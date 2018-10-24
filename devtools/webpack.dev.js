@@ -2,8 +2,12 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     common = require("./webpack.common.js"),
-    proxies = require("lgv-config/proxyconf.json");
+    proxies = require("lgv-config/proxyconf.json"),
+    proxiesPublic = require("lgv-config-public/proxyconf.json");
 
+proxies = function replaceProxyConf () {
+    return proxies === undefined ? proxiesPublic : proxies;
+};
 
 module.exports = merge(common, {
     mode: "development",
@@ -34,4 +38,6 @@ module.exports = merge(common, {
     //         filename: "./statistics.html"
     //     })
     // ]
+
+
 });
