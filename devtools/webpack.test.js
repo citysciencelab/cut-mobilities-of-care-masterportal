@@ -22,8 +22,7 @@ module.exports = {
         port: 9009,
         publicPath: "/test/",
         open: true,
-        openPage: "test/unittests/Testrunner.html",
-        proxy: proxies
+        openPage: "test/unittests/Testrunner.html"
     },
     module: {
         rules: [
