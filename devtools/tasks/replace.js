@@ -8,7 +8,7 @@ module.exports = function (environment, destination) {
         "to": "./"
     },
     {
-        "files": destination + "dist/css/style.css",
+        "files": destination + "/css/style.css",
         "from": /css\/woffs/g,
         "to": "./woffs"
     },
