@@ -7,7 +7,8 @@ const Legend = Tool.extend({
         paramsStyleWMS: [],
         paramsStyleWMSArray: [],
         renderToWindow: false,
-        renderToSidebar: false
+        renderToSidebar: false,
+        glyphicon: "glyphicon-book"
     }),
     initialize: function () {
         var channel = Radio.channel("Legend");

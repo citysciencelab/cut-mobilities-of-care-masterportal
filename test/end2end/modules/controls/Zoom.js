@@ -66,7 +66,7 @@ function ZoomTests (driver) {
 
 
 function getResolution () {
-    var resolution = Backbone.Radio.request("MapView", "getResolution").resolution;
+    var resolution = Backbone.Radio.request("MapView", "getOptions").resolution;
 
     return resolution;
 }

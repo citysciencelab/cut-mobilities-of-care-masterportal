@@ -20,7 +20,7 @@
             "searchDistricts": true,
             "searchParcels": true,
             "searchStreetKey": true
-          },         
+          },
       "visibleWFS":
           {
             "minChars": 3
@@ -32,9 +32,9 @@
     "mapView":
           {
             "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
-            "startCenter": [561210, 5932600],      
+            "startCenter": [561210, 5932600],
             "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
-            "zoomLevel": 1            
+            "zoomLevel": 1
           },
 
     "menu":
@@ -89,7 +89,7 @@
                       {
                         "name": "Erweiterter Filter",
                         "glyphicon": "glyphicon-filter",
-                        "deaktivateGFI": false
+                        "deactivateGFI": false
                       },
 
                    "print":
@@ -122,7 +122,7 @@
                      {
                         "name": "Auswahl speichern"
                      },
-                  "styleWMS": 
+                  "styleWMS":
                      {
                         "name": "Style WMS",
                         "onlyDesktop": true

@@ -7,7 +7,8 @@ const SearchByCoord = Tool.extend({
         "coordSystems": ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
         "coordinatesEasting": "",
         "coordinatesNorthing": "",
-        renderToWindow: true
+        renderToWindow: true,
+        glyphicon: "glyphicon-record"
     }),
     initialize: function () {
         this.superInitialize();

@@ -27,7 +27,8 @@ const ContactModel = Tool.extend({
         includeSystemInfo: false,
         contactInfo: "",
         portalConfig: {},
-        renderToWindow: true
+        renderToWindow: true,
+        glyphicon: "glyphicon-envelope"
     }),
     initialize: function () {
         this.superInitialize();

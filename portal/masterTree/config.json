@@ -137,13 +137,13 @@
           {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {

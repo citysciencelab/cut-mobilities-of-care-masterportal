@@ -796,7 +796,8 @@ Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „fl
 ******
 
 #### Portalconfig.menu.tools.children.print ######
-Bis zur Version 3.0.0 kann noch auf Mapfish-Print 2 gedruck werden. ab dann wird die alte Drucktechnologie komplett abgelöst durch den neuen Mapfish-Print-3.
+Bis zur Version 3.0.0 kann noch auf MapFish Print 2 gedruck werden. Ab dann wird die alte Drucktechnologie komplett abgelöst durch den neuen MapFish Print 3.
+Die Dokumentation von MapFish Print 3 finden sie hier: [http://mapfish.github.io/mapfish-print-doc/](http://mapfish.github.io/mapfish-print-doc/)
 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|

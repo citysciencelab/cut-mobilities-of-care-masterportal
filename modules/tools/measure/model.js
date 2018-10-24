@@ -35,7 +35,8 @@ const Measure = Tool.extend({
         uiStyle: "DEFAULT",
         quickHelp: false,
         renderToWindow: true,
-        deactivateGFI: true
+        deactivateGFI: true,
+        glyphicon: "glyphicon-resize-full"
     }),
 
     initialize: function () {
@@ -130,7 +131,7 @@ const Measure = Tool.extend({
         this.get("measureTooltips").push(measureTooltip);
     },
 
-    placeMeasureTooltip: function (evt, scope) {
+    placeMeasureTooltip: function () {
         var output, geom, coord;
 
         // if (evt.dragging) {
