@@ -7,6 +7,7 @@ const Folder = Item.extend({
         // true wenn der Inhalt(Kinder) der Node angezeigt wird
         isExpanded: false,
         isInitiallyExpanded: false,
+        isAlwaysExpanded: false,
         // true wenn alle Kinder ausgewöhlt sind
         isSelected: false,
         // welcher Node-Type - folder/layer/item

@@ -633,7 +633,8 @@ const ModelList = Backbone.Collection.extend({
 
     toggleCatalogs: function (id) {
         _.each(this.where({parentId: "tree"}), function (model) {
-            if (model.get("id") !== id) {
+            // if (model.get("id") !== id) {
+            if (model.get("id") !== id && !model.get("isAlwaysExpanded")) {
                 model.setIsExpanded(false);
             }
         }, this);
