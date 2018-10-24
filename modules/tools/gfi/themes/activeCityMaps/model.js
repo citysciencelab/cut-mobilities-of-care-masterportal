@@ -105,10 +105,9 @@ const ActiveCityMapsTheme = Theme.extend({
         var gfiContent = this.get("gfiContent"),
             featureInfos = [];
 
-        if (!_.isUndefined(this.get("gfiContent")[0])) {
-            gfiContent = this.get("gfiContent")[0];
+        if (!_.isUndefined(gfiContent[0])) {
             featureInfos = [];
-            featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
+            featureInfos = this.createFeatureInfos(gfiContent[0], this.get("themeConfig"));
             this.setFeatureInfos(featureInfos);
         }
     },
