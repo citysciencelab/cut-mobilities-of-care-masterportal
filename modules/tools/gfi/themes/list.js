@@ -26,6 +26,8 @@ import FlaecheninfoTheme from "./flaecheninfo/model";
 import FlaecheninfoThemeView from "./flaecheninfo/view";
 import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
+import ActiveCityMapsThemeView from "./activeCityMaps/view";
+import ActiveCityMapsTheme from "./activeCityMaps/model";
 
 
 const ThemeList = Backbone.Collection.extend({
@@ -73,6 +75,9 @@ const ThemeList = Backbone.Collection.extend({
         }
         else if (attrs.gfiTheme === "elektroladesaeulen") {
             theme = new ElektroladesaeulenTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "activeCityMaps") {
+            theme = new ActiveCityMapsTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -169,6 +174,10 @@ const ThemeList = Backbone.Collection.extend({
             }
             case "elektroladesaeulen": {
                 new ElektroladesaeulenThemeView({model: model});
+                break;
+            }
+            case "activeCityMaps": {
+                new ActiveCityMapsThemeView({model: model});
                 break;
             }
             default: {
