@@ -80,6 +80,8 @@ const map = Backbone.Model.extend({
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
         this.stopMouseMoveEvent();
+
+        Radio.trigger("Map", "isReady", "gfi", false);
     },
 
     /**

@@ -135,7 +135,8 @@ const ModelList = Backbone.Collection.extend({
                 return new PrintV2(attrs, options);
             }
             else if (attrs.id === "gfi") {
-                return new GFI(attrs, options);
+                return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
+
             }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
