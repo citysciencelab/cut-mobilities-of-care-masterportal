@@ -10,7 +10,6 @@ const FilterView = Backbone.View.extend({
 
         this.listenTo(this.model, {
             "change:isActive": function (model, isActive) {
-
                 if (isActive) {
 
                     if (model.get("queryCollection").length < 1) {
@@ -37,8 +36,8 @@ const FilterView = Backbone.View.extend({
             },
             "renderDetailView": this.renderDetailView,
             "add": function (model) {
-                this.renderDetailView(model);
                 this.render();
+                this.renderDetailView(model);
             }
         });
 

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
+<% console.log("") %>
+<% console.log(isLayerVisible) %>
 <% if (isLayerVisible) { %>
 <div class="detailview-head">
+    <% console.log(sendToRemote) %>
     <% if (sendToRemote) { %>
         <label class="col-xs-6"><%= name %>-Filter</label>
         <button class="zoom-btn btn btn-default btn-sm col-xs-5 col-md-5 col-sm-5" title="Zoom auf Treffer">
@@ -13,6 +16,7 @@
         <label class="col-xs-4 feature-count"><%= featureIds.length %> Treffer</label>
     <% } %>
     <% if (this.model.has("info")) { %>
+        <% console.log(this.model.get("info")) %>
         <div class="filter-info"><%= info %></div>
     <% } %>
 </div>
