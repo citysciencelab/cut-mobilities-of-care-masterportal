@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <form id="printTool" class="form-horizontal">
     <div class="form-group form-group-sm">
-        <label class="col-sm-4 control-label">Titel</label>
-        <div class="col-sm-8">
+        <label class="col-sm-5 control-label">Titel</label>
+        <div class="col-sm-7">
             <input type="text" class="form-control" value="<%= title %>">
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-4 control-label">Layout</label>
-        <div class="col-sm-8">
+        <label class="col-sm-5 control-label">Layout</label>
+        <div class="col-sm-7">
             <select id="printLayout" class="form-control input-sm">
                 <% _.each(layoutList, function(layout) { %>
                     <% if (layout.name === currentLayout.name) { %>
@@ -21,8 +21,8 @@
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-4 control-label">Format</label>
-        <div class="col-sm-8">
+        <label class="col-sm-5 control-label">Format</label>
+        <div class="col-sm-7">
             <select id="printFormat" class="form-control input-sm">
                 <% _.each(formatList, function(format) { %>
                     <% if (format === currentFormat) { %>
@@ -35,8 +35,8 @@
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-4 control-label">Maßstab</label>
-        <div class="col-sm-8">
+        <label class="col-sm-5 control-label">Maßstab</label>
+        <div class="col-sm-7">
             <select id="printScale" class="form-control input-sm">
                 <% _.each(scaleList, function(scale) { %>
                     <% if (scale === currentScale) { %>
@@ -50,22 +50,24 @@
     </div>
     <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
-        <div class="col-sm-offset-4 col-sm-8">
+        <% if(isMetaDataAvailable) { %>
+            <label class="col-sm-5 control-label">Legende / Metadaten</label>
+        <% } else { %>
+            <label class="col-sm-5 control-label">Legende</label>
+        <% } %>
+        <div class="col-sm-7">
             <div class="checkbox">
-            <label>
-                <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>Legende
-            </label>
+                <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>
             </div>
         </div>
     </div>
     <% } %>
     <% if(isGfiAvailable && isGfiActive) { %>
     <div class="form-group form-group-sm">
-        <div class="col-sm-offset-4 col-sm-8">
+        <label class="col-sm-5 control-label">Informationen</label>
+        <div class="col-sm-7">
             <div class="checkbox">
-            <label>
-                <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>Sachinformationen
-            </label>
+                <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>
             </div>
         </div>
     </div>

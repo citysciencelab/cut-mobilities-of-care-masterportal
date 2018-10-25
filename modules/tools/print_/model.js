@@ -4,6 +4,8 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
 const PrintModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
+        // output filename
+        filename: "report",
         // the id from the rest services json for the mapfish app
         mapfishServiceId: undefined,
         // the identifier of one of the available mapfish print configurations
@@ -122,6 +124,7 @@ const PrintModel = Tool.extend({
             }),
             attr = {
                 "layout": this.get("currentLayout").name,
+                "outputFilename": this.get("filename"),
                 "outputFormat": this.get("currentFormat"),
                 "attributes": {
                     "title": this.get("title"),
@@ -153,6 +156,7 @@ const PrintModel = Tool.extend({
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
         spec = spec.toJSON();
+
         spec = _.omit(spec, "uniqueIdList");
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
