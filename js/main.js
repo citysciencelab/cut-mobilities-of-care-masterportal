@@ -38,10 +38,10 @@ if (!("Config" in window)) {
         // Polyfills DOM4 MouseEvent
 
         function MouseEvent (eventType, params) {
-            var params = params || {bubbles: false, cancelable: false},
+            var paramsObj = params || {bubbles: false, cancelable: false},
                 mouseEvent = document.createEvent("MouseEvent");
 
-            mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            mouseEvent.initMouseEvent(eventType, paramsObj.bubbles, paramsObj.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 
             return mouseEvent;
         }

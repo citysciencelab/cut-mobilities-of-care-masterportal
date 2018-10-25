@@ -190,11 +190,6 @@ const CswParser = Backbone.Model.extend({
         if (revisionDateTime) {
             dateTime = revisionDateTime;
         }
-<<<<<<< HEAD
-    });
-    return CswParser;
-});
-=======
         else if (publicationDateTime) {
             dateTime = publicationDateTime;
         }
@@ -203,4 +198,3 @@ const CswParser = Backbone.Model.extend({
 });
 
 export default CswParser;
->>>>>>> dev
