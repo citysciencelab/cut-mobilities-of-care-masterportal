@@ -2,12 +2,8 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     common = require("./webpack.common.js"),
-    proxies = require("lgv-config/proxyconf.json"),
-    proxiesPublic = require("lgv-config-public/proxyconf.json");
-
-proxies = function replaceProxyConf () {
-    return proxies === undefined ? proxiesPublic : proxies;
-};
+    fs = require("fs"),
+    proxies = fs.existsSync("node_modules/lgv-config/proxyconf.json") ? require("lgv-config/proxyconf.json") : require("lgv-config-public/proxyconf.json");
 
 module.exports = merge(common, {
     mode: "development",
