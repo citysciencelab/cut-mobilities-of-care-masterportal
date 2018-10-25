@@ -1,0 +1,59 @@
+@color_1: #333;
+@background_color_1: #FFF;
+@background_color_2: #FFFFFF;
+
+.ladesaeulen {
+  .table {
+    overflow: auto;
+    border-collapse: collapse;
+    background-color: @background_color_1;
+    color: @color_1;
+  }
+  .nav-pills {
+    padding: 6px;
+  }
+  .barladesaeulenBelegt-graph {
+    fill: #DC0000;
+    &:hover {
+      fill: #999999;
+    }
+  }
+  .barladesaeulenVerfuegbar-graph {
+    fill: #00DC00;
+    &:hover {
+      fill: #999999;
+    }
+  }
+  .barladesaeulenAusserBetrieb-graph {
+    fill: #AFAFAF;
+    &:hover {
+      fill: #FF9933;
+    }
+  }
+  .noData {
+    font-size: 14px;
+    text-align: center;
+    text-anchor: middle;
+  }
+  .leftButton {
+    float: left;
+    background-color: @background_color_2;
+    padding: 1px 6px;
+  }
+  .rightButton {
+    float: right;
+    background-color: @background_color_2;
+    padding: 1px 6px;
+  }
+  .day {
+    padding-top: 8px;
+    font-weight: bold;
+  }
+}
+.gfi-header {
+  background: #FFF;
+  margin-bottom: 8x;
+}
+.text-align-center {
+  text-align: center;
+}

@@ -75,17 +75,6 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
-### Grunt
-[Grunt](http://gruntjs.com/) in der Admin-cmd global installieren:
-```
-# npm install -g grunt-cli
-```
-
-Test in normaler cmd:
-```
-# grunt
-```
-
 
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:
@@ -94,90 +83,19 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config" und "build-config" ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/lgv-g12/lgv-config-public/)) inkl. credentials einbinden, z.B.
+**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config"  ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/lgv-g12/lgv-config-public/)) inkl. credentials einbinden, z.B.
 
 ```
-# https://<user>:<pw>@bitbucket.org/lgv-g12/build-config.git#master
-```
-
-
-Dann die Build-Abhängigkeiten ziehen via NPM (alle Abhängigkeiten in der [package.json](../package.json)):
-
-In der Admin-cmd ausführen:
-```
-# npm run installMasterportal
+# https://<user>:<pw>@bitbucket.org/lgv-g12/lgv-config.git#master
 ```
 
 
-Installiert unter anderem Ordner das Repository [build-config](https://bitbucket.org/lgv-g12/build-config)nach /node_modules, wo einige grunt-tasks enthalten sind. Außerdem das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json. Außerdem wird das Zusatzpackage browserMqtt.js als Erweiterung für MQTT.js installiert, das zur Live-Aktualisierung des SensorLayers notwendig ist.
+Installiert das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
 
 
-## Grunt Tasks ausführen
-### grunt server
-Einen lokalen Entwicklungsserver starten.
-
-```
-# grunt server
-```
-
-yeaih!
-
-### grunt test
-Unter Firefox funktioniert grunt server nicht, hier muss statt dessen mit "grunt test" gearbeitet werden
-
-```
-# grunt test
-```
-
-anschließend "localhost:8001" im Firefox öffnen
-
-### grunt build
-Ein Portal vor Veröffentlichung optimieren.
-
-```
-// grunt build --path=<pfad-zum-portal> --name=<Portalname> [--env=internet| default:fhhnet]
-# grunt build --path=portal/master --name=master
-```
-
-- baut das Portal und alles, was es braucht in den Ordner dist/<pkg.version>
-- Pfade in index.html werden automatisch ersetzt
- - Pfade zu *Conf in config.js werden automatisch ersetzt
-- components/lgv-config, also Konfigs, die zwischen den Portalen geteilt werden, werden in den Ordner /lgv-config kopiert, da wird die auch auf den 'echten' Servern erwartet
-
-### grunt buildExamples
-```
-# grunt buildExamples --env=internet
-```
-- erzeugt einen Ordner examples, in dem zwei lauffähige Portal-Instanzen (zurzeit simple und simpleTree) enthalten sind inkl. dem Ordner lgv-config und doc (wenn dieser zuvor erstellt wurde)
-- erzeugt zusätzlich examples.zip
-
-### grunt copyExamples
-```
-# grunt copyExamples --env=internet
-```
-- leert den Ordner examples
-- kopiert den aktuellen dist-Ordner nach examples
-- kopiert notwednige Dateien aus lgv-config und die beiden Portale und nimmt Ersetzungen vor
-- wird aus grunt buildExamples aufgerufen
-
-### Alle grunt-Tasks
-
-```
-# grunt -h
-```
-
-## Aktualisieren der Abhängigkeiten
 
 für alle npm-Pakete:
 
 ```
 # npm update
 ```
-
-für build-config und lgv-config:
-
-```
-# npm run installMasterportal
-```
-
-Vorsicht: Explizites Aufrufen von npm install build-config installiert ein falsches build-config.

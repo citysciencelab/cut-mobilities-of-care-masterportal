@@ -1,0 +1,81 @@
+@color_1: rgb(182, 0, 0);
+@background_color_1: white;
+@background_color_2: rgb(255, 255, 255);
+
+/***** Destop *****/
+.layerinformation {
+    .subtitle {
+        color: @color_1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        max-width: 100%;
+    }
+    hr {
+        margin: 15px 0px 10px 0px;
+    }
+}
+#layerinformation-desktop {
+    .content {
+        >ul {
+            background-color: @background_color_1;
+        }
+        max-height: 66vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    position: absolute;
+    top: 20px;
+    right: 60px;
+    width: 45vw;
+    margin: 60px 10px 30px 10px;
+    z-index: 1010;
+    background-color: @background_color_2;
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.176);
+    border: 1px solid rgb(229, 229, 229);
+    .header {
+        padding: 10px 0 5px 10px;
+        border-bottom: 1px solid rgb(229, 229, 229);
+        cursor: move;
+    }
+    .glyphicon-remove {
+        &:hover {
+            opacity: 0.7;
+            cursor: pointer;
+        }
+    }
+}
+.layerinformation-modal {
+    .nav-tabs {
+        display: flex;
+        >li {
+            font-size: 12px;
+            >a {
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+    }
+    .tab-content {
+        .tab-pane {
+            >ul {
+                >li {
+                    >a {
+                        font-size: 12px;
+                        text-overflow: ellipsis;
+                        display: inline-block;
+                        max-width: 95%;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+        #legende {
+            max-width: 95%;
+            overflow: auto;
+        }
+    }
+}

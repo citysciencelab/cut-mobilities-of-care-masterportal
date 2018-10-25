@@ -3,6 +3,8 @@
 
 .DS_Store
 *.sass-cache
+css/bootstrap.css
+css/modules.css
 
 coverage
 test/coverage
@@ -11,6 +13,7 @@ components
 dist
 temp
 lgv-config
+build
 examples*
 
 /nbproject/private/
@@ -23,3 +26,4 @@ package-lock.json
 test/end2end/Screenshots/ScreenshotsTest
 npm-debug.log
 .vscode
+build

@@ -1,0 +1,49 @@
+@color_1: rgb(182, 0, 0);
+@background_color_1: rgb(255, 255, 255);
+@background_color_2: rgb(8, 88, 158);
+
+.checkbox-container {
+    display: inline-block;
+    width: 100%;
+    padding: 8px 15px;
+    .toggle {
+        float: right;
+        background-color: @background_color_1;
+    }
+    .toggle-group {
+        .btn-primary {
+            background-color: @background_color_2;
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+    >label {
+        padding-top: 6px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 70%;
+        margin: 0;
+        color: @color_1;
+        float: left;
+    }
+    .title-checkbox {
+        width: 85%;
+    }
+    .info-icon {
+        float: right;
+        padding: 10px 0 10px 10px;
+        font-size: 16px;
+        opacity: 0.4;
+        top: -5px;
+        &:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+    }
+    .info-text {
+        display: none;
+        font-size: 10px;
+    }
+}

@@ -1,0 +1,160 @@
+@color_1: #f3f3f3;
+@color_2: rgb(182, 0, 0);
+@color_3: #F3F3F3;
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgb(182, 0, 0);
+@background_color_2: rgb(8,88,158);
+@background_color_3: #f3f3f3;
+
+/***** ToggleButton *****/
+/***** ZoomButtons *****/
+/***** FullScreen *****/
+/***** Attributions *****/
+/***** OrientationControl *****/
+/***** OrientationControl -> geolocation_marker *****/
+.controls-row-right {
+    position: relative;
+    margin-right: 12px;
+}
+.controls-row-left {
+    position: relative;
+    margin-left: 0px;
+}
+.controls-view {
+    top: 0;
+    >div {
+        >.row {
+            >div {
+                >.glyphicon {
+                    color: @color_1;
+                    background-color: @background_color_1;
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+                    &:hover {
+                        cursor: pointer;
+                        opacity: 0.7;
+                    }
+                }
+                >.toggleButtonPressed {
+                    background-color: @background_color_2;
+                }
+            }
+        }
+    }
+}
+.toggleButton {
+    >.glyphicon {
+        font-size: 22px;
+    }
+    >.glyphicon-chevron-up {
+        padding: 5px 4px 6px 7px;
+    }
+    >.glyphicon-chevron-down {
+        padding: 7px 4px 4px 7px;
+    }
+}
+.zoomButtons {
+    margin-top: 20px;
+    >.glyphicon {
+        font-size: 22px;
+        margin-top: 4px;
+    }
+    >.glyphicon-plus {
+        padding: 5px 5px 6px 7px;
+    }
+    >.glyphicon-minus {
+        padding: 5px 7px 6px 5px;
+    }
+}
+.full-screen-button {
+    margin-top: 20px;
+    >.glyphicon {
+        font-size: 22px;
+        padding: 7px 6px 6px 7px;
+    }
+}
+.attributions-div {
+    padding: 5px;
+    background-color: @background_color_3;
+    margin-right: 34px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    border: 1px solid rgb(229, 229, 229);
+    margin-bottom: 20px;
+}
+.attributions-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 20px;
+}
+.attributions-view {
+    dt {
+        color: @color_2;
+        font-size: 15px;
+        font-family: @font_family_1;
+    }
+    dl {
+        margin-bottom: 0;
+        max-width: calc(100vw - 410px);
+    }
+    dd {
+        margin-bottom: 8px;
+    }
+    .glyphicon {
+        font-size: 22px;
+        top: 0;
+    }
+    .glyphicon-info-sign {
+        padding: 6px;
+    }
+    .glyphicon-forward {
+        padding: 6px 4px 6px 8px;
+    }
+    img {
+        max-height: 2em;
+    }
+}
+.orientationButtons {
+    margin-top: 20px;
+    >.glyphicon {
+        font-size: 22px;
+        margin-top: 4px;
+    }
+    >.glyphicon-map-marker {
+        padding: 5px 7px 6px 6px;
+    }
+    >.glyphicon-record {
+        padding: 5px 6px 6px 6px;
+    }
+}
+.geolocation_marker {
+    color: @color_3;
+    padding: 2px 3px 2px 2px;
+    background: none repeat scroll #D42132;
+    border-radius: 50px;
+    font-size: 20px;
+}
+.control-view-top-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.control-view-bottom-right {
+    position: absolute;
+    right: 3px;
+    bottom: 0;
+}
+.control-view-bottom-left {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+@media (max-width: 767px) {
+    .full-screen-button {
+        display: none;
+    }
+    .attributions-view {
+        dl {
+            max-width: calc(100vw - 35px);
+        }
+    }
+}

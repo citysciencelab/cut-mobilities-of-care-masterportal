@@ -1,0 +1,43 @@
+@color_1: white;
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+
+#circle-overlay {
+    position: relative;
+    background: rgba(51, 153, 204, 0.8);
+    color: @color_1;
+    padding: 4px 8px;
+}
+#tooltip-overlay {
+    position: relative;
+    background: rgba(51, 153, 204, 0.8);
+    color: @color_1;
+    padding: 4px 8px;
+}
+#einwohnerabfrage-tool {
+    min-height: 150px;
+    table {
+        font-family: @font_family_1;
+        font-size: 14px;
+    }
+    .form-horizontal {
+        margin-bottom: 20px;
+    }
+    .additional-text {
+        margin: 10px 0;
+        span {
+            font-family: @font_family_1;
+            font-size: 13px;
+        }
+    }
+    #einwohner-loader {
+        img {
+            position: relative;
+            left: 40%;
+        }
+    }
+    .title-checkbox {
+        >label {
+            padding-left: 0;
+        }
+    }
+}

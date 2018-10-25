@@ -2,14 +2,17 @@
 <span class="layer-item pull-left">
     <span class="pull-left">
         <% if (isVisibleInMap === true) { %>
-            <span class="glyphicon glyphicon-check pull-left" title="Layer ausschalten"></span>
+            <span class="glyphicon glyphicon-check pull-left" title="Thema ausschalten"></span>
         <% } else { %>
-            <span class="glyphicon glyphicon-unchecked pull-left" title="Layer einschalten"></span>
+            <span class="glyphicon glyphicon-unchecked pull-left" title="Thema einschalten"></span>
         <% } %>
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </span>
 </span>
 <span class="pull-right">
+    <% if (typeof styleable !== "undefined" && styleable === true) { %>
+            <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="Klasseneinteilung ändern"></span>
+    <% } %>
     <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>
     <span class="glyphicon glyphicon-cog rotate" title="Einstellungen"></span>
 </span>

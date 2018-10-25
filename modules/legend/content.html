@@ -1,0 +1,77 @@
+<% if (typ === "WFS" || typ === "SensorThings") { %>
+    <table>
+        <% 
+            if (typeof img === "string") {
+                if (new RegExp(/(\.pdf)$/i).test(img) === true) { %>
+                    <a href=<%= img %> target="_blank">weitere Informationen</a>
+                <% } 
+                else { %>
+                    <p>
+                        <img src=<%= img %>>
+                    </p>
+                <% }
+            }
+            else {
+                _.each(img, function (image, index2) { %>
+                    <tr>
+                        <td class="tdLegend">
+                            <% if (image.indexOf("<svg") !== -1){%>
+                                <div class="tdLegend-no-image"><%= image %></div>
+                            <% }
+                            else if (_.isArray(image)){%>
+                                <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
+                                    <img src="<%= image[0] %>">
+                                </div>
+                            <%}
+                            else {%>
+                                <img src="<%= image %>">
+                            <%}%>
+                        </td>
+                        <td class="tdLegend">
+                            <span><%= legendname[index2] %></span>
+                        </td>
+                    </tr>
+                <% });
+            } %>
+    </table>
+
+<% }
+else if (typ === "styleWMS") {%>
+    <table>
+        <% _.each(params, function(param) { %>
+            <tr>
+                <td>
+                    <div class="styleWMS" style="background-color:<%=param.color%>"></div>
+                </td>
+                <td><%=param.startRange%> - <%=param.stopRange%></td>
+            </tr>
+        <% }); %>
+    </table>
+
+<% }
+else {
+    if (typeof img === "string") {
+        if (new RegExp(/(\.pdf)$/i).test(img) === true) { %>
+            <a href=<%= img %> target="_blank">weitere Informationen</a>
+        <% }
+        else { %>
+            <p>
+                <img src=<%= img %>>
+            </p>
+        <% }
+    }
+    else {
+        if (img.length > 1) {
+            _.each(img, function (image) { %>
+                <p>
+                    <img src=<%= image %>>
+                </p>
+            <% });
+        }
+        else { %>
+            <p>
+                <img src=<%= img[0] %>>
+            </p>
+        <% }
+    }
+} %>

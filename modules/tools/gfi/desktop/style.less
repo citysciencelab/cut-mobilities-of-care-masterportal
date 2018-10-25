@@ -1,0 +1,104 @@
+@color_1: rgb(85, 85, 85);
+@color_2: rgb(119, 119, 119);
+@font_family_1: "UniversNextW01-Regular",sans-serif;
+@background_color_1: white;
+@background_color_2: rgb(255, 255, 255);
+
+/* Bootstrap Popover Klassen */
+/* Desktop GFI */
+/* Desktop Detached */
+.popover {
+    padding: 0;
+    min-width: 40vw;
+    border: 0;
+    z-index: 1;
+}
+.popover-content {
+    padding: 0;
+}
+.gfi {
+    .panel {
+        margin-bottom: 0;
+    }
+    .has-image {
+        max-width: 25vw;
+    }
+    border: 1px solid rgb(229, 229, 229);
+    color: @color_1;
+    font-family: @font_family_1;
+    >.gfi-header {
+        font-size: 14px;
+        padding: 8px;
+        border-bottom: 1px solid rgb(229, 229, 229);
+        >.title {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        >.buttons {
+            margin: 0 0 0 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    }
+    >.gfi-content {
+        max-height: 50vh;
+        font-size: 13px;
+        overflow: auto;
+    }
+    .gfi-image-zoom-button {
+        top: -17px;
+        background-color: @background_color_1;
+        padding: 2px;
+    }
+    .gfi-image-copyright {
+        top: -19px;
+        position: relative;
+        font-size: 0.9em;
+        padding: 2px;
+        background-color: @background_color_1;
+    }
+    table {
+        margin: 0;
+    }
+}
+.gfi-detached {
+    position: absolute;
+    top: 50px;
+    margin: 10px 10px 30px 10px;
+    display: hide;
+    background-color: @background_color_2;
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.300);
+    >.gfi-header {
+        >.title {
+            cursor: move;
+        }
+    }
+}
+.gfi-footer {
+    padding: 0;
+    color: @color_2;
+    text-align: center;
+    font-size: 22px;
+    >div {
+        background: #f3f3f3;
+        padding: 6px;
+        cursor: pointer;
+        width: 50%;
+    }
+    >.disabled {
+        cursor: not-allowed;
+        background-color: @background_color_2;
+        opacity: 0.2;
+    }
+    >.pager-left {
+        float: left;
+        border-right: 1px solid #ddd;
+    }
+    >.pager-right {
+        float: right;
+    }
+}
+.gfi-iFrame {
+    width: 100%;
+}

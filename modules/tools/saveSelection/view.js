@@ -1,51 +1,48 @@
-define(function (require) {
-    var SaveSelectionSimpleMapTemplate = require("text!modules/tools/saveSelection/templateSimpleMap.html"),
-        SaveSelectionTemplate = require("text!modules/tools/saveSelection/template.html"),
-        SaveSelection = require("modules/tools/saveSelection/model"),
-        $ = require("jquery"),
-        SaveSelectionView;
+import SaveSelectionSimpleMapTemplate from "text-loader!./templateSimpleMap.html";
+import SaveSelectionTemplate from "text-loader!./template.html";
 
-    SaveSelectionView = Backbone.View.extend({
-        model: new SaveSelection(),
-        className: "win-body",
-        template: _.template(SaveSelectionTemplate),
-        templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
-        events: {
-            "click input": "copyToClipboard"
-        },
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:url": this.render
-            });
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                if (this.model.get("simpleMap") === true) {
-                    $(".win-heading").after(this.$el.html(this.templateSimpleMap(attr)));
-                }
-                else {
-                    $(".win-heading").after(this.$el.html(this.template(attr)));
-                }
-                this.delegateEvents();
+const SaveSelectionView = Backbone.View.extend({
+    events: {
+        "click input": "copyToClipboard"
+    },
+    initialize: function () {
+        this.listenTo(this.model, {
+            "change:isActive": this.render,
+            "change:url": this.setUrlValue
+        });
+        // Bestätige, dass das Modul geladen wurde
+        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+    },
+    template: _.template(SaveSelectionTemplate),
+    templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),
+    render: function (model, value) {
+        if (value) {
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            if (this.model.get("simpleMap") === true) {
+                this.$el.html(this.templateSimpleMap(model.toJSON()));
             }
             else {
-                this.undelegateEvents();
+                this.$el.html(this.template(model.toJSON()));
             }
-            return this;
-        },
-
-        /**
-         * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
-         * @param  {evt} evt Evt-Button
-         * @returns {void}
-         */
-        copyToClipboard: function (evt) {
-            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
+            this.delegateEvents();
         }
-    });
+        else {
+            this.undelegateEvents();
+        }
+        return this;
+    },
 
-    return SaveSelectionView;
+    setUrlValue: function (model, value) {
+        this.$("input").val(value);
+    },
+    /**
+     * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
+     * @param  {evt} evt Evt-Button
+     * @returns {void}
+     */
+    copyToClipboard: function (evt) {
+        Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
+    }
 });
+
+export default SaveSelectionView;

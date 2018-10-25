@@ -1,0 +1,154 @@
+@color_1: rgb(85, 85, 85);
+@color_2: rgb(255, 255, 255);
+@color_3: rgb(255, 127, 0);
+@font_family_1: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+@font_family_2: UniversNextW01-Regular,"Arial Narrow",Arial,sans-serif;
+@background_color_1: rgb(85, 85, 85);
+
+/**************** Menu ***********************/
+/**************** Themenbaum ****************/
+/* ----------------------Themenbaum light -----------------------------*/
+/*Haupt Themenliste */
+/*Unterlisten*/
+/*-------------------Selection/Settings----------------------*/
+.submenu-style {
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+ul#tree {
+    border: none;
+    font-family: @font_family_1;
+    padding: 0px 0;
+    min-width: 380px;
+    overflow: auto;
+    .glyphicon {
+        cursor: pointer;
+        font-size: 15px;
+        padding-right: 5px;
+        top: 3px;
+    }
+    .glyphicon-cog {
+        font-size: 18px;
+        padding: 0;
+    }
+    .glyphicon-info-sign {
+        font-size: 18px;
+        padding-right: 6px;
+    }
+    .closed {
+        &:not(.SelectedLayer) {
+            border-bottom: 1px solid #ddd;
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0 0 0 0px;
+        -webkit-padding-start: 0px;
+        overflow-y: auto;
+        overflow-x: auto;
+        max-width: 500px;
+        .title {
+            font-family: @font_family_2;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        li {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 15px;
+        }
+    }
+    .catalog_buttons {
+        .glyphicon {
+            padding: 0px 0;
+            cursor: pointer;
+        }
+        .glyphicon-adjust {
+            font-size: 14px;
+        }
+    }
+    .layer-catalog {
+        >.header {
+            padding: 8px 5px 7px 5px;
+            background-color: @background_color_1;
+            color: @color_2;
+            font-size: 13px;
+        }
+    }
+    .catalog-selection {
+        font-size: 11px;
+        font-weight: 400;
+        >select {
+            height: 20px;
+            padding: 0;
+            font-size: 11px;
+        }
+    }
+    .themen-folder {
+        font-weight: 400;
+    }
+    .rotate-adjust {
+        transform: rotate(180deg);
+        transition: .5s;
+        font-size: 15px;
+        cursor: pointer;
+    }
+    .rotate-adjust-back {
+        transform: rotate(0deg);
+        transition: .5s;
+        font-size: 15px;
+        cursor: pointer;
+    }
+    .rotate-pin {
+        transform: rotate(270deg);
+        transition: .5s;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .rotate-pin-back {
+        transform: rotate(360deg);
+        transition: .5s;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    #SelectedLayer {
+        li {
+            overflow: auto;
+            padding: 8px 6px;
+        }
+    }
+    .SelectedLayer {
+        .layer-selection-save {
+            font-size: 11px;
+            font-weight: 400;
+            cursor: pointer;
+        }
+    }
+}
+.LayerListMaxHeight {
+    max-height: calc(100vH - 177px);
+}
+ul#tree.light {
+    font-size: 12px;
+    color: @color_1;
+    overflow-y: auto;
+    li {
+        border-left: 0;
+        border-right: 0;
+        padding: 8px 6px;
+        max-width: 500px;
+        overflow: auto;
+        font-weight: normal;
+        span.title {
+            vertical-align: sub;
+            cursor: pointer;
+        }
+    }
+}
+ul#Overlayer {
+    .glyphicon-check {
+        color: @color_3;
+        &+.title {
+            color: @color_3;
+        }
+    }
+}

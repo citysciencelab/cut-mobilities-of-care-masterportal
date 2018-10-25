@@ -1,258 +1,137 @@
-define(function (require) {
+import {Group as LayerGroup} from "ol/layer.js";
+import Layer from "./model";
+import WMSLayer from "./wms";
+import WFSLayer from "./wfs";
+import GeoJSONLayer from "./geojson";
+import SensorLayer from "./sensor";
+import HeatmapLayer from "./heatmap";
 
-    var Radio = require("backbone.radio"),
-        ol = require("openlayers"),
-        Layer = require("modules/core/modelList/layer/model"),
-        GroupLayer;
+const GroupLayer = Layer.extend({
+    defaults: _.extend({}, Layer.prototype.defaults),
 
-    GroupLayer = Layer.extend({
-        initialize: function () {
-            this.superInitialize();
-            this.setLayerdefinitions(this.groupLayerObjectsByUrl(this.get("layerdefinitions")));
-            this.setAttributes();
-        },
+    initialize: function () {
+        Layer.prototype.initialize.apply(this);
+    },
 
+    /**
+     * Bei GruppenLayern sind die LayerSources deren childLayer.
+     * Damit die layerSources nicht die layer.initialize() durchlaufen,
+     * wurde isChildLayer: true im parser gesetzt.
+     * @return {void}
+     */
+    createLayerSource: function () {
+        var layerSource = [];
 
-        setAttributes: function () {
-            var gfiParams = [];
-
-            _.each(this.get("layerdefinitions"), function (layerdef, index) {
-                if (layerdef.gfiAttributes !== "ignore") {
-                    gfiParams.push({
-                        featureCount: layerdef.featureCount ? layerdef.featureCount : 1,
-                        infoFormat: layerdef.infoFormat ? layerdef.infoFormat : "text/xml",
-                        gfiAttributes: layerdef.gfiAttributes,
-                        name: layerdef.name,
-                        typ: layerdef.typ,
-                        gfiTheme: layerdef.gfiTheme,
-                        childLayerIndex: index
-                    });
+        _.each(this.get("children"), function (childLayerDefinition) {
+            if (childLayerDefinition.typ === "WMS") {
+                layerSource.push(new WMSLayer(childLayerDefinition));
+            }
+            else if (childLayerDefinition.typ === "WFS") {
+                if (childLayerDefinition.outputFormat === "GeoJSON") {
+                    layerSource.push(new GeoJSONLayer(childLayerDefinition));
                 }
-            }, this);
-
-            this.setGfiParams(gfiParams);
-        },
-        /**
-         * Groups layerdefinitions by url.
-         * If gfiAttributes is set on group layer-object,
-         *     then the gfi-Attributes for sublayers are overwitten and can be grouped.
-         * Else the gfiAttributes of all layers are taken.
-         *
-         * If the gfiAttributes of all layers are equal, then the layers can be aggregated.
-         * Otherwise the layers can not be grouped by url.
-         * @param {array} layerDefinitions - definitions from all layers
-         * @returns {array} newLayerDefs
-         */
-        groupLayerObjectsByUrl: function (layerDefinitions) {
-            var groupByUrl = _.groupBy(layerDefinitions, "url"),
-                newLayerDefs = [];
-
-            _.each(groupByUrl, function (layerGroup) {
-                var newLayerObj = _.clone(layerGroup[0]),
-                    gfiAttributes = this.get("gfiAttributes");
-
-                gfiAttributes = this.groupGfiAttributes(gfiAttributes, layerGroup);
-                if (_.isObject(gfiAttributes) && !_.isString(gfiAttributes)) {
-                    // get all layers for service
-                    newLayerObj.layers = _.pluck(layerGroup, "layers").toString();
-                    // calculate maxScale from all Layers
-                    newLayerObj.maxScale = _.max(_.pluck(layerGroup, "maxScale"), function (scale) {
-                        return parseInt(scale, 10);
-                    });
-                    // calculate minScale from all Layers
-                    newLayerObj.minScale = _.min(_.pluck(layerGroup, "minScale"), function (scale) {
-                        return parseInt(scale, 10);
-                    });
-                    newLayerObj.gfiAttributes = gfiAttributes;
-                    newLayerDefs.push(newLayerObj);
-                }
-                else {
-                    _.each(layerGroup, function (layer) {
-                        layer.gfiAttributes = gfiAttributes;
-                        newLayerDefs.push(layer);
-                    });
-                }
-            }, this);
-
-            return newLayerDefs;
-        },
-
-        /**
-         * get the attributes from layergroup
-         * is gfiAttributes not undefined then returns the input gfiAttributes
-         * @param {undefined|object} gfiAttributes - default is undefined
-         * @param {array} layerGroup - contains the params from the layers
-         * @returns {string|object} attr
-         */
-        groupGfiAttributes: function (gfiAttributes, layerGroup) {
-            var attr = gfiAttributes;
-
-            if (_.isUndefined(attr)) {
-                attr = _.pluck(layerGroup, "gfiAttributes");
-
-                if (_.isArray(attr)) {
-                    attr = attr.length === 1 ? attr[0] : _.uniq(attr).toString();
-                }
+                layerSource.push(new WFSLayer(childLayerDefinition));
+            }
+            else if (childLayerDefinition.typ === "GeoJSON") {
+                layerSource.push(new GeoJSONLayer(childLayerDefinition));
+            }
+            else if (childLayerDefinition.typ === "SensorThings") {
+                layerSource.push(new SensorLayer(childLayerDefinition));
+            }
+            else if (childLayerDefinition.typ === "Heatmap") {
+                layerSource.push(new HeatmapLayer(childLayerDefinition));
             }
 
-            return attr;
-        },
+            _.last(layerSource).prepareLayerObject();
+        }, this);
 
-        createLayerSource: function () {
-            // TODO noch keine Typ unterscheidung -> nur WMS
-            this.createChildLayerSources(this.get("layerdefinitions"));
-            this.createChildLayers(this.get("layerdefinitions"));
-            this.setMaxScale(this.get("id"));
-            this.setMinScale(this.get("id"));
-            this.createLayer();
-        },
+        this.setLayerSource(layerSource);
+    },
 
-        createChildLayerSources: function (childlayers) {
-            var sources = [];
-
-            _.each(childlayers, function (child) {
-                var source = new ol.source.TileWMS({
-                    url: child.url,
-                    params: {
-                        LAYERS: child.layers,
-                        FORMAT: child.format,
-                        VERSION: child.version,
-                        TRANSPARENT: true
-                    }
-                });
-
-                sources.push(source);
-                child.source = source;
-            });
-            this.setChildLayerSources(sources);
-        },
-
-        createChildLayers: function (childlayers) {
-            var layer = new ol.Collection();
-
-            _.each(childlayers, function (childLayer, index) {
-                layer.push(new ol.layer.Tile({
-                    source: this.get("childLayerSources")[index]
-                }));
-            }, this);
-            this.setChildLayers(layer);
-        },
-
-        createLayer: function () {
-            var groupLayer = new ol.layer.Group({
-                layers: this.get("childlayers")
+    /**
+     * Erzeugt einen Gruppenlayer mit den layerSources
+     * @return {void}
+     */
+    createLayer: function () {
+        var layers = _.map(this.get("layerSource"), function (layer) {
+                return layer.get("layer");
+            }),
+            groupLayer = new LayerGroup({
+                layers: layers,
+                visible: false
             });
 
-            this.setLayer(groupLayer);
-        },
+        this.setLayer(groupLayer);
+    },
 
-        /**
-         * [createLegendURL description]
-         * @return {[type]} [description]
-         */
-        createLegendURL: function () {
-            var legendURL = [];
+    /**
+     * Erzeugt die legendenURLs der child-Layer
+     * @return {void}
+     */
+    createLegendURL: function () {
+        _.each(this.get("layerSource"), function (layerSource) {
+            layerSource.createLegendURL();
+        }, this);
+    },
 
-            _.each(this.get("layerdefinitions"), function (layer) {
-                var layerNames;
+    /**
+     * Startet updateSource() an allen layerSources, an denen es vorhanden ist.
+     * Nicht alle Layertypen unterstützen updateSource().
+     * @returns {void}
+     */
+    updateSource: function () {
+        _.each(this.get("layerSource"), function (layerSource) {
+            if (typeof layerSource.updateSource !== "undefined") {
+                layerSource.updateSource();
+            }
+        }, this);
+    },
 
-                if (layer.legendURL === "" || layer.legendURL === undefined) {
-                    layerNames = layer.layers.split(",");
+    /**
+     * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+     * @returns {void}
+     */
+    showLayerInformation: function () {
+        var metaID = [],
+            legend = Radio.request("Legend", "getLegend", this),
+            name = this.get("name");
 
-                    if (layerNames.length === 1) {
-                        legendURL.push(layer.url + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layer.layers);
-                    }
-                    else if (layerNames.length > 1) {
-                        _.each(layerNames, function (layerName) {
-                            legendURL.push(this.get("url") + "?VERSION=" + layer.version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
-                        }, this);
-                    }
-                }
-                else {
-                    legendURL.push(layer.legendURL);
-                }
-            }, this);
-            this.set("legendURL", legendURL);
-        },
+        _.each(this.get("children"), function (layer) {
+            var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
-        /**
-         * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
-         * @returns {void}
-         */
-        showLayerInformation: function () {
-            var metaID = [],
-                legendParams = Radio.request("Legend", "getLegendParams"),
-                name = this.get("name"),
-                legendURL = !_.isUndefined(_.findWhere(legendParams, {layername: name})) ? _.findWhere(legendParams, {layername: name}) : null;
+            if (layerMetaId) {
+                metaID.push(layerMetaId);
+            }
+        });
 
-            _.each(this.get("layerdefinitions"), function (layer) {
-                var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
+        Radio.trigger("LayerInformation", "add", {
+            "id": this.get("id"),
+            "legend": legend,
+            "metaID": metaID,
+            "layername": name,
+            "url": null,
+            "typ": null
+        });
 
-                if (layerMetaId) {
-                    metaID.push(layerMetaId);
-                }
-            });
+        this.setLayerInfoChecked(true);
+    },
 
-            Radio.trigger("LayerInformation", "add", {
-                "id": this.get("id"),
-                "legendURL": legendURL,
-                "metaID": metaID,
-                "layername": name,
-                "url": null,
-                "typ": null
-            });
+    /**
+    * Prüft anhand der Scale aller layerSources, ob der Layer sichtbar ist oder nicht
+    * @param {object} options   Object mit zu prüfender .scale
+    * @returns {void}
+    **/
+    checkForScale: function (options) {
+        var isOutOfRange = false;
 
-            this.setLayerInfoChecked(true);
-        },
+        _.each(this.get("layerSource"), function (layerSource) {
+            if (parseFloat(options.scale, 10) >= layerSource.get("maxScale") || parseFloat(options.scale, 10) <= layerSource.get("minScale")) {
+                isOutOfRange = true;
+            }
+        });
+        this.setIsOutOfRange(isOutOfRange);
+    }
 
-        /**
-         * Setter für das Attribut "childLayerSources"
-         * @param {Ol.source[]} value - value
-         * @returns {void}
-         */
-        setChildLayerSources: function (value) {
-            this.set("childLayerSources", value);
-        },
-
-        /**
-         * Setter für das Attribut "childlayers"
-         * @param {Ol.Collection} value - Eine Ol.Collection mit Ol.layer Objekten
-         * @returns {void}
-         */
-        setChildLayers: function (value) {
-            this.set("childlayers", value);
-        },
-
-        setMaxScale: function (layerId) {
-            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
-
-            this.set("maxScale", layer.maxScale);
-        },
-
-        setMinScale: function (layerId) {
-            var layer = Radio.request("RawLayerList", "getLayerAttributesWhere", {"id": layerId});
-
-            this.set("minScale", layer.minScale);
-        },
-
-        setGfiParams: function (value) {
-            this.set("gfiParams", value);
-        },
-
-        getGfiUrl: function (gfiParams, coordinate, index) {
-            var resolution = Radio.request("MapView", "getResolution").resolution,
-                projection = Radio.request("MapView", "getProjection"),
-                childLayer = this.get("childlayers").item(index);
-
-            return childLayer.getSource().getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: gfiParams.infoFormat, FEATURE_COUNT: gfiParams.featureCount});
-        },
-
-        // setter for layerdefinitions
-        setLayerdefinitions: function (value) {
-            this.set("layerdefinitions", value);
-        }
-
-    });
-
-    return GroupLayer;
 });
+
+export default GroupLayer;
