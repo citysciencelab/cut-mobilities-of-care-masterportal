@@ -4,6 +4,7 @@ const merge = require("webpack-merge"),
     common = require("./webpack.common.js"),
     proxies = require("lgv-config/proxyconf.json");
 
+
 module.exports = merge(common, {
     mode: "development",
     devServer: {
@@ -33,6 +34,4 @@ module.exports = merge(common, {
     //         filename: "./statistics.html"
     //     })
     // ]
-
-
 });
