@@ -115,7 +115,7 @@
       {
         "name": "Filter",
         "glyphicon": "glyphicon-filter",
-        "deaktivateGFI": false,
+        "deactivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
         "allowMultipleQueriesPerLayer": false,
@@ -242,13 +242,13 @@
           {
             "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {
@@ -274,12 +274,16 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
+          "lines": {
+            "name": "Pendler (Lines)",
+            "glyphicon": "glyphicon-play-circle"
+          },
           "animation":
           {
-            "name": "Pendler Animation",
+            "name": "Pendler (Animation)",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
                 "REQUEST": "GetFeature",
                 "SERVICE": "WFS",
@@ -289,10 +293,9 @@
             },
             "featureType": "mrh_einpendler_gemeinde",
             "attrAnzahl": "anzahl_einpendler",
-            "attrKreis": "wohnort_kreis",
+            "attrGemeinde": "wohnort",
             "minPx": 5,
             "maxPx": 30,
-            "num_kreise_to_style": 4,
             "zoomlevel": 1,
             "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },

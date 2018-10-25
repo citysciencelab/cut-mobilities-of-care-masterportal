@@ -1,87 +1,83 @@
-define(function (require) {
-    var $ = require("jquery"),
-        FolderTemplate = require("text!modules/menu/desktop/folder/templateTree.html"),
-        FolderView;
+import FolderTemplate from "text-loader!./templateTree.html";
 
-    FolderView = Backbone.View.extend({
-        tagName: "li",
-        className: "themen-folder",
-        id: "",
-        template: _.template(FolderTemplate),
-        events: {
-            "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
-            "click .selectall": "toggleIsSelected"
-        },
-        initialize: function () {
-            // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
-            this.$el.on({
-                click: function (e) {
-                    e.stopPropagation();
-                }
-            });
-            this.listenTo(this.model, {
-                "change:isSelected": this.rerender,
-                "change:isExpanded": this.rerender,
-                "change:isVisibleInTree": this.removeIfNotVisible
-            });
-            this.render();
-        },
-        render: function () {
-            var attr = this.model.toJSON(),
-                paddingLeftValue = 0,
-                selector = "";
+const FolderView = Backbone.View.extend({
+    events: {
+        "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
+        "click .selectall": "toggleIsSelected"
+    },
+    initialize: function () {
+        // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
+        this.$el.on({
+            click: function (e) {
+                e.stopPropagation();
+            }
+        });
+        this.listenTo(this.model, {
+            "change:isSelected": this.rerender,
+            "change:isExpanded": this.rerender,
+            "change:isVisibleInTree": this.removeIfNotVisible
+        });
+        this.render();
+    },
+    tagName: "li",
+    className: "themen-folder",
+    id: "",
+    template: _.template(FolderTemplate),
+    render: function () {
+        var attr = this.model.toJSON(),
+            paddingLeftValue = 0,
+            selector = "";
 
-            this.$el.html("");
+        this.$el.html("");
 
-            if (this.model.get("isVisibleInTree")) {
-                this.$el.attr("id", this.model.get("id"));
+        if (this.model.get("isVisibleInTree")) {
+            this.$el.attr("id", this.model.get("id"));
 
-                // external Folder
-                if (this.model.get("parentId") === "ExternalLayer") {
-                    $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+            // external Folder
+            if (this.model.get("parentId") === "ExternalLayer") {
+                $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+            }
+            else {
+                // Folder ab der ersten Ebene
+                if (this.model.get("level") > 0) {
+                    $("#" + this.model.get("parentId")).after(this.$el.html(this.template(attr)));
                 }
                 else {
-                    // Folder ab der ersten Ebene
-                    if (this.model.get("level") > 0) {
-                        $("#" + this.model.get("parentId")).after(this.$el.html(this.template(attr)));
+                    // Folder ist auf der Höchsten Ebene (direkt unter Themen)
+                    if (this.model.get("parentId") === "Baselayer") {
+                        selector = "#Baselayer";
                     }
                     else {
-                        // Folder ist auf der Höchsten Ebene (direkt unter Themen)
-                        if (this.model.get("parentId") === "Baselayer") {
-                            selector = "#Baselayer";
-                        }
-                        else {
-                            selector = "#Overlayer";
-                        }
-                        $(selector).append(this.$el.html(this.template(attr)));
+                        selector = "#Overlayer";
                     }
-                    paddingLeftValue = (this.model.get("level") * 15) + 5;
-
-                    $(this.$el).css("padding-left", paddingLeftValue + "px");
+                    $(selector).append(this.$el.html(this.template(attr)));
                 }
-            }
-            return this;
-        },
-        rerender: function () {
-            var attr = this.model.toJSON();
+                paddingLeftValue = (this.model.get("level") * 15) + 5;
 
-            this.$el.html(this.template(attr));
-        },
-        toggleIsExpanded: function () {
-            this.model.toggleIsExpanded();
-        },
-        toggleIsSelected: function () {
-            this.model.toggleIsSelected();
-            Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
-            this.model.setIsExpanded(true);
-        },
-        removeIfNotVisible: function () {
-            if (!this.model.get("isVisibleInTree")) {
-                this.remove();
+                $(this.$el).css("padding-left", paddingLeftValue + "px");
             }
         }
+        return this;
+    },
+    rerender: function () {
+        var attr = this.model.toJSON();
 
-    });
+        this.$el.html(this.template(attr));
+    },
+    toggleIsExpanded: function () {
+        this.model.toggleIsExpanded();
+    },
+    toggleIsSelected: function () {
+        this.model.toggleIsSelected();
+        Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
+        this.model.setIsExpanded(true);
+    },
+    removeIfNotVisible: function () {
+        if (!this.model.get("isVisibleInTree")) {
+            this.remove();
+        }
+    }
 
-    return FolderView;
 });
+
+export default FolderView;

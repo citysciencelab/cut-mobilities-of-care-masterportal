@@ -1,120 +1,91 @@
+import {loadApp} from "./app";
+import "../css/bootstrap.less";
+// CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
+import "../css/style.css";
+// polyfill für Promises im IE
+import "es6-promise/auto";
+import Alert from "../modules/alerting/view";
+
+
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config",
+    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js",
     index,
-    strippedLocation;
+    strippedLocation,
+    loadConfigJs,
+    context;
 
-if (window.location.search !== "") {
-    index = window.location.href.indexOf("?");
-    strippedLocation = window.location.href.slice(0, index);
+new Alert();
 
-    configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config";
+// wenn Config.js nicht in der index.html als Script-Tag eingebunden ist, muss sie zunächst zugefügt und geladen werden
+if (!("Config" in window)) {
+
+    // Pfad zur Config.js bei ParametricUrl
+    if (window.location.search !== "") {
+        index = window.location.href.indexOf("?");
+        strippedLocation = window.location.href.slice(0, index);
+
+        configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config.js";
+    }
+
+    // add mouseevent polyfill to fix ie11 clickhandler
+    // for 3d mode
+    (function (window) {
+        if (typeof window.CustomEvent === "function") {
+            return false; // If not IE
+        }
+
+        // Polyfills DOM4 MouseEvent
+
+        function MouseEvent (eventType, params) {
+            var params = params || {bubbles: false, cancelable: false},
+                mouseEvent = document.createEvent("MouseEvent");
+
+            mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+            return mouseEvent;
+        }
+
+        MouseEvent.prototype = Event.prototype;
+
+        window.MouseEvent = MouseEvent;
+    })(window);
+    // Pfad zur Config.js über data-lgv-config
+    scriptTagsArray.forEach(function (scriptTag) {
+        if (scriptTag.getAttribute("data-masterportal-config") !== null) {
+            // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
+            configPath = scriptTag.getAttribute("data-masterportal-config") + "?noext";
+        }
+    }, this);
+
+    // Config.js laden
+    loadConfigJs = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+
+        document.body.appendChild(script);
+        script.onload = resolve;
+        script.onerror = reject;
+        script.async = true;
+        script.src = configPath;
+    });
+
+    // Abwarten bis Config.js geladen ist, dann app laden
+    loadConfigJs.then(() => {
+        loadApp();
+    });
+
+    loadConfigJs.catch(() => {
+        Radio.trigger("Alert", "alert", "Entschuldigung, die Konfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator.");
+    });
+}
+else {
+    loadApp();
 }
 
-scriptTagsArray.forEach(function (scriptTag) {
-    if (scriptTag.getAttribute("data-lgv-config") !== null) {
-        // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
-        configPath = scriptTag.getAttribute("data-lgv-config") + "?noext";
-    }
-}, this);
 
+// Less-Handling: Importieren von allen less-Files im modules-Ordner
+context = require.context("../modules/", true, /.+\.less?$/);
 
-// add mouseevent polyfill to fix ie11 clickhandler
-// for 3d mode
-(function (window) {
-    if (typeof window.CustomEvent === "function") {
-        return false; // If not IE
-    }
+context.keys().forEach(context);
 
-    // Polyfills DOM4 MouseEvent
-
-    function MouseEvent (eventType, params) {
-        var params = params || {bubbles: false, cancelable: false},
-            mouseEvent = document.createEvent("MouseEvent");
-
-        mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-
-        return mouseEvent;
-    }
-
-    MouseEvent.prototype = Event.prototype;
-
-    window.MouseEvent = MouseEvent;
-})(window);
-
-require.config({
-    waitSeconds: 60,
-    paths: {
-        openlayers: "../lib/ol-cesium/build/olcesium",
-        cesium: "../node_modules/cesium/Build/Cesium/Cesium",
-        app: "app",
-        backbone: "../node_modules/backbone/backbone",
-        "backbone.radio": "../node_modules/backbone.radio/build/backbone.radio.min",
-        bootstrap: "../node_modules/bootstrap/js",
-        "bootstrap-select": "../node_modules/bootstrap-select/dist/js/bootstrap-select.min",
-        "bootstrap-toggle": "../node_modules/bootstrap-toggle/js/bootstrap-toggle.min",
-        colorpicker: "../node_modules/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min",
-        templates: "../templates",
-        config: configPath,
-        d3: "../node_modules/d3/build/d3.min",
-        geoapi: "GeoAPI",
-        jquery: "../node_modules/jquery/dist/jquery.min",
-        jqueryui: "../node_modules/jquery-ui/ui",
-        modules: "../modules",
-        moment: "../node_modules/moment/min/moment-with-locales.min",
-        mqtt: "../node_modules/mqtt/dist/mqtt",
-        // openlayers: "../node_modules/openlayers/dist/ol",
-        pdfmake: "../node_modules/pdfmake/build/pdfmake",
-        proj4: "../node_modules/proj4/dist/proj4",
-        slider: "../node_modules/bootstrap-slider/dist/bootstrap-slider.min",
-        text: "../node_modules/requirejs-text/text",
-        underscore: "../node_modules/underscore/underscore-min",
-        videojs: "../node_modules/video.js/dist/video.min",
-        videojsflash: "../node_modules/videojs-flash/dist/videojs-flash.min",
-        oblique: "../node_modules/vcs-oblique/dist/vcs-oblique.min"
-    },
-    shim: {
-        bootstrap: {
-            deps: ["jquery"]
-        },
-        "bootstrap/popover": {
-            deps: ["bootstrap/tooltip"]
-        },
-        openlayers: {
-            exports: "ol"
-        },
-        cesium: {
-            exports: "Cesium"
-        },
-        oblique: {
-            exports: "vcs"
-        }
-    },
-    map: {
-        "videojsflash": {
-            "video.js": "videojs"
-        }
-    },
-    urlArgs: "bust=" + (new Date()).getTime()
-});
-
-// Überschreibt das Errorhandling von Require so,
-// dass der ursprüngliche Fehler sammt Stacktrace ausgegeben wird.
-// funktioniert obwohl der Linter meckert
-require.onError = function (err) {
-    if (err.requireType === "timeout") {
-        alert("error: " + err);
-    }
-    else {
-        throw err;
-    }
-};
-
-// zuerst libs laden, die alle Module brauchen
-// die sind dann im globalen Namespace verfügbar
-// https://gist.github.com/jjt/3306911
-require(["backbone", "backbone.radio"], function () {
-    // dann unsere app laden, die von diesen globalen libs abhängen
-    Radio = Backbone.Radio;
-    require(["app"]);
-});
+export default context;

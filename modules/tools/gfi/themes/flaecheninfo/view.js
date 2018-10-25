@@ -1,19 +1,15 @@
-define(function (require) {
+import ThemeView from "../view";
+import FlaecheninfoTemplate from "text-loader!./template.html";
 
-    var ThemeView = require("modules/tools/gfi/themes/view"),
-        FlaecheninfoTemplate = require("text!modules/tools/gfi/themes/flaecheninfo/template.html"),
-        FlaecheninfoThemeView;
-
-    FlaecheninfoThemeView = ThemeView.extend({
-        className: "flaecheninfo",
-        template: _.template(FlaecheninfoTemplate),
-        events: {
-            "click button": "btnClicked"
-        },
-        btnClicked: function () {
-            this.model.createReport();
-        }
-    });
-
-    return FlaecheninfoThemeView;
+const FlaecheninfoThemeView = ThemeView.extend({
+    className: "flaecheninfo",
+    template: _.template(FlaecheninfoTemplate),
+    events: {
+        "click button": "btnClicked"
+    },
+    btnClicked: function () {
+        this.model.createReport();
+    }
 });
+
+export default FlaecheninfoThemeView;

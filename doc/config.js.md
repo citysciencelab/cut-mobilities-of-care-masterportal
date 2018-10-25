@@ -36,7 +36,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parameter||
 |[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
-|[browserPrint](#markdown-header-browserPrint)|nein|object||Optionale Konfiguration für das clientseitige Druckmodul.||
 
 ******
 ## mouseHover ##
@@ -60,26 +59,6 @@ remoteInterface:{
 
 ```
 *********
-
-******
-## browserPrint ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|footerText|nein|String|"Kartographie und Gestaltung: Freie und Hansestadt Hamburg \nLandesbetrieb Geoinformation und Vermessung"|Text der in der Fußleiste angezeigt werden soll|
-|titleText|nein|String|"PDF ohne Titel"|Text der im Titel-Element angezeigt werden soll|
-
-**Beispiel:**
-```
-#!json
-browserPrint:{
-    footerText: "Mein Fußleisten-Text",
-    titleText: "Mein Titel"
-}
-
-```
-*********
-
-******
 
 ## clickCounter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|

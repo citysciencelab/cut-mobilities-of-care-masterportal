@@ -1,34 +1,31 @@
-define(function (require) {
+import Template from "text-loader!./template.html";
 
-    var Template = require("text!modules/menu/mobile/breadCrumb/template.html"),
-        BreadCrumbView;
+const BreadCrumbView = Backbone.View.extend({
+    events: {
+        "click": "removeItems"
+    },
+    initialze: function () {
+        this.listenTo(this.model, {
+            "remove": this.remove
+        });
+    },
+    tagName: "li",
+    template: _.template(Template),
 
-    BreadCrumbView = Backbone.View.extend({
-        tagName: "li",
-        template: _.template(Template),
-        events: {
-            "click": "removeItems"
-        },
-        initialze: function () {
-            this.listenTo(this.model, {
-                "remove": this.remove
-            });
-        },
-        /**
-         * Zeichnet das Item und gibt es an die ListView zurück
-         * @return {Backbone.View} this
-         */
-        render: function () {
-            var attr = this.model.toJSON();
+    /**
+     * Zeichnet das Item und gibt es an die ListView zurück
+     * @return {Backbone.View} this
+     */
+    render: function () {
+        var attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
-            return this;
-        },
+        this.$el.html(this.template(attr));
+        return this;
+    },
 
-        removeItems: function () {
-            this.model.removeItems();
-        }
-    });
-
-    return BreadCrumbView;
+    removeItems: function () {
+        this.model.removeItems();
+    }
 });
+
+export default BreadCrumbView;

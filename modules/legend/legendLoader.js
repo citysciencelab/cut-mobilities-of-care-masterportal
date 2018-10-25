@@ -1,31 +1,31 @@
-define(function (require) {
-    var LegendLoader;
+import MobileLegend from "./mobile/view";
+import DesktopLegend from "./desktop/view";
 
-    LegendLoader = function (LegendModel) {
-        this.loadMenu = function (caller) {
-            var isMobile = Radio.request("Util", "isViewMobile");
-
-            if (isMobile) {
-                require(["modules/legend/mobile/view"], function (Legend) {
-                    caller.currentLegend = new Legend({model: LegendModel});
-                });
-            }
-            else {
-                require(["modules/legend/desktop/view"], function (Legend) {
-                    caller.currentLegend = new Legend({model: LegendModel});
-                });
-            }
-        };
-
-        this.currentLegend = this.loadMenu(this, false);
+const LegendLoader = Backbone.Model.extend({
+    defaults: {
+        currentLegend: ""
+    },
+    initialize: function (LegendModel) {
+        this.loadMenu(LegendModel);
 
         Radio.on("Util", {
             "isViewMobileChanged": function () {
                 this.currentLegend.removeView();
-                this.currentLegend = this.loadMenu(this);
+                this.loadMenu(LegendModel);
             }
         }, this);
-    };
+    },
+    loadMenu: function (LegendModel) {
+        var isMobile = Radio.request("Util", "isViewMobile");
 
-    return LegendLoader;
+        if (isMobile) {
+            this.currentLegend = new MobileLegend({model: LegendModel});
+        }
+        else {
+            this.currentLegend = new DesktopLegend({model: LegendModel});
+
+        }
+    }
 });
+
+export default LegendLoader;

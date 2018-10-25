@@ -154,7 +154,7 @@ insert_final_newline = true
 
 ### CSS mit LESS
 CSS-Code gehört nur in LESS-Dateien und in keine HTML-Dokumente oder CSS-Dateien.
-Über einen grunt-Task (grunt-contrib-less) werden automatisch die LESS-Regeln in CSS konvertiert und ins Portal eingebunden. Näheres in der [setup-dev-proxy](doc/setup-dev-proxy.md#markdown-header-gruntless) bzw. in der [setup-dev](doc/setup-dev.md#markdown-header-gruntless).
+Über Webpack werden automatisch die LESS-Regeln in CSS konvertiert und ins Portal eingebunden.
 
 
 ####Weitere Konventionen
