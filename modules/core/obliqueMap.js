@@ -115,8 +115,8 @@ define(function (require) {
 
                     this.container.style.visibility = "hidden";
                     this.set("active", false);
-                    map2D.getOverlayContainer().classList.remove("olcs-hideoverlay");
-                    map2D.getOverlayContainerStopEvent().classList.remove("olcs-hideoverlay");
+                    map2D.getViewport().querySelector(".ol-overlaycontainer").classList.remove("olcs-hideoverlay");
+                    map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.remove("olcs-hideoverlay");
                     ol.Observable.unByKey(this.listenerKeys);
                     interactions = map2D.getInteractions();
                     this.pausedInteractions.forEach((interaction) => {
@@ -230,8 +230,8 @@ define(function (require) {
                         this.pausedInteractions.push(event.element);
                         interactions.clear();
                     }.bind(this)));
-                    map2D.getOverlayContainer().classList.add("olcs-hideoverlay");
-                    map2D.getOverlayContainerStopEvent().classList.add("olcs-hideoverlay");
+                    map2D.getViewport().querySelector(".ol-overlaycontainer").classList.add("olcs-hideoverlay");
+                    map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                     this.set("active", true);
                     this.container.style.visibility = "visible";
                     this.setCenter(center, resolution.resolution).then(function () {
@@ -259,8 +259,8 @@ define(function (require) {
                             this.pausedInteractions.push(event.element);
                             interactions.clear();
                         }.bind(this)));
-                        map2D.getOverlayContainer().classList.add("olcs-hideoverlay");
-                        map2D.getOverlayContainerStopEvent().classList.add("olcs-hideoverlay");
+                        map2D.getViewport().querySelector(".ol-overlaycontainer").classList.add("olcs-hideoverlay");
+                        map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                         this.set("active", true);
                         this.container.style.visibility = "visible";
 
