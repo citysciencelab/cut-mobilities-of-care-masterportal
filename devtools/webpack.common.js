@@ -1,12 +1,16 @@
 var webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-    path = require("path");
+    path = require("path"),
+    test = "../portalconfigs/verkehrsportal/verkehrsfunctions.js";
 
 module.exports = {
-    entry: "./js/main.js",
+    entry: {
+        masterportal: "./js/main.js"
+        // customModule: test
+    },
     output: {
         path: path.resolve(__dirname, "../build"),
-        filename: "js/masterportal.js"
+        filename: "js/[name].js"
     },
     resolve: {
         alias: {
@@ -18,12 +22,16 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /(node_modules)/,
+                include: [
+                    path.resolve(__dirname, test)
+                ],
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["@babel/preset-env"]
+                        presets: ["@babel/preset-env"],
+                        plugins: ["@babel/plugin-syntax-dynamic-import"]
                     }
-                }
+                },
             },
             {
                 test: /\.less$/,
@@ -54,7 +62,7 @@ module.exports = {
             }
         ]
     },
-    plugins: [
+    plugins: [        
         // provide libraries globally
         new webpack.ProvidePlugin({
             jQuery: "jquery",
@@ -68,6 +76,7 @@ module.exports = {
             filename: "css/style.css"
         }),
         // import only de-locale from momentjs
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/)
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
+        new webpack.ContextReplacementPlugin(/testtest/, /.\/portalconfigs\/verkehrsportal\/verkehrsfunctions.js/)
     ]
 };

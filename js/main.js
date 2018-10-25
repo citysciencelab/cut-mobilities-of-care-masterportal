@@ -5,7 +5,7 @@ import "../css/style.css";
 // polyfill für Promises im IE
 import "es6-promise/auto";
 import Alert from "../modules/alerting/view";
-
+import CM from "testtest"
 
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),

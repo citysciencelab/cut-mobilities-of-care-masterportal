@@ -72,6 +72,7 @@ import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
 import HighlightFeature from "../modules/highlightFeature/model";
+import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
 
@@ -102,16 +103,16 @@ function loadApp () {
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
+    // load customModules from config
+    if (_.has(Config, "customModules") && Config.customModules.length > 0) {
 
-    // // load customModules from config
-    // if (_.has(Config, "customModules") && Config.customModules.length > 0) {
-    //     _.each(Config.customModules, function (module) {
-    //         require([module], function (CustomModule) {
-    //             new CustomModule();
-    //         });
-    //     });
-    // }
-    //
+        // import(A from '../portalconfigs/verkehrsportal/verkehrsfunctions');
+   //      return import(/* webpackChunkName: "verkehrsfunctions" */ '../portalconfigs/verkehrsportal/verkehrsfunctions').then(module => {
+   //   var print = module.default;
+
+   //   print();
+   // }).catch(error => 'An error occurred while loading the component');
+    }
 
     new SliderView();
     new SliderRangeView();
@@ -354,4 +355,4 @@ function loadApp () {
     Radio.trigger("Util", "hideLoader");
 }
 
-export {loadApp};
+export {loadCustomModule, loadApp};
