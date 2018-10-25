@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/lgv-g12/lgv.git"
+    "url": "https://jonas_weiter:Hiwi_01.@bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
@@ -21,16 +21,17 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
-    "cesium": "1.45.0",
+    "cesium": "1.50.0",
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
     "moment": "2.x",
     "mqtt": "^2.15.x",
     "ol": "^5.2.0",
+    "olcs": "^2.4.0",
     "proj4": "2.x",
     "underscore": "1.x",
-    "vcs-oblique": "^1.0.5",
+    "vcs-oblique": "^2.0.0",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0"
   },
@@ -53,7 +54,7 @@
     "jaguarjs-jsdoc": "0.0.1",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
-    "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",
+    "lgv-config": "git+https://jonas_weiter:Hiwi_01.@bitbucket.org/lgv-g12/lgv-config.git",
     "mini-css-extract-plugin": "^0.4.3",
     "mocha": "3.5.0",
     "mocha-loader": "^2.0.0",
