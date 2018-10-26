@@ -47,7 +47,7 @@ const FilterModel = Tool.extend({
                     queryCollection = this.get("queryCollection"),
                     filterModels;
 
-                if (!this.isModelinQueryCollection(layerId, queryCollection)) {
+                if (!this.isModelInQueryCollection(layerId, queryCollection)) {
                     filterModels = _.filter(predefinedQueries, function (query) {
                         return query.layerId === layerId;
                     });
@@ -280,7 +280,7 @@ const FilterModel = Tool.extend({
         }
     },
 
-    isModelinQueryCollection: function (layerId, queryCollection) {
+    isModelInQueryCollection: function (layerId, queryCollection) {
         var searchQuery = queryCollection.findWhere({layerId: layerId.toString()});
 
         return !_.isUndefined(searchQuery);
