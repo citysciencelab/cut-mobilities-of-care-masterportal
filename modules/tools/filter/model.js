@@ -47,7 +47,7 @@ const FilterModel = Tool.extend({
                     queryCollection = this.get("queryCollection"),
                     filterModels;
 
-                if (!this.isModelInQueryCollection(layerId, queryCollection)) {
+                if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
                     filterModels = _.filter(predefinedQueries, function (query) {
                         return query.layerId === layerId;
                     });
