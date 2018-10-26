@@ -12,8 +12,9 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js --CUSTOMMODULE",
     "start:verkehr": "npm start -- ../portalconfigs/verkehrsportal/custommodule",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "webpack --config devtools/webpack.prod.js --CUSTOMMODULE  && node devtools/tasks/copy.js",
-    "build:verkehr": "npm run build -- ../portalconfigs/verkehrsportal/custommodule"
+    "build": "npm run webpackbuild && node devtools/tasks/copy.js",
+    "webpackbuild": "webpack --config devtools/webpack.prod.js --CUSTOMMODULE",
+    "build:verkehr": "npm run webpackbuild -- ../portalconfigs/verkehrsportal/custommodule && node devtools/tasks/copy.js"
   },
   "dependencies": {
     "backbone": "1.x",
