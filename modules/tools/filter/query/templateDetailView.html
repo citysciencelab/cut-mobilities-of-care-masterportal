@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<% console.log("") %>
-<% console.log(isLayerVisible) %>
 <% if (isLayerVisible) { %>
 <div class="detailview-head">
     <% console.log(sendToRemote) %>
@@ -16,7 +14,6 @@
         <label class="col-xs-4 feature-count"><%= featureIds.length %> Treffer</label>
     <% } %>
     <% if (this.model.has("info")) { %>
-        <% console.log(this.model.get("info")) %>
         <div class="filter-info"><%= info %></div>
     <% } %>
 </div>
