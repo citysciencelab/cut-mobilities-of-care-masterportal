@@ -133,4 +133,21 @@ describe("core/Util", function () {
         });
 
     });
+
+    describe("convertArrayOfObjectsToCsv", function () {
+        var array = [{attr1: "der", attr2: "die"}, {attr1: "das", attr2: "hier"}, {attr1: "dort", attr2: "oben"}];
+
+        it("should return a string with a length of 39", function () {
+            expect(model.convertArrayOfObjectsToCsv(array)).to.be.a("string").to.have.lengthOf(39);
+        });
+        it("should find four commtatas", function () {
+            expect(model.convertArrayOfObjectsToCsv(array).match(/,/g)).to.have.lengthOf(4);
+        });
+        it("should find four linebreaks (\n)", function () {
+            expect(model.convertArrayOfObjectsToCsv(array).match(/\n/g)).to.have.lengthOf(4);
+        });
+        it("should find four dollar signs", function () {
+            expect(model.convertArrayOfObjectsToCsv(array, "$").match(/\$/g)).to.have.lengthOf(4);
+        });
+    });
 });

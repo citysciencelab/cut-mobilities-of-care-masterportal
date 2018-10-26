@@ -99,7 +99,7 @@
       {
         "name": "Filter",
         "glyphicon": "glyphicon-filter",
-        "deaktivateGFI": false,
+        "deactivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
         "allowMultipleQueriesPerLayer": false,
@@ -226,13 +226,13 @@
           {
             "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {
@@ -267,7 +267,7 @@
             "name": "Pendler (Animation)",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
                 "REQUEST": "GetFeature",
                 "SERVICE": "WFS",

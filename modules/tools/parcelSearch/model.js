@@ -2,7 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 
 const ParcelSearch = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
-        "deaktivateGFI": false,
+        "deactivateGFI": false,
         "renderToWindow": true,
         "isCollapsed": undefined,
         "isCurrentWin": undefined,

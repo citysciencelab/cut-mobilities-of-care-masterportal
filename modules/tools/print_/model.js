@@ -4,6 +4,8 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
 const PrintModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
+        // output filename
+        filename: "report",
         // the id from the rest services json for the mapfish app
         mapfishServiceId: undefined,
         // the identifier of one of the available mapfish print configurations
@@ -36,11 +38,12 @@ const PrintModel = Tool.extend({
         isScaleAvailable: false,
         // the id from the rest services json for the plot app
         plotServiceId: undefined,
-        deaktivateGFI: false,
+        deactivateGFI: false,
         renderToWindow: true,
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37,
-        glyphicon: "glyphicon-print"
+        glyphicon: "glyphicon-print",
+        eventListener: {}
     }),
     initialize: function () {
         var channel = Radio.channel("Print");
@@ -121,6 +124,7 @@ const PrintModel = Tool.extend({
             }),
             attr = {
                 "layout": this.get("currentLayout").name,
+                "outputFilename": this.get("filename"),
                 "outputFormat": this.get("currentFormat"),
                 "attributes": {
                     "title": this.get("title"),
@@ -152,6 +156,7 @@ const PrintModel = Tool.extend({
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
         spec = spec.toJSON();
+
         spec = _.omit(spec, "uniqueIdList");
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
@@ -199,10 +204,11 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
-            Radio.trigger("Map", "registerListener", "postcompose", this.createPrintMask.bind(this), this);
+            this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
+
         }
         else {
-            Radio.trigger("Map", "unregisterListener", "postcompose", this.createPrintMask.bind(this), this);
+            Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         }
         Radio.trigger("Map", "render");
     },
@@ -504,6 +510,9 @@ const PrintModel = Tool.extend({
      */
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
+    },
+    setEventListener: function (value) {
+        this.set("eventListener", value);
     }
 });
 

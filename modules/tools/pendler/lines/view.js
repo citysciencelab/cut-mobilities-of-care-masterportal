@@ -5,7 +5,8 @@ const LinesView = Backbone.View.extend({
         "change #select-kreis": "setKreis",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
-        "change input[type=radio]": "setDirection"
+        "change input[type=radio]": "setDirection",
+        "click .csv-download": "download"
     },
 
     initialize: function () {
@@ -34,6 +35,10 @@ const LinesView = Backbone.View.extend({
             this.undelegateEvents();
         }
         return this;
+    },
+
+    download: function () {
+        this.model.download();
     },
 
     setKreis: function (evt) {

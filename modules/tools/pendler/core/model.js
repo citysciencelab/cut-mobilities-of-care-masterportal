@@ -7,7 +7,7 @@ const PendlerCoreModel = Tool.extend({
         pendlerLegend: [],
         renderToWindow: true,
         zoomLevel: 1,
-        url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+        url: "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
         params: {
             REQUEST: "GetFeature",
             SERVICE: "WFS",
@@ -251,6 +251,39 @@ const PendlerCoreModel = Tool.extend({
         }
 
         this.setPostBody(postBody);
+    },
+
+    download: function () {
+        const features = this.get("lineFeatures"),
+            featurePropertyList = [];
+
+        let csv = "",
+            blob = "";
+
+        features.forEach(function (feature) {
+            featurePropertyList.push(_.omit(feature.getProperties(), "geom_line"));
+        });
+        csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featurePropertyList);
+        blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, "export.csv");
+        }
+        else {
+            const link = document.createElement("a");
+
+            if (link.download !== undefined) { // feature detection
+                // Browsers that support HTML5 download attribute
+                const url = URL.createObjectURL(blob);
+
+                link.setAttribute("href", url);
+                link.setAttribute("download", "export.csv");
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
     },
 
     setPostBody: function (value) {

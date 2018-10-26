@@ -7,7 +7,7 @@
 
 **Aufruf**:
 
-[https://localhost:9001/test/unittests/ExampleTest/ExampleTestRunner.html](https://localhost:9001/test/unittests/ExampleTest/ExampleTestRunner.html)
+[http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html](http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html)
 *******************************************************************************
 
 ##Wie man Tests schreibt:###
@@ -25,28 +25,14 @@ Alle Tests zu einer Komponente z.b. einem Model sollen in eine Testdatei mit gle
 
 Eine Testdatei beschreibt dabei immer nur genau eine zu testende Datei.
 
-###Aufruf###
-
-Damit die Tests in einer Datei ausgeführt werden, muss diese im *SpecRunner.js* eingetragen werden.
-
-```
-require([
-    /********* load Testfiles here!!!**********/
-    "modules/tools/download/testModel.js"
-    ], function (require) {
-        mocha.run();
-    });
-```
-
 
 ###Struktur###
 
 **BeispielStruktur:**
 ```
-define(function(require) {
 
-    var expect = require("chai").expect,
-        Model = require("testModel.js");
+import {expect} from "chai";
+import Model from "./testModel.js";
 
     describe("testModul", function () {
         describe("getEmployeesByName", function () {
@@ -64,7 +50,6 @@ define(function(require) {
                 expect(model.getEmployeesByName("Jonas")).to.deep.include({name: "Jonas", coffeeCount: 1});
             });
         });
-});
 
 ```
 
@@ -121,4 +106,3 @@ D.h. Ungewöhnliche Fälle testen, z.b. sehr hohe oder sehr geringe Eingaben ode
 
 Positiv und **negativ** testen.
 D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch, dass keine Unerwünschten Nebeneffekte auftreten.
-

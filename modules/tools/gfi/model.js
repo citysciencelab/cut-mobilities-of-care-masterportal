@@ -6,7 +6,6 @@ import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
 
-
 const Gfi = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         // detached | attached
@@ -24,7 +23,7 @@ const Gfi = Tool.extend({
         // Koordinate für das attached Popover und den Marker
         coordinate: undefined,
         // Verwaltet die Themes
-        themeList: new ThemeList(),
+        themeList: undefined,
         // Index für das aktuelle Theme
         themeIndex: 0,
         // Anzahl der Themes
@@ -33,9 +32,9 @@ const Gfi = Tool.extend({
         glyphicon: "glyphicon-info-sign"
     }),
     initialize: function () {
-        var channel = Radio.channel("GFI"),
-            tool;
+        var channel = Radio.channel("GFI");
 
+        this.setThemeList(new ThemeList());
         channel.on({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
@@ -71,10 +70,6 @@ const Gfi = Tool.extend({
                     this.get("currentView").toggle();
                 }
             },
-            "change:coordinate": function (model, value) {
-                this.setIsVisible(false);
-                this.get("overlay").setPosition(value);
-            },
             "change:themeIndex": function (model, value) {
                 this.get("themeList").appendTheme(value);
             }
@@ -102,13 +97,14 @@ const Gfi = Tool.extend({
             "activatedTool": this.toggleGFI
         });
 
-        tool = Radio.request("Parser", "getItemByAttributes", {isActive: true});
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                this.toggleGFI(this.get("id"), this.get("deactivateGFI"));
+                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            }
+        }, this);
 
-        if (!_.isUndefined(tool)) {
-            this.toggleGFI(tool.id, !tool.isActive);
-        }
         this.initView();
-        Radio.trigger("Map", "addOverlay", this.get("overlay"));
     },
 
     /**
@@ -135,18 +131,19 @@ const Gfi = Tool.extend({
     /**
      * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
      * @param  {String} id - Tool Id
-     * @param  {String} deaktivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
+     * @param  {String} deactivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
      * @return {undefined}
      */
-    toggleGFI: function (id, deaktivateGFI) {
-        if (id === "gfi" && deaktivateGFI === false) {
-            Radio.trigger("Map", "registerListener", "click", this.setGfiParams.bind(this), this);
+    toggleGFI: function (id, deactivateGFI) {
+        if (id === "gfi" && deactivateGFI === false) {
+            this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
+            // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
         }
-        else if (deaktivateGFI === true) {
-            Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+        else if (deactivateGFI === true) {
+            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
-        else if (_.isUndefined(deaktivateGFI)) {
-            Radio.trigger("Map", "unregisterListener", "click", this.setGfiParams.bind(this), this);
+        else if (_.isUndefined(deactivateGFI)) {
+            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         }
     },
 
@@ -190,19 +187,26 @@ const Gfi = Tool.extend({
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
             eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
-            wmsGFIParams;
+            wmsGFIParams,
+            unionParams;
 
         Radio.trigger("ClickCounter", "gfi");
-
+        // für detached MapMarker
         this.setCoordinate(evt.coordinate);
-
         // Vector
         vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
         // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        unionParams = _.union(vectorGFIParams, wmsGFIParams);
+        if (_.isEmpty(unionParams)) {
+            this.setIsVisible(false);
+        }
+        else {
+            this.get("overlay").setPosition(evt.coordinate);
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+        }
     },
 
     /**
@@ -396,6 +400,15 @@ const Gfi = Tool.extend({
             return true;
         }
         return false;
+    },
+
+    setClickEventKey: function (value) {
+        this.set("clickEventKey", value);
+    },
+
+    // setter for themeList
+    setThemeList: function (value) {
+        this.set("themeList", value);
     }
 
 });

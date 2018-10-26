@@ -1,6 +1,5 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    proxies = require("lgv-config/proxyconf.json");
+    path = require("path");
 
 module.exports = {
     entry: "mocha-loader!./test/unittests/SpecRunner.js",
@@ -22,8 +21,7 @@ module.exports = {
         port: 9009,
         publicPath: "/test/",
         open: true,
-        openPage: "test/unittests/Testrunner.html",
-        proxy: proxies
+        openPage: "test/unittests/Testrunner.html"
     },
     module: {
         rules: [

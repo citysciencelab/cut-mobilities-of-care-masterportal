@@ -27,7 +27,6 @@ import QuickHelpView from "../modules/quickhelp/view";
 import ScaleLineView from "../modules/scaleline/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import GfiModel from "../modules/tools/gfi/model";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
 import CoordPopupView from "../modules/tools/getCoord/view";
@@ -162,10 +161,6 @@ function loadApp () {
             }
             case "schulwegrouting": {
                 new SchulwegRoutingView({model: tool});
-                break;
-            }
-            case "gfi": {
-                new GfiModel(_.extend(tool, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}));
                 break;
             }
             case "coord": {
