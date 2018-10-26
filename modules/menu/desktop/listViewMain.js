@@ -2,6 +2,7 @@ import DesktopToolView from "./tool/view";
 import DesktopFolderView from "./folder/viewMenu";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopStaticLinkView from "./staticlink/view";
+import DesktopViewpointView from "./viewpoint/view";
 
 import "bootstrap";
 
@@ -61,6 +62,9 @@ const Menu = Backbone.View.extend({
     },
     addDesktopFolderView: function (model) {
         new DesktopFolderView({model: model});
+    },
+    addViewpointView: function (model) {
+        new DesktopViewpointView({model: model});
     },
     addToolView: function (model) {
         new DesktopToolView({model: model});

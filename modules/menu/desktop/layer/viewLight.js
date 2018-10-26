@@ -62,6 +62,14 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
         }
     },
+    toggleSupportedVisibility: function (mode) {
+        if (this.model.get("supported").indexOf(mode) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
+        }
+    },
 
     /**
      * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)

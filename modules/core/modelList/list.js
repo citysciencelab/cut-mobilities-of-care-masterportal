@@ -4,6 +4,9 @@ import GeoJSONLayer from "./layer/geojson";
 import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
+// import TerrainLayer from "./layer/terrain";
+// import TileSetLayer from "./layer/tileset";
+// import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
@@ -34,6 +37,7 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayersliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
+import Viewpoint from "./viewpoint/model";
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {
@@ -123,15 +127,15 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.typ === "Heatmap") {
                 return new HeatmapLayer(attrs, options);
             }
-            else if (attrs.typ === "Terrain") {
-                return new TerrainLayer(attrs, options);
-            }
-            else if (attrs.typ === "TileSet") {
-                return new TileSetLayer(attrs, options);
-            }
-            else if (attrs.typ === "Oblique") {
-                return new ObliqueLayer(attrs, options);
-            }
+            // else if (attrs.typ === "Terrain") {
+            //     return new TerrainLayer(attrs, options);
+            // }
+            // else if (attrs.typ === "TileSet") {
+            //     return new TileSetLayer(attrs, options);
+            // }
+            // else if (attrs.typ === "Oblique") {
+            //     return new ObliqueLayer(attrs, options);
+            // }
         }
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
@@ -218,15 +222,16 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.id === "layerslider") {
                 return new LayersliderModel(attrs, options);
             }
-            else if (attrs.type === "viewpoint") {
-                return new Viewpoint(attrs, options);
-            }
             return new Tool(attrs, options);
         }
         else if (attrs.type === "staticlink") {
             return new StaticLink(attrs, options);
         }
+        else if (attrs.type === "viewpoint") {
+            return new Viewpoint(attrs, options);
+        }
         else {
+            console.log(attrs);
             Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
         }
         return null;

@@ -1,7 +1,7 @@
 import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
-import {Oblique} from "oblique";
+import oblique from "vcs-oblique/dist/vcs-oblique.min.js";
 
 const ObliqueMap = Backbone.Model.extend({
     defaults: {
@@ -79,7 +79,7 @@ const ObliqueMap = Backbone.Model.extend({
         this.currentLayer = layer;
         return layer.getObliqueCollection().then(function (collection) {
             this.currentCollection = collection;
-            var direction = collection.directions[Oblique.ViewDirection.NORTH];
+            var direction = collection.directions[oblique.ViewDirection.NORTH];
 
             if (!direction) {
                 var key = Object.keys(collection.directions)[0];
@@ -130,7 +130,7 @@ const ObliqueMap = Backbone.Model.extend({
     },
 
     changeDirection: function (directionName) {
-        var direction = Oblique.viewDirectionNames[directionName];
+        var direction = oblique.viewDirectionNames[directionName];
 
         if (!direction || direction === this.currentDirection.direction) {
             return;
@@ -181,7 +181,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (this.currentCollection && this.currentDirection && this.currentDirection.currentImage) {
             center = this.get("map").getView().getCenter();
-            return Oblique.transformFromImage(this.currentDirection.currentImage, center, {
+            return oblique.transformFromImage(this.currentDirection.currentImage, center, {
                 dataProjection: this.get("projection")
             });
         }
@@ -298,7 +298,7 @@ const ObliqueMap = Backbone.Model.extend({
     },
     reactToClickEvent: function (event) {
         if (this.currentDirection && this.currentDirection.currentImage) {
-            Oblique.transformFromImage(this.currentDirection.currentImage, event.coordinate, {
+            oblique.transformFromImage(this.currentDirection.currentImage, event.coordinate, {
                 dataProjection: this.get("projection")
             }).then(function (coords) {
                 Radio.trigger("ObliqueMap", "clicked", coords.coords);

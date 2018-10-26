@@ -6,7 +6,7 @@ import VectorSource from "ol/source/Vector.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
-import Cesium from "Cesium";
+// import Cesium from "cesium/Build/Cesium/Cesium.js";
 
 const map = Backbone.Model.extend({
     defaults: {

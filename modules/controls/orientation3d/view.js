@@ -1,6 +1,6 @@
 import Orientation3DTemplate from "text-loader!./template.html";
-import {oblique} from "oblique";
-import Cesium from "cesium";
+import oblique from "vcs-oblique/dist/vcs-oblique.min.js";
+// import Cesium from "cesium";
 
 const Orientation3DView = Backbone.View.extend({
     events: {
@@ -24,7 +24,6 @@ const Orientation3DView = Backbone.View.extend({
         obliqueChannel.on({
             "newImage": this.newImage
         }, this);
-
     },
     className: "row",
     template: _.template(Orientation3DTemplate),
