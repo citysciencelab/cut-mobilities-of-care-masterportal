@@ -48,6 +48,7 @@ const WfsQueryModel = QueryModel.extend({
             "featuresLoaded": function (layerId, features) {
                 if (layerId === this.get("layerId")) {
                     this.processFeatures(features);
+                    this.stopListening(Radio.channel("Layer"), "featuresLoaded");
                 }
             }
         });
