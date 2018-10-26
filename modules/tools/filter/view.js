@@ -7,7 +7,6 @@ const FilterView = Backbone.View.extend({
         "click .close": "closeFilter"
     },
     initialize: function () {
-
         this.listenTo(this.model, {
             "change:isActive": function (model, isActive) {
                 if (isActive) {
@@ -66,7 +65,6 @@ const FilterView = Backbone.View.extend({
     },
 
     renderDetailView: function () {
-        // var selectedModel = _.isUndefined(model) ? this.model.get("queryCollection").findWhere({isSelected: true}) : model,
         var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
             view;
 
