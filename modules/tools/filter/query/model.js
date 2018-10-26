@@ -44,6 +44,7 @@ const QueryModel = Backbone.Model.extend({
                 }
             }
         }, this);
+
     },
 
     isSearchInMapExtentActive: function () {
