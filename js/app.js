@@ -103,16 +103,6 @@ function loadApp () {
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
-    // load customModules from config
-    if (_.has(Config, "customModules") && Config.customModules.length > 0) {
-
-        // import(A from '../portalconfigs/verkehrsportal/verkehrsfunctions');
-   //      return import(/* webpackChunkName: "verkehrsfunctions" */ '../portalconfigs/verkehrsportal/verkehrsfunctions').then(module => {
-   //   var print = module.default;
-
-   //   print();
-   // }).catch(error => 'An error occurred while loading the component');
-    }
 
     new SliderView();
     new SliderRangeView();
@@ -352,7 +342,19 @@ function loadApp () {
     }
 
     new HighlightFeature();
+
+    // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
+    if (CUSTOMMODULE !== "") {
+        return import(/* webpackMode: "eager" */ CUSTOMMODULE)
+        .then(module => {
+            new module.default;
+        })
+        .catch(error => {
+            Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+        });
+    }
+
     Radio.trigger("Util", "hideLoader");
 }
 
-export {loadCustomModule, loadApp};
+export {loadApp};
