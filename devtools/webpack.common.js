@@ -3,6 +3,10 @@ var webpack = require("webpack"),
     path = require("path");
 
 module.exports = function (path2CustomModule) {
+    if (path2CustomModule !== "") {
+        console.log("Create global constant for CUSTOMMODULE: " + path2CustomModule);
+    }
+
     return {
         entry: {
             masterportal: "./js/main.js"
@@ -73,6 +77,7 @@ module.exports = function (path2CustomModule) {
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
+            // create global constant at compile time
             new webpack.DefinePlugin({
                 CUSTOMMODULE: JSON.stringify(path2CustomModule)
             })

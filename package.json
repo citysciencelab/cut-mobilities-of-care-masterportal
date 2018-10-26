@@ -9,9 +9,11 @@
     "url": "https://bitbucket.org/lgv-g12/lgv.git"
   },
   "scripts": {
-    "start": "webpack-dev-server --config devtools/webpack.dev.js --CUSTOMMODULE=../portalconfigs/verkehrsportal/customModule",
+    "start": "webpack-dev-server --config devtools/webpack.dev.js --CUSTOMMODULE",
+    "start:verkehr": "npm start -- ../portalconfigs/verkehrsportal/custommodule",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "webpack --config devtools/webpack.prod.js"
+    "build": "webpack --config devtools/webpack.prod.js --CUSTOMMODULE",
+    "build:verkehr": "npm run build -- ../portalconfigs/verkehrsportal/custommodule"
   },
   "dependencies": {
     "backbone": "1.x",

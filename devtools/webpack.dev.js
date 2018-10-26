@@ -1,10 +1,11 @@
 const merge = require("webpack-merge"),
     Visualizer = require("webpack-visualizer-plugin"),
     common = require("./webpack.common.js"),
-    proxies = require("lgv-config/proxyconf.json");
+    proxies = require("lgv-config/proxyconf.json"),
+    _ = require("underscore");
 
 module.exports = function (env, args) {
-    let path2CustomModule = args.CUSTOMMODULE ? args.CUSTOMMODULE : "";
+    let path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
 
     return merge(new common(path2CustomModule), {
         mode: "development",
