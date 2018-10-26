@@ -35,9 +35,9 @@ const FilterView = Backbone.View.extend({
                 this.model.closeGFI();
             },
             "renderDetailView": this.renderDetailView,
-            "add": function (model) {
+            "add": function () {
                 this.render();
-                this.renderDetailView(model);
+                this.renderDetailView();
             }
         });
 
@@ -65,8 +65,9 @@ const FilterView = Backbone.View.extend({
         return this;
     },
 
-    renderDetailView: function (model) {
-        var selectedModel = _.isUndefined(model) ? this.model.get("queryCollection").findWhere({isSelected: true}) : model,
+    renderDetailView: function () {
+        // var selectedModel = _.isUndefined(model) ? this.model.get("queryCollection").findWhere({isSelected: true}) : model,
+        var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
             view;
 
         if (!_.isUndefined(selectedModel)) {
