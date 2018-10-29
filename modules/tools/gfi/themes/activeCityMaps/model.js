@@ -105,9 +105,9 @@ const ActiveCityMapsTheme = Theme.extend({
         var gfiContent = this.get("gfiContent"),
             featureInfos = [];
 
-        if (!_.isUndefined(gfiContent[0])) {
+        if (!_.isUndefined(gfiContent)) {
             featureInfos = [];
-            featureInfos = this.createFeatureInfos(gfiContent[0], this.get("themeConfig"));
+            featureInfos = this.createFeatureInfos(gfiContent);
             this.setFeatureInfos(featureInfos);
         }
     },
@@ -121,22 +121,24 @@ const ActiveCityMapsTheme = Theme.extend({
     createFeatureInfos: function (gfiContent) {
         var featureInfos = [];
 
-        _.each(gfiContent, function (attribute, key) {
-            var gfiAttributes;
+        _.each(gfiContent, function (feature) {
+            _.each(feature, function (attribute, key) {
+                var gfiAttributes;
 
-            if (attribute.indexOf("|") !== -1) {
-                gfiAttributes = {
-                    attrName: key,
-                    attrValue: attribute.split("|")
-                };
-            }
-            else {
-                gfiAttributes = {
-                    attrName: key,
-                    attrValue: attribute
-                };
-            }
-            featureInfos.push(gfiAttributes);
+                if (attribute.indexOf("|") !== -1) {
+                    gfiAttributes = {
+                        attrName: key,
+                        attrValue: attribute.split("|")
+                    };
+                }
+                else {
+                    gfiAttributes = {
+                        attrName: key,
+                        attrValue: attribute
+                    };
+                }
+                featureInfos.push(gfiAttributes);
+            });
         }, this);
         return featureInfos;
     },

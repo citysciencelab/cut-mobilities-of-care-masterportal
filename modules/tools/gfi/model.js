@@ -262,25 +262,23 @@ const Gfi = Tool.extend({
                     },
                     hitTolerance: 0
                 }),
-                modelAttributes;
-
-            _.each(features, function (featureAtPixel) {
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 
+            modelAttributes.gfiFeatureList = [];
+
+            _.each(features, function (featureAtPixel) {
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.feature = featureAtPixel;
-                    vectorGfiParams.push(modelAttributes);
+                    modelAttributes.gfiFeatureList.push(featureAtPixel);
                 }
                 // Cluster Feature
                 else {
                     _.each(featureAtPixel.get("features"), function (feature) {
-                        modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
-                        modelAttributes.feature = feature;
-                        vectorGfiParams.push(modelAttributes);
+                        modelAttributes.gfiFeatureList.push(feature);
                     });
                 }
             }, this);
+            vectorGfiParams.push(modelAttributes);
         }, this);
 
         return vectorGfiParams;

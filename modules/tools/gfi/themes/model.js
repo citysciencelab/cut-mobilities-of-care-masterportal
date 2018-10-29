@@ -158,14 +158,17 @@ const Theme = Backbone.Model.extend({
     },
 
     getVectorGfi: function () {
-        var gfiContent;
+        var gfiContentList = [];
 
-        gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
-        gfiContent = this.getManipulateDate(gfiContent);
+        _.each(this.get("gfiFeatureList"), function (feature) {
+            var gfiContent;
 
-        this.setGfiContent(_.extend(gfiContent, {
-            allProperties: this.get("feature").getProperties()
-        }));
+            gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent)[0];
+            gfiContentList.push(gfiContent);
+        }, this);
+        this.cloneCollModels(gfiContentList);
+        this.setGfiContent(gfiContentList);
         this.setIsReady(true);
     },
     // Setter
