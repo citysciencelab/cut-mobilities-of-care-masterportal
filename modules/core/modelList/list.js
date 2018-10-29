@@ -45,22 +45,22 @@ const ModelList = Backbone.Collection.extend({
                 return this.where(attributes);
             },
             "getModelByAttributes": function (attributes) {
-                var model = this.findWhere(attributes);
+                var returnModel = this.findWhere(attributes),
+                    groupModels;
 
-                if (_.isUndefined(model)) {
-                    console.log(model);
-                    
-                    this.find(function (mod) {
-                        if (mod.get("typ") === "GROUP") {
-                            model = _.find(mod.get("children"), function (child) {
-                                return child.id === attributes.id;
-                            });
-                        }
+                if (_.isUndefined(returnModel)) {
+                    groupModels = this.filter(function (model) {
+                        return model.get("typ") === "GROUP";
                     });
-                }
-                console.log(model);
 
-                return model;
+                    returnModel = _.find(groupModels, function (groupModel) {
+                        return _.find(groupModel.get("children"), function (child) {
+                            return child.id === attributes.id;
+                        });
+                    });
+
+                }
+                return returnModel;
             }
         }, this);
 
