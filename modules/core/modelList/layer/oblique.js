@@ -1,5 +1,5 @@
 import Layer from "./model";
-import {oblique} from "oblique";
+import oblique from "vcs-oblique";
 import {get} from "ol/proj.js";
 
 const ObliqueLayer = Layer.extend({

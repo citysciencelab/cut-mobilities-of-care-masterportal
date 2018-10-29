@@ -1,7 +1,7 @@
 import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
-import oblique from "vcs-oblique/dist/vcs-oblique.min.js";
+import oblique from "vcs-oblique";
 
 const ObliqueMap = Backbone.Model.extend({
     defaults: {

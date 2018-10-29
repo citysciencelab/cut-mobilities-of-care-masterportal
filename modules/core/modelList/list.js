@@ -4,9 +4,9 @@ import GeoJSONLayer from "./layer/geojson";
 import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
-// import TerrainLayer from "./layer/terrain";
-// import TileSetLayer from "./layer/tileset";
-// import ObliqueLayer from "./layer/oblique";
+import TerrainLayer from "./layer/terrain";
+import TileSetLayer from "./layer/tileset";
+import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
@@ -127,15 +127,15 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.typ === "Heatmap") {
                 return new HeatmapLayer(attrs, options);
             }
-            // else if (attrs.typ === "Terrain") {
-            //     return new TerrainLayer(attrs, options);
-            // }
-            // else if (attrs.typ === "TileSet") {
-            //     return new TileSetLayer(attrs, options);
-            // }
-            // else if (attrs.typ === "Oblique") {
-            //     return new ObliqueLayer(attrs, options);
-            // }
+            else if (attrs.typ === "Terrain") {
+                return new TerrainLayer(attrs, options);
+            }
+            else if (attrs.typ === "TileSet") {
+                return new TileSetLayer(attrs, options);
+            }
+            else if (attrs.typ === "Oblique") {
+                return new ObliqueLayer(attrs, options);
+            }
         }
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
