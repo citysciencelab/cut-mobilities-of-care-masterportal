@@ -674,29 +674,28 @@ const ModelList = Backbone.Collection.extend({
     },
 
     showAllFeatures: function (id) {
-        var model = this.get(id);
-
-        if (_.isUndefined(model)) {
-            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
-                return child.get("id") === id;
-            });
-        }
+        var model = this.getModelById(id);
 
         model.showAllFeatures();
     },
 
     showFeaturesById: function (id, featureIds) {
-        var model = this.get(id);
-
-        if (_.isUndefined(model)) {
-            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
-                return child.get("id") === id;
-            });
-        }
+        var model = this.getModelById(id);
 
         model.showFeaturesByIds(featureIds);
     },
     hideAllFeatures: function (id) {
+        var model = this.getModelById(id);
+
+        model.hideAllFeatures();
+    },
+
+    /**
+     * delivers model by given id
+     * @param {number} id from search model
+     * @returns {model} model
+     */
+    getModelById: function (id) {
         var model = this.get(id);
 
         if (_.isUndefined(model)) {
@@ -705,9 +704,8 @@ const ModelList = Backbone.Collection.extend({
             });
         }
 
-        model.hideAllFeatures();
+        return model;
     }
-
 });
 
 export default ModelList;
