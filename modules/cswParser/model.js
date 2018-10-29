@@ -21,7 +21,8 @@ const CswParser = Backbone.Model.extend({
         }, this);
     },
     getMetaData: function (cswObj) {
-        this.fetch({
+        $.ajax({
+            url: this.url(),
             data: {id: cswObj.metaId},
             dataType: "xml",
             async: false,
@@ -35,7 +36,7 @@ const CswParser = Backbone.Model.extend({
                     kategorie: "alert-warning"
                 });
             },
-            success: function (model, xmlDoc) {
+            success: function (xmlDoc) {
                 this.parseData(xmlDoc, cswObj);
             }
         });
