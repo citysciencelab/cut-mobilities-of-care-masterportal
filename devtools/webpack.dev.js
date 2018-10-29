@@ -1,14 +1,18 @@
 const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
-    common = require("./webpack.common.js"),
+    Common = require("./webpack.common.js"),
     proxies = require("lgv-config/proxyconf.json"),
     _ = require("underscore");
 
 module.exports = function (env, args) {
-    let path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
+    let path2CustomModule = "portal/";
 
-    return merge(new common(path2CustomModule), {
+    if (args.CUSTOMMODULE) {
+        path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : ""
+    }
+
+    return merge(new Common(path2CustomModule), {
         mode: "development",
         devServer: {
             port: 9001,
@@ -16,6 +20,10 @@ module.exports = function (env, args) {
             overlay: true,
             https: true,
             open: true,
+            stats: {
+                "children": false,
+                "errorDetails": true
+            },
             openPage: "portal/master",
             proxy: proxies
         },

@@ -1,14 +1,13 @@
 const merge = require("webpack-merge"),
-    Visualizer = require("webpack-visualizer-plugin"),
-    common = require("./webpack.common.js"),
+    Common = require("./webpack.common.js"),
     _ = require("underscore"),
     UglifyJsPlugin = require("uglifyjs-webpack-plugin"),
     path = require("path");
 
 module.exports = function (env, args) {
-    let path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
+    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
 
-    return merge(new common(path2CustomModule), {
+    return merge(new Common(path2CustomModule), {
         mode: "production",
         output: {
             path: path.resolve(__dirname, "../dist/build"),
@@ -29,6 +28,9 @@ module.exports = function (env, args) {
         optimization: {
             minimizer: [new UglifyJsPlugin()]
         },
-        stats: "errors-only"
-    })
+        stats: {
+            "children": false,
+            "errorDetails": true
+        }
+    });
 };
