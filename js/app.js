@@ -330,24 +330,24 @@ function loadApp () {
                     break;
                 }
                 case "button3d": {
-                    // if (control.attr === true) {
-                    //     element = controlsView.addRowTR(control.id);
-                    //     new Button3DView({el: element});
-                    // }
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new Button3DView({el: element});
+                    }
                     break;
                 }
                 case "buttonOblique": {
-                    // if (control.attr === true) {
-                    //     element = controlsView.addRowTR(control.id);
-                    //     new ButtonObliqueView({el: element});
-                    // }
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new ButtonObliqueView({el: element});
+                    }
                     break;
                 }
                 case "orientation3d": {
-                    // if (control.attr === true) {
-                    //     element = controlsView.addRowTR(control.id);
-                    //     new Orientation3DView({el: element});
-                    // }
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new Orientation3DView({el: element});
+                    }
                     break;
                 }
                 default: {
