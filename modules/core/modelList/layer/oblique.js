@@ -1,5 +1,5 @@
 import Layer from "./model";
-import oblique from "vcs-oblique";
+import Collection from "vcs-oblique/src/vcs/oblique/collection";
 import {get} from "ol/proj.js";
 
 const ObliqueLayer = Layer.extend({
@@ -46,13 +46,12 @@ const ObliqueLayer = Layer.extend({
         minZoom = this.get("minZoom") || 0;
         projection = this.get("projection");
         proj = get(projection);
-        obliqueCollection = new oblique.Collection({
+        obliqueCollection = new Collection({
             terrainProvider: null,
             projection: proj,
             hideLevels: hideLevels,
             minZoom: minZoom
         });
-
         return obliqueCollection.loadData(this.get("url")).then(function () {
             this.setObliqueCollection(obliqueCollection);
             return obliqueCollection;

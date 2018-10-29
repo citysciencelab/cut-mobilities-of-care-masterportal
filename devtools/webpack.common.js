@@ -10,7 +10,9 @@ module.exports = {
     },
     resolve: {
         alias: {
-            text: "text-loader"
+            text: "text-loader",
+            // Cesium module name
+            cesium: path.resolve(__dirname, "../node_modules/cesium/Source")
         }
     },
     module: {
@@ -53,7 +55,8 @@ module.exports = {
             $: "jquery",
             Backbone: "backbone",
             Radio: "backbone.radio",
-            _: "underscore"
+            _: "underscore",
+            Cesium: "cesium/Cesium"
         }),
         // create css under build/
         new MiniCssExtractPlugin({

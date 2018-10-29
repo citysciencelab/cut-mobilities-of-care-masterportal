@@ -1,6 +1,5 @@
 import Orientation3DTemplate from "text-loader!./template.html";
-import oblique from "vcs-oblique/dist/vcs-oblique.min.js";
-// import Cesium from "cesium";
+import {ViewDirection} from "vcs-oblique/src/vcs/oblique/viewDirection";
 
 const Orientation3DView = Backbone.View.extend({
     events: {
@@ -128,16 +127,16 @@ const Orientation3DView = Backbone.View.extend({
 
         if (image) {
             switch (image.viewDirection) {
-                case oblique.ViewDirection.NORTH:
+                case ViewDirection.NORTH:
                     rotation = 0;
                     break;
-                case oblique.ViewDirection.SOUTH:
+                case ViewDirection.SOUTH:
                     rotation = 180;
                     break;
-                case oblique.ViewDirection.EAST:
+                case ViewDirection.EAST:
                     rotation = 270;
                     break;
-                case oblique.ViewDirection.WEST:
+                case ViewDirection.WEST:
                     rotation = 90;
                     break;
                 default:

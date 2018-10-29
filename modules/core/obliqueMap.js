@@ -1,7 +1,8 @@
 import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
-import oblique from "vcs-oblique";
+import {ViewDirection, viewDirectionNames} from "vcs-oblique/src/vcs/oblique/viewDirection";
+import {transformFromImage} from "vcs-oblique/src/vcs/oblique/helpers";
 
 const ObliqueMap = Backbone.Model.extend({
     defaults: {
@@ -48,7 +49,7 @@ const ObliqueMap = Backbone.Model.extend({
         this.listenerKeys = [];
 
         this.listenTo(Radio.channel("MapView"), {
-            "centerSet": this.setCenter
+            "changedCenter": this.setCenter
         });
     },
     isActive: function () {
@@ -79,7 +80,7 @@ const ObliqueMap = Backbone.Model.extend({
         this.currentLayer = layer;
         return layer.getObliqueCollection().then(function (collection) {
             this.currentCollection = collection;
-            var direction = collection.directions[oblique.ViewDirection.NORTH];
+            var direction = collection.directions[ViewDirection.NORTH];
 
             if (!direction) {
                 var key = Object.keys(collection.directions)[0];
@@ -130,7 +131,7 @@ const ObliqueMap = Backbone.Model.extend({
     },
 
     changeDirection: function (directionName) {
-        var direction = oblique.viewDirectionNames[directionName];
+        var direction = viewDirectionNames[directionName];
 
         if (!direction || direction === this.currentDirection.direction) {
             return;
@@ -181,7 +182,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (this.currentCollection && this.currentDirection && this.currentDirection.currentImage) {
             center = this.get("map").getView().getCenter();
-            return oblique.transformFromImage(this.currentDirection.currentImage, center, {
+            return transformFromImage(this.currentDirection.currentImage, center, {
                 dataProjection: this.get("projection")
             });
         }
@@ -193,7 +194,7 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (!this.isActive()) {
             var center = Radio.request("MapView", "getCenter");
-            var resolution = Radio.request("MapView", "getResolution");
+            var resolution = Radio.request("MapView", "getOptions").resolution;
 
             map2D = Radio.request("Map", "getMap");
             if (!this.container) {
@@ -260,7 +261,6 @@ const ObliqueMap = Backbone.Model.extend({
                     map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                     this.set("active", true);
                     this.container.style.visibility = "visible";
-
                     this.activateLayer(layer, center, resolution.resolution).then(function () {
                         layer.set("isVisibleInMap", true);
                         layer.set("isSelected", true);
@@ -298,7 +298,7 @@ const ObliqueMap = Backbone.Model.extend({
     },
     reactToClickEvent: function (event) {
         if (this.currentDirection && this.currentDirection.currentImage) {
-            oblique.transformFromImage(this.currentDirection.currentImage, event.coordinate, {
+            transformFromImage(this.currentDirection.currentImage, event.coordinate, {
                 dataProjection: this.get("projection")
             }).then(function (coords) {
                 Radio.trigger("ObliqueMap", "clicked", coords.coords);

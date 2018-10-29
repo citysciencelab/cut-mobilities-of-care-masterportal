@@ -1,5 +1,4 @@
 import Layer from "./model";
-import Cesium from "cesium";
 
 const TerrainLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {

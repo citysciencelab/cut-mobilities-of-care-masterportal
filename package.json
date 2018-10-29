@@ -30,6 +30,7 @@
     "ol": "^5.2.0",
     "olcs": "^2.4.0",
     "proj4": "2.x",
+    "rbush-knn": "^2.1.0",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.0",
     "video.js": "6.x",
