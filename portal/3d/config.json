@@ -160,11 +160,6 @@
         {
           "id": "oblique",
           "name": "Oblique",
-          "visibility": false
-        },
-        {
-          "id": "oblique2",
-          "name": "Oblique2",
           "visibility": true
         }
       ]
