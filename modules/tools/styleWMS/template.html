@@ -2,9 +2,9 @@
 <div class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12">
-            <label class="range-label">Layer</label>
+            <label class="range-label">Thema</label>
             <select class="form-control input-sm" id="layerField">
-                <option class="pull-left" value="" selected="true">Bitte Layer auswählen</option>
+                <option class="pull-left" value="" selected="true">Bitte Thema auswählen</option>
                 <% _.each(styleableLayerList, function (styleableLayer) { %>
                     <option class ="pull-left" value="<%= styleableLayer.id %>"><%= styleableLayer.name %></option>
                 <% })%>
