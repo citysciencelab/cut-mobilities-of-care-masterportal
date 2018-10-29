@@ -625,43 +625,7 @@
           "id": "2178"
         }]
       },
-      {
-        "Titel": "WFS - Schulen und krankenhäuser",
-        "Layer": [
-          {
-            "id": "1711",
-            "styleId": "1711",
-            "visibility": false,
-            "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-            "mouseHoverField": ["name", "strasse"],
-            "searchField": "name",
-            "filterOptions": [
-              {
-                "fieldName": "teilnahme_geburtsklinik",
-                "filterType": "combo",
-                "filterName": "Geburtshilfe",
-                "filterString": ["*", "Ja", "Nein"]
-              },
-              {
-                "fieldName": "teilnahme_notversorgung",
-                "filterType": "combo",
-                "filterName": "Not- und Unfallversorgung",
-                "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-              }
-            ],
-            "extendedFilter": true
-          },
-          {
-            "id": "8712",
-            "visibility": false,
-            "name": "Schulinfosystem",
-            "styleId": "8712",
-            "searchField": "schulname",
-            "mouseHoverField": ["schulname", "kapitelbezeichnung"],
-            "gfiTheme": "schulinfo",
-            "additionalInfoField": "adresse_strasse_hausnr"
-          }]
-      },
+
       {
         "Titel": "Gruppenlayer",
         "Layer": [
@@ -677,6 +641,46 @@
           ],
           "visibility": false,
           "name": "Kita und Krankenhäuser"
+        },
+        {
+          "id": "schUk",
+          "children":[
+            {
+              "id": "1711",
+              "styleId": "1711",
+              "visibility": false,
+              "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+              "mouseHoverField": ["name", "strasse"],
+              "searchField": "name",
+              "filterOptions": [
+                {
+                  "fieldName": "teilnahme_geburtsklinik",
+                  "filterType": "combo",
+                  "filterName": "Geburtshilfe",
+                  "filterString": ["*", "Ja", "Nein"]
+                },
+                {
+                  "fieldName": "teilnahme_notversorgung",
+                  "filterType": "combo",
+                  "filterName": "Not- und Unfallversorgung",
+                  "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                }
+              ],
+              "extendedFilter": true
+            },
+            {
+              "id": "8712",
+              "visibility": false,
+              "name": "Schulinfosystem",
+              "styleId": "8712",
+              "searchField": "schulname",
+              "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+              "gfiTheme": "schulinfo",
+              "additionalInfoField": "adresse_strasse_hausnr"
+            }
+          ],
+          "visibility": true,
+          "name": "Krankenhäuser und Schulen"
         }]
       }]
     }
