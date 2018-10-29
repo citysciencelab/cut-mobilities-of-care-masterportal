@@ -232,7 +232,7 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
