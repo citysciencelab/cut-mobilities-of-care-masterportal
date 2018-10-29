@@ -45,22 +45,7 @@ const ModelList = Backbone.Collection.extend({
                 return this.where(attributes);
             },
             "getModelByAttributes": function (attributes) {
-                var returnModel = this.findWhere(attributes),
-                    groupModels;
-
-                if (_.isUndefined(returnModel)) {
-                    groupModels = this.filter(function (model) {
-                        return model.get("typ") === "GROUP";
-                    });
-
-                    returnModel = _.find(groupModels, function (groupModel) {
-                        return _.find(groupModel.get("children"), function (child) {
-                            return child.id === attributes.id;
-                        });
-                    });
-
-                }
-                return returnModel;
+                return !_.isUndefined(this.findWhere(attributes)) ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
             }
         }, this);
 
@@ -629,7 +614,7 @@ const ModelList = Backbone.Collection.extend({
 
     /**
     * Rekursive Methode, die von unten im Themenbaum startet
-    * FÃ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
+    * FÃ    ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
     * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
     * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
     * @return {undefined}
@@ -670,8 +655,27 @@ const ModelList = Backbone.Collection.extend({
         }, this);
     },
 
+    retrieveGroupModel: function (attributes) {
+        var layerId = _.isObject(attributes) ? attributes.id : attributes,
+            groupModels = this.filter(function (model) {
+                return model.get("typ") === "GROUP";
+            });
+
+        return _.find(groupModels, function (groupModel) {
+            return _.find(groupModel.get("children"), function (child) {
+                return child.id === layerId;
+            });
+        });
+    },
+
     showAllFeatures: function (id) {
         var model = this.get(id);
+
+        if (_.isUndefined(model)) {
+            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
+                return child.get("id") === id;
+            });
+        }
 
         model.showAllFeatures();
     },
@@ -679,10 +683,22 @@ const ModelList = Backbone.Collection.extend({
     showFeaturesById: function (id, featureIds) {
         var model = this.get(id);
 
+        if (_.isUndefined(model)) {
+            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
+                return child.get("id") === id;
+            });
+        }
+
         model.showFeaturesByIds(featureIds);
     },
     hideAllFeatures: function (id) {
         var model = this.get(id);
+
+        if (_.isUndefined(model)) {
+            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
+                return child.get("id") === id;
+            });
+        }
 
         model.hideAllFeatures();
     }
