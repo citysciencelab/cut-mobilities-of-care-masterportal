@@ -655,6 +655,11 @@ const ModelList = Backbone.Collection.extend({
         }, this);
     },
 
+    /**
+     * delivers the model or groupModel by a given id
+     * @param {Object | number} attributes the id from model
+     * @returns {model} model
+     */
     retrieveGroupModel: function (attributes) {
         var layerId = _.isObject(attributes) ? attributes.id : attributes,
             groupModels = this.filter(function (model) {
