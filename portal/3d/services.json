@@ -333,37 +333,12 @@
       {
         "id": "oblique",
         "name": "oblique",
-        "url": "https://hamburg.virtualcitymap.de/datasource-data/oblique/image.json",
+        "url": "https://test.geoportal-hamburg.de/gdi3d/datasource-data/SLB_Rathaus/image.json",
         "typ": "Oblique",
         "resolution" : 10,
         "hideLevels": 2,
         "minZoom": 2,
         "terrainUrl" : "https://test.geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
-        "projection": "EPSG:25832",
-        "gfiAttributes": "showAll",
-        "layerAttribution": "nicht vorhanden",
-        "legendURL": "ignore",
-        "datasets": [
-          {
-            "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
-            "rs_id": "HMDK/001719df-6619-40b7-aefe-32e8aaf49337",
-            "md_name": "Geobasiskarten Hamburg",
-            "bbox": "466251.43,5844577.89,661887.13,6042030.31",
-            "kategorie_opendata": [
-              "Sonstiges"
-            ],
-            "kategorie_inspire": [
-              "nicht INSPIRE-identifiziert"
-            ],
-            "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
-          }
-        ]
-      },
-      {
-        "id": "oblique2",
-        "name": "oblique2",
-        "url": "https://hamburg.virtualcitymap.de/datasource-data/oblique/image.json",
-        "typ": "Oblique",
         "projection": "EPSG:25832",
         "gfiAttributes": "showAll",
         "layerAttribution": "nicht vorhanden",
