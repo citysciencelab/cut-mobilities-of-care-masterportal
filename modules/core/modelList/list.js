@@ -614,7 +614,7 @@ const ModelList = Backbone.Collection.extend({
 
     /**
     * Rekursive Methode, die von unten im Themenbaum startet
-    * FÃ    ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
+    * Fügt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
     * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
     * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
     * @return {undefined}
