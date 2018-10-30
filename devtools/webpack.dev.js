@@ -6,11 +6,7 @@ const merge = require("webpack-merge"),
     _ = require("underscore");
 
 module.exports = function (env, args) {
-    let path2CustomModule = "portal/";
-
-    if (args.CUSTOMMODULE) {
-        path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : ""
-    }
+    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
 
     return merge(new Common(path2CustomModule), {
         mode: "development",
@@ -20,10 +16,6 @@ module.exports = function (env, args) {
             overlay: true,
             https: true,
             open: true,
-            stats: {
-                "children": false,
-                "errorDetails": true
-            },
             openPage: "portal/master",
             proxy: proxies
         },
@@ -45,5 +37,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    })
+    });
 };

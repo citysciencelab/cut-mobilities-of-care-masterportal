@@ -24,7 +24,8 @@ module.exports = function (path2CustomModule) {
                     use: {
                         loader: "babel-loader",
                         options: {
-                            presets: ["@babel/preset-env"]
+                            presets: ["@babel/preset-env"],
+                            plugins: ["@babel/plugin-syntax-dynamic-import"]
                         }
                     }
                 },
@@ -72,8 +73,10 @@ module.exports = function (path2CustomModule) {
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
-            // import customModules
-            new webpack.ContextReplacementPlugin(/portal\//, path2CustomModule)
+            // create global constant at compile time
+            new webpack.DefinePlugin({
+                CUSTOMMODULE: JSON.stringify(path2CustomModule)
+            })
         ]
-    }
+    };
 };
