@@ -79,11 +79,11 @@ const ObliqueMap = Backbone.Model.extend({
         }
         this.currentLayer = layer;
         return layer.getObliqueCollection().then(function (collection) {
-            this.currentCollection = collection;
             var direction = collection.directions[ViewDirection.NORTH];
 
+            this.currentCollection = collection;
             if (!direction) {
-                var key = Object.keys(collection.directions)[0];
+                const key = Object.keys(collection.directions)[0];
 
                 direction = collection.directions[key];
             }
@@ -136,7 +136,7 @@ const ObliqueMap = Backbone.Model.extend({
         if (!direction || direction === this.currentDirection.direction) {
             return;
         }
-        var newDirection = this.currentCollection.directions[direction];
+        const newDirection = this.currentCollection.directions[direction];
 
         if (newDirection) {
             this.getCenter().then(function (center) {
@@ -158,9 +158,9 @@ const ObliqueMap = Backbone.Model.extend({
      */
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
-            var oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution");
-            var useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+            const oldImageID = this.currentDirection.currentImage.id,
+                resolutionFactor = this.currentLayer.get("resolution"),
+                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
 
             return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {
@@ -193,8 +193,8 @@ const ObliqueMap = Backbone.Model.extend({
         var fillArea, oc, containerAttribute, map2D, interactions;
 
         if (!this.isActive()) {
-            var center = Radio.request("MapView", "getCenter");
-            var resolution = Radio.request("MapView", "getOptions").resolution;
+            const center = Radio.request("MapView", "getCenter"),
+                resolution = Radio.request("MapView", "getOptions").resolution;
 
             map2D = Radio.request("Map", "getMap");
             if (!this.container) {
@@ -239,9 +239,9 @@ const ObliqueMap = Backbone.Model.extend({
             else {
                 // load first Layer which is active on startup or
                 // otherwise just take the first layer, abort if no layer exists.
-                var layer = null;
+                let layer = null;
 
-                for (var i = 0; i < this.layers.length; i++) {
+                for (let i = 0; i < this.layers.length; i++) {
                     if (this.layers[i].get("isVisibleInMap")) {
                         layer = this.layers[i];
                         break;
@@ -274,10 +274,10 @@ const ObliqueMap = Backbone.Model.extend({
     },
     postRenderHandler: function () {
         if (this.currentDirection && this.switchOnEdge) {
-            var coord = this.get("map").getView().getCenter();
-            var currentImage = this.currentDirection.currentImage;
-            var ratioLower = this.switchThreshold;
-            var ratioUpper = 1 - ratioLower;
+            const coord = this.get("map").getView().getCenter(),
+                currentImage = this.currentDirection.currentImage,
+                ratioLower = this.switchThreshold,
+                ratioUpper = 1 - ratioLower;
 
             if (
                 !currentImage || (
