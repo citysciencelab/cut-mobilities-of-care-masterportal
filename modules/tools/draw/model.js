@@ -65,9 +65,11 @@ const DrawTool = Tool.extend({
         var featJSON,
             format = new GeoJSON();
 
-        this.superInitialize();
+        this.set("renderToWindow", false);
+        this.setIsActive(true);
 
         if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
+
             this.setDrawType(para_object.drawType, para_object.drawType + " zeichnen");
             if (para_object.color) {
                 this.set("color", para_object.color);
@@ -140,7 +142,7 @@ const DrawTool = Tool.extend({
     cancelDrawWithoutGUI: function () {
         this.cancelEverything();
         // GFI wieder einschalten nach dem Zeichnen
-        Radio.trigger("Tool", "activatedTool", "gfi", false);
+        this.setIsActive(false);
     },
 
     setStatus: function (model, value) {

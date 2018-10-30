@@ -33,8 +33,8 @@ const DrawToolView = Backbone.View.extend({
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     render: function (model, value) {
-        if (value) {
 
+        if (value && this.model.get("renderToWindow")) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
             this.delegateEvents();
