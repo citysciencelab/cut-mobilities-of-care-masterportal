@@ -270,15 +270,19 @@ const Gfi = Tool.extend({
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
                     modelAttributes.gfiFeatureList.push(featureAtPixel);
+                    modelAttributes.feature = featureAtPixel;
                 }
                 // Cluster Feature
                 else {
                     _.each(featureAtPixel.get("features"), function (feature) {
                         modelAttributes.gfiFeatureList.push(feature);
+                        modelAttributes.feature = feature;
                     });
                 }
             }, this);
-            vectorGfiParams.push(modelAttributes);
+            if (!_.isEmpty(modelAttributes.gfiFeatureList)) {
+                vectorGfiParams.push(modelAttributes);
+            }
         }, this);
 
         return vectorGfiParams;

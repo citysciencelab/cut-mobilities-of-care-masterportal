@@ -105,24 +105,16 @@ const SchulInfoTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": this.parseGfiContent
         });
-        _.each(this.get("gfiFeatureList"), function (feature) {
-            feature.on("propertychange", this.toggleStarGlyphicon.bind(this));
+        this.get("feature").on("propertychange", this.toggleStarGlyphicon.bind(this));
 
-            feature.set("layerId", this.get("id"));
-            feature.set("layerName", this.get("name"));
-        }, this);
+        this.get("feature").set("layerId", this.get("id"));
+        this.get("feature").set("layerName", this.get("name"));
     },
     getVectorGfi: function () {
-        var gfiContentList = [];
+        var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
 
-        _.each(this.get("gfiFeatureList"), function (feature) {
-            var gfiContent = _.pick(feature.getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
-
-            gfiContent = this.getManipulateDate([gfiContent])[0];
-            gfiContentList.push(gfiContent);
-        }, this);
-        this.cloneCollModels(gfiContentList);
-        this.setGfiContent(gfiContentList);
+        gfiContent = this.getManipulateDate([gfiContent]);
+        this.setGfiContent(gfiContent);
         this.setIsReady(true);
     },
 
@@ -134,7 +126,7 @@ const SchulInfoTheme = Theme.extend({
         var gfiContent,
             featureInfos = [];
 
-        if (!_.isUndefined(this.get("gfiContent")) && !_.isEmpty(this.get("gfiContent"))) {
+        if (!_.isUndefined(this.get("gfiContent")[0])) {
             gfiContent = this.get("gfiContent")[0];
             featureInfos = [];
             featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
@@ -227,7 +219,7 @@ const SchulInfoTheme = Theme.extend({
      * @param  {[type]} attribute  [description]
      * @return {[type]}            [description]
      */
-    checkForAttribute: function (gfiContent, attribute) {console.log(gfiContent);console.log(attribute);
+    checkForAttribute: function (gfiContent, attribute) {
         var isAttributeFound = false;
 
         if (!_.isUndefined(gfiContent[attribute])) {

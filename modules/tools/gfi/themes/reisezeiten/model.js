@@ -12,7 +12,7 @@ const ReisezeitenTheme = Theme.extend({
         });
     },
     setDefaults: function () {
-        if (_.isUndefined(this.get("gfiContent")) === false && !_.isEmpty(this.get("gfiContent"))) {
+        if (_.isUndefined(this.get("gfiContent")) === false) {
             this.set("routenLayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2713"}));
             this.set("verkehrslagelayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2715"}));
             this.set("standort", this.get("gfiContent")[0].Standort);

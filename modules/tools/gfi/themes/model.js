@@ -158,18 +158,30 @@ const Theme = Backbone.Model.extend({
     },
 
     getVectorGfi: function () {
-        var gfiContentList = [];
+        // var gfiContentList = [];
 
-        _.each(this.get("gfiFeatureList"), function (feature) {
-            var gfiContent;
+        // _.each(this.get("gfiFeatureList"), function (feature) {
+        //     var gfiContent;
 
-            gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
-            gfiContent = this.getManipulateDate(gfiContent)[0];
-            gfiContentList.push(gfiContent);
-        }, this);
-        this.cloneCollModels(gfiContentList);
-        this.setGfiContent(gfiContentList);
-        this.setIsReady(true);
+        //     gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
+        //     gfiContent = this.getManipulateDate(gfiContent)[0];
+        //     gfiContentList.push(gfiContent);
+        // }, this);
+        // this.cloneCollModels(gfiContentList);
+        // this.setGfiContent(gfiContentList);
+        // this.setIsReady(true);
+
+        var gfiContent;
+
+        if (!_.isEmpty(this.get("gfiFeatureList"))) {
+            gfiContent = this.translateGFI([this.get("gfiFeatureList")[0].getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent);
+
+            this.setGfiContent(_.extend(gfiContent, {
+                allProperties: this.get("gfiFeatureList")[0].getProperties()
+            }));
+            this.setIsReady(true);
+        }
     },
     // Setter
     setIsVisible: function (value) {
