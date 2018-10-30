@@ -6,7 +6,11 @@ import VectorSource from "ol/source/Vector.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
-// import Cesium from "cesium/Build/Cesium/Cesium.js";
+import OLCesium from "olcs/OLCesium.js";
+import VectorSynchronizer from "olcs/VectorSynchronizer.js";
+import OverlaySynchronizer from "olcs/OverlaySynchronizer.js";
+import WMSRasterSynchronizer from "../../plugins/WmsRasterSynchronizer.js";
+import {transform, get} from "ol/proj.js";
 
 const map = Backbone.Model.extend({
     defaults: {
@@ -226,11 +230,11 @@ const map = Backbone.Model.extend({
         return this.getMap3d() && this.getMap3d().getEnabled();
     },
     createMap3d: function () {
-        var map3d = new olcs.OLCesium({
+        var map3d = new OLCesium({
             map: this.get("map"),
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (map, scene) {
-                return [new olcs.WMSRasterSynchronizer(map, scene), new olcs.VectorSynchronizer(map, scene), new olcs.OverlaySynchronizer(map, scene)];
+                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new OverlaySynchronizer(map, scene)];
             }
         });
 
@@ -330,14 +334,14 @@ const map = Backbone.Model.extend({
 
             distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
             resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
-            transformedCoords = ol.proj.transform(coords, ol.proj.get("EPSG:4326"), mapProjection);
+            transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
             transformedPickedPosition = null;
 
             if (scene.pickPositionSupported) {
                 pickedPositionCartesian = scene.pickPosition(event.position);
                 if (pickedPositionCartesian) {
                     cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
-                    transformedPickedPosition = ol.proj.transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], ol.proj.get("EPSG:4326"), mapProjection);
+                    transformedPickedPosition = transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
