@@ -105,6 +105,7 @@ const SchulInfoTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": this.parseGfiContent
         });
+
         this.get("feature").on("propertychange", this.toggleStarGlyphicon.bind(this));
 
         this.get("feature").set("layerId", this.get("id"));
@@ -144,6 +145,7 @@ const SchulInfoTheme = Theme.extend({
         var featureInfos = [];
 
         if (!_.isUndefined(themeConfig)) {
+
             _.each(themeConfig, function (kategory) {
                 var kategoryObj = {
                     name: kategory.name,

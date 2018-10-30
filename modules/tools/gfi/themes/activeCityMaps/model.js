@@ -97,12 +97,27 @@ const ActiveCityMapsTheme = Theme.extend({
         this.set("gfiContent", element);
     },
 
+    getVectorGfi: function () {
+        var gfiContentList = [];
+
+        _.each(this.get("gfiFeatureList"), function (feature) {
+            var gfiContent;
+
+            gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent)[0];
+            gfiContentList.push(gfiContent);
+        }, this);
+        this.cloneCollModels(gfiContentList);
+        this.setGfiContent(gfiContentList);
+        this.setIsReady(true);
+    },
+
     /**
      * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
      * @returns {void}
      */
     parseGfiContent: function () {
-        var gfiContent = this.get("gfiContent"),
+        var gfiContent = this.get("gfiContent")[0],
             featureInfos = [];
 
         if (!_.isUndefined(gfiContent)) {
@@ -121,25 +136,23 @@ const ActiveCityMapsTheme = Theme.extend({
     createFeatureInfos: function (gfiContent) {
         var featureInfos = [];
 
-        _.each(gfiContent, function (feature) {
-            _.each(feature, function (attribute, key) {
-                var gfiAttributes;
+        _.each(gfiContent, function (attribute, key) {
+            var gfiAttributes;
 
-                if (attribute.indexOf("|") !== -1) {
-                    gfiAttributes = {
-                        attrName: key,
-                        attrValue: attribute.split("|")
-                    };
-                }
-                else {
-                    gfiAttributes = {
-                        attrName: key,
-                        attrValue: attribute
-                    };
-                }
-                featureInfos.push(gfiAttributes);
-            });
-        }, this);
+            if (attribute.indexOf("|") !== -1) {
+                gfiAttributes = {
+                    attrName: key,
+                    attrValue: attribute.split("|")
+                };
+            }
+            else {
+                gfiAttributes = {
+                    attrName: key,
+                    attrValue: attribute
+                };
+            }
+            featureInfos.push(gfiAttributes);
+        });
         return featureInfos;
     },
 
