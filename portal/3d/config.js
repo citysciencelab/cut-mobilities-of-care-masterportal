@@ -2,7 +2,7 @@ Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"],
     gfiWindow: "attached",
     simpleMap: false,
-    wfsImgPath: "../node_modules/lgv-config/img/",
+    wfsImgPath: "/lgv-config/img/",
     allowParametricURL: true,
     namedProjections: [
         // GK DHDN

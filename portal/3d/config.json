@@ -145,7 +145,7 @@
         {
           "id": ["717", "718", "719", "720"],
           "name": "Geobasiskarten",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "terrainlgv",
