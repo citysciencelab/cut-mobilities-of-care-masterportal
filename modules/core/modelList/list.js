@@ -656,7 +656,7 @@ const ModelList = Backbone.Collection.extend({
     },
 
     /**
-     * delivers the model or groupModel by a given id
+     * delivers groupModel by a given id
      * @param {Object | number} attributes the id from model
      * @returns {model} model
      */
