@@ -359,6 +359,10 @@ const Parser = Backbone.Model.extend({
     },
 
     addTreeMenuItems: function () {
+        var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
+            tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
+            isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [];
+
         this.addItem({
             type: "folder",
             name: "Hintergrundkarten",
@@ -367,6 +371,7 @@ const Parser = Backbone.Model.extend({
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
+            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
             level: 0
         });
         this.addItem({
@@ -377,6 +382,7 @@ const Parser = Backbone.Model.extend({
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
+            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Overlayer"),
             level: 0
         });
         this.addItem({
@@ -388,6 +394,7 @@ const Parser = Backbone.Model.extend({
             isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
+            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "SelectedLayer"),
             level: 0
         });
     },

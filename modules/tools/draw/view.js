@@ -39,13 +39,14 @@ const DrawToolView = Backbone.View.extend({
             this.$el.html(this.template(model.toJSON()));
             this.delegateEvents();
             this.renderForm();
-            this.renderGlyphicon();
+            this.registerListener();
         }
         else {
             $("#map").removeClass("no-cursor");
             $("#map").removeClass("cursor-crosshair");
             $("#cursorGlyph").remove();
             $("#map").off("mousemove");
+            this.unregisterListener();
             this.undelegateEvents();
         }
         return this;
@@ -81,14 +82,18 @@ const DrawToolView = Backbone.View.extend({
             }
         }
     },
-
-    renderGlyphicon: function () {
+    registerListener: function () {
         $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
+        this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
+    },
+    unregisterListener: function () {
+        Radio.request("Map", "unregisterListener", "mousemove", this.listener);
+    },
+    renderGlyphicon: function (e) {
+        var element = document.getElementById("cursorGlyph");
 
-        $("#map").mousemove(function (e) {
-            $("#cursorGlyph").css("left", e.offsetX + 5);
-            $("#cursorGlyph").css("top", e.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
-        });
+        $(element).css("left", e.originalEvent.offsetX + 5);
+        $(element).css("top", e.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
     },
 
     setDrawType: function (evt) {

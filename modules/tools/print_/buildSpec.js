@@ -124,7 +124,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 }
             };
 
-        if (_.has(source.getParams(), "SLD_BODY")) {
+        if (_.has(source.getParams(), "SLD_BODY") && !_.isUndefined(source.getParams().SLD_BODY)) {
             mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
             mapObject.styles = ["style"];
         }
