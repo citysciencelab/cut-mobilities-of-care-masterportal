@@ -97,17 +97,32 @@ const ActiveCityMapsTheme = Theme.extend({
         this.set("gfiContent", element);
     },
 
+    getVectorGfi: function () {
+        var gfiContentList = [];
+
+        _.each(this.get("gfiFeatureList"), function (feature) {
+            var gfiContent;
+
+            gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent)[0];
+            gfiContentList.push(gfiContent);
+        }, this);
+        this.cloneCollModels(gfiContentList);
+        this.setGfiContent(gfiContentList);
+        this.setIsReady(true);
+    },
+
     /**
      * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
      * @returns {void}
      */
     parseGfiContent: function () {
-        var gfiContent = this.get("gfiContent"),
+        var gfiContent = this.get("gfiContent")[0],
             featureInfos = [];
 
-        if (!_.isUndefined(gfiContent[0])) {
+        if (!_.isUndefined(gfiContent)) {
             featureInfos = [];
-            featureInfos = this.createFeatureInfos(gfiContent[0], this.get("themeConfig"));
+            featureInfos = this.createFeatureInfos(gfiContent);
             this.setFeatureInfos(featureInfos);
         }
     },
@@ -137,7 +152,7 @@ const ActiveCityMapsTheme = Theme.extend({
                 };
             }
             featureInfos.push(gfiAttributes);
-        }, this);
+        });
         return featureInfos;
     },
 
