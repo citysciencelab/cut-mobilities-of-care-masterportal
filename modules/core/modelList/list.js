@@ -539,6 +539,7 @@ const ModelList = Backbone.Collection.extend({
         }
         else {
             this.addModelsByAttributes({type: "layer", isSelected: true});
+            this.addModelsByAttributes({typ: "Oblique"});
         }
 
     },

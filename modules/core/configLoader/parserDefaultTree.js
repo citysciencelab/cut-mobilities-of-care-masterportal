@@ -14,7 +14,6 @@ const DefaultTreeParser = Parser.extend({
         newLayerList = this.createLayerPerDataset(newLayerList);
 
         this.parseLayerList(newLayerList);
-
     },
 
     /**
@@ -28,7 +27,7 @@ const DefaultTreeParser = Parser.extend({
                 return false;
             }
 
-             return element.datasets.length > 0 && _.contains(["WMS", "Terrain", "TileSet"], element.typ);
+            return element.datasets.length > 0 && _.contains(["WMS", "Terrain", "TileSet", "Oblique"], element.typ);
         });
     },
 
@@ -87,6 +86,9 @@ const DefaultTreeParser = Parser.extend({
                 if (layer.typ === "Terrain" || layer.typ === "TileSet") {
                     return "layer3d";
                 }
+                else if (layer.typ === "Oblique") {
+                    return "oblique";
+                }
                 return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
             });
 
@@ -96,6 +98,13 @@ const DefaultTreeParser = Parser.extend({
         this.groupDefaultTreeOverlays(typeGroup.overlays);
         // Models für 3D Daten erzeugen
         this.create3dLayer(typeGroup.layer3d);
+        // Models für Oblique Daten erzeugen
+        this.createObliqueLayer(typeGroup.oblique);
+    },
+    createObliqueLayer: function (layerList) {
+        _.each(layerList, function (layer) {
+            this.addItem(_.extend({type: "layer"}, layer));
+        }, this);
     },
     create3dLayer: function (layerList) {
         _.each(layerList, function (layer) {
