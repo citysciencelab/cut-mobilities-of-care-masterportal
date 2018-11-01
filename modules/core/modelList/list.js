@@ -45,7 +45,7 @@ const ModelList = Backbone.Collection.extend({
                 return this.where(attributes);
             },
             "getModelByAttributes": function (attributes) {
-                return this.findWhere(attributes);
+                return !_.isUndefined(this.findWhere(attributes)) ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
             }
         }, this);
 
@@ -614,7 +614,7 @@ const ModelList = Backbone.Collection.extend({
 
     /**
     * Rekursive Methode, die von unten im Themenbaum startet
-    * FÃ¼gt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
+    * Fügt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
     * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
     * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
     * @return {undefined}
@@ -633,7 +633,8 @@ const ModelList = Backbone.Collection.extend({
 
     toggleCatalogs: function (id) {
         _.each(this.where({parentId: "tree"}), function (model) {
-            if (model.get("id") !== id) {
+            // if (model.get("id") !== id) {
+            if (model.get("id") !== id && !model.get("isAlwaysExpanded")) {
                 model.setIsExpanded(false);
             }
         }, this);
@@ -655,23 +656,57 @@ const ModelList = Backbone.Collection.extend({
         }, this);
     },
 
+    /**
+     * delivers groupModel by a given id
+     * @param {Object | number} attributes the id from model
+     * @returns {model} model
+     */
+    retrieveGroupModel: function (attributes) {
+        var layerId = _.isObject(attributes) ? attributes.id : attributes,
+            groupModels = this.filter(function (model) {
+                return model.get("typ") === "GROUP";
+            });
+
+        return _.find(groupModels, function (groupModel) {
+            return _.find(groupModel.get("children"), function (child) {
+                return child.id === layerId;
+            });
+        });
+    },
+
     showAllFeatures: function (id) {
-        var model = this.get(id);
+        var model = this.getModelById(id);
 
         model.showAllFeatures();
     },
 
     showFeaturesById: function (id, featureIds) {
-        var model = this.get(id);
+        var model = this.getModelById(id);
 
         model.showFeaturesByIds(featureIds);
     },
     hideAllFeatures: function (id) {
-        var model = this.get(id);
+        var model = this.getModelById(id);
 
         model.hideAllFeatures();
-    }
+    },
 
+    /**
+     * delivers model by given id
+     * @param {number} id from search model
+     * @returns {model} model
+     */
+    getModelById: function (id) {
+        var model = this.get(id);
+
+        if (_.isUndefined(model)) {
+            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
+                return child.get("id") === id;
+            });
+        }
+
+        return model;
+    }
 });
 
 export default ModelList;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<tbody>
+<%
+_.each(featureInfos, function(attr) {
+    var key= attr.attrName,
+        value = attr.attrValue;
+
+    if (_.isString(key) === false) return;
+%>
+<tr colspan="2">
+    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
+<%= key%>
+    </td>
+    <td>
+<%
+    if (_.isArray(value))  {
+        _.each(value, function (valuePart) {
+            if (valuePart.search("http") !== -1) {
+%>
+                <a href="<%= valuePart %>" target="_blank"><%= valuePart.trim().substring(7) %></a>
+<%
+            }
+            else {
+%>
+                <%= valuePart %>
+<%
+            }
+%>
+            <br>
+<%
+        });
+    }
+    else {
+        if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") {
+%>
+<a href="<%= value %>" target="_blank">Link</a>
+<%
+        }
+        else if (value.substr(0, 4) == "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49"
+                    || value.substr(0, 5) === "0800 "
+                    || value.substr(0, 5) === "0800-") {
+%>
+<a href="tel:<%= value.replace(" ", "").replace("-", "")%>"><%= value %></a>
+<%
+        }
+        else {
+%>
+                <%= value %>
+<%
+        }
+    }
+%>
+    </td>
+</tr>
+<%
+});
+%>
+</tbody>

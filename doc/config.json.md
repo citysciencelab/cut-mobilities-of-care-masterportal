@@ -1074,6 +1074,7 @@ Unter *tree* wird der Themenbaum konfiguriert.
 |glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
 |isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum beim initialen Laden des Portals geöffnet ist oder nicht.|
 |name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
+|isAlwaysExpanded|nein|Array[String]||Ids der Kataloge im Themenbaum, die immer offen bleiben. Mögliche Werte sind "Baselayer", "Overlayer", "SelectedLayer".|
 
 **Beispiel einer *tree*-Konfiguration:**
 

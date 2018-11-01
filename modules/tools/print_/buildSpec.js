@@ -30,28 +30,37 @@ const BuildSpecModel = Backbone.Model.extend({
             layer = _.findWhere(layers, {layerName: layerName});
 
         if (!_.isUndefined(layer)) {
-            layer.metaDate = _.has(parsedData, "date") ? parsedData.date : "";
-            layer.metaOwner = _.has(parsedData, "orga") ? parsedData.orga : "";
-            layer.metaAddress = _.has(parsedData, "address") ? this.parseAddress(parsedData.address) : "";
-            layer.metaEmail = _.has(parsedData, "email") ? parsedData.email : "";
-            layer.metaTel = _.has(parsedData, "tel") ? parsedData.tel : "";
-            layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "";
+            layer.metaDate = _.has(parsedData, "date") ? parsedData.date : "n.N.";
+            layer.metaOwner = _.has(parsedData, "orgaOwner") ? parsedData.orgaOwner : "n.N.";
+            layer.metaAddress = _.has(parsedData, "address") ? this.parseAddressToString(parsedData.address) : "n.N.";
+            layer.metaEmail = _.has(parsedData, "email") ? parsedData.email : "n.N.";
+            layer.metaTel = _.has(parsedData, "tel") ? parsedData.tel : "n.N.";
+            layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "n.N.";
         }
     },
-    parseAddress: function (addressObj) {
+    parseAddressToString: function (addressObj) {
         var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
             housenr = _.isUndefined(addressObj) ? undefined : addressObj.housenr,
             postalCode = _.isUndefined(addressObj) ? undefined : addressObj.postalCode,
             city = _.isUndefined(addressObj) ? undefined : addressObj.city,
             addressString = "";
 
-        addressString = addressString + _.isUndefined(street) ? "" : street;
-        addressString = addressString === "" ? "" : " ";
-        addressString = addressString + _.isUndefined(housenr) ? "" : housenr;
-        addressString = addressString === "" ? "" : addressString + "\n ";
-        addressString = addressString + _.isUndefined(postalCode) ? "" : postalCode;
-        addressString = addressString === "" ? "" : " ";
-        addressString = addressString + _.isUndefined(city) ? "" : city;
+        // street
+        addressString += _.isUndefined(street) ? "" : street;
+        // blank between  street and housenr
+        addressString += addressString === "" ? "" : " ";
+        // housenr
+        addressString += _.isUndefined(housenr) ? "" : housenr;
+        // newline between housenr and postalCode
+        addressString += addressString === "" ? "" : addressString + "\n ";
+        // postalCode
+        addressString += _.isUndefined(postalCode) ? "" : postalCode;
+        // blank between postalCode and City
+        addressString += addressString === "" ? "" : " ";
+        // city
+        addressString += _.isUndefined(city) ? "" : city;
+        // n.N. if addressString is empty
+        addressString += addressString === "" ? "n.N." : "";
 
         return addressString;
     },
@@ -124,7 +133,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 }
             };
 
-        if (_.has(source.getParams(), "SLD_BODY")) {
+        if (_.has(source.getParams(), "SLD_BODY") && !_.isUndefined(source.getParams().SLD_BODY)) {
             mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
             mapObject.styles = ["style"];
         }
@@ -521,7 +530,7 @@ const BuildSpecModel = Backbone.Model.extend({
             this.get("uniqueIdList").push(uniqueId);
             cswObj.layerName = layerName;
             cswObj.metaId = metaId;
-            cswObj.keyList = ["date", "orga", "address", "email", "tel", "url"];
+            cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueId;
 
             Radio.trigger("CswParser", "getMetaData", cswObj);

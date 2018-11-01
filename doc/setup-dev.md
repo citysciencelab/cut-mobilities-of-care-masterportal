@@ -33,7 +33,7 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei *repository* und den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
+**Wichtig**: in der Datei package.json bei den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
 
 Dann in der Admin-cmd ausführen:
 ```

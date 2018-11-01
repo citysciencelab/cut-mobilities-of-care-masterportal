@@ -19,6 +19,14 @@ module.exports = merge(common, {
     module: {
         rules: [
             {
+                test: /glyphicons-halflings-regular\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[ext]",
+                    publicPath: "../../node_modules/bootstrap/fonts"
+                }
+            },
+            {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 loader: "file-loader",
                 options: {
