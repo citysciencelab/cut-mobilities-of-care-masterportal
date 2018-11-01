@@ -79,6 +79,7 @@ const Animation = PendlerCoreModel.extend({
         if (!_.isUndefined(animationLayer)) {
             Radio.trigger("Map", "removeLayer", animationLayer);
         }
+        Radio.trigger("MapMarker", "hideMarker");
     },
 
     colorFeatures: function (features) {

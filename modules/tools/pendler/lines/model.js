@@ -142,6 +142,7 @@ const Lines = PendlerCoreModel.extend({
         if (!_.isUndefined(lineLayer)) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
+        Radio.trigger("MapMarker", "hideMarker");
     }
 });
 

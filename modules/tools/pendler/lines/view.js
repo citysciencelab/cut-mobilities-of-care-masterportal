@@ -6,7 +6,8 @@ const LinesView = Backbone.View.extend({
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
         "change input[type=radio]": "setDirection",
-        "click .csv-download": "download"
+        "click .csv-download": "download",
+        "click .btn-remove-features": "removeFeatures"
     },
 
     initialize: function () {
@@ -36,7 +37,9 @@ const LinesView = Backbone.View.extend({
         }
         return this;
     },
-
+    removeFeatures: function () {
+        this.model.clear();
+    },
     download: function () {
         this.model.download();
     },
