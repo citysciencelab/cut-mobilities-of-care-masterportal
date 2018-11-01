@@ -66,6 +66,75 @@
         "isInitOpen": true,
         "isAlwaysExpanded": ["SelectedLayer"]
       },
+      "filter":
+      {
+        "name": "Filter",
+        "glyphicon": "glyphicon-filter",
+        "deactivateGFI": false,
+        "isGeneric": false,
+        "isInitOpen": false,
+        "allowMultipleQueriesPerLayer": false,
+        "predefinedQueries": [
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Stadtteilschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Stadtteilschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Gymnasien",
+              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Gymnasien"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Sonderschulen",
+              "predefinedRules": [
+                {
+                  "attrName": "kapitelbezeichnung",
+                  "values": ["Sonderschulen"]
+                }
+              ],
+              "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+            },
+            {
+              "layerId": "1711",
+              "isActive": true,
+              "isSelected": true,
+              "name": "Krankenhäuser",
+              "predefinedRules": [],
+              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+            }
+          ]
+      },
       "tools":
       {
         "name": "Werkzeuge",
@@ -371,7 +440,7 @@
         },
         {
           "id": "1562",
-          "visibility": true,
+          "visibility": false,
           "name": "Bebauungspläne im Verfahren (§ 2 BauGB)"
         },
         {
@@ -557,6 +626,7 @@
           "id": "2178"
         }]
       },
+
       {
         "Titel": "Gruppenlayer",
         "Layer": [
@@ -570,8 +640,48 @@
               "id": "1731"
             }
           ],
-          "visibility": true,
+          "visibility": false,
           "name": "Kita und Krankenhäuser"
+        },
+        {
+          "id": "schUk",
+          "children":[
+            {
+              "id": "1711",
+              "styleId": "1711",
+              "visibility": false,
+              "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+              "mouseHoverField": ["name", "strasse"],
+              "searchField": "name",
+              "filterOptions": [
+                {
+                  "fieldName": "teilnahme_geburtsklinik",
+                  "filterType": "combo",
+                  "filterName": "Geburtshilfe",
+                  "filterString": ["*", "Ja", "Nein"]
+                },
+                {
+                  "fieldName": "teilnahme_notversorgung",
+                  "filterType": "combo",
+                  "filterName": "Not- und Unfallversorgung",
+                  "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                }
+              ],
+              "extendedFilter": true
+            },
+            {
+              "id": "8712",
+              "visibility": false,
+              "name": "Schulinfosystem",
+              "styleId": "8712",
+              "searchField": "schulname",
+              "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+              "gfiTheme": "schulinfo",
+              "additionalInfoField": "adresse_strasse_hausnr"
+            }
+          ],
+          "visibility": true,
+          "name": "Krankenhäuser und Schulen"
         }]
       }]
     }
