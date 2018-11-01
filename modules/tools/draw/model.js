@@ -66,6 +66,7 @@ const DrawTool = Tool.extend({
             newColor,
             format = new GeoJSON();
 
+        this.collection.setActiveToolToFalse(this);
         this.set("renderToWindow", false);
         this.setIsActive(true);
 
