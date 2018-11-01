@@ -1,51 +1,45 @@
-define(function (require) {
+import FolderTemplate from "text-loader!./template.html";
+import FolderLeafTemplate from "text-loader!./templateLeaf.html";
 
-    var Backbone = require("backbone"),
-        FolderTemplate = require("text!modules/menu/mobile/folder/template.html"),
-        FolderLeafTemplate = require("text!modules/menu/mobile/folder/templateLeaf.html"),
-        Radio = require("backbone.radio"),
-        FolderView;
+const FolderView = Backbone.View.extend({
+    events: {
+        "click .folder-item": "expand",
+        "click .checked-all-item": "toggleIsSelected"
+    },
+    initialize: function () {
+        this.listenTo(this.model, {
+            "change:isSelected": this.render,
+            "change:isVisibleInTree": this.removeIfNotVisible
+        });
+    },
+    tagName: "li",
+    className: "list-group-item",
+    template: _.template(FolderTemplate),
+    templateLeaf: _.template(FolderLeafTemplate),
+    render: function () {
+        var attr = this.model.toJSON();
 
-    FolderView = Backbone.View.extend({
-        tagName: "li",
-        className: "list-group-item",
-        template: _.template(FolderTemplate),
-        templateLeaf: _.template(FolderLeafTemplate),
-        events: {
-            "click .folder-item": "expand",
-            "click .checked-all-item": "toggleIsSelected"
-        },
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isSelected": this.render,
-                "change:isVisibleInTree": this.removeIfNotVisible
-            });
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isExpanded") === true && this.model.get("parentId") !== "tree") {
-                this.$el.html(this.templateLeaf(attr));
-            }
-            else {
-                this.$el.html(this.template(attr));
-            }
-            return this;
-        },
-        expand: function () {
-            this.model.setIsExpanded(true);
-        },
-        toggleIsSelected: function () {
-            this.model.toggleIsSelected();
-            Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
-            this.model.setIsExpanded(true);
-        },
-        removeIfNotVisible: function () {
-            if (!this.model.get("isVisibleInTree")) {
-                this.remove();
-            }
+        if (this.model.get("isExpanded") === true && this.model.get("parentId") !== "tree") {
+            this.$el.html(this.templateLeaf(attr));
         }
-    });
-
-    return FolderView;
+        else {
+            this.$el.html(this.template(attr));
+        }
+        return this;
+    },
+    expand: function () {
+        this.model.setIsExpanded(true);
+    },
+    toggleIsSelected: function () {
+        this.model.toggleIsSelected();
+        Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
+        this.model.setIsExpanded(true);
+    },
+    removeIfNotVisible: function () {
+        if (!this.model.get("isVisibleInTree")) {
+            this.remove();
+        }
+    }
 });
+
+export default FolderView;

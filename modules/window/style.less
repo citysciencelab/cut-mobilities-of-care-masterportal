@@ -1,0 +1,97 @@
+@color_1: rgb(85, 85, 85);
+@color_2: rgb(255, 255, 255);
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@font_family_2: "HamburgSans",sans-serif;
+@background_color_1: rgb(255, 255, 255);
+@background_color_2: rgb(182, 0, 0);
+@background_color_3: #F2F2F2;
+
+.tool-window {
+    background-color: @background_color_1;
+    display: none;
+    position: absolute !important;
+    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+    z-index: 999;
+    max-width: 500px;
+    >.header {
+        padding-left: 10px;
+        border-bottom: 1px solid rgb(229, 229, 229);
+        letter-spacing: 0.6px;
+        font-family: @font_family_1;
+        >.move {
+            cursor: move;
+        }
+        >.title {
+            white-space: nowrap;
+            min-width: 250px;
+            font-size: 14px;
+            padding-top: 8px;
+            padding-bottom: 5px;
+            color: @color_1;
+            width: calc(100% - 50px);
+            margin: 0;
+        }
+        >.buttons {
+            color: @color_1;
+            font-size: 14px;
+            margin: 0;
+            >.glyphicon-minus {
+                top: 3px;
+            }
+            >span {
+                padding: 8px 8px 8px 0px;
+                &:hover {
+                    &:not(.win-icon) {
+                        opacity: 0.7;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+    >.header-min {
+        background-color: @background_color_2;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        >.move {
+            cursor: pointer;
+        }
+        >.title {
+            color: @color_2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 120px;
+            min-width: 0;
+        }
+        >.buttons {
+            color: @color_2;
+        }
+    }
+}
+.win-body {
+    padding: 20px;
+    overflow: auto;
+    background-color: @background_color_1;
+}
+.table-tool-window {
+    font-family: @font_family_2;
+    border-radius: 12px;
+    background-color: @background_color_3;
+    top: 70%;
+    left: calc(50% + 560px);
+    margin-bottom: 30px;
+    .header {
+        font-family: @font_family_2;
+    }
+    .win-body {
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        background-color: @background_color_3;
+        * {
+            border-radius: 12px;
+        }
+    }
+}

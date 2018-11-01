@@ -1,0 +1,386 @@
+{
+  "Portalconfig":
+  {
+    "portalTitle":
+        {
+          "title": "Basic - Portal",
+          "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+          "link": "http://geoinfo.hamburg.de",
+          "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+       },
+    "Baumtyp": "light",
+    "searchBar":
+    {
+      "gazetteer":
+          {
+            "minChars": 3,
+            "serviceId": "8",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+          },
+      "visibleWFS":
+          {
+            "minChars": 3
+          },
+      "zoomLevel": 9,
+      "placeholder": "Suche nach: - Adresse - Aktiven WFS"
+    },
+
+    "mapView":
+          {
+            "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+            "startCenter": [561210, 5932600],
+            "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
+            "zoomLevel": 1
+          },
+
+    "menu":
+    {
+      "tree":
+          {
+            "name": "Themen",
+            "isInitOpen": false
+          },
+
+      "tools":
+          {
+            "name": "Werkzeuge",
+            "children":
+                 {
+                  "gfi":
+                      {
+                        "name": "Informationen abfragen",
+                        "isActive": true
+                      },
+                   "searchByCoord":
+                      {
+                        "name": "Koordinatensuche"
+                      },
+                  "coord":
+                      {
+                        "name": "Koordinaten abfragen"
+                      },
+                  "measure":
+                      {
+                        "name": "Strecke / Fläche messen"
+                      },
+                  "draw":
+                      {
+                        "name": "Zeichnen / Schreiben",
+                        "glyphicon": "glyphicon-pencil"
+                      },
+                  "kmlimport":
+                      {
+                        "name": "KML Import"
+                      },
+                   "addWMS":
+                      {
+                        "name": "WMS hinzufügen"
+                      },
+                  "featureLister":
+                      {
+                        "name": "Liste",
+                        "lister": 10
+                      },
+                  "extendedFilter":
+                      {
+                        "name": "Erweiterter Filter",
+                        "glyphicon": "glyphicon-filter",
+                        "deactivateGFI": false
+                      },
+
+                   "print":
+                      {
+                        "name": "Karte drucken",
+                        "printID": "99999",
+                        "title": "Master",
+                        "gfi": true,
+                        "outputFilename": "DruckPDF",
+                        "gfiMarker":
+                            {
+                              "outerCircle":
+                                {
+                                  "fill": false,
+                                  "pointRadius": 8,
+                                  "stroke": true,
+                                  "strokeColor": "#ff0000",
+                                  "strokeWidth": 3
+                                },
+                              "point":
+                                {
+                                  "fill": true,
+                                  "pointRadius": 1,
+                                  "fillColor": "#000000",
+                                  "stroke": false
+                                }
+                            }
+                      },
+                  "saveSelection":
+                     {
+                        "name": "Auswahl speichern"
+                     },
+                  "styleWMS":
+                     {
+                        "name": "Style WMS",
+                        "onlyDesktop": true
+                      }
+                }
+          },
+      "legend":
+          {
+            "name": "Legende"
+          },
+      "contact":
+          {
+            "name": "Kontakt",
+            "serviceID": "80001",
+            "includeSystemInfo": true
+          },
+      "info":
+          {
+            "name": "Informationen",
+            "children":
+                {
+                  "staticlinks": [
+                    {
+                    "name": "Haftungsausschluss",
+                    "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+                    },
+                    {
+                    "name": "Hamburg",
+                    "url": "http://www.hamburg.de"
+                    }
+                  ]
+                }
+          }
+    },
+
+    "controls":
+        {
+          "fullScreen": true,
+          "zoom": true,
+          "orientation":
+              {
+              "zoomMode": "once",
+              "poiDistances": [500, 1000, 2000]
+              },
+          "freeze": true,
+          "totalview": true,
+          "attributions":
+              {
+              "isInitOpenDesktop": true,
+              "isInitOpenMobile": false
+              },
+          "overviewmap":
+              {
+              "resolution": 611.4974492763076,
+              "baselayer": "452"
+              },
+          "mousePosition": true
+        },
+    "scaleLine": true
+  },
+
+  "Themenconfig":
+  {
+    "Hintergrundkarten":
+        {
+          "Layer": [
+              {
+                "id": "453",
+                "visibility": true
+
+              },
+              {
+                "id": "452"
+              },
+              {
+                "id": ["713", "714", "715", "716"],
+                "name": "Geobasiskarten (schwarz-weiß)"
+              },
+              {
+                "id": ["1043", "1044", "1045", "1046"],
+                "name": "Geobasiskarten (grau-blau)"
+              },
+              {
+                "id": ["717", "718", "719", "720"],
+                "name": "Geobasiskarten (farbig)"
+              }
+          ]
+        },
+    "Fachdaten":
+        {
+          "Layer": [
+
+              {
+                "id": "2426"
+              },
+              {
+                "id": "4561"
+              },
+              {
+                "id": "6046",
+                "visibility": true
+              },
+              {
+                "id": "1562",
+                "layerAttribution": "<span>Hier Attribute für Fachlayer konfigurieren</span>"
+              },
+              {
+                "id": ["412", "413", "414", "415", "416", "417", "418", "419", "420","421", "423", "424", "425", "426", "427", "428", "429", "430", "431"],
+                "maxScale": 100000,
+                "minScale": 40000,
+                "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
+                "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
+              },
+              {
+                "id": "3302",
+                "visibility": true,
+                "gfiTheme": "trinkwasser",
+                "featureCount": 5
+              },
+              {
+                "id": "5708",
+                "styleable": true,
+                "geomType": "Polygon",
+                "attributesToStyle":
+                  [
+                  "Pkw_AP30"
+                  ],
+                "transparency": "50"
+              },
+              {
+                "id": "2407",
+                "infoFormat": "text/html"
+              },
+
+
+              {
+                "id": "myId",
+                    "children": [
+                      {
+                        "id": "946"
+                      },
+                      {
+                        "id": "947"
+                      }
+                    ],
+                "name": "Verkehrslage auf Autobahnen",
+                "layerAttribution":
+                    {
+                      "text": "",
+                      "channel": "Verkehrsfunctions",
+                      "eventname": "aktualisiereverkehrsnetz",
+                      "timeout": 60000
+                    }
+              },
+              {
+                "id": "myId2",
+                    "children": [
+                      {
+                        "id": "682"
+                      },
+                      {
+                        "id": "1731"
+                      }
+                    ],
+                "name": "Kita und Krankenhäuser"
+              },
+              {
+                "id": "2003",
+                "styleId": "2003",
+                "mouseHoverField": "gebietsname"
+              },
+              {
+                "id": "2714",
+                "gfiTheme": "reisezeiten",
+                "styleId": "2119"
+              },
+              {
+                "id": "2404",
+                "styleId": "45",
+                "clusterDistance": 40
+              },
+              {
+                "id": ["4537", "4538"],
+                "name": "Eignungsflächen",
+                "legendURL": ["http://www.geoportal-hamburg.de/legende/legende_solar.png"],
+                "gfiTheme": "solaratlas",
+                "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 --Hier Attribute für Fachlayer konfigurieren </span>"
+              },
+              {
+                "id": "1711",
+                "visibility": true,
+                "styleId": "1711",
+                "layerAttribution": "<span>Hier Attribute für Fachlayer konfigurieren</span>",
+                "mouseHoverField": ["name", "strasse"],
+                "searchField": "name"
+              },
+              {
+                "id": "8712",
+                "name": "Schulen",
+                "styleId": "8712",
+                "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+                "searchField": "schulname"
+              },
+              {
+                "id": "753",
+                "styleId": "753",
+                "mouseHoverField": "Name",
+                "searchField": "Name",
+                "extendedFilter": true
+              },
+              {
+                "id": "8145",
+                "visibility": true,
+                "styleId": "8145",
+                "mouseHoverField": "kategorie",
+                "searchField": "name"
+              },
+
+              {
+                "id": "4560",
+                "visibility": true,
+                "name": "Convention",
+                "mouseHoverField": "flaechenname"
+              },
+              {
+                "id": "1132",
+                "visibility": true,
+                "name": "Aktivitäten im Volkspark/Stadtpark",
+                "mouseHoverField": ["kategorie", "titel"]
+              },
+              {
+                "id": "1133",
+                "visibility": true,
+                "name": "Laufstrecken-Volkspark",
+                "mouseHoverField": "Name"
+              },
+
+              {
+                "id": "4560_",
+                "styleId": "polygon",
+                "visibility": true,
+                "name": "Convention"
+              },
+              {
+                "id": "1132_",
+                "styleId": "point",
+                "visibility": true,
+                "name": "Aktivitäten im Volkspark/Stadtpark",
+                "mouseHoverField": ["kategorie", "titel"]
+              },
+              {
+                "id": "1133_",
+                "styleId": "line",
+                "visibility": true,
+                "name": "Laufstrecken-Volkspark",
+                "mouseHoverField": "Name"
+              }
+            ]
+        }
+    }
+}

@@ -1,0 +1,38 @@
+@border_color_1: rgba(182, 0, 0, 1);
+
+#overviewmap {
+    margin-bottom: 40px;
+    margin-top: 30px;
+}
+.overviewmap-button {
+    >.glyphicon {
+        cursor: pointer;
+        font-size: 22px;
+        padding: 5px 7px 6px 5px;
+    }
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+.ol-overviewmap-map {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+}
+.ol-custom-overviewmap.ol-uncollapsible {
+    position: relative;
+    margin-right: 34px;
+    float: right;
+}
+.ol-custom-overviewmap {
+    .ol-overviewmap-map {
+        border: none;
+        width: 200px;
+    }
+}
+.ol-overviewmap-box {
+    border-color: @border_color_1;
+}
+
+.ol-custom-overviewmap .ol-overviewmap-box {
+    border: 2px solid rgb(182, 0, 0);
+}

@@ -1,0 +1,532 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://lgvfds03.fhhnet.stadt.hamburg.de/fachdaten_a_b/services/wfs_hh_ausgleichsflaechen?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:ausgleichsflaechen&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2018-08-31T06:49:10Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333876">
+      <app:vorhaben>W-006 - BPlan Marienthal 22 (Husarenweg)</app:vorhaben>
+      <app:vorhaben_zulassung_am>23.04.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>6837.878000000001</app:flaeche>
+      <app:hektar>0.6838000000000001</app:hektar>
+      <app:kompensationsmassnahme_detail>Bepflanzung mit Gehölzen und/oder Sträuchern</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333876_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333876_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>573169.734 5935998.106 573174.965 5935999.887 573179.967 5936000.464 573290.094 5935931.609 573299.702 5935890.794 573290.927 5935888.812 573251.047 5935912.837 573192.370 5935919.986 573194.244 5935935.367 573176.051 5935952.246 573147.404 5935981.236 573169.734 5935998.106</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333877">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>5510.8521</app:flaeche>
+      <app:hektar>0.5511</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333877_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333877_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>558175.547 5930635.657 558206.320 5930637.011 558211.872 5930608.110 558218.401 5930566.926 558219.212 5930549.810 558217.936 5930520.402 558204.172 5930501.822 558204.732 5930499.151 558213.488 5930496.272 558214.921 5930493.431 558205.392 5930458.644 558205.334 5930455.383 558213.295 5930452.548 558211.448 5930450.066 558199.008 5930454.621 558178.120 5930462.269 558180.551 5930470.205 558185.993 5930475.137 558186.366 5930483.039 558189.994 5930493.538 558176.605 5930565.087 558187.748 5930567.160 558175.547 5930635.657</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333878">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>3515.5264</app:flaeche>
+      <app:hektar>0.3516</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333878_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333878_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>558227.573 5930456.681 558224.287 5930456.638 558216.772 5930456.540 558211.376 5930453.705 558211.376 5930453.231 558205.334 5930455.383 558205.392 5930458.644 558214.921 5930493.431 558213.488 5930496.272 558204.732 5930499.151 558204.172 5930501.822 558217.936 5930520.402 558219.212 5930549.810 558218.401 5930566.926 558211.872 5930608.110 558206.320 5930637.011 558213.608 5930637.332 558221.754 5930637.332 558227.790 5930592.401 558242.713 5930456.878 558227.573 5930456.681</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333879">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>112245.8873</app:flaeche>
+      <app:hektar>11.2246</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333879_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333879_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>558212.346 5930446.679 558212.825 5930444.906 558213.807 5930441.270 558212.310 5930437.721 558201.756 5930427.382 558200.269 5930423.025 558201.591 5930418.529 558208.731 5930410.330 558211.639 5930397.635 558124.109 5930419.060 558113.529 5930382.561 558104.274 5930386.793 558091.581 5930393.934 558077.830 5930400.018 558042.395 5930409.275 558030.230 5930407.160 558024.676 5930401.870 558010.661 5930408.747 558006.166 5930408.747 558001.934 5930406.631 557987.654 5930406.632 557979.192 5930410.070 557977.341 5930419.856 557967.821 5930416.418 557960.681 5930423.559 557949.575 5930422.766 557933.444 5930430.966 557928.156 5930440.751 557921.016 5930445.777 557909.909 5930448.158 557896.952 5930454.241 557851.468 5930466.673 557832.163 5930468.260 557807.040 5930475.401 557798.841 5930473.021 557754.408 5930475.813 557739.334 5930475.931 557734.044 5930469.583 557730.342 5930474.344 557719.763 5930479.104 557702.837 5930474.873 557691.464 5930480.162 557681.943 5930478.046 557671.893 5930482.278 557653.115 5930476.724 557644.123 5930479.369 557633.809 5930476.988 557611.328 5930476.724 557603.394 5930473.550 557600.484 5930468.261 557591.756 5930474.343 557566.366 5930471.963 557552.348 5930464.557 557542.033 5930468.788 557533.236 5930469.982 557521.438 5930465.570 557515.684 5930466.338 557508.394 5930464.131 557499.474 5930462.117 557488.636 5930460.870 557480.196 5930464.419 557472.523 5930466.145 557458.616 5930464.322 557445.851 5930463.767 557423.923 5930455.544 557403.365 5930450.213 557379.914 5930447.624 557373.214 5930447.015 557362.610 5930442.470 557350.829 5930436.203 557336.972 5930431.482 557330.273 5930474.728 557331.186 5930480.515 557328.750 5930482.495 557327.532 5930493.458 557356.617 5930490.261 557374.890 5930491.175 557375.042 5930487.521 557379.306 5930469.095 557403.213 5930477.471 557404.736 5930463.614 557430.471 5930469.553 557428.644 5930482.040 557449.506 5930484.172 557447.491 5930496.836 557481.794 5930503.557 557492.151 5930507.940 557501.222 5930513.003 557505.410 5930517.356 557508.523 5930522.538 557510.518 5930527.613 557508.864 5930533.194 557507.417 5930538.127 557534.904 5930546.577 557535.884 5930546.878 557538.283 5930547.616 557534.708 5930559.234 557531.047 5930571.130 557531.004 5930571.269 557530.392 5930571.081 557501.412 5930562.182 557494.311 5930591.867 557490.239 5930619.774 557527.479 5930625.003 557565.599 5930629.111 557574.410 5930627.788 557655.681 5930641.260 557724.528 5930649.694 557729.024 5930620.337 557730.706 5930605.505 557732.930 5930590.431 557757.852 5930596.799 557759.439 5930589.658 557787.738 5930599.443 557784.303 5930631.384 557784.169 5930632.629 557784.158 5930632.973 557795.500 5930633.483 557795.651 5930633.490 557795.731 5930633.494 557806.863 5930633.995 557917.077 5930632.542 557922.724 5930598.760 557922.946 5930597.428 557924.027 5930590.963 557926.202 5930577.418 557926.239 5930577.187 557929.149 5930559.070 557929.634 5930556.047 557929.889 5930554.459 557931.888 5930542.008 557932.625 5930537.420 557934.984 5930522.731 557935.110 5930521.948 557937.790 5930505.256 557981.841 5930507.399 557984.749 5930485.976 558036.718 5930492.467 558036.067 5930500.644 558031.151 5930532.564 558016.346 5930632.681 558078.609 5930634.426 558098.971 5930476.124 558137.605 5930482.647 558135.260 5930508.363 558121.497 5930592.414 558117.477 5930627.410 558116.803 5930633.275 558121.087 5930633.261 558175.547 5930635.657 558187.748 5930567.160 558176.605 5930565.087 558189.994 5930493.538 558186.366 5930483.039 558185.993 5930475.137 558180.551 5930470.205 558178.120 5930462.269 558199.008 5930454.621 558211.428 5930450.073 558212.346 5930446.679</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333880">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>10997.4083</app:flaeche>
+      <app:hektar>1.0997000000000001</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333880_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333880_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>555032.609 5930596.205 555038.349 5930597.736 555041.027 5930595.822 555042.175 5930591.996 555043.706 5930587.404 555049.063 5930585.491 555053.272 5930584.343 555055.951 5930580.899 555059.777 5930577.838 555066.665 5930574.777 555073.935 5930569.037 555083.501 5930558.705 555086.945 5930545.313 555093.832 5930531.538 555099.189 5930517.380 555104.929 5930506.666 555106.459 5930495.569 555112.581 5930485.620 555127.503 5930456.539 555137.069 5930440.850 555155.053 5930412.917 555156.966 5930406.795 555158.496 5930399.907 555158.113 5930392.254 555155.817 5930385.749 555148.164 5930376.949 555138.289 5930370.851 555133.401 5930367.296 555129.846 5930368.185 555122.588 5930371.148 555118.589 5930376.480 555115.182 5930385.515 555112.578 5930391.490 555102.296 5930398.106 555092.817 5930413.214 555083.782 5930431.730 555072.673 5930454.540 555070.155 5930463.872 555064.083 5930483.276 555062.972 5930489.335 555064.231 5930497.051 555060.232 5930502.532 555054.456 5930507.864 555047.149 5930526.182 555037.583 5930543.401 555025.721 5930562.533 555025.721 5930567.890 555023.042 5930570.569 555019.599 5930574.778 555020.364 5930580.135 555025.338 5930591.614 555032.609 5930596.205</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333881">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>1102.5507</app:flaeche>
+      <app:hektar>0.11030000000000001</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333881_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333881_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>558222.929 5930395.143 558222.878 5930394.990 558217.193 5930396.842 558213.491 5930410.066 558207.673 5930419.852 558206.210 5930423.081 558206.543 5930425.632 558215.969 5930434.116 558218.742 5930438.553 558218.798 5930444.098 558216.635 5930449.366 558218.021 5930452.694 558221.847 5930454.136 558242.755 5930454.411 558222.929 5930395.143</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333882">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>161307.2747</app:flaeche>
+      <app:hektar>16.1307</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333882_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333882_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>557324.204 5930460.065 557326.947 5930445.174 557328.134 5930424.392 557323.780 5930419.840 557306.759 5930412.714 557308.738 5930407.173 557279.049 5930392.130 557274.893 5930394.109 557265.788 5930396.484 557257.871 5930395.890 557227.985 5930387.379 557216.110 5930384.806 557160.691 5930359.669 557151.983 5930352.742 557138.921 5930346.212 557132.192 5930347.993 557118.338 5930344.827 557084.495 5930329.985 557073.214 5930328.996 557069.058 5930334.340 557060.151 5930340.278 557057.381 5930346.018 557049.464 5930356.112 557043.725 5930358.685 557039.767 5930357.102 557039.767 5930353.738 557047.881 5930346.810 557052.907 5930338.169 557068.859 5930323.454 557058.172 5930314.350 557049.662 5930310.986 557031.849 5930302.872 557013.641 5930288.029 556983.161 5930270.810 556968.515 5930265.467 556947.537 5930267.052 556938.780 5930262.543 556926.755 5930252.801 556924.776 5930245.874 556922.599 5930244.686 556921.214 5930255.374 556918.443 5930257.947 556912.109 5930242.706 556914.483 5930227.071 556905.586 5930226.649 556899.838 5930220.341 556895.485 5930244.883 556886.183 5930251.019 556879.455 5930259.727 556862.238 5930285.654 556850.562 5930310.791 556842.843 5930324.053 556826.021 5930344.044 556822.261 5930345.430 556819.269 5930344.596 556820.949 5930339.135 556847.829 5930302.590 556854.969 5930283.267 556873.448 5930253.445 556875.967 5930242.104 556886.887 5930229.923 556892.347 5930217.322 556890.666 5930211.441 556884.366 5930209.341 556870.925 5930211.021 556866.305 5930206.820 556852.444 5930206.400 556839.423 5930190.438 556815.902 5930187.497 556803.720 5930176.156 556791.960 5930174.896 556771.378 5930166.495 556762.978 5930160.194 556754.157 5930158.514 556744.079 5930159.877 556734.768 5930158.444 556731.902 5930153.431 556713.995 5930149.133 556690.357 5930153.431 556654.542 5930149.135 556618.726 5930141.257 556594.371 5930129.797 556532.052 5930121.203 556500.535 5930124.785 556488.358 5930119.056 556477.613 5930124.070 556447.528 5930124.787 556415.341 5930121.352 556379.347 5930114.913 556367.336 5930113.980 556361.397 5930116.087 556353.609 5930112.914 556346.877 5930112.391 556338.165 5930109.092 556330.905 5930115.428 556326.021 5930116.352 556294.606 5930106.585 556262.266 5930106.454 556260.419 5930109.490 556260.287 5930113.846 556267.811 5930136.285 556270.716 5930154.369 556277.052 5930160.573 556272.828 5930167.833 556277.713 5930186.972 556289.593 5930202.943 556295.239 5930215.698 556291.830 5930234.642 556292.210 5930272.151 556293.728 5930327.847 556294.107 5930350.200 556297.602 5930372.410 556309.193 5930370.074 556333.707 5930365.539 556339.246 5930365.461 556341.275 5930365.432 556358.225 5930364.573 556371.227 5930364.565 556382.201 5930365.496 556383.010 5930365.575 556391.176 5930366.367 556397.569 5930366.480 556403.163 5930366.640 556409.431 5930366.517 556458.607 5930355.524 556459.281 5930355.373 556488.430 5930350.635 556518.161 5930347.591 556530.739 5930346.302 556547.613 5930345.129 556555.877 5930344.792 556562.739 5930344.512 556583.400 5930343.925 556588.294 5930343.786 556588.777 5930343.772 556602.298 5930344.026 556603.964 5930344.057 556616.853 5930345.950 556616.904 5930345.954 556628.225 5930346.925 556642.240 5930348.126 556670.330 5930346.679 556678.692 5930346.250 556692.475 5930346.168 556705.419 5930346.332 556715.122 5930346.660 556721.482 5930346.876 556739.209 5930347.477 556741.484 5930347.635 556757.758 5930349.365 556776.137 5930348.275 556782.588 5930348.326 556794.046 5930349.739 556794.425 5930349.786 556817.090 5930352.399 556821.729 5930352.935 556824.473 5930353.251 556830.572 5930353.186 556849.467 5930351.511 556857.485 5930351.874 556864.589 5930352.196 556864.847 5930352.208 556869.888 5930352.773 556876.398 5930353.501 556877.700 5930353.647 556879.057 5930353.798 556884.008 5930354.352 556884.059 5930352.500 556884.875 5930352.567 556886.331 5930352.716 556900.099 5930353.791 556899.996 5930355.788 556914.190 5930356.609 556914.493 5930356.627 556926.241 5930357.525 556952.701 5930360.313 557029.472 5930366.603 557049.979 5930371.317 557069.780 5930381.024 557078.993 5930388.172 557092.164 5930403.189 557107.580 5930423.239 557114.793 5930433.402 557115.513 5930426.205 557135.664 5930436.279 557159.053 5930445.994 557190.360 5930458.949 557204.395 5930463.988 557225.974 5930468.106 557234.622 5930470.466 557238.221 5930450.674 557240.455 5930431.120 557243.423 5930426.964 557246.590 5930425.776 557254.903 5930427.558 557261.039 5930431.120 557261.443 5930438.790 557259.616 5930452.647 557258.093 5930461.174 557256.266 5930473.356 557306.234 5930477.664 557305.874 5930483.782 557322.050 5930483.560 557322.599 5930472.732 557324.082 5930461.919 557324.204 5930460.065</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333883">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>161453.8123</app:flaeche>
+      <app:hektar>16.145400000000002</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333883_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333883_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>555132.669 5931601.641 555511.554 5931431.387 555541.789 5931421.262 555567.994 5931415.909 555593.635 5931411.683 555619.277 5931408.584 555659.853 5931406.050 555696.202 5931409.433 555737.342 5931419.861 555762.420 5931429.160 555802.996 5931451.423 555803.115 5931451.816 555807.977 5931454.360 555817.230 5931459.741 555826.661 5931465.919 555827.951 5931467.477 555891.546 5931446.720 555898.287 5931445.304 555898.013 5931445.501 555897.711 5931445.711 555897.404 5931445.916 555897.095 5931446.116 555897.055 5931447.243 555916.946 5931441.418 555916.541 5931438.805 555911.516 5931413.063 555920.679 5931340.718 555922.177 5931328.888 555924.328 5931311.906 555931.312 5931256.763 555834.219 5931244.799 555743.046 5931256.003 555737.846 5931256.641 555737.042 5931256.620 555497.862 5931250.283 555232.368 5931352.806 555227.423 5931354.037 555204.724 5931368.577 555174.049 5931388.223 555167.304 5931392.371 555159.145 5931397.384 555152.946 5931400.849 555144.742 5931405.407 555135.101 5931411.140 555132.175 5931412.860 555130.180 5931415.134 555124.686 5931421.397 555099.656 5931451.991 555095.600 5931459.011 555100.748 5931475.235 555044.088 5931499.351 554987.902 5931522.817 554971.849 5931528.993 554949.005 5931520.967 554967.655 5931534.488 554983.593 5931547.599 555006.987 5931565.080 555028.067 5931578.191 555047.091 5931587.444 555063.287 5931593.613 555078.970 5931596.954 555106.479 5931599.780 555132.445 5931601.577 555132.669 5931601.641</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333884">
+      <app:vorhaben>M-001 - BPlan Finkenwerder 35 (Erweiterung auf den Neß)</app:vorhaben>
+      <app:vorhaben_zulassung_am>08.07.1997</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Grünfläche</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>439891.4299</app:flaeche>
+      <app:hektar>43.9891</app:hektar>
+      <app:kompensationsmassnahme_detail>Hochstaudenflur; Sukzessionsfläche auf feuchten Standorten ohne Gehölze</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333884_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333884_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>555013.708 5931222.413 555047.540 5931192.367 555059.019 5931167.877 555067.054 5931143.004 555109.144 5931058.054 555112.568 5931050.567 555137.843 5930995.299 555161.877 5930949.905 555233.891 5930835.351 555340.652 5930695.685 555390.396 5930644.410 555428.372 5930609.153 555500.842 5930538.272 555540.515 5930513.411 555602.933 5930463.160 555701.849 5930400.740 555772.202 5930376.405 555841.515 5930370.560 555895.936 5930364.803 555928.916 5930368.562 556053.103 5930405.703 556053.946 5930404.438 556058.412 5930402.485 556074.068 5930398.896 556075.875 5930396.667 556049.223 5930277.090 556178.529 5930256.407 556282.584 5930249.185 556283.694 5930223.634 556280.175 5930215.858 556271.473 5930208.267 556266.844 5930199.750 556254.806 5930133.465 556247.029 5930093.102 556238.882 5930089.399 556234.623 5930091.066 556232.587 5930102.360 556233.143 5930106.433 556231.106 5930115.506 556220.183 5930121.431 556207.223 5930135.688 556191.670 5930144.205 556172.414 5930147.908 556160.565 5930145.686 556146.493 5930144.576 556106.870 5930139.207 556085.022 5930137.170 556064.656 5930133.468 556023.735 5930111.621 555984.852 5930099.957 555947.141 5930091.701 555940.230 5930092.182 555916.576 5930085.473 555901.347 5930082.370 555850.244 5930079.593 555813.024 5930079.158 555758.962 5930082.374 555701.357 5930091.174 555661.648 5930100.802 555638.797 5930107.003 555577.882 5930127.187 555524.928 5930149.221 555429.203 5930186.993 555392.913 5930203.657 555344.588 5930231.615 555237.939 5930307.528 555218.312 5930326.044 555202.389 5930348.447 555194.799 5930375.849 555194.985 5930392.142 555211.834 5930397.882 555222.389 5930402.510 555228.684 5930407.139 555231.462 5930405.288 555217.204 5930391.957 555223.129 5930391.031 555231.461 5930393.253 555243.867 5930406.954 555264.235 5930419.173 555275.528 5930419.330 555295.527 5930410.656 555309.229 5930412.692 555317.376 5930419.913 555310.340 5930428.800 555305.711 5930428.060 555293.861 5930435.096 555281.826 5930438.984 555266.273 5930439.725 555244.609 5930433.800 555229.240 5930425.654 555224.796 5930423.877 555197.245 5930423.136 555192.504 5930417.656 555178.283 5930388.921 555161.544 5930352.484 555157.989 5930352.039 555156.804 5930357.816 555165.692 5930376.775 555169.988 5930380.626 555191.171 5930426.840 555173.666 5930439.474 555163.855 5930455.008 555140.622 5930486.948 555119.470 5930523.119 555109.855 5930542.375 555109.262 5930550.966 555105.856 5930554.224 555105.264 5930572.443 555103.400 5930578.219 555079.293 5930595.439 555063.222 5930613.423 555061.309 5930632.173 555053.656 5930639.443 554997.405 5930617.634 554996.257 5930620.695 555041.028 5930641.357 555033.758 5930682.682 555037.585 5930691.865 555026.488 5930732.808 555018.453 5930779.108 555023.810 5930787.526 555010.417 5930821.582 554998.936 5930860.230 554994.344 5930901.556 554980.186 5930915.714 554968.706 5930911.888 554966.792 5930914.184 554975.211 5930918.393 554969.471 5930946.709 554976.358 5930972.729 554975.975 5930995.688 554963.731 5931020.560 554951.487 5931048.494 554953.256 5931056.898 554955.631 5931068.182 554955.871 5931071.114 555011.367 5931091.463 555013.708 5931222.413</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333885">
+      <app:vorhaben>U-036 - Neubau Este-Sperrwerk (SIETAS)</app:vorhaben>
+      <app:vorhaben_zulassung_am>09.02.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Planfeststellung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>30940.2735</app:flaeche>
+      <app:hektar>3.0940000000000003</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333885_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333885_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>552510.281 5932165.945 552516.652 5932166.499 552524.961 5932164.976 552534.518 5932161.652 552544.767 5932156.805 552554.140 5932152.287 552569.173 5932143.190 552580.645 5932135.674 552592.908 5932127.367 552600.029 5932122.225 552606.952 5932114.907 552592.243 5932112.095 552577.214 5932105.365 552573.160 5932097.700 552570.817 5932090.335 552569.143 5932083.640 552565.128 5932056.401 552545.876 5932067.619 552543.521 5932071.081 552534.381 5932072.882 552523.162 5932077.175 552512.775 5932081.607 552505.988 5932083.546 552499.341 5932078.006 552486.183 5932096.702 552481.889 5932100.580 552449.249 5932112.732 552465.614 5932175.667 552478.943 5932214.864 552659.197 5932602.925 552699.116 5932587.783 552514.320 5932178.705 552510.281 5932165.945</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333886">
+      <app:vorhaben>U-036 - Neubau Este-Sperrwerk (SIETAS)</app:vorhaben>
+      <app:vorhaben_zulassung_am>09.02.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Planfeststellung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>1755.7315</app:flaeche>
+      <app:hektar>0.1756</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333886_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333886_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>552319.028 5932088.769 552305.401 5932085.322 552288.557 5932094.226 552288.114 5932094.136 552258.587 5932110.586 552227.658 5932127.815 552185.119 5932146.059 552153.087 5932161.662 552149.212 5932164.257 552153.047 5932172.077 552232.563 5932135.750 552319.028 5932088.769</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333887">
+      <app:vorhaben>U-036 - Neubau Este-Sperrwerk (SIETAS)</app:vorhaben>
+      <app:vorhaben_zulassung_am>09.02.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Planfeststellung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>4567.0433</app:flaeche>
+      <app:hektar>0.4567</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333887_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333887_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>552209.432 5931976.326 552209.323 5931976.176 552202.106 5931983.533 552208.674 5932000.711 552214.715 5932005.469 552216.710 5932009.078 552217.719 5932010.901 552220.197 5932015.383 552226.052 5932025.969 552254.949 5932057.708 552270.325 5932070.233 552288.582 5932081.822 552305.401 5932085.322 552319.028 5932088.769 552334.739 5932080.232 552327.445 5932073.669 552271.997 5932025.229 552235.316 5931992.541 552209.432 5931976.326</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333888">
+      <app:vorhaben>U-036 - Neubau Este-Sperrwerk (SIETAS)</app:vorhaben>
+      <app:vorhaben_zulassung_am>09.02.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Planfeststellung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>5890.3574</app:flaeche>
+      <app:hektar>0.5890000000000001</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333888_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333888_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>551907.759 5932289.459 551889.776 5932265.293 551890.362 5932260.951 551890.643 5932252.216 551890.620 5932240.663 551890.292 5932230.608 551889.456 5932220.683 551888.949 5932212.991 551888.773 5932204.818 551835.737 5932243.540 551831.816 5932255.832 551829.270 5932279.103 551828.938 5932281.708 551828.712 5932283.496 551822.327 5932333.272 551830.613 5932328.114 551852.603 5932321.871 551907.759 5932289.459</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333889">
+      <app:vorhaben>U-036 - Neubau Este-Sperrwerk (SIETAS)</app:vorhaben>
+      <app:vorhaben_zulassung_am>09.02.1996</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Planfeststellung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>18083.802900000002</app:flaeche>
+      <app:hektar>1.8084</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333889_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333889_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>551824.900 5932048.400 551818.592 5932043.295 551816.889 5932043.387 551815.786 5932043.446 551813.594 5932039.318 551812.502 5932038.064 551812.098 5932037.599 551811.587 5932036.619 551811.554 5932036.555 551811.350 5932036.166 551806.064 5932030.694 551801.057 5932033.985 551789.623 5932037.636 551787.487 5932038.316 551786.538 5932035.137 551782.067 5932035.914 551772.375 5932037.695 551762.636 5932039.097 551754.595 5932039.960 551749.277 5932040.214 551747.851 5932040.284 551734.637 5932039.691 551715.639 5932039.726 551715.166 5932043.647 551691.268 5932041.133 551691.971 5932037.036 551677.805 5932034.736 551677.419 5932037.320 551689.202 5932040.996 551690.913 5932041.542 551692.740 5932042.140 551703.607 5932045.697 551713.831 5932049.730 551723.733 5932054.411 551725.533 5932055.262 551738.407 5932062.369 551740.754 5932063.813 551753.160 5932071.931 551765.764 5932080.376 551756.610 5932097.314 551755.009 5932100.219 551758.109 5932102.722 551759.929 5932105.986 551769.112 5932122.483 551773.480 5932140.050 551776.811 5932146.578 551780.902 5932158.616 551784.283 5932169.080 551785.044 5932172.079 551790.487 5932186.459 551793.079 5932195.682 551799.182 5932216.239 551804.317 5932234.029 551807.519 5932247.882 551836.526 5932226.294 551850.967 5932215.540 551886.548 5932189.973 551892.258 5932185.873 551891.883 5932184.897 551890.235 5932180.618 551888.990 5932175.870 551887.933 5932172.202 551884.357 5932160.669 551882.926 5932156.413 551879.525 5932147.077 551875.918 5932138.222 551868.198 5932122.182 551867.741 5932121.041 551869.924 5932119.460 551867.093 5932115.677 551865.047 5932112.947 551866.488 5932111.897 551862.939 5932105.966 551859.327 5932099.367 551848.753 5932080.055 551841.253 5932067.978 551836.809 5932061.012 551831.780 5932054.335 551824.900 5932048.400</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333890">
+      <app:vorhaben>W-023 - Anlage eines kombinierten Geh- und Fahrradweges im NSG Wittmoor</app:vorhaben>
+      <app:vorhaben_zulassung_am>06.10.1998</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>sonstige Genehmigung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Gehölzentwicklung</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>1017.8843</app:flaeche>
+      <app:hektar>0.1018</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines Knicks aus heimischen, standortgerechten Gehölzen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333890_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333890_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>570840.810 5948821.128 570842.166 5948825.873 571058.749 5948796.722 571058.410 5948792.316 570840.810 5948821.128</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333891">
+      <app:vorhaben>W-023 - Anlage eines kombinierten Geh- und Fahrradweges im NSG Wittmoor</app:vorhaben>
+      <app:vorhaben_zulassung_am>06.10.1998</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>sonstige Genehmigung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Gehölzentwicklung</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>1245.692</app:flaeche>
+      <app:hektar>0.1246</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines Knicks aus heimischen, standortgerechten Gehölzen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333891_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333891_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>571238.837 5948765.657 571239.081 5948770.534 571483.804 5948774.674 571484.471 5948769.397 571238.837 5948765.657</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333892">
+      <app:vorhaben>U-091 - Naturnahe Umgestaltung der Tarpenbek am Engernweg, II. Bauabschnitt</app:vorhaben>
+      <app:vorhaben_zulassung_am>15.11.1989</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Zustimmung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Fließgewässer und Gräben</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>7727.775900000001</app:flaeche>
+      <app:hektar>0.7728</app:hektar>
+      <app:kompensationsmassnahme_detail>Renaturierung eines bestehenden Fließgewässers</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333892_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333892_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>564354.588 5942296.542 564364.442 5942282.780 564345.086 5942265.818 564331.404 5942254.633 564326.823 5942250.884 564319.743 5942243.387 564314.542 5942237.845 564295.586 5942212.566 564286.006 5942200.489 564281.775 5942195.402 564272.677 5942180.915 564265.791 5942173.560 564256.200 5942156.956 564238.174 5942137.334 564191.378 5942092.138 564161.720 5942063.280 564149.913 5942075.621 564154.530 5942080.150 564158.975 5942091.788 564162.257 5942098.352 564165.365 5942101.727 564167.673 5942103.236 564174.421 5942103.325 564179.660 5942105.012 564188.962 5942113.029 564197.774 5942120.818 564200.260 5942124.724 564210.741 5942157.932 564215.625 5942166.101 564221.042 5942172.583 564222.285 5942174.667 564224.239 5942177.910 564225.026 5942181.732 564228.858 5942195.046 564235.695 5942200.640 564240.668 5942205.790 564248.926 5942212.538 564251.412 5942214.580 564257.272 5942216.711 564264.642 5942222.216 564269.881 5942227.188 564271.850 5942230.057 564274.766 5942234.647 564280.271 5942241.750 564298.296 5942252.138 564310.638 5942261.907 564318.539 5942262.352 564327.330 5942270.433 564348.550 5942287.928 564354.588 5942296.542</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333893">
+      <app:vorhaben>W-058 - Baumschulbetrieb Mühlenbrook</app:vorhaben>
+      <app:vorhaben_zulassung_am>19.10.1988</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>sonstige Genehmigung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Gehölzentwicklung</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>813.9189</app:flaeche>
+      <app:hektar>0.0814</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines Knicks aus heimischen, standortgerechten Gehölzen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333893_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333893_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>576395.353 5950326.195 576407.840 5950397.935 576410.781 5950397.668 576399.073 5950329.512 576536.653 5950305.862 576535.548 5950301.390 576395.353 5950326.195</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333894">
+      <app:vorhaben>W-058 - Baumschulbetrieb Mühlenbrook</app:vorhaben>
+      <app:vorhaben_zulassung_am>19.10.1988</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>sonstige Genehmigung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Gehölzentwicklung</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>10853.3873</app:flaeche>
+      <app:hektar>1.0853000000000002</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines Knicks aus heimischen, standortgerechten Gehölzen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333894_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333894_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>576410.794 5950397.234 576549.354 5950387.130 576560.301 5950386.337 576542.212 5950331.286 576541.207 5950325.205 576536.235 5950306.008 576399.156 5950329.544 576410.794 5950397.234</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333895">
+      <app:vorhaben>U-179 - Sietas - Rückverlegung linkes Esteufer</app:vorhaben>
+      <app:vorhaben_zulassung_am>11.01.2008</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>Plangenehmigung</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Tideelbe</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>31798.856200000002</app:flaeche>
+      <app:hektar>3.1799</app:hektar>
+      <app:kompensationsmassnahme_detail>Entwicklung von Watt- / Ästurflächen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333895_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333895_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>552092.049 5931998.976 552093.099 5931994.145 552093.099 5931988.209 552090.360 5931981.133 552088.533 5931976.110 552089.219 5931969.946 552092.643 5931966.066 552098.808 5931965.152 552103.831 5931967.207 552107.255 5931972.914 552110.451 5931979.078 552115.931 5931980.904 552142.643 5931994.829 552145.402 5931995.988 552167.643 5932005.325 552181.968 5932003.211 552184.359 5932002.853 552182.825 5931998.253 552183.282 5931991.176 552183.056 5931989.686 552183.878 5931987.632 552186.699 5931983.965 552194.314 5931983.965 552200.237 5931986.503 552202.001 5931987.022 552199.441 5931985.131 552189.958 5931978.527 552186.616 5931976.201 552179.724 5931971.402 552176.953 5931969.623 552174.666 5931968.154 552168.471 5931964.176 552165.493 5931962.191 552165.414 5931962.138 552162.703 5931960.331 552161.808 5931959.734 552163.139 5931959.853 552164.666 5931959.969 552165.077 5931960.071 552165.149 5931960.090 552164.445 5931959.634 552157.631 5931954.989 552157.257 5931954.764 552158.176 5931952.776 552159.320 5931950.300 552164.783 5931938.485 552164.776 5931938.480 552165.443 5931937.042 552165.647 5931936.603 552169.349 5931928.959 552169.391 5931928.874 552169.508 5931928.632 552172.701 5931922.039 552172.823 5931921.788 552171.996 5931921.227 552155.387 5931909.958 552134.310 5931899.455 552127.817 5931895.913 552103.935 5931890.948 552092.731 5931890.735 552077.426 5931888.724 552055.640 5931886.825 552039.105 5931887.830 552022.794 5931892.075 551999.109 5931899.783 551991.512 5931903.693 551987.713 5931905.815 551982.797 5931905.927 551976.094 5931905.591 551967.715 5931905.591 551961.123 5931909.389 551950.062 5931918.215 551928.611 5931935.418 551916.433 5931944.913 551891.854 5931964.685 551875.877 5931978.537 551855.319 5931995.182 551846.045 5932001.438 551833.097 5932010.705 551830.900 5932011.925 551813.832 5932018.787 551800.961 5932021.666 551804.213 5932025.349 551804.379 5932025.537 551807.484 5932029.053 551810.685 5932032.677 551810.961 5932032.990 551810.686 5932033.012 551810.316 5932034.123 551810.316 5932034.182 551811.293 5932036.057 551811.554 5932036.555 551811.587 5932036.619 551812.098 5932037.599 551812.502 5932038.064 551813.594 5932039.318 551815.786 5932043.446 551816.889 5932043.387 551823.977 5932043.007 551825.118 5932045.450 551831.531 5932040.811 551842.725 5932038.572 551848.290 5932037.433 551859.594 5932035.133 551862.617 5932034.542 551864.370 5932034.060 551867.306 5932032.220 551871.162 5932028.759 551881.284 5932020.063 551892.326 5932010.578 551901.220 5932002.933 551902.097 5932002.189 551903.849 5932001.269 551911.912 5931996.778 551917.695 5931993.602 551923.216 5931991.455 551934.608 5931987.096 551945.912 5931983.307 551955.552 5931980.525 551956.637 5931980.210 551956.313 5931981.737 551953.022 5931987.496 551950.553 5931992.549 551945.146 5932000.540 551944.088 5932002.773 551941.620 5932011.351 551940.444 5932020.165 551939.503 5932027.921 551939.973 5932034.385 551940.913 5932037.557 551942.088 5932041.083 551944.439 5932044.256 551947.612 5932046.489 551951.843 5932051.542 551957.484 5932055.890 551962.773 5932059.416 551967.122 5932062.589 551971.353 5932066.819 551974.056 5932069.992 551977.111 5932073.635 551983.223 5932077.396 551989.217 5932078.571 551992.155 5932078.923 551992.037 5932081.509 551991.802 5932083.859 551993.213 5932085.857 551996.503 5932085.034 551998.433 5932083.315 551998.272 5932084.321 551997.207 5932088.226 551995.077 5932091.952 551990.107 5932098.696 551981.727 5932107.075 551983.104 5932106.422 551991.802 5932097.374 552002.733 5932085.387 552016.014 5932072.813 552029.589 5932059.020 552034.273 5932054.452 552033.972 5932054.426 552028.485 5932053.956 552022.777 5932052.130 552018.895 5932051.673 552014.329 5932052.129 552009.763 5932055.554 552003.598 5932056.923 552002.685 5932052.358 552004.283 5932046.422 552001.087 5932038.432 551995.836 5932033.410 551989.672 5932027.703 551983.508 5932020.626 551981.225 5932012.864 551982.367 5932003.961 551983.256 5931996.633 551984.194 5931988.894 551984.880 5931980.219 551984.734 5931973.923 551986.401 5931973.611 551996.236 5931970.491 552006.342 5931966.965 552012.242 5931965.202 552015.455 5931964.267 552016.159 5931964.924 552022.780 5931974.740 552028.715 5931985.013 552032.825 5931992.547 552036.021 5931998.026 552033.509 5932002.135 552032.368 5932006.244 552034.879 5932013.549 552034.907 5932013.603 552037.847 5932019.256 552039.445 5932022.452 552041.728 5932024.735 552047.664 5932022.224 552051.546 5932021.083 552056.797 5932024.507 552059.297 5932029.194 552059.592 5932029.747 552064.518 5932026.266 552070.339 5932023.527 552076.731 5932021.244 552079.857 5932020.549 552084.949 5932019.418 552090.319 5932018.253 552090.253 5932017.519 552088.258 5932017.419 552083.662 5932014.203 552088.989 5932005.102 552091.957 5931999.395 552092.049 5931998.976</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333896">
+      <app:vorhaben>H-066 - BPlan Heimfeld 44</app:vorhaben>
+      <app:vorhaben_zulassung_am>17.09.2008</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Wald</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>9185.006800000001</app:flaeche>
+      <app:hektar>0.9185000000000001</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines naturnahen Waldes</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333896_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333896_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>571335.297 5948042.846 571340.675 5948050.289 571349.638 5948062.439 571394.268 5948122.941 571465.135 5948021.112 571470.246 5948013.770 571469.053 5948012.181 571465.956 5948008.244 571449.409 5947984.297 571435.393 5947967.258 571431.037 5947976.257 571423.933 5947985.389 571408.814 5947997.062 571406.014 5947996.186 571403.014 5947998.989 571383.460 5948015.091 571380.072 5948029.106 571365.553 5948027.030 571346.162 5948036.365 571335.753 5948042.303 571335.297 5948042.846</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333897">
+      <app:vorhaben>E-045 - BPlan Schnelsen 83</app:vorhaben>
+      <app:vorhaben_zulassung_am>13.03.2012</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Wald</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>k.A.</app:flaechensicherung>
+      <app:flaeche>18501.2319</app:flaeche>
+      <app:hektar>1.8501</app:hektar>
+      <app:kompensationsmassnahme_detail>Neuanlage eines naturnahen Waldes</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333897_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333897_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>568589.274 5953661.070 568509.119 5953977.746 568563.883 5953995.999 568643.244 5953665.831 568589.274 5953661.070</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:ausgleichsflaechen xmlns:app="http://www.deegree.org/app" gml:id="APP_AUSGLEICHSFLAECHEN_333898">
+      <app:vorhaben>W-122 - BPlan Bramfeld 64</app:vorhaben>
+      <app:vorhaben_zulassung_am>16.12.2014</app:vorhaben_zulassung_am>
+      <app:vorhaben_verfahrensart>BPlan</app:vorhaben_verfahrensart>
+      <app:kompensationsmassnahme>Gehölzentwicklung</app:kompensationsmassnahme>
+      <app:massnahmenstatus>festgesetzt</app:massnahmenstatus>
+      <app:flaechensicherung>FHH Eigentum (LIG)</app:flaechensicherung>
+      <app:flaeche>2198.3476</app:flaeche>
+      <app:hektar>0.21980000000000002</app:hektar>
+      <app:kompensationsmassnahme_detail>Bepflanzung mit standortgerechten, heimischen Sträuchern und/oder Laubgehölzen</app:kompensationsmassnahme_detail>
+      <app:geom>
+        <!--Inlined geometry 'APP_AUSGLEICHSFLAECHEN_333898_APP_GEOM'-->
+        <gml:Polygon gml:id="APP_AUSGLEICHSFLAECHEN_333898_APP_GEOM" srsName="EPSG:25832">
+          <gml:exterior>
+            <gml:LinearRing srsName="EPSG:25832">
+              <gml:posList>574040.261 5944012.163 574052.902 5944015.174 574092.401 5943849.401 574079.184 5943848.808 574043.182 5943999.902 574042.019 5944004.781 574040.261 5944012.163</gml:posList>
+            </gml:LinearRing>
+          </gml:exterior>
+        </gml:Polygon>
+      </app:geom>
+    </app:ausgleichsflaechen>
+  </gml:featureMember>
+</wfs:FeatureCollection>

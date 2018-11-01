@@ -1,0 +1,52 @@
+@color_1: #555;
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgba(227, 227, 227, 0.5);
+
+/*------------------------Menubar--------------------------------------*/
+.navbar {
+    min-height: 50px;
+    background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    font-family: @font_family_1;
+    border: 0;
+    position: relative;
+    margin-bottom: 0;
+    display: none;
+}
+.dropdown-menu {
+    padding: 0;
+}
+#root {
+    >.dropdown {
+        color: @color_1;
+        font-size: 14px;
+        letter-spacing: 0.6px;
+    }
+    .layer-item {
+        font-weight: 400;
+    }
+    .dropdown {
+        border-right: 1px solid #e5e5e5;
+    }
+    .active {
+        background-color: @background_color_1;
+    }
+}
+.navbar-collapse.in {
+    position: absolute;
+    top: 50px;
+    z-index: 999;
+    width: 100%;
+    padding: 0;
+    max-height: 80vh;
+}
+@media (min-width: 768px) {
+    .navbar {
+        .container-fluid {
+            padding-left: 0;
+        }
+    }
+}

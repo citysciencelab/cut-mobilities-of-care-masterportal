@@ -24,7 +24,8 @@
         <div class="hinweis additional-text">
             <span>Hinweis:</span> Aus Datenschutzgründen wird bei Einwohnerzahlen aus dem Melderegister in Hamburg kleiner 3 die Zahl drei oder null verwendet.
             <br>
-            <span>Datenquelle Hamburg:</span> Einwohner mit Hauptwohnsitz, Melderegister 31.12.2017.
+            <!--Datum 31.12.2017-->
+            <span>Datenquelle Hamburg:</span> Einwohner mit Hauptwohnsitz, Melderegister <%=fhhDate%>.
         </div>
         <div><a> Quelle FHH</a></div>
     <% } %>
@@ -34,7 +35,8 @@
             <% if (data.quelle_mrh === "tlw" && data.quelle_fhh === "nein") { %>
                 <span>Hinweis:</span> Teile des Suchgebiets liegen außerhalb der Grenzen der Metropolregion Hamburg und wurden für die Ermittlung der Einwohnerzahl nicht berücksichtigt.
             <% } %>
-            <span>Datenquelle Metropolregion ohne Hamburg:</span> Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.
+            <!--Datum 09.05.2011-->
+            <span>Datenquelle Metropolregion ohne Hamburg:</span> Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten <%=mrhDate%>.
         </div>
         <div><a> Quelle MRH</a></div>
     <% } %>

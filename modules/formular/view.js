@@ -1,64 +1,54 @@
-define(function (require) {
-    var Grenznachweismodel = require("modules/formular/grenznachweis"),
-        Grenznachweistemplate = require("text!modules/formular/grenznachweis.html"),
-        Grenznachweiscss = require("text!modules/formular/grenznachweis.css"),
-        $ = require("jquery"),
-        FormularView;
+import Grenznachweistemplate from "text-loader!./grenznachweis.html";
+import Grenznachweiscss from "text-loader!./grenznachweis.less";
 
-    FormularView = Backbone.View.extend({
-        id: "formularWin",
-        initialize: function (modelname) {
-            if (modelname === "grenznachweis") {
-                this.model = new Grenznachweismodel();
-                this.template = _.template(Grenznachweistemplate);
-                $("head").prepend("<style>" + Grenznachweiscss + "</style>");
-            }
-            this.listenTo(this.model, {
-                "change:isCollapsed render invalid change:isCurrentWin": this.render
-            });
-            Radio.trigger("Autostart", "initializedModul", "formular");
-        },
-        events: {
-            // anonymisierte Events
-            "keyup input[type=text]": "keyup",
-            "keyup textarea": "keyup",
-            "click input[type=radio]": "click",
-            "click input[type=checkbox]": "click",
-            "click button": "click",
-            "click a": "click",
-            "focusout": "focusout"
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.model.prepWindow();
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
-            }
-            else if (this.model.get("isCurrentWin") === false) {
-                this.model.resetWindow();
-            }
-            return this;
-        },
+const FormularView = Backbone.View.extend({
+    events: {
         // anonymisierte Events
-        keyup: function (evt) {
-            if (evt.target.id) {
-                this.model.keyup(evt);
-            }
-        },
-        click: function (evt) {
-            if (evt.target.id) {
-                this.model.click(evt);
-            }
-        },
-        focusout: function (evt) {
-            if (evt.target.id) {
-                this.model.focusout(evt);
-            }
+        "keyup input[type=text]": "keyup",
+        "keyup textarea": "keyup",
+        "click input[type=radio]": "click",
+        "click input[type=checkbox]": "click",
+        "click button": "click",
+        "click a": "click",
+        "focusout": "focusout"
+    },
+    initialize: function () {
+        if (this.model.get("modelname") === "grenznachweis") {
+            this.template = _.template(Grenznachweistemplate);
+            $("head").prepend("<style>" + Grenznachweiscss + "</style>");
         }
-    });
-
-    return FormularView;
+        this.listenTo(this.model, {
+            "change:isActive render invalid": this.render
+        });
+    },
+    render: function (model, value) {
+        if (value) {
+            this.model.prepWindow();
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(model.toJSON()));
+            this.delegateEvents();
+        }
+        else {
+            this.$el.empty();
+        }
+        return this;
+    },
+    // anonymisierte Events
+    keyup: function (evt) {
+        if (evt.target.id) {
+            this.model.keyup(evt);
+        }
+    },
+    click: function (evt) {
+        if (evt.target.id) {
+            this.model.click(evt);
+        }
+    },
+    focusout: function (evt) {
+        if (evt.target.id) {
+            this.model.focusout(evt);
+        }
+    }
 });
+
+export default FormularView;

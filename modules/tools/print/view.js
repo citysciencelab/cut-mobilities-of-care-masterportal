@@ -1,46 +1,38 @@
-define(function (require) {
-    var PrintWinTemplate = require("text!modules/tools/print/template.html"),
-        Print = require("modules/tools/print/model"),
-        $ = require("jquery"),
-        PrintView;
+import PrintWinTemplate from "text-loader!./template.html";
 
-    PrintView = Backbone.View.extend({
-        events: {
-            "change #layoutField": "setLayout",
-            "change #scaleField": "setScale",
-            "click button": "createPDF"
-        },
-        initialize: function () {
-            this.listenTo(this.model, {
-                "change:isCollapsed change:isCurrentWin change:scale": this.render
-            });
-        },
-        model: new Print(),
-        className: "win-body",
-        template: _.template(PrintWinTemplate),
-        setLayout: function (evt) {
-            this.model.setLayout(evt.target.selectedIndex);
-        },
-        setScale: function (evt) {
-            this.model.setScale(evt.target.selectedIndex);
-        },
-        createPDF: function () {
-            this.model.setTitleFromForm();
-            this.model.getLayersForPrint();
-        },
-        render: function () {
-            var attr = this.model.toJSON();
-
-            if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
-                this.$el.html("");
-                $(".win-heading").after(this.$el.html(this.template(attr)));
-                this.delegateEvents();
-            }
-            else {
-                this.undelegateEvents();
-            }
-            return this;
+const PrintView = Backbone.View.extend({
+    events: {
+        "change #layoutField": "setLayout",
+        "change #scaleField": "setScale",
+        "click button": "createPDF"
+    },
+    initialize: function () {
+        this.template = _.template(PrintWinTemplate);
+        this.listenTo(this.model, {
+            "change:isActive change:fetched change:scale": this.render
+        });
+    },
+    render: function (model) {
+        if (model.get("fetched") && model.get("isActive")) {
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(model.toJSON()));
+            this.delegateEvents();
         }
-    });
-    return PrintView;
+        else {
+            this.undelegateEvents();
+        }
+        return this;
+    },
+    setLayout: function (evt) {
+        this.model.setLayout(evt.target.selectedIndex);
+    },
+    setScale: function (evt) {
+        this.model.setScale(evt.target.selectedIndex);
+    },
+    createPDF: function () {
+        this.model.setTitleFromForm();
+        this.model.getLayersForPrint();
+    }
 });
+
+export default PrintView;
