@@ -13,12 +13,8 @@ const LayerView = Backbone.View.extend({
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
-        this.listenTo(Radio.channel("Map"), {
-            "change": this.toggleSupportedVisibility
-        });
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
-        this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
     },
     tagName: "li",
     className: "layer list-group-item",
@@ -39,14 +35,6 @@ const LayerView = Backbone.View.extend({
             this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
         return this;
-    },
-    toggleSupportedVisibility: function (mode) {
-        if (this.model.get("supported").indexOf(mode) >= 0) {
-            this.removeClassDisabled();
-        }
-        else {
-            this.addClassDisabled();
-        }
     },
     /**
      * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
@@ -70,19 +58,6 @@ const LayerView = Backbone.View.extend({
                 this.$el.attr("title", "");
             }
         }
-    },
-
-    addClassDisabled: function () {
-        this.$el.addClass("disabled");
-        this.$el.find("*").css("pointer-events", "none");
-        this.$el.find("*").css("cursor", "not-allowed");
-        this.$el.attr("title", "Layer nur im 3D-Modus verfügbar");
-    },
-    removeClassDisabled: function () {
-        this.$el.removeClass("disabled");
-        this.$el.find("*").css("pointer-events", "auto");
-        this.$el.find("*").css("cursor", "pointer");
-        this.$el.attr("title", "");
     },
 
     rerender: function () {

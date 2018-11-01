@@ -40,6 +40,7 @@ const Layer = Item.extend({
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
             this.toggleWindowsInterval();
+            this.setIsVisibleInTreeByMapMode(Radio.request("Map", "getMapMode"));
         }
     },
 
@@ -95,6 +96,7 @@ const Layer = Item.extend({
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
+                this.setIsVisibleInTreeByMapMode(mode);
                 if (this.get("supported").indexOf(mode) >= 0) {
                     if (this.get("isVisibleInMap")) {
                         this.get("layer").setVisible(true);
@@ -131,6 +133,19 @@ const Layer = Item.extend({
                 this.checkForScale(options);
             }
         });
+    },
+
+    /**
+     * @param {string} mode - "3D" | "2D" | "none"
+     * @returns {void}
+     */
+    setIsVisibleInTreeByMapMode: function (mode) {
+        if (this.get("supported").indexOf(mode) >= 0) {
+            this.setIsVisibleInTree(true);
+        }
+        else {
+            this.setIsVisibleInTree(false);
+        }
     },
 
     /**
@@ -381,6 +396,10 @@ const Layer = Item.extend({
     // setter for legendURL
     setLegendURL: function (value) {
         this.set("legendURL", value);
+    },
+
+    setIsVisibleInTree: function (value) {
+        this.set("isVisibleInTree", value);
     }
 
 });

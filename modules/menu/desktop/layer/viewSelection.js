@@ -21,15 +21,7 @@ const LayerView = Backbone.View.extend({
             "change:transparency": this.rerender,
             "change:isOutOfRange": this.toggleColor
         });
-        if (this.model.get("supported")) {
-            this.listenTo(Radio.channel("Map"), {
-                "change": function (mode) {
-                    this.toggleSupportedVisibility(mode);
-                }
-            });
-        }
         this.render();
-        this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
@@ -55,14 +47,7 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
         }
     },
-    toggleSupportedVisibility: function (mode) {
-        if (this.model.get("supported").indexOf(mode) >= 0) {
-            this.$el.show();
-        }
-        else {
-            this.$el.hide();
-        }
-    },
+
     /**
      * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
      * @returns {void}

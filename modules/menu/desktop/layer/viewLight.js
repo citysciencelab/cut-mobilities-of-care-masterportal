@@ -28,13 +28,6 @@ const LayerView = Backbone.View.extend({
                 }
             }
         });
-        if (this.model.get("supported")) {
-            this.listenTo(Radio.channel("Map"), {
-                "change": function (mode) {
-                    this.toggleSupportedVisibility(mode);
-                }
-            });
-        }
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -44,7 +37,7 @@ const LayerView = Backbone.View.extend({
 
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
 
-        this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
+        this.model.setIsVisibleInTreeByMapMode(Radio.request("Map", "getMapMode"));
     },
     tagName: "li",
     className: "layer list-group-item",
@@ -68,14 +61,6 @@ const LayerView = Backbone.View.extend({
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
-        }
-    },
-    toggleSupportedVisibility: function (mode) {
-        if (this.model.get("supported").indexOf(mode) >= 0) {
-            this.model.set("isVisibleInTree", true);
-        }
-        else {
-            this.model.set("isVisibleInTree", false);
         }
     },
 
