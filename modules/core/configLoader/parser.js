@@ -359,7 +359,9 @@ const Parser = Backbone.Model.extend({
     },
 
     addTreeMenuItems: function () {
-        var isAlwaysExpandedList = this.get("portalConfig").menu.tree.isAlwaysExpanded || [];
+        var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
+            tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
+            isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [];
 
         this.addItem({
             type: "folder",
