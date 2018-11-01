@@ -22,7 +22,9 @@ const Animation = PendlerCoreModel.extend({
         minPx: 5,
         maxPx: 20,
         colors: [],
-        glyphicon: "glyphicon-play-circle"
+        glyphicon: "glyphicon-play-circle",
+        postcomposeListener: {},
+        animationLayer: {}
     }),
 
     /**
@@ -194,9 +196,9 @@ const Animation = PendlerCoreModel.extend({
             this.setAnimationLimit(1);
         }
         this.setAnimationCount(0);
-        this.set("animationLayer", animationLayer);
+        this.setAnimationLayer(animationLayer);
         this.get("animationLayer").getSource().clear();
-        Radio.trigger("Map", "registerListener", "postcompose", this.moveFeature.bind(this));
+        this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.moveFeature.bind(this)));
         if (this.get("animating")) {
             this.stopAnimation([]);
         }
@@ -224,7 +226,7 @@ const Animation = PendlerCoreModel.extend({
         }
     },
     stopAnimation: function (features) {
-        Radio.trigger("Map", "unregisterListener", "postcompose", this.moveFeature.bind(this));
+        Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
         this.set("animating", false);
         // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
         // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird
@@ -340,6 +342,12 @@ const Animation = PendlerCoreModel.extend({
     },
     setMaxVal: function (val) {
         this.set("maxVal", val);
+    },
+    setPostcomposeListener: function (value) {
+        this.set("postcomposeListener", value);
+    },
+    setAnimationLayer: function (value) {
+        this.set("animationLayer", value);
     }
 });
 
