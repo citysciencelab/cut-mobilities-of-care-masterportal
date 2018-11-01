@@ -3,7 +3,7 @@ import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defautls, {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         // ol.interaction.Draw
         drawInteraction: undefined,
         // ol.interaction.Select for the deleted features
