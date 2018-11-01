@@ -63,6 +63,7 @@ const DrawTool = Tool.extend({
          */
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
+            newColor,
             format = new GeoJSON();
 
         this.set("renderToWindow", false);
@@ -75,8 +76,13 @@ const DrawTool = Tool.extend({
                 this.set("color", para_object.color);
             }
             if (para_object.opacity) {
-                this.set("opacity", para_object.opacity);
+                newColor = this.get("color");
+
+                newColor[3] = parseFloat(para_object.opacity);
+                this.setColor(newColor);
+                this.setOpacity(para_object.opacity);
             }
+
             this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
 
             if (para_object.initialJSON) {
