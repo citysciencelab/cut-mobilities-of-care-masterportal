@@ -56,13 +56,17 @@ const StyleWMS = Tool.extend({
             // und der Attributname zurückgesetzt
             "change:model": function (model, value) {
                 if (value !== null && value !== undefined) {
-                    this.setAttributeName("default");
+                    this.setAttributeName(this.defaults.attributeName);
                     this.setGeomType(value.get("geomType"));
                 }
             },
             // ändert sich der Attributname wird die Anzahl der Klassen zurückgesetzt
             "change:attributeName": function () {
-                this.setNumberOfClasses("default");
+                this.setNumberOfClasses(this.defaults.numberOfClasses);
+                this.resetStyleClassAttributes();
+            },
+            "change:numberOfClasses": function () {
+                this.resetStyleClassAttributes();
             },
             // Sendet das SLD an die layerlist, sobald es erzeugt wurde
             "change:setSLD": function () {
@@ -78,23 +82,7 @@ const StyleWMS = Tool.extend({
                 }
             }
         });
-
-        // this.listenTo(Radio.channel("Window"), {
-        //     "winParams": this.setStatus
-        // });
     },
-
-    // // Fenstermanagement
-    // setStatus: function (args) {
-    //     console.log(args);
-    //     if (args[2].get("id") === "styleWMS") {
-    //         this.setIsCollapsed(args[1]);
-    //         this.setIsCurrentWin(args[0]);
-    //     }
-    //     else {
-    //         this.setIsCurrentWin(false);
-    //     }
-    // },
 
     // Aktualisiere die Liste stylebarer Layer
     refreshStyleableLayerList: function () {
@@ -215,7 +203,11 @@ const StyleWMS = Tool.extend({
     resetModel: function () {
         this.removeSLDBody();
         this.setNumberOfClasses(this.defaults.numberOfClasses);
+        this.resetStyleClassAttributes();
         this.resetLegend();
+    },
+    resetStyleClassAttributes: function () {
+        this.setStyleClassAttributes(this.defaults.styleClassAttributes);
     },
 
     // Setze das Layer-Model anhand einer gegebenen ID (aus dem Layer-Dialog).
@@ -397,14 +389,6 @@ const StyleWMS = Tool.extend({
     setErrors: function (value) {
         this.set("errors", value);
     }
-
-    // setIsCurrentWin: function (value) {
-    //     this.set("isCurrentWin", value);
-    // },
-
-    // setIsCollapsed: function (value) {
-    //     this.set("isCollapsed", value);
-    // }
 });
 
 export default StyleWMS;
