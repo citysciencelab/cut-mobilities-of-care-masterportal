@@ -4,8 +4,9 @@ import {get} from "ol/proj.js";
 
 const ObliqueLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {
-        supported: ["Oblique"],
-        showSettings: false
+        supported: ["none"],
+        showSettings: false,
+        isVisibleInTree: false
     }),
     initialize: function () {
         Radio.trigger("ObliqueMap", "registerLayer", this);

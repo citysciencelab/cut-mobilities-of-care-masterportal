@@ -18,7 +18,15 @@ const LayerView = Backbone.View.extend({
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor
+            "change:isOutOfRange": this.toggleColor,
+            "change:isVisibleInTree": function (model, value) {
+                if (value) {
+                    this.$el.show();
+                }
+                else {
+                    this.$el.hide();
+                }
+            }
         });
         if (this.model.get("supported")) {
             this.listenTo(Radio.channel("Map"), {
@@ -64,10 +72,10 @@ const LayerView = Backbone.View.extend({
     },
     toggleSupportedVisibility: function (mode) {
         if (this.model.get("supported").indexOf(mode) >= 0) {
-            this.$el.show();
+            this.model.set("isVisibleInTree", true);
         }
         else {
-            this.$el.hide();
+            this.model.set("isVisibleInTree", false);
         }
     },
 
