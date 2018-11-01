@@ -63,7 +63,8 @@
       {
         "name": "Themen",
         "glyphicon": "glyphicon-list",
-        "isInitOpen": true
+        "isInitOpen": true,
+        "isAlwaysExpanded": ["SelectedLayer"]
       },
       "filter":
       {

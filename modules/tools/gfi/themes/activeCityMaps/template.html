@@ -31,10 +31,7 @@ _.each(featureInfos, function(attr) {
         });
     }
     else {
-        if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") {
-%>
-            }
-        else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") {
+        if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") {
 %>
 <a href="<%= value %>" target="_blank">Link</a>
 <%
