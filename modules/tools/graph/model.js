@@ -235,6 +235,11 @@ const GraphModel = Backbone.Model.extend({
     },
 
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
+        // nur eine Beschriftung der y-Achse
+        if (_.isArray(yAxisLabel)) {
+            yAxisLabel = yAxisLabel[0];
+        }
+
         var yAxisDraw = yAxis,
             yAxisBBox;
 
@@ -310,30 +315,42 @@ const GraphModel = Backbone.Model.extend({
             .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
     },
 
-    appendLegend: function (svg, attrToShowArray, legendArray) {
+    appendLegend: function (svg, legendData) {
         var legend = svg.append("g")
             .attr("class", "graph-legend")
+            .attr("width", 2000)
+            .attr("height", 2000)
             .selectAll("g")
-            .data(this.getLegendTextArray(attrToShowArray, legendArray))
+            .data(legendData)
             .enter()
-            .append("g")
-            .attr("class", "graph-legend-item")
-            .attr("transform", function () {
-                return "translate(" + -60 + "," + -20 + ")";
-            });
+                .append("g")
+                .attr("class", "graph-legend-item")
+                .attr("transform", function (d, i) {
+                    return "translate(" + -60 + "," + (-20 + (20 * i)) + ")";
+                });
 
-        legend.append("circle")
-            .attr("cx", 5)
-            .attr("cy", 10)
-            .attr("r", 5)
-            .attr("class", "dot");
+        legend.append(function (d) {
+            return document.createElementNS("http://www.w3.org/2000/svg", d.style);
+        })
+        // Attribute für <rect>
+        .attr("width", 10)
+        .attr("height", 10)
+        .attr("x", 0)
+        .attr("y", 5)
+        // Attribute für <circle>
+        .attr("cx", 5)
+        .attr("cy", 10)
+        .attr("r", 5)
+        .attr("class", function (d) {
+            return d.class;
+        });
 
         legend.append("text")
-            .attr("x", 20)
-            .attr("y", 15)
-            .text(function (d) {
-                return d;
-            });
+        .attr("x", 20)
+        .attr("y", 15)
+        .text(function (d) {
+            return d.text;
+        });
     },
 
     getLegendTextArray: function (attrArray, legendArray) {
@@ -372,9 +389,8 @@ const GraphModel = Backbone.Model.extend({
             svg = this.createSvg(selector, margin, width, height, "graph-svg"),
             offset = 10;
 
-        this.appendLegend(svg, attrToShowArray, graphConfig.legendArray);
+        this.appendLegend(svg, graphConfig.legendData);
         _.each(attrToShowArray, function (yAttrToShow) {
-
             valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow, offset);
             this.appendDataToSvg(svg, data, "line", valueLine);
             // Add the scatterplot for each point in line

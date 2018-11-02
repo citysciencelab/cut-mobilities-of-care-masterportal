@@ -177,12 +177,49 @@ const VerkehrsStaerkenTheme = Theme.extend({
         }
         return value;
     },
+
+    // setter for attrToShow
+    setLegendData: function (value) {
+        var attr = [];
+
+        if (value === "DTV") {
+            attr.push({
+                text: "DTV (Kfz/24h)",
+                class: "dot",
+                style: "circle"
+            });
+        }
+        else if (value === "DTVw") {
+            attr.push({
+                text: "DTVw (Kfz/24h)",
+                class: "dot",
+                style: "circle"
+            });
+        }
+        else {
+            attr.push({
+                text: "SV-Anteil am DTVw (%)",
+                class: "dot",
+                style: "circle"
+            });
+        }
+
+        attr.push({
+            text: "mit Baustelleneinfluss",
+            class: "dot_visible",
+            style: "rect"
+        });
+
+        this.set("legendData", attr);
+    },
+
     createD3Document: function () {
         var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
             heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
             height = heightTabContent - heightBtnGroup,
             width = parseInt($(".verkehrsstaerken .tab-content").css("width").slice(0, -2), 10),
             graphConfig = {
+                legendData: this.get("legendData"),
                 graphType: "Linegraph",
                 selector: ".graph",
                 width: width,
@@ -207,7 +244,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
             };
 
         Radio.trigger("Graph", "createGraph", graphConfig);
-        this.manipulateSVG();
+        // this.manipulateSVG();
     },
     manipulateSVG: function () {
         var graphParams = Radio.request("Graph", "getGraphParams"),

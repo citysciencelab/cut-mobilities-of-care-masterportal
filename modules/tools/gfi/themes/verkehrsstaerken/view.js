@@ -12,6 +12,7 @@ const VerkehrsStaerkenThemeView = ThemeView.extend({
     changeKat: function (evt) {
         this.$(".graph svg").remove();
         this.model.setAttrToShow([evt.currentTarget.id]);
+        this.model.setLegendData(evt.currentTarget.id);
         this.$(".btn-group").children("button").each(function () {
             if ($(this)[0].id === evt.currentTarget.id) {
                 $(this).addClass("active");
@@ -27,6 +28,7 @@ const VerkehrsStaerkenThemeView = ThemeView.extend({
 
         this.$(".graph svg").remove();
         this.model.setAttrToShow([attr]);
+        this.model.setLegendData(attr);
         this.model.createD3Document();
     },
     toggleTab: function (evt) {
