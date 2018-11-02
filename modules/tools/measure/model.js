@@ -1,10 +1,11 @@
-import {Circle, Fill, Stroke, Style} from "ol/style.js";
+import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
-import Overlay from "ol/Overlay.js";
 import {Polygon, LineString} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
+import Feature from "ol/Feature.js";
+import Point from "ol/geom/Point.js";
 
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -31,7 +32,6 @@ const Measure = Tool.extend({
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
-        measureTooltips: [],
         uiStyle: "DEFAULT",
         quickHelp: false,
         renderToWindow: true,
@@ -89,75 +89,63 @@ const Measure = Tool.extend({
             type: this.get("geomtype"),
             style: this.get("style")
         }));
-        this.get("draw").on("drawstart", function (evt) {
-            Radio.trigger("Map", "registerListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
-            // "click" needed for touch devices
-            Radio.trigger("Map", "registerListener", "click", that.placeMeasureTooltip.bind(that), this);
-            that.set("sketch", evt.feature);
-            that.createMeasureTooltip();
-        }, this);
         this.get("draw").on("drawend", function (evt) {
+            that.generateTextPoint(evt);
             evt.feature.set("styleId", evt.feature.ol_uid);
-            that.get("measureTooltipElement").className = "tooltip-default tooltip-static";
-            that.get("measureTooltip").setOffset([0, -7]);
-            // unset sketch
-            that.set("sketch", null);
-            // unset tooltip so that a new one can be created
-            that.set("measureTooltipElement", null);
-            Radio.trigger("Map", "unregisterListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
-            // "click" needed for touch devices
-            Radio.trigger("Map", "unregisterListener", "click", that.placeMeasureTooltip.bind(that), this);
         }, this);
         Radio.trigger("Map", "addInteraction", this.get("draw"));
     },
+    generateTextPoint: function (evt) {
+        var geom = evt.feature.getGeometry(),
+            output,
+            coord,
+            pointFeature,
+            fill = new Fill({
+                color: [255, 255, 255, 1]
+            }),
+            backgroundFill = new Fill({
+                color: [255, 127, 0, 1]
+            });
 
-    createMeasureTooltip: function () {
-        var measureTooltipElement,
-            measureTooltip;
-
-        if (measureTooltipElement) {
-            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+        if (geom instanceof Polygon) {
+            output = this.formatArea(geom);
+            coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
         }
-        measureTooltipElement = document.createElement("div");
-        measureTooltipElement.className = "tooltip-default tooltip-measure";
-        measureTooltip = new Overlay({
-            element: measureTooltipElement,
-            offset: [0, -15],
-            positioning: "bottom-center"
+        else if (geom instanceof LineString) {
+            output = this.formatLength(geom);
+            coord = geom.getLastCoordinate();
+        }
+        pointFeature = new Feature({
+            geometry: new Point(coord)
         });
-        this.set("measureTooltipElement", measureTooltipElement);
-        this.set("measureTooltip", measureTooltip);
-        Radio.trigger("Map", "addOverlay", measureTooltip, "measure");
-        this.get("measureTooltips").push(measureTooltip);
+        pointFeature.setStyle([
+            new Style({
+                text: new Text({
+                    text: output.measure,
+                    textAlign: "left",
+                    font: "14px sans-serif",
+                    fill: fill,
+                    offsetY: -10,
+                    backgroundFill: backgroundFill,
+                    padding: [5, 0, 5, 0]
+                })
+            }),
+            new Style({
+                text: new Text({
+                    text: output.deviance,
+                    textAlign: "left",
+                    font: "10px sans-serif",
+                    fill: fill,
+                    offsetY: 10,
+                    backgroundFill: backgroundFill,
+                    padding: [5, 0, 5, 0]
+                })
+            })
+        ]);
+        pointFeature.set("output", output);
+        pointFeature.set("styleId", _.uniqueId());
+        this.get("layer").getSource().addFeatures([pointFeature]);
     },
-
-    placeMeasureTooltip: function () {
-        var output, geom, coord;
-
-        // if (evt.dragging) {
-        //     return;
-        // }
-
-        if (this.get("measureTooltips").length > 0) {
-            this.setScale(Radio.request("MapView", "getOptions"));
-
-            if (this.get("sketch")) {
-                geom = this.get("sketch").getGeometry();
-
-                if (geom instanceof Polygon) {
-                    output = this.formatArea(geom);
-                    coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
-                }
-                else if (geom instanceof LineString) {
-                    output = this.formatLength(geom);
-                    coord = geom.getLastCoordinate();
-                }
-                this.get("measureTooltipElement").innerHTML = output;
-                this.get("measureTooltip").setPosition(coord);
-            }
-        }
-    },
-
     /**
      * Setzt den Typ der Geometrie (LineString oder Polygon).
      * @param {String} value - Typ der Geometrie
@@ -193,10 +181,10 @@ const Measure = Tool.extend({
         // lösche alle Geometrien
         this.get("source").clear();
         // lösche alle Overlays (Tooltips)
-        _.each(this.get("measureTooltips"), function (tooltip) {
-            Radio.trigger("Map", "removeOverlay", tooltip, "measure");
-        });
-        this.set("measureTooltips", []);
+        // _.each(this.get("measureTooltips"), function (tooltip) {
+        //     Radio.trigger("Map", "removeOverlay", tooltip, "measure");
+        // });
+        // this.set("measureTooltips", []);
     },
     setScale: function (options) {
         this.set("scale", options.scale);
@@ -279,7 +267,7 @@ const Measure = Tool.extend({
      */
     formatLength: function (line) {
         var length = line.getLength(),
-            output,
+            output = {},
             coords = line.getCoordinates(),
             rechtswertMittel = 0,
             lengthRed,
@@ -288,6 +276,8 @@ const Measure = Tool.extend({
             scaleError = this.getScaleError(scale),
             i;
 
+        console.log(scale);
+        console.log(scaleError);
         for (i = 0; i < coords.length; i++) {
             rechtswertMittel += coords[i][0];
             if (i < coords.length - 1) {
@@ -309,10 +299,14 @@ const Measure = Tool.extend({
             }
         }
         else if (this.get("unit") === "km") {
-            output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            // output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
+            output.measure = (lengthRed / 1000).toFixed(3) + " " + this.get("unit");
+            output.deviance = "(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")";
         }
         else {
-            output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
+            // output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
+            output.measure = lengthRed.toFixed(2) + " " + this.get("unit");
+            output.deviance = "(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")";
         }
         return output;
     },
@@ -324,7 +318,7 @@ const Measure = Tool.extend({
      */
     formatArea: function (polygon) {
         var area = polygon.getArea(),
-            output,
+            output = {},
             coords = polygon.getLinearRing(0).getCoordinates(),
             rechtswertMittel = 0,
             areaRed,
@@ -354,10 +348,14 @@ const Measure = Tool.extend({
             }
         }
         else if (this.get("unit") === "km<sup>2</sup>") {
-            output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+            // output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+            output.measure = (areaRed / 1000000).toFixed(2) + " " + this.get("unit");
+            output.deviance = "(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")";
         }
         else {
-            output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
+            // output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
+            output.measure = areaRed.toFixed(0) + " " + this.get("unit");
+            output.deviance = "(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")";
         }
         return output;
     }
