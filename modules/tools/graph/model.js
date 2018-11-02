@@ -2,6 +2,7 @@ import {scaleBand, scaleLinear} from "d3-scale";
 import {axisBottom, axisLeft} from "d3-axis";
 import {line} from "d3-shape";
 import {select, event} from "d3-selection";
+import {transition} from "d3-transition"
 
 const GraphModel = Backbone.Model.extend({
     defaults: {},
