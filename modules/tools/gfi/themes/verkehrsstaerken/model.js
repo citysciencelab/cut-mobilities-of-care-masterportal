@@ -119,10 +119,6 @@ const VerkehrsStaerkenTheme = Theme.extend({
     setDataset: function (value) {
         this.set("dataset", value);
     },
-    // setter for attrToShow
-    setAttrToShow: function (value) {
-        this.set("attrToShow", value);
-    },
     /**
      * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
      * @returns {void}
@@ -187,8 +183,12 @@ const VerkehrsStaerkenTheme = Theme.extend({
         return value;
     },
 
-    // setter for attrToShow
-    setLegendData: function (value) {
+    /**
+     * Ermittelt die Bezeichnung und das Styling der Legendeneinträge
+     * @param   {string}    value   Art
+     * @returns {Object[]}          Legendendefinitionen
+     */
+    legendData: function (value) {
         var attr = [];
 
         if (value === "DTV") {
@@ -219,16 +219,33 @@ const VerkehrsStaerkenTheme = Theme.extend({
             style: "rect"
         });
 
-        this.set("legendData", attr);
+        return attr;
     },
 
-    createD3Document: function () {
+    /**
+     * Gibt die Bezeichnung der y-Achse zurück
+     * @param   {string} value  Art
+     * @returns {string}        Bezeichnung der y-Achse
+     */
+    yAxisLabel: function (value) {
+        if (value === "DTV") {
+            return "DTV (Kfz/24h)";
+        }
+        else if (value === "DTVw") {
+            return "DTVw (Kfz/24h)";
+        }
+        else {
+            return "SV-Anteil am DTVw (%)";
+        }
+    },
+
+    createD3Document: function (key) {
         var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
             heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
             height = heightTabContent - heightBtnGroup,
             width = parseInt($(".verkehrsstaerken .tab-content").css("width").slice(0, -2), 10),
             graphConfig = {
-                legendData: this.get("legendData"),
+                legendData: this.legendData(key),
                 graphType: "Linegraph",
                 selector: ".graph",
                 width: width,
@@ -239,123 +256,11 @@ const VerkehrsStaerkenTheme = Theme.extend({
                 data: this.get("dataset"),
                 xAttr: "year",
                 xAxisLabel: "Jahr",
-                attrToShowArray: this.get("attrToShow"),
-                legendArray: [{
-                    key: "DTV",
-                    value: "DTV (Kfz/24h)"
-                }, {
-                    key: "DTVw",
-                    value: "DTVw (Kfz/24h)"
-                }, {
-                    key: "Schwerverkehrsanteil am DTVw",
-                    value: "SV-Anteil am DTVw (%)"
-                }]
+                yAxisLabel: this.yAxisLabel(key),
+                attrToShowArray: [key]
             };
 
         Radio.trigger("Graph", "createGraph", graphConfig);
-        // this.manipulateSVG();
-    },
-    manipulateSVG: function () {
-        var graphParams = Radio.request("Graph", "getGraphParams"),
-            data = this.get("dataset"),
-            svg = select(".graph-svg"),
-            scaleX = graphParams.scaleX,
-            scaleY = graphParams.scaleY,
-            tooltipDiv = graphParams.tooltipDiv,
-            margin = graphParams.margin,
-            offset = graphParams.offset,
-            size = 10,
-            attrToShowArray = this.get("attrToShow"),
-            width,
-            x,
-            y,
-            legendBBox;
-
-        data = _.filter(data, function (obj) {
-            return obj[attrToShowArray[0]] !== "-";
-        });
-        svg.selectAll("dot")
-            .data(data)
-            .enter().append("g")
-            .append("rect")
-            .attr("x", function (d) {
-                return scaleX(d.year) + margin.left - (size / 2) + (offset + (scaleX.bandwidth() / 2));
-            })
-            .attr("y", function (d) {
-                return scaleY(d[attrToShowArray[0]]) + (size / 2) + offset + margin.top;
-            })
-            .attr("width", size)
-            .attr("height", size)
-            .attr("class", function (d) {
-                var returnVal = "";
-
-                if (_.has(d, "Baustelleneinfluss") && d[attrToShowArray] !== "-") {
-                    returnVal = "dot_visible";
-                }
-                else {
-                    returnVal = "dot_invisible";
-                }
-                return returnVal;
-            })
-            .on("mouseover", function (d) {
-                tooltipDiv.transition()
-                    .duration(200)
-                    .style("opacity", 0.9);
-                tooltipDiv.html(d[attrToShowArray[0]])
-                    .attr("style", "background: gray")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 5) + "px");
-
-            })
-            .on("mouseout", function () {
-                tooltipDiv.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            })
-            .on("click", function (d) {
-                tooltipDiv.transition()
-                    .duration(200)
-                    .style("opacity", 0.9);
-                tooltipDiv.html(d[attrToShowArray[0]])
-                    .attr("style", "background: gray")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 5) + "px");
-            });
-        legendBBox = svg.selectAll(".graph-legend").node().getBBox();
-        width = legendBBox.width;
-        x = legendBBox.x;
-        y = legendBBox.y;
-
-        svg.selectAll(".graph-legend").append("g")
-            .append("rect")
-            .attr("width", 10)
-            .attr("height", 10)
-            .attr("class", "dot_visible")
-            .attr("transform", "translate(" + (x + width + 10) + "," + (y + 2.5) + ")");
-
-        legendBBox = svg.selectAll(".graph-legend").node().getBBox();
-        width = legendBBox.width;
-        x = legendBBox.x;
-        y = legendBBox.y;
-
-        svg.selectAll(".graph-legend").append("g")
-            .append("text")
-            .attr("x", 10)
-            .attr("y", 10)
-            .attr("transform", "translate(" + (x + width) + "," + (y + 2.5) + ")")
-            .text(this.createAndGetLegendText(attrToShowArray[0]));
-    },
-
-    createAndGetLegendText: function (value) {
-        if (value === "DTV") {
-            return "DTV (Kfz/24h) mit Baustelleneinfluss";
-        }
-        else if (value === "DTVw") {
-            return "DTVw (Kfz/24h) mit Baustelleneinfluss";
-        }
-
-        return "SV-Anteil am DTVw (%) mit Baustelleneinfluss";
-
     }
 });
 

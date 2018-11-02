@@ -368,28 +368,14 @@ const GraphModel = Backbone.Model.extend({
         });
     },
 
-    getLegendTextArray: function (attrArray, legendArray) {
-        var valueArray = [];
-
-        _.each(attrArray, function (attr) {
-            var legendObj = _.find(legendArray, function (legend) {
-                return legend.key === attr;
-            });
-
-            valueArray.push(legendObj.value);
-        });
-
-        return valueArray;
-    },
-
     createLineGraph: function (graphConfig) {
         var selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
             scaleTypeY = graphConfig.scaleTypeY,
             data = graphConfig.data,
             xAttr = graphConfig.xAttr,
-            xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : graphConfig.xAttr,
-            yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : this.getLegendTextArray(graphConfig.attrToShowArray, graphConfig.legendArray),
+            xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
+            yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
             attrToShowArray = graphConfig.attrToShowArray,
             margin = {top: 20, right: 20, bottom: 70, left: 70},
             width = graphConfig.width - margin.left - margin.right,
