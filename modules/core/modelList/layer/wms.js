@@ -13,7 +13,8 @@ const WMSLayer = Layer.extend({
             sessionId: _.random(9999999),
             supported: ["2D", "3D"],
             showSettings: true,
-            extent: null
+            extent: null,
+            notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"]
         });
     },
 
@@ -25,6 +26,11 @@ const WMSLayer = Layer.extend({
         this.listenTo(this, {
             "change:SLDBody": this.updateSourceSLDBody
         });
+
+        // Hack für Dienste die nicht EPSG:4326 untertützen
+        if (_.contains(this.get("notSupportedFor3D"), this.get("id"))) {
+            this.set("supported", ["2D"]);
+        }
     },
 
     /**

@@ -231,7 +231,6 @@ const ModelList = Backbone.Collection.extend({
             return new Viewpoint(attrs, options);
         }
         else {
-            console.log(attrs);
             Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
         }
         return null;
@@ -586,15 +585,17 @@ const ModelList = Backbone.Collection.extend({
     * @return {undefined}
     */
     showModelInTree: function (modelId) {
-        var lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
+        var mode = Radio.request("Map", "getMapMode"),
+            lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
         this.closeAllExpandedFolder();
-
         // Ã¶ffnet den Themenbaum
         $("#root li:first-child").addClass("open");
         // Parent und eventuelle Siblings werden hinzugefÃ¼gt
         this.addAndExpandModelsRecursive(lightModel.parentId);
-        this.setModelAttributesById(modelId, {isSelected: true});
+        if (this.get(modelId).get("supported").indexOf(mode) >= 0) {
+            this.setModelAttributesById(modelId, {isSelected: true});
+        }
         // Nur bei Overlayern wird in Tree gescrollt.
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);

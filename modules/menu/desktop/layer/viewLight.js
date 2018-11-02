@@ -18,15 +18,10 @@ const LayerView = Backbone.View.extend({
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor,
-            "change:isVisibleInTree": function (model, value) {
-                if (value) {
-                    this.$el.show();
-                }
-                else {
-                    this.$el.hide();
-                }
-            }
+            "change:isOutOfRange": this.toggleColor
+        });
+        this.listenTo(Radio.channel("Map"), {
+            "change": this.toggleByMapMode
         });
         this.$el.on({
             click: function (e) {
@@ -36,7 +31,7 @@ const LayerView = Backbone.View.extend({
         this.render();
 
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
-        this.model.setIsVisibleInTreeByMapMode(Radio.request("Map", "getMapMode"));
+        this.toggleByMapMode(Radio.request("Map", "getMapMode"));
     },
     tagName: "li",
     className: "layer list-group-item",
@@ -141,6 +136,15 @@ const LayerView = Backbone.View.extend({
                 this.$el.find("*").css("cursor", "pointer");
                 this.$el.attr("title", "");
             }
+        }
+    },
+
+    toggleByMapMode: function (mode) {
+        if (this.model.get("supported").indexOf(mode) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
         }
     }
 });
