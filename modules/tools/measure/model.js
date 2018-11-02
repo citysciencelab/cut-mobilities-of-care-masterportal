@@ -3,8 +3,10 @@ import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
 import Overlay from "ol/Overlay.js";
-import {Polygon, LineString} from "ol/geom.js";
+import {Polygon, LineString, Point} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
+import * as Proj from "ol/proj.js";
+import Feature from "ol/Feature.js";
 
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -32,24 +34,29 @@ const Measure = Tool.extend({
         unit: "m",
         decimal: 1,
         measureTooltips: [],
-        uiStyle: "DEFAULT",
+        hits3d: [],
         quickHelp: false,
+        isMap3d: false,
+        uiStyle: "DEFAULT",
         renderToWindow: true,
-        deactivateGFI: true,
-        glyphicon: "glyphicon-resize-full"
+        deactivateGFI: true
     }),
 
     initialize: function () {
-        var channel = Radio.channel("Measure");
 
-        channel.on({
-            "placeMeasureTooltip": this.placeMeasureTooltip
-        }, this);
 
         this.superInitialize();
 
+        this.listenTo(Radio.channel("Map"), {
+            "change": this.changeMap
+        });
+
         this.listenTo(this, {
-            "change:geomtype": this.createInteraction,
+            "change:geomtype": function () {
+                if (this.get("isActive")) {
+                    this.createInteraction();
+                }
+            },
             "change:isActive": this.setStatus
         });
 
@@ -77,38 +84,135 @@ const Measure = Tool.extend({
         }
         else {
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
+            this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
     },
+    changeMap: function (map) {
+        this.deleteFeatures();
+        if (map === "3D") {
+            this.set("isMap3d", true);
+            this.set("geomtype", "3d");
+        }
+        else {
+            this.set("isMap3d", false);
+            this.set("geomtype", "LineString");
+        }
+        if (this.get("isActive")) {
+            this.createInteraction();
+        }
+    },
+    handle3DClicked: function (obj) {
+        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+            object = scene.pick(obj.position),
+            hit,
+            cartographic,
+            ray,
+            coords,
+            mapProjection = Radio.request("MapView", "getProjection"),
+            hits3d = this.get("hits3d"),
+            firstHit = hits3d[0],
+            pointId = "__3dMeasurmentFirstPoint",
+            source = this.get("source"),
+            lon,
+            lat,
+            feature,
+            distance,
+            heightDiff,
+            firstPoint;
 
+        if (object) {
+            hit = scene.pickPosition(obj.position);
+            cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
+        }
+        else {
+            ray = scene.camera.getPickRay(obj.position);
+            hit = scene.globe.pick(ray, scene);
+            cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
+            cartographic.height = scene.globe.getHeight(cartographic);
+        }
+        lon = Cesium.Math.toDegrees(cartographic.longitude);
+        lat = Cesium.Math.toDegrees(cartographic.latitude);
+        coords = [lon, lat, cartographic.height];
+        coords = Proj.transform(coords, Proj.get("EPSG:4326"), mapProjection);
+        // draw first point
+        if (hits3d.length === 0) {
+            feature = this.createPointFeature(coords, pointId);
+
+            source.addFeature(feature);
+            hits3d.push({
+                cartesian: hit,
+                coords: coords
+            });
+        }
+        // draw second point as Line and remove first drawn point
+        else {
+            distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
+            heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
+            this.set("measureTooltip", null);
+            feature = this.createLineFeature(firstHit.coords, coords);
+            source.addFeature(feature);
+            this.place3dMeasureTooltip(distance, heightDiff, coords);
+            this.set("hits3d", []);
+
+            firstPoint = source.getFeatureById(pointId);
+            source.removeFeature(firstPoint);
+        }
+    },
+    createPointFeature: function (coords, id) {
+        var feature = new Feature({
+            geometry: new Point(coords)
+        });
+
+        feature.setId(id);
+
+        return feature;
+    },
+    createLineFeature: function (firstCoord, lastCoord) {
+        var feature = new Feature({
+            geometry: new LineString([
+                firstCoord,
+                lastCoord
+            ])
+        });
+
+        return feature;
+    },
     createInteraction: function () {
         var that = this;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
-        this.set("draw", new Draw({
-            source: this.get("source"),
-            type: this.get("geomtype"),
-            style: this.get("style")
-        }));
-        this.get("draw").on("drawstart", function (evt) {
-            Radio.trigger("Map", "registerListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
-            // "click" needed for touch devices
-            Radio.trigger("Map", "registerListener", "click", that.placeMeasureTooltip.bind(that), this);
-            that.set("sketch", evt.feature);
-            that.createMeasureTooltip();
-        }, this);
-        this.get("draw").on("drawend", function (evt) {
-            evt.feature.set("styleId", evt.feature.ol_uid);
-            that.get("measureTooltipElement").className = "tooltip-default tooltip-static";
-            that.get("measureTooltip").setOffset([0, -7]);
-            // unset sketch
-            that.set("sketch", null);
-            // unset tooltip so that a new one can be created
-            that.set("measureTooltipElement", null);
-            Radio.trigger("Map", "unregisterListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
-            // "click" needed for touch devices
-            Radio.trigger("Map", "unregisterListener", "click", that.placeMeasureTooltip.bind(that), this);
-        }, this);
-        Radio.trigger("Map", "addInteraction", this.get("draw"));
+        this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+        if (Radio.request("Map", "isMap3d")) {
+            this.listenTo(Radio.channel("Map"), "clickedWindowPosition", this.handle3DClicked.bind(this));
+            this.set("hits3d", []);
+        }
+        else {
+            this.set("draw", new Draw({
+                source: this.get("source"),
+                type: this.get("geomtype"),
+                style: this.get("style")
+            }));
+            this.get("draw").on("drawstart", function (evt) {
+                Radio.trigger("Map", "registerListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "registerListener", "click", that.placeMeasureTooltip.bind(that), this);
+                that.set("sketch", evt.feature);
+                that.createMeasureTooltip();
+            }, this);
+            this.get("draw").on("drawend", function (evt) {
+                evt.feature.set("styleId", evt.feature.ol_uid);
+                that.get("measureTooltipElement").className = "tooltip-default tooltip-static";
+                that.get("measureTooltip").setOffset([0, -7]);
+                // unset sketch
+                that.set("sketch", null);
+                // unset tooltip so that a new one can be created
+                that.set("measureTooltipElement", null);
+                Radio.trigger("Map", "unregisterListener", "pointermove", that.placeMeasureTooltip.bind(that), this);
+                // "click" needed for touch devices
+                Radio.trigger("Map", "unregisterListener", "click", that.placeMeasureTooltip.bind(that), this);
+            }, this);
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
+        }
     },
 
     createMeasureTooltip: function () {
@@ -131,12 +235,12 @@ const Measure = Tool.extend({
         this.get("measureTooltips").push(measureTooltip);
     },
 
-    placeMeasureTooltip: function () {
+    placeMeasureTooltip: function (evt) {
         var output, geom, coord;
 
-        // if (evt.dragging) {
-        //     return;
-        // }
+        if (evt.dragging) {
+            return;
+        }
 
         if (this.get("measureTooltips").length > 0) {
             this.setScale(Radio.request("MapView", "getOptions"));
@@ -156,6 +260,24 @@ const Measure = Tool.extend({
                 this.get("measureTooltip").setPosition(coord);
             }
         }
+    },
+
+    place3dMeasureTooltip: function (distance, heightDiff, position) {
+        var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
+
+        if (this.get("unit") === "km") {
+            output += (distance / 1000).toFixed(3) + " " + this.get("unit");
+        }
+        else {
+            output += distance.toFixed(2) + " " + this.get("unit");
+        }
+
+        output += "<br><span class='glyphicon glyphicon-resize-vertical'/> ";
+        output += heightDiff.toFixed(2) + " m";
+
+        this.createMeasureTooltip();
+        this.get("measureTooltipElement").innerHTML = output;
+        this.get("measureTooltip").setPosition(position);
     },
 
     /**
