@@ -22,6 +22,13 @@ const FolderView = Backbone.View.extend({
         }
     },
     initialize: function () {
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (mode === "Oblique") {
+                    this.model.setIsExpanded(false);
+                }
+            }
+        });
         this.listenTo(this.model, {
             "change:isExpanded": this.toggleGlyphicon
         }, this);
