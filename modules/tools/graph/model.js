@@ -194,7 +194,10 @@ const GraphModel = Backbone.Model.extend({
             return obj.yAttrToShow !== "-";
         });
 
-        svg.append("path")
+        svg.append("g")
+            .attr("class", "graph-data")
+            .attr("transform", "translate(0, 20)")
+            .append("path")
             .data([dataToAdd])
             .attr("class", className)
             .attr("transform", "translate(0, 20)")
@@ -208,7 +211,8 @@ const GraphModel = Backbone.Model.extend({
             textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
             fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
             fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
-            heightDraw = _.isUndefined(height) ? svgBBox.height - marginTop : height,
+            innerOffset = 20, // um diesem Wert ist der Graph verschoben
+            heightDraw = _.isUndefined(height) ? svgBBox.height - marginTop + innerOffset : height + innerOffset,
             xAxisDraw = xAxis,
             xAxisBBox;
 
@@ -229,16 +233,17 @@ const GraphModel = Backbone.Model.extend({
     },
 
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
+        var yAxisDraw = yAxis,
+            yAxisBBox,
+            innerOffset = 20; // um diesem Wert ist der Graph verschoben
+
         // nur eine Beschriftung der y-Achse
         if (_.isArray(yAxisLabel)) {
             yAxisLabel = yAxisLabel[0];
         }
 
-        var yAxisDraw = yAxis,
-            yAxisBBox;
-
         yAxisDraw = svg.append("g")
-            .attr("transform", "translate(0, " + AxisOffset + ")")
+            .attr("transform", "translate(0, " + (AxisOffset + innerOffset) + ")")
             .attr("class", "yAxisDraw")
             .call(yAxisDraw);
         yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
@@ -259,7 +264,8 @@ const GraphModel = Backbone.Model.extend({
             return obj[yAttrToShow] !== "-";
         });
 
-        svg.selectAll("dot")
+        // Fügt die Elemente nicht in graph-data an, sondern irgendwie immer unter <g>.
+        svg.select(".graph-data").selectAll("points")
             .data(dat)
             .enter()
             .append(function (d) {
@@ -320,14 +326,14 @@ const GraphModel = Backbone.Model.extend({
             .attr("height", height + marginObj.top + marginObj.bottom)
             .attr("class", svgClass)
             .append("g")
-            .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+            .attr("class", "graph")
+            .attr("transform", "translate(" + (marginObj.left) + "," + marginObj.top + ")");
     },
 
     appendLegend: function (svg, legendData) {
         var legend = svg.append("g")
             .attr("class", "graph-legend")
-            .attr("width", 2000)
-            .attr("height", 2000)
+            .attr("transform", "translate(10, 10)")
             .selectAll("g")
             .data(legendData)
             .enter()
