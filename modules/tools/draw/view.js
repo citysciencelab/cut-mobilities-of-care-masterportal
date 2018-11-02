@@ -87,7 +87,7 @@ const DrawToolView = Backbone.View.extend({
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
     },
     unregisterListener: function () {
-        Radio.request("Map", "unregisterListener", "mousemove", this.listener);
+        Radio.trigger("Map", "unregisterListener", this.listener);
     },
     renderGlyphicon: function (e) {
         var element = document.getElementById("cursorGlyph");

@@ -3,7 +3,7 @@ import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defautls, {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         // ol.interaction.Draw
         drawInteraction: undefined,
         // ol.interaction.Select for the deleted features
@@ -49,12 +49,26 @@ const DrawTool = Tool.extend({
             this.createDrawInteraction(this.get("drawType"), this.get("layer"));
         }
         else {
-            Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-            Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
-            Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+            this.resetModule();
         }
     },
+    resetModule: function () {
+        var defaultColor = this.defaults.color;
 
+        defaultColor.pop();
+        defaultColor.push(this.defaults.opacity);
+
+        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
+        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+        this.setRadius(this.defaults.radius);
+        this.setOpacity(this.defaults.opacity);
+        this.setColor(defaultColor);
+        this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
+        this.setDrawInteraction(this.defaults.drawInteraction);
+        this.setSelectInteraction(this.defaults.selectInteraction);
+        this.setModifyInteraction(this.defaults.modifyInteraction);
+    },
     /**
      * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
      * because only one layer to be needed
@@ -92,7 +106,7 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     createModifyInteraction: function (layer) {
-        this.set("modifyInteraction", new Modify({
+        this.setModifyInteraction(new Modify({
             source: layer.getSource()
         }));
     },
@@ -101,7 +115,7 @@ const DrawTool = Tool.extend({
         var that = this;
 
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-        this.set("drawInteraction", new Draw({
+        this.setDrawInteraction(new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
             style: this.getStyle(drawType.text)
@@ -273,6 +287,12 @@ const DrawTool = Tool.extend({
 
     setLayer: function (value) {
         this.set("layer", value);
+    },
+    setDrawInteraction: function (value) {
+        this.set("drawInteraction", value);
+    },
+    setModifyInteraction: function (value) {
+        this.set("modifyInteraction", value);
     }
 });
 
