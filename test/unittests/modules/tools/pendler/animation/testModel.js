@@ -78,10 +78,6 @@ describe("Pendler-Animation", function () {
 
             _.forEach(model.get("relevantFeatures"), function (feature) {
                 expect(feature.color).to.exist;
-                expect(feature.color).to.satisfy(function (expr) {
-                    // Test for color to be a css color string
-                    return (/rgba/).test(expr) || (/hsla/).test(expr);
-                });
                 colors.push(feature.color);
             });
 
