@@ -44,10 +44,10 @@ const quickHelpView = Backbone.View.extend({
 
         switch (value) {
             case "search": {
-                allgemein = "../img/allgemein.png";
-                allgemein2 = "../img/allgemein_2.png";
-                allgemein3 = "../img/allgemein_3.png";
-                allgemein4 = "../img/allgemein_4.png";
+                allgemein = "../../img/allgemein.png";
+                allgemein2 = "../../img/allgemein_2.png";
+                allgemein3 = "../../img/allgemein_3.png";
+                allgemein4 = "../../img/allgemein_4.png";
 
                 this.$el.html(this.templateSearch({
                     allgemein: allgemein,
