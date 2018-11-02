@@ -105,6 +105,10 @@ const DrawToolView = Backbone.View.extend({
     },
 
     createDrawInteraction: function () {
+        this.unsetAllSelected();
+        this.$el.find(".draw").toggleClass("btn-primary");
+        this.model.deactivateDrawInteraction();
+        this.model.deactivateModifyInteraction();
         this.model.createDrawInteraction(this.model.get("drawType"), this.model.get("layer"));
     },
 
