@@ -14,11 +14,11 @@ const DrawToolView = Backbone.View.extend({
         "change select": "createDrawInteraction",
         "keyup input": "createDrawInteraction",
         "click .delete": "deleteFeatures",
+        "click .draw": "toggleInteraction",
         "click .modify.once": "createModifyInteraction",
         "click .modify": "toggleInteraction",
         "click .trash.once": "createSelectInteraction",
         "click .trash": "toggleInteraction",
-        "click .btn-primary": "enableAllElements",
         "click .downloadDrawing": "downloadFeatures"
     },
     initialize: function () {
@@ -87,7 +87,7 @@ const DrawToolView = Backbone.View.extend({
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
     },
     unregisterListener: function () {
-        Radio.request("Map", "unregisterListener", "mousemove", this.listener);
+        Radio.trigger("Map", "unregisterListener", this.listener);
     },
     renderGlyphicon: function (e) {
         var element = document.getElementById("cursorGlyph");
@@ -105,6 +105,10 @@ const DrawToolView = Backbone.View.extend({
     },
 
     createDrawInteraction: function () {
+        this.unsetAllSelected();
+        this.$el.find(".draw").toggleClass("btn-primary");
+        this.model.deactivateDrawInteraction();
+        this.model.deactivateModifyInteraction();
         this.model.createDrawInteraction(this.model.get("drawType"), this.model.get("layer"));
     },
 
@@ -131,23 +135,13 @@ const DrawToolView = Backbone.View.extend({
     },
 
     toggleInteraction: function (evt) {
+        this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
-        if ($(evt.target).hasClass("btn-primary") === true) {
-            this.disableAllElements();
-            $(evt.target).prop("disabled", false);
-        }
         this.model.toggleInteraction($(evt.target));
     },
-
-    enableAllElements: function () {
-        this.$el.find("button:disabled, select:disabled").each(function () {
-            $(this).prop("disabled", false);
-        });
-    },
-
-    disableAllElements: function () {
-        this.$el.find("button, select").each(function () {
-            $(this).prop("disabled", true);
+    unsetAllSelected: function () {
+        this.$el.find(".btn-primary").each(function () {
+            $(this).removeClass("btn-primary");
         });
     },
 
