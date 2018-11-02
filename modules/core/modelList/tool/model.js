@@ -20,7 +20,7 @@ const Tool = Item.extend({
         deactivateGFI: false,
         renderToWindow: true,
         supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
-        supportedInOblique: ["coord", "searchByCoord", "legend", "contact"],
+        supportedInOblique: ["contact"],
         // Tools die in die Sidebar und nicht in das Fenster sollen
         toolsToRenderInSidebar: ["filter", "schulwegrouting"]
     },
