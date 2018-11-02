@@ -153,24 +153,33 @@ const VerkehrsStaerkenTheme = Theme.extend({
         var parsedDataArray = [];
 
         _.each(dataArray, function (dataObj) {
-            var parsedDataObj = {};
+            var parsedDataObj = {
+                class: "dot",
+                style: "circle"
+            };
 
             _.each(dataObj, function (dataVal, dataAttr) {
                 var parseDataVal = this.parseDataValue(dataVal),
                     parseFloatVal = parseFloat(parseDataVal);
 
-                if (isNaN(parseFloatVal)) {
+                if (dataAttr === "Baustelleneinfluss") {
+                    parsedDataObj.class = "dot_visible";
+                    parsedDataObj.style = "rect"
+                }
+                else if (isNaN(parseFloatVal)) {
                     parsedDataObj[dataAttr] = parseDataVal;
                 }
                 else {
                     parsedDataObj[dataAttr] = parseFloatVal;
                 }
+
             }, this);
             parsedDataArray.push(parsedDataObj);
         }, this);
 
         return parsedDataArray;
     },
+
     parseDataValue: function (value) {
         if (value === "*") {
             return "Ja";

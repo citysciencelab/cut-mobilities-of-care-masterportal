@@ -84,10 +84,7 @@ const GraphModel = Backbone.Model.extend({
             scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
         }
         else {
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Scaletype not found</strong>",
-                kategorie: "alert-danger"
-            });
+            console.error("Unknown scaletype " + scaletype);
         }
         return scale;
     },
@@ -105,10 +102,7 @@ const GraphModel = Backbone.Model.extend({
             scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
         }
         else {
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Scaletype not found</strong>",
-                kategorie: "alert-danger"
-            });
+            console.error("Unknown scaletype " + scaletype);
         }
 
         return scale;
@@ -267,7 +261,10 @@ const GraphModel = Backbone.Model.extend({
 
         svg.selectAll("dot")
             .data(dat)
-            .enter().append("circle")
+            .enter()
+            .append(function (d) {
+                return document.createElementNS("http://www.w3.org/2000/svg", d.style);
+            })
             .attr("transform", "translate(0, 20)")
             .attr("cx", function (d) {
                 return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
@@ -276,7 +273,18 @@ const GraphModel = Backbone.Model.extend({
                 return scaleY(d[yAttrToShow]);
             })
             .attr("r", 5)
-            .attr("class", "dot")
+
+            .attr("x", function (d) {
+                return scaleX(d[xAttr]) + ((offset + scaleX.bandwidth()) / 2);
+            })
+            .attr("y", function (d) {
+                return scaleY(d[yAttrToShow]) - 5;
+            })
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("class", function (d) {
+                return d.class;
+            })
             .on("mouseover", function (d) {
                 tooltipDiv.transition()
                     .duration(200)
