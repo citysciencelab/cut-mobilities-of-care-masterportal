@@ -40,7 +40,6 @@ const Layer = Item.extend({
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
             this.toggleWindowsInterval();
-            this.setIsVisibleInTreeByMapMode(Radio.request("Map", "getMapMode"));
         }
     },
 
@@ -102,7 +101,7 @@ const Layer = Item.extend({
                         this.get("layer").setVisible(true);
                     }
                 }
-                else {
+                else if (this.get("layer") !== undefined) {
                     this.get("layer").setVisible(false);
                 }
             }
