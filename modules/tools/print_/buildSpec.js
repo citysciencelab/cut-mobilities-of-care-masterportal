@@ -277,6 +277,7 @@ const BuildSpecModel = Backbone.Model.extend({
             type: "text",
             label: style.getText(),
             fontColor: this.rgbArrayToHex(style.getFill().getColor()),
+            labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : "white",
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
             fontSize: style.getFont().split(" ")[0],

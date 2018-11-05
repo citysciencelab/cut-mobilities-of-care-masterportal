@@ -6,29 +6,79 @@ import {Polygon, LineString} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
+import MultiPoint from "ol/geom/MultiPoint.js";
 
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
-        style: new Style({
-            fill: new Fill({
-                color: [255, 127, 0, 0.3]
-            }),
-            stroke: new Stroke({
-                color: [255, 127, 0, 1.0],
-                width: 2
-            }),
-            image: new Circle({
-                radius: 6,
+        style: [
+            // general style
+            new Style({
+                fill: new Fill({
+                    color: [255, 127, 0, 0.3]
+                }),
                 stroke: new Stroke({
                     color: [255, 127, 0, 1.0],
-                    width: 3
+                    width: 2
                 }),
-                fill: new Fill({
-                    color: [255, 127, 0, 0.4]
+                image: new Circle({
+                    radius: 6,
+                    stroke: new Stroke({
+                        color: [255, 127, 0, 1.0],
+                        width: 3
+                    }),
+                    fill: new Fill({
+                        color: [255, 127, 0, 0.4]
+                    })
                 })
+            }),
+            //  style for first and last coord
+            new Style({
+                image: new Circle({
+                    radius: 6,
+                    stroke: new Stroke({
+                        color: [255, 127, 0, 1.0],
+                        width: 3
+                    }),
+                    fill: new Fill({
+                        color: [255, 127, 0, 0.4]
+                    })
+                }),
+                geometry: function (feature) {
+                    var geom = feature.getGeometry(),
+                        coords = [];
+
+                    coords.push(geom.getFirstCoordinate());
+                    coords.push(geom.getLastCoordinate());
+                    return new MultiPoint(coords);
+                }
+            }),
+            // style for all points except first and last
+            new Style({
+                image: new Circle({
+                    radius: 2,
+                    stroke: new Stroke({
+                        color: [255, 127, 0, 1.0],
+                        width: 3
+                    }),
+                    fill: new Fill({
+                        color: [255, 127, 0, 0.4]
+                    })
+                }),
+                geometry: function (feature) {
+                    var geom = feature.getGeometry(),
+                        coords = [];
+
+                    _.each(geom.getCoordinates(), function (coordinate, index) {
+                        if (index > 0 && index < geom.getCoordinates().length - 1) {
+                            coords.push(coordinate);
+                        }
+                    });
+
+                    return new MultiPoint(coords);
+                }
             })
-        }),
+        ],
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
@@ -84,7 +134,7 @@ const Measure = Tool.extend({
         var that = this;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
-        this.set("draw", new Draw({
+        this.setDraw(new Draw({
             source: this.get("source"),
             type: this.get("geomtype"),
             style: this.get("style")
@@ -101,7 +151,11 @@ const Measure = Tool.extend({
             coord,
             pointFeature,
             fill = new Fill({
-                color: [255, 255, 255, 1]
+                color: [0, 0, 0, 1]
+            }),
+            stroke = new Stroke({
+                color: [255, 127, 0, 1],
+                width: 1
             }),
             backgroundFill = new Fill({
                 color: [255, 127, 0, 1]
@@ -125,6 +179,7 @@ const Measure = Tool.extend({
                     textAlign: "left",
                     font: "14px sans-serif",
                     fill: fill,
+                    stroke: stroke,
                     offsetY: -10,
                     backgroundFill: backgroundFill,
                     padding: [5, 0, 5, 0]
@@ -136,6 +191,7 @@ const Measure = Tool.extend({
                     textAlign: "left",
                     font: "10px sans-serif",
                     fill: fill,
+                    stroke: stroke,
                     offsetY: 10,
                     backgroundFill: backgroundFill,
                     padding: [5, 0, 5, 0]
@@ -358,6 +414,9 @@ const Measure = Tool.extend({
             output.deviance = "(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")";
         }
         return output;
+    },
+    setDraw: function (value) {
+        this.set("draw", value);
     }
 });
 
