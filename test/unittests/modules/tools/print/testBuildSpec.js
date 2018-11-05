@@ -39,7 +39,7 @@ describe("tools/print_/buildSpec", function () {
         lineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
         multiLineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
     });
-    describe("parseAddress", function () {
+    describe("parseAddressToString", function () {
         it("should return empty string if all keys in address object are empty", function () {
             var address = {
                 street: "",
@@ -48,13 +48,13 @@ describe("tools/print_/buildSpec", function () {
                 city: ""
             };
 
-            expect(buildSpecModel.parseAddress(address)).to.be.a("string").that.is.empty;
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("n.N.");
         });
         it("should return empty address object is empty", function () {
-            expect(buildSpecModel.parseAddress({})).to.be.a("string").that.is.empty;
+            expect(buildSpecModel.parseAddressToString({})).to.equal("n.N.");
         });
         it("should return empty address object is undefined", function () {
-            expect(buildSpecModel.parseAddress(undefined)).to.be.a("string").that.is.empty;
+            expect(buildSpecModel.parseAddressToString(undefined)).to.equal("n.N.");
         });
     });
     describe("isOwnMetaRequest", function () {
@@ -100,7 +100,7 @@ describe("tools/print_/buildSpec", function () {
         it("should not crash if legend doesn't exist yet", function () {
             var parsedData = {
                 date: "",
-                orga: "",
+                orgaOwner: "",
                 address: {},
                 email: "",
                 tel: "",
@@ -113,7 +113,7 @@ describe("tools/print_/buildSpec", function () {
         it("should write parsedData to layer", function () {
             var parsedData = {
                     date: "1.1.2019",
-                    orga: "LGV",
+                    orgaOwner: "LGV",
                     address: {},
                     email: "e@mail.de",
                     tel: "123456",
@@ -134,7 +134,7 @@ describe("tools/print_/buildSpec", function () {
             expect(buildSpecModel.get("attributes").legend.layers[0]).to.own.include({
                 metaDate: "1.1.2019",
                 metaOwner: "LGV",
-                metaAddress: "",
+                metaAddress: "n.N.",
                 metaEmail: "e@mail.de",
                 metaTel: "123456",
                 metaUrl: "www.url.de"

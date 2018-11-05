@@ -5,6 +5,7 @@ const AnimationView = Backbone.View.extend({
         "click .start": "start",
         "click .reset": "reset",
         "click .csv-download": "download",
+        "click .btn-remove-features": "removeFeatures",
         "change #select-kreis": "setKreis",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
@@ -38,7 +39,9 @@ const AnimationView = Backbone.View.extend({
         }
         return this;
     },
-
+    removeFeatures: function () {
+        this.model.clear();
+    },
     start: function () {
         this.model.prepareAnimation();
     },

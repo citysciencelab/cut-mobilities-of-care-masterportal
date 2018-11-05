@@ -21,7 +21,8 @@ const CswParser = Backbone.Model.extend({
         }, this);
     },
     getMetaData: function (cswObj) {
-        this.fetch({
+        $.ajax({
+            url: this.url(),
             data: {id: cswObj.metaId},
             dataType: "xml",
             async: false,
@@ -35,7 +36,7 @@ const CswParser = Backbone.Model.extend({
                     kategorie: "alert-warning"
                 });
             },
-            success: function (model, xmlDoc) {
+            success: function (xmlDoc) {
                 this.parseData(xmlDoc, cswObj);
             }
         });
@@ -49,8 +50,8 @@ const CswParser = Backbone.Model.extend({
                     parsedData[key] = this.parseDate(xmlDoc);
                     break;
                 }
-                case "orga": {
-                    parsedData[key] = this.parseOrga(xmlDoc);
+                case "orgaOwner": {
+                    parsedData[key] = this.parseOrgaOwner(xmlDoc);
                     break;
                 }
                 case "email": {
@@ -118,8 +119,8 @@ const CswParser = Backbone.Model.extend({
         return title;
     },
     parseAddress: function (xmlDoc) {
-        var contact = $("gmd\\:contact,contact", xmlDoc),
-            addressField = $("gmd\\:CI_Address,CI_Address", contact),
+        var orga = this.parseOrga(xmlDoc, "owner"),
+            addressField = $("gmd\\:CI_Address,CI_Address", orga),
             streetNameField = $("gmd\\:deliveryPoint,deliveryPoint", addressField),
             streetName = _.isUndefined($(streetNameField)[0]) ? "" : $(streetNameField)[0].textContent,
             cityField = $("gmd\\:city,city", addressField),
@@ -145,28 +146,58 @@ const CswParser = Backbone.Model.extend({
         return abstractText;
     },
     parseUrl: function (xmlDoc) {
-        // TODO
-        return "";
+        var orga = this.parseOrga(xmlDoc, "owner"),
+            urlField = $("gmd\\:CI_OnlineResource,CI_OnlineResource", orga),
+            linkage = $("gmd\\:linkage,linkage", urlField),
+            url = _.isUndefined($(linkage)[0]) ? "n.N." : $(linkage)[0].textContent;
+
+        return url;
     },
     parseEmail: function (xmlDoc) {
-        var contact = $("gmd\\:contact,contact", xmlDoc),
-            emailField = $("gmd\\:electronicMailAddress,electronicMailAddress", contact),
-            email = _.isUndefined($(emailField)[0]) ? "" : $(emailField)[0].textContent;
+        var orga = this.parseOrga(xmlDoc, "owner"),
+            emailField = $("gmd\\:electronicMailAddress,electronicMailAddress", orga),
+            email = _.isUndefined($(emailField)[0]) ? "n.N." : $(emailField)[0].textContent;
 
         return email;
     },
     parseTel: function (xmlDoc) {
-        var contact = $("gmd\\:contact,contact", xmlDoc),
-            phoneField = $("gmd\\:CI_Telephone,CI_Telephone", contact),
+        var orga = this.parseOrga(xmlDoc, "owner"),
+            phoneField = $("gmd\\:CI_Telephone,CI_Telephone", orga),
             phoneNr = $("gmd\\:voice,voice", phoneField),
-            phone = _.isUndefined($(phoneNr)[0]) ? "" : $(phoneNr)[0].textContent;
+            phone = _.isUndefined($(phoneNr)[0]) ? "n.N." : $(phoneNr)[0].textContent;
+
 
         return phone;
+
     },
-    parseOrga: function (xmlDoc) {
-        var contact = $("gmd\\:contact,contact", xmlDoc),
-            orgaField = $("gmd\\:organisationName,organisationName", contact),
-            orga = _.isUndefined($(orgaField)[0]) ? "" : $(orgaField)[0].textContent;
+    parseOrgaOwner: function (xmlDoc) {
+        var orga = this.parseOrga(xmlDoc, "owner"),
+            orgaField = $("gmd\\:organisationName,organisationName", orga),
+            orgaName = _.isUndefined($(orgaField)[0]) ? "n.N." : $(orgaField)[0].textContent;
+
+        return orgaName;
+    },
+    parseOrga: function (xmlDoc, roleType) {
+        var identificationInfo = $("gmd\\:identificationInfo,identificationInfo", xmlDoc),
+            pointOfContact = $("gmd\\:pointOfContact,pointOfContact", identificationInfo),
+            orga = "";
+
+        _.each($(pointOfContact), function (contact) {
+            var roleObject = $("gmd\\:role,role", contact),
+                children = $(roleObject).children(),
+                role;
+
+            _.each($(children)[0].attributes, function (attribute) {
+                if ($(attribute)[0].name === "codeListValue") {
+                    role = $(attribute)[0].textContent;
+                }
+            });
+            // possible values for roleType "owner", "pointOfContact"
+            if (role === roleType) {
+                orga = contact;
+            }
+
+        });
 
         return orga;
     },

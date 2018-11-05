@@ -3,7 +3,7 @@ import {KML} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 
 const Download = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defautls, {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         id: "download",
         renderToWindow: true
     }),
