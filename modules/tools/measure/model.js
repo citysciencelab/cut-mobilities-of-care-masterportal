@@ -86,22 +86,24 @@ const Measure = Tool.extend({
         quickHelp: false,
         renderToWindow: true,
         deactivateGFI: true,
-        glyphicon: "glyphicon-resize-full"
+        pointerMoveListener: {},
+        clickListener: {},
+        textPoint: {},
+        scale: -1
     }),
 
     initialize: function () {
-        var channel = Radio.channel("Measure");
-
-        channel.on({
-            "placeMeasureTooltip": this.placeMeasureTooltip
-        }, this);
-
         this.superInitialize();
 
         this.listenTo(this, {
             "change:geomtype": this.createInteraction,
             "change:isActive": this.setStatus
         });
+        this.listenTo(Radio.channel("MapView"), {
+            "changedOptions": function (options) {
+                this.setScale(options.scale);
+            }
+        }, this);
 
         this.set("layer", new VectorLayer({
             source: this.get("source"),
@@ -117,6 +119,7 @@ const Measure = Tool.extend({
             measureLayer;
 
         if (value) {
+            this.setScale(Radio.request("MapView", "getOptions").scale);
             measureLayer = _.find(layers.getArray(), function (layer) {
                 return layer.get("name") === "measure_layer";
             });
@@ -124,6 +127,7 @@ const Measure = Tool.extend({
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
             }
             this.createInteraction();
+
         }
         else {
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
@@ -131,7 +135,8 @@ const Measure = Tool.extend({
     },
 
     createInteraction: function () {
-        var that = this;
+        var that = this,
+            textPoint;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.setDraw(new Draw({
@@ -139,17 +144,45 @@ const Measure = Tool.extend({
             type: this.get("geomtype"),
             style: this.get("style")
         }));
+        this.get("draw").on("drawstart", function (evt) {
+            textPoint = that.generateTextPoint(evt.feature);
+            that.get("layer").getSource().addFeatures([textPoint]);
+            that.setTextPoint(textPoint);
+            that.registerPointerMoveListener(that);
+            that.registerClickListener(that);
+        }, this);
         this.get("draw").on("drawend", function (evt) {
-            that.generateTextPoint(evt);
             evt.feature.set("styleId", evt.feature.ol_uid);
+            that.unregisterPointerMoveListener(that);
+            that.unregisterClickListener(that);
         }, this);
         Radio.trigger("Map", "addInteraction", this.get("draw"));
     },
-    generateTextPoint: function (evt) {
-        var geom = evt.feature.getGeometry(),
+    registerPointerMoveListener: function (context) {
+        context.setPointerMoveListener(Radio.request("Map", "registerListener", "pointermove", context.moveTextPoint.bind(context)));
+    },
+    registerClickListener: function (context) {
+        // "click" needed for touch devices
+        context.setClickListener(Radio.request("Map", "registerListener", "click", context.moveTextPoint.bind(context)));
+    },
+    unregisterPointerMoveListener: function (context) {
+        Radio.trigger("Map", "unregisterListener", context.get("pointerMoveListener"));
+    },
+    unregisterClickListener: function (context) {
+        Radio.trigger("Map", "unregisterListener", context.get("clickListener"));
+    },
+    moveTextPoint: function (evt) {
+        var point = this.get("textPoint"),
+            geom = point.getGeometry(),
+            currentLine = this.get("draw").getOverlay().getSource().getFeatures()[0],
+            styles = this.generateTextStyles(currentLine);
+
+        geom.setCoordinates(evt.coordinate);
+        point.setStyle(styles);
+    },
+    generateTextStyles: function (feature) {
+        var geom = feature.getGeometry(),
             output,
-            coord,
-            pointFeature,
             fill = new Fill({
                 color: [0, 0, 0, 1]
             }),
@@ -159,20 +192,17 @@ const Measure = Tool.extend({
             }),
             backgroundFill = new Fill({
                 color: [255, 127, 0, 1]
-            });
+            }),
+            styles = [];
 
         if (geom instanceof Polygon) {
             output = this.formatArea(geom);
-            coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
         }
         else if (geom instanceof LineString) {
             output = this.formatLength(geom);
-            coord = geom.getLastCoordinate();
         }
-        pointFeature = new Feature({
-            geometry: new Point(coord)
-        });
-        pointFeature.setStyle([
+
+        styles = [
             new Style({
                 text: new Text({
                     text: output.measure,
@@ -181,6 +211,7 @@ const Measure = Tool.extend({
                     fill: fill,
                     stroke: stroke,
                     offsetY: -10,
+                    offsetX: 10,
                     backgroundFill: backgroundFill,
                     padding: [5, 0, 5, 0]
                 })
@@ -193,14 +224,31 @@ const Measure = Tool.extend({
                     fill: fill,
                     stroke: stroke,
                     offsetY: 10,
+                    offsetX: 10,
                     backgroundFill: backgroundFill,
                     padding: [5, 0, 5, 0]
                 })
             })
-        ]);
-        pointFeature.set("output", output);
+        ];
+        return styles;
+    },
+    generateTextPoint: function (feature) {
+        var geom = feature.getGeometry(),
+            coord,
+            pointFeature;
+
+        if (geom instanceof Polygon) {
+            coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
+        }
+        else if (geom instanceof LineString) {
+            coord = geom.getLastCoordinate();
+        }
+        pointFeature = new Feature({
+            geometry: new Point(coord)
+        });
+        pointFeature.setStyle(this.generateTextStyles(feature));
         pointFeature.set("styleId", _.uniqueId());
-        this.get("layer").getSource().addFeatures([pointFeature]);
+        return pointFeature;
     },
     /**
      * Setzt den Typ der Geometrie (LineString oder Polygon).
@@ -236,70 +284,6 @@ const Measure = Tool.extend({
     deleteFeatures: function () {
         // lösche alle Geometrien
         this.get("source").clear();
-        // lösche alle Overlays (Tooltips)
-        // _.each(this.get("measureTooltips"), function (tooltip) {
-        //     Radio.trigger("Map", "removeOverlay", tooltip, "measure");
-        // });
-        // this.set("measureTooltips", []);
-    },
-    setScale: function (options) {
-        this.set("scale", options.scale);
-    },
-
-    /** Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
-    * @param {number} scale - Maßstabszahl
-    * @return {undefined}
-    */
-    getScaleError: function (scale) {
-        var scaleError;
-
-        switch (scale) {
-            case 500: {
-                scaleError = 0.5;
-                break;
-            }
-            case 1000: {
-                scaleError = 1;
-                break;
-            }
-            case 2500: {
-                scaleError = 2.5;
-                break;
-            }
-            case 5000: {
-                scaleError = 5;
-                break;
-            }
-            case 10000: {
-                scaleError = 10;
-                break;
-            }
-            case 20000: {
-                scaleError = 20;
-                break;
-            }
-            case 40000: {
-                scaleError = 40;
-                break;
-            }
-            case 60000: {
-                scaleError = 60;
-                break;
-            }
-            case 100000: {
-                scaleError = 100;
-                break;
-            }
-            case 250000: {
-                scaleError = 250;
-                break;
-            }
-            default: {
-                scaleError = 0;
-                break;
-            }
-        }
-        return scaleError;
     },
 
     /** Berechnet das Quadrat der deltas (für x und y) von zwei Koordinaten
@@ -328,12 +312,9 @@ const Measure = Tool.extend({
             rechtswertMittel = 0,
             lengthRed,
             fehler = 0,
-            scale = parseInt(this.get("scale"), 10),
-            scaleError = this.getScaleError(scale),
+            scaleError = this.get("scale") / 1000, // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
             i;
 
-        console.log(scale);
-        console.log(scaleError);
         for (i = 0; i < coords.length; i++) {
             rechtswertMittel += coords[i][0];
             if (i < coords.length - 1) {
@@ -345,7 +326,6 @@ const Measure = Tool.extend({
         fehler = Math.sqrt(fehler);
         rechtswertMittel = rechtswertMittel / coords.length / 1000;
         lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
-
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km") {
                 output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
@@ -355,12 +335,10 @@ const Measure = Tool.extend({
             }
         }
         else if (this.get("unit") === "km") {
-            // output = (lengthRed / 1000).toFixed(3) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")</sub>";
             output.measure = (lengthRed / 1000).toFixed(3) + " " + this.get("unit");
             output.deviance = "(+/- " + (fehler / 1000).toFixed(3) + " " + this.get("unit") + ")";
         }
         else {
-            // output = lengthRed.toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")</sub>";
             output.measure = lengthRed.toFixed(2) + " " + this.get("unit");
             output.deviance = "(+/- " + fehler.toFixed(2) + " " + this.get("unit") + ")";
         }
@@ -379,8 +357,7 @@ const Measure = Tool.extend({
             rechtswertMittel = 0,
             areaRed,
             fehler = 0,
-            scale = parseInt(this.get("scale"), 10),
-            scaleError = this.getScaleError(scale),
+            scaleError = this.get("scale") / 1000,
             i;
 
         for (i = 0; i < coords.length; i++) {
@@ -396,20 +373,18 @@ const Measure = Tool.extend({
         rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
         areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
         if (this.get("uiStyle") === "TABLE") {
-            if (this.get("unit") === "km<sup>2</sup>") {
+            if (this.get("unit") === "km²") {
                 output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
             }
             else {
                 output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
             }
         }
-        else if (this.get("unit") === "km<sup>2</sup>") {
-            // output = (areaRed / 1000000).toFixed(2) + " " + this.get("unit") + " <sub>(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")</sub>";
+        else if (this.get("unit") === "km²") {
             output.measure = (areaRed / 1000000).toFixed(2) + " " + this.get("unit");
             output.deviance = "(+/- " + (fehler / 1000000).toFixed(2) + " " + this.get("unit") + ")";
         }
         else {
-            // output = areaRed.toFixed(0) + " " + this.get("unit") + " <sub>(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")</sub>";
             output.measure = areaRed.toFixed(0) + " " + this.get("unit");
             output.deviance = "(+/- " + fehler.toFixed(0) + " " + this.get("unit") + ")";
         }
@@ -417,6 +392,18 @@ const Measure = Tool.extend({
     },
     setDraw: function (value) {
         this.set("draw", value);
+    },
+    setPointerMoveListener: function (value) {
+        this.set("pointerMoveListener", value);
+    },
+    setClickListener: function (value) {
+        this.set("clickListener", value);
+    },
+    setTextPoint: function (value) {
+        this.set("textPoint", value);
+    },
+    setScale: function (value) {
+        this.set("scale", value);
     }
 });
 

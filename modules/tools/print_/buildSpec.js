@@ -351,14 +351,17 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     buildStrokeStyle: function (style, obj) {
-        var strokeColor = style.getColor();
+        var strokeColor;
 
-        obj.strokeColor = this.rgbArrayToHex(strokeColor);
-        if (strokeColor[3] !== undefined) {
-            obj.strokeOpacity = strokeColor[3];
-        }
-        if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
-            obj.strokeWidth = style.getWidth();
+        if (!_.isNull(style)) {
+            strokeColor = style.getColor();
+            obj.strokeColor = this.rgbArrayToHex(strokeColor);
+            if (strokeColor[3] !== undefined) {
+                obj.strokeOpacity = strokeColor[3];
+            }
+            if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
+                obj.strokeWidth = style.getWidth();
+            }
         }
         return obj;
     },
