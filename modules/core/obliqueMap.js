@@ -110,7 +110,6 @@ const ObliqueMap = Backbone.Model.extend({
                     resolutionFactor = this.currentLayer.get("resolution");
 
                 resolution = this.currentDirection.currentView.view.getResolution() / resolutionFactor;
-
                 this.container.style.visibility = "hidden";
                 this.set("active", false);
                 map2D.getViewport().querySelector(".ol-overlaycontainer").classList.remove("olcs-hideoverlay");
@@ -122,7 +121,7 @@ const ObliqueMap = Backbone.Model.extend({
                 });
                 this.pausedInteractions.length = 0;
                 this.listenerKeys.length = 0;
-                Radio.trigger("MapView", "setCenter", center.coords);
+                Radio.trigger("MapView", "setCenter", [center.coords[0], center.coords[1]]);
                 Radio.trigger("MapView", "setConstrainedResolution", resolution, 0);
                 Radio.trigger("Map", "change", "2D");
             }.bind(this));
@@ -232,7 +231,7 @@ const ObliqueMap = Backbone.Model.extend({
                 map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                 this.set("active", true);
                 this.container.style.visibility = "visible";
-                this.setCenter(center, resolution.resolution).then(function () {
+                this.setCenter(center, resolution).then(function () {
                     Radio.trigger("Map", "change", "Oblique");
                 });
             }
@@ -261,7 +260,7 @@ const ObliqueMap = Backbone.Model.extend({
                     map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                     this.set("active", true);
                     this.container.style.visibility = "visible";
-                    this.activateLayer(layer, center, resolution.resolution).then(function () {
+                    this.activateLayer(layer, center, resolution).then(function () {
                         layer.set("isVisibleInMap", true);
                         layer.set("isSelected", true);
                         Radio.trigger("Map", "change", "Oblique");
