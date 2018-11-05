@@ -187,11 +187,13 @@ const BuildSpecModel = Backbone.Model.extend({
             var clonedFeature,
                 styles = this.getFeatureStyle(feature, layer),
                 stylingRule,
-                styleObject;
+                styleObject,
+                geometryType;
 
             _.each(styles, function (style, index) {
                 if (style !== null) {
                     clonedFeature = feature.clone();
+                    geometryType = feature.getGeoemtry().getType();
                     clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
@@ -202,16 +204,16 @@ const BuildSpecModel = Backbone.Model.extend({
                     styleObject = {
                         symbolizers: []
                     };
-                    if (clonedFeature.getGeometry().getType() === "Point" || clonedFeature.getGeometry().getType() === "MultiPoint") {
+                    if (geometryType === "Point" || geometryType === "MultiPoint") {
                         styleObject.symbolizers.push(this.buildPointStyle(style, layer));
                     }
-                    else if (clonedFeature.getGeometry().getType() === "Polygon" || clonedFeature.getGeometry().getType() === "MultiPolygon") {
+                    else if (geometryType === "Polygon" || geometryType === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
-                    else if (clonedFeature.getGeometry().getType() === "Circle") {
+                    else if (geometryType === "Circle") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
                     }
-                    else if (clonedFeature.getGeometry().getType() === "LineString" || clonedFeature.getGeometry().getType() === "MultiLineString") {
+                    else if (geometryType === "LineString" || geometryType === "MultiLineString") {
                         styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
                     }
                     // label styling
