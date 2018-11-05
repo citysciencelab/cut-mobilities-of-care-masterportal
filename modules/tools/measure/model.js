@@ -327,12 +327,10 @@ const Measure = Tool.extend({
         lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km") {
-                // output = (lengthRed / 1000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 output.measure = (lengthRed / 1000).toFixed(1) + " " + this.get("unit");
                 output.deviance = "Abschließen mit Doppelklick";
             }
             else {
-                // output = lengthRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 output.measure = lengthRed.toFixed(0) + " " + this.get("unit");
                 output.deviance = "Abschließen mit Doppelklick";
             }
@@ -377,12 +375,10 @@ const Measure = Tool.extend({
         areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km²") {
-                // output = (areaRed / 1000000).toFixed(1) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 output.measure = (areaRed / 1000000).toFixed(1) + " " + this.get("unit");
                 output.deviance = "Abschließen mit Doppelklick";
             }
             else {
-                // output = areaRed.toFixed(0) + " " + this.get("unit") + " </br><span class='measure-hint'> Abschließen mit Doppelclick </span>";
                 output.measure = areaRed.toFixed(0) + " " + this.get("unit");
                 output.deviance = "Abschließen mit Doppelclick";
             }
