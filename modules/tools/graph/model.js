@@ -2,7 +2,7 @@ import {scaleBand, scaleLinear} from "d3-scale";
 import {axisBottom, axisLeft} from "d3-axis";
 import {line} from "d3-shape";
 import {select, event} from "d3-selection";
-import {transition} from "d3-transition"
+import "d3-transition";
 
 const GraphModel = Backbone.Model.extend({
     defaults: {},
@@ -236,12 +236,8 @@ const GraphModel = Backbone.Model.extend({
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
         var yAxisDraw = yAxis,
             yAxisBBox,
-            innerOffset = 20; // um diesem Wert ist der Graph verschoben
-
-        // nur eine Beschriftung der y-Achse
-        if (_.isArray(yAxisLabel)) {
-            yAxisLabel = yAxisLabel[0];
-        }
+            innerOffset = 20, // um diesem Wert ist der Graph verschoben
+            yAxisLabelString = _.isArray(yAxisLabel) ? yAxisLabel[0] : yAxisLabel; // nur eine Beschriftung der y-Achse
 
         yAxisDraw = svg.append("g")
             .attr("transform", "translate(0, " + (AxisOffset + innerOffset) + ")")
@@ -257,7 +253,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .style("fill", "#000")
-            .text(yAxisLabel);
+            .text(yAxisLabelString);
     },
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
@@ -300,7 +296,7 @@ const GraphModel = Backbone.Model.extend({
                     .attr("style", "background: gray")
                     .style("left", (event.offsetX + 5) + "px")
                     .style("top", (event.offsetY - 5) + "px");
-            })
+            }, tooltipDiv)
             .on("mouseout", function () {
                 tooltipDiv.transition()
                     .duration(500)
@@ -308,8 +304,8 @@ const GraphModel = Backbone.Model.extend({
                     .on("end", function () {
                         tooltipDiv.style("left", "0px");
                         tooltipDiv.style("top", "0px");
-                    });
-            })
+                    }, tooltipDiv);
+            }, tooltipDiv)
             .on("click", function (d) {
                 tooltipDiv.transition()
                     .duration(200)
@@ -318,7 +314,7 @@ const GraphModel = Backbone.Model.extend({
                     .attr("style", "background: gray")
                     .style("left", (event.offsetX + 5) + "px")
                     .style("top", (event.offsetY - 5) + "px");
-            });
+            }, tooltipDiv);
     },
 
     createSvg: function (selector, marginObj, width, height, svgClass) {
@@ -328,7 +324,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("class", svgClass)
             .append("g")
             .attr("class", "graph")
-            .attr("transform", "translate(" + (marginObj.left) + "," + marginObj.top + ")");
+            .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
     },
 
     appendLegend: function (svg, legendData) {
@@ -338,34 +334,34 @@ const GraphModel = Backbone.Model.extend({
             .selectAll("g")
             .data(legendData)
             .enter()
-                .append("g")
-                .attr("class", "graph-legend-item")
-                .attr("transform", function (d, i) {
-                    return "translate(" + -60 + "," + (-20 + (20 * i)) + ")";
-                });
+            .append("g")
+            .attr("class", "graph-legend-item")
+            .attr("transform", function (d, i) {
+                return "translate(" + -60 + "," + (-20 + (20 * i)) + ")";
+            });
 
         legend.append(function (d) {
             return document.createElementNS("http://www.w3.org/2000/svg", d.style);
         })
         // Attribute für <rect>
-        .attr("width", 10)
-        .attr("height", 10)
-        .attr("x", 0)
-        .attr("y", 5)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", 0)
+            .attr("y", 5)
         // Attribute für <circle>
-        .attr("cx", 5)
-        .attr("cy", 10)
-        .attr("r", 5)
-        .attr("class", function (d) {
-            return d.class;
-        });
+            .attr("cx", 5)
+            .attr("cy", 10)
+            .attr("r", 5)
+            .attr("class", function (d) {
+                return d.class;
+            });
 
         legend.append("text")
-        .attr("x", 20)
-        .attr("y", 15)
-        .text(function (d) {
-            return d.text;
-        });
+            .attr("x", 20)
+            .attr("y", 15)
+            .text(function (d) {
+                return d.text;
+            });
     },
 
     createLineGraph: function (graphConfig) {
@@ -456,7 +452,7 @@ const GraphModel = Backbone.Model.extend({
             })
             .on("mouseover", function () {
                 select(this);
-            })
+            }, this)
             .append("title")
             .text(function (d) {
                 return (Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %";

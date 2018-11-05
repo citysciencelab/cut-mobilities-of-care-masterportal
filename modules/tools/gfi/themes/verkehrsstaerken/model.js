@@ -1,5 +1,5 @@
 import Theme from "../model";
-import {select, event} from "d3-selection";
+import "../../../graph/model";
 
 const VerkehrsStaerkenTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
@@ -160,7 +160,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
 
                 if (dataAttr === "Baustelleneinfluss") {
                     parsedDataObj.class = "dot_visible";
-                    parsedDataObj.style = "rect"
+                    parsedDataObj.style = "rect";
                 }
                 else if (isNaN(parseFloatVal)) {
                     parsedDataObj[dataAttr] = parseDataVal;
@@ -234,9 +234,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
         else if (value === "DTVw") {
             return "DTVw (Kfz/24h)";
         }
-        else {
-            return "SV-Anteil am DTVw (%)";
-        }
+        return "SV-Anteil am DTVw (%)";
     },
 
     createD3Document: function (key) {
