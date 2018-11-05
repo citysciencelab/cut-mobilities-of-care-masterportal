@@ -188,13 +188,22 @@ const BuildSpecModel = Backbone.Model.extend({
                 styles = this.getFeatureStyle(feature, layer),
                 stylingRule,
                 styleObject,
-                geometryType;
+                geometryType,
+                styleGeometryFunction;
 
             _.each(styles, function (style, index) {
                 if (style !== null) {
                     clonedFeature = feature.clone();
-                    geometryType = feature.getGeometry().getType();
                     clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
+                    geometryType = feature.getGeometry().getType();
+
+                    // if style has geometryFunction, take geometry from style Function
+                    styleGeometryFunction = style.getGeometryFunction();
+                    if (!_.isNull(styleGeometryFunction) && !_.isUndefined(styleGeometryFunction)) {
+                        clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
+                        geometryType = styleGeometryFunction(clonedFeature).getType();
+                    }
+
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
@@ -353,15 +362,13 @@ const BuildSpecModel = Backbone.Model.extend({
     buildStrokeStyle: function (style, obj) {
         var strokeColor;
 
-        if (!_.isNull(style)) {
-            strokeColor = style.getColor();
-            obj.strokeColor = this.rgbArrayToHex(strokeColor);
-            if (strokeColor[3] !== undefined) {
-                obj.strokeOpacity = strokeColor[3];
-            }
-            if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
-                obj.strokeWidth = style.getWidth();
-            }
+        strokeColor = style.getColor();
+        obj.strokeColor = this.rgbArrayToHex(strokeColor);
+        if (strokeColor[3] !== undefined) {
+            obj.strokeOpacity = strokeColor[3];
+        }
+        if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
+            obj.strokeWidth = style.getWidth();
         }
         return obj;
     },

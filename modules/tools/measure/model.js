@@ -11,7 +11,7 @@ import MultiPoint from "ol/geom/MultiPoint.js";
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
-        style: [
+        styles: [
             // general style
             new Style({
                 fill: new Fill({
@@ -107,7 +107,7 @@ const Measure = Tool.extend({
 
         this.set("layer", new VectorLayer({
             source: this.get("source"),
-            style: this.get("style"),
+            style: this.get("styles"),
             name: "measure_layer",
             alwaysOnTop: true
         }));
@@ -142,7 +142,7 @@ const Measure = Tool.extend({
         this.setDraw(new Draw({
             source: this.get("source"),
             type: this.get("geomtype"),
-            style: this.get("style")
+            style: this.get("styles")
         }));
         this.get("draw").on("drawstart", function (evt) {
             textPoint = that.generateTextPoint(evt.feature);
