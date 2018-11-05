@@ -193,7 +193,7 @@ const BuildSpecModel = Backbone.Model.extend({
             _.each(styles, function (style, index) {
                 if (style !== null) {
                     clonedFeature = feature.clone();
-                    geometryType = feature.getGeoemtry().getType();
+                    geometryType = feature.getGeometry().getType();
                     clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
