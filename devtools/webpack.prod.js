@@ -7,7 +7,7 @@ const merge = require("webpack-merge"),
 module.exports = function (env, args) {
     const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
 
-    return merge(new Common(path2CustomModule), {
+    return merge.smart(new Common(path2CustomModule), {
         mode: "production",
         output: {
             path: path.resolve(__dirname, "../dist/build"),
@@ -15,6 +15,7 @@ module.exports = function (env, args) {
         },
         module: {
             rules: [
+                // alle Schriftarten (auch die Glyphicons) kommen in lokalen Ordner
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",

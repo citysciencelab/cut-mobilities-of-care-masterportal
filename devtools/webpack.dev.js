@@ -8,7 +8,7 @@ const merge = require("webpack-merge"),
 module.exports = function (env, args) {
     const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
 
-    return merge(new Common(path2CustomModule), {
+    return merge.smart({
         mode: "development",
         devServer: {
             port: 9001,
@@ -21,6 +21,7 @@ module.exports = function (env, args) {
         },
         module: {
             rules: [
+                // Glyphicons werden von bootstrap gelesen
                 {
                     test: /glyphicons-halflings-regular\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
@@ -29,6 +30,7 @@ module.exports = function (env, args) {
                         publicPath: "../../node_modules/bootstrap/fonts"
                     }
                 },
+                // alle anderen Schriftarten werden von lgv-config gelesen
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
@@ -45,5 +47,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    });
+    }, new Common(path2CustomModule));
 };
