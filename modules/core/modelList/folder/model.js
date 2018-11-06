@@ -62,7 +62,6 @@ const Folder = Item.extend({
         else {
             this.setIsSelected(true);
         }
-        // this.collection.toggleIsSelectedLayers(this);
     },
 
     toggleIsExpanded: function () {
@@ -72,7 +71,7 @@ const Folder = Item.extend({
         else {
             this.setIsExpanded(true);
         }
-        if (this.get("parentId") === "tree") {
+        if (this.get("parentId") === "tree" && !this.get("isAlwaysExpanded")) {
             this.collection.toggleCatalogs(this.get("id"));
         }
     },
