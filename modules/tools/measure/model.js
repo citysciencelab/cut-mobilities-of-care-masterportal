@@ -69,11 +69,20 @@ const Measure = Tool.extend({
                     var geom = feature.getGeometry(),
                         coords = [];
 
-                    _.each(geom.getCoordinates(), function (coordinate, index) {
-                        if (index > 0 && index < geom.getCoordinates().length - 1) {
-                            coords.push(coordinate);
-                        }
-                    });
+                    if (geom instanceof LineString) {
+                        _.each(geom.getCoordinates(), function (coordinate, index) {
+                            if (index > 0 && index < geom.getCoordinates().length - 1) {
+                                coords.push(coordinate);
+                            }
+                        });
+                    }
+                    if (geom instanceof Polygon) {
+                        _.each(geom.getCoordinates()[0], function (coordinate, index) {
+                            if (index > 0 && index < geom.getCoordinates()[0].length - 1) {
+                                coords.push(coordinate);
+                            }
+                        });
+                    }
 
                     return new MultiPoint(coords);
                 }
