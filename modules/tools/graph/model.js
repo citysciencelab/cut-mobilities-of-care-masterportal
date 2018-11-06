@@ -198,6 +198,8 @@ const GraphModel = Backbone.Model.extend({
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", "translate(0, 20)")
+            .append("g")
+            .attr("class", "graph-diagram")
             .append("path")
             .data([dataToAdd])
             .attr("class", className)
@@ -205,19 +207,21 @@ const GraphModel = Backbone.Model.extend({
             .attr("d", object);
     },
 
-    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop, height) {
+    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop) {
         var svgBBox = svg.node().getBBox(),
-            text = _.isUndefined(xAxisLabel.label) ? xAxisLabel : xAxisLabel.label,
-            textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
-            textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
-            fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
-            fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
-            innerOffset = 20, // um diesem Wert ist der Graph verschoben
-            heightDraw = _.isUndefined(height) ? svgBBox.height - marginTop + innerOffset : height + innerOffset,
+            // textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
+            // textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
+            // fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
+            // fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
+            heightDraw = svgBBox.height - marginTop,//_.isUndefined(height) ? svgBBox.height - marginTop : height,
             xAxisDraw = xAxis,
-            xAxisBBox;
+            xAxisBBox,
+            xAxisArray = _.isArray(xAxisLabel) ? xAxisLabel : [xAxisLabel];
 
-        xAxisDraw = svg.append("g")
+        xAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
+            .data(xAxisArray)
+            .enter()
+            .append("g")
             .attr("transform", "translate(" + AxisOffset + "," + heightDraw + ")")
             .attr("class", "xAxisDraw")
             .call(xAxis);
@@ -226,11 +230,14 @@ const GraphModel = Backbone.Model.extend({
         // text for xAxisDraw
         xAxisDraw.append("text")
             .attr("x", xAxisBBox.width / 2)
-            .attr("y", xAxisBBox.height + textOffset + 10)
-            .style("text-anchor", textAnchor)
-            .style("fill", fill)
-            .style("font-size", fontSize)
-            .text(text);
+            .attr("y", xAxisBBox.height)
+            .attr("dy", "1em")
+            // .style("text-anchor", textAnchor)
+            // .style("fill", fill)
+            // .style("font-size", fontSize)
+            .style("text-anchor", "middle")
+            .style("fill", "#000")
+            .text(xAxisArray);
     },
 
     /**
@@ -251,7 +258,7 @@ const GraphModel = Backbone.Model.extend({
             .data(yAxisArray)
             .enter()
             .append("g")
-            .attr("transform", "translate(0, " + (AxisOffset * 10) + ")")
+            .attr("transform", "translate(0, " + (AxisOffset) + ")")
             .attr("class", "yAxisDraw")
             .call(yAxisDraw);
 
@@ -273,7 +280,7 @@ const GraphModel = Backbone.Model.extend({
             return obj[yAttrToShow] !== "-";
         });
 
-        svg.select(".graph-data").selectAll("points")
+        svg.select(".graph-diagram").selectAll("points")
             .data(dat)
             .enter()
             .append(function (d) {
@@ -443,7 +450,7 @@ const GraphModel = Backbone.Model.extend({
 
         this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 0);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, 0, height);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, 0);
     },
 
     drawBars: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
