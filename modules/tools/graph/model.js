@@ -233,16 +233,28 @@ const GraphModel = Backbone.Model.extend({
             .text(text);
     },
 
+    /**
+     * Fügt die Y-Achse .graph-data hinzu
+     * @param   {object} svg        SVG
+     * @param   {object} yAxis      axis-left d3-Object
+     * @param   {string} yAxisLabel Beschriftungstext
+     * @param   {number} textOffset Abstand zwischen Skala und Beschriftungstext
+     * @param   {number} AxisOffset Abstand zwischen Y-Achse und oberem Rand
+     * @returns {void}
+     */
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
         var yAxisDraw = yAxis,
             yAxisBBox,
-            innerOffset = 20, // um diesem Wert ist der Graph verschoben
-            yAxisLabelString = _.isArray(yAxisLabel) ? yAxisLabel[0] : yAxisLabel; // nur eine Beschriftung der y-Achse
+            yAxisArray = _.isArray(yAxisLabel) ? yAxisLabel : [yAxisLabel];
 
-        yAxisDraw = svg.append("g")
-            .attr("transform", "translate(0, " + (AxisOffset + innerOffset) + ")")
+        yAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
+            .data(yAxisArray)
+            .enter()
+            .append("g")
+            .attr("transform", "translate(0, " + (AxisOffset * 10) + ")")
             .attr("class", "yAxisDraw")
             .call(yAxisDraw);
+
         yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
 
         // text for yAxis
@@ -253,7 +265,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .style("fill", "#000")
-            .text(yAxisLabelString);
+            .text(yAxisArray);
     },
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
@@ -261,7 +273,6 @@ const GraphModel = Backbone.Model.extend({
             return obj[yAttrToShow] !== "-";
         });
 
-        // Fügt die Elemente nicht in graph-data an, sondern irgendwie immer unter <g>.
         svg.select(".graph-data").selectAll("points")
             .data(dat)
             .enter()
