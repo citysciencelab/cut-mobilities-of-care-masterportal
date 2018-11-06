@@ -30,21 +30,26 @@ const Animation = PendlerCoreModel.extend({
     /**
      * Generiere eine vorgegebene Anzahl an disjunkten Farben
      * @param {Int} amount Anzahl gewünschter Farbgruppen
-     * @returns {String[]} Array mit den Codes (HSLA) der Farben
+     * @returns {String[]} Array mit den Codes (rgba) der Farben
      */
     generateColors: function (amount) {
         var colors = [],
-            h = 0,
-            s = 100,
-            l = 50,
-            a = 0.7,
-            dh = 360.0 / amount,
+            max = 255,
+            min = 0,
+            range = max - min,
+            red,
+            green,
+            blue,
+            alpha,
             i;
 
-        // Schreite den Farbkreis ab
+        // generate random rgba-color-arrays
         for (i = 0; i < amount; i++) {
-            colors.push("hsla(" + h + "," + s + "%," + l + "%," + a + ")");
-            h += dh;
+            red = Math.floor(Math.random() * range) + min;
+            green = Math.floor(Math.random() * range) + min;
+            blue = Math.floor(Math.random() * range) + min;
+            alpha = 0.75;
+            colors.push([red, green, blue, alpha]);
         }
         return colors;
     },
@@ -57,12 +62,26 @@ const Animation = PendlerCoreModel.extend({
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
                 anzahlPendler: feature.get(this.get("attrAnzahl")),
-                color: feature.color,
+                color: this.rgbaArrayToString(feature.color),
                 name: feature.get(this.get("attrGemeinde"))
             });
         }, this);
 
         this.set("pendlerLegend", pendlerLegend);
+    },
+    rgbaArrayToString: function (rgbArray) {
+        var rgbString = "";
+
+        if (rgbArray.length === 3) {
+            rgbString = "rgb(";
+        }
+        else if (rgbArray.length === 4) {
+            rgbString = "rgba(";
+        }
+        rgbString += rgbArray.toString();
+        rgbString += ")";
+
+        return rgbString;
     },
 
     /**
@@ -320,6 +339,8 @@ const Animation = PendlerCoreModel.extend({
 
             currentPoint = new Point(coordinates[drawIndex]);
             newFeature = new Feature(currentPoint);
+            // "styleId" neccessary for print, that style and feature can be linked
+            newFeature.set("styleId", _.uniqueId());
             newFeature.setStyle(style);
             layer.getSource().addFeature(newFeature);
         }, this);
