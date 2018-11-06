@@ -18,6 +18,9 @@ const LayerView = Backbone.View.extend({
                 if (this.model.get("supported").indexOf(mode) >= 0) {
                     this.removeDisableClass();
                 }
+                else if (mode === "2D") {
+                    this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
+                }
                 else {
                     this.addDisableClass("Layer im 3D-Modus nicht verfügbar");
                 }
@@ -61,6 +64,9 @@ const LayerView = Backbone.View.extend({
             }
             else if (this.model.get("supported").indexOf(mode) >= 0) {
                 this.removeDisableClass();
+            }
+            else if (mode === "2D") {
+                this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
             }
             else {
                 this.addDisableClass("Layer im 3D-Modus nicht verfügbar");

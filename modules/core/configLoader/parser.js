@@ -103,7 +103,7 @@ const Parser = Backbone.Model.extend({
             this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
         }
         else {
-            this.addTreeMenuItems();
+            this.addTreeMenuItems(this.get("treeType"));
             this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
         }
         this.createModelList();
