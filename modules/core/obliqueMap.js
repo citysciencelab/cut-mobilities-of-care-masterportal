@@ -49,7 +49,11 @@ const ObliqueMap = Backbone.Model.extend({
         this.listenerKeys = [];
 
         this.listenTo(Radio.channel("MapView"), {
-            "changedCenter": this.setCenter
+            "changedCenter": function (coordinate, resolution) {
+                if (this.get("active")) {
+                    this.setCenter(coordinate, resolution);
+                }
+            }
         });
     },
     isActive: function () {
