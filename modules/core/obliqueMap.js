@@ -193,8 +193,12 @@ const ObliqueMap = Backbone.Model.extend({
 
         if (!this.isActive()) {
             const center = Radio.request("MapView", "getCenter"),
+                activeTool = Radio.request("ModelList", "getModelByAttributes", {type: "tool", isActive: true}),
                 resolution = Radio.request("MapView", "getOptions").resolution;
 
+            if (activeTool !== undefined) {
+                activeTool.set("isActive", false);
+            }
             map2D = Radio.request("Map", "getMap");
             if (!this.container) {
                 fillArea = "position:absolute;top:0;left:0;width:100%;height:100%;";
