@@ -12,18 +12,6 @@ const LayerView = Backbone.View.extend({
                 this.render();
             }
         });
-        // Aktiviert ausgewälter Layer; Layermenu ist aktiv
-        this.listenTo(this.collection, {
-            "updateSelection": function () {
-                this.render();
-                $("#table-nav-layers-panel").collapse("show");
-                this.$el.addClass("burgerMenuIsActive");
-            }
-        });
-        // bootstrap collapse event
-        this.$el.on("show.bs.collapse", function () {
-            Radio.request("TableMenu", "setActiveElement", "Layer");
-        });
     },
     id: "table-layer-list",
     className: "table-layer-list table-nav",
