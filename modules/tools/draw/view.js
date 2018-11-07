@@ -36,8 +36,9 @@ const DrawToolView = Backbone.View.extend({
 
     template: _.template(DrawTemplate),
 
-    render: function (model, value) {
-        if (value) {
+    render: function (model, isActive) {
+        if (isActive) {
+            this.model.setStatus();
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
             this.delegateEvents();
