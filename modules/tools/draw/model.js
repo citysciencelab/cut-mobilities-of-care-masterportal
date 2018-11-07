@@ -46,6 +46,7 @@ const DrawTool = Tool.extend({
         const channel = Radio.channel("Draw");
 
         this.superInitialize();
+
         channel.reply({
             "getLayer": function () {
                 return this.get("layer");
@@ -54,24 +55,132 @@ const DrawTool = Tool.extend({
     },
 
     /**
+     * sets the status of the Drawtool
      * @return {void}
      */
     setStatus: function () {
-        if (_.isUndefined(this.get("layer"))) {
-            this.createLayer();
-        }
-        this.createDrawInteraction(this.get("drawType"), this.get("layer"));
+        const layer = !_.isUndefined(this.get("layer")) ? this.get("layer") : this.createLayer();
+
+        this.setLayer(layer);
+        this.createDrawInteraction(this.get("drawType"), layer);
     },
 
     /**
      * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
      * because only one layer to be needed
-     * @returns {void}
+     * @returns {ol.VectorLayer} layer
      */
     createLayer: function () {
-        var layer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+        return Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+    },
 
-        this.setLayer(layer);
+    /**
+     * creates the interaction with a new drawing and the map
+     * @param {object} drawType - contains the geometry and description
+     * @param {ol.VectorLayer} layer - layer to draw
+     * @return {void}
+     */
+    createDrawInteraction: function (drawType, layer) {
+        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        this.setDrawInteraction(new Draw({
+            source: layer.getSource(),
+            type: drawType.geometry,
+            style: this.getStyle(drawType.text)
+        }));
+
+        this.get("drawInteraction").on("drawend", function (evt) {
+            evt.feature.set("styleId", _.uniqueId());
+            evt.feature.setStyle(this.getStyle(drawType, this.get("color")));
+        }.bind(this));
+        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
+    },
+
+    /**
+     * @param {object} drawType - contains the geometry and description
+     * @param {array} color - of drawings
+     * @return {ol.style.Style} style
+     */
+    getStyle: function (drawType, color) {
+        let style;
+
+        if (drawType.text === "Text schreiben") {
+            style = this.getTextStyle(color, this.get("text"), this.get("fontSize"), this.get("font"));
+        }
+        else {
+            style = this.getDrawStyle(color, drawType.geometry, this.get("strokeWidth"), this.get("radius"));
+        }
+
+        return style;
+    },
+
+    /**
+     * Creates a feature style for text and returns it
+     * @param {number} color - of drawings
+     * @param {string} text - of drawings
+     * @param {number} fontSize - of drawings
+     * @param {string} font - of drawings
+     * @return {ol.style.Style} style
+     */
+    getTextStyle: function (color, text, fontSize, font) {
+        return new Style({
+            text: new Text({
+                textAlign: "left",
+                text: text,
+                font: fontSize + "px " + font,
+                fill: new Fill({
+                    color: color
+                })
+            })
+        });
+    },
+
+    /**
+     * Creates and returns a feature style for points, lines, or faces
+     * @param {number} color - of drawings
+     * @param {string} drawGeometryType - geometry type of drawings
+     * @param {number} strokeWidth - from geometry
+     * @param {number} radius - from geometry
+     * @return {ol.style.Style} style
+     */
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius) {
+        return new Style({
+            fill: new Fill({
+                color: color
+            }),
+            stroke: new Stroke({
+                color: color,
+                width: strokeWidth
+            }),
+            image: new Circle({
+                radius: drawGeometryType === "Point" ? radius : 6,
+                fill: new Fill({
+                    color: color
+                })
+            })
+        });
+    },
+
+    /**
+     * resets the module to its initial state
+     * @return {void}
+     */
+    resetModule: function () {
+        const defaultColor = this.defaults.color;
+
+        defaultColor.pop();
+        defaultColor.push(this.defaults.opacity);
+
+        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
+        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+
+        this.setRadius(this.defaults.radius);
+        this.setOpacity(this.defaults.opacity);
+        this.setColor(defaultColor);
+        this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
+        this.setDrawInteraction(this.defaults.drawInteraction);
+        this.setSelectInteraction(this.defaults.selectInteraction);
+        this.setModifyInteraction(this.defaults.modifyInteraction);
     },
 
     /**
@@ -102,73 +211,6 @@ const DrawTool = Tool.extend({
         this.setModifyInteraction(new Modify({
             source: layer.getSource()
         }));
-    },
-
-    createDrawInteraction: function (drawType, layer) {
-        var that = this;
-
-        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-        this.setDrawInteraction(new Draw({
-            source: layer.getSource(),
-            type: drawType.geometry,
-            style: this.getStyle(drawType.text)
-        }));
-        this.get("drawInteraction").on("drawend", function (evt) {
-            evt.feature.set("styleId", _.uniqueId());
-            evt.feature.setStyle(that.getStyle(drawType.text));
-        }, this);
-        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
-    },
-
-    getStyle: function (arg) {
-        var color = [this.get("color")[0], this.get("color")[1], this.get("color")[2], this.get("color")[3]];
-
-        if (arg === "Text schreiben") {
-            return this.getTextStyle(this.get("color"));
-        }
-        return this.getDrawStyle(color, this.get("drawType").geometry);
-    },
-
-    /**
-     * Erstellt ein Feature Style für Punkte, Linien oder Flächen und gibt ihn zurück.
-     * @param {number} color -
-     * @param {string} type -
-     * @return {ol.style.Style} style
-     */
-    getDrawStyle: function (color, type) {
-        return new Style({
-            fill: new Fill({
-                color: color
-            }),
-            stroke: new Stroke({
-                color: color,
-                width: this.get("strokeWidth")
-            }),
-            image: new Circle({
-                radius: type === "Point" ? this.get("radius") : 6,
-                fill: new Fill({
-                    color: color
-                })
-            })
-        });
-    },
-
-    /**
-     * Erstellt ein Feature Style für Texte und gibt ihn zurück.
-     * @param {number} color -
-     * @return {ol.style.Style} style
-     */
-    getTextStyle: function (color) {
-        return new Style({
-            text: new Text({
-                textAlign: "left",
-                text: this.get("text"),
-                font: this.get("fontSize") + "px " + this.get("font"),
-                fill: new Fill({
-                    color: color
-                })
-            })
-        });
     },
 
     // Löscht alle Geometrien
