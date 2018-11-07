@@ -11,7 +11,7 @@ const DownloadView = Backbone.View.extend({
     initialize: function () {
         var channel = Radio.channel("download");
 
-        this.model = new DownloadModel();
+        // this.model = new DownloadModel();
         this.template = _.template(DownloadWin);
 
         this.listenTo(this.model, {
