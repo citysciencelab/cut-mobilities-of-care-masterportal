@@ -35,6 +35,16 @@ const TileSetLayer = Layer.extend({
             }
         });
 
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (mode === "3D") {
+                    this.setIsSelected(true);
+                }
+                else {
+                    this.setIsSelected(false);
+                }
+            }
+        });
         //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
         //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
         //  selectionIDX benötigen, um verschoben werden zu können

@@ -362,6 +362,7 @@ const Parser = Backbone.Model.extend({
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
                 model.parentId === "bezirke" ||
+                model.parentId === "3d_daten" ||
                 model.parentId === "ansichten";
         }));
     },
