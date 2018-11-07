@@ -1,8 +1,18 @@
+/**
+ * Module for drawing different geometries and text
+ * @exports module:modules.modules/tools/draw/model
+ */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
+    /**
+     * @class DrawTool
+     * @name module:modules.modules/tools/draw/model
+     * @constructor
+     * @augments Backbone.Model
+     */
     defaults: _.extend({}, Tool.prototype.defaults, {
         // ol.interaction.Draw
         drawInteraction: undefined,
@@ -28,8 +38,12 @@ const DrawTool = Tool.extend({
         glyphicon: "glyphicon-pencil"
     }),
 
+    /**
+     * create a DrawTool instance
+     * @return {void}
+     */
     initialize: function () {
-        var channel = Radio.channel("Draw");
+        const channel = Radio.channel("Draw");
 
         this.superInitialize();
         channel.reply({
@@ -37,42 +51,21 @@ const DrawTool = Tool.extend({
                 return this.get("layer");
             }
         }, this);
-
-        this.on("change:isActive", this.setStatus, this);
     },
 
-    setStatus: function (model, value) {
-        if (value) {
-            if (this.get("layer") === undefined) {
-                this.createLayer();
-            }
-            this.createDrawInteraction(this.get("drawType"), this.get("layer"));
+    /**
+     * @return {void}
+     */
+    setStatus: function () {
+        if (_.isUndefined(this.get("layer"))) {
+            this.createLayer();
         }
-        else {
-            this.resetModule();
-        }
+        this.createDrawInteraction(this.get("drawType"), this.get("layer"));
     },
-    resetModule: function () {
-        var defaultColor = this.defaults.color;
 
-        defaultColor.pop();
-        defaultColor.push(this.defaults.opacity);
-
-        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
-        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
-        this.setRadius(this.defaults.radius);
-        this.setOpacity(this.defaults.opacity);
-        this.setColor(defaultColor);
-        this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
-        this.setDrawInteraction(this.defaults.drawInteraction);
-        this.setSelectInteraction(this.defaults.selectInteraction);
-        this.setModifyInteraction(this.defaults.modifyInteraction);
-    },
     /**
      * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
      * because only one layer to be needed
-     * @param {boolean} value - is tool active
      * @returns {void}
      */
     createLayer: function () {
