@@ -1,5 +1,6 @@
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
+import DownloadModel from "../download/model";
 
 const DrawToolView = Backbone.View.extend({
     events: {
@@ -21,20 +22,22 @@ const DrawToolView = Backbone.View.extend({
         "click .trash": "toggleInteraction",
         "click .downloadDrawing": "downloadFeatures"
     },
+
     initialize: function () {
-        this.template = _.template(DrawTemplate);
-
-        new DownloadView();
-
         this.listenTo(this.model, {
             "change:isActive": this.render
         });
+
+        new DownloadView({model: DownloadModel});
+
         // Bestätige, dass das Modul geladen wurde
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
+
+    template: _.template(DrawTemplate),
+
     render: function (model, value) {
         if (value) {
-
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
             this.delegateEvents();
@@ -57,33 +60,33 @@ const DrawToolView = Backbone.View.extend({
 
         switch (element.options[element.selectedIndex].text) {
             case "Punkt zeichnen": {
-                this.$el.find(".text").toggle(false);
-                this.$el.find(".font-size").toggle(false);
-                this.$el.find(".font").toggle(false);
-                this.$el.find(".radius").toggle(true);
-                this.$el.find(".stroke-width").toggle(false);
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").show();
+                this.$el.find(".stroke-width").hide();
                 break;
             }
             case "Text schreiben": {
-                this.$el.find(".text").toggle(true);
-                this.$el.find(".font-size").toggle(true);
-                this.$el.find(".font").toggle(true);
-                this.$el.find(".radius").toggle(false);
-                this.$el.find(".stroke-width").toggle(false);
+                this.$el.find(".text").show();
+                this.$el.find(".font-size").show();
+                this.$el.find(".font").show();
+                this.$el.find(".radius").hide();
+                this.$el.find(".stroke-width").hide();
                 break;
             }
             default: {
-                this.$el.find(".text").toggle(false);
-                this.$el.find(".font-size").toggle(false);
-                this.$el.find(".font").toggle(false);
-                this.$el.find(".radius").toggle(false);
-                this.$el.find(".stroke-width").toggle(true);
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").hide();
+                this.$el.find(".stroke-width").show();
                 break;
             }
         }
     },
     registerListener: function () {
-        $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
+        this.$("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
     },
     unregisterListener: function () {
