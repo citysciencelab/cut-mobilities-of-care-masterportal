@@ -46,6 +46,7 @@ const DrawToolView = Backbone.View.extend({
             this.registerListener();
         }
         else {
+            this.model.resetModule();
             $("#map").removeClass("no-cursor");
             $("#map").removeClass("cursor-crosshair");
             $("#cursorGlyph").remove();
@@ -87,7 +88,7 @@ const DrawToolView = Backbone.View.extend({
         }
     },
     registerListener: function () {
-        this.$("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
+        $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
     },
     unregisterListener: function () {
