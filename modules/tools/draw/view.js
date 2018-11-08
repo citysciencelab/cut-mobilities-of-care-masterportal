@@ -44,7 +44,7 @@ const DrawToolView = Backbone.View.extend({
             "change:isActive": this.render
         });
 
-        new DownloadView({model: DownloadModel});
+        new DownloadView({model: new DownloadModel()});
 
         // Bestätige, dass das Modul geladen wurde
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
