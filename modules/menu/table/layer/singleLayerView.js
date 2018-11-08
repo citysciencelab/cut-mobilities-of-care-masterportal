@@ -47,6 +47,7 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".layer-settings").slideUp("slow", function () {
                 $(this).remove();
             });
+            this.$el.removeClass("layer-settings-activated");
         }
         else {
             this.$el.addClass("layer-settings-activated");
