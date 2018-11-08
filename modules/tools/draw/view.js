@@ -1,8 +1,19 @@
+/**
+ * Module for drawing different geometries and text
+ * @exports module:lgv.lgv/modules/tools/draw/view
+ * @module lgv/modules/tools/draw/view
+ */
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
 import DownloadModel from "../download/model";
 
 const DrawToolView = Backbone.View.extend({
+    /**
+     * @class DrawTool
+     * @name module:lgv.lgv/modules/tools/draw/view
+     * @constructor
+     * @augments Backbone.Model
+     */
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
@@ -23,6 +34,11 @@ const DrawToolView = Backbone.View.extend({
         "click .downloadDrawing": "downloadFeatures"
     },
 
+    /**
+     * initialize the drawTool
+     * that would be called by creates this tool
+     * @return {void}
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render
@@ -36,6 +52,12 @@ const DrawToolView = Backbone.View.extend({
 
     template: _.template(DrawTemplate),
 
+    /**
+     * render the tool draw
+     * @param {Backbone.model} model - draw model
+     * @param {boolean} isActive - from tool
+     * @return {Backbone.View} DrawView
+     */
     render: function (model, isActive) {
         if (isActive) {
             this.model.startDrawInteraction();
@@ -109,6 +131,10 @@ const DrawToolView = Backbone.View.extend({
         this.renderForm();
     },
 
+    /**
+     * starts the interaction with a new drawing and the map
+     * @returns {void}
+     */
     startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
@@ -142,8 +168,9 @@ const DrawToolView = Backbone.View.extend({
     toggleInteraction: function (evt) {
         this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
-        this.model.toggleInteraction($(evt.target));
+        this.model.toggleInteraction($(evt.target).attr("class"));
     },
+
     unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
@@ -154,22 +181,47 @@ const DrawToolView = Backbone.View.extend({
         this.model.deleteFeatures();
     },
 
+    /**
+     * starts the download of the drawn features
+     * @return {void}
+     */
     downloadFeatures: function () {
         this.model.downloadFeatures();
     },
 
+    /**
+     * setter for font on the model
+     * @param {event} evt - with new font
+     * @return {void}
+     */
     setFont: function (evt) {
         this.model.setFont(evt.target.value);
     },
 
+    /**
+     * setter for text on the model
+     * @param {event} evt - with new text
+     * @return {void}
+     */
     setText: function (evt) {
         this.model.setText(evt.target.value);
     },
 
+    /**
+     * setter for fontSize on the model
+     * @param {event} evt - with new fontSize
+     * @return {void}
+     */
     setFontSize: function (evt) {
         this.model.setFontSize(evt.target.value);
     },
 
+    /**
+     * setter for new color on the model
+     * and adds the opacity before
+     * @param {event} evt - with new color
+     * @return {void}
+     */
     setColor: function (evt) {
         var colors = evt.target.value.split(","),
             newColor = [];
@@ -181,19 +233,35 @@ const DrawToolView = Backbone.View.extend({
         this.model.setColor(newColor);
     },
 
+    /**
+     * setter for radius on the model
+     * @param {event} evt - with new radius
+     * @return {void}
+     */
     setRadius: function (evt) {
         this.model.setRadius(evt.target.value);
     },
 
+    /**
+     * setter for strokeWidth on the model
+     * @param {event} evt - with new strokeWidth
+     * @return {void}
+     */
     setStrokeWidth: function (evt) {
         this.model.setStrokeWidth(evt.target.value);
     },
 
+    /**
+     * setter for opacity on the model
+     * and also sets the color new on the model
+     * @param {event} evt - with new opacity
+     * @return {void}
+     */
     setOpacity: function (evt) {
-        var newColor = this.model.get("color");
+        var newcolor = this.model.get("color");
 
-        newColor[3] = parseFloat(evt.target.value);
-        this.model.setColor(newColor);
+        newcolor[3] = parseFloat(evt.target.value);
+        this.model.setColor(newcolor);
         this.model.setOpacity(parseFloat(evt.target.value));
     }
 });

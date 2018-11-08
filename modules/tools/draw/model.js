@@ -1,6 +1,7 @@
 /**
  * Module for drawing different geometries and text
- * @exports module:modules.modules/tools/draw/model
+ * @exports module:lgv.lgv/modules/tools/draw/model
+ * @module lgv/modules/tools/draw/model
  */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
@@ -9,18 +10,14 @@ import Tool from "../../core/modelList/tool/model";
 const DrawTool = Tool.extend({
     /**
      * @class DrawTool
-     * @name module:modules.modules/tools/draw/model
+     * @name module:lgv.lgv/modules/tools/draw/model
      * @constructor
      * @augments Backbone.Model
      */
     defaults: _.extend({}, Tool.prototype.defaults, {
-        // ol.interaction.Draw
         drawInteraction: undefined,
-        // ol.interaction.Select for the deleted features
         selectInteraction: undefined,
-        // ol.interaction.Modify
         modifyInteraction: undefined,
-        // destination layer for the drawn features
         layer: undefined,
         font: "Arial",
         fontSize: 10,
@@ -73,10 +70,11 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
+     * creates a vector layer for drawn features, if layer input is undefined
+     * and removes this callback from the change:isCurrentWin event
      * because only one layer to be needed
-     * @param {ol.VectorLayer} layer - could be undefined
-     * @return {ol.VectorLayer} vectorLayer
+     * @param {ol/layer/Vector} layer - could be undefined
+     * @return {ol/layer/Vector} vectorLayer
      */
     createLayer: function (layer) {
         var vectorLayer = layer;
@@ -91,9 +89,9 @@ const DrawTool = Tool.extend({
     /**
      * creates the draw to draw in the map
      * @param {object} drawType - contains the geometry and description
-     * @param {ol.VectorLayer} layer - layer to draw
+     * @param {ol/layer/Vector} layer - layer to draw
      * @param {array} color - of geometries
-     * @return {ol.Draw} draw
+     * @return {ol/interaction/Draw} draw
      */
     createDrawInteraction: function (drawType, layer, color) {
         return new Draw({
@@ -117,7 +115,7 @@ const DrawTool = Tool.extend({
     /**
      * @param {object} drawType - contains the geometry and description
      * @param {array} color - of drawings
-     * @return {ol.style.Style} style
+     * @return {ol/style/Style} style
      */
     getStyle: function (drawType, color) {
         var style = new Style();
@@ -138,7 +136,7 @@ const DrawTool = Tool.extend({
      * @param {string} text - of drawings
      * @param {number} fontSize - of drawings
      * @param {string} font - of drawings
-     * @return {ol.style.Style} style
+     * @return {ol/style/Style} style
      */
     getTextStyle: function (color, text, fontSize, font) {
         return new Style({
@@ -159,7 +157,7 @@ const DrawTool = Tool.extend({
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
      * @param {number} radius - from geometry
-     * @return {ol.style.Style} style
+     * @return {ol/style/Style} style
      */
     getDrawStyle: function (color, drawGeometryType, strokeWidth, radius) {
         return new Style({
@@ -204,7 +202,7 @@ const DrawTool = Tool.extend({
 
     /**
      * creates and sets a interaction for selecting vector features
-     * @param {ol.layer.Vector} layer - for the selected(deleted) features
+     * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @returns {void}
      */
     createSelectInteraction: function (layer) {
@@ -223,7 +221,7 @@ const DrawTool = Tool.extend({
 
     /**
      * creates and sets a interaction for modify vector features
-     * @param {ol.layer.Vector} layer - for the selected(deleted) features
+     * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @returns {void}
      */
     createModifyInteraction: function (layer) {
@@ -232,64 +230,99 @@ const DrawTool = Tool.extend({
         }));
     },
 
-    // Löscht alle Geometrien
+    /**
+     * Löscht alle Geometrien
+     * @return {void}
+     */
     deleteFeatures: function () {
         this.get("layer").getSource().clear();
     },
 
-    toggleInteraction: function (value) {
-        var mode;
-
-        if (value.attr("class").indexOf("modify") !== -1) {
-            mode = "modify";
-        }
-        else if (value.attr("class").indexOf("trash") !== -1) {
-            mode = "select";
-        }
-        else if (value.attr("class").indexOf("draw") !== -1) {
-            mode = "draw";
-        }
-
-        if (mode === "modify") {
+    /**
+     * toggle between modify, trash and draw modes
+     * @param {string} mode - from active button
+     * @return {void}
+     */
+    toggleInteraction: function (mode) {
+        if (mode.indexOf("modify") !== -1) {
             this.deactivateDrawInteraction();
             this.activateModifyInteraction();
         }
-        else if (mode === "select") {
+        else if (mode.indexOf("trash") !== -1) {
             this.deactivateDrawInteraction();
             this.deactivateModifyInteraction();
             this.activateSelectInteraction();
         }
-        else if (mode === "draw") {
+        else if (mode.indexOf("draw") !== -1) {
             this.deactivateModifyInteraction();
             this.deactivateSelectInteraction();
             this.activateDrawInteraction();
         }
     },
-    deactivateDrawInteraction: function () {
-        this.get("drawInteraction").setActive(false);
-    },
+
+    /**
+     * activate draw interaction
+     * @return {void}
+     */
     activateDrawInteraction: function () {
         this.get("drawInteraction").setActive(true);
     },
-    activateModifyInteraction: function () {
-        Radio.trigger("Map", "addInteraction", this.get("modifyInteraction"));
-        this.setGlyphToCursor("glyphicon glyphicon-wrench");
-    },
-    deactivateModifyInteraction: function () {
-        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
-        this.setGlyphToCursor("glyphicon glyphicon-pencil");
-    },
-    activateSelectInteraction: function () {
-        Radio.trigger("Map", "addInteraction", this.get("selectInteraction"));
-        this.setGlyphToCursor("glyphicon glyphicon-trash");
-    },
-    deactivateSelectInteraction: function () {
-        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
-        this.setGlyphToCursor("glyphicon glyphicon-pencil");
+
+    /**
+     * deactivates draw interaction
+     * @return {void}
+     */
+    deactivateDrawInteraction: function () {
+        this.get("drawInteraction").setActive(false);
     },
 
-    // Erstellt ein HTML-Element, legt dort das Glyphicon rein und klebt es an den Cursor
-    setGlyphToCursor: function (glyphicon) {
+    /**
+     * activate modify interaction
+     * and change glyphicon to wrench
+     * @return {void}
+     */
+    activateModifyInteraction: function () {
+        Radio.trigger("Map", "addInteraction", this.get("modifyInteraction"));
+        this.putGlyphToCursor("glyphicon glyphicon-wrench");
+    },
+
+    /**
+     * deactivate modify interaction
+     * and change glyphicon to pencil
+     * @return {void}
+     */
+    deactivateModifyInteraction: function () {
+        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+        this.putGlyphToCursor("glyphicon glyphicon-pencil");
+    },
+
+    /**
+     * activate selct interaction
+     * and change glyphicon to trash
+     * @return {void}
+     */
+    activateSelectInteraction: function () {
+        Radio.trigger("Map", "addInteraction", this.get("selectInteraction"));
+        this.putGlyphToCursor("glyphicon glyphicon-trash");
+    },
+
+    /**
+     * deactivate selct interaction
+     * and change glyphicon to pencil
+     * @return {void}
+     */
+    deactivateSelectInteraction: function () {
+        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
+        this.putGlyphToCursor("glyphicon glyphicon-pencil");
+    },
+
+    /**
+     * Creates an HTML element,
+     * puts the glyph icon there and sticks it to the cursor
+     * @param {string} glyphicon - of the mouse
+     * @return {void}
+     */
+    putGlyphToCursor: function (glyphicon) {
         if (glyphicon.indexOf("trash") !== -1) {
             $("#map").removeClass("no-cursor");
             $("#map").addClass("cursor-crosshair");
@@ -298,12 +331,13 @@ const DrawTool = Tool.extend({
             $("#map").removeClass("cursor-crosshair");
             $("#map").addClass("no-cursor");
         }
+
         $("#cursorGlyph").removeClass();
         $("#cursorGlyph").addClass(glyphicon);
     },
 
     /**
-     * Startet das Downloadmodul
+     * Starts the download module
      * @returns {void}
      */
     downloadFeatures: function () {
@@ -318,51 +352,111 @@ const DrawTool = Tool.extend({
             }});
     },
 
+    /**
+     * setter for drawType
+     * @param {string} value1 - geometry
+     * @param {string} value2 - text
+     * @return {void}
+     */
     setDrawType: function (value1, value2) {
         this.set("drawType", {geometry: value1, text: value2});
     },
 
+    /**
+     * setter for font
+     * @param {string} value - font
+     * @return {void}
+     */
     setFont: function (value) {
         this.set("font", value);
     },
 
-
+    /**
+     * setter for fontSize
+     * @param {number} value - fontSize
+     * @return {void}
+     */
     setFontSize: function (value) {
         this.set("fontSize", value);
     },
 
+    /**
+     * setter for color
+     * @param {array} value - color
+     * @return {void}
+     */
     setColor: function (value) {
         this.set("color", value);
     },
 
+    /**
+     * setter for opacity
+     * @param {number} value - opacity
+     * @return {void}
+     */
     setOpacity: function (value) {
         this.set("opacity", value);
     },
 
+    /**
+     * setter for text
+     * @param {string} value - text
+     * @return {void}
+     */
     setText: function (value) {
         this.set("text", value);
     },
 
+    /**
+     * setter for radius
+     * @param {number} value - radius
+     * @return {void}
+     */
     setRadius: function (value) {
         this.set("radius", parseInt(value, 10));
     },
 
+    /**
+     * setter for strokeWidth
+     * @param {number} value - strokeWidth
+     * @return {void}
+     */
     setStrokeWidth: function (value) {
         this.set("strokeWidth", parseInt(value, 10));
     },
 
-    setSelectInteraction: function (value) {
-        this.set("selectInteraction", value);
-    },
-
+    /**
+     * setter for layer
+     * @param {ol/layer/Vector} value - layer
+     * @return {void}
+     */
     setLayer: function (value) {
         this.set("layer", value);
     },
 
+    /**
+     * setter for selectInteraction
+     * @param {ol/interaction/select} value - selectInteraction
+     * @return {void}
+     */
+    setSelectInteraction: function (value) {
+        this.set("selectInteraction", value);
+    },
+
+    /**
+     * setter for drawInteraction
+     * @param {ol/interaction/Draw} value - drawInteraction
+     * @return {void}
+     */
     setDrawInteraction: function (value) {
         this.set("drawInteraction", value);
     },
 
+    /**
+     * setter for modifyInteraction
+     * @param {ol/interaction/modify} value - modifyInteraction
+     * @return {void}
+     */
     setModifyInteraction: function (value) {
         this.set("modifyInteraction", value);
     }
