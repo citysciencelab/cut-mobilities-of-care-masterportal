@@ -201,22 +201,41 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * creates and sets a interaction for selecting vector features
+     * creates and sets an interaction for selecting vector features
      * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @returns {void}
      */
+    startSelectInteraction: function (layer) {
+        var selectInteraction = this.createSelectInteraction(layer);
+
+        this.craeteSelectInteractionListener(selectInteraction, layer);
+        this.setSelectInteraction(selectInteraction);
+    },
+
+    /**
+     * creates an interaction for selecting vector features
+     * @param {ol/layer/Vector} layer - for the selected(deleted) features
+     * @return {ol/interaction/Select} selectInteraction
+     */
     createSelectInteraction: function (layer) {
-        var selectInteraction = new Select({
+        return new Select({
             layers: [layer]
         });
+    },
 
+    /**
+     * craete an listener for select interaction
+     * @param {ol/interaction/Select} selectInteraction - selectInteraction
+     * @param {ol/layer/Vector} layer - for the selected(deleted) features
+     * @return {void}
+     */
+    craeteSelectInteractionListener: function (selectInteraction, layer) {
         selectInteraction.on("select", function (evt) {
             // remove feature from source
             layer.getSource().removeFeature(evt.selected[0]);
             // remove feature from interaction
             this.getFeatures().clear();
         });
-        this.setSelectInteraction(selectInteraction);
     },
 
     /**

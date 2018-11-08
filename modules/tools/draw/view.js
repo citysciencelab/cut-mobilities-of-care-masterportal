@@ -29,7 +29,7 @@ const DrawToolView = Backbone.View.extend({
         "click .draw": "toggleInteraction",
         "click .modify.once": "createModifyInteraction",
         "click .modify": "toggleInteraction",
-        "click .trash.once": "createSelectInteraction",
+        "click .trash.once": "startSelectInteraction",
         "click .trash": "toggleInteraction",
         "click .downloadDrawing": "startDownloadTool"
     },
@@ -199,13 +199,13 @@ const DrawToolView = Backbone.View.extend({
 
     /**
      * removes the class 'once' from target and
-     * calls createSelectInteraction in the model
+     * calls startSelectInteraction in the model
      * @param {MouseEvent} evt -
      * @returns {void}
      */
-    createSelectInteraction: function (evt) {
+    startSelectInteraction: function (evt) {
         $(evt.target).removeClass("once");
-        this.model.createSelectInteraction(this.model.get("layer"));
+        this.model.startSelectInteraction(this.model.get("layer"));
     },
 
     /**

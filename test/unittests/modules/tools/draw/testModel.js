@@ -146,5 +146,50 @@ describe("drawModel", function () {
 
             expect(result.getStroke().getWidth()).to.equal(strokeWidth);
         });
+
+        describe("resetModule", function () {
+            it("should radius is equal default radius", function () {
+                model.setRadius(10000);
+                model.resetModule();
+
+                expect(model.get("radius")).is.equal(model.defaults.radius);
+            });
+            it("should opacity is equal default opacity", function () {
+                model.setOpacity(0.5);
+                model.resetModule();
+
+                expect(model.get("opacity")).is.equal(model.defaults.opacity);
+            });
+            it("should color is equal default color", function () {
+                model.setColor([111, 112, 113, 0.4]);
+                model.resetModule();
+
+                expect(model.get("color")).is.equal(model.defaults.color);
+            });
+            it("should drawType is equal default drawType", function () {
+                model.setDrawType("xy");
+                model.resetModule();
+
+                expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
+            });
+            it("should drawInteraction is equal default drawInteraction", function () {
+                model.setDrawInteraction("xy");
+                model.resetModule();
+
+                expect(model.get("drawInteraction")).is.equal(model.defaults.drawInteraction);
+            });
+            it("should selectInteraction is equal default selectInteraction", function () {
+                model.setSelectInteraction("xy");
+                model.resetModule();
+
+                expect(model.get("selectInteraction")).is.equal(model.defaults.selectInteraction);
+            });
+            it("should modifyInteraction is equal default modifyInteraction", function () {
+                model.setModifyInteraction("xy");
+                model.resetModule();
+
+                expect(model.get("modifyInteraction")).is.equal(model.defaults.modifyInteraction);
+            });
+        });
     });
 });
