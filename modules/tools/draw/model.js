@@ -57,16 +57,16 @@ const DrawTool = Tool.extend({
      */
     startDrawInteraction: function () {
         var layer = this.createLayer(this.get("layer")),
-            drawInteraction;
+            drawInteraction = this.get("drawInteraction");
 
-        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        Radio.trigger("Map", "removeInteraction", drawInteraction);
         drawInteraction = this.createDrawInteraction(this.get("drawType"), layer, this.get("color"));
 
         this.setLayer(layer);
         this.setDrawInteraction(drawInteraction);
 
-        this.createDrawInteractionListener();
-        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
+        this.createDrawInteractionListener(drawInteraction);
+        Radio.trigger("Map", "addInteraction", drawInteraction);
     },
 
     /**
@@ -103,10 +103,11 @@ const DrawTool = Tool.extend({
 
     /**
      * lister to change the entries for the next drawing
+     * @param {ol/interaction/Draw} drawInteraction - drawInteraction
      * @return {void}
      */
-    createDrawInteractionListener: function () {
-        this.get("drawInteraction").on("drawend", function (evt) {
+    createDrawInteractionListener: function (drawInteraction) {
+        drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
             evt.feature.setStyle(this.getStyle(this.get("drawType"), this.get("color")));
         }.bind(this));
