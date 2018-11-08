@@ -55,11 +55,11 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * sets the status of the Drawtool
+     * starts the interaction to draw
      * @return {void}
      */
-    setStatus: function () {
-        const layer = !_.isUndefined(this.get("layer")) ? this.get("layer") : this.createLayer();
+    startDrawInteraction: function () {
+        const layer = this.createLayer(this.get("layer"));
 
         this.setLayer(layer);
         this.createDrawInteraction(this.get("drawType"), layer);
@@ -68,10 +68,17 @@ const DrawTool = Tool.extend({
     /**
      * creates a vector layer for drawn features and removes this callback from the change:isCurrentWin event
      * because only one layer to be needed
-     * @returns {ol.VectorLayer} layer
+     * @param {ol.VectorLayer} layer - could be undefined
+     * @return {ol.VectorLayer} vectorLayer
      */
-    createLayer: function () {
-        return Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+    createLayer: function (layer) {
+        let vectorLayer = layer;
+
+        if (_.isUndefined(vectorLayer)) {
+            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+        }
+
+        return vectorLayer;
     },
 
     /**
@@ -81,16 +88,23 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     createDrawInteraction: function (drawType, layer) {
+        const color = this.get("color");
+
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.setDrawInteraction(new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
-            style: this.getStyle(drawType.text)
+            style: this.getStyle(drawType, color)
         }));
 
+        this.createDrawInteractionListener(drawType, color);
+        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
+    },
+
+    createDrawInteractionListener: function (drawType, color) {
         this.get("drawInteraction").on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
-            evt.feature.setStyle(this.getStyle(drawType, this.get("color")));
+            evt.feature.setStyle(this.getStyle(drawType, color));
         }.bind(this));
         Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
     },
@@ -339,9 +353,11 @@ const DrawTool = Tool.extend({
     setLayer: function (value) {
         this.set("layer", value);
     },
+
     setDrawInteraction: function (value) {
         this.set("drawInteraction", value);
     },
+
     setModifyInteraction: function (value) {
         this.set("modifyInteraction", value);
     }
