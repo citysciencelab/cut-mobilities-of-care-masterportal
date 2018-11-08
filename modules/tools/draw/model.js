@@ -55,14 +55,21 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * starts the interaction to draw
+     * creates the interaction with a new drawing and the map
      * @return {void}
      */
     startDrawInteraction: function () {
-        const layer = this.createLayer(this.get("layer"));
+        var layer = this.createLayer(this.get("layer")),
+            drawInteraction;
+
+        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        drawInteraction = this.createDrawInteraction(this.get("drawType"), layer, this.get("color"));
 
         this.setLayer(layer);
-        this.createDrawInteraction(this.get("drawType"), layer);
+        this.setDrawInteraction(drawInteraction);
+
+        this.createDrawInteractionListener();
+        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
     },
 
     /**
@@ -72,7 +79,7 @@ const DrawTool = Tool.extend({
      * @return {ol.VectorLayer} vectorLayer
      */
     createLayer: function (layer) {
-        let vectorLayer = layer;
+        var vectorLayer = layer;
 
         if (_.isUndefined(vectorLayer)) {
             vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
@@ -82,31 +89,29 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * creates the interaction with a new drawing and the map
+     * creates the draw to draw in the map
      * @param {object} drawType - contains the geometry and description
      * @param {ol.VectorLayer} layer - layer to draw
-     * @return {void}
+     * @param {array} color - of geometries
+     * @return {ol.Draw} draw
      */
-    createDrawInteraction: function (drawType, layer) {
-        const color = this.get("color");
-
-        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-        this.setDrawInteraction(new Draw({
+    createDrawInteraction: function (drawType, layer, color) {
+        return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
             style: this.getStyle(drawType, color)
-        }));
-
-        this.createDrawInteractionListener(drawType, color);
-        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
+        });
     },
 
-    createDrawInteractionListener: function (drawType, color) {
+    /**
+     * lister to change the entries for the next drawing
+     * @return {void}
+     */
+    createDrawInteractionListener: function () {
         this.get("drawInteraction").on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
-            evt.feature.setStyle(this.getStyle(drawType, color));
+            evt.feature.setStyle(this.getStyle(this.get("drawType"), this.get("color")));
         }.bind(this));
-        Radio.trigger("Map", "addInteraction", this.get("drawInteraction"));
     },
 
     /**
@@ -115,12 +120,12 @@ const DrawTool = Tool.extend({
      * @return {ol.style.Style} style
      */
     getStyle: function (drawType, color) {
-        let style;
+        var style = new Style();
 
-        if (drawType.text === "Text schreiben") {
+        if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, this.get("text"), this.get("fontSize"), this.get("font"));
         }
-        else {
+        else if (_.has(drawType, "geometry") && drawType.geometry) {
             style = this.getDrawStyle(color, drawType.geometry, this.get("strokeWidth"), this.get("radius"));
         }
 

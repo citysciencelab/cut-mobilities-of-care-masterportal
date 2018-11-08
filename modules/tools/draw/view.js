@@ -12,8 +12,8 @@ const DrawToolView = Backbone.View.extend({
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
         "change .color select": "setColor",
-        "change select": "createDrawInteraction",
-        "keyup input": "createDrawInteraction",
+        "change select": "startDrawInteraction",
+        "keyup input": "startDrawInteraction",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
         "click .modify.once": "createModifyInteraction",
@@ -109,12 +109,12 @@ const DrawToolView = Backbone.View.extend({
         this.renderForm();
     },
 
-    createDrawInteraction: function () {
+    startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
         this.model.deactivateDrawInteraction();
         this.model.deactivateModifyInteraction();
-        this.model.createDrawInteraction(this.model.get("drawType"), this.model.get("layer"));
+        this.model.startDrawInteraction();
     },
 
     /**
