@@ -2,6 +2,8 @@ import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import VectorSource from "ol/source/Vector";
+import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
 import { Layer } from "ol/layer";
 
@@ -10,6 +12,14 @@ describe("drawModel", function () {
 
     before(function () {
         model = new Model();
+    });
+
+    describe("startDrawInteraction", function () {
+        it("should be an instance of Draw for empty input", function () {
+            model.startDrawInteraction();
+
+            expect(model.get("drawInteraction") instanceof Draw).to.be.true;
+        });
     });
 
     describe("createLayer", function () {
@@ -189,6 +199,37 @@ describe("drawModel", function () {
                 model.resetModule();
 
                 expect(model.get("modifyInteraction")).is.equal(model.defaults.modifyInteraction);
+            });
+        });
+
+        describe("startSelectInteraction", function () {
+            it("should be an instance of Select for empty input", function () {
+                model.startSelectInteraction(new VectorLayer());
+
+                expect(model.get("selectInteraction") instanceof Select).to.be.true;
+            });
+        });
+
+        describe("createSelectInteraction", function () {
+            it("the result should be an instance of Select for empty input", function () {
+                expect(model.createSelectInteraction(new VectorLayer()) instanceof Select).to.be.true;
+            });
+        });
+
+        describe("createModifyInteraction", function () {
+            it("should be an instance of Modify for empty input", function () {
+                model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
+
+                expect(model.get("modifyInteraction") instanceof Modify).to.be.true;
+            });
+        });
+
+        describe("deleteFeatures", function () {
+            it("should empty the layerSource", function () {
+                model.get("layer").getSource().getFeatures().push(new Feature());
+                model.deleteFeatures();
+
+                expect(model.get("layer").getSource().getFeatures()).is.empty;
             });
         });
     });
