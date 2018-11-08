@@ -1,11 +1,10 @@
 import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Select, Modify, Draw} from "ol/interaction.js";
-import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import {Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
-import { Layer } from "ol/layer";
 
 describe("drawModel", function () {
     var model;
