@@ -60,26 +60,47 @@ const DrawToolView = Backbone.View.extend({
      */
     render: function (model, isActive) {
         if (isActive) {
-            this.model.startDrawInteraction();
-            this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(this.template(model.toJSON()));
-            this.delegateEvents();
-            this.renderForm();
-            this.registerListener();
+            this.renderSurface(model);
         }
         else {
-            this.model.resetModule();
-            $("#map").removeClass("no-cursor");
-            $("#map").removeClass("cursor-crosshair");
-            $("#cursorGlyph").remove();
-            $("#map").off("mousemove");
-            this.unregisterListener();
-            this.undelegateEvents();
+            this.removeSurface();
         }
         return this;
     },
 
-    renderForm: function () {
+    /**
+     * render this tool
+     * @param {Backbone.model} model - draw model
+     * @return {void}
+     */
+    renderSurface: function (model) {
+        this.model.startDrawInteraction();
+        this.setElement(document.getElementsByClassName("win-body")[0]);
+        this.$el.html(this.template(model.toJSON()));
+        this.delegateEvents();
+        this.renewSurface();
+        this.registerListener();
+    },
+
+    /**
+     * clears the tool when it is closed
+     * @return {void}
+     */
+    removeSurface: function () {
+        this.model.resetModule();
+        $("#map").removeClass("no-cursor");
+        $("#map").removeClass("cursor-crosshair");
+        $("#cursorGlyph").remove();
+        $("#map").off("mousemove");
+        this.unregisterListener();
+        this.undelegateEvents();
+    },
+
+    /**
+     * renews the surface of the drawtool
+     * @return {void}
+     */
+    renewSurface: function () {
         var element = this.$el.find(".interaction")[0];
 
         switch (element.options[element.selectedIndex].text) {
@@ -109,26 +130,47 @@ const DrawToolView = Backbone.View.extend({
             }
         }
     },
+
+    /**
+     * register the listeners on the map
+     * @return {void}
+     */
     registerListener: function () {
         $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
     },
+
+    /**
+     * unregister the listeners from the map
+     * @return {void}
+     */
     unregisterListener: function () {
         Radio.trigger("Map", "unregisterListener", this.listener);
     },
-    renderGlyphicon: function (e) {
+
+    /**
+     * render the glyphicon on mouse
+     * @param {event} evt - MapBrwoserPointerEvent
+     * @return {void}
+     */
+    renderGlyphicon: function (evt) {
         var element = document.getElementById("cursorGlyph");
 
-        $(element).css("left", e.originalEvent.offsetX + 5);
-        $(element).css("top", e.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
+        $(element).css("left", evt.originalEvent.offsetX + 5);
+        $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
     },
 
+    /**
+     * set drawtype on model
+     * @param {event} evt - with selectedElement
+     * @return {void}
+     */
     setDrawType: function (evt) {
         var element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
         this.model.setDrawType(selectedElement.value, selectedElement.text);
-        this.renderForm();
+        this.renewSurface();
     },
 
     /**
@@ -165,18 +207,31 @@ const DrawToolView = Backbone.View.extend({
         this.model.createSelectInteraction(this.model.get("layer"));
     },
 
+    /**
+     * toggle the various interactions by event
+     * @param {event} evt - with the interactions
+     * @return {void}
+     */
     toggleInteraction: function (evt) {
         this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
         this.model.toggleInteraction($(evt.target).attr("class"));
     },
 
+    /**
+     * deselects all buttons
+     * @return {void}
+     */
     unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
         });
     },
 
+    /**
+     * deletes all geometries from the layer
+     * @return {void}
+     */
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },

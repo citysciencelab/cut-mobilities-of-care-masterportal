@@ -231,7 +231,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Löscht alle Geometrien
+     * deletes all geometries from the layer
      * @return {void}
      */
     deleteFeatures: function () {
