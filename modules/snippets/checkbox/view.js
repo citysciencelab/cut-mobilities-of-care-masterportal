@@ -1,5 +1,6 @@
 import Model from "./model";
 import Template from "text-loader!./template.html";
+import TemplateClassic from "text-loader!./templateClassic.html";
 import "bootstrap-toggle";
 
 const CheckboxSnippetView = Backbone.View.extend({
@@ -16,20 +17,35 @@ const CheckboxSnippetView = Backbone.View.extend({
     },
     className: "checkbox-container",
     template: _.template(Template),
+    templateClassic: _.template(TemplateClassic),
+
     render: function () {
         var attr = this.model.toJSON();
 
+        if (attr.snippetType === "checkbox-classic") {
+            this.$el.html(this.templateClassic(attr));
+            this.initClassicCheckbox();
+            this.delegateEvents();
+            return this.$el;
+        }
+        else {
         this.$el.html(this.template(attr));
         this.initCheckbox();
         this.delegateEvents();
         return this;
+        }
     },
 
-    /**
-     * inits the Checkbox
-     */
     initCheckbox: function () {
         this.$el.find("input").bootstrapToggle({
+            on: this.model.get("textOn"),
+            off: this.model.get("textOff"),
+            size: this.model.get("size")
+        });
+    },
+
+    initClassicCheckbox: function () {
+        this.$el.find("input").checkbox({
             on: this.model.get("textOn"),
             off: this.model.get("textOff"),
             size: this.model.get("size")

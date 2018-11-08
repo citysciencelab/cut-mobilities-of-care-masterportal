@@ -113,6 +113,18 @@ const QueryModel = Backbone.Model.extend({
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
             this.get("snippetCollection").add(new SnippetSliderModel(snippetAttribute));
         }
+        else if (snippetAttribute.type === "category") {
+            snippetAttribute.values.forEach(function (value) {
+
+                this.getSnippetCollection().add(new SnippetCheckboxModel({
+                    snippetType: "checkbox-classic",
+                    isSelected: true,
+                    name: featureAttribute.name,
+                    label: value,
+                    type: "category"
+                }));
+            }, this);
+        }
     },
 
     /**

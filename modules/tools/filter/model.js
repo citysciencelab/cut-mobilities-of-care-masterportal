@@ -212,11 +212,16 @@ const FilterModel = Tool.extend({
     },
 
     createQueries: function (queries) {
-        var queryObjects = Radio.request("ParametricURL", "getFilter");
+        var queryObjects,
+            queryObject,
+            oneQuery;
+
+        if (this.get("setParametricURL") === true) {
+            queryObjects = Radio.request("ParametricURL", "getFilter");
+        }
 
         _.each(queries, function (query) {
-            var queryObject,
-                oneQuery = query;
+            oneQuery = query;
 
             if (!_.isUndefined(queryObjects)) {
                 queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
