@@ -37,7 +37,6 @@ const DownloadView = Backbone.View.extend({
                 feature.setGeometry(fromCircle(feature.getGeometry()));
             }
         });
-console.log(this.model);
 
         this.model.setData(features.data);
         this.model.setFormats(features.formats);
