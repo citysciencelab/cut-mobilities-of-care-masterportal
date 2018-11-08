@@ -27,7 +27,7 @@ const DefaultTreeParser = Parser.extend({
                 return false;
             }
 
-            return element.datasets.length > 0 && _.contains(["WMS", "Terrain", "TileSet", "Oblique"], element.typ);
+            return element.datasets.length > 0 && _.contains(["WMS", "Terrain3D", "TileSet3D", "Oblique"], element.typ);
         });
     },
 
@@ -83,7 +83,9 @@ const DefaultTreeParser = Parser.extend({
         var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
             // Unterscheidung nach Overlay und Baselayer
             typeGroup = _.groupBy(layerList, function (layer) {
-                if (layer.typ === "Terrain" || layer.typ === "TileSet") {
+                console.info(layer.typ);
+                if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D") {
+                    console.info(465);
                     return "layer3d";
                 }
                 else if (layer.typ === "Oblique") {

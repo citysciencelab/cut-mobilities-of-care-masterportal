@@ -127,10 +127,10 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.typ === "Heatmap") {
                 return new HeatmapLayer(attrs, options);
             }
-            else if (attrs.typ === "Terrain") {
+            else if (attrs.typ === "Terrain3D") {
                 return new TerrainLayer(attrs, options);
             }
-            else if (attrs.typ === "TileSet") {
+            else if (attrs.typ === "TileSet3D") {
                 return new TileSetLayer(attrs, options);
             }
             else if (attrs.typ === "Oblique") {
