@@ -31,12 +31,13 @@ const DrawToolView = Backbone.View.extend({
         "click .modify": "toggleInteraction",
         "click .trash.once": "createSelectInteraction",
         "click .trash": "toggleInteraction",
-        "click .downloadDrawing": "downloadFeatures"
+        "click .downloadDrawing": "startDownloadTool"
     },
 
     /**
      * initialize the drawTool
      * that would be called by creates this tool
+     * craete an instance from download tool
      * @return {void}
      */
     initialize: function () {
@@ -44,7 +45,7 @@ const DrawToolView = Backbone.View.extend({
             "change:isActive": this.render
         });
 
-        new DownloadView({model: new DownloadModel()});
+        this.model.setDownloadView(new DownloadView({model: new DownloadModel()}));
 
         // Bestätige, dass das Modul geladen wurde
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
@@ -240,8 +241,8 @@ const DrawToolView = Backbone.View.extend({
      * starts the download of the drawn features
      * @return {void}
      */
-    downloadFeatures: function () {
-        this.model.downloadFeatures();
+    startDownloadTool: function () {
+        this.model.startDownloadTool();
     },
 
     /**
