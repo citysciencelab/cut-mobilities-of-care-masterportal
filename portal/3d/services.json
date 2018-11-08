@@ -281,7 +281,7 @@
       "id": "buildingslgv",
             "name": "Gebäude LoD2 LGV",
             "url": "https://geoportal-hamburg.de/gdi3d/datasource-data/LoD2",
-            "typ": "TileSet",
+            "typ": "TileSet3D",
             "cesium3DTilesetOptions": {
                 "maximumScreenSpaceError": 6
             },
@@ -308,7 +308,7 @@
           "id": "terrainlgv",
           "name": "Gelände LGV",
           "url": "https://geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
-          "typ": "Terrain",
+          "typ": "Terrain3D",
           "layerAttribution": "nicht vorhanden",
           "legendURL": "ignore",
           "cesiumTerrainProviderOptions": {

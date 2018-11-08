@@ -402,12 +402,12 @@
           "visibility": true
         },
         {
-          "id": "terrain",
+          "id": "12883",
           "name": "Gelände",
           "visibility": true
         },
         {
-          "id": "buildings",
+          "id": "12884",
           "name": "Gebäude LoD2",
           "visibility": true
         }
