@@ -10,9 +10,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            text: "text-loader",
-            // Cesium module name
-            cesium: path.resolve(__dirname, "../node_modules/cesium/Source")
+            text: "text-loader"
         }
     },
     module: {
