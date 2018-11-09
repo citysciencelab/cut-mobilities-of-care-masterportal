@@ -103,7 +103,7 @@ const TileSetLayer = Layer.extend({
             if (this.has("cesium3DTilesetOptions")) {
                 _.extend(options, this.get("cesium3DTilesetOptions"));
             }
-            options.url = this.get("url");
+            options.url = this.get("url") + "/tileset.json";
             this.setTileSet(new Cesium.Cesium3DTileset(options));
         }
     },

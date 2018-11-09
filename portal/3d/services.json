@@ -228,7 +228,7 @@
         "id": "terrain",
         "name": "Terrain",
         "url": "https://d35ei6ur3bjvr1.cloudfront.net/hamburg/e314ae1a-2030-4c90-b886-b2cbca298395",
-        "typ": "Terrain",
+        "typ": "Terrain3D",
         "layerAttribution": "nicht vorhanden",
         "legendURL": "ignore",
         "cesiumTerrainProviderOptions": {
@@ -254,7 +254,7 @@
         "id": "buildings",
         "name": "buildings",
         "url": "https://d35ei6ur3bjvr1.cloudfront.net/hamburg/b3dm_hamburg_lod2",
-        "typ": "TileSet",
+        "typ": "TileSet3D",
         "cesium3DTilesetOptions": {
             "maximumScreenSpaceError": 6
         },
@@ -280,7 +280,7 @@
     {
       "id": "buildingslgv",
             "name": "Gebäude LoD2 LGV",
-            "url": "https://geoportal-hamburg.de/gdi3d/datasource-data/LoD2",
+            "url": "https://test.geoportal-hamburg.de/gdi3d/datasource-data/LoD2",
             "typ": "TileSet3D",
             "cesium3DTilesetOptions": {
                 "maximumScreenSpaceError": 6
@@ -307,7 +307,7 @@
       {
           "id": "terrainlgv",
           "name": "Gelände LGV",
-          "url": "https://geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
+          "url": "https://test.geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
           "typ": "Terrain3D",
           "layerAttribution": "nicht vorhanden",
           "legendURL": "ignore",
@@ -338,7 +338,7 @@
         "resolution" : 10,
         "hideLevels": 2,
         "minZoom": 2,
-        "terrainUrl" : "https://test.geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
+        "terrainUrl" : "https://geoportal-hamburg.de/gdi3d/datasource-data/Gelaende",
         "projection": "EPSG:25832",
         "gfiAttributes": "showAll",
         "layerAttribution": "nicht vorhanden",

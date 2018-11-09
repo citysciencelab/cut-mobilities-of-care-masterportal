@@ -55,18 +55,18 @@ module.exports = {
             $: "jquery",
             Backbone: "backbone",
             Radio: "backbone.radio",
-            _: "underscore",
-            Cesium: "cesium/Cesium"
+            _: "underscore"
+            // Cesium: "cesium/Cesium"
         }),
         // create css under build/
         new MiniCssExtractPlugin({
             filename: "css/style.css"
         }),
         // import only de-locale from momentjs
-        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
-        new webpack.DefinePlugin({
-            // Define relative base path in cesium for loading assets
-            CESIUM_BASE_URL: JSON.stringify("../../node_modules/cesium/Source")
-        })
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/)
+        // new webpack.DefinePlugin({
+        //     // Define relative base path in cesium for loading assets
+        //     CESIUM_BASE_URL: JSON.stringify("../../node_modules/cesium/Source")
+        // })
     ]
 };
