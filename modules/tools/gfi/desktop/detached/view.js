@@ -26,7 +26,6 @@ const GFIDetachedView = DesktopView.extend({
             this.$el.show();
             Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
             Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
-            Radio.trigger("GFI", "afterRender");
         }
         else {
             this.$el.hide();

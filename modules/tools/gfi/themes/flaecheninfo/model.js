@@ -9,12 +9,14 @@ const FlaecheninfoTheme = Theme.extend({
     initialize: function () {
         var channel = Radio.channel("GFI");
 
-        this.listenTo(channel, {
+        this.listenToOnce(channel, {
             "afterRender": this.showUmring
         }, this);
 
         this.listenTo(this, {
-            "change:isReady": this.parseGfiContent
+            "change:isReady": function () {
+                this.parseGfiContent();
+            }
         }, this);
     },
 
@@ -75,6 +77,7 @@ const FlaecheninfoTheme = Theme.extend({
                 type: "flaecheninfo"
             });
         }
+        Radio.trigger("MapMarker", "hideMarker");
     }
 });
 
