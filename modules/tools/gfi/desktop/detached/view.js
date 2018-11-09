@@ -24,9 +24,10 @@ const GFIDetachedView = DesktopView.extend({
     toggle: function () {
         if (this.model.get("isVisible")) {
             this.$el.show();
-            if (this.model.get("isVisibleMapMarker")) {
-                this.drawMarkerTocenter();
+            if (this.model.get("isMapMarkerVisible")) {
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
             }
+            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
         }
         else {
             this.$el.hide();
@@ -35,14 +36,12 @@ const GFIDetachedView = DesktopView.extend({
     },
 
     setMarker: function () {
-        if (this.model.get("isVisible") && this.model.get("isVisibleMapMarker")) {
-            this.drawMarkerTocenter();
+        if (this.model.get("isVisible")) {
+            if (this.model.get("isMapMarkerVisible")) {
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            }
+            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
         }
-    },
-
-    drawMarkerTocenter: function () {
-        Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
-        Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
     },
 
     removeView: function () {

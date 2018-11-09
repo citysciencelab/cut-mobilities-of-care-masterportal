@@ -4,13 +4,13 @@ const FlaecheninfoTheme = Theme.extend({
     defaults: {
         geometryKey: "Umringspolygon",
         geometry: null,
-        isVisibleMapMarker: false
+        isMapMarkerVisible: false
     },
 
     initialize: function () {
         var channel = Radio.channel("GFI");
 
-        channel.trigger("isVisibleMapMarker", this.get("isVisibleMapMarker"));
+        channel.trigger("isMapMarkerVisible", this.get("isMapMarkerVisible"));
 
         this.listenToOnce(channel, {
             "afterRender": this.showUmring
