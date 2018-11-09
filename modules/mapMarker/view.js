@@ -191,7 +191,7 @@ const MapMarker = Backbone.View.extend({
         this.model.showFeature();
     },
 
-    hidePolygon: function () {console.log(3);
+    hidePolygon: function () {
         this.model.hideFeature();
     }
 

@@ -8,10 +8,6 @@ const FlaecheninfoThemeView = ThemeView.extend({
         "click button": "btnClicked"
     },
 
-    initialize: function () {
-        Radio.trigger("GFI", "isVisibleMapMarker", false);
-    },
-
     btnClicked: function () {
         this.model.createReport();
     }

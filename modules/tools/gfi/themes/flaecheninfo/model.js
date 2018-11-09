@@ -3,20 +3,21 @@ import Theme from "../model";
 const FlaecheninfoTheme = Theme.extend({
     defaults: {
         geometryKey: "Umringspolygon",
-        geometry: null
+        geometry: null,
+        isVisibleMapMarker: false
     },
 
     initialize: function () {
         var channel = Radio.channel("GFI");
+
+        channel.trigger("isVisibleMapMarker", this.get("isVisibleMapMarker"));
 
         this.listenToOnce(channel, {
             "afterRender": this.showUmring
         }, this);
 
         this.listenTo(this, {
-            "change:isReady": function () {
-                this.parseGfiContent();
-            }
+            "change:isReady": this.parseGfiContent
         }, this);
     },
 
@@ -77,7 +78,6 @@ const FlaecheninfoTheme = Theme.extend({
                 type: "flaecheninfo"
             });
         }
-        Radio.trigger("MapMarker", "hideMarker");
     }
 });
 

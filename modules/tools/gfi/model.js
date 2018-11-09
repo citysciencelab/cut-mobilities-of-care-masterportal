@@ -29,12 +29,14 @@ const Gfi = Tool.extend({
         // Anzahl der Themes
         numberOfThemes: 0,
         rotateAngle: 0,
-        glyphicon: "glyphicon-info-sign"
+        glyphicon: "glyphicon-info-sign",
+        isVisibleMapMarker: true
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
 
         this.setThemeList(new ThemeList());
+
         channel.on({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
@@ -86,6 +88,12 @@ const Gfi = Tool.extend({
                 else {
                     this.setIsVisible(false);
                 }
+            }
+        });
+
+        this.listenTo(channel, {
+            "isVisibleMapMarker": function (value) {
+                this.setIsVisibleMapMarker(value);
             }
         });
 
@@ -411,6 +419,11 @@ const Gfi = Tool.extend({
     // setter for themeList
     setThemeList: function (value) {
         this.set("themeList", value);
+    },
+
+    // setter for themeList
+    setIsVisibleMapMarker: function (value) {
+        this.set("isVisibleMapMarker", value);
     }
 
 });
