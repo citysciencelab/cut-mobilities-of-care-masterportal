@@ -33,7 +33,11 @@ const FilterView = Backbone.View.extend({
                 }
                 this.model.closeGFI();
             },
-            "renderDetailView": this.renderDetailView
+            "renderDetailView": this.renderDetailView,
+            "add": function () {
+                this.render();
+                this.renderDetailView();
+            }
         });
 
         if (this.model.get("isActive")) {
@@ -48,6 +52,7 @@ const FilterView = Backbone.View.extend({
     id: "filter-view",
     template: _.template(Template),
     className: "filter",
+
     render: function () {
         var attr = this.model.toJSON();
 
@@ -63,7 +68,7 @@ const FilterView = Backbone.View.extend({
         var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
             view;
 
-        if (_.isUndefined(selectedModel) === false) {
+        if (!_.isUndefined(selectedModel)) {
             view = new QueryDetailView({model: selectedModel});
 
             this.$el.find(".detail-view-container").html(view.render().$el);

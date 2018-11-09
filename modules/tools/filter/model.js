@@ -40,6 +40,25 @@ const FilterModel = Tool.extend({
                 this.setIsActive(false);
             }
         }, this);
+
+        this.listenTo(Radio.channel("Layer"), {
+            "featuresLoaded": function (layerId) {
+                var predefinedQueries = this.get("predefinedQueries"),
+                    queryCollection = this.get("queryCollection"),
+                    filterModels;
+
+                if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
+                    filterModels = _.filter(predefinedQueries, function (query) {
+                        return query.layerId === layerId;
+                    });
+
+                    _.each(filterModels, function (filterModel) {
+                        this.createQuery(filterModel);
+                    }, this);
+                }
+
+            }
+        }, this);
     },
 
     resetFilter: function (feature) {
@@ -213,7 +232,7 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" ? new WfsQueryModel(model) : undefined;
+            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
@@ -234,6 +253,7 @@ const FilterModel = Tool.extend({
                 query.setIsDefault(true);
                 query.setIsActive(true);
             }
+
             this.get("queryCollection").add(query);
         }
     },
@@ -258,6 +278,12 @@ const FilterModel = Tool.extend({
                 openSnippet.setIsOpen(false);
             }
         }
+    },
+
+    isModelInQueryCollection: function (layerId, queryCollection) {
+        var searchQuery = queryCollection.findWhere({layerId: layerId.toString()});
+
+        return !_.isUndefined(searchQuery);
     },
 
     // setter for isInitOpen

@@ -11,7 +11,7 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "webpack --config devtools/webpack.prod.js && node devtools/tasks/copy.js"
+    "build": "node devtools/tasks/build.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -38,9 +38,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0",
     "chai": "4.1.1",
+    "child-process-promise": "^2.2.1",
     "css-loader": "^1.0.0",
     "deep-extend": "^0.3.2",
     "es6-promise": "^4.2.5",

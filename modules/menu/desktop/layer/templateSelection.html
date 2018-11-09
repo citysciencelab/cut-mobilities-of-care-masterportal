@@ -3,9 +3,9 @@
     <span class="glyphicon glyphicon-remove-circle pull-left" title="Auswahl entfernen"></span>
     <span class="pull-left">
         <% if (isVisibleInMap === true) { %>
-            <span class="glyphicon glyphicon-check pull-left" title="Thema ausschalten"></span>
+            <span class="glyphicon glyphicon-check pull-left" title="Thema entfernen"></span>
         <% } else { %>
-            <span class="glyphicon glyphicon-unchecked pull-left" title="Thema einschalten"></span>
+            <span class="glyphicon glyphicon-unchecked pull-left" title="Thema darstellen"></span>
         <% } %>
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </span>

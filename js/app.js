@@ -74,6 +74,7 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
+import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
 
@@ -104,16 +105,6 @@ function loadApp () {
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
-
-    // // load customModules from config
-    // if (_.has(Config, "customModules") && Config.customModules.length > 0) {
-    //     _.each(Config.customModules, function (module) {
-    //         require([module], function (CustomModule) {
-    //             new CustomModule();
-    //         });
-    //     });
-    // }
-    //
 
     new SliderView();
     new SliderRangeView();
@@ -369,6 +360,18 @@ function loadApp () {
     }
 
     new HighlightFeature();
+
+    // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
+    if (CUSTOMMODULE !== "") {
+        return import(/* webpackMode: "eager" */ CUSTOMMODULE)
+        .then(module => {
+            new module.default;
+        })
+        .catch(error => {
+            Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+        });
+    }
+
     Radio.trigger("Util", "hideLoader");
 }
 

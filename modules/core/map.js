@@ -482,11 +482,18 @@ const map = Backbone.Model.extend({
         var extent,
             features,
             layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
-            layerFeatures = [];
+            layerFeatures = [],
+            olLayer = layer.get("layer");
 
-        if (!_.isUndefined(layer) && !_.isUndefined(layer.get("layer").getSource())) {
-            layerFeatures = layer.get("layer").getSource().getFeatures();
+        if (!_.isUndefined(layer) && olLayer instanceof LayerGroup) {
+            olLayer.getLayers().forEach(function (child) {
+                layerFeatures = child.getSource().getFeatures();
+            });
         }
+        else if (!_.isUndefined(layer) && !_.isUndefined(olLayer.getSource())) {
+            layerFeatures = olLayer.getSource().getFeatures();
+        }
+
         features = _.filter(layerFeatures, function (feature) {
             return _.contains(ids, feature.getId());
         });

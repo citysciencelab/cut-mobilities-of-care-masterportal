@@ -157,15 +157,18 @@ const Theme = Backbone.Model.extend({
         }, this);
     },
     getVectorGfi: function () {
-        var gfiContent;
+        var gfiContent,
+            gfiFeatureList = this.get("gfiFeatureList");
 
-        gfiContent = this.translateGFI([this.get("feature").getProperties()], this.get("gfiAttributes"));
-        gfiContent = this.getManipulateDate(gfiContent);
+        if (!_.isEmpty(gfiFeatureList)) {
+            gfiContent = this.translateGFI([gfiFeatureList[0].getProperties()], this.get("gfiAttributes"));
+            gfiContent = this.getManipulateDate(gfiContent);
 
-        this.setGfiContent(_.extend(gfiContent, {
-            allProperties: this.get("feature").getProperties()
-        }));
-        this.setIsReady(true);
+            this.setGfiContent(_.extend(gfiContent, {
+                allProperties: gfiFeatureList[0].getProperties()
+            }));
+            this.setIsReady(true);
+        }
     },
     // Setter
     setIsVisible: function (value) {

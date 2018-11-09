@@ -1,6 +1,7 @@
 import DownloadWin from "text-loader!./template.html";
 import DownloadModel from "./model";
-import {Circle, Polygon} from "ol/geom.js";
+import {Circle} from "ol/geom.js";
+import {fromCircle} from "ol/geom/Polygon.js";
 
 const DownloadView = Backbone.View.extend({
     events: {
@@ -34,7 +35,7 @@ const DownloadView = Backbone.View.extend({
         _.each(features.data, function (feature) {
             if (feature.getGeometry() instanceof Circle) {
             // creates a regular polygon from a circle with 32(default) sides
-                feature.setGeometry(Polygon.fromCircle(feature.getGeometry()));
+                feature.setGeometry(fromCircle(feature.getGeometry()));
             }
         });
 

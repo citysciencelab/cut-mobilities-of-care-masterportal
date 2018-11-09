@@ -48,6 +48,7 @@ const WfsQueryModel = QueryModel.extend({
             "featuresLoaded": function (layerId, features) {
                 if (layerId === this.get("layerId")) {
                     this.processFeatures(features);
+                    this.stopListening(Radio.channel("Layer"), "featuresLoaded");
                 }
             }
         });
@@ -57,13 +58,38 @@ const WfsQueryModel = QueryModel.extend({
      * @return {Object} - olFeatures
      */
     getFeaturesFromWFS: function () {
-        var model = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-            features = [];
+        var layerId = this.get("layerId"),
+            model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            features = [],
+            layerSource;
 
         if (!_.isUndefined(model)) {
-            features = model.get("layerSource").getFeatures();
+            layerSource = model.get("layerSource");
+            layerSource = this.retrieveLayerSource(layerSource, layerId);
+            features = layerSource.getFeatures();
         }
         return features;
+    },
+
+    /**
+     * delivers the layerSource from an layer,
+     * by grouplayer delivers the layerSource from child by layerid
+     * @param {object} layerSource from layer
+     * @param {number} layerId id from layer
+     * @returns {object} layerSource
+     */
+    retrieveLayerSource: function (layerSource, layerId) {
+        var layer,
+            groupLayerSource = layerSource;
+
+        if (_.isArray(layerSource)) {
+            layer = _.find(layerSource, function (child) {
+                return child.get("id") === layerId;
+            });
+            groupLayerSource = layer.get("layerSource");
+        }
+
+        return groupLayerSource;
     },
 
     /**

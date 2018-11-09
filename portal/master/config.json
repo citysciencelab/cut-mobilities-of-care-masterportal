@@ -466,7 +466,7 @@
       {
         "id": "47",
         "styleId": "47",
-        "mouseHoverField": "GEBIETSNAME"
+        "mouseHoverField": ["beginn", "ende"]
       },
       {
         "id": "2714",

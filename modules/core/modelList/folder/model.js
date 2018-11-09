@@ -7,6 +7,7 @@ const Folder = Item.extend({
         // true wenn der Inhalt(Kinder) der Node angezeigt wird
         isExpanded: false,
         isInitiallyExpanded: false,
+        isAlwaysExpanded: false,
         // true wenn alle Kinder ausgewöhlt sind
         isSelected: false,
         // welcher Node-Type - folder/layer/item
@@ -63,7 +64,6 @@ const Folder = Item.extend({
         else {
             this.setIsSelected(true);
         }
-        // this.collection.toggleIsSelectedLayers(this);
     },
 
     toggleIsExpanded: function () {
@@ -73,7 +73,7 @@ const Folder = Item.extend({
         else {
             this.setIsExpanded(true);
         }
-        if (this.get("parentId") === "tree") {
+        if (this.get("parentId") === "tree" && !this.get("isAlwaysExpanded")) {
             this.collection.toggleCatalogs(this.get("id"));
         }
     },
