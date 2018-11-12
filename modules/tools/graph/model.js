@@ -20,6 +20,11 @@ const GraphModel = Backbone.Model.extend({
         }, this);
     },
 
+    /**
+     * Startet die Erzeugung der Grafik
+     * @param   {objekt} graphConfig Konfigurationsobjekt nach graphType
+     * @returns {void}
+     */
     createGraph: function (graphConfig) {
         if (graphConfig.graphType === "Linegraph") {
             this.createLineGraph(graphConfig);
