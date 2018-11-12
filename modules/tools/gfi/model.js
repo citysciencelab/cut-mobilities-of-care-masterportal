@@ -138,12 +138,17 @@ const Gfi = Tool.extend({
         if (id === "gfi" && deactivateGFI === false) {
             this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
             // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
+            this.listenTo(Radio.channel("Map"), {
+                "clickedWindowPosition": this.setGfiParams
+            }, this);
         }
         else if (deactivateGFI === true) {
             Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
+            this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
         else if (_.isUndefined(deactivateGFI)) {
             Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
+            this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
     },
 
@@ -188,9 +193,13 @@ const Gfi = Tool.extend({
             eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
             wmsGFIParams,
+            GFIParams3d = [],
             unionParams;
 
         Radio.trigger("ClickCounter", "gfi");
+        if (Radio.request("Map", "isMap3d")) {
+            GFIParams3d = this.setGfiParams3d(evt);
+        }
         // für detached MapMarker
         this.setCoordinate(evt.coordinate);
         // Vector
@@ -199,14 +208,53 @@ const Gfi = Tool.extend({
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        unionParams = _.union(vectorGFIParams, wmsGFIParams);
+        unionParams = _.union(vectorGFIParams, wmsGFIParams, GFIParams3d);
         if (_.isEmpty(unionParams)) {
             this.setIsVisible(false);
         }
         else {
             this.get("overlay").setPosition(evt.coordinate);
-            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams, GFIParams3d));
         }
+    },
+
+    setGfiParams3d: function (evt) {
+        var features,
+            gfiParams3d = [];
+
+        features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
+        _.each(features, function (feature) {
+            var properties = {},
+                propertyNames,
+                modelattributes,
+                olFeature,
+                layer;
+
+            if (feature instanceof Cesium.Cesium3DTileFeature) {
+                propertyNames = feature.getPropertyNames();
+                _.each(propertyNames, function (propertyName) {
+                    properties[propertyName] = feature.getProperty(propertyName);
+                });
+                if (properties.attributes && properties.id) {
+                    properties.attributes.gmlid = properties.id;
+                }
+                modelattributes = {
+                    attributes: properties.attributes ? properties.attributes : properties,
+                    gfiAttributes: "showAll",
+                    typ: "Cesium3DTileFeature",
+                    name: "Buildings"
+                };
+                gfiParams3d.push(modelattributes);
+            }
+            else if (feature.primitive) {
+                olFeature = feature.primitive.olFeature;
+                layer = feature.primitive.olLayer;
+                if (olFeature && layer) {
+                    gfiParams3d.push(this.getVectorGfiParams3d(olFeature, layer));
+                }
+            }
+        }, this);
+        return gfiParams3d;
     },
 
     /**
@@ -288,6 +336,34 @@ const Gfi = Tool.extend({
         return vectorGfiParams;
     },
 
+    /**
+     * @param {ol.Feature} featureAtPixel Feature
+     * @param {ol.Layer} olLayer Layer
+     * @return {void}
+     */
+    getVectorGfiParams3d: function (featureAtPixel, olLayer) {
+        var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
+            modelAttributes;
+
+        if (_.isUndefined(model) === false) {
+            modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+            modelAttributes.gfiFeatureList = [];
+            // Feature
+            if (_.has(featureAtPixel.getProperties(), "features") === false) {
+                modelAttributes.feature = featureAtPixel;
+                modelAttributes.gfiFeatureList.push(featureAtPixel);
+            }
+            // Cluster Feature
+            else {
+                _.each(featureAtPixel.get("features"), function (feature) {
+                    modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                    modelAttributes.gfiFeatureList.push(feature);
+                    modelAttributes.feature = feature;
+                });
+            }
+        }
+        return modelAttributes;
+    },
     /**
      * Ermittelt die GFIParameter zur Abfrage von WMSlayern
      * @param  {layer[]} layerlist  Liste der abzufragenden WMSlayer

@@ -24,6 +24,9 @@ const Theme = Backbone.Model.extend({
                 this.getWmsGfi(this.parseWmsGfi);
             }
         }
+        else if (this.get("typ") === "Cesium3DTileFeature") {
+            this.getCesium3DTileFeatureGfi();
+        }
         else {
             this.getVectorGfi();
         }
@@ -155,6 +158,14 @@ const Theme = Backbone.Model.extend({
                 this.collection.add(clone);
             }
         }, this);
+    },
+    getCesium3DTileFeatureGfi: function () {
+        var gfiContent;
+
+        gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));
+        gfiContent = this.getManipulateDate(gfiContent);
+        this.setGfiContent(gfiContent);
+        this.setIsReady(true);
     },
     getVectorGfi: function () {
         var gfiContent,
