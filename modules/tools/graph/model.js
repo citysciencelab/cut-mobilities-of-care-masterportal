@@ -362,14 +362,14 @@ const GraphModel = Backbone.Model.extend({
             }, tooltipDiv);
     },
 
-    createSvg: function (selector, marginObj, width, height, svgClass) {
+    createSvg: function (selector, left, top, width, height, svgClass) {
         return select(selector).append("svg")
-            .attr("width", width + marginObj.left + marginObj.right)
-            .attr("height", height + marginObj.top + marginObj.bottom)
+            .attr("width", width)
+            .attr("height", height)
             .attr("class", svgClass)
             .append("g")
             .attr("class", "graph")
-            .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
+            .attr("transform", "translate(" + left + "," + top + ")");
     },
 
     appendLegend: function (svg, legendData) {
@@ -418,7 +418,7 @@ const GraphModel = Backbone.Model.extend({
             xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
             yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
             attrToShowArray = graphConfig.attrToShowArray,
-            margin = {top: 20, right: 20, bottom: 70, left: 70},
+            margin = {top: 20, right: 20, bottom: 90, left: 70},
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - margin.bottom,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
@@ -426,7 +426,7 @@ const GraphModel = Backbone.Model.extend({
             xAxis = this.createAxisBottom(scaleX, xThinning),
             yAxis = this.createAxisLeft(scaleY),
             svgClass = graphConfig.svgClass,
-            svg = this.createSvg(selector, margin, width, height, svgClass),
+            svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
             offset = 10,
@@ -471,7 +471,7 @@ const GraphModel = Backbone.Model.extend({
             xAxis = this.createAxisBottom(scaleX, 1, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
-            svg = this.createSvg(selector, margin, width, height, svgClass),
+            svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             barWidth = width / data.length,
             offset = 0;
 
