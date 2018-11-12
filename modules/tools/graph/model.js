@@ -177,6 +177,14 @@ const GraphModel = Backbone.Model.extend({
         return d3Object;
     },
 
+    /**
+     * Erzeugt ein D3 - Linienobjekt
+     * @param   {object} scaleX      D3 - Scale der xAchse
+     * @param   {object} scaleY      D3 - Scale der yAchse
+     * @param   {string} xAttr       Attributname für xAchse
+     * @param   {string} yAttrToShow Attributname für yAchse
+     * @returns {void}
+     */
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
         return line()
             .x(function (d) {
@@ -190,7 +198,15 @@ const GraphModel = Backbone.Model.extend({
             });
     },
 
-    appendDataToSvg: function (svg, data, className, object) {
+    /**
+     * Erzeugt die Struktur eines Liniengraphen
+     * @param   {object}    svg         das SVG-Objekt
+     * @param   {object[]}  data        Array der Daten
+     * @param   {string}    className   Classes der Punkte
+     * @param   {object}    d3line        D3 - Linienobjekt
+     * @returns {void}
+     */
+    appendDataToSvg: function (svg, data, className, d3line) {
         var dataToAdd = _.filter(data, function (obj) {
             return obj.yAttrToShow !== "-";
         });
@@ -212,7 +228,7 @@ const GraphModel = Backbone.Model.extend({
             .append("path")
             .data([dataToAdd])
             .attr("class", className)
-            .attr("d", object);
+            .attr("d", d3line);
     },
 
     /**
@@ -237,7 +253,7 @@ const GraphModel = Backbone.Model.extend({
             xAxisBBox;
 
         xAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
-            .data([1])  // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
+            .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
             .enter()
             .append("g")
             .attr("transform", function () {
@@ -285,7 +301,7 @@ const GraphModel = Backbone.Model.extend({
             yAxisBBox;
 
         yAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
-            .data([1])  // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
+            .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
             .enter()
             .append("g")
             .attr("class", "yAxisDraw")
@@ -325,7 +341,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("r", 5)
 
             .attr("x", function (d) {
-                return scaleX(d[xAttr]) + (scaleX.bandwidth()) / 2;
+                return scaleX(d[xAttr]) + (scaleX.bandwidth() / 2);
             })
             .attr("y", function (d) {
                 return scaleY(d[yAttrToShow]) - 5;
@@ -364,6 +380,16 @@ const GraphModel = Backbone.Model.extend({
             }, tooltipDiv);
     },
 
+    /**
+     * Erzeugt das SVG
+     * @param   {string} selector Class unter der das SVG erzeugt wird
+     * @param   {number} left     Linker Rand vom SVG
+     * @param   {number} top      Oberer Rand vom SVG
+     * @param   {number} width    Breite
+     * @param   {number} height   Höhe
+     * @param   {string} svgClass Class des SVG
+     * @returns {void}
+     */
     createSvg: function (selector, left, top, width, height, svgClass) {
         return select(selector).append("svg")
             .attr("width", width)
@@ -374,6 +400,15 @@ const GraphModel = Backbone.Model.extend({
             .attr("transform", "translate(" + left + "," + top + ")");
     },
 
+    /**
+     * Erzeugt eine Legende und fügt sie oben in SVG ein
+     * @param   {object}    svg                 SVG
+     * @param   {object[]}  legendData          Legendenobjekt
+     * @param   {string}    legendData.style    Art des Legendeneintrags <rect> oder <circle>
+     * @param   {string}    legendData.class    Class des Eintrags
+     * @param   {string}    legendData.text     Textliche Beschreibung
+     * @returns {void}
+     */
     appendLegend: function (svg, legendData) {
         var legend = svg.append("g")
             .attr("class", "graph-legend")
@@ -411,6 +446,28 @@ const GraphModel = Backbone.Model.extend({
             });
     },
 
+    /**
+     * Erzeugt die d3 Grafik für ein Liniendiagramm
+     * @param   {object}    graphConfig                     Konfigurationsobjekt
+     * @param   {string}    graphConfig.selector            Class unter der das SVG erzeugt wird
+     * @param   {string}    graphConfig.scaleTypeX          Typ der xAchse
+     * @param   {string}    graphConfig.scaleTypeY          Typ der yAchse
+     * @param   {object[]}  graphConfig.data                darzustellende Daten
+     * @param   {string}    graphConfig.xAttr               Attributname der xAchse
+     * @param   {object}    graphConfig.xAxisLabel          Definitionsobjekt der x-Achse
+     * @param   {object}    graphConfig.yAxisLabel          Definitionsobjekt der y-Achse
+     * @param   {string[]}  graphConfig.attrToShowArray     Array der Attributnamen der yAchse
+     * @param   {object}    graphConfig.margin              Margin der .graph-data in .graph
+     * @param   {number}    graphConfig.width               Breite des SVG
+     * @param   {number}    graphConfig.height              Höhe des SVG
+     * @param   {object}    [graphConfig.xAxisTicks]        Tick Beschreibung der xAchse
+     * @param   {object}    [graphConfig.yAxisTicks]        Tick Beschreibung der yAchse
+     * @param   {number}    [graphConfig.xThinning=1]       Tick Thinning Value
+     * @param   {string}    graphConfig.svgClass            Class der SVG
+     * @param   {string}    [graphConfig.selectorTooltip]   DIV für Tooltip
+     * @param   {object}    [graphConfig.legendData]        Legendeninformationen
+     * @returns {void}
+     */
     createLineGraph: function (graphConfig) {
         var selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
@@ -436,7 +493,9 @@ const GraphModel = Backbone.Model.extend({
             offset = 10,
             valueLine;
 
-        this.appendLegend(svg, graphConfig.legendData);
+        if (_.has(graphConfig, "legendData")) {
+            this.appendLegend(svg, graphConfig.legendData);
+        }
         _.each(attrToShowArray, function (yAttrToShow) {
             valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
             this.appendDataToSvg(svg, data, "line", valueLine);
@@ -456,6 +515,26 @@ const GraphModel = Backbone.Model.extend({
         });
     },
 
+    /**
+     * Erzeugt die d3 Grafik für ein Balkendiagramm
+     * @param   {object}    graphConfig                     Konfigurationsobjekt
+     * @param   {string}    graphConfig.selector            Class unter der das SVG erzeugt wird
+     * @param   {string}    graphConfig.scaleTypeX          Typ der xAchse
+     * @param   {string}    graphConfig.scaleTypeY          Typ der yAchse
+     * @param   {object[]}  graphConfig.data                darzustellende Daten
+     * @param   {string}    graphConfig.xAttr               Attributname der xAchse
+     * @param   {object}    graphConfig.xAxisLabel          Definitionsobjekt der x-Achse
+     * @param   {object}    graphConfig.yAxisLabel          Definitionsobjekt der y-Achse
+     * @param   {string[]}  graphConfig.attrToShowArray     Array der Attributnamen der yAchse
+     * @param   {object}    graphConfig.margin              Margin der .graph-data in .graph
+     * @param   {number}    graphConfig.width               Breite des SVG
+     * @param   {number}    graphConfig.height              Höhe des SVG
+     * @param   {object}    [graphConfig.xAxisTicks]        Tick Beschreibung der xAchse
+     * @param   {object}    [graphConfig.yAxisTicks]        Tick Beschreibung der yAchse
+     * @param   {string}    graphConfig.svgClass            Class der SVG
+     * @param   {object}    [graphConfig.legendData]        Legendeninformationen
+     * @returns {void}
+     */
     createBarGraph: function (graphConfig) {
         var selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
@@ -465,13 +544,13 @@ const GraphModel = Backbone.Model.extend({
             xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
             yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
             attrToShowArray = graphConfig.attrToShowArray,
-            margin = margin = graphConfig.margin,
+            margin = graphConfig.margin,
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - margin.bottom,
-            scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
-            scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
+            scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
+            scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
             xAxis = this.createAxisBottom(scaleX, 1, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
@@ -479,6 +558,9 @@ const GraphModel = Backbone.Model.extend({
             barWidth = width / data.length,
             offset = 0;
 
+        if (_.has(graphConfig, "legendData")) {
+            this.appendLegend(svg, graphConfig.legendData);
+        }
         this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
@@ -488,12 +570,12 @@ const GraphModel = Backbone.Model.extend({
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", function () {
-                var y;
+                var legendHeight;
 
                 if (svg.select(".graph-legend").size() > 0) {
-                    y = svg.select(".graph-legend").node().getBBox().height;
+                    legendHeight = svg.select(".graph-legend").node().getBBox().height;
 
-                    return "translate(0, " + y + ")";
+                    return "translate(0, " + legendHeight + ")";
                 }
                 return "translate(0, 0)";
             })
