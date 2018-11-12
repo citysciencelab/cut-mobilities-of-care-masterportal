@@ -19,6 +19,17 @@ const FlaecheninfoTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": this.parseGfiContent
         }, this);
+
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                var layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
+
+                if (!layerModelFlaecheninfo.get("isVisibleInMap") || !layerModelFlaecheninfo.get("isSelected")) {
+                    this.setIsVisible(false);
+                    this.resetIsMapMarkerVisible();
+                }
+            }
+        });
     },
 
     /**
@@ -89,7 +100,7 @@ const FlaecheninfoTheme = Theme.extend({
      */
     resetIsMapMarkerVisible: function () {
         if (!this.get("isVisible")) {
-            Radio.trigger("GFI", "isMapMarkerVisible", false);
+            Radio.trigger("GFI", "isMapMarkerVisible", true);
             Radio.trigger("MapMarker", "hidePolygon");
         }
     }
