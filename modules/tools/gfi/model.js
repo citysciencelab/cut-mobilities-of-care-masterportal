@@ -13,9 +13,9 @@ const Gfi = Tool.extend({
         // ist das Modal/Popover sichtbar
         isVisible: false,
         // mobile Ansicht true | false
-        isMobile: Radio.request("Util", "isViewMobile"),
+        isMobile: false,
         // uiStyle DEFAULT | TABLE | SIMPLE
-        uiStyle: Radio.request("Util", "getUiStyle"),
+        uiStyle: "DEFAULT",
         // ol.Overlay für attached
         overlay: new Overlay({element: undefined}),
         // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -33,6 +33,10 @@ const Gfi = Tool.extend({
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
+
+        // Wegen Ladereihenfolge hier die Default-Attribute setzen, sonst sind die Werte noch nicht aus der Config ausgelesen
+        this.set("uiStyle", Radio.request("Util", "getUiStyle"));
+        this.set("isMobile", Radio.request("Util", "isViewMobile"));
 
         this.setThemeList(new ThemeList());
         channel.on({
