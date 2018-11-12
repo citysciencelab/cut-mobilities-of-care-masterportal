@@ -57,8 +57,25 @@ const LayerView = Backbone.View.extend({
         }
     },
     toggleIsSelected: function () {
+        var layerCollection = Radio.request("ModelList", "getCollection").where({type: "layer"});
+
+        this.setSettingsVisibility(layerCollection, this.model);
+
         this.model.toggleIsSelected();
         this.render();
+    },
+    setSettingsVisibility: function (layerCollection, model) {
+        var thislayerId = model.get("id");
+
+        if (!model.get("isSelected")) {
+            _.each(layerCollection, function (layer) {
+                if (layer.get("id") !== thislayerId) {
+                    layer.set("isSettingVisible", false);
+                }
+            });
+        }
+
+        return layerCollection;
     },
     showLayerInformation: function () {
         this.model.showLayerInformation();
