@@ -253,6 +253,10 @@ const VerkehrsStaerkenTheme = Theme.extend({
                 selectorTooltip: ".graph-tooltip-div",
                 scaleTypeX: "ordinal",
                 scaleTypeY: "linear",
+                yAxisTicks: {
+                    ticks: 7,
+                    factor: ",f"
+                },
                 data: this.get("dataset"),
                 xAttr: "year",
                 xAxisLabel: {
