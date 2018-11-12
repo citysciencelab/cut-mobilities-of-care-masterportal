@@ -151,7 +151,6 @@ const GraphModel = Backbone.Model.extend({
         else {
             d3Object = axisBottom(scale)
                 .ticks(xAxisTicks.ticks, xAxisTicks.factor)
-
                 .tickFormat(function (d) {
                     return d + unit;
                 });
@@ -171,7 +170,8 @@ const GraphModel = Backbone.Model.extend({
                 });
         }
         else {
-            d3Object = axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
+            d3Object = axisLeft(scale)
+                .ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
 
         return d3Object;
@@ -415,20 +415,20 @@ const GraphModel = Backbone.Model.extend({
             scaleTypeY = graphConfig.scaleTypeY,
             data = graphConfig.data,
             xAttr = graphConfig.xAttr,
-            xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
-            yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
+            xAxisLabel = graphConfig.xAxisLabel,
+            yAxisLabel = graphConfig.yAxisLabel,
             attrToShowArray = graphConfig.attrToShowArray,
-            margin = {top: 20, right: 20, bottom: 90, left: 70},
+            margin = graphConfig.margin,
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - margin.bottom,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
+            xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
             xAxis = this.createAxisBottom(scaleX, xThinning),
             yAxis = this.createAxisLeft(scaleY),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
-            xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
             offset = 10,
             valueLine;
 
@@ -461,13 +461,13 @@ const GraphModel = Backbone.Model.extend({
             xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
             yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
             attrToShowArray = graphConfig.attrToShowArray,
-            margin = {top: 20, right: 20, bottom: 50, left: 50},
+            margin = margin = graphConfig.margin,
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - margin.bottom,
-            xAxisTicks = graphConfig.xAxisTicks,
-            yAxisTicks = graphConfig.yAxisTicks,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
+            xAxisTicks = graphConfig.xAxisTicks,
+            yAxisTicks = graphConfig.yAxisTicks,
             xAxis = this.createAxisBottom(scaleX, 1, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,

@@ -248,6 +248,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
                 selector: ".graph",
                 width: width,
                 height: height,
+                margin: {top: 20, right: 20, bottom: 75, left: 70},
                 svgClass: "graph-svg",
                 selectorTooltip: ".graph-tooltip-div",
                 scaleTypeX: "ordinal",
