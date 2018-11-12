@@ -1,4 +1,5 @@
 import WfsQueryModel from "./query/source/wfs";
+import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
@@ -237,7 +238,8 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
+            query = layer.get("typ") === "WFS" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
+            query = layer.get("typ") === "GeoJSON" ? new GeoJsonQueryModel(model) : undefined;
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));

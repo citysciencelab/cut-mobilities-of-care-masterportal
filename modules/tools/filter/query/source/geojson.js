@@ -1,7 +1,7 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 
-const WfsQueryModel = QueryModel.extend({
+const GeoJsonQueryModel = QueryModel.extend({
     initialize: function () {
         this.superInitialize();
         this.prepareQuery();
@@ -146,6 +146,7 @@ const WfsQueryModel = QueryModel.extend({
             featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
         });
         console.log(featureAttributesMap);
+        
         this.createSnippets(featureAttributesMap);
     },
 
@@ -416,4 +417,4 @@ const WfsQueryModel = QueryModel.extend({
     }
 });
 
-export default WfsQueryModel;
+export default GeoJsonQueryModel;
