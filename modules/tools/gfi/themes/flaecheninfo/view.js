@@ -5,10 +5,10 @@ const FlaecheninfoThemeView = ThemeView.extend({
     className: "flaecheninfo",
     template: _.template(FlaecheninfoTemplate),
     events: {
-        "click button": "btnClicked"
+        "click button": "buttonClicked"
     },
 
-    btnClicked: function () {
+    buttonnClicked: function () {
         this.model.createReport();
     }
 });

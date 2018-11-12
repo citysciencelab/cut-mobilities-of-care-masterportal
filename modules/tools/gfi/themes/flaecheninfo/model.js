@@ -4,16 +4,16 @@ const FlaecheninfoTheme = Theme.extend({
     defaults: {
         geometryKey: "Umringspolygon",
         geometry: null,
-        isMapMarkerVisible: false
+        isMapMarkerVisible: false,
+        isReady: false
     },
 
     initialize: function () {
         var channel = Radio.channel("GFI");
 
-        channel.trigger("isMapMarkerVisible", this.get("isMapMarkerVisible"));
-
         this.listenToOnce(channel, {
-            "afterRender": this.showUmring
+            "afterRender": this.showUmring,
+            "hideGFI": this.resetIsMapMarkerVisible
         }, this);
 
         this.listenTo(this, {
@@ -34,7 +34,7 @@ const FlaecheninfoTheme = Theme.extend({
                 return null;
             }, this);
 
-        this.setGfiContent(textContent);
+        this.setGfiContent([textContent]);
         this.setGeometry(umring);
     },
 
@@ -72,11 +72,25 @@ const FlaecheninfoTheme = Theme.extend({
     showUmring: function () {
         var coordinates = this.get("geometry");
 
+        Radio.trigger("GFI", "isMapMarkerVisible", this.get("isMapMarkerVisible"));
         if (coordinates) {
             Radio.trigger("MapMarker", "zoomTo", {
                 coordinate: coordinates,
                 type: "flaecheninfo"
             });
+        }
+    },
+
+    /**
+     * Triggert ans GFI und MapMarker, wenn das gfi nicht mehr sichtbar ist.
+     * @fires GFI:isMapMarkerVisible
+     * @fires MapMarker:hidePolygon
+     * @returns {void}
+     */
+    resetIsMapMarkerVisible: function () {
+        if (!this.get("isVisible")) {
+            Radio.trigger("GFI", "isMapMarkerVisible", false);
+            Radio.trigger("MapMarker", "hidePolygon");
         }
     }
 });
