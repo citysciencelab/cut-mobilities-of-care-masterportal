@@ -177,10 +177,10 @@ const GraphModel = Backbone.Model.extend({
         return d3Object;
     },
 
-    createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow, offset) {
+    createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
         return line()
             .x(function (d) {
-                return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
+                return scaleX(d[xAttr]) + (scaleX.bandwidth() / 2);
             })
             .y(function (d) {
                 return scaleY(d[yAttrToShow]);
@@ -243,7 +243,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("transform", function () {
                 var y = svg.select(".yAxisDraw").node().getBBox().height;
 
-                return "translate(10," + y + ")";
+                return "translate(0," + y + ")";
             })
             .attr("class", "xAxisDraw")
             .call(xAxisDraw);
@@ -303,7 +303,7 @@ const GraphModel = Backbone.Model.extend({
         }
     },
 
-    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
+    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
         var dat = _.filter(data, function (obj) {
             return obj[yAttrToShow] !== "-";
         });
@@ -315,7 +315,7 @@ const GraphModel = Backbone.Model.extend({
                 return document.createElementNS("http://www.w3.org/2000/svg", d.style);
             })
             .attr("cx", function (d) {
-                return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
+                return scaleX(d[xAttr]) + (scaleX.bandwidth() / 2);
             })
             .attr("cy", function (d) {
                 return scaleY(d[yAttrToShow]);
@@ -323,7 +323,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("r", 5)
 
             .attr("x", function (d) {
-                return scaleX(d[xAttr]) + ((offset + scaleX.bandwidth()) / 2);
+                return scaleX(d[xAttr]) + (scaleX.bandwidth()) / 2;
             })
             .attr("y", function (d) {
                 return scaleY(d[yAttrToShow]) - 5;
@@ -436,10 +436,10 @@ const GraphModel = Backbone.Model.extend({
 
         this.appendLegend(svg, graphConfig.legendData);
         _.each(attrToShowArray, function (yAttrToShow) {
-            valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow, offset);
+            valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
             this.appendDataToSvg(svg, data, "line", valueLine);
             // Add the scatterplot for each point in line
-            this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset);
+            this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
         }, this);
         // Add the Axis
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel);
@@ -482,21 +482,26 @@ const GraphModel = Backbone.Model.extend({
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
     },
 
-    drawBars: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
+    drawBars: function (svg, dataToAdd, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
         svg.append("g")
             .attr("class", "graph-data")
-            .attr("transform", "translate(0, 20)")
-            .append("g")
-            .attr("class", "graph-diagram")
-            .append("path")
-            .data([dataToAdd])
-            .attr("class", className)
-            .attr("transform", "translate(0, 20)")
-            .attr("d", object);
+            .attr("transform", function () {
+                var y;
 
-        svg.selectAll(".bar")
-            .data(data)
-            .enter().append("rect")
+                if (svg.select(".graph-legend").size() > 0) {
+                    y = svg.select(".graph-legend").node().getBBox().height;
+
+                    return "translate(0, " + y + ")";
+                }
+                return "translate(0, 0)";
+            })
+            .append("g")
+            .attr("class", "graph-diagram");
+
+        svg.select(".graph-diagram").selectAll("bars")
+            .data(dataToAdd)
+            .enter()
+            .append("rect")
             .attr("class", "bar" + selector.split(".")[1])
             .attr("x", function (d) {
                 return x(d[xAttr]);
