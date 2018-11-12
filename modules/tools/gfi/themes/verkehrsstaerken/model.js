@@ -253,8 +253,13 @@ const VerkehrsStaerkenTheme = Theme.extend({
                 scaleTypeY: "linear",
                 data: this.get("dataset"),
                 xAttr: "year",
-                xAxisLabel: "Jahr",
-                yAxisLabel: this.yAxisLabel(key),
+                xAxisLabel: {
+                    label: "Jahr"
+                },
+                yAxisLabel: {
+                    label: this.yAxisLabel(key),
+                    offset: 10
+                },
                 attrToShowArray: [key]
             };
 

@@ -197,82 +197,110 @@ const GraphModel = Backbone.Model.extend({
 
         svg.append("g")
             .attr("class", "graph-data")
-            .attr("transform", "translate(0, 20)")
+            .attr("transform", function () {
+                var y;
+
+                if (svg.select(".graph-legend").size() > 0) {
+                    y = svg.select(".graph-legend").node().getBBox().height;
+
+                    return "translate(0, " + y + ")";
+                }
+                return "translate(0, 0)";
+            })
             .append("g")
             .attr("class", "graph-diagram")
             .append("path")
             .data([dataToAdd])
             .attr("class", className)
-            .attr("transform", "translate(0, 20)")
             .attr("d", object);
     },
 
-    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop) {
-        var svgBBox = svg.node().getBBox(),
-            // textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
-            // textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
-            // fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
-            // fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
-            heightDraw = svgBBox.height - marginTop,//_.isUndefined(height) ? svgBBox.height - marginTop : height,
+    /**
+     * Fügt die X-Achse .graph-data hinzu
+     * @param   {object} svg                                SVG
+     * @param   {object} xAxis                              axis-left d3-Object
+     * @param   {object} xAxisLabel                         Definitionsobjekt der x-Achse
+     * @param   {string} [xAxisLabel.label]                 Text
+     * @param   {string} [xAxisLabel.offset=0]              Abstand zwischen Achse und Text
+     * @param   {string} [xAxisLabel.textAnchor=middle]     Positionierungsart
+     * @param   {string} [xAxisLabel.fill=#000]             Füllfarbe
+     * @param   {string} [xAxisLabel.fontSize=10]           FontSize
+     * @returns {void}
+     */
+    appendXAxisToSvg: function (svg, xAxis, xAxisLabel) {
+        var textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
+            textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
+            fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
+            fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
+            label = _.isUndefined(xAxisLabel.label) ? null : [xAxisLabel.label],
             xAxisDraw = xAxis,
-            xAxisBBox,
-            xAxisArray = _.isArray(xAxisLabel) ? xAxisLabel : [xAxisLabel];
+            xAxisBBox;
 
         xAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
-            .data(xAxisArray)
+            .data([1])  // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
             .enter()
             .append("g")
-            .attr("transform", "translate(" + AxisOffset + "," + heightDraw + ")")
-            .attr("class", "xAxisDraw")
-            .call(xAxis);
-        xAxisBBox = svg.selectAll(".xAxisDraw").node().getBBox();
+            .attr("transform", function () {
+                var y = svg.select(".yAxisDraw").node().getBBox().height;
 
-        // text for xAxisDraw
-        xAxisDraw.append("text")
-            .attr("x", xAxisBBox.width / 2)
-            .attr("y", xAxisBBox.height)
-            .attr("dy", "1em")
-            // .style("text-anchor", textAnchor)
-            // .style("fill", fill)
-            // .style("font-size", fontSize)
-            .style("text-anchor", "middle")
-            .style("fill", "#000")
-            .text(xAxisArray);
+                return "translate(10," + y + ")";
+            })
+            .attr("class", "xAxisDraw")
+            .call(xAxisDraw);
+
+        if (label) {
+            xAxisBBox = svg.selectAll(".xAxisDraw").node().getBBox();
+            xAxisDraw.append("text")
+                .attr("x", xAxisBBox.width / 2)
+                .attr("y", xAxisBBox.height + textOffset)
+                .attr("dy", "1em")
+                .style("text-anchor", textAnchor)
+                .style("fill", fill)
+                .style("font-size", fontSize)
+                .text(label);
+        }
     },
 
     /**
      * Fügt die Y-Achse .graph-data hinzu
-     * @param   {object} svg        SVG
-     * @param   {object} yAxis      axis-left d3-Object
-     * @param   {string} yAxisLabel Beschriftungstext
-     * @param   {number} textOffset Abstand zwischen Skala und Beschriftungstext
-     * @param   {number} AxisOffset Abstand zwischen Y-Achse und oberem Rand
+     * @param   {object} svg                                SVG
+     * @param   {object} yAxis                              axis-left d3-Object
+     * @param   {object} yAxisLabel                         Definitionsobjekt der y-Achse
+     * @param   {string} [yAxisLabel.label]                 Text
+     * @param   {string} [yAxisLabel.offset=0]              Abstand zwischen Achse und Text
+     * @param   {string} [yAxisLabel.textAnchor=middle]     Positionierungsart
+     * @param   {string} [yAxisLabel.fill=#000]             Füllfarbe
+     * @param   {string} [yAxisLabel.fontSize=10]           FontSize
      * @returns {void}
      */
-    appendYAxisToSvg: function (svg, yAxis, yAxisLabel, textOffset, AxisOffset) {
-        var yAxisDraw = yAxis,
-            yAxisBBox,
-            yAxisArray = _.isArray(yAxisLabel) ? yAxisLabel : [yAxisLabel];
+    appendYAxisToSvg: function (svg, yAxis, yAxisLabel) {
+        var textOffset = _.isUndefined(yAxisLabel.offset) ? 0 : yAxisLabel.offset,
+            textAnchor = _.isUndefined(yAxisLabel.textAnchor) ? "middle" : yAxisLabel.textAnchor,
+            fill = _.isUndefined(yAxisLabel.fill) ? "#000" : yAxisLabel.fill,
+            fontSize = _.isUndefined(yAxisLabel.fontSize) ? 10 : yAxisLabel.fontSize,
+            label = _.isUndefined(yAxisLabel.label) ? null : [yAxisLabel.label],
+            yAxisDraw = yAxis,
+            yAxisBBox;
 
         yAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
-            .data(yAxisArray)
+            .data([1])  // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
             .enter()
             .append("g")
-            .attr("transform", "translate(0, " + (AxisOffset) + ")")
             .attr("class", "yAxisDraw")
             .call(yAxisDraw);
 
-        yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
-
-        // text for yAxis
-        yAxisDraw.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("x", 0 - (yAxisBBox.height / 2))
-            .attr("y", 0 - yAxisBBox.width - (2 * textOffset))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .style("fill", "#000")
-            .text(yAxisArray);
+        if (label) {
+            yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
+            yAxisDraw.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", 0 - (yAxisBBox.height / 2))
+                .attr("y", 0 - yAxisBBox.width - (2 * textOffset))
+                .attr("dy", "1em")
+                .style("text-anchor", textAnchor)
+                .style("fill", fill)
+                .style("font-size", fontSize)
+                .text(label);
+        }
     },
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset) {
@@ -286,7 +314,6 @@ const GraphModel = Backbone.Model.extend({
             .append(function (d) {
                 return document.createElementNS("http://www.w3.org/2000/svg", d.style);
             })
-            .attr("transform", "translate(0, 20)")
             .attr("cx", function (d) {
                 return scaleX(d[xAttr]) + (offset + (scaleX.bandwidth() / 2));
             })
@@ -348,7 +375,7 @@ const GraphModel = Backbone.Model.extend({
     appendLegend: function (svg, legendData) {
         var legend = svg.append("g")
             .attr("class", "graph-legend")
-            .attr("transform", "translate(10, 10)")
+            .style("height", "200 px")
             .selectAll("g")
             .data(legendData)
             .enter()
@@ -361,12 +388,12 @@ const GraphModel = Backbone.Model.extend({
         legend.append(function (d) {
             return document.createElementNS("http://www.w3.org/2000/svg", d.style);
         })
-        // Attribute für <rect>
+            // Attribute für <rect>
             .attr("width", 10)
             .attr("height", 10)
             .attr("x", 0)
             .attr("y", 5)
-        // Attribute für <circle>
+            // Attribute für <circle>
             .attr("cx", 5)
             .attr("cy", 10)
             .attr("r", 5)
@@ -396,13 +423,13 @@ const GraphModel = Backbone.Model.extend({
             height = graphConfig.height - margin.top - margin.bottom,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
-            valueLine,
-            tooltipDiv = select(graphConfig.selectorTooltip),
-            xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
             xAxis = this.createAxisBottom(scaleX, xThinning),
             yAxis = this.createAxisLeft(scaleY),
             svg = this.createSvg(selector, margin, width, height, "graph-svg"),
-            offset = 10;
+            tooltipDiv = select(graphConfig.selectorTooltip),
+            xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
+            offset = 10,
+            valueLine;
 
         this.appendLegend(svg, graphConfig.legendData);
         _.each(attrToShowArray, function (yAttrToShow) {
@@ -412,8 +439,8 @@ const GraphModel = Backbone.Model.extend({
             this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, offset);
         }, this);
         // Add the Axis
-        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 20);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, margin.top);
+        this.appendYAxisToSvg(svg, yAxis, yAxisLabel);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel);
 
         this.setGraphParams({
             scaleX: scaleX,
@@ -425,35 +452,45 @@ const GraphModel = Backbone.Model.extend({
     },
 
     createBarGraph: function (graphConfig) {
-        // debugger;
         var selector = graphConfig.selector,
+            scaleTypeX = graphConfig.scaleTypeX,
+            scaleTypeY = graphConfig.scaleTypeY,
+            data = graphConfig.data,
+            xAttr = graphConfig.xAttr,
+            xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
+            yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
+            attrToShowArray = graphConfig.attrToShowArray,
             margin = {top: 20, right: 20, bottom: 50, left: 50},
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - margin.bottom,
-            scaleTypeX = graphConfig.scaleTypeX,
-            scaleTypeY = graphConfig.scaleTypeY,
-            svgClass = graphConfig.svgClass,
-            data = graphConfig.data,
-            xAttr = graphConfig.xAttr,
-            attrToShowArray = graphConfig.attrToShowArray,
-            xAxisLabel = graphConfig.xAxisLabel ? graphConfig.xAxisLabel : undefined,
-            yAxisLabel = graphConfig.yAxisLabel ? graphConfig.yAxisLabel : undefined,
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
-            svg = this.createSvg(selector, margin, width, height, svgClass),
-            barWidth = width / data.length,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
             xAxis = this.createAxisBottom(scaleX, 1, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
+            svgClass = graphConfig.svgClass,
+            svg = this.createSvg(selector, margin, width, height, svgClass),
+            barWidth = width / data.length,
             offset = 0;
 
         this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
-        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset, 0);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset, 0);
+        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
     },
 
     drawBars: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
+        svg.append("g")
+            .attr("class", "graph-data")
+            .attr("transform", "translate(0, 20)")
+            .append("g")
+            .attr("class", "graph-diagram")
+            .append("path")
+            .data([dataToAdd])
+            .attr("class", className)
+            .attr("transform", "translate(0, 20)")
+            .attr("d", object);
+
         svg.selectAll(".bar")
             .data(data)
             .enter().append("rect")
