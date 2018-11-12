@@ -627,6 +627,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 fill: "#000",
                 fontSize: 12
             },
+            yAxisLabel: {},
             xAttr: "hour",
             attrToShowArray: ["mean"]
         };
