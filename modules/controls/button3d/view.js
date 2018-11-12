@@ -36,6 +36,7 @@ const Button3dView = Backbone.View.extend({
     },
     mapChange: function () {
         if (Radio.request("Map", "isMap3d")) {
+            Radio.trigger("ModelList", "toggleWfsCluster", true);
             Radio.trigger("Map", "deactivateMap3d");
             Radio.trigger("Alert", "alert:remove");
         }
@@ -49,6 +50,7 @@ const Button3dView = Backbone.View.extend({
                 Radio.trigger("ObliqueMap", "deactivate");
                 return;
             }
+            Radio.trigger("ModelList", "toggleWfsCluster", false);
             Radio.trigger("Map", "activateMap3d");
             // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
             // Radio.trigger("ModelList", "setModelAttributesById", "terrain", {isSelected: true});

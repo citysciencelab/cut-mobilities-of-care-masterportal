@@ -69,7 +69,8 @@ const ModelList = Backbone.Collection.extend({
             "setAllDescendantsInvisible": this.setAllDescendantsInvisible,
             "renderTree": function () {
                 this.trigger("renderTree");
-            }
+            },
+            "toggleWfsCluster": this.toggleWfsCluster
         }, this);
 
         this.listenTo(this, {
@@ -726,6 +727,22 @@ const ModelList = Backbone.Collection.extend({
         }
 
         return model;
+    },
+
+    /**
+     * is used when changing the map mode
+     * in 3d mode features cannot be clustered
+     * @param {boolean} value -
+     * @returns {void}
+     */
+    toggleWfsCluster: function (value) {
+        const clusterModels = this.filter(function (model) {
+            return model.has("clusterDistance");
+        });
+
+        clusterModels.forEach(function (layer) {
+            layer.set("isClustered", value);
+        });
     }
 });
 
