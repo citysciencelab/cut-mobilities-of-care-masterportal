@@ -32,6 +32,7 @@ const SchulwegRouting = Tool.extend({
             label: "HVV Verkehrsnetz"
         }),
         renderToSidebar: true,
+        renderToWindow: false,
         glyphicon: "glyphicon-filter"
     }),
 
