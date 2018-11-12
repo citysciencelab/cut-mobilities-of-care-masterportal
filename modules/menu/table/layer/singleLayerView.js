@@ -35,7 +35,7 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.addClass("layer-settings-activated");
         }
-        return this.$el;
+        return this;
     },
     renderSetting: function () {
         var attr = this.model.toJSON();

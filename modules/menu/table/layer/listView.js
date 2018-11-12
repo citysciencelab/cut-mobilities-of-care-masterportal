@@ -37,7 +37,7 @@ const LayerView = Backbone.View.extend({
             $("#table-nav-layers-panel").collapse("show");
         }
         this.renderList();
-        return this.$el;
+        return this;
     },
     renderList: function () {
         var models = this.collection.where({type: "layer"});
@@ -52,7 +52,7 @@ const LayerView = Backbone.View.extend({
         var childElement = {};
 
         _.each(models, function (model) {
-            childElement = new SingleLayerView({model: model}).render();
+            childElement = new SingleLayerView({model: model}).render().$el;
             this.$el.find("ul.layers").prepend(childElement);
 
         }, this);
