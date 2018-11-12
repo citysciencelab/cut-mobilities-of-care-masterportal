@@ -241,9 +241,11 @@ const GraphModel = Backbone.Model.extend({
             .enter()
             .append("g")
             .attr("transform", function () {
-                var y = svg.select(".yAxisDraw").node().getBBox().height;
+                // gibt den Hochwert des untersten Ticks zurück
+                var tick = svg.select(".yAxisDraw .tick").attr("transform"),
+                    transform = tick.substring(tick.indexOf("(") + 1, tick.indexOf(")")).split(",");
 
-                return "translate(0," + y + ")";
+                return "translate(0," + transform[1] + ")";
             })
             .attr("class", "xAxisDraw")
             .call(xAxisDraw);
