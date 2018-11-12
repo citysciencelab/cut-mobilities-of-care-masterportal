@@ -8,7 +8,7 @@ const FlaecheninfoThemeView = ThemeView.extend({
         "click button": "buttonClicked"
     },
 
-    buttonnClicked: function () {
+    buttonClicked: function () {
         this.model.createReport();
     }
 });

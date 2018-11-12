@@ -50,8 +50,8 @@ const FlaecheninfoTheme = Theme.extend({
     },
 
     createReport: function () {
-        var flurst = this.get("gfiContent").Flurstück,
-            gemarkung = this.get("gfiContent").Gemarkung;
+        var flurst = this.get("gfiContent")[0].Flurstück,
+            gemarkung = this.get("gfiContent")[0].Gemarkung;
 
         Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
     },
