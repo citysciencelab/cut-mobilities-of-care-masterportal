@@ -18,6 +18,15 @@ const DefaultTheme = Theme.extend({
             "4000": "Turmdach",
             "5000": "Mischform",
             "9999": "Sonstiges Dach"
+        },
+        objectTypes: {
+            "31001_": "Gebäude",
+            "51001_": "Turm",
+            "51002_": "Bauwerk oder Anlage für Industrie und Gewerbe",
+            "51003_": "Vorratsbehälter Speicherbauwerk",
+            "51006_": "Bauwerk oder Anlage für Sport, Freizeit und Erholung",
+            "51009_": "Sonstiges Bauwerk oder Sonstige Einrichtung",
+            "51007": "Historisches Bauwerk oder Historische Einrichtung"
         }
     }),
 
@@ -38,7 +47,8 @@ const DefaultTheme = Theme.extend({
 
     translateProperties: function () {
         this.get("gfiContent").forEach(function (element) {
-            const roofTypes = this.get("roofTypes");
+            const roofTypes = this.get("roofTypes"),
+                objectTypes = this.get("objectTypes");
 
             Object.keys(element).forEach(function (attribute) {
                 if (attribute === "Dachtyp") {
@@ -48,6 +58,13 @@ const DefaultTheme = Theme.extend({
                     const t = Number.parseFloat(element[attribute]).toFixed(2);
 
                     element[attribute] = t.toString() + "m";
+                }
+                else if (attribute === "Objektart") {
+                    Object.keys(objectTypes).forEach(function (type) {
+                        if (element[attribute].search(type) !== -1) {
+                            element[attribute] = objectTypes[type];
+                        }
+                    });
                 }
             });
         }, this);

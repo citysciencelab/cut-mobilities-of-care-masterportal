@@ -240,7 +240,7 @@ const Gfi = Tool.extend({
                 }
                 modelattributes = {
                     attributes: properties.attributes ? properties.attributes : properties,
-                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe"},
+                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
                     typ: "Cesium3DTileFeature",
                     gfiTheme: "buildings_3d",
                     name: "Buildings"
