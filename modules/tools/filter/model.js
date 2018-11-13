@@ -238,8 +238,7 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
-            query = layer.get("typ") === "GeoJSON" ? new GeoJsonQueryModel(model) : undefined;
+            query = this.getQueryByTyp(layer.get("typ"), model);
 
             if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
                 _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
@@ -265,6 +264,18 @@ const FilterModel = Tool.extend({
         }
     },
 
+    getQueryByTyp: function (layerTyp, model) {
+        var query;
+
+        if (layerTyp === "WFS" || layerTyp === "GROUP") {
+            query = new WfsQueryModel(model);
+        }
+        else if (layerTyp === "GeoJSON") {
+            query = new GeoJsonQueryModel(model);
+        }
+        return query;
+    },
+    
     setIsActive: function (value) {
         this.set("isActive", value);
     },

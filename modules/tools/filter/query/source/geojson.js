@@ -114,6 +114,7 @@ const GeoJsonQueryModel = QueryModel.extend({
             featureType = layerObject.get("featureType");
             version = layerObject.get("version");
             this.requestMetadata(url, featureType, version, this.parseResponse);
+            console.log("GeoJSON");
         }
     },
     /**
@@ -139,15 +140,8 @@ const GeoJsonQueryModel = QueryModel.extend({
      * @return {object} - Mapobject containing names and types
      */
     parseResponse: function (response) {
-        var elements = $("element", response),
-            featureAttributesMap = [];
-
-        _.each(elements, function (element) {
-            featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
-        });
-        console.log(featureAttributesMap);
-        
-        this.createSnippets(featureAttributesMap);
+        // console.log(response);
+        this.createSnippets([{name: "thema", type: "string", displayName: "Thema", matchingMode: "OR"}]);
     },
 
 
@@ -294,15 +288,17 @@ const GeoJsonQueryModel = QueryModel.extend({
             selectableValues = [];
 
         _.each(allAttributes, function (attribute) {
+            console.log(attribute);
             selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: [], matchingMode: attribute.matchingMode};
 
             _.each(features, function (feature) {
                 var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
                     return attr.attrName !== attribute.name;
                 }));
-
+                
                 if (isMatch) {
                     selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
+                    console.log(attribute.name);
                 }
             }, this);
             selectableValues.values = _.unique(_.flatten(selectableValues.values));

@@ -148,11 +148,16 @@ const QueryModel = Backbone.Model.extend({
         var featureAttributesMap = this.trimAttributes(featureAttributes),
             options;
 
-        featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
+        if (featureAttributes.displayName === undefined) {
+            featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
+        }
+
         featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
         featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
+
         this.setFeatureAttributesMap(featureAttributesMap);
         this.addSnippets(featureAttributesMap);
+        
         if (this.get("isSelected") === true) {
             this.runFilter();
             if (this.get("liveZoomToFeatures")) {
