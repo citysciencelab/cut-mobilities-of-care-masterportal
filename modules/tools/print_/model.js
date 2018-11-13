@@ -107,17 +107,13 @@ const PrintModel = Tool.extend({
     },
 
     parseMapfishCapabilities: function (response) {
-        // these formats throw errors
-        var formatBlacklist = ["bmp", "jpg", "jpeg"],
-            filteredFormats = _.difference(response.formats, formatBlacklist);
-
         this.setLayoutList(response.layouts);
         this.setCurrentLayout(response.layouts[0]);
         this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
         this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
         this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
         this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
-        this.setFormatList(filteredFormats);
+        this.setFormatList(response.formats);
         this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
         this.togglePostcomposeListener(this, true);
     },
