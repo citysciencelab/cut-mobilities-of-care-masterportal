@@ -327,7 +327,6 @@ const DrawTool = Tool.extend({
      */
     deactivateDrawInteraction: function () {
         if (!_.isUndefined(this.get("drawInteraction"))) {
-            console.log(this.get("drawInteraction"));
             this.get("drawInteraction").setActive(false);
         }
     },
