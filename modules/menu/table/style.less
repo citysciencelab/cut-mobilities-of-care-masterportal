@@ -259,6 +259,11 @@ a {
         .layer-item {
             font-family: @font_family_2;
             font-size: 17px;
+            .title{
+                display: block;
+                min-width: 385px;
+                overflow: auto;
+            }
         }
     }
     ul#layers {
@@ -271,7 +276,7 @@ a {
         ul {
             list-style: none;
             padding: 0 0 0 0px;
-            -webkit-padding-start: 0px;
+            -webkit-padding-start: 10px;
             li {
                 border-bottom: 1px solid #ddd;
                 padding: 5px 15px;
