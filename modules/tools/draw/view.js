@@ -23,13 +23,9 @@ const DrawToolView = Backbone.View.extend({
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
         "change .color select": "setColor",
-        "change select": "startDrawInteraction",
-        "keyup input": "startDrawInteraction",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
-        "click .modify.once": "createModifyInteraction",
         "click .modify": "toggleInteraction",
-        "click .trash.once": "startSelectInteraction",
         "click .trash": "toggleInteraction",
         "click .downloadDrawing": "startDownloadTool"
     },
@@ -75,12 +71,12 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     renderSurface: function (model) {
-        this.model.startDrawInteraction();
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
         this.renewSurface();
         this.registerListener();
+        this.model.toggleInteraction("draw");
     },
 
     /**
@@ -171,7 +167,9 @@ const DrawToolView = Backbone.View.extend({
             selectedElement = element.options[element.selectedIndex];
 
         this.model.setDrawType(selectedElement.value, selectedElement.text);
+        this.model.updateDrawInteraction();
         this.renewSurface();
+        this.startDrawInteraction();
     },
 
     /**
@@ -181,31 +179,7 @@ const DrawToolView = Backbone.View.extend({
     startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
-        this.model.deactivateDrawInteraction();
-        this.model.deactivateModifyInteraction();
-        this.model.startDrawInteraction();
-    },
-
-    /**
-     * removes the class 'once' from target and
-     * calls createModifyInteraction in the model
-     * @param {MouseEvent} evt -
-     * @returns {void}
-     */
-    createModifyInteraction: function (evt) {
-        $(evt.target).removeClass("once");
-        this.model.createModifyInteraction(this.model.get("layer"));
-    },
-
-    /**
-     * removes the class 'once' from target and
-     * calls startSelectInteraction in the model
-     * @param {MouseEvent} evt -
-     * @returns {void}
-     */
-    startSelectInteraction: function (evt) {
-        $(evt.target).removeClass("once");
-        this.model.startSelectInteraction(this.model.get("layer"));
+        this.model.toggleInteraction("draw");
     },
 
     /**
@@ -252,6 +226,7 @@ const DrawToolView = Backbone.View.extend({
      */
     setFont: function (evt) {
         this.model.setFont(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -261,6 +236,7 @@ const DrawToolView = Backbone.View.extend({
      */
     setText: function (evt) {
         this.model.setText(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -270,6 +246,7 @@ const DrawToolView = Backbone.View.extend({
      */
     setFontSize: function (evt) {
         this.model.setFontSize(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -287,6 +264,7 @@ const DrawToolView = Backbone.View.extend({
         });
         newColor.push(this.model.get("opacity"));
         this.model.setColor(newColor);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -296,6 +274,7 @@ const DrawToolView = Backbone.View.extend({
      */
     setRadius: function (evt) {
         this.model.setRadius(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -305,6 +284,7 @@ const DrawToolView = Backbone.View.extend({
      */
     setStrokeWidth: function (evt) {
         this.model.setStrokeWidth(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -314,11 +294,12 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     setOpacity: function (evt) {
-        var newcolor = this.model.get("color");
+        var newColor = this.model.get("color");
 
-        newcolor[3] = parseFloat(evt.target.value);
-        this.model.setColor(newcolor);
+        newColor[3] = parseFloat(evt.target.value);
+        this.model.setColor(newColor);
         this.model.setOpacity(parseFloat(evt.target.value));
+        this.model.updateDrawInteraction();
     }
 });
 

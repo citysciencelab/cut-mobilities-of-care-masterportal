@@ -48,26 +48,28 @@ const DrawTool = Tool.extend({
                 return this.get("layer");
             }
         }, this);
+        this.listenTo(this, {
+            "change:isActive": function (model, value) {
+                var layer = model.createLayer(model.get("layer"));
+
+                if (value) {
+                    this.setLayer(layer);
+                    this.createDrawInteractionAndAddToMap(layer, this.get("drawType"), true);
+                    this.createSelectInteractionAndAddToMap(layer, false);
+                    this.createModifyInteractionAndAddToMap(layer, false);
+                    this.off(this);
+                    this.createSourceListenerForStyling(layer);
+                }
+            }
+        });
     },
+    createSourceListenerForStyling: function (layer) {
+        var source = layer.getSource();
 
-    /**
-     * creates the interaction with a new drawing and the map
-     * @return {void}
-     */
-    startDrawInteraction: function () {
-        var layer = this.createLayer(this.get("layer")),
-            drawInteraction = this.get("drawInteraction");
-
-        Radio.trigger("Map", "removeInteraction", drawInteraction);
-        drawInteraction = this.createDrawInteraction(this.get("drawType"), layer, this.get("color"));
-
-        this.setLayer(layer);
-        this.setDrawInteraction(drawInteraction);
-
-        this.createDrawInteractionListener(drawInteraction);
-        Radio.trigger("Map", "addInteraction", drawInteraction);
+        source.on("addfeature", function (evt) {
+            evt.feature.setStyle(this.getStyle());
+        }.bind(this));
     },
-
     /**
      * creates a vector layer for drawn features, if layer input is undefined
      * and removes this callback from the change:isCurrentWin event
@@ -84,6 +86,29 @@ const DrawTool = Tool.extend({
 
         return vectorLayer;
     },
+    createDrawInteractionAndAddToMap: function (layer, drawType, isActive) {
+        var drawInteraction = this.createDrawInteraction(drawType, layer);
+
+        drawInteraction.setActive(isActive);
+        this.setDrawInteraction(drawInteraction);
+        this.createDrawInteractionListener(drawInteraction);
+        Radio.trigger("Map", "addInteraction", drawInteraction);
+    },
+    createSelectInteractionAndAddToMap: function (layer, isActive) {
+        var selectInteraction = this.createSelectInteraction(layer);
+
+        selectInteraction.setActive(isActive);
+        this.setSelectInteraction(selectInteraction);
+        this.createSelectInteractionListener(selectInteraction, layer);
+        Radio.trigger("Map", "addInteraction", selectInteraction);
+    },
+    createModifyInteractionAndAddToMap: function (layer, isActive) {
+        var modifyInteraction = this.createModifyInteraction(layer);
+
+        modifyInteraction.setActive(isActive);
+        this.setModifyInteraction(modifyInteraction);
+        Radio.trigger("Map", "addInteraction", modifyInteraction);
+    },
 
     /**
      * creates the draw to draw in the map
@@ -92,11 +117,11 @@ const DrawTool = Tool.extend({
      * @param {array} color - of geometries
      * @return {ol/interaction/Draw} draw
      */
-    createDrawInteraction: function (drawType, layer, color) {
+    createDrawInteraction: function (drawType, layer) {
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
-            style: this.getStyle(drawType, color)
+            style: this.getStyle()
         });
     },
 
@@ -108,26 +133,35 @@ const DrawTool = Tool.extend({
     createDrawInteractionListener: function (drawInteraction) {
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
-            evt.feature.setStyle(this.getStyle(this.get("drawType"), this.get("color")));
-        }.bind(this));
+        });
     },
-
+    updateDrawInteraction: function () {
+        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
+        this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
+    },
     /**
      * @param {object} drawType - contains the geometry and description
      * @param {array} color - of drawings
      * @return {ol/style/Style} style
      */
-    getStyle: function (drawType, color) {
-        var style = new Style();
+    getStyle: function () {
+        var style = new Style(),
+            drawType = this.get("drawType"),
+            color = this.get("color"),
+            text = this.get("text"),
+            font = this.get("font"),
+            fontSize = this.get("fontSize"),
+            strokeWidth = this.get("strokeWidth"),
+            radius = this.get("radius");
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
-            style = this.getTextStyle(color, this.get("text"), this.get("fontSize"), this.get("font"));
+            style = this.getTextStyle(color, text, fontSize, font);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
-            style = this.getDrawStyle(color, drawType.geometry, this.get("strokeWidth"), this.get("radius"));
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius);
         }
 
-        return style;
+        return style.clone();
     },
 
     /**
@@ -187,17 +221,15 @@ const DrawTool = Tool.extend({
         defaultColor.pop();
         defaultColor.push(this.defaults.opacity);
 
-        Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
-        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
-        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+        this.deactivateDrawInteraction();
+        this.deactivateModifyInteraction();
+        this.deactivateSelectInteraction();
 
         this.setRadius(this.defaults.radius);
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
+
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
-        this.setDrawInteraction(this.defaults.drawInteraction);
-        this.setSelectInteraction(this.defaults.selectInteraction);
-        this.setModifyInteraction(this.defaults.modifyInteraction);
     },
 
     /**
@@ -208,7 +240,7 @@ const DrawTool = Tool.extend({
     startSelectInteraction: function (layer) {
         var selectInteraction = this.createSelectInteraction(layer);
 
-        this.craeteSelectInteractionListener(selectInteraction, layer);
+        this.createSelectInteractionListener(selectInteraction, layer);
         this.setSelectInteraction(selectInteraction);
     },
 
@@ -229,7 +261,7 @@ const DrawTool = Tool.extend({
      * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @return {void}
      */
-    craeteSelectInteractionListener: function (selectInteraction, layer) {
+    createSelectInteractionListener: function (selectInteraction, layer) {
         selectInteraction.on("select", function (evt) {
             // remove feature from source
             layer.getSource().removeFeature(evt.selected[0]);
@@ -244,9 +276,9 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     createModifyInteraction: function (layer) {
-        this.setModifyInteraction(new Modify({
+        return new Modify({
             source: layer.getSource()
-        }));
+        });
     },
 
     /**
@@ -301,7 +333,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     activateModifyInteraction: function () {
-        Radio.trigger("Map", "addInteraction", this.get("modifyInteraction"));
+        this.get("modifyInteraction").setActive(true);
         this.putGlyphToCursor("glyphicon glyphicon-wrench");
     },
 
@@ -311,7 +343,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     deactivateModifyInteraction: function () {
-        Radio.trigger("Map", "removeInteraction", this.get("modifyInteraction"));
+        this.get("modifyInteraction").setActive(false);
         this.putGlyphToCursor("glyphicon glyphicon-pencil");
     },
 
@@ -321,7 +353,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     activateSelectInteraction: function () {
-        Radio.trigger("Map", "addInteraction", this.get("selectInteraction"));
+        this.get("selectInteraction").setActive(true);
         this.putGlyphToCursor("glyphicon glyphicon-trash");
     },
 
@@ -331,7 +363,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     deactivateSelectInteraction: function () {
-        Radio.trigger("Map", "removeInteraction", this.get("selectInteraction"));
+        this.get("selectInteraction").setActive(false);
         this.putGlyphToCursor("glyphicon glyphicon-pencil");
     },
 
