@@ -123,7 +123,6 @@ const PrintModel = Tool.extend({
                             scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                             scale.name = "1: " + scaletext;
                         });
-                        debugger;
                         model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                         model.setScaleByMapView();
                         model.set("isCollapsed", false);
