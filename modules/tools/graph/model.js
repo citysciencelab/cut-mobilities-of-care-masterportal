@@ -264,7 +264,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("transform", function () {
                 // gibt den Hochwert des untersten Ticks zurück
                 var tick = svg.select(".yAxisDraw .tick").attr("transform"),
-                    transform = tick.substring(tick.indexOf("(") + 1, tick.indexOf(")")).split(/\ |\,/);
+                    transform = tick.substring(tick.indexOf("(") + 1, tick.indexOf(")")).split(/\s|,/); // blank oder Komma
 
                 return "translate(0," + transform[1] + ")";
             })
