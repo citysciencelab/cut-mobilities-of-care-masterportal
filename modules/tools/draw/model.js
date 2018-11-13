@@ -51,16 +51,16 @@ const DrawTool = Tool.extend({
         this.on("change:isActive", this.setStatus, this);
     },
     /**
-         * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
-         * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
-         * @param {String} para_object - Ein Objekt, welches die Parameter enthält
-         *                 {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
-         *                 {String} color - Farbe, in rgb (default: "55, 126, 184")
-         *                 {Float} opacity - Transparenz (default: 1.0)
-         *                 {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
-         *                 {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
-         * @returns {String} GeoJSON aller Features als String
-         */
+     * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
+     * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+     * @param {String} para_object - Ein Objekt, welches die Parameter enthält
+     *                 {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
+     *                 {String} color - Farbe, in rgb (default: "55, 126, 184")
+     *                 {Float} opacity - Transparenz (default: 1.0)
+     *                 {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
+     *                 {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
+     * @returns {String} GeoJSON aller Features als String
+     */
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
             newColor,
