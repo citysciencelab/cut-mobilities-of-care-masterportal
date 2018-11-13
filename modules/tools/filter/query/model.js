@@ -157,7 +157,6 @@ const QueryModel = Backbone.Model.extend({
 
         this.setFeatureAttributesMap(featureAttributesMap);
         this.addSnippets(featureAttributesMap);
-        
         if (this.get("isSelected") === true) {
             this.runFilter();
             if (this.get("liveZoomToFeatures")) {

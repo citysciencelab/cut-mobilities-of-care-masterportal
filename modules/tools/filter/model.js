@@ -1,5 +1,5 @@
 import WfsQueryModel from "./query/source/wfs";
-import GeoJsonQueryModel from "./query/source/geojson";
+import BeitraegeQueryModel from "./query/source/beitraege";
 import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
@@ -271,7 +271,7 @@ const FilterModel = Tool.extend({
             query = new WfsQueryModel(model);
         }
         else if (layerTyp === "GeoJSON") {
-            query = new GeoJsonQueryModel(model);
+            query = new BeitraegeQueryModel(model);
         }
         return query;
     },

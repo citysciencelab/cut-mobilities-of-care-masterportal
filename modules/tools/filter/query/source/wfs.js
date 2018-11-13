@@ -145,9 +145,6 @@ const WfsQueryModel = QueryModel.extend({
         _.each(elements, function (element) {
             featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
         });
-        console.log("Logg");
-        console.log(featureAttributesMap);
-        // console.log(response);
         this.createSnippets(featureAttributesMap);
     },
 
