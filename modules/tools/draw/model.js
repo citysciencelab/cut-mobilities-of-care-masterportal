@@ -316,7 +316,9 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     activateDrawInteraction: function () {
-        this.get("drawInteraction").setActive(true);
+        if (!_.isUndefined(this.get("drawInteraction"))) {
+            this.get("drawInteraction").setActive(true);
+        }
     },
 
     /**
@@ -324,7 +326,10 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     deactivateDrawInteraction: function () {
-        this.get("drawInteraction").setActive(false);
+        if (!_.isUndefined(this.get("drawInteraction"))) {
+            console.log(this.get("drawInteraction"));
+            this.get("drawInteraction").setActive(false);
+        }
     },
 
     /**
@@ -333,8 +338,10 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     activateModifyInteraction: function () {
-        this.get("modifyInteraction").setActive(true);
-        this.putGlyphToCursor("glyphicon glyphicon-wrench");
+        if (!_.isUndefined(this.get("modifyInteraction"))) {
+            this.get("modifyInteraction").setActive(true);
+            this.putGlyphToCursor("glyphicon glyphicon-wrench");
+        }
     },
 
     /**
@@ -343,8 +350,10 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     deactivateModifyInteraction: function () {
-        this.get("modifyInteraction").setActive(false);
-        this.putGlyphToCursor("glyphicon glyphicon-pencil");
+        if (!_.isUndefined(this.get("modifyInteraction"))) {
+            this.get("modifyInteraction").setActive(false);
+            this.putGlyphToCursor("glyphicon glyphicon-pencil");
+        }
     },
 
     /**
@@ -363,8 +372,10 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     deactivateSelectInteraction: function () {
-        this.get("selectInteraction").setActive(false);
-        this.putGlyphToCursor("glyphicon glyphicon-pencil");
+        if (!_.isUndefined(this.get("selectInteraction"))) {
+            this.get("selectInteraction").setActive(false);
+            this.putGlyphToCursor("glyphicon glyphicon-pencil");
+        }
     },
 
     /**

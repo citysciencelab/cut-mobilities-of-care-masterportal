@@ -13,14 +13,6 @@ describe("drawModel", function () {
         model = new Model();
     });
 
-    describe("startDrawInteraction", function () {
-        it("should be an instance of Draw for empty input", function () {
-            model.startDrawInteraction();
-
-            expect(model.get("drawInteraction") instanceof Draw).to.be.true;
-        });
-    });
-
     describe("createLayer", function () {
         it("should return an result that be not undefined", function () {
             expect(model.createLayer(undefined)).to.exist;
@@ -41,8 +33,7 @@ describe("drawModel", function () {
         it("the result should be an instance of Draw for empty input", function () {
             var drawType = "",
                 layer = new VectorLayer(),
-                color = [],
-                result = model.createDrawInteraction(drawType, layer, color);
+                result = model.createDrawInteraction(drawType, layer);
 
             expect(result instanceof Draw).to.be.true;
         });
@@ -52,19 +43,20 @@ describe("drawModel", function () {
                     text: "Punkt zeichnen"
                 },
                 layer = new VectorLayer(),
-                color = [255, 0, 0, 1],
-                result = model.createDrawInteraction(drawType, layer, color);
+                color = [55, 126, 184, 1],
+                result = model.createDrawInteraction(drawType, layer);
 
-            expect(result.getOverlay().getStyle().getFill().getColor()).to.equal(color);
+            expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
         });
     });
 
     describe("getStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var drawType = {},
-                color = [],
-                result = model.getStyle(drawType, color);
+            var result;
 
+            model.setDrawType(undefined, undefined);
+            model.setColor([]);
+            result = model.getStyle();
             expect(result instanceof Style).to.be.true;
         });
         it("the result should be an instance of Style for undefined input", function () {
@@ -72,25 +64,25 @@ describe("drawModel", function () {
 
             expect(result instanceof Style).to.be.true;
         });
-        it("should be the result color ist the same as input color for geometry point", function () {
-            var drawType = {
-                    geometry: "Point",
-                    text: "Punkt zeichnen"
-                },
-                color = [255, 0, 0, 1],
-                result = model.getStyle(drawType, color);
+        it("should return result color to be the same as input color for geometry point", function () {
+            var color = [55, 126, 184, 1],
+                result;
 
-            expect(result.getFill().getColor()).to.equal(color);
+            model.setDrawType("Point", "Punkt zeichnen");
+            model.setColor(color);
+            result = model.getStyle();
+
+            expect(result.getFill().getColor()).to.deep.equal(color);
         });
         it("should be the result color ist the same as input color for text", function () {
-            var drawType = {
-                    geometry: "text",
-                    text: "Text schreiben"
-                },
-                color = [255, 0, 0, 1],
-                result = model.getStyle(drawType, color);
+            var color = [255, 0, 0, 1],
+                result;
 
-            expect(result.getText().getFill().getColor()).to.equal(color);
+            model.setDrawType("text", "Text schreiben");
+            model.setColor(color);
+            result = model.getStyle();
+
+            expect(result.getText().getFill().getColor()).to.deep.equal(color);
         });
     });
 
@@ -158,46 +150,30 @@ describe("drawModel", function () {
 
         describe("resetModule", function () {
             it("should radius is equal default radius", function () {
+                model.setDrawType("Point", "Punkt zeichnen");
                 model.setRadius(10000);
                 model.resetModule();
-
-                expect(model.get("radius")).is.equal(model.defaults.radius);
+                expect(model.get("radius")).to.deep.equal(model.defaults.radius);
             });
             it("should opacity is equal default opacity", function () {
+                model.setDrawType("Point", "Punkt zeichnen");
                 model.setOpacity(0.5);
                 model.resetModule();
 
                 expect(model.get("opacity")).is.equal(model.defaults.opacity);
             });
             it("should color is equal default color", function () {
+                model.setDrawType("Point", "Punkt zeichnen");
                 model.setColor([111, 112, 113, 0.4]);
                 model.resetModule();
 
                 expect(model.get("color")).is.equal(model.defaults.color);
             });
             it("should drawType is equal default drawType", function () {
-                model.setDrawType("xy");
+                model.setDrawType("Point", "Punkt zeichnen");
                 model.resetModule();
 
                 expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
-            });
-            it("should drawInteraction is equal default drawInteraction", function () {
-                model.setDrawInteraction("xy");
-                model.resetModule();
-
-                expect(model.get("drawInteraction")).is.equal(model.defaults.drawInteraction);
-            });
-            it("should selectInteraction is equal default selectInteraction", function () {
-                model.setSelectInteraction("xy");
-                model.resetModule();
-
-                expect(model.get("selectInteraction")).is.equal(model.defaults.selectInteraction);
-            });
-            it("should modifyInteraction is equal default modifyInteraction", function () {
-                model.setModifyInteraction("xy");
-                model.resetModule();
-
-                expect(model.get("modifyInteraction")).is.equal(model.defaults.modifyInteraction);
             });
         });
 
@@ -217,14 +193,15 @@ describe("drawModel", function () {
 
         describe("createModifyInteraction", function () {
             it("should be an instance of Modify for empty input", function () {
-                model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
+                var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
 
-                expect(model.get("modifyInteraction") instanceof Modify).to.be.true;
+                expect(interaction instanceof Modify).to.be.true;
             });
         });
 
         describe("deleteFeatures", function () {
             it("should empty the layerSource", function () {
+                model.setLayer(model.createLayer());
                 model.get("layer").getSource().getFeatures().push(new Feature());
                 model.deleteFeatures();
 
