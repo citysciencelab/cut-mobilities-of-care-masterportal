@@ -240,8 +240,9 @@ const Gfi = Tool.extend({
                 }
                 modelattributes = {
                     attributes: properties.attributes ? properties.attributes : properties,
-                    gfiAttributes: "showAll",
+                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe"},
                     typ: "Cesium3DTileFeature",
+                    gfiTheme: "buildings_3d",
                     name: "Buildings"
                 };
                 gfiParams3d.push(modelattributes);
