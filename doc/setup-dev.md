@@ -33,7 +33,7 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei *repository* und den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
+**Wichtig**: in der Datei package.json bei den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
 
 Dann in der Admin-cmd ausführen:
 ```
@@ -54,6 +54,16 @@ Einen lokalen Entwicklungsserver starten.
 Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration des Masterportals.
 
 Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort dort der lgv-config Ordner angegeben. Bei Verwendung eines eigenen Ordners mit anderer Bezeichnung für die Dienste-json-Dateien müsste der Pfad entsprechend angepasst werden. Beispiele für die Weiterleitung sind in der proxyconf.json des lgv-config-public Repositories zu finden.
+
+
+### npm start mit customModule
+Sofern ein eigenes Skript mit Abhängigkeiten zum Masterportal in die Entwicklungsumgebung eingebunden werden soll, so besteht in der Konsole über Eingabe eines weiteren Parameters die Möglichkeit hierzu. _CUSTOMMODULE_ wird als relativer Pfad zum JavaScript ausgehend von der _js/main.js_ angegeben.
+
+```
+# npm start -- --CUSTOMMODULE "../portalconfigs/verkehrsportal/custom"
+```
+
+Der genutzte Mechanismus wird über [webpackMode: eager](https://webpack.js.org/api/module-methods) gesteuert, indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
 
 
 ### npm test
@@ -78,6 +88,7 @@ Ein Portal vor Veröffentlichung optimieren/bauen.
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/
+ - Sucht im angegebenen Ordner nach einem customModule mit angegebenem Namen und importiert dieses Skript in den current chunk.
 - Pfade in index.html werden automatisch ersetzt
  - Pfade zu Conf in config.js werden automatisch ersetzt
 

@@ -22,8 +22,6 @@ const Tool = Item.extend({
     },
 
     superInitialize: function () {
-        var channel = Radio.channel("Tool");
-
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (value && model.get("renderToWindow")) {
@@ -33,12 +31,13 @@ const Tool = Item.extend({
                 else if (!value && model.get("renderToWindow")) {
                     Radio.trigger("Window", "setIsVisible", false);
                 }
-                if (model.get("deactivateGFI") && value) {
-                    channel.trigger("activatedTool", "gfi", true);
+                if (value && model.get("deactivateGFI")) {
+                    Radio.trigger("GFI", "deactivate");
                 }
                 else {
-                    channel.trigger("activatedTool", "gfi", false);
+                    Radio.trigger("GFI", "activate");
                 }
+
             }
         });
 

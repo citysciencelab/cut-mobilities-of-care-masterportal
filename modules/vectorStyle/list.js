@@ -51,6 +51,13 @@ const StyleList = Backbone.Collection.extend({
                     styleIds.push(layer.styleId);
                 }
             }
+            else if (layer.typ === "GROUP") {
+                _.each(layer.children, function (child) {
+                    if (_.has(child, "styleId")) {
+                        styleIds.push(child.styleId);
+                    }
+                });
+            }
         });
         filteredData = _.filter(data, function (styleModel) {
             return _.contains(styleIds, styleModel.layerId);

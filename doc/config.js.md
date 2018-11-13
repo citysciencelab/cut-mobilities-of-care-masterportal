@@ -10,7 +10,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |----|-------------|---|-------|------------|--------|
 |[clickCounter](#markdown-header-clickcounter)|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
-|customModules|nein|Array[String]||Pfad zu portalspezifischen Modulen. Der Pfad ist relativ zu *js/main.js*.| `["../portal/master/verkehrsfunctions"]`|
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|

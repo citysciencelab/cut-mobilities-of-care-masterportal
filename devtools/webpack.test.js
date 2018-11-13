@@ -1,6 +1,5 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    proxies = require("lgv-config/proxyconf.json");
+    path = require("path");
 
 module.exports = {
     entry: "mocha-loader!./test/unittests/SpecRunner.js",
