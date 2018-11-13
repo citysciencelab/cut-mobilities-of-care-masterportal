@@ -8,6 +8,5 @@ const inquirer = require("inquirer"),
     ];
 
 inquirer.prompt(questions).then(function (answers) {
-    // buildWebpack(answers);
     buildFunctions(answers);
 });
