@@ -11,7 +11,6 @@ const DrawTool = Tool.extend({
     /**
      * @class DrawTool
      * @name module:lgv.lgv/modules/tools/draw/model
-     * @constructor
      * @augments Backbone.Model
      */
     defaults: _.extend({}, Tool.prototype.defaults, {
