@@ -42,10 +42,6 @@ const MapMarker = Backbone.View.extend({
         this.hideMarker();
     },
 
-    clearPolygon: function () {
-        this.hidePolygon();
-    },
-
     /**
     * @description Zoom auf Treffer
     * @param {Object} hit - Treffer der Searchbar

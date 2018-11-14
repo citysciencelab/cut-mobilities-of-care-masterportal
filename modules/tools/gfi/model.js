@@ -94,12 +94,6 @@ const Gfi = Tool.extend({
         });
         this.listenToThemeList();
 
-        this.listenTo(channel, {
-            "isVisibleMapMarker": function (value) {
-                this.setIsVisibleMapMarker(value);
-            }
-        });
-
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": this.setIsMobile
         }, this);
