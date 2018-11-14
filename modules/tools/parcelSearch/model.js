@@ -30,6 +30,10 @@ const ParcelSearch = Tool.extend({
         this.listenTo(Radio.channel("ParcelSearch"), {
             "createReport": this.createReport
         });
+
+        this.listenTo(Radio.channel("GFI"), {
+            "isMapMarkerVisible": this.setIsMapMarkerVisible
+        }, this);
         this.setDefaults();
     },
 
@@ -186,7 +190,8 @@ const ParcelSearch = Tool.extend({
             position,
             coordinate,
             geoExtent,
-            attributes;
+            attributes,
+            isMapMarkerVisible = this.get("isMapMarkerVisible");
 
         if (!member || member.length === 0) {
             parcelNumber = this.padLeft(this.get("parcelNumber"), 5, "0");
@@ -208,7 +213,11 @@ const ParcelSearch = Tool.extend({
                 _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
             });
             this.setParcelFound(true);
-            Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
+
+            if (_.isUndefined(isMapMarkerVisible) || isMapMarkerVisible) {
+                Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
+            }
+
             Radio.trigger("ParcelSearch", "parcelFound", attributes);
         }
     },
@@ -271,6 +280,10 @@ const ParcelSearch = Tool.extend({
     // setter for parcelFound
     setParcelFound: function (value) {
         this.set("parcelFound", value);
+    },
+
+    setIsMapMarkerVisible: function (value) {
+        this.set("isMapMarkerVisible", value);
     }
 });
 
