@@ -247,49 +247,22 @@ const CswParser = Backbone.Model.extend({
             maintenanceAndUpdateFrequency = $("gmd\\:maintenanceAndUpdateFrequency,maintenanceAndUpdateFrequency", maintenanceInformation),
             maintenanceFrequencyCode = $("gmd\\:MD_MaintenanceFrequencyCode,MD_MaintenanceFrequencyCode", maintenanceAndUpdateFrequency),
             dateType = $(maintenanceFrequencyCode).attr("codeListValue"),
-            periodicity;
+            dateTypes = {
+                continual: "kontinuierlich",
+                daily: "täglich",
+                weekly: "wöchentlich",
+                fortnightly: "zweimal wöchentlich",
+                monthly: "monatlich",
+                quarterly: "quartalsweise",
+                biannually: "zweimal jährlich",
+                annually: "jährlich",
+                asNeeded: "bei Bedarf",
+                irregular: "unregelmäßige Intervalle",
+                notPlanned: "nicht geplant",
+                unknown: "unbekannt"
+            };
 
-        if (dateType === "continual") {
-            periodicity = "kontinuierlich";
-        }
-        else if (dateType === "daily") {
-            periodicity = "täglich";
-        }
-        else if (dateType === "weekly") {
-            periodicity = "wöchentlich";
-        }
-        else if (dateType === "fortnightly") {
-            periodicity = "zweimal wöchentlich";
-        }
-        else if (dateType === "monthly") {
-            periodicity = "monatlich";
-        }
-        else if (dateType === "quarterly") {
-            periodicity = "quartalsweise";
-        }
-        else if (dateType === "biannually") {
-            periodicity = "zweimal jährlich";
-        }
-        else if (dateType === "annually") {
-            periodicity = "jährlich";
-        }
-        else if (dateType === "asNeeded") {
-            periodicity = "bei Bedarf";
-        }
-        else if (dateType === "irregular") {
-            periodicity = "unregelmäßige Intervalle";
-        }
-        else if (dateType === "notPlanned") {
-            periodicity = "nicht geplant";
-        }
-        else if (dateType === "unknown") {
-            periodicity = "unbekannt";
-        }
-        else {
-            periodicity = null;
-        }
-
-        return periodicity;
+        return dateTypes[dateType];
     }
 });
 
