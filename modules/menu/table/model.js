@@ -11,6 +11,10 @@ const TableNavModel = Backbone.Model.extend({
             },
             "setActiveElement": this.setActiveElement
         }, this);
+
+        this.listenTo(channel, {
+            "appendFilter": this.appendFilterContent
+        });
     },
 
     setActiveElement: function (element) {
@@ -20,6 +24,9 @@ const TableNavModel = Backbone.Model.extend({
             channel.trigger("hideMenuElement" + this.get("isActiveElement"));
         }
         this.set("isActiveElement", element);
+    },
+    appendFilterContent: function (element) {
+        this.trigger("appendFilterContent", element);
     }
 });
 
