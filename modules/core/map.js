@@ -8,7 +8,7 @@ import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import OverlaySynchronizer from "olcs/OverlaySynchronizer.js";
+import FixedOverlaySynchronizer from "../../plugins/FixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "../../plugins/WmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 
@@ -234,7 +234,7 @@ const map = Backbone.Model.extend({
             map: this.get("map"),
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (map, scene) {
-                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new OverlaySynchronizer(map, scene)];
+                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new FixedOverlaySynchronizer(map, scene)];
             }
         });
 

@@ -1,6 +1,6 @@
 const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    gfiWindow: "attached",
+    gfiWindow: "detached",
     simpleMap: false,
     wfsImgPath: "/lgv-config/img/",
     allowParametricURL: true,

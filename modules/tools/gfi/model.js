@@ -100,7 +100,9 @@ const Gfi = Tool.extend({
         this.listenTo(Radio.channel("Map"), {
             "isReady": function () {
                 this.toggleGFI(this.get("id"), this.get("deactivateGFI"));
-                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+                if (this.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
+                    Radio.trigger("Map", "addOverlay", this.get("overlay"));
+                }
             }
         }, this);
 
