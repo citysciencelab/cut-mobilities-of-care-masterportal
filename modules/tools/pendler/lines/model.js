@@ -88,11 +88,12 @@ const Lines = PendlerCoreModel.extend({
 
             lineLayerFeature.setStyle(new Style({
                 stroke: new Stroke({
-                    color: "#c00909",
+                    color: [192, 9, 9, 1],
                     width: "3"
                 })
             }));
-
+            // "styleId" neccessary for print, that style and feature can be linked
+            lineLayerFeature.set("styleId", _.uniqueId());
             this.get("lineLayer").getSource().addFeature(lineLayerFeature);
 
             // Erzeuge die Beschriftung. Dafür wird ein (unsichtbarere) Punkt am Ende jeder Linie gesetzt.
@@ -114,12 +115,13 @@ const Lines = PendlerCoreModel.extend({
                     font: "14pt sans-serif",
                     placement: "point",
                     stroke: new Stroke({
-                        color: "#ffffff",
+                        color: [255, 255, 255, 1],
                         width: 5
                     })
                 })
             }));
-
+            // "styleId" neccessary for print, that style and feature can be linked
+            labelLayerFeature.set("styleId", _.uniqueId());
             this.get("labelLayer").getSource().addFeature(labelLayerFeature);
 
         }, this);
@@ -142,6 +144,7 @@ const Lines = PendlerCoreModel.extend({
         if (!_.isUndefined(lineLayer)) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
+        Radio.trigger("MapMarker", "hideMarker");
     }
 });
 

@@ -184,38 +184,54 @@ const BuildSpecModel = Backbone.Model.extend({
             styleAttribute = this.getStyleAttribute(layer);
 
         features.forEach(function (feature) {
-            var style = this.getFeatureStyle(feature, layer)[0],
+            var clonedFeature,
+                styles = this.getFeatureStyle(feature, layer),
                 stylingRule,
-                styleObject;
+                styleObject,
+                geometryType,
+                styleGeometryFunction;
 
-            if (style !== null) {
-                this.addFeatureToGeoJsonList(feature, geojsonList);
-                stylingRule = this.getStylingRule(layer, feature, styleAttribute);
-                // do nothing if we already have a style object for this CQL rule
-                if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
-                    return;
+            _.each(styles, function (style, index) {
+                if (style !== null) {
+                    clonedFeature = feature.clone();
+                    clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
+                    geometryType = feature.getGeometry().getType();
+
+                    // if style has geometryFunction, take geometry from style Function
+                    styleGeometryFunction = style.getGeometryFunction();
+                    if (!_.isNull(styleGeometryFunction) && !_.isUndefined(styleGeometryFunction)) {
+                        clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
+                        geometryType = styleGeometryFunction(clonedFeature).getType();
+                    }
+
+                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
+                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
+                    // do nothing if we already have a style object for this CQL rule
+                    if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
+                        return;
+                    }
+                    styleObject = {
+                        symbolizers: []
+                    };
+                    if (geometryType === "Point" || geometryType === "MultiPoint") {
+                        styleObject.symbolizers.push(this.buildPointStyle(style, layer));
+                    }
+                    else if (geometryType === "Polygon" || geometryType === "MultiPolygon") {
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
+                    }
+                    else if (geometryType === "Circle") {
+                        styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
+                    }
+                    else if (geometryType === "LineString" || geometryType === "MultiLineString") {
+                        styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
+                    }
+                    // label styling
+                    if (style.getText() !== null && style.getText() !== undefined) {
+                        styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
+                    }
+                    mapfishStyleObject[stylingRule] = styleObject;
                 }
-                styleObject = {
-                    symbolizers: []
-                };
-                if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
-                    styleObject.symbolizers.push(this.buildPointStyle(style, layer));
-                }
-                else if (feature.getGeometry().getType() === "Polygon" || feature.getGeometry().getType() === "MultiPolygon") {
-                    styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
-                }
-                else if (feature.getGeometry().getType() === "Circle") {
-                    styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
-                }
-                else if (feature.getGeometry().getType() === "LineString" || feature.getGeometry().getType() === "MultiLineString") {
-                    styleObject.symbolizers.push(this.buildLineStringStyle(style, layer));
-                }
-                // label styling
-                if (style.getText() !== null && style.getText() !== undefined) {
-                    styleObject.symbolizers.push(this.buildTextStyle(style.getText()));
-                }
-                mapfishStyleObject[stylingRule] = styleObject;
-            }
+            }, this);
         }, this);
         return mapfishStyleObject;
     },
@@ -277,6 +293,7 @@ const BuildSpecModel = Backbone.Model.extend({
             type: "text",
             label: style.getText(),
             fontColor: this.rgbArrayToHex(style.getFill().getColor()),
+            labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : "white",
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
             fontSize: style.getFont().split(" ")[0],
@@ -343,8 +360,9 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     buildStrokeStyle: function (style, obj) {
-        var strokeColor = style.getColor();
+        var strokeColor;
 
+        strokeColor = style.getColor();
         obj.strokeColor = this.rgbArrayToHex(strokeColor);
         if (strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];

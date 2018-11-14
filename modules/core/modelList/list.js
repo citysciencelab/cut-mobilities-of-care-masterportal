@@ -273,27 +273,30 @@ const ModelList = Backbone.Collection.extend({
     * @return {undefined}
     */
     setVisibleByParentIsExpanded: function (parentId) {
-        var itemListByParentId = this.where({parentId: parentId}),
+        var children = this.where({parentId: parentId}),
             parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
-            this.setAllDescendantsInvisible(parentId);
+            this.setAllDescendantsInvisible(children);
         }
         else {
-            _.each(itemListByParentId, function (item) {
-                item.setIsVisibleInTree(true);
-            });
+            this.setAllDescendantsVisible(children);
         }
     },
-    setAllDescendantsInvisible: function (parentId) {
-        var itemListByParentId = this.where({parentId: parentId});
-
-        _.each(itemListByParentId, function (item) {
-            item.setIsVisibleInTree(false);
-            if (item.get("type") === "folder") {
-                item.setIsExpanded(false, {silent: true});
+    setAllDescendantsInvisible: function (children) {
+        _.each(children, function (child) {
+            child.setIsVisibleInTree(false);
+            if (child.get("type") === "folder") {
+                this.setAllDescendantsInvisible(this.where({parentId: child.get("id")}));
             }
-            this.setAllDescendantsInvisible(item.get("id"));
+        }, this);
+    },
+    setAllDescendantsVisible: function (children) {
+        _.each(children, function (child) {
+            child.setIsVisibleInTree(true);
+            if (child.get("type") === "folder" && child.get("isExpanded")) {
+                this.setAllDescendantsVisible(this.where({parentId: child.get("id")}));
+            }
         }, this);
     },
 
@@ -370,15 +373,11 @@ const ModelList = Backbone.Collection.extend({
         }
     },
 
-    setActiveToolToFalse: function (model, deactivateGFI) {
-        var tools = _.without(this.where({isActive: true}), model);
+    setActiveToolToFalse: function (model) {
+        var activeTools = _.without(this.where({isActive: true}), model);
 
-        _.each(tools, function (tool) {
-            if (!_.isUndefined(tool)) {
-                if (model.get("id") !== "gfi" || model.get("id") !== "compareFeatures" || deactivateGFI) {
-                    tool.setIsActive(false);
-                }
-            }
+        _.each(activeTools, function (tool) {
+            tool.setIsActive(false);
         });
     },
 
@@ -633,7 +632,6 @@ const ModelList = Backbone.Collection.extend({
 
     toggleCatalogs: function (id) {
         _.each(this.where({parentId: "tree"}), function (model) {
-            // if (model.get("id") !== id) {
             if (model.get("id") !== id && !model.get("isAlwaysExpanded")) {
                 model.setIsExpanded(false);
             }

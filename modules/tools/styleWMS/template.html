@@ -66,5 +66,12 @@
                 </div>
             </div>
         <% } %>
+        <% if (model !== null && numberOfClasses === "default") { %>
+            <div class="form-group form-group-sm">
+                <div class="col-md-12 col-sm-12 col-xs-12 stylewms-panel">
+                    <button class="btn btn-panel-reset">Zurücksetzen</button>
+                </div>
+            </div>
+        <% } %>
     <% } %>
 </div>

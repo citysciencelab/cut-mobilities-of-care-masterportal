@@ -34,9 +34,6 @@ const PendlerCoreModel = Tool.extend({
                 if (value) {
                     this.resetWindow();
                 }
-                else {
-                    this.hideMapContent();
-                }
             }
         });
 
@@ -328,17 +325,6 @@ const PendlerCoreModel = Tool.extend({
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
     },
-
-    /**
-     * Beende die Animation bzw. enteferne angezeigte Features (durch Aufruf von "clear"),
-     * entferne zusätzlich den Marker der selektierten Gemeinde (wenn vorhanden).
-     * @returns {Void} keine Rückgabe
-     */
-    hideMapContent: function () {
-        this.clear();
-        Radio.trigger("MapMarker", "hideMarker");
-    },
-
     resetWindow: function () {
         this.setKreis("");
         this.set("pendlerLegend", []);

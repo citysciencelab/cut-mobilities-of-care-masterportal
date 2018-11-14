@@ -1,5 +1,4 @@
 import DownloadWin from "text-loader!./template.html";
-import DownloadModel from "./model";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
@@ -11,7 +10,7 @@ const DownloadView = Backbone.View.extend({
     initialize: function () {
         var channel = Radio.channel("download");
 
-        this.model = new DownloadModel();
+        // this.model = new DownloadModel();
         this.template = _.template(DownloadWin);
 
         this.listenTo(this.model, {
