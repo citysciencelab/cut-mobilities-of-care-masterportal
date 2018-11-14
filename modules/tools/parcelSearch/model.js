@@ -22,7 +22,8 @@ const ParcelSearch = Tool.extend({
         "parcelDenominatorNumber": "0", // default Flurstücksnenner,
         "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         "parcelFound": false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        "glyphicon": "glyphicon-search"
+        "glyphicon": "glyphicon-search",
+        "mapMarkerType": "Parcel"
     }),
     initialize: function () {
         this.superInitialize();
@@ -31,9 +32,6 @@ const ParcelSearch = Tool.extend({
             "createReport": this.createReport
         });
 
-        this.listenTo(Radio.channel("GFI"), {
-            "isMapMarkerVisible": this.setIsMapMarkerVisible
-        }, this);
         this.setDefaults();
     },
 
@@ -190,8 +188,7 @@ const ParcelSearch = Tool.extend({
             position,
             coordinate,
             geoExtent,
-            attributes,
-            isMapMarkerVisible = this.get("isMapMarkerVisible");
+            attributes;
 
         if (!member || member.length === 0) {
             parcelNumber = this.padLeft(this.get("parcelNumber"), 5, "0");
@@ -214,10 +211,7 @@ const ParcelSearch = Tool.extend({
             });
             this.setParcelFound(true);
 
-            if (_.isUndefined(isMapMarkerVisible) || isMapMarkerVisible) {
-                Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
-            }
-
+            Radio.trigger("MapMarker", "zoomTo", {type: this.get("mapMarkerType"), coordinate: coordinate});
             Radio.trigger("ParcelSearch", "parcelFound", attributes);
         }
     },
@@ -280,10 +274,6 @@ const ParcelSearch = Tool.extend({
     // setter for parcelFound
     setParcelFound: function (value) {
         this.set("parcelFound", value);
-    },
-
-    setIsMapMarkerVisible: function (value) {
-        this.set("isMapMarkerVisible", value);
     }
 });
 
