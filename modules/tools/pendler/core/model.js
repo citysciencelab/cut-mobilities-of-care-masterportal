@@ -18,7 +18,9 @@ const PendlerCoreModel = Tool.extend({
         featureType: "mrh_einpendler_gemeinde",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
-        alertId: ""
+        alertId: "",
+        attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
+            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
     }),
     initialize: function () {
         var channel = Radio.channel("Animation");
@@ -34,6 +36,10 @@ const PendlerCoreModel = Tool.extend({
             "change:isActive": function (model, value) {
                 if (value) {
                     this.resetWindow();
+                    Radio.trigger("Attributions", "createAttribution", model.get("name"), this.get("attributionText"));
+                }
+                else {
+                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), this.get("attributionText"));
                 }
             }
         });
@@ -264,8 +270,7 @@ const PendlerCoreModel = Tool.extend({
         this.setAlertId(alertId);
         Radio.trigger("Alert", "alert", {
             id: alertId,
-            text: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
-                "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>",
+            text: this.get("attributionText"),
             dismissable: false,
             confirmable: true
         });
