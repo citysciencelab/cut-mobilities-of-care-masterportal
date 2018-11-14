@@ -28,10 +28,15 @@ const AnimationView = Backbone.View.extend({
     template: _.template(AnimationTemplate),
 
     render: function (model, value) {
+        var windowHeight = (window.innerHeight - 120) + "px";
+
         if (value || !model.get("animating")) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
 
             this.$el.html(this.template(model.toJSON()));
+            this.$el.css({
+                "max-height": windowHeight
+            });
             this.delegateEvents();
         }
         else {
