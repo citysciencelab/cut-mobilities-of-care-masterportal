@@ -750,6 +750,7 @@ Flurstücksuche
 |storedQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
 |createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
 |reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
+|mapMarkerType|nein|String|"Parcel"|Gibt an wie im MapMarker Modul auf das Flurstück gezoomt und markiert wird.|
 
 ******
 ******
