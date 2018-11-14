@@ -389,15 +389,11 @@ const ModelList = Backbone.Collection.extend({
         }
     },
 
-    setActiveToolToFalse: function (model, deactivateGFI) {
-        var tools = _.without(this.where({isActive: true}), model);
+    setActiveToolToFalse: function (model) {
+        var activeTools = _.without(this.where({isActive: true}), model);
 
-        _.each(tools, function (tool) {
-            if (!_.isUndefined(tool)) {
-                if (model.get("id") !== "gfi" || model.get("id") !== "compareFeatures" || deactivateGFI) {
-                    tool.setIsActive(false);
-                }
-            }
+        _.each(activeTools, function (tool) {
+            tool.setIsActive(false);
         });
     },
 

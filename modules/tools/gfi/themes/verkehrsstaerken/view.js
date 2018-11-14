@@ -11,7 +11,6 @@ const VerkehrsStaerkenThemeView = ThemeView.extend({
     },
     changeKat: function (evt) {
         this.$(".graph svg").remove();
-        this.model.setAttrToShow([evt.currentTarget.id]);
         this.$(".btn-group").children("button").each(function () {
             if ($(this)[0].id === evt.currentTarget.id) {
                 $(this).addClass("active");
@@ -20,14 +19,13 @@ const VerkehrsStaerkenThemeView = ThemeView.extend({
                 $(this).removeClass("active");
             }
         });
-        this.model.createD3Document();
+        this.model.createD3Document(evt.currentTarget.id);
     },
     loadDiagramm: function () {
         var attr = this.$("#diagramm").find(".active")[0].value;
 
         this.$(".graph svg").remove();
-        this.model.setAttrToShow([attr]);
-        this.model.createD3Document();
+        this.model.createD3Document(attr);
     },
     toggleTab: function (evt) {
         var contentId = this.$(evt.currentTarget).attr("value");
