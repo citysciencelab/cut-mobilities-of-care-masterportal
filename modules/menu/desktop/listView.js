@@ -30,9 +30,6 @@ const Menu = listView.extend({
         $("#tree").html("");
         // Eine Themenebene rendern
         this.renderSubTree("tree", 0, 0, true);
-        $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
-        $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
-        $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
     },
     /**
      * Rendert die  Auswahlliste

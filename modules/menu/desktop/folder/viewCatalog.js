@@ -60,13 +60,6 @@ const FolderView = Backbone.View.extend({
             elem.removeClass("glyphicon-plus-sign");
             elem.addClass("glyphicon-minus-sign");
         }
-        // Hässlicher IE Bugfix, weil IE 11 mit overflow: auto und remove probleme macht (leerer Katalog wird sehr hoch und bekommt die Höhe -0.01)
-        if (!this.model.get("isExpanded")) {
-            this.$el.find(".LayerListMaxHeight").css("overflow", "visible");
-        }
-        else {
-            this.$el.find(".LayerListMaxHeight").css("overflow", "auto");
-        }
     },
     toggleBackground: function () {
         Radio.trigger("MapView", "toggleBackground");
