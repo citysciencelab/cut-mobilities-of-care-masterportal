@@ -17,7 +17,8 @@ const PendlerCoreModel = Tool.extend({
         },
         featureType: "mrh_einpendler_gemeinde",
         attrAnzahl: "anzahl_einpendler",
-        attrGemeinde: "wohnort"
+        attrGemeinde: "wohnort",
+        alertId: ""
     }),
     initialize: function () {
         var channel = Radio.channel("Animation");
@@ -72,6 +73,14 @@ const PendlerCoreModel = Tool.extend({
             },
             "change:postBody": function (model, value) {
                 this.sendRequest("POST", value, this.parseFeatures);
+            }
+        });
+        this.listenTo(Radio.channel("Alert"), {
+            "confirmed": function (id) {
+                if (id === this.get("alertId")) {
+                    this.download();
+                }
+                this.setAlertId("");
             }
         });
         this.sendRequest("GET", this.get("params"), this.parseKreise);
@@ -249,7 +258,18 @@ const PendlerCoreModel = Tool.extend({
 
         this.setPostBody(postBody);
     },
+    createAlertBeforeDownload: function () {
+        var alertId = "PendlerDownload";
 
+        this.setAlertId(alertId);
+        Radio.trigger("Alert", "alert", {
+            id: alertId,
+            text: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
+                "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>",
+            dismissable: false,
+            confirmable: true
+        });
+    },
     download: function () {
         const features = this.get("lineFeatures"),
             featurePropertyList = [];
@@ -329,6 +349,9 @@ const PendlerCoreModel = Tool.extend({
         this.setKreis("");
         this.set("pendlerLegend", []);
         this.unset("postBody", {silent: true});
+    },
+    setAlertId: function (value) {
+        this.set("alertId", value);
     }
 });
 
