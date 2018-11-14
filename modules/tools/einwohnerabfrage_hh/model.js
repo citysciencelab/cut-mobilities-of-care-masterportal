@@ -46,7 +46,6 @@ const Einwohnerabfrage = Tool.extend({
         currentValue: "",
         // mrh meta data id
         mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
-        mrhDate: undefined,
         // fhh meta data id
         fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
         fhhDate: undefined,
@@ -106,9 +105,6 @@ const Einwohnerabfrage = Tool.extend({
     updateMetaData: function (attr, parsedData) {
         if (attr === "fhhDate") {
             this.setFhhDate(parsedData.date);
-        }
-        else if (attr === "mrhDate") {
-            this.setMrhDate(parsedData.date);
         }
     },
     /**
@@ -313,11 +309,8 @@ const Einwohnerabfrage = Tool.extend({
             {
                 metaId: this.get("fhhId"),
                 attr: "fhhDate"
-            },
-            {
-                metaId: this.get("mrhId"),
-                attr: "mrhDate"
-            }];
+            }
+        ];
 
         if (this.get("isActive")) {
             _.each(metaIds, function (metaIdObj) {
@@ -557,10 +550,6 @@ const Einwohnerabfrage = Tool.extend({
 
     setFhhDate: function (value) {
         this.set("fhhDate", value);
-    },
-
-    setMrhDate: function (value) {
-        this.set("mrhDate", value);
     },
 
     setDrawInteraction: function (value) {

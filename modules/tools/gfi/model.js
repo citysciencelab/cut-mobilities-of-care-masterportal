@@ -13,9 +13,9 @@ const Gfi = Tool.extend({
         // ist das Modal/Popover sichtbar
         isVisible: false,
         // mobile Ansicht true | false
-        isMobile: Radio.request("Util", "isViewMobile"),
+        isMobile: false,
         // uiStyle DEFAULT | TABLE | SIMPLE
-        uiStyle: Radio.request("Util", "getUiStyle"),
+        uiStyle: "DEFAULT",
         // ol.Overlay für attached
         overlay: new Overlay({element: undefined}),
         // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -30,10 +30,15 @@ const Gfi = Tool.extend({
         numberOfThemes: 0,
         rotateAngle: 0,
         glyphicon: "glyphicon-info-sign",
-        isMapMarkerVisible: true
+        isMapMarkerVisible: true,
+        deactivateGFI: false
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
+
+        // Wegen Ladereihenfolge hier die Default-Attribute setzen, sonst sind die Werte noch nicht aus der Config ausgelesen
+        this.set("uiStyle", Radio.request("Util", "getUiStyle"));
+        this.set("isMobile", Radio.request("Util", "isViewMobile"));
 
         this.setThemeList(new ThemeList());
 
@@ -41,7 +46,9 @@ const Gfi = Tool.extend({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
             "changeFeature": this.changeFeature,
-            "isMapMarkerVisible": this.setIsMapMarkerVisible
+            "isMapMarkerVisible": this.setIsMapMarkerVisible,
+            "activate": this.activateGFI,
+            "deactivate": this.deactivateGFI
         }, this);
 
         channel.reply({
@@ -75,9 +82,38 @@ const Gfi = Tool.extend({
             },
             "change:themeIndex": function (model, value) {
                 this.get("themeList").appendTheme(value);
+            },
+            "change:isActive": function (model, value) {
+                if (value) {
+                    this.listenToThemeList();
+                }
+                else {
+                    this.stopListening(this.get("themeList"));
+                }
+            }
+        });
+        this.listenToThemeList();
+
+        this.listenTo(channel, {
+            "isVisibleMapMarker": function (value) {
+                this.setIsVisibleMapMarker(value);
             }
         });
 
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": this.setIsMobile
+        }, this);
+
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                this.activateGFI();
+                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            }
+        }, this);
+
+        this.initView();
+    },
+    listenToThemeList: function () {
         this.listenTo(this.get("themeList"), {
             "isReady": function () {
                 if (this.get("themeList").length > 0) {
@@ -91,31 +127,7 @@ const Gfi = Tool.extend({
                 }
             }
         });
-
-        this.listenTo(channel, {
-            "isVisibleMapMarker": function (value) {
-                this.setIsVisibleMapMarker(value);
-            }
-        });
-
-        this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": this.setIsMobile
-        }, this);
-
-        this.listenTo(Radio.channel("Tool"), {
-            "activatedTool": this.toggleGFI
-        });
-
-        this.listenTo(Radio.channel("Map"), {
-            "isReady": function () {
-                this.toggleGFI(this.get("id"), this.get("deactivateGFI"));
-                Radio.trigger("Map", "addOverlay", this.get("overlay"));
-            }
-        }, this);
-
-        this.initView();
     },
-
     /**
      * if the displayed feature changes, the model is recreated and the gfi adjusted
      * @param  {ol.Feature} feature - the feature which has been changed
@@ -136,24 +148,13 @@ const Gfi = Tool.extend({
             }
         }
     },
-
-    /**
-     * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
-     * @param  {String} id - Tool Id
-     * @param  {String} deactivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
-     * @return {undefined}
-     */
-    toggleGFI: function (id, deactivateGFI) {
-        if (id === "gfi" && deactivateGFI === false) {
-            this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
-            // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
-        }
-        else if (deactivateGFI === true) {
-            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
-        }
-        else if (_.isUndefined(deactivateGFI)) {
-            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
-        }
+    activateGFI: function () {
+        this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
+        this.setIsActive(true);
+    },
+    deactivateGFI: function () {
+        Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
+        this.setIsActive(false);
     },
 
     /**
