@@ -104,6 +104,7 @@ const ParcelSearch = Tool.extend({
         if (_.isUndefined(flurstueck) === false) {
             this.setParcelNumber(flurstueck);
             this.setDistrictNumber(gemarkung);
+            this.setParcelFound(true);
         }
         else {
             // prüfe ob es ein Flurstück gibt
