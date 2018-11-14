@@ -105,19 +105,19 @@ const ParcelSearch = Tool.extend({
             this.setParcelNumber(flurstueck);
             this.setDistrictNumber(gemarkung);
         }
+        else {
+            // prüfe ob es ein Flurstück gibt
+            this.sendRequest();
+        }
         flurst_kennz = this.createFlurstKennz();
-
-        // prüfe ob es ein Flurstück gibt
-        this.sendRequest();
-        if (this.get("parcelFound") === true) {
-            if (_.isUndefined(url) === false && _.isUndefined(params) === false) {
-                params.flurstueckskennzeichen = flurst_kennz;
-                url = this.buildUrl(url, params);
-                window.open(url, "_blank");
-            }
-            else {
-                Radio.trigger("Alert", "alert", {text: "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support", kategorie: "alert-info"});
-            }
+        // if (this.get("parcelFound") === true) {
+        if (this.get("parcelFound") && _.isUndefined(url) === false && _.isUndefined(params) === false) {
+            params.flurstueckskennzeichen = flurst_kennz;
+            url = this.buildUrl(url, params);
+            window.open(url, "_blank");
+        }
+        else {
+            Radio.trigger("Alert", "alert", {text: "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support", kategorie: "alert-info"});
         }
     },
     buildUrl: function (url, params) {
