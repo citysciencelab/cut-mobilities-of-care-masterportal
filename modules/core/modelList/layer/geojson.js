@@ -2,6 +2,8 @@ import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
+import Cluster from "ol/source/Cluster.js";
+
 
 const GeoJSONLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults),
@@ -13,22 +15,43 @@ const GeoJSONLayer = Layer.extend({
         this.setStyleId(this.get("styleId") || this.get("id"));
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
-
     /**
-     * [createLayerSource description]
+     * Wird vom Model getriggert und erzeugt eine vectorSource.
+     * Ggf. auch eine clusterSource
      * @return {[type]} [description]
+     * @uses this createClusterLayerSource
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
+        if (this.has("clusterDistance")) {
+            this.createClusterLayerSource();
+        }
     },
-
+    /**
+     * [createClusterLayerSource description]
+     * @return {[type]} [description]
+     */
+    createClusterLayerSource: function () {
+        this.setClusterLayerSource(new Cluster({
+            source: this.get("layerSource"),
+            distance: this.get("clusterDistance")
+        }));
+    },
+    /**
+     * [setClusterLayerSource description]
+     * @param {[type]} value [description]
+     * @returns {void}
+     */
+    setClusterLayerSource: function (value) {
+        this.set("clusterLayerSource", value);
+    },
     /**
      * [createLayer description]
      * @return {[type]} [description]
      */
     createLayer: function () {
         this.setLayer(new VectorLayer({
-            source: this.get("layerSource"),
+            source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
@@ -130,12 +153,14 @@ const GeoJSONLayer = Layer.extend({
      * @returns {undefined}
      */
     setStyleFunction: function (stylelistmodel) {
+        var isClustered = Boolean(this.has("clusterDistance"));
+
         if (_.isUndefined(stylelistmodel)) {
             this.set("styleFunction", undefined);
         }
         else {
             this.set("styleFunction", function (feature) {
-                return stylelistmodel.createStyle(feature);
+                return stylelistmodel.createStyle(feature, isClustered);
             });
         }
     },
@@ -151,26 +176,26 @@ const GeoJSONLayer = Layer.extend({
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
-        },
-        /**
+    },
+    /**
         * Zeigt nur die Features an, deren Id übergeben wird
         * @param  {string[]} featureIdList Liste der FeatureIds
         * @return {undefined}
         */
-        showFeaturesByIds: function (featureIdList) {
+    showFeaturesByIds: function (featureIdList) {
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             feature.setStyle(undefined);
         }, this);
-        },
+    },
 
-        /**
+    /**
         * sets null style (=no style) for all features
         * @return {undefined}
         */
-        hideAllFeatures: function () {
+    hideAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
@@ -178,14 +203,14 @@ const GeoJSONLayer = Layer.extend({
                 return null;
             });
         }, this);
-        },
+    },
 
-        /**
+    /**
         * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
         * @param {object} options -
         * @returns {void}
         **/
-        checkForScale: function (options) {
+    checkForScale: function (options) {
         if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
             this.setIsOutOfRange(false);
         }
