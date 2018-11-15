@@ -14,7 +14,7 @@ module.exports = function (environment, destination) {
     },
     {
         "files": destination + "/config.json",
-        "from": /\.\.\/\.\.\/node_modules\/lgv-config/g,
+        "from": /\/lgv-config/g,
         "to": "../lgv-config"
     });
 
