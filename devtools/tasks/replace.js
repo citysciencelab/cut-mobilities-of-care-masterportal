@@ -48,11 +48,17 @@ module.exports = function (environment, destination) {
         });
     }
     replacements.forEach(function (replacement) {
-        replace.sync({
+        var rep = replace.sync({
             files: replacement.files,
             from: replacement.from,
             to: replacement.to
         });
-        console.warn("Successfully replaced '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
+
+        if (rep.length > 0) {
+            console.warn("Successfully replaced '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
+        }
+        else {
+            console.warn("Could not replace '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
+        }
     });
 };
