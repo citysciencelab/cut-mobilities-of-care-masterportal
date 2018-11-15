@@ -364,7 +364,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         strokeColor = style.getColor();
         obj.strokeColor = this.rgbArrayToHex(strokeColor);
-        if (strokeColor[3] !== undefined) {
+        if (_.isArray(strokeColor) && strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];
         }
         if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {

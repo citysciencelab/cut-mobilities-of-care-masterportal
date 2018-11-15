@@ -603,6 +603,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             selector: graphTag,
             width: width,
             height: height - 5,
+            margin: {top: 20, right: 20, bottom: 50, left: 50},
             svgClass: "BarGraph-svg",
             data: processedData,
             scaleTypeX: "linear",
@@ -626,6 +627,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 fill: "#000",
                 fontSize: 12
             },
+            yAxisLabel: {},
             xAttr: "hour",
             attrToShowArray: ["mean"]
         };
