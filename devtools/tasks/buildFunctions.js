@@ -42,5 +42,4 @@ module.exports = function buildWebpack (answers) {
         .catch(function (err) {
             console.error("ERROR: ", err);
         });
-
 };
