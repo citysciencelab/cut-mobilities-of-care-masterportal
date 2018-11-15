@@ -207,7 +207,7 @@
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish_qs",
-            "printAppId": "mrh",
+            "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "version" : "mapfish_print_3"
