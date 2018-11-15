@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
     "build": "node devtools/tasks/build.js",
-    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js"
+    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -31,7 +31,8 @@
     "proj4": "2.x",
     "underscore": "1.x",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0"
+    "videojs-flash": "^2.1.0",
+    "zip-a-folder": "0.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

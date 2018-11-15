@@ -1,6 +1,7 @@
 const fs = require("fs-extra"),
     _ = require("underscore"),
-    exampleReplace = require("./exampleReplace");
+    exampleReplace = require("./exampleReplace"),
+    packageJSON = require("../../package.json");
 
 function createFolders (folder, name) {
     fs.mkdir(name).then(() => {
@@ -14,7 +15,7 @@ function createFolders (folder, name) {
                 fs.copy(folder.source + "/" + file, name + "/" + file)
                     .then(() => {
                         if (file === "config.js" || file === "config.json") {
-                            exampleReplace(folder.destination + "/" + file);
+                            exampleReplace(name + "/" + file);
                         }
                     })
                     .catch(err => console.error(err));
@@ -32,8 +33,8 @@ function buildFolderStructure (structure) {
 }
 
 function createDataStructure () {
-    const structure = [
-        {
+    var structure = [],
+        folder = {
             name: "examples",
             subFolders: [
                 {
@@ -74,8 +75,14 @@ function createDataStructure () {
                     ]
                 }
             ]
-        }
-    ];
+        },
+        folderVersion = _.clone(folder),
+        version = packageJSON.version;
+
+    folderVersion.name = "examples-" + version;
+
+    structure.push(folder);
+    structure.push(folderVersion);
 
     buildFolderStructure(structure);
 }
