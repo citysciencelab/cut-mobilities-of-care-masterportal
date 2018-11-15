@@ -12,7 +12,7 @@ function copyFiles (folder) {
     }
 }
 
-function createFolders (structure) {
+function createFolders (examplesFolder, structure) {
     _.each(structure, function (folder) {
         fs.mkdir(folder.destination).then(() => {
             copyFiles(folder);
@@ -20,27 +20,24 @@ function createFolders (structure) {
     });
 }
 
-function removeExampleFolders (examplesFolder, structure) {
+function createBasicFolder (examplesFolder, portalFolder, structure) {
+    fs.mkdir(examplesFolder).then(() => {
+        fs.mkdir(portalFolder).then(() => {
+            createFolders(examplesFolder, structure);
+        }).catch(err => console.error(err));
+    }).catch(err => console.error(err));
+}
+
+function removeExampleFolders (examplesFolder, portalFolder, structure) {
     fs.remove(examplesFolder).then(() => {
-        createFolders(structure);
+        createBasicFolder(examplesFolder, portalFolder, structure);
     }).catch(err => console.error(err));
 }
 
 function createDataStructure () {
     var examplesFolder = "examples",
+        portalFolder = examplesFolder + "/portal",
         structure = {
-            examplesPortal: {
-                source: "./dist/Basic",
-                destination: examplesFolder,
-                files: [
-                    "css",
-                    "js"
-                ]
-            },
-            portal: {
-                source: "",
-                destination: examplesFolder + "/portal"
-            },
             lgvConfig: {
                 source: "node_modules/lgv-config",
                 destination: examplesFolder + "/lgv-config",
@@ -51,22 +48,24 @@ function createDataStructure () {
                 ]
             },
             images: {
-                source: "node_modules/lgv-config/img",
+                source: "img",
                 destination: examplesFolder + "/img",
-                files: []
+                files: ["ajax-loader.gif"]
             },
             portalFiles: {
                 source: "./dist/Basic",
-                destination: examplesFolder + "/portal/Basic",
+                destination: portalFolder + "/Basic",
                 files: [
                     "config.js",
                     "config.json",
-                    "index.html"
+                    "index.html",
+                    "css",
+                    "js"
                 ]
             }
         };
 
-    removeExampleFolders(examplesFolder, structure);
+    removeExampleFolders(examplesFolder, portalFolder, structure);
 }
 
 console.warn("create structure for examples");
