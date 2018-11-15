@@ -23,7 +23,7 @@ const CheckboxSnippet = SnippetModel.extend({
     },
     addValueModel: function (value) {
         this.get("valuesCollection").add(new ValueModel({
-            attr: this.get("name"),
+            // attr: this.get("name"),
             isSelected: value,
             type: this.get("type")
         }));

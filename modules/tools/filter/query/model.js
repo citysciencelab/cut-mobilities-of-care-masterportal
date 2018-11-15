@@ -1,6 +1,7 @@
 import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
+import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
 
 const QueryModel = Backbone.Model.extend({
 
@@ -97,7 +98,6 @@ const QueryModel = Backbone.Model.extend({
             isSelected = false;
 
         snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
-
         if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
@@ -113,17 +113,10 @@ const QueryModel = Backbone.Model.extend({
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
             this.get("snippetCollection").add(new SnippetSliderModel(snippetAttribute));
         }
-        else if (snippetAttribute.type === "category") {
-            snippetAttribute.values.forEach(function (value) {
-
-                this.getSnippetCollection().add(new SnippetCheckboxModel({
-                    snippetType: "checkbox-classic",
-                    isSelected: true,
-                    name: featureAttribute.name,
-                    label: value,
-                    type: "category"
-                }));
-            }, this);
+        else if (snippetAttribute.type === "checkbox-classic") {
+            snippetAttribute = _.extend(snippetAttribute, {"snippetType": snippetAttribute.type});
+            snippetAttribute.type = "string";
+            this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
         }
     },
 
@@ -148,10 +141,7 @@ const QueryModel = Backbone.Model.extend({
         var featureAttributesMap = this.trimAttributes(featureAttributes),
             options;
 
-        if (featureAttributes.displayName === undefined) {
-            featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
-        }
-
+        featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
         featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
         featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
 

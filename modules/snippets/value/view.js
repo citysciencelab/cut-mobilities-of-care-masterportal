@@ -27,6 +27,8 @@ const View = Backbone.View.extend({
         return this;
     },
     deselect: function () {
+        console.log(123);
+        
         this.model.setIsSelected(false);
     }
 });

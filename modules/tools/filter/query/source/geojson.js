@@ -1,5 +1,6 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
+import GeoJSON from "ol/format/GeoJSON";
 
 const BeitraegeQueryModel = QueryModel.extend({
     initialize: function () {
@@ -128,7 +129,7 @@ const BeitraegeQueryModel = QueryModel.extend({
         $.ajax({
             url: url,
             context: this,
-            data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
+            // data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
             // parent (QueryModel) function
             success: callback
         });
@@ -139,8 +140,28 @@ const BeitraegeQueryModel = QueryModel.extend({
      * @return {object} - Mapobject containing names and types
      */
     parseResponse: function (response) {
-        console.log(response);
-        this.createSnippets([{name: "thema", type: "string", displayName: "Thema", matchingMode: "OR"}]);
+        var featureAttributesMap = [],
+            format = new GeoJSON(),
+            features = format.readFeatures(response),
+            firstFeature = features[0],
+            snippetType = this.get("snippetType"),
+            keys = _.without(firstFeature.getKeys(), "geometry");
+
+        if (snippetType === undefined) {
+            _.each(keys, function (key) {
+                var type = typeof firstFeature.get(key);
+
+                featureAttributesMap.push({name: key, type: type});
+            });
+        }
+        else {
+            _.each(keys, function (key) {
+                var type = snippetType;
+
+                featureAttributesMap.push({name: key, type: type});
+            });
+        }
+        this.createSnippets(featureAttributesMap);
     },
 
 
@@ -241,7 +262,6 @@ const BeitraegeQueryModel = QueryModel.extend({
                 selectedAttributes.push(snippet.getSelectedValues());
             }
         });
-
         if (selectedAttributes.length > 0) {
             _.each(features, function (feature) {
                 var isMatch = this.isFilterMatch(feature, selectedAttributes);
@@ -349,7 +369,10 @@ const BeitraegeQueryModel = QueryModel.extend({
         }, this);
     },
     containsValue: function (feature, attribute, value) {
-        if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+        if (attribute.type === "checkbox-classic") {
+            return feature.get(attribute.attrName).indexOf(attribute.label) !== -1;
+        }
+        else if (_.isUndefined(feature.get(attribute.attrName)) === false) {
             return feature.get(attribute.attrName).indexOf(value) !== -1;
         }
         return false;

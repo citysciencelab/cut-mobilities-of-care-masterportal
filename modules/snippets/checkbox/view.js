@@ -21,31 +21,21 @@ const CheckboxSnippetView = Backbone.View.extend({
 
     render: function () {
         var attr = this.model.toJSON();
-
+        
         if (attr.snippetType === "checkbox-classic") {
             this.$el.html(this.templateClassic(attr));
-            this.initClassicCheckbox();
             this.delegateEvents();
-            return this.$el;
         }
         else {
-        this.$el.html(this.template(attr));
-        this.initCheckbox();
-        this.delegateEvents();
-        return this;
+            this.$el.html(this.template(attr));
+            this.initCheckbox();
+            this.delegateEvents();
         }
+        return this;
     },
 
     initCheckbox: function () {
         this.$el.find("input").bootstrapToggle({
-            on: this.model.get("textOn"),
-            off: this.model.get("textOff"),
-            size: this.model.get("size")
-        });
-    },
-
-    initClassicCheckbox: function () {
-        this.$el.find("input").checkbox({
             on: this.model.get("textOn"),
             off: this.model.get("textOff"),
             size: this.model.get("size")
