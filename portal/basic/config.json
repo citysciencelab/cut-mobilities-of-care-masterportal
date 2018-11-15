@@ -4,7 +4,7 @@
     "portalTitle":
         {
           "title": "Basic - Portal",
-          "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+          "logo": "/lgv-config/img/hh-logo.png",
           "link": "http://geoinfo.hamburg.de",
           "tooltip": "Landesbetrieb Geoinformation und Vermessung"
        },
