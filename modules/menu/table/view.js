@@ -11,6 +11,10 @@ const Menu = Backbone.View.extend({
         this.renderCategoryList();
         this.renderTools();
         this.hideContextMenu();
+
+        this.listenTo(this.model, {
+            "appendFilterContent": this.appendFilterContent
+        });
     },
     model: new TableNavModel(),
     id: "table-nav",
@@ -33,6 +37,9 @@ const Menu = Backbone.View.extend({
     },
     hideContextMenu: function () {
         $("body").attr("oncontextmenu", "return false;");
+    },
+    appendFilterContent: function (element) {
+        this.$el.find(".table-filter-container").append(element);
     }
 });
 

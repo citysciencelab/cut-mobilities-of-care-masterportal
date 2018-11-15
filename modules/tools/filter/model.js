@@ -16,7 +16,8 @@ const FilterModel = Tool.extend({
         sendToRemote: false,
         renderToSidebar: true,
         renderToWindow: false,
-        glyphicon: "glyphicon-filter"
+        glyphicon: "glyphicon-filter",
+        uiStyle: "DEFAULT"
     }),
     initialize: function () {
         var channel = Radio.channel("Filter");
@@ -26,6 +27,7 @@ const FilterModel = Tool.extend({
             "resetFilter": this.resetFilter
         });
 
+        this.set("uiStyle", Radio.request("Util", "getUiStyle"));
         this.set("queryCollection", new Backbone.Collection());
         this.listenTo(this.get("queryCollection"), {
             "deactivateAllModels": function (model) {
