@@ -604,8 +604,11 @@ const BuildSpecModel = Backbone.Model.extend({
     getFillFromSVG: function (svgString) {
         var indexOfFill = svgString.indexOf("fill:") + 5,
             hexLength = 6 + 1,
-            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
+            hexColor = "#000000";
 
+        if (svgString.indexOf("fill:") !== -1) {
+            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
+        }
         return hexColor;
     },
     createLegendImageUrl: function (typ, path) {
