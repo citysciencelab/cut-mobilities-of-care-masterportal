@@ -14,7 +14,7 @@ function createFolders (folder, name) {
             folder.files.forEach(function (file) {
                 fs.copy(folder.source + "/" + file, name + "/" + file)
                     .then(() => {
-                        if (file === "config.js" || file === "config.json") {
+                        if (file === "config.js" || file === "config.json" || file === "index.html") {
                             exampleReplace(name + "/" + file);
                         }
                     })
