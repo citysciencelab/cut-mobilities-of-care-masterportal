@@ -47,7 +47,8 @@ function createDataStructure () {
                                 "Icon-Badeseen.png",
                                 "Icon-Schwimmbaeder.png",
                                 "Icon-Spaß-am-Wasser.png",
-                                "Krankenhaus.png"
+                                "Krankenhaus.png",
+                                "ajax-loader.gif"
                             ]
                         }
                     ],
