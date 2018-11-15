@@ -87,5 +87,5 @@ function createDataStructure () {
     buildFolderStructure(structure);
 }
 
-console.warn("create structure for examples");
+console.warn("create example folders, copy portal and dependencies");
 createDataStructure();

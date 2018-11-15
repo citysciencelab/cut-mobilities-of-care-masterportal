@@ -1,6 +1,6 @@
 const buildFunctions = require("./buildFunctions");
 
-console.warn("build Basic Portal for examples");
+console.warn("build Basic Portal");
 buildFunctions({
     portalPath: "portal/basic",
     portalName: "Basic",
