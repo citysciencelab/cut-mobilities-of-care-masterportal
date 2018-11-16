@@ -1,7 +1,7 @@
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
-const DropdownModel = SnippetModel.extend({
+const MultiCheckboxModel = SnippetModel.extend({
     defaults: {
         // init dropdown values
         values: [],
@@ -44,7 +44,7 @@ const DropdownModel = SnippetModel.extend({
             attr: this.get("name"),
             value: value,
             displayName: value,
-            isSelected: false,
+            isSelected: true,
             isSelectable: true,
             type: this.get("type")
         }));
@@ -65,22 +65,12 @@ const DropdownModel = SnippetModel.extend({
     /**
      * checks the value models if they are selected or not
      * @param {string|string[]} values - selected value(s) in the dropdown list
+     * @param {boolean} checked - is checkbox checked or unchecked
      * @returns {void}
      */
     updateSelectedValues: function (values, checked) {
-        // if (!_.isArray(values)) {
-        //     if (!this.get("isMultiple")) {
-        //         this.setDisplayName(values);
-        //     }
-        //     vals = [vals];
-        // }
         _.each(this.get("valuesCollection").models, function (valueModel) {
-            
-            
-            
             if (valueModel.get("displayName") === values) {
-                console.log(valueModel);
-            console.log(values);
                 valueModel.set("isSelected", checked);
             }
         });
@@ -89,7 +79,7 @@ const DropdownModel = SnippetModel.extend({
     /**
      * checks the value models if they are selectable or not
      * @param {string[]} values - filtered values
-     * @fires DropdownView#render
+     * @fires MultiCheckboxView#render
      * @returns {void}
      */
     updateSelectableValues: function (values) {
@@ -134,4 +124,4 @@ const DropdownModel = SnippetModel.extend({
     }
 });
 
-export default DropdownModel;
+export default MultiCheckboxModel;

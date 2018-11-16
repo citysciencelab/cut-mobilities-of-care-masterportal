@@ -2,7 +2,7 @@ import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 import GeoJSON from "ol/format/GeoJSON";
 
-const BeitraegeQueryModel = QueryModel.extend({
+const GeoJsonQueryModel = QueryModel.extend({
     initialize: function () {
         this.superInitialize();
         this.prepareQuery();
@@ -140,31 +140,29 @@ const BeitraegeQueryModel = QueryModel.extend({
      * @return {object} - Mapobject containing names and types
      */
     parseResponse: function (response) {
-        var featureAttributesMap = [],
-            format = new GeoJSON(),
-            features = format.readFeatures(response),
-            firstFeature = features[0],
-            snippetType = this.get("snippetType"),
-            keys = _.without(firstFeature.getKeys(), "geometry");
+        var features = this.parseGeoJsonToFeatures(response),
+            featureAttributesMap = this.createFeatureAttributesMap(features, this.get("snippetType"));
 
-        if (snippetType === undefined) {
-            _.each(keys, function (key) {
-                var type = typeof firstFeature.get(key);
-
-                featureAttributesMap.push({name: key, type: type});
-            });
-        }
-        else {
-            _.each(keys, function (key) {
-                var type = snippetType;
-
-                featureAttributesMap.push({name: key, type: type});
-            });
-        }
         this.createSnippets(featureAttributesMap);
     },
+    parseGeoJsonToFeatures: function (response) {
+        var format = new GeoJSON(),
+            geoJsonFeatures = format.readFeatures(response);
 
+        return geoJsonFeatures;
+    },
+    createFeatureAttributesMap: function (features, snippetType) {
+        var featureAttributesMap = [],
+            firstFeature = !_.isUndefined(features) ? features[0] : undefined,
+            keys = !_.isUndefined(firstFeature) ? _.without(firstFeature.getKeys(), "geometry") : [];
 
+        _.each(keys, function (key) {
+            var type = !_.isUndefined(snippetType) ? String(snippetType) : typeof firstFeature.get(key);
+
+            featureAttributesMap.push({name: key, type: type});
+        });
+        return featureAttributesMap;
+    },
     /**
      * [getValuesFromFeature description]
      * @param  {ol.feature} feature olfeature
@@ -433,4 +431,4 @@ const BeitraegeQueryModel = QueryModel.extend({
     }
 });
 
-export default BeitraegeQueryModel;
+export default GeoJsonQueryModel;
