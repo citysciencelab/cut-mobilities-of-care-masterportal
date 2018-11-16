@@ -4,6 +4,8 @@ const AlertingModel = Backbone.Model.extend({
         category: "alert-info",
         // true wenn Close Button dargestellt werden soll
         isDismissable: true,
+        // true wenn OK Button dargestellt werden soll
+        isConfirmable: false,
         // Position der Messages [top-center | center-center]
         position: "top-center",
         // letzte/aktuelle Alert Message
@@ -44,7 +46,10 @@ const AlertingModel = Backbone.Model.extend({
                 this.setCategory(val.kategorie);
             }
             if (_.has(val, "dismissable") === true) {
-                this.setIsDismissalbe(val.dismissable);
+                this.setIsDismissable(val.dismissable);
+            }
+            if (_.has(val, "confirmable") === true) {
+                this.setIsConfirmable(val.confirmable);
             }
             if (_.has(val, "position") === true) {
                 this.setPosition(val.position);
@@ -67,8 +72,12 @@ const AlertingModel = Backbone.Model.extend({
         this.set("category", value);
     },
 
-    setIsDismissalbe: function (value) {
+    setIsDismissable: function (value) {
         this.set("isDismissable", value);
+    },
+
+    setIsConfirmable: function (value) {
+        this.set("isConfirmable", value);
     },
 
     setMessage: function (value) {

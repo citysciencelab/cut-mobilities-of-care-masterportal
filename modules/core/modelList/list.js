@@ -390,7 +390,10 @@ const ModelList = Backbone.Collection.extend({
     },
 
     setActiveToolToFalse: function (model) {
-        var activeTools = _.without(this.where({isActive: true}), model);
+        var activeTools = _.without(this.where({isActive: true}), model),
+            legendModel = this.where({id: "legend"})[0];
+
+        activeTools = _.without(activeTools, legendModel);
 
         _.each(activeTools, function (tool) {
             tool.setIsActive(false);

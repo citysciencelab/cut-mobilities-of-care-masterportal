@@ -69,7 +69,7 @@ const ItemView = Backbone.View.extend({
     },
 
     checkItem: function () {
-        if (this.model.get("name") === "Legende") {
+        if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
         }
         else {

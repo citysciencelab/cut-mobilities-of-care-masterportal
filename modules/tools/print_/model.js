@@ -33,7 +33,7 @@ const PrintModel = Tool.extend({
         // true if the current layout supports legend
         isLegendAvailable: false,
         // true if the legend is to be printed
-        isLegendSelected: false,
+        isLegendSelected: true,
         // true if the current layout supports scale
         isScaleAvailable: false,
         // the id from the rest services json for the plot app
