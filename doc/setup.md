@@ -35,7 +35,7 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
 
     Hier geht es zu den Beispielportalen auf unserem Server:
 
-    - simple: [Portal](https://geoportal-hamburg.de/examples/portal/Basic/), [config.json](https://geoportal-hamburg.de/examples/portal/Basic/config.json), [config.js](https://geoportal-hamburg.de/examples/portal/Basic/config.js)
+    - Basic: [Portal](https://geoportal-hamburg.de/examples/portal/Basic/), [config.json](https://geoportal-hamburg.de/examples/portal/Basic/config.json), [config.js](https://geoportal-hamburg.de/examples/portal/Basic/config.js)
 
 
 #### Beispiel-Anwendung anpassen
