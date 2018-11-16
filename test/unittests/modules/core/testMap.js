@@ -33,5 +33,11 @@ describe("core/map", function () {
         it("should return extent of test-features with yMax = 5984174.061", function () {
             expect(model.calculateExtent(features)[3]).to.equal(5984174.061);
         });
+
+        describe("getMapMode", function () {
+            it("should return 2D", function () {
+                expect(model.getMapMode()).to.equal("2D");
+            });
+        });
     });
 });

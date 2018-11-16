@@ -18,9 +18,12 @@ const Tool = Item.extend({
         isActive: false,
         // deaktiviert GFI, wenn dieses tool geöffnet wird
         deactivateGFI: false,
-        renderToWindow: true
+        renderToWindow: true,
+        supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
+        supportedInOblique: ["contact"],
+        // Tools die in die Sidebar und nicht in das Fenster sollen
+        toolsToRenderInSidebar: ["filter", "schulwegrouting"]
     },
-
     superInitialize: function () {
         this.listenTo(this, {
             "change:isActive": function (model, value) {

@@ -14,6 +14,8 @@ describe("menu/desktop/layer/viewSelection", function () {
 
             isSettingVisible: false,
             isStyleable: false,
+            showSettings: true,
+            supported: ["2D"],
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
@@ -25,6 +27,10 @@ describe("menu/desktop/layer/viewSelection", function () {
                         return this.isSettingVisible;
                     case "isStyleable":
                         return this.isStyleable;
+                    case "showSettings":
+                        return this.showSettings;
+                    case "supported":
+                        return this.supported;
                     default:
                         return null;
                 }
@@ -41,7 +47,9 @@ describe("menu/desktop/layer/viewSelection", function () {
             toJSON: function () {
                 return {
                     styleable: this.isStyleable,
+                    supported: this.supported,
                     isSettingVisible: this.isSettingVisible,
+                    showSettings: this.showSettings,
                     transparency: 42,
                     isVisibleInMap: true
                 };

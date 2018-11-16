@@ -46,5 +46,18 @@ const Config = {
         imgLink: "../img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560"
+    },
+    startingMap3D: false,
+    obliqueMap: true,
+    cesiumParameter: {
+        tileCacheSize: 20,
+        enableLighting: false,
+        fog: {
+            enabled: true,
+            density: 0.0002,
+            screenSpaceErrorFactor: 2.0
+        },
+        maximumScreenSpaceError: 2,
+        fxaa: true
     }
 };

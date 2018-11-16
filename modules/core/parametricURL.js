@@ -412,6 +412,41 @@ const ParametricURL = Backbone.Model.extend({
             this.set("filter", JSON.parse(value));
         }
 
+        /**
+         * passt den Config startingMap3D Parameter an.
+         */
+        if (_.has(result, "MAP")) {
+            value = _.values(_.pick(result, "MAP"))[0].toUpperCase();
+
+            if (value === "2D") {
+                Config.startingMap3D = false;
+            }
+            else if (value === "3D") {
+                Config.startingMap3D = true;
+            }
+        }
+
+        if (!Config.cameraParameter) {
+            Config.cameraParameter = {};
+        }
+        /**
+         * wertet die Camera Parameter( heading, tilt, altitude) aus
+         */
+        if (_.has(result, "HEADING")) {
+            value = _.values(_.pick(result, "HEADING"))[0];
+
+            Config.cameraParameter.heading = value;
+        }
+        if (_.has(result, "TILT")) {
+            value = _.values(_.pick(result, "TILT"))[0];
+
+            Config.cameraParameter.tilt = value;
+        }
+        if (_.has(result, "ALTITUDE")) {
+            value = _.values(_.pick(result, "ALTITUDE"))[0];
+
+            Config.cameraParameter.altitude = value;
+        }
         if (_.has(result, "HIGHLIGHTFEATURE")) {
             value = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
 

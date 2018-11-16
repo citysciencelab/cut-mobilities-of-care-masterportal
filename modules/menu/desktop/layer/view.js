@@ -13,6 +13,19 @@ const LayerView = Backbone.View.extend({
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (this.model.get("supported").indexOf(mode) >= 0) {
+                    this.removeDisableClass();
+                }
+                else if (mode === "2D") {
+                    this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
+                }
+                else {
+                    this.addDisableClass("Layer im 3D-Modus nicht verfügbar");
+                }
+            }
+        });
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
@@ -43,18 +56,20 @@ const LayerView = Backbone.View.extend({
      * @returns {void}
      */
     toggleColor: function (model, value) {
+        var mode = Radio.request("Map", "getMapMode");
+
         if (model.has("minScale") === true) {
             if (value === true) {
-                this.$el.addClass("disabled");
-                this.$el.find("*").css("pointer-events", "none");
-                this.$el.find("*").css("cursor", "not-allowed");
-                this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
+                this.addDisableClass("Layer wird in dieser Zoomstufe nicht angezeigt");
+            }
+            else if (this.model.get("supported").indexOf(mode) >= 0) {
+                this.removeDisableClass();
+            }
+            else if (mode === "2D") {
+                this.addDisableClass("Layer im 2D-Modus nicht verfügbar");
             }
             else {
-                this.$el.removeClass("disabled");
-                this.$el.find("*").css("pointer-events", "auto");
-                this.$el.find("*").css("cursor", "pointer");
-                this.$el.attr("title", "");
+                this.addDisableClass("Layer im 3D-Modus nicht verfügbar");
             }
         }
     },
@@ -93,6 +108,18 @@ const LayerView = Backbone.View.extend({
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
+    },
+    addDisableClass: function (text) {
+        this.$el.addClass("disabled");
+        this.$el.find("*").css("pointer-events", "none");
+        this.$el.find("*").css("cursor", "not-allowed");
+        this.$el.attr("title", text);
+    },
+    removeDisableClass: function () {
+        this.$el.removeClass("disabled");
+        this.$el.find("*").css("pointer-events", "auto");
+        this.$el.find("*").css("cursor", "pointer");
+        this.$el.attr("title", "");
     }
 });
 

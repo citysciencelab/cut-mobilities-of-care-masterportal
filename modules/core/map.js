@@ -5,12 +5,14 @@ import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
+import ObliqueMap from "./obliqueMap";
+import OLCesium from "olcs/OLCesium.js";
+import VectorSynchronizer from "olcs/VectorSynchronizer.js";
+import FixedOverlaySynchronizer from "../../plugins/FixedOverlaySynchronizer.js";
+import WMSRasterSynchronizer from "../../plugins/WmsRasterSynchronizer.js";
+import {transform, get} from "ol/proj.js";
 
 const map = Backbone.Model.extend({
-
-    /**
-    *
-    */
     defaults: {
         initalLoading: 0
     },
@@ -33,7 +35,11 @@ const map = Backbone.Model.extend({
             "registerListener": this.registerListener,
             "getMap": function () {
                 return this.get("map");
-            }
+            },
+            "isMap3d": this.isMap3d,
+            "getMap3d": this.getMap3d,
+            "getMapMode": this.getMapMode,
+            "getFeatures3dAtPosition": this.getFeatures3dAtPosition
         }, this);
 
         channel.on({
@@ -56,7 +62,10 @@ const map = Backbone.Model.extend({
             "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
             "updateSize": function () {
                 this.get("map").updateSize();
-            }
+            },
+            "activateMap3d": this.activateMap3d,
+            "deactivateMap3d": this.deactivateMap3d,
+            "setCameraParameter": this.setCameraParameter
         }, this);
 
         this.listenTo(this, {
@@ -74,7 +83,9 @@ const map = Backbone.Model.extend({
             controls: [],
             interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
         }));
-
+        if (Config.obliqueMap) {
+            this.set("obliqueMap", new ObliqueMap({}));
+        }
         Radio.trigger("ModelList", "addInitialyNeededModels");
         if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
@@ -82,6 +93,9 @@ const map = Backbone.Model.extend({
         this.stopMouseMoveEvent();
 
         Radio.trigger("Map", "isReady", "gfi", false);
+        if (Config.startingMap3D) {
+            this.activateMap3d();
+        }
     },
 
     /**
@@ -203,7 +217,171 @@ const map = Backbone.Model.extend({
     forEachFeatureAtPixel: function (pixel, callback) {
         this.get("map").forEachFeatureAtPixel(pixel, callback);
     },
+    getMapMode: function () {
+        if (Radio.request("ObliqueMap", "isActive")) {
+            return "Oblique";
+        }
+        else if (this.getMap3d() && this.getMap3d().getEnabled()) {
+            return "3D";
+        }
+        return "2D";
+    },
+    isMap3d: function () {
+        return this.getMap3d() && this.getMap3d().getEnabled();
+    },
+    createMap3d: function () {
+        var map3d = new OLCesium({
+            map: this.get("map"),
+            stopOpenLayersEventsPropagation: true,
+            createSynchronizers: function (map, scene) {
+                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new FixedOverlaySynchronizer(map, scene)];
+            }
+        });
 
+        return map3d;
+    },
+    handle3DEvents: function () {
+        var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+
+        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    },
+    setCameraParameter: function (params) {
+        var map3d = this.getMap3d(),
+            camera;
+
+        if (_.isUndefined(map3d) === false && _.isNull(params) === false) {
+            camera = map3d.getCamera();
+            if (_.has(params, "tilt")) {
+                camera.setTilt(parseFloat(params.tilt));
+            }
+            if (_.has(params, "heading")) {
+                camera.setHeading(parseFloat(params.heading));
+            }
+            if (_.has(params, "altitude")) {
+                camera.setAltitude(parseFloat(params.altitude));
+            }
+        }
+    },
+    setCesiumSceneDefaults: function () {
+        var params,
+            scene = this.getMap3d().getCesiumScene();
+
+        if (_.has(Config, "cesiumParameter")) {
+            params = Config.cesiumParameter;
+            if (_.has(params, "fog")) {
+                scene.fog.enabled = _.has(params.fog, "enabled") ? params.fog.enabled : scene.fog.enabled;
+                scene.fog.density = _.has(params.fog, "density") ? parseFloat(params.fog.density) : scene.fog.density;
+                scene.fog.screenSpaceErrorFactor = _.has(params.fog, "screenSpaceErrorFactor") ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
+            }
+
+            scene.globe.tileCacheSize = _.has(params, "tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
+            scene.globe.maximumScreenSpaceError = _.has(params, "maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
+            scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
+            scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
+        }
+        return scene;
+    },
+    activateMap3d: function () {
+        var camera,
+            cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
+
+        if (!this.getMap3d()) {
+            this.setMap3d(this.createMap3d());
+            this.handle3DEvents();
+            this.setCesiumSceneDefaults();
+            this.setCameraParameter(cameraParameter);
+            camera = this.getMap3d().getCesiumScene().camera;
+            camera.changed.addEventListener(this.reactToCameraChanged, this);
+        }
+        this.getMap3d().setEnabled(true);
+        Radio.trigger("Map", "change", "3D");
+    },
+
+    getFeatures3dAtPosition: function (position) {
+        var scene,
+            objects;
+
+        if (this.getMap3d()) {
+            scene = this.getMap3d().getCesiumScene();
+            objects = scene.drillPick(position);
+        }
+        return objects;
+    },
+
+    reactTo3DClickEvent: function (event) {
+        var map3d = this.getMap3d(),
+            scene = map3d.getCesiumScene(),
+            ray = scene.camera.getPickRay(event.position),
+            cartesian = scene.globe.pick(ray, scene),
+            height,
+            coords,
+            cartographic,
+            distance,
+            resolution,
+            mapProjection = Radio.request("MapView", "getProjection"),
+            transformedCoords,
+            transformedPickedPosition,
+            pickedPositionCartesian,
+            cartographicPickedPosition;
+
+        if (cartesian) {
+            cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+            coords = [Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude)];
+            height = scene.globe.getHeight(cartographic);
+            if (height) {
+                coords = coords.concat([height]);
+            }
+
+            distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
+            resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
+            transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
+            transformedPickedPosition = null;
+
+            if (scene.pickPositionSupported) {
+                pickedPositionCartesian = scene.pickPosition(event.position);
+                if (pickedPositionCartesian) {
+                    cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
+                    transformedPickedPosition = transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
+                    transformedPickedPosition.push(cartographicPickedPosition.height);
+                }
+            }
+            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event});
+        }
+    },
+    deactivateMap3d: function () {
+        var resolution,
+            resolutions;
+
+        if (this.getMap3d()) {
+            this.get("view").animate({rotation: 0}, function () {
+                this.getMap3d().setEnabled(false);
+                this.get("view").setRotation(0);
+                resolution = this.get("view").getResolution();
+                resolutions = this.get("view").getResolutions();
+                if (resolution > resolutions[0]) {
+                    this.get("view").setResolution(resolutions[0]);
+                }
+                if (resolution < resolutions[resolutions.length - 1]) {
+                    this.get("view").setResolution(resolutions[resolutions.length - 1]);
+                }
+                Radio.trigger("Map", "change", "2D");
+            }.bind(this));
+        }
+    },
+
+    setMap3d: function (map3d) {
+        return this.set("map3d", map3d);
+    },
+
+    getMap3d: function () {
+        return this.get("map3d");
+    },
+
+    reactToCameraChanged: function () {
+        var camera = this.getMap3d().getCamera();
+
+        Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
+    },
     addInteraction: function (interaction) {
         this.get("map").addInteraction(interaction);
     },

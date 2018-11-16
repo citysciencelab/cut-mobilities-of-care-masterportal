@@ -266,7 +266,6 @@ const MapView = Backbone.Model.extend({
     setStartResolution: function (value) {
         this.set("startResolution", value);
     },
-
     toggleBackground: function () {
         if (this.get("background") === "white") {
             this.setBackground(this.get("backgroundImage"));
@@ -330,7 +329,12 @@ const MapView = Backbone.Model.extend({
     },
 
     setCenter: function (coords, zoomLevel) {
-        this.get("view").setCenter(coords);
+        if (coords.length === 2) {
+            this.get("view").setCenter(coords);
+        }
+        else {
+            this.get("view").setCenter([coords[0], coords[1]]);
+        }
         if (!_.isUndefined(zoomLevel)) {
             this.get("view").setZoom(zoomLevel);
         }

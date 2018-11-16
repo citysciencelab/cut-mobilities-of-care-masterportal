@@ -48,6 +48,7 @@ const Preparser = Backbone.Model.extend({
             portalConfig: response.Portalconfig,
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
+            overlayer_3d: response.Themenconfig.Fachdaten_3D,
             treeType: response.Portalconfig.Baumtyp,
             isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
             snippetInfos: this.requestSnippetInfos()
