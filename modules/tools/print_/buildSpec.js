@@ -1,5 +1,6 @@
 import {Circle as CircleStyle, Icon} from "ol/style.js";
-import {Point, Polygon} from "ol/geom.js";
+import {Point} from "ol/geom.js";
+import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
@@ -405,7 +406,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         // circle is not suppported by geojson
         if (feature.getGeometry().getType() === "Circle") {
-            feature.setGeometry(Polygon.fromCircle(feature.getGeometry()));
+            feature.setGeometry(fromCircle(feature.getGeometry()));
         }
         return geojsonFormat.writeFeatureObject(feature);
     },
