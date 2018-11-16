@@ -2,7 +2,7 @@ import Template from "text-loader!./template.html";
 
 const CategoryView = Backbone.View.extend({
     events: {
-        "click": "toggleCategoryMenu"
+        "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
     initialize: function () {
         this.listenTo(Radio.channel("TableMenu"), {
