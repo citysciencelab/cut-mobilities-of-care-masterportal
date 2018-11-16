@@ -296,6 +296,10 @@ const SearchbarModel = Backbone.Model.extend({
 
     setSearchFieldisSelected: function (value) {
         this.set("searchFieldisSelected", value);
+    },
+
+    setQuickHelp: function (value) {
+        this.set("quickHelp", value);
     }
 });
 

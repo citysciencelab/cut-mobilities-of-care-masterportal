@@ -236,7 +236,13 @@ a {
         border-radius: 12px;
     }
     &:before {
-        color: @color_5;
+        display: none;
+    }
+    .icon-close {
+    &:before {
+        display: block;
+        color: @color_2;
+        }
     }
 }
 .icon-burgermenu_alt.collapsed {
@@ -245,6 +251,12 @@ a {
     }
     &:before {
         color: @color_4;
+        display: block;
+    }
+    .icon-close {
+        &:before {
+        display: none;
+        }
     }
 }
 .burgermenu-layer-list {
@@ -259,6 +271,11 @@ a {
         .layer-item {
             font-family: @font_family_2;
             font-size: 17px;
+            .title{
+                display: block;
+                min-width: 385px;
+                overflow: auto;
+            }
         }
     }
     ul#layers {

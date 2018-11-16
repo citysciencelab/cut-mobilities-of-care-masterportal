@@ -25,7 +25,7 @@ const WFSStyle = Backbone.Model.extend({
         ],
         "circleStrokeWidth": 2,
         // Für Label
-        "textAlign": "left",
+        "textAlign": "center",
         "textFont": "10px sans-serif",
         "textScale": 1,
         "textOffsetX": 0,
@@ -57,7 +57,7 @@ const WFSStyle = Backbone.Model.extend({
         "clusterImageOffsetY": 0.5,
         // Für Cluster Text
         "clusterText": "COUNTER",
-        "clusterTextAlign": "left",
+        "clusterTextAlign": "center",
         "clusterTextFont": "Courier",
         "clusterTextScale": 1,
         "clusterTextOffsetX": 0,
