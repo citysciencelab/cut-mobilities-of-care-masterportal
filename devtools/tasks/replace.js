@@ -19,7 +19,7 @@ module.exports = function (environment, destination) {
     },
     {
         "files": destination + "/index.html",
-        "from": /\.\.\/\.\.\/node_modules\/lgv-config/g,
+        "from": /\/lgv-config/g,
         "to": "../lgv-config"
     });
 
