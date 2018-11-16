@@ -132,9 +132,11 @@ const Measure = Tool.extend({
     },
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
+            quickHelpSet = Radio.request("Quickhelp", "isSet") === true ? true : false,
             measureLayer;
 
         if (value) {
+            this.setQuickHelp(quickHelpSet);
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
             this.setScale(Radio.request("MapView", "getOptions").scale);
             measureLayer = _.find(layers.getArray(), function (layer) {
@@ -596,6 +598,15 @@ const Measure = Tool.extend({
     },
     setScale: function (value) {
         this.set("scale", value);
+    },
+
+    /*
+    * setter for quickHelp
+    * @param {[type]} value quickHelp
+    * @returns {void}
+    */
+    setQuickHelp: function (value) {
+        this.set("quickHelp", value);
     }
 });
 

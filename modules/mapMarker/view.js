@@ -17,6 +17,8 @@ const MapMarker = Backbone.View.extend({
             "zoomTo": this.zoomTo,
             "hideMarker": this.hideMarker,
             "showMarker": this.showMarker,
+            "hidePolygon": this.hidePolygon,
+            "showPolygon": this.showPolygon,
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
@@ -38,7 +40,6 @@ const MapMarker = Backbone.View.extend({
     * @returns {void}
     */
     clearMarker: function () {
-        this.model.hideFeature();
         this.hideMarker();
     },
 
@@ -61,6 +62,7 @@ const MapMarker = Backbone.View.extend({
             coord = hit.coordinate.split(" ");
         }
         this.clearMarker();
+        this.hidePolygon();
         switch (hit.type) {
             case "Straße": {
                 this.model.setWkt("POLYGON", coord);
@@ -129,7 +131,8 @@ const MapMarker = Backbone.View.extend({
             // gfiTheme für Flächeninformation soll nur dargestellt und nicht gezommt werden.
             case "flaecheninfo": {
                 this.model.setWkt("POLYGON", coord);
-                this.model.showFeature();
+                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                this.showPolygon();
                 break;
             }
             // Features
@@ -181,12 +184,18 @@ const MapMarker = Backbone.View.extend({
             this.model.get("marker").setPosition([coordinate[0], coordinate[1]]);
         }
         this.$el.show();
-        this.model.get("polygon").setVisible(true);
     },
 
     hideMarker: function () {
         this.$el.hide();
-        this.model.get("polygon").setVisible(false);
+    },
+
+    showPolygon: function () {
+        this.model.showFeature();
+    },
+
+    hidePolygon: function () {
+        this.model.hideFeature();
     }
 
 });

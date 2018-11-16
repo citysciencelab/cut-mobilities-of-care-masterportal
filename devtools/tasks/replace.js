@@ -16,6 +16,11 @@ module.exports = function (environment, destination) {
         "files": destination + "/config.json",
         "from": /\.\.\/\.\.\/node_modules\/lgv-config/g,
         "to": "../lgv-config"
+    },
+    {
+        "files": destination + "/index.html",
+        "from": /\/lgv-config/g,
+        "to": "../lgv-config"
     });
 
     if (environment === "Internet") {

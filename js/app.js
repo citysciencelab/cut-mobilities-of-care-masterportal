@@ -126,8 +126,8 @@ function loadApp () {
     }
 
 
-    if (_.has(Config, "quickHelp") && Config.quickHelp === true) {
-        new QuickHelpView();
+    if (_.has(Config, "quickHelp")) {
+        new QuickHelpView(Config.quickHelp);
     }
 
     if (_.has(Config, "scaleLine") && Config.scaleLine === true) {

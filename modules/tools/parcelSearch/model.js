@@ -22,7 +22,8 @@ const ParcelSearch = Tool.extend({
         "parcelDenominatorNumber": "0", // default Flurstücksnenner,
         "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         "parcelFound": false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        "glyphicon": "glyphicon-search"
+        "glyphicon": "glyphicon-search",
+        "mapMarkerType": "Parcel"
     }),
     initialize: function () {
         this.superInitialize();
@@ -30,6 +31,7 @@ const ParcelSearch = Tool.extend({
         this.listenTo(Radio.channel("ParcelSearch"), {
             "createReport": this.createReport
         });
+
         this.setDefaults();
     },
 
@@ -104,20 +106,21 @@ const ParcelSearch = Tool.extend({
         if (_.isUndefined(flurstueck) === false) {
             this.setParcelNumber(flurstueck);
             this.setDistrictNumber(gemarkung);
+            this.setParcelFound(true);
+        }
+        else {
+            // prüfe ob es ein Flurstück gibt
+            this.sendRequest();
         }
         flurst_kennz = this.createFlurstKennz();
-
-        // prüfe ob es ein Flurstück gibt
-        this.sendRequest();
-        if (this.get("parcelFound") === true) {
-            if (_.isUndefined(url) === false && _.isUndefined(params) === false) {
-                params.flurstueckskennzeichen = flurst_kennz;
-                url = this.buildUrl(url, params);
-                window.open(url, "_blank");
-            }
-            else {
-                Radio.trigger("Alert", "alert", {text: "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support", kategorie: "alert-info"});
-            }
+        // if (this.get("parcelFound") === true) {
+        if (this.get("parcelFound") && _.isUndefined(url) === false && _.isUndefined(params) === false) {
+            params.flurstueckskennzeichen = flurst_kennz;
+            url = this.buildUrl(url, params);
+            window.open(url, "_blank");
+        }
+        else {
+            Radio.trigger("Alert", "alert", {text: "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support", kategorie: "alert-info"});
         }
     },
     buildUrl: function (url, params) {
@@ -207,7 +210,8 @@ const ParcelSearch = Tool.extend({
                 _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
             });
             this.setParcelFound(true);
-            Radio.trigger("MapMarker", "zoomTo", {type: "Parcel", coordinate: coordinate});
+
+            Radio.trigger("MapMarker", "zoomTo", {type: this.get("mapMarkerType"), coordinate: coordinate});
             Radio.trigger("ParcelSearch", "parcelFound", attributes);
         }
     },

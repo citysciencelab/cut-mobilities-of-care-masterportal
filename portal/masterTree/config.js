@@ -33,7 +33,9 @@ const Config = {
         postMessageUrl: "http://localhost:8080"
     },
     proxyURL: "/cgi-bin/proxy.cgi",
-    quickHelp: true,
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     restConf: "/lgv-config/rest-services-fhhnet.json",
     scaleLine: true,
     simpleMap: false,

@@ -128,7 +128,6 @@ const Theme = Backbone.Model.extend({
         if (gfiList.length > 0) {
             pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"));
             pgfi = this.getManipulateDate(pgfi);
-            pgfi = this.getManipulateDate(pgfi);
             if (this.get("gfiTheme") !== "table") {
                 this.cloneCollModels(pgfi);
             }

@@ -1,6 +1,7 @@
 import TemplateSearch from "text-loader!./templateSearch.html";
 import TemplateTree from "text-loader!./templateTree.html";
 import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";
+import QuickHelpModel from "./model";
 import "jquery-ui/ui/widgets/draggable";
 
 const quickHelpView = Backbone.View.extend({
@@ -8,18 +9,34 @@ const quickHelpView = Backbone.View.extend({
         "click .glyphicon-remove": "removeWindow",
         "click .glyphicon-print": "printHelp"
     },
-    initialize: function () {
+
+    /**
+     * Initialisiert die QuickHelp
+     * @param   {boolean | object} attr Konfiguration
+     * @deprecated Boolean-Prüfung auf true entfällt mit Version 3.0 zwecks dedizierter Path-Übergabe
+     * @returns {void}
+     */
+    initialize: function (attr) {
         var channel = Radio.channel("Quickhelp");
 
-        channel.on({
-            "showWindowHelp": this.showWindow
-        }, this);
-        this.render();
+        if (attr === true || _.isObject(attr)) {
+            this.model = new QuickHelpModel(attr);            
 
-        this.$el.draggable({
-            containment: "#map",
-            handle: ".header"
-        });
+            channel.on({
+                "showWindowHelp": this.showWindow
+            }, this);
+
+            channel.reply({
+                "isSet": true
+            })
+
+            this.render();
+
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".header"
+            });
+        }
     },
     templateSearch: _.template(TemplateSearch),
     templateTree: _.template(TemplateTree),
@@ -32,55 +49,26 @@ const quickHelpView = Backbone.View.extend({
     removeWindow: function () {
         this.$el.hide("slow");
     },
+
     /**
      * [showWindow description]
      * @param {[type]} value [description]
      * @returns {void}
      */
     showWindow: function (value) {
-        var allgemein, allgemein2, allgemein3, allgemein4,
-            themen, themen2,
-            statistikFlaecheNiemeier, statistikStreckeUniErlangen, utmStreifen, utmVerzerrung, utmFormeln;
+        var attr = this.model.toJSON();
 
         switch (value) {
             case "search": {
-                allgemein = "../img/allgemein.png";
-                allgemein2 = "../img/allgemein_2.png";
-                allgemein3 = "../img/allgemein_3.png";
-                allgemein4 = "../img/allgemein_4.png";
-
-                this.$el.html(this.templateSearch({
-                    allgemein: allgemein,
-                    allgemein2: allgemein2,
-                    allgemein3: allgemein3,
-                    allgemein4: allgemein4
-                }));
+                this.$el.html(this.templateSearch(attr));
                 break;
             }
             case "tree": {
-                themen = "../img/themen.png";
-                themen2 = "../img/themen_2.png";
-
-                this.$el.html(this.templateTree({
-                    themen: themen,
-                    themen2: themen2
-                }));
+                this.$el.html(this.templateTree(attr));
                 break;
             }
             case "measure": {
-                statistikFlaecheNiemeier = "../img/Statistik_Flaeche_Niemeier.png";
-                statistikStreckeUniErlangen = "../img/Statistik_Strecke_UniErlangen.png";
-                utmStreifen = "../img/UTM_Streifen.png";
-                utmVerzerrung = "../img/UTM_Verzerrung.png";
-                utmFormeln = "../img/UTM_Formeln.png";
-
-                this.$el.html(this.templateMeasureTool({
-                    statistikFlaecheNiemeier: statistikFlaecheNiemeier,
-                    statistikStreckeUniErlangen: statistikStreckeUniErlangen,
-                    utmStreifen: utmStreifen,
-                    utmVerzerrung: utmVerzerrung,
-                    utmFormeln: utmFormeln
-                }));
+                this.$el.html(this.templateMeasureTool(attr));
                 break;
             }
             default: {
