@@ -23,7 +23,6 @@ const AttributionsView = Backbone.View.extend({
             "renderAttributions": this.renderAttributions
         });
 
-        this.render();
 
         if (isViewMobile === true) {
             this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
@@ -31,6 +30,8 @@ const AttributionsView = Backbone.View.extend({
         else {
             this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
         }
+        this.model.checkModelsByAttributions();
+        this.render();
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
@@ -76,6 +77,7 @@ const AttributionsView = Backbone.View.extend({
     toggleIsVisibleInMap: function (isVisible) {
         if (isVisible) {
             this.$el.show();
+            this.$el.addClass("attributions-view");
         }
         else {
             this.$el.hide();

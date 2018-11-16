@@ -26,8 +26,6 @@ const Attributions = Backbone.Model.extend({
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.checkModelsByAttributions
         });
-
-        this.checkModelsByAttributions();
         channel.on({
             "createAttribution": this.createAttribution,
             "removeAttribution": this.removeAttribution
@@ -50,7 +48,6 @@ const Attributions = Backbone.Model.extend({
 
         this.setAttributionList(filteredAttributions);
         if (filteredAttributions.length === 0) {
-            this.setIsVisibleInMap(false);
             this.setIsContentVisible(false);
         }
         this.trigger("renderAttributions");
@@ -62,13 +59,13 @@ const Attributions = Backbone.Model.extend({
      */
     checkModelsByAttributions: function () {
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            haveModelsAttributions = _.some(modelList, function (model) {
-                return model.get("layerAttribution");
+            filteredModelList = _.filter(modelList, function (model) {
+                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
             });
 
-        if (haveModelsAttributions === true) {
-            this.removeAllLayerAttributions();
-            this.generateAttributions(modelList);
+        this.removeAllLayerAttributions();
+        if (filteredModelList.length > 0) {
+            this.generateAttributions(filteredModelList);
         }
     },
     removeAllLayerAttributions: function () {
@@ -82,14 +79,10 @@ const Attributions = Backbone.Model.extend({
     /**
      * Holt sich aus der ModelList die aktuellen in der Karte sichtbaren Layern,
      * filter die ohne Attributions raus und schreibt sie in "modelList"
-     * @param {Model} modelList ModelList
+     * @param {Model} filteredModelList ModelList
      * @returns {void}
      */
-    generateAttributions: function (modelList) {
-        var filteredModelList = _.filter(modelList, function (model) {
-            return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
-        });
-
+    generateAttributions: function (filteredModelList) {
         _.each(filteredModelList, function (model) {
             var name = model.get("name"),
                 text = "",
