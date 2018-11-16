@@ -19,7 +19,8 @@ const AttributionsView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isContentVisible": this.renderAttributions,
             "change:attributionList": this.renderAttributions,
-            "change:isVisibleInMap": this.toggleIsVisibleInMap
+            "change:isVisibleInMap": this.toggleIsVisibleInMap,
+            "renderAttributions": this.renderAttributions
         });
 
         this.render();

@@ -36,10 +36,10 @@ const PendlerCoreModel = Tool.extend({
             "change:isActive": function (model, value) {
                 if (value) {
                     this.resetWindow();
-                    Radio.trigger("Attributions", "createAttribution", model.get("name"), this.get("attributionText"));
+                    Radio.trigger("Attributions", "createAttribution", model.get("name"), this.get("attributionText"), "Pendler");
                 }
                 else {
-                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), this.get("attributionText"));
+                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), this.get("attributionText"), "Pendler");
                 }
             }
         });

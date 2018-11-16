@@ -33,22 +33,27 @@ const Attributions = Backbone.Model.extend({
             "removeAttribution": this.removeAttribution
         }, this);
     },
-    createAttribution: function (name, text) {
+    createAttribution: function (name, text, type) {
         this.get("attributionList").push({
+            type: type,
             name: name,
             text: text
         });
         this.setIsVisibleInMap(true);
         this.setIsContentVisible(true);
+        this.trigger("renderAttributions");
     },
-    removeAttribution: function (name, text) {
+    removeAttribution: function (name, text, type) {
         var filteredAttributions = _.filter(this.get("attributionList"), function (attribution) {
-            return attribution.name !== name && attribution.text !== text;
+            return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
 
-        this.setIsVisibleInMap(false);
-        this.setIsContentVisible(false);
         this.setAttributionList(filteredAttributions);
+        if (filteredAttributions.length === 0) {
+            this.setIsVisibleInMap(false);
+            this.setIsContentVisible(false);
+        }
+        this.trigger("renderAttributions");
     },
     /**
      * Es wird geprüft, ob Attributions bei den aktuell in der Karten sichtbaren Layern vorliegen
@@ -61,13 +66,19 @@ const Attributions = Backbone.Model.extend({
                 return model.get("layerAttribution");
             });
 
-        this.setIsVisibleInMap(haveModelsAttributions);
-        this.setIsContentVisible(haveModelsAttributions);
         if (haveModelsAttributions === true) {
+            this.removeAllLayerAttributions();
             this.generateAttributions(modelList);
         }
     },
+    removeAllLayerAttributions: function () {
+        var attributions = this.get("attributionList"),
+            filteredAttributions = _.filter(attributions, function (attribution) {
+                return attribution.type !== "layer";
+            });
 
+        this.setAttributionList(filteredAttributions);
+    },
     /**
      * Holt sich aus der ModelList die aktuellen in der Karte sichtbaren Layern,
      * filter die ohne Attributions raus und schreibt sie in "modelList"
@@ -76,24 +87,22 @@ const Attributions = Backbone.Model.extend({
      */
     generateAttributions: function (modelList) {
         var filteredModelList = _.filter(modelList, function (model) {
-                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
-            }),
-            attributions = [];
-
-        _.each(filteredModelList, function (model) {
-            var attribution = {};
-
-            attribution.name = model.get("name");
-            if (_.isObject(model.get("layerAttribution"))) {
-                attribution.text = model.get("layerAttribution").text;
-            }
-            else {
-                attribution.text = model.get("layerAttribution");
-            }
-            attributions.push(attribution);
+            return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
         });
 
-        this.setAttributionList(attributions);
+        _.each(filteredModelList, function (model) {
+            var name = model.get("name"),
+                text = "",
+                type = "layer";
+
+            if (_.isObject(model.get("layerAttribution"))) {
+                text = model.get("layerAttribution").text;
+            }
+            else {
+                text = model.get("layerAttribution");
+            }
+            this.createAttribution(name, text, type);
+        }, this);
     },
 
     setIsContentVisible: function (value) {
