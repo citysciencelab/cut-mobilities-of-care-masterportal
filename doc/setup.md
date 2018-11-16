@@ -17,7 +17,7 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
         - services*.json
         - rest-services*.json
         - style.json
-        -img/
+        - img/
     - portal/
         - Basic/
             - css/
