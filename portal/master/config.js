@@ -30,7 +30,9 @@ const Config = {
             }
         ]
     },
-    quickHelp: true,
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     portalConf: "./",
     layerConf: "/lgv-config/services-fhhnet-ALL.json",
     restConf: "/lgv-config/rest-services-fhhnet.json",

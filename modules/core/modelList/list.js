@@ -163,7 +163,7 @@ const ModelList = Backbone.Collection.extend({
                 return new GetCoord(attrs, options);
             }
             else if (attrs.id === "measure") {
-                return new Measure(_.extend(attrs, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {}), options);
+                return new Measure(attrs, options);
             }
             else if (attrs.id === "draw") {
                 return new Draw(attrs, options);
