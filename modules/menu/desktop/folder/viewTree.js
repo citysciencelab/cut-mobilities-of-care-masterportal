@@ -26,8 +26,7 @@ const FolderView = Backbone.View.extend({
     render: function () {
         var attr = this.model.toJSON(),
             paddingLeftValue = 0,
-            selector = "",
-            windowHeight = (window.innerHeight - 120) + "px";
+            selector = "";
 
         this.$el.html("");
 
@@ -58,9 +57,6 @@ const FolderView = Backbone.View.extend({
                 $(this.$el).css("padding-left", paddingLeftValue + "px");
             }
         }
-        $("#tree").css({
-            "max-height": windowHeight
-        });
         return this;
     },
     rerender: function () {
