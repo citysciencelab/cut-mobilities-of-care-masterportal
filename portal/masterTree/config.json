@@ -329,6 +329,7 @@
         "baselayer": "452"
       },
       "mousePosition": true,
+      "buttonOblique": true,
       "button3d": true
     },
     "scaleLine": true,
@@ -365,7 +366,12 @@
       },
       {
         "id": "453"
-      }
+      },
+        {
+          "id": "12885",
+          "name": "Oblique",
+          "visibility": true
+        }
       ]
     },
     "Fachdaten_3D":

@@ -45,7 +45,7 @@ const ObliqueLayer = Layer.extend({
         }
         hideLevels = this.get("hideLevels") || 0;
         minZoom = this.get("minZoom") || 0;
-        projection = this.get("projection");
+        projection = Radio.request("MapView", "getProjection");
         proj = get(projection);
         obliqueCollection = new Collection({
             terrainProvider: null,
