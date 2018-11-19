@@ -1,8 +1,8 @@
 import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
-import Cluster from "ol/source/Cluster.js";
 
 
 const GeoJSONLayer = Layer.extend({
@@ -38,14 +38,6 @@ const GeoJSONLayer = Layer.extend({
         }));
     },
     /**
-     * [setClusterLayerSource description]
-     * @param {[type]} value [description]
-     * @returns {void}
-     */
-    setClusterLayerSource: function (value) {
-        this.set("clusterLayerSource", value);
-    },
-    /**
      * [createLayer description]
      * @return {[type]} [description]
      */
@@ -66,7 +58,14 @@ const GeoJSONLayer = Layer.extend({
             this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
         }
     },
-
+    /**
+     * [setClusterLayerSource description]
+     * @param {[type]} value [description]
+     * @returns {void}
+     */
+    setClusterLayerSource: function (value) {
+        this.set("clusterLayerSource", value);
+    },
     /**
      * Lädt das GeoJSON neu
      * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
@@ -163,6 +162,7 @@ const GeoJSONLayer = Layer.extend({
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
+        //this.get("layer").setStyle(this.get("style"));
     },
 
     // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
