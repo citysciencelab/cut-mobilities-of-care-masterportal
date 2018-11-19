@@ -4,7 +4,6 @@ import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
-
 const GeoJSONLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
@@ -19,6 +18,7 @@ const GeoJSONLayer = Layer.extend({
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
     /**
+     * [createLayerSource description]
      * Wird vom Model getriggert und erzeugt eine vectorSource.
      * Ggf. auch eine clusterSource
      * @return {[type]} [description]
@@ -154,7 +154,7 @@ const GeoJSONLayer = Layer.extend({
      * sets style function for features or layer
      * @param  {Backbone.Model} stylelistmodel Model für Styles
      * @returns {undefined}
-     */
+    */
     setStyleFunction: function (stylelistmodel) {
         var isClustered = Boolean(this.has("clusterDistance"));
 
@@ -181,10 +181,10 @@ const GeoJSONLayer = Layer.extend({
         }
     },
     /**
-        * Zeigt nur die Features an, deren Id übergeben wird
-        * @param  {string[]} featureIdList Liste der FeatureIds
-        * @return {undefined}
-        */
+     * Zeigt nur die Features an, deren Id übergeben wird
+     * @param  {string[]} featureIdList Liste der FeatureIds
+     * @return {undefined}
+     */
     showFeaturesByIds: function (featureIdList) {
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
@@ -209,10 +209,10 @@ const GeoJSONLayer = Layer.extend({
     },
 
     /**
-        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-        * @param {object} options -
-        * @returns {void}
-        **/
+     * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+     * @param {object} options -
+     * @returns {void}
+     **/
     checkForScale: function (options) {
         if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
             this.setIsOutOfRange(false);
