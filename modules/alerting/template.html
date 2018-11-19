@@ -10,4 +10,8 @@
     <p>
         <%= message %>
     </p>
+<% if(isConfirmable) {%>
+    <button type="button" class="btn btn-primary alert-confirm" data-dismiss="alert" aria-label="Close">OK
+    </button>
+<% }%>
 </div>

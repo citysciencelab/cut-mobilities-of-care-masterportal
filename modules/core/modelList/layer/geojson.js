@@ -6,7 +6,10 @@ import {GeoJSON} from "ol/format.js";
 
 
 const GeoJSONLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults),
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        showSettings: true
+    }),
 
     initialize: function () {
         if (!this.get("isChildLayer")) {
@@ -49,7 +52,8 @@ const GeoJSONLayer = Layer.extend({
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: "clampToGround"
         }));
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();
@@ -162,7 +166,6 @@ const GeoJSONLayer = Layer.extend({
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
-        //this.get("layer").setStyle(this.get("style"));
     },
 
     // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!

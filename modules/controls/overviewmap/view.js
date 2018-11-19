@@ -10,7 +10,6 @@ const OverviewmapView = Backbone.View.extend({
         this.render();
         this.model = new OverviewmapModel();
     },
-
     render: function () {
         this.$el.html(this.template());
         return this;

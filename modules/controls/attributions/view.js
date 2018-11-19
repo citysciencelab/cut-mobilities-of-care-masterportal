@@ -18,11 +18,11 @@ const AttributionsView = Backbone.View.extend({
 
         this.listenTo(this.model, {
             "change:isContentVisible": this.renderAttributions,
-            "change:modelList": this.renderAttributions,
-            "change:isVisibleInMap": this.toggleIsVisibleInMap
+            "change:attributionList": this.renderAttributions,
+            "change:isVisibleInMap": this.toggleIsVisibleInMap,
+            "renderAttributions": this.renderAttributions
         });
 
-        this.render();
 
         if (isViewMobile === true) {
             this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
@@ -30,6 +30,8 @@ const AttributionsView = Backbone.View.extend({
         else {
             this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
         }
+        this.model.checkModelsByAttributions();
+        this.render();
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
@@ -45,7 +47,7 @@ const AttributionsView = Backbone.View.extend({
             this.$el.hide();
         }
 
-        if (attr.modelList.length === 0) {
+        if (attr.attributionList.length === 0) {
             this.$(".attributions-div").removeClass("attributions-div");
         }
         return this;
@@ -60,7 +62,7 @@ const AttributionsView = Backbone.View.extend({
         else {
             this.$el.html(this.templateHide(attr));
         }
-        if (_.isEmpty(attr.modelList) === true) {
+        if (_.isEmpty(attr.attributionList) === true) {
             this.$(".attributions-div").removeClass("attributions-div");
         }
         else {
@@ -72,8 +74,14 @@ const AttributionsView = Backbone.View.extend({
         this.model.toggleIsContentVisible();
     },
 
-    toggleIsVisibleInMap: function () {
-        this.$el.toggle();
+    toggleIsVisibleInMap: function (isVisible) {
+        if (isVisible) {
+            this.$el.show();
+            this.$el.addClass("attributions-view");
+        }
+        else {
+            this.$el.hide();
+        }
     }
 });
 
