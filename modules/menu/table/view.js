@@ -38,6 +38,11 @@ const Menu = Backbone.View.extend({
     hideContextMenu: function () {
         $("body").attr("oncontextmenu", "return false;");
     },
+    /**
+     * add HTML content to the Categories Window
+     * @param {DOM} element - from a tool view
+     * @returns {void}
+     */
     appendFilterContent: function (element) {
         this.$el.find(".table-filter-container").append(element);
     }
