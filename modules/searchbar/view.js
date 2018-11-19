@@ -80,6 +80,9 @@ const SearchbarView = Backbone.View.extend({
             }
         });
 
+        if (config.quickHelp) {
+            this.model.setQuickHelp(config.quickHelp);
+        }
 
         this.initialRender();
 

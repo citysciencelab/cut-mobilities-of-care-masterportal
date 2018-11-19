@@ -205,6 +205,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 #!json
 
 {
+<<<<<<< HEAD
       "id" : "11111",
       "name" : "lokale GeoJSON",
       "url" : "myJsons/test.json",
@@ -212,6 +213,153 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "",
+   }
+```
+
+## 3D Object Layer TileSet ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
+|id|ja|String||Frei wählbare Layer-ID|`"44"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|typ|ja|String||Diensttyp, in diesem Fall TileSet |`"TileSet"`|
+|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
+|[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
+
+[cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
+
+**Beispiel Tileset:**
+
+
+```
+#!json
+
+{
+      "id" : "buildings",
+      "name" : "Gebäude",
+      "url" : "https://geodienste.hamburg.de/b3dm_hamburg_lod2",
+      "typ" : "Tileset",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",
+      "cesium3DTilesetOptions" : {
+        maximumScreenSpaceError : 6
+      },
+      "datasets" : [
+         {
+            "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+            "rs_id" : "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
+            "md_name" : "LOD 2 Gebäude",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "LOD 2 Gebäude"
+            ],
+            "kategorie_inspire" : [
+               "LOD 2 Gebäude"
+            ],
+            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
+         }
+      ]
+   }
+```
+
+## Terrain Quantized Mesh Dataset ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|id|ja|String||Frei wählbare Layer-ID|`"44"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|typ|ja|String||Diensttyp, in diesem Fall Terrain |`"Terrain"`|
+|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/terrain"`|
+|[cesiumTerrainProviderOptions]|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+
+[cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
+
+
+**Beispiel Terrain:**
+
+```
+#!json
+   {
+      "id" : "buildings",
+      "name" : "Terrain",
+      "url" : "https://geodienste.hamburg.de/terrain",
+      "typ" : "Tileset",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",
+      "cesiumTerrainProviderOptions": {
+        "requestVertexNormals" : true
+      },
+      "datasets" : [
+         {
+            "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+            "rs_id" : "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
+            "md_name" : "Terrain",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Terrain"
+            ],
+            "kategorie_inspire" : [
+               "Terrain"
+            ],
+            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
+         }
+      ]
+   }
+```
+## Oblique Layer##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|id|ja|String||Frei wählbare Layer-ID|`"44"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|typ|ja|String||Diensttyp, in diesem Fall Oblique |`"Oblique"`|
+|hideLevels|nein|Number||Anzahl der Level der Bildpyramide, die nicht angezeigt werden sollen. |`0`|
+|minZoom|nein|Number||Minimale Zoomstufe 0 zeigt das komplette Schrägluftbild in der Mitte des Bildschirms. |`0`|
+|terrainUrl|nein|String||URL zu Cesium Quantized Mesh Terrain dataset |`"https://geodienste.hamburg.de/terrain"`|
+|resolution|nein|Number||Auflösung der Schrägluftbilder in cm z.B. 10 . |`10`|
+|projection|ja|String||Projektion der Schrägluftbild ebene. |`EPSG:25832`|
+|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/oblique"`|
+
+
+**Beispiel Oblique Ebene:**
+
+```
+#!json
+   {
+      "id" : "oblique",
+      "name" : "Oblique",
+      "url" : "https://geodienste.hamburg.de/oblique",
+      "typ" : "Oblique",
+      "gfiAttributes" : "showAll",
+      "layerAttribution" : "nicht vorhanden",
+      "legendURL" : "ignore",      
+      "datasets" : [
+         {
+            "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
+            "rs_id" : "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
+            "md_name" : "Oblique",
+            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata" : [
+               "Oblique"
+            ],
+            "kategorie_inspire" : [
+               "Oblique"
+            ],
+            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
+         }
+      ]
    }
 ```
 >Zurück zur [Dokumentation Masterportal](doc.md).

@@ -8,7 +8,7 @@ import Feature from "ol/Feature.js";
 
 const SchulwegRouting = Tool.extend({
 
-    defaults: _.extend({}, Tool.prototype.Tool, {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         id: "",
         layerId: "",
         // ol-features of all schools
@@ -32,6 +32,7 @@ const SchulwegRouting = Tool.extend({
             label: "HVV Verkehrsnetz"
         }),
         renderToSidebar: true,
+        renderToWindow: false,
         glyphicon: "glyphicon-filter"
     }),
 

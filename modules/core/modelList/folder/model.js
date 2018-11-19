@@ -20,7 +20,9 @@ const Folder = Item.extend({
         id: "",
         // Glyphicon massen auswahl
         selectAllGlyphicon: "glyphicon-unchecked",
-        glyphicon: "glyphicon-folder-open"
+        glyphicon: "glyphicon-folder-open",
+        // these folder are not displayed in oblique mode
+        obliqueModeBlacklist: ["tree", "tools"]
     }),
 
     initialize: function () {

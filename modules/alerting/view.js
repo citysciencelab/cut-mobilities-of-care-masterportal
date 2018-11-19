@@ -4,7 +4,8 @@ import "bootstrap/js/alert";
 
 const AlertingView = Backbone.View.extend({
     events: {
-        "click .close": "alertClosed"
+        "click .close": "alertClosed",
+        "click .alert-confirm": "alertConfirmed"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -39,6 +40,12 @@ const AlertingView = Backbone.View.extend({
             Radio.trigger("Alert", "closed", $(div[0]).attr("id"));
         }
 
+    },
+    alertConfirmed: function (evt) {
+        var div = $(evt.currentTarget).parent();
+
+        Radio.trigger("Alert", "confirmed", $(div[0]).attr("id"));
+        this.model.setIsConfirmable(false);
     },
 
     /**

@@ -20,6 +20,7 @@ const ThemeView = Backbone.View.extend({
         gfiWindow: "detached"
     },
     render: function () {
+
         var attr;
 
         if (_.isUndefined(this.model.get("gfiContent")) === false) {
@@ -27,6 +28,7 @@ const ThemeView = Backbone.View.extend({
             this.$el.html(this.template(attr));
         }
 
+        Radio.trigger("GFI", "afterRender");
         return this;
     },
 

@@ -8,7 +8,14 @@ const ItemView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
         });
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                this.toggleSupportedVisibility(mode);
+            }
+        });
+
         this.render();
+        this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         this.setCssClass();
         this.toggleIsActiveClass();
     },
@@ -23,7 +30,20 @@ const ItemView = Backbone.View.extend({
         }
         return this;
     },
-
+    toggleSupportedVisibility: function (mode) {
+        if (mode === "2D") {
+            this.$el.show();
+        }
+        else if (mode === "3D" && this.model.get("supportedIn3d").indexOf(this.model.get("id")) >= 0) {
+            this.$el.show();
+        }
+        else if (mode === "Oblique" && this.model.get("supportedInOblique").indexOf(this.model.get("id")) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
+        }
+    },
     /**
      * Abhängig davon ob ein Tool in die Menüleiste oder unter dem Punkt Werkzeuge gezeichnet wird,
      * bekommt die View eine andere CSS-Klasse zugeordent
@@ -49,7 +69,7 @@ const ItemView = Backbone.View.extend({
     },
 
     checkItem: function () {
-        if (this.model.get("name") === "Legende") {
+        if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
         }
         else {

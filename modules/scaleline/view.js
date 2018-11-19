@@ -5,6 +5,16 @@ const ScaleLineView = Backbone.View.extend({
     initialize: function () {
         this.model = new ScaleLine();
         this.listenTo(this.model, "change:scaleLineValue", this.render);
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (mode === "Oblique") {
+                    this.$el.hide();
+                }
+                else {
+                    this.$el.show();
+                }
+            }
+        });
         this.render();
     },
     className: "scale-line",

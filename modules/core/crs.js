@@ -58,7 +58,6 @@ const CRS = Backbone.Model.extend({
 
         return projections;
     },
-
     transformToMapProjection: function (sourceProjection, point) {
         var mapProjection = Radio.request("MapView", "getProjection"),
             targetProjection;

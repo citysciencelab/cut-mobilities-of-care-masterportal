@@ -1,5 +1,6 @@
 import {Circle as CircleStyle, Icon} from "ol/style.js";
-import {Point, Polygon} from "ol/geom.js";
+import {Point} from "ol/geom.js";
+import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
@@ -364,7 +365,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         strokeColor = style.getColor();
         obj.strokeColor = this.rgbArrayToHex(strokeColor);
-        if (strokeColor[3] !== undefined) {
+        if (_.isArray(strokeColor) && strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];
         }
         if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
@@ -405,7 +406,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         // circle is not suppported by geojson
         if (feature.getGeometry().getType() === "Circle") {
-            feature.setGeometry(Polygon.fromCircle(feature.getGeometry()));
+            feature.setGeometry(fromCircle(feature.getGeometry()));
         }
         return geojsonFormat.writeFeatureObject(feature);
     },
@@ -572,8 +573,15 @@ const BuildSpecModel = Backbone.Model.extend({
                     valueObj.imageUrl = this.createLegendImageUrl("WMS", url);
                 }
                 else if (layerParam.legend[0].typ === "WFS") {
-                    valueObj.legendType = "wfsImage";
-                    valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
+                    if (url.indexOf("<svg") !== -1) {
+                        valueObj.color = this.getFillFromSVG(url);
+                        valueObj.legendType = "geometry";
+                        valueObj.geometryType = "polygon";
+                    }
+                    else {
+                        valueObj.legendType = "wfsImage";
+                        valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
+                    }
                 }
 
                 valueObj.label = layerParam.layername;
@@ -593,6 +601,16 @@ const BuildSpecModel = Backbone.Model.extend({
         }
 
         return valuesArray;
+    },
+    getFillFromSVG: function (svgString) {
+        var indexOfFill = svgString.indexOf("fill:") + 5,
+            hexLength = 6 + 1,
+            hexColor = "#000000";
+
+        if (svgString.indexOf("fill:") !== -1) {
+            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
+        }
+        return hexColor;
     },
     createLegendImageUrl: function (typ, path) {
         var url = path,
