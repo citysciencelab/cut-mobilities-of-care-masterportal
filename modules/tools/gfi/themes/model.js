@@ -318,7 +318,7 @@ const Theme = Backbone.Model.extend({
                         valueName = JSON.parse(valueName).multiTag;
                     }
                     if (_.isArray(valueName)) {
-                        valueName = valueName.toString().replace(/,/g, ", ");
+                        valueName = valueName.join("</br>");
                     }
                     preGfi[key] = _.isString(valueName) ? valueName.trim() : valueName;
                 }
