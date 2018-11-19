@@ -2,6 +2,9 @@ import SidebarModel from "./model";
 
 const SidebarView = Backbone.View.extend({
     initialize: function () {
+        this.model = new SidebarModel();
+        this.$el.addClass(this.getClassName());
+
         this.listenTo(this.model, {
             "change:isVisible": this.toggle,
             "change:isMobile": this.toggleClass,
@@ -9,8 +12,12 @@ const SidebarView = Backbone.View.extend({
         });
         $("#map").after(this.$el);
     },
-    model: new SidebarModel(),
-    className: function () {
+
+    /**
+     * Ermittelt den ClassName dieser View
+     * @returns {string}    ClassName
+     */
+    getClassName: function () {
         if (this.model.get("isMobile")) {
             return "sidebar-mobile";
         }

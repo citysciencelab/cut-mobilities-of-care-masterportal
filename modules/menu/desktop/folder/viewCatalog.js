@@ -22,6 +22,14 @@ const FolderView = Backbone.View.extend({
         }
     },
     initialize: function () {
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (mode === "Oblique") {
+                    this.model.setIsExpanded(false);
+                }
+                this.togle3dCatalog(mode);
+            }
+        });
         this.listenTo(this.model, {
             "change:isExpanded": this.toggleGlyphicon
         }, this);
@@ -31,6 +39,7 @@ const FolderView = Backbone.View.extend({
                 e.stopPropagation();
             }});
         this.render();
+        this.togle3dCatalog(Radio.request("Map", "getMapMode"));
     },
     tagName: "li",
     className: "layer-catalog",
@@ -72,6 +81,14 @@ const FolderView = Backbone.View.extend({
         Radio.trigger("MapView", "toggleBackground");
         $(".glyphicon-adjust").toggleClass("rotate-adjust");
         $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
+    },
+    togle3dCatalog: function (mode) {
+        if (mode === "3D" && this.model.get("id") === "3d_daten") {
+            this.$el.show();
+        }
+        else if (mode !== "3D" && this.model.get("id") === "3d_daten") {
+            this.$el.hide();
+        }
     },
     fixTree: function () {
         $("body").on("click", "#map", this.helpForFixing);

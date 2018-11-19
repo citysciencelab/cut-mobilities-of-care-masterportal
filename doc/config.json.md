@@ -45,6 +45,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden d
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
 |[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button an, mit dem die Startansicht wiederhergestellt wird.|
+|button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung nach 3D angezeigt werden soll. |
+|orientation3d|nein|Boolean|false|Legt fest, ob ein im 3D Modus eine Navigationsrose anzeiget werden soll. |
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
 
 **Beispiel controls:**
@@ -750,6 +752,7 @@ Flurstücksuche
 |storedQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
 |createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
 |reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
+|mapMarkerType|nein|String|"Parcel"|Gibt an wie im MapMarker Modul auf das Flurstück gezoomt und markiert wird.|
 
 ******
 ******
@@ -1347,6 +1350,8 @@ Der Abschnitt Hintergrundkarten besteht aus dem Attribut _Layer_. Es ist ein Arr
 |name|nein|String|Name aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 
 **Beispiel Hintergrundkarten:**
@@ -1469,6 +1474,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
 |transparency|nein|Number|0|Layertransparenz|
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
+|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 |autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
@@ -1481,6 +1487,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |infoFormat|nein|String|Wert aus der [services.json](services.json.md) sonst *„text/xml“*|Format für die GFI-Abfrage.|
 |styleable|nein|Boolean||True -> Layer kann im Client anders gestylt werden. Zusätzlich müssen *geomType* und *attributesToStyle* gesetzt werden.|
 |styles|nein|Array [String]||Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.|
+|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
 
 **Folgende Layerkonfigurationen gelten nur für WFS:**
 

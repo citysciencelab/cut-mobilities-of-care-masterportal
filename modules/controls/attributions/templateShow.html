@@ -1,13 +1,8 @@
 <div class="attributions-div">
     <dl>
-        <% _.each(modelList, function (model) { %>
-            <dt><%= model.get("name") %>:</dt>
-            <% if (_.isObject(model.get("layerAttribution")) === true) { %>
-                <dd><%= model.get("layerAttribution").text %></d>
-            <% }
-            else { %>
-                <dd><%= model.get("layerAttribution") %></d>
-            <% } %>
+        <% _.each(attributionList, function (model) { %>
+            <dt><%= model.name %>:</dt>
+            <dd><%= model.text %></d>
         <% }); %>
     </dl>
 </div>

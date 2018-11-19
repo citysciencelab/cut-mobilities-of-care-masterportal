@@ -1,6 +1,6 @@
 const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    gfiWindow: "attached",
+    gfiWindow: "detached",
     simpleMap: false,
     wfsImgPath: "/lgv-config/img/",
     allowParametricURL: true,
@@ -30,7 +30,9 @@ const Config = {
             }
         ]
     },
-    quickHelp: true,
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     portalConf: "./",
     layerConf: "/lgv-config/services-fhhnet-ALL.json",
     restConf: "/lgv-config/rest-services-fhhnet.json",
@@ -47,5 +49,18 @@ const Config = {
     clickCounter: {},
     remoteInterface: {
         postMessageUrl: "http://localhost:8080"
+    },
+    startingMap3D: false,
+    obliqueMap: true,
+    cesiumParameter: {
+        tileCacheSize: 20,
+        enableLighting: false,
+        fog: {
+            enabled: true,
+            density: 0.0002,
+            screenSpaceErrorFactor: 2.0
+        },
+        maximumScreenSpaceError: 2,
+        fxaa: true
     }
 };

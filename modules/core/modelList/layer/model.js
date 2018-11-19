@@ -17,7 +17,9 @@ const Layer = Item.extend({
         layerInfoClicked: false,
         minScale: "0",
         maxScale: "1000000",
-        legendURL: ""
+        legendURL: "",
+        supported: ["2D"],
+        showSettings: true
     },
 
     initialize: function () {
@@ -89,6 +91,18 @@ const Layer = Item.extend({
             },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
+            }
+        });
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                if (this.get("supported").indexOf(mode) >= 0) {
+                    if (this.get("isVisibleInMap")) {
+                        this.get("layer").setVisible(true);
+                    }
+                }
+                else if (this.get("layer") !== undefined) {
+                    this.get("layer").setVisible(false);
+                }
             }
         });
         // Diese Listener kümmern sich um die Sichtbarkeit der Layer
@@ -345,7 +359,6 @@ const Layer = Item.extend({
         }
 
         return undefined;
-
     },
     /**
      * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
@@ -368,6 +381,10 @@ const Layer = Item.extend({
     // setter for legendURL
     setLegendURL: function (value) {
         this.set("legendURL", value);
+    },
+
+    setIsVisibleInTree: function (value) {
+        this.set("isVisibleInTree", value);
     }
 
 });

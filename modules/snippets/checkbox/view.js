@@ -50,7 +50,7 @@ const CheckboxSnippetView = Backbone.View.extend({
         if (!isInfoTextVisible) {
             this.$el.find(".info-text").toggle();
         }
-    },
+    }
 });
 
 export default CheckboxSnippetView;

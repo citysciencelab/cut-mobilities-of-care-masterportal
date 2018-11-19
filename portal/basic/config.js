@@ -25,8 +25,9 @@ const Config = {
             }
         ]
     },
-    quickHelp: true,
-
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     portalConf: "../../portal/master/",
     layerConf: "/lgv-config/services-internet.json",
     restConf: "/lgv-config/rest-services-internet.json",
