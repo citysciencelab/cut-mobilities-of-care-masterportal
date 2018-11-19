@@ -59,7 +59,6 @@ function createDataStructure () {
                                 "berufliche_schulen.png",
                                 "langformschulen.png",
                                 "backgroundCanvas.jpeg",
-                                "verkehrslage_keine.png",
                                 "krippe.gif",
                                 "krippe_ele_eh.gif",
                                 "krippe_ele.gif",
