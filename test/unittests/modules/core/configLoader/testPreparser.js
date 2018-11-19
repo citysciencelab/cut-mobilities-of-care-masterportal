@@ -8,7 +8,7 @@ describe("core/configLoader/preparser", function () {
 
     before(function () {
         new RawLayerList();
-        new RestReaderList();
+        new RestReaderList(null, {"url": "resources/testRestServices.json"});
         preparser = new Preparser();
     });
 

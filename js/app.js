@@ -87,7 +87,7 @@ function loadApp () {
     new Autostarter();
     new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
     new RawLayerList();
-    new RestReaderList();
+    new RestReaderList(null, {url: Config.restConf});
     new Preparser();
     new StyleList();
     new ParametricURL();
