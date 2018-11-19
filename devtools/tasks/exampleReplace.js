@@ -3,7 +3,7 @@ var replace = require("replace-in-file");
 module.exports = function (destination) {
     var replacement = {
             "files": destination,
-            "from": /\/lgv-config/g,
+            "from": /\..\/lgv-config/g,
             "to": "../../lgv-config"
         },
         rep = replace.sync(replacement);
