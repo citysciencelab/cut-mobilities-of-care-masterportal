@@ -7,8 +7,8 @@ describe("core/configLoader/preparser", function () {
     var preparser;
 
     before(function () {
-        new RawLayerList();
-        new RestReaderList(null, {"url": "resources/testRestServices.json"});
+        new RestReaderList(null, {url: "resources/testRestServices.json"});
+        new RawLayerList(null, {url: "lgv-config/services-fhhnet-ALL.json"});
         preparser = new Preparser();
     });
 

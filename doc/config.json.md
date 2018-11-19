@@ -143,7 +143,7 @@ Stellt die Startansicht wieder her. Es werden die initialen Parameter zoomLevel 
 ```
 #!json
 "mapView": {
-        "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
         {

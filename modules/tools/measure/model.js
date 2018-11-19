@@ -99,7 +99,8 @@ const Measure = Tool.extend({
         pointerMoveListener: {},
         clickListener: {},
         textPoint: {},
-        scale: -1
+        scale: -1,
+        "glyphicon": "glyphicon-resize-full"
     }),
 
     initialize: function () {
