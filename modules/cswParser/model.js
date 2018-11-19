@@ -262,7 +262,7 @@ const CswParser = Backbone.Model.extend({
                 unknown: "unbekannt"
             };
 
-        return dateTypes[dateType];
+        return _.isUndefined(dateTypes[dateType]) ? null : dateTypes[dateType];
     }
 });
 
