@@ -57,7 +57,16 @@ function createDataStructure () {
                                 "stadtteilschulen.png",
                                 "sonderschulen.png",
                                 "berufliche_schulen.png",
-                                "langformschulen.png"
+                                "langformschulen.png",
+                                "backgroundCanvas.jpeg",
+                                "verkehrslage_keine.png",
+                                "krippe.gif",
+                                "krippe_ele_eh.gif",
+                                "krippe_ele.gif",
+                                "ele.gif",
+                                "ele_eh.gif",
+                                "krippe_ele_hort.gif",
+                                "paemi.gif"
                             ]
                         }
                     ],
