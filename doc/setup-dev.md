@@ -93,6 +93,18 @@ Ein Portal vor Veröffentlichung optimieren/bauen.
  - Pfade zu Conf in config.js werden automatisch ersetzt
 
 
+### npm run buildExamples
+Ein Beispielportal erzeugen.
+
+```
+// npm run buildExamples
+# npm run buildExamples
+```
+
+- erzeugt zwei Ordner examples und examples-x.x.x (Version), in denen jeweils eine lauffähige Portal-Instanz (Basic) enthalten ist inkl. dem Ordner lgv-config
+- erzeugt zusätzlich examples.zip und examples-x.x.x.zip
+
+
 ## Aktualisieren der Abhängigkeiten
 
 für alle npm-Pakete:
