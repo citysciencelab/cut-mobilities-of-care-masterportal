@@ -2,15 +2,11 @@ const RawLayerList = Backbone.Collection.extend({
     model: function (attrs) {
         return new Backbone.Model(attrs);
     },
-    initialize: function (urlForTest) {
+    initialize: function (models, options) {
         var channel = Radio.channel("RawLayerList");
 
         // URL zur services.json
-        this.url = Config.layerConf;
-
-        if (urlForTest) {
-            this.url = urlForTest;
-        }
+        this.url = options.url;
 
         channel.reply({
             "getLayerWhere": this.getLayerWhere,
