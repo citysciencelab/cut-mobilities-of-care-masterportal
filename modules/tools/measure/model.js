@@ -2,11 +2,10 @@ import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
-import {Polygon, LineString} from "ol/geom.js";
+import {Polygon, LineString, Point, MultiPoint} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
+import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
-import Point from "ol/geom/Point.js";
-import MultiPoint from "ol/geom/MultiPoint.js";
 
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -91,21 +90,32 @@ const Measure = Tool.extend({
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
-        uiStyle: "DEFAULT",
+        hits3d: [],
         quickHelp: false,
+        isMap3d: false,
+        uiStyle: "DEFAULT",
         renderToWindow: true,
         deactivateGFI: true,
         pointerMoveListener: {},
         clickListener: {},
         textPoint: {},
-        scale: -1
+        scale: -1,
+        "glyphicon": "glyphicon-resize-full"
     }),
 
     initialize: function () {
         this.superInitialize();
 
+        this.listenTo(Radio.channel("Map"), {
+            "change": this.changeMap
+        });
+
         this.listenTo(this, {
-            "change:geomtype": this.createInteraction,
+            "change:geomtype": function () {
+                if (this.get("isActive")) {
+                    this.createInteraction();
+                }
+            },
             "change:isActive": this.setStatus
         });
         this.listenTo(Radio.channel("MapView"), {
@@ -123,9 +133,11 @@ const Measure = Tool.extend({
     },
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
+            quickHelpSet = Radio.request("Quickhelp", "isSet") === true ? true : false,
             measureLayer;
 
         if (value) {
+            this.setQuickHelp(quickHelpSet);
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
             this.setScale(Radio.request("MapView", "getOptions").scale);
             measureLayer = _.find(layers.getArray(), function (layer) {
@@ -139,32 +151,131 @@ const Measure = Tool.extend({
         }
         else {
             Radio.trigger("Map", "removeInteraction", this.get("draw"));
+            this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
     },
+    changeMap: function (map) {
+        this.deleteFeatures();
+        if (map === "3D") {
+            this.set("isMap3d", true);
+            this.set("geomtype", "3d");
+        }
+        else {
+            this.set("isMap3d", false);
+            this.set("geomtype", "LineString");
+        }
+        if (this.get("isActive")) {
+            this.createInteraction();
+        }
+    },
+    handle3DClicked: function (obj) {
+        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+            object = scene.pick(obj.position),
+            hit,
+            cartographic,
+            ray,
+            coords,
+            mapProjection = Radio.request("MapView", "getProjection"),
+            hits3d = this.get("hits3d"),
+            firstHit = hits3d[0],
+            pointId = "__3dMeasurmentFirstPoint",
+            source = this.get("source"),
+            lon,
+            lat,
+            feature,
+            distance,
+            textPoint,
+            heightDiff,
+            firstPoint;
 
+        if (object) {
+            hit = scene.pickPosition(obj.position);
+            cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
+        }
+        else {
+            ray = scene.camera.getPickRay(obj.position);
+            hit = scene.globe.pick(ray, scene);
+            cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
+            cartographic.height = scene.globe.getHeight(cartographic);
+        }
+        lon = Cesium.Math.toDegrees(cartographic.longitude);
+        lat = Cesium.Math.toDegrees(cartographic.latitude);
+        coords = [lon, lat, cartographic.height];
+        coords = Proj.transform(coords, Proj.get("EPSG:4326"), mapProjection);
+        // draw first point
+        if (hits3d.length === 0) {
+            feature = this.createPointFeature(coords, pointId);
+
+            source.addFeature(feature);
+            hits3d.push({
+                cartesian: hit,
+                coords: coords
+            });
+        }
+        // draw second point as Line and remove first drawn point
+        else {
+            distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
+            heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
+            feature = this.createLineFeature(firstHit.coords, coords);
+            source.addFeature(feature);
+            textPoint = this.generateTextPoint(feature, distance, heightDiff, coords);
+            source.addFeature(textPoint);
+            this.setTextPoint(textPoint);
+            this.set("hits3d", []);
+
+            firstPoint = source.getFeatureById(pointId);
+            source.removeFeature(firstPoint);
+        }
+    },
+    createPointFeature: function (coords, id) {
+        var feature = new Feature({
+            geometry: new Point(coords)
+        });
+
+        feature.setId(id);
+
+        return feature;
+    },
+    createLineFeature: function (firstCoord, lastCoord) {
+        var feature = new Feature({
+            geometry: new LineString([
+                firstCoord,
+                lastCoord
+            ])
+        });
+
+        return feature;
+    },
     createInteraction: function () {
         var that = this,
             textPoint;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
-        this.setDraw(new Draw({
-            source: this.get("source"),
-            type: this.get("geomtype"),
-            style: this.get("styles")
-        }));
-        this.get("draw").on("drawstart", function (evt) {
-            textPoint = that.generateTextPoint(evt.feature);
-            that.get("layer").getSource().addFeatures([textPoint]);
-            that.setTextPoint(textPoint);
-            that.registerPointerMoveListener(that);
-            that.registerClickListener(that);
-        }, this);
-        this.get("draw").on("drawend", function (evt) {
-            evt.feature.set("styleId", evt.feature.ol_uid);
-            that.unregisterPointerMoveListener(that);
-            that.unregisterClickListener(that);
-        }, this);
-        Radio.trigger("Map", "addInteraction", this.get("draw"));
+        this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+        if (Radio.request("Map", "isMap3d")) {
+            this.listenTo(Radio.channel("Map"), "clickedWindowPosition", this.handle3DClicked.bind(this));
+            this.set("hits3d", []);
+        }
+        else {
+            this.setDraw(new Draw({
+                source: this.get("source"),
+                type: this.get("geomtype"),
+                style: this.get("styles")
+            }));
+            this.get("draw").on("drawstart", function (evt) {
+                textPoint = that.generateTextPoint(evt.feature);
+                that.get("layer").getSource().addFeatures([textPoint]);
+                that.setTextPoint(textPoint);
+                that.registerPointerMoveListener(that);
+                that.registerClickListener(that);
+            }, this);
+            this.get("draw").on("drawend", function (evt) {
+                evt.feature.set("styleId", evt.feature.ol_uid);
+                that.unregisterPointerMoveListener(that);
+                that.unregisterClickListener(that);
+            }, this);
+            Radio.trigger("Map", "addInteraction", this.get("draw"));
+        }
     },
     registerPointerMoveListener: function (context) {
         context.setPointerMoveListener(Radio.request("Map", "registerListener", "pointermove", context.moveTextPoint.bind(context)));
@@ -188,9 +299,54 @@ const Measure = Tool.extend({
         geom.setCoordinates(evt.coordinate);
         point.setStyle(styles);
     },
+    generate3dTextStyles: function (distance, heightDiff) {
+        var output = {},
+            fill = new Fill({
+                color: [255, 255, 255, 1]
+            }),
+            stroke = new Stroke({
+                color: [0, 0, 0, 1],
+                width: 2
+            }),
+            styles = [];
+
+        if (this.get("unit") === "km") {
+            output.measure = "Länge: " + (distance / 1000).toFixed(3) + this.get("unit");
+        }
+        else {
+            output.measure = "Länge: " + distance.toFixed(2) + this.get("unit");
+        }
+        output.deviance = " Höhe: " + heightDiff.toFixed(2) + "m";
+
+        styles = [
+            new Style({
+                text: new Text({
+                    text: output.measure,
+                    textAlign: "left",
+                    font: "18px sans-serif",
+                    fill: fill,
+                    stroke: stroke,
+                    offsetY: -50,
+                    offsetX: 10
+                })
+            }),
+            new Style({
+                text: new Text({
+                    text: output.deviance,
+                    textAlign: "left",
+                    font: "18px sans-serif",
+                    fill: fill,
+                    stroke: stroke,
+                    offsetY: -30,
+                    offsetX: 10
+                })
+            })
+        ];
+        return styles;
+    },
     generateTextStyles: function (feature) {
         var geom = feature.getGeometry(),
-            output,
+            output = {},
             fill = new Fill({
                 color: [0, 0, 0, 1]
             }),
@@ -228,7 +384,7 @@ const Measure = Tool.extend({
                 text: new Text({
                     text: output.deviance,
                     textAlign: "left",
-                    font: "10px sans-serif",
+                    font: "12px sans-serif",
                     fill: fill,
                     stroke: stroke,
                     offsetY: 10,
@@ -240,12 +396,15 @@ const Measure = Tool.extend({
         ];
         return styles;
     },
-    generateTextPoint: function (feature) {
+    generateTextPoint: function (feature, distance, heightDiff, coords) {
         var geom = feature.getGeometry(),
             coord,
             pointFeature;
 
-        if (geom instanceof Polygon) {
+        if (distance !== undefined) {
+            coord = coords;
+        }
+        else if (geom instanceof Polygon) {
             coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
         }
         else if (geom instanceof LineString) {
@@ -254,10 +413,34 @@ const Measure = Tool.extend({
         pointFeature = new Feature({
             geometry: new Point(coord)
         });
-        pointFeature.setStyle(this.generateTextStyles(feature));
+        if (distance !== undefined) {
+            pointFeature.setStyle(this.generate3dTextStyles(distance, heightDiff));
+        }
+        else {
+            pointFeature.setStyle(this.generateTextStyles(feature));
+        }
         pointFeature.set("styleId", _.uniqueId());
         return pointFeature;
     },
+
+    place3dMeasureTooltip: function (distance, heightDiff, position) {
+        var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
+
+        if (this.get("unit") === "km") {
+            output += (distance / 1000).toFixed(3) + " " + this.get("unit");
+        }
+        else {
+            output += distance.toFixed(2) + " " + this.get("unit");
+        }
+
+        output += "<br><span class='glyphicon glyphicon-resize-vertical'/> ";
+        output += heightDiff.toFixed(2) + " m";
+
+        this.createMeasureTooltip();
+        this.get("measureTooltipElement").innerHTML = output;
+        this.get("measureTooltip").setPosition(position);
+    },
+
     /**
      * Setzt den Typ der Geometrie (LineString oder Polygon).
      * @param {String} value - Typ der Geometrie
@@ -416,6 +599,15 @@ const Measure = Tool.extend({
     },
     setScale: function (value) {
         this.set("scale", value);
+    },
+
+    /*
+    * setter for quickHelp
+    * @param {[type]} value quickHelp
+    * @returns {void}
+    */
+    setQuickHelp: function (value) {
+        this.set("quickHelp", value);
     }
 });
 

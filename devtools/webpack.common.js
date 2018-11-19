@@ -20,7 +20,6 @@ module.exports = function (path2CustomModule) {
             rules: [
                 {
                     test: /\.js$/,
-                    exclude: /(node_modules)/,
                     use: {
                         loader: "babel-loader",
                         options: {

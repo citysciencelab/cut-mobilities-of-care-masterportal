@@ -29,6 +29,11 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`""`|
 |[zoomToFeature](#markdown-header-zoomtofeature)|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe [URL-Parameter](URL-Parameter.md).||
+|postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
+|startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
+|obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
+|[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parameter||
+|[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
 
 ******
@@ -183,5 +188,24 @@ zoomtofeature: {
     layerId: "4561"
 }
 ```
+********
+## cameraParameter ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|heading|nein|Number||Heading der Kamera in Radians.|
+|tilt|nein|Number||Tilt der Kamera in Radians.|
+|altitude|nein|Number||Höhe der Kamera in m.|
+********
+## cesiumParameter ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|fog|nein|Object||Nebel Einstellungen. Optionen siehe [fog]|
+|enableLighting|nein|Boolean|false|aktiviert Lichteffekte auf dem Terrain von der Sonne aus.|
+|maximumScreenSpaceError|nein|Number|2.0|Gibt an wie detailliert die Terrain/Raster Kacheln geladen werden. 4/3 ist die beste Qualität.|
+|fxaa|nein|Number|true|aktiviert Fast Approximate Anti-alisasing.|
+|tileCacheSize|nein|Number|100|Größe des Tilecaches für Terrain/Raster Kacheln.|
+
+
+[fog]: https://cesiumjs.org/Cesium/Build/Documentation/Fog.html
 
 >Zurück zur [Dokumentation Masterportal](doc.md).

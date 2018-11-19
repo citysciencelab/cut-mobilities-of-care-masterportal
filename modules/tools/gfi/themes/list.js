@@ -1,6 +1,8 @@
 
 import DefaultThemeView from "./default/view";
 import DefaultTheme from "./default/model";
+import Buildings3dThemeView from "./buildings3d/view";
+import Buildings3dTheme from "./buildings3d/model";
 import TableThemeView from "./table/view";
 import TableTheme from "./table/model";
 import ReisezeitenThemeView from "./reisezeiten/view";
@@ -78,6 +80,9 @@ const ThemeList = Backbone.Collection.extend({
         }
         else if (attrs.gfiTheme === "activeCityMaps") {
             theme = new ActiveCityMapsTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "buildings_3d") {
+            theme = new Buildings3dTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -178,6 +183,10 @@ const ThemeList = Backbone.Collection.extend({
             }
             case "activeCityMaps": {
                 new ActiveCityMapsThemeView({model: model});
+                break;
+            }
+            case "buildings_3d": {
+                new Buildings3dThemeView({model: model});
                 break;
             }
             default: {

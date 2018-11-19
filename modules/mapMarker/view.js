@@ -1,3 +1,4 @@
+
 import MapHandlerModel from "./model";
 
 const MapMarker = Backbone.View.extend({
@@ -176,7 +177,12 @@ const MapMarker = Backbone.View.extend({
 
     showMarker: function (coordinate) {
         this.clearMarker();
-        this.model.get("marker").setPosition(coordinate);
+        if (coordinate.length === 2) {
+            this.model.get("marker").setPosition(coordinate);
+        }
+        else {
+            this.model.get("marker").setPosition([coordinate[0], coordinate[1]]);
+        }
         this.$el.show();
     },
 

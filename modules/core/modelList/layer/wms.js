@@ -10,7 +10,11 @@ const WMSLayer = Layer.extend({
         return _.extend(_.result(Layer.prototype, "defaults"), {
             infoFormat: "text/xml",
             // Eine Veränderung der SESSIONID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
-            sessionId: _.random(9999999)
+            sessionId: _.random(9999999),
+            supported: ["2D", "3D"],
+            showSettings: true,
+            extent: null,
+            notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"]
         });
     },
 
@@ -22,6 +26,11 @@ const WMSLayer = Layer.extend({
         this.listenTo(this, {
             "change:SLDBody": this.updateSourceSLDBody
         });
+
+        // Hack für Dienste die nicht EPSG:4326 untertützen
+        if (_.contains(this.get("notSupportedFor3D"), this.get("id"))) {
+            this.set("supported", ["2D"]);
+        }
     },
 
     /**
@@ -209,16 +218,20 @@ const WMSLayer = Layer.extend({
             this.registerImageloadError();
         }
     },
-
-    // registerTileloadError: function () {
-    //     this.get("layerSource").on("tileloaderror", function () {
-    //     }, this);
-    // },
-
-    // registerImageloadError: function () {
-    //     this.get("layerSource").on("imageloaderror", function () {
-    //     }, this);
-    // },
+    updateSupported: function () {
+        if (this.getSingleTile()) {
+            this.set("supported", ["2D"]);
+        }
+        else {
+            this.set("supported", ["2D", "3D"]);
+        }
+    },
+    getExtent: function () {
+        if (this.has("extent")) {
+            return this.get("extent");
+        }
+        return Radio.request("MapView", "getExtent");
+    },
 
     updateSourceSLDBody: function () {
         this.get("layer").getSource().updateParams({SLD_BODY: this.get("SLDBody"), STYLES: this.get("paramStyle")});

@@ -20,7 +20,9 @@ const LayerView = Backbone.View.extend({
             "change:transparency": this.rerender,
             "change:isOutOfRange": this.toggleColor
         });
-
+        this.listenTo(Radio.channel("Map"), {
+            "change": this.toggleByMapMode
+        });
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -29,6 +31,7 @@ const LayerView = Backbone.View.extend({
         this.render();
 
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
+        this.toggleByMapMode(Radio.request("Map", "getMapMode"));
     },
     tagName: "li",
     className: "layer list-group-item",
@@ -127,11 +130,21 @@ const LayerView = Backbone.View.extend({
                 this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
             }
             else {
+
                 this.$el.removeClass("disabled");
                 this.$el.find("*").css("pointer-events", "auto");
                 this.$el.find("*").css("cursor", "pointer");
                 this.$el.attr("title", "");
             }
+        }
+    },
+
+    toggleByMapMode: function (mode) {
+        if (this.model.get("supported").indexOf(mode) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
         }
     }
 });

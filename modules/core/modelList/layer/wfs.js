@@ -5,11 +5,19 @@ import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
 
 const WFSLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults),
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        showSettings: true,
+        isClustered: false
+    }),
 
     initialize: function () {
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
+        }
+
+        if (this.has("clusterDistance")) {
+            this.set("isClustered", true);
         }
     },
 
@@ -49,7 +57,8 @@ const WFSLayer = Layer.extend({
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: "clampToGround"
         }));
 
         this.updateSource(true);
@@ -142,8 +151,7 @@ const WFSLayer = Layer.extend({
     },
 
     styling: function () {
-        var isClustered = Boolean(this.has("clusterDistance")),
-            stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (!_.isUndefined(stylelistmodel)) {
             /**
@@ -155,8 +163,8 @@ const WFSLayer = Layer.extend({
              * @tutorial https://openlayers.org/en/latest/apidoc/ol.html#.StyleFunction
              */
             this.setStyle(function (feature) {
-                return stylelistmodel.createStyle(feature, isClustered);
-            });
+                return stylelistmodel.createStyle(feature, this.get("isClustered"));
+            }.bind(this));
         }
 
         this.get("layer").setStyle(this.get("style"));

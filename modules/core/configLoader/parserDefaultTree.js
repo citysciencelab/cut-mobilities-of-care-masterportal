@@ -14,7 +14,6 @@ const DefaultTreeParser = Parser.extend({
         newLayerList = this.createLayerPerDataset(newLayerList);
 
         this.parseLayerList(newLayerList);
-
     },
 
     /**
@@ -28,7 +27,7 @@ const DefaultTreeParser = Parser.extend({
                 return false;
             }
 
-            return element.datasets.length > 0 && element.typ === "WMS";
+            return element.datasets.length > 0 && _.contains(["WMS", "Terrain3D", "TileSet3D", "Oblique"], element.typ);
         });
     },
 
@@ -84,6 +83,12 @@ const DefaultTreeParser = Parser.extend({
         var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
             // Unterscheidung nach Overlay und Baselayer
             typeGroup = _.groupBy(layerList, function (layer) {
+                if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D") {
+                    return "layer3d";
+                }
+                else if (layer.typ === "Oblique") {
+                    return "oblique";
+                }
                 return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
             });
 
@@ -91,6 +96,20 @@ const DefaultTreeParser = Parser.extend({
         this.createBaselayer(layerList);
         // Models für die Fachdaten erzeugen
         this.groupDefaultTreeOverlays(typeGroup.overlays);
+        // Models für 3D Daten erzeugen
+        this.create3dLayer(typeGroup.layer3d);
+        // Models für Oblique Daten erzeugen
+        this.createObliqueLayer(typeGroup.oblique);
+    },
+    createObliqueLayer: function (layerList) {
+        _.each(layerList, function (layer) {
+            this.addItem(_.extend({type: "layer"}, layer));
+        }, this);
+    },
+    create3dLayer: function (layerList) {
+        _.each(layerList, function (layer) {
+            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: "true"}, layer));
+        }, this);
     },
 
     createBaselayer: function (layerList) {

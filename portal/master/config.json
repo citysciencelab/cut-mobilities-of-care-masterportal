@@ -4,7 +4,7 @@
     "portalTitle":
     {
       "title": "Master",
-      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+      "logo": "/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -79,7 +79,7 @@
     },
     "mapView":
     {
-      "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [561210, 5932600]
     },
     "menu":
@@ -89,6 +89,22 @@
         "name": "Themen",
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
+      },
+      "ansichten": {
+        "name" : "Ansichten",
+        "glyphicon": "glyphicon-list",
+        "children": {
+          "view1": {
+            "name": "Ansicht1",
+            "type" : "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296,
+            "altitude" :272.3469798217454,
+            "center" : [564028.7954571751,5934555.967867207],
+            "zoomLevel" :  7.456437968949651
+          }
+        }
       },
       "schulwegrouting": {
         "name": "Schulweg-Routing",
@@ -207,7 +223,7 @@
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish_qs",
-            "printAppId": "mrh",
+            "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "version" : "mapfish_print_3"
@@ -344,6 +360,7 @@
     "controls":
     {
       "fullScreen": true,
+      "orientation3d": true,
       "zoom": true,
       "orientation": {
         "zoomMode": "once",
@@ -361,6 +378,8 @@
         "baselayer": "452"
       },
       "mousePosition": true,
+      "button3d": true,
+      "buttonOblique": true,
       "freeze": true
     },
     "scaleLine": true,
@@ -371,17 +390,34 @@
     "Hintergrundkarten":
     {
       "Layer": [
-      {
-        "id": "453",
-        "visibility": true
-      },
-      {
-        "id": "452"
-      },
-      {
-        "id": ["713", "714", "715", "716"],
-        "name": "Geobasiskarten (schwarz-weiß)"
-      }]
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        },
+        {
+          "id": ["713", "714", "715", "716"],
+          "name": "Geobasiskarten (schwarz-weiß)",
+          "visibility": true
+        },
+        {
+          "id": "12883",
+          "name": "Gelände",
+          "visibility": true
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2",
+          "visibility": true
+        },
+        {
+          "id": "12885",
+          "name": "Oblique",
+          "visibility": true
+        }
+      ]
     },
     "Fachdaten":
     {

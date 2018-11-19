@@ -28,8 +28,8 @@ const QueryDetailView = Backbone.View.extend({
         var attr;
 
         if (!this.model.get("features")) {
-            this.$el.html("<div id='filter-loader'><img src='../../img/ajax-loader.gif'></div>");
-            return this.$el;
+            this.$el.html("<div id='filter-loader'><img src='/lgv-config/img/ajax-loader.gif'></div>");
+            return this;
         }
         attr = this.model.toJSON();
 

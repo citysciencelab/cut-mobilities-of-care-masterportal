@@ -97,12 +97,13 @@ const Parser = Backbone.Model.extend({
             this.parseTree(this.get("baselayer"), "tree", 0);
         }
         else if (this.get("treeType") === "custom") {
-            this.addTreeMenuItems();
+            this.addTreeMenuItems("custom", this.get("overlayer_3d"));
             this.parseTree(this.get("baselayer"), "Baselayer", 0);
             this.parseTree(this.get("overlayer"), "Overlayer", 0);
+            this.parseTree(this.get("overlayer_3d"), "3d_daten", 0);
         }
         else {
-            this.addTreeMenuItems();
+            this.addTreeMenuItems(this.get("treeType"));
             this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
         }
         this.createModelList();
@@ -117,7 +118,8 @@ const Parser = Backbone.Model.extend({
     parseMenu: function (items, parentId) {
         _.each(items, function (value, key) {
             var item,
-                toolitem;
+                toolitem,
+                ansicht;
 
             if (_.has(value, "children") || key === "tree") {
                 item = {
@@ -138,6 +140,10 @@ const Parser = Backbone.Model.extend({
 
                     this.addItem(toolitem);
                 }, this);
+            }
+            else if (_.has(value, "type") && value.type === "viewpoint") {
+                ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+                this.addItem(ansicht);
             }
             else {
                 toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
@@ -256,6 +262,7 @@ const Parser = Backbone.Model.extend({
             maxScale: "2500000",
             gfiAttributes: "showAll",
             layerAttribution: "nicht vorhanden",
+            supported: ["2D", "3D"],
             legendURL: "",
             isbaselayer: false,
             cache: false,
@@ -354,11 +361,13 @@ const Parser = Backbone.Model.extend({
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
-                model.parentId === "bezirke";
+                model.parentId === "bezirke" ||
+                model.parentId === "3d_daten" ||
+                model.parentId === "ansichten";
         }));
     },
 
-    addTreeMenuItems: function () {
+    addTreeMenuItems: function (treeType) {
         var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
             tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
             isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [];
@@ -374,6 +383,18 @@ const Parser = Backbone.Model.extend({
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
             level: 0
         });
+        if (treeType === "default" || !_.isUndefined(this.get("overlayer_3d"))) {
+            this.addItem({
+                type: "folder",
+                name: "3D Daten",
+                // glyphicon: "glyphicon-plus-sign",
+                id: "3d_daten",
+                parentId: "tree",
+                isInThemen: true,
+                isInitiallyExpanded: false,
+                level: 0
+            });
+        }
         this.addItem({
             type: "folder",
             name: "Fachdaten",

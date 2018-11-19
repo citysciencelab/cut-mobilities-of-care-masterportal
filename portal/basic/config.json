@@ -4,7 +4,7 @@
     "portalTitle":
         {
           "title": "Basic - Portal",
-          "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+          "logo": "/lgv-config/img/hh-logo.png",
           "link": "http://geoinfo.hamburg.de",
           "tooltip": "Landesbetrieb Geoinformation und Vermessung"
        },
@@ -31,7 +31,7 @@
 
     "mapView":
           {
-            "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+            "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
             "startCenter": [561210, 5932600],
             "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
             "zoomLevel": 1

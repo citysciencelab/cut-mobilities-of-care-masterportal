@@ -4,7 +4,10 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults),
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        showSettings: true
+    }),
 
     initialize: function () {
         if (!this.get("isChildLayer")) {
@@ -34,7 +37,8 @@ const GeoJSONLayer = Layer.extend({
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: "clampToGround"
         }));
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();
@@ -151,26 +155,26 @@ const GeoJSONLayer = Layer.extend({
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
-        },
-        /**
-        * Zeigt nur die Features an, deren Id übergeben wird
-        * @param  {string[]} featureIdList Liste der FeatureIds
-        * @return {undefined}
-        */
-        showFeaturesByIds: function (featureIdList) {
+    },
+    /**
+    * Zeigt nur die Features an, deren Id übergeben wird
+    * @param  {string[]} featureIdList Liste der FeatureIds
+    * @return {undefined}
+    */
+    showFeaturesByIds: function (featureIdList) {
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             feature.setStyle(undefined);
         }, this);
-        },
+    },
 
-        /**
-        * sets null style (=no style) for all features
-        * @return {undefined}
-        */
-        hideAllFeatures: function () {
+    /**
+    * sets null style (=no style) for all features
+    * @return {undefined}
+    */
+    hideAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
@@ -178,14 +182,14 @@ const GeoJSONLayer = Layer.extend({
                 return null;
             });
         }, this);
-        },
+    },
 
-        /**
-        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-        * @param {object} options -
-        * @returns {void}
-        **/
-        checkForScale: function (options) {
+    /**
+    * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+    * @param {object} options -
+    * @returns {void}
+    **/
+    checkForScale: function (options) {
         if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
             this.setIsOutOfRange(false);
         }
