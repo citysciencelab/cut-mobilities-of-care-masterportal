@@ -281,7 +281,7 @@ const Theme = Backbone.Model.extend({
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
 
-    isMultiNode: function (str) {
+    isMultiTag: function (str) {
         var test;
 
         try {
@@ -314,7 +314,7 @@ const Theme = Backbone.Model.extend({
                     }
                 }
                 else if (this.isValidKey(key) && this.isValidValue(valueName)) {
-                    if (this.isMultiNode(value)) {
+                    if (this.isMultiTag(value)) {
                         valueName = JSON.parse(valueName).multiTag;
                     }
                     if (_.isArray(valueName)) {
