@@ -86,7 +86,8 @@ function loadApp () {
     // Core laden
     new Autostarter();
     new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
-    new RawLayerList();
+    // Pass null to create an empty Collection with options
+    new RawLayerList(null, {url: Config.layerConf});
     new RestReaderList();
     new Preparser();
     new StyleList();
