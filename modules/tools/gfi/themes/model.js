@@ -110,10 +110,13 @@ const Theme = Backbone.Model.extend({
                 nodeListValue = _.map(nodeList, function (node) {
                     return node.innerHTML;
                 }),
-                firstNode = nodeList[0];
+                firstNode = nodeList[0],
+                i;
 
-            firstNode.innerHTML = JSON.stringify(nodeListValue);
-            for (var i = nodeList.length - 1; i >= 1; i--) {
+            firstNode.innerHTML = JSON.stringify({
+                multiTag: nodeListValue
+            });
+            for (i = nodeList.length - 1; i >= 1; i--) {
                 childNode.firstElementChild.removeChild(nodeList[i]);
             }
         });
@@ -131,7 +134,7 @@ const Theme = Backbone.Model.extend({
         _.each(childNodes, function (childNode) {
             // Suche nach doppelten Attributnamen
             var multiTags = this.getMultiTags(childNode);
-            
+
             // Ersetze die betroffenen Attribute pro Feature
             this.replaceMultiNodes(multiTags, childNode);
         }, this);
@@ -277,6 +280,22 @@ const Theme = Backbone.Model.extend({
     beautifyString: function (str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
+
+    isMultiNode: function (str) {
+        var test;
+
+        try {
+            test = JSON.parse(str);
+        }
+        catch (e) {
+            return false;
+        }
+        if (_.isObject(test) && _.has(test, "multiTag")) {
+            return true;
+        }
+        return false;
+    },
+
     translateGFI: function (gfiList, gfiAttributes) {
         var pgfi = [];
 
@@ -285,7 +304,6 @@ const Theme = Backbone.Model.extend({
                 gfi = {},
                 keys = [],
                 values = [];
-
             // get rid of invalid keys and keys with invalid values; trim values
             _.each(element, function (value, key) {
                 var valueName = value;
@@ -296,6 +314,9 @@ const Theme = Backbone.Model.extend({
                     }
                 }
                 else if (this.isValidKey(key) && this.isValidValue(valueName)) {
+                    if (this.isMultiNode(value)) {
+                        valueName = JSON.parse(valueName).multiTag;
+                    }
                     if (_.isArray(valueName)) {
                         valueName = valueName.toString().replace(/,/g, ", ");
                     }
