@@ -44,11 +44,20 @@ function createDataStructure () {
                             name: "img",
                             source: "node_modules/lgv-config/img",
                             files: [
+                                "hh-logo.png",
                                 "Icon-Badeseen.png",
                                 "Icon-Schwimmbaeder.png",
                                 "Icon-Spaß-am-Wasser.png",
                                 "Krankenhaus.png",
-                                "ajax-loader.gif"
+                                "ajax-loader.gif",
+                                "dira.png",
+                                "bikeandride.png",
+                                "grundschulen.png",
+                                "gymnasien.png",
+                                "stadtteilschulen.png",
+                                "sonderschulen.png",
+                                "berufliche_schulen.png",
+                                "langformschulen.png"
                             ]
                         }
                     ],
