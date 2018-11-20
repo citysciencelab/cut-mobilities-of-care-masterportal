@@ -90,15 +90,16 @@ const FeatureListerModel = Tool.extend({
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === id;
             }).feature,
-            style = feature.getStyle() ? feature.getStyle() : layer.style(),
+            style = feature.getStyle() ? feature.getStyle() : layer.style(feature),
             clonedStyle = style.clone(),
-            image = clonedStyle.getImage();
+            clonedImage = clonedStyle.getImage();
 
-        if (image) {
+        if (clonedImage) {
             this.setHighlightedFeature(feature);
             this.setHighlightedFeatureStyle(feature.getStyle());
 
-            image.setScale(image.getScale() * 1.5);
+            clonedImage.setScale(clonedImage.getScale() * 1.5);
+
             feature.setStyle(clonedStyle);
         }
     },
