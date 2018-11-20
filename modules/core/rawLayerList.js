@@ -5,9 +5,6 @@ const RawLayerList = Backbone.Collection.extend({
     initialize: function (models, options) {
         var channel = Radio.channel("RawLayerList");
 
-        // URL zur services.json
-        this.url = options.url;
-
         channel.reply({
             "getLayerWhere": this.getLayerWhere,
             "getLayerAttributesWhere": this.getLayerAttributesWhere,
@@ -19,7 +16,18 @@ const RawLayerList = Backbone.Collection.extend({
         channel.on({
             "addGroupLayer": this.addGroupLayer
         }, this);
-        this.fetch({async: false});
+
+        if (options.url !== undefined) {
+            // URL zur services.json
+            this.url = options.url;
+            this.fetch({async: false});
+        }
+        else {
+            Radio.trigger("Alert", "alert", {
+                text: "Der Parameter 'restConf' wurde in der config.js nicht gefunden oder ist falsch geschrieben",
+                kategorie: "alert-warning"
+            });
+        }
     },
 
     /**
