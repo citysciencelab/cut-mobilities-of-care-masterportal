@@ -87,8 +87,8 @@ function loadApp () {
     new Autostarter();
     new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
     // Pass null to create an empty Collection with options
+    new RestReaderList(null, {url: Config.restConf});
     new RawLayerList(null, {url: Config.layerConf});
-    new RestReaderList();
     new Preparser();
     new StyleList();
     new ParametricURL();
