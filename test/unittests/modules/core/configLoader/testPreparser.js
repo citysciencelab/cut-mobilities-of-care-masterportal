@@ -9,7 +9,7 @@ describe("core/configLoader/preparser", function () {
     before(function () {
         new RestReaderList(null, {url: "resources/testRestServices.json"});
         new RawLayerList(null, {url: "lgv-config/services-fhhnet-ALL.json"});
-        preparser = new Preparser();
+        preparser = new Preparser(null, {url: Config.portalConf});
     });
 
     describe("global isFolderSelectable", function () {
