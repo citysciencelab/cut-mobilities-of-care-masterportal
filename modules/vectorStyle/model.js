@@ -109,8 +109,6 @@ const WFSStyle = Backbone.Model.extend({
         ]
     },
     initialize: function () {
-        console.log(Config.wfsImgPath);
-        
         if (!_.isUndefined(Config.wfsImgPath)) {
             this.setImagePath(Config.wfsImgPath);
         }
