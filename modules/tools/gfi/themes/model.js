@@ -81,6 +81,69 @@ const Theme = Backbone.Model.extend({
         });
     },
 
+    /**
+     * Gibt mehrfach belegte Attributnamen in XML-Features zurück.
+     * @param   {xml}       node    Feature-Node
+     * @returns {string[]}          Attributnamen
+     */
+    getMultiTags: function (node) {
+        var tagNameList = _.map(node.firstElementChild.children, function (element) {
+                return element.tagName;
+            }),
+            tagNameListSorted = _.sortBy(tagNameList, function (name) {
+                return name;
+            }),
+            multiTags = _.filter(tagNameListSorted, function (tagName, index, list) {
+                return tagName === list[index + 1];
+            }),
+            multiTagsUnique = _.uniq(multiTags);
+
+        return multiTagsUnique;
+    },
+
+    /**
+     * Ersetzt die multiTags eines Features durch einen Tag mit akkumuliertem Value
+     * @param   {string[]} multiTags mehrfache Tags in einem Feature
+     * @param   {xml} childNode Feature-Node
+     * @returns {void}
+     */
+    replaceMultiNodes: function (multiTags, childNode) {
+        _.each(multiTags, function (tagName) {
+            var nodeList = childNode.getElementsByTagName(tagName),
+                nodeListValue = _.map(nodeList, function (node) {
+                    return node.innerHTML;
+                }),
+                firstNode = nodeList[0],
+                i;
+
+            firstNode.innerHTML = JSON.stringify({
+                multiTag: nodeListValue
+            });
+            for (i = nodeList.length - 1; i >= 1; i--) {
+                childNode.firstElementChild.removeChild(nodeList[i]);
+            }
+        });
+    },
+
+    /**
+     * Ersetzt doppelte Attribute in einem GFI featurebasiert
+     * @param   {xml} xml GFI
+     * @returns {void}
+     */
+    parseMultiElementNodes: function (xml) {
+        var childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
+
+        // Schleife über alle Features des GFI
+        _.each(childNodes, function (childNode) {
+            // Suche nach doppelten Attributnamen
+            var multiTags = this.getMultiTags(childNode);
+
+            // Ersetze die betroffenen Attribute pro Feature
+            this.replaceMultiNodes(multiTags, childNode);
+        }, this);
+
+    },
+
     parseWmsGfi: function (data) {
         var gfiList = [],
             gfiFormat,
@@ -88,6 +151,7 @@ const Theme = Backbone.Model.extend({
             gfiFeatures,
             dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
 
+        this.parseMultiElementNodes(dat);
         // parse result, try built-in Ol-format first
         gfiFormat = new WMSGetFeatureInfo();
         // das reverse wird fürs Planportal gebraucht SD 18.01.2016
@@ -226,6 +290,22 @@ const Theme = Backbone.Model.extend({
     beautifyString: function (str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
+
+    isMultiTag: function (str) {
+        var test;
+
+        try {
+            test = JSON.parse(str);
+        }
+        catch (e) {
+            return false;
+        }
+        if (_.isObject(test) && _.has(test, "multiTag")) {
+            return true;
+        }
+        return false;
+    },
+
     translateGFI: function (gfiList, gfiAttributes) {
         var pgfi = [];
 
@@ -245,8 +325,11 @@ const Theme = Backbone.Model.extend({
                     }
                 }
                 else if (this.isValidKey(key) && this.isValidValue(valueName)) {
+                    if (this.isMultiTag(value)) {
+                        valueName = JSON.parse(valueName).multiTag;
+                    }
                     if (_.isArray(valueName)) {
-                        valueName = valueName.toString().replace(/,/g, ", ");
+                        valueName = valueName.join("</br>");
                     }
                     preGfi[key] = _.isString(valueName) ? valueName.trim() : valueName;
                 }
