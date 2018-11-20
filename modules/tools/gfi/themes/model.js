@@ -314,6 +314,7 @@ const Theme = Backbone.Model.extend({
                 gfi = {},
                 keys = [],
                 values = [];
+
             // get rid of invalid keys and keys with invalid values; trim values
             _.each(element, function (value, key) {
                 var valueName = value;
