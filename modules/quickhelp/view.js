@@ -20,7 +20,7 @@ const quickHelpView = Backbone.View.extend({
         var channel = Radio.channel("Quickhelp");
 
         if (attr === true || _.isObject(attr)) {
-            this.model = new QuickHelpModel(attr);            
+            this.model = new QuickHelpModel(attr);
 
             channel.on({
                 "showWindowHelp": this.showWindow
@@ -52,7 +52,7 @@ const quickHelpView = Backbone.View.extend({
 
     /**
      * [showWindow description]
-     * @param {[type]} value [description]
+     * @param {String} value [description]
      * @returns {void}
      */
     showWindow: function (value) {

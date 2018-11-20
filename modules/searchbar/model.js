@@ -141,12 +141,10 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * Hilfsmethode um ein Attribut vom Typ Array zu setzen.
-     * {String} attribute - Das Attribut das gesetzt werden soll
-     * {whatever} value - Der Wert des Attributs
-     * @param  {[type]} attribute [description]
-     * @param  {[type]} value     [description]
-     * @param  {[type]} evtType     [description]
-     * @return {[type]}         [description]
+     * @param  {String} attribute [description]
+     * @param  {String} value     Der Wert des Attributs
+     * @param  {event} evtType     [description]
+     * @return {void}
      */
     pushHits: function (attribute, value, evtType) {
         var tempArray = _.clone(this.get(attribute)),
@@ -174,8 +172,8 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * Removes all hits with the given filter
-     * @param  {[type]} attribute Name of the object to be filtered
-     * @param  {[type]} filter Filter parameters
+     * @param  {string} attribute Name of the object to be filtered
+     * @param  {object[]} filter Filter parameters
      * @return {Void} Nothing
      */
     removeHits: function (attribute, filter) {
@@ -200,9 +198,9 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * changes the filename extension of given filepath
-     * @param  {[type]} src [description]
-     * @param  {[type]} ext     [description]
-     * @return {[type]}         [description]
+     * @param  {String} src source string
+     * @param  {String} ext     file extension
+     * @return {String}  file extension
      */
     changeFileExtension: function (src, ext) {
         if (_.isUndefined(src)) {
@@ -216,8 +214,8 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * crops names of hits to length zeichen
-     * @param  {[type]} s [the search result]
-     * @param  {[type]} length  [name length]
+     * @param  {String} s [the search result]
+     * @param  {number} length  [name length]
      * @returns {string} s
      */
     shortenString: function (s, length) {

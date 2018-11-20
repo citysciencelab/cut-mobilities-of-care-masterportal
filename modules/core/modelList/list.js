@@ -238,7 +238,7 @@ const ModelList = Backbone.Collection.extend({
     },
     /**
     * [checkIsExpanded description]
-    * @return {[type]} [description]
+    * @return {void}
     */
     closeAllExpandedFolder: function () {
         var folderModel = this.findWhere({isExpanded: true});
@@ -252,7 +252,7 @@ const ModelList = Backbone.Collection.extend({
     * Setzt bei Ã„nderung der Ebene, alle Model
     * auf der neuen Ebene auf sichtbar
     * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
-    * @return {undefined}
+    * @return {void}
     */
     setModelsVisibleByParentId: function (parentId) {
         var itemListByParentId = this.where({parentId: parentId}),
@@ -267,7 +267,7 @@ const ModelList = Backbone.Collection.extend({
     * Setzt bei Ã„nderung der Ebene, alle Model
     * auf der alten Ebene auf unsichtbar
     * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
-    * @return {undefined}
+    * @return {void}
     */
     setModelsInvisibleByParentId: function (parentId) {
         var children;
@@ -286,7 +286,7 @@ const ModelList = Backbone.Collection.extend({
     *
     *
     * @param {int} parentId Die Id des Objektes dessen Kinder angezeigt werden sollen
-    * @return {undefined}
+    * @return {void}
     */
     setVisibleByParentIsExpanded: function (parentId) {
         var children = this.where({parentId: parentId}),
@@ -318,7 +318,7 @@ const ModelList = Backbone.Collection.extend({
 
     /**
     * Setzt alle Models unsichtbar
-    * @return {undefined}
+    * @return {void}
     */
     setAllModelsInvisible: function () {
         this.forEach(function (model) {
@@ -372,7 +372,7 @@ const ModelList = Backbone.Collection.extend({
     * PrÃ¼ft ob alle Layer im Leaffolder isSelected = true sind
     * Falls ja, wird der Leaffolder auch auf isSelected = true gesetzt
     * @param {Backbone.Model} model - layerModel
-    * @return {undefined}
+    * @return {void}
     */
     setIsSelectedOnParent: function (model) {
         var layers = this.where({parentId: model.get("parentId")}),
@@ -489,7 +489,7 @@ const ModelList = Backbone.Collection.extend({
     /**
     * Setzt bei allen Models vom Typ "layer" das Attribut "isSettingVisible"
     * @param {boolean} value ist sichtbar?
-    * @return {undefined}
+    * @return {void}
     */
     setIsSettingVisible: function (value) {
         var models = this.where({type: "layer"});
@@ -501,7 +501,7 @@ const ModelList = Backbone.Collection.extend({
     /**
     * Im Lighttree alle Models hinzufÃ¼gen ansonsten, die Layer die initial
     * angezeigt werden sollen.
-    * @return {undefined}
+    * @return {void}
     */
     addInitialyNeededModels: function () {
         // lighttree: Alle models gleich hinzufÃ¼gen, weil es nicht viele sind und sie direkt einen Selection index
@@ -585,7 +585,7 @@ const ModelList = Backbone.Collection.extend({
     * Wird aus der Themensuche heraus aufgerufen
     * Ã–ffnet den Themenbaum, selektiert das Model und fÃ¼gt es zur Themenauswahl hinzu
     * @param  {String} modelId die Id des Models
-    * @return {undefined}
+    * @return {void}
     */
     showModelInTree: function (modelId) {
         var mode = Radio.request("Map", "getMapMode"),
@@ -608,7 +608,7 @@ const ModelList = Backbone.Collection.extend({
     /**
     * Scrolled auf den Layer
     * @param {String} overlayername - in "Fachdaten" wird auf diesen Layer gescrolled
-    * @return {undefined}
+    * @return {void}
     */
     scrollToLayer: function (overlayername) {
         var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
@@ -638,7 +638,7 @@ const ModelList = Backbone.Collection.extend({
     * Fügt alle Models der gleichen Ebene zur Liste hinzu, holt sich das Parent-Model und ruft sich selbst auf
     * Beim ZurÃ¼cklaufen werden die Parent-Models expanded
     * @param {String} parentId - Models mit dieser parentId werden zur Liste hinzugefÃ¼gt
-    * @return {undefined}
+    * @return {void}
     */
     addAndExpandModelsRecursive: function (parentId) {
         var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
@@ -662,8 +662,8 @@ const ModelList = Backbone.Collection.extend({
 
     /**
     * [removeModelsByParentId description]
-    * @param  {[type]} parentId [description]
-    * @return {[type]}          [description]
+    * @param  {String} parentId [description]
+    * @return {void}
     */
     removeModelsByParentId: function (parentId) {
         _.each(this.where({parentId: parentId}), function (model) {
@@ -679,7 +679,7 @@ const ModelList = Backbone.Collection.extend({
     /**
      * delivers groupModel by a given id
      * @param {Object | number} attributes the id from model
-     * @returns {model} model
+     * @returns {Object} model
      */
     retrieveGroupModel: function (attributes) {
         var layerId = _.isObject(attributes) ? attributes.id : attributes,

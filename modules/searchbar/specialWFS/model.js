@@ -172,7 +172,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @param {string} type MetaName bzw. Kategorie für Suchtreffer
      * @param {string} url URL des Dienstes
      * @param {string} glyphicon Glyphicon für Suchtreffer
-     * @return {[Object]} Datenobjekt zur Speicherung im Model
+     * @return {Object[]} Datenobjekt zur Speicherung im Model
      */
     extractWFSMembers: function (data, type, url, glyphicon) {
         var rootElement = $(data).contents()[0],

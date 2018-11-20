@@ -81,7 +81,7 @@ const ParametricURL = Backbone.Model.extend({
      * Parse string to number. Returns NaN if string can't be parsed to number.
      * Aus underscore.string
      * @param  {string} num             Text
-     * @param  {[number]} precision   Dezimalstellen
+     * @param  {number[]} precision   Dezimalstellen
      * @return {number}                 Zahl
      */
     toNumber: function (num, precision) {

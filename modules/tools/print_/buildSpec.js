@@ -165,7 +165,7 @@ const BuildSpecModel = Backbone.Model.extend({
     /**
      * returns vector layer information
      * @param {ol.layer.Vector} layer - vector layer with vector source
-     * @param {[ol.feature]} features vectorfeatures
+     * @param {ol.feature[]} features vectorfeatures
      * @returns {object} geojson layer spec
     */
     buildVector: function (layer, features) {
@@ -509,7 +509,7 @@ const BuildSpecModel = Backbone.Model.extend({
     /**
      * gets legendParams and builds legend object for mapfish print
      * @param  {Boolean} isLegendSelected flag if legend has to be printed
-     * @param  {[object]}  legendParams params derived from legend module
+     * @param  {Object[]}  legendParams params derived from legend module
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @return {void}
      */
@@ -629,7 +629,7 @@ const BuildSpecModel = Backbone.Model.extend({
      * empty array if gfi is not active.
      * coordinates not needed, yet.
      * @param {boolean} isGfiSelected flag if gfi has to be printed
-     * @param  {array} gfiArray array
+     * @param  {Array} gfiArray array
      * @return {void}
      */
     buildGfi: function (isGfiSelected, gfiArray) {
@@ -656,7 +656,7 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
-     * @param {object[]} layers - layers attribute of the map spec
+     * @param {Object[]} layers - layers attribute of the map spec
      * @param {number[]} coordinates - the coordinates of the gfi
      * @returns {void}
      */
@@ -692,8 +692,8 @@ const BuildSpecModel = Backbone.Model.extend({
     },
     /**
      * parses gfiAttributes object with key value pairs into array[objects] with attributes key and value
-     * @param  {object} gfiAttributes gfi Mapping attributes
-     * @return {[object]} parsed array[objects] with key- and value attributes
+     * @param  {Object} gfiAttributes gfi Mapping attributes
+     * @return {Object[]} parsed array[objects] with key- and value attributes
      */
     prepareGfiAttributes: function (gfiAttributes) {
         var valuesArray = [];

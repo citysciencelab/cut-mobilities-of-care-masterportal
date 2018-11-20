@@ -23,7 +23,7 @@ const DownloadView = Backbone.View.extend({
     },
     /**
      * Startet das Download modul
-     * @param  {ol.feature} features die Features die heruntergeladen werden sollen
+     * @param  {ol.feature[]} features die Features die heruntergeladen werden sollen
      * @returns {void}
      */
     start: function (features) {
@@ -58,7 +58,7 @@ const DownloadView = Backbone.View.extend({
     },
     /**
      *
-     * @return {[type]} [description]
+     * @return {void}
      */
     prepareDownloadButton: function () {
         this.model.setSelectedFormat();

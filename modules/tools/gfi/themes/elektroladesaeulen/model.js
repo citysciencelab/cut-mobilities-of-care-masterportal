@@ -186,10 +186,10 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * builds the request and collect the historical data for each datastream
      * one object with results and phenomenonTimes for every chargingpoint
-     * @param  {boolean} async - mode for ajax
-     * @param  {boolean} dataStreamIds - from features
-     * @param  {boolean} gfiParams - limits the period of observations
-     * @return {[Object]} historicalData
+     * @param  {Boolean} async - mode for ajax
+     * @param  {Boolean} dataStreamIds - from features
+     * @param  {Boolean} gfiParams - limits the period of observations
+     * @return {Object[]} historicalData
      */
     createHistoricalData: function (async, dataStreamIds, gfiParams) {
         var historicalData,
@@ -228,9 +228,9 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * adds filter to a given query
-     * @param {string} query - filter load observations
-     * @param {string} dataStreamIds - from feature
-     * @return {[Object]} workingQuery
+     * @param {String} query - filter load observations
+     * @param {String} dataStreamIds - from feature
+     * @return {Object[]} workingQuery
      */
     addFilter: function (query, dataStreamIds) {
         var workingQuery = query + ")&$filter=";
@@ -249,7 +249,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * adds time params to query by given gfiParams
      * @param {String} query - filter load observations
-     * @param {[Object]} gfiParams - attributes that specify the historical data period
+     * @param {Object[]} gfiParams - attributes that specify the historical data period
      * @return {String} extended query
      */
     addGfiParams: function (query, gfiParams) {
@@ -304,7 +304,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * create the request with given query for one Datastream
-     * @param  {[type]} query - add filter to url
+     * @param  {String} query - add filter to url
      * @param  {String} requestURL - url to service
      * @param  {String} versionURL - version of the service
      * @return {String} complete URL
@@ -327,8 +327,8 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * returns the historicalData by Ajax-Request
      * @param  {String} requestURLHistoricaldata - url with query
-     * @param  {boolean} async - state fo ajax-request
-     * @return {[Object]} historicalData
+     * @param  {Boolean} async - state fo ajax-request
+     * @return {Object[]} historicalData
      */
     sendRequest: function (requestURLHistoricaldata, async) {
         var response;
@@ -424,8 +424,8 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * checks if there are any observations
-     * @param  {[Object]} historicalData - data from feature
-     * @return {boolean} boolean
+     * @param  {Object[]} historicalData - data from feature
+     * @return {Boolean} boolean
      */
     checkObservationsNotEmpty: function (historicalData) {
         var boolean = false;
@@ -442,9 +442,9 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * change the timzone for the historicalData
-     * @param  {[Object]} historicalData - data from feature
-     * @param  {[Object]} utc - timezone
-     * @return {[Object]} data
+     * @param  {Object[]} historicalData - data from feature
+     * @param  {Object[]} utc - timezone
+     * @return {Object[]} data
      */
     changeTimeZone: function (historicalData, utc) {
         var data = _.isUndefined(historicalData) ? [] : historicalData;
@@ -479,8 +479,8 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * add an index to the historicalData
-     * @param {[object]} historicalData -  - data from feature
-     * @return {[Object]} data
+     * @param {Object[]} historicalData -  - data from feature
+     * @return {Object[]} data
      */
     addIndex: function (historicalData) {
         var data = _.isUndefined(historicalData) ? [] : historicalData;
@@ -500,7 +500,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @param  {Array} historicalDataWithIndex - from features
      * @param  {Date} lastDay - the day on which the evaluation of the data should end
      * @param  {Date} endDay - the date at which the evaluation should end
-     * @return {array} weekArray
+     * @return {Array} weekArray
      */
     divideDataByWeekday: function (historicalDataWithIndex, lastDay, endDay) {
         var weekArray = [
@@ -568,7 +568,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * create the config to draw graph
      * @param  {String} targetResult - result to draw
      * @param  {String} graphTag - div
-     * @param  {number} index - day
+     * @param  {Number} index - day
      * @returns {void}
      */
     triggerToBarGraph: function (targetResult, graphTag, index) {
@@ -638,9 +638,9 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * message if data is not evaluable or not existing
      * @param  {String} graphTag - div to draw graph
-     * @param  {number} width - from frame
-     * @param  {number} height - from frame
-     * @param  {number} index - day
+     * @param  {Number} width - from frame
+     * @param  {Number} height - from frame
+     * @param  {Number} index - day
      * @returns {void}
      */
     drawErrorMessage: function (graphTag, width, height, index) {
@@ -655,9 +655,9 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * calculate workload for every day
      * the workload is divided into 24 hours
-     * @param  {array} dataByWeekday - historical data sorted by weekday
+     * @param  {Array} dataByWeekday - historical data sorted by weekday
      * @param  {String} targetResult - result to draw
-     * @return {array} allDataArray
+     * @return {Array} allDataArray
      */
     calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
         var allDataArray = [];
@@ -682,7 +682,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * create an object with 24 pairs, which represents 24 hours for one day
      * the values are by initialize 0
-     * @return {object} dayObj
+     * @return {Object} dayObj
      */
     createInitialDayPerHour: function () {
         var dayObj = {},
@@ -697,10 +697,10 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * calculate the workload for one day
-     * @param  {object} emptyDayObj - contains 24 objects
-     * @param  {[object]} dayData - observations from one date
+     * @param  {Object} emptyDayObj - contains 24 objects
+     * @param  {Object[]} dayData - observations from one date
      * @param  {String} targetResult - result to draw
-     * @return {object} dayObj
+     * @return {Object} dayObj
      */
     calculateWorkloadforOneDay: function (emptyDayObj, dayData, targetResult) {
         var dataFromDay = _.isUndefined(dayData) ? [] : dayData,
@@ -734,10 +734,10 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * filters out the objects of the current timestep
-     * @param  {array} dayData - observations from one date
+     * @param  {Array} dayData - observations from one date
      * @param  {String} actualTimeStep - startTime
      * @param  {String} nextTimeStep - endTime
-     * @return {array} dataByActualTimeStep
+     * @return {Array} dataByActualTimeStep
      */
     filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
         return _.filter(dayData, function (data) {
@@ -750,13 +750,13 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * calculates the workload for the current hour
      * time calculations in milliseconds
-     * @param  {array} dataByActualTimeStep - within an hour
+     * @param  {Array} dataByActualTimeStep - within an hour
      * @param  {String} actualState - status of the last observation
-     * @param  {number} actualStateAsNumber - state as number 0 or 1
+     * @param  {Number} actualStateAsNumber - state as number 0 or 1
      * @param  {String} actualTimeStep - startTime
      * @param  {String} nextTimeStep - endTime
      * @param  {String} targetResult - result to draw
-     * @return {number} workload
+     * @return {Number} workload
      */
     calculateOneHour: function (dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
         var actualPhenomenonTime = moment(actualTimeStep).toDate().getTime(),
@@ -794,8 +794,8 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * calculates the arithemtic Meaning for all datas
-     * @param  {array} dataPerHour - data for every day, according to targetresult
-     * @return {array} dayMeanArray
+     * @param  {Array} dataPerHour - data for every day, according to targetresult
+     * @return {Array} dayMeanArray
      */
     calculateSumAndArithmeticMean: function (dataPerHour) {
         var dayLength = 24,
@@ -845,9 +845,9 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * returns an array which contains values at hour position
-     * @param  {array} dataPerHour - data for every day, according to targetresult
-     * @param  {number} position - one hour
-     * @return {array} arrayPerHour
+     * @param  {Array} dataPerHour - data for every day, according to targetresult
+     * @param  {Number} position - one hour
+     * @return {Array} arrayPerHour
      */
     arrayPerHour: function (dataPerHour, position) {
         var arrayPerHour = [];
@@ -866,9 +866,9 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * checks if processdData is existing
      * if no data is found, undefined will be delivered
-     * @param  {array} processedData - data with mean
-     * @param  {array} value - the key is searched
-     * @return {object} first data that was found
+     * @param  {Array} processedData - data with mean
+     * @param  {Array} value - the key is searched
+     * @return {Object} first data that was found
      */
     checkValue: function (processedData, value) {
         return _.find(processedData, function (data) {

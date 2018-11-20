@@ -41,7 +41,7 @@ const WfsQueryModel = QueryModel.extend({
     },
     /**
      * Waits for the Layer to load its features and proceeds requests the metadata
-     * @return {[type]} [description]
+     * @return {void}
      */
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("Layer"), {
@@ -74,9 +74,9 @@ const WfsQueryModel = QueryModel.extend({
     /**
      * delivers the layerSource from an layer,
      * by grouplayer delivers the layerSource from child by layerid
-     * @param {object} layerSource from layer
-     * @param {number} layerId id from layer
-     * @returns {object} layerSource
+     * @param {Object} layerSource from layer
+     * @param {Number} layerId id from layer
+     * @returns {Object} layerSource
      */
     retrieveLayerSource: function (layerSource, layerId) {
         var layer,
@@ -154,7 +154,7 @@ const WfsQueryModel = QueryModel.extend({
      * [getValuesFromFeature description]
      * @param  {ol.feature} feature olfeature
      * @param  {string} attrName [description]
-     * @return {[string]}          [description]
+     * @return {string[]}          [description]
      */
     getValuesFromFeature: function (feature, attrName) {
         var values = this.parseValuesFromString(feature, attrName);
@@ -235,7 +235,7 @@ const WfsQueryModel = QueryModel.extend({
      * runs predefined rules,
      * determines selected values from snippets,
      * derives featureIds from matching Features and triggers "featureIdsChanged" to filterModel
-     * @return {[type]} [description]
+     * @return {void}
      */
     runFilter: function () {
         var features = this.runPredefinedRules(),

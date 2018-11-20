@@ -386,8 +386,8 @@ const MapView = Backbone.Model.extend({
     },
 
     /**
-     *
-     * @return {[type]} [description]
+     * Return current Zoom of MapView
+     * @return {float} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();

@@ -36,7 +36,7 @@ const Menu = listView.extend({
     },
     /**
      * Rendert die  Auswahlliste
-     * @return {[type]} [description]
+     * @return {void}
      */
     renderSelectedList: function () {
         var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),

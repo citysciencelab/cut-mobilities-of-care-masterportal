@@ -44,7 +44,7 @@ const SaveSelection = Tool.extend({
 
     /**
      * externe Layer werden rausgefiltert
-     * @param  {[type]} layerList [description]
+     * @param  {object[]} layerList collection ob backbone layers
      * @returns {void}
      */
     filterExternalLayer: function (layerList) {
@@ -60,8 +60,8 @@ const SaveSelection = Tool.extend({
     },
 
     /**
-     * [createParamsValues description]
-     * @return {[type]} [description]
+     * [createParamsValues creates url parameters]
+     * @return {void}
      */
     createParamsValues: function () {
         var layerVisibilities = [],

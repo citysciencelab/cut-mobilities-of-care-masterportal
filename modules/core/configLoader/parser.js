@@ -113,7 +113,7 @@ const Parser = Backbone.Model.extend({
      * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
      * @param {object} items Einzelnen Ebenen der Menüleiste, bsp. contact, legend, tools und tree
      * @param {string} parentId gibt an wem die items hinzugefügt werden
-     * @return {undefined}
+     * @return {void}
      */
     parseMenu: function (items, parentId) {
         _.each(items, function (value, key) {
@@ -162,8 +162,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [parseSearchBar description]
-     * @param  {[type]} searchbarConfig [description]
-     * @return {[type]}       [description]
+     * @param  {Object} searchbarConfig [description]
+     * @return {void}
      */
     parseSearchBar: function (searchbarConfig) {
         this.addItem({
@@ -173,8 +173,8 @@ const Parser = Backbone.Model.extend({
     },
 
     /** [parseMapView description]
-     * @param  {[type]} items [description]
-     * @return {[type]}       [description]
+     * @param  {Array} items [description]
+     * @return {void}
      */
     parseMapView: function (items) {
         _.each(items, function (value, key) {
@@ -188,8 +188,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [parseControls description]
-     * @param  {[type]} items [description]
-     * @return {[type]}       [description]
+     * @param  {Array} items [description]
+     * @return {void}
      */
     parseControls: function (items) {
         _.each(items, function (value, key) {
@@ -204,7 +204,7 @@ const Parser = Backbone.Model.extend({
     /**
      * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
      * @param {object} obj - Item
-     * @return {undefined}
+     * @return {void}
      */
     addItem: function (obj) {
         if (!_.isUndefined(obj.visibility)) {
@@ -219,7 +219,7 @@ const Parser = Backbone.Model.extend({
      *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
      *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
      *  @param {object} attr Layerobjekt
-     *  @return {undefined}
+     *  @return {void}
      */
     addItems: function (objs, attr) {
         _.each(objs, function (obj) {
@@ -298,7 +298,7 @@ const Parser = Backbone.Model.extend({
     /**
      * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
      * @param {Object} obj - Item
-     * @return {undefined}
+     * @return {void}
      */
     addItemAtTop: function (obj) {
         if (!_.isUndefined(obj.visibility)) {
@@ -336,8 +336,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [getItemByAttributes description]
-     * @param  {[type]} value [description]
-     * @return {[type]}       [description]
+     * @param  {Object} value [description]
+     * @return {Object}       [description]
      */
     getItemByAttributes: function (value) {
         return _.findWhere(this.get("itemList"), value);
@@ -345,8 +345,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [getItemsByAttributes description]
-     * @param  {[type]} value [description]
-     * @return {[type]}       [description]
+     * @param  {Object} value [description]
+     * @return {Array}       [description]
      */
     getItemsByAttributes: function (value) {
         return _.where(this.get("itemList"), value);
@@ -354,7 +354,7 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [createModelList description]
-     * @return {[type]} [description]
+     * @return {ModelList} [description]
      */
     createModelList: function () {
         new ModelList(_.filter(this.get("itemList"), function (model) {

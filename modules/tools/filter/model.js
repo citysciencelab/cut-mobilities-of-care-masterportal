@@ -107,7 +107,7 @@ const FilterModel = Tool.extend({
     },
     /**
      * updates the Features shown on the Map
-     * @return {[type]} [description]
+     * @return {void}
      */
     updateMap: function () {
         // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
@@ -163,8 +163,8 @@ const FilterModel = Tool.extend({
 
     /**
      * collects the ids from of all features that match the filter, maps them to the layerids
-     * @param  {[object]} queries query objects
-     * @return {object} Map object mapping layers to featuresids
+     * @param  {Object[]} queries query objects
+     * @return {Object} Map object mapping layers to featuresids
      */
     groupFeatureIdsByLayer: function (queries) {
         var allFeatureIds = [],
@@ -195,8 +195,8 @@ const FilterModel = Tool.extend({
 
     /**
      * collects all featureIds of a group of queries into a list of uniqueIds
-     * @param  {[object]} queryGroup group of queries
-     * @return {[string]} unique list of all feature ids
+     * @param  {Object[]} queryGroup group of queries
+     * @return {String[]} unique list of all feature ids
      */
     collectFilteredIds: function (queryGroup) {
         var featureIdList = [];
