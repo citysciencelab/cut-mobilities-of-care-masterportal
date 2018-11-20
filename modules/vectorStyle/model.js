@@ -109,7 +109,14 @@ const WFSStyle = Backbone.Model.extend({
         ]
     },
     initialize: function () {
-        this.setImagePath(Config.wfsImgPath);
+        console.log(Config.wfsImgPath);
+        
+        if (!_.isUndefined(Config.wfsImgPath)) {
+            this.setImagePath(Config.wfsImgPath);
+        }
+        else {
+            console.warn("wfsImgPath at Config.js is not defined");
+        }
     },
 
     /*

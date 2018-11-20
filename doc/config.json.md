@@ -623,7 +623,7 @@ Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  La
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 |minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
-
+|snippetType|nein|String|nicht gesetzt|Möglichkeit den Filter fest auf einen Snippet Type zu setzen
 
 ******
 ******
@@ -645,6 +645,7 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
 |attributeWhiteList|nein|Array[String] / Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)]||Filterbare Attribute. Können entweder als Array of Strings (Attributnamen) oder als Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)] übergeben werden. Wird ein Array of Strigns übergeben, so werden bei Mehrfachauswahl die Werte eines Attributes mit ODER verknüpft.
+|snippetType|nein|String|nicht gesetzt|z.B. checkbox-classic|
 
 **Beispiel:**
 
@@ -670,7 +671,8 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
                      "values": ["Grundschulen"]
                  }
              ],
-             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"],
+             "snippetType": "checkbox-classic"
          }
      ]
  }
