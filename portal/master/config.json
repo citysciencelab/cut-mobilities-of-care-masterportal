@@ -199,7 +199,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
