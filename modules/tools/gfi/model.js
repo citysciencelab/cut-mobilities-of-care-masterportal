@@ -195,7 +195,6 @@ const Gfi = Tool.extend({
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
-            eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
             wmsGFIParams,
             GFIParams3d = [],
@@ -208,7 +207,7 @@ const Gfi = Tool.extend({
         // für detached MapMarker
         this.setCoordinate(evt.coordinate);
         // Vector
-        vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
+        vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, evt.map.getEventPixel(evt.originalEvent));
         // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 

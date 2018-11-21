@@ -27,7 +27,6 @@ const map = Backbone.Model.extend({
             "getLayers": this.getLayers,
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
-            "getEventPixel": this.getEventPixel,
             "hasFeatureAtPixel": this.hasFeatureAtPixel,
             "getSize": this.getSize,
             "getPixelFromCoordinate": this.getPixelFromCoordinate,
@@ -169,15 +168,6 @@ const map = Backbone.Model.extend({
         else {
             unlistenByKey(event);
         }
-    },
-
-    /**
-    * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
-    * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-    * @return {ol.Pixel} pixel
-    */
-    getEventPixel: function (evt) {
-        return this.get("map").getEventPixel(evt);
     },
 
     /**
