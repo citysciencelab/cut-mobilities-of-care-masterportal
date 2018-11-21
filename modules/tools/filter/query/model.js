@@ -118,8 +118,6 @@ const QueryModel = Backbone.Model.extend({
             snippetAttribute.type = "string";
             snippetAttribute.icons = this.retrieveIconsFromValue(this.get("features"), snippetAttribute.name, snippetAttribute.values);
             this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
-            console.log(snippetAttribute);
-            
         }
     },
     retrieveIconsFromValue: function (features, key, values) {
@@ -134,7 +132,7 @@ const QueryModel = Backbone.Model.extend({
                 }),
                 featureWithValue = featureListWithValue[0],
                 icon = "";
-            
+
             if (!_.isUndefined(featureWithValue)) {
                 icon = style(featureWithValue).getImage().getSrc();
                 icons.push(icon);

@@ -51,6 +51,13 @@ const MultiCheckboxModel = SnippetModel.extend({
         }));
     },
 
+    /**
+     * creates a model value and adds it to the value collection
+     * @param  {array} icons - icon array from
+     * @param  {array} valueArray - valueArray
+     * @param  {string} value - value
+     * @returns {void} - the icon index
+     */
     getIconPath: function (icons, valueArray, value) {
         var index = null;
 

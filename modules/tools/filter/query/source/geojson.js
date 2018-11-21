@@ -1,6 +1,5 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
-import GeoJSON from "ol/format/GeoJSON";
 
 const GeoJsonQueryModel = QueryModel.extend({
     initialize: function () {
@@ -97,7 +96,7 @@ const GeoJsonQueryModel = QueryModel.extend({
     /**
      * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
      * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} url - WFS Url
+     * @param  {string} features - WFS Url
      * @param  {string} featureType - WFS FeatureType
      * @param  {string} version - WFS Version
      * @returns {void}
@@ -109,10 +108,9 @@ const GeoJsonQueryModel = QueryModel.extend({
             this.addSearchInMapExtentSnippet();
         }
         featureAttributesMap = this.createFeatureAttributesMap(features, this.get("snippetType"));
-       
         this.createSnippets(featureAttributesMap);
     },
-    
+
     createFeatureAttributesMap: function (features, snippetType) {
         var featureAttributesMap = [],
             firstFeature = !_.isUndefined(features) ? features[0] : undefined,
