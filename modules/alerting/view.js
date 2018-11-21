@@ -1,6 +1,6 @@
 /**
- * @description Module to manage Alerts
- * @module AlertingView
+ * @module Alerting
+ * @description BarFoo
  * @extends Backbone.View
  */
 import AlertingModel from "./model";
