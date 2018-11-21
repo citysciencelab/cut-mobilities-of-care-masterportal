@@ -56,7 +56,6 @@ const map = Backbone.Model.extend({
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
-            "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
             "updateSize": function () {
                 this.get("map").updateSize();
             },
@@ -178,15 +177,6 @@ const map = Backbone.Model.extend({
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
-    /**
-    * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @param  {Function} callback - Die Feature Callback Funktion
-    * @returns {void}
-    */
-    forEachFeatureAtPixel: function (pixel, callback) {
-        this.get("map").forEachFeatureAtPixel(pixel, callback);
-    },
     getMapMode: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
