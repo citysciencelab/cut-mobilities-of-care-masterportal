@@ -125,7 +125,7 @@ const ParcelSearchView = Backbone.View.extend({
         this.$("#cadastralDistrictField").empty();
         this.$("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
         _.each(_.values(_.pick(cadastralDistricts, districtNumber))[0], function (cadastralDistrict) {
-            this.$("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
+            $("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
         });
         this.$("#cadastralDistrictField").focus();
     },
