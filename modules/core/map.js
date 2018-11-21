@@ -27,7 +27,6 @@ const map = Backbone.Model.extend({
             "getLayers": this.getLayers,
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
-            "hasFeatureAtPixel": this.hasFeatureAtPixel,
             "getSize": this.getSize,
             "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
@@ -177,15 +176,6 @@ const map = Backbone.Model.extend({
     */
     getPixelFromCoordinate: function (value) {
         return this.get("map").getPixelFromCoordinate(value);
-    },
-
-    /**
-    * Ermittelt ob Features ein Pixel im Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @return {Boolean} true | false
-    */
-    hasFeatureAtPixel: function (pixel) {
-        return this.get("map").hasFeatureAtPixel(pixel);
     },
 
     /**
