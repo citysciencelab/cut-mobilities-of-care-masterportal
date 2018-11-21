@@ -133,7 +133,7 @@ const ZoomToGeometry = Backbone.Model.extend({
 
         if (this.get("isRender") === true && _.isUndefined(this.get("featureGeometry")) === false) {
             canvas.beginPath();
-            this.drawOutsidePolygon(canvas);
+            this.drawOutsidePolygon(canvas, map.getSize());
             this.drawInsidePolygon(canvas, map);
             canvas.fillStyle = "rgba(0, 0, 0, 0.4)";
             canvas.fill();
@@ -141,9 +141,8 @@ const ZoomToGeometry = Backbone.Model.extend({
         }
     },
 
-    drawOutsidePolygon: function (canvas) {
-        var size = Radio.request("Map", "getSize"),
-            height = size[1] * DEVICE_PIXEL_RATIO,
+    drawOutsidePolygon: function (canvas, size) {
+        var height = size[1] * DEVICE_PIXEL_RATIO,
             width = size[0] * DEVICE_PIXEL_RATIO;
 
         canvas.moveTo(0, 0);
