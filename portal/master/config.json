@@ -436,7 +436,12 @@
         "id": "2426"
       },
       {
-        "id": "4561"
+        "id": "1933",
+        "infoFormat": "application/vnd.ogc.gml"
+      },
+      {
+        "id": "4561",
+        "infoFormat": "text/html"
       },
       {
         "id": "441"
