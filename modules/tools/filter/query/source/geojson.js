@@ -30,7 +30,8 @@ const GeoJsonQueryModel = QueryModel.extend({
     processFeatures: function (features) {
         this.setFeatures(features);
         this.setFeatureIds(this.collectAllFeatureIds(features));
-        this.buildQueryDatastructure();
+        this.buildQueryDatastructure(features);
+
     },
     collectAllFeatureIds: function (features) {
         var featureIds = [];
@@ -101,56 +102,17 @@ const GeoJsonQueryModel = QueryModel.extend({
      * @param  {string} version - WFS Version
      * @returns {void}
      */
-    buildQueryDatastructure: function () {
-        var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-            url,
-            featureType,
-            version;
+    buildQueryDatastructure: function (features) {
+        var featureAttributesMap = [];
 
         if (this.get("searchInMapExtent") === true) {
             this.addSearchInMapExtentSnippet();
         }
-        if (!_.isUndefined(layerObject)) {
-            url = Radio.request("Util", "getProxyURL", layerObject.get("url"));
-            featureType = layerObject.get("featureType");
-            version = layerObject.get("version");
-            this.requestMetadata(url, featureType, version, this.parseResponse);
-        }
-    },
-    /**
-     * Führt DescriptFeatureType Request aus
-     * @param  {string} url         url to wfs
-     * @param  {string} featureType featuretype of wfs
-     * @param  {string} version     version of wfs
-     * @param  {function} callback  callbackfunction for ajaxrequest
-     * @return {void}
-     */
-    requestMetadata: function (url, featureType, version, callback) {
-        $.ajax({
-            url: url,
-            context: this,
-            // data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-            // parent (QueryModel) function
-            success: callback
-        });
-    },
-    /**
-     * Extract Attribute names and types from DescribeFeatureType-Response
-     * @param  {XML} response response xml from ajax call
-     * @return {object} - Mapobject containing names and types
-     */
-    parseResponse: function (response) {
-        var features = this.parseGeoJsonToFeatures(response),
-            featureAttributesMap = this.createFeatureAttributesMap(features, this.get("snippetType"));
-
+        featureAttributesMap = this.createFeatureAttributesMap(features, this.get("snippetType"));
+       
         this.createSnippets(featureAttributesMap);
     },
-    parseGeoJsonToFeatures: function (response) {
-        var format = new GeoJSON(),
-            geoJsonFeatures = format.readFeatures(response);
-
-        return geoJsonFeatures;
-    },
+    
     createFeatureAttributesMap: function (features, snippetType) {
         var featureAttributesMap = [],
             firstFeature = !_.isUndefined(features) ? features[0] : undefined,

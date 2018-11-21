@@ -43,6 +43,7 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
+            iconPath: this.getIconPath(this.get("icons"), this.get("values"), value),
             displayName: value,
             isSelected: true,
             isSelectable: true,
@@ -50,6 +51,12 @@ const MultiCheckboxModel = SnippetModel.extend({
         }));
     },
 
+    getIconPath: function (icons, valueArray, value) {
+        var index = null;
+
+        index = valueArray.indexOf(value);
+        return icons[index];
+    },
     /**
     * resetCollection
     * @return {[type]} [description]
