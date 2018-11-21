@@ -28,7 +28,6 @@ const map = Backbone.Model.extend({
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
             "getSize": this.getSize,
-            "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
             "registerListener": this.registerListener,
             "getMap": function () {
@@ -167,15 +166,6 @@ const map = Backbone.Model.extend({
         else {
             unlistenByKey(event);
         }
-    },
-
-    /**
-    * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-    * @param  {ol.Coordinate} value -
-    * @return {ol.Pixel} pixel
-    */
-    getPixelFromCoordinate: function (value) {
-        return this.get("map").getPixelFromCoordinate(value);
     },
 
     /**
