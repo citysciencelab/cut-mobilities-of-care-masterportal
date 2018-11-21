@@ -13,9 +13,7 @@
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js",
-    "removePreviousJsDoc": "rm -Rf jsdoc",
-    "generateNewJsDoc": "./node_modules/.bin/jsdoc -c jsdoc-config.json -d jsdoc -r",
-    "buildJsDoc": "npm run removePreviousJsDoc && npm run generateNewJsDoc"
+    "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
   },
   "dependencies": {
     "backbone": "1.x",
