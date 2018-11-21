@@ -1,3 +1,8 @@
+/**
+ * @description Module to search for parcels
+ * @module ParcelSearch
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 
 const ParcelSearch = Tool.extend({

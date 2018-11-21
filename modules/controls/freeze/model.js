@@ -1,3 +1,8 @@
+/**
+ * @description Control to freeze screen
+ * @module FreezeModel
+ * @extends Backbone.Model
+ */
 import FreezeView from "./freezewindowview";
 import FreezeToolMenuView from "./freezetoolmenuview";
 import FreezeControlMenuView from "./freezecontrolmenuview";

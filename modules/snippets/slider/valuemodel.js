@@ -1,3 +1,8 @@
+/**
+ * @description Module to create value model
+ * @module ValueModel
+ * @extends ../value/model
+ */
 import BaseModel from "../value/model";
 
 const ValueModel = BaseModel.extend({

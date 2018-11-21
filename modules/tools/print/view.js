@@ -1,3 +1,8 @@
+/**
+ * @description Module for printing in mapfish-print-2
+ * @module PrintView
+ * @extends Backbone.View
+ */
 import PrintWinTemplate from "text-loader!./template.html";
 
 const PrintView = Backbone.View.extend({

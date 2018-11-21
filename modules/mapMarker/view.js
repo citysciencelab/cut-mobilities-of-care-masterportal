@@ -1,7 +1,11 @@
-
+/**
+ * @description Module to set mapMarker
+ * @module MapMarkerView
+ * @extends Backbone.View
+ */
 import MapHandlerModel from "./model";
 
-const MapMarker = Backbone.View.extend({
+const MapMarkerView = Backbone.View.extend({
     /**
     * @description View des Map Handlers
     * @returns {void}
@@ -200,4 +204,4 @@ const MapMarker = Backbone.View.extend({
 
 });
 
-export default MapMarker;
+export default MapMarkerView;

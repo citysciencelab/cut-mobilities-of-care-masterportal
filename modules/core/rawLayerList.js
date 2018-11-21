@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage services from services.json
+ * @module RawLayerList
+ * @extends Backbone.Collection
+ */
 const RawLayerList = Backbone.Collection.extend({
     model: function (attrs) {
         return new Backbone.Model(attrs);

@@ -1,3 +1,8 @@
+/**
+ * @description WFS Source of Filter Query
+ * @module WfsQueryModel
+ * @extends ../model
+ */
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 

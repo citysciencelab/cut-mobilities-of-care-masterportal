@@ -1,3 +1,8 @@
+/**
+ * @description Module parse DefaultTree
+ * @module DefaultTreeParser
+ * @extends ./parser
+ */
 import Parser from "./parser";
 
 const DefaultTreeParser = Parser.extend({

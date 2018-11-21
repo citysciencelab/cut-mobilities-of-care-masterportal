@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage Legend
+ * @module Legend
+ * @extends ../core/modelList/tool/model
+ */
 import Feature from "ol/Feature.js";
 import Tool from "../core/modelList/tool/model";
 

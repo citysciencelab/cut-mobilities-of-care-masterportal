@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent any Item (Folder, Tool, Layer, ...)
+ * @module Item
+ * @extends Backbone.Model
+ */
 const Item = Backbone.Model.extend({
     defaults: {
         name: "",

@@ -1,3 +1,8 @@
+/**
+ * @description Model to filter vectorFeatures
+ * @module WfsFeatureFilter
+ * @extends ../core/modelList/tool/model
+ */
 import Tool from "../core/modelList/tool/model";
 
 const WfsFeatureFilter = Tool.extend({

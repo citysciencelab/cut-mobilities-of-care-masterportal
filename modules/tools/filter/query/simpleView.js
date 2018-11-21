@@ -1,3 +1,8 @@
+/**
+ * @description Simple View of Filter
+ * @module QuerySimpleView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./templateSimpleView.html";
 
 const QuerySimpleView = Backbone.View.extend({

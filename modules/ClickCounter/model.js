@@ -1,3 +1,8 @@
+/**
+ * @description Module to count Clicks
+ * @module ClickCounter
+ * @extends Backbone.Model
+ */
 const ClickCounter = Backbone.Model.extend({
     defaults: {
         countframeid: _.uniqueId("countframe"),

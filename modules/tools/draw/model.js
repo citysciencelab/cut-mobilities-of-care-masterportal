@@ -1,7 +1,7 @@
 /**
  * @description Module for drawing different geometries and text
  * @module DrawToolModel
- * @extends lgv/modules/core/modelList/tool/model
+ * @extends ../../core/modelList/tool/model
  */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";

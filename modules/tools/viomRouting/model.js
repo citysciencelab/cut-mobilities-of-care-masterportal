@@ -1,3 +1,8 @@
+/**
+ * @description Model
+ * @module ViomRouting
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 import Overlay from "ol/Overlay.js";
 import VectorSource from "ol/source/Vector.js";

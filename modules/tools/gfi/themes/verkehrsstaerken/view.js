@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Verkehrsstärken
+ * @module VerkehrsStaerkenThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import VerkehrsStaerkenThemeTemplate from "text-loader!./template.html";
 

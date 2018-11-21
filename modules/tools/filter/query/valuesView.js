@@ -1,3 +1,8 @@
+/**
+ * @description Values View of Filter Query
+ * @module QueryValuesView
+ * @extends Backbone.View
+ */
 const QueryValuesView = Backbone.View.extend({
     events: {
         "click": "removeView"

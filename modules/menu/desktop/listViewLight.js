@@ -1,3 +1,8 @@
+/**
+ * @description ListViewLight for modelList in desktop mode
+ * @module Menu
+ * @extends ./listViewMain
+ */
 import listView from "./listViewMain";
 import DesktopLayerViewLight from "./layer/viewLight";
 

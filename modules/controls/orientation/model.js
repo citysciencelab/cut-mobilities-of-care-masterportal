@@ -1,3 +1,8 @@
+/**
+ * @description Control to show position
+ * @module OrientationModel
+ * @extends Backbone.Model
+ */
 import {Circle, LineString} from "ol/geom.js";
 import Overlay from "ol/Overlay.js";
 import Geolocation from "ol/Geolocation.js";

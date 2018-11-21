@@ -1,7 +1,12 @@
+/**
+ * @description Module to retrieve and show layer Information (metadata and legend)
+ * @module LayerInformationModel
+ * @extends Backbone.Model
+ */
 import ViewMobile from "./viewMobile";
 import View from "./view";
 
-const LayerInformation = Backbone.Model.extend({
+const LayerInformationModel = Backbone.Model.extend({
     defaults: {
         // true wenn die Layerinformation sichtbar ist
         isVisible: false,
@@ -141,4 +146,4 @@ const LayerInformation = Backbone.Model.extend({
     }
 });
 
-export default LayerInformation;
+export default LayerInformationModel;

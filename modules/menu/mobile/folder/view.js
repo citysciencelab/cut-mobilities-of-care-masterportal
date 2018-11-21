@@ -1,3 +1,8 @@
+/**
+ * @description View for folder in mobile mode
+ * @module FolderView
+ * @extends Backbone.View
+ */
 import FolderTemplate from "text-loader!./template.html";
 import FolderLeafTemplate from "text-loader!./templateLeaf.html";
 

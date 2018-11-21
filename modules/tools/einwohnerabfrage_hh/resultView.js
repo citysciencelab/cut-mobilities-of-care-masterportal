@@ -1,3 +1,8 @@
+/**
+ * @description View to display result
+ * @module ResultView
+ * @extends Backbone.View
+ */
 import ResultTemplate from "text-loader!./resultTemplate.html";
 
 const ResultView = Backbone.View.extend({

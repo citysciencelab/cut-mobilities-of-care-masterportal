@@ -1,3 +1,8 @@
+/**
+ * @description View for tree in desktop mode
+ * @module FolderView
+ * @extends Backbone.View
+ */
 import FolderTemplate from "text-loader!./templateTree.html";
 
 const FolderView = Backbone.View.extend({

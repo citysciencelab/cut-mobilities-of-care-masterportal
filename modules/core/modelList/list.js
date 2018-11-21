@@ -1,3 +1,8 @@
+/**
+ * @description Module to gather all Models
+ * @module ModelList
+ * @extends Backbone.Collection
+ */
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
 import GeoJSONLayer from "./layer/geojson";

@@ -1,4 +1,9 @@
-const Model = Backbone.Model.extend({
+/**
+ * @description Module to create slider snippet
+ * @module SnippetValueModel
+ * @extends Backbone.Model
+ */
+const SnippetValueModel = Backbone.Model.extend({
     defaults: {
         value: "",
         type: ""
@@ -31,4 +36,4 @@ const Model = Backbone.Model.extend({
     }
 });
 
-export default Model;
+export default SnippetValueModel;

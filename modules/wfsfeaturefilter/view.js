@@ -1,6 +1,11 @@
-import wfsFeatureFilterTemplate from "text-loader!./template.html";
+/**
+ * @description Model to filter vectorFeatures
+ * @module WfsFeatureFilter
+ * @extends Backbone.View
+ */
+import WfsFeatureFilterTemplate from "text-loader!./template.html";
 
-const wfsFeatureFilterView = Backbone.View.extend({
+const WfsFeatureFilterView = Backbone.View.extend({
     events: {
         "click #filterbutton": "getFilterInfos",
         "click .panel-heading": "toggleHeading"
@@ -13,7 +18,7 @@ const wfsFeatureFilterView = Backbone.View.extend({
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     id: "wfsFilterWin",
-    template: _.template(wfsFeatureFilterTemplate),
+    template: _.template(WfsFeatureFilterTemplate),
     toggleHeading: function (evt) {
         var id = this.$(evt.currentTarget)[0].id;
 
@@ -167,4 +172,4 @@ const wfsFeatureFilterView = Backbone.View.extend({
     }
 });
 
-export default wfsFeatureFilterView;
+export default WfsFeatureFilterView;

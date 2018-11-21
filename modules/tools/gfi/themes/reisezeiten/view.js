@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Reisezeiten
+ * @module ReisezeitenThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import ReisezeitenTemplate from "text-loader!./template.html";
 

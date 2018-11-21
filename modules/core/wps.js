@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage WebProcessingService (WPS) requests
+ * @module WPS
+ * @extends Backbone.Model
+ */
 const WPS = Backbone.Model.extend({
     defaults: {
         xmlTemplate: "<wps:Execute xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"" +

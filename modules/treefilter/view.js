@@ -1,3 +1,8 @@
+/**
+ * @description View to filter trees in in hamburg
+ * @module TreeFilter
+ * @extends Backbone.View
+ */
 import TreeFilterTemplate from "text-loader!./template.html";
 
 const TreeFilterView = Backbone.View.extend({

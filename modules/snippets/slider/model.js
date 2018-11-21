@@ -1,3 +1,8 @@
+/**
+ * @description Module to create slider snippet
+ * @module SliderModel
+ * @extends ../model
+ */
 import SnippetModel from "../model";
 import ValueModel from "./valuemodel";
 

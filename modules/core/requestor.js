@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage services from services.json
+ * @module RawLayerList
+ * @extends Backbone.Model
+ */
 import {WMSGetFeatureInfo} from "ol/format.js";
 
 const Requestor = Backbone.Model.extend({
@@ -5,7 +10,8 @@ const Requestor = Backbone.Model.extend({
     requestCount: 0,
     pContent: [],
     /**
-     * params: [0] = Objekt mit name und url
+     * @param {Array} params Objekt mit name und url
+     * @returns {void}
      */
     requestFeatures: function (params) {
         this.groupContentByTyp(params);

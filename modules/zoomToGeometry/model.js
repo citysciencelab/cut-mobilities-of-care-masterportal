@@ -1,3 +1,8 @@
+/**
+ * @description Model to zoom to Geometry from District
+ * @module ZoomToGeometry
+ * @extends Backbone.Model
+ */
 import {WFS} from "ol/format.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 

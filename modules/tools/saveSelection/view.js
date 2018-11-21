@@ -1,3 +1,8 @@
+/**
+ * @description Module for saving current state of map in url
+ * @module SaveSelection
+ * @extends Backbone.View
+ */
 import SaveSelectionSimpleMapTemplate from "text-loader!./templateSimpleMap.html";
 import SaveSelectionTemplate from "text-loader!./template.html";
 

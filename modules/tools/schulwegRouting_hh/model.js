@@ -1,3 +1,8 @@
+/**
+ * @description Module for calculating routing from address to schools
+ * @module SchulwegRouting
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 import BuildSpecModel from "../print_/buildSpec";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";

@@ -1,3 +1,8 @@
+/**
+ * @description Module to create visibleWFS search
+ * @module VisibleWFSModel
+ * @extends Backbone.Model
+ */
 import "../model";
 
 const VisibleWFSModel = Backbone.Model.extend({

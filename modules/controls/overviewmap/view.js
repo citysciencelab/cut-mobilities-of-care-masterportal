@@ -1,14 +1,19 @@
-import OverviewmapModel from "./model";
+/**
+ * @description Control to show an overview-map
+ * @module OverviewMapView
+ * @extends Backbone.Model
+ */
+import OverviewMapModel from "./model";
 import template from "text-loader!./template.html";
 
-const OverviewmapView = Backbone.View.extend({
+const OverviewMapView = Backbone.View.extend({
     events: {
         "click .glyphicon": "toggle"
     },
 
     initialize: function () {
         this.render();
-        this.model = new OverviewmapModel();
+        this.model = new OverviewMapModel();
     },
     render: function () {
         this.$el.html(this.template());
@@ -32,4 +37,4 @@ const OverviewmapView = Backbone.View.extend({
     }
 });
 
-export default OverviewmapView;
+export default OverviewMapView;

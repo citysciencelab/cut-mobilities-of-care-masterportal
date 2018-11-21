@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Verkehrsstärken-Rad
+ * @module VerkehrsStaerkenRadTheme
+ * @extends ../model
+ */
 import Theme from "../model";
 import * as moment from "moment";
 

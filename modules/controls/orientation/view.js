@@ -1,3 +1,8 @@
+/**
+ * @description Control to show position
+ * @module OrientationView
+ * @extends Backbone.View
+ */
 import OrientationTemplate from "text-loader!./template.html";
 import OrientationModel from "./model";
 import POIView from "./poi/view";

@@ -1,4 +1,9 @@
-const TotalviewmapModel = Backbone.Model.extend({
+/**
+ * @description Control to reset map to initial state
+ * @module TotalViewMapModel
+ * @extends Backbone.Model
+ */
+const TotalViewMapModel = Backbone.Model.extend({
     defaults: {
     },
     setTotalView: function () {
@@ -6,4 +11,4 @@ const TotalviewmapModel = Backbone.Model.extend({
     }
 });
 
-export default TotalviewmapModel;
+export default TotalViewMapModel;

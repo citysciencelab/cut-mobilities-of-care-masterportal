@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Table
+ * @module TableThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import TableThemeTemplate from "text-loader!./template.html";
 

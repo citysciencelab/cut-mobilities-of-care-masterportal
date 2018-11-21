@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage switches between mobile and desktop mode
+ * @module LegendLoader
+ * @extends Backbone.Model
+ */
 import MobileLegend from "./mobile/view";
 import DesktopLegend from "./desktop/view";
 

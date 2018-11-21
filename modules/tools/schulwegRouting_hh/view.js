@@ -1,3 +1,8 @@
+/**
+ * @description View for Tool: Schulwegrouting
+ * @module SchulwegRouting
+ * @extends Backbone.View
+ */
 import template from "text-loader!./template.html";
 import templateHitlist from "text-loader!./templateHitlist.html";
 import templateRouteResult from "text-loader!./templateRouteResult.html";

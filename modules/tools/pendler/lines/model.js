@@ -1,3 +1,8 @@
+/**
+ * @description Module for commuter flows as lines
+ * @module Lines
+ * @extends ../core/model
+ */
 import PendlerCoreModel from "../core/model";
 import {Stroke, Style, Text} from "ol/style.js";
 import {Point} from "ol/geom.js";

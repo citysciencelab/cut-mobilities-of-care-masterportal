@@ -1,3 +1,7 @@
+/**
+ * @description Loads core and instances all modules that have to be loaded, due to portal config
+ * @module App
+ */
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";

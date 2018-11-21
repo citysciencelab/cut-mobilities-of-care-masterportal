@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for SGV-Online
+ * @module SgvOnlineTheme
+ * @extends ../model
+ */
 import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import VideoView from "../../objects/video/view";

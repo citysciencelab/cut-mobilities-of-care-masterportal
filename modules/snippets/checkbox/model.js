@@ -1,3 +1,8 @@
+/**
+ * @description Module to create checkbox snippet
+ * @module CheckboxSnippet
+ * @extends ../model
+ */
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 

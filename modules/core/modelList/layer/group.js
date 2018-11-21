@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent group layer
+ * @module GroupLayer
+ * @extends ./model
+ */
 import {Group as LayerGroup} from "ol/layer.js";
 import Layer from "./model";
 import WMSLayer from "./wms";
@@ -7,7 +12,7 @@ import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
 const GroupLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults,{
+    defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true
     }),

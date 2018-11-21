@@ -1,7 +1,12 @@
+/**
+ * @description Module to list features of given vector layer
+ * @module FeatureListerView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
 
-const FeatureLister = Backbone.View.extend({
+const FeatureListerView = Backbone.View.extend({
     events: {
         "click .glyphicon-remove": "toggle",
         "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
@@ -361,4 +366,4 @@ const FeatureLister = Backbone.View.extend({
     }
 });
 
-export default FeatureLister;
+export default FeatureListerView;

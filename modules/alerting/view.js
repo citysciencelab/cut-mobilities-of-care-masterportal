@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage Alerts
+ * @module AlertingView
+ * @extends Backbone.View
+ */
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";

@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage rest-services.json
+ * @module RestList
+ * @extends Backbone.Collection
+ */
 const RestList = Backbone.Collection.extend({
     model: Backbone.Model,
     initialize: function (models, options) {

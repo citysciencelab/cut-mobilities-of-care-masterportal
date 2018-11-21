@@ -1,3 +1,8 @@
+/**
+ * @description Tool to compare vectorFeatures
+ * @module CompareFeaturesView
+ * @extends Backbone.View
+ */
 import CompareFeaturesTemplateFeedback from "text-loader!./templateFeedback.html";
 import CompareFeaturesTemplateNoFeatures from "text-loader!./templateNoFeatures.html";
 import CompareFeaturesTemplate from "text-loader!./template.html";

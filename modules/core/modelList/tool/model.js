@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent any tool
+ * @module Tool
+ * @extends .././item
+ */
 import Item from ".././item";
 
 const Tool = Item.extend({

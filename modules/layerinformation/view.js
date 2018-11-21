@@ -1,3 +1,8 @@
+/**
+ * @description Module to retrieve and show layer Information (metadata and legend)
+ * @module LayerInformationView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./template.html";
 import ContentTemplate from "text-loader!../legend/content.html";
 import "jquery-ui/ui/widgets/draggable";

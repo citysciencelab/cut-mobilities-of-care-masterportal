@@ -1,3 +1,8 @@
+/**
+ * @description Module to highlight given feature
+ * @module HighlightFeature
+ * @extends Backbone.Model
+ */
 import {Fill, Stroke, Style} from "ol/style.js";
 
 const HighlightFeature = Backbone.Model.extend({

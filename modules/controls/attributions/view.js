@@ -1,3 +1,8 @@
+/**
+ * @description Control to show Attributions
+ * @module AttributionsView
+ * @extends Backbone.View
+ */
 import TemplateShow from "text-loader!./templateShow.html";
 import TemplateHide from "text-loader!./templateHide.html";
 import Attributions from "./model";

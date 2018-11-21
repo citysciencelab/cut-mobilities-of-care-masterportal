@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent wms layer
+ * @module WMSLayer
+ * @extends ./model
+ */
 import Layer from "./model";
 import TileWMS from "ol/source/TileWMS.js";
 import TileGrid from "ol/tilegrid/TileGrid.js";

@@ -1,3 +1,8 @@
+/**
+ * @description List to manage breadcrumbs in mobile mode
+ * @module ListView
+ * @extends Backbone.View
+ */
 import List from "./list";
 import View from "./view";
 import Template from "text-loader!./templateListView.html";

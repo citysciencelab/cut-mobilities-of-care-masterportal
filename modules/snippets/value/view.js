@@ -1,6 +1,11 @@
+/**
+ * @description Module to create value for snippets
+ * @module SnippetValueView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./template.html";
 
-const View = Backbone.View.extend({
+const SnippetValueView = Backbone.View.extend({
     events: {
         "click": "deselect"
     },
@@ -31,4 +36,4 @@ const View = Backbone.View.extend({
     }
 });
 
-export default View;
+export default SnippetValueView;

@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage url parameters
+ * @module ParametricURL
+ * @extends Backbone.Model
+ */
 const ParametricURL = Backbone.Model.extend({
     defaults: {
         layerParams: [],

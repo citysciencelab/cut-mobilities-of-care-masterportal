@@ -1,3 +1,8 @@
+/**
+ * @description Model to zoom to Feature
+ * @module ZoomToFeature
+ * @extends Backbone.Model
+ */
 import {WFS} from "ol/format.js";
 import Overlay from "ol/Overlay.js";
 

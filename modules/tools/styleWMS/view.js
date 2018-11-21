@@ -1,3 +1,8 @@
+/**
+ * @description View
+ * @module StyleWMS
+ * @extends Backbone.View
+ */
 import StyleWMSTemplate from "text-loader!./template.html";
 import StyleWMSTemplateNoStyleableLayers from "text-loader!./templateNoStyleableLayers.html";
 import "bootstrap-colorpicker";

@@ -1,3 +1,8 @@
+/**
+ * @description Module to create searchbar
+ * @module SidebarView
+ * @extends Backbone.View
+ */
 import SidebarModel from "./model";
 
 const SidebarView = Backbone.View.extend({

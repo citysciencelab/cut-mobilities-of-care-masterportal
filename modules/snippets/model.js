@@ -1,6 +1,11 @@
+/**
+ * @description Module to create a snippet
+ * @module SnippetModel
+ * @extends Backbone.Model
+ */
 import ValueModel from "./value/model";
 
-const Snippet = Backbone.Model.extend({
+const SnippetModel = Backbone.Model.extend({
     defaults: {
         // snippet info text
         infoText: undefined,
@@ -101,4 +106,4 @@ const Snippet = Backbone.Model.extend({
     }
 });
 
-export default Snippet;
+export default SnippetModel;

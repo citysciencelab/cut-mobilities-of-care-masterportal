@@ -1,7 +1,8 @@
-// define(function (require) {
-
-//     var Button3dTemplate = require("text-loader!./template.html"),
-//         Button3dView;
+/**
+ * @description Control to activate 3d-mode
+ * @module Button3dView
+ * @extends Backbone.View
+ */
 import Button3dTemplate from "text-loader!./template.html";
 
 const Button3dView = Backbone.View.extend({

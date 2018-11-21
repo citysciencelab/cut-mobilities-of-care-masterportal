@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for ITGBM
+ * @module ItGbmTheme
+ * @extends ../model
+ */
 import Theme from "../model";
 
 const ItGbmTheme = Theme.extend({

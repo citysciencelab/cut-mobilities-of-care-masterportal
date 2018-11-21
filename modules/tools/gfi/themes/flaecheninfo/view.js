@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Flächeninfo
+ * @module FlaecheninfoThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import FlaecheninfoTemplate from "text-loader!./template.html";
 

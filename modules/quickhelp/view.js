@@ -1,10 +1,15 @@
+/**
+ * @description View to manage Quickhelp
+ * @module QuickHelpView
+ * @extends Backbone.View
+ */
 import TemplateSearch from "text-loader!./templateSearch.html";
 import TemplateTree from "text-loader!./templateTree.html";
 import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";
 import QuickHelpModel from "./model";
 import "jquery-ui/ui/widgets/draggable";
 
-const quickHelpView = Backbone.View.extend({
+const QuickHelpView = Backbone.View.extend({
     events: {
         "click .glyphicon-remove": "removeWindow",
         "click .glyphicon-print": "printHelp"
@@ -87,4 +92,4 @@ const quickHelpView = Backbone.View.extend({
     }
 });
 
-export default quickHelpView;
+export default QuickHelpView;

@@ -1,3 +1,8 @@
+/**
+ * @description Module to list features of given vector layer
+ * @module FeatureListerModel
+ * @extends ../core/modelList/tool/model
+ */
 import Requestor from "../core/requestor";
 import Tool from "../core/modelList/tool/model";
 

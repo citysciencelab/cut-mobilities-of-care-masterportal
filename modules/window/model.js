@@ -1,3 +1,8 @@
+/**
+ * @description Model for tool window
+ * @module Window
+ * @extends Backbone.Model
+ */
 const Window = Backbone.Model.extend({
     defaults: {
         isCollapsed: false,

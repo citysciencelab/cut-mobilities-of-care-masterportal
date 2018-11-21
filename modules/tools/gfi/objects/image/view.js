@@ -1,3 +1,8 @@
+/**
+ * @description View for Image-Object in GFI
+ * @module ImgView
+ * @extends Backbone.View
+ */
 import ImgTemplate from "text-loader!./template.html";
 import ImgModel from "./model";
 

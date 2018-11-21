@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Trinkwasser
+ * @module TrinkwasserThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import TrinkwasserTemplate from "text-loader!./template.html";
 

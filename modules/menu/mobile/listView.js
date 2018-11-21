@@ -1,3 +1,8 @@
+/**
+ * @description View for mobile mode
+ * @module MobileMenu
+ * @extends Backbone.View
+ */
 import FolderView from "./folder/view";
 import LayerView from "./layer/view";
 import LayerViewLight from "./layer/viewLight";

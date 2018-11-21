@@ -1,3 +1,8 @@
+/**
+ * @description View for Tool in desktop mode
+ * @module ItemView
+ * @extends Backbone.View
+ */
 import ItemTemplate from "text-loader!./template.html";
 
 const ItemView = Backbone.View.extend({

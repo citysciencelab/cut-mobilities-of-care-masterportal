@@ -1,3 +1,8 @@
+/**
+ * @description Module to display map Data
+ * @module MapView
+ * @extends Backbone.Model
+ */
 import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 

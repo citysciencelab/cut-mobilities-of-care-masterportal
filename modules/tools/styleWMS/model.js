@@ -1,3 +1,8 @@
+/**
+ * @description Module for generating SLD-Body to append in service getMap-Url
+ * @module StyleWMS
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 
 const StyleWMS = Tool.extend({

@@ -1,4 +1,9 @@
-const Sidebar = Backbone.Model.extend({
+/**
+ * @description Module to create searchbar
+ * @module SidebarModel
+ * @extends Backbone.Model
+ */
+const SidebarModel = Backbone.Model.extend({
     defaults: {
         // true if sidebar is visible
         isVisible: false,
@@ -36,4 +41,4 @@ const Sidebar = Backbone.Model.extend({
     }
 });
 
-export default Sidebar;
+export default SidebarModel;

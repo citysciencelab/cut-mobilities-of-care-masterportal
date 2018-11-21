@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent oblique layer
+ * @module ObliqueLayer
+ * @extends ./model
+ */
 import Layer from "./model";
 import Collection from "vcs-oblique/src/vcs/oblique/collection";
 import {get} from "ol/proj.js";

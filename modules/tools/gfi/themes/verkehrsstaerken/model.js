@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Verkehrsstärken
+ * @module VerkehrsStaerkenTheme
+ * @extends ../model
+ */
 import Theme from "../model";
 import "../../../graph/model";
 

@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Mietenspiegel
+ * @module MietenspiegelThemeView
+ * @extends ../view
+ */
 import ThemeView from "../view";
 import MietenspiegelTemplate from "text-loader!./template.html";
 import MietenspiegelFormularTemplate from "text-loader!./template-formular.html";

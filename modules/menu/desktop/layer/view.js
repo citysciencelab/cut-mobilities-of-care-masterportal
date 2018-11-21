@@ -1,3 +1,8 @@
+/**
+ * @description View for layer in default and custom tree in desktop mode
+ * @module LayerView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./template.html";
 
 const LayerView = Backbone.View.extend({

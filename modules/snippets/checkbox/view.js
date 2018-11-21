@@ -1,3 +1,8 @@
+/**
+ * @description Module to create checkbox snippet
+ * @module CheckboxSnippetView
+ * @extends Backbone.View
+ */
 import Model from "./model";
 import Template from "text-loader!./template.html";
 import "bootstrap-toggle";

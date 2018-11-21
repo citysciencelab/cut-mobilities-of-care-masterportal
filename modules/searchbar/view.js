@@ -1,3 +1,8 @@
+/**
+ * @description Module to create searchbar
+ * @module SearchbarView
+ * @extends Backbone.View
+ */
 import SearchbarTemplate from "text-loader!./template.html";
 import TemplateTable from "text-loader!./templateTable.html";
 import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedList.html";

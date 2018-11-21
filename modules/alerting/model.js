@@ -1,3 +1,8 @@
+/**
+ * @description Module to manage Alerts
+ * @module AlertingModel
+ * @extends Backbone.Model
+ */
 const AlertingModel = Backbone.Model.extend({
     defaults: {
         // http://getbootstrap.com/components/#alerts-examples

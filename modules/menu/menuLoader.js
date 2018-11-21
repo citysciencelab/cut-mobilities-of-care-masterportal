@@ -1,3 +1,8 @@
+/**
+ * @description Model to load table mode
+ * @module MenuLoader
+ * @extends Backbone.Model
+ */
 import LightMenu from "./desktop/listViewLight";
 import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";

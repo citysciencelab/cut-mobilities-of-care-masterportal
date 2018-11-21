@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent any layer
+ * @module HeatmapLayer
+ * @extends .././item
+ */
 import Item from ".././item";
 
 const Layer = Item.extend({

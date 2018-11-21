@@ -1,3 +1,8 @@
+/**
+ * @description Module to derive Coordinated by Clicking into map
+ * @module CoordPopup
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";

@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent sensor layer
+ * @module SensorLayer
+ * @extends ./model
+ */
 import Layer from "./model";
 import mqtt from "mqtt";
 import moment from "moment";

@@ -1,3 +1,8 @@
+/**
+ * @description Module to create bkg search
+ * @module BKGSearchModel
+ * @extends Backbone.Model
+ */
 import "../model";
 
 const BKGSearchModel = Backbone.Model.extend({

@@ -1,3 +1,8 @@
+/**
+ * @description GFI-Theme for Trinkwasser
+ * @module TrinkwasserTheme
+ * @extends ../model
+ */
 import Theme from "../model";
 
 const TrinkwasserTheme = Theme.extend({

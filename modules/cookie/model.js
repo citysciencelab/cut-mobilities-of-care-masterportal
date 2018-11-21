@@ -1,3 +1,8 @@
+/**
+ * @description Module to write Cookies
+ * @module CookieModel
+ * @extends Backbone.Model
+ */
 const CookieModel = Backbone.Model.extend({
     defaults: {
         approved: false

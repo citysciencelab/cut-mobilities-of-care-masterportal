@@ -1,3 +1,8 @@
+/**
+ * @description Module to count Clicks
+ * @module ClickCounterView
+ * @extends Backbone.View
+ */
 import ClickCounterModel from "./model";
 
 const ClickCounterView = Backbone.View.extend({

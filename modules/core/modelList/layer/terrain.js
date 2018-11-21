@@ -1,3 +1,8 @@
+/**
+ * @description Module to represent terrain layer
+ * @module TerrainLayer
+ * @extends ./model
+ */
 import Layer from "./model";
 
 const TerrainLayer = Layer.extend({

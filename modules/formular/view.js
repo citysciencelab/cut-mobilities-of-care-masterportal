@@ -1,7 +1,12 @@
+/**
+ * @description Module to build formular to request grenznachweis
+ * @module GrenznachweisView
+ * @extends Backbone.View
+ */
 import Grenznachweistemplate from "text-loader!./grenznachweis.html";
 import Grenznachweiscss from "text-loader!./grenznachweis.less";
 
-const FormularView = Backbone.View.extend({
+const GrenznachweisView = Backbone.View.extend({
     events: {
         // anonymisierte Events
         "keyup input[type=text]": "keyup",
@@ -51,4 +56,4 @@ const FormularView = Backbone.View.extend({
     }
 });
 
-export default FormularView;
+export default GrenznachweisView;

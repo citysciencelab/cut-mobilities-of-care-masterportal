@@ -1,3 +1,8 @@
+/**
+ * @description View for Routing-Button in GFI
+ * @module RoutingButtonView
+ * @extends Backbone.View
+ */
 import RoutingButtonTemplate from "text-loader!./template.html";
 import RoutingButtonModel from "./model";
 

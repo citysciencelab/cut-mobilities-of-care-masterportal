@@ -1,3 +1,8 @@
+/**
+ * @description View for tools in table mode
+ * @module ToolView
+ * @extends Backbone.View
+ */
 import ToolTemplate from "text-loader!./tooltemplate.html";
 
 const ToolView = Backbone.View.extend({

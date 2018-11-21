@@ -1,3 +1,8 @@
+/**
+ * @description Module to animate commuter flows
+ * @module AnimationView
+ * @extends Backbone.View
+ */
 import AnimationTemplate from "text-loader!./template.html";
 
 const AnimationView = Backbone.View.extend({

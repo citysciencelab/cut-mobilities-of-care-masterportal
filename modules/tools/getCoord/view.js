@@ -1,3 +1,8 @@
+/**
+ * @description Module to derive Coordinated by Clicking into map
+ * @module GetCoord
+ * @extends Backbone.View
+ */
 import GetCoordTemplate from "text-loader!./template.html";
 
 const GetCoord = Backbone.View.extend({

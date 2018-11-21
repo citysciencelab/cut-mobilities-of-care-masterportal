@@ -1,3 +1,8 @@
+/**
+ * @description Module to create searchbar
+ * @module SearchbarModel
+ * @extends Backbone.Model
+ */
 const SearchbarModel = Backbone.Model.extend({
     defaults: {
         placeholder: "Suche",

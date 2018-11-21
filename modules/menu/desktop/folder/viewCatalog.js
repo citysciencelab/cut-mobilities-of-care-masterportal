@@ -1,3 +1,8 @@
+/**
+ * @description View for Catalogue in custom and default tree in desktop mode
+ * @module FolderView
+ * @extends Backbone.View
+ */
 import Template from "text-loader!./templateCatalog.html";
 
 const FolderView = Backbone.View.extend({

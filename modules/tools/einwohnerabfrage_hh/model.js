@@ -1,3 +1,8 @@
+/**
+ * @description Tool to request inhabitants from drawn geometry
+ * @module EinwohnerabfrageModel
+ * @extends ../../core/modelList/tool/model
+ */
 import Tool from "../../core/modelList/tool/model";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";
@@ -7,7 +12,7 @@ import {Draw} from "ol/interaction.js";
 import {createBox} from "ol/interaction/Draw.js";
 import {Circle, Polygon} from "ol/geom.js";
 
-const Einwohnerabfrage = Tool.extend({
+const EinwohnerabfrageModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         renderToWindow: true,
@@ -572,4 +577,4 @@ const Einwohnerabfrage = Tool.extend({
     }
 });
 
-export default Einwohnerabfrage;
+export default EinwohnerabfrageModel;

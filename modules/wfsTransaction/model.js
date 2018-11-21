@@ -1,3 +1,8 @@
+/**
+ * @description Model to do wfstransaction on WFST
+ * @module WFSTransaction
+ * @extends Backbone.Model
+ */
 import {WFS} from "ol/format.js";
 
 const WFSTransaction = Backbone.Model.extend({

@@ -1,8 +1,13 @@
+/**
+ * @description Tool to download drawn features
+ * @module DownloadModel
+ * @extends ../../core/modelList/tool/model
+ */
 import proj4 from "proj4";
 import {KML} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 
-const Download = Tool.extend({
+const DownloadModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         id: "download",
         renderToWindow: true
@@ -432,4 +437,4 @@ const Download = Tool.extend({
     }
 });
 
-export default Download;
+export default DownloadModel;

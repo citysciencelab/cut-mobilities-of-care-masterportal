@@ -1,7 +1,8 @@
-// define(function (require) {
-
-//     var ButtonObliqueTemplate = require("text-loader!./template.html"),
-//         ButtonObliqueView;
+/**
+ * @description Control to activate oblique-mode (Schrägluftbilder)
+ * @module ButtonObliqueView
+ * @extends Backbone.View
+ */
 import ButtonObliqueTemplate from "text-loader!./template.html";
 
 const ButtonObliqueView = Backbone.View.extend({
