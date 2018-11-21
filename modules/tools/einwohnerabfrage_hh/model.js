@@ -6,6 +6,7 @@ import Overlay from "ol/Overlay.js";
 import {Draw} from "ol/interaction.js";
 import {createBox} from "ol/interaction/Draw.js";
 import {Circle, Polygon} from "ol/geom.js";
+import {fromCircle} from "ol/geom/Polygon.js";
 
 const Einwohnerabfrage = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -465,7 +466,7 @@ const Einwohnerabfrage = Tool.extend({
             geometry = feature.getGeometry();
 
         if (geometry.getType() === "Circle") {
-            feature.setGeometry(Polygon.fromCircle(geometry));
+            feature.setGeometry(fromCircle(geometry));
         }
         return reader.writeGeometryObject(feature.getGeometry());
     },
