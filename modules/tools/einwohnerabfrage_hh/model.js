@@ -5,7 +5,7 @@ import {GeoJSON} from "ol/format.js";
 import Overlay from "ol/Overlay.js";
 import {Draw} from "ol/interaction.js";
 import {createBox} from "ol/interaction/Draw.js";
-import {Circle, Polygon} from "ol/geom.js";
+import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
 const Einwohnerabfrage = Tool.extend({
