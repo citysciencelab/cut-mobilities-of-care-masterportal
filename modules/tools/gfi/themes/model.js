@@ -93,7 +93,7 @@ const Theme = Backbone.Model.extend({
             tagNameListSorted = _.sortBy(tagNameList, function (name) {
                 return name;
             }),
-            multiTags = _.filter(tagNameListSorted, function (tagName, index, list) {
+            multiTags = tagNameListSorted.filter(function (tagName, index, list) {
                 return tagName === list[index + 1];
             }),
             multiTagsUnique = _.uniq(multiTags);

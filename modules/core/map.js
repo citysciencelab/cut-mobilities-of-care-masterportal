@@ -464,7 +464,7 @@ const map = Backbone.Model.extend({
 
     // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
     setImportDrawMeasureLayersOnTop: function (layers) {
-        var layersOnTop = _.filter(layers.getArray(), function (layer) {
+        var layersOnTop = layers.getArray().filter(function (layer) {
             return layer.get("alwaysOnTop") === true;
         });
 
@@ -494,7 +494,7 @@ const map = Backbone.Model.extend({
             layerFeatures = olLayer.getSource().getFeatures();
         }
 
-        features = _.filter(layerFeatures, function (feature) {
+        features = layerFeatures.filter(function (feature) {
             return _.contains(ids, feature.getId());
         });
         if (features.length > 0) {

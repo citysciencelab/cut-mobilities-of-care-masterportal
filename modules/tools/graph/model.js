@@ -212,7 +212,7 @@ const GraphModel = Backbone.Model.extend({
      * @returns {void}
      */
     appendDataToSvg: function (svg, data, className, d3line) {
-        var dataToAdd = _.filter(data, function (obj) {
+        var dataToAdd = data.filter(function (obj) {
             return obj.yAttrToShow !== "-";
         });
 
@@ -327,7 +327,7 @@ const GraphModel = Backbone.Model.extend({
     },
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
-        var dat = _.filter(data, function (obj) {
+        var dat = data.filter(function (obj) {
             return obj[yAttrToShow] !== "-";
         });
 

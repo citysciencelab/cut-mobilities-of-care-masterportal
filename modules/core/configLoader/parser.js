@@ -357,7 +357,7 @@ const Parser = Backbone.Model.extend({
      * @return {[type]} [description]
      */
     createModelList: function () {
-        new ModelList(_.filter(this.get("itemList"), function (model) {
+        new ModelList(this.get("itemList").filter(function (model) {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -469,7 +469,7 @@ const Parser = Backbone.Model.extend({
     },
 
     getItemsByMetaID: function (metaID) {
-        var layers = _.filter(this.get("itemList"), function (item) {
+        var layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
