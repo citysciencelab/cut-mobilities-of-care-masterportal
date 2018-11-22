@@ -4,7 +4,15 @@ const GeoJsonQueryModel = SourceModel.extend({
     initialize: function () {
         this.initializeFunction();
     },
-
+    /**
+     * Gets the features for the Layer asscociated with this Query
+     * and proceeds to build the datastructure including the snippets for this query
+     * @param  {string} layerObject - WFS Url
+     * @param  {string} url - WFS Url
+     * @param  {string} featureType - WFS FeatureType
+     * @param  {string} version - WFS Version
+     * @returns {void}
+     */
     buildQueryDatastructureByType: function () {
         var features = this.get("features"),
             snippetType = this.get("snippetType"),
@@ -15,6 +23,12 @@ const GeoJsonQueryModel = SourceModel.extend({
         this.createSnippets(featureAttributesMap);
     },
 
+    /**
+     * Creates a feature set with only one snippetType
+     * @param  {array} features - GeoJson Features from file
+     * @param  {string} snippetType - snippetType from filter configuration
+     * @returns {void}
+     */
     createFeatureAttributesMap: function (features, snippetType) {
         var featureAttributesMap = [],
             firstFeature = !_.isUndefined(features) ? features[0] : undefined,

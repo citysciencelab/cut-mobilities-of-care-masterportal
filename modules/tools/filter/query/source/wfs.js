@@ -42,7 +42,7 @@ const WfsQueryModel = SourceModel.extend({
         });
     },
     /**
-     * Extract Attribute names and types from DescribeFeatureType-Response
+     * Extract Attribute names and types from DescribeFeatureType-Response and creates the snippets
      * @param  {XML} response response xml from ajax call
      * @return {object} - Mapobject containing names and types
      */
