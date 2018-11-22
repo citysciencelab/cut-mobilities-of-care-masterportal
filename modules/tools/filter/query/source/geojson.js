@@ -1,31 +1,8 @@
 import SourceModel from "./model";
-import {intersects} from "ol/extent.js";
-import GeoJSON from "ol/format/GeoJSON";
 
 const GeoJsonQueryModel = SourceModel.extend({
     initialize: function () {
         this.initializeFunction();
-    },
-
-    /**
-     * delivers the layerSource from an layer,
-     * by grouplayer delivers the layerSource from child by layerid
-     * @param {object} layerSource from layer
-     * @param {number} layerId id from layer
-     * @returns {object} layerSource
-     */
-    retrieveLayerSource: function (layerSource, layerId) {
-        var layer,
-            groupLayerSource = layerSource;
-
-        if (_.isArray(layerSource)) {
-            layer = _.find(layerSource, function (child) {
-                return child.get("id") === layerId;
-            });
-            groupLayerSource = layer.get("layerSource");
-        }
-
-        return groupLayerSource;
     },
 
     buildQueryDatastructureByType: function () {
