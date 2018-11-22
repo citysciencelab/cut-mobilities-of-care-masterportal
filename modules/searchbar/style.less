@@ -196,10 +196,10 @@ li.results {
     }
     .dropdown-menu-search {
         background-clip: padding-box;
-        background-color: @background_color_2;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        background-color: #F2F2F2;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
         float: left;
-        font-size: 13px;
+        font-size: 17px;
         list-style: outside none none;
         margin: 2px 0 0;
         min-width: 200px;
@@ -208,6 +208,8 @@ li.results {
         z-index: 1001;
         padding: 0;
         top: auto;
+        font-family: @font_family_3;
+        border-radius: 12px;
         .glyphicon {
             color: @color_1;
             padding-right: 12px;
@@ -236,6 +238,9 @@ li.results {
                 cursor: pointer;
                 background-color: @background_color_3;
             }
+        }
+        .list-group-item {
+            font-family: @font_family_3;
         }
     }
     #searchInput {
