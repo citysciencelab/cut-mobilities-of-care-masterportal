@@ -591,10 +591,18 @@ const SearchbarView = Backbone.View.extend({
     },
 
     showMarker: function (evt) {
-        var hitID = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+        var hitId = evt.currentTarget.id,
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
 
-        Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+        if (_.has(hit, "triggerEvent")) {
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+        }
+        else if (_.has(hit, "coordinate")) {
+            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+        }
+        else {
+            console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
+        }
     },
 
     hideMarker: function () {
