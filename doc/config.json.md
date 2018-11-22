@@ -1500,6 +1500,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleWFS gesucht werden soll .|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md)zu.|
+|hitTolerance|nein|Number||Toleranz in Pixel beim Abrufen von Feature Infos.|
 
 
 #### filterOptions ####
