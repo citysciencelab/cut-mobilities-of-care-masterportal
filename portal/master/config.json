@@ -400,7 +400,7 @@
         {
           "id": ["713", "714", "715", "716"],
           "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "12883",
