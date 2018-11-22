@@ -13,7 +13,6 @@ const GeoJsonQueryModel = QueryModel.extend({
     },
     /**
      * gathers Information for this Query including the wfs features and metadata
-     * waits for WFS features to be loaded if they aren't loaded already.
      * @return {ol.Feature[]} openlayers Features
      */
     prepareQuery: function () {
