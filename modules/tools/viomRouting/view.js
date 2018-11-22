@@ -29,8 +29,10 @@ const RoutingView = Backbone.View.extend({
         channel.on({
             "setRoutingDestination": this.setRoutingDestination
         }, this);
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     id: "routingWin",
     startAdressePosition: function () {

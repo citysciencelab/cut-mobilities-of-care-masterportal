@@ -9,8 +9,9 @@ const wfsFeatureFilterView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isActive": this.render
         }, this);
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     id: "wfsFilterWin",
     template: _.template(wfsFeatureFilterTemplate),
