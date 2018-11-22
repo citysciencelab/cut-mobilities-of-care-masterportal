@@ -11,26 +11,6 @@ const SourceModel = QueryModel.extend({
     },
 
     /**
-     * delivers the layerSource from an layer,
-     * by grouplayer delivers the layerSource from child by layerid
-     * @param {object} layerSource from layer
-     * @param {number} layerId id from layer
-     * @returns {object} layerSource
-     */
-    retrieveLayerSource: function (layerSource, layerId) {
-        var layer,
-            groupLayerSource = layerSource;
-
-        if (_.isArray(layerSource)) {
-            layer = _.find(layerSource, function (child) {
-                return child.get("id") === layerId;
-            });
-            groupLayerSource = layer.get("layerSource");
-        }
-
-        return groupLayerSource;
-    },
-    /**
      * gathers Information for this Query including the wfs features and metadata
      * waits for WFS features to be loaded if they aren't loaded already.
      * @return {ol.Feature[]} openlayers Features
@@ -123,16 +103,13 @@ const SourceModel = QueryModel.extend({
      * @returns {void}
      */
     buildQueryDatastructure: function () {
-        var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")}),
-            featureAttributesMap;
+        var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
 
         if (this.get("searchInMapExtent") === true) {
             this.addSearchInMapExtentSnippet();
         }
         if (!_.isUndefined(layerObject)) {
-
-            featureAttributesMap = this.buildQueryDatastructureByType(layerObject);
-            this.createSnippets(featureAttributesMap);
+            this.buildQueryDatastructureByType(layerObject);
         }
     },
     /**

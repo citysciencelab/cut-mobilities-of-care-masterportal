@@ -17,9 +17,12 @@ const WfsQueryModel = SourceModel.extend({
     buildQueryDatastructureByType: function (layerObject) {
         var url = Radio.request("Util", "getProxyURL", layerObject.get("url")),
             featureType = layerObject.get("featureType"),
-            version = layerObject.get("version");
+            version = layerObject.get("version"),
+            featureAttributesMap = [];
 
-        this.requestMetadata(url, featureType, version, this.parseResponse);
+        featureAttributesMap = this.requestMetadata(url, featureType, version, this.parseResponse);
+
+        return featureAttributesMap;
     },
     /**
      * Führt DescriptFeatureType Request aus
@@ -50,7 +53,8 @@ const WfsQueryModel = SourceModel.extend({
         _.each(elements, function (element) {
             featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
         });
-        return featureAttributesMap;
+
+        this.createSnippets(featureAttributesMap);
     }
 });
 

@@ -11,7 +11,8 @@ const GeoJsonQueryModel = SourceModel.extend({
             featureAttributesMap = [];
 
         featureAttributesMap = this.createFeatureAttributesMap(features, snippetType);
-        return featureAttributesMap;
+
+        this.createSnippets(featureAttributesMap);
     },
 
     createFeatureAttributesMap: function (features, snippetType) {
