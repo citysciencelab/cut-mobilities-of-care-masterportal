@@ -187,7 +187,8 @@
         "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
-            "glyphicon": "glyphicon-wrench"
+            "glyphicon": "glyphicon-wrench",
+            "onlyDesktop": true
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
