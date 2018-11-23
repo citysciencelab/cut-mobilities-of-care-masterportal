@@ -289,29 +289,32 @@ const ModelList = Backbone.Collection.extend({
     * @return {undefined}
     */
     setVisibleByParentIsExpanded: function (parentId) {
-        var children = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+        var parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
-            this.setAllDescendantsInvisible(children);
+            this.setAllDescendantsInvisible(parentId);
         }
         else {
-            this.setAllDescendantsVisible(children);
+            this.setAllDescendantsVisible(parentId);
         }
     },
-    setAllDescendantsInvisible: function (children) {
+    setAllDescendantsInvisible: function (parentId) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
-                this.setAllDescendantsInvisible(this.where({parentId: child.get("id")}));
+                this.setAllDescendantsInvisible(child.get("id"));
             }
         }, this);
     },
-    setAllDescendantsVisible: function (children) {
+    setAllDescendantsVisible: function (parentId) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(true);
             if (child.get("type") === "folder" && child.get("isExpanded")) {
-                this.setAllDescendantsVisible(this.where({parentId: child.get("id")}));
+                this.setAllDescendantsVisible(child.get("id"));
             }
         }, this);
     },
