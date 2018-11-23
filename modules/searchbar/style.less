@@ -234,23 +234,30 @@ li.results {
             font-size: 17px;
             color: #808080;
             background-color: #F2F2F2;
-
-            &:hover {
-                opacity: 1;
-                background-color: #e0e0e0;
-            }
             #searchInputLi {
                 font-family: @font_family_3;
                 font-size: 17px;
             }
         }
-        .list-group-item:first-child{
+        li {
+            &:hover {
+                opacity: 1;
+                background-color: #e0e0e0;
+            }
+        }
+        .list-group-item:first-child {
             border-top-right-radius: 12px;
             border-top-left-radius: 12px;
         }
-        .list-group-item:last-child{
+        .list-group-item:last-child {
             border-bottom-right-radius: 12px;
             border-bottom-left-radius: 12px;
+        }
+    }
+    li.results {
+        &:hover {
+            opacity: 1;
+            background-color: #a4a4a4;
         }
     }
     #searchInputUL {
