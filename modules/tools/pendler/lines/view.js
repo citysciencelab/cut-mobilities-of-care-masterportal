@@ -15,11 +15,9 @@ const LinesView = Backbone.View.extend({
             // ändert sich der Fensterstatus wird neu gezeichnet
             "change:isActive": this.render,
             // ändert sich eins dieser Attribute wird neu gezeichnet
-            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:animating change:pendlerLegend": this.render
+            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:animating change:pendlerLegend": this.render,
+            "render": this.render
         });
-        if (this.model.get("isActive") === true) {
-            this.render(this.model, true);
-        }
     },
 
     tagName: "form",
