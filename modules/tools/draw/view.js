@@ -56,7 +56,8 @@ const DrawToolView = Backbone.View.extend({
      * @return {Backbone.View} DrawView
      */
     render: function (model, isActive) {
-        if (isActive) {
+
+        if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
         }
         else {
