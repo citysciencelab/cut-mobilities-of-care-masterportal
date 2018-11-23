@@ -3,7 +3,6 @@ import ValueModel from "../value/model";
 
 const MultiCheckboxModel = SnippetModel.extend({
     defaults: {
-        // init dropdown values
         values: [],
         preselectedValues: []
     },
@@ -64,7 +63,7 @@ const MultiCheckboxModel = SnippetModel.extend({
 
     /**
      * checks the value models if they are selected or not
-     * @param {string|string[]} values - selected value(s) in the dropdown list
+     * @param {string|string[]} values - selected value(s) in the multicheckbox list
      * @param {boolean} checked - is checkbox checked or unchecked
      * @returns {void}
      */
