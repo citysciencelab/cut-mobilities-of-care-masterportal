@@ -8,7 +8,7 @@ const WfsQueryModel = SourceModel.extend({
     /**
      * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
      * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} layerObject - WFS Url
+     * @param  {string} layerObject - WFS LayerObject
      * @param  {string} url - WFS Url
      * @param  {string} featureType - WFS FeatureType
      * @param  {string} version - WFS Version
