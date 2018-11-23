@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 import {loadApp} from "./app";
 import "../css/bootstrap.less";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
