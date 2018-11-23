@@ -7,10 +7,8 @@ const GeoJsonQueryModel = SourceModel.extend({
     /**
      * Gets the features for the Layer asscociated with this Query
      * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} layerObject - WFS Url
-     * @param  {string} url - WFS Url
-     * @param  {string} featureType - WFS FeatureType
-     * @param  {string} version - WFS Version
+     * @param  {string} features - GeoJSON features
+     * @param  {string} snippetType - GeoJSON snippetType
      * @returns {void}
      */
     buildQueryDatastructureByType: function () {

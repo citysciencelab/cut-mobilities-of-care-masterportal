@@ -11,8 +11,7 @@ const SourceModel = QueryModel.extend({
     },
 
     /**
-     * gathers Information for this Query including the wfs features and metadata
-     * waits for WFS features to be loaded if they aren't loaded already.
+     * gathers Information for this Query including the features and metadata
      * @return {ol.Feature[]} openlayers Features
      */
     prepareQuery: function () {
@@ -97,9 +96,9 @@ const SourceModel = QueryModel.extend({
     /**
      * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
      * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} url - WFS Url
-     * @param  {string} featureType - WFS FeatureType
-     * @param  {string} version - WFS Version
+     * @param  {string} url - Url
+     * @param  {string} featureType - FeatureType
+     * @param  {string} version -  Version
      * @returns {void}
      */
     buildQueryDatastructure: function () {
@@ -112,23 +111,7 @@ const SourceModel = QueryModel.extend({
             this.buildQueryDatastructureByType(layerObject);
         }
     },
-    /**
-     * Führt DescriptFeatureType Request aus
-     * @param  {string} url         url to wfs
-     * @param  {string} featureType featuretype of wfs
-     * @param  {string} version     version of wfs
-     * @param  {function} callback  callbackfunction for ajaxrequest
-     * @return {void}
-     */
-    requestMetadata: function (url, featureType, version, callback) {
-        $.ajax({
-            url: url,
-            context: this,
-            data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-            // parent (QueryModel) function
-            success: callback
-        });
-    },
+
     /**
      * Extract Attribute names and types from DescribeFeatureType-Response
      * @param  {XML} response response xml from ajax call
