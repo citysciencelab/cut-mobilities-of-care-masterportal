@@ -46,9 +46,6 @@ const FilterView = Backbone.View.extend({
             }
             this.render();
         }
-        if (this.model.get("isActive") === true) {
-            this.render();
-        }
     },
     id: "filter-view",
     template: _.template(Template),
