@@ -29,6 +29,7 @@ const CompareFeaturesView = Backbone.View.extend({
             "renderFeedbackModal": this.renderFeedbackModal
         });
         document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
+
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
