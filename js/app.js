@@ -309,7 +309,7 @@ function loadApp () {
                 }
                 case "overviewmap": {
                     if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id);
+                        element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView({el: element});
                     }
                     break;
