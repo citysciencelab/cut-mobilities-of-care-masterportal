@@ -168,7 +168,7 @@ const GeoJSONLayer = Layer.extend({
         else {
             this.set("styleFunction", function (feature) {
                 return stylelistmodel.createStyle(feature, this.get("isClustered"));
-            }.bind(this));
+            });
         }
     },
 
