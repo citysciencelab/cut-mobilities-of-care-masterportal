@@ -402,10 +402,9 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     startDownloadTool: function () {
-        var features = this.get("layer").getSource().getFeatures(),
-            downloadView = this.get("downloadView");
+        var features = this.get("layer").getSource().getFeatures();
 
-        downloadView.start({
+        Radio.trigger("download", "start", {
             data: features,
             formats: ["kml"],
             caller: {
@@ -521,15 +520,6 @@ const DrawTool = Tool.extend({
      */
     setModifyInteraction: function (value) {
         this.set("modifyInteraction", value);
-    },
-
-    /**
-     * setter for modifyInteraction
-     * @param {ol/interaction/modify} value - modifyInteraction
-     * @return {void}
-     */
-    setDownloadView: function (value) {
-        this.set("downloadView", value);
     }
 });
 

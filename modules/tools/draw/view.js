@@ -37,11 +37,13 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     initialize: function () {
+        var downloadModel = Radio.request("ModelList", "getModelByAttributes", {id: "download"});
+
         this.listenTo(this.model, {
             "change:isActive": this.render
         });
 
-        this.model.setDownloadView(new DownloadView({model: new DownloadModel()}));
+        new DownloadView({model: downloadModel});
 
         // Bestätige, dass das Modul geladen wurde
         Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
