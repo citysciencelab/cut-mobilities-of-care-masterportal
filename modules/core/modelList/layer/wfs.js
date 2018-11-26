@@ -58,6 +58,7 @@ const WFSLayer = Layer.extend({
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
+            hitTolerance: this.get("hitTolerance"),
             altitudeMode: "clampToGround"
         }));
 
