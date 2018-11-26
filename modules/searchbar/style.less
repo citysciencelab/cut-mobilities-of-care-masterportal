@@ -165,6 +165,10 @@ li.results {
     }
 }
 #searchInputUL {
+    div{
+        opacity: 1;
+        border-radius: 0px;
+    }
     .selected {
         background: rgb(8, 88, 158);
         color: @color_4;
@@ -248,16 +252,18 @@ li.results {
                 background-color: #e0e0e0;
             }
         }
-        .list-group-item:first-child {
+        >.list-group-item:first-child {
             border-top-right-radius: 12px;
             border-top-left-radius: 12px;
         }
-        .list-group-item:last-child {
+        >div:last-child > .list-group-item:last-child, > .list-group-item:nth-last-child(2):not(.open):last-of-type {
             border-bottom-right-radius: 12px;
             border-bottom-left-radius: 12px;
         }
     }
     li.results {
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
         &:hover {
             opacity: 1;
             background-color: #c0c0c0;
