@@ -298,6 +298,14 @@ const ModelList = Backbone.Collection.extend({
             this.setAllDescendantsVisible(parentId);
         }
     },
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to invisible in the tree
+     * in mobile mode folders are closed
+     * @param {string} parentId - id of the parent model
+     * @param {boolean} isMobile - is the mobile tree visible
+     * @returns {void}
+     */
     setAllDescendantsInvisible: function (parentId, isMobile) {
         var children = this.where({parentId: parentId});
 
@@ -311,6 +319,12 @@ const ModelList = Backbone.Collection.extend({
             }
         }, this);
     },
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to visible in the tree
+     * @param {string} parentId - id of the parent model
+     * @returns {void}
+     */
     setAllDescendantsVisible: function (parentId) {
         var children = this.where({parentId: parentId});
 
