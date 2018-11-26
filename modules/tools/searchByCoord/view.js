@@ -34,7 +34,7 @@ const SearchByCoordView = Backbone.View.extend({
     },
     setFocusToCoordSystemInput: function () {
         this.$("#coordSystemField").focus();
-        this.render();
+        this.render(this.model, true);
     },
     validateCoords: function () {
         this.model.validateCoordinates();
