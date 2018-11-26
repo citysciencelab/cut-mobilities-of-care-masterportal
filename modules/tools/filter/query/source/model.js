@@ -93,14 +93,6 @@ const SourceModel = QueryModel.extend({
         return groupLayerSource;
     },
 
-    /**
-     * Sends a DescriptFeatureType Request for the Layer asscociated with this Query
-     * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} url - Url
-     * @param  {string} featureType - FeatureType
-     * @param  {string} version -  Version
-     * @returns {void}
-     */
     buildQueryDatastructure: function () {
         var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
 

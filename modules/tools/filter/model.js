@@ -219,10 +219,6 @@ const FilterModel = Tool.extend({
             queryObject,
             oneQuery;
 
-        if (this.get("setParametricURL") === true) {
-            queryObjects = Radio.request("ParametricURL", "getFilter");
-        }
-
         _.each(queries, function (query) {
             oneQuery = query;
 
