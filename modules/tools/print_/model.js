@@ -158,7 +158,6 @@ const PrintModel = Tool.extend({
         spec = spec.toJSON();
 
         spec = _.omit(spec, "uniqueIdList");
-        console.log(spec);
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
 
