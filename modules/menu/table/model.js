@@ -11,7 +11,6 @@ const TableNavModel = Backbone.Model.extend({
             },
             "setActiveElement": this.setActiveElement
         }, this);
-
         this.listenTo(channel, {
             "appendFilter": this.appendFilterContent
         });

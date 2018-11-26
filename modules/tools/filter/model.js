@@ -1,4 +1,5 @@
 import WfsQueryModel from "./query/source/wfs";
+import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
@@ -214,11 +215,12 @@ const FilterModel = Tool.extend({
     },
 
     createQueries: function (queries) {
-        var queryObjects = Radio.request("ParametricURL", "getFilter");
+        var queryObjects,
+            queryObject,
+            oneQuery;
 
         _.each(queries, function (query) {
-            var queryObject,
-                oneQuery = query;
+            oneQuery = query;
 
             if (!_.isUndefined(queryObjects)) {
                 queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
@@ -234,32 +236,44 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
+            query = this.getQueryByTyp(layer.get("typ"), model);
+            if (!_.isNull(query)) {
+                if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                    _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+                }
 
-            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
-                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
-            }
+                if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                    query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+                }
 
-            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
-                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
-            }
+                if (!_.isUndefined(this.get("sendToRemote"))) {
+                    query.set("sendToRemote", this.get("sendToRemote"));
+                }
+                if (!_.isUndefined(this.get("minScale"))) {
+                    query.set("minScale", this.get("minScale"));
+                }
 
-            if (!_.isUndefined(this.get("sendToRemote"))) {
-                query.set("sendToRemote", this.get("sendToRemote"));
-            }
-            if (!_.isUndefined(this.get("minScale"))) {
-                query.set("minScale", this.get("minScale"));
-            }
+                if (query.get("isSelected")) {
+                    query.setIsDefault(true);
+                    query.setIsActive(true);
+                }
 
-            if (query.get("isSelected")) {
-                query.setIsDefault(true);
-                query.setIsActive(true);
+                this.get("queryCollection").add(query);
             }
-
-            this.get("queryCollection").add(query);
         }
     },
 
+    getQueryByTyp: function (layerTyp, model) {
+        var query = null;
+
+        if (layerTyp === "WFS" || layerTyp === "GROUP") {
+            query = new WfsQueryModel(model);
+        }
+        else if (layerTyp === "GeoJSON") {
+            query = new GeoJsonQueryModel(model);
+        }
+        return query;
+    },
     setIsActive: function (value) {
         this.set("isActive", value);
     },
