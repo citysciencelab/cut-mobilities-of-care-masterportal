@@ -740,6 +740,9 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {array} dataByActualTimeStep
      */
     filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
+        if (Array.isArray(dayData) === false) {
+            return [];
+        }
         return dayData.filter(function (data) {
             var dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 

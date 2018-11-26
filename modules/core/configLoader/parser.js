@@ -32,7 +32,6 @@ const Parser = Backbone.Model.extend({
     },
 
     initialize: function () {
-
         var channel = Radio.channel("Parser");
 
         channel.reply({
