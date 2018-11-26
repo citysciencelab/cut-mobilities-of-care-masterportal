@@ -214,7 +214,6 @@ const DefaultTreeParser = Parser.extend({
             glyphicon: "glyphicon-plus-sign"
         });
         _.each(tree, function (category) {
-            // console.info(this.get("isFolderSelectable"));
             // Unterordner erzeugen
             this.addItems(category.folder, {type: "folder",
                 parentId: category.id,
