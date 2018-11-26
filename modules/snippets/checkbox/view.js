@@ -1,4 +1,3 @@
-import Model from "./model";
 import Template from "text-loader!./template.html";
 import TemplateClassic from "text-loader!./templateClassic.html";
 import "bootstrap-toggle";

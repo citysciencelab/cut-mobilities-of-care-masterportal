@@ -13,7 +13,7 @@ describe("filter/query/source/geojson", function () {
         testFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
     });
     describe("createFeatureAttributesMap", function () {
-        it("***", function () {
+        it("should return deep equal match with array if type is: \"Test\"", function () {
             expect(model.createFeatureAttributesMap(testFeatures, "Test")).to.deep.equal([
                 {name: "kh_nummer", type: "Test"},
                 {name: "name", type: "Test"},
@@ -32,7 +32,7 @@ describe("filter/query/source/geojson", function () {
             ]);
         });
 
-        it("snippetType undefined", function () {
+        it("should return deep equal match with array if type is: \"undefined\"", function () {
             expect(model.createFeatureAttributesMap(testFeatures, undefined)).to.deep.equal([
                 {name: "kh_nummer", type: "string"},
                 {name: "name", type: "string"},
@@ -51,11 +51,11 @@ describe("filter/query/source/geojson", function () {
             ]);
         });
 
-        it("empty features array", function () {
+        it("should return empty array if there no features", function () {
             expect(model.createFeatureAttributesMap([], "Test")).to.be.an("array").that.is.empty;
         });
 
-        it("snippetType integer", function () {
+        it("should return deep equal match with array if type is integer: 123", function () {
             expect(model.createFeatureAttributesMap(testFeatures, 123)).to.deep.equal([
                 {name: "kh_nummer", type: "123"},
                 {name: "name", type: "123"},
@@ -74,7 +74,7 @@ describe("filter/query/source/geojson", function () {
             ]);
         });
 
-        it("snippetType boolean", function () {
+        it("should return deep equal match with array if type is: false", function () {
             expect(model.createFeatureAttributesMap(testFeatures, false)).to.deep.equal([
                 {name: "kh_nummer", type: "false"},
                 {name: "name", type: "false"},
@@ -93,7 +93,7 @@ describe("filter/query/source/geojson", function () {
             ]);
         });
 
-        it("features undefined", function () {
+        it("should return empty array if there undefined features", function () {
             expect(model.createFeatureAttributesMap(undefined, "test")).to.be.an("array").that.is.empty;
         });
     });
