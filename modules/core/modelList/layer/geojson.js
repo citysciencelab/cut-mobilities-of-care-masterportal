@@ -59,7 +59,8 @@ const GeoJSONLayer = Layer.extend({
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
-            altitudeMode: "clampToGround"
+            altitudeMode: "clampToGround",
+            hitTolerance: this.get("hitTolerance")
         }));
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();

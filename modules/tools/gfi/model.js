@@ -314,7 +314,7 @@ const Gfi = Tool.extend({
                     layerFilter: function (layer) {
                         return layer.get("name") === vectorLayer.get("name");
                     },
-                    hitTolerance: 0
+                    hitTolerance: vectorLayer.get("hitTolerance")
                 }),
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 
