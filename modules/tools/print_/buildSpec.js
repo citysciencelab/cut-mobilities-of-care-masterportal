@@ -292,7 +292,7 @@ const BuildSpecModel = Backbone.Model.extend({
     buildTextStyle: function (style) {
         return {
             type: "text",
-            label: style.getText(),
+            label: !_.isUndefined(style.getText()) ? style.getText() : "",
             fontColor: this.rgbArrayToHex(style.getFill().getColor()),
             labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : "white",
             labelXOffset: -style.getOffsetX(),
@@ -445,10 +445,13 @@ const BuildSpecModel = Backbone.Model.extend({
         if (styleAttribute === "") {
             return "*";
         }
+        // cluster feature with geometry style
+        else if (feature.get("features") !== undefined) {
+            return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
+        }
         // feature with geometry style and label style
         else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-
             if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
@@ -456,10 +459,6 @@ const BuildSpecModel = Backbone.Model.extend({
             }
             // feature with geometry style
             return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
-        }
-        // cluster feature with geometry style
-        else if (feature.get("features") !== undefined) {
-            return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
         }
         // feature with geometry style
         return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
