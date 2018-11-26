@@ -292,7 +292,7 @@ const ModelList = Backbone.Collection.extend({
         var parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
-            this.setAllDescendantsInvisible(parentId);
+            this.setAllDescendantsInvisible(parentId, Radio.request("Util", "isViewMobile"));
         }
         else {
             this.setAllDescendantsVisible(parentId);
@@ -307,7 +307,7 @@ const ModelList = Backbone.Collection.extend({
                 if (isMobile) {
                     child.setIsExpanded(false, {silent: true});
                 }
-                this.setAllDescendantsInvisible(child.get("id"));
+                this.setAllDescendantsInvisible(child.get("id"), isMobile);
             }
         }, this);
     },
