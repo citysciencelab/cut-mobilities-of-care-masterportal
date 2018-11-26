@@ -298,12 +298,15 @@ const ModelList = Backbone.Collection.extend({
             this.setAllDescendantsVisible(parentId);
         }
     },
-    setAllDescendantsInvisible: function (parentId) {
+    setAllDescendantsInvisible: function (parentId, isMobile) {
         var children = this.where({parentId: parentId});
 
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
+                if (isMobile) {
+                    child.setIsExpanded(false, {silent: true});
+                }
                 this.setAllDescendantsInvisible(child.get("id"));
             }
         }, this);
