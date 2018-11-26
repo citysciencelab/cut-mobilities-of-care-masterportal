@@ -556,51 +556,90 @@ const BuildSpecModel = Backbone.Model.extend({
         }
     },
     prepareLegendAttributes: function (layerParam) {
-        var valuesArray = [];
+        var valuesArray = [],
+            typ = layerParam.legend[0].typ;
 
-        if (layerParam.legend[0].typ === "WMS" || layerParam.legend[0].typ === "WFS") {
-            _.each(layerParam.legend[0].img, function (url) {
-                var valueObj = {
-                    legendType: "",
-                    geometryType: "",
-                    imageUrl: "",
-                    color: "",
-                    label: ""
-                };
+        if (typ === "WMS") {
+            valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
+        }
+        else if (typ === "WFS") {
+            valuesArray.push(this.createWfsLegendList(layerParam.legend[0].img, layerParam.legend[0].legendname, layerParam.layerName));
+        }
+        else if (typ === "styleWMS") {
+            valuesArray.push(this.createStyleWmsLegendList(layerParam.legend[0].params));
+        }
 
-                if (layerParam.legend[0].typ === "WMS") {
-                    valueObj.legendType = "wmsGetLegendGraphic";
-                    valueObj.imageUrl = this.createLegendImageUrl("WMS", url);
-                }
-                else if (layerParam.legend[0].typ === "WFS") {
-                    if (url.indexOf("<svg") !== -1) {
-                        valueObj.color = this.getFillFromSVG(url);
-                        valueObj.legendType = "geometry";
-                        valueObj.geometryType = "polygon";
-                    }
-                    else {
-                        valueObj.legendType = "wfsImage";
-                        valueObj.imageUrl = this.createLegendImageUrl("WFS", url);
-                    }
-                }
+        return _.flatten(valuesArray);
+    },
+    createWmsLegendList: function (legendObjects) {
+        var wmsLegendList = [];
 
-                valueObj.label = layerParam.layername;
-                valuesArray.push(valueObj);
+        _.each(legendObjects, function (url) {
+            var wmsLegendObject = {
+                legendType: "wmsGetLegendGraphic",
+                geometryType: "",
+                imageUrl: this.createLegendImageUrl(url),
+                color: "",
+                label: ""
+            };
+
+            wmsLegendList.push(wmsLegendObject);
+        }, this);
+        return wmsLegendList;
+    },
+    createWfsLegendList: function (legendObjects, legendNames, layerName) {
+        var wfsLegendList = [],
+            wfsLegendObject;
+
+        if (_.isString(legendObjects)) {
+            wfsLegendObject = this.createWfsLegendObject(legendObjects, layerName);
+            wfsLegendList.push(wfsLegendObject);
+        }
+        else {
+            _.each(legendObjects, function (url, index) {
+                wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
+                wfsLegendList.push(wfsLegendObject);
             }, this);
         }
-        else if (layerParam.legend[0].typ === "styleWMS") {
-            _.each(layerParam.legend[0].params, function (styleWmsParam) {
-                valuesArray.push({
-                    legendType: "geometry",
-                    geometryType: "polygon",
-                    imageUrl: "",
-                    color: styleWmsParam.color,
-                    label: styleWmsParam.startRange + " - " + styleWmsParam.stopRange
-                });
-            });
-        }
+        return wfsLegendList;
+    },
+    createWfsLegendObject: function (url, label) {
+        var wfsLegendObject = {
+            legendType: "",
+            geometryType: "",
+            imageUrl: "",
+            color: "",
+            label: label
+        };
 
-        return valuesArray;
+        if (url.indexOf("<svg") !== -1) {
+            wfsLegendObject.color = this.getFillFromSVG(url);
+            wfsLegendObject.legendType = "geometry";
+            wfsLegendObject.geometryType = "polygon";
+        }
+        else if (url.indexOf("http") === 0) {
+            wfsLegendObject.legendType = "wmsGetLegendGraphic";
+            wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
+        }
+        else {
+            wfsLegendObject.legendType = "wfsImage";
+            wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
+        }
+        return wfsLegendObject;
+    },
+    createStyleWmsLegendList: function (legendObjects) {
+        var styleWmsLegendList = [];
+
+        _.each(legendObjects, function (styleWmsParam) {
+            styleWmsLegendList.push({
+                legendType: "geometry",
+                geometryType: "polygon",
+                imageUrl: "",
+                color: styleWmsParam.color,
+                label: styleWmsParam.startRange + " - " + styleWmsParam.stopRange
+            });
+        });
+        return styleWmsLegendList;
     },
     getFillFromSVG: function (svgString) {
         var indexOfFill = svgString.indexOf("fill:") + 5,
@@ -612,11 +651,11 @@ const BuildSpecModel = Backbone.Model.extend({
         }
         return hexColor;
     },
-    createLegendImageUrl: function (typ, path) {
+    createLegendImageUrl: function (path) {
         var url = path,
             image;
 
-        if (typ === "WFS") {
+        if (url.indexOf("http") === -1) {
             url = this.buildGraphicPath();
             image = path.substring(path.lastIndexOf("/"));
             url = url + image;
