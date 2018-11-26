@@ -16,8 +16,9 @@ const SelectView = Backbone.View.extend({
         this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
         this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.get("checkBoxRaster")});
         this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.get("checkBoxAddress")});
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     id: "einwohnerabfrage-tool",
     template: _.template(Template),
