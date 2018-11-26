@@ -84,7 +84,6 @@ const OrientationModel = Backbone.Model.extend({
         if (this.get("zoomMode") === "once") {
             this.listenToOnce(this, "change:position", function () {
                 Radio.trigger("geolocation", "position", this.get("position"));
-                this.untrack();
             });
             this.track();
         }
