@@ -187,7 +187,8 @@
         "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
-            "glyphicon": "glyphicon-wrench"
+            "glyphicon": "glyphicon-wrench",
+            "onlyDesktop": true
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
@@ -400,7 +401,7 @@
         {
           "id": ["713", "714", "715", "716"],
           "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "12883",

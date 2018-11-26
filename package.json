@@ -32,7 +32,7 @@
     "olcs": "^2.5.0",
     "proj4": "2.x",
     "underscore": "1.x",
-    "vcs-oblique": "^2.0.0",
+    "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0",
     "zip-a-folder": "0.0.6"
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.0",
     "chai": "4.1.1",
