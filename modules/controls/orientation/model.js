@@ -66,12 +66,12 @@ const OrientationModel = Backbone.Model.extend({
      * @returns {void}
      */
     setConfig: function () {
-        if (this.poiDistances) {
-            if (_.isArray(this.poiDistances) && this.poiDistances.length > 0) {
-                this.setPoiDistances(this.poiDistances);
+        if (this.get("poiDistances")) {
+            if (_.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
+                this.setPoiDistances(this.get("poiDistances"));
                 this.setShowPoi(true);
             }
-            else if (this.poiDistances === true) {
+            else if (this.get("poiDistances") === true) {
                 this.setShowPoi(true);
             }
         }
