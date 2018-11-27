@@ -55,7 +55,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      * @param  {array} icons - icon array from
      * @param  {array} valueArray - valueArray
      * @param  {string} value - value
-     * @returns {void} - the icon index
+     * @returns {string} - path to Icon
      */
     getIconPath: function (icons, valueArray, value) {
         var index = null;
