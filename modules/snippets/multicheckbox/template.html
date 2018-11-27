@@ -2,7 +2,11 @@
 <% _.each(valueModelsToShow, function (model) { %>
     <div class="multicheckbox <% if (model.get('isSelected')) {print('checked');} %>">
         <span class="icon-checkbox<% if (!model.get('isSelected')) {print('2');} %>"></span>
-        <span><img class="multicheckbox-icon" src="<%= model.get('iconPath') %>"></span>
+        <% if (model.get('iconPath')) { %>
+                <span>
+                    <img class="multicheckbox-icon" src="<%= model.get('iconPath') %>">
+                </span>
+        <%   } %>
         <span class="multicheckbox-label"><%= model.get("displayName") %></span>
     </div>
 <% }); %>

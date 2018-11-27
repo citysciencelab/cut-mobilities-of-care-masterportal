@@ -116,29 +116,9 @@ const QueryModel = Backbone.Model.extend({
         else if (snippetAttribute.type === "checkbox-classic") {
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": snippetAttribute.type});
             snippetAttribute.type = "string";
-            snippetAttribute.icons = this.retrieveIconsFromValue(this.get("features"), snippetAttribute.name, snippetAttribute.values);
+            snippetAttribute.layerId = this.get("layerId");
             this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
         }
-    },
-    retrieveIconsFromValue: function (features, key, values) {
-        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
-            layer = layerModel.get("layer"),
-            style = layer.getStyle(),
-            icons = [];
-
-        _.each(values, function (value) {
-            var featureListWithValue = _.filter(features, function (feature) {
-                    return feature.get(key) === value;
-                }),
-                featureWithValue = featureListWithValue[0],
-                icon = "";
-
-            if (!_.isUndefined(featureWithValue)) {
-                icon = style(featureWithValue).getImage().getSrc();
-                icons.push(icon);
-            }
-        });
-        return icons;
     },
     /**
      * adds a snippet for the map extent search

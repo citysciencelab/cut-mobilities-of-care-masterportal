@@ -42,7 +42,7 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
-            iconPath: this.getIconPath(this.get("icons"), this.get("values"), value),
+            iconPath: this.getIconPath(value),
             displayName: value,
             isSelected: true,
             isSelectable: true,
@@ -57,11 +57,18 @@ const MultiCheckboxModel = SnippetModel.extend({
      * @param  {string} value - value
      * @returns {string} - path to Icon
      */
-    getIconPath: function (icons, valueArray, value) {
-        var index = null;
+    getIconPath: function (value) {
+        var styleId = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}).get("styleId"),
+            styleModel = Radio.request("StyleList", "returnModelById", styleId),
+            valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
+                return styleFieldValue.styleFieldValue === value;
+            }),
+            iconPath;
 
-        index = valueArray.indexOf(value);
-        return icons[index];
+        if (valueStyle) {
+            iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
+            return iconPath;
+        }
     },
     /**
     * resetCollection
