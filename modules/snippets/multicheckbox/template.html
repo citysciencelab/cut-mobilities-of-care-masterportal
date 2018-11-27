@@ -1,5 +1,7 @@
 <% _.each(valueModelsToShow, function (model) { %>
-         <input type="checkbox" class="multicheckbox" value='<%= model.get("displayName") %>' data-toggle="toggle" <% if (model.get("isSelected")) {print("checked");} %>>
-         <label><%= model.get("displayName") %></label><br>
-    <% }); %>
+    <div class="multicheckbox <% if (model.get("isSelected")) {print("checked");} %>">
+            <span class="icon-checkbox<% if (!model.get("isSelected")) {print("2");} %>"></span>
+            <span class="multicheckbox-label"><%= model.get("displayName") %></span>
+        </div>
 
+<% }); %>

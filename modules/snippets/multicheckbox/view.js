@@ -4,7 +4,7 @@ import "bootstrap-select";
 const MultiCheckboxView = Backbone.View.extend({
     events: {
         // This event fires after the select's value has been changed
-        "click input": "updateSelectedValues"
+        "click .multicheckbox": "updateSelectedValues"
     },
 
     initialize: function () {
@@ -36,7 +36,10 @@ const MultiCheckboxView = Backbone.View.extend({
      * @returns {void}
      */
     updateSelectedValues: function (evt) {
-        this.model.updateSelectedValues(evt.target.value, evt.target.checked);
+        var checked = !evt.currentTarget.className.includes(" checked"),
+            value = evt.currentTarget.innerText;
+
+        this.model.updateSelectedValues(value, checked);
     },
 
     /**
