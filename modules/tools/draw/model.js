@@ -31,7 +31,8 @@ const DrawTool = Tool.extend({
         },
         renderToWindow: true,
         deactivateGFI: true,
-        glyphicon: "glyphicon-pencil"
+        glyphicon: "glyphicon-pencil",
+        addFeatureListener: {}
     }),
 
     /**
@@ -64,12 +65,13 @@ const DrawTool = Tool.extend({
         });
     },
     createSourceListenerForStyling: function (layer) {
-        var source = layer.getSource();
+        var layerSource = layer.getSource();
 
-        source.on("addfeature", function (evt) {
+        this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
             evt.feature.setStyle(this.getStyle());
-        }.bind(this));
+        }.bind(this)));
     },
+
     /**
      * creates a vector layer for drawn features, if layer input is undefined
      * and removes this callback from the change:isCurrentWin event
@@ -520,6 +522,15 @@ const DrawTool = Tool.extend({
      */
     setModifyInteraction: function (value) {
         this.set("modifyInteraction", value);
+    },
+
+    /**
+     * setter for addFeatureListener
+     * @param {ol/interaction/modify} value - addFeatureListener
+     * @return {void}
+     */
+    setAddFeatureListener: function (value) {
+        this.set("addFeatureListener", value);
     }
 });
 
