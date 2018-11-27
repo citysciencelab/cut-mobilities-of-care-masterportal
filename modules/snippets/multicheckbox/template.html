@@ -2,7 +2,6 @@
 <% _.each(valueModelsToShow, function (model) { %>
      <div class="checkbox-icon-label-container">
          <input type="checkbox" class="multicheckbox" value='<%= model.get("displayName") %>' data-toggle="toggle" <% if (model.get("isSelected")) {print("checked");} %>>
-         <img class="category-icon" src='<%= model.get("iconPath") %>'><label><%= model.get("displayName") %></label><br>
+         <img class="multicheckbox-icon" src='<%= model.get("iconPath") %>'><label><%= model.get("displayName") %></label><br>
      </div>
 <% }); %>
-
