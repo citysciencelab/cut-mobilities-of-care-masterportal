@@ -554,6 +554,15 @@ const DrawTool = Tool.extend({
     countupZIndex: function () {
         var value = this.get("zIndex") + 1;
 
+        this.setZIndex(value);
+    },
+
+    /*
+    * setter for zIndex
+    * @param {number} value zIndex
+    * @returns {void}
+    */
+    setZIndex: function (value) {
         this.set("zIndex", value);
     }
 });
