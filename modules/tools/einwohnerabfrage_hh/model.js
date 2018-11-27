@@ -15,12 +15,12 @@ const Einwohnerabfrage = Tool.extend({
         // checkbox snippet for alkis adressen layer
         checkBoxAddress: new SnippetCheckboxModel({
             isSelected: false,
-            label: "ALKIS Adressen anzeigen (ab 1: 20000 bis 1: 2500)"
+            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
         }),
         // checkbox snippet for zensus raster layer
         checkBoxRaster: new SnippetCheckboxModel({
             isSelected: false,
-            label: "Raster Layer anzeigen"
+            label: "Raster Layer anzeigen (ab 1: 100.000)"
         }),
         drawInteraction: undefined,
         isCollapsed: undefined,
@@ -518,7 +518,7 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     toggleRasterLayer: function (value) {
-        Radio.trigger("ModelList", "setModelAttributesById", "8712", {
+        Radio.trigger("ModelList", "setModelAttributesById", "13023", {
             isSelected: value,
             isVisibleInMap: value
         });
