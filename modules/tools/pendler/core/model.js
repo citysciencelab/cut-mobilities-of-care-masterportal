@@ -4,6 +4,7 @@ import {WFS} from "ol/format.js";
 const PendlerCoreModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         kreis: "",
+        kreise: [],
         pendlerLegend: [],
         renderToWindow: true,
         zoomLevel: 1,
@@ -150,8 +151,10 @@ const PendlerCoreModel = Tool.extend({
 
             kreise.push(kreis);
         });
-
         this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
+        if (this.get("isActive")) {
+            this.trigger("render", this, true);
+        }
     },
 
     /**

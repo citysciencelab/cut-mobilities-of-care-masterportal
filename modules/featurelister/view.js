@@ -27,8 +27,9 @@ const FeatureLister = Backbone.View.extend({
             "switchTabToTheme": this.switchTabToTheme
         });
 
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     className: "featurelist-win",
     template: _.template(Template),

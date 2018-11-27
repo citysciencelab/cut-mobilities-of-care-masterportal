@@ -14,11 +14,13 @@ const CompareFeaturesModel = Tool.extend({
         numberOfFeaturesToShow: 3,
         // number of attributes to be displayed
         numberOfAttributesToShow: 12,
-        glyphicon: "glyphicon-th-list"
+        glyphicon: "glyphicon-th-list",
+        renderToWindow: false
     }),
     initialize: function () {
         var channel = Radio.channel("CompareFeatures");
 
+        this.superInitialize();
         channel.on({
             "setIsActivated": this.setIsActive,
             "addFeatureToList": this.addFeatureToList,

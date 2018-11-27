@@ -123,6 +123,9 @@ const TileSetLayer = Layer.extend({
      * @returns {void}
      */
     setTileSet: function (value) {
+        if (value) {
+            value.layerReferenceId = this.get("id");
+        }
         this.set("tileSet", value);
     }
 });

@@ -41,7 +41,7 @@ const SearchbarView = Backbone.View.extend({
     },
 
     initialize: function (config) {
-        this.model = new Searchbar();
+        this.model = new Searchbar(config);
 
         if (config.renderToDOM) {
             this.setElement(config.renderToDOM);

@@ -44,8 +44,9 @@ const StyleWMSView = Backbone.View.extend({
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshStyleableLayerList();
         }
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render();
+        }
     },
     className: "wmsStyle-window",
     template: _.template(StyleWMSTemplate),

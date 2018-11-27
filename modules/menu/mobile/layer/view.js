@@ -12,7 +12,7 @@ const LayerView = Backbone.View.extend({
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
         "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
         "change select": "setTransparency",
-        "click .glyphicon-picture": "openStyleWMS"
+        "click .glyphicon-tint": "openStyleWMS"
     },
     initialize: function () {
         this.listenTo(this.model, {
