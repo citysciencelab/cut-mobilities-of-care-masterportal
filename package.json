@@ -11,7 +11,8 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
-    "build": "node devtools/tasks/build.js"
+    "build": "node devtools/tasks/build.js",
+    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js"
   },
   "dependencies": {
     "backbone": "1.x",
@@ -21,16 +22,20 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "9.x",
     "bootstrap-toggle": "2.x.x",
+    "cesium": "1.50.0",
     "d3": "4.9.x",
     "jquery": "2.x",
     "jquery-ui": "1.x",
     "moment": "2.x",
     "mqtt": "^2.15.x",
-    "ol": "^5.2.0",
+    "ol": "^5.3.0",
+    "olcs": "^2.5.0",
     "proj4": "2.x",
     "underscore": "1.x",
+    "vcs-oblique": "^2.0.0",
     "video.js": "6.x",
-    "videojs-flash": "^2.1.0"
+    "videojs-flash": "^2.1.0",
+    "zip-a-folder": "0.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

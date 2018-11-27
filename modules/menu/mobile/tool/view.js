@@ -29,6 +29,20 @@ const ItemView = Backbone.View.extend({
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
+    },
+    toggleSupportedVisibility: function (mode) {
+        if (mode === "2D") {
+            this.$el.show();
+        }
+        else if (mode === "3D" && this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0) {
+            this.$el.show();
+        }
+        else if (mode === "Oblique" && this.model.get("supportedInOblique").indexOf(this.model.getId()) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
+        }
     }
 });
 

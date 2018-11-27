@@ -147,7 +147,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -310,6 +310,7 @@
     },
     "controls":
     {
+      "orientation3d": true,
       "fullScreen": true,
       "zoom": true,
       "orientation": {
@@ -327,7 +328,9 @@
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
-      "mousePosition": true
+      "mousePosition": true,
+      "buttonOblique": true,
+      "button3d": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
@@ -363,7 +366,26 @@
       },
       {
         "id": "453"
-      }]
+      },
+        {
+          "id": "12885",
+          "name": "Oblique",
+          "visibility": true
+        }
+      ]
+    },
+    "Fachdaten_3D":
+    {
+      "Layer": [
+        {
+          "id": "12883",
+          "name": "Gelände"
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2"
+        }
+      ]
     },
     "Fachdaten":
     {

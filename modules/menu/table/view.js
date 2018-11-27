@@ -27,7 +27,7 @@ const Menu = Backbone.View.extend({
         return this;
     },
     renderLayerList: function () {
-        this.$el.find("#table-nav-main").append(new LayerListView().render());
+        this.$el.find("#table-nav-main").append(new LayerListView().render().$el);
     },
     renderCategoryList: function () {
         this.$el.append(new CategoryList().$el);

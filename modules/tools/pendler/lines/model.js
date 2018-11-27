@@ -112,7 +112,7 @@ const Lines = PendlerCoreModel.extend({
             labelLayerFeature.setStyle(new Style({
                 text: new Text({
                     text: feature.get(this.get("attrAnzahl")),
-                    font: "14pt sans-serif",
+                    font: "10pt sans-serif",
                     placement: "point",
                     stroke: new Stroke({
                         color: [255, 255, 255, 1],

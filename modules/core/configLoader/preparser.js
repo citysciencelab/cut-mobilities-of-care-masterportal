@@ -3,13 +3,26 @@ import CustomTreeParser from "./parserCustomTree";
 
 const Preparser = Backbone.Model.extend({
     defaults: {},
-    url: function () {
-        var path = _.has(Config, "portalConf") === true ? Config.portalConf : "config.json",
+    initialize: function (attributes, options) {
+        this.url = this.getUrlPath(options.url);
+        this.fetch({async: false,
+            error: function () {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
+                        "<small>Details: Das Portal kann \"config.json\" unter dem angegebenen Pfad nicht finden.</small>",
+                    kategorie: "alert-warning"
+                });
+            }
+        });
+    },
+
+    getUrlPath: function (url) {
+        var path = url !== undefined ? url : "config.json",
             addPath,
             isAddPathValid;
 
         if (path.slice(-6) === "?noext") {
-            path = Config.portalConf;
+            path = url;
         }
         else if (path.slice(-5) !== ".json") {
             addPath = Radio.request("Util", "getConfig");
@@ -32,22 +45,13 @@ const Preparser = Backbone.Model.extend({
 
         return path;
     },
-    initialize: function () {
-        this.fetch({async: false,
-            error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: Das Portal kann \"config.json\" unter dem angegebenen Pfad nicht finden.</small>",
-                    kategorie: "alert-warning"
-                });
-            }
-        });
-    },
+
     parse: function (response) {
         var attributes = {
             portalConfig: response.Portalconfig,
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
+            overlayer_3d: response.Themenconfig.Fachdaten_3D,
             treeType: response.Portalconfig.Baumtyp,
             isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
             snippetInfos: this.requestSnippetInfos()

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "name": "CSW HMDK Summary",
+    "url": "http://hmdk.fhhnet.stadt.hamburg.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=summary",
+    "typ": "CSW"
+  },
+  {
+    "id" : "2",
+    "name" : "Metadaten-URL",
+    "url" : "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=",
+    "typ" : "URL"
+  },
+  {
+    "id": "3",
+    "name": "CSW HMDK Full",
+    "url": "http://hmdk.fhhnet.stadt.hamburg.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=full",
+    "typ": "CSW"
+  },
+  {
+    "id" : "4",
+    "name" : "BKG Geokodierungsdienst Suggest",
+    "url" : "/bkg_suggest",
+    "typ" : "GDZ"
+  },
+  {
+    "id" : "5",
+    "name" : "BKG Geokodierungsdienst Geosearch",
+    "url" : "/bkg_geosearch",
+    "typ" : "GDZ"
+  },
+  {
+    "id" : "6",
+    "name" : "Hamburg Gazetteer",
+    "url" : "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
+    "typ" : "WFS"
+  },
+  {
+    "id" : "7",
+    "name" : "Routing Service VIOM",
+    "url" : "/viomRouting",
+    "providerID" : "HHBWVI",
+    "typ" : "ID"
+  },
+  {
+    "id" : "8",
+    "name" : "Hamburg Gazetteer",
+    "url" : "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
+    "typ" : "WFS"
+  },
+  {
+    "id" : "9",
+    "name" : "Jasperserver",
+    "url" : "http://wfalgpa005.fhhnet.stadt.hamburg.de/jasperserver/flow.html",
+    "typ" : "Jasperserver",
+    "params": {
+      "_flowId":"viewReportFlow",
+      "reportUnit": "/Berichte/Flaechenmanagement",
+      "j_username": "LGV",
+      "j_password": "LGV",
+      "standAlone": true,
+      "ParentFolderUri": "/Berichte/",
+      "decorate": "no",
+      "output":"pdf"
+    }
+  },
+  {
+    "id" : "10",
+    "name" : "OSM Suche",
+    "url" : "https://nominatim.openstreetmap.org/search?",
+    "typ" : "WFS"
+  },
+  {
+    "id" : "1001",
+    "name" : "Deegree WPS RZ2 Produktion",
+    "url" : "https://geodienste.hamburg.de/HH_WPS",
+    "version": "1.1.0",
+    "typ" : "WPS"
+  },
+  {
+    "id" : "1002",
+    "name" : "Deegree WPS RZ2 Test",
+    "url" : "http://wfalgqa003.dpaorins.de/deegree-wps/services/wps",
+    "typ" : "WPS"
+  },
+  {
+    "id" : "80001",
+    "name" : "Email Service by PHP",
+    "url" : "https://test-geofos.fhhnet.stadt.hamburg.de/smtp/sendmail.php",
+    "typ" : "EmailService"
+  },
+  {
+    "id" : "80002",
+    "name" : "Email Service by PHP",
+    "url" : "https://geofos.fhhnet.stadt.hamburg.de/smtp/sendmail.php",
+    "typ" : "EmailService"
+  },
+  {
+    "id": "99999",
+    "name": "Print Service Prod",
+    "url": "http://wfalgpa005.fhhnet.stadt.hamburg.de/mapfish_print_2.0",
+    "typ": "Print"
+  },
+  {
+    "id": "printqs",
+    "name": "Print Service QS",
+    "url": "http://wfalgqw001.fhhnet.stadt.hamburg.de/mapfish_print_2.0",
+    "typ": "Print"
+  },
+  {
+    "id": "mapfish_qs",
+    "name": "Print Service QS",
+    "url": "https://test-geofos.fhhnet.stadt.hamburg.de/mapfish_print/print/",
+    "typ": "Print"
+  },
+  {
+    "id": "mapfish",
+    "name": "Print Service Prod",
+    "url": "http://wfalgpa005.fhhnet.stadt.hamburg.de/mapfish_print/print/",
+    "typ": "Print"
+  }
+]

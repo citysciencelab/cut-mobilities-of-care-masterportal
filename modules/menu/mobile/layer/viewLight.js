@@ -53,7 +53,6 @@ const LayerView = Backbone.View.extend({
         if (this.model.get("isSettingVisible") === true) {
             this.renderSetting();
         }
-
         return this;
     },
 
@@ -77,7 +76,6 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".item-settings").hide();
             this.$el.find(".item-settings").slideDown();
         }
-
     },
 
     toggleIsSelected: function () {

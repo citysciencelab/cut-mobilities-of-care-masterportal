@@ -1,40 +1,66 @@
 import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults),
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        showSettings: true,
+        isClustered: false
+    }),
 
     initialize: function () {
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
+
+        if (this.has("clusterDistance")) {
+            this.set("isClustered", true);
+        }
+
         this.setStyleId(this.get("styleId") || this.get("id"));
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
-
     /**
      * [createLayerSource description]
+     * Wird vom Model getriggert und erzeugt eine vectorSource.
+     * Ggf. auch eine clusterSource
      * @return {[type]} [description]
+     * @uses this createClusterLayerSource
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
+        if (this.has("clusterDistance")) {
+            this.createClusterLayerSource();
+        }
     },
-
+    /**
+     * [createClusterLayerSource description]
+     * @return {[type]} [description]
+     */
+    createClusterLayerSource: function () {
+        this.setClusterLayerSource(new Cluster({
+            source: this.get("layerSource"),
+            distance: this.get("clusterDistance")
+        }));
+    },
     /**
      * [createLayer description]
      * @return {[type]} [description]
      */
     createLayer: function () {
         this.setLayer(new VectorLayer({
-            source: this.get("layerSource"),
+            source: this.has("clusterDistance") ? this.get("clusterLayerSource") : this.get("layerSource"),
             name: this.get("name"),
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: "clampToGround",
+            hitTolerance: this.get("hitTolerance")
         }));
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();
@@ -43,7 +69,14 @@ const GeoJSONLayer = Layer.extend({
             this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
         }
     },
-
+    /**
+     * [setClusterLayerSource description]
+     * @param {[type]} value [description]
+     * @returns {void}
+     */
+    setClusterLayerSource: function (value) {
+        this.set("clusterLayerSource", value);
+    },
     /**
      * Lädt das GeoJSON neu
      * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
@@ -135,7 +168,7 @@ const GeoJSONLayer = Layer.extend({
         }
         else {
             this.set("styleFunction", function (feature) {
-                return stylelistmodel.createStyle(feature);
+                return stylelistmodel.createStyle(feature, this.get("isClustered"));
             });
         }
     },
@@ -151,26 +184,27 @@ const GeoJSONLayer = Layer.extend({
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
-        },
-        /**
-        * Zeigt nur die Features an, deren Id übergeben wird
-        * @param  {string[]} featureIdList Liste der FeatureIds
-        * @return {undefined}
-        */
-        showFeaturesByIds: function (featureIdList) {
+    },
+
+    /**
+     * Zeigt nur die Features an, deren Id übergeben wird
+     * @param  {string[]} featureIdList Liste der FeatureIds
+     * @return {undefined}
+     */
+    showFeaturesByIds: function (featureIdList) {
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             feature.setStyle(undefined);
         }, this);
-        },
+    },
 
-        /**
-        * sets null style (=no style) for all features
-        * @return {undefined}
-        */
-        hideAllFeatures: function () {
+    /**
+     * sets null style (=no style) for all features
+     * @return {undefined}
+     */
+    hideAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
@@ -178,14 +212,14 @@ const GeoJSONLayer = Layer.extend({
                 return null;
             });
         }, this);
-        },
+    },
 
-        /**
-        * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-        * @param {object} options -
-        * @returns {void}
-        **/
-        checkForScale: function (options) {
+    /**
+     * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+     * @param {object} options -
+     * @returns {void}
+     */
+    checkForScale: function (options) {
         if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
             this.setIsOutOfRange(false);
         }

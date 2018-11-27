@@ -33,7 +33,9 @@ const Config = {
         postMessageUrl: "http://localhost:8080"
     },
     proxyURL: "/cgi-bin/proxy.cgi",
-    quickHelp: true,
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     restConf: "/lgv-config/rest-services-fhhnet.json",
     scaleLine: true,
     simpleMap: false,
@@ -44,5 +46,18 @@ const Config = {
         imgLink: "../img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560"
+    },
+    startingMap3D: false,
+    obliqueMap: true,
+    cesiumParameter: {
+        tileCacheSize: 20,
+        enableLighting: false,
+        fog: {
+            enabled: true,
+            density: 0.0002,
+            screenSpaceErrorFactor: 2.0
+        },
+        maximumScreenSpaceError: 2,
+        fxaa: true
     }
 };

@@ -13,9 +13,9 @@ const Gfi = Tool.extend({
         // ist das Modal/Popover sichtbar
         isVisible: false,
         // mobile Ansicht true | false
-        isMobile: Radio.request("Util", "isViewMobile"),
+        isMobile: false,
         // uiStyle DEFAULT | TABLE | SIMPLE
-        uiStyle: Radio.request("Util", "getUiStyle"),
+        uiStyle: "DEFAULT",
         // ol.Overlay für attached
         overlay: new Overlay({element: undefined}),
         // desktop/attached/view.js | desktop/detached/view.js | mobile/view.js
@@ -29,16 +29,26 @@ const Gfi = Tool.extend({
         // Anzahl der Themes
         numberOfThemes: 0,
         rotateAngle: 0,
-        glyphicon: "glyphicon-info-sign"
+        glyphicon: "glyphicon-info-sign",
+        isMapMarkerVisible: true,
+        deactivateGFI: false
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
 
+        // Wegen Ladereihenfolge hier die Default-Attribute setzen, sonst sind die Werte noch nicht aus der Config ausgelesen
+        this.set("uiStyle", Radio.request("Util", "getUiStyle"));
+        this.set("isMobile", Radio.request("Util", "isViewMobile"));
+
         this.setThemeList(new ThemeList());
+
         channel.on({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
-            "changeFeature": this.changeFeature
+            "changeFeature": this.changeFeature,
+            "isMapMarkerVisible": this.setIsMapMarkerVisible,
+            "activate": this.activateGFI,
+            "deactivate": this.deactivateGFI
         }, this);
 
         channel.reply({
@@ -72,9 +82,34 @@ const Gfi = Tool.extend({
             },
             "change:themeIndex": function (model, value) {
                 this.get("themeList").appendTheme(value);
+            },
+            "change:isActive": function (model, value) {
+                if (value) {
+                    this.listenToThemeList();
+                }
+                else {
+                    this.stopListening(this.get("themeList"));
+                }
             }
         });
+        this.listenToThemeList();
 
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": this.setIsMobile
+        }, this);
+
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                this.activateGFI();
+                if (this.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
+                    Radio.trigger("Map", "addOverlay", this.get("overlay"));
+                }
+            }
+        }, this);
+
+        this.initView();
+    },
+    listenToThemeList: function () {
         this.listenTo(this.get("themeList"), {
             "isReady": function () {
                 if (this.get("themeList").length > 0) {
@@ -88,25 +123,7 @@ const Gfi = Tool.extend({
                 }
             }
         });
-
-        this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": this.setIsMobile
-        }, this);
-
-        this.listenTo(Radio.channel("Tool"), {
-            "activatedTool": this.toggleGFI
-        });
-
-        this.listenTo(Radio.channel("Map"), {
-            "isReady": function () {
-                this.toggleGFI(this.get("id"), this.get("deactivateGFI"));
-                Radio.trigger("Map", "addOverlay", this.get("overlay"));
-            }
-        }, this);
-
-        this.initView();
     },
-
     /**
      * if the displayed feature changes, the model is recreated and the gfi adjusted
      * @param  {ol.Feature} feature - the feature which has been changed
@@ -127,24 +144,17 @@ const Gfi = Tool.extend({
             }
         }
     },
-
-    /**
-     * Prüft ob GFI aktiviert ist und registriert entsprechend den Listener oder eben nicht
-     * @param  {String} id - Tool Id
-     * @param  {String} deactivateGFI - soll durch aktivierung des Tools das GFI deaktiviert werden?
-     * @return {undefined}
-     */
-    toggleGFI: function (id, deactivateGFI) {
-        if (id === "gfi" && deactivateGFI === false) {
-            this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
-            // this.set("key", Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
-        }
-        else if (deactivateGFI === true) {
-            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
-        }
-        else if (_.isUndefined(deactivateGFI)) {
-            Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
-        }
+    activateGFI: function () {
+        this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
+        this.listenTo(Radio.channel("Map"), {
+            "clickedWindowPosition": this.setGfiParams
+        }, this);
+        this.setIsActive(true);
+    },
+    deactivateGFI: function () {
+        Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
+        this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+        this.setIsActive(false);
     },
 
     /**
@@ -188,9 +198,13 @@ const Gfi = Tool.extend({
             eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
             wmsGFIParams,
+            GFIParams3d = [],
             unionParams;
 
         Radio.trigger("ClickCounter", "gfi");
+        if (Radio.request("Map", "isMap3d")) {
+            GFIParams3d = this.setGfiParams3d(evt);
+        }
         // für detached MapMarker
         this.setCoordinate(evt.coordinate);
         // Vector
@@ -199,14 +213,54 @@ const Gfi = Tool.extend({
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        unionParams = _.union(vectorGFIParams, wmsGFIParams);
+        unionParams = _.union(vectorGFIParams, wmsGFIParams, GFIParams3d);
         if (_.isEmpty(unionParams)) {
             this.setIsVisible(false);
         }
         else {
             this.get("overlay").setPosition(evt.coordinate);
-            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams, GFIParams3d));
         }
+    },
+
+    setGfiParams3d: function (evt) {
+        var features,
+            gfiParams3d = [];
+
+        features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
+        _.each(features, function (feature) {
+            var properties = {},
+                propertyNames,
+                modelattributes,
+                olFeature,
+                layer;
+
+            if (feature instanceof Cesium.Cesium3DTileFeature) {
+                propertyNames = feature.getPropertyNames();
+                _.each(propertyNames, function (propertyName) {
+                    properties[propertyName] = feature.getProperty(propertyName);
+                });
+                if (properties.attributes && properties.id) {
+                    properties.attributes.gmlid = properties.id;
+                }
+                modelattributes = {
+                    attributes: properties.attributes ? properties.attributes : properties,
+                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
+                    typ: "Cesium3DTileFeature",
+                    gfiTheme: "buildings_3d",
+                    name: "Buildings"
+                };
+                gfiParams3d.push(modelattributes);
+            }
+            else if (feature.primitive) {
+                olFeature = feature.primitive.olFeature;
+                layer = feature.primitive.olLayer;
+                if (olFeature && layer) {
+                    gfiParams3d.push(this.getVectorGfiParams3d(olFeature, layer));
+                }
+            }
+        }, this);
+        return gfiParams3d;
     },
 
     /**
@@ -260,7 +314,7 @@ const Gfi = Tool.extend({
                     layerFilter: function (layer) {
                         return layer.get("name") === vectorLayer.get("name");
                     },
-                    hitTolerance: 0
+                    hitTolerance: vectorLayer.get("hitTolerance")
                 }),
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 
@@ -288,6 +342,34 @@ const Gfi = Tool.extend({
         return vectorGfiParams;
     },
 
+    /**
+     * @param {ol.Feature} featureAtPixel Feature
+     * @param {ol.Layer} olLayer Layer
+     * @return {void}
+     */
+    getVectorGfiParams3d: function (featureAtPixel, olLayer) {
+        var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
+            modelAttributes;
+
+        if (_.isUndefined(model) === false) {
+            modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+            modelAttributes.gfiFeatureList = [];
+            // Feature
+            if (_.has(featureAtPixel.getProperties(), "features") === false) {
+                modelAttributes.feature = featureAtPixel;
+                modelAttributes.gfiFeatureList.push(featureAtPixel);
+            }
+            // Cluster Feature
+            else {
+                _.each(featureAtPixel.get("features"), function (feature) {
+                    modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                    modelAttributes.gfiFeatureList.push(feature);
+                    modelAttributes.feature = feature;
+                });
+            }
+        }
+        return modelAttributes;
+    },
     /**
      * Ermittelt die GFIParameter zur Abfrage von WMSlayern
      * @param  {layer[]} layerlist  Liste der abzufragenden WMSlayer
@@ -331,6 +413,7 @@ const Gfi = Tool.extend({
             wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
             this.setThemeIndex(0);
+
             this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
         }
     },
@@ -411,6 +494,10 @@ const Gfi = Tool.extend({
     // setter for themeList
     setThemeList: function (value) {
         this.set("themeList", value);
+    },
+
+    setIsMapMarkerVisible: function (value) {
+        this.set("isMapMarkerVisible", value);
     }
 
 });

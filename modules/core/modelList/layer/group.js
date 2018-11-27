@@ -7,7 +7,10 @@ import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
 const GroupLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults),
+    defaults: _.extend({}, Layer.prototype.defaults,{
+        supported: ["2D", "3D"],
+        showSettings: true
+    }),
 
     initialize: function () {
         Layer.prototype.initialize.apply(this);
@@ -41,7 +44,6 @@ const GroupLayer = Layer.extend({
             else if (childLayerDefinition.typ === "Heatmap") {
                 layerSource.push(new HeatmapLayer(childLayerDefinition));
             }
-
             _.last(layerSource).prepareLayerObject();
         }, this);
 
@@ -131,7 +133,6 @@ const GroupLayer = Layer.extend({
         });
         this.setIsOutOfRange(isOutOfRange);
     }
-
 });
 
 export default GroupLayer;

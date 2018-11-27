@@ -41,13 +41,22 @@ const CswParser = Backbone.Model.extend({
             }
         });
     },
+
     parseData: function (xmlDoc, cswObj) {
         var parsedData = {};
 
         _.each(cswObj.keyList, function (key) {
             switch (key) {
-                case "date": {
-                    parsedData[key] = this.parseDate(xmlDoc);
+                case "datePublication": {
+                    parsedData[key] = this.parseDate(xmlDoc, "publication");
+                    break;
+                }
+                case "dateRevision": {
+                    parsedData[key] = this.parseDate(xmlDoc, "revision");
+                    break;
+                }
+                case "periodicity": {
+                    parsedData[key] = this.parsePeriodicity(xmlDoc);
                     break;
                 }
                 case "orgaOwner": {
@@ -85,7 +94,6 @@ const CswParser = Backbone.Model.extend({
                 default: {
                     break;
                 }
-
             }
         }, this);
         cswObj.parsedData = parsedData;
@@ -201,10 +209,14 @@ const CswParser = Backbone.Model.extend({
 
         return orga;
     },
-    parseDate: function (xmlDoc) {
+
+    parseDate: function (xmlDoc, status) {
         var citation = $("gmd\\:citation,citation", xmlDoc),
             dates = $("gmd\\:CI_Date,CI_Date", citation),
-            datetype, revisionDateTime, publicationDateTime, dateTime;
+            datetype,
+            revisionDateTime,
+            publicationDateTime,
+            dateTime;
 
         dates.each(function (index, element) {
             datetype = $("gmd\\:CI_DateTypeCode,CI_DateTypeCode", element);
@@ -215,16 +227,42 @@ const CswParser = Backbone.Model.extend({
                 publicationDateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
             }
             else {
-                dateTime = $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent;
+                publicationDateTime = _.isUndefined(publicationDateTime) ? $("gco\\:DateTime,DateTime, gco\\:Date,Date", element)[0].textContent : publicationDateTime;
             }
         });
-        if (revisionDateTime) {
+
+        if (!_.isUndefined(revisionDateTime) && status === "revision") {
             dateTime = revisionDateTime;
         }
-        else if (publicationDateTime) {
+        else if (!_.isUndefined(publicationDateTime) && status === "publication") {
             dateTime = publicationDateTime;
         }
-        return moment(dateTime).format("DD.MM.YYYY");
+
+        return !_.isUndefined(dateTime) ? moment(dateTime).format("DD.MM.YYYY") : null;
+    },
+
+    parsePeriodicity: function (xmlDoc) {
+        var resourceMaintenance = $("gmd\\:resourceMaintenance,resourceMaintenance", xmlDoc),
+            maintenanceInformation = $("gmd\\:MD_MaintenanceInformation,MD_MaintenanceInformation", resourceMaintenance),
+            maintenanceAndUpdateFrequency = $("gmd\\:maintenanceAndUpdateFrequency,maintenanceAndUpdateFrequency", maintenanceInformation),
+            maintenanceFrequencyCode = $("gmd\\:MD_MaintenanceFrequencyCode,MD_MaintenanceFrequencyCode", maintenanceAndUpdateFrequency),
+            dateType = $(maintenanceFrequencyCode).attr("codeListValue"),
+            dateTypes = {
+                continual: "kontinuierlich",
+                daily: "täglich",
+                weekly: "wöchentlich",
+                fortnightly: "zweimal wöchentlich",
+                monthly: "monatlich",
+                quarterly: "quartalsweise",
+                biannually: "zweimal jährlich",
+                annually: "jährlich",
+                asNeeded: "bei Bedarf",
+                irregular: "unregelmäßige Intervalle",
+                notPlanned: "nicht geplant",
+                unknown: "unbekannt"
+            };
+
+        return _.isUndefined(dateTypes[dateType]) ? null : dateTypes[dateType];
     }
 });
 
