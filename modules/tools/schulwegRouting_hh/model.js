@@ -53,7 +53,6 @@ const SchulwegRouting = Tool.extend({
                 if (layerId === this.get("layerId")) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                     this.addRouteFeatures(this.get("layer").getSource());
-                    this.get("layer").setVisible(false);
                     this.get("layer").setStyle(this.routeStyle);
                     this.setSchoolList(this.sortSchoolsByName(features));
                     if (this.get("isActive") === true) {
@@ -86,14 +85,11 @@ const SchulwegRouting = Tool.extend({
                 if (value && this.get("layer") === undefined) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                     this.addRouteFeatures(this.get("layer").getSource());
-                    this.get("layer").setVisible(true);
                     this.get("layer").setStyle(this.routeStyle);
                 }
                 if (value && !_.isUndefined(this.get("layer"))) {
-                    this.get("layer").setVisible(true);
                 }
                 if (!value && !_.isUndefined(this.get("layer"))) {
-                    this.get("layer").setVisible(false);
                 }
             }
         });
@@ -198,7 +194,6 @@ const SchulwegRouting = Tool.extend({
                 }
             }
             else {
-                this.get("layer").setVisible(false);
                 this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
             }
         }
@@ -524,7 +519,6 @@ const SchulwegRouting = Tool.extend({
         this.removeGeomFromFeatures(features);
         this.trigger("resetRouteResult");
         this.trigger("togglePrintEnabled", false);
-        this.get("layer").setVisible(false);
     },
     removeGeomFromFeatures: function (features) {
         _.each(features, function (feature) {
