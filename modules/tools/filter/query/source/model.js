@@ -265,7 +265,7 @@ const SourceModel = QueryModel.extend({
             selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: [], matchingMode: attribute.matchingMode};
 
             _.each(features, function (feature) {
-                var isMatch = this.isFilterMatch(feature, _.filter(selectedAttributes, function (attr) {
+                var isMatch = this.isFilterMatch(feature, selectedAttributes.filter(function (attr) {
                     return attr.attrName !== attribute.name;
                 }));
 
