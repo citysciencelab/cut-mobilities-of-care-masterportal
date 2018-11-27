@@ -90,7 +90,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     updateSelectedValues: function (values, checked) {
         _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (valueModel.get("displayName") === values) {
+            if (valueModel.get("displayName") === values.trim()) {
                 valueModel.set("isSelected", checked);
             }
         });
