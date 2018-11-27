@@ -327,9 +327,9 @@ const Util = Backbone.Model.extend({
                 }
                 result += item[key];
                 colCounter++;
-            });
+            }, this);
             result += lineDelimiter;
-        });
+        }, this);
 
         return result;
     },

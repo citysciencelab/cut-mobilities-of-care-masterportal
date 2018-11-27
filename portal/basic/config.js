@@ -2,7 +2,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
-    wfsImgPath: "../../node_modules/lgv-config/img/",
+    wfsImgPath: "/lgv-config/img/",
     allowParametricURL: true,
     namedProjections: [
         // GK DHDN
@@ -25,12 +25,13 @@ const Config = {
             }
         ]
     },
-    quickHelp: true,
-
+    quickHelp: {
+        imgPath: "/lgv-config/img/"
+    },
     portalConf: "../../portal/master/",
-    layerConf: "../../node_modules/lgv-config/services-internet.json",
-    restConf: "../../node_modules/lgv-config/rest-services-internet.json",
-    styleConf: "../../node_modules/lgv-config/style_v2.json",
+    layerConf: "/lgv-config/services-internet.json",
+    restConf: "/lgv-config/rest-services-internet.json",
+    styleConf: "/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
 
     attributions: true,

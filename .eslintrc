@@ -12,7 +12,9 @@
         "_": true,
         "Config": true,
         "Radio": true,
-        "Backbone": true
+        "Backbone": true,
+        "olcs": true,
+        "vcs": true
     },
     "plugins": [
         "chai-friendly"
@@ -155,7 +157,7 @@
         "new-parens": "error",
         "no-array-constructor": "error",
         "no-lonely-if": "error",
-        "no-mixed-operators": "error",
+        "no-mixed-operators": "off",
         "no-mixed-spaces-and-tabs": "error",
         "no-multiple-empty-lines": ["error", { "max": 2, "maxBOF": 1}],
         "no-nested-ternary": "error",

@@ -22,7 +22,7 @@ const MapMarkerModel = Backbone.Model.extend({
                     width: 4
                 }),
                 fill: new Fill({
-                    color: "rgba(8, 119, 95, 0.3)"
+                    color: [8, 119, 95, 0.3]
                 })
             })
         }),

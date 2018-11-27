@@ -3,7 +3,7 @@
     <div class="form-group form-group-sm">
         <label class="col-sm-5 control-label">Titel</label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" value="<%= title %>">
+            <input type="text" class="form-control" maxLength="45" value="<%= title %>">
         </div>
     </div>
     <div class="form-group form-group-sm">
@@ -51,20 +51,20 @@
     <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
         <% if(isMetaDataAvailable) { %>
-            <label class="col-sm-5 control-label">Legende / Metadaten</label>
+            <label class="col-sm-5 control-label">Mit Legende / Metadaten</label>
         <% } else { %>
-            <label class="col-sm-5 control-label">Legende</label>
+            <label class="col-sm-5 control-label">Mit Legende</label>
         <% } %>
         <div class="col-sm-7">
             <div class="checkbox">
-                <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>
+                <input id="printLegend" type="checkbox" checked>
             </div>
         </div>
     </div>
     <% } %>
     <% if(isGfiAvailable && isGfiActive) { %>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Informationen</label>
+        <label class="col-sm-5 control-label">Mit Informationen</label>
         <div class="col-sm-7">
             <div class="checkbox">
                 <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>

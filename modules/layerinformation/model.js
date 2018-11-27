@@ -67,7 +67,7 @@ const LayerInformation = Backbone.Model.extend({
             this.get("uniqueIdList").push(uniqueId);
             cswObj.layerName = attrs.layername;
             cswObj.metaId = metaId;
-            cswObj.keyList = ["abstractText", "date", "title", "downloadLinks"];
+            cswObj.keyList = ["abstractText", "datePublication", "dateRevision", "periodicity", "title", "downloadLinks"];
             cswObj.uniqueId = uniqueId;
             Radio.trigger("CswParser", "getMetaData", cswObj);
         }

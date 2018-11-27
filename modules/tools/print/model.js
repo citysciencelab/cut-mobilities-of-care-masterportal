@@ -402,10 +402,10 @@ const PrintModel = Tool.extend({
 
     setSpecification: function (gfiPosition) {
         var layers = Radio.request("Map", "getLayers").getArray(),
-            animationLayer = _.filter(layers, function (layer) {
+            animationLayer = layers.filter(function (layer) {
                 return layer.get("name") === "animationLayer";
             }),
-            wfsLayer = _.filter(layers, function (layer) {
+            wfsLayer = layers.filter(function (layer) {
                 return layer.get("typ") === "WFS" && layer.get("visible") === true && layer.getSource().getFeatures().length > 0;
             }),
             specification;

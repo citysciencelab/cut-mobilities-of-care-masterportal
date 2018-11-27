@@ -51,6 +51,7 @@ const ParcelSearchView = Backbone.View.extend({
         }
         else {
             this.$el.empty();
+            Radio.trigger("MapMarker", "hideMarker");
         }
 
         return this;

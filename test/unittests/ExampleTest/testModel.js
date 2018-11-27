@@ -15,13 +15,13 @@ testModul = Backbone.Model.extend({
         return employee.coffeeCount > 1;
     },
     getSleepingEmployeeNames: function () {
-        return _.pluck(_.filter(this.getEmployees(), function (employee) {
+        return _.pluck(this.getEmployees().filter(function (employee) {
             return !this.getIsAwake(employee);
         }, this), "name");
     },
     // getter for employees
     getEmployeesByName: function (name) {
-        return _.filter(this.getEmployees(), function (employee) {
+        return this.getEmployees().filter(function (employee) {
             return employee.name === name;
         }, this);
     },

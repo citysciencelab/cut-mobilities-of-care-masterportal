@@ -8,7 +8,7 @@ import Feature from "ol/Feature.js";
 
 const SchulwegRouting = Tool.extend({
 
-    defaults: _.extend({}, Tool.prototype.Tool, {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         id: "",
         layerId: "",
         // ol-features of all schools
@@ -32,6 +32,7 @@ const SchulwegRouting = Tool.extend({
             label: "HVV Verkehrsnetz"
         }),
         renderToSidebar: true,
+        renderToWindow: false,
         glyphicon: "glyphicon-filter"
     }),
 
@@ -427,7 +428,7 @@ const SchulwegRouting = Tool.extend({
      * @returns {object[]} filtered list of addresses
      */
     filterAddressList: function (addressList, searchRegExp) {
-        return _.filter(addressList, function (address) {
+        return addressList.filter(function (address) {
             return address.joinAddress.search(searchRegExp) !== -1;
         }, this);
     },
@@ -543,7 +544,7 @@ const SchulwegRouting = Tool.extend({
 
         _.each(streetNameList, function (street) {
             var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
-                resultStreets = _.filter(streetNameParts, function (part) {
+                resultStreets = streetNameParts.filter(function (part) {
                     return part.toLowerCase() === targetStreet.toLowerCase();
                 }, this);
 

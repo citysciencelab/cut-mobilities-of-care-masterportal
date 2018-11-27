@@ -1,0 +1,14 @@
+.menu-style {
+    font-size: 14px;
+    letter-spacing: 0.6px
+}
+
+.viewpoint-style {
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.viewpoint-style:last-child {
+    border-bottom: 0;
+}

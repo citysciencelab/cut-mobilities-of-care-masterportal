@@ -12,14 +12,7 @@ const LayerView = Backbone.View.extend({
                 this.render();
             }
         });
-        // Aktiviert ausgewälter Layer; Layermenu ist aktiv
-        this.listenTo(this.collection, {
-            "updateSelection": function () {
-                this.render();
-                $("#table-nav-layers-panel").collapse("show");
-                this.$el.addClass("burgerMenuIsActive");
-            }
-        });
+
         // bootstrap collapse event
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Layer");
@@ -37,7 +30,7 @@ const LayerView = Backbone.View.extend({
             $("#table-nav-layers-panel").collapse("show");
         }
         this.renderList();
-        return this.$el;
+        return this;
     },
     renderList: function () {
         var models = this.collection.where({type: "layer"});
@@ -52,7 +45,7 @@ const LayerView = Backbone.View.extend({
         var childElement = {};
 
         _.each(models, function (model) {
-            childElement = new SingleLayerView({model: model}).render();
+            childElement = new SingleLayerView({model: model}).render().$el;
             this.$el.find("ul.layers").prepend(childElement);
 
         }, this);
