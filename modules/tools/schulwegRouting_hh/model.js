@@ -524,7 +524,6 @@ const SchulwegRouting = Tool.extend({
         this.removeGeomFromFeatures(features);
         this.trigger("resetRouteResult");
         this.trigger("togglePrintEnabled", false);
-        this.get("layer").setVisible(false);
     },
     removeGeomFromFeatures: function (features) {
         _.each(features, function (feature) {
