@@ -96,6 +96,30 @@ const BuildSpecModel = Backbone.Model.extend({
         attributes.map.layers = layers.reverse();
     },
 
+    /**
+     * Gibt die nach zIndex sortierten Features des Draw-layers zurück oder undefined
+     * @param   {ol.layer}  layer   ol.Layer mit Features
+     * @param   {ol.extent} extent  sichtbarer Extent zum filtern der Features
+     * @returns {object}            Layerinfos zum drucken
+     */
+    getDrawLayerInfo: function (layer, extent) {
+        var featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
+            features = _.sortBy(featuresInExtent, function (feature) {
+                return feature.getStyle().getZIndex();
+            });
+
+        if (features.length > 0) {
+            return this.buildVector(layer, features);
+        }
+
+        return undefined;
+    },
+
+    /**
+     * Rückgabe der Layerinformation nach Layertyp oder undefined
+     * @param   {ol.layer}  layer   ol.Layer mit Features
+     * @returns {object}            Layerinfos zum drucken
+     */
     buildLayerType: function (layer) {
         var features = [],
             extent = Radio.request("MapView", "getCurrentExtent"),
@@ -107,12 +131,16 @@ const BuildSpecModel = Backbone.Model.extend({
         else if (layer instanceof Tile) {
             returnLayer = this.buildTileWms(layer);
         }
+        else if (layer.get("name") === "import_draw_layer") {
+            returnLayer = this.getDrawLayerInfo(layer, extent);
+        }
         else if (layer instanceof Vector) {
             features = layer.getSource().getFeaturesInExtent(extent);
             if (features.length > 0) {
                 returnLayer = this.buildVector(layer, features);
             }
         }
+
         return returnLayer;
     },
 
