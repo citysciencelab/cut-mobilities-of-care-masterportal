@@ -52,8 +52,6 @@ const MultiCheckboxModel = SnippetModel.extend({
 
     /**
      * creates a model value and adds it to the value collection
-     * @param  {array} icons - icon array from
-     * @param  {array} valueArray - valueArray
      * @param  {string} value - value
      * @returns {string} - path to Icon
      */
@@ -67,8 +65,9 @@ const MultiCheckboxModel = SnippetModel.extend({
 
         if (valueStyle) {
             iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
-            return iconPath;
         }
+
+        return iconPath;
     },
     /**
     * resetCollection
