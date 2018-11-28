@@ -32,6 +32,7 @@ const DrawTool = Tool.extend({
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
+        addFeatureListener: {},
         zIndex: 0
     }),
 
@@ -71,13 +72,14 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     createSourceListenerForStyling: function (layer) {
-        var source = layer.getSource();
+        var layerSource = layer.getSource();
 
-        source.on("addfeature", function (evt) {
+        this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
             evt.feature.setStyle(this.getStyle());
             this.countupZIndex();
-        }.bind(this));
+        }.bind(this)));
     },
+
     /**
      * creates a vector layer for drawn features, if layer input is undefined
      * and removes this callback from the change:isCurrentWin event
@@ -417,10 +419,9 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     startDownloadTool: function () {
-        var features = this.get("layer").getSource().getFeatures(),
-            downloadView = this.get("downloadView");
+        var features = this.get("layer").getSource().getFeatures();
 
-        downloadView.start({
+        Radio.trigger("download", "start", {
             data: features,
             formats: ["kml"],
             caller: {
@@ -539,12 +540,12 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * setter for modifyInteraction
-     * @param {ol/interaction/modify} value - modifyInteraction
+     * setter for addFeatureListener
+     * @param {object} value - addFeatureListener
      * @return {void}
      */
-    setDownloadView: function (value) {
-        this.set("downloadView", value);
+    setAddFeatureListener: function (value) {
+        this.set("addFeatureListener", value);
     },
 
     /*

@@ -16,6 +16,7 @@ import PrintV2 from "../../tools/print_/model";
 import Print from "../../tools/print/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
+import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../contact/model";
@@ -180,6 +181,9 @@ const ModelList = Backbone.Collection.extend({
             }
             else if (attrs.id === "draw") {
                 return new Draw(attrs, options);
+            }
+            else if (attrs.id === "download") {
+                return new Download(attrs, options);
             }
             else if (attrs.id === "searchByCoord") {
                 return new SearchByCoord(attrs, options);
