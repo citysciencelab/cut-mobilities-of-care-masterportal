@@ -203,6 +203,7 @@ const DrawToolView = Backbone.View.extend({
     unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
+            $(this).addClass("btn-lgv-grey");
         });
     },
 
