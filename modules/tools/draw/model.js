@@ -32,7 +32,8 @@ const DrawTool = Tool.extend({
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
-        addFeatureListener: {}
+        addFeatureListener: {},
+        zIndex: 0
     }),
 
     /**
@@ -64,11 +65,18 @@ const DrawTool = Tool.extend({
             }
         });
     },
+
+    /**
+     * Erzeugt einen addfeature-Listener
+     * @param   {ol.layer} layer Layer, an dem der Listener registriert wird
+     * @returns {void}
+     */
     createSourceListenerForStyling: function (layer) {
         var layerSource = layer.getSource();
 
         this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
             evt.feature.setStyle(this.getStyle());
+            this.countupZIndex();
         }.bind(this)));
     },
 
@@ -113,7 +121,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * creates the draw to draw in the map
+     * creates the draw interaction to draw in the map
      * @param {object} drawType - contains the geometry and description
      * @param {ol/layer/Vector} layer - layer to draw
      * @param {array} color - of geometries
@@ -141,7 +149,9 @@ const DrawTool = Tool.extend({
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
     },
+
     /**
+     * Erzeugt den ol.style und gibt diesen zurück
      * @param {object} drawType - contains the geometry and description
      * @param {array} color - of drawings
      * @return {ol/style/Style} style
@@ -154,13 +164,14 @@ const DrawTool = Tool.extend({
             font = this.get("font"),
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
-            radius = this.get("radius");
+            radius = this.get("radius"),
+            zIndex = this.get("zIndex");
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
-            style = this.getTextStyle(color, text, fontSize, font);
+            style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
-            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius);
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex);
         }
 
         return style.clone();
@@ -172,9 +183,10 @@ const DrawTool = Tool.extend({
      * @param {string} text - of drawings
      * @param {number} fontSize - of drawings
      * @param {string} font - of drawings
+     * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getTextStyle: function (color, text, fontSize, font) {
+    getTextStyle: function (color, text, fontSize, font, zIndex) {
         return new Style({
             text: new Text({
                 textAlign: "left",
@@ -183,19 +195,21 @@ const DrawTool = Tool.extend({
                 fill: new Fill({
                     color: color
                 })
-            })
+            }),
+            zIndex: zIndex
         });
     },
 
     /**
-     * Creates and returns a feature style for points, lines, or faces
+     * Creates and returns a feature style for points, lines, or faces and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
      * @param {number} radius - from geometry
+     * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius) {
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex) {
         return new Style({
             fill: new Fill({
                 color: color
@@ -209,7 +223,8 @@ const DrawTool = Tool.extend({
                 fill: new Fill({
                     color: color
                 })
-            })
+            }),
+            zIndex: zIndex
         });
     },
 
@@ -526,11 +541,30 @@ const DrawTool = Tool.extend({
 
     /**
      * setter for addFeatureListener
-     * @param {ol/interaction/modify} value - addFeatureListener
+     * @param {object} value - addFeatureListener
      * @return {void}
      */
     setAddFeatureListener: function (value) {
         this.set("addFeatureListener", value);
+    },
+
+    /*
+    * count up zIndex
+    * @returns {void}
+    */
+    countupZIndex: function () {
+        var value = this.get("zIndex") + 1;
+
+        this.setZIndex(value);
+    },
+
+    /*
+    * setter for zIndex
+    * @param {number} value zIndex
+    * @returns {void}
+    */
+    setZIndex: function (value) {
+        this.set("zIndex", value);
     }
 });
 
