@@ -497,12 +497,34 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {string} the attribute by whose value the feature is styled
      */
     getStyleAttribute: function (layer) {
-        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")});
+        var layerId = layer.get("id"),
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
         if (layerModel !== undefined) {
+            layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
+
             return Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
         }
         return "styleId";
+    },
+
+    /**
+     * Checks if model is a Group Model.
+     * If so, then the child model corresponding to layerId is returned.
+     * Otherwise the model is returned
+     * @param  {Backbone.Model} model Layer model from ModelList
+     * @param  {String} layerId Id of layer model to return
+     * @return {Backbone.Model} found layer model
+     */
+    getChildModelIfGroupLayer: function (model, layerId) {
+        var layerModel = model;
+
+        if (layerModel.get("typ") === "GROUP") {
+            layerModel = _.filter(layerModel.get("layerSource"), function (childLayer) {
+                return childLayer.get("id") === layerId;
+            })[0];
+        }
+        return layerModel;
     },
 
     /**
