@@ -1,7 +1,8 @@
 /**
- * @module Alerting
+ * @module AlertingModule
  * @description FooBar
- * @extends Backbone.Radio
+ * @see module:AlertingModule
+ * @extends Backbone.Model
  */
 const AlertingModel = Backbone.Model.extend({
     defaults: {
