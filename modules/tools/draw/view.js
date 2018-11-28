@@ -185,6 +185,7 @@ const DrawToolView = Backbone.View.extend({
     startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
+        this.$el.find(".draw").toggleClass("btn-lgv-grey");
         this.model.toggleInteraction("draw");
     },
 
@@ -196,6 +197,7 @@ const DrawToolView = Backbone.View.extend({
     toggleInteraction: function (evt) {
         this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
+        $(evt.target).toggleClass("btn-lgv-grey");
         this.model.toggleInteraction($(evt.target).attr("class"));
     },
 
@@ -206,6 +208,7 @@ const DrawToolView = Backbone.View.extend({
     unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
+            $(this).addClass("btn-lgv-grey");
         });
     },
 
