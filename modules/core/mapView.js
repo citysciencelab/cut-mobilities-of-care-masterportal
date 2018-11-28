@@ -73,7 +73,7 @@ const MapView = Backbone.Model.extend({
      * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
      * @returns {void}
      */
-    initialize: function () {
+    initialize: function (attributes) {
         var channel = Radio.channel("MapView");
 
         channel.reply({
@@ -120,7 +120,11 @@ const MapView = Backbone.Model.extend({
             }
         });
 
-        this.setConfig();
+        if (attributes.resolution === undefined && attributes.zoomLevel !== undefined) {
+            const resolution = this.get("options")[attributes.zoomLevel].resolution;
+
+            this.setStartResolution(resolution);
+        }
         this.setResolutions();
         this.setUrlParams();
         this.setProjection();
@@ -177,22 +181,6 @@ const MapView = Backbone.Model.extend({
         this.get("view").setCenter(this.get("startCenter"));
         this.get("view").setResolution(this.get("resolution"));
         Radio.trigger("MapMarker", "hideMarker");
-    },
-
-    /*
-    * Finalisierung der Initialisierung für config.json
-    */
-    setConfig: function () {
-        const mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView;
-
-        Object.keys(mapViewSettings).forEach(key => {
-            this.set(key, mapViewSettings[key]);
-        });
-        if (mapViewSettings.resolution === undefined && mapViewSettings.zoomLevel !== undefined) {
-            const resolution = this.get("options")[mapViewSettings.zoomLevel].resolution;
-
-            this.setStartResolution(resolution);
-        }
     },
 
     setUrlParams: function () {

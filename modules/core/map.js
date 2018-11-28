@@ -19,7 +19,8 @@ const map = Backbone.Model.extend({
 
     initialize: function () {
         var channel = Radio.channel("Map"),
-            mapView = new MapView();
+            mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
+            mapView = new MapView(mapViewSettings, {parse: true});
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
