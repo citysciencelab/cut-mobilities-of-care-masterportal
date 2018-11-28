@@ -463,7 +463,7 @@ const SchulwegRouting = Tool.extend({
             Radio.trigger("MapView", "setCenter", geometry.getCoordinates(), 6);
         }
         else {
-            Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            Radio.trigger("Map", "zoomToExtent", source.getExtent());
         }
         Radio.trigger("MapView", "setZoomLevelDown");
     },
