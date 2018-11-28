@@ -42,6 +42,7 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
+            iconPath: this.getIconPath(value),
             displayName: value,
             isSelected: true,
             isSelectable: true,
@@ -50,13 +51,45 @@ const MultiCheckboxModel = SnippetModel.extend({
     },
 
     /**
+     * creates a model value and adds it to the value collection
+     * @param  {string} value - value
+     * @returns {string} - path to Icon
+     */
+    getIconPath: function (value) {
+        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+            styleId,
+            styleModel,
+            valueStyle,
+            iconPath;
+
+        if (layerModel) {
+            styleId = layerModel.get("styleId");
+
+            if (styleId) {
+                styleModel = Radio.request("StyleList", "returnModelById", styleId);
+            }
+        }
+
+        if (styleModel) {
+            valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
+                return styleFieldValue.styleFieldValue === value;
+            });
+        }
+
+        if (valueStyle) {
+            iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
+        }
+
+        return iconPath;
+    },
+    /**
     * resetCollection
-    * @return {[type]} [description]
+    * @return {void}
     */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models;
+        var models = this.get("valuesCollection").models;
 
-        _.each(collection.models, function (model) {
+        _.each(models, function (model) {
             model.set("isSelectable", true);
         }, this);
     },
@@ -69,7 +102,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     updateSelectedValues: function (values, checked) {
         _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (valueModel.get("displayName") === values) {
+            if (valueModel.get("displayName") === values.trim()) {
                 valueModel.set("isSelected", checked);
             }
         });

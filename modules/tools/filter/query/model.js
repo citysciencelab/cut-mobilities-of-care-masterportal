@@ -116,10 +116,10 @@ const QueryModel = Backbone.Model.extend({
         else if (snippetAttribute.type === "checkbox-classic") {
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": snippetAttribute.type});
             snippetAttribute.type = "string";
+            snippetAttribute.layerId = this.get("layerId");
             this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
         }
     },
-
     /**
      * adds a snippet for the map extent search
      * @return {[type]} [description]
