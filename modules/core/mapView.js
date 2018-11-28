@@ -62,7 +62,7 @@ const MapView = Backbone.Model.extend({
                 zoomLevel: 9
             }
         ],
-        startResolution: 15.874991427504629,
+        resolution: 15.874991427504629,
         startCenter: [565874, 5934140],
         units: "m",
         DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
@@ -175,7 +175,7 @@ const MapView = Backbone.Model.extend({
 
     resetView: function () {
         this.get("view").setCenter(this.get("startCenter"));
-        this.get("view").setResolution(this.get("startResolution"));
+        this.get("view").setResolution(this.get("resolution"));
         Radio.trigger("MapMarker", "hideMarker");
     },
 
@@ -183,50 +183,15 @@ const MapView = Backbone.Model.extend({
     * Finalisierung der Initialisierung für config.json
     */
     setConfig: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus Config.json in spezifischer Reihenfolge
-        */
-        var mapViewSettings = Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}),
-            mapViewOptions = _.find(mapViewSettings, {"id": "options"}),
-            mapViewEpsg = _.find(mapViewSettings, {"id": "epsg"}),
-            mapViewImage = _.find(mapViewSettings, {"id": "backgroundImage"}),
-            mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
-            mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
-            mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
-            mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"}),
-            res;
+        const mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView;
 
-        if (_.isUndefined(mapViewOptions) === false) {
-            this.set("options", []);
-            _.each(mapViewOptions.attr, function (opt) {
-                this.pushHits("options", opt);
-            }, this);
-        }
+        Object.keys(mapViewSettings).forEach(key => {
+            this.set(key, mapViewSettings[key]);
+        });
+        if (mapViewSettings.resolution === undefined && mapViewSettings.zoomLevel !== undefined) {
+            const resolution = this.get("options")[mapViewSettings.zoomLevel].resolution;
 
-        if (_.isUndefined(mapViewEpsg) === false) {
-            this.setEpsg(mapViewEpsg.attr);
-        }
-
-        if (_.isUndefined(mapViewImage) === false) {
-            this.setBackgroundImage(mapViewImage.attr);
-            this.setBackground(mapViewImage.attr);
-        }
-
-        if (_.isUndefined(mapViewStartCenter) === false) {
-            this.setStartCenter(mapViewStartCenter.attr);
-        }
-
-        if (_.isUndefined(mapViewExtent) === false) {
-            this.setExtent(mapViewExtent.attr);
-        }
-
-        if (_.isUndefined(mapViewResolution) === false) {
-            this.setStartResolution(mapViewResolution.attr);
-        }
-        else if (_.isUndefined(mapViewZoomLevel) === false) {
-            res = this.get("options")[mapViewZoomLevel.attr].resolution;
-
-            this.setStartResolution(res);
+            this.setStartResolution(resolution);
         }
     },
 
@@ -242,14 +207,14 @@ const MapView = Backbone.Model.extend({
         }
 
         if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.set("startResolution", this.get("resolutions")[zoomLevelFromParamUrl]);
+            this.set("resolution", this.get("resolutions")[zoomLevelFromParamUrl]);
         }
     },
 
     // setter for epsg
-    setEpsg: function (value) {
-        this.set("epsg", value);
-    },
+    // setEpsg: function (value) {
+    //     this.set("epsg", value);
+    // },
 
     setBackground: function (value) {
         this.set("background", value);
@@ -264,7 +229,7 @@ const MapView = Backbone.Model.extend({
     },
 
     setStartResolution: function (value) {
-        this.set("startResolution", value);
+        this.set("resolution", value);
     },
     toggleBackground: function () {
         if (this.get("background") === "white") {
@@ -280,9 +245,9 @@ const MapView = Backbone.Model.extend({
     },
 
     // setter for extent
-    setExtent: function (value) {
-        this.set("extent", value);
-    },
+    // setExtent: function (value) {
+    //     this.set("extent", value);
+    // },
 
     /**
      * Setzt die ol Projektion anhand des epsg-Codes
@@ -321,7 +286,7 @@ const MapView = Backbone.Model.extend({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
-            resolution: this.get("startResolution"),
+            resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
         });
 
