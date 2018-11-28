@@ -120,7 +120,7 @@ const MapView = Backbone.Model.extend({
         });
 
         // overwrite the resolution if zoomLevel is configured and resolution is not
-        if (attributes.resolution === undefined && attributes.zoomLevel !== undefined) {
+        if (attributes && attributes.resolution && attributes.zoomLevel !== undefined) {
             const resolution = this.get("options")[attributes.zoomLevel].resolution;
 
             this.setResolution(resolution);
