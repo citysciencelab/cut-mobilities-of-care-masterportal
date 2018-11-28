@@ -304,16 +304,6 @@ const SchulwegRouting = Tool.extend({
     isRoutingRequest: function (ownRequests, requestID) {
         return _.contains(ownRequests, requestID);
     },
-    // activate: function (id) {
-    //     if (this.get("id") === id) {
-    //         this.setIsActive(true);
-    //     }
-    // },
-    // deactivate: function (id) {
-    //     if (this.get("id") === id) {
-    //         this.setIsActive(false);
-    //     }
-    // },
 
     /**
      * sorts the school features by name
@@ -471,6 +461,7 @@ const SchulwegRouting = Tool.extend({
         else {
             Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
         }
+        Radio.trigger("MapView", "setZoomLevelDown");
     },
 
     /**
