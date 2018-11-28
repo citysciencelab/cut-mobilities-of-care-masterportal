@@ -205,6 +205,9 @@ const SchulwegRouting = Tool.extend({
         this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
         response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
         this.setRouteResult(response);
+        if (!_.isArray(routeDescription)) {
+            routeDescription = [routeDescription]
+        }
         this.setRouteDescription(routeDescription);
         this.trigger("togglePrintEnabled", true);
     },
