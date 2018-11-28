@@ -42,6 +42,7 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
+            iconPath: this.getIconPath(value),
             displayName: value,
             isSelected: true,
             isSelectable: true,
@@ -50,8 +51,28 @@ const MultiCheckboxModel = SnippetModel.extend({
     },
 
     /**
+     * creates a model value and adds it to the value collection
+     * @param  {array} icons - icon array from
+     * @param  {array} valueArray - valueArray
+     * @param  {string} value - value
+     * @returns {string} - path to Icon
+     */
+    getIconPath: function (value) {
+        var styleId = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}).get("styleId"),
+            styleModel = Radio.request("StyleList", "returnModelById", styleId),
+            valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
+                return styleFieldValue.styleFieldValue === value;
+            }),
+            iconPath;
+
+        if (valueStyle) {
+            iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
+            return iconPath;
+        }
+    },
+    /**
     * resetCollection
-    * @return {[type]} [description]
+    * @return {void}
     */
     resetValues: function () {
         var collection = this.get("valuesCollection").models;
@@ -69,7 +90,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     updateSelectedValues: function (values, checked) {
         _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (valueModel.get("displayName") === values) {
+            if (valueModel.get("displayName") === values.trim()) {
                 valueModel.set("isSelected", checked);
             }
         });
