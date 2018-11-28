@@ -478,7 +478,8 @@
       {
         "id": "47",
         "styleId": "47",
-        "mouseHoverField": ["beginn", "ende"]
+        "mouseHoverField": ["beginn", "ende"],
+        "autoRefresh": 6000
       },
       {
         "id": "2714",
@@ -531,8 +532,7 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true,
-        "autoRefresh": 6000
+        "extendedFilter": true
       },
       {
         "id": "8712",
