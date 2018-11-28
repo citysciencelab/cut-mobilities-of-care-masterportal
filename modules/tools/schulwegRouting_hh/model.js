@@ -206,7 +206,7 @@ const SchulwegRouting = Tool.extend({
         response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
         this.setRouteResult(response);
         if (!_.isArray(routeDescription)) {
-            routeDescription = [routeDescription]
+            routeDescription = [routeDescription];
         }
         this.setRouteDescription(routeDescription);
         this.trigger("togglePrintEnabled", true);
