@@ -31,37 +31,37 @@ label {
     }
 }
 
-@media (min-height:200px){
-    #poibody{
+@media (min-height:200px) {
+    #poibody {
         max-height:120px;
     }
 }
 
-@media (min-height:250px){
-    #poibody{
+@media (min-height:250px) {
+    #poibody {
         max-height:200px;
     }
 }
 
-@media (min-height:300px){
-    #poibody{
+@media (min-height:300px) {
+    #poibody {
         max-height:220px;
     }
 }
 
-@media (min-height:480px){
-    #poibody{
+@media (min-height:480px) {
+    #poibody {
         max-height:400px;
     }
 }
 
 @media (min-height: 768px) {
-    #poibody{
+    #poibody {
         max-height:700px;
     }
 }
 
-#poibody{
+#poibody {
     overflow:auto;
 }
 
@@ -75,8 +75,7 @@ label {
 }
 
 /******* Ajax Loader *******/
-#loader
-{
+#loader {
     background-color: rgba(0, 0, 0, 0.4);
     color: #FFFFFF;
     height: 100%;
@@ -93,14 +92,14 @@ label {
     margin-top: -5px;
 }
 
-.cluster{
+.cluster {
     font-size:25px;
     border-radius:30px!important;
     float:left;
     margin:10px;
 }
 
-.btn-grey-lgv{
+.btn-lgv-grey {
     background-color:#E3E3E3;
     color: #000000;
 }
