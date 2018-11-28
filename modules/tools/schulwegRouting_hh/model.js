@@ -82,14 +82,10 @@ const SchulwegRouting = Tool.extend({
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                if (value && this.get("layer") === undefined) {
+                if (value && _.isUndefined(this.get("layer"))) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                     this.addRouteFeatures(this.get("layer").getSource());
                     this.get("layer").setStyle(this.routeStyle);
-                }
-                if (value && !_.isUndefined(this.get("layer"))) {
-                }
-                if (!value && !_.isUndefined(this.get("layer"))) {
                 }
             }
         });
@@ -250,9 +246,14 @@ const SchulwegRouting = Tool.extend({
         var wktParser = new WKT(),
             multiLineString = new MultiLineString({});
 
-        routeParts.forEach(function (routePart) {
-            multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
-        });
+        if (_.isArray(routeParts)) {
+            routeParts.forEach(function (routePart) {
+                multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
+            });
+        }
+        else {
+            multiLineString.appendLineString(wktParser.readGeometry(routeParts.wkt));
+        }
         return multiLineString;
     },
     prepareRequest: function (address) {
