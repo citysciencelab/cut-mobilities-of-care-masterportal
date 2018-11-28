@@ -87,9 +87,9 @@ const MultiCheckboxModel = SnippetModel.extend({
     * @return {void}
     */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models;
+        var models = this.get("valuesCollection").models;
 
-        _.each(collection.models, function (model) {
+        _.each(models, function (model) {
             model.set("isSelectable", true);
         }, this);
     },
