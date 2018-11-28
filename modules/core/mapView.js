@@ -69,8 +69,7 @@ const MapView = Backbone.Model.extend({
     },
 
     /**
-     * Die initiale Größe der #map beträgt 100%.
-     * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
+     * @param {object} attributes - initial values
      * @returns {void}
      */
     initialize: function (attributes) {
@@ -120,10 +119,11 @@ const MapView = Backbone.Model.extend({
             }
         });
 
+        // overwrite the resolution if zoomLevel is configured and resolution is not
         if (attributes.resolution === undefined && attributes.zoomLevel !== undefined) {
             const resolution = this.get("options")[attributes.zoomLevel].resolution;
 
-            this.setStartResolution(resolution);
+            this.setResolution(resolution);
         }
         this.setResolutions();
         this.setUrlParams();
@@ -199,11 +199,6 @@ const MapView = Backbone.Model.extend({
         }
     },
 
-    // setter for epsg
-    // setEpsg: function (value) {
-    //     this.set("epsg", value);
-    // },
-
     setBackground: function (value) {
         this.set("background", value);
     },
@@ -216,7 +211,7 @@ const MapView = Backbone.Model.extend({
         this.set("startCenter", value);
     },
 
-    setStartResolution: function (value) {
+    setResolution: function (value) {
         this.set("resolution", value);
     },
     toggleBackground: function () {
@@ -231,11 +226,6 @@ const MapView = Backbone.Model.extend({
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
     },
-
-    // setter for extent
-    // setExtent: function (value) {
-    //     this.set("extent", value);
-    // },
 
     /**
      * Setzt die ol Projektion anhand des epsg-Codes
@@ -354,13 +344,6 @@ const MapView = Backbone.Model.extend({
         var mapSize = Radio.request("Map", "getSize");
 
         return this.get("view").calculateExtent(mapSize);
-    },
-
-    pushHits: function (attribute, value) {
-        var tempArray = _.clone(this.get(attribute));
-
-        tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
     }
 });
 
