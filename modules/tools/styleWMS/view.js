@@ -15,8 +15,8 @@ const StyleWMSView = Backbone.View.extend({
         // Auswahl der Farbe
         "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
         // Anwenden Button
-        "click .btn-panel-submit": "createSLD",
-        "click .btn-panel-reset": "reset",
+        "click .submit": "createSLD",
+        "click .reset": "reset",
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
