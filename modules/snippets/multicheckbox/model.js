@@ -52,32 +52,44 @@ const MultiCheckboxModel = SnippetModel.extend({
 
     /**
      * creates a model value and adds it to the value collection
-     * @param  {array} icons - icon array from
-     * @param  {array} valueArray - valueArray
      * @param  {string} value - value
      * @returns {string} - path to Icon
      */
     getIconPath: function (value) {
-        var styleId = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}).get("styleId"),
-            styleModel = Radio.request("StyleList", "returnModelById", styleId),
+        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+            styleId,
+            styleModel,
+            valueStyle,
+            iconPath;
+
+        if (layerModel) {
+            styleId = layerModel.get("styleId");
+
+            if (styleId) {
+                styleModel = Radio.request("StyleList", "returnModelById", styleId);
+            }
+        }
+
+        if (styleModel) {
             valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
                 return styleFieldValue.styleFieldValue === value;
-            }),
-            iconPath;
+            });
+        }
 
         if (valueStyle) {
             iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
-            return iconPath;
         }
+
+        return iconPath;
     },
     /**
     * resetCollection
     * @return {void}
     */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models;
+        var models = this.get("valuesCollection").models;
 
-        _.each(collection.models, function (model) {
+        _.each(models, function (model) {
             model.set("isSelectable", true);
         }, this);
     },
