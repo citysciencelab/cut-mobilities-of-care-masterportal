@@ -1,0 +1,125 @@
+@color_1: #777;
+@color_2: rgb(85, 85, 85);
+@font_family_1: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgb(255, 255, 255);
+
+/***** Destop *****/
+/***** Mobil *****/
+.wfslist-navbar-li {
+    width: 100px;
+}
+.legend-win {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    max-width: 40%;
+    margin: 60px 10px 30px 10px;
+    display: none;
+    background-color: @background_color_1;
+    >.legend-win-header {
+        color: @color_1;
+        cursor: move;
+    }
+    >.legend-win-content {
+        overflow-y: auto;
+        background-color: @background_color_1;
+    }
+}
+.legend-win-header {
+    padding-left: 10px;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    >.title {
+        white-space: nowrap;
+        min-width: 150px;
+        max-width: 40%;
+        cursor: move;
+        font-size: 14px;
+        padding-top: 8px;
+        padding-bottom: 5px;
+        color: @color_2;
+    }
+    >.buttons {
+        color: @color_2;
+        font-size: 14px;
+        >span {
+            padding: 8px 3px;
+            &:hover {
+                &:not(.win-icon) {
+                    opacity: 0.7;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+.legend-win-content {
+    >.panel-group {
+        padding: 12px;
+        margin-bottom: 0;
+        .panel {
+            margin-top: 8px;
+        }
+    }
+}
+.legend-heading {
+    padding: 8px;
+    >.legend-title {
+        font-size: 12px;
+    }
+}
+.legendModal {
+    background-color: @background_color_1;
+    color: @color_2;
+    border-bottom: 1px solid rgb(229, 229, 229);
+    font-family: @font_family_1;
+    padding: 10px;
+    >button {
+        padding: 4px 0px;
+    }
+    >h4 {
+        >span {
+            padding: 0 8px;
+        }
+    }
+}
+.panel-heading {
+    background: #e7e7e7;
+    background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: @color_2;
+    cursor: pointer;
+    font-family: @font_family_1;
+}
+.tdLegend {
+    padding: 3px;
+    font-family: @font_family_1;
+    >img {
+        max-height: 35px;
+        background-size: 35px;
+    }
+}
+.imageArray {
+    >img {
+        max-height: 35px;
+    }
+}
+.tdLegend-no-image {
+    width: 35px;
+    height: 35px;
+}
+.panel-legend {
+    overflow-x: auto;
+    max-height: 300px;
+    padding: 8px;
+    >p {
+        margin: 0;
+    }
+}
+.styleWMS {
+    height: 15px;
+    width: 15px;
+    margin-right: 5px;
+}

@@ -4,7 +4,7 @@
     "portalTitle":
     {
       "title": "Master",
-      "logo": "../../node_modules/lgv-config/img/hh-logo.png",
+      "logo": "/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -79,7 +79,7 @@
     },
     "mapView":
     {
-      "backgroundImage": "/../../node_modules/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [561210, 5932600]
     },
     "menu":
@@ -90,6 +90,22 @@
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
+      "ansichten": {
+        "name" : "Ansichten",
+        "glyphicon": "glyphicon-list",
+        "children": {
+          "view1": {
+            "name": "Ansicht1",
+            "type" : "viewpoint",
+            "glyphicon": "glyphicon-screenshot",
+            "heading": -0.30858728378862876,
+            "tilt": 0.9321791580603296,
+            "altitude" :272.3469798217454,
+            "center" : [564028.7954571751,5934555.967867207],
+            "zoomLevel" :  7.456437968949651
+          }
+        }
+      },
       "schulwegrouting": {
         "name": "Schulweg-Routing",
         "glyphicon": "glyphicon-filter",
@@ -99,10 +115,10 @@
       {
         "name": "Filter",
         "glyphicon": "glyphicon-filter",
-        "deaktivateGFI": false,
+        "deactivateGFI": false,
         "isGeneric": false,
         "isInitOpen": false,
-        "allowMultipleQueriesPerLayer": true,
+        "allowMultipleQueriesPerLayer": false,
         "predefinedQueries": [
             {
               "layerId": "8712",
@@ -168,11 +184,11 @@
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
-        "children":
-        {
+        "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
-            "glyphicon": "glyphicon-wrench"
+            "glyphicon": "glyphicon-wrench",
+            "onlyDesktop": true
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
@@ -184,7 +200,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -207,28 +223,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master",
-            "gfi": true,
-            "outputFilename": "DruckPDF",
-            "gfiMarker":
-                {
-                  "outerCircle":
-                  {
-                    "fill": false,
-                    "pointRadius": 8,
-                    "stroke": true,
-                    "strokeColor": "#ff0000",
-                    "strokeWidth": 3
-                  },
-                  "point":
-                  {
-                    "fill": true,
-                    "pointRadius": 1,
-                    "fillColor": "#000000",
-                    "stroke": false
-                  }
-                }
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "mrh",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
@@ -244,13 +243,13 @@
           {
             "name": "Feature Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {
@@ -266,25 +265,64 @@
             "name": "Zeichnen / Schreiben",
             "glyphicon": "glyphicon-pencil"
           },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
+          "styleWMS": {
+            "name": "Style WMS",
+            "glyphicon": "glyphicon-tint",
+            "onlyDesktop": true
           },
-          "featureLister":
-          {
+          "featureLister": {
             "name": "Liste",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
+          "lines": {
+            "name": "Pendler (Lines)",
+            "glyphicon": "glyphicon-play-circle"
+          },
           "animation":
           {
-            "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
+            "name": "Pendler (Animation)",
+            "glyphicon": "glyphicon-play-circle",
+            "steps": 30,
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+            "params": {
+                "REQUEST": "GetFeature",
+                "SERVICE": "WFS",
+                "TYPENAME": "app:mrh_kreise",
+                "VERSION": "1.1.0",
+                "maxFeatures": "10000"
+            },
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrGemeinde": "wohnort",
+            "minPx": 5,
+            "maxPx": 30,
+            "zoomlevel": 1,
+            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection": {
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
+          },
+          "layerslider": {
+            "name": "Zeitreihe",
+            "glyphicon": "glyphicon-film",
+            "title": "Simulation von Beispiel-WMS",
+            "timeInterval": 2000,
+            "layerIds": [
+              {
+                "title": "Dienst 1",
+                "layerId": "8730"
+              },
+              {
+                "title": "Dienst 2",
+                "layerId": "2426"
+              },
+              {
+                "title": "Dienst 3",
+                "layerId": "4561"
+              }
+            ]
           }
         }
       },
@@ -323,6 +361,7 @@
     "controls":
     {
       "fullScreen": true,
+      "orientation3d": true,
       "zoom": true,
       "orientation": {
         "zoomMode": "once",
@@ -340,6 +379,8 @@
         "baselayer": "452"
       },
       "mousePosition": true,
+      "button3d": true,
+      "buttonOblique": true,
       "freeze": true
     },
     "scaleLine": true,
@@ -350,17 +391,34 @@
     "Hintergrundkarten":
     {
       "Layer": [
-      {
-        "id": "453",
-        "visibility": true
-      },
-      {
-        "id": "452"
-      },
-      {
-        "id": ["713", "714", "715", "716"],
-        "name": "Geobasiskarten (schwarz-weiß)"
-      }]
+        {
+          "id": "453",
+          "visibility": true
+        },
+        {
+          "id": "452"
+        },
+        {
+          "id": ["713", "714", "715", "716"],
+          "name": "Geobasiskarten (schwarz-weiß)",
+          "visibility": false
+        },
+        {
+          "id": "12883",
+          "name": "Gelände",
+          "visibility": true
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2",
+          "visibility": true
+        },
+        {
+          "id": "12885",
+          "name": "Oblique",
+          "visibility": true
+        }
+      ]
     },
     "Fachdaten":
     {
@@ -379,7 +437,12 @@
         "id": "2426"
       },
       {
-        "id": "4561"
+        "id": "1933",
+        "infoFormat": "application/vnd.ogc.gml"
+      },
+      {
+        "id": "4561",
+        "infoFormat": "text/html"
       },
       {
         "id": "441"
@@ -400,6 +463,7 @@
       },
       {
         "id": "5708",
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -410,6 +474,12 @@
         "id": "2003",
         "styleId": "2003",
         "mouseHoverField": "gebietsname"
+      },
+      {
+        "id": "47",
+        "styleId": "47",
+        "mouseHoverField": ["beginn", "ende"],
+        "autoRefresh": 6000
       },
       {
         "id": "2714",
@@ -496,13 +566,15 @@
         "extendedFilter": true
       },
       {
-        "id": [
-        {
-          "id": "946"
-        },
-        {
-          "id": "947"
-        }],
+        "id": "myId",
+        "children": [
+          {
+            "id": "946"
+          },
+          {
+            "id": "947"
+          }
+        ],
         "name": "Verkehrslage auf Autobahnen",
         "layerAttribution":
         {
@@ -513,14 +585,19 @@
         }
       },
       {
-        "id": [
-        {
-          "id": "682"
-        },
-        {
-          "id": "1731"
-        }],
+        "id": "myId2",
+        "children": [
+          {
+            "id": "682"
+          },
+          {
+            "id": "1731"
+          }
+        ],
         "name": "Kita und KH"
+      },
+      {
+        "id": "13023"
       }]
     }
   }

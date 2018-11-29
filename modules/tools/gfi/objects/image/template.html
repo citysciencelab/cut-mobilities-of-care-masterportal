@@ -1,7 +1,7 @@
 <% if (url.search('.html') !== -1) { %>
     <a href="<%= url%>" target="_blank">Link</a>
-<% } else if (url.substr(0, 7) == 'http://') { %>
-    <% if (url.search(/\.jpg/i) !== -1 || url.search(/\.png/i) !== -1 ) { %>
+<% } else if (url.substr(0, 4) === 'http') { %>
+    <% if (url.search(/\.jpg/i) !== -1 || url.search(/\.png/i) !== -1 || url.search(/\.jpeg/i) !== -1 || url.search(/\.gif/i) !== -1 ) { %>
         <a href="<%= url%>" target="_blank">
             <img id=<%= id %> style="width:100%;" src="<%= url + '?ver=' + zufallszahl %>"
                 <% if (gfiImgReloadTime > 0) {print (' title="Automatischer Refresh alle ' + (gfiImgReloadTime/1000).toString() + ' Sekunden."');}%>

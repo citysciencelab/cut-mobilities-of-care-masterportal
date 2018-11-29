@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<div class="form-group">
+    <select id="select-kreis" class="form-control">
+        <option disabled selected hidden>Landkreis auswählen</option>
+        <% _.each(kreise, function (element) { %>
+            <% if (element === kreis) { %>
+                <option selected><%= element %></option>
+            <% }
+            else { %>
+                <option><%= element %></option>
+            <% } %>
+        <% }); %>
+    </select>
+</div>
+<% if (kreis !== "") { %>
+<div class="form-group">
+    <select id="select-gemeinde" class="form-control">
+        <option disabled selected hidden>Amt/Samtgemeinde auswählen</option>
+        <% _.each(gemeinden, function (element) { %>
+            <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
+                <option selected><%= element %></option>
+            <% }
+            else { %>
+                <option><%= element %></option>
+            <% } %>
+        <% }); %>
+    </select>
+</div>
+<% } %>
+<% if (typeof gemeinde !== "undefined") { %>
+<div class="form-group">
+    <select id="select-trefferAnzahl" class="form-control">
+        <option disabled selected hidden>Anzahl anzuzeigender Beziehungen</option>
+        <option value="top5" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top5") ? "selected" : "" %> >Top 5</option>
+        <option value="top10" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top10") ? "selected" : "" %> >Top 10</option>
+        <option value="top15" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top15") ? "selected" : "" %> >Top 15</option>
+        <!-- <option value="alle" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "alle") ? "selected" : "" %> >Alle</option> -->
+    </select>
+</div>
+<% } %>
+<% if (typeof trefferAnzahl !== "undefined") { %>
+<div class="radio">
+  <label class=" radio-inline">
+    <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
+    Wohnort
+  </label>
+  <label class=" radio-inline">
+    <input type="radio" name="direction" value="arbeitsort" <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
+    Arbeitsort
+  </label>
+</div>
+<% } %>
+<% if (typeof direction !== "undefined") { %>
+<table class="table">
+    <% _.each(pendlerLegend, function(gemeinde){ %>
+        <tr>
+            <td><div class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></div></td>
+            <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
+        </tr>
+    <% }); %>
+</table>
+<hr>
+<div class="form-group">
+    <button class="btn btn-default csv-download">
+        <span class="glyphicon glyphicon-download"></span>&nbsp;CSV Download
+    </button>
+    <% if (animating === true) { %>
+        <button class="btn btn-default pull-right reset">
+            <span class="glyphicon glyphicon-stop"></span>&nbsp;Reset
+        </button>
+    <% }
+    else { %>
+        <button class="btn btn-default pull-right start">
+            <span class="glyphicon glyphicon-play"></span>&nbsp;Start
+        </button>
+    <% } %>
+</div>
+<div class="form-group">
+    <button class="btn btn-default btn-remove-features">
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;Geometrien löschen
+    </button>
+</div>
+
+<% } %>

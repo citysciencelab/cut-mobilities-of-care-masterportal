@@ -63,14 +63,83 @@
       {
         "name": "Themen",
         "glyphicon": "glyphicon-list",
-        "isInitOpen": true
+        "isInitOpen": true,
+        "isAlwaysExpanded": ["SelectedLayer"]
+      },
+      "filter":
+      {
+        "name": "Filter",
+        "glyphicon": "glyphicon-filter",
+        "deactivateGFI": false,
+        "isGeneric": false,
+        "isInitOpen": false,
+        "allowMultipleQueriesPerLayer": false,
+        "predefinedQueries": [
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Stadtteilschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Stadtteilschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Gymnasien",
+              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Gymnasien"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Sonderschulen",
+              "predefinedRules": [
+                {
+                  "attrName": "kapitelbezeichnung",
+                  "values": ["Sonderschulen"]
+                }
+              ],
+              "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+            },
+            {
+              "layerId": "1711",
+              "isActive": true,
+              "isSelected": true,
+              "name": "Krankenhäuser",
+              "predefinedRules": [],
+              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+            }
+          ]
       },
       "tools":
       {
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children":
-
         {
           "parcelSearch":
           {
@@ -78,7 +147,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -101,28 +170,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master-Portal",
-            "gfi": false,
-            "outputFilename": "DruckPDF",
-            "gfiMarker":
-                {
-                  "outerCircle":
-                  {
-                    "fill": false,
-                    "pointRadius": 8,
-                    "stroke": true,
-                    "strokeColor": "#ff0000",
-                    "strokeWidth": 3
-                  },
-                  "point":
-                  {
-                    "fill": true,
-                    "pointRadius": 1,
-                    "fillColor": "#000000",
-                    "stroke": false
-                  }
-                }
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "master",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
@@ -138,13 +190,13 @@
           {
             "name": "Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "extendedFilter":
           {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
-            "deaktivateGFI": false
+            "deactivateGFI": false
           },
           "routing":
           {
@@ -165,10 +217,30 @@
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
+          "lines": {
+            "name": "Pendler (Linien)",
+            "glyphicon": "glyphicon-play-circle"
+          },
           "animation":
           {
-            "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
+            "name": "Pendler (Animation)",
+            "glyphicon": "glyphicon-play-circle",
+            "steps": 30,
+            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "params": {
+                "REQUEST": "GetFeature",
+                "SERVICE": "WFS",
+                "TYPENAME": "app:mrh_kreise",
+                "VERSION": "1.1.0",
+                "maxFeatures": "10000"
+            },
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrGemeinde": "wohnort",
+            "minPx": 5,
+            "maxPx": 30,
+            "zoomlevel": 1,
+            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection":
           {
@@ -179,6 +251,11 @@
           {
             "name": "WMS hinzufügen",
             "glyphicon": "glyphicon-plus"
+                    },
+                    "styleWMS": {
+                        "name": "Style WMS",
+                        "glyphicon": "glyphicon-tint",
+                        "onlyDesktop": true
           }
         }
       },
@@ -216,6 +293,7 @@
     },
     "controls":
     {
+      "orientation3d": true,
       "fullScreen": true,
       "zoom": true,
       "orientation": {
@@ -233,7 +311,9 @@
         "resolution": 611.4974492763076,
         "baselayer": "452"
       },
-      "mousePosition": true
+      "mousePosition": true,
+      "buttonOblique": true,
+      "button3d": true
     },
     "scaleLine": true,
     "Baumtyp": "custom"
@@ -269,7 +349,26 @@
       },
       {
         "id": "453"
-      }]
+      },
+        {
+          "id": "12885",
+          "name": "Oblique",
+          "visibility": true
+        }
+      ]
+    },
+    "Fachdaten_3D":
+    {
+      "Layer": [
+        {
+          "id": "12883",
+          "name": "Gelände"
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2"
+        }
+      ]
     },
     "Fachdaten":
     {
@@ -346,7 +445,7 @@
         },
         {
           "id": "1562",
-          "visibility": true,
+          "visibility": false,
           "name": "Bebauungspläne im Verfahren (§ 2 BauGB)"
         },
         {
@@ -450,7 +549,7 @@
         "Titel": "Luftverkehr",
         "Layer": [
         {
-          "id": ["412", "413", "414", "415", "416", "417", "418", "419", "420", "421", "423", "424", "425", "426", "427", "428", "429", "430", "431"],
+          "id": ["422","420","418","417","416","413","430","412","428","426","427","425","424"],
           "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
           "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
         }]
@@ -496,10 +595,10 @@
               "Busliniennummern"
             ],
             "legendURL": [
-              "http://87.106.16.168/legende_mrh/hvv-faehre.png",
-              "http://87.106.16.168/legende_mrh/hvv-bahn.png",
-              "http://87.106.16.168/legende_mrh/hvv-bus.png",
-              "http://87.106.16.168/legende_mrh/hvv-bus.png"
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png",
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
             ]
           },
           {
@@ -511,7 +610,7 @@
               "Haltestellen"
             ],
             "legendURL": [
-              "http://87.106.16.168/legende_mrh/hvv-bus.png"
+              "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
             ]
           }]
         }],
@@ -532,19 +631,61 @@
           "id": "2178"
         }]
       },
+
       {
         "Titel": "Gruppenlayer",
         "Layer": [
         {
-          "id": [
-          {
-            "id": "682"
-          },
-          {
-            "id": "1731"
-          }],
+          "id": "xyz",
+          "children":[
+            {
+              "id": "682"
+            },
+            {
+              "id": "1731"
+            }
+          ],
           "visibility": true,
           "name": "Kita und Krankenhäuser"
+        },
+        {
+          "id": "schUk",
+          "children":[
+            {
+              "id": "1711",
+              "styleId": "1711",
+              "visibility": false,
+              "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+              "mouseHoverField": ["name", "strasse"],
+              "searchField": "name",
+              "filterOptions": [
+                {
+                  "fieldName": "teilnahme_geburtsklinik",
+                  "filterType": "combo",
+                  "filterName": "Geburtshilfe",
+                  "filterString": ["*", "Ja", "Nein"]
+                },
+                {
+                  "fieldName": "teilnahme_notversorgung",
+                  "filterType": "combo",
+                  "filterName": "Not- und Unfallversorgung",
+                  "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                }
+              ],
+              "extendedFilter": true
+            },
+            {
+              "id": "8712",
+              "visibility": false,
+              "name": "Schulinfosystem",
+              "styleId": "8712",
+              "searchField": "schulname",
+              "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+              "gfiTheme": "schulinfo",
+              "additionalInfoField": "adresse_strasse_hausnr"
+            }
+          ],
+          "name": "Krankenhäuser und Schulen"
         }]
       }]
     }

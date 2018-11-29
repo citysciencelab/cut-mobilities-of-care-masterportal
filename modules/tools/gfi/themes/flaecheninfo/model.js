@@ -1,24 +1,109 @@
-define(function (require) {
+import Theme from "../model";
 
-    var Theme = require("modules/tools/gfi/themes/model"),
-        FlaecheninfoTheme;
+const FlaecheninfoTheme = Theme.extend({
+    defaults: {
+        geometryKey: "Umringspolygon",
+        geometry: null,
+        isMapMarkerVisible: false,
+        isReady: false
+    },
 
-    FlaecheninfoTheme = Theme.extend({
-        initialize: function () {
-            this.listenTo(this, {
-                "change:isReady": this.parseGfiContent
-            });
-        },
-        parseGfiContent: function () {
-            this.setGfiContent(this.get("gfiContent")[0]);
-        },
-        createReport: function () {
-            var flurst = this.get("gfiContent").Flurstück,
-                gemarkung = this.get("gfiContent").Gemarkung;
+    initialize: function () {
+        var channel = Radio.channel("GFI");
 
-            Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
+        this.listenToOnce(channel, {
+            "hideGFI": this.resetIsMapMarkerVisible
+        }, this);
+
+        this.listenTo(this, {
+            "change:isReady": this.parseGfiContent
+        }, this);
+
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                var layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
+
+                if (!layerModelFlaecheninfo.get("isVisibleInMap") || !layerModelFlaecheninfo.get("isSelected")) {
+                    this.setIsVisible(false);
+                    this.resetIsMapMarkerVisible();
+                }
+            }
+        });
+    },
+
+    /**
+     * Parsed die GFI-Attribute
+     * @returns {void}
+     */
+    parseGfiContent: function () {
+        var textContent = _.omit(this.get("gfiContent")[0], this.get("geometryKey")),
+            umring = _.find(this.get("gfiContent")[0], function (val, key) {
+                if (key === this.get("geometryKey")) {
+                    return val;
+                }
+                return null;
+            }, this);
+
+        this.setGfiContent([textContent]);
+        this.setGeometry(umring);
+        this.showUmring();
+    },
+
+    createReport: function () {
+        var flurst = this.get("gfiContent")[0].Flurstück,
+            gemarkung = this.get("gfiContent")[0].Gemarkung;
+
+        Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
+    },
+
+    /**
+     * Speichert die Geometrie als WKT
+     * @param {string} umring WKT
+     * @returns {void}
+     */
+    setGeometry: function (umring) {
+        var coordinatesString,
+            coordinates;
+
+        if (umring) {
+            coordinatesString = umring.slice(10, umring.length - 2);
+            coordinates = coordinatesString.replace(/,/g, " ");
+            this.set("geometry", coordinates);
         }
-    });
+        else {
+            this.set("geometry", null);
+        }
+    },
 
-    return FlaecheninfoTheme;
+    /**
+     * Triggert die Darstellung des Flurstücks über MapMarker
+     * @fires MapMarker:zoomTo
+     * @returns {void}
+     */
+    showUmring: function () {
+        var coordinates = this.get("geometry");
+
+        Radio.trigger("GFI", "isMapMarkerVisible", this.get("isMapMarkerVisible"));
+        if (coordinates) {
+            Radio.trigger("MapMarker", "zoomTo", {
+                coordinate: coordinates,
+                type: "flaecheninfo"
+            });
+        }
+    },
+
+    /**
+     * Triggert ans GFI und MapMarker, wenn das gfi nicht mehr sichtbar ist.
+     * @fires GFI:isMapMarkerVisible
+     * @fires MapMarker:hidePolygon
+     * @returns {void}
+     */
+    resetIsMapMarkerVisible: function () {
+        if (!this.get("isVisible")) {
+            Radio.trigger("GFI", "isMapMarkerVisible", true);
+            Radio.trigger("MapMarker", "hidePolygon");
+        }
+    }
 });
+
+export default FlaecheninfoTheme;

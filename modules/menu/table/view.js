@@ -1,42 +1,39 @@
-define(function (require) {
-    var MainTemplate = require("text!modules/menu/table/main/template.html"),
-        TableNavModel = require("modules/menu/table/model"),
-        $ = require("jquery"),
-        LayerListView = require("modules/menu/table/layer/listView"),
-        CategoryList = require("modules/menu/table/categories/view"),
-        ToolView = require("modules/menu/table/tool/view"),
-        Menu;
+import MainTemplate from "text-loader!./main/template.html";
+import TableNavModel from "./model";
+import LayerListView from "./layer/listView";
+import CategoryList from "./categories/view";
+import ToolView from "./tool/view";
 
-    Menu = Backbone.View.extend({
-        initialize: function () {
-            this.render();
-            this.renderLayerList();
-            this.renderCategoryList();
-            this.renderTools();
-            this.hideContextMenu();
-        },
-        model: new TableNavModel(),
-        id: "table-nav",
-        className: "table-nav",
-        template: _.template(MainTemplate),
-        render: function () {
-            $(this.el).html(this.template());
-            $(".lgv-container").append(this.$el);
+const Menu = Backbone.View.extend({
+    initialize: function () {
+        this.render();
+        this.renderLayerList();
+        this.renderCategoryList();
+        this.renderTools();
+        this.hideContextMenu();
+    },
+    model: new TableNavModel(),
+    id: "table-nav",
+    className: "table-nav",
+    template: _.template(MainTemplate),
+    render: function () {
+        $(this.el).html(this.template());
+        $(".lgv-container").append(this.$el);
 
-            return this;
-        },
-        renderLayerList: function () {
-            this.$el.find("#table-nav-main").append(new LayerListView().render());
-        },
-        renderCategoryList: function () {
-            this.$el.append(new CategoryList().$el);
-        },
-        renderTools: function () {
-            new ToolView();
-        },
-        hideContextMenu: function () {
-            $("body").attr("oncontextmenu", "return false;");
-        }
-    });
-    return Menu;
+        return this;
+    },
+    renderLayerList: function () {
+        this.$el.find("#table-nav-main").append(new LayerListView().render().$el);
+    },
+    renderCategoryList: function () {
+        this.$el.append(new CategoryList().$el);
+    },
+    renderTools: function () {
+        new ToolView();
+    },
+    hideContextMenu: function () {
+        $("body").attr("oncontextmenu", "return false;");
+    }
 });
+
+export default Menu;

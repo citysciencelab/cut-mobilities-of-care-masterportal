@@ -93,7 +93,7 @@
         </div>
         <div class="row">
             <p class="col-md-12">
-                <img class="img-responsive img-thumbnail .center-block" src="<%= statistikFlaecheNiemeier %>"><br>
+                <img class="img-responsive img-thumbnail .center-block" src="<%= imgPath + statistikFlaecheNiemeier %>"><br>
                 (Niemeier, 2002)<br><br>
             </p>
         </div>
@@ -104,7 +104,7 @@
         </div>
         <div class="row">
             <p class="col-md-12">
-                <img class="img-responsive img-thumbnail .center-block" src="<%= statistikStreckeUniErlangen %>"><br>
+                <img class="img-responsive img-thumbnail .center-block" src="<%= imgPath + statistikStreckeUniErlangen %>"><br>
                 (<a href="http://www.hs-bochum.de/fb5/baeumker/download/vermessungskundes1-36einseitig.pdf">Uni Erlangen, 2016</a>)<br><br>
             </p>
         </div>
@@ -121,18 +121,18 @@
                 Das UTM-Koordinaten-System ist ein globales Koordinatensystem, welches die Erdoberfläche in 6° breiten Streifen darstellt. Jeder Streifen stellt eine Zone dar, die fortlaufend von 180° West nach 180° Ost durchnummeriert werden. Deutschland liegt weitestgehend in der Zone 32 (6° bis 12° östliche Länge). Als Projektion der gekrümmten Erdoberfläche auf eine ebene Karte wird eine transversale Mercator-Projektion verwendet. Dabei schneidet der Projektionszylinder (<font color="red">rot</font>) die Erdoberfläche, sodass ein 360km breiter Schnittstreifen entsteht, der "über" den Projektionszylinder herausragt. Die Koordinaten des Schnittstreifens werden folglich verkürzt auf der Abbildungsebene abgebildet, wohingegen die Koordinaten außerhalb des Schnittstreifens gestreckt werden.<br><br>
             </p>
             <p class="col-md-12">
-                <img class="img-responsive img-thumbnail .center-block" src="<%= utmStreifen %>"><br>
+                <img class="img-responsive img-thumbnail .center-block" src="<%= imgPath + utmStreifen %>"><br>
                 UTM-Abbildung 6° breit<br><br>
             </p>
             <p class="col-md-12">
-                <img class="img-responsive img-thumbnail .center-block" src="<%= utmVerzerrung %>"><br>
+                <img class="img-responsive img-thumbnail .center-block" src="<%= imgPath + utmVerzerrung %>"><br>
                 Abbildungsverzerrung bei der UTM-Abbildung<br><br>
             </p>
              <p class="col-md-12">
                 Dieser Verzerrung muss entgegengewirkt werden, da bei einer direkten Messung in der Karte die gemessenen Strecken/Flächen verzerrt und somit falsch sind. Für Hamburg macht die Verzerrung bspw. bei einer Streckenmessung von 1000m schon ca. 40cm aus. Dies ist ein nicht unerheblicher Fehler, der weit über den Toleranzen heutiger Messgeräte liegt. Mit Hilfe folgender Formeln lassen sich gemessene Strecken und Flächen wieder entzerren: <br><br>
             </p>
             <p class="col-md-12">
-                <img class="img-responsive img-thumbnail .center-block" src="<%= utmFormeln %>"><br>
+                <img class="img-responsive img-thumbnail .center-block" src="<%= imgPath + utmFormeln %>"><br>
                 Formeln zur Entzerrung der in UTM gemessenen Flächen/Strecken<br><br>
             </p>
         </div>

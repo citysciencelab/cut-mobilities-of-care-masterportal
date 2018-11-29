@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<div class="header">
-    <p class="buttons pull-right">
-        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
-    </p>
-    <p class="title">
-        <span class="glyphicon glyphicon-picture"></span>
-        <span>Style WMS</span>
-    </p>
-</div>
-<div class="content">
-    <p class="layer-name"><%= model.get("name") %></p>
-    <br>
-    <div class="form-horizontal" role="form">
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <label class="range-label">Thema</label>
+            <select class="form-control input-sm" id="layerField">
+                <option class="pull-left" value="" selected="true">Bitte Thema auswählen</option>
+                <% _.each(styleableLayerList, function (styleableLayer) { %>
+                    <option class ="pull-left" value="<%= styleableLayer.id %>"><%= styleableLayer.name %></option>
+                <% })%>
+            </select>
+        </div>
+    </div>
+    <% if ( model !== null && model!== undefined) { %>
         <div class="form-group form-group-sm">
             <div class="col-md-12 col-sm-12">
                 <label class="range-label">Attribut</label>
@@ -24,17 +24,17 @@
             </div>
         </div>
         <% if (attributeName !== "default") { %>
-        <div class="form-group form-group-sm">
-            <div class="col-md-12 col-sm-12">
-                <label class="range-label">Anzahl der Klassen</label>
-                <select class="form-control input-sm" id="numberField">
-                    <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
-                    <% _.each(numberOfClassesList, function (number) { %>
-                        <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
-                    <% }); %>
-                </select>
+            <div class="form-group form-group-sm">
+                <div class="col-md-12 col-sm-12">
+                    <label class="range-label">Anzahl der Klassen</label>
+                    <select class="form-control input-sm" id="numberField">
+                        <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
+                        <% _.each(numberOfClassesList, function (number) { %>
+                            <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
+                        <% }); %>
+                    </select>
+                </div>
             </div>
-        </div>
         <% } %>
         <% if (numberOfClasses !== "default") { %>
             <% for (var i = 0; i < numberOfClasses; i++) { %>
@@ -60,10 +60,18 @@
                 <% if (typeof errors !== "undefined") { %>
                     <span id="yearError" class="col-xs-7 col-xs-offset-5 treeFilterError"><%= errors.range %></span>
                 <% } %>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <button class="btn btn-panel-submit col-md-12 col-sm-12">Anwenden</button>
+                <div class="col-md-12 col-sm-12 col-xs-12 stylewms-panel">
+                    <button class="btn btn-lgv-grey reset float-left">Zurücksetzen</button>
+                    <button class="btn btn-lgv-grey submit float-right">Anwenden</button>
                 </div>
             </div>
         <% } %>
-    </div>
+        <% if (model !== null && numberOfClasses === "default") { %>
+            <div class="form-group form-group-sm">
+                <div class="col-md-12 col-sm-12 col-xs-12 stylewms-panel">
+                    <button class="btn btn-lgv-grey reset float-left">Zurücksetzen</button>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
 </div>

@@ -1,0 +1,1455 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://lgvfds03.fhhnet.stadt.hamburg.de/fachdaten_n_s/services/wfs_hh_strassennetz_inspire_a1_7_verkehrsnetze?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:strassennetz_inspire_bab&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2018-08-31T06:13:22Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6351">
+      <app:abs>252500101 252500102</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>469.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse>E 45</app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6351_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6351_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561590.680 5921144.340 561644.084 5921103.671 561659.200 5921092.160 561716.088 5921051.085 561735.650 5921036.960 561842.988 5920965.121 561877.190 5920942.230 561979.230 5920880.720</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6352">
+      <app:abs>242500008T 242500008U</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>4.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6352_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6352_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>559301.270 5934632.650 559302.660 5934630.820 559303.820 5934629.070</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6353">
+      <app:abs>252500103K 252500103B</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>706.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6353_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6353_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561657.370 5924059.470 561649.000 5924123.090 561631.660 5924199.160 561588.836 5924335.227 561577.140 5924372.390 561519.160 5924578.730 561514.000 5924601.580 561511.810 5924625.260 561513.229 5924639.510 561514.000 5924647.260 561517.540 5924661.250 561538.980 5924708.240 561550.730 5924738.080</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6354">
+      <app:abs>242600012T 242600012U</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>512.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6354_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6354_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>572104.730 5929258.170 572183.070 5929279.980 572303.620 5929320.000 572310.180 5929324.630 572329.230 5929332.540 572357.270 5929347.320 572540.630 5929424.530 572555.110 5929432.440 572578.580 5929449.580</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6355">
+      <app:abs>242600010K 242600010R</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1218.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6355_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6355_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>576192.740 5934157.800 576229.230 5934307.860 576252.430 5934390.980 576275.020 5934463.740 576297.200 5934527.350 576322.460 5934594.420 576340.870 5934634.610 576360.070 5934674.080 576398.030 5934745.220 576459.210 5934853.540 576485.090 5934895.200 576527.180 5934956.170 576554.490 5934992.150 576582.620 5935025.480 576643.600 5935092.140 576703.560 5935148.230 576737.850 5935176.270 576769.830 5935199.230</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6356">
+      <app:abs>242600007K 242600007L</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>719.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6356_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6356_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574722.270 5930990.070 574741.960 5931010.310 574799.780 5931077.880 574880.650 5931176.920 574896.670 5931192.010 574914.450 5931201.010 574939.020 5931208.520 574987.530 5931211.680 575011.740 5931214.960 575029.030 5931221.630 575045.310 5931232.240 575053.340 5931239.400 575073.220 5931262.990 575151.982 5931368.677 575181.714 5931408.574 575183.090 5931410.420 575200.499 5931431.775 575212.030 5931445.920 575220.230 5931457.770 575221.860 5931463.700</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6357">
+      <app:abs>242600012A 242600012B</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>711.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6357_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6357_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>572344.510 5929416.030 572345.450 5929430.250 572338.530 5929501.740 572342.410 5929514.320 572351.230 5929524.720 572353.231 5929525.887 572358.240 5929528.810 572366.910 5929531.160 572395.280 5929534.520 572413.650 5929533.350 572422.320 5929531.010 572431.720 5929525.890 572442.340 5929516.370 572449.050 5929507.440 572453.980 5929491.200 572454.580 5929479.790 572452.130 5929467.280 572441.430 5929449.350 572421.664 5929431.810 572420.914 5929431.145 572408.220 5929419.880 572406.410 5929418.896 572404.650 5929417.940 572376.070 5929402.410 572343.160 5929389.650 572307.910 5929382.330 572236.970 5929373.850 572204.958 5929365.522 572203.220 5929365.070 572171.680 5929352.790 572098.410 5929313.550 572074.070 5929304.580 572048.210 5929298.400</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6358">
+      <app:abs>252700005 252700006</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>2310.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6358_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6358_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>580005.850 5925825.070 580178.380 5925878.950 580314.320 5925916.290 580417.710 5925941.390 580512.120 5925962.300 580725.450 5925998.750 580879.620 5926019.060 581052.910 5926032.800 581151.510 5926038.180 581280.580 5926041.770 581383.960 5926039.980 581535.730 5926034.000 581740.690 5926017.260 581900.240 5925996.350 582062.780 5925970.660 582139.870 5925955.720 582289.350 5925922.570</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6359">
+      <app:abs>242500004A 242500004B</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>859.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6359_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6359_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561065.060 5939338.620 561087.860 5939180.500 561094.320 5939122.600 561097.630 5939074.370 561097.903 5939054.308 561098.190 5939033.170 561095.830 5938990.560 561088.740 5938938.300 561079.690 5938899.080 561065.370 5938854.780 561051.840 5938825.840 561046.407 5938818.600 561033.050 5938800.800 561019.580 5938791.660 561010.470 5938787.940 560999.710 5938786.050 560980.740 5938787.940 560971.870 5938792.120 560964.470 5938797.210 560955.920 5938807.120 560950.450 5938817.250 560947.590 5938833.970 560949.190 5938847.010 560951.810 5938854.310 560955.630 5938861.340 560967.930 5938874.950 560990.192 5938894.100 560993.470 5938896.920 561025.775 5938921.746 561037.687 5938930.900 561043.790 5938935.590 561082.050 5938961.810</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6360">
+      <app:abs>252500142P 252500142Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>567.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6360_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6360_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560488.720 5926266.300 560501.654 5926241.496 560532.690 5926181.980 560548.350 5926159.600 560556.930 5926151.210 560568.680 5926142.820 560583.030 5926135.360 560610.662 5926127.266 560613.620 5926126.400 560621.063 5926123.730 560633.020 5926119.440 560646.810 5926112.610 560660.600 5926100.490 560677.010 5926076.990 560684.840 5926056.490 560710.270 5925926.940 560729.400 5925843.350 560741.880 5925798.220</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6361">
+      <app:abs>252600103E 252600103F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>440.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6361_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6361_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574181.560 5926939.740 574072.700 5926986.920 573990.310 5927026.450 573961.400 5927043.330 573947.001 5927055.580 573943.510 5927058.550 573935.110 5927073.260 573930.880 5927088.790 573930.610 5927095.130 573931.400 5927105.340 573934.450 5927116.080 573946.470 5927133.860 573962.060 5927144.330 573980.240 5927148.750 573991.614 5927148.689 573996.950 5927148.660 574004.459 5927147.281 574005.660 5927147.060 574013.660 5927144.840 574030.020 5927136.390</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6362">
+      <app:abs>242600011 242600002</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>255</app:strassennummer>
+      <app:strasse>A 255</app:strasse>
+      <app:strassenname>BAB A255</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1235.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6362_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6362_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>568167.910 5930389.980 568124.500 5930464.740 567843.410 5930988.760 567837.558 5931001.688 567801.470 5931081.410 567783.310 5931140.890 567770.160 5931209.750 567769.853 5931215.030 567766.410 5931274.240 567766.476 5931277.956 567767.040 5931309.920 567770.160 5931341.850 567778.930 5931387.550 567793.220 5931447.660 567815.770 5931524.140</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6363">
+      <app:abs>252600104C 252600104D</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>515.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6363_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6363_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>576296.750 5926445.580 576290.940 5926443.530 576284.160 5926443.640 576264.703 5926448.673 576115.431 5926487.288 576084.110 5926495.390 576033.730 5926511.820 575925.830 5926553.040 575842.400 5926582.320 575804.780 5926593.080</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6364">
+      <app:abs>242600015M 242600015N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>24</app:strassennummer>
+      <app:strasse>A 24</app:strasse>
+      <app:strassenname>BAB A24</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>516.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6364_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6364_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574143.890 5935861.600 574199.550 5935869.380 574373.390 5935899.510 574404.460 5935900.570 574420.100 5935897.530 574427.900 5935894.180 574440.190 5935885.410 574445.680 5935879.670 574453.630 5935864.100 574454.860 5935856.880 574453.630 5935841.640 574450.920 5935833.280 574445.100 5935824.260 574438.790 5935817.950 574422.320 5935808.690 574407.060 5935805.090 574394.610 5935804.270 574350.251 5935807.678 574341.234 5935808.371 574340.070 5935808.460 574303.920 5935816.420</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6365">
+      <app:abs>252600101T 252600101U</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>67.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6365_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6365_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>567946.420 5924346.880 567913.000 5924300.860 567905.620 5924293.810</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6366">
+      <app:abs>252500104 252500105</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>876.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6366_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6366_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>565579.490 5922971.070 565834.040 5923111.220 565897.060 5923148.990 565954.560 5923188.760 565958.352 5923191.658 565971.881 5923201.999 566000.210 5923223.650 566063.880 5923283.210 566105.310 5923330.690 566133.370 5923366.510 566152.370 5923393.230 566189.300 5923454.440 566212.590 5923500.010 566225.890 5923532.280</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6367">
+      <app:abs>242500004G 242500004H</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>488.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6367_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6367_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561175.230 5938883.380 561169.360 5938893.760 561160.700 5938915.570 561153.200 5938946.330 561140.153 5939033.731 561129.320 5939106.300 561110.520 5939248.040 561096.590 5939329.920 561088.550 5939360.230</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6368">
+      <app:abs>252500109 252500110</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>233.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6368_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6368_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566182.610 5926325.820 566180.807 5926380.829 566180.118 5926401.833 566178.806 5926441.840 566174.970 5926558.860</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6369">
+      <app:abs>242500001K 242500001L</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>449.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6369_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6369_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>559527.730 5935050.240 559533.437 5935089.871 559550.990 5935211.760 559568.870 5935280.600 559573.015 5935299.086 559590.535 5935377.226 559601.705 5935427.041 559610.903 5935468.065 559615.940 5935490.530</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6370">
+      <app:abs>252700004P 252700004Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>77.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6370_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6370_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>578095.020 5925477.390 578084.990 5925483.390 578079.070 5925489.200 578071.210 5925502.060 578068.970 5925518.230 578070.810 5925528.010 578076.270 5925542.330</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6371">
+      <app:abs>242600014P 242600014Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>470.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6371_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6371_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>575850.790 5933531.840 575867.423 5933544.681 575882.473 5933556.298 575901.660 5933571.110 575923.380 5933582.220 575935.490 5933584.940 575959.690 5933583.950 575964.195 5933582.326 575979.440 5933576.830 575988.960 5933570.730 575997.300 5933561.950 576009.510 5933543.640 576014.560 5933529.360 576018.570 5933506.880 576017.440 5933491.660 576006.600 5933442.700 575962.720 5933273.090</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6372">
+      <app:abs>242600015C 242600015D</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>24</app:strassennummer>
+      <app:strasse>A 24</app:strasse>
+      <app:strassenname>BAB A24</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>463.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6372_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6372_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574334.890 5935959.080 574309.200 5935959.080 574281.430 5935951.550 574274.588 5935948.159 574235.100 5935928.592 574176.030 5935899.320 574162.801 5935894.152 574145.030 5935887.210 574126.140 5935881.600 574096.277 5935876.323 573942.000 5935849.060 573891.460 5935838.340</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6373">
+      <app:abs>242600006 242600015</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>24</app:strassennummer>
+      <app:strasse>A 24</app:strasse>
+      <app:strassenname>BAB A24</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>3538.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6373_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6373_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>570924.000 5935048.620 570958.900 5935089.320 570987.300 5935119.200 571022.870 5935150.320 571101.220 5935208.860 571148.610 5935240.680 571192.430 5935264.370 571236.260 5935282.880 571287.860 5935302.350 571376.800 5935328.000 571584.860 5935376.860 571703.180 5935400.560 572134.402 5935470.903 572321.050 5935501.350 572534.860 5935542.670 572672.480 5935574.640 573065.700 5935674.760 573223.920 5935709.480 573352.238 5935732.202 574324.670 5935904.400</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6374">
+      <app:abs>252700005P 252700005Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>121.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6374_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6374_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>579958.750 5925620.810 579985.760 5925702.450 579993.360 5925711.220 580005.210 5925716.450</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6375">
+      <app:abs>242500007M 242500007N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>56.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6375_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6375_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560560.660 5929887.460 560571.690 5929890.500 560587.850 5929888.360 560596.470 5929883.820 560605.290 5929875.530</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6376">
+      <app:abs>252600104G 252600104H</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>459.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6376_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6376_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>576685.270 5926191.250 576612.270 5926234.030 576479.410 5926307.130 576360.520 5926394.827 576342.815 5926407.886 576311.670 5926430.860 576306.793 5926436.288 576306.270 5926436.870 576303.720 5926442.540</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6377">
+      <app:abs>232500003N 232500003P</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1099.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6377_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6377_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560132.510 5941370.390 560240.242 5941245.098 560240.300 5941245.030 560330.540 5941130.540 560417.210 5941013.000 560486.160 5940910.410 560539.330 5940821.590 560594.670 5940713.250 560642.430 5940604.400 560682.962 5940497.084 560684.240 5940493.700 560701.240 5940438.800</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6378">
+      <app:abs>232500003C 232500003D</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>717.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6378_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6378_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560481.250 5941738.090 560452.190 5941695.020 560423.950 5941644.230 560394.340 5941583.660 560374.340 5941535.770 560351.190 5941460.450 560337.810 5941426.550 560330.690 5941413.470 560326.555 5941408.558 560311.430 5941390.590 560303.150 5941383.430 560284.390 5941371.940 560273.400 5941366.750 560262.230 5941363.860 560245.700 5941361.170 560224.380 5941361.330 560198.950 5941366.390 560172.770 5941379.230 560161.743 5941388.939 560153.620 5941396.090 560046.870 5941504.510</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6379">
+      <app:abs>232500009R 232500009S</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>40.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6379_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6379_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561524.840 5944492.810 561534.270 5944493.480 561544.770 5944490.800 561551.990 5944485.990 561558.900 5944477.110</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6380">
+      <app:abs>242600001 242600011</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>255</app:strassennummer>
+      <app:strasse>A 255</app:strasse>
+      <app:strassenname>BAB A255</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1175.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6380_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6380_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>568720.050 5929353.120 568630.920 5929553.870 568588.350 5929638.390 568399.290 5929987.100 568324.800 5930118.550 568242.170 5930258.160 568222.988 5930293.560 568210.118 5930317.311 568205.870 5930325.150 568167.910 5930389.980</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6381">
+      <app:abs>242600012R 242600012S</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>135.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6381_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6381_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>572547.000 5929483.320 572510.350 5929473.130 572480.410 5929462.150 572449.520 5929445.210 572424.380 5929428.590</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6382">
+      <app:abs>252500108I 252500108J</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>33.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6382_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6382_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566133.930 5924448.190 566120.640 5924442.990 566101.700 5924442.780</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6383">
+      <app:abs>242600015K 242600015L</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>24</app:strassennummer>
+      <app:strasse>A 24</app:strasse>
+      <app:strassenname>BAB A24</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>545.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6383_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6383_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574301.200 5935808.150 574320.670 5935803.561 574323.180 5935802.970 574350.453 5935800.061 574378.860 5935797.030 574410.300 5935795.800 574430.980 5935798.080 574448.210 5935806.320 574463.560 5935819.890 574492.862 5935877.473 574497.420 5935886.430 574504.890 5935897.830 574519.660 5935913.180 574539.270 5935925.080 574550.760 5935929.160 574592.000 5935934.830 574659.670 5935941.240 574779.740 5935949.380</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6384">
+      <app:abs>242600015P 242600015Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>24</app:strassennummer>
+      <app:strasse>A 24</app:strasse>
+      <app:strassenname>BAB A24</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>69.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6384_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6384_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574281.000 5935745.410 574297.140 5935783.010 574307.160 5935793.810 574319.150 5935799.750</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6385">
+      <app:abs>242600030 242600011</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>252</app:strassennummer>
+      <app:strasse>A 252</app:strasse>
+      <app:strassenname>BAB A252</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>437.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6385_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6385_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>567806.100 5930307.620 567829.110 5930297.550 567979.120 5930261.780 568010.011 5930258.567 568018.640 5930257.670 568051.230 5930260.700 568064.760 5930264.090 568091.820 5930275.660 568102.680 5930281.880 568126.890 5930302.350 568148.430 5930330.660 568157.510 5930348.450 568165.530 5930376.050 568167.910 5930389.980</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6386">
+      <app:abs>252500109M 252500109N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>444.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6386_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6386_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566277.960 5926323.770 566277.449 5926286.796 566276.210 5926197.230 566273.610 5926181.410 566269.570 5926171.550 566263.750 5926164.460 566255.660 5926157.130 566246.140 5926153.450 566235.180 5926152.080 566234.881 5926152.125 566227.180 5926153.290 566212.070 5926160.840 566202.980 5926172.410 566199.280 5926183.050 566190.290 5926381.040</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6387">
+      <app:abs>252600101 252600008</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>2016.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse>E 22</app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6387_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6387_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>568097.490 5924211.540 568126.588 5924056.194 568150.714 5923927.395 568316.840 5923040.500 568332.690 5922939.120 568343.760 5922857.790 568344.344 5922851.501 568352.160 5922767.290 568390.320 5922219.000</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6388">
+      <app:abs>242500008I 242500008J</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>26.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6388_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6388_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>559322.440 5934615.970 559330.500 5934626.600 559339.530 5934635.020</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6389">
+      <app:abs>232500003A 232500002</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>23</app:strassennummer>
+      <app:strasse>A 23</app:strasse>
+      <app:strassenname>BAB A23</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>140.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6389_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6389_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560139.000 5941374.660 560042.570 5941476.070</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6390">
+      <app:abs>242600007T 242600007U</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>217.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6390_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6390_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>575196.380 5931422.290 575213.580 5931431.550 575231.180 5931437.120 575248.030 5931438.600 575262.640 5931436.380 575271.450 5931432.480 575284.890 5931424.276 575368.650 5931373.150 575374.845 5931370.010 575390.020 5931362.320</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6391">
+      <app:abs>242600001E 242600001F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1499.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6391_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6391_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>568717.350 5929359.210 568687.650 5929325.180 568667.400 5929296.040 568650.350 5929264.920 568635.610 5929230.070 568627.890 5929207.380 568617.760 5929164.660 568613.060 5929128.360 568612.570 5929104.650 568615.040 5929062.180 568622.700 5929020.690 568629.360 5928995.750 568644.910 5928955.000 568655.040 5928934.010 568676.030 5928899.190 568691.170 5928877.550 568716.030 5928849.550 568802.470 5928763.370 568834.080 5928726.570 568859.760 5928690.020 568879.520 5928648.780 568893.530 5928606.990 568901.310 5928566.610 568902.050 5928542.170 568900.320 5928497.710 568887.580 5928425.830 568869.940 5928356.830 568851.420 5928300.690 568836.080 5928261.180 568797.600 5928177.560 568718.320 5928013.200</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6392">
+      <app:abs>252500102I 252500102J</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>513.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6392_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6392_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>562007.830 5920970.610 562026.441 5920963.385 562041.331 5920957.605 562057.110 5920951.480 562098.700 5920930.940 562112.870 5920920.540 562125.360 5920904.830 562131.000 5920889.220 562131.180 5920882.540 562128.090 5920867.480 562116.450 5920853.350 562111.598 5920850.191 562105.190 5920846.020 562098.520 5920843.970 562083.120 5920843.040 562060.410 5920848.700 562050.270 5920852.790 562003.430 5920878.910 561928.877 5920924.933 561837.990 5920981.040</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6393">
+      <app:abs>232500002A 232500002B</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>23</app:strassennummer>
+      <app:strasse>A 23</app:strasse>
+      <app:strassenname>BAB A23</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>459.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6393_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6393_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560026.600 5941402.290 560020.190 5941404.410 559999.614 5941420.732 559998.831 5941421.354 559993.680 5941425.440 559953.202 5941464.792 559950.520 5941467.400 559937.190 5941483.200 559934.470 5941488.640 559930.810 5941502.130 559931.280 5941511.060 559934.120 5941519.260 559940.030 5941526.780 559951.880 5941532.720 559966.500 5941532.190 559973.550 5941529.370 560024.360 5941478.880 560149.940 5941345.220</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6394">
+      <app:abs>252500105P 252500105Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>406.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6394_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6394_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566187.220 5923543.190 566172.102 5923508.238 566144.652 5923444.772 566104.880 5923352.820 566097.730 5923339.840 566076.110 5923311.560 566027.540 5923261.660 565966.470 5923210.910</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6395">
+      <app:abs>252500105E 252500105F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>93.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6395_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6395_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566224.810 5923642.110 566200.559 5923587.461 566198.690 5923583.250 566191.970 5923576.100 566174.860 5923569.160</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6396">
+      <app:abs>242500009E 242500009F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>507.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6396_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6396_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>560545.290 5937500.800 560547.170 5937515.040 560541.680 5937543.060 560539.857 5937561.832 560538.820 5937572.510 560537.540 5937637.980 560543.040 5937653.420 560549.750 5937663.210 560558.880 5937670.150 560564.890 5937672.840 560578.310 5937674.580 560584.940 5937673.910 560598.310 5937668.430 560604.940 5937663.530 560616.180 5937649.210 560620.530 5937635.200 560619.640 5937566.530 560610.880 5937482.690 560594.900 5937391.950</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6397">
+      <app:abs>242600001Q 242600001V</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>255</app:strassennummer>
+      <app:strasse>A 255</app:strasse>
+      <app:strassenname>BAB A255</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>2387.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6397_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6397_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>569232.170 5929501.300 569190.840 5929504.150 569145.330 5929505.150 568897.500 5929505.580 568869.350 5929507.560 568824.400 5929515.720 568799.460 5929522.140 568762.170 5929538.690 568743.890 5929549.310 568714.010 5929572.030 568683.390 5929601.420 568643.784 5929642.972 568642.900 5929643.900 568642.444 5929644.458 568606.600 5929688.340 568574.000 5929737.000 568519.670 5929832.810 568474.240 5929917.770 568463.067 5929944.209 568460.150 5929951.110 568456.828 5929963.193 568452.750 5929978.030 568440.404 5930036.443 568430.780 5930081.980 568426.580 5930094.830 568415.720 5930118.290 568400.650 5930141.750 568382.380 5930163.480 568361.140 5930183.240 568322.860 5930212.630 568303.850 5930229.420 568289.361 5930245.301 568280.640 5930254.860 568263.850 5930276.100 568254.460 5930290.430 568202.360 5930385.250 568192.730 5930408.210 568161.620 5930497.600 568144.100 5930537.110 568129.290 5930561.810 568115.450 5930581.070 568055.200 5930649.470 568053.460 5930651.658 568046.560 5930660.330 568033.230 5930683.050 568027.279 5930694.197 567864.060 5930999.930 567845.290 5931039.690 567831.210 5931077.970 567823.800 5931108.340 567820.350 5931139.710 567820.570 5931163.180</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6398">
+      <app:abs>242600129M 242600129N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>252</app:strassennummer>
+      <app:strasse>A 252</app:strasse>
+      <app:strassenname>BAB A252</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>788.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6398_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6398_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566860.180 5930170.540 566885.310 5930175.990 566928.280 5930189.150 567111.280 5930248.940 567145.370 5930254.480 567152.671 5930254.271 567175.370 5930253.620 567204.510 5930245.720 567232.540 5930232.390 567299.960 5930192.990 567309.340 5930189.410 567320.210 5930186.700 567338.970 5930186.450 567348.600 5930188.300 567362.180 5930194.230 567373.720 5930202.650 567382.160 5930212.380 567388.980 5930226.030 567393.050 5930239.540 567391.910 5930264.340 567383.790 5930289.990 567344.550 5930389.300 567341.059 5930401.117 567336.890 5930415.230 567334.420 5930429.300</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6399">
+      <app:abs>242600012P 242600012Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>157.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6399_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6399_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>572473.540 5929279.990 572470.810 5929260.960 572463.960 5929245.400 572455.320 5929234.300 572444.430 5929225.160 572432.100 5929218.570 572420.060 5929214.920 572358.540 5929209.720</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6400">
+      <app:abs>232500010 232500009</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>818.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse>E 45</app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6400_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6400_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561516.070 5945291.170 561509.760 5945199.580 561502.920 5945026.170 561503.540 5944733.790 561501.290 5944645.720 561494.540 5944556.870 561484.080 5944474.910</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6401">
+      <app:abs>252500108G 252500108H</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>471.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6401_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6401_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566292.050 5924317.020 566291.300 5924331.150 566288.470 5924339.230 566287.979 5924340.433 566274.366 5924373.777 566235.910 5924467.970 566178.320 5924615.470 566139.400 5924704.800 566115.210 5924752.690</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6402">
+      <app:abs>252500105 252500108</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>253</app:strassennummer>
+      <app:strasse>A 253</app:strasse>
+      <app:strassenname>BAB A253</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>802.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6402_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6402_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>566225.890 5923532.280 566247.830 5923589.510 566248.239 5923591.069 566269.010 5923670.220 566279.990 5923731.830 566284.850 5923771.210 566285.772 5923779.775 566290.970 5923828.070 566293.630 5923870.660 566295.790 5923937.690 566295.790 5924003.060 566290.951 5924089.768 566290.506 5924097.743 566289.970 5924107.350 566279.990 5924196.330 566272.680 5924245.580 566258.080 5924321.900</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6403">
+      <app:abs>252600102A 252600102B</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>33.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6403_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6403_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>567757.470 5926090.790 567747.580 5926102.120 567745.290 5926110.470 567745.170 5926119.490</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6404">
+      <app:abs>242600014K 242600014L</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>458.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6404_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6404_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>575891.060 5932970.290 575916.600 5933031.990 575949.090 5933122.870 575956.630 5933148.050 575972.870 5933185.634 575973.020 5933185.980 575996.640 5933212.740 576008.500 5933221.880 576074.840 5933258.020 576087.640 5933267.830 576094.190 5933275.100 576098.390 5933284.610 576107.108 5933308.601 576120.800 5933346.280</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6405">
+      <app:abs>242600014E 242600014F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>138.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6405_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6405_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>575944.130 5933430.720 575926.380 5933444.470 575911.590 5933459.390 575869.260 5933510.730 575865.940 5933523.490 575868.150 5933539.030</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6406">
+      <app:abs>252500106 252500094</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>261</app:strassennummer>
+      <app:strasse>A 261</app:strasse>
+      <app:strassenname>BAB A261</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>795.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6406_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6406_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561665.450 5920140.240 561661.590 5920083.100 561650.530 5919966.990 561630.380 5919814.360 561609.460 5919693.760 561586.880 5919583.950 561558.630 5919463.160 561529.790 5919357.680</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6407">
+      <app:abs>232500009K 232500009L</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>851.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6407_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6407_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561262.970 5943775.980 561341.340 5943953.040 561429.080 5944161.040 561453.090 5944213.210 561465.860 5944233.990 561467.249 5944235.710 561481.330 5944253.140 561506.870 5944274.540 561537.035 5944294.817 561540.060 5944296.850 561552.070 5944310.880 561559.130 5944322.290 561564.990 5944341.680 561571.069 5944379.484 561571.810 5944384.090 561573.980 5944418.370 561574.690 5944474.970 561578.120 5944500.870 561587.870 5944522.830 561597.410 5944536.120</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6408">
+      <app:abs>242600010M 242600010N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>228.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6408_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6408_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>576865.220 5935301.630 576830.650 5935281.440 576763.960 5935238.910 576730.000 5935214.130 576674.630 5935167.940</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6409">
+      <app:abs>252500102M 252500102N</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>480.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6409_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6409_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561835.050 5920956.570 561862.940 5920936.530 561909.940 5920906.690 562041.590 5920827.070 562058.344 5920813.720 562067.330 5920806.560 562087.100 5920785.480 562102.200 5920761.240 562107.050 5920749.680 562111.520 5920737.550 562117.300 5920706.600 562116.843 5920681.335 562116.750 5920676.200 562114.118 5920657.494 562108.540 5920617.840</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6410">
+      <app:abs>232500005P 232500005Q</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>548.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6410_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6410_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561024.440 5943271.090 561027.451 5943251.318 561028.510 5943244.360 561029.870 5943104.980 561028.530 5943064.310 561023.210 5943020.370 560979.990 5942768.630 560974.380 5942727.820</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6411">
+      <app:abs>252600101I 252600101J</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>836.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6411_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6411_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>568140.920 5924058.410 568134.820 5924104.260 568096.520 5924309.810 568097.190 5924338.690 568100.920 5924352.340 568107.390 5924364.090 568119.230 5924375.340 568127.960 5924379.880 568140.790 5924383.220 568156.770 5924382.400 568170.870 5924376.440 568182.140 5924367.410 568190.540 5924354.320 568197.320 5924334.280 568206.720 5924286.410 568208.500 5924262.830 568204.890 5924245.110 568198.820 5924233.070 568186.590 5924219.610 568169.360 5924209.510 568151.479 5924206.455 568148.290 5924205.910 568118.910 5924208.580 568071.300 5924219.250 568026.870 5924231.520 567985.720 5924239.740 567964.900 5924246.790 567945.760 5924255.360 567927.620 5924264.420 567920.270 5924269.920</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6412">
+      <app:abs>242500001 242500008</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>7</app:strassennummer>
+      <app:strasse>A 7</app:strasse>
+      <app:strassenname>BAB A7</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>864.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse>E 45</app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6412_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6412_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>559582.170 5935512.290 559542.890 5935302.250 559527.080 5935197.990 559515.753 5935107.649 559507.820 5935044.380 559499.611 5934971.545 559491.767 5934901.955 559464.090 5934656.400</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6413">
+      <app:abs>242600007R 242600007S</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>1446.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6413_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6413_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>574512.790 5931732.910 574546.690 5931710.270 574582.300 5931689.170 574625.650 5931669.880 574658.860 5931658.490 574717.072 5931642.576 574741.090 5931636.010 574808.185 5931615.613 574842.010 5931605.330 574893.510 5931582.420 574926.220 5931561.130 574938.910 5931551.290 574992.170 5931503.020 575010.450 5931489.070 575023.740 5931481.750 575043.670 5931473.780 575066.050 5931469.080 575095.780 5931469.650 575119.550 5931474.420 575147.520 5931486.930 575163.280 5931498.390 575173.665 5931508.968 575178.370 5931513.760 575194.480 5931536.240 575204.710 5931560.640 575219.990 5931636.850 575224.860 5931652.500 575226.949 5931657.150 575244.340 5931695.860 575368.950 5931908.890 575469.000 5932087.460 575492.220 5932134.240</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6414">
+      <app:abs>252700004E 252700004F</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>25</app:strassennummer>
+      <app:strasse>A 25</app:strasse>
+      <app:strassenname>BAB A25</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>129.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>1</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6414_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6414_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>578180.720 5925635.680 578157.000 5925642.310 578145.260 5925647.390 578135.010 5925654.430 578128.460 5925663.070 578124.020 5925673.930 578123.590 5925684.770 578133.120 5925728.710</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6415">
+      <app:abs>252500184 252500106</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>261</app:strassennummer>
+      <app:strasse>A 261</app:strasse>
+      <app:strassenname>BAB A261</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>497.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse></app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6415_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6415_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>561664.920 5920637.250 561664.966 5920636.250 561672.360 5920474.420 561673.070 5920358.720 561670.840 5920244.780 561665.460 5920140.240</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+  <gml:featureMember>
+    <app:strassennetz_inspire_bab xmlns:app="http://www.deegree.org/app" gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6416">
+      <app:abs>242600012 242600019</app:abs>
+      <app:strassenart>A</app:strassenart>
+      <app:strassennummer>1</app:strassennummer>
+      <app:strasse>A 1</app:strasse>
+      <app:strassenname>BAB A1</app:strassenname>
+      <app:landesschluessel>02</app:landesschluessel>
+      <app:gemeindeschluessel></app:gemeindeschluessel>
+      <app:kreisschluessel></app:kreisschluessel>
+      <app:abschnittslaenge>664.0</app:abschnittslaenge>
+      <app:laengenherkunft></app:laengenherkunft>
+      <app:ast>0</app:ast>
+      <app:europastrasse>E 22</app:europastrasse>
+      <app:geom>
+        <!--Inlined geometry 'APP_STRASSENNETZ_INSPIRE_BAB_6416_APP_GEOM'-->
+        <gml:LineString gml:id="APP_STRASSENNETZ_INSPIRE_BAB_6416_APP_GEOM" srsName="EPSG:25832">
+          <gml:posList>572337.830 5929357.280 572247.470 5929324.560 572171.220 5929300.260 572094.250 5929279.300 572010.630 5929261.030 571937.180 5929248.990 571857.680 5929240.200 571757.930 5929235.120 571688.420 5929235.770</gml:posList>
+        </gml:LineString>
+      </app:geom>
+    </app:strassennetz_inspire_bab>
+  </gml:featureMember>
+</wfs:FeatureCollection>

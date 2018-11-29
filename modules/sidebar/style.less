@@ -1,0 +1,33 @@
+@background_color_1: rgb(255, 255, 255);
+@background_color_2: rgba(0, 0, 0, 0.5);
+
+.sidebar {
+    height: calc(100% - 50px);
+    width: 30%;
+    float: left;
+    overflow: auto;
+    display: none;
+    position: relative;
+}
+.sidebar-mobile {
+    position: fixed;
+    display: none;
+    background-color: @background_color_1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 40px;
+}
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1040;
+    background-color: @background_color_2;
+}

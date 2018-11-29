@@ -1,0 +1,122 @@
+@color_1: #fec44f;
+@color_2: transparent;
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgb(0, 92, 169);
+@background_color_2: #eee;
+@background_color_3: #ddd;
+@background_color_4: #ccc;
+
+.compare-feature-modal {
+    z-index: 1080;
+    font-size: 14px;
+    label {
+        font-family: @font_family_1;
+        padding-top: 7px;
+    }
+    .modal-title {
+        font-family: @font_family_1;
+    }
+    .modal-lg {
+        .modal-body {
+            overflow: auto;
+            max-height: calc(100vh - 200px);
+        }
+        width: 95%;
+        .modal-footer {
+            text-align: center;
+        }
+    }
+    .modal-error {
+        width: auto;
+        max-width: 450px;
+        .glyphicon {
+            font-size: 22px;
+        }
+        p {
+            line-height: 22px;
+            &:first-child {
+                font-family: @font_family_1;
+                font-size: 14px;
+            }
+        }
+    }
+    .modal-sub-header {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+    .toggle-row {
+        display: none;
+    }
+    .btn {
+        background-color: @background_color_1;
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+    .glyphicon-star {
+        color: @color_1;
+    }
+    table {
+        .glyphicon-remove {
+            opacity: 0.3;
+            &:hover {
+                cursor: pointer;
+                opacity: 1;
+            }
+        }
+        >tbody {
+            >tr {
+                &:nth-child(odd) {
+                    background-color: @background_color_2;
+                }
+                &:nth-child(even) {
+                    background-color: @background_color_3;
+                }
+                &:hover {
+                    background-color: @background_color_4;
+                    >td {
+                        border-left: 1px solid #bbb;
+                    }
+                }
+            }
+        }
+    }
+    tr {
+        &:first-child {
+            td {
+                font-family: @font_family_1;
+                font-size: 16px;
+                border-top: 0;
+            }
+            .col-1 {
+                &:first-child {
+                    color: @color_2;
+                    border: none;
+                }
+            }
+        }
+    }
+    .col-1 {
+        font-family: @font_family_1;
+        width: 20%;
+    }
+    .table {
+        table-layout: fixed;
+        width: 100%;
+        overflow: hidden;
+        word-wrap: break-word;
+    }
+    td {
+        border-left: 1px solid #ccc;
+    }
+    thead {
+        th {
+            border-left: 1px solid #ccc;
+        }
+    }
+    @media (min-width: 768px) {
+        .modal-dialog {
+            margin: 30px auto;
+        }
+    }
+}

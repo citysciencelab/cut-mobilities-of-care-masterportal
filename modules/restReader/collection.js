@@ -1,40 +1,33 @@
-define(function (require) {
-    var Config = require("config"),
-        RestList;
+const RestList = Backbone.Collection.extend({
+    model: Backbone.Model,
+    initialize: function (models, options) {
+        var channel = Radio.channel("RestReader");
 
-    RestList = Backbone.Collection.extend({
-        url: function () {
-            return Radio.request("Util", "getPath", Config.restConf);
-        },
-        initialize: function () {
-            var channel = Radio.channel("RestReader");
+        channel.reply({
+            "getServiceById": this.getServiceById
+        }, this);
 
-            channel.reply({
-                "getAllServices": this.getAllServices,
-                "getServiceById": this.getServiceById
-            }, this);
+        this.url = options.url;
+        this.fetch({
+            cache: false,
+            async: false,
+            error: function () {
+                Radio.trigger("Alert", "alert", {
+                    text: "Fehler beim Laden von: " + options.url,
+                    kategorie: "alert-warning"
+                });
+            }
+        });
+    },
 
-            this.fetch({
-                cache: false,
-                async: false,
-                success: function () {
-                    channel.trigger("isReady", true);
-                },
-                error: function () {
-                    Radio.trigger("Alert", "alert", {
-                        text: "Fehler beim Laden von: " + Radio.request("Util", "getPath", Config.restConf),
-                        kategorie: "alert-warning"
-                    });
-                }
-            });
-        },
-        getAllServices: function () {
-            return this;
-        },
-        getServiceById: function (id) {
-            return this.findWhere({id: id});
-        }
-    });
-
-    return RestList;
+    /**
+     * returns the model in the collection that matches the passed id
+     * @param {string} id - the service id
+     * @returns {Backbone.Model} - service model
+     */
+    getServiceById: function (id) {
+        return this.get(id);
+    }
 });
+
+export default RestList;

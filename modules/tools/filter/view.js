@@ -1,88 +1,95 @@
-define(function (require) {
+import QueryDetailView from "./query/detailView";
+import QuerySimpleView from "./query/simpleView";
+import Template from "text-loader!./template.html";
 
-    var FilterModel = require("modules/tools/filter/model"),
-        QueryDetailView = require("modules/tools/filter/query/detailView"),
-        QuerySimpleView = require("modules/tools/filter/query/simpleView"),
-        Template = require("text!modules/tools/filter/template.html"),
-        FilterView;
+const FilterView = Backbone.View.extend({
+    events: {
+        "click .close": "closeFilter"
+    },
+    initialize: function () {
+        this.listenTo(this.model, {
+            "change:isActive": function (model, isActive) {
+                if (isActive) {
 
-    FilterView = Backbone.View.extend({
-        events: {
-            "click .close": "closeFilter"
-        },
-        initialize: function () {
-            if (this.model.get("isInitOpen")) {
-                this.model.set("isActive", true);
-                this.render();
-            }
-            this.listenTo(this.model, {
-                "change:isActive": function (model, isActive) {
-                    if (isActive) {
+                    if (model.get("queryCollection").length < 1) {
+                        model.createQueries(model.get("predefinedQueries"));
                         this.render();
-                        this.renderDetailView();
                     }
                     else {
-                        this.$el.remove();
-                        Radio.trigger("Sidebar", "toggle", false);
+                        this.renderDetailView();
+                        this.render();
                     }
                 }
-            });
-            this.listenTo(this.model.get("queryCollection"), {
-                "change:isSelected": function (model, value) {
-                    if (value === true) {
-                        this.renderDetailView();
-                    }
-                    this.model.closeGFI();
-                },
-                "renderDetailView": this.renderDetailView
-            });
-        },
-        model: new FilterModel(),
-        id: "filter-view",
-        template: _.template(Template),
-        className: "filter",
-        render: function () {
-            var attr = this.model.toJSON();
-
-            this.$el.html(this.template(attr));
-            Radio.trigger("Sidebar", "append", this.el);
-            Radio.trigger("Sidebar", "toggle", true);
-            this.renderSimpleViews();
-            this.delegateEvents();
-
-            return this;
-        },
-
-        renderDetailView: function () {
-            var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
-                view;
-
-            if (_.isUndefined(selectedModel) === false) {
-                view = new QueryDetailView({model: selectedModel});
-
-                this.$el.find(".detail-view-container").html(view.render().$el);
+                else {
+                    this.$el.remove();
+                    Radio.trigger("Sidebar", "toggle", false);
+                }
             }
-        },
-
-        renderSimpleViews: function () {
-            var view;
-
-            if (this.model.get("queryCollection").models.length > 1) {
-                _.each(this.model.get("queryCollection").models, function (query) {
-                    view = new QuerySimpleView({model: query});
-                    this.$el.find(".simple-views-container").append(view.render().$el);
-                }, this);
+        });
+        this.listenTo(this.model.get("queryCollection"), {
+            "change:isSelected": function (model, value) {
+                if (value === true) {
+                    this.renderDetailView();
+                }
+                this.model.closeGFI();
+            },
+            "renderDetailView": this.renderDetailView,
+            "add": function () {
+                this.render();
+                this.renderDetailView();
             }
-            else {
-                this.$el.find(".simple-views-container").remove();
+        });
+
+        if (this.model.get("isActive")) {
+            if (this.model.get("queryCollection").length < 1) {
+                this.model.createQueries(this.model.get("predefinedQueries"));
             }
-        },
-        closeFilter: function () {
-            this.model.setIsActive(false);
-            this.model.collapseOpenSnippet();
-            Radio.trigger("Sidebar", "toggle", false);
+            this.render();
         }
-    });
+    },
+    id: "filter-view",
+    template: _.template(Template),
+    className: "filter",
 
-    return FilterView;
+    render: function () {
+        var attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
+        Radio.trigger("Sidebar", "append", this.el);
+        Radio.trigger("Sidebar", "toggle", true);
+        this.renderSimpleViews();
+        this.delegateEvents();
+        return this;
+    },
+
+    renderDetailView: function () {
+        var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
+            view;
+
+        if (!_.isUndefined(selectedModel)) {
+            view = new QueryDetailView({model: selectedModel});
+
+            this.$el.find(".detail-view-container").html(view.render().$el);
+        }
+    },
+
+    renderSimpleViews: function () {
+        var view;
+
+        if (this.model.get("queryCollection").models.length > 1) {
+            _.each(this.model.get("queryCollection").models, function (query) {
+                view = new QuerySimpleView({model: query});
+                this.$el.find(".simple-views-container").append(view.render().$el);
+            }, this);
+        }
+        else {
+            this.$el.find(".simple-views-container").remove();
+        }
+    },
+    closeFilter: function () {
+        this.model.setIsActive(false);
+        this.model.collapseOpenSnippet();
+    }
 });
+
+export default FilterView;
