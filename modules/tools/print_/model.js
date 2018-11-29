@@ -231,7 +231,7 @@ const PrintModel = Tool.extend({
             scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
             this.setCurrentScale(scale);
         }
-        this.drawMask(frameState, context);
+        this.drawMask(frameState.size, context);
         this.drawPrintPage(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), scale, context);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
@@ -239,13 +239,13 @@ const PrintModel = Tool.extend({
 
     /**
      * draws a mask on the whole map
-     * @param {object} frameState - representing the current render frame state
+     * @param {ol.Size} mapSize - size of the map in px
      * @param {CanvasRenderingContext2D} context - context of the postcompose event
      * @returns {void}
      */
-    drawMask: function (frameState, context) {
-        var mapWidth = frameState.size[0] * DEVICE_PIXEL_RATIO,
-            mapHeight = frameState.size[1] * DEVICE_PIXEL_RATIO;
+    drawMask: function (mapSize, context) {
+        var mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
+            mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
 
         context.beginPath();
         // Outside polygon, must be clockwise
@@ -267,7 +267,7 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
-        var center = [mapSize[0] / 2, mapSize[1] / 2],
+        var center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
             boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             minx = center[0] - (boundWidth / 2),

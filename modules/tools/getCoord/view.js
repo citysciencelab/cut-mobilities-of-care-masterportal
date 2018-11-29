@@ -12,8 +12,9 @@ const GetCoord = Backbone.View.extend({
             "change:isActive change:url": this.render,
             "change:positionMapProjection": this.changedPosition
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     template: _.template(GetCoordTemplate),
     render: function (model, value) {

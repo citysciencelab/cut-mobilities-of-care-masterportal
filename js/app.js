@@ -276,8 +276,11 @@ function loadApp () {
                     break;
                 }
                 case "orientation": {
+                    var orientationConfigAttr =_.isString(control.attr) ? {zoomMode: control.attr} : control;
+
                     element = controlsView.addRowTR(control.id, true);
-                    new OrientationView({el: element, attr: {config: {epsg: Radio.request("MapView", "getProjection").getCode()}}});
+                    orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
+                    new OrientationView({el: element, config: orientationConfigAttr});
                     break;
                 }
                 case "mousePosition": {
@@ -309,7 +312,7 @@ function loadApp () {
                 }
                 case "overviewmap": {
                     if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id);
+                        element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView({el: element});
                     }
                     break;

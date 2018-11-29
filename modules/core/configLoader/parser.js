@@ -118,7 +118,8 @@ const Parser = Backbone.Model.extend({
         _.each(items, function (value, key) {
             var item,
                 toolitem,
-                ansicht;
+                ansicht,
+                downloadItem;
 
             if (_.has(value, "children") || key === "tree") {
                 item = {
@@ -153,6 +154,18 @@ const Parser = Backbone.Model.extend({
                     if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
                         toolitem = _.extend(toolitem, {onlyDesktop: true});
                     }
+                }
+
+                // special case because the download tool is only used in Drawtool
+                if (toolitem.id === "draw") {
+                    downloadItem = {
+                        parentId: parentId,
+                        type: "tool",
+                        id: "download",
+                        isVisibleInMenu: false
+                    };
+
+                    this.addItem(downloadItem);
                 }
                 this.addItem(toolitem);
             }

@@ -20,7 +20,8 @@ const Layer = Item.extend({
         legendURL: "",
         supported: ["2D"],
         showSettings: true,
-        hitTolerance: 0
+        hitTolerance: 0,
+        styleable: false
     },
 
     initialize: function () {

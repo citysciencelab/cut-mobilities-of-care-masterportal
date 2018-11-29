@@ -1,4 +1,4 @@
-import Template from "text-loader!./template.html";
+import Template from "text-loader!./templateLight.html";
 import SettingTemplate from "text-loader!./templateSettings.html";
 
 const LayerView = Backbone.View.extend({
@@ -10,7 +10,7 @@ const LayerView = Backbone.View.extend({
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
         "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
         "change select": "setTransparency",
-        "click .glyphicon-picture": "openStyleWMS"
+        "click .glyphicon-tint": "openStyleWMS"
     },
     initialize: function () {
         this.listenTo(this.model, {

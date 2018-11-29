@@ -44,6 +44,7 @@ const Tool = Item.extend({
             }
         });
 
+        Radio.trigger("Autostart", "initializedModul", this.get("id"));
         if (this.get("isInitOpen")) {
             this.setIsActive("true");
         }
