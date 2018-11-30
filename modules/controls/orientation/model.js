@@ -71,18 +71,12 @@ const OrientationModel = Backbone.Model.extend({
      * @returns {void}
      */
     setConfig: function () {
-        var config = Radio.request("Parser", "getItemByAttributes", {id: "orientation"}).attr;
-
-        if (config.zoomMode) {
-            this.setZoomMode(config.zoomMode);
-        }
-
-        if (config.poiDistances) {
-            if (_.isArray(config.poiDistances) && config.poiDistances.length > 0) {
-                this.setPoiDistances(config.poiDistances);
+        if (this.get("poiDistances")) {
+            if (_.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
+                this.setPoiDistances(this.get("poiDistances"));
                 this.setShowPoi(true);
             }
-            else if (config.poiDistances === true) {
+            else if (this.get("poiDistances") === true) {
                 this.setShowPoi(true);
             }
         }
@@ -92,14 +86,14 @@ const OrientationModel = Backbone.Model.extend({
     * Triggert die Standpunktkoordinate auf Radio
     */
     sendPosition: function () {
-        if (this.get("tracking") === false) {
+        if (this.get("zoomMode") === "once") {
             this.listenToOnce(this, "change:position", function () {
                 Radio.trigger("geolocation", "position", this.get("position"));
-                this.untrack();
             });
             this.track();
         }
         else {
+            this.track();
             Radio.trigger("geolocation", "position", this.get("position"));
         }
     },
@@ -111,9 +105,11 @@ const OrientationModel = Backbone.Model.extend({
 
         geolocation.un("change", this.positioning.bind(this), this);
         geolocation.un("error", this.onError.bind(this), this);
+        if (this.get("tracking") === false || this.get("firstGeolocation") === false) {
+            this.removeOverlay();
+        }
         this.set("firstGeolocation", true);
         this.set("tracking", false);
-        this.removeOverlay();
     },
     track: function () {
         var geolocation;
@@ -286,6 +282,11 @@ const OrientationModel = Backbone.Model.extend({
     // setter for marker
     setMarker: function (value) {
         this.set("marker", value);
+    },
+
+    // setter for tracking
+    setTracking: function (value) {
+        this.set("tracking", value);
     }
 });
 

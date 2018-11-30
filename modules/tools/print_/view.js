@@ -15,6 +15,7 @@ const PrintView = Backbone.View.extend({
         "click #printGfi": "setIsGfiSelected",
         "click button": "print"
     },
+
     initialize: function () {
         this.template = _.template(PrintTemplate);
         this.listenTo(this.model, {

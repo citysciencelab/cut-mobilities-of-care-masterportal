@@ -19,8 +19,9 @@ const MeasureView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isActive change:geomtype": this.render
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     render: function (model, value) {
         var template;

@@ -24,7 +24,9 @@ const Layer = Item.extend({
         maxScale: "1000000",
         legendURL: "",
         supported: ["2D"],
-        showSettings: true
+        showSettings: true,
+        hitTolerance: 0,
+        styleable: false
     },
 
     initialize: function () {

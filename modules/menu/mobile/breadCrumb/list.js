@@ -55,7 +55,7 @@ const BreadCrumbList = Backbone.Collection.extend({
 
         if (hasModels) {
             this.remove(models);
-            Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].get("id"));
+            Radio.trigger("ModelList", "setAllDescendantsInvisible", models[0].get("id"), true);
             Radio.trigger("ModelList", "setModelAttributesById", models[0], {isExpanded: false});
         }
         else if (modelIndex === 0) {

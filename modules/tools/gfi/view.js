@@ -24,8 +24,6 @@ const GFIView = Backbone.View.extend({
             this.renderDomElementToBody();
             this.model.setOverlayElement(document.getElementById("gfipopup"));
         }
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
 
     renderNext: function () {

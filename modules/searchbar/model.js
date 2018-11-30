@@ -159,7 +159,7 @@ const SearchbarModel = Backbone.Model.extend({
 
         // removes addresses without house number, if more than one exists
         if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
-            valueWithNumbers = _.filter(tempArray, function (val) {
+            valueWithNumbers = tempArray.filter(function (val) {
                 var valueArray = val.name.split(",")[0].split(" ");
 
                 return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));

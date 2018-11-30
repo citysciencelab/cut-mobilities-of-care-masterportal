@@ -22,10 +22,9 @@ const AnimationView = Backbone.View.extend({
             // ändert sich der Fensterstatus wird neu gezeichnet
             "change:isActive": this.render,
             // ändert sich eins dieser Attribute wird neu gezeichnet
-            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:animating change:pendlerLegend": this.render
+            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:animating change:pendlerLegend": this.render,
+            "render": this.render
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
 
     tagName: "form",
@@ -35,7 +34,6 @@ const AnimationView = Backbone.View.extend({
     render: function (model, value) {
         if (value || !model.get("animating")) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
-
             this.$el.html(this.template(model.toJSON()));
             this.delegateEvents();
         }

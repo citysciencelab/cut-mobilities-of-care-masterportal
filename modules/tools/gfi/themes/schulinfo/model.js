@@ -214,7 +214,7 @@ const SchulInfoTheme = Theme.extend({
      * @return {void}
      */
     determineSelectedContent: function (featureInfos) {
-        var selectedContent = _.filter(featureInfos, function (featureInfo) {
+        var selectedContent = featureInfos.filter(function (featureInfo) {
             return featureInfo.isSelected;
         })[0];
 
@@ -279,7 +279,7 @@ const SchulInfoTheme = Theme.extend({
         var newNameFound = false,
             filterArray;
 
-        filterArray = _.filter(featureInfos, function (featureObject) {
+        filterArray = featureInfos.filter(function (featureObject) {
             if (featureObject.name === newName) {
                 return true;
             }

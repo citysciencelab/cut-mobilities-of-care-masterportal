@@ -37,7 +37,6 @@ const Parser = Backbone.Model.extend({
     },
 
     initialize: function () {
-
         var channel = Radio.channel("Parser");
 
         channel.reply({
@@ -124,7 +123,8 @@ const Parser = Backbone.Model.extend({
         _.each(items, function (value, key) {
             var item,
                 toolitem,
-                ansicht;
+                ansicht,
+                downloadItem;
 
             if (_.has(value, "children") || key === "tree") {
                 item = {
@@ -159,6 +159,18 @@ const Parser = Backbone.Model.extend({
                     if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
                         toolitem = _.extend(toolitem, {onlyDesktop: true});
                     }
+                }
+
+                // special case because the download tool is only used in Drawtool
+                if (toolitem.id === "draw") {
+                    downloadItem = {
+                        parentId: parentId,
+                        type: "tool",
+                        id: "download",
+                        isVisibleInMenu: false
+                    };
+
+                    this.addItem(downloadItem);
                 }
                 this.addItem(toolitem);
             }
@@ -362,7 +374,7 @@ const Parser = Backbone.Model.extend({
      * @return {ModelList} [description]
      */
     createModelList: function () {
-        new ModelList(_.filter(this.get("itemList"), function (model) {
+        new ModelList(this.get("itemList").filter(function (model) {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -474,7 +486,7 @@ const Parser = Backbone.Model.extend({
     },
 
     getItemsByMetaID: function (metaID) {
-        var layers = _.filter(this.get("itemList"), function (item) {
+        var layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;

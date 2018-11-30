@@ -63,7 +63,7 @@ const Theme = Backbone.Model.extend({
                 url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
                 context: this,
                 success: function (data) {
-                    if (this.$(data).find("tbody").children().length > 1) {
+                    if ($(data).find("tbody").children().length > 1) {
                         this.set("gfiContent", [gfiFeatures]);
                     }
                     this.setIsReady(true);
@@ -98,7 +98,7 @@ const Theme = Backbone.Model.extend({
             tagNameListSorted = _.sortBy(tagNameList, function (name) {
                 return name;
             }),
-            multiTags = _.filter(tagNameListSorted, function (tagName, index, list) {
+            multiTags = tagNameListSorted.filter(function (tagName, index, list) {
                 return tagName === list[index + 1];
             }),
             multiTagsUnique = _.uniq(multiTags);

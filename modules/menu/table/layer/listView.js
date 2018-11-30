@@ -50,9 +50,10 @@ const LayerView = Backbone.View.extend({
         var childElement = {};
 
         _.each(models, function (model) {
-            childElement = new SingleLayerView({model: model}).render().$el;
-            this.$el.find("ul.layers").prepend(childElement);
-
+            if (model.get("isVisibleInTree") === true) {
+                childElement = new SingleLayerView({model: model}).render().$el;
+                this.$el.find("ul.layers").prepend(childElement);
+            }
         }, this);
     }
 });

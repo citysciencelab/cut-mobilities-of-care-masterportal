@@ -745,7 +745,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} dataByActualTimeStep
      */
     filterDataByActualTimeStep: function (dayData, actualTimeStep, nextTimeStep) {
-        return _.filter(dayData, function (data) {
+        if (Array.isArray(dayData) === false) {
+            return [];
+        }
+        return dayData.filter(function (data) {
             var dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
             return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
@@ -820,7 +823,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 break;
             }
             // remove all undefined data
-            arrayPerHour = _.filter(arrayPerHour, function (value) {
+            arrayPerHour = arrayPerHour.filter(function (value) {
                 return !_.isUndefined(value);
             });
 

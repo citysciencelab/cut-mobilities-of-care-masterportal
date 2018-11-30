@@ -38,6 +38,21 @@ const RemoteInterface = Backbone.Model.extend({
         if (event.origin !== this.get("postMessageUrl")) {
             return;
         }
+        /*  Hiermit kann jedes beliebige Radio im Masterportal angetriggert werden
+            Die Postmessage muss den radio_channel und die radio_function setzen, dann wird das Radio
+            mit diesen Werten angetriggert.
+            Falls Parameter übergeben werden sollen, muss die Radio-Funktion diese als Objekt erwarten.
+            Das Parameter-Objekt muss der Postmessage als radio_para_object übergeben werden.
+        */
+        if (event.data.hasOwnProperty("radio_channel") && event.data.hasOwnProperty("radio_function")) {
+            if (event.data.hasOwnProperty("radio_para_object")) {
+                Radio.trigger(event.data.radio_channel, event.data.radio_function, event.data.radio_para_object);
+            }
+            else {
+                Radio.trigger(event.data.radio_channel, event.data.radio_function);
+            }
+            return;
+        }
         if (event.data.hasOwnProperty("showPositionByExtent")) {
             this.showPositionByExtent(event.data.showPositionByExtent);
         }

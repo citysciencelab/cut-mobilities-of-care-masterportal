@@ -63,6 +63,7 @@ const WFSLayer = Layer.extend({
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
+            hitTolerance: this.get("hitTolerance"),
             altitudeMode: "clampToGround"
         }));
 
@@ -148,7 +149,7 @@ const WFSLayer = Layer.extend({
         features = wfsReader.readFeatures(data);
 
         // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
-        features = _.filter(features, function (feature) {
+        features = features.filter(function (feature) {
             return !_.isUndefined(feature.getGeometry());
         });
 

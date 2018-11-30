@@ -91,7 +91,7 @@ const Menu = listView.extend({
             this.collection.setVisibleByParentIsExpanded(parentId);
         }
 
-        layer = _.filter(models, function (model) {
+        layer = models.filter(function (model) {
             return model.get("type") === "layer";
         });
 
@@ -107,7 +107,7 @@ const Menu = listView.extend({
 
         this.addOverlayViews(layer);
 
-        folders = _.filter(models, function (model) {
+        folders = models.filter(function (model) {
             return model.get("type") === "folder";
         });
 
@@ -131,7 +131,7 @@ const Menu = listView.extend({
         this.renderSubTree(parentId, 0, 10, false);
     },
     addViewsToItemsOfType: function (type, items, parentId) {
-        var viewItems = _.filter(items, function (model) {
+        var viewItems = items.filter(function (model) {
             return model.get("type") === type;
         });
 

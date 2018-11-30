@@ -259,7 +259,7 @@ const WFSStyle = Backbone.Model.extend({
 
         featureValue = feature.get(styleField);
         if (!_.isUndefined(featureValue)) {
-            styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+            styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
                 return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
             })[0];
         }
@@ -439,7 +439,7 @@ const WFSStyle = Backbone.Model.extend({
         else {
             featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
             if (!_.isUndefined(featureValue)) {
-                styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
                     return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 })[0];
             }

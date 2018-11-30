@@ -1,3 +1,98 @@
+# Changelog LGV Master-Portal 2.2.0
+
+NEU:
+
+  - 8de8d34a5 Darstellung im GFI (WMS) mehrfach vergebener Attribute mit gleichem Namen
+  - cb7b25aa2 - 3d Modus inkl. Geländemodell und Gebäude Layer für Hamburg.
+  - 9f4a21ad5 import of customModules  to webpack
+  - c473c3450 Druckfunktion funktioniert jetzt auch für GruppenLayer
+  - 207320b8b Glyphicons werden für das Menü und die Tools per Default gesetzt
+  - 26abf2c8c initial layer search Merged in SchBe/mplgv-8 (pull request #870)
+  - f6800524a Beim Verwenden des Moduls Koordinaten abfragen wird nun beim einfrieren der Koordinate ein MapMarker angezeigt. Dadurch lässt sich das Tool nun auch mobil verwenden
+  - 7e1afecd5 methode um gfi eines spezifischen layers an bestimmter Position zu setzen
+  - 162ef6a14 cswParser, all modules that need metadata trigger cswParser
+  - 2c1a96bb2 css to less syntax by css2less.net
+  - 5fb9ef36b mapfish_print_3 can print user styled wms with sld_body
+  - f12c29e9d take the icons from the origin server the app is running on Merged in print_imagepath_from_origin (pull request #840)
+  - b9848fcad GFI Support für Links auf JPEG und GIF
+  - fe634e78c Wechsel des Webbundlers von Browserify auf Webpack. Dieser wird zum installieren des Packages BrowserMqtt.js benötigt.
+  - 2f8a1d2d0 printModule with Mapfish print 3 and refactor modellist
+  - ed84d41df layerslider zum sliden von Layern nach definierbarem Zeitintervall
+  - 85eadd186 Dokumentation zur Verwendung vom Tool addWMS
+  - c846b7685 Tooltips in Searchbar-Hitlist für Themensuche, OSM und BKG damit Einträge unterscheidbar werden
+  - 995cf7844 Verwendung von LESS anstatt von CSS im gesamten Repo
+  - 7a39ac43e tests for styleable layers
+  - 35d2ba452 WMS cache-handling für TileWMS eingeschaltet
+  - 58f1aa58e layer autorefresh Konfiguration für automatischen Refresh gemäß Konfiguration für (fast) jeden Layertyp
+  - 54e86c51b Konventionen für Änderungen der Konfigurationsparamter
+  - 7a5c1fa79 Layerkonfiguration auch als openlayers layerGroup möglich
+
+FIXES:
+
+  - 93bbf9961 Graph für mobile ansichten optimiert Merged in fix_stabel_23_iphone (pull request #981)
+  - 9ad3722b5 Schulwegrouting zeigt auch kurze Strecken
+  - 4bee2580e Druckmodul kann auch WFS Gruppenlayer drucken
+  - 5cab3a42e buttons haben hamburgstyle conforme farben Merged in fix_stable_40 (pull request #980)
+  - e9ed46478 KML-importierte Features werden nun wieder in ihrer entsprechenden Farbe dargestellt
+  - 523dc353e druckmodul
+  - b87a82684 Reihenfolge der Zeichenelemente in der Karte entsprechend Digitalisierreihenfolge
+  - 2e874be85 Einwohnertool richtiger Rasterlayer eingebunden Merged in 85_stable_candidate_einwohnertool (pull request #978)
+  - 05b399b8d schulwegrouting layer wird nicht mehr an oder ausgeschaltet Merged in 80_stable_candidate_schulwegrouting (pull request #979)
+  - ab355672c Fehlermeldung der CompareList wurde für kleine Bildschirme angepasst
+  - 1eefc9271 Ein Fehler wurden behoben der verhindert hat, dass der Platzhalter (placeholder) für die Searchbar aus der config.json geladen wurde.
+  - d61460962 fehlender afterRender Trigger im detached unterband videostreaming
+  - 07f15af6c Einen Fehler in der Flurstückssuche, der verhindert, das die Flur ausgewählt werden konnte
+  - 8674869d4 searchbar hover on item in recommended list zooms to result
+  - cdd02d1d6 ein Fehler der das aufziehen eines Kreises im Einwohnertool verhindert hat wurde behoben
+  - 8f608bb27 ein Fehler in der Liste, der das Icon beim hovern verschwinden lässt, wurde behoben
+  - 1164b9f23 Auswahl speichern schließt jetzt andere Tools vollständig
+  - 517cd9635 print circle geometries printable
+  - b565b14f4 Print polygon styles in legend
+  - a77e23d8f Labels werden custom Featurestyles jetzt zentriert angezeigt
+  - 9f651d311 Sidebar wurde nicht mehr in mobiler Darstellung ausgespielt
+  - b9e5efa82 Feature bekommt im Zeichenmodul korrekten Style zugewiesen
+  - 1d78053d5 Graph-Modul überarbeitet und Diagramm Darstellung vereinheitlicht
+  - 94211b475 uiStyle in GFI-Model wegen Ladereihenfolge nicht vorhanden
+  - f4dc4fe12 webpack rules for dev and prod
+  - e796997b6 print feature with multiple styles
+  - 0f4f3eee5 pendler can be printed with new print module
+  - 7d068a884 drawModule eventlistener and refactor buttonhandling
+  - 603f90a51 metadata can also be requested from internet explorer
+  - a307af473 styleWMS classifications are removed on change attribute or change number of classes update mrh stylewms
+  - 4af961cbc update neues Filtermodul funktioniert jetzt auch mit dem customTree und GroupLayer; WFS Styles innerhalb eines GroupLayers
+  - 7f63674c2 download circlegeometries
+  - c31caaa39 tests for parser
+  - 969f945e0 drawCursor stays at mouse-position on move
+  - 6a249b664 Glyphicons werden jetzt direkt aus Bootstrap geladen
+  - 9aaa67ef4 Pfad zu zum Styling
+  - b61d1a55c das Tool zur Koordinatenabfrage zeigt nun in der mobilen Version einen Marker
+  - ef521974a print canvas gets removed on closed print module
+  - e16fb4a1d missing bootstrap tooltip
+  - b9283eb6a kein FlurstücksHighlighting bei gfi detached im flaecheninfo
+  - 720ac7a8e pendler lines have correct text style
+  - 767ab71a9 layerslider funktionierte nicht mit treetype=custom
+  - 79583f9e8 Die Reihenfolge der aktiven Layer im CustomTree entspricht nun der des Themenbaumes
+  - b9437ecf1 Ein Fehler wurde behoben der durch Konfiguration eines Custom-Stylings auftrat, wenn kein Alpha-Wert (Opazität bzw. Transparenz) angegeben wurde
+  - f9ada14fd merge - conflicts
+  - f9f7ee677 renderToDOM parcelSearch und searchbar ohne Funktion
+  - 3a2743278 Ein Fehler wurde behoben der verhindert hat, dass bei einigen Layern das GFI nicht mehr funktionierte, wenn bestimmte Layer aktiviert waren
+  - 91f9578ff Fehler wurden behoben, durch die keine Schulen im Schulwegrouting zu einer gefundenen Adresse in den Browsern Internet Explorer und Edge angezeigt wurden
+  - 9c54d7a48 Ein Fehler wurde behoben, der die Definition eines Legenden-Images für den GeoJSON-Layer verhindert hat
+  - 9c934ac04 Routingmodul wertete BKG-Adressabfragen wegen fehlendem Proxyeintrag nicht aus
+  - f79a18470 autostart über URL funktioniert nicht wegen veränderter Ladereihenfolge
+  - 5a61d5b3f Standardpfad für Glyphicons variabel gemacht um Entwicklungs- und Produktionsumgebung abzubilden
+  - ca1367822 Measure Modul zeigte falsche Einheiten für Strecke
+  - a38bd35a0 bei Auswahl eines neuen Tools bei minimiertem Routing konnte Routing nicht beendet werden
+  - 24022ae1b missing glyphicons weil less path auf falschen Ordner zeigt
+  - 3de99be7d switch zw desktop und mobile menu führte zu error in console
+  - c81273418 scaleline ohne footer wirft Fehler in console
+  - 331b67b78 grouplayer wurden in parametrisierten Aufrufen wegen unklarer id ignoriert
+  - 8d2349b40 Beim navigieren mit den Pfeiltasten in der Suche springt der Cursor nun immer ans Ende der Eingabe
+  - e3094b642 Die Version zum Laden der Legende eines WMS wird jetzt aus der services.json verwendet
+  - 409a65c02 Fehler im KML Import der nach erneutem Export auftrat
+  - 6fe334a4f parcelSearch flur getter
+  - ee0793d51 metaidtomerge nicht alle objekte wurden gruppiert
+
 # Changelog LGV Master-Portal 2.1.3
 
 NEU:

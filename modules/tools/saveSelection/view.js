@@ -15,8 +15,9 @@ const SaveSelectionView = Backbone.View.extend({
             "change:isActive": this.render,
             "change:url": this.setUrlValue
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     template: _.template(SaveSelectionTemplate),
     templateSimpleMap: _.template(SaveSelectionSimpleMapTemplate),

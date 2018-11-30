@@ -20,8 +20,8 @@ const StyleWMSView = Backbone.View.extend({
         // Auswahl der Farbe
         "changeColor [id*=style-wms-colorpicker]": "setStyleClassAttributes",
         // Anwenden Button
-        "click .btn-panel-submit": "createSLD",
-        "click .btn-panel-reset": "reset",
+        "click .submit": "createSLD",
+        "click .reset": "reset",
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
@@ -49,8 +49,9 @@ const StyleWMSView = Backbone.View.extend({
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshStyleableLayerList();
         }
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render();
+        }
     },
     className: "wmsStyle-window",
     template: _.template(StyleWMSTemplate),

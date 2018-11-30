@@ -41,8 +41,9 @@ const ParcelSearchView = Backbone.View.extend({
                 "change:isActive": this.render2Window
             });
         }
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render2Window(this.model, true);
+        }
     },
     template: _.template(ParcelSearchTemplate),
     /*
@@ -131,7 +132,7 @@ const ParcelSearchView = Backbone.View.extend({
         this.$("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
         _.each(_.values(_.pick(cadastralDistricts, districtNumber))[0], function (cadastralDistrict) {
             this.$("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
-        });
+        }, this);
         this.$("#cadastralDistrictField").focus();
     },
     setParcelNumber: function (evt) {

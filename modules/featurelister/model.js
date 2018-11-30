@@ -150,7 +150,7 @@ const FeatureListerModel = Tool.extend({
 
         // entferne nicht mehr sichtbare Layer
         _.each(layerlist, function (layer) {
-            var tester = _.filter(modelList, function (lay) {
+            var tester = modelList.filter(function (lay) {
                 return lay.id === layer.id;
             });
 
@@ -166,7 +166,7 @@ const FeatureListerModel = Tool.extend({
         }, this);
         // füge neue Layer hinzu
         _.each(modelList, function (layer) {
-            var tester = _.filter(layerlist, function (lay) {
+            var tester = layerlist.filter(function (lay) {
                 return lay.id === layer.id;
             });
 
@@ -180,7 +180,7 @@ const FeatureListerModel = Tool.extend({
     */
     removeLayerFromList: function (layer) {
         var layerlist = this.get("layerlist"),
-            remainLayer = _.filter(layerlist, function (lay) {
+            remainLayer = layerlist.filter(function (lay) {
                 return lay.id !== layer.id;
             });
 

@@ -33,7 +33,7 @@ const MouseHoverPopup = Backbone.Model.extend({
             geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"}),
             sensorThingsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "SensorThings"}),
             vectorLayers = _.union(wfsLayers, geoJsonLayers, sensorThingsLayers),
-            mouseHoverLayers = _.filter(vectorLayers, function (layer) {
+            mouseHoverLayers = vectorLayers.filter(function (layer) {
                 return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
             }),
             mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {

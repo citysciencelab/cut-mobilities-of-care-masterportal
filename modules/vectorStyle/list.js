@@ -64,7 +64,7 @@ const StyleList = Backbone.Collection.extend({
                 });
             }
         });
-        filteredData = _.filter(data, function (styleModel) {
+        filteredData = data.filter(function (styleModel) {
             return _.contains(styleIds, styleModel.layerId);
         });
 

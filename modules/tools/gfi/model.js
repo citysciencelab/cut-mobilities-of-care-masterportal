@@ -236,7 +236,8 @@ const Gfi = Tool.extend({
         _.each(features, function (feature) {
             var properties = {},
                 propertyNames,
-                modelattributes,
+                modelAttributes,
+                layerModel,
                 olFeature,
                 layer;
 
@@ -248,14 +249,27 @@ const Gfi = Tool.extend({
                 if (properties.attributes && properties.id) {
                     properties.attributes.gmlid = properties.id;
                 }
-                modelattributes = {
-                    attributes: properties.attributes ? properties.attributes : properties,
-                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
-                    typ: "Cesium3DTileFeature",
-                    gfiTheme: "buildings_3d",
-                    name: "Buildings"
-                };
-                gfiParams3d.push(modelattributes);
+                if (feature.tileset && feature.tileset.layerReferenceId) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.tileset.layerReferenceId});
+                    if (layerModel) {
+                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                    }
+
+                }
+                if (!modelAttributes) {
+                    modelAttributes = {
+                        attributes: properties.attributes ? properties.attributes : properties,
+                        gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
+                        typ: "Cesium3DTileFeature",
+                        gfiTheme: "buildings_3d",
+                        name: "Buildings"
+                    };
+                }
+                else {
+                    modelAttributes.attributes = properties.attributes ? properties.attributes : properties;
+                    modelAttributes.typ = "Cesium3DTileFeature";
+                }
+                gfiParams3d.push(modelAttributes);
             }
             else if (feature.primitive) {
                 olFeature = feature.primitive.olFeature;
@@ -319,7 +333,7 @@ const Gfi = Tool.extend({
                     layerFilter: function (layer) {
                         return layer.get("name") === vectorLayer.get("name");
                     },
-                    hitTolerance: 0
+                    hitTolerance: vectorLayer.get("hitTolerance")
                 }),
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 

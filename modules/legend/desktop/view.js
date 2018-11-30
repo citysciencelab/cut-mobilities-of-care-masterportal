@@ -33,12 +33,26 @@ const LegendView = Backbone.View.extend({
         this.listenTo(Radio.channel("Map"), {
             "updateSize": this.updateLegendSize
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.show();
+        }
     },
     className: "legend-win",
     template: _.template(LegendTemplate),
     contentTemplate: _.template(ContentTemplate),
+
+    render: function () {
+        var attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
+        $("body").append(this.$el.html(this.template(attr)));
+        $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
+        this.$el.draggable({
+            containment: "#map",
+            handle: ".legend-win-header"
+        });
+        return this;
+    },
 
     /**
      * Steuert Maßnahmen zur Aufbereitung der Legende.
@@ -68,19 +82,6 @@ const LegendView = Backbone.View.extend({
                 legend.html = this.contentTemplate(legend);
             }, this);
         }, this);
-    },
-
-    render: function () {
-        var attr = this.model.toJSON();
-
-        this.$el.html(this.template(attr));
-        $("body").append(this.$el.html(this.template(attr)));
-        $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
-        this.$el.draggable({
-            containment: "#map",
-            handle: ".legend-win-header"
-        });
-        return this;
     },
 
     show: function () {

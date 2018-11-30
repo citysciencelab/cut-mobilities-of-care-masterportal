@@ -18,7 +18,7 @@ const Autostarter = Backbone.Model.extend({
             "initializedModul": this.setInitializedModul
         }, this);
 
-        Radio.once("MenuLoader", "ready", this.menuLoaded, this);
+        Radio.once("Menuloader", "ready", this.menuLoaded, this);
 
         Radio.once("ParametricURL", "ready", this.parametersAnalysed, this);
     },

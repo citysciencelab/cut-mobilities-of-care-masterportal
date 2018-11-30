@@ -75,8 +75,9 @@ const SchulwegRoutingView = Backbone.View.extend({
                 this.render();
             }
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render();
+        }
     },
     className: "schulweg-routing",
     template: _.template(template),

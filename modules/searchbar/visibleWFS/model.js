@@ -37,7 +37,7 @@ const VisibleWFSModel = Backbone.Model.extend({
             this.setInUse(true);
             prepSearchString = searchString.replace(" ", "");
             wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
-            filteredModels = _.filter(_.union(wfsModels), function (model) {
+            filteredModels = _.union(wfsModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
@@ -55,7 +55,7 @@ const VisibleWFSModel = Backbone.Model.extend({
 
             if (_.isArray(model.get("searchField"))) {
                 _.each(model.get("searchField"), function (field) {
-                    filteredFeatures = _.filter(features, function (feature) {
+                    filteredFeatures = features.filter(function (feature) {
                         var value = feature.get(field).toString().toUpperCase();
 
                         return value.indexOf(searchString.toUpperCase()) !== -1;
@@ -65,7 +65,7 @@ const VisibleWFSModel = Backbone.Model.extend({
                 }, this);
             }
             else {
-                filteredFeatures = _.filter(features, function (feature) {
+                filteredFeatures = features.filter(function (feature) {
                     var value = feature.get(model.get("searchField")).toUpperCase();
 
                     return value.indexOf(searchString.toUpperCase()) !== -1;

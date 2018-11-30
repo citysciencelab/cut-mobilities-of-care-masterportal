@@ -5,6 +5,7 @@
  */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import {GeoJSON} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
@@ -26,7 +27,9 @@ const DrawTool = Tool.extend({
         },
         renderToWindow: true,
         deactivateGFI: true,
-        glyphicon: "glyphicon-pencil"
+        glyphicon: "glyphicon-pencil",
+        addFeatureListener: {},
+        zIndex: 0
     }),
 
     /**
@@ -41,8 +44,18 @@ const DrawTool = Tool.extend({
         channel.reply({
             "getLayer": function () {
                 return this.get("layer");
-            }
+            },
+            "downloadWithoutGUI": this.downloadFeaturesWithoutGUI
         }, this);
+
+        channel.on({
+            "initWithoutGUI": this.inititalizeWithoutGUI,
+            "deleteAllFeatures": this.deleteFeatures,
+            "editWithoutGUI": this.editFeaturesWithoutGUI,
+            "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI,
+            "downloadViaRemoteInterface": this.downloadViaRemoteInterface
+        }, this);
+
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 var layer = model.createLayer(model.get("layer"));
@@ -57,14 +70,130 @@ const DrawTool = Tool.extend({
                 }
             }
         });
-    },
-    createSourceListenerForStyling: function (layer) {
-        var source = layer.getSource();
 
-        source.on("addfeature", function (evt) {
-            evt.feature.setStyle(this.getStyle());
-        }.bind(this));
     },
+
+    /**
+     * Erzeugt einen addfeature-Listener
+     * @param   {ol.layer} layer Layer, an dem der Listener registriert wird
+     * @returns {void}
+     */
+    createSourceListenerForStyling: function (layer) {
+        var layerSource = layer.getSource();
+
+        this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
+            evt.feature.setStyle(this.getStyle());
+            this.countupZIndex();
+        }.bind(this)));
+    },
+
+    /**
+     * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
+     * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+     * @param {String} para_object - Ein Objekt, welches die Parameter enthält
+     *                 {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
+     *                 {String} color - Farbe, in rgb (default: "55, 126, 184")
+     *                 {Float} opacity - Transparenz (default: 1.0)
+     *                 {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
+     *                 {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
+     * @returns {String} GeoJSON aller Features als String
+     */
+    inititalizeWithoutGUI: function (para_object) {
+        var featJSON,
+            newColor,
+            format = new GeoJSON();
+
+        if (this.collection) {
+            this.collection.setActiveToolToFalse(this);
+        }
+
+        this.set("renderToWindow", false);
+        this.setIsActive(true);
+
+        if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
+            this.setDrawType(para_object.drawType, para_object.drawType + " zeichnen");
+            if (para_object.color) {
+                this.set("color", para_object.color);
+            }
+            if (para_object.opacity) {
+                newColor = this.get("color");
+
+                newColor[3] = parseFloat(para_object.opacity);
+                this.setColor(newColor);
+                this.setOpacity(para_object.opacity);
+            }
+
+            // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
+            this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
+
+            if (para_object.initialJSON) {
+                try {
+                    featJSON = format.readFeatures(para_object.initialJSON);
+                    if (featJSON.length > 0) {
+                        this.get("layer").setStyle(this.getStyle(para_object.drawType));
+                        this.get("layer").getSource().addFeatures(featJSON);
+                    }
+                }
+                catch (e) {
+                    // das übergebene JSON war nicht gültig
+                    Radio.trigger("Alert", "alert", "Die übergebene Geometrie konnte nicht dargestellt werden.");
+                }
+            }
+        }
+    },
+    /**
+     * ermöglicht das Editieren von gezeichneten Features, ohne eine Oberfläche zu benötigen
+     * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+     * @returns {void}
+     */
+    editFeaturesWithoutGUI: function () {
+        this.deactivateDrawInteraction();
+        this.createModifyInteractionAndAddToMap(this.get("layer"), true);
+    },
+
+    /**
+     * erzeugt ein GeoJSON von allen Featues und gibt es zurück
+     * gibt ein leeres Objekt zurück, wenn vorher kein init erfolgt ist (= kein layer gesetzt)
+     * @returns {String} GeoJSON aller Features als String
+     */
+    downloadFeaturesWithoutGUI: function () {
+        var features = null,
+            format = new GeoJSON(),
+            featuresKonverted = {"type": "FeatureCollection", "features": []};
+
+        if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
+            features = this.get("layer").getSource().getFeatures();
+            featuresKonverted = format.writeFeaturesObject(features);
+        }
+
+        return JSON.stringify(featuresKonverted);
+    },
+    /**
+     * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
+     * @returns {void}
+     */
+    downloadViaRemoteInterface: function () {
+        var result = this.downloadFeaturesWithoutGUI();
+
+        Radio.trigger("RemoteInterface", "postMessage", {
+            "downloadViaRemoteInterface": "function identifier",
+            "success": true,
+            "response": result
+        });
+    },
+    /**
+     * beendet das Zeichnen via Radio
+     * @returns {void}
+     */
+    cancelDrawWithoutGUI: function () {
+        this.deactivateDrawInteraction();
+        this.deactivateSelectInteraction();
+        this.deactivateModifyInteraction();
+        this.resetModule();
+        // GFI wieder einschalten nach dem Zeichnen
+        this.setIsActive(false);
+    },
+
     /**
      * creates a vector layer for drawn features, if layer input is undefined
      * and removes this callback from the change:isCurrentWin event
@@ -81,12 +210,12 @@ const DrawTool = Tool.extend({
 
         return vectorLayer;
     },
-    createDrawInteractionAndAddToMap: function (layer, drawType, isActive) {
+    createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
         var drawInteraction = this.createDrawInteraction(drawType, layer);
 
         drawInteraction.setActive(isActive);
         this.setDrawInteraction(drawInteraction);
-        this.createDrawInteractionListener(drawInteraction);
+        this.createDrawInteractionListener(drawInteraction, maxFeatures);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
     createSelectInteractionAndAddToMap: function (layer, isActive) {
@@ -106,7 +235,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * creates the draw to draw in the map
+     * creates the draw interaction to draw in the map
      * @param {object} drawType - contains the geometry and description
      * @param {ol/layer/Vector} layer - layer to draw
      * @param {array} color - of geometries
@@ -123,18 +252,41 @@ const DrawTool = Tool.extend({
     /**
      * lister to change the entries for the next drawing
      * @param {ol/interaction/Draw} drawInteraction - drawInteraction
+     * @param {integer} maxFeatures - maximal number of features to be drawn
      * @return {void}
      */
-    createDrawInteractionListener: function (drawInteraction) {
+    createDrawInteractionListener: function (drawInteraction, maxFeatures) {
+        var that = this;
+
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
         });
+
+        if (maxFeatures && maxFeatures > 0) {
+
+            drawInteraction.on("drawstart", function () {
+                var count = that.get("layer").getSource().getFeatures().length,
+                    text = "";
+
+                if (count > maxFeatures - 1) {
+                    text = "Sie haben bereits " + maxFeatures + " Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!";
+                    if (maxFeatures === 1) {
+                        text = "Sie haben bereits " + maxFeatures + " Objekt gezeichnet, bitte löschen Sie dieses, bevor Sie fortfahren!";
+                    }
+
+                    Radio.trigger("Alert", "alert", text);
+                    that.deactivateDrawInteraction();
+                }
+            }, this);
+        }
     },
     updateDrawInteraction: function () {
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
     },
+
     /**
+     * Erzeugt den ol.style und gibt diesen zurück
      * @param {object} drawType - contains the geometry and description
      * @param {array} color - of drawings
      * @return {ol/style/Style} style
@@ -147,13 +299,14 @@ const DrawTool = Tool.extend({
             font = this.get("font"),
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
-            radius = this.get("radius");
+            radius = this.get("radius"),
+            zIndex = this.get("zIndex");
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
-            style = this.getTextStyle(color, text, fontSize, font);
+            style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
-            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius);
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex);
         }
 
         return style.clone();
@@ -165,9 +318,10 @@ const DrawTool = Tool.extend({
      * @param {string} text - of drawings
      * @param {number} fontSize - of drawings
      * @param {string} font - of drawings
+     * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getTextStyle: function (color, text, fontSize, font) {
+    getTextStyle: function (color, text, fontSize, font, zIndex) {
         return new Style({
             text: new Text({
                 textAlign: "left",
@@ -176,19 +330,21 @@ const DrawTool = Tool.extend({
                 fill: new Fill({
                     color: color
                 })
-            })
+            }),
+            zIndex: zIndex
         });
     },
 
     /**
-     * Creates and returns a feature style for points, lines, or faces
+     * Creates and returns a feature style for points, lines, or faces and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
      * @param {number} radius - from geometry
+     * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius) {
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex) {
         return new Style({
             fill: new Fill({
                 color: color
@@ -202,7 +358,8 @@ const DrawTool = Tool.extend({
                 fill: new Fill({
                     color: color
                 })
-            })
+            }),
+            zIndex: zIndex
         });
     },
 
@@ -397,10 +554,9 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     startDownloadTool: function () {
-        var features = this.get("layer").getSource().getFeatures(),
-            downloadView = this.get("downloadView");
+        var features = this.get("layer").getSource().getFeatures();
 
-        downloadView.start({
+        Radio.trigger("download", "start", {
             data: features,
             formats: ["kml"],
             caller: {
@@ -519,12 +675,31 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * setter for modifyInteraction
-     * @param {ol/interaction/modify} value - modifyInteraction
+     * setter for addFeatureListener
+     * @param {object} value - addFeatureListener
      * @return {void}
      */
-    setDownloadView: function (value) {
-        this.set("downloadView", value);
+    setAddFeatureListener: function (value) {
+        this.set("addFeatureListener", value);
+    },
+
+    /*
+    * count up zIndex
+    * @returns {void}
+    */
+    countupZIndex: function () {
+        var value = this.get("zIndex") + 1;
+
+        this.setZIndex(value);
+    },
+
+    /*
+    * setter for zIndex
+    * @param {number} value zIndex
+    * @returns {void}
+    */
+    setZIndex: function (value) {
+        this.set("zIndex", value);
     }
 });
 

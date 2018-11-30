@@ -72,7 +72,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
         if (_.isNull(ids) === false) {
             _.each(ids, function (id) {
-                var feature = _.filter(features, function (feat) {
+                var feature = features.filter(function (feat) {
                         if (feat.get(attribute) === id) {
                             return 1;
                         }
@@ -134,7 +134,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
         if (ids.length > 0) {
             _.each(ids, function (id, index) {
-                var feature = _.filter(features, function (feat) {
+                var feature = features.filter(function (feat) {
                         return feat.get(attribute) === id ? 1 : 0;
                     }),
                     extent = feature[0].getGeometry().getExtent();

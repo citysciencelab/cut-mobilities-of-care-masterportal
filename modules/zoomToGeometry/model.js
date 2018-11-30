@@ -107,7 +107,7 @@ const ZoomToGeometry = Backbone.Model.extend({
     parseFeatures: function (data, name, attribute) {
         var format = new WFS(),
             features = format.readFeatures(data),
-            foundFeature = _.filter(features, function (feature) {
+            foundFeature = features.filter(function (feature) {
                 if (!_.contains(feature.getKeys(), attribute)) {
                     return false;
                 }

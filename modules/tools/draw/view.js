@@ -5,7 +5,6 @@
  */
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
-import DownloadModel from "../download/model";
 
 const DrawToolView = Backbone.View.extend({
     events: {
@@ -31,14 +30,17 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     initialize: function () {
+        var downloadModel = Radio.request("ModelList", "getModelByAttributes", {id: "download"});
+
         this.listenTo(this.model, {
             "change:isActive": this.render
         });
 
-        this.model.setDownloadView(new DownloadView({model: new DownloadModel()}));
+        new DownloadView({model: downloadModel});
 
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
 
     template: _.template(DrawTemplate),
@@ -50,7 +52,8 @@ const DrawToolView = Backbone.View.extend({
      * @return {Backbone.View} DrawView
      */
     render: function (model, isActive) {
-        if (isActive) {
+
+        if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
         }
         else {
@@ -78,12 +81,14 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     removeSurface: function () {
+        var layerSource = this.model.get("layer").getSource();
+
         this.model.resetModule();
         $("#map").removeClass("no-cursor");
         $("#map").removeClass("cursor-crosshair");
         $("#cursorGlyph").remove();
         $("#map").off("mousemove");
-        this.unregisterListener();
+        this.unregisterListeners(layerSource);
         this.undelegateEvents();
     },
 
@@ -132,11 +137,13 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
-     * unregister the listeners from the map
+     * unregister the listeners from the map and from layerSource
+     * @param {ol/source/vector} layerSource - vector LayerSource
      * @return {void}
      */
-    unregisterListener: function () {
+    unregisterListeners: function (layerSource) {
         Radio.trigger("Map", "unregisterListener", this.listener);
+        layerSource.un("addfeature", this.model.get("addFeatureListener").listener);
     },
 
     /**
@@ -173,6 +180,7 @@ const DrawToolView = Backbone.View.extend({
     startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
+        this.$el.find(".draw").toggleClass("btn-lgv-grey");
         this.model.toggleInteraction("draw");
     },
 
@@ -184,6 +192,7 @@ const DrawToolView = Backbone.View.extend({
     toggleInteraction: function (evt) {
         this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
+        $(evt.target).toggleClass("btn-lgv-grey");
         this.model.toggleInteraction($(evt.target).attr("class"));
     },
 
@@ -194,6 +203,7 @@ const DrawToolView = Backbone.View.extend({
     unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
+            $(this).addClass("btn-lgv-grey");
         });
     },
 

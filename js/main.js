@@ -2,6 +2,7 @@
  * @description Loading basic requirements such as the css. Then it starts the App.
  * @module Main
  */
+import "@babel/polyfill";
 import {loadApp} from "./app";
 import "../css/bootstrap.less";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.

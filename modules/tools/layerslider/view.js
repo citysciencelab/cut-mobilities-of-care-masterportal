@@ -19,8 +19,9 @@ const LayersliderView = Backbone.View.extend({
             },
             "change:activeLayer": this.layerSwitched
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
+        if (this.model.get("isActive") === true) {
+            this.render();
+        }
     },
     className: "layerslider",
     template: _.template(LayersliderTemplate),

@@ -187,7 +187,8 @@
         "children": {
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
-            "glyphicon": "glyphicon-wrench"
+            "glyphicon": "glyphicon-wrench",
+            "onlyDesktop": true
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
@@ -199,7 +200,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -400,7 +401,7 @@
         {
           "id": ["713", "714", "715", "716"],
           "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": true
+          "visibility": false
         },
         {
           "id": "12883",
@@ -436,7 +437,12 @@
         "id": "2426"
       },
       {
-        "id": "4561"
+        "id": "1933",
+        "infoFormat": "application/vnd.ogc.gml"
+      },
+      {
+        "id": "4561",
+        "infoFormat": "text/html"
       },
       {
         "id": "441"
@@ -472,7 +478,8 @@
       {
         "id": "47",
         "styleId": "47",
-        "mouseHoverField": ["beginn", "ende"]
+        "mouseHoverField": ["beginn", "ende"],
+        "autoRefresh": 6000
       },
       {
         "id": "2714",
@@ -525,8 +532,7 @@
             "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
           }
         ],
-        "extendedFilter": true,
-        "autoRefresh": 6000
+        "extendedFilter": true
       },
       {
         "id": "8712",
@@ -556,6 +562,7 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
+        "hitTolerance": 25,
         "mouseHoverField": "kategorie",
         "extendedFilter": true
       },
@@ -589,6 +596,9 @@
           }
         ],
         "name": "Kita und KH"
+      },
+      {
+        "id": "13023"
       }]
     }
   }

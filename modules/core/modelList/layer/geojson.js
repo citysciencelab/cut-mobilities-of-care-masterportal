@@ -64,7 +64,8 @@ const GeoJSONLayer = Layer.extend({
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
-            altitudeMode: "clampToGround"
+            altitudeMode: "clampToGround",
+            hitTolerance: this.get("hitTolerance")
         }));
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();
@@ -173,7 +174,7 @@ const GeoJSONLayer = Layer.extend({
         else {
             this.set("styleFunction", function (feature) {
                 return stylelistmodel.createStyle(feature, this.get("isClustered"));
-            });
+            }.bind(this));
         }
     },
 

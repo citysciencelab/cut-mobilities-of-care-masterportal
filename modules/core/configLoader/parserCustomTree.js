@@ -57,7 +57,7 @@ const CustomTreeParser = Parser.extend({
                         return undefined;
                     }, this);
 
-                    layerExtended.children = _.filter(layerExtended.children, function (childLayer) {
+                    layerExtended.children = layerExtended.children.filter(function (childLayer) {
                         return !_.isUndefined(childLayer);
                     });
 

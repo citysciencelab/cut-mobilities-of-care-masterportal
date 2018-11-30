@@ -21,6 +21,7 @@ import PrintV2 from "../../tools/print_/model";
 import Print from "../../tools/print/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
+import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../contact/model";
@@ -186,6 +187,9 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.id === "draw") {
                 return new Draw(attrs, options);
             }
+            else if (attrs.id === "download") {
+                return new Download(attrs, options);
+            }
             else if (attrs.id === "searchByCoord") {
                 return new SearchByCoord(attrs, options);
             }
@@ -294,29 +298,49 @@ const ModelList = Backbone.Collection.extend({
     * @return {void}
     */
     setVisibleByParentIsExpanded: function (parentId) {
-        var children = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+        var parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
-            this.setAllDescendantsInvisible(children);
+            this.setAllDescendantsInvisible(parentId, Radio.request("Util", "isViewMobile"));
         }
         else {
-            this.setAllDescendantsVisible(children);
+            this.setAllDescendantsVisible(parentId);
         }
     },
-    setAllDescendantsInvisible: function (children) {
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to invisible in the tree
+     * in mobile mode folders are closed
+     * @param {string} parentId - id of the parent model
+     * @param {boolean} isMobile - is the mobile tree visible
+     * @returns {void}
+     */
+    setAllDescendantsInvisible: function (parentId, isMobile) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
-                this.setAllDescendantsInvisible(this.where({parentId: child.get("id")}));
+                if (isMobile) {
+                    child.setIsExpanded(false, {silent: true});
+                }
+                this.setAllDescendantsInvisible(child.get("id"), isMobile);
             }
         }, this);
     },
-    setAllDescendantsVisible: function (children) {
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to visible in the tree
+     * @param {string} parentId - id of the parent model
+     * @returns {void}
+     */
+    setAllDescendantsVisible: function (parentId) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(true);
             if (child.get("type") === "folder" && child.get("isExpanded")) {
-                this.setAllDescendantsVisible(this.where({parentId: child.get("id")}));
+                this.setAllDescendantsVisible(child.get("id"));
             }
         }, this);
     },

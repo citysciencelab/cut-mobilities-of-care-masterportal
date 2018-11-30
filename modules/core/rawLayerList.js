@@ -10,9 +10,6 @@ const RawLayerList = Backbone.Collection.extend({
     initialize: function (models, options) {
         var channel = Radio.channel("RawLayerList");
 
-        // URL zur services.json
-        this.url = options.url;
-
         channel.reply({
             "getLayerWhere": this.getLayerWhere,
             "getLayerAttributesWhere": this.getLayerAttributesWhere,
@@ -24,7 +21,18 @@ const RawLayerList = Backbone.Collection.extend({
         channel.on({
             "addGroupLayer": this.addGroupLayer
         }, this);
-        this.fetch({async: false});
+
+        if (options.url !== undefined) {
+            // URL zur services.json
+            this.url = options.url;
+            this.fetch({async: false});
+        }
+        else {
+            Radio.trigger("Alert", "alert", {
+                text: "Der Parameter 'restConf' wurde in der config.js nicht gefunden oder ist falsch geschrieben",
+                kategorie: "alert-warning"
+            });
+        }
     },
 
     /**
@@ -76,7 +84,7 @@ const RawLayerList = Backbone.Collection.extend({
      * @return {Object[]} response - Objekte aus der services.json
      */
     deleteLayersByMetaIds: function (response, metaIds) {
-        return _.filter(response, function (element) {
+        return response.filter(function (element) {
             return element.datasets.length === 0 || _.contains(metaIds, element.datasets[0].md_id) === false;
         });
     },
@@ -94,7 +102,7 @@ const RawLayerList = Backbone.Collection.extend({
 
         _.each(metaIds, function (metaID) {
             // Objekte mit derselben Metadaten-Id
-            objectsById = _.filter(rawLayerArray, function (layer) {
+            objectsById = rawLayerArray.filter(function (layer) {
                 return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
             });
             // Das erste Objekt wird kopiert
@@ -132,7 +140,7 @@ const RawLayerList = Backbone.Collection.extend({
         var styleLayerIDs = _.pluck(Config.tree.layerIDsToStyle, "id"),
             layersByID;
 
-        layersByID = _.filter(response, function (layer) {
+        layersByID = response.filter(function (layer) {
             return _.contains(styleLayerIDs, layer.id);
         });
         _.each(layersByID, function (layer) {
@@ -151,7 +159,7 @@ const RawLayerList = Backbone.Collection.extend({
      */
     cloneByStyle: function (response) {
         var rawLayerArray = response,
-            objectsByStyle = _.filter(response, function (model) { // Layer die mehrere Styles haben
+            objectsByStyle = response.filter(function (model) { // Layer die mehrere Styles haben
                 return typeof model.styles === "object" && model.typ === "WMS";
             });
 

@@ -77,10 +77,10 @@ const RoutingModel = Tool.extend({
     },
     suggestByBKG: function (value, target) {
         var arr = value.split(/,| /),
-            plz = _.filter(arr, function (val) {
+            plz = arr.filter(function (val) {
                 return val.match(/^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$/);
             }),
-            hsnr = _.filter(arr, function (val, index, list) {
+            hsnr = arr.filter(function (val, index, list) {
                 var patt = /^\D*$/,
                     preString = patt.test(list[index - 1]),
                     isHouseNr = false;

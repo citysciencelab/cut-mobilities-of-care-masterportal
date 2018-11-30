@@ -58,7 +58,6 @@ const SchulwegRouting = Tool.extend({
                 if (layerId === this.get("layerId")) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                     this.addRouteFeatures(this.get("layer").getSource());
-                    this.get("layer").setVisible(false);
                     this.get("layer").setStyle(this.routeStyle);
                     this.setSchoolList(this.sortSchoolsByName(features));
                     if (this.get("isActive") === true) {
@@ -88,17 +87,10 @@ const SchulwegRouting = Tool.extend({
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                if (value && this.get("layer") === undefined) {
+                if (value && _.isUndefined(this.get("layer"))) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
                     this.addRouteFeatures(this.get("layer").getSource());
-                    this.get("layer").setVisible(true);
                     this.get("layer").setStyle(this.routeStyle);
-                }
-                if (value && !_.isUndefined(this.get("layer"))) {
-                    this.get("layer").setVisible(true);
-                }
-                if (!value && !_.isUndefined(this.get("layer"))) {
-                    this.get("layer").setVisible(false);
                 }
             }
         });
@@ -203,7 +195,6 @@ const SchulwegRouting = Tool.extend({
                 }
             }
             else {
-                this.get("layer").setVisible(false);
                 this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
             }
         }
@@ -219,6 +210,9 @@ const SchulwegRouting = Tool.extend({
         this.setGeometryByFeatureId("route", this.get("layer").getSource(), routeGeometry);
         response.kuerzesteStrecke = Radio.request("Util", "punctuate", response.kuerzesteStrecke);
         this.setRouteResult(response);
+        if (!_.isArray(routeDescription)) {
+            routeDescription = [routeDescription];
+        }
         this.setRouteDescription(routeDescription);
         this.trigger("togglePrintEnabled", true);
     },
@@ -260,9 +254,14 @@ const SchulwegRouting = Tool.extend({
         var wktParser = new WKT(),
             multiLineString = new MultiLineString({});
 
-        routeParts.forEach(function (routePart) {
-            multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
-        });
+        if (_.isArray(routeParts)) {
+            routeParts.forEach(function (routePart) {
+                multiLineString.appendLineString(wktParser.readGeometry(routePart.wkt));
+            });
+        }
+        else {
+            multiLineString.appendLineString(wktParser.readGeometry(routeParts.wkt));
+        }
         return multiLineString;
     },
     prepareRequest: function (address) {
@@ -314,16 +313,6 @@ const SchulwegRouting = Tool.extend({
     isRoutingRequest: function (ownRequests, requestID) {
         return _.contains(ownRequests, requestID);
     },
-    // activate: function (id) {
-    //     if (this.get("id") === id) {
-    //         this.setIsActive(true);
-    //     }
-    // },
-    // deactivate: function (id) {
-    //     if (this.get("id") === id) {
-    //         this.setIsActive(false);
-    //     }
-    // },
 
     /**
      * sorts the school features by name
@@ -433,7 +422,7 @@ const SchulwegRouting = Tool.extend({
      * @returns {object[]} filtered list of addresses
      */
     filterAddressList: function (addressList, searchRegExp) {
-        return _.filter(addressList, function (address) {
+        return addressList.filter(function (address) {
             return address.joinAddress.search(searchRegExp) !== -1;
         }, this);
     },
@@ -479,8 +468,9 @@ const SchulwegRouting = Tool.extend({
             Radio.trigger("MapView", "setCenter", geometry.getCoordinates(), 6);
         }
         else {
-            Radio.trigger("Map", "zoomToExtent", geometry.getExtent());
+            Radio.trigger("Map", "zoomToExtent", source.getExtent());
         }
+        Radio.trigger("MapView", "setZoomLevelDown");
     },
 
     /**
@@ -529,7 +519,6 @@ const SchulwegRouting = Tool.extend({
         this.removeGeomFromFeatures(features);
         this.trigger("resetRouteResult");
         this.trigger("togglePrintEnabled", false);
-        this.get("layer").setVisible(false);
     },
     removeGeomFromFeatures: function (features) {
         _.each(features, function (feature) {
@@ -549,7 +538,7 @@ const SchulwegRouting = Tool.extend({
 
         _.each(streetNameList, function (street) {
             var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
-                resultStreets = _.filter(streetNameParts, function (part) {
+                resultStreets = streetNameParts.filter(function (part) {
                     return part.toLowerCase() === targetStreet.toLowerCase();
                 }, this);
 

@@ -23,8 +23,6 @@ const MobileLegendView = Backbone.View.extend({
                 }
             }
         });
-        // Bestätige, dass das Modul geladen wurde
-        Radio.trigger("Autostart", "initializedModul", this.model.get("id"));
     },
     id: "base-modal-legend",
     className: "modal bs-example-modal-sm legend fade in",

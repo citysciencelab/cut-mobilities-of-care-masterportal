@@ -53,7 +53,7 @@ const SaveSelection = Tool.extend({
      * @returns {void}
      */
     filterExternalLayer: function (layerList) {
-        var filteredLayerList = _.filter(layerList, function (model) {
+        var filteredLayerList = layerList.filter(function (model) {
             return !model.get("isExternal");
         });
 

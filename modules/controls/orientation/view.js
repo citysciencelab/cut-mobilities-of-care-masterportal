@@ -85,6 +85,7 @@ const OrientationView = Backbone.View.extend({
             this.$("#geolocate").addClass("toggleButtonPressed");
         }
         else {
+            this.model.untrack();
             this.$("#geolocate").removeClass("toggleButtonPressed");
         }
     },

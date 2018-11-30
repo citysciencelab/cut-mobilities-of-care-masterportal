@@ -217,7 +217,7 @@ const GraphModel = Backbone.Model.extend({
      * @returns {void}
      */
     appendDataToSvg: function (svg, data, className, d3line) {
-        var dataToAdd = _.filter(data, function (obj) {
+        var dataToAdd = data.filter(function (obj) {
             return obj.yAttrToShow !== "-";
         });
 
@@ -285,7 +285,8 @@ const GraphModel = Backbone.Model.extend({
                 .style("text-anchor", textAnchor)
                 .style("fill", fill)
                 .style("font-size", fontSize)
-                .text(label);
+                .text(label)
+                .attr("class", "xAxisLabelText");
         }
     },
 
@@ -332,7 +333,7 @@ const GraphModel = Backbone.Model.extend({
     },
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
-        var dat = _.filter(data, function (obj) {
+        var dat = data.filter(function (obj) {
             return obj[yAttrToShow] !== "-";
         });
 
@@ -501,7 +502,8 @@ const GraphModel = Backbone.Model.extend({
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
-            valueLine;
+            valueLine,
+            isMobile = Radio.request("Util", "isViewMobile");
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
@@ -516,6 +518,11 @@ const GraphModel = Backbone.Model.extend({
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel);
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel);
 
+        if (isMobile) {
+            this.rotateXAxisTexts(svg);
+            this.translateXAxislabelText(svg);
+        }
+
         this.setGraphParams({
             scaleX: scaleX,
             scaleY: scaleY,
@@ -523,6 +530,26 @@ const GraphModel = Backbone.Model.extend({
             margin: margin,
             offset: offset
         });
+    },
+
+    /**
+     * rotates the label on the x-axis by 45 degrees
+     * @param {String} svg - svg with d3 object
+     * @return {void}
+     */
+    rotateXAxisTexts: function (svg) {
+        svg.select(".xAxisDraw").selectAll(".tick").selectAll("text")
+            .attr("transform", "rotate(45) translate(17, -4)");
+    },
+
+    /**
+     * moves the label of the X-axis downwards
+     * @param {String} svg - svg with d3 object
+     * @return {void}
+     */
+    translateXAxislabelText: function (svg) {
+        svg.select(".xAxisDraw").selectAll(".xAxisLabelText")
+            .attr("transform", "translate(0, 6)");
     },
 
     /**
