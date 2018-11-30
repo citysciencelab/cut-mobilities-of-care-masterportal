@@ -11,10 +11,15 @@
         "dictionaries": ["jsdoc","closure"]
     },
     "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false
+      "cleverLinks": true,
+      "monospaceLinks": true
     },
+    "linenums": true,
     "opts": {
-      "template": "node_modules/docdash"
+      "encoding": "utf8",
+      "recurse": true,
+      "destination": "./jsdoc",
+      "template": "node_modules/docdash",
+      "template_": "node_modules/jaguarjs-jsdoc"
     }
 }

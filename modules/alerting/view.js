@@ -1,7 +1,7 @@
 /**
- * @module AlertingModule
- * @description BarFoo
- * @see module:AlertingModule
+ * @module modules/alerting
+ * @class AlertingView
+ * @classdesc BarFoo
  * @extends Backbone.View
  */
 import AlertingModel from "./model";

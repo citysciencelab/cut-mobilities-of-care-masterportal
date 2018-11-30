@@ -1,7 +1,7 @@
 /**
- * @module AlertingModule
- * @description FooBar
- * @see module:AlertingModule
+ * @module modules/alerting
+ * @class AlertingModel
+ * @classdesc FooBar
  * @extends Backbone.Model
  */
 const AlertingModel = Backbone.Model.extend({
