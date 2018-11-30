@@ -128,21 +128,21 @@ const ZoomToGeometry = Backbone.Model.extend({
     },
 
     handlePostCompose: function (evt) {
-        var canvas = evt.context;
+        var canvas = evt.context,
+            map = evt.target;
 
         if (this.get("isRender") === true && _.isUndefined(this.get("featureGeometry")) === false) {
             canvas.beginPath();
-            this.drawOutsidePolygon(canvas);
-            this.drawInsidePolygon(canvas);
+            this.drawOutsidePolygon(canvas, map.getSize());
+            this.drawInsidePolygon(canvas, map);
             canvas.fillStyle = "rgba(0, 0, 0, 0.4)";
             canvas.fill();
             canvas.restore();
         }
     },
 
-    drawOutsidePolygon: function (canvas) {
-        var size = Radio.request("Map", "getSize"),
-            height = size[1] * DEVICE_PIXEL_RATIO,
+    drawOutsidePolygon: function (canvas, size) {
+        var height = size[1] * DEVICE_PIXEL_RATIO,
             width = size[0] * DEVICE_PIXEL_RATIO;
 
         canvas.moveTo(0, 0);
@@ -153,14 +153,14 @@ const ZoomToGeometry = Backbone.Model.extend({
         canvas.closePath();
     },
 
-    drawInsidePolygon: function (canvas) {
+    drawInsidePolygon: function (canvas, map) {
 
         _.each(this.get("featureGeometry").getPolygons(), function (polygon) {
             // Damit es als inneres Polygon erkannt wird, muss es gegen die Uhrzeigerrichtung gezeichnet werden
             var coordinates = polygon.getCoordinates()[0].reverse();
 
             _.each(coordinates, function (coordinate) {
-                var coord = Radio.request("Map", "getPixelFromCoordinate", coordinate);
+                var coord = map.getPixelFromCoordinate(coordinate);
 
                 canvas.lineTo(coord[0] * DEVICE_PIXEL_RATIO, coord[1] * DEVICE_PIXEL_RATIO);
             });
