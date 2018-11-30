@@ -195,7 +195,6 @@ const Gfi = Tool.extend({
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
-            eventPixel = Radio.request("Map", "getEventPixel", evt.originalEvent),
             vectorGFIParams,
             wmsGFIParams,
             GFIParams3d = [],
@@ -208,7 +207,7 @@ const Gfi = Tool.extend({
         // für detached MapMarker
         this.setCoordinate(evt.coordinate);
         // Vector
-        vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, eventPixel);
+        vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, evt.map.getEventPixel(evt.originalEvent));
         // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
@@ -231,7 +230,8 @@ const Gfi = Tool.extend({
         _.each(features, function (feature) {
             var properties = {},
                 propertyNames,
-                modelattributes,
+                modelAttributes,
+                layerModel,
                 olFeature,
                 layer;
 
@@ -243,14 +243,27 @@ const Gfi = Tool.extend({
                 if (properties.attributes && properties.id) {
                     properties.attributes.gmlid = properties.id;
                 }
-                modelattributes = {
-                    attributes: properties.attributes ? properties.attributes : properties,
-                    gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
-                    typ: "Cesium3DTileFeature",
-                    gfiTheme: "buildings_3d",
-                    name: "Buildings"
-                };
-                gfiParams3d.push(modelattributes);
+                if (feature.tileset && feature.tileset.layerReferenceId) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.tileset.layerReferenceId});
+                    if (layerModel) {
+                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                    }
+
+                }
+                if (!modelAttributes) {
+                    modelAttributes = {
+                        attributes: properties.attributes ? properties.attributes : properties,
+                        gfiAttributes: {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
+                        typ: "Cesium3DTileFeature",
+                        gfiTheme: "buildings_3d",
+                        name: "Buildings"
+                    };
+                }
+                else {
+                    modelAttributes.attributes = properties.attributes ? properties.attributes : properties;
+                    modelAttributes.typ = "Cesium3DTileFeature";
+                }
+                gfiParams3d.push(modelAttributes);
             }
             else if (feature.primitive) {
                 olFeature = feature.primitive.olFeature;

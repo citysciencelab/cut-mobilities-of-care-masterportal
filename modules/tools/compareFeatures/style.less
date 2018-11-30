@@ -27,7 +27,8 @@
         }
     }
     .modal-error {
-        width: 450px;
+        width: auto;
+        max-width: 450px;
         .glyphicon {
             font-size: 22px;
         }
@@ -111,6 +112,11 @@
     thead {
         th {
             border-left: 1px solid #ccc;
+        }
+    }
+    @media (min-width: 768px) {
+        .modal-dialog {
+            margin: 30px auto;
         }
     }
 }

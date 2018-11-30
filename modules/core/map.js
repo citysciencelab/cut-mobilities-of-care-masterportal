@@ -28,10 +28,7 @@ const map = Backbone.Model.extend({
             "getLayers": this.getLayers,
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
-            "getEventPixel": this.getEventPixel,
-            "hasFeatureAtPixel": this.hasFeatureAtPixel,
             "getSize": this.getSize,
-            "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
             "registerListener": this.registerListener,
             "getMap": function () {
@@ -60,7 +57,6 @@ const map = Backbone.Model.extend({
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
-            "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
             "updateSize": function () {
                 this.get("map").updateSize();
             },
@@ -173,33 +169,6 @@ const map = Backbone.Model.extend({
     },
 
     /**
-    * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
-    * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-    * @return {ol.Pixel} pixel
-    */
-    getEventPixel: function (evt) {
-        return this.get("map").getEventPixel(evt);
-    },
-
-    /**
-    * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-    * @param  {ol.Coordinate} value -
-    * @return {ol.Pixel} pixel
-    */
-    getPixelFromCoordinate: function (value) {
-        return this.get("map").getPixelFromCoordinate(value);
-    },
-
-    /**
-    * Ermittelt ob Features ein Pixel im Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @return {Boolean} true | false
-    */
-    hasFeatureAtPixel: function (pixel) {
-        return this.get("map").hasFeatureAtPixel(pixel);
-    },
-
-    /**
     * Rückgabe der Features an einer Pixelkoordinate
     * @param  {pixel} pixel    Pixelkoordinate
     * @param  {object} options layerDefinition und pixelTolerance
@@ -209,15 +178,6 @@ const map = Backbone.Model.extend({
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
-    /**
-    * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @param  {Function} callback - Die Feature Callback Funktion
-    * @returns {void}
-    */
-    forEachFeatureAtPixel: function (pixel, callback) {
-        this.get("map").forEachFeatureAtPixel(pixel, callback);
-    },
     getMapMode: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";

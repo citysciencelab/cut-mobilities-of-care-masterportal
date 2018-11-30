@@ -46,6 +46,7 @@ const MenuLoader = Backbone.Model.extend({
 
             if (isMobile) {
                 this.currentMenu = new MobileMenu();
+                channel.trigger("ready", this.currentMenu.id);
             }
             else if (this.treeType === "light") {
                 this.currentMenu = new LightMenu();

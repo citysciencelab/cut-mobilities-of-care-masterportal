@@ -617,10 +617,10 @@ const PrintModel = Tool.extend({
 
     handlePostCompose: function (evt) {
         var ctx = evt.context,
-            size = Radio.request("Map", "getSize"),
+            size = evt.target.getSize(),
             height = size[1] * DEVICE_PIXEL_RATIO,
             width = size[0] * DEVICE_PIXEL_RATIO,
-            printPageRectangle = this.calculatePageBoundsPixels(),
+            printPageRectangle = this.calculatePageBoundsPixels(size),
             minx = printPageRectangle[0],
             miny = printPageRectangle[1],
             maxx = printPageRectangle[2],
@@ -646,14 +646,13 @@ const PrintModel = Tool.extend({
         ctx.restore();
     },
 
-    calculatePageBoundsPixels: function () {
+    calculatePageBoundsPixels: function (mapSize) {
         var s = this.get("scale").value,
             width = this.get("layout").map.width,
             height = this.get("layout").map.height,
             resolution = Radio.request("MapView", "getOptions").resolution,
             w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
             h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
-            mapSize = Radio.request("Map", "getSize"),
             center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
                 mapSize[1] * DEVICE_PIXEL_RATIO / 2],
             minx, miny, maxx, maxy;

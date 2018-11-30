@@ -12,7 +12,6 @@ const FlaecheninfoTheme = Theme.extend({
         var channel = Radio.channel("GFI");
 
         this.listenToOnce(channel, {
-            "afterRender": this.showUmring,
             "hideGFI": this.resetIsMapMarkerVisible
         }, this);
 
@@ -47,6 +46,7 @@ const FlaecheninfoTheme = Theme.extend({
 
         this.setGfiContent([textContent]);
         this.setGeometry(umring);
+        this.showUmring();
     },
 
     createReport: function () {

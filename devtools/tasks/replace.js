@@ -13,6 +13,11 @@ module.exports = function (environment, destination) {
         "to": "./woffs"
     },
     {
+        "files": destination + "/css/style.css",
+        "from": /\/lgv-config/g,
+        "to": "../../lgv-config"
+    },
+    {
         "files": destination + "/config.js",
         "from": /\/lgv-config/g,
         "to": "../lgv-config"

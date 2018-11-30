@@ -170,28 +170,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
-            "title": "Master-Portal",
-            "gfi": false,
-            "outputFilename": "DruckPDF",
-            "gfiMarker":
-                {
-                  "outerCircle":
-                  {
-                    "fill": false,
-                    "pointRadius": 8,
-                    "stroke": true,
-                    "strokeColor": "#ff0000",
-                    "strokeWidth": 3
-                  },
-                  "point":
-                  {
-                    "fill": true,
-                    "pointRadius": 1,
-                    "fillColor": "#000000",
-                    "stroke": false
-                  }
-                }
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "master",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
@@ -566,7 +549,7 @@
         "Titel": "Luftverkehr",
         "Layer": [
         {
-          "id": ["412", "413", "414", "415", "416", "417", "418", "419", "420", "421", "423", "424", "425", "426", "427", "428", "429", "430", "431"],
+          "id": ["422","420","418","417","416","413","430","412","428","426","427","425","424"],
           "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
           "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
         }]
@@ -662,7 +645,7 @@
               "id": "1731"
             }
           ],
-          "visibility": false,
+          "visibility": true,
           "name": "Kita und Krankenhäuser"
         },
         {
@@ -702,7 +685,6 @@
               "additionalInfoField": "adresse_strasse_hausnr"
             }
           ],
-          "visibility": true,
           "name": "Krankenhäuser und Schulen"
         }]
       }]
