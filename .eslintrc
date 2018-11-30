@@ -14,7 +14,8 @@
         "Radio": true,
         "Backbone": true,
         "olcs": true,
-        "vcs": true
+        "vcs": true,
+        "Cesium": true
     },
     "plugins": [
         "chai-friendly"
