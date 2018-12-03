@@ -625,6 +625,7 @@ Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  La
 |isGeneric|nein|String|false||
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 |minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
+|liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
 
 
@@ -643,7 +644,6 @@ Der Filter sucht in ausgewählten Layern nach vor ausgwählten Attributen, die �
 |isVisible|nein|Boolean|||
 |searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
-liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
