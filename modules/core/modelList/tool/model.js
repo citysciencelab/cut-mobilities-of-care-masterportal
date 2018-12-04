@@ -27,20 +27,35 @@ const Tool = Item.extend({
     superInitialize: function () {
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                if (value && model.get("renderToWindow")) {
-                    Radio.trigger("Window", "showTool", model);
-                    Radio.trigger("Window", "setIsVisible", true);
+                // if (value && model.get("renderToWindow")) {
+                //     Radio.trigger("Window", "showTool", model);
+                //     Radio.trigger("Window", "setIsVisible", true);
+                // }
+                // else if (!value && model.get("renderToWindow")) {
+                //     Radio.trigger("Window", "setIsVisible", false);
+                // }
+                // if (value && model.get("deactivateGFI")) {
+                //     Radio.trigger("GFI", "deactivate");
+                // }
+                // else {
+                //     Radio.trigger("GFI", "activate");
+                // }
+                if (value) {
+                    if (model.get("renderToWindow")) {
+                        Radio.trigger("Window", "showTool", model);
+                        Radio.trigger("Window", "setIsVisible", true);
+                    }
+                    if (model.get("deactivateGFI")) {
+                        Radio.trigger("GFI", "deactivate");
+                    }
                 }
-                else if (!value && model.get("renderToWindow")) {
-                    Radio.trigger("Window", "setIsVisible", false);
-                }
-                if (value && model.get("deactivateGFI")) {
-                    Radio.trigger("GFI", "deactivate");
-                }
-                else {
+                if (!value) {
+                    if (model.get("renderToWindow")) {
+                        Radio.trigger("Window", "setIsVisible", false);
+                    }
                     Radio.trigger("GFI", "activate");
+                    model.collection.toggleDefaultToolIsActive(model.get("id"), true);
                 }
-
             }
         });
 
