@@ -115,10 +115,8 @@ const SpecialWFSModel = Backbone.Model.extend({
             .replace(/\u00f6/g, "oe")
             .replace(/\u00fc/g, "ue")
             .replace(/\u00df/g, "ss")
-            .replace("(", "")
-            .replace(")", "")
-            .replace("[", "")
-            .replace("]", "");
+            .replace("(", /\(/g)
+            .replace(")", /\)/g);
     },
 
     /**
