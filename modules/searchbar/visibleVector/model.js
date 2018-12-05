@@ -1,22 +1,26 @@
 import "../model";
 
-const VisibleWFSModel = Backbone.Model.extend({
+const VisibleVectorModel = Backbone.Model.extend({
     /**
     *
     */
     defaults: {
         inUse: false,
-        minChars: 3
+        minChars: 3,
+        layerTypes: ["WFS"]
     },
     /**
-     * @description Initialisierung der visibleWFS Suche
-     * @param {Object} config - Das Konfigurationsobjekt der Suche in sichtbaren WFS.
+     * @description Initialisierung der visibleVector Suche
+     * @param {Object} config - Das Konfigurationsobjekt der Suche in sichtbaren Vector-Layern.
      * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
      * @returns {void}
      */
     initialize: function (config) {
         if (config.minChars) {
             this.setMinChars(config.minChars);
+        }
+        if (config.layerTypes) {
+            this.setLayerTypes(config.layerTypes);
         }
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.prepSearch
@@ -25,19 +29,23 @@ const VisibleWFSModel = Backbone.Model.extend({
     },
     prepSearch: function (searchString) {
         var prepSearchString,
-            wfsModels,
+            wfsModels = [],
             filteredModels;
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
             prepSearchString = searchString.replace(" ", "");
-            wfsModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+
+            _.each(this.getLayerTypes(), function (layerType) {
+                wfsModels = wfsModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
+            }, this);
+
             filteredModels = _.union(wfsModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
             this.findMatchingFeatures(filteredModels, prepSearchString);
-            Radio.trigger("Searchbar", "createRecommendedList", "visibleWFS");
+            Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
             this.setInUse(false);
         }
     },
@@ -78,7 +86,7 @@ const VisibleWFSModel = Backbone.Model.extend({
      * gets a new feature object
      * @param  {string} searchField Attribute feature has to be searche through
      * @param  {ol.Feature} filteredFeatures openlayers feature
-     * @param  {Backbone.Model} model model of visibleWFS
+     * @param  {Backbone.Model} model model of visibleVector
      * @return {array} array with feature objects
      */
     getFeatureObject: function (searchField, filteredFeatures, model) {
@@ -120,12 +128,10 @@ const VisibleWFSModel = Backbone.Model.extend({
      */
     getImageSource: function (feature, model) {
         var layerStyle,
-            layerTyp,
             style;
 
         if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
             layerStyle = model.get("layer").getStyle(feature);
-            layerTyp = model.get("typ");
 
             // layerStyle returns style
             if (typeof layerStyle === "object") {
@@ -135,8 +141,7 @@ const VisibleWFSModel = Backbone.Model.extend({
 
             style = layerStyle(feature);
 
-            return layerTyp === "WFS" ? style.getImage().getSrc() : undefined;
-
+            return style.getImage().getSrc();
         }
 
         return undefined;
@@ -158,10 +163,20 @@ const VisibleWFSModel = Backbone.Model.extend({
         this.set("minChars", value);
     },
 
+    // setter for LayerTypes to search in
+    setLayerTypes: function (value) {
+        this.set("layerTypes", value);
+    },
+
+    // getter for LayerTypes to search in
+    getLayerTypes: function () {
+        return this.get("layerTypes");
+    },
+
     // setter for inUse
     setInUse: function (value) {
         this.set("inUse", value);
     }
 });
 
-export default VisibleWFSModel;
+export default VisibleVectorModel;
