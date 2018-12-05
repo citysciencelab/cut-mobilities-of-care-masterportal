@@ -42,8 +42,7 @@ import Viewpoint from "./viewpoint/model";
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {
-        var channel = Radio.channel("ModelList"),
-            defaultToolId = "gfi";
+        var channel = Radio.channel("ModelList");
 
         channel.reply({
             "getCollection": this,
@@ -104,8 +103,7 @@ const ModelList = Backbone.Collection.extend({
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }
         });
-        defaultToolId = this.findDefaultToolId(defaultToolId);
-        this.defaultToolId = defaultToolId;
+        this.defaultToolId = Config && Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
     selectionIDX: [],
     model: function (attrs, options) {
@@ -242,14 +240,6 @@ const ModelList = Backbone.Collection.extend({
             Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
         }
         return null;
-    },
-    findDefaultToolId: function (defaultToolId) {
-        var toolId = defaultToolId;
-
-        if (Config && Config.hasOwnProperty("defaultToolId")) {
-            toolId = Config.defaultToolId;
-        }
-        return toolId;
     },
     toggleDefaultToolIsActive: function (toolId, isActive) {
         var defaultTool = this.get(this.defaultToolId);
