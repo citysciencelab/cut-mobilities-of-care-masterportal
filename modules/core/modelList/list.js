@@ -103,7 +103,7 @@ const ModelList = Backbone.Collection.extend({
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }
         });
-        this.defaultToolId = Config && Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
+        this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
     selectionIDX: [],
     model: function (attrs, options) {
