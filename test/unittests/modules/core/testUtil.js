@@ -4,10 +4,10 @@ import Model from "@modules/core/util.js";
 describe("core/Util", function () {
     var model;
 
-    before(function () {
-        model = new Model();
-    });
     describe("punctuate", function () {
+        before(function () {
+            model = new Model();
+        });
         it("should not set two points for 7 digit number with decimals", function () {
             expect(model.punctuate(1234567.890)).to.equal("1.234.567");
         });
@@ -31,6 +31,9 @@ describe("core/Util", function () {
         });
     });
     describe("sort", function () {
+        before(function () {
+            model = new Model();
+        });
         // undefined
         it("should return undefined for undefined input", function () {
             expect(model.sort(undefined)).to.be.undefined;
@@ -137,6 +140,9 @@ describe("core/Util", function () {
     describe("convertArrayOfObjectsToCsv", function () {
         var array = [{attr1: "der", attr2: "die"}, {attr1: "das", attr2: "hier"}, {attr1: "dort", attr2: "oben"}];
 
+        before(function () {
+            model = new Model();
+        });
         it("should return a string with a length of 39", function () {
             expect(model.convertArrayOfObjectsToCsv(array)).to.be.a("string").to.have.lengthOf(39);
         });
@@ -149,5 +155,28 @@ describe("core/Util", function () {
         it("should find four dollar signs", function () {
             expect(model.convertArrayOfObjectsToCsv(array, "$").match(/\$/g)).to.have.lengthOf(4);
         });
+    });
+
+    describe("generate proxy url", function () {
+        it("should generate key without hostname from url", function () {
+            var proxyURL;
+
+            model = new Model();
+
+            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
+            expect(proxyURL).to.be.equal("/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
+        });
+
+        it("should generate key with hostname from url", function () {
+            var proxyURL;
+
+            model = new Model({
+                proxyHost: "https://test-proxy.example.com"
+            });
+
+            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
+            expect(proxyURL).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
+        });
+
     });
 });
