@@ -1137,7 +1137,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |quickHelp|nein|Boolean|false|Gibt an ob eine portalseitige Hilfe angezeigt werden soll. Wenn sie nicht gesetzt ist, wird der globale Wert aus der config.js verwendet.|
 |[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)|nein|Object||Durchsuchen von speziell definierten WFS-Layern.|
 |[tree](#markdown-header-portalconfigsearchbartree)|nein|Object||Themensuche. Durchsucht den Themenbaum des Portals.|
-|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||Durchsuchen von sichtbar geschalteten WFS-Layern.|
+|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||(deprecated) Durchsuchen von sichtbar geschalteten WFS-Layern.|
+|[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)|nein|Object||Durchsuchen von sichtbar geschalteten Vektor-Layern.|
 |zoomLevel||Number||Zoomstufe, in der das gesuchte Objekt angezeigt wird.|
 |renderToDOM|nein|String||HTML ID an deren Objekt sich die Suchleiste rendern soll. Bei  "#searchbarInMap" wird die Suchleiste auf der Karte gezeichnet.|
 
@@ -1278,8 +1279,9 @@ Alle Layer im Themenbaum des Portals, werden durchsucht.
 
 ******
 
-#### Portalconfig.searchBar.visibleWFS ####
+#### Portalconfig.searchBar.visibleWFS  (deprecated) ####
 Alle sichtbaren WFS-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
+Ersetzt durch [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1293,6 +1295,28 @@ Alle sichtbaren WFS-Dienste werden nach einem vordefinierten Attribut durchsucht
 
 "visibleWFS": {
            "minChars": 3
+       }
+```
+
+******
+
+#### Portalconfig.searchBar.visibleVector ####
+Alle sichtbaren Vektor-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|layerTypes|nein|Array [String]|["WFS"]|Vektor-Layer-Typen, die durchsucht werden sollen.|
+
+**Beispiel visibleVector:**
+
+
+```
+#!json
+
+"visibleVector": {
+           "minChars": 3,
+           "layerTypes": ["WFS", "GeoJSON"]
        }
 ```
 
@@ -1500,7 +1524,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
 |mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
-|searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleWFS gesucht werden soll .|
+|searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleVector gesucht werden soll .|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md)zu.|
 |hitTolerance|nein|Number||Toleranz in Pixel beim Abrufen von Feature Infos.|
 
