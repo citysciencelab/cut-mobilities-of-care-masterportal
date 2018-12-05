@@ -29,7 +29,7 @@ const VisibleVectorModel = Backbone.Model.extend({
     },
     prepSearch: function (searchString) {
         var prepSearchString,
-            wfsModels = [],
+            vectorLayerModels = [],
             filteredModels;
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
@@ -37,10 +37,10 @@ const VisibleVectorModel = Backbone.Model.extend({
             prepSearchString = searchString.replace(" ", "");
 
             _.each(this.getLayerTypes(), function (layerType) {
-                wfsModels = wfsModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
+                vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
             }, this);
 
-            filteredModels = _.union(wfsModels).filter(function (model) {
+            filteredModels = _.union(vectorLayerModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 

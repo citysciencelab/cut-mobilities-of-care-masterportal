@@ -113,7 +113,8 @@ const SearchbarView = Backbone.View.extend({
         if (_.has(config, "visibleVector") === true) {
             new VisibleVectorModel(config.visibleVector);
         }
-        else if (_.has(config, "visibleWFS") === true) {    //Deprecated mit neuer Stable
+        else if (_.has(config, "visibleWFS") === true) {
+            // Deprecated mit neuer Stable
             new VisibleVectorModel(config.visibleWFS);
         }
         if (_.has(config, "bkg") === true) {
