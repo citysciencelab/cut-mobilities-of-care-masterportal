@@ -11,7 +11,8 @@ module.exports = {
     resolve: {
         alias: {
             "@modules": path.resolve(__dirname, "../modules"),
-            "@testUtil": path.resolve(__dirname, "../test/unittests/Util")
+            "@testUtil": path.resolve(__dirname, "../test/unittests/Util"),
+            "@portalconfigs": path.resolve(__dirname, "../../portalconfigs")
         }
     },
     externals: {
