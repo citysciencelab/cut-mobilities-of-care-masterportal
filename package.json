@@ -12,7 +12,8 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
     "build": "node devtools/tasks/build.js",
-    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js"
+    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js",
+    "buildPortalsForStable": "node devtools/tasks/exampleBuild.js && node devtools/tasks/portalsForStableCopy.js"
   },
   "dependencies": {
     "backbone": "1.x",
