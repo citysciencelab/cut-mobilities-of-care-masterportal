@@ -491,9 +491,14 @@ const SearchbarView = Backbone.View.extend({
     },
 
     setSearchString: function (evt) {
+        console.log(evt.target.value.length);
+        
         if (evt.target.value.length === 0) {
             // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
             this.deleteSearchString();
+        }
+        else if (evt.target.value.length < 3) {
+            this.$("#searchInputUL").html("");
         }
         else {
             if (evt.type === "paste") {
