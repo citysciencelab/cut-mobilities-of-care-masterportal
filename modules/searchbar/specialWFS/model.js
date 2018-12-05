@@ -110,9 +110,15 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     simplifyString: function (searchString) {
-        var value = searchString.toLowerCase().replace(/\u00e4/g, "ae").replace(/\u00f6/g, "oe").replace(/\u00fc/g, "ue").replace(/\u00df/g, "ss");
-
-        return value;
+        return searchString.toLowerCase()
+            .replace(/\u00e4/g, "ae")
+            .replace(/\u00f6/g, "oe")
+            .replace(/\u00fc/g, "ue")
+            .replace(/\u00df/g, "ss")
+            .replace("(", "")
+            .replace(")", "")
+            .replace("[", "")
+            .replace("]", "");
     },
 
     /**
