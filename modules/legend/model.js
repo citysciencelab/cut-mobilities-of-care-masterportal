@@ -136,7 +136,7 @@ const Legend = Tool.extend({
             sortedModelList = _.sortBy(modelList, function (layer) {
                 return layer.get("name");
             }),
-            visibleLayer = _.filter(sortedModelList, function (layer) {
+            visibleLayer = sortedModelList.filter(function (layer) {
                 return layer.get("legendURL") !== "ignore";
             }),
             tempArray = [];
