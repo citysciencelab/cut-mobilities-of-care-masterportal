@@ -34,10 +34,14 @@ const Tool = Item.extend({
                         Radio.trigger("Window", "showTool", model);
                         Radio.trigger("Window", "setIsVisible", true);
                     }
-                    gfiModel.setIsActive(!model.get("deactivateGFI"));
+                    if (gfiModel) {
+                        gfiModel.setIsActive(!model.get("deactivateGFI"));
+                    }
                 }
                 else {
-                    gfiModel.setIsActive(false);
+                    if (gfiModel) {
+                        gfiModel.setIsActive(false);
+                    }
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
