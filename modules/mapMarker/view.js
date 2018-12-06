@@ -13,7 +13,6 @@ const MapMarker = Backbone.View.extend({
         this.model = new MapHandlerModel();
 
         channel.on({
-            "clearMarker": this.clearMarker,
             "zoomTo": this.zoomTo,
             "hideMarker": this.hideMarker,
             "showMarker": this.showMarker,
@@ -35,13 +34,6 @@ const MapMarker = Backbone.View.extend({
     },
     id: "searchMarker",
     className: "glyphicon glyphicon-map-marker",
-    /**
-    * @description Entfernt den searchVector
-    * @returns {void}
-    */
-    clearMarker: function () {
-        this.hideMarker();
-    },
 
     /**
     * @description Zoom auf Treffer
@@ -61,7 +53,7 @@ const MapMarker = Backbone.View.extend({
         else if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate) === false) {
             coord = hit.coordinate.split(" ");
         }
-        this.clearMarker();
+        this.hideMarker();
         this.hidePolygon();
         switch (hit.type) {
             case "Straße": {
@@ -176,7 +168,11 @@ const MapMarker = Backbone.View.extend({
     },
 
     showMarker: function (coordinate) {
-        this.clearMarker();
+        console.log(coordinate);
+        console.log(this.model.get("marker"));
+
+
+        this.hideMarker();
         if (coordinate.length === 2) {
             this.model.get("marker").setPosition(coordinate);
         }
