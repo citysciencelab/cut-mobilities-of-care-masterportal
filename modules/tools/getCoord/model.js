@@ -68,6 +68,10 @@ const CoordPopup = Tool.extend({
      * @returns {void}
      */
     toggleMapMarker: function (position, updatePosition, isViewMobile) {
+        console.log(position);
+        console.log(updatePosition);
+        console.log(isViewMobile);
+        
         var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker";
 
         Radio.trigger("MapMarker", showHideMarker, position);
