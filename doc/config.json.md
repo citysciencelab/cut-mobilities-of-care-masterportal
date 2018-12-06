@@ -585,6 +585,7 @@ Ermöglicht mit Hilfe des Mouse Ziegers  die Ermittlung von Koordinaten in allen
 |name|nein|String||Name des Werkzeuges im Menüeintrag.|
 |onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
+|isVisibleInMenu|nein|Boolean|true|Gibt an, ob das Zeichnen Tool im Menü eingetragen sein soll. Wenn false, dann ist es nur über Radio ansprechbar.|
 
 ******
 ******
@@ -624,6 +625,7 @@ Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  La
 |isGeneric|nein|String|false||
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 |minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
+|liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
 
 
@@ -642,7 +644,6 @@ Der Filter sucht in ausgewählten Layern nach vor ausgwählten Attributen, die �
 |isVisible|nein|Boolean|||
 |searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
-liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
@@ -1476,6 +1477,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
 |supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 |autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
+|isVisibleInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1500,6 +1502,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
 |searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleWFS gesucht werden soll .|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md)zu.|
+|hitTolerance|nein|Number||Toleranz in Pixel beim Abrufen von Feature Infos.|
 
 
 #### filterOptions ####

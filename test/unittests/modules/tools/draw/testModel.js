@@ -37,7 +37,7 @@ describe("drawModel", function () {
 
             expect(result instanceof Draw).to.be.true;
         });
-        it("should be the result color ist the same as input color", function () {
+        it("should be the result color is the same as input color", function () {
             var drawType = {
                     geometry: "Point",
                     text: "Punkt zeichnen"
@@ -208,5 +208,88 @@ describe("drawModel", function () {
                 expect(model.get("layer").getSource().getFeatures()).is.empty;
             });
         });
+
+    });
+    describe("inititalizeWithoutGUI", function () {
+        before(function () {
+            var params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
+
+            model.inititalizeWithoutGUI(params);
+        });
+
+
+        it("should not render to Window", function () {
+            expect(model.get("renderToWindow")).to.be.false;
+        });
+        it("should activate Tool", function () {
+            expect(model.get("isActive")).to.be.true;
+        });
+        it("should set drawType", function () {
+            expect(model.get("drawType").geometry).to.equal("Polygon");
+        });
+        it("should set Opacity", function () {
+            expect(model.get("opacity")).to.equal(0.5);
+        });
+        it("should add Feature", function () {
+            var feature = model.get("layer").getSource().getFeatures();
+
+            expect(feature).to.have.lengthOf(1);
+        });
+
+    });
+
+    describe("editFeaturesWithoutGUI", function () {
+        before(function () {
+            model.editFeaturesWithoutGUI();
+        });
+        it("should activate modify Interaction", function () {
+            expect(model.get("modifyInteraction").get("active")).to.be.true;
+        });
+        it("should deactivate draw Interaction", function () {
+            expect(model.get("drawInteraction").get("active")).to.be.false;
+        });
+    });
+
+    describe("cancelDrawWithoutGUI", function () {
+        before(function () {
+            var drawType = "",
+                layer = new VectorLayer();
+
+            model.createDrawInteraction(drawType, layer);
+            model.cancelDrawWithoutGUI();
+        });
+
+        it("should deactivate modify Interaction", function () {
+
+            expect(model.get("modifyInteraction").get("active")).to.be.false;
+        });
+        it("should deactivate draw Interaction", function () {
+
+            expect(model.get("drawInteraction").get("active")).to.be.false;
+        });
+        it("should deactivate select Interaction", function () {
+
+            expect(model.get("selectInteraction").get("active")).to.be.false;
+        });
+        it("should reset Module", function () {
+            expect(model.get("radius")).to.deep.equal(model.defaults.radius);
+            expect(model.get("opacity")).is.equal(model.defaults.opacity);
+            expect(model.get("color")).is.equal(model.defaults.color);
+            expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
+        });
+        it("should deactivate Tool", function () {
+            expect(model.get("isActive")).to.be.false;
+        });
+    });
+
+    describe("downloadFeaturesWithoutGUI", function () {
+        var downloadedFeatures,
+            featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]};
+
+        it("should return FeatureCollection", function () {
+            downloadedFeatures = model.downloadFeaturesWithoutGUI();
+            expect(downloadedFeatures).to.deep.equal(JSON.stringify(featureCollectionFromJson));
+        });
+
     });
 });

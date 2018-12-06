@@ -41,10 +41,10 @@ const ExtendedFilter = Tool.extend({
     },
     getLayers: function () {
         var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-            featureLayers = _.filter(layers, function (layer) {
+            featureLayers = layers.filter(function (layer) {
                 return layer.get("layer").getSource().getFeatures().length > 0;
             }),
-            filterLayers = _.filter(featureLayers, function (layer) {
+            filterLayers = featureLayers.filter(function (layer) {
                 return layer.get("extendedFilter");
             }),
             wfsList = [],

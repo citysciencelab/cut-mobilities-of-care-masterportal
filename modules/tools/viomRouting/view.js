@@ -141,7 +141,7 @@ const RoutingView = Backbone.View.extend({
     toggleDown: function (target) {
         var ul = $("#" + target)[0],
             liList = $(ul).find("li"),
-            selectedLi = _.filter(liList, function (li) {
+            selectedLi = liList.filter(function (li) {
                 return $(li).hasClass("active");
             });
 
@@ -156,7 +156,7 @@ const RoutingView = Backbone.View.extend({
     toggleUp: function (target) {
         var ul = $("#" + target)[0],
             liList = $(ul).find("li"),
-            selectedLi = _.filter(liList, function (li) {
+            selectedLi = liList.filter(function (li) {
                 return $(li).hasClass("active");
             });
 
