@@ -1,7 +1,11 @@
 import ListTemplate from "text-loader!./templates/template.html";
 import SingleLayerView from "./singleLayerView";
+import CloseClickView from "./closeClickView";
 
 const LayerView = Backbone.View.extend({
+    events: {
+        "click .closeclick-view": "hideMenu"
+    },
     initialize: function () {
         this.collection = Radio.request("ModelList", "getCollection");
         this.listenTo(Radio.channel("TableMenu"), {
@@ -13,9 +17,15 @@ const LayerView = Backbone.View.extend({
             }
         });
 
-        // bootstrap collapse event
+        this.$el.on("hide.bs.collapse", function () {
+            $("#closeclick-view").removeClass("closeclick-activated");
+            $("#closeclick-view").addClass("closeclick-deactivated");
+        });
+
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Layer");
+            $("#closeclick-view").removeClass("closeclick-deactivated");
+            $("#closeclick-view").addClass("closeclick-activated");
         });
     },
     id: "table-layer-list",
@@ -23,9 +33,12 @@ const LayerView = Backbone.View.extend({
     template: _.template(ListTemplate),
     hideMenu: function () {
         $("#table-nav-layers-panel").collapse("hide");
+        $("#closeclick-view").removeClass("closeclick-activated");
+        $("#closeclick-view").addClass("closeclick-deactivated");
     },
     render: function () {
         this.$el.html(this.template());
+        this.$el.find("#table-nav").prepend(new CloseClickView().render().$el);
         if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
             $("#table-nav-layers-panel").collapse("show");
         }
@@ -40,7 +53,6 @@ const LayerView = Backbone.View.extend({
         });
         this.addViews(models);
     },
-
     addViews: function (models) {
         var childElement = {};
 

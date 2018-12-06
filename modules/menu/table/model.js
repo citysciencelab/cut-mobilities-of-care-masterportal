@@ -2,6 +2,7 @@ const TableNavModel = Backbone.Model.extend({
     defaults: {
         isActiveElement: ""
     },
+
     initialize: function () {
         var channel = Radio.channel("TableMenu");
 
@@ -19,7 +20,11 @@ const TableNavModel = Backbone.Model.extend({
         if (this.get("isActiveElement") !== element) {
             channel.trigger("hideMenuElement" + this.get("isActiveElement"));
         }
-        this.set("isActiveElement", element);
+        this.setIsActiveElement(element);
+    },
+
+    setIsActiveElement: function (value) {
+        this.set("isActiveElement", value);
     }
 });
 
