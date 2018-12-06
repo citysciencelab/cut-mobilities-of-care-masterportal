@@ -38,7 +38,7 @@ const LayerView = Backbone.View.extend({
     },
     render: function () {
         this.$el.html(this.template());
-        this.$el.find("#table-nav").prepend(new CloseClickView().render().$el);
+        new CloseClickView().render();
         if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
             $("#table-nav-layers-panel").collapse("show");
         }
