@@ -61,7 +61,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             elementName;
 
         _.each(masterObject, function (elements) {
-            elementsHits = _.filter(elements, function (element) {
+            elementsHits = elements.filter(function (element) {
                 elementName = this.simplifyString(element.name);
                 _.extend(element, {
                     triggerEvent: {
