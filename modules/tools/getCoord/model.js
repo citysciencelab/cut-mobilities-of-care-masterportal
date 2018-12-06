@@ -15,6 +15,7 @@ const CoordPopup = Tool.extend({
         renderToWindow: true,
         glyphicon: "glyphicon-screenshot"
     }),
+
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
@@ -35,6 +36,7 @@ const CoordPopup = Tool.extend({
                 this.positionClicked(evt.coordinate);
             }.bind(this)
         }, this));
+console.log(this.get("selectPointerMove"));
 
         Radio.trigger("Map", "addInteraction", this.get("selectPointerMove"));
     },
@@ -45,7 +47,7 @@ const CoordPopup = Tool.extend({
     },
 
     checkPosition: function (position) {
-        if (this.get("updatePosition") === true) {
+        if (this.get("updatePosition")) {
             this.setPositionMapProjection(position);
         }
     },
