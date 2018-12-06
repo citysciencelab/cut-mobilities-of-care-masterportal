@@ -140,5 +140,41 @@
         ],
         "kategorie_organisation": "Hamburger Verkehrsverbund GmbH"
     }]
+  },
+  {
+    "id": "6883",
+    "name": "Kindertagesstätten Details TestFolder",
+    "typ": "WMS",
+    "layers": "testFolder",
+    "datasets": [
+        {
+            "md_name": "testFolder",
+            "kategorie_opendata": [
+                "Sonstiges"
+            ],
+            "kategorie_inspire": [
+                "Versorgungswirtschaft und staatliche Dienste"
+            ],
+            "kategorie_organisation": "Behörde für Arbeit, Soziales, Familie und Integration"
+        }
+    ]
+},
+{
+    "id": "19323",
+    "name": "Haltestellen TestFolder",
+    "typ": "WMS",
+    "layers": "testFolder",
+    "datasets": [
+        {
+            "md_name": "testFolder",
+            "kategorie_opendata": [
+                "Sonstiges"
+            ],
+            "kategorie_inspire": [
+                "nicht INSPIRE-identifiziert"
+            ],
+            "kategorie_organisation": "Hamburger Verkehrsverbund GmbH"
+        }
+    ]
   }
 ]

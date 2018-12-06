@@ -166,7 +166,7 @@ const SensorLayer = Layer.extend({
         }, this);
 
         // only features with geometry
-        features = _.filter(features, function (feature) {
+        features = features.filter(function (feature) {
             return !_.isUndefined(feature.getGeometry());
         });
 

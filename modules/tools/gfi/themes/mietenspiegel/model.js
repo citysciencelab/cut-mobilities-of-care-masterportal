@@ -97,7 +97,7 @@ const MietenspiegelTheme = Theme.extend({
         merkmale = _.map(daten, function (value) {
             return value.merkmale;
         });
-        merkmaleReduced = _.filter(merkmale, function (value) {
+        merkmaleReduced = merkmale.filter(function (value) {
             return _.isMatch(value, setted);
         });
         possibleValues = _.map(merkmaleReduced, function (merkmal) {
@@ -228,7 +228,7 @@ const MietenspiegelTheme = Theme.extend({
         var daten = this.get("msDaten"),
             vergleichsmiete;
 
-        vergleichsmiete = _.filter(daten, function (value) {
+        vergleichsmiete = daten.filter(function (value) {
             return _.isMatch(value.merkmale, merkmale);
         });
         if (vergleichsmiete.length !== 1) {
