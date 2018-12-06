@@ -71,7 +71,8 @@ const ModelList = Backbone.Collection.extend({
             "renderTree": function () {
                 this.trigger("renderTree");
             },
-            "toggleWfsCluster": this.toggleWfsCluster
+            "toggleWfsCluster": this.toggleWfsCluster,
+            "toggleDefaultTool": this.toggleDefaultTool
         }, this);
 
         this.listenTo(this, {
@@ -241,12 +242,8 @@ const ModelList = Backbone.Collection.extend({
         }
         return null;
     },
-    toggleDefaultToolIsActive: function (toolId, isActive) {
-        var defaultTool = this.get(this.defaultToolId);
-
-        if (defaultTool !== undefined && defaultTool.get("id") !== toolId) {
-            defaultTool.setIsActive(isActive);
-        }
+    getDefaultTool: function () {
+        return this.get(this.defaultToolId);
     },
     /**
     * [checkIsExpanded description]
@@ -421,9 +418,9 @@ const ModelList = Backbone.Collection.extend({
         }
     },
 
-    setActiveToolToFalse: function (model) {
+    setActiveToolsToFalse: function (model) {
         var activeTools = _.without(this.where({isActive: true}), model),
-            legendModel = this.where({id: "legend"})[0];
+            legendModel = this.findWhere({id: "legend"});
 
         activeTools = _.without(activeTools, legendModel);
 
@@ -431,7 +428,16 @@ const ModelList = Backbone.Collection.extend({
             tool.setIsActive(false);
         });
     },
+    toggleDefaultTool: function () {
+        var activeTools = this.where({isActive: true}),
+            legendModel = this.findWhere({id: "legend"}),
+            defaultTool = this.getDefaultTool();
 
+        activeTools = _.without(activeTools, legendModel);
+        if (activeTools.length === 0) {
+            defaultTool.setIsActive(true);
+        }
+    },
     insertIntoSelectionIDX: function (model) {
         var idx = 0;
 

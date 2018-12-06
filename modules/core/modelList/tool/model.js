@@ -30,23 +30,17 @@ const Tool = Item.extend({
                 var gfiModel = model.collection.findWhere({id: "gfi"});
 
                 if (value) {
-                    model.collection.toggleDefaultToolIsActive(model.get("id"), false);
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "showTool", model);
                         Radio.trigger("Window", "setIsVisible", true);
                     }
-                    if (model.get("deactivateGFI")) {
-                        gfiModel.setIsActive(false);
-                    }
-                    if (!model.get("deactivateGFI")) {
-                        gfiModel.setIsActive(true);
-                    }
+                    gfiModel.setIsActive(!model.get("deactivateGFI"));
                 }
-                if (!value) {
+                else {
+                    gfiModel.setIsActive(false);
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
-                    model.collection.toggleDefaultToolIsActive(model.get("id"), true);
                 }
             }
         });
@@ -56,7 +50,6 @@ const Tool = Item.extend({
             this.setIsActive("true");
         }
     },
-
     setIsActive: function (value, options) {
         this.set("isActive", value, options);
     }
