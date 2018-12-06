@@ -18,29 +18,29 @@ const LayerView = Backbone.View.extend({
         });
 
         this.$el.on("hide.bs.collapse", function () {
-            $("#closeclick-view").removeClass("closeclick-activated");
-            $("#closeclick-view").addClass("closeclick-deactivated");
+            this.$("#closeclick-view").removeClass("closeclick-activated");
+            this.$("#closeclick-view").addClass("closeclick-deactivated");
         });
 
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Layer");
-            $("#closeclick-view").removeClass("closeclick-deactivated");
-            $("#closeclick-view").addClass("closeclick-activated");
+            this.$("#closeclick-view").removeClass("closeclick-deactivated");
+            this.$("#closeclick-view").addClass("closeclick-activated");
         });
     },
     id: "table-layer-list",
     className: "table-layer-list table-nav",
     template: _.template(ListTemplate),
     hideMenu: function () {
-        $("#table-nav-layers-panel").collapse("hide");
-        $("#closeclick-view").removeClass("closeclick-activated");
-        $("#closeclick-view").addClass("closeclick-deactivated");
+        this.$("#table-nav-layers-panel").collapse("hide");
+        this.$("#closeclick-view").removeClass("closeclick-activated");
+        this.$("#closeclick-view").addClass("closeclick-deactivated");
     },
     render: function () {
         this.$el.html(this.template());
         this.$el.find("#table-nav").prepend(new CloseClickView().render().$el);
         if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
-            $("#table-nav-layers-panel").collapse("show");
+            this.$("#table-nav-layers-panel").collapse("show");
         }
         this.renderList();
         return this;
