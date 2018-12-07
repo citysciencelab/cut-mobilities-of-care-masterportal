@@ -31,7 +31,7 @@ const Gfi = Tool.extend({
         rotateAngle: 0,
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
-        deactivateGFI: false
+        unlisten: false
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
@@ -46,9 +46,7 @@ const Gfi = Tool.extend({
             "setIsVisible": this.setIsVisible,
             "layerAtPosition": this.setGfiOfLayerAtPosition,
             "changeFeature": this.changeFeature,
-            "isMapMarkerVisible": this.setIsMapMarkerVisible,
-            "activate": this.activateGFI,
-            "deactivate": this.deactivateGFI
+            "isMapMarkerVisible": this.setIsMapMarkerVisible
         }, this);
 
         channel.reply({
@@ -86,9 +84,11 @@ const Gfi = Tool.extend({
             "change:isActive": function (model, value) {
                 if (value) {
                     this.listenToThemeList();
+                    this.listen();
                 }
                 else {
                     this.stopListening(this.get("themeList"));
+                    this.unlisten();
                 }
             }
         });
@@ -100,7 +100,8 @@ const Gfi = Tool.extend({
 
         this.listenTo(Radio.channel("Map"), {
             "isReady": function () {
-                this.activateGFI();
+                this.setIsActive(true);
+                this.listen();
                 if (this.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
                     Radio.trigger("Map", "addOverlay", this.get("overlay"));
                 }
@@ -144,17 +145,15 @@ const Gfi = Tool.extend({
             }
         }
     },
-    activateGFI: function () {
+    listen: function () {
         this.setClickEventKey(Radio.request("Map", "registerListener", "click", this.setGfiParams.bind(this)));
         this.listenTo(Radio.channel("Map"), {
             "clickedWindowPosition": this.setGfiParams
         }, this);
-        this.setIsActive(true);
     },
-    deactivateGFI: function () {
+    unlisten: function () {
         Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
-        this.setIsActive(false);
     },
 
     /**
