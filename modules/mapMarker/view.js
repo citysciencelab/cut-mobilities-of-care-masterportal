@@ -168,17 +168,10 @@ const MapMarker = Backbone.View.extend({
     },
 
     showMarker: function (coordinate) {
-        console.log(coordinate);
-        console.log(this.model.get("marker"));
-
-
         this.hideMarker();
         if (coordinate.length === 2) {
-            console.log(1);
             
             this.model.get("marker").setPosition(coordinate);
-            console.log(this.model.get("marker").getPosition());
-            
         }
         else {
             this.model.get("marker").setPosition([coordinate[0], coordinate[1]]);

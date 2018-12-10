@@ -36,7 +36,6 @@ const CoordPopup = Tool.extend({
                 this.positionClicked(evt.coordinate);
             }.bind(this)
         }, this));
-console.log(this.get("selectPointerMove"));
 
         Radio.trigger("Map", "addInteraction", this.get("selectPointerMove"));
     },
@@ -70,10 +69,6 @@ console.log(this.get("selectPointerMove"));
      * @returns {void}
      */
     toggleMapMarker: function (position, updatePosition, isViewMobile) {
-        console.log(position);
-        console.log(updatePosition);
-        console.log(isViewMobile);
-        
         var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker";
 
         Radio.trigger("MapMarker", showHideMarker, position);
