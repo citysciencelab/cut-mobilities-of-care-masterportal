@@ -89,6 +89,7 @@ const FilterView = Backbone.View.extend({
     closeFilter: function () {
         this.model.setIsActive(false);
         this.model.collapseOpenSnippet();
+        Radio.trigger("ModelList", "toggleDefaultTool");
     }
 });
 
