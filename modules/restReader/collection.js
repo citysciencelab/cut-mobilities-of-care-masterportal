@@ -7,17 +7,25 @@ const RestList = Backbone.Collection.extend({
             "getServiceById": this.getServiceById
         }, this);
 
-        this.url = options.url;
-        this.fetch({
-            cache: false,
-            async: false,
-            error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "Fehler beim Laden von: " + options.url,
-                    kategorie: "alert-warning"
-                });
-            }
-        });
+        if (options.url !== undefined) {
+            this.url = options.url;
+            this.fetch({
+                cache: false,
+                async: false,
+                error: function () {
+                    Radio.trigger("Alert", "alert", {
+                        text: "Fehler beim Laden von: " + options.url,
+                        kategorie: "alert-warning"
+                    });
+                }
+            });
+        }
+        else {
+            Radio.trigger("Alert", "alert", {
+                text: "Der Parameter 'layerConf' wurde in der config.js nicht gefunden oder ist falsch geschrieben",
+                kategorie: "alert-warning"
+            });
+        }
     },
 
     /**

@@ -562,6 +562,7 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
+        "hitTolerance": 25,
         "mouseHoverField": "kategorie",
         "extendedFilter": true
       },

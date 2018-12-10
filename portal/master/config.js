@@ -62,5 +62,6 @@ const Config = {
         },
         maximumScreenSpaceError: 2,
         fxaa: true
-    }
+    },
+    defaultToolId: "gfi"
 };
