@@ -95,6 +95,7 @@ const ObliqueMap = Backbone.Model.extend({
                 this.currentDirection = direction;
                 return direction.activate(this.get("map"), coordinate, resolution).then(function () {
                     Radio.trigger("ObliqueMap", "newImage", direction.currentImage);
+                    Radio.trigger("ObliqueMap", "setCenter", coordinate, resolution);
                 });
             }
             return Promise.reject(new Error("there is no direction"));
@@ -163,9 +164,10 @@ const ObliqueMap = Backbone.Model.extend({
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
                 resolutionFactor = this.currentLayer.get("resolution"),
-                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution(),
+                seResolution = this.get("map").getView().constrainResolution(useResolution);
 
-            return this.currentDirection.setView(coordinate, useResolution).then(function () {
+            return this.currentDirection.setView(coordinate, seResolution).then(function () {
                 if (this.currentDirection.currentImage) {
                     if (this.currentDirection.currentImage.id !== oldImageID) {
                         Radio.trigger("ObliqueMap", "newImage", this.currentDirection.currentImage);
