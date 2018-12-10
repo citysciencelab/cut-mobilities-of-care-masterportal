@@ -1,28 +1,33 @@
-// var context = require.context("./modules/", true, /.+\.js?$/);
+var context;
 
-// console.log(context.keys());
-// context.keys().forEach(context);
-
-// export default context;
-
-
-
-function requireAll(req, cb) {
+function requireAll (req, callback) {
     // store moduleName => module mappings to prevent overriding
-    let modules = {};
+    const modules = {},
+        reqList = req;
 
-    if (!Array.isArray(req)) req = [req];
+    if (!Array.isArray(reqList)) {
+        reqList = [reqList];
+    }
     // go trough each require.context
-    for (let reqItem of req) {
+    for (const reqItem of reqList) {
         // go through each module
-        for (let name of reqItem.keys()) {
+        for (const name of reqItem.keys()) {
+            let module;
+
             // skip module if it is already required
-            if (modules.hasOwnProperty(name)) continue;
+            if (modules.hasOwnProperty(name)) {
+                continue;
+            }
             // require module
-            let module = reqItem(name);
-            if (module.default) module = module.default;
+            module = reqItem(name);
+
+            if (module.default) {
+                module = module.default;
+            }
             // callback
-            if (cb) cb(module, name);
+            if (callback) {
+                return callback(module, name);
+            }
             // memorize module
             modules[name] = module;
         }
@@ -30,9 +35,9 @@ function requireAll(req, cb) {
     return modules;
 }
 
-var context = requireAll([
+context = requireAll([
     require.context("./modules/", true, /.+\.js?$/),
     require.context("../../portalconfigs/test/", true, /.+\.js?$/)
-    ]);
+]);
 
 export default context;
