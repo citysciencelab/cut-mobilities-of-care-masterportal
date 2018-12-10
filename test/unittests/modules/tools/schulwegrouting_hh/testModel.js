@@ -156,20 +156,25 @@ describe("tools/schulwegrouting_hh", function () {
     });
 
     describe("parseRoute", function () {
-        it("should return a MultiLineString geometry", function () {
+        it("should return a MultiLineString geometry for array input", function () {
             var geometry = model.parseRoute(routeParts);
 
             expect(geometry instanceof MultiLineString).to.be.true;
         });
-        it("should return a MultiLineString geometry with six LineStrings", function () {
+        it("should return a MultiLineString geometry with six LineStrings for array input", function () {
             var geometry = model.parseRoute(routeParts);
 
             expect(geometry.getLineStrings()).to.have.length(6);
         });
-        it("should return a MultiLineString geometry with an extent of '[566318.249463363, 5928119.483, 566462.705, 5928187.98622225]'", function () {
+        it("should return a MultiLineString geometry with an extent of '[566318.249463363, 5928119.483, 566462.705, 5928187.98622225]' for array input", function () {
             var geometry = model.parseRoute(routeParts);
 
             expect(geometry.getExtent()).to.deep.equal([566318.249463363, 5928119.483, 566462.705, 5928187.98622225]);
+        });
+        it("should return a MultiLineString geometry with an extent of '[566318.249463363, 5928182.69, 566329.228, 5928187.98622225]' for object input", function () {
+            var geometry = model.parseRoute(routeParts[0]);
+
+            expect(geometry.getExtent()).to.deep.equal([566318.249463363, 5928182.69, 566329.228, 5928187.98622225]);
         });
 
     });

@@ -4,7 +4,7 @@ import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedL
 import SearchbarHitListTemplate from "text-loader!./templateHitList.html";
 import GAZModel from "./gaz/model";
 import SpecialWFSModel from "./specialWFS/model";
-import VisibleWFSModel from "./visibleWFS/model";
+import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./OSM/model";
@@ -41,7 +41,7 @@ const SearchbarView = Backbone.View.extend({
     },
 
     initialize: function (config) {
-        this.model = new Searchbar();
+        this.model = new Searchbar(config);
 
         if (config.renderToDOM) {
             this.setElement(config.renderToDOM);
@@ -110,8 +110,12 @@ const SearchbarView = Backbone.View.extend({
         if (_.has(config, "specialWFS") === true) {
             new SpecialWFSModel(config.specialWFS);
         }
-        if (_.has(config, "visibleWFS") === true) {
-            new VisibleWFSModel(config.visibleWFS);
+        if (_.has(config, "visibleVector") === true) {
+            new VisibleVectorModel(config.visibleVector);
+        }
+        else if (_.has(config, "visibleWFS") === true) {
+            // Deprecated mit neuer Stable
+            new VisibleVectorModel(config.visibleWFS);
         }
         if (_.has(config, "bkg") === true) {
             new BKGModel(config.bkg);
@@ -495,6 +499,9 @@ const SearchbarView = Backbone.View.extend({
             // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
             this.deleteSearchString();
         }
+        else if (evt.target.value.length < 3) {
+            this.$("#searchInputUL").html("");
+        }
         else {
             if (evt.type === "paste") {
                 this.model.setSearchString(evt.target.value, evt.type);
@@ -591,10 +598,18 @@ const SearchbarView = Backbone.View.extend({
     },
 
     showMarker: function (evt) {
-        var hitID = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitID});
+        var hitId = evt.currentTarget.id,
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
 
-        Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+        if (_.has(hit, "triggerEvent")) {
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+        }
+        else if (_.has(hit, "coordinate")) {
+            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+        }
+        else {
+            console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
+        }
     },
 
     hideMarker: function () {

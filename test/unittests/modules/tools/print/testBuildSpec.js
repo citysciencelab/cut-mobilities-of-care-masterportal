@@ -156,21 +156,22 @@ describe("tools/print_/buildSpec", function () {
                 geometryType: "",
                 imageUrl: "http://GetlegendGraphicRequest1",
                 color: "",
-                label: "Layer1"
+                label: ""
             });
             expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
                 imageUrl: "http://GetlegendGraphicRequest2",
                 color: "",
-                label: "Layer1"
+                label: ""
             });
         });
         it("should create legend attributes array for WFS", function () {
             var layerParam = {
                 layername: "Layer1",
                 legend: [{
-                    img: ["https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink1.png", "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink2.png"],
+                    img: ["/lgv-config/img/imgLink1.png", "/lgv-config/img/imgLink2.png"],
+                    legendname: ["Layer1", "Layer2"],
                     typ: "WFS"
                 }]
             };
@@ -187,7 +188,7 @@ describe("tools/print_/buildSpec", function () {
                 geometryType: "",
                 imageUrl: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink2.png",
                 color: "",
-                label: "Layer1"
+                label: "Layer2"
             });
         });
         it("should create legend attributes array for styleWMS", function () {
@@ -291,7 +292,8 @@ describe("tools/print_/buildSpec", function () {
                 url: "url",
                 params: {
                     LAYERS: "layer1,layer2",
-                    FORMAT: "image/png"
+                    FORMAT: "image/png",
+                    TRANSPARENT: true
                 }
             }),
             opacity: 1
@@ -305,7 +307,7 @@ describe("tools/print_/buildSpec", function () {
                 layers: ["layer1", "layer2"],
                 imageFormat: "image/png",
                 customParams: {
-                    TRANSPARENT: "true"
+                    TRANSPARENT: true
                 }
             });
         });
@@ -316,7 +318,8 @@ describe("tools/print_/buildSpec", function () {
                 url: "url",
                 params: {
                     LAYERS: "layer1,layer2",
-                    FORMAT: "image/png"
+                    FORMAT: "image/png",
+                    TRANSPARENT: true
                 }
             }),
             opacity: 1
@@ -330,7 +333,7 @@ describe("tools/print_/buildSpec", function () {
                 layers: ["layer1", "layer2"],
                 imageFormat: "image/png",
                 customParams: {
-                    TRANSPARENT: "true"
+                    TRANSPARENT: true
                 }
             });
         });

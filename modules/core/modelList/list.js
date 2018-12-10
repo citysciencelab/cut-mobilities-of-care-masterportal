@@ -16,6 +16,7 @@ import PrintV2 from "../../tools/print_/model";
 import Print from "../../tools/print/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
+import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../contact/model";
@@ -70,7 +71,8 @@ const ModelList = Backbone.Collection.extend({
             "renderTree": function () {
                 this.trigger("renderTree");
             },
-            "toggleWfsCluster": this.toggleWfsCluster
+            "toggleWfsCluster": this.toggleWfsCluster,
+            "toggleDefaultTool": this.toggleDefaultTool
         }, this);
 
         this.listenTo(this, {
@@ -102,6 +104,7 @@ const ModelList = Backbone.Collection.extend({
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }
         });
+        this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
     selectionIDX: [],
     model: function (attrs, options) {
@@ -181,6 +184,9 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.id === "draw") {
                 return new Draw(attrs, options);
             }
+            else if (attrs.id === "download") {
+                return new Download(attrs, options);
+            }
             else if (attrs.id === "searchByCoord") {
                 return new SearchByCoord(attrs, options);
             }
@@ -236,6 +242,9 @@ const ModelList = Backbone.Collection.extend({
         }
         return null;
     },
+    getDefaultTool: function () {
+        return this.get(this.defaultToolId);
+    },
     /**
     * [checkIsExpanded description]
     * @return {[type]} [description]
@@ -289,29 +298,49 @@ const ModelList = Backbone.Collection.extend({
     * @return {undefined}
     */
     setVisibleByParentIsExpanded: function (parentId) {
-        var children = this.where({parentId: parentId}),
-            parent = this.findWhere({id: parentId});
+        var parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
-            this.setAllDescendantsInvisible(children);
+            this.setAllDescendantsInvisible(parentId, Radio.request("Util", "isViewMobile"));
         }
         else {
-            this.setAllDescendantsVisible(children);
+            this.setAllDescendantsVisible(parentId);
         }
     },
-    setAllDescendantsInvisible: function (children) {
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to invisible in the tree
+     * in mobile mode folders are closed
+     * @param {string} parentId - id of the parent model
+     * @param {boolean} isMobile - is the mobile tree visible
+     * @returns {void}
+     */
+    setAllDescendantsInvisible: function (parentId, isMobile) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
-                this.setAllDescendantsInvisible(this.where({parentId: child.get("id")}));
+                if (isMobile) {
+                    child.setIsExpanded(false, {silent: true});
+                }
+                this.setAllDescendantsInvisible(child.get("id"), isMobile);
             }
         }, this);
     },
-    setAllDescendantsVisible: function (children) {
+
+    /**
+     * sets all models(layer/folder/tools) of a parent id to visible in the tree
+     * @param {string} parentId - id of the parent model
+     * @returns {void}
+     */
+    setAllDescendantsVisible: function (parentId) {
+        var children = this.where({parentId: parentId});
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(true);
             if (child.get("type") === "folder" && child.get("isExpanded")) {
-                this.setAllDescendantsVisible(this.where({parentId: child.get("id")}));
+                this.setAllDescendantsVisible(child.get("id"));
             }
         }, this);
     },
@@ -389,9 +418,9 @@ const ModelList = Backbone.Collection.extend({
         }
     },
 
-    setActiveToolToFalse: function (model) {
+    setActiveToolsToFalse: function (model) {
         var activeTools = _.without(this.where({isActive: true}), model),
-            legendModel = this.where({id: "legend"})[0];
+            legendModel = this.findWhere({id: "legend"});
 
         activeTools = _.without(activeTools, legendModel);
 
@@ -399,7 +428,16 @@ const ModelList = Backbone.Collection.extend({
             tool.setIsActive(false);
         });
     },
+    toggleDefaultTool: function () {
+        var activeTools = this.where({isActive: true}),
+            legendModel = this.findWhere({id: "legend"}),
+            defaultTool = this.getDefaultTool();
 
+        activeTools = _.without(activeTools, legendModel);
+        if (activeTools.length === 0) {
+            defaultTool.setIsActive(true);
+        }
+    },
     insertIntoSelectionIDX: function (model) {
         var idx = 0;
 

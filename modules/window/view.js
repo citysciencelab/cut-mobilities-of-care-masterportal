@@ -29,6 +29,7 @@ const WindowView = Backbone.View.extend({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
             });
         }, this));
+        this.render();
     },
     id: "window",
     className: "tool-window ui-widget-content",
@@ -36,15 +37,17 @@ const WindowView = Backbone.View.extend({
     templateMax: _.template(templateMax),
     templateTable: _.template(templateTable),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (this.model.get("isVisible") === true) {
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
-                $(".lgv-container").append(this.$el.html(this.templateTable(attr)));
+                this.$el.html(this.templateTable(attr));
+                document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
                 this.$el.addClass("table-tool-window");
             }
             else {
-                $("body").append(this.$el.html(this.templateMax(attr)));
+                this.$el.html(this.templateMax(attr));
+                document.body.appendChild(this.el);
                 this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
             }
             this.$el.show("slow");
@@ -77,9 +80,8 @@ const WindowView = Backbone.View.extend({
 
         if (toolModel) {
             toolModel.setIsActive(false);
+            Radio.trigger("ModelList", "toggleDefaultTool");
         }
-        this.$el.hide("slow");
-        this.model.setVisible(false);
     }
 });
 

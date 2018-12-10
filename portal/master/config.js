@@ -6,7 +6,7 @@ const Config = {
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
-        imgLink: "../img/location_eventlotse.svg",
+        imgLink: "/lgv-config/img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560"
     },
@@ -62,5 +62,6 @@ const Config = {
         },
         maximumScreenSpaceError: 2,
         fxaa: true
-    }
+    },
+    defaultToolId: "gfi"
 };

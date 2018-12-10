@@ -5,12 +5,14 @@ import {Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
+import ModelList from "@modules/core/modelList/list.js";
 
 describe("drawModel", function () {
     var model;
 
     before(function () {
         model = new Model();
+        model.collection = new ModelList();
     });
 
     describe("createLayer", function () {

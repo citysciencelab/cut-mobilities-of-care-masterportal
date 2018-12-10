@@ -24,7 +24,7 @@
     </select>
 
     <%if (currentContent.step > 1){%>
-        <button id="btn_back" title="Einen Schritt zurück" class="btn btn-btn-default " type="button">Zurück</button>
+        <button id="btn_back" title="Einen Schritt zurück" class="btn btn-lgv-grey " type="button">Zurück</button>
     <%};%>
 
     <%if (currentFilters.length > 0){%>
@@ -32,7 +32,7 @@
             <div>
                 <label><%=filter.layername%></%></label>
                 <%_.each(filter.attributes,function(attr){%>
-                    <button id="<%=filter.layername+'__'+attr.attribute+'__'+attr.value %>" title="<%=attr.value %>" class="btn btn-btn-default btn_remove" type="button"><%=attr.attribute %>
+                    <button id="<%=filter.layername+'__'+attr.attribute+'__'+attr.value %>" title="<%=attr.value %>" class="btn btn-lgv-grey btn_remove" type="button"><%=attr.attribute %>
                         <span class ="glyphicon glyphicon-remove"></span>
                     </button>
 

@@ -35,6 +35,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[cameraParameter](#markdown-header-cameraParameter)|nein|Object||Start Camera Parameter||
 |[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
+|defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 
 ******
 ## mouseHover ##
