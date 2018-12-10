@@ -180,25 +180,22 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
-            elements = data.children[0].children,
-            element, typeElement, identifier, geom;
+            elements = data.getElementsByTagName(typeName),
+            element, identifier, geom;
 
         for (element of elements) {
-            typeElement = element.getElementsByTagName(typeName);
-            if (typeElement.length > 0) {
-                if (typeElement[0].getElementsByTagName(propertyNames).length > 0 && typeElement[0].getElementsByTagName(geometryName).length > 0) {
-                    identifier = typeElement[0].getElementsByTagName(propertyNames)[0].textContent;
-                    geom = typeElement[0].getElementsByTagName(geometryName)[0].textContent;
+            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
+                identifier = element.getElementsByTagName(propertyNames)[0].textContent;
+                geom = element.getElementsByTagName(geometryName)[0].textContent;
 
-                    // "Hitlist-Objekte"
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        id: _.uniqueId(type.toString()),
-                        name: identifier.trim(),
-                        type: type,
-                        coordinate: geom.trim().split(" "),
-                        glyphicon: glyphicon
-                    });
-                }
+                // "Hitlist-Objekte"
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    id: _.uniqueId(type.toString()),
+                    name: identifier.trim(),
+                    type: type,
+                    coordinate: geom.trim().split(" "),
+                    glyphicon: glyphicon
+                });
             }
             else {
                 console.error("Antwort eines specialWFS konnte nicht verarbeitet werden");
