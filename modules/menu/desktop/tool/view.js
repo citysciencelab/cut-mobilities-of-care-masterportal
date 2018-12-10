@@ -73,7 +73,7 @@ const ItemView = Backbone.View.extend({
             this.model.setIsActive(true);
         }
         else {
-            this.model.collection.setActiveToolToFalse(this.model);
+            this.model.collection.setActiveToolsToFalse(this.model);
             this.model.setIsActive(true);
         }
         // Navigation wird geschlossen
