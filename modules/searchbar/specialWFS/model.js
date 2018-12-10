@@ -198,15 +198,14 @@ const SpecialWFSModel = Backbone.Model.extend({
                         coordinate: geom.trim().split(" "),
                         glyphicon: glyphicon
                     });
-
-                    return undefined;
                 }
             }
-            console.error("Antwort eines specialWFS konnte nicht verarbeitet werden");
-            console.error(element);
+            else {
+                console.error("Antwort eines specialWFS konnte nicht verarbeitet werden");
+                console.error(element);
+            }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
-        return undefined;
     },
 
     // setter for minChars
