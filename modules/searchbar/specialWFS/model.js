@@ -7,7 +7,8 @@ const SpecialWFSModel = Backbone.Model.extend({
         geometryName: "app:geom",
         maxFeatures: 20,
         timeout: 6000,
-        definitions: null
+        definitions: null,
+        ajaxRequests: {}
     },
 
     /**
@@ -104,34 +105,6 @@ const SpecialWFSModel = Backbone.Model.extend({
     },
 
     /**
-     * Erzeugt einen POST Request zur Suche in den definierten WFS 1.1.0
-     * @param   {string} searchString Searchstring aus der Suchleiste
-     * @returns {void}
-     */
-    search: function (searchString) {
-        var definitions = this.get("definitions");
-
-        if (searchString.length >= this.get("minChars")) {
-            _.each(definitions, function (def) {
-                $.ajax({
-                    url: def.url,
-                    data: this.getWFS110Xml(def, searchString),
-                    context: this,
-                    type: "POST",
-                    success: function (data) {
-                        this.fillHitList(data, def);
-                    },
-                    timeout: this.get("timeout"),
-                    contentType: "text/xml",
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error(textStatus + ": " + errorThrown);
-                    }
-                });
-            }, this);
-        }
-    },
-
-    /**
      * Erstellt XML für einen WFS 1.1.0 POST Request
      * @param   {Object} definition    Definition aus Konfiguration
      * @param   {string} searchString  Suchstring
@@ -168,7 +141,72 @@ const SpecialWFSModel = Backbone.Model.extend({
     },
 
     /**
-     * @summary Liest das XML des WFS 1.1.0 ein und triggert das Füllen der hitList
+     * Initiiert die WFS-Suche
+     * @listens Radio.channel("Searchbar")~search
+     * @param   {string} searchString Searchstring aus der Suchleiste
+     * @returns {void}
+     */
+    search: function (searchString) {
+        var definitions = this.get("definitions"),
+            data;
+
+        if (searchString.length >= this.get("minChars")) {
+            _.each(definitions, function (def) {
+                data = this.getWFS110Xml(def, searchString);
+                this.sendRequest(def, data);
+            }, this);
+        }
+    },
+
+    /**
+     * @description Führt immer nur einen HTTP-POST-Request pro specialWFS zur Zeit aus.
+     * @param {String} def Parameter eines WFS
+     * @param {String} data Data to be sent to the server
+     * @returns {void}
+     */
+    sendRequest: function (def, data) {
+        var ajax = this.get("ajaxRequests");
+
+        if (ajax[def.name] !== null && !_.isUndefined(ajax[def.name])) {
+            ajax[def.name].abort();
+            this.polishAjax(def.name);
+        }
+        this.ajaxSend(def, data);
+    },
+
+    /**
+     * Verschickt einen POST-Request
+     * @param   {Object} def      Definition eines specialWFS
+     * @param   {string} postdata POST-Data-String
+     * @returns {void}
+     */
+    ajaxSend: function (def, postdata) {
+        this.get("ajaxRequests")[def.name] = $.ajax({
+            url: def.url,
+            data: postdata,
+            context: this,
+            async: true,
+            type: "POST",
+            success: function (data) {
+                this.fillHitList(data, def);
+            },
+            timeout: this.get("timeout"),
+            contentType: "text/xml",
+            def: def,
+            error: function (err) {
+                if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                    this.showError(err);
+                }
+                Radio.trigger("Searchbar", "abortSearch", "specialWFS");
+            },
+            complete: function () {
+                this.polishAjax(def.name);
+            }
+        }, this);
+    },
+
+    /**
+     * @summary Liest das Response-XML des WFS 1.1.0 ein und triggert das Füllen der hitList
      * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind.         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
      * @param  {xml} data Response des requests
      * @param {Object} definition Definition aus Konfiguration
@@ -203,6 +241,29 @@ const SpecialWFSModel = Backbone.Model.extend({
             }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+     * Fehlerbehandlung
+     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * @returns {void}
+     */
+    showError: function (err) {
+        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+        console.error("Alert", "alert", "Dienst nicht erreichbar. " + detail);
+    },
+
+    /**
+     * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
+     * @param {string} type Bezeichnung des Typs
+     * @returns {void}
+     */
+    polishAjax: function (type) {
+        var ajax = this.get("ajaxRequests"),
+            cleanedAjax = _.omit(ajax, type);
+
+        this.set("ajaxRequests", cleanedAjax);
     },
 
     // setter for minChars
