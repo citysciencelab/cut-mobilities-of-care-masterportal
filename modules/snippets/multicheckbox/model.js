@@ -11,7 +11,9 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.superInitialize();
         this.addValueModels(this.get("values"));
         if (this.get("preselectedValues").length > 0) {
-            this.updateSelectedValues(this.get("preselectedValues"));
+            this.get("preselectedValues").forEach(function (preselectedValue) {
+                this.updateSelectedValues(preselectedValue, true);
+            }, this);
         }
         this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
         this.listenTo(this.get("valuesCollection"), {
@@ -44,7 +46,7 @@ const MultiCheckboxModel = SnippetModel.extend({
             value: value,
             iconPath: this.getIconPath(value),
             displayName: value,
-            isSelected: true,
+            isSelected: this.get("isInitialLoad") ? true : _.contains(this.get("preselectedValues"), value),
             isSelectable: true,
             type: this.get("type")
         }));
@@ -100,9 +102,9 @@ const MultiCheckboxModel = SnippetModel.extend({
      * @param {boolean} checked - is checkbox checked or unchecked
      * @returns {void}
      */
-    updateSelectedValues: function (values, checked) {
+    updateSelectedValues: function (value, checked) {
         _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (valueModel.get("displayName") === values.trim()) {
+            if (valueModel.get("displayName") === value.trim()) {
                 valueModel.set("isSelected", checked);
             }
         });
