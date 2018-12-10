@@ -117,6 +117,7 @@ const QueryModel = Backbone.Model.extend({
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": snippetAttribute.type});
             snippetAttribute.type = "string";
             snippetAttribute.layerId = this.get("layerId");
+            snippetAttribute.isInitialLoad = this.get("isInitialLoad");
             this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
         }
     },
@@ -221,10 +222,14 @@ const QueryModel = Backbone.Model.extend({
      * @return {object} featureAttributesMap
      */
     mapRules: function (featureAttributesMap, rules) {
-        _.each(rules, function (rule) {
-            var attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
+        var attrMap;
 
-            attrMap.preselectedValues = rule.values;
+        _.each(rules, function (rule) {
+            attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
+
+            if (attrMap) {
+                attrMap.preselectedValues = rule.values;
+            }
         });
 
         return featureAttributesMap;
@@ -328,6 +333,11 @@ const QueryModel = Backbone.Model.extend({
     // setter for attributeWhiteList
     setAttributeWhiteList: function (value) {
         this.set("attributeWhiteList", value);
+    },
+
+    // setter for isInitialLoad
+    setIsInitialLoad: function (value) {
+        this.set("isInitialLoad", value);
     }
 });
 
