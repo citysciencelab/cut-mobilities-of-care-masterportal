@@ -15,14 +15,14 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
      * @param {integer} [config.timeout=6000] - Timeout der Ajax-Requests im Millisekunden.
      * @param {Object[]} config.definitions - Definitionen der SpecialWFS.
-     * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
+     * @param {Object} config.definitions[].definition - Parameter eines WFS
      * @param {string} config.definitions[].definition.url - Die URL, des WFS
      * @param {string} config.definitions[].definition.data - Query string des WFS-Request deprecated
      * @param {string} config.definitions[].definition.name - MetaName der Kategorie für Vorschlagssuche
-     * @param {string} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
      * @param {string} config.definitions[].definition.typeName - typeName des WFS Dienstes
-     * @param {string} config.definitions[].definition.propertyNames[] - propertyNames des WFS zur Suche verwendet
-     * @param {string} [config.definitions[].definition.geometryName="app:geom"] - geometryName der WFS Ergebnisse
+     * @param {string} [config.definitions[].definition.geometryName="app:geom"] - Name des Attributs mit Geometrie
+     * @param {string_} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+     * @param {strings[]} config.definitions[].definition.propertyNames - Name der Attribute zur Suche verwendet
      * @returns {void}
      */
     initialize: function (config) {
@@ -54,17 +54,20 @@ const SpecialWFSModel = Backbone.Model.extend({
         var definitions = [];
 
         _.each(values, function (value) {
+            var definition = value;
+
             // @deprecated since 3.0.0
             if (_.has(value, "data")) {
-                value = _.extend(value, this.getDataParameters(value));
+                definition = _.extend(value, this.getDataParameters(value));
             }
 
-            if (_.has(value, "typeName") === false || _.has(value, "propertyNames") === false) {
+            if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
                 console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
                 return undefined;
             }
 
-            definitions.push(value);
+            definitions.push(definition);
+            return undefined;
         }, this);
 
         this.set("definitions", definitions);
@@ -103,8 +106,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     search: function (searchString) {
         var definitions = this.get("definitions"),
             geometryName,
-            glyphicon,
-            result = {};
+            glyphicon;
 
         _.each(definitions, function (def) {
             geometryName = def.geometryName ? def.geometryName : this.get("geometryName");
@@ -136,12 +138,13 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {string}               XML String
      */
     getWFS110Xml: function (typeName, propertyNames, geometryName, searchString) {
-        var data;
+        var data,
+            propertyName;
 
         data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS'";
         data += " xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>";
         data += "<wfs:Query typeName='" + typeName + "'>";
-        for (var propertyName of propertyNames) {
+        for (propertyName of propertyNames) {
             data += "<wfs:PropertyName>" + propertyName + "</wfs:PropertyName>";
         }
         data += "<wfs:PropertyName>" + geometryName + "</wfs:PropertyName>";
@@ -149,9 +152,9 @@ const SpecialWFSModel = Backbone.Model.extend({
         if (propertyNames.length > 1) {
             data += "<ogc:Or>";
         }
-        _.each(propertyNames, function (propertyName) {
+        for (propertyName of propertyNames) {
             data += "<ogc:PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + _.escape(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
-        });
+        }
         if (propertyNames.length > 1) {
             data += "</ogc:Or>";
         }
@@ -172,12 +175,13 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     fillHitList: function (data, type, typeName, propertyNames, geometryName, glyphicon) {
-        var elements = data.children[0].children;
+        var elements = data.children[0].children,
+            element, typeElement, identifier, geom;
 
-        for (var element of elements) {
-            var typeElement = element.getElementsByTagName(typeName)[0],
-                identifier = typeElement.getElementsByTagName(propertyNames)[0].textContent,
-                geom = typeElement.getElementsByTagName(geometryName)[0].textContent;
+        for (element of elements) {
+            typeElement = element.getElementsByTagName(typeName)[0];
+            identifier = typeElement.getElementsByTagName(propertyNames)[0].textContent;
+            geom = typeElement.getElementsByTagName(geometryName)[0].textContent;
 
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
