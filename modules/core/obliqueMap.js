@@ -246,6 +246,7 @@ const ObliqueMap = Backbone.Model.extend({
                 });
             }
             else {
+                Radio.trigger("Util", "showLoader");
                 // load first Layer which is active on startup or
                 // otherwise just take the first layer, abort if no layer exists.
                 let layer = null;
@@ -274,6 +275,7 @@ const ObliqueMap = Backbone.Model.extend({
                         layer.set("isVisibleInMap", true);
                         layer.set("isSelected", true);
                         Radio.trigger("Map", "change", "Oblique");
+                        Radio.trigger("Util", "hideLoader");
                     });
                 }
                 // no oblique layer, obliqueMap is not loaded.
