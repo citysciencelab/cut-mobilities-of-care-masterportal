@@ -1,3 +1,19 @@
+# Changelog LGV Master-Portal 2.2.1
+
+NEU:
+
+  - f84b1fe74 hotfix Funktion zum bauen der Portale für eine Stable Version geht jetzt function for build all portals for new stable version and git ignore new portals
+
+FIXES:
+
+  - d8723bb51 - Schrägluftbildmodus springt in die richtige Zoomstufe
+  - 24d3849f2 Die Videokameras funktionieren jetzt wieder mobil. Die Darstellungsreihenfolge der Attribute im GFI sind nun in allen Browsern gleich
+  - 87e208519 der Marker wird im Tool Koordinaten Abfragen jetzt wieder richtig positioniert
+  - f84b1fe74 Funktion zum bauen der Portale für eine Stable Version geht jetzt add function for build all portals for new stable version and git ignore new portals
+  - ff65eab95 Der Titel wird nun beim Drucken richtig dargestellt
+  - 8627b6579 Das Them für die Radverkehrszählsäulen wird nun wieder richtig dargestellt
+  - 7a03233c6 Fehler in der Searchbar wurden behoben
+
 # Changelog LGV Master-Portal 2.2.0
 
 NEU:
