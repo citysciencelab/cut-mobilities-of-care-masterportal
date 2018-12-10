@@ -97,8 +97,8 @@ const MultiCheckboxModel = SnippetModel.extend({
     },
 
     /**
-     * checks the value models if they are selected or not
-     * @param {string|string[]} values - selected value(s) in the multicheckbox list
+     * checks the value model if it is selected or not
+     * @param {string} value - selected value in the multicheckbox list
      * @param {boolean} checked - is checkbox checked or unchecked
      * @returns {void}
      */
