@@ -27,6 +27,19 @@ const FilterModel = Tool.extend({
             "resetFilter": this.resetFilter
         });
 
+        channel.reply({
+            "getIsInitialLoad": function () {
+                return this.get("isInitialLoad");
+            },
+            "getFilterName": function (layerId) {
+                var predefinedQuery = this.get("predefinedQueries").filter(function (query) {
+                    return query.layerId === layerId;
+                });
+
+                return predefinedQuery[0].name;
+            }
+        }, this);
+
         this.set("uiStyle", Radio.request("Util", "getUiStyle"));
         this.set("queryCollection", new Backbone.Collection());
         this.listenTo(this.get("queryCollection"), {
@@ -215,7 +228,7 @@ const FilterModel = Tool.extend({
     },
 
     createQueries: function (queries) {
-        var queryObjects,
+        var queryObjects = Radio.request("ParametricURL", "getFilter"),
             queryObject,
             oneQuery;
 

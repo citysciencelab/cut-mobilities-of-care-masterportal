@@ -41,9 +41,6 @@ const CategoryView = Backbone.View.extend({
         this.$(".table-category-list").addClass("table-category-active");
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
-        this.$("div.detailview-head").hide();
-        this.$("div.checkbox-container").hide();
-        this.$("div.value-views-container").hide();
         Radio.request("TableMenu", "setActiveElement", "Category");
     }
 });

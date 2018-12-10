@@ -2,11 +2,19 @@ import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
 
 const SourceModel = QueryModel.extend({
+    defaults: {
+        isAutoRefreshing: false,
+        isInitialLoad: true
+    },
     initializeFunction: function () {
         this.superInitialize();
         this.prepareQuery();
         if (this.get("searchInMapExtent") === true) {
             Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive.bind(this), this);
+        }
+        if (Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}).get("autoRefresh")) {
+            this.set("isAutoRefreshing", true);
+            this.listenToFeaturesLoaded();
         }
     },
 
@@ -20,6 +28,7 @@ const SourceModel = QueryModel.extend({
 
         if (features.length > 0) {
             this.processFeatures(features);
+            this.setIsInitialLoad(false);
         }
         else {
             this.listenToFeaturesLoaded();
@@ -46,9 +55,29 @@ const SourceModel = QueryModel.extend({
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("Layer"), {
             "featuresLoaded": function (layerId, features) {
+                var urlFilterRules;
+
                 if (layerId === this.get("layerId")) {
-                    this.processFeatures(features);
-                    this.stopListening(Radio.channel("Layer"), "featuresLoaded");
+                    if (this.get("snippetCollection").length > 0 && this.get("isAutoRefreshing") && !this.get("isInitialLoad")) {
+
+                        urlFilterRules = Radio.request("ParametricURL", "getFilter").filter(function (urlFilters) {
+                            var name = Radio.request("Filter", "getFilterName", layerId);
+
+                            return urlFilters.name === name;
+                        }, this);
+
+                        this.createQueryFromUrlFilterRules(urlFilterRules[0]);
+                        this.get("snippetCollection").reset(null);
+                        this.processFeatures(features);
+                    }
+                    else if (this.get("isInitialLoad")) {
+                        this.processFeatures(features);
+                        this.setIsInitialLoad(false);
+
+                        if (!this.get("isAutoRefreshing")) {
+                            this.stopListening(Radio.channel("Layer"), "featuresLoaded");
+                        }
+                    }
                 }
             }
         });
@@ -382,6 +411,17 @@ const SourceModel = QueryModel.extend({
 
     setFeatures: function (value) {
         this.set("features", value);
+    },
+
+    /**
+     * creates Query from Url-Filterobject
+     * @param  {object[]} obj array of attributes and their values to filter
+     * @return {void}
+     */
+    createQueryFromUrlFilterRules: function (obj) {
+        Object.keys(obj).forEach(function (key) {
+            this.set(key, obj[key]);
+        }, this);
     }
 });
 
