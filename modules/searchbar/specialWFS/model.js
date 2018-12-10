@@ -130,7 +130,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             data += "<ogc:Or>";
         }
         for (propertyName of propertyNames) {
-            data += "<ogc:PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + _.escape(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
+            data += "<ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + _.escape(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
         }
         if (propertyNames.length > 1) {
             data += "</ogc:Or>";
