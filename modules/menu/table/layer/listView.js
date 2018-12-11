@@ -27,6 +27,7 @@ const LayerView = Backbone.View.extend({
             $("#closeclick-view").removeClass("closeclick-deactivated");
             $("#closeclick-view").addClass("closeclick-activated");
         });
+        new CloseClickView().render();
     },
     id: "table-layer-list",
     className: "table-layer-list table-nav",
@@ -38,7 +39,6 @@ const LayerView = Backbone.View.extend({
     },
     render: function () {
         this.$el.html(this.template());
-        new CloseClickView().render();
         if (Radio.request("TableMenu", "getActiveElement") === "Layer") {
             $("#table-nav-layers-panel").collapse("show");
         }
