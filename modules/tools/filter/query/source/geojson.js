@@ -7,8 +7,6 @@ const GeoJsonQueryModel = SourceModel.extend({
     /**
      * Gets the features for the Layer asscociated with this Query
      * and proceeds to build the datastructure including the snippets for this query
-     * @param  {string} features - GeoJSON features
-     * @param  {string} snippetType - GeoJSON snippetType
      * @returns {void}
      */
     buildQueryDatastructureByType: function () {
