@@ -7,12 +7,14 @@ const SourceModel = QueryModel.extend({
         isInitialLoad: true
     },
     initializeFunction: function () {
+        var modelList = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+
         this.superInitialize();
         this.prepareQuery();
         if (this.get("searchInMapExtent") === true) {
             Radio.trigger("Map", "registerListener", "moveend", this.isSearchInMapExtentActive.bind(this), this);
         }
-        if (Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}).get("autoRefresh")) {
+        if (modelList && modelList.get("autoRefresh")) {
             this.set("isAutoRefreshing", true);
             this.listenToFeaturesLoaded();
         }

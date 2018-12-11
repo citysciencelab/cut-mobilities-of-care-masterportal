@@ -22,14 +22,13 @@ describe("Multicheckbox Model", function () {
 
         it("should update Value", function () {
 
-            model.updateSelectedValues("Freizeit", false);
+            model.updateSelectedValues("Freizeit", true);
             updatedValue = model.get("valuesCollection").models.filter(function (value) {
                 return value.get("value") === "Freizeit";
             })[0].get("isSelected");
 
-
-            expect(initialValue).to.be.true;
-            expect(updatedValue).to.be.false;
+            expect(initialValue).to.be.false;
+            expect(updatedValue).to.be.true;
         });
     });
 
