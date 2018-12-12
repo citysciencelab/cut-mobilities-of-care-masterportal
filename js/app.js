@@ -89,7 +89,7 @@ function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new RawLayerList(null, {url: Config.layerConf});
-    new Preparser();
+    new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
     new CRS();
