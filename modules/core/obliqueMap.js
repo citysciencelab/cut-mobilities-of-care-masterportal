@@ -163,11 +163,13 @@ const ObliqueMap = Backbone.Model.extend({
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution"),
-                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution(),
-                seResolution = this.get("map").getView().constrainResolution(useResolution);
+                resolutionFactor = this.currentLayer.get("resolution");
 
-            return this.currentDirection.setView(coordinate, seResolution).then(function () {
+            let useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+
+            useResolution = this.get("map").getView().constrainResolution(useResolution);
+
+            return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {
                     if (this.currentDirection.currentImage.id !== oldImageID) {
                         Radio.trigger("ObliqueMap", "newImage", this.currentDirection.currentImage);
