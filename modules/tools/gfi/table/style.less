@@ -4,6 +4,7 @@
 
 .gfi-detached-table {
     border-radius: 12px;
+    border-color: #808080; 
     background-color: @background_color_1;
     max-width: 360px;
     max-height: 260px;
@@ -12,6 +13,9 @@
     top: 250px;
     >.gfi-header {
         border-bottom: 1px solid #808080;
+        border-radius: 11px 11px 0px 0px;
+        background-color: #646262;
+        color: #F2F2F2;
     }
     >.gfi-content {
         max-height: 200px;
@@ -27,8 +31,16 @@
     }
 }
 .icon-turnarticle {
+    color: #f2f2f2;
     position: relative;
     display: inline-block;
     bottom: 20px;
     right: 25px;
+}
+
+.icon-turnarticle::before {
+    color: #F2F2F2;
+}
+span.glyphicon.glyphicon-remove::before {
+    color: #F2F2F2;
 }
