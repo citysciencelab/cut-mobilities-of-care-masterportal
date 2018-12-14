@@ -3,16 +3,15 @@ import Theme from "../model";
 const DipasTheme = Theme.extend({
     initialize: function () {
         this.listenTo(this, {
-            "change:isReady": this.getIconPath()
+            "change:isReady": this.getIconPath(this.get("feature").get("thema"))
         });
 
     },
 
-    getIconPath: function () {
+    getIconPath: function (value) {
         var styleModel = Radio.request("StyleList", "returnModelById", this.get("id")),
             valueStyle,
-            iconPath,
-            value = this.get("feature").get("thema");
+            iconPath;
 
         if (styleModel) {
             valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
