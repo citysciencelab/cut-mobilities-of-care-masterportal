@@ -5,7 +5,6 @@ const DipasTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": this.getIconPath(this.get("feature").get("thema"))
         });
-
     },
 
     getIconPath: function (value) {
@@ -26,8 +25,6 @@ const DipasTheme = Theme.extend({
     setIconPath: function (value) {
         this.set("iconPath", value);
     }
-
-
 });
 
 export default DipasTheme;
