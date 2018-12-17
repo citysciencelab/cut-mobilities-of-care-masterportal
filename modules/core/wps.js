@@ -47,7 +47,6 @@ const WPS = Backbone.Model.extend({
         var xhr = new XMLHttpRequest(),
             that = this;
 
-debugger;
         xhr.open("POST", url);
         xhr.timeout = 10000;
 
