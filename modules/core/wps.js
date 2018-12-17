@@ -26,22 +26,25 @@ const WPS = Backbone.Model.extend({
      * @param {string} requestID unique Identifier for this request
      * @param {string} identifier The functionality to be invoked by the wps
      * @param {object} data Contains the Attributes to be sent
+     * @param {[function]} responseFunction function to be called
      * @returns {void}
      */
-    request: function (wpsID, requestID, identifier, data) {
+    request: function (wpsID, requestID, identifier, data, responseFunction) {
         var xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
             url = this.buildUrl(identifier, Radio.request("RestReader", "getServiceById", wpsID));
 
-        this.sendRequest(url, xmlString, requestID);
+        this.sendRequest(url, xmlString, requestID, responseFunction);
     },
+
     /**
      * @desc sends POST request to wps
      * @param {string} url url
      * @param {string} xmlString XML to be sent as String
      * @param {string} requestID unique Identifier for this request
+     * @param {[function]} responseFunction function to be called
      * @returns {void}
      */
-    sendRequest: function (url, xmlString, requestID) {
+    sendRequest: function (url, xmlString, requestID, responseFunction) {
         var xhr = new XMLHttpRequest(),
             that = this;
 
@@ -49,24 +52,26 @@ const WPS = Backbone.Model.extend({
         xhr.timeout = 10000;
 
         xhr.onload = function (event) {
-            that.handleResponse(event.currentTarget.responseText, requestID, xhr.status);
+            that.handleResponse(event.currentTarget.responseText, requestID, xhr.status, responseFunction);
         };
         xhr.ontimeout = function () {
-            that.handleResponse({}, requestID, "timeout");
+            that.handleResponse({}, requestID, "timeout", responseFunction);
         };
         xhr.onabort = function () {
-            that.handleResponse({}, requestID, "abort");
+            that.handleResponse({}, requestID, "abort", responseFunction);
         };
         xhr.send(xmlString);
     },
+
     /**
      * @desc handles wps response
      * @param {string} responseText XML to be sent as String
      * @param {string} requestID unique Identifier for this request
      * @param {integer} status status of xhr-request
+     * @param {[function]} responseFunction function to be called
      * @returns {void}
      */
-    handleResponse: function (responseText, requestID, status) {
+    handleResponse: function (responseText, requestID, status, responseFunction) {
         var obj;
 
         if (status === 200) {
@@ -76,6 +81,9 @@ const WPS = Backbone.Model.extend({
             Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status);
         }
         Radio.trigger("WPS", "response", requestID, obj, status);
+        if (responseFunction) {
+            responseFunction(obj, status);
+        }
     },
     /**
      * Parse xml from string and turn xml into object
