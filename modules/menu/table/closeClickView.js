@@ -14,7 +14,7 @@ const CloseClickView = Backbone.View.extend({
     closeSelfAndLayertree: function () {
         var channel = Radio.channel("TableMenu");
 
-        channel.trigger("hideMenuElementLayer");
+        channel.trigger("hideCurrentElement");
     }
 });
 
