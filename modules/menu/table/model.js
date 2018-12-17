@@ -29,12 +29,12 @@ const TableNavModel = Backbone.Model.extend({
             channel.trigger("hideMenuElement" + this.get("isActiveElement"));
         }
         this.set("isActiveElement", element);
+        $("#closeclick-view").removeClass("closeclick-deactivated");
+        $("#closeclick-view").addClass("closeclick-activated");
     },
     appendFilterContent: function (element) {
         this.trigger("appendFilterContent", element);
         this.setIsActiveElement(element);
-        $("#closeclick-view").removeClass("closeclick-deactivated");
-        $("#closeclick-view").addClass("closeclick-activated");
     },
 
     setIsActiveElement: function (value) {
