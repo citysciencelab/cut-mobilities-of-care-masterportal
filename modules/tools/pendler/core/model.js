@@ -69,6 +69,8 @@ const PendlerCoreModel = Tool.extend({
                 this.clear();
             },
             "change:direction": function (model, value) {
+                this.set("pendlerLegend", [], {silent: true});
+                this.set("emptyResult", false, {silent: true});
                 this.clear();
                 if (value === "arbeitsort") {
                     this.setAttrGemeinde("wohnort");
