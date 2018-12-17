@@ -31,8 +31,7 @@ const WPS = Backbone.Model.extend({
      */
     request: function (wpsID, requestID, identifier, data, responseFunction) {
         var xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
-            url = this.buildUrl(identifier, Radio.request("RestReader", "getServiceById", wpsID));
-
+            url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
         this.sendRequest(url, xmlString, requestID, responseFunction);
     },
 
@@ -48,6 +47,7 @@ const WPS = Backbone.Model.extend({
         var xhr = new XMLHttpRequest(),
             that = this;
 
+debugger;
         xhr.open("POST", url);
         xhr.timeout = 10000;
 
@@ -174,18 +174,17 @@ const WPS = Backbone.Model.extend({
         }
         return newDataString;
     },
+
     /**
      * @desc creates URL using model from rest-service
-     * @param {string} identifier The functionality to be invoked by the wps
      * @param {object} restModel Model retrieved from rest-services.json
      * @returns {string} url to wps request
      */
-    buildUrl: function (identifier, restModel) {
-        var url = "",
-            version = _.isUndefined(restModel) === false && _.isUndefined(restModel.get("version")) === false ? restModel.get("version") : "1.1.0";
+    buildUrl: function (restModel) {
+        var url = "";
 
-        if (identifier && restModel && restModel.get("url")) {
-            url = restModel.get("url") + "?service=WPS&version=" + version + "&request=execute&identifier=" + identifier;
+        if (restModel && restModel.get("url")) {
+            url = restModel.get("url");
         }
         return url;
     }
