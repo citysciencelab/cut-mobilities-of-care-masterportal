@@ -11,5 +11,5 @@ const execute = require("child-process-promise").exec,
  */
 execute("rm -rf jsdoc")
     .then(function () {
-        execute(pathToJsDocCmd + " -c jsdoc-config.json");
+        execute(pathToJsDocCmd + " -c devtools/jsdoc/jsdoc-config.json");
     });
