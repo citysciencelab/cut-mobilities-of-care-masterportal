@@ -32,6 +32,7 @@ const WPS = Backbone.Model.extend({
     request: function (wpsID, requestID, identifier, data, responseFunction) {
         var xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
             url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
+
         this.sendRequest(url, xmlString, requestID, responseFunction);
     },
 
