@@ -12,6 +12,9 @@ const TableNavModel = Backbone.Model.extend({
             },
             "setActiveElement": this.setActiveElement
         }, this);
+        this.listenTo(channel, {
+            "appendFilter": this.appendFilterContent
+        });
 
         channel.on({
             "hideCurrentElement": this.hideCurrentElement,
@@ -25,9 +28,13 @@ const TableNavModel = Backbone.Model.extend({
         if (this.get("isActiveElement") !== element) {
             channel.trigger("hideMenuElement" + this.get("isActiveElement"));
         }
-        this.setIsActiveElement(element);
+        this.set("isActiveElement", element);
         $("#closeclick-view").removeClass("closeclick-deactivated");
         $("#closeclick-view").addClass("closeclick-activated");
+    },
+    appendFilterContent: function (element) {
+        this.trigger("appendFilterContent", element);
+        this.setIsActiveElement(element);
     },
 
     setIsActiveElement: function (value) {
