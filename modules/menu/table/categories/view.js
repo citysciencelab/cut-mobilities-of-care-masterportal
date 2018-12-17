@@ -36,8 +36,7 @@ const CategoryView = Backbone.View.extend({
     hideCategoryMenu: function () {
         this.$(".table-nav-cat-panel").removeClass("in");
         this.$(".table-category-list").removeClass("table-category-active");
-        $("#closeclick-view").removeClass("closeclick-activated");
-        $("#closeclick-view").addClass("closeclick-deactivated");
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     showCategoryMenu: function () {
         this.$(".table-category-list").addClass("table-category-active");

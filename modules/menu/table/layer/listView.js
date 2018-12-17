@@ -14,8 +14,7 @@ const LayerView = Backbone.View.extend({
         });
 
         this.$el.on("hide.bs.collapse", function () {
-            $("#closeclick-view").removeClass("closeclick-activated");
-            $("#closeclick-view").addClass("closeclick-deactivated");
+            Radio.trigger("TableMenu", "deactivateCloseClickFrame");
         });
 
         this.$el.on("show.bs.collapse", function () {
@@ -28,8 +27,7 @@ const LayerView = Backbone.View.extend({
     template: _.template(ListTemplate),
     hideMenu: function () {
         $("#table-nav-layers-panel").collapse("hide");
-        $("#closeclick-view").removeClass("closeclick-activated");
-        $("#closeclick-view").addClass("closeclick-deactivated");
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     render: function () {
         this.$el.html(this.template());

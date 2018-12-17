@@ -14,7 +14,8 @@ const TableNavModel = Backbone.Model.extend({
         }, this);
 
         channel.on({
-            "hideCurrentElement": this.hideCurrentElement
+            "hideCurrentElement": this.hideCurrentElement,
+            "deactivateCloseClickFrame": this.deactivateCloseClickFrame
         }, this);
     },
 
@@ -35,6 +36,10 @@ const TableNavModel = Backbone.Model.extend({
 
     hideCurrentElement: function () {
         Radio.trigger("TableMenu", "hideMenuElement" + this.get("isActiveElement"));
+        this.deactivateCloseClickFrame();
+    },
+
+    deactivateCloseClickFrame: function () {
         $("#closeclick-view").removeClass("closeclick-activated");
         $("#closeclick-view").addClass("closeclick-deactivated");
     }
