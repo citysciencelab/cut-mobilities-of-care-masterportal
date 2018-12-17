@@ -432,7 +432,7 @@ const WFSStyle = Backbone.Model.extend({
             offset,
             imagestyle,
             style = this.getDefaultStyle();
-        
+
         if (isClustered && feature.get("features").length > 1) {
             imagestyle = this.createClusterStyle();
         }
