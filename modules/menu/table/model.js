@@ -12,6 +12,10 @@ const TableNavModel = Backbone.Model.extend({
             },
             "setActiveElement": this.setActiveElement
         }, this);
+
+        channel.on({
+            "hideCurrentElement": this.hideCurrentElement
+        }, this);
     },
 
     setActiveElement: function (element) {
@@ -21,10 +25,18 @@ const TableNavModel = Backbone.Model.extend({
             channel.trigger("hideMenuElement" + this.get("isActiveElement"));
         }
         this.setIsActiveElement(element);
+        $("#closeclick-view").removeClass("closeclick-deactivated");
+        $("#closeclick-view").addClass("closeclick-activated");
     },
 
     setIsActiveElement: function (value) {
         this.set("isActiveElement", value);
+    },
+
+    hideCurrentElement: function () {
+        Radio.trigger("TableMenu", "hideMenuElement" + this.get("isActiveElement"));
+        $("#closeclick-view").removeClass("closeclick-activated");
+        $("#closeclick-view").addClass("closeclick-deactivated");
     }
 });
 
