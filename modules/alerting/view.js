@@ -1,8 +1,12 @@
 /**
- * @module Alerting
- * @classDesc AlertingViewBLABLABLA
+ * @namespace 00_Alerting
+ */
+/**
+ * @memberof 00_Alerting
+ * @class AlertingView
  * @extends Backbone.View
  */
+
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
