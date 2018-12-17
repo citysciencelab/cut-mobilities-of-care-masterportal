@@ -50,15 +50,8 @@ describe("core/WPS", function () {
             "typ": "WPS"
         });
 
-        it("return empty string if inputs are undefined", function () {
-            expect(model.buildUrl(undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);
-        });
-        it("return url string with default version( version not set in restModel)", function () {
-            expect(model.buildUrl("test.fmw", restModel)).to.be.a("string").to.have.string("version=1.1.0");
-        });
-        it("return url string with given version( version set in restModel)", function () {
-            restModel.set("version", "2.0.0");
-            expect(model.buildUrl("test.fmw", restModel)).to.be.a("string").to.have.string("version=2.0.0");
+        it("return empty string if input is undefined", function () {
+            expect(model.buildUrl(undefined)).to.be.a("string").to.have.a.lengthOf(0);
         });
     });
     describe("parseXmlToObject", function () {
