@@ -1,11 +1,7 @@
 import ListTemplate from "text-loader!./templates/template.html";
 import SingleLayerView from "./singleLayerView";
-import CloseClickView from "./closeClickView";
 
 const LayerView = Backbone.View.extend({
-    events: {
-        "click .closeclick-view": "hideMenu"
-    },
     initialize: function () {
         this.collection = Radio.request("ModelList", "getCollection");
         this.listenTo(Radio.channel("TableMenu"), {
@@ -24,10 +20,8 @@ const LayerView = Backbone.View.extend({
 
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Layer");
-            $("#closeclick-view").removeClass("closeclick-deactivated");
-            $("#closeclick-view").addClass("closeclick-activated");
         });
-        new CloseClickView().render();
+
     },
     id: "table-layer-list",
     className: "table-layer-list table-nav",
