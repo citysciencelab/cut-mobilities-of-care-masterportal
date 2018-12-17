@@ -1216,12 +1216,14 @@ Der Gazetteer-Dienst des LGV wird angefragt.
 ******
 
 #### Portalconfig.searchBar.specialWFS ####
-Die definierten WFS-Dienste werden angefragt.
+Über die specialWFS-Suche können WFS-Dienste in die Suchfunktion eingebunden werden, ohne das diese Daten der Karte oder dem Layerbaum hinzugefügt werden. Wird eine Suche ausgelöst wird der definierte WFS in Version 1.1.0 über einen POST-Request mit Filterparametern abgefragt. Hierdurch bleibt die Suche auch bei größeren Datenmengen im Dienst performant. Die Suchtreffer werden mit definierbarer Textangabe und Glyphicon in der Liste angezeigt. Durch Auswahl eines Eintrags wird die Standard-Funktion für Suchtreffer verwandt und auf das Objekt gezoomt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden (**url**: URL des WFS-Dienstes, **data**: Parameter des WFS-Requests, **name**: MetaName in Suche, **glyphicon**: Glyphicon in Suche.|
+|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden.|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|glyphicon|nein|String|"glyphicon-home"|Standard-Glyphicon in Trefferleiste.|
+|maxFeatures|nein|Number|20|Setzt das maxFeatures Attribut bei der WFS-Abfrage zur Limitierung der Treffer.|
 |timeout|nein|Number|6000|Timeout der Ajax-Requests im Millisekunden.|
 
 
@@ -1230,9 +1232,13 @@ Die definierten WFS-Dienste werden angefragt.
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |url|ja|String||URL des WFS-Dienstes|
-|data|ja|String||Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring (erstes Element des featureMember).|
 |name|ja|String||MetaName der Kategorie. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
-|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
+|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons zur Anzeige in der Vorschlagssuche.|
+|typeName|nein|String||NEU! Layername des WFS Dienstes im POST-Request.|
+|propertyNames|nein|Array[String]||NEU! Liste der Attribute, die zur Übereinstimmungssuche verwendet werden.|
+|geometryName|nein|String|"app:geom"|NEU! Attributname aus der die Geometrie zur Anzeige entnommen wird.|
+|maxFeatures|Number|String|20|NEU! Setzt das maxFeatures Attribut an diesen WFS zur Limitierung der Treffer pro WFS.|
+|data|nein|String||DEPRECATED ab V_3.0.0! Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring.|
 
 **Beispiel specialWFS:**
 
@@ -1240,22 +1246,26 @@ Die definierten WFS-Dienste werden angefragt.
 ```
 #!json
 
-  "specialWFS": {
-            "minChar": 3,
-            "timeout": 2000,
-            "definitions": [
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName                    =planrecht",
-                    "name": "bplan"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=                    plan",
-                    "name": "bplan"
-                }
-            ]
-        }
+  "specialWFS":
+      {
+        "minChars": 5,
+        "timeout": 10000,
+        "definitions": [
+          {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+          }
+        ]
+      },
 ```
 
 *****

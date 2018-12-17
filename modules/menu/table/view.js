@@ -3,6 +3,7 @@ import TableNavModel from "./model";
 import LayerListView from "./layer/listView";
 import CategoryList from "./categories/view";
 import ToolView from "./tool/view";
+import CloseClickView from "./closeClickView";
 
 const Menu = Backbone.View.extend({
     initialize: function () {
@@ -23,6 +24,8 @@ const Menu = Backbone.View.extend({
     render: function () {
         $(this.el).html(this.template());
         $(".lgv-container").append(this.$el);
+
+        new CloseClickView().render();
 
         return this;
     },
