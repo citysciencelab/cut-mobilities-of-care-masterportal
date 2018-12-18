@@ -34,7 +34,6 @@ const Einwohnerabfrage = Tool.extend({
             offset: [15, 20],
             positioning: "top-left"
         }),
-        requests: [],
         data: {},
         dataReceived: false,
         requesting: false,
@@ -62,9 +61,6 @@ const Einwohnerabfrage = Tool.extend({
         this.superInitialize();
         this.listenTo(this, {
             "change:isActive": this.setStatus
-        });
-        this.listenTo(Radio.channel("WPS"), {
-            "response": this.handleResponse
         });
         this.listenTo(Radio.channel("CswParser"), {
             "fetchedMetaData": this.fetchedMetaData
@@ -119,40 +115,28 @@ const Einwohnerabfrage = Tool.extend({
     },
     /**
      * Called when the wps modules returns a request
-     * @param  {string} requestId - uniqueId used to identfy if request was sent by this model
      * @param  {string} response - the response xml of the wps
      * @param  {number} status - the HTTPStatusCode
      * @returns {void}
      */
-    handleResponse: function (requestId, response, status) {
+    handleResponse: function (response, status) {
         var parsedData;
 
         this.setRequesting(false);
-        if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
-            parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
-            this.removeId(this.get("requests"), requestId);
-            if (status === 200) {
-                if (parsedData.ErrorOccured === "yes") {
-                    this.handleWPSError(parsedData);
-                }
-                else {
-                    this.handleSuccess(parsedData);
-                }
+        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
+
+        if (status === 200) {
+            if (parsedData.ErrorOccured === "yes") {
+                this.handleWPSError(parsedData);
             }
             else {
-                this.resetView();
+                this.handleSuccess(parsedData);
             }
         }
+        else {
+            this.resetView();
+        }
         this.trigger("renderResult");
-    },
-    /**
-     * Check if this request id is known by this model
-     * @param  {string[]} ownRequests - contains all ids of requests triggered by this module
-     * @param  {string} requestId - the id returned by the wps
-     * @returns {boolean} true | false
-     */
-    isEinwohnerRequest: function (ownRequests, requestId) {
-        return _.contains(ownRequests, requestId);
     },
     /**
      * Displays Errortext if the WPS returns an Error
@@ -260,19 +244,6 @@ const Einwohnerabfrage = Tool.extend({
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-        }
-    },
-    /**
-     * Removes an ID from an array of ID
-     * @param  {string[]} requests - All IDs
-     * @param  {string} requestId - Id to remove
-     * @returns {void}
-     */
-    removeId: function (requests, requestId) {
-        var index = requests.indexOf(requestId);
-
-        if (index > -1) {
-            requests.splice(index, 1);
         }
     },
     /**
@@ -407,16 +378,13 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     makeRequest: function (geoJson) {
-        var requestId = _.uniqueId("wps");
-
         this.setDataReceived(false);
         this.setRequesting(true);
         this.trigger("renderResult");
 
-        this.get("requests").push(requestId);
-        Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
+        Radio.trigger("WPS", "request", "1001", "einwohner_ermitteln.fmw", {
             "such_flaeche": JSON.stringify(geoJson)
-        });
+        }, this.handleResponse.bind(this));
     },
     prepareData: function (geoJson) {
         var prepared = {};

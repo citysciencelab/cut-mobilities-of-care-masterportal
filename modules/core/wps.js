@@ -75,7 +75,7 @@ const WPS = Backbone.Model.extend({
             obj = this.parseDataString(responseText);
         }
         else {
-            Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status);
+            Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status + ")");
         }
         responseFunction(obj, status);
     },
