@@ -13,16 +13,21 @@ const LayerView = Backbone.View.extend({
             }
         });
 
-        // bootstrap collapse event
+        this.$el.on("hide.bs.collapse", function () {
+            Radio.trigger("TableMenu", "deactivateCloseClickFrame");
+        });
+
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Layer");
         });
+
     },
     id: "table-layer-list",
     className: "table-layer-list table-nav",
     template: _.template(ListTemplate),
     hideMenu: function () {
         $("#table-nav-layers-panel").collapse("hide");
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     render: function () {
         this.$el.html(this.template());
@@ -40,7 +45,6 @@ const LayerView = Backbone.View.extend({
         });
         this.addViews(models);
     },
-
     addViews: function (models) {
         var childElement = {};
 
