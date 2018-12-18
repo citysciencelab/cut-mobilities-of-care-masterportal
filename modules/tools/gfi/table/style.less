@@ -4,7 +4,7 @@
 
 .gfi-detached-table {
     border-radius: 12px;
-    border-color: #808080; 
+    border-color: #808080;
     background-color: @background_color_1;
     max-width: 360px;
     max-height: 260px;
@@ -16,10 +16,29 @@
         border-radius: 11px 11px 0px 0px;
         background-color: #646262;
         color: #F2F2F2;
+        .title {
+            color: #F2F2F2;
+        }
     }
     >.gfi-content {
         max-height: 200px;
         overflow-x: hidden;
+    }
+    .gfi-content::-webkit-scrollbar {
+        width: 20px;
+    }
+    .gfi-content::-webkit-scrollbar-track {
+        border: 5px solid transparent;
+        border-radius: 12px;
+        background-clip: content-box;
+        background-color: #d3d3d3;
+    }
+
+    .gfi-content::-webkit-scrollbar-thumb {
+        background-color: #003063;
+        border: 6px solid transparent;
+        border-radius: 12px;
+        background-clip: content-box;
     }
     >.gfi-footer {
         >.pager-left {
@@ -29,18 +48,18 @@
             border-bottom-right-radius: 12px;
         }
     }
-}
-.icon-turnarticle {
-    color: #f2f2f2;
-    position: relative;
-    display: inline-block;
-    bottom: 20px;
-    right: 25px;
-}
+    .icon-turnarticle {
+        color: #f2f2f2;
+        position: relative;
+        display: inline-block;
+        bottom: 20px;
+        right: 25px;
+    }
 
-.icon-turnarticle::before {
-    color: #F2F2F2;
-}
-span.glyphicon.glyphicon-remove::before {
-    color: #F2F2F2;
+    .icon-turnarticle::before {
+        color: #F2F2F2;
+    }
+    span.glyphicon.glyphicon-remove::before {
+        color: #F2F2F2;
+    }
 }
