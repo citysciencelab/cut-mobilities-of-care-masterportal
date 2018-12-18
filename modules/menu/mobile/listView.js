@@ -161,7 +161,9 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        if (!nodeView.model.get("isNeverVisibleInTree")) {
+            $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        }
     },
 
     addViews: function (models) {

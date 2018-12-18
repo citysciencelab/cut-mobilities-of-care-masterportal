@@ -33,9 +33,11 @@ const LayerView = Backbone.View.extend({
         var selector = $("ul#SelectedLayer"),
             attr = this.model.toJSON();
 
-        selector.prepend(this.$el.html(this.template(attr)));
-        if (this.model.get("isSettingVisible") === true) {
-            this.$el.append(this.templateSettings(attr));
+        if (!this.model.get("isNeverVisibleInTree")) {
+            selector.prepend(this.$el.html(this.template(attr)));
+            if (this.model.get("isSettingVisible") === true) {
+                this.$el.append(this.templateSettings(attr));
+            }
         }
         return this;
     },

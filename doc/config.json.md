@@ -1514,6 +1514,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 |autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 |isVisibleInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden|
+|isNeverVisibleInTree|nein|Boolean|false|Soll der Layer niemals im Themenbaum angezeigt werden|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 

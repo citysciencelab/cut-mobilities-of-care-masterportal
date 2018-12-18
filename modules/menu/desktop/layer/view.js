@@ -38,14 +38,16 @@ const LayerView = Backbone.View.extend({
             selector = $("#" + this.model.get("parentId"));
 
         this.$el.html("");
-        if (this.model.get("isVisibleInTree")) {
-            if (this.model.get("level") === 0) {
-                selector.prepend(this.$el.html(this.template(attr)));
+        if (!this.model.get("isNeverVisibleInTree")) {
+            if (this.model.get("isVisibleInTree")) {
+                if (this.model.get("level") === 0) {
+                    selector.prepend(this.$el.html(this.template(attr)));
+                }
+                else {
+                    selector.after(this.$el.html(this.template(attr)));
+                }
+                this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
             }
-            else {
-                selector.after(this.$el.html(this.template(attr)));
-            }
-            this.$el.css("padding-left", ((this.model.get("level") * 15) + 5) + "px");
         }
         return this;
     },
