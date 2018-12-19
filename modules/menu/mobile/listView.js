@@ -161,9 +161,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        if (!nodeView.model.get("isNeverVisibleInTree")) {
-            $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
-        }
+        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
     addViews: function (models) {
@@ -199,8 +197,13 @@ const MobileMenu = Backbone.View.extend({
                     break;
                 }
                 case "layer": {
-                    nodeView = treeType === "light" ? new LayerViewLight({model: model}) : new LayerView({model: model});
-                    break;
+                    if (!model.get("isNeverVisibleInTree")) {
+                        nodeView = treeType === "light" ? new LayerViewLight({model: model}) : new LayerView({model: model});
+                        break;
+                    }
+                    else {
+                        return;
+                    }
                 }
                 default: {
                     return;
