@@ -3,7 +3,7 @@ import Theme from "../model";
 const DipasTheme = Theme.extend({
     initialize: function () {
         this.listenTo(this, {
-            "change:isReady": this.getIconPath(this.get("feature").get("thema"))
+            "change:isReady": this.getIconPath(this.get("feature").get("Thema"))
         });
     },
 
