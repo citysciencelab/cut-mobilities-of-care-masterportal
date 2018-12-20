@@ -17,7 +17,7 @@ const DipasTheme = Theme.extend({
                 return styleFieldValue.styleFieldValue === value;
             });
         }
-        if (valueStyle && valueStyle.length > 0) {
+        if (valueStyle && valueStyle.length > 0 && ("imageName" in valueStyle[0])) {
             iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
         }
         this.setIconPath(iconPath);
