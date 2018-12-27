@@ -20,7 +20,7 @@ const ClickCounterView = Backbone.View.extend(
          * @param  {String} mobileURL  [description]
          * @return {void}
          */
-        initialize2: function (desktopURL, mobileURL) {
+        initialize: function (desktopURL, mobileURL) {
             var channel = Radio.channel("ClickCounter");
 
             this.model = new ClickCounterModel(desktopURL, mobileURL);
