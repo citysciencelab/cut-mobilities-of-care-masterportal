@@ -1,6 +1,6 @@
 /**
  * @description Module to create checkbox snippet
- * @module CheckboxSnippetView
+ * @memberof CheckboxSnippetView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

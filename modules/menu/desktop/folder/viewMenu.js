@@ -1,6 +1,6 @@
 /**
  * @description View for menu in desktop mode
- * @module FolderView
+ * @memberof FolderView
  * @extends Backbone.View
  */
 import Template from "text-loader!./templateMenu.html";

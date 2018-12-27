@@ -1,6 +1,6 @@
 /**
  * @description GFI-List
- * @module ThemeList
+ * @memberof ThemeList
  * @extends Backbone.Collection
  */
 import DefaultThemeView from "./default/view";

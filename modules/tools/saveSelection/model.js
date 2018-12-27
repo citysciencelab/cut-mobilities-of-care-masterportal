@@ -1,6 +1,6 @@
 /**
  * @description Module for saving current state of map in url
- * @module SaveSelection
+ * @memberof SaveSelection
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

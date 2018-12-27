@@ -1,6 +1,6 @@
 /**
  * @description Module to create a scaleLine
- * @module ScaleLineView
+ * @memberof ScaleLineView
  * @extends Backbone.View
  */
 import ScaleLineModel from "./model";

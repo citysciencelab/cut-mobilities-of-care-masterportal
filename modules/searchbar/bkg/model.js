@@ -1,6 +1,6 @@
 /**
  * @description Module to create bkg search
- * @module BKGSearchModel
+ * @memberof BKGSearchModel
  * @extends Backbone.Model
  */
 import "../model";

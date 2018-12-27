@@ -1,6 +1,6 @@
 /**
  * @description Model for Image-Object in GFI
- * @module ImgModel
+ * @memberof ImgModel
  * @extends Backbone.Model
  */
 const ImgModel = Backbone.Model.extend({

@@ -1,6 +1,6 @@
 /**
  * @description Values View of Filter Query
- * @module QueryValuesView
+ * @memberof QueryValuesView
  * @extends Backbone.View
  */
 const QueryValuesView = Backbone.View.extend({

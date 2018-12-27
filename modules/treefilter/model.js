@@ -1,6 +1,6 @@
 /**
  * @description Model to filter trees in in hamburg
- * @module TreeFilter
+ * @memberof TreeFilter
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../core/modelList/tool/model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to represent wfs layer
- * @module WFSLayer
+ * @memberof WFSLayer
  * @extends ./model
  */
 import Layer from "./model";

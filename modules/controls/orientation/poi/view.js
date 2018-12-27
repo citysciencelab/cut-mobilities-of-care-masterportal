@@ -1,6 +1,6 @@
 /**
  * @description Control to show closed POIs
- * @module POIView
+ * @memberof POIView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

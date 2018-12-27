@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Mietenspiegel
- * @module MietenspiegelThemeView
+ * @memberof MietenspiegelThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

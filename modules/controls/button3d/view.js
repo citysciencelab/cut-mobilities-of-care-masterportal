@@ -1,6 +1,6 @@
 /**
  * @description Control to activate 3d-mode
- * @module Button3dView
+ * @memberof Button3dView
  * @extends Backbone.View
  */
 import Button3dTemplate from "text-loader!./template.html";

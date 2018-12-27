@@ -1,6 +1,6 @@
 /**
  * @description Control to zoom in map
- * @module ZoomControlView
+ * @memberof ZoomControlView
  * @extends Backbone.View
  */
 import ZoomControlTemplate from "text-loader!./template.html";

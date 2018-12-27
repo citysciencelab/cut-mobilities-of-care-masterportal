@@ -1,6 +1,6 @@
 /**
  * @description Model for one vectorLayer
- * @module WFSStyle
+ * @memberof WFSStyle
  * @extends Backbone.Model
  */
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon, Text} from "ol/style.js";

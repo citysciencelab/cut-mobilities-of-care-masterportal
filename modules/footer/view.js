@@ -1,6 +1,6 @@
 /**
  * @description Module to set Footer information
- * @module FooterView
+ * @memberof FooterView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

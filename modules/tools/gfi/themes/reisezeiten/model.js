@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Reisezeiten
- * @module ReisezeitenTheme
+ * @memberof ReisezeitenTheme
  * @extends ../model
  */
 import Theme from "../model";

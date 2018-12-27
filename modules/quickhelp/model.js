@@ -1,6 +1,6 @@
 /**
  * @description Model to manage Quickhelp
- * @module QuickHelpModel
+ * @memberof QuickHelpModel
  * @extends Backbone.Model
  */
 const QuickHelpModel = Backbone.Model.extend({

@@ -1,6 +1,6 @@
 /**
  * @description View for Tool in desktop mode
- * @module ItemView
+ * @memberof ItemView
  * @extends Backbone.View
  */
 import ItemTemplate from "text-loader!./template.html";

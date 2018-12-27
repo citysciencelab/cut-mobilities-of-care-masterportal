@@ -1,6 +1,6 @@
 /**
  * @description Module to derive Coordinated by Clicking into map
- * @module CoordPopup
+ * @memberof CoordPopup
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

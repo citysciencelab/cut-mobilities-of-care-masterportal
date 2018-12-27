@@ -1,6 +1,6 @@
 /**
  * @description Module to highlight given feature
- * @module HighlightFeature
+ * @memberof HighlightFeature
  * @extends Backbone.Model
  */
 import {Fill, Stroke, Style} from "ol/style.js";

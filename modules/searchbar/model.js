@@ -1,6 +1,6 @@
 /**
  * @description Module to create searchbar
- * @module SearchbarModel
+ * @memberof SearchbarModel
  * @extends Backbone.Model
  */
 const SearchbarModel = Backbone.Model.extend({

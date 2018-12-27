@@ -1,6 +1,6 @@
 /**
  * @description Tool to compare vectorFeatures
- * @module CompareFeaturesView
+ * @memberof CompareFeaturesView
  * @extends Backbone.View
  */
 import CompareFeaturesTemplateFeedback from "text-loader!./templateFeedback.html";

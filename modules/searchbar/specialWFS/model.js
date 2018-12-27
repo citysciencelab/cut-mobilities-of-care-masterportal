@@ -1,6 +1,6 @@
 /**
  * @description Module to create specialWFS search
- * @module SpecialWFSModel
+ * @memberof SpecialWFSModel
  * @extends Backbone.Model
  */
 import "../model";

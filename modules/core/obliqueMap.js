@@ -1,6 +1,6 @@
 /**
  * @description Module to display oblique map Data (Schrägluftbilder)
- * @module ObliqueMap
+ * @memberof ObliqueMap
  * @extends Backbone.Model
  */
 import Map from "ol/Map.js";

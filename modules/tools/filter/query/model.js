@@ -1,6 +1,6 @@
 /**
  * @description Model Filter Query
- * @module QueryModel
+ * @memberof QueryModel
  * @extends Backbone.Model
  */
 import SnippetDropdownModel from "../../../snippets/dropdown/model";

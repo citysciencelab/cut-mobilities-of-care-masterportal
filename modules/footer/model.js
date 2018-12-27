@@ -1,6 +1,6 @@
 /**
  * @description Module to set Footer information
- * @module FooterModel
+ * @memberof FooterModel
  * @extends Backbone.Model
  */
 const FooterModel = Backbone.Model.extend({

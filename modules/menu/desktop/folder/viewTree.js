@@ -1,6 +1,6 @@
 /**
  * @description View for tree in desktop mode
- * @module FolderView
+ * @memberof FolderView
  * @extends Backbone.View
  */
 import FolderTemplate from "text-loader!./templateTree.html";

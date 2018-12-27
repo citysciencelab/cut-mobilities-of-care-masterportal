@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for DIPAS
- * @module DipasThemeView
+ * @memberof DipasThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

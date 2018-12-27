@@ -1,6 +1,6 @@
 /**
  * @description Module for printing in mapfish-print-2
- * @module PrintModel
+ * @memberof PrintModel
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to import KML
- * @module ImportView
+ * @memberof ImportView
  * @extends Backbone.View
  */
 import ImportTemplate from "text-loader!./template.html";

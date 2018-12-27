@@ -1,6 +1,6 @@
 /**
  * @description Collection to store vectorStyles
- * @module StyleList
+ * @memberof StyleList
  * @extends Backbone.Collection
  */
 import WFSStyle from "./model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to represent terrain layer
- * @module TerrainLayer
+ * @memberof TerrainLayer
  * @extends ./model
  */
 import Layer from "./model";

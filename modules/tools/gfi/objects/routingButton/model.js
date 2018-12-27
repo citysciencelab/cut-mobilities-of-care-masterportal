@@ -1,6 +1,6 @@
 /**
  * @description Model for Routing-Button in GFI
- * @module RoutingButton
+ * @memberof RoutingButton
  * @extends Backbone.Model
  */
 const RoutingButton = Backbone.Model.extend({

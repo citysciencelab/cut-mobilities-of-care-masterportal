@@ -1,6 +1,6 @@
 /**
  * @description Module for locating given coordinates on map
- * @module SearchByCoord
+ * @memberof SearchByCoord
  * @extends Backbone.View
  */
 import SearchByCoordTemplate from "text-loader!./template.html";

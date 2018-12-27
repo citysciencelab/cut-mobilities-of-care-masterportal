@@ -1,6 +1,6 @@
 /**
  * @description Model to filter vectorFeatures
- * @module WfsFeatureFilter
+ * @memberof WfsFeatureFilter
  * @extends ../core/modelList/tool/model
  */
 import Tool from "../core/modelList/tool/model";

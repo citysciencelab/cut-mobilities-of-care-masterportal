@@ -1,6 +1,6 @@
 /**
  * @description Module to manage map Data
- * @module Map
+ * @memberof Map
  * @extends Backbone.Model
  */
 import Map from "ol/Map.js";

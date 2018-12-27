@@ -1,6 +1,6 @@
 /**
  * @description Control to make app run in fullscreen-mode
- * @module FullScreenView
+ * @memberof FullScreenView
  * @extends Backbone.View
  */
 const FullScreenView = Backbone.View.extend({

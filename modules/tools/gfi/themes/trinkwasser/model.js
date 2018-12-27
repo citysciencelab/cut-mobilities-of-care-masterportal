@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Trinkwasser
- * @module TrinkwasserTheme
+ * @memberof TrinkwasserTheme
  * @extends ../model
  */
 import Theme from "../model";

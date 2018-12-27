@@ -1,6 +1,6 @@
 /**
  * @description WFS Source of Filter Query
- * @module WfsQueryModel
+ * @memberof WfsQueryModel
  * @extends ../model
  */
 import SourceModel from "./model";

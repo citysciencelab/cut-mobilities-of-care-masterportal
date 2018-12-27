@@ -1,6 +1,6 @@
 /**
  * @description Module to create value model
- * @module ValueModel
+ * @memberof ValueModel
  * @extends ../value/model
  */
 import BaseModel from "../value/model";

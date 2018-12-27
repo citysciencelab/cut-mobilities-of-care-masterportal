@@ -1,6 +1,6 @@
 /**
  * @description Module to create slider snippet
- * @module SliderView
+ * @memberof SliderView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

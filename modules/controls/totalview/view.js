@@ -1,6 +1,6 @@
 /**
  * @description Control to reset map to initial state
- * @module TotalViewMapView
+ * @memberof TotalViewMapView
  * @extends Backbone.View
  */
 import Model from "./model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to search for parcels
- * @module ParcelSearchView
+ * @memberof ParcelSearchView
  * @extends Backbone.View
  */
 import ParcelSearchTemplate from "text-loader!./template.html";

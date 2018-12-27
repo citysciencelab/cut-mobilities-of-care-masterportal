@@ -1,6 +1,6 @@
 /**
  * @description Module to build a contact opportunity by email
- * @module ContactView
+ * @memberof ContactView
  * @extends ../core/modelList/tool/model
  */
 import Template from "text-loader!./template.html";

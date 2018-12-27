@@ -1,6 +1,6 @@
 /**
  * @description Control to show Attributions
- * @module AttributionsModel
+ * @memberof AttributionsModel
  * @extends Backbone.Model
  */
 const AttributionsModel = Backbone.Model.extend({

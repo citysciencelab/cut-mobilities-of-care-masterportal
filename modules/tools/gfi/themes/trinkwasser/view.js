@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Trinkwasser
- * @module TrinkwasserThemeView
+ * @memberof TrinkwasserThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

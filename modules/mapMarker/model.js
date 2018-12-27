@@ -1,6 +1,6 @@
 /**
  * @description Module to set mapMarker
- * @module MapMarkerModel
+ * @memberof MapMarkerModel
  * @extends Backbone.Model
  */
 import VectorSource from "ol/source/Vector.js";

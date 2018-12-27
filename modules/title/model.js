@@ -1,6 +1,6 @@
 /**
  * @description Module to create portal title
- * @module TitleModel
+ * @memberof TitleModel
  * @extends Backbone.Model
  */
 const TitleModel = Backbone.Model.extend({

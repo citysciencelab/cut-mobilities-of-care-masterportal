@@ -1,6 +1,6 @@
 /**
  * @description Control to show closed POIs
- * @module POIModel
+ * @memberof POIModel
  * @extends Backbone.Model
  */
 const POIModel = Backbone.Model.extend({

@@ -1,6 +1,6 @@
 /**
  * @description Module to slide 2 layers
- * @module LayersliderView
+ * @memberof LayersliderView
  * @extends Backbone.View
  */
 import LayersliderTemplate from "text-loader!./template.html";

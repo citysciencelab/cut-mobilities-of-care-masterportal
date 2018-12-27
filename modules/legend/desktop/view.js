@@ -1,6 +1,6 @@
 /**
  * @description Module to manage legend in desktop mode
- * @module LegendView
+ * @memberof LegendView
  * @extends Backbone.View
  */
 import LegendTemplate from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description GFI-Model
- * @module Gfi
+ * @memberof Gfi
  * @extends ../../core/modelList/tool/model
  */
 import Overlay from "ol/Overlay.js";

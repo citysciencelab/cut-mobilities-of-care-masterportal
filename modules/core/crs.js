@@ -1,6 +1,6 @@
 /**
  * @description Module to manage coordinate reference systems (CRS) of the map
- * @module CRS
+ * @memberof CRS
  * @extends Backbone.Model
  */
 import proj4 from "proj4";

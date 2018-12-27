@@ -1,6 +1,6 @@
 /**
  * @description View for layer in light tree in desktop mode
- * @module LayerView
+ * @memberof LayerView
  * @extends Backbone.View
  */
 import TemplateSettings from "text-loader!./templateSettings.html";

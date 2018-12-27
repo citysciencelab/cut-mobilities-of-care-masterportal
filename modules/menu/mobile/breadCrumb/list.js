@@ -1,6 +1,6 @@
 /**
  * @description List to manage breadcrumbs in mobile mode
- * @module BreadCrumbList
+ * @memberof BreadCrumbList
  * @extends Backbone.Collection
  */
 import BreadCrumbItem from "./model";

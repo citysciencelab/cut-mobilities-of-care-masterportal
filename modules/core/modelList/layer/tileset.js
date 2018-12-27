@@ -1,6 +1,6 @@
 /**
  * @description Module to represent tileset layer
- * @module TileSetLayer
+ * @memberof TileSetLayer
  * @extends ./model
  */
 import Layer from "./model";

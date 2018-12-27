@@ -1,6 +1,6 @@
 /**
  * @description Module to represent heatmap layer
- * @module HeatmapLayer
+ * @memberof HeatmapLayer
  * @extends ./model
  */
 import Layer from "./model";

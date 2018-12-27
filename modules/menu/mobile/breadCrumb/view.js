@@ -1,6 +1,6 @@
 /**
  * @description View to represent one breadcrumb in mobile mode
- * @module BreadCrumbView
+ * @memberof BreadCrumbView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

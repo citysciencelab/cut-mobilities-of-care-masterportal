@@ -1,6 +1,6 @@
 /**
  * @description View
- * @module StyleWMS
+ * @memberof StyleWMS
  * @extends Backbone.View
  */
 import StyleWMSTemplate from "text-loader!./template.html";

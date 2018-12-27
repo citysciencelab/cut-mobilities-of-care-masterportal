@@ -1,6 +1,6 @@
 /**
  * @description Module to manage rest-services.json
- * @module RestList
+ * @memberof RestList
  * @extends Backbone.Collection
  */
 const RestList = Backbone.Collection.extend({

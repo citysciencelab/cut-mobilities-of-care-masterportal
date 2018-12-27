@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for buildings3d
- * @module Buildings3dTheme
+ * @memberof Buildings3dTheme
  * @extends ../model
  */
 import Theme from "../model";

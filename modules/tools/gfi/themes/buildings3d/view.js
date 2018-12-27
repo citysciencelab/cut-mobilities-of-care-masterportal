@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for buildings3d
- * @module Buildings3dThemeView
+ * @memberof Buildings3dThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

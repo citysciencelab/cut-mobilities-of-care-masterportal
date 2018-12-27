@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for SGV-Online
- * @module DefaultThemeView
+ * @memberof DefaultThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

@@ -1,6 +1,6 @@
 /**
  * @description Module to auto start configured Tool or Functionality
- * @module Autostarter
+ * @memberof Autostarter
  * @extends Backbone.Model
  */
 const Autostarter = Backbone.Model.extend({

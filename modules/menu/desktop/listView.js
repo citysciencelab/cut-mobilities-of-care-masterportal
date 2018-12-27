@@ -1,6 +1,6 @@
 /**
  * @description ListView for modelList in desktop mode
- * @module Menu
+ * @memberof Menu
  * @extends ./listViewMain
  */
 import listView from "./listViewMain";

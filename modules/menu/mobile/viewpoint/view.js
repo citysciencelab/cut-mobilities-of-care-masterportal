@@ -1,6 +1,6 @@
 /**
  * @description View for viewpoint in mobile mode
- * @module ItemView
+ * @memberof ItemView
  * @extends Backbone.View
  */
 define(function (require) {

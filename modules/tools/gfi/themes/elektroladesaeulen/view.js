@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Elektroladesäulen
- * @module ElektroladesaeulenThemeView
+ * @memberof ElektroladesaeulenThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

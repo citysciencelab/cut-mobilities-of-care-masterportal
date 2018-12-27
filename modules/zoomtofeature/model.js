@@ -1,6 +1,6 @@
 /**
  * @description Model to zoom to Feature
- * @module ZoomToFeature
+ * @memberof ZoomToFeature
  * @extends Backbone.Model
  */
 import {WFS} from "ol/format.js";

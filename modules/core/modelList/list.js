@@ -1,6 +1,6 @@
 /**
  * @description Module to gather all Models
- * @module ModelList
+ * @memberof ModelList
  * @extends Backbone.Collection
  */
 import WMSLayer from "./layer/wms";

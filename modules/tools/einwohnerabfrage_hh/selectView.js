@@ -1,6 +1,6 @@
 /**
  * @description View to display Einwohnerabfrage Tool
- * @module SelectView
+ * @memberof SelectView
  * @extends Backbone.View
  */
 import SnippetDropdownView from "../../snippets/dropdown/view";

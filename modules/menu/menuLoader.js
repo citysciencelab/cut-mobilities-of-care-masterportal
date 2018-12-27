@@ -1,6 +1,6 @@
 /**
  * @description Model to load table mode
- * @module MenuLoader
+ * @memberof MenuLoader
  * @extends Backbone.Model
  */
 import LightMenu from "./desktop/listViewLight";

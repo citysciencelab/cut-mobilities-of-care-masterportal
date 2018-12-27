@@ -1,6 +1,6 @@
 /**
  * @description Module to measure
- * @module Measure
+ * @memberof Measure
  * @extends ../../core/modelList/tool/model
  */
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";

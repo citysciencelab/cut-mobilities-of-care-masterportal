@@ -1,6 +1,6 @@
 /**
  * @description Module to import KML
- * @module ImportTool
+ * @memberof ImportTool
  * @extends ../../core/modelList/tool/model
  */
 import proj4 from "proj4";

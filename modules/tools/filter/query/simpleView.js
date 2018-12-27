@@ -1,6 +1,6 @@
 /**
  * @description Simple View of Filter
- * @module QuerySimpleView
+ * @memberof QuerySimpleView
  * @extends Backbone.View
  */
 import Template from "text-loader!./templateSimpleView.html";

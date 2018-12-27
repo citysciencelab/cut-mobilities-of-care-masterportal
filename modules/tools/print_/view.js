@@ -1,6 +1,6 @@
 /**
  * @description Module for printing in mapfish-print-3
- * @module PrintView
+ * @memberof PrintView
  * @extends Backbone.View
  */
 import PrintTemplate from "text-loader!./template.html";

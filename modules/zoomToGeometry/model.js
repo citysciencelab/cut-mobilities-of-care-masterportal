@@ -1,6 +1,6 @@
 /**
  * @description Model to zoom to Geometry from District
- * @module ZoomToGeometry
+ * @memberof ZoomToGeometry
  * @extends Backbone.Model
  */
 import {WFS} from "ol/format.js";

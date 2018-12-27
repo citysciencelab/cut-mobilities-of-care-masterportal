@@ -1,6 +1,6 @@
 /**
  * @description Model for table mode
- * @module TableNavModel
+ * @memberof TableNavModel
  * @extends Backbone.Model
  */
 const TableNavModel = Backbone.Model.extend({

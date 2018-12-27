@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Verkehrsstärken-Rad
- * @module VerkehrsStaerkenThemeRadView
+ * @memberof VerkehrsStaerkenThemeRadView
  * @extends ../view
  */
 import ThemeView from "../view";

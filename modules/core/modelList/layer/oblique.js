@@ -1,6 +1,6 @@
 /**
  * @description Module to represent oblique layer
- * @module ObliqueLayer
+ * @memberof ObliqueLayer
  * @extends ./model
  */
 import Layer from "./model";

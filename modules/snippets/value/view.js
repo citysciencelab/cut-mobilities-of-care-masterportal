@@ -1,6 +1,6 @@
 /**
  * @description Module to create value for snippets
- * @module SnippetValueView
+ * @memberof SnippetValueView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

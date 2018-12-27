@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Flächeninfo
- * @module FlaecheninfoTheme
+ * @memberof FlaecheninfoTheme
  * @extends ../model
  */
 import Theme from "../model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to search for parcels
- * @module ParcelSearch
+ * @memberof ParcelSearch
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

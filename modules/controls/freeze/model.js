@@ -1,6 +1,6 @@
 /**
  * @description Control to freeze screen
- * @module FreezeModel
+ * @memberof FreezeModel
  * @extends Backbone.Model
  */
 import FreezeView from "./freezewindowview";

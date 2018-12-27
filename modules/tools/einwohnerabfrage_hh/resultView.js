@@ -1,6 +1,6 @@
 /**
  * @description View to display result
- * @module ResultView
+ * @memberof ResultView
  * @extends Backbone.View
  */
 import ResultTemplate from "text-loader!./resultTemplate.html";

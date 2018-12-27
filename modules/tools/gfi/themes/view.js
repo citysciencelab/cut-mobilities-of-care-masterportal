@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme-View
- * @module ThemeView
+ * @memberof ThemeView
  * @extends Backbone.View
  */
 const ThemeView = Backbone.View.extend({

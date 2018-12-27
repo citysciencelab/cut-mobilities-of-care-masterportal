@@ -1,6 +1,6 @@
 /**
  * @description Module to create searchbar
- * @module SearchbarView
+ * @memberof SearchbarView
  * @extends Backbone.View
  */
 import SearchbarTemplate from "text-loader!./template.html";

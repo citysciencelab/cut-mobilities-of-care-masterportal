@@ -1,6 +1,6 @@
 /**
  * @description Module to write Cookies
- * @module CookieModel
+ * @memberof CookieModel
  * @extends Backbone.Model
  */
 const CookieModel = Backbone.Model.extend({

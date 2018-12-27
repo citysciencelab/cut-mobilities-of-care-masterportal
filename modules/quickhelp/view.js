@@ -1,6 +1,6 @@
 /**
  * @description View to manage Quickhelp
- * @module QuickHelpView
+ * @memberof QuickHelpView
  * @extends Backbone.View
  */
 import TemplateSearch from "text-loader!./templateSearch.html";

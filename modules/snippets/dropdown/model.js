@@ -1,6 +1,6 @@
 /**
  * @description Module to create dropdown snippet
- * @module DropdownModel
+ * @memberof DropdownModel
  * @extends ../model
  */
 import SnippetModel from "../model";

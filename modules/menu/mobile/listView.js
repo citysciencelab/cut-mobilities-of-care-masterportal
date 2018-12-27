@@ -1,6 +1,6 @@
 /**
  * @description View for mobile mode
- * @module MobileMenu
+ * @memberof MobileMenu
  * @extends Backbone.View
  */
 import FolderView from "./folder/view";

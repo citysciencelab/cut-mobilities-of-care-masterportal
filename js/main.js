@@ -1,6 +1,6 @@
 /**
+ * @namespace Main
  * @description Loading basic requirements such as the css. Then it starts the App.
- * @module Main
  */
 import "@babel/polyfill";
 import {loadApp} from "./app";

@@ -1,6 +1,6 @@
 /**
  * @description Module for calculating routing from address to schools
- * @module SchulwegRouting
+ * @memberof SchulwegRouting
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

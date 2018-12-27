@@ -1,6 +1,6 @@
 /**
  * @description Module to represent any tool
- * @module Tool
+ * @memberof Tool
  * @extends .././item
  */
 import Item from ".././item";

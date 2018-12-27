@@ -1,6 +1,6 @@
 /**
  * @description Module to animate commuter flows
- * @module Animation
+ * @memberof Animation
  * @extends ../core/model
  */
 import PendlerCoreModel from "../core/model";

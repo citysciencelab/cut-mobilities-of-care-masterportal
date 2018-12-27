@@ -1,6 +1,6 @@
 /**
  * @description Module to represent GeoJSON layer
- * @module GeoJSONLayer
+ * @memberof GeoJSONLayer
  * @extends ./model
  */
 import Layer from "./model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to represent a viewpoint in 3d-mode
- * @module Viewpoint
+ * @memberof Viewpoint
  * @extends .././item
  */
 import Item from ".././item";

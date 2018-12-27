@@ -1,6 +1,6 @@
 /**
  * @description Model
- * @module ViomRouting
+ * @memberof ViomRouting
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

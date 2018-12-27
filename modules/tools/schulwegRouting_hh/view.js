@@ -1,6 +1,6 @@
 /**
  * @description View for Tool: Schulwegrouting
- * @module SchulwegRouting
+ * @memberof SchulwegRouting
  * @extends Backbone.View
  */
 import template from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description View for layer in light tree in mobile mode
- * @module LayerView
+ * @memberof LayerView
  * @extends Backbone.View
  */
 import Template from "text-loader!./templateLight.html";

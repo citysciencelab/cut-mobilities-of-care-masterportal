@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for ITGBM
- * @module ItGbmTheme
+ * @memberof ItGbmTheme
  * @extends ../model
  */
 import Theme from "../model";

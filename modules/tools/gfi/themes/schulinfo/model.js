@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Schulinfo
- * @module SchulInfoTheme
+ * @memberof SchulInfoTheme
  * @extends ../model
  */
 import Theme from "../model";

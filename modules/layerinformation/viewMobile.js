@@ -1,6 +1,6 @@
 /**
  * @description Module to retrieve and show layer Information (metadata and legend) - Mobile
- * @module LayerInformationViewMobile
+ * @memberof LayerInformationViewMobile
  * @extends Backbone.View
  */
 import TemplateMobile from "text-loader!./templateMobile.html";

@@ -1,6 +1,6 @@
 /**
  * @description Module to represent wms layer
- * @module WMSLayer
+ * @memberof WMSLayer
  * @extends ./model
  */
 import Layer from "./model";

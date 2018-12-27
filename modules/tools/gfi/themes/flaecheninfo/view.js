@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Flächeninfo
- * @module FlaecheninfoThemeView
+ * @memberof FlaecheninfoThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

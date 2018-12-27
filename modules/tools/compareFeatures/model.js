@@ -1,6 +1,6 @@
 /**
  * @description Tool to compare vectorFeatures
- * @module CompareFeaturesModel
+ * @memberof CompareFeaturesModel
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

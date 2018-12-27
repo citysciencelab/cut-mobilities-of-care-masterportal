@@ -1,6 +1,6 @@
 /**
  * @description Module for commuter flows as lines
- * @module LinesView
+ * @memberof LinesView
  * @extends Backbone.View
  */
 import LinesTemplate from "text-loader!./template.html";

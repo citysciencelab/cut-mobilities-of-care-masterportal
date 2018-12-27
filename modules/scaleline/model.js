@@ -1,6 +1,6 @@
 /**
  * @description Module to create a scaleLine
- * @module ScaleLineModel
+ * @memberof ScaleLineModel
  * @extends Backbone.Model
  */
 const ScaleLineModel = Backbone.Model.extend({

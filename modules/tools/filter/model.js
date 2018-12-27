@@ -1,6 +1,6 @@
 /**
  * @description Model of Filter Tool
- * @module FilterModel
+ * @memberof FilterModel
  * @extends ../../core/modelList/tool/model
  */
 import WfsQueryModel from "./query/source/wfs";

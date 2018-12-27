@@ -1,6 +1,6 @@
 /**
  * @description Module to retrieve and show layer Information (metadata and legend)
- * @module LayerInformationModel
+ * @memberof LayerInformationModel
  * @extends Backbone.Model
  */
 import ViewMobile from "./viewMobile";

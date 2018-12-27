@@ -1,6 +1,6 @@
 /**
  * @description Control to show position in 3d-mode
- * @module Orientation3DView
+ * @memberof Orientation3DView
  * @extends Backbone.View
  */
 import Orientation3DTemplate from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description Module to set mapMarker
- * @module MapMarkerView
+ * @memberof MapMarkerView
  * @extends Backbone.View
  */
 import MapHandlerModel from "./model";
@@ -174,7 +174,7 @@ const MapMarkerView = Backbone.View.extend({
     showMarker: function (coordinate) {
         this.hideMarker();
         if (coordinate.length === 2) {
-            
+
             this.model.get("marker").setPosition(coordinate);
         }
         else {

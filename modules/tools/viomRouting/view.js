@@ -1,6 +1,6 @@
 /**
  * @description View
- * @module ViomRouting
+ * @memberof ViomRouting
  * @extends Backbone.View
  */
 import RoutingWin from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description Model to filter vectorFeatures
- * @module WfsFeatureFilter
+ * @memberof WfsFeatureFilter
  * @extends Backbone.View
  */
 import WfsFeatureFilterTemplate from "text-loader!./template.html";

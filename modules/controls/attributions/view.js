@@ -1,6 +1,6 @@
 /**
  * @description Control to show Attributions
- * @module AttributionsView
+ * @memberof AttributionsView
  * @extends Backbone.View
  */
 import TemplateShow from "text-loader!./templateShow.html";

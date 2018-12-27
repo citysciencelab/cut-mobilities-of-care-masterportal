@@ -1,6 +1,6 @@
 /**
  * @description Module for drawing different geometries and text
- * @module DrawToolModel
+ * @memberof DrawToolModel
  * @extends ../../core/modelList/tool/model
  */
 import {Select, Modify, Draw} from "ol/interaction.js";

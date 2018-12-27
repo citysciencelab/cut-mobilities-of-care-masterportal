@@ -1,6 +1,6 @@
 /**
  * @description Module to create tree search
- * @module TreeModel
+ * @memberof TreeModel
  * @extends Backbone.Model
  */
 const TreeModel = Backbone.Model.extend({

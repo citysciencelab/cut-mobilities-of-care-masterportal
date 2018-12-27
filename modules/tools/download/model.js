@@ -1,6 +1,6 @@
 /**
  * @description Tool to download drawn features
- * @module DownloadModel
+ * @memberof DownloadModel
  * @extends ../../core/modelList/tool/model
  */
 import proj4 from "proj4";

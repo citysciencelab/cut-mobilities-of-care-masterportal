@@ -1,6 +1,6 @@
 /**
  * @description Module for commuter flows
- * @module PendlerCoreModel
+ * @memberof PendlerCoreModel
  * @extends ../../../core/modelList/tool/model
  */
 import Tool from "../../../core/modelList/tool/model";

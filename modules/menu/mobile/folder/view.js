@@ -1,6 +1,6 @@
 /**
  * @description View for folder in mobile mode
- * @module FolderView
+ * @memberof FolderView
  * @extends Backbone.View
  */
 import FolderTemplate from "text-loader!./template.html";

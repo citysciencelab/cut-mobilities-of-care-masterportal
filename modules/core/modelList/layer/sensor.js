@@ -1,6 +1,6 @@
 /**
  * @description Module to represent sensor layer
- * @module SensorLayer
+ * @memberof SensorLayer
  * @extends ./model
  */
 import Layer from "./model";

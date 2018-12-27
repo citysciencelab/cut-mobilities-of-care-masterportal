@@ -1,6 +1,6 @@
 /**
  * @description Module to create a snippet
- * @module SnippetModel
+ * @memberof SnippetModel
  * @extends Backbone.Model
  */
 import ValueModel from "./value/model";

@@ -1,6 +1,6 @@
 /**
  * @description Tool to download drawn features
- * @module DownloadView
+ * @memberof DownloadView
  * @extends Backbone.View
  */
 import DownloadWin from "text-loader!./template.html";

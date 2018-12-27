@@ -1,6 +1,6 @@
 /**
  * @description ListView for modelList in desktop mode
- * @module Menu
+ * @memberof Menu
  * @extends Backbone.View
  */
 import DesktopToolView from "./tool/view";

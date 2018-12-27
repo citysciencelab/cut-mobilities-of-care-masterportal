@@ -1,6 +1,6 @@
 /**
  * @description Module to manage WebProcessingService (WPS) requests
- * @module WPS
+ * @memberof WPS
  * @extends Backbone.Model
  */
 const WPS = Backbone.Model.extend({

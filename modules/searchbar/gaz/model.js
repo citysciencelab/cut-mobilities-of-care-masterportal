@@ -1,6 +1,6 @@
 /**
  * @description Module to create gaz search
- * @module GazetteerModel
+ * @memberof GazetteerModel
  * @extends Backbone.Model
  */
 import "../model";

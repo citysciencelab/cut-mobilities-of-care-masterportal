@@ -1,6 +1,6 @@
 /**
  * @description View to manage configured Controls
- * @module ControlsView
+ * @memberof ControlsView
  * @extends Backbone.View
  */
 const ControlsView = Backbone.View.extend({

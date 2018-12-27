@@ -1,6 +1,6 @@
 /**
  * @description Module to manage services from services.json
- * @module RawLayerList
+ * @memberof RawLayerList
  * @extends Backbone.Collection
  */
 const RawLayerList = Backbone.Collection.extend({

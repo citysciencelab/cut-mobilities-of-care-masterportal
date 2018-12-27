@@ -1,6 +1,6 @@
 /**
  * @description Module to retrieve and show layer Information (metadata and legend)
- * @module LayerInformationView
+ * @memberof LayerInformationView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

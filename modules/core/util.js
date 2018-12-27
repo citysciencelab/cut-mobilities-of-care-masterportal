@@ -1,6 +1,6 @@
 /**
  * @description Module to store functions used by different modules
- * @module Util
+ * @memberof Util
  * @extends Backbone.Model
  */
 const Util = Backbone.Model.extend({

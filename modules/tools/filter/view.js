@@ -1,6 +1,6 @@
 /**
  * @description View of Filter Tool
- * @module FilterView
+ * @memberof FilterView
  * @extends Backbone.View
  */
 import QueryDetailView from "./query/detailView";

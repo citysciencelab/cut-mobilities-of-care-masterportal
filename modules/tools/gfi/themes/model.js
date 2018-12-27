@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme-Model
- * @module Theme
+ * @memberof Theme
  * @extends Backbone.Model
  */
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";

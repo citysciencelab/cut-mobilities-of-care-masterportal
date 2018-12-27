@@ -1,6 +1,6 @@
 /**
  * @description Module to measure
- * @module MeasureView
+ * @memberof MeasureView
  * @extends Backbone.View
  */
 import DefaultTemplate from "text-loader!./default/template.html";

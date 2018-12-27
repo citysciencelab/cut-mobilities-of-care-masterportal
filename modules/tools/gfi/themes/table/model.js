@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Table
- * @module TableTheme
+ * @memberof TableTheme
  * @extends ../model
  */
 import Theme from "../model";

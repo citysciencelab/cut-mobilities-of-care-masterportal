@@ -1,6 +1,6 @@
 /**
  * @description Control to reset map to initial state
- * @module TotalViewMapModel
+ * @memberof TotalViewMapModel
  * @extends Backbone.Model
  */
 const TotalViewMapModel = Backbone.Model.extend({

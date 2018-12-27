@@ -1,6 +1,6 @@
 /**
  * @description Module to create checkbox snippet
- * @module CheckboxSnippet
+ * @memberof CheckboxSnippet
  * @extends ../model
  */
 import SnippetModel from "../model";

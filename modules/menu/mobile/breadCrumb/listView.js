@@ -1,6 +1,6 @@
 /**
  * @description List to manage breadcrumbs in mobile mode
- * @module ListView
+ * @memberof ListView
  * @extends Backbone.View
  */
 import List from "./list";

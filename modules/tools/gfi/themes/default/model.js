@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme default
- * @module DefaultTheme
+ * @memberof DefaultTheme
  * @extends ../model
  */
 import Theme from "../model";

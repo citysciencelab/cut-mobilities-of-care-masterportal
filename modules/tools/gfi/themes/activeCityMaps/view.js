@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for activeCityMaps
- * @module ActiveCityMapsThemeView
+ * @memberof ActiveCityMapsThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

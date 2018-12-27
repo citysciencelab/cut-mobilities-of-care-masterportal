@@ -1,6 +1,6 @@
 /**
  * @description View for Video in GFI
- * @module VideoView
+ * @memberof VideoView
  * @extends Backbone.View
  */
 import VideoTemplate from "text-loader!./template.html";

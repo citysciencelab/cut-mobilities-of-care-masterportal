@@ -1,6 +1,6 @@
 /**
  * @description View for table mode
- * @module Menu
+ * @memberof Menu
  * @extends Backbone.View
  */
 import MainTemplate from "text-loader!./main/template.html";

@@ -1,6 +1,6 @@
 /**
  * @description Module to create searchbar
- * @module SidebarView
+ * @memberof SidebarView
  * @extends Backbone.View
  */
 import SidebarModel from "./model";

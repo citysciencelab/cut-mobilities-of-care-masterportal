@@ -1,6 +1,6 @@
 /**
  * @description Control to show position
- * @module OrientationModel
+ * @memberof OrientationModel
  * @extends Backbone.Model
  */
 import {Circle, LineString} from "ol/geom.js";

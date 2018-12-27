@@ -1,6 +1,6 @@
 /**
  * @description Module to represent a link in the menu
- * @module StaticLink
+ * @memberof StaticLink
  * @extends ../item
  */
 import Item from "../item";

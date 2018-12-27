@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Table
- * @module TableThemeView
+ * @memberof TableThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

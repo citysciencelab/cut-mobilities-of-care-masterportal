@@ -1,6 +1,6 @@
 /**
  * @description Module parse CustomTree
- * @module CustomTreeParser
+ * @memberof CustomTreeParser
  * @extends ./parser
  */
 import Parser from "./parser";

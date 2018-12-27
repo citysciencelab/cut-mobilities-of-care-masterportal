@@ -1,6 +1,6 @@
 /**
  * @description Module to manage legend in mobile mode
- * @module MobileLegendView
+ * @memberof MobileLegendView
  * @extends Backbone.View
  */
 import LegendTemplate from "text-loader!./template.html";

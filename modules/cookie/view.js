@@ -1,6 +1,6 @@
 /**
  * @description Module to write Cookies
- * @module CookieView
+ * @memberof CookieView
  * @extends Backbone.View
  */
 import CookieModel from "./model";

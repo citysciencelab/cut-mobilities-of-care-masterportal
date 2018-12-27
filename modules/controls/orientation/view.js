@@ -1,6 +1,6 @@
 /**
  * @description Control to show position
- * @module OrientationView
+ * @memberof OrientationView
  * @extends Backbone.View
  */
 import OrientationTemplate from "text-loader!./template.html";

@@ -1,25 +1,69 @@
 /**
- * @namespace 00_Alerting
+ * @namespace Alerting
+ * @description Alerting system that responds to given events.
+ * Used to have same alert all over the portal.
  */
 /**
- * @memberof 00_Alerting
- * @class AlertingModel
- * @extends Backbone.Model
+ * @memberof Alerting
+ * @event RadioChannel("Alert")#"alert"
+ */
+/**
+ * @memberof Alerting
+ * @event RadioChannel("Alert")#"remove:alert"
  */
 const AlertingModel = Backbone.Model.extend({
     defaults: {
-        // http://getbootstrap.com/components/#alerts-examples
+        /**
+         * http://getbootstrap.com/components/#alerts-examples
+         * @memberof Alerting
+         * @type {String}
+         * @default "alert-info"
+         */
         category: "alert-info",
-        // true wenn Close Button dargestellt werden soll
+        /**
+         * Flag if close button has to be rendered
+         * @memberof Alerting
+         * @type {Boolean}
+         * @default true
+         */
         isDismissable: true,
-        // true wenn OK Button dargestellt werden soll
+        /**
+         * Flag if ok button has to be rendered
+         * @memberof Alerting
+         * @type {Boolean}
+         * @default false
+         */
         isConfirmable: false,
-        // Position der Messages [top-center | center-center]
+        /**
+         * Position of alerting. Possible values are "top-center" and "center-center"
+         * @memberof Alerting
+         * @type {String}
+         * @default "top-center"
+         */
         position: "top-center",
-        // letzte/aktuelle Alert Message
+        /**
+         * latest/actual alert message
+         * @memberof Alerting
+         * @type {String}
+         * @default ""
+         */
         message: "",
+        /**
+         * Flag if alert is animated, by means of fading out
+         * @memberof Alerting
+         * @type {Boolean}
+         * @default false
+         */
         animation: false
     },
+    /**
+     * Initialize function for model
+     * @memberof Alerting
+     * @listens Radio.channel("Alert", "alert")
+     * @listens Radio.channel("Alert", "alert:remove")
+     * @fires AlertingModel, "removeAll"
+     * @return {void}
+     */
     initialize: function () {
         var channel = Radio.channel("Alert");
 
@@ -30,11 +74,12 @@ const AlertingModel = Backbone.Model.extend({
             }
         }, this);
     },
-
     /**
      * Wird ein String übergeben, handelt es sich dabei um die Alert Message
      * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
-     * @param {String|Object} val -
+     * @memberof Alerting
+     * @param {String|Object} val Value string or object with information about the alert
+     * @fires AlertingModel, "render"
      * @returns {void}
      */
     setParams: function (val) {
@@ -45,7 +90,7 @@ const AlertingModel = Backbone.Model.extend({
         else if (_.isObject(val)) {
             this.setMessage(val.text);
             if (_.has(val, "id") === true) {
-                this.setId(val.id);
+                this.setId(String(val.id));
             }
             else {
                 this.setId(_.uniqueId());
@@ -73,7 +118,7 @@ const AlertingModel = Backbone.Model.extend({
     },
 
     setId: function (value) {
-        this.set("id", value.toString());
+        this.set("id", value);
     },
 
     setCategory: function (value) {
@@ -95,6 +140,7 @@ const AlertingModel = Backbone.Model.extend({
     setPosition: function (value) {
         this.set("position", value);
     },
+
     setAnimation: function (value) {
         this.set("animation", value);
     }

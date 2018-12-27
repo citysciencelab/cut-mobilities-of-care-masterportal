@@ -1,6 +1,6 @@
 /**
  * @description Detail View of Filter Query
- * @module QueryDetailView
+ * @memberof QueryDetailView
  * @extends Backbone.View
  */
 import SnippetDropdownView from "../../../snippets/dropdown/view";

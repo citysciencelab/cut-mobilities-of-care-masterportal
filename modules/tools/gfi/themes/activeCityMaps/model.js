@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for activeCityMaps
- * @module ActiveCityMapsTheme
+ * @memberof ActiveCityMapsTheme
  * @extends ../model
  */
 import Theme from "../model";

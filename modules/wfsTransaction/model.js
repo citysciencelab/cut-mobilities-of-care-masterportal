@@ -1,6 +1,6 @@
 /**
  * @description Model to do wfstransaction on WFST
- * @module WFSTransaction
+ * @memberof WFSTransaction
  * @extends Backbone.Model
  */
 import {WFS} from "ol/format.js";

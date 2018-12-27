@@ -1,6 +1,6 @@
 /**
  * @description Module to create osm search
- * @module OsmModel
+ * @memberof OsmModel
  * @extends Backbone.Model
  */
 import "../model";

@@ -1,6 +1,6 @@
 /**
  * @description View for categories in table mode
- * @module CategoryView
+ * @memberof CategoryView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

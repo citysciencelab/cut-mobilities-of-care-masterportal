@@ -1,6 +1,6 @@
 /**
  * @description View for tool window
- * @module Window
+ * @memberof Window
  * @extends Backbone.View
  */
 import Window from "./model";

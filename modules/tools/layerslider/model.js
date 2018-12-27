@@ -1,6 +1,6 @@
 /**
  * @description Module to slide 2 layers
- * @module LayersliderModel
+ * @memberof LayersliderModel
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

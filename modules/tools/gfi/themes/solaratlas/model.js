@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for SGV-Online
- * @module SolaratlasTheme
+ * @memberof SolaratlasTheme
  * @extends ../model
  */
 import Theme from "../model";

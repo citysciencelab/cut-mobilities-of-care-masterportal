@@ -1,35 +1,130 @@
 /**
+ * @namespace ModelList/Item/Layer
  * @description Module to represent any layer
- * @module HeatmapLayer
- * @extends .././item
+ */
+/**
+ * @memberof ModelList/Item/Layer
+ * @event RadioChannel("Layer")#"updateLayerInfo"
+ */
+/**
+ * @memberof ModelList/Item/Layer
+ * @event RadioChannel("Layer")#"setLayerInfoChecked"
  */
 import Item from ".././item";
 
 const Layer = Item.extend({
     defaults: {
-        // channel des Layer-Radios
+        /**
+         * @memberof ModelList/Item/Layer
+         * @default Radio.channel("Layer")
+         * @type {Radio.channel}
+         */
         channel: Radio.channel("Layer"),
-        // ist der Layer (ol.layer) in der Karte sichtbar
+        /**
+         * Flag if layer is visible in map
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         isVisibleInMap: false,
-        // ist das Model im Baum selektiert
+        /**
+         * Flag if Model in selected in layer tree
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         isSelected: false,
-        // sind die Einstellungen (Transparenz etc.) vom Model im Baum sichtbar
+        /**
+         * Flag if settings (transparency,...) are visible in tree
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         isSettingVisible: false,
-        // Transparenz in %
+        /**
+         * Transparency in percent
+         * @memberof ModelList/Item/Layer
+         * @default 0
+         * @type {Number}
+         */
         transparency: 0,
-        // der Index der die Reihenfolge der selektierten Models beim Zeichnen in "Auswahl der Themen" bestimmt
+        /**
+         * Index of rendering order in layer selection
+         * @memberof ModelList/Item/Layer
+         * @default 0
+         * @type {Number}
+         */
         selectionIDX: 0,
+        /**
+         * Flag if layerInfo was clicked
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         layerInfoClicked: false,
+        /**
+         * Minimum scale for layer to be displayed
+         * @memberof ModelList/Item/Layer
+         * @default "0"
+         * @type {String}
+         */
         minScale: "0",
+        /**
+         * Maximum scale for layer to be displayed
+         * @memberof ModelList/Item/Layer
+         * @default "1000000"
+         * @type {String}
+         */
         maxScale: "1000000",
+        /**
+         * LegendURL to request legend from
+         * @memberof ModelList/Item/Layer
+         * @default ""
+         * @type {String}
+         */
         legendURL: "",
+        /**
+         * Array of Strings to show supported modes "2D" and "3D"
+         * @memberof ModelList/Item/Layer
+         * @default ["2D"]
+         * @type {Array}
+         */
         supported: ["2D"],
+        /**
+         * Flag if layer settings have to be shown
+         * @memberof ModelList/Item/Layer
+         * @default true
+         * @type {Boolean}
+         */
         showSettings: true,
+        /**
+         * Hit tolerance used by layer for map interaction
+         * @memberof ModelList/Item/Layer
+         * @default 0
+         * @type {Number}
+         */
         hitTolerance: 0,
+        /**
+         * Flag if wms layer can be styleable via stylewms tool
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         styleable: false,
+        /**
+         * Flag if layer is never visible in layertree
+         * @memberof ModelList/Item/Layer
+         * @default false
+         * @type {Boolean}
+         */
         isNeverVisibleInTree: false
     },
-
+    /**
+     * Initialize function for Layer
+     * @memberof ModelList/Item/Layer
+     * @fires Radio.trigger("Map","addLayerToIndex")
+     * @return {void}
+     */
     initialize: function () {
         this.registerInteractionTreeListeners(this.get("channel"));
         this.registerInteractionMapViewListeners();
@@ -51,12 +146,20 @@ const Layer = Item.extend({
         }
     },
 
+    /**
+     * Triggers event if vector features are loaded
+     * @memberof ModelList/Item/Layer
+     * @fires Radio.trigger("Layer","featuresLoaded")
+     * @param  {ol.Feature[]} features Loaded vector features
+     * @return {void}
+     */
     featuresLoaded: function (features) {
         this.get("channel").trigger("featuresLoaded", this.get("id"), features);
     },
 
     /**
-     * Ruft die Einzelfunktionen zur Layererstellung auf.
+     * Process function. Calls smaller function to prepare and create layer object
+     * @memberof ModelList/Item/Layer
      * @returns {void}
      */
     prepareLayerObject: function () {
@@ -69,20 +172,22 @@ const Layer = Item.extend({
     },
 
     /**
-     * Hier wird die Schnittstelle zur Interaktion mit dem Tree registriert.
-     * @return {void}
+     * Register interaction with layer tree
+     * @memberof ModelList/Item/Layer
      * @param {Radio.channel} channel Kanal dieses Moduls
-     * @listens this~change:isSelected
-     * @listens Layer~updateLayerInfo
-     * @listens Layer~setLayerInfoChecked
-     * @listens this~change:isVisibleInMap
-     * @listens this~change:transparency
+     * @listens this, "change:isSelected"
+     * @listens this, "change:isVisibleInMap"
+     * @listens this, "change:transparency"
+     * @listens Radio.channel("Layer", "updateLayerInfo")
+     * @listens Radio.channel("Layer", "setLayerInfoChecked")
+     * @listens Radio.channel("Map", "change")
+     * @return {void}
      */
     registerInteractionTreeListeners: function (channel) {
-        // beim treetype: "light" werden alle Layer initial geladen
+        // on treetype: "light" all layers are loaded initially
         if (Radio.request("Parser", "getTreeType") !== "light") {
             this.listenToOnce(this, {
-                // Die LayerSource wird beim ersten Selektieren einmalig erstellt
+                // LayerSource is created on first select
                 "change:isSelected": function () {
                     if (_.isUndefined(this.get("layerSource"))) {
                         this.prepareLayerObject();
@@ -90,7 +195,6 @@ const Layer = Item.extend({
                 }
             });
         }
-        // Dieses Radio kümmert sich um die Darstellung der layerInformation
         this.listenTo(channel, {
             "updateLayerInfo": function (name) {
                 if (this.get("name") === name && this.get("layerInfoChecked") === true) {
@@ -113,7 +217,6 @@ const Layer = Item.extend({
                 }
             }
         });
-        // Diese Listener kümmern sich um die Sichtbarkeit der Layer
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 // triggert das Ein- und Ausschalten von Layern
@@ -128,8 +231,9 @@ const Layer = Item.extend({
     },
 
     /**
-     * Hier wird die Schnittstelle zur Interaktion mit der MapView registriert.
-     * @listens Radio:MapView~changedOptions
+     * Register interaction with map view
+     * @memberof ModelList/Item/Layer
+     * @listens Radio.channel("MapView", "changedOptions")
      * @returns {void}
      */
     registerInteractionMapViewListeners: function () {
@@ -142,8 +246,9 @@ const Layer = Item.extend({
     },
 
     /**
-     * Setter des Windows Intervals. Bindet an this.
-     * @param {function} func                Funktion, die in this ausgeführt werden soll
+     * Setter of window interval. Binds this to func.
+     * @memberof ModelList/Item/Layer
+     * @param {function} func Function, to be executed in this
      * @param {integer}  autorefreshInterval Intervall in ms
      * @returns {void}
      */
@@ -152,19 +257,19 @@ const Layer = Item.extend({
     },
 
     /**
-     * Steuert die Handlungen in einem Layerinterval
+     * Callback for layer interval
+     * @memberof ModelList/Item/Layer
      * @returns {void}
      */
     intervalHandler: function () {
         this.updateSource();
     },
 
-    setLayerInfoChecked: function (value) {
-        this.set("layerInfoChecked", value);
-    },
 
     /**
-     * Setzt die sichtbaren Resolution an den ol.layer.
+     * Sets visible min and max resolution on layer
+     * @memberof ModelList/Item/Layer
+     * @fires Radio.request("MapView", "getResoByScale")
      * @returns {void}
      */
     getResolutions: function () {
@@ -175,6 +280,185 @@ const Layer = Item.extend({
         this.setMinResolution(resoByMinScale);
     },
 
+    /**
+     * Increases layer transparency by 10 percent
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    incTransparency: function () {
+        if (this.get("transparency") <= 90) {
+            this.setTransparency(this.get("transparency") + 10);
+        }
+    },
+
+    /**
+     * Decreases layer transparency by 10 percent
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    decTransparency: function () {
+        if (this.get("transparency") >= 10) {
+            this.setTransparency(this.get("transparency") - 10);
+        }
+    },
+
+    /**
+     * Toggles the attribute isSelected
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    toggleIsSelected: function () {
+        if (this.get("isSelected") === true) {
+            this.setIsSelected(false);
+        }
+        else {
+            this.setIsSelected(true);
+        }
+    },
+
+    /**
+     * Toggles the attribute isVisibleInMap
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    toggleIsVisibleInMap: function () {
+        if (this.get("isVisibleInMap") === true) {
+            this.setIsVisibleInMap(false);
+        }
+        else {
+            this.setIsVisibleInMap(true);
+        }
+    },
+
+    /**
+     * Toggles the layer interval based on attribute isVisibleInMap
+     * The autoRefresh interval has to be >500 , because of performance issues
+     * @memberof ModelList/Item/Layer
+     * @returns {void}
+     */
+    toggleWindowsInterval: function () {
+        var isVisible = this.get("isVisibleInMap"),
+            autoRefresh = this.get("autoRefresh");
+
+        if (isVisible === true) {
+            if (autoRefresh > 500) {
+                this.setWindowsInterval(this.intervalHandler, autoRefresh);
+            }
+        }
+        else if (!_.isUndefined(this.get("windowsInterval"))) {
+            clearInterval(this.get("windowsInterval"));
+        }
+    },
+    /**
+     * Toggles the attribute isSettingVisible
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    toggleIsSettingVisible: function () {
+        if (this.get("isSettingVisible") === true) {
+            this.setIsSettingVisible(false);
+        }
+        else {
+            // setzt vorher alle Models auf false, damit immer nur eins angezeigt wird
+            this.collection.setIsSettingVisible(false);
+            this.setIsSettingVisible(true);
+        }
+    },
+    /**
+     * Adds or removes layer from map, depending on attribte isSelected
+     * @memberof ModelList/Item/Layer
+     * @returns {void}
+     */
+    toggleLayerOnMap: function () {
+        if (Radio.request("Parser", "getTreeType") !== "light") {
+            if (this.get("isSelected") === true) {
+                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
+            }
+            else {
+                // model.collection besser?!
+                Radio.trigger("Map", "removeLayer", this.get("layer"));
+            }
+        }
+    },
+
+    /**
+     * If attribution is defined as an object, then the attribution are requested in given intervals, as long as "isVisibleInMap" is true
+     * Is used for Verkehrslage auf den Autobahnen
+     * @memberof ModelList/Item/Layer
+     * @returns {void}
+     */
+    toggleAttributionsInterval: function () {
+        var channelName, eventName, timeout;
+
+        if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
+            channelName = this.get("layerAttribution").channel;
+            eventName = this.get("layerAttribution").eventname;
+            timeout = this.get("layerAttribution").timeout;
+
+            if (this.get("isVisibleInMap") === true) {
+                Radio.trigger(channelName, eventName, this);
+                this.get("layerAttribution").interval = setInterval(function (model) {
+                    Radio.trigger(channelName, eventName, model);
+                }, timeout, this);
+            }
+            else {
+                clearInterval(this.get("layerAttribution").interval);
+            }
+        }
+    },
+
+    /**
+     * Transforms transparency into opacity and sets opacity on layer
+     * @memberof ModelList/Item/Layer
+     * @return {void}
+     */
+    updateLayerTransparency: function () {
+        var opacity = (100 - this.get("transparency")) / 100;
+
+        // Auch wenn die Layer im simple Tree noch nicht selected wurde können
+        // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
+        if (!_.isUndefined(this.get("layer"))) {
+            this.get("layer").setOpacity(opacity);
+        }
+    },
+    /**
+     * Initiates the presentation of layer information
+     * @memberof ModelList/Item/Layer
+     * @fires Radio.trigger("LayerInformation", "add")
+     * @returns {void}
+     */
+    showLayerInformation: function () {
+        var metaID = [],
+            legend = Radio.request("Legend", "getLegend", this),
+            name = this.get("name"),
+            layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
+
+        metaID.push(layerMetaId);
+
+        Radio.trigger("LayerInformation", "add", {
+            "id": this.get("id"),
+            "legend": legend,
+            "metaID": metaID,
+            "layername": name,
+            "url": this.get("url"),
+            "typ": this.get("typ")
+        });
+
+        this.setLayerInfoChecked(true);
+    },
+    setSelectionIDX: function (idx) {
+        this.set("selectionIDX", idx);
+    },
+
+    moveDown: function () {
+        this.collection.moveModelDown(this);
+    },
+    moveUp: function () {
+        this.collection.moveModelUp(this);
+    },
+    setLayerInfoChecked: function (value) {
+        this.set("layerInfoChecked", value);
+    },
     setLayerSource: function (value) {
         this.set("layerSource", value);
     },
@@ -212,181 +496,10 @@ const Layer = Item.extend({
         this.get("layer").setMinResolution(value);
     },
 
-    incTransparency: function () {
-        if (this.get("transparency") <= 90) {
-            this.setTransparency(this.get("transparency") + 10);
-        }
-    },
-    decTransparency: function () {
-        if (this.get("transparency") >= 10) {
-            this.setTransparency(this.get("transparency") - 10);
-        }
-    },
-
-    toggleIsSelected: function () {
-        if (this.get("isSelected") === true) {
-            this.setIsSelected(false);
-        }
-        else {
-            this.setIsSelected(true);
-        }
-    },
-
-    toggleIsVisibleInMap: function () {
-        if (this.get("isVisibleInMap") === true) {
-            this.setIsVisibleInMap(false);
-        }
-        else {
-            this.setIsVisibleInMap(true);
-        }
-    },
-
-    /**
-     * Toggelt das Interval anhand der Layersichtbarkeit.
-     * Das autoRefresh Interval muss as Performance-Gründen > 500 sein.
-     * @returns {void}
-     */
-    toggleWindowsInterval: function () {
-        var isVisible = this.get("isVisibleInMap"),
-            autoRefresh = this.get("autoRefresh");
-
-        if (isVisible === true) {
-            if (autoRefresh > 500) {
-                this.setWindowsInterval(this.intervalHandler, autoRefresh);
-            }
-        }
-        else if (!_.isUndefined(this.get("windowsInterval"))) {
-            clearInterval(this.get("windowsInterval"));
-        }
-    },
-
-    toggleIsSettingVisible: function () {
-        if (this.get("isSettingVisible") === true) {
-            this.setIsSettingVisible(false);
-        }
-        else {
-            // setzt vorher alle Models auf false, damit immer nur eins angezeigt wird
-            this.collection.setIsSettingVisible(false);
-            this.setIsSettingVisible(true);
-        }
-    },
-    /**
-     * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-     * Abhängig vom Attribut "isSelected"
-     * @returns {void}
-     */
-    toggleLayerOnMap: function () {
-        if (Radio.request("Parser", "getTreeType") !== "light") {
-            if (this.get("isSelected") === true) {
-                Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
-            }
-            else {
-                // model.collection besser?!
-                Radio.trigger("Map", "removeLayer", this.get("layer"));
-            }
-        }
-    },
-
-    /**
-     * Wenn die Attributions als Objekt definiert ist,
-     * wird in einem bestimmten Intervall die Attributions angefragt, solange "isVisibleInMap" true ist
-     * Wird für die Verkehrslage auf den Autobahnen genutzt
-     * @returns {void}
-     */
-    toggleAttributionsInterval: function () {
-        var channelName, eventName, timeout;
-
-        if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
-            channelName = this.get("layerAttribution").channel;
-            eventName = this.get("layerAttribution").eventname;
-            timeout = this.get("layerAttribution").timeout;
-
-            if (this.get("isVisibleInMap") === true) {
-                Radio.trigger(channelName, eventName, this);
-                this.get("layerAttribution").interval = setInterval(function (model) {
-                    Radio.trigger(channelName, eventName, model);
-                }, timeout, this);
-            }
-            else {
-                clearInterval(this.get("layerAttribution").interval);
-            }
-        }
-    },
-
-    updateLayerTransparency: function () {
-        var opacity = (100 - this.get("transparency")) / 100;
-
-        // Auch wenn die Layer im simple Tree noch nicht selected wurde können
-        // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
-        if (!_.isUndefined(this.get("layer"))) {
-            this.get("layer").setOpacity(opacity);
-        }
-    },
-    /**
-     * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
-     * In layerinformation/model wird bei Layern ohne LegendURL auf null getestet.
-     * @returns {void}
-     */
-    showLayerInformation: function () {
-        var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
-            name = this.get("name"),
-            layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
-
-        metaID.push(layerMetaId);
-
-        Radio.trigger("LayerInformation", "add", {
-            "id": this.get("id"),
-            "legend": legend,
-            "metaID": metaID,
-            "layername": name,
-            "url": this.get("url"),
-            "typ": this.get("typ")
-        });
-
-        this.setLayerInfoChecked(true);
-    },
-    setSelectionIDX: function (idx) {
-        this.set("selectionIDX", idx);
-    },
-
-    moveDown: function () {
-        this.collection.moveModelDown(this);
-    },
-    moveUp: function () {
-        this.collection.moveModelUp(this);
-    },
-    /**
-     * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt die metaID wieder.
-     * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
-     * @returns {undefined|string} metadata id
-     */
-    getmetaID: function () {
-        if (this.get("datasets")[0]) {
-            return this.get("datasets")[0].md_id;
-        }
-
-        return undefined;
-    },
-    /**
-     * Überprüft, ob der Layer einen Metadateneintrag in der Service.json besitzt und gibt den Metanamen wieder
-     * Wenn nicht wird undefined übergeben, damit die Legende trotzdem gezeichnet werden kann.
-     * @returns {undefined|string} metadata name
-     */
-    getmetaName: function () {
-        if (this.get("datasets")[0]) {
-            return this.get("datasets")[0].md_name;
-        }
-
-        return undefined;
-    },
-
-    // setter for name
     setName: function (value) {
         this.set("name", value);
     },
 
-    // setter for legendURL
     setLegendURL: function (value) {
         this.set("legendURL", value);
     },

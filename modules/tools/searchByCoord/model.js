@@ -1,6 +1,6 @@
 /**
  * @description Module for locating given coordinates on map
- * @module SearchByCoord
+ * @memberof SearchByCoord
  * @extends ../../core/modelList/tool/model
  */
 import proj4 from "proj4";

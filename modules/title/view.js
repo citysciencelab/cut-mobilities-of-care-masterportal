@@ -1,6 +1,6 @@
 /**
  * @description Module to create portal title
- * @module TitleView
+ * @memberof TitleView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description Model for tool window
- * @module Window
+ * @memberof Window
  * @extends Backbone.Model
  */
 const Window = Backbone.Model.extend({

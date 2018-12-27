@@ -1,6 +1,6 @@
 /**
  * @description Module for commuter flows as lines
- * @module Lines
+ * @memberof Lines
  * @extends ../core/model
  */
 import PendlerCoreModel from "../core/model";

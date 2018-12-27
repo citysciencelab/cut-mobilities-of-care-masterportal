@@ -1,6 +1,6 @@
 /**
  * @description View to filter trees in in hamburg
- * @module TreeFilter
+ * @memberof TreeFilter
  * @extends Backbone.View
  */
 import TreeFilterTemplate from "text-loader!./template.html";

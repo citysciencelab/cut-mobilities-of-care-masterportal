@@ -1,6 +1,6 @@
 /**
  * @description Control to show an overview-map
- * @module OverviewMapView
+ * @memberof OverviewMapView
  * @extends Backbone.Model
  */
 import OverviewMapModel from "./model";

@@ -1,6 +1,6 @@
 /**
  * @description Module to generate Graphs
- * @module GraphModel
+ * @memberof GraphModel
  * @extends Backbone.Model
  */
 import {scaleBand, scaleLinear} from "d3-scale";

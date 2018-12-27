@@ -1,6 +1,6 @@
 /**
  * @description View to display extendedFilter Tool
- * @module ExtendedFilter
+ * @memberof ExtendedFilter
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

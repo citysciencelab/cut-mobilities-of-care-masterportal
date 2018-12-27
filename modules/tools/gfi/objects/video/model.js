@@ -1,6 +1,6 @@
 /**
  * @description Model for Video in GFI
- * @module VideoModel
+ * @memberof VideoModel
  * @extends Backbone.Model
  */
 import * as videojs from "video.js";

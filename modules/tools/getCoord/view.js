@@ -1,6 +1,6 @@
 /**
  * @description Module to derive Coordinated by Clicking into map
- * @module GetCoord
+ * @memberof GetCoord
  * @extends Backbone.View
  */
 import GetCoordTemplate from "text-loader!./template.html";

@@ -1,6 +1,6 @@
 /**
  * @description Control to activate oblique-mode (Schrägluftbilder)
- * @module ButtonObliqueView
+ * @memberof ButtonObliqueView
  * @extends Backbone.View
  */
 import ButtonObliqueTemplate from "text-loader!./template.html";

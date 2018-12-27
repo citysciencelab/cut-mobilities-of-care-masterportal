@@ -1,6 +1,6 @@
 /**
  * @description View for GFI in table mode
- * @module GFIDetachedTableView
+ * @memberof GFIDetachedTableView
  * @extends ../view
  */
 import DesktopView from "../view";

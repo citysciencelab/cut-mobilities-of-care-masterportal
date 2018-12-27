@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for SGV-Online
- * @module SgvOnlineTheme
+ * @memberof SgvOnlineTheme
  * @extends ../model
  */
 import Theme from "../model";

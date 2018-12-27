@@ -1,6 +1,6 @@
 /**
  * @description Module to build formular to request grenznachweis
- * @module GrenznachweisView
+ * @memberof GrenznachweisView
  * @extends Backbone.View
  */
 import Grenznachweistemplate from "text-loader!./grenznachweis.html";

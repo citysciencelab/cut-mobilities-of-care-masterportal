@@ -1,6 +1,6 @@
 /**
  * @description Module to filter vector features
- * @module ExtendedFilter
+ * @memberof ExtendedFilter
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

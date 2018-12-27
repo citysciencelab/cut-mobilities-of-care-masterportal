@@ -1,6 +1,6 @@
 /**
  * @description Module for creatung spec.JSON for mapfish-print-3
- * @module BuildSpecModel
+ * @memberof BuildSpecModel
  * @extends Backbone.Model
  */
 import {Circle as CircleStyle, Icon} from "ol/style.js";

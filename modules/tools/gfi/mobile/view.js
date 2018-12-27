@@ -1,6 +1,6 @@
 /**
  * @description View for GFI in mobile mode
- * @module GFIMobileView
+ * @memberof GFIMobileView
  * @extends ../view
  */
 import GFIView from "../view";

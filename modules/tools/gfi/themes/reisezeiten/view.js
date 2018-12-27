@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Reisezeiten
- * @module ReisezeitenThemeView
+ * @memberof ReisezeitenThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

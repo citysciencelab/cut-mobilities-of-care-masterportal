@@ -1,6 +1,6 @@
 /**
  * @description Module to represent Folder in Menu and layer-tree
- * @module DefaultTreeParser
+ * @memberof DefaultTreeParser
  * @extends Backbone.Model
  */
 import Item from "../item";

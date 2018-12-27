@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for ITGBM
- * @module ItGbmThemeView
+ * @memberof ItGbmThemeView
  * @extends ../view
  */
 import ThemeView from "../view";

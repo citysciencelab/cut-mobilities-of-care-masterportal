@@ -1,6 +1,6 @@
 /**
  * @description Module to animate commuter flows
- * @module AnimationView
+ * @memberof AnimationView
  * @extends Backbone.View
  */
 import AnimationTemplate from "text-loader!./template.html";

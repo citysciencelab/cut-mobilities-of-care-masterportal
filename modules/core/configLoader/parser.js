@@ -1,6 +1,6 @@
 /**
  * @description Module parse Config
- * @module Parser
+ * @memberof Parser
  * @extends Backbone.Model
  */
 import Backbone from "backbone";

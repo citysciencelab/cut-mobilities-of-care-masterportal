@@ -1,6 +1,6 @@
 /**
  * @description GFI-View
- * @module GFIView
+ * @memberof GFIView
  * @extends Backbone.View
  */
 const GFIView = Backbone.View.extend({

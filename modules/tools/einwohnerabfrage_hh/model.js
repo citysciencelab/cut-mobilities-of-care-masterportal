@@ -1,6 +1,6 @@
 /**
  * @description Tool to request inhabitants from drawn geometry
- * @module EinwohnerabfrageModel
+ * @memberof EinwohnerabfrageModel
  * @extends ../../core/modelList/tool/model
  */
 import Tool from "../../core/modelList/tool/model";

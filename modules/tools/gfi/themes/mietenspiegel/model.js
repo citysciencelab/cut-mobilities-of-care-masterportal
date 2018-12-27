@@ -1,6 +1,6 @@
 /**
  * @description GFI-Theme for Mietenspiegel
- * @module MietenspiegelTheme
+ * @memberof MietenspiegelTheme
  * @extends ../model
  */
 import Theme from "../model";

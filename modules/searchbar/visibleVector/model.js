@@ -1,6 +1,6 @@
 /**
  * @description Module to create visibleWFS search
- * @module VisibleWFSModel
+ * @memberof VisibleWFSModel
  * @extends Backbone.Model
  */
 import "../model";

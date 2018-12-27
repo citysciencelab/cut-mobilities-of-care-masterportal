@@ -1,6 +1,6 @@
 /**
  * @description Module to list features of given vector layer
- * @module FeatureListerView
+ * @memberof FeatureListerView
  * @extends Backbone.View
  */
 import Template from "text-loader!./template.html";

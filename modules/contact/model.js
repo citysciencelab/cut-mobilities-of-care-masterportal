@@ -1,6 +1,6 @@
 /**
  * @description Module to build a contact opportunity by email
- * @module ContactModel
+ * @memberof ContactModel
  * @extends ../core/modelList/tool/model
  */
 import Tool from "../core/modelList/tool/model";

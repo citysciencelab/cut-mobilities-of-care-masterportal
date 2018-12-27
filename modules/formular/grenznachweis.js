@@ -1,6 +1,6 @@
 /**
  * @description Module to build formular to request grenznachweis
- * @module GrenznachweisModel
+ * @memberof GrenznachweisModel
  * @extends ../core/modelList/tool/model
  */
 import cookie from "../cookie/view";

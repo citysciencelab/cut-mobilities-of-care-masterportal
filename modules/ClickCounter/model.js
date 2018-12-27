@@ -1,6 +1,6 @@
 /**
  * @description Module to count Clicks
- * @module ClickCounter
+ * @memberof ClickCounter
  * @extends Backbone.Model
  */
 const ClickCounter = Backbone.Model.extend({
