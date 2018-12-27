@@ -1,3 +1,6 @@
+/**
+ * @namespace ClickCounter
+ */
 import ClickCounterModel from "./model";
 
 const ClickCounterView = Backbone.View.extend(
