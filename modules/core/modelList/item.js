@@ -1,62 +1,62 @@
 /**
- * @namespace ModelList/Item
+ * @namespace Item
  * @description Module to represent any Item (Folder, Tool, Layer, ...)
  */
 const Item = Backbone.Model.extend({
     defaults: {
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default ""
          * @type {String}
          */
         name: "",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default ""
          * @type {String}
          */
         id: "",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default ""
          * @type {String}
          */
         parentId: "",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * which node type folder/layer/tool/staticlink
          * @default ""
          * @type {String}
          */
         type: "",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * displayed title
          * @default "no title defined"
          * @type {String}
          */
         title: "no title defined",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * bootstrap glyphicon class
          * @default ""
          * @type {String}
          */
         glyphicon: "",
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default false
          * @type {Boolean}
          */
         isInThemen: false,
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default 0
          * @type {Number}
          */
         level: 0,
         /**
-         * @memberof ModelList/Item
+         * @memberof Item
          * @default false
          * @type {Boolean}
          */

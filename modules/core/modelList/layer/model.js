@@ -1,13 +1,13 @@
 /**
- * @namespace ModelList/Item/Layer
+ * @namespace Item/Layer
  * @description Module to represent any layer
  */
 /**
- * @memberof ModelList/Item/Layer
+ * @memberof Item/Layer
  * @event RadioChannel("Layer")#"updateLayerInfo"
  */
 /**
- * @memberof ModelList/Item/Layer
+ * @memberof Item/Layer
  * @event RadioChannel("Layer")#"setLayerInfoChecked"
  */
 import Item from ".././item";
@@ -15,105 +15,105 @@ import Item from ".././item";
 const Layer = Item.extend({
     defaults: {
         /**
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default Radio.channel("Layer")
          * @type {Radio.channel}
          */
         channel: Radio.channel("Layer"),
         /**
          * Flag if layer is visible in map
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
         isVisibleInMap: false,
         /**
          * Flag if Model in selected in layer tree
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
         isSelected: false,
         /**
          * Flag if settings (transparency,...) are visible in tree
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
         isSettingVisible: false,
         /**
          * Transparency in percent
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default 0
          * @type {Number}
          */
         transparency: 0,
         /**
          * Index of rendering order in layer selection
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default 0
          * @type {Number}
          */
         selectionIDX: 0,
         /**
          * Flag if layerInfo was clicked
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
         layerInfoClicked: false,
         /**
          * Minimum scale for layer to be displayed
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default "0"
          * @type {String}
          */
         minScale: "0",
         /**
          * Maximum scale for layer to be displayed
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default "1000000"
          * @type {String}
          */
         maxScale: "1000000",
         /**
          * LegendURL to request legend from
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default ""
          * @type {String}
          */
         legendURL: "",
         /**
          * Array of Strings to show supported modes "2D" and "3D"
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default ["2D"]
          * @type {Array}
          */
         supported: ["2D"],
         /**
          * Flag if layer settings have to be shown
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default true
          * @type {Boolean}
          */
         showSettings: true,
         /**
          * Hit tolerance used by layer for map interaction
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default 0
          * @type {Number}
          */
         hitTolerance: 0,
         /**
          * Flag if wms layer can be styleable via stylewms tool
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
         styleable: false,
         /**
          * Flag if layer is never visible in layertree
-         * @memberof ModelList/Item/Layer
+         * @memberof Item/Layer
          * @default false
          * @type {Boolean}
          */
@@ -121,7 +121,7 @@ const Layer = Item.extend({
     },
     /**
      * Initialize function for Layer
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @fires Radio.trigger("Map","addLayerToIndex")
      * @return {void}
      */
@@ -148,7 +148,7 @@ const Layer = Item.extend({
 
     /**
      * Triggers event if vector features are loaded
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @fires Radio.trigger("Layer","featuresLoaded")
      * @param  {ol.Feature[]} features Loaded vector features
      * @return {void}
@@ -159,7 +159,7 @@ const Layer = Item.extend({
 
     /**
      * Process function. Calls smaller function to prepare and create layer object
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @returns {void}
      */
     prepareLayerObject: function () {
@@ -173,7 +173,7 @@ const Layer = Item.extend({
 
     /**
      * Register interaction with layer tree
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @param {Radio.channel} channel Kanal dieses Moduls
      * @listens this, "change:isSelected"
      * @listens this, "change:isVisibleInMap"
@@ -232,7 +232,7 @@ const Layer = Item.extend({
 
     /**
      * Register interaction with map view
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @listens Radio.channel("MapView", "changedOptions")
      * @returns {void}
      */
@@ -247,7 +247,7 @@ const Layer = Item.extend({
 
     /**
      * Setter of window interval. Binds this to func.
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @param {function} func Function, to be executed in this
      * @param {integer}  autorefreshInterval Intervall in ms
      * @returns {void}
@@ -258,7 +258,7 @@ const Layer = Item.extend({
 
     /**
      * Callback for layer interval
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @returns {void}
      */
     intervalHandler: function () {
@@ -268,7 +268,7 @@ const Layer = Item.extend({
 
     /**
      * Sets visible min and max resolution on layer
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @fires Radio.request("MapView", "getResoByScale")
      * @returns {void}
      */
@@ -282,7 +282,7 @@ const Layer = Item.extend({
 
     /**
      * Increases layer transparency by 10 percent
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     incTransparency: function () {
@@ -293,7 +293,7 @@ const Layer = Item.extend({
 
     /**
      * Decreases layer transparency by 10 percent
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     decTransparency: function () {
@@ -304,7 +304,7 @@ const Layer = Item.extend({
 
     /**
      * Toggles the attribute isSelected
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     toggleIsSelected: function () {
@@ -318,7 +318,7 @@ const Layer = Item.extend({
 
     /**
      * Toggles the attribute isVisibleInMap
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     toggleIsVisibleInMap: function () {
@@ -333,7 +333,7 @@ const Layer = Item.extend({
     /**
      * Toggles the layer interval based on attribute isVisibleInMap
      * The autoRefresh interval has to be >500 , because of performance issues
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @returns {void}
      */
     toggleWindowsInterval: function () {
@@ -351,7 +351,7 @@ const Layer = Item.extend({
     },
     /**
      * Toggles the attribute isSettingVisible
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     toggleIsSettingVisible: function () {
@@ -366,7 +366,7 @@ const Layer = Item.extend({
     },
     /**
      * Adds or removes layer from map, depending on attribte isSelected
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @returns {void}
      */
     toggleLayerOnMap: function () {
@@ -384,7 +384,7 @@ const Layer = Item.extend({
     /**
      * If attribution is defined as an object, then the attribution are requested in given intervals, as long as "isVisibleInMap" is true
      * Is used for Verkehrslage auf den Autobahnen
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @returns {void}
      */
     toggleAttributionsInterval: function () {
@@ -409,7 +409,7 @@ const Layer = Item.extend({
 
     /**
      * Transforms transparency into opacity and sets opacity on layer
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @return {void}
      */
     updateLayerTransparency: function () {
@@ -423,7 +423,7 @@ const Layer = Item.extend({
     },
     /**
      * Initiates the presentation of layer information
-     * @memberof ModelList/Item/Layer
+     * @memberof Item/Layer
      * @fires Radio.trigger("LayerInformation", "add")
      * @returns {void}
      */
