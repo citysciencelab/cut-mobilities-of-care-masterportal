@@ -63,6 +63,7 @@ const ToolView = Backbone.View.extend({
     closeToolMenu: function () {
         $("div.table-tools").removeClass("table-tools-active");
         $("div.table-tools-menu").hide();
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     }
 });
 

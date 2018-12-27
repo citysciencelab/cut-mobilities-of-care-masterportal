@@ -24,7 +24,8 @@ const map = Backbone.Model.extend({
 
     initialize: function () {
         var channel = Radio.channel("Map"),
-            mapView = new MapView();
+            mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
+            mapView = new MapView(mapViewSettings);
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -198,8 +199,8 @@ const map = Backbone.Model.extend({
         var map3d = new OLCesium({
             map: this.get("map"),
             stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (map, scene) {
-                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new FixedOverlaySynchronizer(map, scene)];
+            createSynchronizers: function (olMap, scene) {
+                return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
             }
         });
 

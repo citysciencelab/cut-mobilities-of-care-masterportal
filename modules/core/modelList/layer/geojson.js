@@ -201,7 +201,10 @@ const GeoJSONLayer = Layer.extend({
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
-            feature.setStyle(undefined);
+            if (feature !== null) {
+                feature.setStyle(undefined);
+            }
+
         }, this);
     },
 

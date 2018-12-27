@@ -36,16 +36,21 @@
       {
         "minChar": 3,
         "definitions": [
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-          "data": "typeNames=prosin_festgestellt&propertyName=planrecht",
-          "name": "bplan"
-        },
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-          "data": "typeNames=prosin_imverfahren&propertyName=plan",
-          "name": "bplan"
-        }]
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_festgestellt",
+            "propertyNames": ["app:planrecht"],
+            "geometryName": "app:geom",
+            "name": "festgestellt"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+          }
+        ]
       },
       "visibleWFS":
       {

@@ -20,6 +20,7 @@ const CoordPopup = Tool.extend({
         renderToWindow: true,
         glyphicon: "glyphicon-screenshot"
     }),
+
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
@@ -50,7 +51,7 @@ const CoordPopup = Tool.extend({
     },
 
     checkPosition: function (position) {
-        if (this.get("updatePosition") === true) {
+        if (this.get("updatePosition")) {
             this.setPositionMapProjection(position);
         }
     },
@@ -73,9 +74,12 @@ const CoordPopup = Tool.extend({
      * @returns {void}
      */
     toggleMapMarker: function (position, updatePosition, isViewMobile) {
-        var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker";
+        var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker",
+            mapViewCenter = Radio.request("MapView", "getCenter");
 
         Radio.trigger("MapMarker", showHideMarker, position);
+        Radio.trigger("MapView", "setCenter", position);
+        Radio.trigger("MapView", "setCenter", mapViewCenter);
     },
 
     returnTransformedPosition: function (targetProjection) {

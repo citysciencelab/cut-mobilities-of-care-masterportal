@@ -159,14 +159,16 @@ const Menu = listView.extend({
                     new DesktopThemenFolderView({model: model});
                 }
             }
-            else {
+            else if (!model.get("isNeverVisibleInTree")) {
                 new DesktopLayerView({model: model});
             }
         }, this);
     },
     addSelectionView: function (models) {
         _.each(models, function (model) {
-            new SelectionView({model: model});
+            if (!model.get("isNeverVisibleInTree")) {
+                new SelectionView({model: model});
+            }
         }, this);
     },
     startModul: function (modulId) {

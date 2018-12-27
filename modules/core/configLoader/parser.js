@@ -94,7 +94,6 @@ const Parser = Backbone.Model.extend({
         this.parseMenu(this.get("portalConfig").menu, "root");
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
-        this.parseMapView(this.get("portalConfig").mapView);
 
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
@@ -187,20 +186,6 @@ const Parser = Backbone.Model.extend({
             type: "searchBar",
             attr: searchbarConfig
         });
-    },
-
-    /** [parseMapView description]
-     * @param  {Array} items [description]
-     * @return {void}
-     */
-    parseMapView: function (items) {
-        _.each(items, function (value, key) {
-            this.addItem({
-                type: "mapView",
-                id: key,
-                attr: value
-            });
-        }, this);
     },
 
     /**

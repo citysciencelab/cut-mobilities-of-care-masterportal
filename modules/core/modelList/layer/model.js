@@ -26,7 +26,8 @@ const Layer = Item.extend({
         supported: ["2D"],
         showSettings: true,
         hitTolerance: 0,
-        styleable: false
+        styleable: false,
+        isNeverVisibleInTree: false
     },
 
     initialize: function () {

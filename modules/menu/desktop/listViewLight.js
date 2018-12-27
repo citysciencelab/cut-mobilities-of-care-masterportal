@@ -33,7 +33,9 @@ const LightMenu = listView.extend({
     },
     addViews: function (models) {
         _.each(models, function (model) {
-            new DesktopLayerViewLight({model: model});
+            if (!model.get("isNeverVisibleInTree")) {
+                new DesktopLayerViewLight({model: model});
+            }
         }, this);
     },
     startModul: function (modulId) {

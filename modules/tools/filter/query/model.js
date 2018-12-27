@@ -6,6 +6,7 @@
 import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
+import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
 
 const QueryModel = Backbone.Model.extend({
 
@@ -102,7 +103,6 @@ const QueryModel = Backbone.Model.extend({
             isSelected = false;
 
         snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
-
         if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
@@ -118,8 +118,14 @@ const QueryModel = Backbone.Model.extend({
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "slider"});
             this.get("snippetCollection").add(new SnippetSliderModel(snippetAttribute));
         }
+        else if (snippetAttribute.type === "checkbox-classic") {
+            snippetAttribute = _.extend(snippetAttribute, {"snippetType": snippetAttribute.type});
+            snippetAttribute.type = "string";
+            snippetAttribute.layerId = this.get("layerId");
+            snippetAttribute.isInitialLoad = this.get("isInitialLoad");
+            this.get("snippetCollection").add(new SnippetMultiCheckboxModel(snippetAttribute));
+        }
     },
-
     /**
      * adds a snippet for the map extent search
      * @return {void}
@@ -144,6 +150,7 @@ const QueryModel = Backbone.Model.extend({
         featureAttributesMap = this.mapDisplayNames(featureAttributesMap);
         featureAttributesMap = this.collectSelectableOptions(this.get("features"), [], featureAttributesMap);
         featureAttributesMap = this.mapRules(featureAttributesMap, this.get("rules"));
+
         this.setFeatureAttributesMap(featureAttributesMap);
         this.addSnippets(featureAttributesMap);
         if (this.get("isSelected") === true) {
@@ -220,10 +227,14 @@ const QueryModel = Backbone.Model.extend({
      * @return {object} featureAttributesMap
      */
     mapRules: function (featureAttributesMap, rules) {
-        _.each(rules, function (rule) {
-            var attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
+        var attrMap;
 
-            attrMap.preselectedValues = rule.values;
+        _.each(rules, function (rule) {
+            attrMap = _.findWhere(featureAttributesMap, {name: rule.attrName});
+
+            if (attrMap) {
+                attrMap.preselectedValues = rule.values;
+            }
         });
 
         return featureAttributesMap;
@@ -327,6 +338,11 @@ const QueryModel = Backbone.Model.extend({
     // setter for attributeWhiteList
     setAttributeWhiteList: function (value) {
         this.set("attributeWhiteList", value);
+    },
+
+    // setter for isInitialLoad
+    setIsInitialLoad: function (value) {
+        this.set("isInitialLoad", value);
     }
 });
 

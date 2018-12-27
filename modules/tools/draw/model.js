@@ -104,7 +104,7 @@ const DrawTool = Tool.extend({
             format = new GeoJSON();
 
         if (this.collection) {
-            this.collection.setActiveToolToFalse(this);
+            this.collection.setActiveToolsToFalse(this);
         }
 
         this.set("renderToWindow", false);

@@ -668,11 +668,18 @@ const PrintModel = Tool.extend({
         maxy = center[1] + (h / 2);
         return [minx, miny, maxx, maxy];
     },
+
     setPrecomposeListener: function (value) {
         this.set("precomposeListener", value);
     },
+
     setPostcomposeListener: function (value) {
         this.set("postcomposeListener", value);
+    },
+
+    // setter for title
+    setTitle: function (value) {
+        this.set("title", value);
     }
 });
 

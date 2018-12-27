@@ -85,9 +85,8 @@ const WindowView = Backbone.View.extend({
 
         if (toolModel) {
             toolModel.setIsActive(false);
+            Radio.trigger("ModelList", "toggleDefaultTool");
         }
-        this.$el.hide("slow");
-        this.model.setVisible(false);
     }
 });
 

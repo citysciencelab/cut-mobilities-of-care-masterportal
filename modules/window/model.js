@@ -14,7 +14,7 @@ const Window = Backbone.Model.extend({
         var channel = Radio.channel("Window");
 
         this.listenTo(channel, {
-            "setIsVisible": this.setVisible,
+            "setIsVisible": this.setIsVisible,
             "showTool": this.setParams
         }, this);
 
@@ -28,7 +28,7 @@ const Window = Backbone.Model.extend({
     setCollapse: function (value) {
         this.set("isCollapsed", value);
     },
-    setVisible: function (value) {
+    setIsVisible: function (value) {
         this.set("isVisible", value);
     },
     setParams: function (value) {

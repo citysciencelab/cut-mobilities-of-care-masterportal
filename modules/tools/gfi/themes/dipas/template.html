@@ -2,6 +2,7 @@
 <div class = "dipas-gfi-content">
     <% _.each(gfiContent[0], function(value, key) { %>
         <% if (key === "Thema") { %>
+        <div class="dipas-gfi-icon"><img src="<%= iconPath %>"></div>
         <div class = "dipas-gfi-thema"><%= value %></div>
         <% }%>
     <% });%>

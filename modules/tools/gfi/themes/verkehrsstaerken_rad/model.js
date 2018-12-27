@@ -92,6 +92,8 @@ const VerkehrsStaerkenRadTheme = Theme.extend({
                 r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
             tempArr.push({
+                class: "dot",
+                style: "circle",
                 timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                 total: total,
                 r_in: r_in,
@@ -122,6 +124,8 @@ const VerkehrsStaerkenRadTheme = Theme.extend({
                 r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
             tempArr.push({
+                class: "dot",
+                style: "circle",
                 timestamp: new Date(year, month, day, 0, 0, 0, 0),
                 total: total,
                 r_in: r_in,
@@ -150,6 +154,8 @@ const VerkehrsStaerkenRadTheme = Theme.extend({
                 r_out = splitted[4] ? parseFloat(splitted[4]) : null;
 
             tempArr.push({
+                class: "dot",
+                style: "circle",
                 timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                 total: total,
                 r_in: r_in,
@@ -297,8 +303,9 @@ const VerkehrsStaerkenRadTheme = Theme.extend({
      */
     getLegendAttributes: function (inspectData) {
         var legendData = [{
-            key: "total",
-            value: "Fahrräder insgesamt"
+            class: "dot",
+            text: "Fahrräder insgesamt",
+            style: "circle"
         }];
 
         if (!_.isNull(inspectData.r_in)) {
@@ -320,22 +327,28 @@ const VerkehrsStaerkenRadTheme = Theme.extend({
 
     createD3Document: function () {
         var dataset = this.getDataset(),
-            data = dataset.data,
             graphConfig = {
                 graphType: "Linegraph",
                 selector: ".graph",
                 width: this.get("width"),
                 height: this.get("height"),
+                margin: {top: 20, right: 20, bottom: 50, left: 70},
+                svgClass: "graph-svg",
                 selectorTooltip: ".graph-tooltip-div",
                 scaleTypeX: "ordinal",
                 scaleTypeY: "linear",
-                data: data,
+                data: dataset.data,
                 xAttr: "timestamp",
                 xThinning: dataset.xThinning,
-                xAxisLabel: dataset.xLabel,
-                yAxisLabel: "Anzahl Fahrräder",
+                xAxisLabel: {
+                    label: dataset.xLabel
+                },
+                yAxisLabel: {
+                    label: "Anzahl Fahrräder",
+                    offset: 10
+                },
                 attrToShowArray: dataset.graphArray,
-                legendArray: dataset.legendArray
+                legendData: dataset.legendArray
             };
 
         Radio.trigger("Graph", "createGraph", graphConfig);

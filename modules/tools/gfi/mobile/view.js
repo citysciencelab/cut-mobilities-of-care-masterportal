@@ -23,7 +23,10 @@ const GFIMobileView = GFIView.extend({
     toggle: function () {
         if (this.model.get("isVisible") === true) {
             this.$el.modal("show");
-            Radio.trigger("GFI", "afterRender");
+
+            this.$el.on("shown.bs.modal", function () {
+                Radio.trigger("GFI", "afterRender");
+            });
         }
         else {
             this.$el.modal("hide");

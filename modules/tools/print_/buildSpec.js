@@ -163,7 +163,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 layers: source.getParams().LAYERS.split(","),
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": "true"
+                    "TRANSPARENT": source.getParams().TRANSPARENT
                 }
             };
 
@@ -188,7 +188,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 layers: source.getParams().LAYERS.split(","),
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
-                    "TRANSPARENT": "true"
+                    "TRANSPARENT": source.getParams().TRANSPARENT
                 }
             };
 

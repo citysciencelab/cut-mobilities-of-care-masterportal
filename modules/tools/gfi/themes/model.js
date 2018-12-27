@@ -316,9 +316,7 @@ const Theme = Backbone.Model.extend({
 
         _.each(gfiList, function (element) {
             var preGfi = {},
-                gfi = {},
-                keys = [],
-                values = [];
+                gfi = {};
 
             // get rid of invalid keys and keys with invalid values; trim values
             _.each(element, function (value, key) {
@@ -346,16 +344,6 @@ const Theme = Backbone.Model.extend({
 
                     gfi[keyName] = value;
                 }, this);
-                // im IE müssen die Attribute für WMS umgedreht werden
-                if (Radio.request("Util", "isInternetExplorer") !== false && this.get("typ") === "WMS") {
-                    _.each(gfi, function (value, key) {
-                        keys.push(key);
-                        values.push(value);
-                    }, this);
-                    keys.reverse();
-                    values.reverse();
-                    gfi = _.object(keys, values);
-                }
             }
             else {
                 preGfi = this.allKeysToLowerCase(preGfi);
