@@ -30,7 +30,7 @@ const WPS = Backbone.Model.extend({
      * @param {string} wpsID The service id, defined in rest-services.json
      * @param {string} identifier The functionality to be invoked by the wps
      * @param {object} data Contains the Attributes to be sent
-     * @param {[function]} responseFunction function to be called
+     * @param {function} responseFunction function to be called
      * @returns {void}
      */
     request: function (wpsID, identifier, data, responseFunction) {
@@ -44,7 +44,7 @@ const WPS = Backbone.Model.extend({
      * @desc sends POST request to wps
      * @param {string} url url
      * @param {string} xmlString XML to be sent as String
-     * @param {[function]} responseFunction function to be called
+     * @param {function} responseFunction function to be called
      * @returns {void}
      */
     sendRequest: function (url, xmlString, responseFunction) {
@@ -70,7 +70,7 @@ const WPS = Backbone.Model.extend({
      * @desc handles wps response
      * @param {string} responseText XML to be sent as String
      * @param {integer} status status of xhr-request
-     * @param {[function]} responseFunction function to be called
+     * @param {function} responseFunction function to be called
      * @returns {void}
      */
     handleResponse: function (responseText, status, responseFunction) {
