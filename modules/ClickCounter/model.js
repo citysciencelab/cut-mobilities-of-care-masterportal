@@ -15,7 +15,7 @@ const ClickCounterModel = Backbone.Model.extend(
         /**
         * @class ClickCounterModel
         * @extends Backbone.Model
-        * @memberOf ClickCounter
+        * @memberof ClickCounter
         * @constructs
         * @param {String} desktopURL Url to be used in iframe when app runs in desktop mode
         * @param {String} mobileURL  Url to be used in iframe when app runs in mobile mode

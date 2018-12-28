@@ -3,21 +3,37 @@ const ClickCounterView = Backbone.View.extend(
     /** @lends ClickCounterView.prototype */
     {
         /**
-        * @memberof ClickCounter
-        * @event RadioChannel("ClickCounter")#"toolChanged"
+         * @event ClickCounterView#RadioTriggerClickCounterToolChanged
+         * @description Radio.trigger("ClickCounter", "toolChanged")
+        */
+        /**
+         * @event ClickCounterView#RadioTriggerClickCounterCalcRoute
+         * @description Radio.trigger("ClickCounter", "calcRoute")
+        */
+        /**
+         * @event ClickCounterView#RadioTriggerClickCounterZoomChanged
+         * @description Radio.trigger("ClickCounter", "zoomChanged")
+        */
+        /**
+         * @event ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
+         * @description Radio.trigger("ClickCounter", "layerVisibleChanged")
+        */
+        /**
+         * @event ClickCounterView#RadioTriggerClickCounterGfi
+         * @description Radio.trigger("ClickCounter", "gfi")
         */
         /**
         * @class ClickCounterView
         * @extends Backbone.View
-        * @memberOf ClickCounter
+        * @memberof ClickCounter
         * @constructs
         * @param {String} desktopURL [description]
         * @param {String} mobileURL  [description]
-        * @listens RadioChannel("ClickCounter","toolChanged")
-        * @listens ClickCounter#calcRoute
-        * @listens ClickCounter#zoomChanged
-        * @listens ClickCounter#layerVisibleChanged
-        * @listens ClickCounter#gfi
+        * @listens ClickCounterView#RadioTriggerClickCounterToolChanged
+        * @listens ClickCounterView#RadioTriggerClickCounterCalcRoute
+        * @listens ClickCounterView#RadioTriggerClickCounterZoomChanged
+        * @listens ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
+        * @listens ClickCounterView#RadioTriggerClickCounterGfi
         */
         initialize: function (desktopURL, mobileURL) {
             var channel = Radio.channel("ClickCounter");
@@ -32,7 +48,6 @@ const ClickCounterView = Backbone.View.extend(
                 "gfi": this.registerClick
             }, this);
 
-            // fired beim Öffnen der Seite
             this.registerClick();
         },
         registerLayerEvent: function (layertree) {

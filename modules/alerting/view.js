@@ -1,25 +1,22 @@
 /**
- * @memberof AlertingModel
- * @description Triggered when Model attribute position has changed.
  * @event AlertingModel#change:position
+ * @description Triggered when Model attribute position has changed.
  */
 /**
- * @memberof AlertingModel
- * @description Triggered when View has to render.
  * @event AlertingModel#render
+ * @description Triggered when View has to render.
  */
 /**
- * @memberof AlertingModel
- * @description Triggered when View has to remove all alerts.
  * @event AlertingModel#removeAll
+ * @description Triggered when View has to remove all alerts.
  */
 /**
- * @memberof AlertingView
- * @event Radio:Alert#"closed"
+ * @event AlertingView#RadioTriggerAlertClosed
+ * @description Radio.trigger("Alert", "closed")
  */
 /**
- * @memberof AlertingView
- * @event Radio:Alert#"confirmed"
+ * @event AlertingView#RadioTriggerAlertConfirmed
+ * @description Radio.trigger("Alert", "confirmed")
  */
 
 import AlertingModel from "./model";
@@ -36,7 +33,7 @@ const AlertingView = Backbone.View.extend(
         /**
          * @class AlertingView
          * @extends Backbone.View
-         * @memberOf Alerting
+         * @memberof Alerting
          * @constructs
          * @listens AlertingModel#render
          * @listens AlertingModel#removeAll
@@ -56,7 +53,7 @@ const AlertingView = Backbone.View.extend(
         model: new AlertingModel(),
         template: _.template(AlertingTemplate),
         /**
-         * Renders the data to DOM
+         * Renders the data to DOM.
          * @return {object} returns this
          */
         render: function () {
@@ -72,9 +69,9 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Reacts to click on dismiss button
+         * Reacts to click on dismiss button.
          * @param {Event} evt Click event on dismissable alert
-         * @fires Radio:Alert#"closed"
+         * @fires AlertingView#RadioTriggerAlertClosed
          * @return {void}
          */
         alertClosed: function (evt) {
@@ -86,10 +83,11 @@ const AlertingView = Backbone.View.extend(
             }
 
         },
+
         /**
-         * Reacts to click on confirm button
+         * Reacts to click on confirm button.
          * @param {Event} evt Click event on confirmable alert
-         * @fires Radio:Alert#"confirmed"
+         * @fires AlertingView#RadioTriggerAlertConfirmed
          * @return {void}
          */
         alertConfirmed: function (evt) {
@@ -100,7 +98,7 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Positioniert der Alerts über css-Klassen
+         * Sets position of alert via css-classes.
          * @param  {Backbone.Model} model - this.model
          * @param  {String} value - this.model.get("position")
          * @returns {void}
@@ -113,7 +111,7 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Entfernt alle Meldungen
+         * Removes all alerts
          * @returns {void}
          */
         removeAll: function () {

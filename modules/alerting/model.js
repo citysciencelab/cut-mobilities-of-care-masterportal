@@ -4,12 +4,12 @@
  * Used to have same alert all over the portal.
  */
 /**
- * @memberof AlertingModel
- * @event RadioChannel("Alert")#"alert"
+ * @event AlertingModel#RadioTriggerAlertAlert
+ * @description Radio.trigger("Alert", "alert")
  */
 /**
- * @memberof AlertingModel
- * @event RadioChannel("Alert")#"remove:alert"
+ * @event AlertingModel#RadioTriggerAlertAlertRemove
+ * @description Radio.trigger("Alert", "alert:remove")
  */
 const AlertingModel = Backbone.Model.extend(
     /** @lends AlertingModel.prototype */
@@ -25,16 +25,16 @@ const AlertingModel = Backbone.Model.extend(
         /**
          * @class AlertingModel
          * @extends Backbone.Model
-         * @memberOf Alerting
+         * @memberof Alerting
          * @constructs
-         * @property {String} category="alert-info" [description]
-         * @property {Boolean} isDismissable=true [description]
-         * @property {Boolean} isConfirmable=false [description]
-         * @property {String} position="top-center" [description]
-         * @property {String} message="" [description]
-         * @property {Boolean} animation=false [description]
-         * @listens Radio.channel("Alert", "alert")
-         * @listens Radio.channel("Alert", "alert:remove")
+         * @property {String} category="alert-info" Category of alert. bootstrap css class
+         * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
+         * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
+         * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
+         * @property {String} message="" The message of the alert
+         * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
+         * @listens AlertingModel#RadioTriggerAlertAlert
+         * @listens AlertingModel#RadioTriggerAlertAlertRemove
          * @fires AlertingModel#removeAll
          */
         initialize: function () {
@@ -48,8 +48,7 @@ const AlertingModel = Backbone.Model.extend(
             }, this);
         },
         /**
-         * Wird ein String übergeben, handelt es sich dabei um die Alert Message
-         * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
+         * Sets given parameters on model. Then fires render-event
          * @param {String|Object} val Value string or object with information about the alert
          * @fires AlertingModel#render
          * @returns {void}
