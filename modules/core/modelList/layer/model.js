@@ -7,7 +7,7 @@
  * @description Radio.trigger("Layer", "setLayerInfoChecked")
  */
 /**
- * @event Layer#RadioTriggerLayerFeaturesloaded
+ * @event Layer#RadioTriggerLayerFeaturesLoaded
  * @description Radio.trigger("Layer", "featuresLoaded")
  */
 /**
