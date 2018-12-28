@@ -1,19 +1,11 @@
 /**
  * @namespace ClickCounter
+ * @description This functionality registers user click behaviour and updates the url of an created iframe
+ * used for Verkehrsportal.
  */
 const ClickCounterModel = Backbone.Model.extend(
-/** @lends ClickCounterModel.prototype */
+    /** @lends ClickCounterModel.prototype */
     {
-        /**
-        * @class ClickCounterModel
-        * @memberof ClickCounter
-        * @extends Backbone.Model
-        * @constructs
-        * @param {String} countframeid [description]
-        * @param {String} usedURL [description]
-        * @param {String} desktopURL [description]
-        * @param {String} mobileURL [description]
-        */
         defaults: {
             countframeid: _.uniqueId("countframe"),
             usedURL: "", // beutzte iFrame-URL, kann desktop oder mobile sein
@@ -21,11 +13,17 @@ const ClickCounterModel = Backbone.Model.extend(
             mobileURL: "" // URL die verwendet wird, wenn mobile
         },
         /**
-         * Initialize function for model
-         * @param  {String} desktopURL [description]
-         * @param  {String} mobileURL  [description]
-         * @return {void}
-         */
+        * @class ClickCounterModel
+        * @extends Backbone.Model
+        * @memberOf ClickCounter
+        * @constructs
+        * @param {String} desktopURL Url to be used in iframe when app runs in desktop mode
+        * @param {String} mobileURL  Url to be used in iframe when app runs in mobile mode
+        * @property {String} countframeid=_.uniqueId("countframe") Id of iframe.
+        * @property {String} usedURL="" Currently used url.
+        * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
+        * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
+        */
         initialize: function (desktopURL, mobileURL) {
             var isMobile = Radio.request("Util", "isViewMobile"),
                 usedURL = isMobile === true ? mobileURL : desktopURL;
@@ -42,6 +40,11 @@ const ClickCounterModel = Backbone.Model.extend(
             // Erzeuge iFrame
             $("<iframe style='display:none' src='" + this.get("usedURL") + "' id='" + this.get("countframeid") + "' width='0' height='0' frameborder='0'/>").appendTo("body");
         },
+        /**
+         * Sets attribute "usedURl"
+         * @param  {Boolean} isMobile Flag if app runs in mobile mode
+         * @return {void}
+         */
         updateURL: function (isMobile) {
             var usedURL;
 

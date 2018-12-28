@@ -1,25 +1,24 @@
-/**
- * @namespace ClickCounter
- */
 import ClickCounterModel from "./model";
-
 const ClickCounterView = Backbone.View.extend(
     /** @lends ClickCounterView.prototype */
     {
         /**
-        * @class ClickCounterView
         * @memberof ClickCounter
-        * @extends Backbone.View
-        * @constructs
-        * @param {String} desktopURL [description]
-        * @param {String} mobileURL [description]
+        * @event RadioChannel("ClickCounter")#"toolChanged"
         */
         /**
-         * Initialize function for view
-         * @param  {String} desktopURL [description]
-         * @param  {String} mobileURL  [description]
-         * @return {void}
-         */
+        * @class ClickCounterView
+        * @extends Backbone.View
+        * @memberOf ClickCounter
+        * @constructs
+        * @param {String} desktopURL [description]
+        * @param {String} mobileURL  [description]
+        * @listens RadioChannel("ClickCounter","toolChanged")
+        * @listens ClickCounter#calcRoute
+        * @listens ClickCounter#zoomChanged
+        * @listens ClickCounter#layerVisibleChanged
+        * @listens ClickCounter#gfi
+        */
         initialize: function (desktopURL, mobileURL) {
             var channel = Radio.channel("ClickCounter");
 
@@ -44,6 +43,11 @@ const ClickCounterView = Backbone.View.extend(
                 }.bind(this));
             }
         },
+
+        /**
+         * Refreshes iframe url
+         * @return {void}
+         */
         registerClick: function () {
             this.model.refreshIframe();
         }
