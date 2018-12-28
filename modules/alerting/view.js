@@ -1,22 +1,25 @@
 /**
- * @memberof Alerting
- * @event AlertingModel#"change:position"
+ * @memberof AlertingModel
+ * @description Triggered when Model attribute position has changed.
+ * @event AlertingModel#change:position
  */
 /**
- * @memberof Alerting
- * @event AlertingModel#"render"
+ * @memberof AlertingModel
+ * @description Triggered when View has to render.
+ * @event AlertingModel#render
  */
 /**
- * @memberof Alerting
- * @event AlertingModel#"removeAll"
+ * @memberof AlertingModel
+ * @description Triggered when View has to remove all alerts.
+ * @event AlertingModel#removeAll
  */
 /**
- * @memberof Alerting
- * @event RadioChannel("Alert")#"closed"
+ * @memberof AlertingView
+ * @event Radio:Alert#"closed"
  */
 /**
- * @memberof Alerting
- * @event RadioChannel("Alert")#"confirmed"
+ * @memberof AlertingView
+ * @event Radio:Alert#"confirmed"
  */
 
 import AlertingModel from "./model";
@@ -35,9 +38,9 @@ const AlertingView = Backbone.View.extend(
          * @extends Backbone.View
          * @memberOf Alerting
          * @constructs
-         * @listens AlertingModel, "render"
-         * @listens AlertingModel, "removeAll"
-         * @listens AlertingModel, "change:position"
+         * @listens AlertingModel#render
+         * @listens AlertingModel#removeAll
+         * @listens AlertingModel#change:position
          */
         initialize: function () {
             this.listenTo(this.model, {
@@ -71,7 +74,7 @@ const AlertingView = Backbone.View.extend(
         /**
          * Reacts to click on dismiss button
          * @param {Event} evt Click event on dismissable alert
-         * @fires Radio,trigger("Alert", "closed")
+         * @fires Radio:Alert#"closed"
          * @return {void}
          */
         alertClosed: function (evt) {
@@ -86,7 +89,7 @@ const AlertingView = Backbone.View.extend(
         /**
          * Reacts to click on confirm button
          * @param {Event} evt Click event on confirmable alert
-         * @fires Radio.trigger("Alert", "confirmed")
+         * @fires Radio:Alert#"confirmed"
          * @return {void}
          */
         alertConfirmed: function (evt) {

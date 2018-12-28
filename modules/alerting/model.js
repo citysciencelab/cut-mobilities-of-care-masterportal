@@ -4,11 +4,11 @@
  * Used to have same alert all over the portal.
  */
 /**
- * @memberof Alerting
+ * @memberof AlertingModel
  * @event RadioChannel("Alert")#"alert"
  */
 /**
- * @memberof Alerting
+ * @memberof AlertingModel
  * @event RadioChannel("Alert")#"remove:alert"
  */
 const AlertingModel = Backbone.Model.extend(
@@ -23,7 +23,7 @@ const AlertingModel = Backbone.Model.extend(
             animation: false
         },
         /**
-         * @class ClickCounterView
+         * @class AlertingModel
          * @extends Backbone.Model
          * @memberOf Alerting
          * @constructs
@@ -35,7 +35,7 @@ const AlertingModel = Backbone.Model.extend(
          * @property {Boolean} animation=false [description]
          * @listens Radio.channel("Alert", "alert")
          * @listens Radio.channel("Alert", "alert:remove")
-         * @fires AlertingModel, "removeAll"
+         * @fires AlertingModel#removeAll
          */
         initialize: function () {
             var channel = Radio.channel("Alert");
@@ -51,7 +51,7 @@ const AlertingModel = Backbone.Model.extend(
          * Wird ein String übergeben, handelt es sich dabei um die Alert Message
          * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
          * @param {String|Object} val Value string or object with information about the alert
-         * @fires AlertingModel, "render"
+         * @fires AlertingModel#render
          * @returns {void}
          */
         setParams: function (val) {
