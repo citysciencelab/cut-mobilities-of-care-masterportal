@@ -180,7 +180,7 @@ const Einwohnerabfrage = Tool.extend({
                     stringVal = this.chooseUnitAndPunctuate(value);
                 }
                 else {
-                    stringVal = Radio.request("Util", "punctuate", value) + this.getFormattedDecimalString(value, 3);
+                    stringVal = Radio.request("Util", "punctuate", value);
                 }
                 list[key] = stringVal;
             }
@@ -197,43 +197,21 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {string} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
-        var decimals = "",
-            newValue;
+        var newValue;
 
         if (value < 250000) {
-            decimals = this.getFormattedDecimalString(value, maxDecimals);
-            return Radio.request("Util", "punctuate", value) + decimals + " m²";
+            return Radio.request("Util", "punctuate", value.toFixed(maxDecimals)) + " m²";
         }
         if (value < 10000000) {
             newValue = value / 10000.0;
-            decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-            return Radio.request("Util", "punctuate", newValue) + decimals + " ha";
+            return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " ha";
         }
         newValue = value / 1000000.0;
-        decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-        return Radio.request("Util", "punctuate", newValue) + decimals + " km²";
+        return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " km²";
     },
-    /**
-     * Returns the pecimal part cut aftera  max length of number represented as string
-     * adds "," in front of decimals if applicable
-     * @param  {string} number input number
-     * @param  {num} maxLength decimals are cut after maxlength chars
-     * @returns {String} decimals string with leading with ',' is not empty
-     */
-    getFormattedDecimalString: function (number, maxLength) {
-        var decimals = "",
-            formattedString = number.toString();
 
-        if (formattedString.indexOf(".") !== -1) {
-            decimals = formattedString.split(".")[1];
-            if (maxLength > 0 && decimals.length > 0) {
-                return "," + decimals.substring(0, maxLength);
-            }
-        }
-        return "";
-    },
     /**
      * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
      * @returns {void}
