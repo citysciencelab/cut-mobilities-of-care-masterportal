@@ -57,7 +57,7 @@ const Layer = Item.extend(
         /**
          * @class Layer
          * @description Module to represent any layer
-         * @extends .././Item
+         * @extends Item.Item
          * @memberof Item
          * @constructs
          * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
