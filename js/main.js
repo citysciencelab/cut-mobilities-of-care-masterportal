@@ -2,29 +2,6 @@
  * @file
  * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
  */
-/**
- * @namespace Main
- * @description Loading basic requirements such as the css. Then it starts the App.
- */
-/**
- * @namespace Backbone
- * @description Backbone library for code architecture
- */
-/**
- * @class Model
- * @memberOf Backbone
- * @description {@link http://backbonejs.org/#Model}
- */
-/**
- * @class View
- * @memberOf Backbone
- * @description {@link http://backbonejs.org/#View}
- */
-/**
- * @class Collection
- * @memberOf Backbone
- * @description {@link http://backbonejs.org/#Collection}
- */
 import "@babel/polyfill";
 import {loadApp} from "./app";
 import "../css/bootstrap.less";

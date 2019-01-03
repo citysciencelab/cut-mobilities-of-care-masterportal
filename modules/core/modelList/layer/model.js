@@ -1,37 +1,3 @@
-/**
- * @event Layer#RadioTriggerLayerUpdateLayerInfo
- * @param {String} name The name of the layer.
- * @description Radio.trigger("Layer", "updateLayerInfo", name)
- */
-/**
- * @event Layer#RadioTriggerLayerSetLayerInfoChecked
- * @param {Boolean} value Flag that signs that the layer informations has been checked.
- * @description Radio.trigger("Layer", "setLayerInfoChecked", value)
- */
-/**
- * @event Layer#RadioTriggerLayerFeaturesLoaded
- * @param {string} id Id of vector layer.
- * @param {ol/Feature[]} features Features that have been loaded.
- * @description Radio.trigger("Layer", "featuresLoaded", id, features)
- */
-/**
- * @event Layer#change:isSelected
- * @param {Backbone/Model} model The model whose attribute hat changed.
- * @param {Boolean} value The attribute value that has changed.
- * @description Fired if attribute isSelected has changed
- */
-/**
- * @event Layer#change:isVisibleInMap
- * @param {Backbone/Model} model The model whose attribute hat changed.
- * @param {Boolean} value The attribute value that has changed.
- * @description Fired if attribute isVisibleInMap has changed
- */
-/**
- * @event Layer#change:transparency
- * @param {Backbone/Model} model The model whose attribute hat changed.
- * @param {Boolean} value The attribute value that has changed.
- * @description Fired if attribute transparency has changed
- */
 import Item from ".././item";
 
 const Layer = Item.extend(
@@ -57,8 +23,8 @@ const Layer = Item.extend(
         /**
          * @class Layer
          * @description Module to represent any layer
-         * @extends Item.Item
-         * @memberof Item
+         * @extends Item
+         * @memberOf Item
          * @constructs
          * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
          * @property {Boolean} isVisibleInMap=false Flag if layer is visible in map
@@ -76,6 +42,16 @@ const Layer = Item.extend(
          * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
          * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
          * @fires Map#RadioTriggerMapAddLayerToIndex
+         * @fires Layer#RadioTriggerLayerFeaturesLoaded
+         * @fires MapView#RadioRequestMapViewGetResoByScale
+         * @fires LayerInformation#RadioTriggerLayerInformationAdd
+         * @listens Layer#changeIsSelected
+         * @listens Layer#changeIsVisibleInMap
+         * @listens Layer#changeTransparency
+         * @listens Layer#RadioTriggerLayerUpdateLayerInfo
+         * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
+         * @listens Map#RadioTriggerMapChange
+         * @listens MapView#RadioTriggerMapViewChangedOptions
          */
         initialize: function () {
             this.registerInteractionTreeListeners(this.get("channel"));
@@ -98,8 +74,7 @@ const Layer = Item.extend(
         },
 
         /**
-         * Triggers event if vector features are loaded
-         * @fires Layer#RadioTriggerLayerFeaturesLoaded
+         * Triggers event if vector features are loaded {@link Layer#event:RadioTriggerLayerFeaturesLoaded}
          * @param {ol.Feature[]} features Loaded vector features
          * @return {void}
          */
@@ -122,13 +97,13 @@ const Layer = Item.extend(
 
         /**
          * Register interaction with layer tree
+         * Listens to {@link Layer#event:changeIsSelected}
+         * Listens to {@link Layer#event:changeIsVisibleInMap}
+         * Listens to {@link Layer#event:changeTransparency}
+         * Listens to {@link Layer#event:RadioTriggerLayerUpdateLayerInfo}
+         * Listens to {@link Layer#event:RadioTriggerLayerSetLayerInfoChecked}
+         * Listens to {@link Map#event:RadioTriggerMapChange}
          * @param {Radio.channel} channel Radio channel of this module
-         * @listens Layer#change:isSelected
-         * @listens Layer#change:isVisibleInMap
-         * @listens Layer#change:transparency
-         * @listens Layer#RadioTriggerLayerUpdateLayerInfo
-         * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
-         * @listens Map#RadioTriggerMapChange
          * @return {void}
          */
         registerInteractionTreeListeners: function (channel) {
@@ -179,8 +154,7 @@ const Layer = Item.extend(
         },
 
         /**
-         * Register interaction with map view
-         * @listens MapView:RadioTriggerMapViewChangedOptions
+         * Register interaction with map view. Listens to {@link MapView#event:RadioTriggerMapViewChangedOptions}
          * @returns {void}
          */
         registerInteractionMapViewListeners: function () {
@@ -195,7 +169,7 @@ const Layer = Item.extend(
         /**
          * Setter of window interval. Binds this to func.
          * @param {function} func Function, to be executed in this
-         * @param {integer}  autorefreshInterval Intervall in ms
+         * @param {integer} autorefreshInterval Intervall in ms
          * @returns {void}
          */
         setWindowsInterval: function (func, autorefreshInterval) {
@@ -212,8 +186,7 @@ const Layer = Item.extend(
 
 
         /**
-         * Sets visible min and max resolution on layer
-         * @fires MapView#RadioRequestMapViewGetResoByScale
+         * Sets visible min and max resolution on layer. Fires {@link MapView#event:RadioRequestMapViewGetResoByScale}
          * @returns {void}
          */
         getResolutions: function () {
@@ -357,8 +330,7 @@ const Layer = Item.extend(
             }
         },
         /**
-         * Initiates the presentation of layer information
-         * @fires LayerInformation#RadioTriggerLayerInformationAdd
+         * Initiates the presentation of layer information. Fires {@link LayerInformation#event:RadioTriggerLayerInformationAdd}
          * @returns {void}
          */
         showLayerInformation: function () {

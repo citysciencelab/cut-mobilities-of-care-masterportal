@@ -1,5 +1,4 @@
 /**
- * @description Module to gather all Models
  * @memberof ModelList
  * @extends Backbone.Collection
  */

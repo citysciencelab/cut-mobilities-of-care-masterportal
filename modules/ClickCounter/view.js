@@ -3,26 +3,6 @@ const ClickCounterView = Backbone.View.extend(
     /** @lends ClickCounterView.prototype */
     {
         /**
-         * @event ClickCounterView#RadioTriggerClickCounterToolChanged
-         * @description Radio.trigger("ClickCounter", "toolChanged")
-        */
-        /**
-         * @event ClickCounterView#RadioTriggerClickCounterCalcRoute
-         * @description Radio.trigger("ClickCounter", "calcRoute")
-        */
-        /**
-         * @event ClickCounterView#RadioTriggerClickCounterZoomChanged
-         * @description Radio.trigger("ClickCounter", "zoomChanged")
-        */
-        /**
-         * @event ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
-         * @description Radio.trigger("ClickCounter", "layerVisibleChanged")
-        */
-        /**
-         * @event ClickCounterView#RadioTriggerClickCounterGfi
-         * @description Radio.trigger("ClickCounter", "gfi")
-        */
-        /**
         * @class ClickCounterView
         * @extends Backbone.View
         * @memberof ClickCounter

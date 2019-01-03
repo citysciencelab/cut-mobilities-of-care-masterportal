@@ -1,17 +1,3 @@
-/**
- * @namespace Alerting
- * @description Alerting system that responds to given events.
- * Used to have same alert all over the portal.
- */
-/**
- * @event AlertingModel#RadioTriggerAlertAlert
- * @param {String/Object} alert The alert object or string needed to create the alert.
- * @description Radio.trigger("Alert", "alert", alert)
- */
-/**
- * @event AlertingModel#RadioTriggerAlertAlertRemove
- * @description Radio.trigger("Alert", "alert:remove")
- */
 const AlertingModel = Backbone.Model.extend(
     /** @lends AlertingModel.prototype */
     {
@@ -34,9 +20,10 @@ const AlertingModel = Backbone.Model.extend(
          * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
          * @property {String} message="" The message of the alert
          * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
+         * @fires AlertingModel#removeAll
+         * @fires AlertingModel#render
          * @listens AlertingModel#RadioTriggerAlertAlert
          * @listens AlertingModel#RadioTriggerAlertAlertRemove
-         * @fires AlertingModel#removeAll
          */
         initialize: function () {
             var channel = Radio.channel("Alert");
@@ -49,9 +36,8 @@ const AlertingModel = Backbone.Model.extend(
             }, this);
         },
         /**
-         * Sets given parameters on model. Then fires render-event
+         * Sets given parameters on model. Then fires {@link AlertingModel#event:render}
          * @param {String|Object} val Value string or object with information about the alert
-         * @fires AlertingModel#render
          * @returns {void}
          */
         setParams: function (val) {

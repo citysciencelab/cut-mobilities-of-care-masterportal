@@ -1,8 +1,3 @@
-/**
- * @namespace ClickCounter
- * @description This functionality registers user click behaviour and updates the url of an created iframe
- * used for Verkehrsportal.
- */
 const ClickCounterModel = Backbone.Model.extend(
     /** @lends ClickCounterModel.prototype */
     {

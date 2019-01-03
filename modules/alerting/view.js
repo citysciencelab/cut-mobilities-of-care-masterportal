@@ -1,28 +1,3 @@
-/**
- * @event AlertingModel#change:position
- * @param {Backbone/Model} model The model whose attribute hat changed.
- * @param {Boolean} value The attribute value that has changed.
- * @description Triggered when Model attribute position has changed.
- */
-/**
- * @event AlertingModel#render
- * @description Triggered when View has to render.
- */
-/**
- * @event AlertingModel#removeAll
- * @description Triggered when View has to remove all alerts.
- */
-/**
- * @event AlertingView#RadioTriggerAlertClosed
- * @param {String} id The id of the alert that has been closed.
- * @description Radio.trigger("Alert", "closed", id)
- */
-/**
- * @event AlertingView#RadioTriggerAlertConfirmed
- * @param {String} id The id of the alert that has been confirmed.
- * @description Radio.trigger("Alert", "confirmed", id)
- */
-
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
@@ -39,6 +14,8 @@ const AlertingView = Backbone.View.extend(
          * @extends Backbone.View
          * @memberof Alerting
          * @constructs
+         * @fires AlertingView#RadioTriggerAlertClosed
+         * @fires AlertingView#RadioTriggerAlertConfirmed
          * @listens AlertingModel#render
          * @listens AlertingModel#removeAll
          * @listens AlertingModel#change:position
@@ -73,9 +50,8 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Reacts to click on dismiss button.
+         * Reacts to click on dismiss button. Fires {@link AlertingView#event:RadioTriggerAlertClosed}
          * @param {Event} evt Click event on dismissable alert
-         * @fires AlertingView#RadioTriggerAlertClosed
          * @return {void}
          */
         alertClosed: function (evt) {
@@ -89,9 +65,8 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Reacts to click on confirm button.
+         * Reacts to click on confirm button. Fires {@link AlertingView#event:RadioTriggerAlertConfirmed}
          * @param {Event} evt Click event on confirmable alert
-         * @fires AlertingView#RadioTriggerAlertConfirmed
          * @return {void}
          */
         alertConfirmed: function (evt) {
