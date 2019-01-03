@@ -176,7 +176,7 @@ const SchulInfoTheme = Theme.extend({
         var newVal,
             beautifiedAttribute = attribute;
 
-        if (key === "oberstufenprofil") {
+        if (key === "oberstufenprofil" && _.isString(attribute)) {
             if (beautifiedAttribute.indexOf("|") !== -1) {
                 beautifiedAttribute = [];
                 _.each(attribute.split("|"), function (value) {
