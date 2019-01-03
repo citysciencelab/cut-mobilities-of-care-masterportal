@@ -96,13 +96,13 @@ const Layer = Item.extend(
         },
 
         /**
-         * Register interaction with layer tree
-         * Listens to {@link Layer#event:changeIsSelected}
-         * Listens to {@link Layer#event:changeIsVisibleInMap}
-         * Listens to {@link Layer#event:changeTransparency}
-         * Listens to {@link Layer#event:RadioTriggerLayerUpdateLayerInfo}
-         * Listens to {@link Layer#event:RadioTriggerLayerSetLayerInfoChecked}
-         * Listens to {@link Map#event:RadioTriggerMapChange}
+         * Register interaction with layer tree.<br>
+         * Listens to {@link Layer#event:changeIsSelected}<br>
+         * Listens to {@link Layer#event:changeIsVisibleInMap}<br>
+         * Listens to {@link Layer#event:changeTransparency}<br>
+         * Listens to {@link Layer#event:RadioTriggerLayerUpdateLayerInfo}<br>
+         * Listens to {@link Layer#event:RadioTriggerLayerSetLayerInfoChecked}<br>
+         * Listens to {@link Map#event:RadioTriggerMapChange}<br>
          * @param {Radio.channel} channel Radio channel of this module
          * @return {void}
          */
