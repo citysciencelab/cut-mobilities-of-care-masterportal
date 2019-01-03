@@ -5,8 +5,7 @@ import Util from "@modules/core/util.js";
 
 describe("tools/einwohnerabfrageModel", function () {
     var model,
-        testUtilModel,
-        cswResponseXml;
+        testUtilModel;
 
     before(function () {
         model = new Model();
