@@ -28,4 +28,4 @@ test/end2end/Screenshots/ScreenshotsTest
 npm-debug.log
 .vscode
 build
-jsdoc
+/jsdoc
