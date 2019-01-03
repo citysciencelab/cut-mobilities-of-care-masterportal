@@ -53,7 +53,7 @@ const ClickCounterModel = Backbone.Model.extend(
         },
         /**
          * refreshed iframe with given id and used url
-         * @return {[type]} [description]
+         * @return {void}
          */
         refreshIframe: function () {
             var id = this.get("countframeid"),
