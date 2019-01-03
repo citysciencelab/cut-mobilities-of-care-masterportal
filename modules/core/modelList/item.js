@@ -28,34 +28,73 @@ const Item = Backbone.Model.extend(
             level: 0,
             isVisibleInTree: false
         },
+        /**
+         * Setter for id
+         * @param {String} value Id
+         * @returns {void}
+         */
         setId: function (value) {
             this.set("id", value);
         },
 
+        /**
+         * Setter for parentId
+         * @param {String} value ParentId
+         * @returns {void}
+         */
         setParentId: function (value) {
             this.set("parentId", value);
         },
 
+        /**
+         * Setter for name
+         * @param {String} value Name
+         * @returns {void}
+         */
         setName: function (value) {
             this.set("name", value);
         },
-
-        setType: function (type) {
-            return this.set("type", type);
+        /**
+         * Setter for type
+         * @param {String} value Type
+         * @returns {void}
+         */
+        setType: function (value) {
+            return this.set("type", value);
         },
 
-        setGlyphicon: function (glyphicon) {
-            return this.set("glyphicon", glyphicon);
+        /**
+         * Setter for glyphicon
+         * @param {String} value Glyphicon
+         * @returns {void}
+         */
+        setGlyphicon: function (value) {
+            return this.set("glyphicon", value);
         },
 
+        /**
+         * Setter for isInThemen
+         * @param {Boolean} value Flag if item is in themen
+         * @returns {void}
+         */
         setIsInThemen: function (value) {
             this.set("isInThemen", value);
         },
 
+        /**
+         * Setter for level
+         * @param {String} value Level
+         * @returns {void}
+         */
         setLevel: function (value) {
             this.set("level", value);
         },
 
+        /**
+         * Setter for isVisibleInTree
+         * @param {Boolean} value Flag if item is visible in layertree
+         * @returns {void}
+         */
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         }
