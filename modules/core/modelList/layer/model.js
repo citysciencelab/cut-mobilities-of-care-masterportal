@@ -76,7 +76,6 @@ const Layer = Item.extend(
          * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
          * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
          * @fires Map#RadioTriggerMapAddLayerToIndex
-         * @return {void}
          */
         initialize: function () {
             this.registerInteractionTreeListeners(this.get("channel"));
