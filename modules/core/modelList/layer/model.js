@@ -352,64 +352,146 @@ const Layer = Item.extend(
 
             this.setLayerInfoChecked(true);
         },
-        setSelectionIDX: function (idx) {
-            this.set("selectionIDX", idx);
-        },
 
+        /**
+         * Calls Collection function moveModelDown
+         * @return {void}
+         */
         moveDown: function () {
             this.collection.moveModelDown(this);
         },
+
+        /**
+         * Calls Collection function moveModelUp
+         * @return {void}
+         */
         moveUp: function () {
             this.collection.moveModelUp(this);
         },
+
+        /**
+         * Setter for selectionIDX
+         * @param {String} value SelectionIDX
+         * @returns {void}
+         */
+        setSelectionIDX: function (value) {
+            this.set("selectionIDX", value);
+        },
+
+        /**
+         * Setter for layerInfoChecked
+         * @param {Boolean} value Flag if layerInfo was checked
+         * @returns {void}
+         */
         setLayerInfoChecked: function (value) {
             this.set("layerInfoChecked", value);
         },
+
+        /**
+         * Setter for layerSource
+         * @param {ol/source} value LayerSource
+         * @returns {void}
+         */
         setLayerSource: function (value) {
             this.set("layerSource", value);
         },
 
+        /**
+         * Setter for layer
+         * @param {ol/layer} value Layer
+         * @returns {void}
+         */
         setLayer: function (value) {
             this.set("layer", value);
         },
 
+        /**
+         * Setter for isVisibleInMap and setter for layer.setVisible
+         * @param {Boolean} value Flag if layer is visible in map
+         * @returns {void}
+         */
         setIsVisibleInMap: function (value) {
             this.set("isVisibleInMap", value);
             this.get("layer").setVisible(value);
         },
 
+        /**
+         * Setter for isSelected
+         * @param {Boolean} value Flag if layer is selected
+         * @returns {void}
+         */
         setIsSelected: function (value) {
             this.set("isSelected", value);
         },
 
+        /**
+         * Setter for isSettingVisible
+         * @param {Boolean} value Flag if layer settings are visible
+         * @returns {void}
+         */
         setIsSettingVisible: function (value) {
             this.set("isSettingVisible", value);
         },
 
+        /**
+         * Setter for transparency
+         * @param {Number} value Tranparency in percent
+         * @returns {void}
+         */
         setTransparency: function (value) {
             this.set("transparency", value);
         },
 
+        /**
+         * Setter for isOutOfRange
+         * @param {Boolean} value Flag if map Scale is out of defined layer minScale and maxScale
+         * @returns {void}
+         */
         setIsOutOfRange: function (value) {
             this.set("isOutOfRange", value);
         },
 
+        /**
+         * Setter for ol/layer.setMaxResolution
+         * @param {Number} value Maximum resolution of layer
+         * @returns {void}
+         */
         setMaxResolution: function (value) {
             this.get("layer").setMaxResolution(value);
         },
 
+        /**
+         * Setter for ol/layer.setMinResolution
+         * @param {Number} value Minimum resolution of layer
+         * @returns {void}
+         */
         setMinResolution: function (value) {
             this.get("layer").setMinResolution(value);
         },
 
+        /**
+         * Setter for name
+         * @param {String} value Name of layer
+         * @returns {void}
+         */
         setName: function (value) {
             this.set("name", value);
         },
 
+        /**
+         * Setter for legendURL
+         * @param {String} value legendURL
+         * @returns {void}
+         */
         setLegendURL: function (value) {
             this.set("legendURL", value);
         },
 
+        /**
+         * Setter for isVisibleInTree
+         * @param {Boolean} value Flag if layer is visible in tree
+         * @returns {void}
+         */
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         }
