@@ -75,30 +75,64 @@ const AlertingModel = Backbone.Model.extend(
             this.trigger("render");
         },
 
+        /**
+         * Setter for id
+         * @param {String} value Id
+         * @returns {void}
+         */
         setId: function (value) {
             this.set("id", value);
         },
-
+        /**
+         * Setter for category
+         * @param {String} value category
+         * @returns {void}
+         */
         setCategory: function (value) {
             this.set("category", value);
         },
 
+        /**
+         * Setter for isDismissable
+         * @param {Boolean} value Flag if alert is dismissable
+         * @returns {void}
+         */
         setIsDismissable: function (value) {
             this.set("isDismissable", value);
         },
 
+        /**
+         * Setter for isConfirmable
+         * @param {Boolean} value Flag if alert is confirmable
+         * @returns {void}
+         */
         setIsConfirmable: function (value) {
             this.set("isConfirmable", value);
         },
 
+        /**
+         * Setter for message
+         * @param {String} value Message to be shown
+         * @returns {void}
+         */
         setMessage: function (value) {
             this.set("message", value);
         },
 
+        /**
+         * Setter for position
+         * @param {String} value Positioning of alert
+         * @returns {void}
+         */
         setPosition: function (value) {
             this.set("position", value);
         },
 
+        /**
+         * Setter for animation
+         * @param {Boolean/Number} value False if no animation is wanted. Number for fade-out in millis
+         * @returns {void}
+         */
         setAnimation: function (value) {
             this.set("animation", value);
         }
