@@ -1,5 +1,7 @@
 /**
  * @event AlertingModel#change:position
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
  * @description Triggered when Model attribute position has changed.
  */
 /**
@@ -12,11 +14,13 @@
  */
 /**
  * @event AlertingView#RadioTriggerAlertClosed
- * @description Radio.trigger("Alert", "closed")
+ * @param {String} id The id of the alert that has been closed.
+ * @description Radio.trigger("Alert", "closed", id)
  */
 /**
  * @event AlertingView#RadioTriggerAlertConfirmed
- * @description Radio.trigger("Alert", "confirmed")
+ * @param {String} id The id of the alert that has been confirmed.
+ * @description Radio.trigger("Alert", "confirmed", id)
  */
 
 import AlertingModel from "./model";

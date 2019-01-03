@@ -1,26 +1,36 @@
 /**
  * @event Layer#RadioTriggerLayerUpdateLayerInfo
- * @description Radio.trigger("Layer", "updateLayerInfo")
+ * @param {String} name The name of the layer.
+ * @description Radio.trigger("Layer", "updateLayerInfo", name)
  */
 /**
  * @event Layer#RadioTriggerLayerSetLayerInfoChecked
- * @description Radio.trigger("Layer", "setLayerInfoChecked")
+ * @param {Boolean} value Flag that signs that the layer informations has been checked.
+ * @description Radio.trigger("Layer", "setLayerInfoChecked", value)
  */
 /**
  * @event Layer#RadioTriggerLayerFeaturesLoaded
- * @description Radio.trigger("Layer", "featuresLoaded")
+ * @param {string} id Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @description Radio.trigger("Layer", "featuresLoaded", id, features)
  */
 /**
  * @event Layer#change:isSelected
- * @description Fired of attribute isSelected has changed
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isSelected has changed
  */
 /**
  * @event Layer#change:isVisibleInMap
- * @description Fired of attribute isVisibleInMap has changed
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isVisibleInMap has changed
  */
 /**
  * @event Layer#change:transparency
- * @description Fired of attribute transparency has changed
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute transparency has changed
  */
 import Item from ".././item";
 

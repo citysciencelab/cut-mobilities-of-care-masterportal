@@ -5,7 +5,8 @@
  */
 /**
  * @event AlertingModel#RadioTriggerAlertAlert
- * @description Radio.trigger("Alert", "alert")
+ * @param {String/Object} alert The alert object or string needed to create the alert.
+ * @description Radio.trigger("Alert", "alert", alert)
  */
 /**
  * @event AlertingModel#RadioTriggerAlertAlertRemove
