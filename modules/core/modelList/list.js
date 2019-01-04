@@ -53,7 +53,6 @@ const List = Backbone.Collection.extend(
          * @listens List#RadioRequestModelListGetCollection
          * @listens List#RadioRequestModelListGetModelsByAttributes
          * @listens List#RadioRequestModelListGetModelByAttributes
-         *
          * @listens List#RadioTriggerModelListSetModelAttributesById
          * @listens List#RadioTriggerModelListShowAllFeatures
          * @listens List#RadioTriggerModelListHideAllFeatures
@@ -66,21 +65,20 @@ const List = Backbone.Collection.extend(
          * @listens List#RadioTriggerModelListShowModelInTree
          * @listens List#RadioTriggerModelListCloseAllExpandedFolder
          * @listens List#RadioTriggerModelListSetAllDescendantsInvisible
-         * @listens List#RenderTree
          * @listens List#RadioTriggerModelListToggleWfsCluster
+         * @listens List#RadioTriggerModelListRenderTree
          * @listens List#RadioTriggerModelListToggleDefaultTool
-         *
          * @listens List#ChangeIsVisibleInMap
          * @listens List#ChangeIsExpanded
          * @listens List#ChangeIsSelected
          * @listens List#ChangeTransparency
          * @listens List#ChangeSelectionIDX
-         *
          * @fires List#RadioTriggerModelListUpdateVisibleInMapList
          * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
          * @fires List#UpdateOverlayerView
          * @fires List#UpdateSelection
          * @fires List#TraverseTree
+         * @fires List#RenderTree
          *
          */
         initialize: function () {

@@ -249,6 +249,12 @@
  */
 
 /**
+ * @event List#RadioTriggerModelListRenderTree
+ * @fires List#RenderTree
+ * @example Radio.trigger("ModelList", "renderTree")
+ */
+
+/**
  * @event List#RenderTree
  * @description Triggers "renderTree"
  * @example this.trigger("renderTree")
