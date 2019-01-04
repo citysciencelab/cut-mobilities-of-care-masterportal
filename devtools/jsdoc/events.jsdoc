@@ -14,19 +14,13 @@
  */
 
 /**
- * @event AlertingModel#removeAll
- * @description Triggered when View has to remove all alerts.
- * @example this.trigger("removeAll")
- */
-
-/**
  * @event AlertingModel#RadioTriggerAlertAlert
  * @param {String/Object} alert The alert object or string needed to create the alert.
  * @example Radio.trigger("Alert", "alert", alert)
  */
 
 /**
- * @event AlertingModel#RadioTriggerAlertAlertRemove
+ * @event AlertingView#RadioTriggerAlertAlertRemove
  * @example Radio.trigger("Alert", "alert:remove")
  */
 

@@ -2,6 +2,7 @@ const AlertingModel = Backbone.Model.extend(
     /** @lends AlertingModel.prototype */
     {
         defaults: {
+            channel: Radio.channel("Alert"),
             category: "alert-info",
             isDismissable: true,
             isConfirmable: false,
@@ -14,25 +15,19 @@ const AlertingModel = Backbone.Model.extend(
          * @extends Backbone.Model
          * @memberof Alerting
          * @constructs
+         * @property {Radio.channel} channel=Radio.channel("Alert") Radio channel for communication
          * @property {String} category="alert-info" Category of alert. bootstrap css class
          * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
          * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
          * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
          * @property {String} message="" The message of the alert
          * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
-         * @fires AlertingModel#removeAll
          * @fires AlertingModel#render
          * @listens AlertingModel#RadioTriggerAlertAlert
-         * @listens AlertingModel#RadioTriggerAlertAlertRemove
          */
         initialize: function () {
-            var channel = Radio.channel("Alert");
-
-            this.listenTo(channel, {
-                "alert": this.setParams,
-                "alert:remove": function () {
-                    this.trigger("removeAll");
-                }
+            this.listenTo(this.get("channel"), {
+                "alert": this.setParams
             }, this);
         },
         /**

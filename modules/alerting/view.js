@@ -17,13 +17,15 @@ const AlertingView = Backbone.View.extend(
          * @fires AlertingView#RadioTriggerAlertClosed
          * @fires AlertingView#RadioTriggerAlertConfirmed
          * @listens AlertingModel#render
-         * @listens AlertingModel#removeAll
          * @listens AlertingModel#changePosition
+         * @listens AlertingModel#RadioTriggerAlertAlertRemove
          */
         initialize: function () {
+            this.listenTo(this.model.get("channel"), {
+                "alert:remove": this.removeAll
+            }, this);
             this.listenTo(this.model, {
                 "render": this.render,
-                "removeAll": this.removeAll,
                 "change:position": this.positionAlerts
             }, this);
 
