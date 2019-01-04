@@ -1,7 +1,7 @@
 /** -------------------- ALERTING -------------------- */
 
 /**
- * @event AlertingModel#change:position
+ * @event AlertingModel#changePosition
  * @param {Backbone/Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Triggered when Model attribute position has changed.
@@ -10,11 +10,13 @@
 /**
  * @event AlertingModel#render
  * @description Triggered when View has to render.
+ * @example this.trigger("render")
  */
 
 /**
  * @event AlertingModel#removeAll
  * @description Triggered when View has to remove all alerts.
+ * @example this.trigger("removeAll")
  */
 
 /**
