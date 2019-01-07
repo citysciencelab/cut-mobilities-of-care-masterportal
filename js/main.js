@@ -1,6 +1,8 @@
 /**
  * @file
  * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
+ * <br><h1>Configuration:</h1><br>
+ * If you want to know more about the configuration and the available parameters, have a look at our [Configs-page]{@link Configs}
  */
 import "@babel/polyfill";
 import {loadApp} from "./app";
