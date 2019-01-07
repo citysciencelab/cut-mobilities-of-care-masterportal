@@ -3,13 +3,15 @@ const execute = require("child-process-promise").exec,
     pathToJsDocCmd = path.resolve(__dirname, "../../node_modules/.bin/jsdoc");
 
 /**
- * Removes Folder jsdoc recusively if existent.
+ * Removes folder jsdoc if it exists.
+ * rd remove directory
+ * /s with all subfolders
+ * /q without confirmations
  * Then it generates the JsDoc using:
  * Config: -c jsdoc-config.json
- * Destination: -d
- * Recursion: -r
  */
-execute("rm -rf jsdoc")
+
+execute("if exist jsdoc rd /s /q jsdoc")
     .then(function () {
         execute(pathToJsDocCmd + " -c ./devtools/jsdoc/jsdoc-config.json");
     });
