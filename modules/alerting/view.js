@@ -1,7 +1,11 @@
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
-
+/**
+ * @member AlertingTemplate
+ * @description Template used to create the alert message
+ * @memberof Alerting
+ */
 const AlertingView = Backbone.View.extend(
     /** @lends AlertingView.prototype */
     {
