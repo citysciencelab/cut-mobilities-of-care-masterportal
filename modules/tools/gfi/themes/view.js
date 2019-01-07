@@ -46,7 +46,8 @@ const ThemeView = Backbone.View.extend({
 
             currentView.$el.find(".gfi-content").html(this.el);
 
-            truncatedTitle = this.stringTruncate(title, 50);
+            title = "Lorem Ipsum sit amet Dolor Lorem Ipsum sit amet Dolor";
+            truncatedTitle = this.stringTruncate(title, 43);
 
             currentView.$el.find(".gfi-title").text(truncatedTitle);
             this.appendChildren();
