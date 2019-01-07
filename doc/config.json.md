@@ -625,8 +625,9 @@ Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  La
 |isGeneric|nein|String|false||
 |isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
 |minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
+|liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
-
+|snippetType|nein|String|nicht gesetzt|Möglichkeit den Filter fest auf einen Snippet Type zu setzen
 
 ******
 ******
@@ -643,11 +644,11 @@ Der Filter sucht in ausgewählten Layern nach vor ausgwählten Attributen, die �
 |isVisible|nein|Boolean|||
 |searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
 |allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
-liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
 |name|nein|String||Name des Filters
 |info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
 |predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
 |attributeWhiteList|nein|Array[String] / Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)]||Filterbare Attribute. Können entweder als Array of Strings (Attributnamen) oder als Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)] übergeben werden. Wird ein Array of Strigns übergeben, so werden bei Mehrfachauswahl die Werte eines Attributes mit ODER verknüpft.
+|snippetType|nein|String|nicht gesetzt|z.B. checkbox-classic|
 
 **Beispiel:**
 
@@ -673,7 +674,8 @@ liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterw
                      "values": ["Grundschulen"]
                  }
              ],
-             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"]
+             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"],
+             "snippetType": "checkbox-classic"
          }
      ]
  }
@@ -1137,7 +1139,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |quickHelp|nein|Boolean|false|Gibt an ob eine portalseitige Hilfe angezeigt werden soll. Wenn sie nicht gesetzt ist, wird der globale Wert aus der config.js verwendet.|
 |[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)|nein|Object||Durchsuchen von speziell definierten WFS-Layern.|
 |[tree](#markdown-header-portalconfigsearchbartree)|nein|Object||Themensuche. Durchsucht den Themenbaum des Portals.|
-|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||Durchsuchen von sichtbar geschalteten WFS-Layern.|
+|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||(deprecated) Durchsuchen von sichtbar geschalteten WFS-Layern.|
+|[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)|nein|Object||Durchsuchen von sichtbar geschalteten Vektor-Layern.|
 |zoomLevel||Number||Zoomstufe, in der das gesuchte Objekt angezeigt wird.|
 |renderToDOM|nein|String||HTML ID an deren Objekt sich die Suchleiste rendern soll. Bei  "#searchbarInMap" wird die Suchleiste auf der Karte gezeichnet.|
 
@@ -1213,12 +1216,14 @@ Der Gazetteer-Dienst des LGV wird angefragt.
 ******
 
 #### Portalconfig.searchBar.specialWFS ####
-Die definierten WFS-Dienste werden angefragt.
+Über die specialWFS-Suche können WFS-Dienste in die Suchfunktion eingebunden werden, ohne das diese Daten der Karte oder dem Layerbaum hinzugefügt werden. Wird eine Suche ausgelöst wird der definierte WFS in Version 1.1.0 über einen POST-Request mit Filterparametern abgefragt. Hierdurch bleibt die Suche auch bei größeren Datenmengen im Dienst performant. Die Suchtreffer werden mit definierbarer Textangabe und Glyphicon in der Liste angezeigt. Durch Auswahl eines Eintrags wird die Standard-Funktion für Suchtreffer verwandt und auf das Objekt gezoomt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden (**url**: URL des WFS-Dienstes, **data**: Parameter des WFS-Requests, **name**: MetaName in Suche, **glyphicon**: Glyphicon in Suche.|
+|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden.|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|glyphicon|nein|String|"glyphicon-home"|Standard-Glyphicon in Trefferleiste.|
+|maxFeatures|nein|Number|20|Setzt das maxFeatures Attribut bei der WFS-Abfrage zur Limitierung der Treffer.|
 |timeout|nein|Number|6000|Timeout der Ajax-Requests im Millisekunden.|
 
 
@@ -1227,9 +1232,13 @@ Die definierten WFS-Dienste werden angefragt.
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |url|ja|String||URL des WFS-Dienstes|
-|data|ja|String||Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring (erstes Element des featureMember).|
 |name|ja|String||MetaName der Kategorie. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
-|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
+|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons zur Anzeige in der Vorschlagssuche.|
+|typeName|nein|String||NEU! Layername des WFS Dienstes im POST-Request.|
+|propertyNames|nein|Array[String]||NEU! Liste der Attribute, die zur Übereinstimmungssuche verwendet werden.|
+|geometryName|nein|String|"app:geom"|NEU! Attributname aus der die Geometrie zur Anzeige entnommen wird.|
+|maxFeatures|Number|String|20|NEU! Setzt das maxFeatures Attribut an diesen WFS zur Limitierung der Treffer pro WFS.|
+|data|nein|String||DEPRECATED ab V_3.0.0! Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring.|
 
 **Beispiel specialWFS:**
 
@@ -1237,22 +1246,26 @@ Die definierten WFS-Dienste werden angefragt.
 ```
 #!json
 
-  "specialWFS": {
-            "minChar": 3,
-            "timeout": 2000,
-            "definitions": [
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName                    =planrecht",
-                    "name": "bplan"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=                    plan",
-                    "name": "bplan"
-                }
-            ]
-        }
+  "specialWFS":
+      {
+        "minChars": 5,
+        "timeout": 10000,
+        "definitions": [
+          {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+          }
+        ]
+      },
 ```
 
 *****
@@ -1278,8 +1291,9 @@ Alle Layer im Themenbaum des Portals, werden durchsucht.
 
 ******
 
-#### Portalconfig.searchBar.visibleWFS ####
+#### Portalconfig.searchBar.visibleWFS  (deprecated) ####
 Alle sichtbaren WFS-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
+Ersetzt durch [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1293,6 +1307,28 @@ Alle sichtbaren WFS-Dienste werden nach einem vordefinierten Attribut durchsucht
 
 "visibleWFS": {
            "minChars": 3
+       }
+```
+
+******
+
+#### Portalconfig.searchBar.visibleVector ####
+Alle sichtbaren Vektor-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|layerTypes|nein|Array [String]|["WFS"]|Vektor-Layer-Typen, die durchsucht werden sollen.|
+
+**Beispiel visibleVector:**
+
+
+```
+#!json
+
+"visibleVector": {
+           "minChars": 3,
+           "layerTypes": ["WFS", "GeoJSON"]
        }
 ```
 
@@ -1478,6 +1514,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
 |autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
 |isVisibleInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden|
+|isNeverVisibleInTree|nein|Boolean|false|Soll der Layer niemals im Themenbaum angezeigt werden|
 
 **Folgende Layerkonfigurationen gelten nur für WMS:**
 
@@ -1500,7 +1537,7 @@ In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstell
 |[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
 |mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
 |routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
-|searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleWFS gesucht werden soll .|
+|searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleVector gesucht werden soll .|
 |styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md)zu.|
 |hitTolerance|nein|Number||Toleranz in Pixel beim Abrufen von Feature Infos.|
 

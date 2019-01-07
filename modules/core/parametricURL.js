@@ -487,6 +487,8 @@ const ParametricURL = Backbone.Model.extend({
         else {
             window.history.replaceState({}, "", baseUrl + params);
         }
+
+        this.parseURL();
     },
 
     // setter for zoomToGeometry

@@ -40,6 +40,7 @@ const CheckboxSnippet = SnippetModel.extend({
     getSelectedValues: function () {
         return {
             attrName: this.get("name"),
+            label: this.get("label"),
             type: this.get("type"),
             values: this.get("valuesCollection").pluck("isSelected")
         };

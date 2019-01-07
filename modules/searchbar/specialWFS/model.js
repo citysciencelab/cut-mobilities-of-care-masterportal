@@ -4,8 +4,11 @@ const SpecialWFSModel = Backbone.Model.extend({
     defaults: {
         minChars: 3,
         glyphicon: "glyphicon-home",
-        wfsMembers: {},
-        timeout: 6000
+        geometryName: "app:geom",
+        maxFeatures: 20,
+        timeout: 6000,
+        definitions: null,
+        ajaxRequests: {}
     },
 
     /**
@@ -14,11 +17,15 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
      * @param {integer} [config.timeout=6000] - Timeout der Ajax-Requests im Millisekunden.
      * @param {Object[]} config.definitions - Definitionen der SpecialWFS.
-     * @param {Object} config.definitions[].definition - Definition eines SpecialWFS.
-     * @param {string} config.definitions[].definition.url - Die URL, des WFS
-     * @param {string} config.definitions[].definition.data - Query string des WFS-Request
+     * @param {Object} config.definitions[].definition - Parameter eines WFS
+     * @param {string} config.definitions[].definition.url - URL des WFS
+     * @param {string} config.definitions[].definition.data - Query string des WFS-Request deprecated
      * @param {string} config.definitions[].definition.name - MetaName der Kategorie für Vorschlagssuche
-     * @param {string} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+     * @param {string} config.definitions[].definition.typeName - Layername des WFS Dienstes
+     * @param {string} [config.definitions[].definition.geometryName="app:geom"] - Name des Attributs mit Geometrie
+     * @param {integer} [config.definitions[].definition.maxFeatures="20"] - Anzahl der vom Dienst maximal zurückgegebenen Features
+     * @param {string_} [config.definitions[].definition.glyphicon="glyphicon-home"] - Name des Glyphicon für Vorschlagssuche
+     * @param {strings[]} config.definitions[].definition.propertyNames - Name der Attribute die zur Suche ausgewertet werden
      * @returns {void}
      */
     initialize: function (config) {
@@ -28,17 +35,14 @@ const SpecialWFSModel = Backbone.Model.extend({
         if (config.timeout) {
             this.setTimeout(config.timeout);
         }
-        // Jede Konfiguration eines SpecialWFS wird abgefragt
-        _.each(config.definitions, function (definition) {
-            this.requestWFS(definition);
-        }, this);
+        if (config.maxFeatures) {
+            this.setMaxFeatures(config.maxFeatures);
+        }
+        this.setDefinitions(config.definitions);
 
         // set Listener
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
-        });
-        this.listenTo(Radio.channel("SpecialWFS"), {
-            "requestFeature": this.requestFeature
         });
 
         // initiale Suche
@@ -47,218 +51,219 @@ const SpecialWFSModel = Backbone.Model.extend({
         }
     },
 
-    /**
-     * Durchsucht ein Object, bestehend aus Objekten, bestehend aus Array of Objects nach name
-     * @param  {string} searchString Der Suchstring
-     * @param  {object} masterObject wfsMembers
-     * @return {object}              Suchtreffer
-     */
-    collectHits: function (searchString, masterObject) {
-        var simpleSearchString = this.simplifyString(searchString),
-            searchStringRegExp = new RegExp(simpleSearchString),
-            masterObjectHits = [],
-            elementsHits,
-            elementName;
+    /*
+    * setter for definitions
+    * @param {object[]} value definitions aus config.json
+    * @returns {void}
+    */
+    setDefinitions: function (values) {
+        var definitions = [];
 
-        _.each(masterObject, function (elements) {
-            elementsHits = elements.filter(function (element) {
-                elementName = this.simplifyString(element.name);
-                _.extend(element, {
-                    triggerEvent: {
-                        channel: "SpecialWFS",
-                        event: "requestFeature"
-                    }
-                });
-                return elementName.search(searchStringRegExp) !== -1; // Prüft ob der Suchstring ein Teilstring vom Namen ist
-            }, this);
+        _.each(values, function (value) {
+            var definition = value;
 
-            if (elementsHits.length > 0) {
-                masterObjectHits.push(elementsHits);
+            // @deprecated since 3.0.0
+            if (_.has(value, "data")) {
+                definition = _.extend(value, this.getDataParameters(value));
             }
+
+            if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
+                console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+                return undefined;
+            }
+
+            definitions.push(definition);
+            return undefined;
         }, this);
 
-        return masterObjectHits;
+        this.set("definitions", definitions);
     },
 
     /**
-     * @description Suchfunktion, wird von Searchbar getriggert
-     * @param {string} searchString - Der Suchstring.
+     * Extrahiert die Parameter für POST-Request und gibt diese zurück.
+     * @deprecated Parameterübergabe zukünftig in Objekt. Aktuell auch noch aus string. Ablösung mit 3.0.0
+     * @param   {string}    value   Konfiguration aus config.json
+     * @returns {object}            aufbereitetes Objekt zur WFS Abfrage
+     */
+    getDataParameters: function (value) {
+        var parameters = {};
+
+        value.data.split("&").forEach(function (keyValue) {
+            parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
+        });
+
+        if (_.has(parameters, "TYPENAMES") === false || _.has(parameters, "PROPERTYNAME") === false) {
+            console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+            return undefined;
+        }
+
+        return {
+            propertyNames: parameters.PROPERTYNAME.split(","),
+            typeName: parameters.TYPENAMES,
+            geometryName: value.geometryName ? value.geometryName : "app:geom"
+        };
+    },
+
+    /**
+     * Erstellt XML für einen WFS 1.1.0 POST Request
+     * @param   {Object} definition    Definition aus Konfiguration
+     * @param   {string} searchString  Suchstring
+     * @returns {string}               XML String
+     */
+    getWFS110Xml: function (definition, searchString) {
+        var typeName = definition.typeName,
+            propertyNames = definition.propertyNames,
+            geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
+            maxFeatures = definition.maxFeatures ? definition.maxFeatures : this.get("maxFeatures"),
+            data, propertyName;
+
+        data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS'";
+        data += " xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>";
+        data += "<wfs:Query typeName='" + typeName + "'>";
+        for (propertyName of propertyNames) {
+            data += "<wfs:PropertyName>" + propertyName + "</wfs:PropertyName>";
+        }
+        data += "<wfs:PropertyName>" + geometryName + "</wfs:PropertyName>";
+        data += "<wfs:maxFeatures>" + maxFeatures + "</wfs:maxFeatures>";
+        data += "<ogc:Filter>";
+        if (propertyNames.length > 1) {
+            data += "<ogc:Or>";
+        }
+        for (propertyName of propertyNames) {
+            data += "<ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + _.escape(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
+        }
+        if (propertyNames.length > 1) {
+            data += "</ogc:Or>";
+        }
+        data += "</ogc:Filter></wfs:Query></wfs:GetFeature>";
+
+        return data;
+    },
+
+    /**
+     * Initiiert die WFS-Suche
+     * @listens Radio.channel("Searchbar")~search
+     * @param   {string} searchString Searchstring aus der Suchleiste
      * @returns {void}
      */
     search: function (searchString) {
-        var wfsMembers = this.get("wfsMembers"),
-            minChars = this.get("minChars"),
-            hits;
+        var definitions = this.get("definitions"),
+            data;
 
-        if (searchString.length < minChars) {
-            Radio.trigger("Searchbar", "abortSearch", "specialWFS");
-            return;
-        }
-        hits = this.collectHits(searchString, wfsMembers);
-        if (hits.length > 0) {
-            Radio.trigger("Searchbar", "pushHits", "hitList", hits);
-            Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
-        }
-        else {
-            Radio.trigger("Searchbar", "abortSearch", "specialWFS");
+        if (searchString.length >= this.get("minChars")) {
+            _.each(definitions, function (def) {
+                data = this.getWFS110Xml(def, searchString);
+                this.sendRequest(def, data);
+            }, this);
         }
     },
 
     /**
-     * @description Entfernt Sonderzeichen aus dem Suchstring
-     * @param {string} searchString - Der Suchstring
+     * @description Führt immer nur einen HTTP-POST-Request pro specialWFS zur Zeit aus.
+     * @param {String} def Parameter eines WFS
+     * @param {String} data Data to be sent to the server
      * @returns {void}
      */
-    simplifyString: function (searchString) {
-        var value = searchString.toLowerCase().replace(/\u00e4/g, "ae").replace(/\u00f6/g, "oe").replace(/\u00fc/g, "ue").replace(/\u00df/g, "ss");
+    sendRequest: function (def, data) {
+        var ajax = this.get("ajaxRequests");
 
-        return value;
+        if (ajax[def.name] !== null && !_.isUndefined(ajax[def.name])) {
+            ajax[def.name].abort();
+            this.polishAjax(def.name);
+        }
+        this.ajaxSend(def, data);
     },
 
     /**
-     * @description Die geom kann sehr komplex sein. Daher wird sie separat abgefragt.
-     * @param  {string} feature, das geklickt worden ist mit filter
+     * Verschickt einen POST-Request
+     * @param   {Object} def      Definition eines specialWFS
+     * @param   {string} postdata POST-Data-String
      * @returns {void}
      */
-    requestFeature: function (feature) {
-        var data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='" + feature.filter.typeName + "'><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>" + feature.filter.propertyName + "</ogc:PropertyName><ogc:Literal>" + _.escape(feature.filter.literal) + "</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter></wfs:Query></wfs:GetFeature>";
-
-        $.ajax({
-            url: feature.filter.url,
-            data: data,
+    ajaxSend: function (def, postdata) {
+        this.get("ajaxRequests")[def.name] = $.ajax({
+            url: def.url,
+            data: postdata,
             context: this,
+            async: true,
             type: "POST",
-            success: this.zoomTo,
-            timeout: this.get("timeout"),
-            contentType: "text/xml",
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error(textStatus + ": " + errorThrown);
-                Radio.trigger("Alert", "alert", "Beim Abfragen der Koordinaten trat ein Fehler auf.");
-            }
-        });
-    },
-
-    /**
-     * @description Durchsucht die Response auf Koordinatenangaben
-     * @param {xml} response Response des Requests
-     * @returns {number[]}  Extent oder Koordinate
-     */
-    extractGeom: function (response) {
-        var posList = $(response).find("gml\\:posList, posList")[0],
-            pos = $(response).find("gml\\:pos, pos")[0],
-            coordinate = posList ? posList.textContent : pos.textContent;
-
-        return coordinate;
-    },
-
-    /**
-     * Triggert den zoom
-     * @param  {number[]} response Extent oder Koordinate
-     * @return {void}
-     */
-    zoomTo: function (response) {
-        var coordinate = this.extractGeom(response);
-
-        Radio.trigger("MapMarker", "zoomTo", {
-            type: "default",
-            coordinate: coordinate
-        });
-    },
-
-    /**
-     * @summary Liest das XML des WFS ein.
-     * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind.         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
-     * @param  {xml} data Response des requests
-     * @param {string} type MetaName bzw. Kategorie für Suchtreffer
-     * @param {string} url URL des Dienstes
-     * @param {string} glyphicon Glyphicon für Suchtreffer
-     * @return {[Object]} Datenobjekt zur Speicherung im Model
-     */
-    extractWFSMembers: function (data, type, url, glyphicon) {
-        var rootElement = $(data).contents()[0],
-            elements = $(rootElement).children(),
-            feature, property,
-            features = [];
-
-        _.each(elements, function (element) {
-            feature = $(element).children().first()[0];
-            property = $(element).children().first().children().first()[0];
-
-            if (feature && property) {
-                features.push({
-                    id: _.uniqueId(type.toString()),
-                    name: $(element).text().trim(),
-                    type: type,
-                    glyphicon: glyphicon,
-                    filter: {
-                        url: url,
-                        typeName: feature.nodeName,
-                        propertyName: property.nodeName,
-                        literal: property.textContent
-                    }
-                });
-            }
-
-        });
-
-        return features;
-    },
-
-    /**
-     * @description Fragt einen WFS nach Features ab und speichert die Ergebnisse im Model.
-     * @param  {object} element Konfiguration eines SpecialWFS aus config
-     * @returns {void}
-     */
-    requestWFS: function (element) {
-        var url = element.url,
-            parameter = element.data,
-            name = element.name,
-            glyphicon = element.glyphicon ? element.glyphicon : this.get("glyphicon");
-
-        $.ajax({
-            url: url,
-            data: parameter,
-            context: this,
-            type: "GET",
             success: function (data) {
-                var features = this.extractWFSMembers(data, name, url, glyphicon);
-
-                this.setWfsMembers(name, features);
+                this.fillHitList(data, def);
             },
             timeout: this.get("timeout"),
             contentType: "text/xml",
-            error: function (jqXHR, textStatus) {
-                console.error(textStatus + ": " + url);
+            def: def,
+            error: function (err) {
+                if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                    this.showError(err);
+                }
+                Radio.trigger("Searchbar", "abortSearch", "specialWFS");
+            },
+            complete: function () {
+                this.polishAjax(def.name);
             }
-        });
+        }, this);
     },
 
     /**
-     * Fügt einem Objekt untergeordnete Objekte hinzu bzw. ergänzt diese
-     * @param {string} key          Name des Objekt
-     * @param {string[]} values     Werte des Objekts
-     * @param {object} masterObject Übergeordnetes Objekt dem die untergeordneten Objekte zugefügt werden sollen
-     * @return {object} ergänztes MasterObjekt
+     * @summary Liest das Response-XML des WFS 1.1.0 ein und triggert das Füllen der hitList
+     * @description Diese Funktion setzt vorraus, dass die Features im root-Element des response-XML als direkte Child-Elemente gelistet sind.         * @description Der textContent jedes Elements eines Features wird für die Bezeichnung verwendet.
+     * @param  {xml} data Response des requests
+     * @param {Object} definition Definition aus Konfiguration
+     * @returns {void}
      */
-    addObjectsInObject: function (key, values, masterObject) {
-        var master = masterObject,
-            oldObj,
-            oldValues,
-            newObj;
+    fillHitList: function (data, definition) {
+        var type = definition.name,
+            typeName = definition.typeName,
+            propertyNames = definition.propertyNames,
+            geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
+            glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
+            elements = data.getElementsByTagName(typeName),
+            element, identifier, geom;
 
-        if (!_.has(master, key)) {
-            newObj = _.object([key], [values]);
-            _.extend(master, newObj);
-        }
-        else {
-            oldObj = _.pick(master, key);
-            oldValues = _.values(oldObj)[0];
-            newObj = _.object([key], [_.union(oldValues, values)]);
-            master = _.omit(master, key);
-            _.extend(master, newObj);
-        }
+        for (element of elements) {
+            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
+                identifier = element.getElementsByTagName(propertyNames)[0].textContent;
+                geom = element.getElementsByTagName(geometryName)[0].textContent;
 
-        return master;
+                // "Hitlist-Objekte"
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    id: _.uniqueId(type.toString()),
+                    name: identifier.trim(),
+                    type: type,
+                    coordinate: geom.trim().split(" "),
+                    glyphicon: glyphicon
+                });
+            }
+            else {
+                console.error("Antwort eines specialWFS konnte nicht verarbeitet werden");
+                console.error(element);
+            }
+        }
+        Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+     * Fehlerbehandlung
+     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * @returns {void}
+     */
+    showError: function (err) {
+        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+        console.error("Alert", "alert", "Dienst nicht erreichbar. " + detail);
+    },
+
+    /**
+     * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
+     * @param {string} type Bezeichnung des Typs
+     * @returns {void}
+     */
+    polishAjax: function (type) {
+        var ajax = this.get("ajaxRequests"),
+            cleanedAjax = _.omit(ajax, type);
+
+        this.set("ajaxRequests", cleanedAjax);
     },
 
     // setter for minChars
@@ -266,22 +271,18 @@ const SpecialWFSModel = Backbone.Model.extend({
         this.set("minChars", value);
     },
 
-    // setter for RequestInfo
-    setRequestInfo: function (value) {
-        this.set("requestInfo", value);
-    },
-
-    // setter for wfsMembers
-    setWfsMembers: function (key, values) {
-        var wfsMembers = this.get("wfsMembers"),
-            newWfsMembers = this.addObjectsInObject(key, values, wfsMembers);
-
-        this.set("wfsMembers", newWfsMembers);
-    },
-
     // setter for timeout
     setTimeout: function (value) {
         this.set("timeout", value);
+    },
+
+    /*
+    * setter for maxFeatures
+    * @param {integer} value maxFeatures
+    * @returns {void}
+    */
+    setMaxFeatures: function (value) {
+        this.set("maxFeatures", value);
     }
 });
 
