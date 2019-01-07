@@ -238,12 +238,27 @@ a {
     &:before {
         display: none;
     }
-    .icon-close {
-    &:before {
-        display: block;
-        color: @color_2;
+    /*.icon-close {
+        &:before {
+            display: block;
+            color: @color_2;
+            }
+        }*/
+    .icon-close-svg {
+        &:before {
+            /*display: block;
+            width: 100px;
+            top: -1.05em;
+            left: -1.1em;*/
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: url("http://geoportal-hamburg.de/lgv-beteiligung/icons/05cross1.svg");
+            }
         }
-    }
+
+
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
@@ -253,7 +268,7 @@ a {
         color: @color_4;
         display: block;
     }
-    .icon-close {
+    .icon-close-svg {
         &:before {
         display: none;
         }
