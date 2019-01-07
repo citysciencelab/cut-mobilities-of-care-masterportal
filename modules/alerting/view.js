@@ -37,7 +37,7 @@ const AlertingView = Backbone.View.extend(
         template: _.template(AlertingTemplate),
         /**
          * Renders the data to DOM.
-         * @return {object} returns this
+         * @return {AlertingView} returns this
          */
         render: function () {
             var attr = this.model.toJSON();
@@ -52,8 +52,9 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Reacts to click on dismiss button. Fires {@link AlertingView#event:RadioTriggerAlertClosed}
+         * Reacts to click on dismiss button.
          * @param {Event} evt Click event on dismissable alert
+         * @fires AlertingView#event:RadioTriggerAlertClosed
          * @return {void}
          */
         alertClosed: function (evt) {
@@ -67,8 +68,9 @@ const AlertingView = Backbone.View.extend(
         },
 
         /**
-         * Reacts to click on confirm button. Fires {@link AlertingView#event:RadioTriggerAlertConfirmed}
+         * Reacts to click on confirm button.
          * @param {Event} evt Click event on confirmable alert
+         * @fires AlertingView#event:RadioTriggerAlertConfirmed
          * @return {void}
          */
         alertConfirmed: function (evt) {

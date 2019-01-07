@@ -31,8 +31,9 @@ const AlertingModel = Backbone.Model.extend(
             }, this);
         },
         /**
-         * Sets given parameters on model. Then fires {@link AlertingModel#event:render}
+         * Sets given parameters on model.
          * @param {String|Object} val Value string or object with information about the alert
+         * @fires  AlertingModel#event:render
          * @returns {void}
          */
         setParams: function (val) {

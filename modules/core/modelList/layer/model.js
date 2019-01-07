@@ -74,8 +74,9 @@ const Layer = Item.extend(
         },
 
         /**
-         * Triggers event if vector features are loaded {@link Layer#event:RadioTriggerLayerFeaturesLoaded}
+         * Triggers event if vector features are loaded
          * @param {ol.Feature[]} features Loaded vector features
+         * @fires Layer#event:RadioTriggerLayerFeaturesLoaded
          * @return {void}
          */
         featuresLoaded: function (features) {
@@ -97,12 +98,12 @@ const Layer = Item.extend(
 
         /**
          * Register interaction with layer tree.<br>
-         * Listens to {@link Layer#event:changeIsSelected}<br>
-         * Listens to {@link Layer#event:changeIsVisibleInMap}<br>
-         * Listens to {@link Layer#event:changeTransparency}<br>
-         * Listens to {@link Layer#event:RadioTriggerLayerUpdateLayerInfo}<br>
-         * Listens to {@link Layer#event:RadioTriggerLayerSetLayerInfoChecked}<br>
-         * Listens to {@link Map#event:RadioTriggerMapChange}<br>
+         * @listens Layer#event:changeIsSelected
+         * @listens Layer#event:changeIsVisibleInMap
+         * @listens Layer#event:changeTransparency
+         * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
+         * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
+         * @listens Map#event:RadioTriggerMapChange
          * @param {Radio.channel} channel Radio channel of this module
          * @return {void}
          */
@@ -154,7 +155,8 @@ const Layer = Item.extend(
         },
 
         /**
-         * Register interaction with map view. Listens to {@link MapView#event:RadioTriggerMapViewChangedOptions}
+         * Register interaction with map view.
+         * @listens MapView#event:RadioTriggerMapViewChangedOptions
          * @returns {void}
          */
         registerInteractionMapViewListeners: function () {
@@ -186,7 +188,8 @@ const Layer = Item.extend(
 
 
         /**
-         * Sets visible min and max resolution on layer. Fires {@link MapView#event:RadioRequestMapViewGetResoByScale}
+         * Sets visible min and max resolution on layer.
+         * @fires MapView#event:RadioRequestMapViewGetResoByScale
          * @returns {void}
          */
         getResolutions: function () {
@@ -330,7 +333,8 @@ const Layer = Item.extend(
             }
         },
         /**
-         * Initiates the presentation of layer information. Fires {@link LayerInformation#event:RadioTriggerLayerInformationAdd}
+         * Initiates the presentation of layer information.
+         * @fires LayerInformation#event:RadioTriggerLayerInformationAdd
          * @returns {void}
          */
         showLayerInformation: function () {

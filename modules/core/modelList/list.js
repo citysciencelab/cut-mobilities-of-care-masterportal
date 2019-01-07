@@ -632,7 +632,7 @@ const List = Backbone.Collection.extend(
         },
 
         /**
-         * Adds in light tree mode all layer models. Otherwise  only the layers are added that are initially set to visible
+         * Adds in light tree mode all layer models. Otherwise only the layers are added that are initially set to visible
          * @fires ParametricUrl#RadioRequestParametricURLGetLayerParams
          * @fires Parser#RadioRequestParserGetTreeType
          * @fires Parser#RadioRequestParserGetItemsByAttributes
