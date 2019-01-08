@@ -108,7 +108,8 @@ const ObliqueMap = Backbone.Model.extend({
 
         map2D = Radio.request("Map", "getMap");
 
-        if (this.isActive()) {
+        if (this.isActive() && this.currentCollection && _.has(this.currentDirection, "currentImage")) {
+            Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {
                 var resolution,
                     resolutionFactor = this.currentLayer.get("resolution");
@@ -196,6 +197,7 @@ const ObliqueMap = Backbone.Model.extend({
         var fillArea, oc, containerAttribute, map2D, interactions;
 
         if (!this.isActive()) {
+            Radio.trigger("ObliqueMap", "isActivated", true);
             const center = Radio.request("MapView", "getCenter"),
                 activeTool = Radio.request("ModelList", "getModelByAttributes", {type: "tool", isActive: true}),
                 resolution = Radio.request("MapView", "getOptions").resolution;
