@@ -253,12 +253,12 @@
  * @property {Configs.ConfigJSON.tool} [children.extendedFilter] Tool to dynamically filter all visible vector layers. The user gets guided through the filtering process. The layer must be prpared to be filterable. This is done via the layer attribute [extendedFilter]{@link Configs.Config.Layer}
  * @property {Configs.ConfigJSON.featureLister} [children.featureLister]
  * @property {Configs.ConfigJSON.filter} [children.filter]
- * @property {String} [children.gfi]*
- * @property {String} [children.kmlimport]*
- * @property {String} [children.lines]*
- * @property {String} [children.measure]*
- * @property {String} [children.parcelSearch]*
- * @property {String} [children.print]*
+ * @property {Configs.ConfigJSON.tool} [children.gfi] Tool to get feature information by clicking on feature in map
+ * @property {Configs.ConfigJSON.tool} [children.kmlimport] Tool to import kml files.
+ * @property {Configs.ConfigJSON.lines} [children.lines]
+ * @property {Configs.ConfigJSON.tool} [children.measure] Tool to measure distances or areas by creating the measuring geometry directly on the map
+ * @property {Configs.ConfigJSON.parcelSearch} [children.parcelSearch]
+ * @property {Configs.ConfigJSON.print} [children.print]
  * @property {String} [children.routing]*
  * @property {String} [children.searchByCoord]*
  * @property {String} [children.wfsFeatureFilter]*
@@ -379,4 +379,47 @@
  * @type {String[]|Object[]}
  * @property {String} name Name of the attribute
  * @property {String} matchingMode="OR" Matching mode of multiple selected values of same attribute. "OR" for logical OR and "AND" for logical AND
+ */
+
+/**
+ * @member lines
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to display commuter data as lines. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {String} [attrAnzahl="anzahl_einpendler"] Attribute for the amount of inbound commuters
+ * @property {String} [attrGemeinde="wohnort"] Attribute for municipality name
+ * @property {String} [featureType="mrh_einpendler_gemeinde"] FeatureType of wfs whose data should animated
+ * @property {Number} [url="http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"] Url of wfs to be requested
+ * @property {Number} [zoomLevel=1] Zoomlevel to which the portal should zoom, after the user has chosen a municipality
+ */
+
+/**
+ * @member parcelSearch
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to to search for specific parcels. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {String} [configJSON] Path to [gemarkungen_xx.json]{@link Configs.Gemarkungen}
+ * @property {Boolean} [parcelDenominator=false] Flag if cadastral district are also send to stored query
+ * @property {String} [serviceId] ID of gazetteer wfs. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} [storedQueryID] Name of storedQuery to be called
+ * @property {Boolean} [createReport=false] Flag if report should be created
+ * @property {String} [resportServiceId] Id of report service. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} [mapMarkerType="Parcel"] Flag how the [MapMarker]{@link MapMarker} module should mark and zoom onto parcel
+ */
+
+/**
+ * @member print
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to print map with all layers to PDF. This tool uses the MapFish3 technology Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @deprecated in 3.0.0. Some Parameters are deprecated
+ * @property {String} [mapfishServiceId] ID of print. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} [title="PrintResult"] Default title of created PDF. Can be manipulated by user
+ * @property {String} [printAppId="master"] Name of print app. Used for mapfish to use the correct template and to require the correct attributes
+ * @property {String} [version] @deprecated in 3.0.0. Flag for mapfish_print_3. If "mapfish_print_3" then the mapfish 3 is used otherwise the mapfish 2 is used with old config
+ * @property {Boolean} [gfi] @deprecated in 3.0.0. Flag if gfi should be printed.
+ * @property {String} [printID="9999"] @deprecated in 3.0.0. ID of print service. Id gets resolved over {@link Configs.RestServices}
+ * @property {Object} [gfiMarker] @deprecated in 3.0.0. Definition of gfiMarker in pdf
+ * @property {String} [configYAML="master"] @deprecated in 3.0.0. Name of config YAML used in mapfish print 2
+ * @property {String} [outputFilename="Ausdruck"] @deprecated in 3.0.0. Default filename of PDF. Can be changed by user.
  */
