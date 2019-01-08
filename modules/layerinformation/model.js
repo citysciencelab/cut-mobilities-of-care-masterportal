@@ -3,6 +3,8 @@ import View from "./view";
 
 const LayerInformation = Backbone.Model.extend({
     defaults: {
+        // konfiguriert in der rest-services.json
+        cswId: "3",
         // true wenn die Layerinformation sichtbar ist
         isVisible: false,
         uniqueIdList: []
