@@ -17,12 +17,33 @@ const TreeModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
+        this.listenTo(Radio.channel("ObliqueMap"), {
+            "isActivated": this.controlListeningToSearchbar
+        });
 
         if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
             // Führe die initiale Suche durch, da ein Suchparameter übergeben wurde.
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
 
+    },
+
+    /**
+     * Deactivates the topic search if the obliqueMap is activated.
+     * Enables topic search when obliqueMap is disabled.
+     * @param {boolean} value - includes whether the obliqueMap is active
+     * @return {void}
+     */
+    controlListeningToSearchbar: function (value) {
+        if (value) {
+            this.stopListening(Radio.channel("Searchbar"), "search");
+        }
+        else {
+            this.listenTo(Radio.channel("Searchbar"), {
+                "search": this.search
+            });
+        }
+        
     },
 
     search: function (searchString) {
