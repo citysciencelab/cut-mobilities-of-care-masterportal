@@ -43,7 +43,6 @@ const TreeModel = Backbone.Model.extend({
                 "search": this.search
             });
         }
-        
     },
 
     search: function (searchString) {
