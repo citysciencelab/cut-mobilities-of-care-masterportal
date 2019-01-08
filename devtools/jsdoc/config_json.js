@@ -1,8 +1,17 @@
 /**
  * @member ConfigJSON
  * @memberOf Configs
- * @description Config json needed for portal configuration
+ * @description Config json needed for portal configuration sparated in portalconfig and layerconfig
  * @class
+ * @property {Configs.ConfigJSON.Portalconfig} Portalconfig
+ * @property {Configs.ConfigJSON.Themenconfig} Themenconfig
+ */
+
+/**
+ * @member Portalconfig
+ * @memberOf Configs.ConfigJSON
+ * @description Config json needed for portal configuration
+ * @type {Object}
  * @property {Configs.ConfigJSON.Baumtyp} Baumtyp
  * @property {Configs.ConfigJSON.controls} [controls]
  * @property {Configs.ConfigJSON.mapView} [mapView]
@@ -12,6 +21,123 @@
  * @property {Configs.ConfigJSON.searchBar} [searchBar]
  * @property {Configs.ConfigJSON.simpleLister} [simpleLister]
  * @property {Configs.ConfigJSON.mapMarkerModul} [mapMarkerModul]
+ */
+
+/**
+ * @member Themenconfig
+ * @memberOf Configs.ConfigJSON
+ * @description Config json needed for portal layer configuration
+ * @type {Object}
+ * @property {Configs.ConfigJSON.Hintergrundkarten} Hintergrundkarten
+ * @property {Configs.ConfigJSON.Fachdaten} Fachdaten
+ */
+
+
+/**
+ * @member Hintergrundkarten
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of base layers
+ * @type {Object}
+ * @property {Configs.ConfigJSON.Layer[]} Layer
+ * @example "Hintergrundkarten":
+    {
+      "Layer": [
+        {
+          "id": "453",
+          "transparency": "80"
+        },
+        {
+          "id": "452"
+        },
+        {
+          "id": ["713", "714", "715", "716"],
+          "name": "Geobasiskarten (schwarz-weiß)",
+          "visibility": true
+        }
+      ]
+    }
+ */
+
+/**
+ * @member Fachdaten
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of overlayers. If [Baumtyp]{@link Configs.ConfigJSON.Baumtyp} === "custom", then it is possible to group layers to folders. Also folders cannbe grouped to folders.
+ * @type {Object}
+ * @property @property {Configs.ConfigJSON.Layer[]|Configs.ConfigJSON.GroupLayer[]} Layer
+ * @property {Configs.ConfigJSON.Ordner[]} [Ordner]
+ */
+
+/**
+ * @member Ordner
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of overlayers. If [Baumtyp]{@link Configs.ConfigJSON.Baumtyp} === "custom", then it is possible to group layers to folders. Also folders cannbe grouped to folders.
+ * @type {Object}
+ * @property {String} Titel Title of folder
+ * @property {Boolean} [isFolderSelectable] Flag if whole folder can be selected. If user selects the folder, then all contained layers are selected.
+ * @property {Configs.ConfigJSON.Ordner[]} [Ordner]
+ * @property {Configs.ConfigJSON.Layer[]|Configs.ConfigJSON.GroupLayer[]} Layer
+ */
+
+/**
+ * @member Layer
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of layer. Attributes for special types of layers are tagged in description (@WMS, @VECTOR)
+ * @type {Object}
+ * @property {String[]|String} id Layer id array or layer id or array with layer obejcts. Id gets resolved over {@link Configs.Services}
+ * @property {String} [name] Layer name
+ * @property {Number} [transparency=0] Tranparency of layer
+ * @property {Boolean} [visibility=false] Flag if layer is initially visible
+ * @property {String[]} [supported=["2D","3D"]] Flag if layers are supported in 2D and 3D modes
+ * @property {Number[]} [extent=[454591, 5809000, 700000, 6075769]] Extent of layer
+ * @property {Boolean} [displayInTree=true] Flag if layer should be displayed in tree.
+ * @property {String} [gfiTheme=value from [services.json]{@link Configs.Services} otherwise "default"] Definition of layers gfi theme
+ * @property {String} [layerAttribution] Html string that gives additional information. Gets displayed in control[attribution]{@link Configs.ConfigJSON.attributions} if control is configured.
+ * @property {String[]|String} [legendURL=value from [services.json]{@link Configs.Services}] The url to legend of layer
+ * @property {String} [maxScale=value from [services.json]{@link Configs.Services}] Maximum scale for layer to be displayed
+ * @property {String} [minScale=value from [services.json]{@link Configs.Services}] Minimum scale for layer to be displayed
+ * @property {Number} [autoRefresh] Automatical reload of the layer in millis. Minimum is 500
+ * @property {Boolean} [isVisibleInTree=true] Flag if layer should be shown in layer tree
+ * @property {Boolean} [isNeverVisibleInTree=false] Flag if layer should never be shown in layer tree
+ * @property {String[]} [attributesToStyle] @WMS Array of attributes to be styled. Needed by [styleWMS]{@link Configs.ConfigJSON.styleWMS}
+ * @property {Number} [featureCount=1] @WMS Number of features to be returned on Gfi request
+ * @property {String} [geomType] @WMS Geometry type of data behind WMS. At the moment only "Polygon" is possible. Needed by [styleWMS]{@link Configs.ConfigJSON.styleWMS}
+ * @property {String} [infoFormat=value from [services.json]{@link Configs.Services} otherwise "text/xml"] @WMS The format the get feature info request has to be returned.
+ * @property {Boolean} [styleable] @WMS Flag if layer can be used by tool [styleWMS]{@link Configs.ConfigJSON.styleWMS}
+ * @property {String[]} [styles] @WMS Requests layers with defined styles
+ * @property {Number} [clusterDistance] @Vector Pixel radius in whom all features of one layer get clustered
+ * @property {Boolean} [extendedFilter] @Vector Flag if layer can be used in [extendedFilter]{@link Configs.ConfigJSON.extendedFilter}
+ *
+ * @example {
+        "id": "452"
+      }
+ * @example {
+        "id": ["713", "714", "715", "716"],
+        "name": "Geobasiskarten (schwarz-weiß)"
+      }
+ */
+
+/**
+ * @member GroupLayer
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of group layer
+ * @type {Object}
+ * @property {String} id Layer id
+ * @property {Configs.ConfigJSON.Layer[]} children
+ * @property {String} [name] Layer name
+ * @property {Boolean} [visibility=false] Flag if layer is initially visible
+ * @example {
+          "id": "xyz",
+          "children":[
+            {
+              "id": "682"
+            },
+            {
+              "id": "1731"
+            }
+          ],
+          "visibility": true,
+          "name": "Kita und Krankenhäuser"
+        }
  */
 
 /**
