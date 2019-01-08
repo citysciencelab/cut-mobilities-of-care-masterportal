@@ -33,9 +33,7 @@ const ThemeView = Backbone.View.extend({
         var isViewMobile = Radio.request("Util", "isViewMobile"),
             currentView = Radio.request("GFI", "getCurrentView"),
             oldGfiWidth = currentView.$el.width(),
-            oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10),
-            title = this.model.get("name"),
-            truncatedTitle = null;
+            oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
         if (value === true) {
 
@@ -46,10 +44,8 @@ const ThemeView = Backbone.View.extend({
 
             currentView.$el.find(".gfi-content").html(this.el);
 
-            title = "Lorem Ipsum sit amet Dolor Lorem Ipsum sit amet Dolor";
-            truncatedTitle = this.stringTruncate(title, 43);
-
-            currentView.$el.find(".gfi-title").text(truncatedTitle);
+            // currentView.$el.find(".gfi-title").text(this.model.get("name"));
+            currentView.$el.find(".gfi-title").text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
             this.appendChildren();
             this.appendRoutableButton();
             if (this.gfiWindow === "detached" && !isViewMobile) {
@@ -57,12 +53,6 @@ const ThemeView = Backbone.View.extend({
             }
         }
         this.delegateEvents();
-    },
-
-    stringTruncate: function (str, length) {
-        var dots = str.length > length ? "..." : "";
-
-        return str.substring(0, length) + dots;
     },
 
     adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
