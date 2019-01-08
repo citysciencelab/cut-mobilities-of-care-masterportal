@@ -69,14 +69,14 @@ außerdem
 #### npm-Pakete global als Admin installieren
 Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werden, damit sie auf der Kommandozeile als normaler User ausführbar sind (wie normale Programme auch). Um das vorzubereiten in der Admin-cmd
 
-Achtung: Bitte VOR Konfiguration dieses Parameters den korrekten Systempfad ermitteln!
-(Auf einem deutschsprachigen Win10 ist dies bspw. ```C:\Program Files\nodejs```)
 ```
 # npm config set prefix C:\Programme\nodejs\
 ```
 
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
+**ACHTUNG:** Bitte VOR Konfiguration dieses Parameters den korrekten Systempfad ermitteln!
+(Auf einem deutschsprachigen Win10 ist dies bspw. ```C:\Program Files\nodejs```)
 
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:
