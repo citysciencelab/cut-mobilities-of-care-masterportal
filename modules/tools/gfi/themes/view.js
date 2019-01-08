@@ -43,9 +43,7 @@ const ThemeView = Backbone.View.extend({
             currentView.$el.css("left", "0px");
 
             currentView.$el.find(".gfi-content").html(this.el);
-
-            // currentView.$el.find(".gfi-title").text(this.model.get("name"));
-            currentView.$el.find(".gfi-title").text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
+            currentView.$el.find(".gfi-title").text(this.model.get("name"));
             this.appendChildren();
             this.appendRoutableButton();
             if (this.gfiWindow === "detached" && !isViewMobile) {
