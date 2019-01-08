@@ -7,6 +7,11 @@
  * @property {Configs.ConfigJSON.controls} [controls]
  * @property {Configs.ConfigJSON.mapView} [mapView]
  * @property {Configs.ConfigJSON.menu} [menu]
+ * @property {Configs.ConfigJSON.portalTitle} [portalTitle]
+ * @property {Configs.ConfigJSON.scaleLine} [scaleLine]
+ * @property {Configs.ConfigJSON.searchBar} [searchBar]
+ * @property {Configs.ConfigJSON.simpleLister} [simpleLister]
+ * @property {Configs.ConfigJSON.mapMarkerModul} [mapMarkerModul]
  */
 
 /**
@@ -16,6 +21,14 @@
  * Possible values are <b>light</b>, <b>default</b> and <b>custom</b>
  * @type {String}
  * @example "Baumtyp": "light"
+ */
+
+/**
+ * @member scaleLine
+ * @memberOf Configs.ConfigJSON
+ * @description Flag if scaleline should be created
+ * @type {Boolean}
+ * @example "scaleLine": true
  */
 
 /**
@@ -221,6 +234,11 @@
  * @type {Object}
  * @property {Configs.ConfigJSON.staticlinks} [staticlinks]
  * @property {Configs.ConfigJSON.tools} [tools]
+ * @property {Object} [tree] Menu configuration of layer tree
+ * @property {String} [tree.name] Display name of layer tree
+ * @property {String} [tree.glyphicon] Icon to be displayed before name
+ * @property {Boolean} [tree.isInitOpen=false] Flag to show if layer tree is initially opened
+ * @property {Boolean} [hide=false] Flag if menu should be hided in portal
  */
 
 /**
@@ -461,4 +479,185 @@
  * @property {Object} layer defined layer object.
  * @property {String} layer.title Title of layer to be displayed in tool.
  * @property {String} layer.layerId Id of layer to be displayed or hided
+ */
+
+/**
+ * @member portalTitle
+ * @memberOf Configs.ConfigJSON
+ * @description Title object  defining the header of the portal.
+ * @type {Object}
+ * @property {String} [title="Master"] Name of the portal
+ * @property {String} [logo] Url to extern image file. Positioned before title
+ * @property {String} [link="http://geoinfo.hamburg.de"] Url to extern page. Opend when user klicks on title
+ * @property {String} [tooltip="Landesbetrieb Geoinformation und Vermessung"] Tooltip that if shown when hovering over title
+ * @example "portalTitle": {
+  "title": "Master",
+  "logo": "/lgv-config/img/hh-logo.png",
+  "link": "http://geoinfo.hamburg.de",
+  "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+ */
+
+/**
+ * @member searchBar
+ * @memberOf Configs.ConfigJSON
+ * @description Definition of the contents of the searchbar. Multiple search alorithms and date to be search through can be defined.
+ * @type {Object}
+ * @property {Configs.ConfigJSON.bkg} [bkg] Bkg search.
+ * @property {Configs.ConfigJSON.gazetteer} [gazeteer] Gazetteer search.
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @property {String} [placeholder="Suche"] Placeholder for input field. Shows the user what search algorithms can be used
+ * @property {Number} [recommendedListlength=5] Maximum of suggestions
+ * @property {Boolean} [quickHelp=false] Flag if quick help should be shown in searchbar
+ * @property {Configs.ConfigJSON.specialWFS} [specialWFS] SpecialWFS search.
+ * @property {Configs.ConfigJSON.tree} [tree] Tree search.
+ * @property {Configs.ConfigJSON.visibleWFS} [visibleWFS] VisibleWFS search
+ * @property {Configs.ConfigJSON.visibleVector} [visibleVector] VisibleVector search
+ * @property {Number} [zoomLevel] Zoom level to be zoomed to, on click of search suggestion
+ * @property {String} [renderToDOM] Html-id to which object the searchbar gets appended. On "#searchbarInMap", the searchbar gets rendered on the map.
+ */
+
+/**
+ * @member bkg
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm over data containing the whole of germany.
+ * @type {Object}
+ * @property {String} [epsg="EPSG:25832"] Epsg copde of the used Coordinate reference system
+ * @property {Number[]} [extent=[454591, 5809000, 700000, 6075769]] Coordinate based extent of search algorithm. [minx, miny, maxx, maxy]
+ * @property {String} [filter="filter=(typ:*)"] Filter string send to bkg interface
+ * @property {String} geosearchServiceId Id of search service. Id gets resolved over {@link Configs.RestServices}
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @property {Number} [score=0.6] Score value defining the quality of search results
+ * @property {Number} [suggestCount=20] Number of suggestions for inout search string
+ * @property {String} suggestServiceId Id of suggest service. Id gets resolved over {@link Configs.RestServices}
+ * @example "bkg": {
+            "minChars": 3,
+            "suggestServiceId": "4",
+            "geosearchServiceId": "5",
+            "extent": [454591, 5809000, 700000, 6075769],
+            "suggestCount": 10,
+            "epsg": "EPSG:25832",
+            "filter": "filter=(typ:*)",
+            "score": 0.6
+        }
+ */
+
+/**
+ * @member gazetteer
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm that uses the gazetteer servicee of hamburg.
+ * @type {Object}
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @property {Boolean} [searchDistricts=false] Flag if gazetteer should search for districts
+ * @property {Boolean} [searchHouseNumbers=false] Flag if gazetteer should search for streets with housnumbers. Needs searchStreets=true
+ * @property {Boolean} [searchParcels=false] Flag if gazetteer should search for parcels.
+ * @property {Boolean} [searchStreetKey=false] Flag if gazetteer should search for streetkeys.
+ * @property {Boolean} [searchStreets=false] Flag if gazetteer should search for streetnames. Requirement for searchHouseNumbers
+ * @property {String} serviceID Id of gazetteer service. Id gets resolved over {@link Configs.RestServices}
+ * @example "gazetteer": {
+            "minChars": 3,
+            "serviceId": "6",
+            "searchStreets": true,
+            "searchHouseNumbers": true,
+            "searchDistricts": true,
+            "searchParcels": true,
+            "searchStreetKey": true
+        }
+ */
+
+/**
+ * @member specialWFS
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm that uses defined wfs. This module manages a direct wfs search without adding data to the portal or the layertree.
+ * If search gets triggered, the wfs is called per post request with filterparameters. Thus the portal is also with huge datasets performant.
+ * The search resulte are added to the suggest list with defined text and glyphicon. By clicking on this suggestion, the default function for clicking on search result is used and zoomed on thát feature.
+ * @deprecated in 3.0.0 Some attributes are deprecated
+ * @type {Object}
+ * @property {definition[]} definitions Definitions of wfs objects to be searched through
+ * @property {Object} definition One wfs object to be searched through
+ * @property {String} definition.url Url of wfs
+ * @property {String} definition.name Name of category. Used in suggest list
+ * @property {String} [definition.glyphicon="glyphicon-home"] Glyphicon used in suggest list
+ * @property {String} [definition.typeName] Typename of layer to be requested
+ * @property {String[]} [definition.propertyNames] Array of attribute names ot be used for filtering
+ * @property {String} [definition.geometryName="app:geom"] Attribute name of geometry. Used to zoom onto
+ * @property {Number} [definition.maxFeatures=20] Maximum of features to be returned
+ * @property {String} [definition.data] @deprecated in 3.0.0 Parameter of wfs request to filter
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @property {String} [glyphicon="glyphicon-home"] Glyphicon used in suggest list. Can be overwritten by definition.glyphicon
+ * @property {Number} [maxFeatures=20] Maximum of features to be returned. Can be overwritten by definition.maxFeatures
+ * @property {Number} [timeout=6000] Timeout for ajax request
+ * @example "specialWFS":
+      {
+        "minChars": 5,
+        "timeout": 10000,
+        "definitions": [
+          {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+          }
+        ]
+      }
+ */
+
+/**
+ * @member tree
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm that searches the layer tree
+ * @type {Object}
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @example "tree": {
+           "minChars": 3
+         }
+ */
+
+/**
+ * @member visibleWFS
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm that searches the visible WFS layers in the layertree
+ * @type {Object}
+ * @deprecated in 3.0.0 use [visibleVector]{@link Configs.ConfigJSON.visibleVector} instead
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @example "visibleWFS": {
+           "minChars": 3
+       }
+ */
+
+/**
+ * @member visibleVector
+ * @memberOf Configs.ConfigJSON
+ * @description Search algorithm that searches the visible vector layers in the layertree
+ * @type {Object}
+ * @property {Number} [minChars=3] Minimum numbers of chars when search should start
+ * @property {String[]} [layerTypes=["WFS"]] Vector layer types to be searched by
+ * @example "visibleVector": {
+           "minChars": 3,
+           "layerTypes": ["WFS", "GeoJSON"]
+       }
+ */
+
+/**
+ * @member simpleLister
+ * @memberOf Configs.ConfigJSON
+ * @description Tool that lists all vector features and their attributes, that are within the map extent
+ * @type {Object}
+ * @property {String} layerName Name of layer whos features should be shown
+ * @property {String} [errortxt="Keine Features im Kartenausschnitt"] Error text to be shown if no features are in the current map extent
+ */
+
+/**
+ * @member mapMarkerModul
+ * @memberOf Configs.ConfigJSON
+ * @description Flag that steers the mapmarker to be draggable or not. Used in MeldeMichel
+ * @type {Object}
+ * @property {String} marker On "dragMarker" the mapMarker gets draggable.
+ * @property {Boolean} visible Flag if marker is visible initially
  */
