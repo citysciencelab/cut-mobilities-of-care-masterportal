@@ -103,11 +103,7 @@ const TreeModel = Backbone.Model.extend({
         layerModels = _.uniq(layerModels, function (model) {
             return model.name + model.id;
         });
-
         _.each(layerModels, function (model) {
-            if (model.typ === "Oblique") {
-                return;
-            }
             this.get("layers").push({
                 name: model.name,
                 metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
