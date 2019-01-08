@@ -259,13 +259,13 @@
  * @property {Configs.ConfigJSON.tool} [children.measure] Tool to measure distances or areas by creating the measuring geometry directly on the map
  * @property {Configs.ConfigJSON.parcelSearch} [children.parcelSearch]
  * @property {Configs.ConfigJSON.print} [children.print]
- * @property {String} [children.routing]*
- * @property {String} [children.searchByCoord]*
- * @property {String} [children.wfsFeatureFilter]*
- * @property {String} [children.schulwegrouting]*
- * @property {String} [children.compareFeatures]*
- * @property {String} [children.layerslider]*
- * @property {String} [children.addWMS]*
+ * @property {Configs.ConfigJSON.routing} [children.routing]
+ * @property {Configs.ConfigJSON.tool} [children.searchByCoord] Tool to locate a map marker in the map based on coordinated given by user.
+ * @property {Configs.ConfigJSON.tool} [children.wfsFeatureFilter] Tool to filter defined layers by defined attributes. Parameters can be found at the [layer]{@link Configs.Config.Layer}
+ * @property {Configs.ConfigJSON.schulwegrouting} [children.schulwegrouting]
+ * @property {Configs.ConfigJSON.compareFeatures} [children.compareFeatures]
+ * @property {Configs.ConfigJSON.layerslider} [children.layerslider]
+ * @property {Configs.ConfigJSON.tool} [children.addWMS] Tool to add external wms layers using the layer url. Only works in portals with config [Baumtyp]{@link Configs.ConfigJSON.Baumtyp} = "custom"
  */
 
 /**
@@ -410,7 +410,7 @@
 /**
  * @member print
  * @memberOf Configs.ConfigJSON
- * @description Tool to print map with all layers to PDF. This tool uses the MapFish3 technology Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @description Tool to print map with all layers to PDF. This tool uses the MapFish3 technology. Extends [tool]{@link Configs.ConfigJSON.tool}
  * @type {Object}
  * @deprecated in 3.0.0. Some Parameters are deprecated
  * @property {String} [mapfishServiceId] ID of print. Id gets resolved over {@link Configs.RestServices}
@@ -418,8 +418,47 @@
  * @property {String} [printAppId="master"] Name of print app. Used for mapfish to use the correct template and to require the correct attributes
  * @property {String} [version] @deprecated in 3.0.0. Flag for mapfish_print_3. If "mapfish_print_3" then the mapfish 3 is used otherwise the mapfish 2 is used with old config
  * @property {Boolean} [gfi] @deprecated in 3.0.0. Flag if gfi should be printed.
- * @property {String} [printID="9999"] @deprecated in 3.0.0. ID of print service. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} [printID="9999"] @deprecated in 3.0.0. Id of print service. Id gets resolved over {@link Configs.RestServices}
  * @property {Object} [gfiMarker] @deprecated in 3.0.0. Definition of gfiMarker in pdf
  * @property {String} [configYAML="master"] @deprecated in 3.0.0. Name of config YAML used in mapfish print 2
  * @property {String} [outputFilename="Ausdruck"] @deprecated in 3.0.0. Default filename of PDF. Can be changed by user.
+ */
+
+/**
+ * @member routing
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to perform a routing based on BKG-Address data and viom routing data. Used for verkehsportal. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {String} bkgGeosearchID Id of bkg geosearch service that geocode address data. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} bkgSuggestID Id of bkg suggest service that returns a suggest list based on the users input. Id gets resolved over {@link Configs.RestServices}
+ * @property {String} viomRoutingID Id of routing service that returns a suggest list based on the users input. Id gets resolved over {@link Configs.RestServices}
+ */
+
+/**
+ * @member schulwegrouting
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to perform a routing from a given address to a predefined school entry. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {String} layerId="" Id of layer that contains the school positions. Needed to derive the coordinates for each school.
+ */
+
+/**
+ * @member compareFeatures
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to compare attributes of vector data. entry point is the [gfi]{@link Configs.ConfigJSON.gfi}. Used in schulinfosystem. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {Number} [numberOfFeaturesToShow=3] Maximum features to be compared.
+ * @property {Number} [numberOfAttributesToShow=12] Number of attributes to be shown. There is always a toggle button to show all attributes and to show the top number of attributes defined here
+ */
+
+/**
+ * @member layerslider
+ * @memberOf Configs.ConfigJSON
+ * @description Tool to slide between a configured stack of layers. Interactions are "play", "pause", "stop", "forward" and "backbward". The layers need to be configured in the portal and get toggled via Backbone.Radio. Extends [tool]{@link Configs.ConfigJSON.tool}
+ * @type {Object}
+ * @property {Number} [timeInterval=2000] Time interval in millis where the layers get switches. Minimum is 500
+ * @property {Object[]} layerIds Array with defined layers.
+ * @property {Object} layer defined layer object.
+ * @property {String} layer.title Title of layer to be displayed in tool.
+ * @property {String} layer.layerId Id of layer to be displayed or hided
  */
