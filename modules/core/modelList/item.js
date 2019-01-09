@@ -43,4 +43,4 @@ const Item = Backbone.Model.extend({
     }
 });
 
-export default  Item;
+export default Item;

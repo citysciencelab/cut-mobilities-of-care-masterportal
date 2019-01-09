@@ -79,17 +79,27 @@ import "es6-promise/auto";
 var sbconfig, controls, controlsView;
 
 function loadApp () {
+
+    // Prepare config for Utils
+    var utilConfig = {};
+    if (_.has(Config, "uiStyle")) {
+        utilConfig.uiStyle = Config.uiStyle.toUpperCase();
+    }
+    if (_.has(Config, "proxyHost")) {
+        utilConfig.proxyHost = Config.proxyHost;
+    }
+
     // RemoteInterface laden
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
     }
     // Core laden
     new Autostarter();
-    new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
+    new Util(utilConfig);
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new RawLayerList(null, {url: Config.layerConf});
-    new Preparser();
+    new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
     new CRS();

@@ -45,27 +45,34 @@
         "definitions": [
           {
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:mrh_row_bplan&propertyName=name",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
             "name": "B-Plan"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+            "typeName": "app:prosin_festgestellt",
+            "propertyNames": ["app:planrecht"],
+            "geometryName": "app:geom",
             "name": "festgestellt"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
             "name": "im Verfahren"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name",
+            "typeName": "app:KitaEinrichtungen",
+            "propertyNames": ["app:Name"],
             "name": "Kita"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-            "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort",
+            "typeName": "app:stoerfallbetrieb",
+            "propertyNames": ["app:standort"],
             "name": "Störfallbetrieb"
           }
         ]
@@ -428,6 +435,9 @@
         "id": "8730"
       },
       {
+        "id": "10220"
+      },
+      {
         "id": "2426"
       },
       {
@@ -556,6 +566,7 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
+        "hitTolerance": 25,
         "mouseHoverField": "kategorie",
         "extendedFilter": true
       },

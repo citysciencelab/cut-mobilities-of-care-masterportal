@@ -2,7 +2,7 @@ import Template from "text-loader!./template.html";
 
 const CategoryView = Backbone.View.extend({
     events: {
-        "click": "toggleCategoryMenu"
+        "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
     initialize: function () {
         this.listenTo(Radio.channel("TableMenu"), {
@@ -36,10 +36,12 @@ const CategoryView = Backbone.View.extend({
     hideCategoryMenu: function () {
         this.$(".table-nav-cat-panel").removeClass("in");
         this.$(".table-category-list").removeClass("table-category-active");
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     showCategoryMenu: function () {
         this.$(".table-category-list").addClass("table-category-active");
         this.$(".table-nav-cat-panel").addClass("in");
+        this.$("div.btn-group.header").hide();
         Radio.request("TableMenu", "setActiveElement", "Category");
     }
 });

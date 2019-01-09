@@ -3,6 +3,7 @@ import ValueView from "../../../snippets/value/view";
 import SnippetCheckBoxView from "../../../snippets/checkbox/view";
 import Template from "text-loader!./templateDetailView.html";
 import SnippetSliderView from "../../../snippets/slider/range/view";
+import SnippetMultiCheckboxView from "../../../snippets/multicheckbox/view";
 
 const QueryDetailView = Backbone.View.extend({
     events: {
@@ -70,7 +71,10 @@ const QueryDetailView = Backbone.View.extend({
 
         if (this.model.get("isLayerVisible")) {
             _.each(this.model.get("snippetCollection").models, function (snippet) {
-                if (snippet.get("type") === "string" || snippet.get("type") === "text") {
+                if (snippet.get("snippetType") === "checkbox-classic") {
+                    view = new SnippetMultiCheckboxView({model: snippet});
+                }
+                else if (snippet.get("type") === "string" || snippet.get("type") === "text") {
                     view = new SnippetDropdownView({model: snippet});
                 }
                 else if (snippet.get("type") === "boolean") {
@@ -83,6 +87,7 @@ const QueryDetailView = Backbone.View.extend({
                 else {
                     view = new SnippetCheckBoxView({model: snippet});
                 }
+
 
                 this.$el.append(view.render().$el);
             }, this);
