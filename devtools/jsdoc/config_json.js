@@ -19,7 +19,6 @@
  * @property {Configs.ConfigJSON.portalTitle} [portalTitle]
  * @property {Configs.ConfigJSON.scaleLine} [scaleLine]
  * @property {Configs.ConfigJSON.searchBar} [searchBar]
- * @property {Configs.ConfigJSON.simpleLister} [simpleLister]
  * @property {Configs.ConfigJSON.mapMarkerModul} [mapMarkerModul]
  */
 
@@ -63,8 +62,27 @@
  * @memberOf Configs.ConfigJSON
  * @description Definition of overlayers. If [Baumtyp]{@link Configs.ConfigJSON.Baumtyp} === "custom", then it is possible to group layers to folders. Also folders cannbe grouped to folders.
  * @type {Object}
- * @property @property {Configs.ConfigJSON.Layer[]|Configs.ConfigJSON.GroupLayer[]} Layer
+ * @property {Configs.ConfigJSON.Layer[]|Configs.ConfigJSON.GroupLayer[]} Layer
  * @property {Configs.ConfigJSON.Ordner[]} [Ordner]
+ * @example "Fachdaten": {
+        "Layer": [
+            {
+                "id": "8194"
+            }
+        ]
+    }
+ * @example "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "Ordner1",
+                "Layer": [
+                    {
+                        "id": "8194"
+                    }
+                ]
+            }
+        ]
+    }
  */
 
 /**
@@ -76,6 +94,31 @@
  * @property {Boolean} [isFolderSelectable] Flag if whole folder can be selected. If user selects the folder, then all contained layers are selected.
  * @property {Configs.ConfigJSON.Ordner[]} [Ordner]
  * @property {Configs.ConfigJSON.Layer[]|Configs.ConfigJSON.GroupLayer[]} Layer
+ * @example "Ordner": [
+        {
+            "Titel": "Ordner1",
+            "Layer": [
+                {
+                    "id": "8194"
+                }
+            ]
+        }
+    ]
+ * @example "Ordner": [
+        {
+            "Titel": "Ordner1",
+            "Ordner": [
+                {
+                    "Titel": "Ordner2",
+                    "Layer": [
+                        {
+                            "id": "8194"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
  */
 
 /**
@@ -124,6 +167,69 @@
  * @example {
         "id": ["713", "714", "715", "716"],
         "name": "Geobasiskarten (schwarz-weiß)"
+      }
+ * @example Example of WMS:
+ * {
+        "id": "123456",
+        "name": "MyWMSLayerName",
+        "transparency": 0,
+        "visibility": true,
+        "supported": ["2D"],
+        "extent": [454591, 5809000, 700000, 6075769],
+        "displayInTree": true,
+        "gfiTheme": "default",
+        "layerAttribution": "<b>MyBoldAttribution for layer 123456</b>",
+        "legendURL": "https://myServer/myService/legend.pdf",
+        "maxScale": "100000",
+        "minScale": "1000",
+        "autoRefresh": "10000",
+        "isVisibleInTree": true,
+        "isNeverVisibleInTree": false,
+        "attributesToStyle": ["MyFirstAttr"],
+        "featureCount": 2,
+        "geomType": "geometry",
+        "infoFormat": "text/html",
+        "styleable": true,
+        "styles": ["firstStyle", "secondStyle"]
+      }
+ * @example Example of Vector:
+ * {
+        "id": "123456",
+        "name": "MyVectorLayerName",
+        "transparency": 0,
+        "visibility": true,
+        "supported": ["2D"],
+        "extent": [454591, 5809000, 700000, 6075769],
+        "displayInTree": true,
+        "gfiTheme": "default",
+        "layerAttribution": "<b>MyBoldAttribution for layer 123456</b>",
+        "legendURL": "https://myServer/myService/legend.pdf",
+        "maxScale": "100000",
+        "minScale": "1000",
+        "autoRefresh": "10000",
+        "isVisibleInTree": true,
+        "isNeverVisibleInTree": false,
+        "clusterDistance": 60,
+        "extendedFilter": true,
+        "filterOptions": [
+            {
+                "fieldName": "myFirstAttributeToFilter",
+                "filterName": "Filter_1",
+                "filterString": ["*", "value1", "value2"],
+                "filterType": "combo"
+            },
+            {
+                "fieldName": "mySecondAttributeToFilter",
+                "filterName": "Filter_2",
+                "filterString": ["*", "value3", "value4"],
+                "filterType": "combo"
+            }
+        ],
+        "mouseHoverField": "name",
+        "routable": false,
+        "searchField": "name",
+        "styleId": "123456",
+        "hitTolerance": 50,
       }
  */
 
@@ -386,11 +492,42 @@
  * @type {Object[]}
  * @property {String} name Name of item to be displayed
  * @property {String} glyphicon Glyphicon of item to be displayed before link
- * @property {String} url Url to be pointed at
+ * @property {String} [url] Url to be pointed at
  * @property {Object[]} [onClickTrigger] Defines the Radio events that are triggered in click on item.
  * @property {String} onClickTrigger.channel Radio channel for trigger
  * @property {String} onClickTrigger.event Radio event for trigger
  * @property {String|Boolean|Number} onClickTrigger.data data to be triggered
+ * @example Example with only links:
+ * "staticlinks": [
+      {
+        "name": "Haftungsausschluss",
+        "glyphicon": "glyphicon-globe",
+        "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+      },
+      {
+        "name": "Hamburg",
+        "glyphicon": "glyphicon-globe",
+        "url": "http://www.hamburg.de"
+      }]
+ * @example Example with link and onClickTrigger:
+ * "staticlinks": [
+      {
+        "name": "DoSomethingInModuleXY",
+        "glyphicon": "glyphicon-globe",
+        "onClicktrigger": [
+            {
+                "channel": "ModuleXY",
+                "event": "doSomething",
+                "data": "HelloWorld!"
+            }
+
+        ]
+      },
+      {
+        "name": "Hamburg",
+        "glyphicon": "glyphicon-globe",
+        "url": "http://www.hamburg.de"
+      }]
  */
 
 /**
@@ -434,6 +571,11 @@
  * @property {Boolean} [isVisibleInMenu=true] Flag if tool is visible in menu
  * @property {Boolean} [isInitOpen=false] Flag if tool is initially activated
  * @property {Boolean} [onlyDesktop=false] Flag if tool is only available in desktop mode
+ * @example * "measure":
+          {
+            "name": "Strecke / Fläche messen",
+            "glyphicon": "glyphicon-resize-full"
+          }
  */
 
 /**
@@ -443,6 +585,10 @@
  * @type {Object}
  * @property {String} email Email
  * @property {String} name Name
+ * @example {
+ *          "email": "user@company.com",
+ *          "name": "User"
+ *          }
  */
 
 /**
@@ -460,6 +606,42 @@
  * @property {String} [textPlaceholder] Placeholder for user text in email mask
  * @property {Configs.ConfigJSON.email[]} [to] To Emails
  * @property {String} [contactInfo] Information to be displayed above the email mask
+ * @example
+ * "contact":
+      {
+        "name": "Kontakt",
+        "glyphicon": "glyphicon-envelope",
+        "serviceID": "123",
+        "includeSystemInfo": true,
+        "ccToUser": false,
+        "from": [
+            {
+                "email": "user1@company.com",
+                "name": "User1"
+            }
+        ],
+        "to": [
+            {
+                "email": "userx@company2.com",
+                "name": "UserX"
+            }
+        ],
+        "cc": [
+            {
+                "email": "user2@company.com",
+                "name": "User2"
+            }
+        ],
+        "bcc": [
+            {
+                "email": "user3@company.com",
+                "name": "User3"
+            }
+        ],
+        "subject": "Email to support",
+        "textPlaceholder": "Please type in your message",
+        "contactInfo": "Here you can report bugs or contact our support team."
+      }
  */
 
 /**
@@ -511,6 +693,12 @@
  * @description Tool to list all features for every vector layer. Extends [tool]{@link Configs.ConfigJSON.tool}
  * @type {Object}
  * @property {Number} [lister=20] Amount of features to be loaded initially. This is also the step size the features can manually be reloaded
+ * @example
+ * "featureLister": {
+            "name": "Liste",
+            "glyphicon": "glyphicon-menu-hamburger",
+            "lister": 10
+          }
  */
 
 /**
@@ -523,6 +711,76 @@
  * @property {Boolean} [liveZoomToFeatures=false] Flag to zoom to filter result immediately after user action
  * @property {Configs.ConfigJSON.predefinedQuery[]} [predefinedQueries] Predefined queries that are automatically called when activating the filter
  * @property {Boolean} [allowMultipleQueriesPerLayer] Flag to allow more than one filter query per layer
+ * @example
+ * "filter":
+      {
+        "name": "Filter",
+        "glyphicon": "glyphicon-filter",
+        "deactivateGFI": false,
+        "isGeneric": false,
+        "isInitOpen": false,
+        "allowMultipleQueriesPerLayer": false,
+        "predefinedQueries": [
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Stadtteilschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Stadtteilschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Gymnasien",
+              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Gymnasien"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+            },
+            {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Sonderschulen",
+              "predefinedRules": [
+                {
+                  "attrName": "kapitelbezeichnung",
+                  "values": ["Sonderschulen"]
+                }
+              ],
+              "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+            },
+            {
+              "layerId": "1711",
+              "isActive": true,
+              "isSelected": true,
+              "name": "Krankenhäuser",
+              "predefinedRules": [],
+              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+            }
+          ]
+      }
  */
 
 /**
@@ -538,6 +796,19 @@
  * @property {Configs.ConfigJSON.predefinedRule[]} [predefinedRules] Rules that are always used for the filter
  * @property {Configs.ConfigJSON.attributeWhiteListObject[]} [attributeWhitelist] Attributes of features that can be filtered
  * @property {String} [snippetType] Snippet type of attribute. Normally the attribut typed of the layer are derived and thus the snippet type defined. This flag overwrites the derived snippetType, eg. with: "checkbox-classic"
+ * @example
+ * {
+              "layerId": "8712",
+              "isActive": false,
+              "isSelected": false,
+              "name": "Grundschulen",
+              "predefinedRules": [
+              {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }],
+              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+            }
  */
 
 /**
@@ -547,6 +818,11 @@
  * @type {Object}
  * @property {String} attrName Name of the attribute
  * @property {String[]} values Attribute values that pass the filtering test
+ * @example
+ * {
+                "attrName": "kapitelbezeichnung",
+                "values": ["Grundschulen", "Langformschulen"]
+              }
  */
 
 /**
@@ -556,8 +832,10 @@
  * @type {String[]|Object[]}
  * @property {String} name Name of the attribute
  * @property {String} matchingMode="OR" Matching mode of multiple selected values of same attribute. "OR" for logical OR and "AND" for logical AND
- * @example "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
- * @example "attributeWhiteList": [
+ * @example Example with array of strings:
+ * "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+ * @example Example with array of objects
+ * "attributeWhiteList": [
   {"name": "bezirk", "matchingMode": "OR"},
   {"name": "stadtteil", "matchingMode": "OR"},
   {"name": "abschluss", "matchingMode": "AND"},
@@ -576,6 +854,17 @@
  * @property {String} [featureType="mrh_einpendler_gemeinde"] FeatureType of wfs whose data should animated
  * @property {Number} [url="http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"] Url of wfs to be requested
  * @property {Number} [zoomLevel=1] Zoomlevel to which the portal should zoom, after the user has chosen a municipality
+ * @example
+ * "lines":
+          {
+            "name": "Pendler (Lines)",
+            "glyphicon": "glyphicon-play-circle",
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrGemeinde": "wohnort",
+            "zoomlevel": 1,
+          }
  */
 
 /**
@@ -590,6 +879,16 @@
  * @property {Boolean} [createReport=false] Flag if report should be created
  * @property {String} [resportServiceId] Id of report service. Id gets resolved over {@link Configs.RestServices}
  * @property {String} [mapMarkerType="Parcel"] Flag how the [MapMarker]{@link MapMarker} module should mark and zoom onto parcel
+ * @example
+ * "parcelSearch":
+          {
+            "name": "Flurstückssuche",
+            "glyphicon": "glyphicon-search",
+            "serviceId": "123",
+            "storedQueryID": "Flurstueck",
+            "configJSON": "/lgv-config/gemarkungen_hh.json",
+            "parcelDenominator": false
+          }
  */
 
 /**
@@ -607,6 +906,17 @@
  * @property {Object} [gfiMarker] @deprecated in 3.0.0. Definition of gfiMarker in pdf
  * @property {String} [configYAML="master"] @deprecated in 3.0.0. Name of config YAML used in mapfish print 2
  * @property {String} [outputFilename="Ausdruck"] @deprecated in 3.0.0. Default filename of PDF. Can be changed by user.
+ * @example
+ * "print":
+          {
+            "name": "Karte drucken",
+            "glyphicon": "glyphicon-print",
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "mrh",
+            "filename": "Ausdruck",
+            "title": "Mein Titel",
+            "version" : "mapfish_print_3"
+          }
  */
 
 /**
@@ -617,6 +927,16 @@
  * @property {String} bkgGeosearchID Id of bkg geosearch service that geocode address data. Id gets resolved over {@link Configs.RestServices}
  * @property {String} bkgSuggestID Id of bkg suggest service that returns a suggest list based on the users input. Id gets resolved over {@link Configs.RestServices}
  * @property {String} viomRoutingID Id of routing service that returns a suggest list based on the users input. Id gets resolved over {@link Configs.RestServices}
+ * @example
+ * "routing":
+          {
+            "name": "Routenplaner",
+            "glyphicon": "glyphicon-road",
+            "viomRoutingID": "123",
+            "bkgSuggestID": "456",
+            "bkgGeosearchID": "789",
+            "isInitOpen": false
+          }
  */
 
 /**
@@ -625,6 +945,12 @@
  * @description Tool to perform a routing from a given address to a predefined school entry. Extends [tool]{@link Configs.ConfigJSON.tool}
  * @type {Object}
  * @property {String} layerId="" Id of layer that contains the school positions. Needed to derive the coordinates for each school.
+ * @example
+ * "schulwegrouting": {
+        "name": "Schulweg-Routing",
+        "glyphicon": "glyphicon-filter",
+        "layerId": "8712"
+      }
  */
 
 /**
@@ -652,6 +978,26 @@
  * @property {Object} layer defined layer object.
  * @property {String} layer.title Title of layer to be displayed in tool.
  * @property {String} layer.layerId Id of layer to be displayed or hided
+ * @example "layerslider": {
+            "name": "Zeitreihe",
+            "glyphicon": "glyphicon-film",
+            "title": "Simulation von Beispiel-WMS",
+            "timeInterval": 2000,
+            "layerIds": [
+              {
+                "title": "Dienst 1",
+                "layerId": "8730"
+              },
+              {
+                "title": "Dienst 2",
+                "layerId": "2426"
+              },
+              {
+                "title": "Dienst 3",
+                "layerId": "4561"
+              }
+            ]
+          }
  */
 
 /**
@@ -815,15 +1161,6 @@
            "minChars": 3,
            "layerTypes": ["WFS", "GeoJSON"]
        }
- */
-
-/**
- * @member simpleLister
- * @memberOf Configs.ConfigJSON
- * @description Tool that lists all vector features and their attributes, that are within the map extent
- * @type {Object}
- * @property {String} layerName Name of layer whos features should be shown
- * @property {String} [errortxt="Keine Features im Kartenausschnitt"] Error text to be shown if no features are in the current map extent
  */
 
 /**
