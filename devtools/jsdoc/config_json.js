@@ -83,7 +83,7 @@
  * @memberOf Configs.ConfigJSON
  * @description Definition of layer. Attributes for special types of layers are tagged in description (@WMS, @VECTOR)
  * @type {Object}
- * @property {String[]|String} id Layer id array or layer id or array with layer obejcts. Id gets resolved over {@link Configs.Services}
+ * @property {String[]|String} id Layer id array or layer id or array with layer obejcts. Id gets resolved over [services.json]{@link Configs.Services}
  * @property {String} [name] Layer name
  * @property {Number} [transparency=0] Tranparency of layer
  * @property {Boolean} [visibility=false] Flag if layer is initially visible
@@ -106,6 +106,17 @@
  * @property {String[]} [styles] @WMS Requests layers with defined styles
  * @property {Number} [clusterDistance] @Vector Pixel radius in whom all features of one layer get clustered
  * @property {Boolean} [extendedFilter] @Vector Flag if layer can be used in [extendedFilter]{@link Configs.ConfigJSON.extendedFilter}
+ * @property {filterOption[]} [filterOptions] @Vector Array of filter options used by [wfsFeatureFilter]{@link Configs.ConfigJSON.wfsFeatureFilter}
+ * @property {Object} [filterOption] @Vector Filter option
+ * @property {String} filterOption.fieldName @Vector Attribut name of wfs to be filtered by
+ * @property {String} filterOption.filterName @Vector Name of filter in Tool
+ * @property {String[]} filterOption.filterString @Vector Array of attribute values that can be filtered
+ * @property {String} filterOption.filterType @Vector Name of allowed filtertyp. At the moment only "combo"
+ * @property {String[]|String} [mouseHoverField] @Vector Attribute name or list of attribute names to be shown on hover. Therefore [mousehover]{@link Configs.Config.mouseHover} must be activated.
+ * @property {Boolean} [routable] @Vector Flag if gfi position of layer feature can be set as routing destination in gfi. Therefore [routing]{@link Configs.ConfigJSON.routing} must be configured.
+ * @property {String} [searchField] @Vector Name of Attribute to be searched by [searchbar]{@link Configs.ConfigJSON.searchbar}.
+ * @property {String} [styleId] @Vector Id of style object defined in [style.json]{@link Configs.style}. The style object defines the styling of vector layers.
+ * @property {String} [hitTolerance] @Vector Pixel tolerance on get feature info click
  *
  * @example {
         "id": "452"
@@ -119,9 +130,10 @@
 /**
  * @member GroupLayer
  * @memberOf Configs.ConfigJSON
- * @description Definition of group layer
+ * @description Definition of group layer. A group layer can consist of different layer types such as "WFS" and "WMS". A group layer takes all the defined layers in the children-array and show them as one layer in the map.
+ * There are some things to be mentioned. In case of get feature request, every layer gets requested for its own. Legends are created for each layer and displayed together. Layer information get shortened and only the layerinformation of first layer gets shown.
  * @type {Object}
- * @property {String} id Layer id
+ * @property {String} id Layer id. Is expected as a uniqueId and may not be listed in [services.json]{@link Configs.Services}
  * @property {Configs.ConfigJSON.Layer[]} children
  * @property {String} [name] Layer name
  * @property {Boolean} [visibility=false] Flag if layer is initially visible
@@ -470,6 +482,27 @@
  * @property {Number} [steps=50] Amount of animation steps
  * @property {Number} [url="http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"] Url of wfs to be requested
  * @property {Number} [zoomLevel=1] Zoomlevel to which the portal should zoom, after the user has chosen a municipality
+ * @example "animation":
+          {
+            "name": "Pendler (Animation)",
+            "glyphicon": "glyphicon-play-circle",
+            "steps": 30,
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+            "params": {
+                "REQUEST": "GetFeature",
+                "SERVICE": "WFS",
+                "TYPENAME": "app:mrh_kreise",
+                "VERSION": "1.1.0",
+                "maxFeatures": "10000"
+            },
+            "featureType": "mrh_einpendler_gemeinde",
+            "attrAnzahl": "anzahl_einpendler",
+            "attrGemeinde": "wohnort",
+            "minPx": 5,
+            "maxPx": 30,
+            "zoomlevel": 1,
+            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+          }
  */
 
 /**
@@ -523,6 +556,14 @@
  * @type {String[]|Object[]}
  * @property {String} name Name of the attribute
  * @property {String} matchingMode="OR" Matching mode of multiple selected values of same attribute. "OR" for logical OR and "AND" for logical AND
+ * @example "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+ * @example "attributeWhiteList": [
+  {"name": "bezirk", "matchingMode": "OR"},
+  {"name": "stadtteil", "matchingMode": "OR"},
+  {"name": "abschluss", "matchingMode": "AND"},
+  {"name": "anzahl_schueler", "matchingMode": "AND"},
+  {"name": "fremdsprache", "matchingMode": "AND"}
+]
  */
 
 /**
@@ -593,6 +634,12 @@
  * @type {Object}
  * @property {Number} [numberOfFeaturesToShow=3] Maximum features to be compared.
  * @property {Number} [numberOfAttributesToShow=12] Number of attributes to be shown. There is always a toggle button to show all attributes and to show the top number of attributes defined here
+ * @example "compareFeatures": {
+            "name": "Vergleichsliste",
+            "glyphicon": "glyphicon-th-list",
+            "numberOfFeaturesToShow": 5,
+            "numberOfAttributesToShow": 20
+          }
  */
 
 /**

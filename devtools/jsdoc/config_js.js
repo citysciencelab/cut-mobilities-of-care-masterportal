@@ -50,7 +50,7 @@
  * @member cswId
  * @memberOf Configs.Config
  * @type {String}
- * @description Reference id to a CS-W interface. Id gets resolved over {@link Configs.RestServices}
+ * @description Reference id to a CS-W interface. Id gets resolved over [rest-services.json]{@link Configs.RestServices}
  * @default "1"
  * @example cswId: "1"
  */
@@ -160,7 +160,7 @@
  * @member restConf
  * @memberOf Configs.Config
  * @type {String}
- * @description Path to [rest-services.json]{@link Configs.RestServices}. Contains additional services like print service, wps, csw. Path if relative to js/main.js
+ * @description Path to [rest-services.json][rest-services.json]{@link Configs.RestServices}. Contains additional services like print service, wps, csw. Path if relative to js/main.js
  * @example restConf: "/lgv-config/rest-services-internet.json"
  */
 
@@ -221,7 +221,7 @@
  * @member wpsID
  * @memberOf Configs.Config
  * @type {String}
- * @description Reference id to wps interface, which is used in different modules. Id gets resolved over {@link Configs.RestServices}
+ * @description Reference id to wps interface, which is used in different modules. Id gets resolved over [rest-services.json]{@link Configs.RestServices}
  * @example wpsID: "1"
  */
 
