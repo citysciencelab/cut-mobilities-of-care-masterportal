@@ -387,6 +387,7 @@
       },
       "mousePosition": true,
       "button3d": true,
+      "buttonOblique": true,
       "freeze": true
     },
     "scaleLine": true,
@@ -418,6 +419,11 @@
           "id": "12884",
           "name": "Gebäude LoD2",
           "visibility": true
+        },
+        {
+         "id": "12885",
+         "name": "Oblique",
+         "visibility": true
         }
       ]
     },
