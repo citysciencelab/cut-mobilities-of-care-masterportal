@@ -257,7 +257,11 @@ const ParametricURL = Backbone.Model.extend({
         }
         this.setZoomToGeometry(bezirk.name);
     },
+    parseBrwId: function (result) {
+        var brwId = _.values(_.pick(result, "BRWID"))[0];
 
+        this.setBrwId(brwId);
+    },
     parseFeatureId: function (result) {
         var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -354,6 +358,10 @@ const ParametricURL = Backbone.Model.extend({
 
         if (_.has(result, "BEZIRK")) {
             this.parseBezirk(result);
+        }
+
+        if (_.has(result, "BRWID")) {
+            this.parseBrwId(result);
         }
 
         /**
