@@ -5,6 +5,11 @@
  * @class
  * @property {Configs.ConfigJSON.Portalconfig} Portalconfig
  * @property {Configs.ConfigJSON.Themenconfig} Themenconfig
+ * @example
+ * {
+ * "Portalconfig": {...},
+ * "Themenconfig": {...}
+ * }
  */
 
 /**
