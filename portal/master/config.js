@@ -51,7 +51,6 @@ const Config = {
         postMessageUrl: "http://localhost:8080"
     },
     startingMap3D: false,
-    obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
         enableLighting: false,

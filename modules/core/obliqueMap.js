@@ -95,6 +95,7 @@ const ObliqueMap = Backbone.Model.extend({
                 this.currentDirection = direction;
                 return direction.activate(this.get("map"), coordinate, resolution).then(function () {
                     Radio.trigger("ObliqueMap", "newImage", direction.currentImage);
+                    Radio.trigger("ObliqueMap", "setCenter", coordinate, resolution);
                 });
             }
             return Promise.reject(new Error("there is no direction"));
@@ -162,8 +163,11 @@ const ObliqueMap = Backbone.Model.extend({
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution"),
-                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+                resolutionFactor = this.currentLayer.get("resolution");
+
+            let useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+
+            useResolution = this.get("map").getView().constrainResolution(useResolution);
 
             return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {
@@ -244,6 +248,7 @@ const ObliqueMap = Backbone.Model.extend({
                 });
             }
             else {
+                Radio.trigger("Util", "showLoader");
                 // load first Layer which is active on startup or
                 // otherwise just take the first layer, abort if no layer exists.
                 let layer = null;
@@ -272,6 +277,7 @@ const ObliqueMap = Backbone.Model.extend({
                         layer.set("isVisibleInMap", true);
                         layer.set("isSelected", true);
                         Radio.trigger("Map", "change", "Oblique");
+                        Radio.trigger("Util", "hideLoader");
                     });
                 }
                 // no oblique layer, obliqueMap is not loaded.
