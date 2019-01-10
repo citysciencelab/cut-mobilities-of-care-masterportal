@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<div class= "panel text-align-center radPegelHeader">
+    <strong><%= gfiContent[0].Name %></strong>
+</div>
+<ul class="nav nav-pills">
+    <li value= "info" class="tab-toggle active"><a data-toggle="tab" href="#gfiList">Info</a></li>
+  <% if (!_.isNull(dayDataset)) { %>
+    <li value= "day" class="tab-toggle"><a data-toggle="tab" href="#chart">Tag</a></li>
+  <% } %>
+  <% if (!_.isNull(lastSevenDaysDataset)) { %>
+    <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>
+  <% } %>
+  <% if (!_.isNull(yearDataset)) { %>
+    <li value= "year" class="tab-toggle"><a data-toggle="tab" href="#chart">Jahr</a></li>
+  <% } %>
+</ul>
+<div class="tab-content">
+    <div id="gfiList" class="tab-pane radzaehlstellen fade in active">
+        <div class="imageradzaehlstellenDiv">
+        </div>
+        <table class="table table-striped">
+            <tbody>
+                <tr colspan="3">
+                    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
+                    </td>
+                    <td>
+                        Zeitraum
+                    </td>
+                    <td>
+                        Radfahrer
+                    </td>
+                </tr>
+            <%  _.each(infoGFIContent, function(value, index) { console.log(value)%>
+                <tr colspan="3">
+                    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
+                        <%= value.attrName + ""%>
+                    </td>
+                <% if(_.isArray(value.attrValue)) { %>
+                    <td class = "infoGFIContent">
+                        <%= value.attrValue[0] %>
+                    </td>
+
+                    <td class = "infoGFIContent">
+                        <%= value.attrValue[1] %>
+                    </td>
+                <% }
+                else { %>
+                    <td>
+                        <%= value.attrValue%>
+                    </td>
+                    <td>
+                    </td>
+                <% } %>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div class="radzaehlstellen tab-pane form-check fade">
+        <input type="checkbox" class="chartCheckbox form-check-input" id="chartCheck" checked>
+        <label class="form-check-label" for="chartCheck">Diagramm</label>
+    </div>
+    <div id="chart" class="tab-pane radzaehlstellen fade">
+        <div id="d3-div" class="graph">
+            <div class="graph-tooltip-div"></div>
+        </div>
+    </div>
+    <div class="radzaehlstellen tab-pane form-check fade">
+        <input type="checkbox" class="tableCheckbox form-check-input" id="tableCheck" checked>
+        <label class="form-check-label" for="tableCheck">Tabelle</label>
+    </div>
+    <div id="tableday" class="tab-pane radzaehlstellen table fade">
+        <table class="table table-striped">
+            <thead>
+                <th>Name</th>
+                <% _.each(dayDataset.data, function (day){%>
+                <th><%=day.timestamp%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(dayDataset.data, function (day){%>
+                    <td class="data"><%=day.total%></td>
+                <% });%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tablelastSevenDays" class="tab-pane radzaehlstellen table fade">
+        <table class="table table-striped">
+            <thead>
+                <th>Name</th>
+                <% _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
+                <th><%=lastSevenDays.timestamp%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(lastSevenDaysDataset.data, function (lastSevenDays) {%>
+                    <td class="data"><%=lastSevenDays.total%></td>
+                <% });%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tableyear" class="tab-pane radzaehlstellen table fade">
+        <table class="table table-striped">
+            <thead>
+                <th>Name</th>
+                <% _.each(yearDataset.data, function (year) {%>
+                <th><%=year.timestamp%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(yearDataset.data, function (year) {%>
+                    <td class="data"><%=year.total%></td>
+                <% });%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="radzaehlstellen tab-pane downloadButton fade">
+        <button class="btn csv-download">Download
+            <span class="glyphicon glyphicon-save"></span>
+        </button>
+    </div>
+</div>
