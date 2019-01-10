@@ -3,7 +3,9 @@ const ParametricURL = Backbone.Model.extend({
         layerParams: [],
         isInitOpen: [],
         zoomToGeometry: "",
-        zoomToFeatureIds: []
+        zoomToFeatureIds: [],
+        brwId: undefined,
+        brwLayerName: undefined
     },
 
     initialize: function () {
@@ -43,6 +45,12 @@ const ParametricURL = Backbone.Model.extend({
             },
             "getZoomToFeatureIds": function () {
                 return this.get("zoomToFeatureIds");
+            },
+            "getBrwId": function () {
+                return this.get("brwId");
+            },
+            "getBrwLayerName": function () {
+                return this.get("brwLayerName");
             }
         }, this);
 
@@ -262,6 +270,11 @@ const ParametricURL = Backbone.Model.extend({
 
         this.setBrwId(brwId);
     },
+    parseBrwLayerName: function (result) {
+        var brwLayerName = _.values(_.pick(result, "BRWLAYERNAME"))[0];
+
+        this.setBrwLayerName(brwLayerName);
+    },
     parseFeatureId: function (result) {
         var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -362,6 +375,9 @@ const ParametricURL = Backbone.Model.extend({
 
         if (_.has(result, "BRWID")) {
             this.parseBrwId(result);
+        }
+        if (_.has(result, "BRWLAYERNAME")) {
+            this.parseBrwLayerName(result);
         }
 
         /**
@@ -510,6 +526,22 @@ const ParametricURL = Backbone.Model.extend({
     },
     setZoomToFeatureIds: function (value) {
         this.set("zoomToFeatureIds", value);
+    },
+    /**
+     * Setter for brw id
+     * @param {String} value Brw id
+     * @returns {void}
+     */
+    setBrwId: function (value) {
+        this.set("brwId", value);
+    },
+    /**
+     * Setter for brw layer name
+     * @param {String} value Brw layer name
+     * @returns {void}
+     */
+    setBrwLayerName: function (value) {
+        this.set("brwLayerName", value);
     }
 });
 
