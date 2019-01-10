@@ -44,16 +44,15 @@ const Einwohnerabfrage = Tool.extend({
             "Fläche zeichnen": "Polygon"
         },
         currentValue: "",
+        metaDataLink: undefined,
         // mrh meta data id
-        mrhId: "DC71F8A1-7A8C-488C-AC99-23776FA7775E",
+        mrhId: "46969C7D-FAA8-420A-81A0-8352ECCFF526",
         // fhh meta data id
-        fhhId: "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
+        fhhId: "B3FD9BD5-F614-433F-A762-E14003C300BF",
         fhhDate: undefined,
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
         uniqueIdList: [],
-        // hmdk/metaver link
-        // metaDataLink: Radio.request("RestReader", "getServiceById", "2").get("url")
         glyphicon: "glyphicon-wrench"
     }),
 
@@ -86,6 +85,7 @@ const Einwohnerabfrage = Tool.extend({
             isMultiple: false,
             preselectedValues: _.allKeys(this.get("values"))[0]
         }));
+        this.setMetaDataLink(Radio.request("RestReader", "getServiceById", "2").get("url"));
     },
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
@@ -516,6 +516,9 @@ const Einwohnerabfrage = Tool.extend({
     },
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
+    },
+    setMetaDataLink: function (value) {
+        this.set("metaDataLink", value);
     }
 });
 
