@@ -19,8 +19,8 @@ import VerkehrsStaerkenTheme from "./verkehrsstaerken/model";
 import VerkehrsStaerkenThemeView from "./verkehrsstaerken/view";
 import SchulInfoTheme from "./schulinfo/model";
 import SchulInfoThemeView from "./schulinfo/view";
-import RadzaehlstellenTheme from "./radzaehlstellen/model";
-import RadzaehlstellenThemeView from "./radzaehlstellen/view";
+import RadverkehrszaehlstellenTheme from "./radverkehrszaehlstellen/model";
+import RadverkehrszaehlstellenThemeView from "./radverkehrszaehlstellen/view";
 import ItGbmTheme from "./itgbm/model";
 import ItGbmThemeView from "./itgbm/view";
 import DipasThemeView from "./dipas/view";
@@ -70,8 +70,8 @@ const ThemeList = Backbone.Collection.extend({
         else if (attrs.gfiTheme === "schulinfo") {
             theme = new SchulInfoTheme(attrs, options);
         }
-        else if (attrs.gfiTheme === "radzaehlstellen") {
-            theme = new RadzaehlstellenTheme(attrs, options);
+        else if (attrs.gfiTheme === "radverkehrszaehlstellen") {
+            theme = new RadverkehrszaehlstellenTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "itgbm") {
             theme = new ItGbmTheme(attrs, options);
@@ -165,8 +165,8 @@ const ThemeList = Backbone.Collection.extend({
                 new SchulInfoThemeView({model: model});
                 break;
             }
-            case "radzaehlstellen": {
-                new RadzaehlstellenThemeView({model: model});
+            case "radverkehrszaehlstellen": {
+                new RadverkehrszaehlstellenThemeView({model: model});
                 break;
             }
             case "itgbm": {

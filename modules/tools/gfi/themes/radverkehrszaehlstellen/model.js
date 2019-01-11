@@ -2,7 +2,7 @@ import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
-const RadzaehlstellenTheme = Theme.extend({
+const RadverkehrszaehlstellenTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             dayDataset: null,
@@ -88,7 +88,7 @@ const RadzaehlstellenTheme = Theme.extend({
 
         if (!_.isUndefined(this.get("gfiContent"))) {
             gfiContent = this.get("gfiContent")[0];
-            infoGFIContent = _.omit(gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name"]);
+            infoGFIContent = _.omit(gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name", "Typ"]);
             dayLine = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
             lastSevenDaysLine = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
             yearLine = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
@@ -246,6 +246,10 @@ const RadzaehlstellenTheme = Theme.extend({
         this.setDayDataset({
             data: newData,
             xLabel: "Tagesverlauf am " + datum,
+            yLabel: {
+                label: "Anzahl Fahrräder/Stunde",
+                offset: 10
+            },
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 6),
             legendArray: legendArray
@@ -270,6 +274,10 @@ const RadzaehlstellenTheme = Theme.extend({
         this.setLastSevenDaysDataset({
             data: newData,
             xLabel: "Woche vom " + startDatum + " bis " + endeDatum,
+            yLabel: {
+                label: "Anzahl Fahrräder/Tag",
+                offset: 10
+            },
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 1),
             legendArray: legendArray
@@ -293,6 +301,10 @@ const RadzaehlstellenTheme = Theme.extend({
         this.setYearDataset({
             data: newData,
             xLabel: "KW im Jahr " + year,
+            yLabel: {
+                label: "Anzahl Fahrräder/Woche",
+                offset: 10
+            },
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 5),
             legendArray: legendArray
@@ -370,10 +382,7 @@ const RadzaehlstellenTheme = Theme.extend({
                 xAxisLabel: {
                     label: dataset.xLabel
                 },
-                yAxisLabel: {
-                    label: "Anzahl Fahrräder",
-                    offset: 10
-                },
+                yAxisLabel: dataset.yLabel,
                 attrToShowArray: dataset.graphArray,
                 legendData: dataset.legendArray
             };
@@ -439,6 +448,9 @@ const RadzaehlstellenTheme = Theme.extend({
         }
         else if (activeTab === "year") {
             activeTabData = this.get("yearDataset").data;
+            _.each(activeTabData, function (ele, index) {
+                activeTabData[index].timestamp = ele.timestamp + ". KW";
+            });
         }
 
         this.setDownloadData(this.createDownloadFeature(activeTabData));
@@ -457,7 +469,7 @@ const RadzaehlstellenTheme = Theme.extend({
             dataArray = [];
 
         _.each(dataset, function (ele) {
-            dataObject[ele.timestamp] = ele.total;
+            dataObject[ele.timestamp] = Radio.request("Util", "punctuate", ele.total);
         });
         dataArray.push(dataObject);
         return dataArray;
@@ -565,4 +577,4 @@ const RadzaehlstellenTheme = Theme.extend({
     }
 });
 
-export default RadzaehlstellenTheme;
+export default RadverkehrszaehlstellenTheme;

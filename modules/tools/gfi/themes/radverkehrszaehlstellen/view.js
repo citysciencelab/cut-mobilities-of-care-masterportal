@@ -1,10 +1,10 @@
 import ThemeView from "../view";
-import RadzaehlstellenTemplate from "text-loader!./template.html";
+import RadverkehrszaehlstellenTemplate from "text-loader!./template.html";
 
-const RadzaehlstellenView = ThemeView.extend({
+const RadverkehrszaehlstellenView = ThemeView.extend({
     tagName: "div",
-    className: "radzaehlstellen",
-    template: _.template(RadzaehlstellenTemplate),
+    className: "radverkehrszaehlstellen",
+    template: _.template(RadverkehrszaehlstellenTemplate),
     events: {
         "click .tab-toggle": "toggleTab",
         "change input": function (evt) {
@@ -39,7 +39,7 @@ const RadzaehlstellenView = ThemeView.extend({
         });
 
         // get all tabContent to remove "in active" classes
-        _.each(this.$(".active.radzaehlstellen"), function (ele) {
+        _.each(this.$(".active.radverkehrszaehlstellen"), function (ele) {
             if (!_.isNull(ele.getAttribute("id"))) {
                 tabContentList.push("#" + ele.getAttribute("id"));
             }
@@ -53,7 +53,7 @@ const RadzaehlstellenView = ThemeView.extend({
         activeContent.addClass("in active");
         this.$el.find("#chart").width("auto");
         if (activeTab !== "info") {
-            this.$(".radzaehlstellen.form-check").addClass("in active");
+            this.$(".radverkehrszaehlstellen.form-check").addClass("in active");
             this.$("#chart").addClass("in active");
             this.fadeIn("tableCheck", activeTab);
             this.$(".chartCheckbox").prop("checked", true);
@@ -133,7 +133,7 @@ const RadzaehlstellenView = ThemeView.extend({
      * @return {void}
      */
     fadeInDownloadButton: function (activeTab) {
-        this.$(".radzaehlstellen.downloadButton").addClass("in active");
+        this.$(".radverkehrszaehlstellen.downloadButton").addClass("in active");
         this.model.createDownloadContent(activeTab);
     },
     /**
@@ -144,13 +144,13 @@ const RadzaehlstellenView = ThemeView.extend({
     appendChildren: function () {
         var children = this.model.get("children");
 
-        this.$(".imageRadzaehlstellenDiv").removeClass("has-image");
+        this.$(".imageRadverkehrszaehlstellenDiv").removeClass("has-image");
         _.each(children, function (element, index) {
-            element.val.$el.prepend("<p class=imageRadzaehlstellenP>" + element.key + ": </p>");
+            element.val.$el.prepend("<p class=imageRadverkehrszaehlstellenP>" + element.key + ": </p>");
             if (element.type && element.type === "image") {
-                this.$(".imageRadzaehlstellenDiv").append("<div class='col-xs-6 col-md-6'></div>");
-                this.$(".imageRadzaehlstellennDiv").children()[index].append(element.val.$el[0]);
-                this.$(".imageRadzaehlstellenDiv").addClass("has-image");
+                this.$(".imageRadverkehrszaehlstellenDiv").append("<div class='col-xs-6 col-md-6'></div>");
+                this.$(".imageRadverkehrszaehlstellennDiv").children()[index].append(element.val.$el[0]);
+                this.$(".imageRadverkehrszaehlstellenDiv").addClass("has-image");
             }
         }, this);
     },
@@ -169,4 +169,4 @@ const RadzaehlstellenView = ThemeView.extend({
     }
 });
 
-export default RadzaehlstellenView;
+export default RadverkehrszaehlstellenView;
