@@ -286,6 +286,9 @@ const Einwohnerabfrage = Tool.extend({
     setStatus: function (model, value) {
         var selectedValues;
 
+        this.checksRasterLayerIsLoaded(this.get("rasterLayerId"));
+        this.checksAlkisAddressLayerIsLoaded(this.get("alkisAdressLayer"));
+
         if (value) {
             // this.set("isCollapsed", args[1]);
             // this.set("isCurrentWin", args[0]);
@@ -512,6 +515,28 @@ const Einwohnerabfrage = Tool.extend({
 
         element.setAttribute("id", id);
         overlay.setElement(element);
+    },
+
+    /**
+     * checks if rasterLayer is loaded and toggles the button accordingly
+     * @param {String} layerId id of the rasterLayer
+     * @returns {void}
+     */
+    checksRasterLayerIsLoaded: function (layerId) {
+        if (!_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            this.get("checkBoxRaster").setIsSelected(true);
+        }
+    },
+
+    /**
+     * checks if addressLayer is loaded and toggles the button accordingly
+     * @param {String} layerId id of the addressLayer
+     * @returns {void}
+     */
+    checksAlkisAddressLayerIsLoaded: function (layerId) {
+        if (!_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            this.get("checkBoxAddress").setIsSelected(true);
+        }
     },
 
     /**
