@@ -27,7 +27,7 @@
             <!--Datum 31.12.2017-->
             <span>Datenquelle Hamburg:</span> Einwohner mit Hauptwohnsitz, Melderegister <%=fhhDate%>.
         </div>
-        <div><a href="<%= metaDataLink + fhhId %>">Quelle FHH</a></div>
+        <div><a target="_blank" href="<%= metaDataLink + fhhId %>">Quelle FHH</a></div>
     <% } %>
     <% if (data.einwohner_mrh > 0) { %>
         <div class="hinweis additional-text">
@@ -37,7 +37,7 @@
             <!--Datum 09.05.2011-->
             <span>Datenquelle Metropolregion ohne Hamburg:</span> Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.
         </div>
-        <div><a href="<%= metaDataLink + mrhId %>">Quelle MRH</div>
+        <div><a target="_blank" href="<%= metaDataLink + mrhId %>">Quelle MRH</div>
     <% } %>
 <% } else { %>
     <% if (requesting) { %>
