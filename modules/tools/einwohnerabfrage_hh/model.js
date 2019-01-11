@@ -54,7 +54,9 @@ const Einwohnerabfrage = Tool.extend({
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
         uniqueIdList: [],
-        glyphicon: "glyphicon-wrench"
+        glyphicon: "glyphicon-wrench",
+        rasterLayerId: "13023",
+        alkisAdressLayer: "441"
     }),
 
     initialize: function () {
@@ -518,10 +520,10 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     toggleRasterLayer: function (value) {
-        Radio.trigger("ModelList", "setModelAttributesById", "13023", {
-            isSelected: value,
-            isVisibleInMap: value
-        });
+        var layerId = this.get("rasterLayerId");
+
+        this.addModelsByAttributesToModelList(layerId);
+        this.setModelAttributesByIdToModelList(layerId, value);
     },
 
     /**
@@ -530,7 +532,31 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     toggleAlkisAddressLayer: function (value) {
-        Radio.trigger("ModelList", "setModelAttributesById", "441", {
+        var layerId = this.get("alkisAdressLayer");
+
+        this.addModelsByAttributesToModelList(layerId);
+        this.setModelAttributesByIdToModelList(layerId, value);
+    },
+
+    /**
+     * if the model does not exist, add Model from Parser to ModelList via Radio.trigger
+     * @param {String} layerId id of the layer to be toggled
+     * @returns {void}
+     */
+    addModelsByAttributesToModelList: function (layerId) {
+        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+        }
+    },
+
+    /**
+     * sets selected and visibility to ModelList via Radio.trigger
+     * @param {String} layerId id of the layer to be toggled
+     * @param {boolean} value - true | false
+     * @returns {void}
+     */
+    setModelAttributesByIdToModelList: function (layerId, value) {
+        Radio.trigger("ModelList", "setModelAttributesById", layerId, {
             isSelected: value,
             isVisibleInMap: value
         });
@@ -539,12 +565,15 @@ const Einwohnerabfrage = Tool.extend({
     setData: function (value) {
         this.set("data", value);
     },
+
     setDataReceived: function (value) {
         this.set("dataReceived", value);
     },
+
     setRequesting: function (value) {
         this.set("requesting", value);
     },
+
     setDropDownSnippet: function (value) {
         this.set("snippetDropdownModel", value);
     },
@@ -568,9 +597,11 @@ const Einwohnerabfrage = Tool.extend({
     setCurrentValue: function (value) {
         this.set("currentValue", value);
     },
+
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
     },
+
     setMetaDataLink: function (value) {
         this.set("metaDataLink", value);
     }
