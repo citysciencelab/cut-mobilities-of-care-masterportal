@@ -3,3 +3,7 @@
     <div class="visible-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias_mobil %></a></div>
     <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
 <%}); %>
+<% _.each(version, function(value, key){ %>
+    <div class="hidden-xs pull-left"> <%=key%> :  <%=value %>  <a href=<%=value %> ></a></div>
+    <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
+<%}); %>
