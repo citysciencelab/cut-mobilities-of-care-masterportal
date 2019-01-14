@@ -56,7 +56,7 @@ const Einwohnerabfrage = Tool.extend({
         uniqueIdList: [],
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
-        alkisAdressLayer: "441"
+        alkisAdressLayerId: "441"
     }),
 
     initialize: function () {
@@ -286,12 +286,10 @@ const Einwohnerabfrage = Tool.extend({
     setStatus: function (model, value) {
         var selectedValues;
 
-        this.checksRasterLayerIsLoaded(this.get("rasterLayerId"));
-        this.checksAlkisAddressLayerIsLoaded(this.get("alkisAdressLayer"));
 
         if (value) {
-            // this.set("isCollapsed", args[1]);
-            // this.set("isCurrentWin", args[0]);
+            this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
+            this.checksSnippetCheckboxLayerIsLoaded(this.get("alkisAdressLayerId"), this.get("checkBoxAddress"));
             selectedValues = this.get("snippetDropdownModel").getSelectedValues();
             this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
         }
@@ -518,24 +516,16 @@ const Einwohnerabfrage = Tool.extend({
     },
 
     /**
-     * checks if rasterLayer is loaded and toggles the button accordingly
-     * @param {String} layerId id of the rasterLayer
+     * checks if snippetCheckboxLayer is loaded and toggles the button accordingly
+     * @param {String} layerId - id of the addressLayer
+     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
      * @returns {void}
      */
-    checksRasterLayerIsLoaded: function (layerId) {
-        if (!_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
-            this.get("checkBoxRaster").setIsSelected(true);
-        }
-    },
+    checksSnippetCheckboxLayerIsLoaded: function (layerId, snippetCheckboxModel) {
+        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
-    /**
-     * checks if addressLayer is loaded and toggles the button accordingly
-     * @param {String} layerId id of the addressLayer
-     * @returns {void}
-     */
-    checksAlkisAddressLayerIsLoaded: function (layerId) {
-        if (!_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
-            this.get("checkBoxAddress").setIsSelected(true);
+        if (!_.isUndefined(model) && model.get("isSelected")) {
+            snippetCheckboxModel.setIsSelected(true);
         }
     },
 
@@ -557,7 +547,7 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     toggleAlkisAddressLayer: function (value) {
-        var layerId = this.get("alkisAdressLayer");
+        var layerId = this.get("alkisAdressLayerId");
 
         this.addModelsByAttributesToModelList(layerId);
         this.setModelAttributesByIdToModelList(layerId, value);
