@@ -68,7 +68,7 @@ const TreeModel = Backbone.Model.extend({
             var searchString = "";
 
             if (!_.isUndefined(layer.metaName)) {
-                searchString = layer.metaName.replace(/ /g, "")
+                searchString = layer.metaName.replace(/ /g, "");
             }
             else if (!_.isUndefined(layer.name)) {
                 searchString = layer.name.replace(/ /g, "");
