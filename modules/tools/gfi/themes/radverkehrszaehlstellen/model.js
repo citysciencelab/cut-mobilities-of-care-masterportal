@@ -104,7 +104,9 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
                     if (isnum === true) {
                         editedAttribute[1] = Radio.request("Util", "punctuate", editedAttribute[1]);
                     }
-
+                    if (key === "Stärkster Monat im Jahr") {
+                        editedAttribute[0] = moment(editedAttribute[0], "month", "de").format("MMMM");
+                    }
                     gfiAttributes = {
                         attrName: key,
                         attrValue: editedAttribute
@@ -220,6 +222,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
                 class: "dot",
                 style: "circle",
                 timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
+                year: year,
                 total: total,
                 r_in: r_in,
                 r_out: r_out
@@ -290,8 +293,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
      * @returns {void}
      */
     prepareYearDataset: function (data) {
-        var year = moment(data[0].timestamp).format("YYYY"),
-            graphArray = this.getDataAttributes(data[0]),
+        var graphArray = this.getDataAttributes(data[0]),
             newData = _.each(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("w");
                 return val;
@@ -300,7 +302,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
 
         this.setYearDataset({
             data: newData,
-            xLabel: "KW im Jahr " + year,
+            xLabel: "KW im Jahr " + data[0].year,
             yLabel: {
                 label: "Anzahl Fahrräder/Woche",
                 offset: 10
