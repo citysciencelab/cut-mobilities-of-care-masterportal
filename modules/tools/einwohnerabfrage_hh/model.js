@@ -79,6 +79,12 @@ const Einwohnerabfrage = Tool.extend({
         this.listenTo(this.get("checkBoxAddress"), {
             "valuesChanged": this.toggleAlkisAddressLayer
         });
+        this.listenTo(Radio.channel("ModelList"), {
+            "updateVisibleInMapList": function () {
+                this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
+                this.checksSnippetCheckboxLayerIsLoaded(this.get("alkisAdressLayerId"), this.get("checkBoxAddress"));
+            }
+        });
         this.on("change:isActive", this.handleCswRequests, this);
         this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
         this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
@@ -285,7 +291,6 @@ const Einwohnerabfrage = Tool.extend({
      */
     setStatus: function (model, value) {
         var selectedValues;
-
 
         if (value) {
             this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
@@ -522,10 +527,14 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     checksSnippetCheckboxLayerIsLoaded: function (layerId, snippetCheckboxModel) {
-        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            isVisibleInMap = !_.isUndefined(model) ? model.get("isVisibleInMap") : false;
 
-        if (!_.isUndefined(model) && model.get("isSelected")) {
+        if (isVisibleInMap) {
             snippetCheckboxModel.setIsSelected(true);
+        }
+        else {
+            snippetCheckboxModel.setIsSelected(false);
         }
     },
 
@@ -538,6 +547,9 @@ const Einwohnerabfrage = Tool.extend({
         var layerId = this.get("rasterLayerId");
 
         this.addModelsByAttributesToModelList(layerId);
+        if (value) {
+            this.checkIsModelLoaded(layerId, this.get("checkBoxRaster"));
+        }
         this.setModelAttributesByIdToModelList(layerId, value);
     },
 
@@ -550,6 +562,9 @@ const Einwohnerabfrage = Tool.extend({
         var layerId = this.get("alkisAdressLayerId");
 
         this.addModelsByAttributesToModelList(layerId);
+        if (value) {
+            this.checkIsModelLoaded(layerId, this.get("checkBoxAddress"));
+        }
         this.setModelAttributesByIdToModelList(layerId, value);
     },
 
@@ -561,6 +576,20 @@ const Einwohnerabfrage = Tool.extend({
     addModelsByAttributesToModelList: function (layerId) {
         if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
             Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
+        }
+    },
+
+    /**
+     * checks whether the model has been loaded.
+     * If it is not loaded, a corresponding error message is displayed and switches snippetCheckbox off
+     * @param {String} layerId id of the layer to be toggled
+     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
+     * @returns {void}
+     */
+    checkIsModelLoaded: function (layerId, snippetCheckboxModel) {
+        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            Radio.trigger("Alert", "alert", "Der Layer mit der ID: " + layerId + " konnte nicht geladen werden, da dieser im Portal nicht zur Verfügung steht!");
+            snippetCheckboxModel.setIsSelected(false);
         }
     },
 
