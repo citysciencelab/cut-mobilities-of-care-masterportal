@@ -72,11 +72,11 @@
         <label class="form-check-label" for="tableCheck">Tabelle</label>
     </div>
     <div id="tableday" class="tab-pane radverkehrszaehlstellen table fade">
-        <table class="table table-striped">
+        <table class="table table-striped text-align-center">
             <thead>
-                <th>Name</th>
+                <th class="text-align-center">Name</th>
                 <% _.each(dayDataset.data, function (day){%>
-                <th><%=day.timestamp%></th>
+                <th class="text-align-center"><%=day.timestamp%></th>
                 <% });%>
             </thead>
             <tbody>
@@ -91,11 +91,11 @@
         </table>
     </div>
     <div id="tablelastSevenDays" class="tab-pane radverkehrszaehlstellen table fade">
-        <table class="table table-striped">
+        <table class="table table-striped text-align-center">
             <thead>
-                <th>Name</th>
+                <th class="text-align-center">Name</th>
                 <% _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
-                <th><%=lastSevenDays.timestamp%></th>
+                <th class="text-align-center"><%=lastSevenDays.timestamp%></th>
                 <% });%>
             </thead>
             <tbody>
@@ -110,11 +110,11 @@
         </table>
     </div>
     <div id="tableyear" class="tab-pane radverkehrszaehlstellen table fade">
-        <table class="table table-striped">
+        <table class="table table-striped text-align-center">
             <thead>
-                <th>Name</th>
+                <th class="text-align-center">Name</th>
                 <% _.each(yearDataset.data, function (year) {%>
-                <th><%=year.timestamp + " KW"%></th>
+                <th class="text-align-center"><%=year.timestamp + " KW"%></th>
                 <% });%>
             </thead>
             <tbody>
