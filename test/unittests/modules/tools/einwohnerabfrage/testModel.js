@@ -1,17 +1,13 @@
 import {expect} from "chai";
 import Model from "@modules/tools/einwohnerabfrage_hh/model.js";
-import TestUtil from "@testUtil";
 import Util from "@modules/core/util.js";
 
 describe("tools/einwohnerabfrageModel", function () {
-    var model,
-        testUtilModel;
+    var model;
 
     before(function () {
         model = new Model();
-        testUtilModel = new TestUtil();
         new Util();
-        cswResponseXml = testUtilModel.getCswResponse();
     });
 
     describe("roundRadius", function () {
