@@ -357,9 +357,9 @@ const GraphModel = Backbone.Model.extend({
                     .duration(200)
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[yAttrToShow])
-                    .attr("style", "background-color: buttonface; border-radius: 4px;")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 30) + "px");
+                    .attr("style", "background-color: buttonface; border-radius: 4px; text-align: center;")
+                    .style("left", (event.layerX - 25) + "px")
+                    .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv)
             .on("mouseout", function () {
                 tooltipDiv.transition()
@@ -376,8 +376,8 @@ const GraphModel = Backbone.Model.extend({
                     .style("opacity", 0.9);
                 tooltipDiv.html(d[yAttrToShow])
                     .attr("style", "background-color: buttonface; border-radius: 4px;")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 30) + "px");
+                    .style("left", (event.layerX - 25) + "px")
+                    .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv);
     },
 
