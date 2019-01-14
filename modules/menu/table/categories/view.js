@@ -5,6 +5,8 @@ const CategoryView = Backbone.View.extend({
         "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
     initialize: function () {
+        var channel = Radio.channel("Filter");
+
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementCategory": this.hideCategoryMenu
         });
@@ -12,6 +14,11 @@ const CategoryView = Backbone.View.extend({
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Category");
         });
+
+        channel.on({
+            "disable": this.disableCategoryButton,
+            "enable": this.enableCategoryButton
+        }, this);
 
         this.render();
     },
@@ -29,7 +36,7 @@ const CategoryView = Backbone.View.extend({
         if (this.$(".table-nav-cat-panel").hasClass("in")) {
             this.hideCategoryMenu();
         }
-        else {
+        else if (!$(".table-category-list").hasClass("disableCategoryButton")) {
             this.showCategoryMenu();
         }
     },
@@ -43,6 +50,14 @@ const CategoryView = Backbone.View.extend({
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
         Radio.request("TableMenu", "setActiveElement", "Category");
+    },
+    disableCategoryButton: function () {
+        console.log("let's disable");
+        $(".table-category-list").addClass("disableCategoryButton");
+    },
+    enableCategoryButton: function () {
+        console.log("let's enable");
+        $(".table-category-list").removeClass("disableCategoryButton");
     }
 });
 
