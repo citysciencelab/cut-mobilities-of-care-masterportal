@@ -65,7 +65,14 @@ const TreeModel = Backbone.Model.extend({
      */
     searchInLayers: function (searchStringRegExp) {
         _.each(this.get("layers"), function (layer) {
-            var searchString = layer.metaName ? layer.metaName.replace(/ /g, "") : layer.name.replace(/ /g, "");
+            var searchString = "";
+
+            if (!_.isUndefined(layer.metaName)) {
+                searchString = layer.metaName.replace(/ /g, "")
+            }
+            else if (!_.isUndefined(layer.name)) {
+                searchString = layer.name.replace(/ /g, "");
+            }
 
             if (searchString.search(searchStringRegExp) !== -1) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", layer);
