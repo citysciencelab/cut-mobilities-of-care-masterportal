@@ -31,7 +31,7 @@ const Button3dView = Backbone.View.extend({
             this.renderToToolbar();
         }
     },
-    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='icon-btn3d1'></span> Ansicht</a> </div>"),
+    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='glyphicon icon-btn3d1'></span> Ansicht</a> </div>"),
     change: function (map) {
         var style = Radio.request("Util", "getUiStyle");
 
