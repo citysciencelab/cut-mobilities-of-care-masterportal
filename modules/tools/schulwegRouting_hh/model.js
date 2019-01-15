@@ -404,7 +404,7 @@ const SchulwegRouting = Tool.extend({
 
             address.geometry = new Point([parseInt(coords[0], 10), parseInt(coords[1], 10)]);
             address.street = streetNameList[0];
-            address.joinAddress = address.street.replace(/ /g, "") + address.number + address.affix;
+            address.joinAddress = address.street.replace(/ /g, "") + address.number + address.affix.replace(/ /g, "");
         }, this);
 
         return addressList;
