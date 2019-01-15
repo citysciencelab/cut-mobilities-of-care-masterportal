@@ -52,9 +52,11 @@ const CategoryView = Backbone.View.extend({
         Radio.request("TableMenu", "setActiveElement", "Category");
     },
     disableCategoryButton: function () {
+        $("#table-nav-cat-panel-icon").addClass("disableCategoryIcon");
         $(".table-category-list").addClass("disableCategoryButton");
     },
     enableCategoryButton: function () {
+        $("#table-nav-cat-panel-icon").removeClass("disableCategoryIcon");
         $(".table-category-list").removeClass("disableCategoryButton");
     }
 });
