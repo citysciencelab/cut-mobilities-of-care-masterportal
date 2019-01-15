@@ -1,5 +1,4 @@
 import ItemTemplate from "text-loader!./template.html";
-import { log } from "util";
 
 const ItemView = Backbone.View.extend({
     events: {
