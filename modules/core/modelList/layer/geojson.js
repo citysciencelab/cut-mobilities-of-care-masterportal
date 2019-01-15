@@ -20,8 +20,6 @@ const GeoJSONLayer = Layer.extend({
             this.set("isClustered", true);
         }
 
-        console.log(this.get("layerSource"));
-        
         this.setStyleId(this.get("styleId") || this.get("id"));
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
