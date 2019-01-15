@@ -382,6 +382,7 @@ function loadApp () {
             new module.default;
         })
         .catch(error => {
+            console.error(error);
             Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
         });
     }
