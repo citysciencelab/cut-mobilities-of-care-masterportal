@@ -6,30 +6,64 @@ import Button3dTemplate from "text-loader!./template.html";
 
 const Button3dView = Backbone.View.extend({
     events: {
-        "click .button3D": "mapChange"
+        "click .button3D": "mapChange",
+        "click div#3d-ansicht": "mapChange"
     },
     initialize: function () {
-        var channel = Radio.channel("Map");
+        var channel = Radio.channel("Map"),
+            style = Radio.request("Util", "getUiStyle");
 
         channel.on({
             "change": this.change
         }, this);
-
-        this.template = _.template(Button3dTemplate);
-        this.render();
+        if (style === "DEFAULT") {
+            this.template = _.template(Button3dTemplate);
+            this.render();
+        }
+        else if (style === "TABLE") {
+            this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
+                    this.setElement("#table-tools-menu");
+                    this.renderToToolbar();
+                }
+            });
+            this.setElement("#table-tools-menu");
+            this.renderToToolbar();
+        }
     },
+    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='icon-btn3d1'></span> Ansicht</a> </div>"),
     change: function (map) {
+        var style = Radio.request("Util", "getUiStyle");
+
         if (map === "3D") {
-            this.$("#button3D").addClass("toggleButtonPressed");
+            if (style === "DEFAULT") {
+                this.$("#button3D").addClass("toggleButtonPressed");
+            }
+            else if (style === "TABLE") {
+                this.$("#3d-ansicht").addClass("toggleButtonPressed");
+            }
         }
         else {
-            this.$("#button3D").removeClass("toggleButtonPressed");
+            if (style === "DEFAULT") {
+                this.$("#button3D").removeClass("toggleButtonPressed");
+            }
+            else if (style === "TABLE") {
+                this.$("#3d-ansicht").removeClass("toggleButtonPressed");
+            }
         }
     },
     render: function () {
         this.$el.html(this.template);
         if (Radio.request("Map", "isMap3d")) {
             this.$("#button3D").addClass("toggleButtonPressed");
+        }
+
+        return this;
+    },
+    renderToToolbar: function () {
+        this.$el.append(this.tabletemplate());
+        if (Radio.request("Map", "isMap3d")) {
+            this.$("#3d-ansicht").addClass("toggleButtonPressed");
         }
 
         return this;
