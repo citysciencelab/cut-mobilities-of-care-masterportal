@@ -264,6 +264,7 @@ const Measure = Tool.extend({
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                that.setIsDrawn(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
                 that.setTextPoint(textPoint);
@@ -271,6 +272,7 @@ const Measure = Tool.extend({
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
+                that.setIsDrawn(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
                 that.unregisterClickListener(that);
@@ -586,20 +588,46 @@ const Measure = Tool.extend({
         }
         return output;
     },
+
+    /**
+     * removes the last drawing if it has not been completed
+     * @return {void}
+     */
+    removeIncompleteDrawing: function () {
+        var isDrawn = this.get("isDrawn"),
+            source,
+            actualFeature;
+
+        if (isDrawn) {
+            source = this.get("source");
+            actualFeature = source.getFeatures().slice(-1)[0];
+
+            source.removeFeature(actualFeature);
+        }
+    },
+
     setDraw: function (value) {
         this.set("draw", value);
     },
+
     setPointerMoveListener: function (value) {
         this.set("pointerMoveListener", value);
     },
+
     setClickListener: function (value) {
         this.set("clickListener", value);
     },
+
     setTextPoint: function (value) {
         this.set("textPoint", value);
     },
+
     setScale: function (value) {
         this.set("scale", value);
+    },
+
+    setIsDrawn: function (value) {
+        this.set("isDrawn", value);
     },
 
     /*
