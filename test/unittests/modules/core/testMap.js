@@ -10,7 +10,7 @@ describe("core/map", function () {
         features;
 
     before(function () {
-        new Preparser();
+        new Preparser(null, {url: Config.portalConf});
         new ParametricURL();
         model = new Model();
         utilModel = new Util();
