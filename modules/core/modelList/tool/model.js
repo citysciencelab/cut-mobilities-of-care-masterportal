@@ -27,20 +27,25 @@ const Tool = Item.extend({
     superInitialize: function () {
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                if (value && model.get("renderToWindow")) {
-                    Radio.trigger("Window", "showTool", model);
-                    Radio.trigger("Window", "setIsVisible", true);
-                }
-                else if (!value && model.get("renderToWindow")) {
-                    Radio.trigger("Window", "setIsVisible", false);
-                }
-                if (value && model.get("deactivateGFI")) {
-                    Radio.trigger("GFI", "deactivate");
+                var gfiModel = model.collection.findWhere({id: "gfi"});
+
+                if (value) {
+                    if (model.get("renderToWindow")) {
+                        Radio.trigger("Window", "showTool", model);
+                        Radio.trigger("Window", "setIsVisible", true);
+                    }
+                    if (gfiModel) {
+                        gfiModel.setIsActive(!model.get("deactivateGFI"));
+                    }
                 }
                 else {
-                    Radio.trigger("GFI", "activate");
+                    if (gfiModel) {
+                        gfiModel.setIsActive(false);
+                    }
+                    if (model.get("renderToWindow")) {
+                        Radio.trigger("Window", "setIsVisible", false);
+                    }
                 }
-
             }
         });
 
@@ -49,7 +54,6 @@ const Tool = Item.extend({
             this.setIsActive("true");
         }
     },
-
     setIsActive: function (value, options) {
         this.set("isActive", value, options);
     }

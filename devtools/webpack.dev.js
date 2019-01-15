@@ -10,6 +10,7 @@ module.exports = function (env, args) {
 
     return merge.smart({
         mode: "development",
+        devtool: "cheap-module-eval-source-map",
         devServer: {
             port: 9001,
             publicPath: "/build/",
