@@ -3,7 +3,8 @@ const Util = Backbone.Model.extend({
         // isViewMobile: false,
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-        uiStyle: "DEFAULT"
+        uiStyle: "DEFAULT",
+        proxyHost: ""
     },
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -61,13 +62,18 @@ const Util = Backbone.Model.extend({
     punctuate: function (value) {
         var pattern = /(-?\d+)(\d{3})/,
             stringValue = value.toString(),
+            decimals,
             predecimals = stringValue;
 
         if (stringValue.indexOf(".") !== -1) {
             predecimals = stringValue.split(".")[0];
+            decimals = stringValue.split(".")[1];
         }
         while (pattern.test(predecimals)) {
             predecimals = predecimals.replace(pattern, "$1.$2");
+        }
+        if (decimals) {
+            return predecimals + "," + decimals;
         }
         return predecimals;
     },
@@ -251,7 +257,8 @@ const Util = Backbone.Model.extend({
             parser.hostname = window.location.hostname;
         }
         hostname = parser.hostname.split(".").join("_");
-        result = result.replace(parser.hostname, "/" + hostname);
+        result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
+
         return result;
     },
 

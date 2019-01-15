@@ -3,58 +3,49 @@ import Model from "@modules/searchbar/specialWFS/model.js";
 
 describe("modules/searchbar/specialWFS", function () {
     var model = {},
-        config = {
-            "minChars": 5,
-            "timeout": 10000,
-            "definitions": [
-                {
-                    "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:mrh_row_bplan&propertyName=name",
-                    "name": "B-Plan"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-                    "name": "festgestellt"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
-                    "name": "im Verfahren"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
-                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name",
-                    "name": "Kita"
-                },
-                {
-                    "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-                    "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort",
-                    "name": "Störfallbetrieb"
-                }
-            ]
-        },
-        thema1 = [{
-            filter: "blah",
-            glyphicon: "glyphicon-home",
-            id: "Störfallbetrieb6088",
-            name: "Shell Deutschland Oil GmbH, GLC Nord",
-            type: "Störfallbetrieb"
+    config = {
+        "minChars": 5,
+        "maxFeatures": 1,
+        "timeout": 10000,
+        "definitions": [
+        {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
         },
         {
-            filter: "blahbl",
-            glyphicon: "glyphicon-home",
-            id: "Störfallbetrieb601458",
-            name: "Oesterreichische Holding",
-            type: "Störfallbetrieb"
-        }],
-        thema2 = [{
-            filter: "blah",
-            glyphicon: "glyphicon-home",
-            id: "Störfallbetrieb6089",
-            name: "Lufthansa Technik Aktiengesellschaft",
-            type: "Störfallbetrieb"
-        }];
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_festgestellt",
+            "propertyNames": ["app:planrecht"],
+            "geometryName": "app:geom",
+            "name": "festgestellt"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+            "typeName": "app:KitaEinrichtungen",
+            "propertyNames": ["app:Name"],
+            "name": "Kita"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+            "typeName": "app:stoerfallbetrieb",
+            "propertyNames": ["app:standort"],
+            "name": "Störfallbetrieb"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+            "name": "festgestellt"
+        }]
+    };
 
     before(function () {
         model = new Model(config);
@@ -67,57 +58,42 @@ describe("modules/searchbar/specialWFS", function () {
         it("should set minchar", function () {
             expect(model.get("minChars")).to.equal(5);
         });
+        it("should set maxFeatures", function () {
+            expect(model.get("maxFeatures")).to.equal(1);
+        });
+        it("should have definitions length of 6", function () {
+            expect(model.get("definitions").length).to.equal(6);
+        });
+        it("should have set definition url", function () {
+            expect(model.get("definitions")[0].url).to.equal("/geodienste_hamburg_de/MRH_WFS_Rotenburg");
+        });
+        it("should have set definition typeName", function () {
+            expect(model.get("definitions")[0].typeName).to.equal("app:mrh_row_bplan");
+        });
+        it("should have set definition name", function () {
+            expect(model.get("definitions")[0].name).to.equal("B-Plan");
+        });
+        it("should have set definition propertyNames", function () {
+            expect(model.get("definitions")[0].propertyNames).to.be.an("array").that.includes("app:name");
+        });
+        it("should have set deprecated propertyNames", function () {
+            expect(model.get("definitions")[5].propertyNames).to.be.an("array").that.includes("planrecht");
+        });
+        it("should have set deprecated typeName", function () {
+            expect(model.get("definitions")[5].typeName).to.equal("prosin_festgestellt");
+        });
+        it("should set geometryName", function () {
+           expect(model.get("definitions")[2].geometryName).to.equal("app:the_geom");
+           expect(model.get("definitions")[1].geometryName).to.equal("app:geom");
+        });
+        it("should have set deprecated typeName", function () {
+            expect(model.get("definitions")[5].typeName).to.equal("prosin_festgestellt");
+        });
     });
 
-    describe("simplifyString", function () {
-        it("should simplify Umlaute", function () {
-            expect(model.simplifyString("ßäöü")).to.be.an("string").that.equals("ssaeoeue");
-        });
-        it("should lowerCase", function () {
-            expect(model.simplifyString("ABC")).to.be.an("string").that.equals("abc");
-        });
-    });
-
-    describe("addObjectsInObject", function () {
-        var temp1, temp2, temp3;
-
-        it("should create Object in Object", function () {
-            temp1 = model.addObjectsInObject("thema1", thema1, {});
-            expect(temp1).to.have.deep.property("thema1");
-            expect(temp1.thema1).to.be.an("array").to.have.lengthOf(2);
-        });
-        it("should add other Object in Object", function () {
-            temp2 = model.addObjectsInObject("thema2", thema2, temp1);
-            expect(temp2).to.have.deep.property("thema1");
-            expect(temp2).to.have.deep.property("thema2");
-            expect(temp2.thema2).to.be.an("array").to.have.lengthOf(1);
-        });
-        it("should add Object in added Object", function () {
-            temp3 = model.addObjectsInObject("thema2", thema1, temp2);
-            expect(temp3).to.have.deep.property("thema1");
-            expect(temp3).to.have.deep.property("thema2");
-            expect(temp3.thema1).to.be.an("array").to.have.lengthOf(2);
-            expect(temp3.thema2).to.be.an("array").to.have.lengthOf(3);
-        });
-    });
-
-    describe("collectHits", function () {
-        var temp1, temp2;
-
-        it("should find expected results", function () {
-            temp1 = model.addObjectsInObject("thema1", thema1, {});
-            temp2 = model.addObjectsInObject("thema2", thema2, temp1);
-            expect(model.collectHits("Lufthansa", temp2)).to.be.an("array").to.have.lengthOf(1);
-        });
-
-        it("should find umlauts as well", function () {
-            temp1 = model.addObjectsInObject("thema1", thema1, {});
-            expect(model.collectHits("Österre", temp1)).to.be.an("array").to.have.lengthOf(1);
-        });
-
-        it("should be case insensitive", function () {
-            temp1 = model.addObjectsInObject("thema1", thema1, {});
-            expect(model.collectHits("österre", temp1)).to.be.an("array").to.have.lengthOf(1);
+    describe("getWFS110Xml", function () {
+        it("should return WFS POST string", function () {
+            expect(model.getWFS110Xml(model.get("definitions")[0], "Ham")).to.equal("<?xml version=\'1.0\' encoding=\'UTF-8\'?><wfs:GetFeature service=\'WFS\' xmlns:wfs=\'http://www.opengis.net/wfs\' xmlns:ogc=\'http://www.opengis.net/ogc\' xmlns:gml=\'http://www.opengis.net/gml\' traverseXlinkDepth=\'*\' version=\'1.1.0\'><wfs:Query typeName=\'app:mrh_row_bplan\'><wfs:PropertyName>app:name</wfs:PropertyName><wfs:PropertyName>app:geom</wfs:PropertyName><wfs:maxFeatures>1</wfs:maxFeatures><ogc:Filter><ogc:PropertyIsLike matchCase=\'false\' wildCard=\'*\' singleChar=\'#\' escapeChar=\'!\'><ogc:PropertyName>app:name</ogc:PropertyName><ogc:Literal>*Ham*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></wfs:Query></wfs:GetFeature>");
         });
     });
 });
