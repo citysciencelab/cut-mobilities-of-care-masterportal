@@ -51,7 +51,7 @@ const FilterModel = Tool.extend({
                 this.updateMap();
                 if (!this.get("queryCollection").models[0].get("isAutoRefreshing")) {
                     this.updateGFI(featureIds, layerId);
-                };
+                }
                 this.updateFilterObject();
             },
             "closeFilter": function () {
