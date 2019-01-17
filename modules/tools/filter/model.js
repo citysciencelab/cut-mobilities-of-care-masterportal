@@ -40,11 +40,6 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        channel.on({
-            "enable": this.setIsActive(false),
-            "disable": this.setIsActive(true)
-        });
-
         this.set("uiStyle", Radio.request("Util", "getUiStyle"));
         this.set("queryCollection", new Backbone.Collection());
         this.listenTo(this.get("queryCollection"), {
