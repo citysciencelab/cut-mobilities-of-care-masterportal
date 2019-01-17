@@ -43,13 +43,11 @@ const Button3dView = Backbone.View.extend({
                 this.$("#3d-ansicht").addClass("toggleButtonPressed");
             }
         }
-        else {
-            if (style === "DEFAULT") {
-                this.$("#button3D").removeClass("toggleButtonPressed");
-            }
-            else if (style === "TABLE") {
-                this.$("#3d-ansicht").removeClass("toggleButtonPressed");
-            }
+        else if (style === "DEFAULT") {
+            this.$("#button3D").removeClass("toggleButtonPressed");
+        }
+        else if (style === "TABLE") {
+            this.$("#3d-ansicht").removeClass("toggleButtonPressed");
         }
     },
     render: function () {
