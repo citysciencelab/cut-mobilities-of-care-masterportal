@@ -36,28 +36,28 @@ const CategoryView = Backbone.View.extend({
         if (this.$(".table-nav-cat-panel").hasClass("in")) {
             this.hideCategoryMenu();
         }
-        else if (!$(".table-category-list").hasClass("disableCategoryButton")) {
+        else if (!this.$el.hasClass("disableCategoryButton")) {
             this.showCategoryMenu();
         }
     },
     hideCategoryMenu: function () {
         this.$(".table-nav-cat-panel").removeClass("in");
-        this.$(".table-category-list").removeClass("table-category-active");
+        this.$el.removeClass("table-category-active");
         Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     showCategoryMenu: function () {
-        this.$(".table-category-list").addClass("table-category-active");
+        this.$el.addClass("table-category-active");
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
         Radio.request("TableMenu", "setActiveElement", "Category");
     },
     disableCategoryButton: function () {
-        $("#table-nav-cat-panel-icon").addClass("disableCategoryIcon");
-        $(".table-category-list").addClass("disableCategoryButton");
+        this.$("#table-nav-cat-panel-icon").addClass("disableCategoryIcon");
+        this.$el.addClass("disableCategoryButton");
     },
     enableCategoryButton: function () {
-        $("#table-nav-cat-panel-icon").removeClass("disableCategoryIcon");
-        $(".table-category-list").removeClass("disableCategoryButton");
+        this.$("#table-nav-cat-panel-icon").removeClass("disableCategoryIcon");
+        this.$el.removeClass("disableCategoryButton");
     }
 });
 
