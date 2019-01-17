@@ -3,6 +3,7 @@ import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
 import {Polygon, LineString, Point, MultiPoint} from "ol/geom.js";
+import OLCesium from "olcs/OLCesium.js";
 import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
@@ -133,7 +134,7 @@ const Measure = Tool.extend({
     },
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
-            quickHelpSet = Radio.request("Quickhelp", "isSet") === true ? true : false,
+            quickHelpSet = Radio.request("Quickhelp", "isSet"),
             measureLayer;
 
         if (value) {
@@ -198,8 +199,8 @@ const Measure = Tool.extend({
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
             cartographic.height = scene.globe.getHeight(cartographic);
         }
-        lon = Cesium.Math.toDegrees(cartographic.longitude);
-        lat = Cesium.Math.toDegrees(cartographic.latitude);
+        lon = OLCesium.Math.toDegrees(cartographic.longitude);
+        lat = OLCesium.Math.toDegrees(cartographic.latitude);
         coords = [lon, lat, cartographic.height];
         coords = Proj.transform(coords, Proj.get("EPSG:4326"), mapProjection);
         // draw first point
@@ -214,7 +215,7 @@ const Measure = Tool.extend({
         }
         // draw second point as Line and remove first drawn point
         else {
-            distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
+            distance = OLCesium.Cartesian3.distance(firstHit.cartesian, hit);
             heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
             feature = this.createLineFeature(firstHit.coords, coords);
             source.addFeature(feature);
@@ -263,6 +264,7 @@ const Measure = Tool.extend({
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                that.setIsDrawn(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
                 that.setTextPoint(textPoint);
@@ -270,6 +272,7 @@ const Measure = Tool.extend({
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
+                that.setIsDrawn(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
                 that.unregisterClickListener(that);
@@ -585,20 +588,46 @@ const Measure = Tool.extend({
         }
         return output;
     },
+
+    /**
+     * removes the last drawing if it has not been completed
+     * @return {void}
+     */
+    removeIncompleteDrawing: function () {
+        var isDrawn = this.get("isDrawn"),
+            source,
+            actualFeature;
+
+        if (isDrawn) {
+            source = this.get("source");
+            actualFeature = source.getFeatures().slice(-1)[0];
+
+            source.removeFeature(actualFeature);
+        }
+    },
+
     setDraw: function (value) {
         this.set("draw", value);
     },
+
     setPointerMoveListener: function (value) {
         this.set("pointerMoveListener", value);
     },
+
     setClickListener: function (value) {
         this.set("clickListener", value);
     },
+
     setTextPoint: function (value) {
         this.set("textPoint", value);
     },
+
     setScale: function (value) {
         this.set("scale", value);
+    },
+
+    setIsDrawn: function (value) {
+        this.set("isDrawn", value);
     },
 
     /*
