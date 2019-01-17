@@ -79,6 +79,7 @@
     list-style: outside none none;
     margin: 2px 0 0;
     min-width: 200px;
+    max-width: 480px;
     position: absolute;
     top: 100%;
     z-index: 1001;
@@ -90,7 +91,7 @@
         font-size: 12px;
     }
     img {
-        width: 30px;
+        width: 25px;
         padding-right: 10px;
         margin-bottom: 4px;
     }
@@ -165,6 +166,10 @@ li.results {
     }
 }
 #searchInputUL {
+    div{
+        opacity: 1;
+        border-radius: 0px;
+    }
     .selected {
         background: rgb(8, 88, 158);
         color: @color_4;
@@ -193,6 +198,9 @@ li.results {
     >.input-group {
         width: 100%;
         font-family: @font_family_2;
+        .icon-cross2{
+            margin: 13px 7px 0px 0px;
+        }
     }
     .dropdown-menu-search {
         background-clip: padding-box;
@@ -215,7 +223,7 @@ li.results {
             font-size: 12px;
         }
         img {
-            width: 30px;
+            width: 25px;
             padding-right: 10px;
             margin-bottom: 4px;
         }
@@ -231,12 +239,49 @@ li.results {
             background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
             background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
         }
+        .list-group-item {
+            font-family: @font_family_3;
+            font-size: 17px;
+            color: #808080;
+            background-color: #F2F2F2;
+            #searchInputLi {
+                font-family: @font_family_3;
+                font-size: 17px;
+            }
+
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 480px;
+
+
+        }
         li {
             &:hover {
                 cursor: pointer;
-                background-color: @background_color_3;
+                opacity: 1;
+                background-color: #e0e0e0;
             }
         }
+        >.list-group-item:first-child {
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
+        }
+        >div:last-child > .list-group-item:last-child, > .list-group-item:nth-last-child(2):not(.open):last-of-type {
+            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+    }
+    li.results {
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+        &:hover {
+            opacity: 1;
+            background-color: #c0c0c0;
+        }
+    }
+    #searchInputUL {
+        border-radius: 12px;
     }
     #searchInput {
         margin: 1px 0px 7px 78px;
