@@ -7,7 +7,7 @@
 <% }
 else { %>
     <% addressListFiltered.every(function (address, index) { %>
-        <li class="list-group-item address"><%= address.street + " " + address.number + address.affix %></li>
+        <li class="list-group-item address"><%= address.street + " " + address.number + (address.affix.indexOf("haus") !== -1 ? " " : "") + address.affix %></li>
         <% return index !== 5; %>
     <% }); %>
 <% } %>
