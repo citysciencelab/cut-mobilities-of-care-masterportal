@@ -155,6 +155,9 @@ a {
     border-top: 1px solid #C0C0C0;
     >a {
         color: @color_3;
+        >.icon-btn3d1 {
+            padding-right: 5px;
+        }
     }
 }
 #table-nav-layers-panel-toggler {
@@ -249,12 +252,15 @@ a {
     &:before {
         display: none;
     }
-    .icon-close {
-    &:before {
-        display: block;
-        color: @color_2;
+    .icon-cross1 {
+        &:before {
+            display: block;
+            color: @color_2;
+            top: 11px;
+            left: 11px;
+            font-size: 18px;
+            }
         }
-    }
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
@@ -264,7 +270,7 @@ a {
         color: @color_4;
         display: block;
     }
-    .icon-close {
+    .icon-cross1 {
         &:before {
         display: none;
         }
