@@ -31,23 +31,13 @@ const Button3dView = Backbone.View.extend({
             this.renderToToolbar();
         }
     },
-    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='glyphicon icon-btn3d1'></span> Ansicht</a> </div>"),
+    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='glyphicon icon-btn3d1'></span><%=ansicht %></a> </div>"),
     change: function (map) {
-        var style = Radio.request("Util", "getUiStyle");
-
         if (map === "3D") {
-            if (style === "DEFAULT") {
-                this.$("#button3D").addClass("toggleButtonPressed");
-            }
-            else if (style === "TABLE") {
-                this.$("#3d-ansicht").addClass("toggleButtonPressed");
-            }
+            this.$("#button3D").addClass("toggleButtonPressed");
         }
-        else if (style === "DEFAULT") {
+        else {
             this.$("#button3D").removeClass("toggleButtonPressed");
-        }
-        else if (style === "TABLE") {
-            this.$("#3d-ansicht").removeClass("toggleButtonPressed");
         }
     },
     render: function () {
@@ -59,7 +49,7 @@ const Button3dView = Backbone.View.extend({
         return this;
     },
     renderToToolbar: function () {
-        this.$el.append(this.tabletemplate());
+        this.$el.append(this.tabletemplate({ansicht: "Ansicht einschalten"}));
         if (Radio.request("Map", "isMap3d")) {
             this.$("#3d-ansicht").addClass("toggleButtonPressed");
         }
@@ -67,10 +57,13 @@ const Button3dView = Backbone.View.extend({
         return this;
     },
     mapChange: function () {
+
         if (Radio.request("Map", "isMap3d")) {
             Radio.trigger("ModelList", "toggleWfsCluster", true);
             Radio.trigger("Map", "deactivateMap3d");
             Radio.trigger("Alert", "alert:remove");
+            this.tabletemplate({ansicht: "Ansicht ausschalten"});
+            alert ("hallo");
         }
         else {
             if (Radio.request("ObliqueMap", "isActive")) {
@@ -82,6 +75,7 @@ const Button3dView = Backbone.View.extend({
                 Radio.trigger("ObliqueMap", "deactivate");
                 return;
             }
+            this.tabletemplate({ansicht: "Ansicht ausschalten"});
             Radio.trigger("ModelList", "toggleWfsCluster", false);
             Radio.trigger("Map", "activateMap3d");
             // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
