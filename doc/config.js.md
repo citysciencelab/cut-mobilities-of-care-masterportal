@@ -87,6 +87,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
+|version|nein|Array[Object]||Array von Versionsnummerobjekten. Dieser Wert wird beim build-Prozess aus der package.json ausgelesen und hier eingesetzt.|
 
 ******
 ### footer.urls ###
@@ -121,7 +122,10 @@ footer: {
             "url": "http://www.hamburg.de/bsu/timonline",
             "alias": "Kartenunstimmigkeit"
         }
-    ]
+    ],
+    version: {
+        "Version" : "$Version"
+    }
 }
 ```
 *********

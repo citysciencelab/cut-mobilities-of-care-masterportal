@@ -31,7 +31,7 @@ const Config = {
         ],
         version: {
             "Version" : "2.2.0"
-    },
+        }
     },
     quickHelp: {
         imgPath: "/lgv-config/img/"
