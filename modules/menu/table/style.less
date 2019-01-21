@@ -155,6 +155,9 @@ a {
     border-top: 1px solid #C0C0C0;
     >a {
         color: @color_3;
+        >.icon-btn3d1 {
+            padding-right: 5px;
+        }
     }
 }
 #table-nav-layers-panel-toggler {
@@ -282,6 +285,9 @@ a {
 }
 #table-nav-layers-panel {
     .layers {
+        max-height: 360px;
+        overflow-y: scroll;
+        margin: 4px 4px;
         .layer-item {
             font-family: @font_family_2;
             font-size: 17px;
@@ -291,6 +297,16 @@ a {
                 overflow: auto;
             }
         }
+    }
+    .layers::-webkit-scrollbar {
+        background: #cccccc;
+        width: 14px;
+        border-radius: 10px;
+    }
+    .layers::-webkit-scrollbar-thumb {
+        background: #003063;
+        border-radius: 10px;
+        border: 1px solid #ccc;
     }
     ul#layers {
         border: none;
