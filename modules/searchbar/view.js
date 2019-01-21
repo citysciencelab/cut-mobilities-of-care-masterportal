@@ -8,6 +8,7 @@ import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./OSM/model";
+import GdiModel from "./gdi/model";
 import Searchbar from "./model";
 
 const SearchbarView = Backbone.View.extend({
@@ -125,6 +126,9 @@ const SearchbarView = Backbone.View.extend({
         }
         if (_.has(config, "osm") === true) {
             new OSMModel(config.osm);
+        }
+        if (_.has(config, "gdi") === true) {
+            new GdiModel(config.gdi);
         }
 
         // Hack für flexible Suchleiste
