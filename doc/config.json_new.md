@@ -140,3 +140,27 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 ```
 
 ***
+
+### Portalconfig.portalTitle ###
+In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|nein|String|Master|Name des Portals.|
+|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
+|link|nein|String|http://geoinfo.hamburg.de|URL der externen Seite, auf die verlinkt wird.|
+|tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+
+**Beispiel portalTitle:**
+```
+#!json
+"portalTitle": {
+    "title": "Master",
+    "logo": "../../img/hh-logo.png",
+    "link": "http://geoinfo.hamburg.de",
+    "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+}
+```
+
+***
+
