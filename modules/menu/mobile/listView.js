@@ -169,6 +169,12 @@ const MobileMenu = Backbone.View.extend({
         $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
+    /**
+     * separates by modelType and add Views
+     * add only tools that have the attribute "isVisibleInMenu" === true
+     * @param {Item[]} models - all models
+     * @returns {void}
+     */
     addViews: function (models) {
         var nodeView,
             attr,
@@ -194,7 +200,9 @@ const MobileMenu = Backbone.View.extend({
                     break;
                 }
                 case "tool": {
-                    nodeView = new ToolView({model: model});
+                    if (model.get("isVisibleInMenu")) {
+                        nodeView = new ToolView({model: model});
+                    }
                     break;
                 }
                 case "staticlink": {

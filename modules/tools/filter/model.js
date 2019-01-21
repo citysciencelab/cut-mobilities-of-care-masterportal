@@ -54,7 +54,9 @@ const FilterModel = Tool.extend({
             "deselectAllModels": this.deselectAllModels,
             "featureIdsChanged": function (featureIds, layerId) {
                 this.updateMap();
-                this.updateGFI(featureIds, layerId);
+                if (!this.get("queryCollection").models[0].get("isAutoRefreshing")) {
+                    this.updateGFI(featureIds, layerId);
+                }
                 this.updateFilterObject();
             },
             "closeFilter": function () {

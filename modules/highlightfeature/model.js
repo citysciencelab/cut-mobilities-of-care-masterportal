@@ -7,6 +7,16 @@ import {Fill, Stroke, Style} from "ol/style.js";
 
 const HighlightFeature = Backbone.Model.extend({
     defaults: {
+        polygonStyle: new Style({
+            stroke: new Stroke({
+                color: "#08775f",
+                lineDash: [8],
+                width: 4
+            }),
+            fill: new Fill({
+                color: [8, 119, 95, 0.3]
+            })
+        })
     },
     initialize: function () {
         var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
@@ -14,7 +24,8 @@ const HighlightFeature = Backbone.Model.extend({
             temp;
 
         channel.on({
-            "highlightfeature": this.highlightFeature
+            "highlightfeature": this.highlightFeature,
+            "highlightPolygon": this.highlightPolygon
         }, this);
         if (featureToAdd) {
             temp = featureToAdd.split(",");
@@ -69,7 +80,21 @@ const HighlightFeature = Backbone.Model.extend({
                 color: "rgba(237, 136, 4, 0.1)"
             })
         });
+    },
+
+    /**
+     * highlights a polygon feature
+     * @param {ol.Feature} feature - the feature to be highlighted
+     * @returns {void}
+     */
+    highlightPolygon: function (feature) {
+        const highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer"),
+            source = highlightLayer.getSource();
+
+        highlightLayer.getSource().clear();
+        feature.setStyle(this.get("polygonStyle"));
+        source.addFeature(feature);
     }
 });
 
-export default  HighlightFeature;
+export default HighlightFeature;

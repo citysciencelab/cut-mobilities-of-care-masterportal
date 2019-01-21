@@ -67,13 +67,18 @@ const Util = Backbone.Model.extend({
     punctuate: function (value) {
         var pattern = /(-?\d+)(\d{3})/,
             stringValue = value.toString(),
+            decimals,
             predecimals = stringValue;
 
         if (stringValue.indexOf(".") !== -1) {
             predecimals = stringValue.split(".")[0];
+            decimals = stringValue.split(".")[1];
         }
         while (pattern.test(predecimals)) {
             predecimals = predecimals.replace(pattern, "$1.$2");
+        }
+        if (decimals) {
+            return predecimals + "," + decimals;
         }
         return predecimals;
     },

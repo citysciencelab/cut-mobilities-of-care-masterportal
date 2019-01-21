@@ -596,6 +596,7 @@ const SearchbarView = Backbone.View.extend({
         this.focusOnEnd(this.$("#searchInput"));
         this.hideMarker();
         Radio.trigger("MapMarker", "hideMarker");
+        Radio.trigger("MapMarker", "hidePolygon");
         this.clearSelection();
         // Suchvorschläge löschen
         this.$("#searchInputUL").html("");

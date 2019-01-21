@@ -133,6 +133,15 @@ const Animation = PendlerCoreModel.extend({
             min,
             max;
 
+        // Handling for "no data": Just refresh legend (clear and print message).
+        if (rawFeatures.length === 0) {
+
+            // Since legend is already rendered while data is fetched it's necessary to introduce a flag for empty result.
+            // Otherwise the message for "empty result" is printed always before the data has been fetched.
+            this.set("emptyResult", true);
+            return;
+        }
+
         this.centerGemeinde(true);
 
         topFeatures = this.selectFeatures(rawFeatures);
