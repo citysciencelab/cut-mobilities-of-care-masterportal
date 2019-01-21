@@ -62,4 +62,4 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
-|poiDistances|nein|Boolean / Integer[]||Bei poiDistances=true werden die Defaultwerte  verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|
+|poiDistances|nein|Boolean/Integer[]||Bei poiDistances=true werden die Defaultwerte  verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|
