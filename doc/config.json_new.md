@@ -27,16 +27,16 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|
 |Baumtyp|ja|enum["light", "default", "custom"]||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|
 |[controls](#markdown-header-Portalconfig.controls)|nein|Object||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|
-|LogoLink|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle)|
-|LogoToolTip|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle)|
+|LogoLink|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle).|
+|LogoToolTip|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle).|
 |mapView|nein|[mapView](#markdown-header-Portalconfig.mapView)||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|
 |menu|nein|[menu](#markdown-header-Portalconfig.menu)||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe [Tools](#markdown-header-Portalconfig.menu.tools)).|
-|PortalLogo|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle)|
-|PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle)|
+|PortalLogo|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle).|
+|PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-Portalconfig.portalTitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-Portalconfig.portalTitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchBar](#markdown-header-Portalconfig.searchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden|
-|simpleLister|nein|[simpleLister](#markdown-header-Portalconfig.simpleLister)||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten vektor Layers  an.|
+|searchbar|nein|[searchBar](#markdown-header-Portalconfig.searchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|simpleLister|nein|[simpleLister](#markdown-header-Portalconfig.simpleLister)||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten vektor Layers an.|
 |mapMarkerModul|nein|[mapMarkerModul](#markdown-header-Portalconfig.mapMarkerModul)||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.|
 
 ### Portalconfig.controls ###
