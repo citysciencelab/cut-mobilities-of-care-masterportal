@@ -306,7 +306,7 @@ const map = Backbone.Model.extend({
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
-            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event});
+            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
     deactivateMap3d: function () {
