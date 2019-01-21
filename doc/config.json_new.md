@@ -2,6 +2,8 @@
 
 [TOC]
 
+***
+
 # config.json
 Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv/src/stable/portal/master/config.json).
 Die config.json besteht aus der [Portalconfig](#markdown-header-Portalconfig) und der [Themenconfig](#markdown-header-Themenconfig)
@@ -11,6 +13,7 @@ Die config.json besteht aus der [Portalconfig](#markdown-header-Portalconfig) un
    "Themenconfig": {}
 }
 ```
+***
 
 ## Portalconfig
 In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
@@ -38,6 +41,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |simpleLister|nein|[simpleLister](#markdown-header-portalconfigsimplelister)||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten vektor Layers an.|
 |mapMarkerModul|nein|[mapMarkerModul](#markdown-header-portalconfig.mapmarkermodul)||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.|
+***
 
 ### Portalconfig.controls ###
 
@@ -53,6 +57,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+***
 
 ### Portalconfig.controls.attributions
 
@@ -77,6 +82,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
     "isInitOpenMobile": false,
 }
 ```
+***
 
 ### Portalconfig.controls.orientation ###
 
@@ -102,6 +108,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
     "poiDistances": [500, 1000, 2000, 5000]
 }
 ```
+***
 
 ### Portalconfig.controls.overviewmap ###
 
@@ -126,3 +133,4 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 #!json
 "overviewmap": true
 ```
+***
