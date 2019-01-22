@@ -1,26 +1,31 @@
-var timeout = 6000,
-    sorting = "asc",
-    service;
+var sorting = {},
+    size = 10000;
 
+function prepareSearchBody (query) {
+    var searchBody = {};
 
-function getServiceUrl (serviceID) {
-    var url;
+    if (!_.isEmpty(sorting)) {
+        searchBody.sort = [sorting];
+    }
 
-    return url;
-}
+    searchBody.from = 0;
+    searchBody.size = size;
+    searchBody.query = query;
 
-function successFunction () {
-
+    return JSON.stringify(searchBody);
 }
 
 export function setTimeOut (value) {
     timeout = value;
 }
 
-export function setSorting(value) {
-    sorting = value;
+export function setSorting (key, value) {
+    sorting = { key, value };
 }
 
+export function setSize (value) {
+    size = value;
+}
 
 /**
 * sends query against ElasticSearch-Index
@@ -30,41 +35,49 @@ export function setSorting(value) {
 */
 export function search (serviceId, query) {
     var result = {},
-        url;
+        searchUrl,
+        searchBody,
+        serviceUrl;
 
-        url = Radio.request("RestReader", "getServiceById", serviceId).get("url");
-    console.log(url);
+    serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
+    searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
+    searchBody = prepareSearchBody(query);
 
 
-    if (_.isUndefined(url)) {
+    if (_.isUndefined(serviceUrl)) {
         result.status = "error";
         result.message = "ElasticSearch Service with id " + serviceId + " not found.";
-        console.log(JSON.stringify(result));
+        console.error(JSON.stringify(result));
     }
     else if (_.isUndefined(query)) {
         result.status = "error";
         result.message = "ElasticSearch query not found.";
-        console.log(JSON.stringify(result));
+        console.error(JSON.stringify(result));
     }
     else {
-        $.ajax({
-            url: url,
-            data: "",
-            dataType: "json",
-            context: this,
-            type: "GET",
-            success: function (data) {
-                console.log(data.hits);
+        fetch(searchUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: searchBody
+        })
+            .then(response => response.json())
+            .then(response => {
+                var datasources = [];
 
-            },
-            timeout: timeout,
-            error: function (err) {
-                console.log("error");
-            },
-            complete: function () {
-                console.log("complete");
-            }
-        }, this);
+                result.status = "success";
+
+                _.each(response.hits.hits, function (hit) {
+                    datasources.push(hit._source);
+                })
+                result.hits = datasources;}
+            )
+            .catch(err => {
+                result.status = "error";
+                result.message = "ElasticSearch query went wrong with message: " + err;
+                console.error("error", err);
+            });
     }
 
     return result;
