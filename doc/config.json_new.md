@@ -312,6 +312,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |lines|nein|[lines](#markdown-header-portalconfigmenutoolstoollines)||Pendlerdarstellung als linenhafte Objekte.|
 |animation|nein|[animation](#markdown-header-portalconfigmenutoolstoolanimation)||Pendleranimation als punkthafte Objekte.|
 |saveSelection|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|
+|layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoolstoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
+|legend|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
+|contact|nein|[contact](#markdown-header-portalconfigmenutoolstoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
 
 ***
 
@@ -410,14 +413,60 @@ Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation"
 |zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|
 |url|nein|String|"http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|Url des WFS Dienstes der abgefragt werden soll.|
 |params|nein|Object||Parameter mit denen der Dienst abgefragt werden soll.|
-|params.REQUEST|ja|String|"GetFeature"|Art des Requests.|
-|params.SERVICE|ja|String|"WFS"|Typ des Dienstes.|
-|params.TYPENAME|ja|String|"app:mrh_kreise"|Typename des Layers.|
-|params.VERSION|ja|String|"1.1.0"|Version des WFS.|
-|params.maxFeatures|ja|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|
-|featureType|ja|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|
-|attrAnzahl|ja|String|"anzahl_einpendler"|Attributname das die Anzahl der Pendler pro Gemeinde enthält.|
-|attrGemeinde|ja|String|"wohnort"|Attributname das die Gemeinde enthält.|
+|params.REQUEST|nein|String|"GetFeature"|Art des Requests.|
+|params.SERVICE|nein|String|"WFS"|Typ des Dienstes.|
+|params.TYPENAME|nein|String|"app:mrh_kreise"|Typename des Layers.|
+|params.VERSION|nein|String|"1.1.0"|Version des WFS.|
+|params.maxFeatures|nein|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|
+|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|
+|attrAnzahl|nein|String|"anzahl_einpendler"|Attributname das die Anzahl der Pendler pro Gemeinde enthält.|
+|attrGemeinde|nein|String|"wohnort"|Attributname das die Gemeinde enthält.|
+
+***
+
+### Portalconfig.menu.tools.tool.contact ###
+Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|from|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+        }]|Absender der Email.|
+|to|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+        }]|Addressat der Email.|
+|cc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|CC der Email.|
+|bcc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|BCC der Email.|
+|ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
+|textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
+|includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
+
+***
+
+### Portalconfig.menu.tools.tool.contact.email ###
+Email Objekt bestehend aus der email und aus dem Anzeigename.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|email|nein|String||Email.|
+|name|nein|String||Anzeigename.|
+
+***
+
+### Portalconfig.menu.tools.tool.layerslider ###
+Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hintereinander an bzw auszuschalten. Dadurch kann z.B. eine Zeitreihe verschiedener Zustände animiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|ja|String||Titel der im Werkzeug vorkommt.|
+|timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|
+|layerIds|ja|layerId[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
+|layerId|ja|Object||Objekt, das einen layer definiert.|
+|layerId.title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|
+|layerId.layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+
 ***
 
 ### Portalconfig.menu.staticlinks ###
