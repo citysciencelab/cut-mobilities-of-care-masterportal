@@ -20,7 +20,8 @@ export function setTimeOut (value) {
 }
 
 export function setSorting (key, value) {
-    sorting = { key, value };
+    sorting.key = key;
+    sorting.value = value;
 }
 
 export function setSize (value) {
