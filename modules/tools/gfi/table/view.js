@@ -38,9 +38,12 @@ const GFIDetachedTableView = DesktopView.extend({
     },
 
     toggle: function () {
-        if (this.model.get("isVisible") === true) {
+        if (this.model.get("isVisible")) {
             this.$el.show();
-            Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            if (this.model.get("isMapMarkerVisible")) {
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            }
+            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
             Radio.trigger("GFI", "afterRender");
         }
         else {
