@@ -429,14 +429,8 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|from|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name": "LGVGeoportalHilfe"
-        }]|Absender der Email.|
-|to|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name": "LGVGeoportalHilfe"
-        }]|Addressat der Email.|
+|from|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|
+|to|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|
 |cc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|CC der Email.|
 |bcc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|BCC der Email.|
 |ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
