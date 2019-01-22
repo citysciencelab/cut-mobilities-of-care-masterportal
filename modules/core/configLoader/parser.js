@@ -438,7 +438,7 @@ const Parser = Backbone.Model.extend({
 
         // Wenn nicht alle LayerIDs des Arrays gefunden werden
         if (objectsByIds.length !== ids.length) {
-            return [];
+            return null;
         }
         // Das erste Objekt wird kopiert
         newObject = _.clone(objectsByIds[0]);
