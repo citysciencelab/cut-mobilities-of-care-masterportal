@@ -45,6 +45,204 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
 ***
 
+### Portalconfig.searchbar ###
+Konfiguration der Searchbar
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
+|gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
+|recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
+|quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|
+|specialWFS|nein|[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)||Konfiguration des specialWFS Suchdienstes.|
+|tree|nein|[tree](#markdown-header-portalconfigsearchbartree)||Konfiguration der Suche im Themenbaum.|
+|visibleWFS|nein|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)||Konfiguration der Suche über die sichtbaren WFS Layer.|
+|visibleVector|nein|[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)||Konfiguration der Suche über die sichtbaren WFS Layer.|
+|zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|
+|renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|
+
+***
+
+### Portalconfig.searchbar.bkg ###
+Konfiguration des BKG Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|
+|extent|nein|Number[]|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmuss suchen soll. [minx, miny, maxx, maxy].|
+|filter|nein|String|"filter=(typ:*)"|Filter string der an die BKG-Schnittstelle geschickt wird.|
+|geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|score|nein|Number|0.6|Score der die Qualität der Suchergebnisse definiert.|
+|suggestCount|nein|Integer|20|Anzahl der Vorschläge.|
+|suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
+```
+#!json
+"bkg": {
+    "minChars": 3,
+    "suggestServiceId": "4",
+    "geosearchServiceId": "5",
+    "extent": [454591, 5809000, 700000, 6075769],
+    "suggestCount": 10,
+    "epsg": "EPSG:25832",
+    "filter": "filter=(typ:*)",
+    "score": 0.6
+}
+```
+
+***
+
+### Portalconfig.searchbar.gazetteer ###
+Konfiguration des Gazetteer Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|searchDistricts|nein|Boolean|false|Gibt an ob nach Bezirken gesucht werden soll.|
+|searchHouseNumbers|nein|Boolean|false|Gibt an ob nach Straßen und Hausnummern gesucht werden soll. Bedingt **searchStreets**=true.|
+|searchParcels|nein|Boolean|false|Gibt an ob nach Flurstücken gesucht werden soll.|
+|searchStreetKey|nein|Boolean|false|Gibt an ob nach Straßenschlüsseln gesucht werden soll.|
+|searchStreet|nein|Boolean|false|Gibt an ob nach Straßen gesucht werden soll. Vorraussetzung für **searchHouseNumbers**|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
+```
+#!json
+"gazetteer": {
+    "minChars": 3,
+    "serviceId": "6",
+    "searchStreets": true,
+    "searchHouseNumbers": true,
+    "searchDistricts": true,
+    "searchParcels": true,
+    "searchStreetKey": true
+}
+```
+
+***
+
+### Portalconfig.searchbar.specialWFS ###
+Konfiguration der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|glyphicon|nein|String|"glyhicon-home"|Default glyphicon das in der Vorschlagsliste erscheint. Kann in der [definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition) überschrieben werden.|
+|maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features. Kann in der [definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition) überschrieben werden.|
+|timeout|nein|Integer|6000|Timeout in ms für die Dienste Anfrage.|
+|definitions|nein|[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)[]||Definition der speziellen WFS suchen|
+
+**Beispiel**
+```
+#!json
+"specialWFS": {
+    "minChars": 5,
+    "timeout": 10000,
+    "definitions": [
+        {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+        }
+    ]
+}
+```
+
+***
+
+### Portalconfig.searchbar.specialWFS.definition ###
+Konfiguration einer Definition bei der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|url|nein|String||URL des WFS.|
+|name|nein|String||Name der Kategorie. Erscheint in der Vorschlagsliste.|
+|glyphicon|nein|String|"glyhicon-home"|CSS Klasse des Glyphicons das in der Vorschlagsliste erscheint.|
+|typeName|nein|String||TypeName des WFS layers.|
+|propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|
+|geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|
+|maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|
+|data|nein|String||@deprecated in 3.0.0 Filterparameter für den WFS request.|
+
+**Beispiel**
+```
+#!json
+{
+    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+    "typeName": "app:prosin_imverfahren",
+    "propertyNames": ["app:plan"],
+    "geometryName": "app:the_geom",
+    "name": "im Verfahren"
+}
+```
+
+***
+
+### Portalconfig.searchbar.tree ###
+Konfiguration der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+
+**Beispiel**
+```
+#!json
+"tree": {
+    "minChars": 5
+}
+```
+
+***
+
+### Portalconfig.searchbar.visibleWFS ###
+Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+
+**Beispiel**
+```
+#!json
+"visibleWFS": {
+    "minChars": 3
+}
+```
+
+***
+
+### Portalconfig.searchbar.visibleVector ###
+Konfiguration der Suche über die sichtbaren WFS
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+
+**Beispiel**
+```
+#!json
+"visibleVector": {
+    "minChars": 3,
+    "layerTypes": ["WFS", "GeoJSON"]
+}
+```
+
+***
+
 ### Portalconfig.controls ###
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -277,6 +475,18 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |----|-------------|---|-------|------------|
 |info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
 |tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) darstellt.|
+|tree|nein|[tree](#markdown-header-portalconfigmenutree)||Darstellung udn Position des Themenbaums.|
+
+***
+
+### Portalconfig.menu.tree ###
+Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Themenbaumes.|
+|glyphicon|nein|String||CSS Klasse des glyphicons.|
+|isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|
 
 ***
 
@@ -330,7 +540,8 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoolstoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
 |legend|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
 |contact|nein|[contact](#markdown-header-portalconfigmenutoolstoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
-
+|schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolstoolschulwegrouting)||Schulwegrouting.|
+|filter|nein|[filter](#markdown-header-portalconfigmenutoolstoolfilter)||Neues Filtermodul.|
 ***
 
 ### Portalconfig.menu.tools.tool ###
@@ -353,8 +564,194 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 
 ***
 
+### Portalconfig.menu.tools.tool.filter ###
+Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|
+|minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|
+|liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|
+|predefinedQueries|nein|[predinedQuery](#markdown-header-portalconfigmenutoolstoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
+
+**Beispiel**
+```
+#!json
+"filter":{
+    "name": "Filter",
+    "glyphicon": "glyphicon-filter",
+    "deactivateGFI": false,
+    "isGeneric": false,
+    "isInitOpen": false,
+    "allowMultipleQueriesPerLayer": false,
+    "predefinedQueries": [
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Grundschulen",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Stadtteilschulen",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen", "Langformschulen"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Gymnasien",
+            "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Sonderschulen",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Sonderschulen"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+        },
+        {
+        "layerId": "1711",
+        "isActive": true,
+        "isSelected": true,
+        "name": "Krankenhäuser",
+        "predefinedRules": [],
+        "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+        }
+    ]
+}
+```
+
+***
+
+### Portalconfig.menu.tools.tool.filter.predefinedQuery ###
+Objekt, das eine Filtereinstelung definiert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|layerId|ja|String||Id des Layers. Muss auch in der Themenconfig konfiguriert sein.|
+|isActive|nein|Boolean|false|Gibt an ob diese Filtereinstellung initial durchgeführt werden soll.|
+|isSelected|nein|Boolean|false|Gibt an ob diese Filtereinstellung initial angezeigt werden soll.|
+|searchInMapExtent|nein|Boolean|false|Gibt an ob nur die Features im Kartenauschnitt gefiltert werden sollen.|
+|info|nein|String||Kurzer Info text der über der Filtereinstellung erscheint.|
+|predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolstoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
+|attributeWhiteList|nein|[attributeWhiteList](#markdown-header-portalconfigmenutoolstoolfilterpredefinedqueryattributeWhiteListObject)[]||Whitelist an Attributen die verwendet werden sollen.|
+|snippetType|nein|String||Datentyp des Attributes. Wenn nciht angegeben wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird benötigt im Projekt DIPAS auf der Touchtabl-Variante des Portals.|
+
+**Beispiel**
+```
+#!json
+{
+    "layerId": "8712",
+    "isActive": false,
+    "isSelected": false,
+    "name": "Grundschulen",
+    "predefinedRules": [
+        {
+            "attrName": "kapitelbezeichnung",
+            "values": ["Grundschulen", "Langformschulen"]
+        }
+    ],
+    "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+}
+```
+
+***
+
+### Portalconfig.menu.tools.tool.filter.predefinedQuery.predefinedRule ###
+Filterregel die die Daten immer vorfiltert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|attrName|ja|String||Attributname nach dem vorgefiltert werden soll.|
+|values|ja|String[]||Attributwerte für das Vorfiltern.|
+
+**Beispiel**
+```
+#!json
+{
+    "attrName": "kapitelbezeichnung",
+    "values": ["Grundschulen", "Langformschulen"]
+}
+```
+
+***
+
+### Portalconfig.menu.tools.tool.filter.predefinedQuery.attributeWhiteListObject ###
+Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
+Er kann aber auch ein Objekt sein.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Attributname.|
+|matchingMode|nein|enum("AND", "OR")|"OR"|Logische Verknüpfung mehrerer Attributwerte (bei Mehrfachauswahl) innerhalb eines Attributes.|
+
+**Beispiel als String**
+```
+#!json
+"Grundschulen"
+```
+
+**Beispiel als Objekt**
+```
+#!json
+{
+    "name": "Grundschulen",
+    "matchingMode": "AND"
+}
+```
+
+***
+
+### Portalconfig.menu.tools.tool.schulwegrouting ###
+Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|layerId|ja|String||Id des Layers der de Schulen enthält. Dieser Layer muss auch in den [Themenconfig](#markdown-header-themenconfig) konfiguriert sein.|
+
+**Beispiel**
+```
+#!json
+"schulwegrouting": {
+    "name": "Schulweg-Routing",
+    "glyphicon": "glyphicon-filter",
+    "layerId": "8712"
+}
+```
+
+***
+
 ### Portalconfig.menu.tools.tool.compareFeatures ###
-foobar.
+Hier können Vector Features miteinander verglichen werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
