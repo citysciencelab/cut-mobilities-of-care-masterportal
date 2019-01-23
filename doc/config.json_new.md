@@ -727,3 +727,289 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 
 ***
 
+##Themenconfig
+Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkommen. Je nach vonfiguration des Baumtyps können auch Ordner Strukturen in den [Fachdaten](#markdown-header-themenconfigfachdaten) angegeben werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Hintergrundkarten|ja|[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)||Definition der Hintergrundkarten|
+|Fachdaten|ja|String||Definition der Fachdaten.|
+
+**Beispiel**
+```
+#!json
+"Themenconfig": {
+    "Hintergrundkarten": {},
+    "Fachdaten": {}
+}
+```
+
+***
+
+##Themenconfig.Hintergrundkarten
+Hier werden die Hintergrundkarten definiert
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+
+**Beispiel**
+```
+#!json
+"Hintergrundkarten": {
+    "Layer": [
+        {
+            "id": "123
+        }
+    ]
+},
+```
+
+***
+
+##Themenconfig.Fachdaten
+Hier werden die Fachdaten definiert
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
+
+**Beispiel**
+```
+#!json
+"Fachdaten": {
+    "Layer": [
+        {
+            "id": "123
+        }
+    ]
+},
+```
+
+***
+
+##Themenconfig.Ordner
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Titel|ja|String||Titel des Ordners.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
+
+**Beispiel Ordner mit einem Layer**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein Ordner"
+            "Layer": [
+                {
+                    "id": "123
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Beispiel Ordner mit einem Unterordner in dem eine Layer konfiguriert ist**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein erster Ordner"
+            "Ordner": [
+                {
+                    "Titel": "Mein zweiter Ordner"
+                    "Layer": [
+                        {
+                            "id": "123
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Beispiel Ordner einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein erster Ordner"
+            "Ordner": [
+                {
+                    "Titel": "Mein zweiter Ordner"
+                    "Layer": [
+                        {
+                            "id": "123
+                        }
+                    ]
+                }
+            ],
+            "Layer": [
+                {
+                    "id": "456
+                }
+            ]
+        }
+    ]
+}
+```
+
+***
+
+##Themenconfig.Layer
+Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
+Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String/String[]||Id des Layers. In der [services.json](services.json.md) werden die ids aufgelöst und die notwendigen Informationen herangezogen.|
+|children|nein|[Layer](#markdown-header-themenconfiglayer)[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Falle ist eine einzigartige Id manuell zu wählen.|
+|name|nein|String||Name des Layers.|
+|transparency|nein|Integer|0|Transparenz des Layers.|
+|visibility|nein|Boolean|false|Sichtbarkeit des Layers.|
+|supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|
+|extent|nein|Number[]|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
+|displayInTree|nein|Boolean|false|Gibt an ob der Layer im Themenbaum angezeigt werden soll.|
+|gfiTheme|nein|String|Wert aus [services.json](services.json.md)/"default"|Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
+|layerAttribution|nein|String|Wert aus [services.json](services.json.md)|HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
+|legendURL|nein|String|Wert aus [services.json](services.json.md)|Url die verwendet wird um die Legende anzufragen.|
+|maxScale|nein|String|Wert aus [services.json](services.json.md)|Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|minScale|nein|String|Wert aus [services.json](services.json.md)|Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|
+|isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|
+|isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|
+
+**Beispiel mit einer Id**
+```
+#!json
+{
+    "id": "123"
+}
+```
+
+**Beispiel mit einem Array von Ids**
+```
+#!json
+{
+    "id": ["123", "456", "789"],
+    "name": "mein testlayer"
+}
+```
+
+***
+
+##Themenconfig.Layer.WMS
+Hier werde WMS typische Attribute aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|attributesToStyle|nein|String[]||Array von Attributen nach denen der WMS gestylt werden kann. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|featureCount|nein|Integer|1|Anzahl der Features die zurückgegeben werden sollen bei einer GetFeatureInfo-Abfrage.|
+|geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|styleable|nein|Boolean||Zeigt an der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|infoFormat|nein|String|Wert aus [services.json](services.json.md)/"text/xml"|Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|
+|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|
+
+**Beispiel**
+```
+#!json
+{
+    "id": "123456",
+    "name": "MyWMSLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "attributesToStyle": ["MyFirstAttr"],
+    "featureCount": 2,
+    "geomType": "geometry",
+    "infoFormat": "text/html",
+    "styleable": true,
+    "styles": ["firstStyle", "secondStyle"]
+}
+```
+
+***
+
+##Themenconfig.Layer.Vector
+hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|clusterDistance|nein|Integer||Pixelradius. Innerhalb dieses PRadius werden alle features zu einem feature "geclustered".|
+|extendedFilter|nein|Boolean||Gibt an ob dieser layer vom Werkzeug "extendedFilter" in [tools](#markdown-header-portalconfigmenutools) verwendet werden kann.|
+|filterOptions|nein|filterOption[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt werden.|
+|filterOption|nein|Object||Filteroption.|
+|filterOption.fieldName|ja|String||Attributname nach dem zu filtern ist.|
+|filterOption.filterName|ja|String||Name des Filters im Werkzeug.|
+|filterOption.filterString|ja|String[]||Array von Attributwerten nach denen gefiltert werden kann. Bei "*" werden alle Wertausprägungen angezeigt.|
+|filterOption.filterType|ja|String||typ des Filters Momentan wird nur "combo" unterstützt.|
+|mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|
+|routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolstoolrouting) konfiguriert sein.|
+|searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|
+|styleId|nein|String||Id die den Style definiert. Id wird in der [style.json](style.json.md) aufgelöst.|
+|hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|
+
+**Beispiel**
+```
+#!json
+{
+"id": "123456",
+"name": "MyVectorLayerName",
+"transparency": 0,
+"visibility": true,
+"supported": ["2D"],
+"extent": [454591, 5809000, 700000, 6075769],
+"displayInTree": true,
+"gfiTheme": "default",
+"layerAttribution": "MyBoldAttribution for layer 123456",
+"legendURL": "https://myServer/myService/legend.pdf",
+"maxScale": "100000",
+"minScale": "1000",
+"autoRefresh": "10000",
+"isVisibleInTree": true,
+"isNeverVisibleInTree": false,
+"clusterDistance": 60,
+"extendedFilter": true,
+"filterOptions": [
+    {
+        "fieldName": "myFirstAttributeToFilter",
+        "filterName": "Filter_1",
+        "filterString": ["*", "value1", "value2"],
+        "filterType": "combo"
+    },
+    {
+        "fieldName": "mySecondAttributeToFilter",
+        "filterName": "Filter_2",
+        "filterString": ["*", "value3", "value4"],
+        "filterType": "combo"
+    }
+],
+"mouseHoverField": "name",
+"routable": false,
+"searchField": "name",
+"styleId": "123456",
+"hitTolerance": 50,
+}
+```
+
+***
