@@ -276,7 +276,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
-|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
+|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) darstellt.|
 
 ***
 
