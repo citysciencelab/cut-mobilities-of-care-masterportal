@@ -291,7 +291,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
-|poiDistances|nein|Boolean/Integer[]||Bei poiDistances=true werden die Defaultwerte  verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|
+|poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte  verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|
 
 **Beispiel mit poiDistances vom Typ Boolean**
 ```
@@ -368,7 +368,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |----|-------------|---|-------|------------|
 |backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|
 |startCenter|nein|Integer[]|[565874, 5934140]|Die initiale Zentrumskoordinate.|
-|options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{resolution:66.14579761460263,scale:250000,zoomLevel:0}, {resolution:26.458319045841044,scale:100000,zoomLevel:1}, {resolution:15.874991427504629,scale:60000,zoomLevel:2}, {resolution: 10.583327618336419,scale:40000,zoomLevel:3}, {resolution:5.2916638091682096,scale:20000,zoomLevel:4}, {resolution:2.6458319045841048,scale:10000,zoomLevel:5}, {resolution:1.3229159522920524,scale:5000,zoomLevel:6}, {resolution:0.6614579761460262,scale:2500,zoomLevel:7}, {resolution:0.2645831904584105,scale: 1000,zoomLevel:8}, {resolution:0.13229159522920521,scale:500,zoomLevel:9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
+|options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
 |extent|nein|Number[]|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
 |resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|
 |zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|
@@ -712,7 +712,7 @@ Er kann aber auch ein Objekt sein.
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|ja|String||Attributname.|
-|matchingMode|nein|enum("AND", "OR")|"OR"|Logische Verknüpfung mehrerer Attributwerte (bei Mehrfachauswahl) innerhalb eines Attributes.|
+|matchingMode|nein|enum["AND", "OR"]|"OR"|Logische Verknüpfung mehrerer Attributwerte (bei Mehrfachauswahl) innerhalb eines Attributes.|
 
 **Beispiel als String**
 ```
@@ -1277,11 +1277,11 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|
 |extent|nein|Number[]|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
 |displayInTree|nein|Boolean|false|Gibt an ob der Layer im Themenbaum angezeigt werden soll.|
-|gfiTheme|nein|String|Wert aus [services.json](services.json.md)/"default"|Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
-|layerAttribution|nein|String|Wert aus [services.json](services.json.md)|HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
-|legendURL|nein|String|Wert aus [services.json](services.json.md)|Url die verwendet wird um die Legende anzufragen.|
-|maxScale|nein|String|Wert aus [services.json](services.json.md)|Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|
-|minScale|nein|String|Wert aus [services.json](services.json.md)|Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|gfiTheme|nein|String|"default"|Wert aus [services.json](services.json.md). Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
+|layerAttribution|nein|String||Wert aus [services.json](services.json.md). HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
+|legendURL|nein|String||Wert aus [services.json](services.json.md). Url die verwendet wird um die Legende anzufragen.|
+|maxScale|nein|String||Wert aus [services.json](services.json.md). Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|minScale|nein|String||Wert aus [services.json](services.json.md). Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|
 |isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|
@@ -1314,7 +1314,7 @@ Hier werde WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features die zurückgegeben werden sollen bei einer GetFeatureInfo-Abfrage.|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
 |styleable|nein|Boolean||Zeigt an der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
-|infoFormat|nein|String|Wert aus [services.json](services.json.md)/"text/xml"|Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|
+|infoFormat|nein|String|"text/xml"|Wert aus [services.json](services.json.md). Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|
 |styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|
 
 **Beispiel**
