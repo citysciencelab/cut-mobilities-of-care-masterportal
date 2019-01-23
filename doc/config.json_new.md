@@ -257,6 +257,8 @@ Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Aufl
 |resolution|ja|Number||Auflösung der definierten Zoomstufe.|
 |scale|ja|Integer||Maßstabszahl der definierten Zoomstufe.|
 |zoomLevel|ja|Integer||Zoomstufe der definierten Zoomstufe.|
+
+**Beispiel einer mapview Option**
 ```
 #!json
 {
@@ -273,8 +275,8 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, das [tool](#markdown-header-portalconfigmenutool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
-
+|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
+|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
 
 ***
 
@@ -286,6 +288,19 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 |name|ja|String||Name des Ordners im Menu.|
 |glyphicon|ja|String|"glyphicon-folder-open"|CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
 |children|nein|[tool](#markdown-header-portalconfigmenutoolstool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
+
+**Beispiel eines folders**
+```
+#!json
+"tools":{
+    "name": "Werkzeuge",
+    "glyphicon": "glyphicon-wrench",
+    "children": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+    }
+}
+```
 
 ***
 
@@ -327,6 +342,15 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|
 
+**Beispiel eines Tools**
+```
+#!json
+"legend":{
+    "name": "Legende",
+    "glyphicon": "glyphicon-book"
+}
+```
+
 ***
 
 ### Portalconfig.menu.tools.tool.compareFeatures ###
@@ -336,6 +360,17 @@ foobar.
 |----|-------------|---|-------|------------|
 |numberOfFeaturesToShow|nein|Integer|3|Anzahl der Features die maximal miteinander vergleichen werden können.|
 |numberOfAttributesToShow|nein|Integer|12|Anzahl der Attribute die angezeigt wird. Gibt es mehr Attribute können diese über einen Button zusätzlich ein-/ bzw. ausgeblendet werden.|
+
+**Beispiel**
+```
+#!json
+"compareFeatures": {
+    "name": "Vergleichsliste",
+    "glyphicon": "glyphicon-th-list",
+    "numberOfFeaturesToShow": 5,
+    "numberOfAttributesToShow": 10
+}
+```
 
 ***
 
@@ -348,6 +383,19 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|
 |configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält.|
 |parcelDenominator|nein|Boolean|false|Flag ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|
+
+**Beispiel**
+```
+#!json
+"parcelSearch": {
+    "name": "Flurstückssuche",
+    "glyphicon": "glyphicon-search",
+    "serviceId": "6",
+    "storedQueryID": "Flurstueck",
+    "configJSON": "/lgv-config/gemarkungen_hh.json",
+    "parcelDenominator": false
+}
+```
 
 ***
 
@@ -366,6 +414,34 @@ Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdiens
 |gfi|nein|Boolean|false|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
 |configYAML|nein|String|"/master"|@deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|
 
+**Beispiel alte Konfiguration mit MapfishPrint2**
+```
+#!json
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "printID": "123456",
+    "configYAML": "/master",
+    "outputFilename": "report",
+    "title": "Mein Titel",
+    "gfi": true
+}
+```
+
+**Beispiel neue Konfiguration mit MapfishPrint3**
+```
+#!json
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "mapfishServiceId": "mapfish_printservice_id",
+    "printAppId": "mrh",
+    "filename": "Ausdruck",
+    "title": "Mein Titel",
+    "version" : "mapfish_print_3"
+}
+```
+
 ***
 
 ### Portalconfig.menu.tools.tool.routing ###
@@ -376,6 +452,20 @@ Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen P
 |viomRoutingID|ja|String||Id des Routingdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
 |bkgSuggestID|ja|String||Id des Vorschlagsdienstes des BKG. Er wird verwendet um Addressvorschläge zu liefern. Wird in der rest-services.json abgelegt.|
 |bkgGeosearchID|ja|String||Id des Geokodierungsdienstes des BKG. Er wird verwendet um gewählte Addressen in Koordinaten umzuwandeln. Wird in der rest-services.json abgelegt.|
+|isInitOpen|nein|Boolean|false|Flag ob das tool initial geöffnet sein soll.|
+
+**Beispiel**
+```
+#!json
+"routing": {
+    "name": "Routenplaner",
+    "glyphicon": "glyphicon-road",
+    "viomRoutingID": "1",
+    "bkgSuggestID": "2",
+    "bkgGeosearchID": "3",
+    "isInitOpen": false
+}
+```
 
 ***
 
@@ -386,10 +476,41 @@ Modul, das Vektor Features darstellt. Durch hovern über ein feature in der List
 |----|-------------|---|-------|------------|
 |maxFeatures|nein|Integer|20|Anzahl der zu zeigenden Features. Über einen Button können weitere features in dieser Anzahl zugeladen werden.|
 
+**Beispiel**
+```
+#!json
+"featureLister": {
+    "name": "Liste",
+    "glyphicon": "glyphicon-menu-hamburger",
+    "maxFeatures": 10
+}
+```
+
 ***
 
 ### Portalconfig.menu.tools.tool.lines ###
 Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolstoolpendlercore)
+
+**Beispiel**
+```
+#!json
+"animation": {
+    "name": "Pendler (Animation)",
+    "glyphicon": "glyphicon-play-circle",
+    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "params": {
+        "REQUEST": "GetFeature",
+        "SERVICE": "WFS",
+        "TYPENAME": "app:mrh_kreise",
+        "VERSION": "1.1.0",
+        "maxFeatures": "10000"
+    },
+    "featureType": "mrh_einpendler_gemeinde",
+    "attrAnzahl": "anzahl_einpendler",
+    "attrGemeinde": "wohnort",
+    "zoomlevel": 1,
+}
+```
 
 ***
 
@@ -403,10 +524,35 @@ Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg)
 |maxPx|nein|Integer|20|Maximalgröße der Kreisdarstellung der Pendler.|
 |colors|nein|String[]|[]|Anzahl der Farben im RGBA-Muster ("rgba(255,0,0,1)").|
 
+**Beispiel**
+```
+#!json
+"animation": {
+    "name": "Pendler (Animation)",
+    "glyphicon": "glyphicon-play-circle",
+    "steps": 30,
+    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "params": {
+        "REQUEST": "GetFeature",
+        "SERVICE": "WFS",
+        "TYPENAME": "app:mrh_kreise",
+        "VERSION": "1.1.0",
+        "maxFeatures": "10000"
+    },
+    "featureType": "mrh_einpendler_gemeinde",
+    "attrAnzahl": "anzahl_einpendler",
+    "attrGemeinde": "wohnort",
+    "minPx": 5,
+    "maxPx": 30,
+    "zoomlevel": 1,
+    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+}
+```
+
 ***
 
 ### Portalconfig.menu.tools.tool.pendlerCore ###
-Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation"
+Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch [lines](#markdown-header-portalconfigmenutoolstoollines) und [animation](#markdown-header-portalconfigmenutoolstoolanimation)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -429,6 +575,7 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
+|serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
 |from|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|
 |to|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|
 |cc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|CC der Email.|
@@ -436,6 +583,33 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 |ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
 |textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
 |includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
+
+**Beispiel**
+```
+#!json
+"contact":{
+    "name": "Kontakt",
+    "glyphicon": "glyphicon-envelope",
+    "serviceID": "123",
+    "from": [
+        {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name":"LGVGeoportalHilfe"
+        }
+    ],
+    "to": [
+        {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name":"LGVGeoportalHilfe"
+        }
+    ],
+    "cc": [],
+    "bcc": [],
+    "ccTouser": true,
+    "textPlaceholder": "Hier Text eingeben."
+    "includeSystemInfo": true
+}
+```
 
 ***
 
@@ -446,6 +620,15 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 |----|-------------|---|-------|------------|
 |email|nein|String||Email.|
 |name|nein|String||Anzeigename.|
+
+**Beispiel**
+```
+#!json
+{
+    "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+    "name":"LGVGeoportalHilfe"
+}
+```
 
 ***
 
@@ -460,6 +643,31 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |layerId|ja|Object||Objekt, das einen layer definiert.|
 |layerId.title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|
 |layerId.layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+
+**Beispiel**
+```
+#!json
+"layerslider": {
+    "name": "Zeitreihe",
+    "glyphicon": "glyphicon-film",
+    "title": "Simulation von Beispiel-WMS",
+    "timeInterval": 2000,
+    "layerIds": [
+        {
+            "title": "Dienst 1",
+            "layerId": "123"
+        },
+        {
+            "title": "Dienst 2",
+            "layerId": "456"
+        },
+        {
+            "title": "Dienst 3",
+            "layerId": "789"
+        }
+    ]
+}
+```
 
 ***
 
@@ -513,7 +721,7 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 {
     "channel": "Alert",
     "event": "alert",
-    "data": "Hello World!" 
+    "data": "Hello World!"
 }
 ```
 
