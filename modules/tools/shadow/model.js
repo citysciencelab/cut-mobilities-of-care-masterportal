@@ -7,6 +7,7 @@ const Shadow = Tool.extend({
     initialize: function () {
         this.superInitialize();
         const date = Cesium.JulianDate.now();
+
         Cesium.JulianDate.addDays(date, 200, date);
         Cesium.JulianDate.addHours(date, 12, date);
         this.time = date;
@@ -19,9 +20,10 @@ const Shadow = Tool.extend({
         Cesium.JulianDate.addHours(this.time, -1, this.time);
         Radio.trigger("Map", "setTime", this.time);
     },
-    toggleShadow: function() {
-        var map = Radio.request("Map", "getMap3d");
-        var scene = map.getCesiumScene();
+    toggleShadow: function () {
+        var map = Radio.request("Map", "getMap3d"),
+            scene = map.getCesiumScene();
+
         if (!scene.sun) {
             scene.sun = new Cesium.Sun();
         }

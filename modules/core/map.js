@@ -206,15 +206,17 @@ const map = Backbone.Model.extend({
 
         return map3d;
     },
-    returnCesiumTime: function() {
+    returnCesiumTime: function () {
         if (this.time) {
             return this.time;
-        } else {
-            const date = Cesium.JulianDate.now();
-            Cesium.JulianDate.addDays(date, 200, date);
-            Cesium.JulianDate.addHours(date, 12, date);
-            return date;
         }
+
+        const date = Cesium.JulianDate.now();
+
+        Cesium.JulianDate.addDays(date, 200, date);
+        Cesium.JulianDate.addHours(date, 12, date);
+        return date;
+
     },
     setTime: function (time) {
         this.time = time;
