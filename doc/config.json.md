@@ -162,7 +162,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-##### Portalconfig.searchbar.specialWFS.definition
+#### Portalconfig.searchbar.specialWFS.definition
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -544,7 +544,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |filter|nein|[filter](#markdown-header-portalconfigmenutoolfilter)||Neues Filtermodul.|
 ***
 
-##### Portalconfig.menu.tool
+#### Portalconfig.menu.tool
 Über den Attribut-key des Werkzeuges wird definiert, welches Werkzeug mit welchen Eigenschaften geladen wird. Jedes Tool besitzt mindestens die unten aufgeführten Attribute. Welche Tools konfigurierbar sind, finden Sie unter [tools](#markdown-header-portalconfigmenutools).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -652,7 +652,7 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 
 ***
 
-##### Portalconfig.menu.tool.filter.predefinedQuery
+#### Portalconfig.menu.tool.filter.predefinedQuery
 Objekt, das eine Filtereinstelung definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -686,7 +686,7 @@ Objekt, das eine Filtereinstelung definiert.
 
 ***
 
-###### Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule
+#### Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule
 Filterregel die die Daten immer vorfiltert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -705,7 +705,7 @@ Filterregel die die Daten immer vorfiltert.
 
 ***
 
-###### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
+#### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
 Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
 Er kann aber auch ein Objekt sein.
 
@@ -962,7 +962,7 @@ Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Se
 
 ***
 
-##### Portalconfig.menu.tool.pendlerCore.param
+#### Portalconfig.menu.tool.pendlerCore.param
 Parameter die für die Anfrage des Dienstes relevant sind.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1018,7 +1018,7 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 
 ***
 
-##### Portalconfig.menu.tool.contact.email
+#### Portalconfig.menu.tool.contact.email
 Email Objekt bestehend aus der email und aus dem Anzeigename.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1073,7 +1073,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 ***
 
-##### Portalconfig.menu.tool.layerslider.layerId
+#### Portalconfig.menu.tool.layerslider.layerId
 Definiert einen Layer für den Layerslider.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1127,7 +1127,7 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 
 ***
 
-##### Portalconfig.menu.staticlinks.onClickTrigger
+#### Portalconfig.menu.staticlinks.onClickTrigger
 Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1148,7 +1148,7 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 
 ***
 
-##Themenconfig
+## Themenconfig
 Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkommen. Je nach vonfiguration des Baumtyps können auch Ordner Strukturen in den [Fachdaten](#markdown-header-themenconfigfachdaten) angegeben werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1167,7 +1167,7 @@ Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkomm
 
 ***
 
-###Themenconfig.Hintergrundkarten
+### Themenconfig.Hintergrundkarten
 Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1188,7 +1188,7 @@ Hier werden die Hintergrundkarten definiert
 
 ***
 
-###Themenconfig.Fachdaten
+### Themenconfig.Fachdaten
 Hier werden die Fachdaten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1210,7 +1210,7 @@ Hier werden die Fachdaten definiert
 
 ***
 
-###Themenconfig.Ordner
+### Themenconfig.Ordner
 Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1287,7 +1287,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 ***
 
-###Themenconfig.Layer
+### Themenconfig.Layer
 Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
 
@@ -1329,7 +1329,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 
 ***
 
-####Themenconfig.Layer.WMS
+#### Themenconfig.Layer.WMS
 Hier werde WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1371,7 +1371,7 @@ Hier werde WMS typische Attribute aufgelistet.
 
 ***
 
-####Themenconfig.Layer.Vector
+#### Themenconfig.Layer.Vector
 Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1430,7 +1430,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 
 ***
 
-#####Themenconfig.Layer.Vector.filterOption
+#### Themenconfig.Layer.Vector.filterOption
 Filteroption die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt wird.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
