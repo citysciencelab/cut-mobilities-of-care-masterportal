@@ -25,7 +25,7 @@ const ShadowView = Backbone.View.extend({
         this.model.backwardTime();
     },
     template: _.template(ShadowTemplate),
-    render: function (model, value) {
+    render: function () {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template({}));
         this.delegateEvents();
