@@ -663,7 +663,7 @@ Objekt, das eine Filtereinstelung definiert.
 |searchInMapExtent|nein|Boolean|false|Gibt an ob nur die Features im Kartenauschnitt gefiltert werden sollen.|
 |info|nein|String||Kurzer Info text der über der Filtereinstellung erscheint.|
 |predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolstoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
-|attributeWhiteList|nein|[attributeWhiteList](#markdown-header-portalconfigmenutoolstoolfilterpredefinedqueryattributeWhiteListObject)[]||Whitelist an Attributen die verwendet werden sollen.|
+|attributeWhiteList|nein|String[]/[attributeWhiteList](#markdown-header-portalconfigmenutoolstoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
 |snippetType|nein|String||Datentyp des Attributes. Wenn nciht angegeben wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird benötigt im Projekt DIPAS auf der Touchtabl-Variante des Portals.|
 
 **Beispiel**
@@ -955,15 +955,23 @@ Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Se
 |----|-------------|---|-------|------------|
 |zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|
 |url|nein|String|"http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|Url des WFS Dienstes der abgefragt werden soll.|
-|params|nein|Object||Parameter mit denen der Dienst abgefragt werden soll.|
-|params.REQUEST|nein|String|"GetFeature"|Art des Requests.|
-|params.SERVICE|nein|String|"WFS"|Typ des Dienstes.|
-|params.TYPENAME|nein|String|"app:mrh_kreise"|Typename des Layers.|
-|params.VERSION|nein|String|"1.1.0"|Version des WFS.|
-|params.maxFeatures|nein|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|
+|params|nein|[param](#markdown-header-portalconfigmenutoolstoolpendlercoreparam)||Parameter mit denen der Dienst abgefragt werden soll.|
 |featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|
 |attrAnzahl|nein|String|"anzahl_einpendler"|Attributname das die Anzahl der Pendler pro Gemeinde enthält.|
 |attrGemeinde|nein|String|"wohnort"|Attributname das die Gemeinde enthält.|
+
+***
+
+### Portalconfig.menu.tools.tool.pendlerCore.param ###
+Parameter die für die Anfrage des Dienstes relevant sind.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|REQUEST|nein|String|"GetFeature"|Art des Requests.|
+|SERVICE|nein|String|"WFS"|Typ des Dienstes.|
+|TYPENAME|nein|String|"app:mrh_kreise"|Typename des Layers.|
+|VERSION|nein|String|"1.1.0"|Version des WFS.|
+|maxFeatures|nein|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|
 
 ***
 
@@ -1036,10 +1044,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |----|-------------|---|-------|------------|
 |title|ja|String||Titel der im Werkzeug vorkommt.|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|
-|layerIds|ja|layerId[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
-|layerId|ja|Object||Objekt, das einen layer definiert.|
-|layerId.title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|
-|layerId.layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoolstoollayersliderlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
 
 **Beispiel**
 ```
@@ -1063,6 +1068,25 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
             "layerId": "789"
         }
     ]
+}
+```
+
+***
+
+### Portalconfig.menu.tools.tool.layerslider.layerId ###
+Definiert einen Layer für den Layerslider.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|
+|layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+
+**Beispiel**
+```
+#!json
+{
+    "title": "Dienst 1",
+    "layerId": "123"
 }
 ```
 
@@ -1348,18 +1372,13 @@ Hier werde WMS typische Attribute aufgelistet.
 ***
 
 ##Themenconfig.Layer.Vector
-hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |clusterDistance|nein|Integer||Pixelradius. Innerhalb dieses PRadius werden alle features zu einem feature "geclustered".|
 |extendedFilter|nein|Boolean||Gibt an ob dieser layer vom Werkzeug "extendedFilter" in [tools](#markdown-header-portalconfigmenutools) verwendet werden kann.|
-|filterOptions|nein|filterOption[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt werden.|
-|filterOption|nein|Object||Filteroption.|
-|filterOption.fieldName|ja|String||Attributname nach dem zu filtern ist.|
-|filterOption.filterName|ja|String||Name des Filters im Werkzeug.|
-|filterOption.filterString|ja|String[]||Array von Attributwerten nach denen gefiltert werden kann. Bei "*" werden alle Wertausprägungen angezeigt.|
-|filterOption.filterType|ja|String||typ des Filters Momentan wird nur "combo" unterstützt.|
+|filterOptions|nein|[filterOption](#markdown-header-themenconfiglayervectorfilteroption)[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt werden.|
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|
 |routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolstoolrouting) konfiguriert sein.|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|
@@ -1406,6 +1425,29 @@ hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 "searchField": "name",
 "styleId": "123456",
 "hitTolerance": 50,
+}
+```
+
+***
+
+##Themenconfig.Layer.Vector.filterOption
+Filteroption die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|fieldName|ja|String||Attributname nach dem zu filtern ist.|
+|filterName|ja|String||Name des Filters im Werkzeug.|
+|filterString|ja|String[]||Array von Attributwerten nach denen gefiltert werden kann. Bei "*" werden alle Wertausprägungen angezeigt.|
+|filterType|ja|String||typ des Filters Momentan wird nur "combo" unterstützt.|
+
+**Beispiel**
+```
+#!json
+{
+    "fieldName": "myFirstAttributeToFilter",
+    "filterName": "Filter_1",
+    "filterString": ["*", "value1", "value2"],
+    "filterType": "combo"
 }
 ```
 
