@@ -45,7 +45,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
 ***
 
-### Portalconfig.searchbar ###
+### Portalconfig.searchbar
 Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -65,7 +65,7 @@ Konfiguration der Searchbar
 
 ***
 
-### Portalconfig.searchbar.bkg ###
+#### Portalconfig.searchbar.bkg
 Konfiguration des BKG Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -96,7 +96,7 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
-### Portalconfig.searchbar.gazetteer ###
+#### Portalconfig.searchbar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -125,7 +125,7 @@ Konfiguration des Gazetteer Suchdienstes
 
 ***
 
-### Portalconfig.searchbar.specialWFS ###
+#### Portalconfig.searchbar.specialWFS
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -162,7 +162,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-### Portalconfig.searchbar.specialWFS.definition ###
+##### Portalconfig.searchbar.specialWFS.definition
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -190,7 +190,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 
 ***
 
-### Portalconfig.searchbar.tree ###
+#### Portalconfig.searchbar.tree
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -207,7 +207,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-### Portalconfig.searchbar.visibleWFS ###
+#### Portalconfig.searchbar.visibleWFS
 Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -224,7 +224,7 @@ Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwende
 
 ***
 
-### Portalconfig.searchbar.visibleVector ###
+#### Portalconfig.searchbar.visibleVector
 Konfiguration der Suche über die sichtbaren WFS
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -243,7 +243,7 @@ Konfiguration der Suche über die sichtbaren WFS
 
 ***
 
-### Portalconfig.controls ###
+### Portalconfig.controls
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -260,7 +260,7 @@ Konfiguration der Suche über die sichtbaren WFS
 
 ***
 
-### Portalconfig.controls.attributions
+#### Portalconfig.controls.attributions
 
 Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob vorhandene Attributions angezeigt werden sollen oder nicht. Ist es vom Typ Object so gelten folgende Attribute:
 
@@ -286,7 +286,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 ***
 
-### Portalconfig.controls.orientation ###
+#### Portalconfig.controls.orientation
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -313,7 +313,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 ***
 
-### Portalconfig.controls.overviewmap ###
+#### Portalconfig.controls.overviewmap
 
 Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Overviewmap mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
 
@@ -339,7 +339,7 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 ***
 
-### Portalconfig.portalTitle ###
+### Portalconfig.portalTitle
 In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -362,7 +362,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 
 ***
 
-### Portalconfig.mapView ###
+### Portalconfig.mapView
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -446,7 +446,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 
 ***
 
-### Portalconfig.mapView.option ###
+#### Portalconfig.mapView.option
 
 Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das zoomLevel ist, desto kleiner ist die scale. und desto näher hat man gezoomt.
 
@@ -468,18 +468,18 @@ Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Aufl
 
 ***
 
-### Portalconfig.menu ###
+### Portalconfig.menu
 Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
-|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutoolstool) darstellt.|
+|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
+|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) darstellt.|
 |tree|nein|[tree](#markdown-header-portalconfigmenutree)||Darstellung udn Position des Themenbaums.|
 
 ***
 
-### Portalconfig.menu.tree ###
+#### Portalconfig.menu.tree
 Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -490,14 +490,14 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
-### Portalconfig.menu.folder ###
+#### Portalconfig.menu.folder
 Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" noch das attribut "children" besitzt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|ja|String||Name des Ordners im Menu.|
 |glyphicon|ja|String|"glyphicon-folder-open"|CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
-|children|nein|[tool](#markdown-header-portalconfigmenutoolstool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
+|children|nein|[tool](#markdown-header-portalconfigmenutool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
 
 **Beispiel eines folders**
 ```
@@ -514,37 +514,37 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 ***
 
-### Portalconfig.menu.tools ###
-Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutoolstool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
+#### Portalconfig.menu.tools
+Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|einwohnerabfrage|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
-|compareFeatures|nein|[compareFeatures](#markdown-header-portalconfigmenutoolstoolcomparefeatures)|| Vergleichsmöglichkeit von Vector-Features.|
-|parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolstoolparcelsearch)||Flurstückssuche.|
-|measure|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|
-|coord|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|
-|gfi|nein|[tool](#markdown-header-portalconfigmenutoolstool)||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|
-|print|nein|[print](#markdown-header-portalconfigmenutoolstoolprint)||Druckmodul mit dem die Karte als PDF exportiert werden kann.|
-|searchByCoord|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|
-|kmlimport|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|
-|wfsFeatureFilter|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|
-|extendedFilter|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|
-|routing|nein|[routing](#markdown-header-portalconfigmenutoolstoolrouting)||Routing. Über dieses Werkzeug können Routen berechnet werden.|
-|draw|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|
-|styleWMS|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|
-|featureLister|nein|[featureLister](#markdown-header-portalconfigmenutoolstoolfeaturelister)||Listet alle Features eines Vektor Layers auf.|
-|lines|nein|[lines](#markdown-header-portalconfigmenutoolstoollines)||Pendlerdarstellung als linenhafte Objekte.|
-|animation|nein|[animation](#markdown-header-portalconfigmenutoolstoolanimation)||Pendleranimation als punkthafte Objekte.|
-|saveSelection|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|
-|layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoolstoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
-|legend|nein|[tool](#markdown-header-portalconfigmenutoolstool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
-|contact|nein|[contact](#markdown-header-portalconfigmenutoolstoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
-|schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolstoolschulwegrouting)||Schulwegrouting.|
-|filter|nein|[filter](#markdown-header-portalconfigmenutoolstoolfilter)||Neues Filtermodul.|
+|einwohnerabfrage|nein|[tool](#markdown-header-portalconfigmenutool)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
+|compareFeatures|nein|[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)|| Vergleichsmöglichkeit von Vector-Features.|
+|parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)||Flurstückssuche.|
+|measure|nein|[tool](#markdown-header-portalconfigmenutool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|
+|coord|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|
+|gfi|nein|[tool](#markdown-header-portalconfigmenutool)||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|
+|print|nein|[print](#markdown-header-portalconfigmenutoolprint)||Druckmodul mit dem die Karte als PDF exportiert werden kann.|
+|searchByCoord|nein|[tool](#markdown-header-portalconfigmenutool)||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|
+|kmlimport|nein|[tool](#markdown-header-portalconfigmenutool)||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|
+|wfsFeatureFilter|nein|[tool](#markdown-header-portalconfigmenutool)||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|
+|extendedFilter|nein|[tool](#markdown-header-portalconfigmenutool)||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|
+|routing|nein|[routing](#markdown-header-portalconfigmenutoolrouting)||Routing. Über dieses Werkzeug können Routen berechnet werden.|
+|draw|nein|[tool](#markdown-header-portalconfigmenutool)||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|
+|styleWMS|nein|[tool](#markdown-header-portalconfigmenutool)||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|
+|featureLister|nein|[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)||Listet alle Features eines Vektor Layers auf.|
+|lines|nein|[lines](#markdown-header-portalconfigmenutoollines)||Pendlerdarstellung als linenhafte Objekte.|
+|animation|nein|[animation](#markdown-header-portalconfigmenutoolanimation)||Pendleranimation als punkthafte Objekte.|
+|saveSelection|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|
+|layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
+|legend|nein|[tool](#markdown-header-portalconfigmenutool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
+|contact|nein|[contact](#markdown-header-portalconfigmenutoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
+|schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)||Schulwegrouting.|
+|filter|nein|[filter](#markdown-header-portalconfigmenutoolfilter)||Neues Filtermodul.|
 ***
 
-### Portalconfig.menu.tools.tool ###
+##### Portalconfig.menu.tool
 Über den Attribut-key des Werkzeuges wird definiert, welches Werkzeug mit welchen Eigenschaften geladen wird. Jedes Tool besitzt mindestens die unten aufgeführten Attribute. Welche Tools konfigurierbar sind, finden Sie unter [tools](#markdown-header-portalconfigmenutools).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -564,7 +564,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 
 ***
 
-### Portalconfig.menu.tools.tool.filter ###
+#### Portalconfig.menu.tool.filter
 Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -572,7 +572,7 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|
-|predefinedQueries|nein|[predinedQuery](#markdown-header-portalconfigmenutoolstoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
+|predefinedQueries|nein|[predinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
 
 **Beispiel**
 ```
@@ -652,7 +652,7 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 
 ***
 
-### Portalconfig.menu.tools.tool.filter.predefinedQuery ###
+##### Portalconfig.menu.tool.filter.predefinedQuery
 Objekt, das eine Filtereinstelung definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -662,8 +662,8 @@ Objekt, das eine Filtereinstelung definiert.
 |isSelected|nein|Boolean|false|Gibt an ob diese Filtereinstellung initial angezeigt werden soll.|
 |searchInMapExtent|nein|Boolean|false|Gibt an ob nur die Features im Kartenauschnitt gefiltert werden sollen.|
 |info|nein|String||Kurzer Info text der über der Filtereinstellung erscheint.|
-|predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolstoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
-|attributeWhiteList|nein|String[]/[attributeWhiteList](#markdown-header-portalconfigmenutoolstoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
+|predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
+|attributeWhiteList|nein|String[]/[attributeWhiteList](#markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
 |snippetType|nein|String||Datentyp des Attributes. Wenn nciht angegeben wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird benötigt im Projekt DIPAS auf der Touchtabl-Variante des Portals.|
 
 **Beispiel**
@@ -686,7 +686,7 @@ Objekt, das eine Filtereinstelung definiert.
 
 ***
 
-### Portalconfig.menu.tools.tool.filter.predefinedQuery.predefinedRule ###
+###### Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule
 Filterregel die die Daten immer vorfiltert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -705,7 +705,7 @@ Filterregel die die Daten immer vorfiltert.
 
 ***
 
-### Portalconfig.menu.tools.tool.filter.predefinedQuery.attributeWhiteListObject ###
+###### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
 Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
 Er kann aber auch ein Objekt sein.
 
@@ -731,7 +731,7 @@ Er kann aber auch ein Objekt sein.
 
 ***
 
-### Portalconfig.menu.tools.tool.schulwegrouting ###
+#### Portalconfig.menu.tool.schulwegrouting
 Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -750,7 +750,7 @@ Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jed
 
 ***
 
-### Portalconfig.menu.tools.tool.compareFeatures ###
+#### Portalconfig.menu.tool.compareFeatures
 Hier können Vector Features miteinander verglichen werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -771,7 +771,7 @@ Hier können Vector Features miteinander verglichen werden.
 
 ***
 
-### Portalconfig.menu.tools.tool.parcelSearch ###
+#### Portalconfig.menu.tool.parcelSearch
 Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WFS abgefragt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -796,7 +796,7 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 
 ***
 
-### Portalconfig.menu.tools.tool.print ###
+#### Portalconfig.menu.tool.print
 Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdienst über MapfishPrint 2 oder der moderne Druckdienst, der MapfishPrint 3 verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -841,7 +841,7 @@ Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdiens
 
 ***
 
-### Portalconfig.menu.tools.tool.routing ###
+#### Portalconfig.menu.tool.routing
 Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -866,7 +866,7 @@ Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen P
 
 ***
 
-### Portalconfig.menu.tools.tool.featureLister ###
+#### Portalconfig.menu.tool.featureLister
 Modul, das Vektor Features darstellt. Durch hovern über ein feature in der Liste wird auf der Karte der Marker gesetzt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -885,8 +885,8 @@ Modul, das Vektor Features darstellt. Durch hovern über ein feature in der List
 
 ***
 
-### Portalconfig.menu.tools.tool.lines ###
-Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolstoolpendlercore)
+#### Portalconfig.menu.tool.lines
+Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 **Beispiel**
 ```
@@ -911,8 +911,8 @@ Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metr
 
 ***
 
-### Portalconfig.menu.tools.tool.animation ###
-Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolstoolpendlercore)
+#### Portalconfig.menu.tool.animation
+Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -948,21 +948,21 @@ Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg)
 
 ***
 
-### Portalconfig.menu.tools.tool.pendlerCore ###
-Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch [lines](#markdown-header-portalconfigmenutoolstoollines) und [animation](#markdown-header-portalconfigmenutoolstoolanimation)
+#### Portalconfig.menu.tool.pendlerCore
+Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch [lines](#markdown-header-portalconfigmenutoollines) und [animation](#markdown-header-portalconfigmenutoolanimation)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|
 |url|nein|String|"http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|Url des WFS Dienstes der abgefragt werden soll.|
-|params|nein|[param](#markdown-header-portalconfigmenutoolstoolpendlercoreparam)||Parameter mit denen der Dienst abgefragt werden soll.|
+|params|nein|[param](#markdown-header-portalconfigmenutoolpendlercoreparam)||Parameter mit denen der Dienst abgefragt werden soll.|
 |featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|
 |attrAnzahl|nein|String|"anzahl_einpendler"|Attributname das die Anzahl der Pendler pro Gemeinde enthält.|
 |attrGemeinde|nein|String|"wohnort"|Attributname das die Gemeinde enthält.|
 
 ***
 
-### Portalconfig.menu.tools.tool.pendlerCore.param ###
+##### Portalconfig.menu.tool.pendlerCore.param
 Parameter die für die Anfrage des Dienstes relevant sind.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -975,16 +975,16 @@ Parameter die für die Anfrage des Dienstes relevant sind.
 
 ***
 
-### Portalconfig.menu.tools.tool.contact ###
+#### Portalconfig.menu.tool.contact
 Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
-|from|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|
-|to|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|
-|cc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|CC der Email.|
-|bcc|nein|[email](#markdown-header-portalconfigmenutoolstoolcontactemail)[]|[]|BCC der Email.|
+|from|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|
+|to|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|
+|cc|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[]|CC der Email.|
+|bcc|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[]|BCC der Email.|
 |ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
 |textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
 |includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
@@ -1018,7 +1018,7 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 
 ***
 
-### Portalconfig.menu.tools.tool.contact.email ###
+##### Portalconfig.menu.tool.contact.email
 Email Objekt bestehend aus der email und aus dem Anzeigename.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1037,14 +1037,14 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 
 ***
 
-### Portalconfig.menu.tools.tool.layerslider ###
+#### Portalconfig.menu.tool.layerslider
 Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hintereinander an bzw auszuschalten. Dadurch kann z.B. eine Zeitreihe verschiedener Zustände animiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |title|ja|String||Titel der im Werkzeug vorkommt.|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|
-|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoolstoollayersliderlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
+|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
 
 **Beispiel**
 ```
@@ -1073,7 +1073,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 ***
 
-### Portalconfig.menu.tools.tool.layerslider.layerId ###
+##### Portalconfig.menu.tool.layerslider.layerId
 Definiert einen Layer für den Layerslider.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1092,7 +1092,7 @@ Definiert einen Layer für den Layerslider.
 
 ***
 
-### Portalconfig.menu.staticlinks ###
+#### Portalconfig.menu.staticlinks
 Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1127,7 +1127,7 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 
 ***
 
-### Portalconfig.menu.staticlinks.onclicktrigger ###
+##### Portalconfig.menu.staticlinks.onClickTrigger
 Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1167,7 +1167,7 @@ Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkomm
 
 ***
 
-##Themenconfig.Hintergrundkarten
+###Themenconfig.Hintergrundkarten
 Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1188,7 +1188,7 @@ Hier werden die Hintergrundkarten definiert
 
 ***
 
-##Themenconfig.Fachdaten
+###Themenconfig.Fachdaten
 Hier werden die Fachdaten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1210,7 +1210,7 @@ Hier werden die Fachdaten definiert
 
 ***
 
-##Themenconfig.Ordner
+###Themenconfig.Ordner
 Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1287,7 +1287,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 ***
 
-##Themenconfig.Layer
+###Themenconfig.Layer
 Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
 
@@ -1329,7 +1329,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 
 ***
 
-##Themenconfig.Layer.WMS
+####Themenconfig.Layer.WMS
 Hier werde WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1371,7 +1371,7 @@ Hier werde WMS typische Attribute aufgelistet.
 
 ***
 
-##Themenconfig.Layer.Vector
+####Themenconfig.Layer.Vector
 Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1380,7 +1380,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |extendedFilter|nein|Boolean||Gibt an ob dieser layer vom Werkzeug "extendedFilter" in [tools](#markdown-header-portalconfigmenutools) verwendet werden kann.|
 |filterOptions|nein|[filterOption](#markdown-header-themenconfiglayervectorfilteroption)[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt werden.|
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|
-|routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolstoolrouting) konfiguriert sein.|
+|routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolrouting) konfiguriert sein.|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|
 |styleId|nein|String||Id die den Style definiert. Id wird in der [style.json](style.json.md) aufgelöst.|
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|
@@ -1430,7 +1430,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 
 ***
 
-##Themenconfig.Layer.Vector.filterOption
+#####Themenconfig.Layer.Vector.filterOption
 Filteroption die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt wird.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
