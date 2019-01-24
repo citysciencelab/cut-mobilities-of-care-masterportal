@@ -12,6 +12,8 @@ function prepareSearchBody (query) {
     searchBody.size = size;
     searchBody.query = query;
 
+    console.log(JSON.stringify(searchBody));
+
     return JSON.stringify(searchBody);
 }
 
@@ -48,15 +50,17 @@ export function search (serviceId, query) {
     if (_.isUndefined(serviceUrl)) {
         result.status = "error";
         result.message = "ElasticSearch Service with id " + serviceId + " not found.";
-        console.error(JSON.stringify(result));
+        // console.error(JSON.stringify(result));
+        // return result;
     }
     else if (_.isUndefined(query)) {
         result.status = "error";
         result.message = "ElasticSearch query not found.";
-        console.error(JSON.stringify(result));
+        // console.error(JSON.stringify(result));
+        // return result;
     }
     else {
-        fetch(searchUrl, {
+        return fetch(searchUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
@@ -69,17 +73,21 @@ export function search (serviceId, query) {
 
                 result.status = "success";
 
-                _.each(response.hits.hits, function (hit) {
-                    datasources.push(hit._source);
-                })
-                result.hits = datasources;}
+                if (response.hits) {
+                    _.each(response.hits.hits, function (hit) {
+                        datasources.push(hit._source);
+                    })
+                }
+
+                result.hits = datasources;
+                return result;
+            }
             )
             .catch(err => {
                 result.status = "error";
                 result.message = "ElasticSearch query went wrong with message: " + err;
                 console.error("error", err);
+                return result;
             });
     }
-
-    return result;
 }
