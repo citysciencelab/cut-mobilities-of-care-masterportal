@@ -1472,6 +1472,8 @@ Eine Koordinate besteht aus einem Array bestehend aus zwei Zahlen. Die erste rep
 [561210.1458, 5932600.12358]
 ```
 
+***
+
 ## Datatypes.Extent
 
 Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschreibt einen rechteckigen Gültigkeitsbereich. Dabei wird ein Rechteck aufgespannt, das durch die "linke untere" und die "rechte obere" Ecke definiert wird. Das Schema lautet [Rechtswert-Links-Unten, Hochwert-Links-Unten, Rechtswert-Rechts-Oben, Hochwert-Rechts-Oben] oder [minx, miny, maxx, maxy].
@@ -1481,3 +1483,4 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschr
 #!json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
+***
