@@ -75,6 +75,8 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
+**ACHTUNG:** Bitte VOR Konfiguration dieses Parameters den korrekten Systempfad ermitteln!
+(Auf einem deutschsprachigen Win10 ist dies bspw. ```C:\Program Files\nodejs```)
 
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:
