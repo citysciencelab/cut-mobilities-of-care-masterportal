@@ -142,15 +142,16 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
      * @return {void}
      */
     appendChildren: function () {
-        var children = this.model.get("children");
+        var children = this.model.get("children"),
+            imageRadverkehrszaehlstellenDiv = this.$(".imageRadverkehrszaehlstellenDiv");
 
-        this.$(".imageRadverkehrszaehlstellenDiv").removeClass("has-image");
+        imageRadverkehrszaehlstellenDiv.removeClass("has-image");
         _.each(children, function (element, index) {
             element.val.$el.prepend("<p class=imageRadverkehrszaehlstellenP>" + element.key + ": </p>");
             if (element.type && element.type === "image") {
-                this.$(".imageRadverkehrszaehlstellenDiv").append("<div class='col-xs-6 col-md-6'></div>");
-                this.$(".imageRadverkehrszaehlstellennDiv").children()[index].append(element.val.$el[0]);
-                this.$(".imageRadverkehrszaehlstellenDiv").addClass("has-image");
+                imageRadverkehrszaehlstellenDiv.append("<div class='col-xs-6 col-md-6'></div>");
+                imageRadverkehrszaehlstellenDiv.children()[index].append(element.val.$el[0]);
+                imageRadverkehrszaehlstellenDiv.addClass("has-image");
             }
         }, this);
     },
