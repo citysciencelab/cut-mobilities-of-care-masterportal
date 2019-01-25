@@ -147,7 +147,9 @@ const MapMarkerModel = Backbone.Model.extend({
     setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
         var styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
 
-        this.get("polygon").setStyle(styleListModel.createStyle(this.get("polygon"), false));
+        if (styleListModel) {
+            this.get("polygon").setStyle(styleListModel.createStyle(this.get("polygon"), false));
+        }
     },
 
     // setter for zoomLevel
@@ -177,7 +179,7 @@ const MapMarkerModel = Backbone.Model.extend({
         this.set("polygon", value);
     },
 
-    //setter for polygonStyle
+    // setter for polygonStyle
     setStyle: function (value) {
         this.set("style", value);
     }
