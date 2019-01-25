@@ -756,6 +756,7 @@ Flurstücksuche
 |createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
 |reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
 |mapMarkerType|nein|String|"Parcel"|Gibt an wie im MapMarker Modul auf das Flurstück gezoomt und markiert wird.|
+|styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den standard Style vom MapMarker zu überschreiben.|
 
 ******
 ******
