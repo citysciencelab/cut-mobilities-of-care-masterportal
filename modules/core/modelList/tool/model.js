@@ -19,7 +19,7 @@ const Tool = Item.extend({
         // deaktiviert GFI, wenn dieses tool geöffnet wird
         deactivateGFI: false,
         renderToWindow: true,
-        supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
+        supportedIn3d: ["coord", "shadow", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
         supportedInOblique: ["contact"],
         // Tools die in die Sidebar und nicht in das Fenster sollen
         toolsToRenderInSidebar: ["filter", "schulwegrouting"]
