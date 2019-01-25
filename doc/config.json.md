@@ -71,7 +71,7 @@ Konfiguration des BKG Suchdienstes
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|
-|extent|nein|Number[4]|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmuss suchen soll. [minx, miny, maxx, maxy].|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmuss suchen soll.|
 |filter|nein|String|"filter=(typ:*)"|Filter string der an die BKG-Schnittstelle geschickt wird.|
 |geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
@@ -367,9 +367,9 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|
-|startCenter|nein|Integer[2]|[565874, 5934140]|Die initiale Zentrumskoordinate.|
+|startCenter|nein|[Coordinate](#markdown-header-datatypescoordinate)|[565874, 5934140]|Die initiale Zentrumskoordinate.|
 |options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
-|extent|nein|Number[4]|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
 |resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|
 |zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|
 |epsg|nein|String|"EPSG:25832"|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
@@ -1299,7 +1299,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 |transparency|nein|Integer|0|Transparenz des Layers.|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|
-|extent|nein|Number[4]|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
 |displayInTree|nein|Boolean|false|Gibt an ob der Layer im Themenbaum angezeigt werden soll.|
 |gfiTheme|nein|String|"default"|Wert aus [services.json](services.json.md). Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
 |layerAttribution|nein|String||Wert aus [services.json](services.json.md). HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
@@ -1452,3 +1452,32 @@ Filteroption die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-por
 ```
 
 ***
+
+# Datatypes
+In diesem Kapitel werden die erwarteten Datentypen definiert.
+
+## Datatypes.Coordinate
+
+Eine Koordinate besteht aus einem Array bestehend aus zwei Zahlen. Die erste repräsentiert den Rechtswert, die zweite den Hochwert.
+
+**Beispiel Koordinate bestehend aus Ganzzahlen(Integer)**
+```
+#!json
+[561210, 5932600]
+```
+
+**Beispiel Koordinate bestehend aus Gleitkommazahlen(Float)**
+```
+#!json
+[561210.1458, 5932600.12358]
+```
+
+## Datatypes.Extent
+
+Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschreibt einen rechteckigen Gültigkeitsbereich. Dabei wird ein Rechteck aufgespannt, das durch die "linke untere" und die "rechte obere" Ecke definiert wird. Das Schema lautet [Rechtswert-Links-Unten, Hochwert-Links-Unten, Rechtswert-Rechts-Oben, Hochwert-Rechts-Oben] oder [minx, miny, maxx, maxy].
+
+**Beispiel Extent**
+```
+#!json
+[510000.0, 5850000.0, 625000.4, 6000000.0]
+```
