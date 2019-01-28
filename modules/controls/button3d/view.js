@@ -62,6 +62,7 @@ const Button3dView = Backbone.View.extend({
             Radio.trigger("ModelList", "toggleWfsCluster", true);
             Radio.trigger("Map", "deactivateMap3d");
             Radio.trigger("Alert", "alert:remove");
+            Radio.trigger("Filter", "enable");
             this.$("#3d_titel").text("Auswahl einschalten");
         }
         else {
@@ -75,6 +76,7 @@ const Button3dView = Backbone.View.extend({
                 return;
             }
             this.$("#3d_titel").text("Auswahl ausschalten");
+            Radio.trigger("Filter", "disable");
             Radio.trigger("ModelList", "toggleWfsCluster", false);
             Radio.trigger("Map", "activateMap3d");
             // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
