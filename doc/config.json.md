@@ -2,1104 +2,344 @@
 
 [TOC]
 
-# config.json #
-Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv/src/stable/portal/master/config.json).
-## Portalconfig ##
-In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
+***
 
+# config.json
+Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv/src/stable/portal/master/config.json).
+Die config.json besteht aus der [Portalconfig](#markdown-header-Portalconfig) und der [Themenconfig](#markdown-header-Themenconfig)
+```
+{
+   "Portalconfig": {},
+   "Themenconfig": {}
+}
+```
+
+***
+
+## Portalconfig
+In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
 1.  der Titel mit Logo, falls erforderlich
 2.  welche/r Suchdienst/e angesprochen werden soll/en
 3.  welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
-4.  welche Werkzeuge geladen werden sollen
+4.  welche Werkzeuge an welcher Stelle geladen werden sollen
 5.  welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers, Vollbildmodus, etc.)
 6.  welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
 
-Es existieren die im Folgenden aufgelisteten Konfigurationen. Auch hier werden die Konfigurationen des Typs object verlinkt und später eingehend erläutert.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|Baumtyp|ja|String||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|`"light"`|
-|[controls](#markdown-header-portalconfigcontrols)|nein|Object||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.||
-|LogoLink|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
-|LogoToolTip|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
-|[mapView](#markdown-header-portalconfigmapview)|nein|Object||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.||
-|[menu](#markdown-header-portalconfigmenu)|nein|Object||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
-|PortalLogo|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
-|PortalTitle|deprecated|deprecated||Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalTitle)||
-|[portalTitle](#markdown-header-portalconfigportalTitle)|nein|Object||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.||
-|scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|`true`|
-|[searchBar](#markdown-header-portalconfigsearchbar)|nein|Object||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden||
-|[simpleLister](#markdown-header-portalconfigsimplelister)|nein|Object||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten Layers  an.||
-|[mapMarkerModul](#markdown-header-portalconfigmapmarkermodul)|nein|Object||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.||
-
-******
-
-### Portalconfig.controls ###
+Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[attributions](#markdown-header-portalconfigcontrolsattributions)|nein|Boolean/Object|false|Boolean: Zeigt vorhandene Attributions an. Object: Zeigt vorhandene Attributions mit folgenden Eigenschaften an, siehe [Object](#markdown-header-portalconfigcontrolsattributions)|
-|fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
-|mousePosition|nein|Boolean|false|Die Koordination des Mauszeigers werden angeziegt.|
-|[orientation](#markdown-header-portalconfigcontrolsorientation)|nein|Object||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers. Weitere Parameter,  siehe[orientation](#markdown-header-portalconfigcontrolsorientation).|
-|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
-|[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|nein|Boolean/Object|false|Boolean: Zeigt die Overviewmap unten rechts an. Object: Passt die Overviewmap um die angegebenen Attribute an, siehe [Object](#markdown-header-portalconfigcontrolsaoverviewmap)|
-|[totalview](#markdown-header-portalconfigcontrolstotalview)|nein|Boolean|false|Zeigt einen Button an, mit dem die Startansicht wiederhergestellt wird.|
-|button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung nach 3D angezeigt werden soll. |
-|orientation3d|nein|Boolean|false|Legt fest, ob ein im 3D Modus eine Navigationsrose anzeiget werden soll. |
-|freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+|Baumtyp|ja|enum["light", "default", "custom"]||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|
+|controls|nein|[controls](#markdown-header-portalconfigcontrols)||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|
+|LogoLink|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalitle).|
+|LogoToolTip|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalitle).|
+|mapView|nein|[mapView](#markdown-header-portalconfigmapview)||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|
+|menu|nein|[menu](#markdown-header-portalconfigmenu)||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
+|PortalLogo|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
+|PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
+|portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
+|scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
+|searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|simpleLister|nein|[simpleLister](#markdown-header-portalconfigsimplelister)||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten vektor Layers an.|
+|mapMarkerModul|nein|[mapMarkerModul](#markdown-header-portalconfig.mapmarkermodul)||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.|
 
-**Beispiel controls:**
+***
 
+### Portalconfig.searchbar
+Konfiguration der Searchbar
 
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
+|gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
+|recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
+|quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|
+|specialWFS|nein|[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)||Konfiguration des specialWFS Suchdienstes.|
+|tree|nein|[tree](#markdown-header-portalconfigsearchbartree)||Konfiguration der Suche im Themenbaum.|
+|visibleWFS|nein|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)||Konfiguration der Suche über die sichtbaren WFS Layer.|
+|visibleVector|nein|[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)||Konfiguration der Suche über die sichtbaren WFS Layer.|
+|zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|
+|renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|
+
+***
+
+#### Portalconfig.searchbar.bkg
+Konfiguration des BKG Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmuss suchen soll.|
+|filter|nein|String|"filter=(typ:*)"|Filter string der an die BKG-Schnittstelle geschickt wird.|
+|geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|score|nein|Number|0.6|Score der die Qualität der Suchergebnisse definiert.|
+|suggestCount|nein|Integer|20|Anzahl der Vorschläge.|
+|suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
 ```
 #!json
-
-"controls": {
-        "zoom": true,
-        "orientation": {
-          "zoomMode": "once",
-          "poiDistances": [500, 1000, 2000]
-        },
-        "fullScreen": true,
-        "mousePosition": true,
-        "attributions": {
-            "isInitOpenDesktop": true,
-            "isInitOpenMobile": false
-        },
-        "overviewmap": true
-      }
-
+"bkg": {
+    "minChars": 3,
+    "suggestServiceId": "4",
+    "geosearchServiceId": "5",
+    "extent": [454591, 5809000, 700000, 6075769],
+    "suggestCount": 10,
+    "epsg": "EPSG:25832",
+    "filter": "filter=(typ:*)",
+    "score": 0.6
+}
 ```
 
+***
 
-******
-### Portalconfig.controls.attributions ###
+#### Portalconfig.searchbar.gazetteer
+Konfiguration des Gazetteer Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|searchDistricts|nein|Boolean|false|Gibt an ob nach Bezirken gesucht werden soll.|
+|searchHouseNumbers|nein|Boolean|false|Gibt an ob nach Straßen und Hausnummern gesucht werden soll. Bedingt **searchStreets**=true.|
+|searchParcels|nein|Boolean|false|Gibt an ob nach Flurstücken gesucht werden soll.|
+|searchStreetKey|nein|Boolean|false|Gibt an ob nach Straßenschlüsseln gesucht werden soll.|
+|searchStreet|nein|Boolean|false|Gibt an ob nach Straßen gesucht werden soll. Vorraussetzung für **searchHouseNumbers**|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
+```
+#!json
+"gazetteer": {
+    "minChars": 3,
+    "serviceId": "6",
+    "searchStreets": true,
+    "searchHouseNumbers": true,
+    "searchDistricts": true,
+    "searchParcels": true,
+    "searchStreetKey": true
+}
+```
+
+***
+
+#### Portalconfig.searchbar.specialWFS
+Konfiguration der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|glyphicon|nein|String|"glyhicon-home"|Default glyphicon das in der Vorschlagsliste erscheint. Kann in der [definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition) überschrieben werden.|
+|maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features. Kann in der [definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition) überschrieben werden.|
+|timeout|nein|Integer|6000|Timeout in ms für die Dienste Anfrage.|
+|definitions|nein|[definition](#markdown-header-portalconfigsearchbarspecialwfsdefinition)[]||Definition der speziellen WFS suchen|
+
+**Beispiel**
+```
+#!json
+"specialWFS": {
+    "minChars": 5,
+    "timeout": 10000,
+    "definitions": [
+        {
+            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
+            "name": "B-Plan"
+        },
+        {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+        }
+    ]
+}
+```
+
+***
+
+#### Portalconfig.searchbar.specialWFS.definition
+Konfiguration einer Definition bei der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|url|nein|String||URL des WFS.|
+|name|nein|String||Name der Kategorie. Erscheint in der Vorschlagsliste.|
+|glyphicon|nein|String|"glyhicon-home"|CSS Klasse des Glyphicons das in der Vorschlagsliste erscheint.|
+|typeName|nein|String||TypeName des WFS layers.|
+|propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|
+|geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|
+|maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|
+|data|nein|String||@deprecated in 3.0.0 Filterparameter für den WFS request.|
+
+**Beispiel**
+```
+#!json
+{
+    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+    "typeName": "app:prosin_imverfahren",
+    "propertyNames": ["app:plan"],
+    "geometryName": "app:the_geom",
+    "name": "im Verfahren"
+}
+```
+
+***
+
+#### Portalconfig.searchbar.tree
+Konfiguration der SpecialWFS Suche
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+
+**Beispiel**
+```
+#!json
+"tree": {
+    "minChars": 5
+}
+```
+
+***
+
+#### Portalconfig.searchbar.visibleWFS
+Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+
+**Beispiel**
+```
+#!json
+"visibleWFS": {
+    "minChars": 3
+}
+```
+
+***
+
+#### Portalconfig.searchbar.visibleVector
+Konfiguration der Suche über die sichtbaren WFS
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+
+**Beispiel**
+```
+#!json
+"visibleVector": {
+    "minChars": 3,
+    "layerTypes": ["WFS", "GeoJSON"]
+}
+```
+
+***
+
+### Portalconfig.controls
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|attributions|nein|[attributions](#markdown-header-portalconfigcontrolsattributions)|false|Zusätzliche Layerinformationen die im Portal angezeigt werden sollen|
+|fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|
+|mousePosition|nein|Boolean|false|Die Koordinaten des Mauszeigers werden angeziegt.|
+|orientation|nein|[orientation](#markdown-header-portalconfigcontrolsorientation)||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers.|
+|zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
+|overviewmap|nein|[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|false|Übersichtskarte|
+|totalview|nein|Boolean|false|Zeigt einen Button an, mit dem die Startansicht mit den initialen Einstellungen wiederhergestellt werden kann.|
+|button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
+|orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
+|freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+
+***
+
+#### Portalconfig.controls.attributions
+
+Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob vorhandene Attributions angezeigt werden sollen oder nicht. Ist es vom Typ Object so gelten folgende Attribute:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |isInitOpenDesktop|nein|Boolean|true|Legt fest, ob die Attributions (Desktop-Ansicht) initial ausgeklappt werden sollen.|
 |isInitOpenMobile|nein|Boolean|false|Legt fest, ob die Attributions (Mobile-Ansicht) initial ausgeklappt werden sollen.|
 
-******
-### Portalconfig.controls.orientation ###
+**Beispiel als Boolean**
+```
+#!json
+"attributions": true
+```
+
+**Beispiel als Object**
+```
+#!json
+"attributions": {
+    "isInitOpenDesktop": true,
+    "isInitOpenMobile": false,
+}
+```
+
+***
+
+#### Portalconfig.controls.orientation
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|zoomMode|nein|String|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
-|poiDistances|nein|Boolean / [integer]|"true": [500,1000,2000] / "Array": []|Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Anbgabe eines Array werden die darin definierten Abstände angeboten. Bei Angabe von true der default.|
+|zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.)|
+|poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte  verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|
 
-******
-### Portalconfig.controls.overviewmap ###
+**Beispiel mit poiDistances vom Typ Boolean**
+```
+#!json
+"orientation": {
+    "zoomMode": "once",
+    "poiDistances": true
+}
+```
+
+**Beispiel mit poiDistances vom Typ Integer[]**
+```
+#!json
+"orientation": {
+    "zoomMode": "once",
+    "poiDistances": [500, 1000, 2000, 5000]
+}
+```
+
+***
+
+#### Portalconfig.controls.overviewmap
+
+Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Overviewmap mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
 |baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 
-**Beispiel overviewmap mit Parametern:**
-
-
+**Beispiel overviewmap als Object:**
 ```
 #!json
-
-      "overviewmap": {
-          "resolution": 305.7487246381551,
-          "baselayer": "452"
-      }
-
-
-```
-******
-### Portalconfig.controls.zoom ###
-
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|showInSimpleMap|nein|Boolean||Gibt an ob die Zoom-Buttons auch in der simple Map ([URL-Parameter](URL_Parameter.md) "?style=simple" gezeichnet werden sollen.|
-|showMobile|nein|Boolean|false|Gibt an ob die Zoom-Buttons auch in der mobilen Ansicht gezeichnet werden sollen.|
-
-******
-### Portalconfig.controls.totalview ###
-
-Stellt die Startansicht wieder her. Es werden die initialen Parameter zoomLevel und startCenter aus mapView verwendet.
-
-
-### Portalconfig.mapView ###
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|
-|startCenter|nein|Array|[565874, 5934140]|Die initiale Zentrumskoordinate.|
-|options|nein|Array|[{resolution:66.14579761460263,scale:250000,zoomLevel:0},{resolution:26.458319045841044,scale:100000,zoomLevel:1},{resolution:15.874991427504629,scale:60000,zoomLevel:2},{resolution: 10.583327618336419,scale:40000,zoomLevel:3},{resolution:5.2916638091682096,scale:20000,zoomLevel:4},{resolution:2.6458319045841048,scale:10000,zoomLevel:5},{resolution:1.3229159522920524,scale:5000,zoomLevel:6},{resolution:0.6614579761460262,scale:2500,zoomLevel:7},{resolution:0.2645831904584105,scale: 1000,zoomLevel:8},{resolution:0.13229159522920521,scale:500,zoomLevel:9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
-|extent|nein|Array|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
-|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|
-|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|
-|epsg|nein|String|EPSG:25832|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
-
-**Beispiel mapView:**
-
-
-```
-#!json
-"mapView": {
-        "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
-        "startCenter": [561210, 5932600],
-        "options": [
-        {
-          "resolution": 611.4974492763076,
-          "scale": 2311167,
-          "zoomLevel": 0
-        },
-        {
-          "resolution": 305.7487246381551,
-          "scale": 1155583,
-          "zoomLevel": 1
-        },
-        {
-          "resolution": 152.87436231907702,
-          "scale": 577791,
-          "zoomLevel": 2
-        },
-        {
-          "resolution": 76.43718115953851,
-          "scale": 288896,
-          "zoomLevel": 3
-        },
-        {
-          "resolution": 38.21859057976939,
-          "scale": 144448,
-          "zoomLevel": 4
-        },
-        {
-          "resolution": 19.109295289884642,
-          "scale": 72223,
-          "zoomLevel": 5
-        },
-        {
-          "resolution": 9.554647644942321,
-          "scale": 36112,
-          "zoomLevel": 6
-        },
-        {
-          "resolution": 4.7773238224711605,
-          "scale": 18056,
-          "zoomLevel": 7
-        },
-        {
-          "resolution": 2.3886619112355802,
-          "scale": 9028,
-          "zoomLevel": 8
-        },
-        {
-          "resolution": 1.1943309556178034,
-          "scale": 4514,
-          "zoomLevel": 9
-        },
-        {
-          "resolution": 0.5971654778089017,
-          "scale": 2257,
-          "zoomLevel": 10
-        }
-      ],
-      "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
-      "resolution": 15.874991427504629,
-      "zoomLevel": 1,
-      "epsg": "EPSG:25832"
-    }
-```
-
-******
-
-### Portalconfig.menu ###
-Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
-
-Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt und werden im Anschluss an diese Auflistung näher beschrieben.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[staticlinks](#markdown-header-portalconfigmenustaticlinks)|nein|Object||In diesem Modul werden Links zu anderen Webseiten, deren Reihenfolge und das Erscheinungsbild in der Menüleiste konfiguriert. In "name" kann das Modul individuell benannt werden.|
-|[contact](#markdown-header-portalconfigmenucontact)|nein|Object||Das Modul gibt dem Anwender des Portals die Möglichkeit, eine Mail mit seiner Fehlermeldung/Rückmeldung/Anmerkung etc. an den Betreiber des Portals zu versenden.|
-|[legend](#markdown-header-portalconfigmenulegend)|nein|Object||Die *Legende* kann wie jedes andere Werkzeug/Tool sowohl einzeln direkt unter *Menu*, als auch unter *Tools* konfiguriert werden.|
-|[tools](#markdown-header-portalconfigmenutools)|nein|Object||Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbild in der Menüleiste konfiguriert.|
-|[tree](#markdown-header-portalconfigmenutree)|nein|Object||Unter *tree* wird der Themenbaum konfiguriert.|
-|hide|nein|Boolean|false|Gibt an ob das Menu gezeichnet werden soll.
-
-******
-
-### Portalconfig.simpleLister ###
-Listet die Features und deren Attribute eines angegebenen Layers auf, die sich im Kartenausschnitt befinden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|layerName|ja|String||Name des Layers, dessen Features angezeigt werden sollen.|
-|errortxt|nein|String|"Keine Features im Kartenausschnitt"|Fehlermeldung die angezeigt werden soll, wenn sich keine Features im Kartenausschnitt befinden.|
-
-******
-
-
-### Portalconfig.mapMarkerModul ###
-Gibt an ob der in der Karte verwendete Marker verschiebbar sein soll.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|marker|nein|String||Bei "dragMarker" wird der Marker auf der Karte verschiebbar, bei allen anderen Eingaben wird ein Marker verwendet, der nicht verschiebbar ist.|
-|visible|nein|Boolean|true|Gibt an ob der Marker beim initialen Laden der Karte sichtbar ist oder nicht.|
-
-******
-
-### Portalconfig.menu.staticlinks ###
-Gibt die Links zu externen Webseiten und deren Position im Menu an. Zusätzlich kann für jeden Link ein Radiotrigger definiert werden, der beim click einen Internen Ablauf startet.
-Wird die URL oder der Radio trigger weggelassen, dann wird nur jeweils die andere Aktion ausgeführt.
-Wichtig: Werden Links an unterschiedlichen Stellen des Menus eingefügt, so müssen die Objektattribute, die das Array definieren, im Namen "staticlinks" enthalten
-
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|ja|String||Name, wie der Link im Menu angezeigt werden soll.|
-|glyphicon|ja|String||Glyphicon des Linkes für den Menueintrag.|
-|url|nein|String||URL zur externen Webseite. |
-|onClickTrigger|nein|Array|| Ein Array von Objekten mit den jeweiligen Channel Namen, das Event, welches getriggert wird und die Daten die mitgeschickt werden.|
-
-
-**Beispiel staticlinks:**
-
-
-```
-#!json
-
-"info":{
-    "name": "Informationen",
-    "glyphicon": "glyphicon-info-sign",
-    "children": {
-        "staticlinks": [{
-            "name": "Wikipedia1",
-            "glyphicon": "glyphicon-globe",
-            "url": "https://www.wikipedia.de/"
-        }],
-        "contact": {
-            "name": "Kontakt",
-            "glyphicon": "glyphicon-envelope",
-            "serviceID": "80001",
-            "includeSystemInfo": true
-        },
-        "staticlinks2": [{
-            "name": "Wikipedia2",
-            "glyphicon": "glyphicon-globe",
-            "url": "https://www.wikipedia.de/"
-        },
-        {
-            "name": "hamburg.de",
-            "glyphicon": "glyphicon-globe",
-            "url": "http://www.hamburg.de"
-        },
-        {
-            "name": "Altona",
-            "glyphicon": "glyphicon-globe",
-            "onClickTrigger": [{
-                "channel": "ZoomToGeometry",
-                "event": "zoomToGeometry",
-                "data": "Altona"
-            }]
-        }]
-    }
-}
-
-```
-
-******
-******
-
-
-#### Portalconfig.menu.contact ####
-Das Modul *contact* gibt dem Anwender des Portals die Möglichkeit, eine Mail mit seiner Fehlermeldung/Rückmeldung/Anmerkung etc. an den Betreiber des Portals zu versenden. Für die Nutzung ist ein SNTP-Server, sowie ein PHPT-Skript erforderlich!!
-
-Folgende Parameter stehen für die Konfiguration zur Verfügung:
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[bcc](#markdown-header-portalconfigmenucontactbcc)|nein|Array [Object]|[]|Wie cc, nur sind diese Mailadressen nicht sichtbar für andere. Wird immer mit **email** und **name** erwartet.|
-|[cc](#markdown-header-portalconfigmenucontactcc)|nein|Array [Object]|[]|Möglichkeit weitere Mailadressen zu konfigurieren, an die diese Mail versendet werden soll. Wird immer mit **email** und **name** erwartet.|
-|ccToUser|nein|Boolean||Wenn hier true konfiguriert ist, wird eine Bestätigung mit Ticketnummer an die ins Formular eingetragene eMail-Adresse geschickt .|
-|[from](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array für die Absender der Mail.|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|includeSystemInfo||Boolean||Hier wird ausgewählt, ob vom User die Systeminfo in der Mail mit versandt werden soll.|
-|name|nein|String||Name des Moduls in der Oberfläche.|
-|serviceID||String||ID zum finden des EmailServices aus der [rest-services.json](rest-services.json.md).|
-|subject|nein|String|"Supportanfrage zum Portal " + *portalTitle*|Hier kann ein String mit übergeben werden, der oben in der Betreffzeile der Mail auftaucht. Eine TicketId wird dem Betreff in jedem Fall vorangestellt.|
-|textPlaceholder||String||Platzhalter für das Textfeld in dem der Anwender sein Anliegen eintragen kann.|
-|[to](#markdown-header-portalconfigmenucontactfrom)|nein|Array [Object]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de", "name": "LGVGeoportalHilfe"}]|Array der Empfänger. Wird immer mit **email** und **name** erwartet.|
-|contactInfo|nein|String||Information, die über dem Kontaktformular angezeigt wird.|
-|isInitOpen|nein|Boolean|false|Gibt an, ob das Modul *contact* beim initialen Laden des Portals geöffnet ist.|
-
-##### Portalconfig.menu.contact.bcc #####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|email|nein|String||eMail-Adresse(n) Empfänger|
-|name|nein|String||Name(n) Empfänger|
-
-##### Portalconfig.menu.contact.cc #####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|email|nein|String||eMail-Adresse(n) Empfänger|
-|name|nein|String||Name(n) Empfänger|
-
-
-##### Portalconfig.menu.contact.from #####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|email|nein|String|"lgvgeoportal-hilfe@gv.hamburg.de"|eMail-Adresse Absender|
-|name|nein|String|"LGVGeoportalHilfe"|Name Absender|
-
-##### Portalconfig.menu.contact.to #####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|email|nein|String|"lgvgeoportal-hilfe@gv.hamburg.de"|eMail-Adresse(n) Empfänger|
-|name|nein|String|"LGVGeoportalHilfe"|Name(n) Empfänger|
-
-
-**Beispiel contact:**
-```
-#!json
-
-"contact": {
-            "name": "Kontakt",
-            "glyphicon": "glyphicon-envelope",
-            "serviceID": "80001",
-            "from": [
-              {
-                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-                "name": "LGVGeoportalHilfe"
-              }
-            ],
-            "to": [
-              {
-                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-                "name": "LGVGeoportalHilfe"
-               }
-             ],
-            "ccToUser": true,
-            "textPlaceholder": "Bitte formulieren Sie Ihre Anfrage.",
-            "includeSystemInfo": true
-        }
-      }
-
-```
-
-******
-******
-
-#### Portalconfig.menu.legend ####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Reiters unter dem die Legende in der Menüleiste erscheint.|
-|isInitOpen|nein|Boolean|false|Gibt an, ob das Legendenmodul beim initialen Laden des Portals geöffnet ist.|
-
-**Beispiel legend:**
-
-
-```
-#!json
-
-"legend": {
-        "name": "Legende",
-        "glyphicon": "glyphicon-book"
-      }
-
-```
-
-
-******
-******
-
-#### Portalconfig.menu.tools ####
-Im Objekt *tools* werden die Werkzeuge, deren Reihenfolge und das Erscheinungsbild in der Menüleiste konfiguriert.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[children](#markdown-header-portalconfigmenutoolschildren)|nein|Object||Objekte, die die Tools konfigurieren.|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
-|isVisibleInMenu|nein|Boolean|true|Soll das Tool in der Menüleiste erscheinen.|
-
-******
-
-##### Portalconfig.menu.tools.children #####
-Unter dem Objekt *children* werden die Werkzeuge und Funktionalitäten definiert welche im Portal verfügbar sein sollen. Folgende Werkzeuge stehen zur Verfügung:
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[animation](#markdown-header-portalconfigmenutoolschildrenanimation)|nein|Object||Pendler Animation|
-|[coord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatenanzeige|
-|[draw](#markdown-header-portalconfigmenutoolschildrendraw)|nein|Object||Zeichnen / Schreiben|
-|[extendedFilter](#markdown-header-portalconfigmenutoolschildrenextendedfilter)|nein|Object||Erweiterter Filter|
-|[featureLister](#markdown-header-portalconfigmenutoolschildrenfeaturelister)|nein|Object||WFS-Liste|
-|[filter](#markdown-header-portalconfigmenutoolschildrenfilter)|nein|Object||Feature-Filter|
-|[gfi](#markdown-header-portalconfigmenutoolschildrengfi)|nein|Object||Informationen abfragen|
-|[kmlimport](#markdown-header-portalconfigmenutoolschildrenkmlimport)|nein|Object||KML Import|
-|[lines](#markdown-header-portalconfigmenutoolschildrenlines)|nein|Object||Pendler Linien|
-|[measure](#markdown-header-portalconfigmenutoolschildrenmeasure)|nein|Object||Strecke / Fläche messen|
-|[parcelSearch](#markdown-header-portalconfigmenutoolschildrenparcelsearch)|nein|Object||Flurstückssuche|
-|[print](#markdown-header-portalconfigmenutoolschildrenprint)|nein|Object||Karte drucken|
-|[routing](#markdown-header-portalconfigmenutoolschildrenrouting)|nein|Object||Routenplaner|
-|[searchByCoord](#markdown-header-portalconfigmenutoolschildrencoord)|nein|Object||Koordinatensuche|
-|[wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter)|nein|Object||WFS Filter|
-|[schulwegrouting](#markdown-header-portalconfigmenutoolschildrenschulwegrouting)|nein|Object||Schulwegrouting|
-|[compareFeatures](#markdown-header-portalconfigmenutoolschildrencomparefeatures)|nein|Object||Feature-Vergleichsliste|
-|[layerslider](#markdown-header-portalconfigmenutoolschildrenlayerslider)|nein|Object||Layer nacheinander abspielen|
-|[addWMS](#markdown-header-portalconfigmenutoolschildrenaddwms)|nein|Object||Hinzufügen weiterer WMS über URL-Eingabe|
-
-Werden mehrere Werkzeuge verwendet, so werden die Objekte mit Komma getrennt. Die Reihenfolge der Werkzeuge in der Konfiguration gibt die Reihenfolge der Werkzeuge im Portal wieder.
-
-Die Werkzeuge können auch direkt in die Menüleiste eingebunden werden. Dazu muss lediglich das Objekt, welches ein Werkzeug definiert, unter *menu* eingetragen werden.
-Im folgenden Beispiel würde das Werkzeug *Strecke / Fläche messen* in der Menüleiste untergebracht, wohingegen das Werkzeug *Flurstückssuche* unter dem Reiter *Werkzeuge* positioniert würde. Dadurch ist es möglich, für das Portal wichtige, Funktionen sehr dominant zu positionieren.
-
-**Beispiel eines Werkzeuges, das in der Menüleiste ganz oben angebracht ist:**
-
-```
-#!json
-
-"menu" : {
-    "tree" : {
-        "name" : "Themen",
-        "glyphicon" : "glyphicon-list",
-        "isInitOpen" : true
-    },
-    "measure" : {
-        "name" : "Strecke / Fläche messen",
-        "glyphicon" : "glyphicon-resize-full",
-        "onlyDesktop" : true
-    },
-    "tools" : {
-        "name" : "Werkzeuge",
-        "glyphicon" : "glyphicon-wrench",
-        "children" : {
-            "parcelSearch" : {
-                "name" : "Flurstückssuche",
-                "glyphicon" : "glyphicon-search",
-                "serviceId" : "6",
-                "StoredQueryID" : "Flurstueck",
-                "configJSON":"/../../node_modules/lgv-config/gemarkungen_hh.json",
-                "parcelDenominator" : false
-            },
-            {...}
-        }
-    }
-```
-
-******
-******
-
-Darüber hinaus gibt es für die Werkzeuge weitere Konfigurationsmöglichkeiten, die im Folgenden erläutert werden.
-
-#### Portalconfig.menu.tools.children.animation
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
-|attrGemeinde|nein|String|"wohnort"|Aus diesem Attribut des featureTypes wird der Name der Gemeinde ausgelesen.|
-|colors|nein|Array[String]|["rgba(255,0,0,0.5)", "rgba(0,0,255,0.5)"]|Angabe der verschiedenen Farben, die für die Animation verschiedener Kreise genutzt werden sollen in [rgba()-Notation](https://www.w3.org/TR/css3-color/#rgba-color) ([siehe auch hier](https://developer.mozilla.org/de/docs/Web/CSS/Farben#rgba)). Es sollten 15 Farben definiert werden, damit auch im Falle der Auswahl  "Top 15" alle Ergebnisse wie gewünscht angezeight werden können. Werden zu wenige Farben definiert, so wird auf eine default-Farbpalette zurückgegriffen.|
-|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
-|maxPx|nein|Number|20|Größe des größten Punkts in px.|
-|minPx|nein|Number|1|Größe des kleinsten Punkts in px.|
-|[params](#markdown-header-animationparams)|nein|Object||Hier gibt es verschiedene Konfigurationsmöglichkeiten.|
-|steps|nein|Number|50|Anzahl der Schritte, die pro Animation durchlaufen werden.|
-|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
-|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
-
-### animation.params ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|REQUEST|nein|String|"GetFeature"|WFS-Request|
-|SERVICE|nein|String|"WFS"|Service-Typ|
-|TYPENAME|nein|String|"app:mrh_kreise"|FeatureType des WFS|
-|VERSION|nein|String|"1.1.0"|Version des Dienstes|
-|maxFeatures|nein|String|"10000"|maximale Anzahl an zu ladenden Features|
-
-**Beispiel animation:**
-
-```
-#!json
-animation: {
-            steps: 30,
-            url: "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
-            params: {
-                REQUEST: "GetFeature",
-                SERVICE: "WFS",
-                TYPENAME: "app:mrh_kreise",
-                VERSION: "1.1.0",
-                maxFeatures: "10000"
-            },
-            featureType: "mrh_einpendler_gemeinde",
-            attrAnzahl: "anzahl_einpendler",
-            attrGemeinde: "wohnort",
-            minPx: 5,
-            maxPx: 30,
-            num_kreise_to_style: 4,
-            zoomlevel: 1,
-            colors: ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-        }
-```
-******
-******
-
-#### Portalconfig.menu.tools.children.lines
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|attrAnzahl|nein|String|"anzahl_einpendler"|Aus diesem Attribut des featureTypes wird die Anzahl der Pendler ausgelesen.|
-|attrGemeinde|nein|String|"wohnort"|Aus diesem Attribut des featureTypes wird der Name der Gemeinde ausgelesen.|
-|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType, der animiert werden soll.|
-|url|nein|String|"http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung"|Die URL des zu animierenden Dienstes.|
-|zoomlevel|nein|Number|1|Zoomlevel, auf das nach Auswahl eines Kreises gezoomt wird.|
-
-#### Portalconfig.menu.tools.children.coord ######
-Ermöglicht mit Hilfe des Mouse Ziegers  die Ermittlung von Koordinaten in allen in der config.js definierten Koordinatensystemen(siehe [namedProjections](config.js.md)).Der Titel der Projektion wird dem "+title"-Attribut entnommen. Alternativ wird der Name der Projektion(z.B. "EPSG:25832") verwendet.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-******
-******
-
-#### Portalconfig.menu.tools.children.draw
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
-|isVisibleInMenu|nein|Boolean|true|Gibt an, ob das Zeichnen Tool im Menü eingetragen sein soll. Wenn false, dann ist es nur über Radio ansprechbar.|
-
-******
-******
-
-#### Portalconfig.menu.tools.children.extendedFilter ######
-Der Filter ist  in der Lage,  sämtliche in der Karte verfügbaren WFS nach allen vorhandenen Attributen und -werten zu filtern. Dazu muss für jeden filterbaren WFS-Layer  dem Werkzeug  erlaubt werden, den Layer auch zu verwenden. Dies geschieht am Layer  in der Layer-Konfiguration über den Parameter "extendedFilter": true.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-
-******
-******
-
-#### Portalconfig.menu.tools.children.featureLister ######
-Alle aktiven WFS können in einer eigenen Liste dargestellt werden.
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|lister|nein|Number|20|Gibt an wie viele Features mit jedem Klick geladen werden sollen.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-******
-******
-
-#### Portalconfig.menu.tools.children.filter ######
-Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  Layer, mit Parametern unter [filterOptions](#markdown-header-filteroptions) in der WFS-Layer-Konfiguration  konfiguriert werden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|nein|String||Name des Werkzeuges im Menüeintrag|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|isGeneric|nein|String|false||
-|isInitOpen|nein|Boolean|false|Gibt an, ob das Zeichnen Tool beim initialen Laden des Portals geöffnet ist.|
-|minScale|nein|Integer||Gibt den kleinsten Maßstab an auf den die Suche zoomt|
-|liveZoomToFeatures|nein|Boolean|false|gibt an ob bei jeder Auswahl eines Filterwertes direkt auf den Extent der übrigen Features gezoomt wird|
-|predefinedQueries|nein|Object||Vordefinierter Filter der beim Aktivieren automatisch ausgeführt wird
-|snippetType|nein|String|nicht gesetzt|Möglichkeit den Filter fest auf einen Snippet Type zu setzen
-
-******
-******
-
-
-#### Portalconfig.menu.tools.children.filter.predefinedQueries ####
-Der Filter sucht in ausgewählten Layern nach vor ausgwählten Attributen, die über folgende  Parametern definiert werden:
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|layerId|ja|String||Id des Layers auf dem der Filter ausgeführt wird|
-|isActive|nein|Boolean||Wird der Filter initial ausgeführt|
-|isSelected|nein|Boolean||Ist der Filter initial ausgewählt|
-|isVisible|nein|Boolean|||
-|searchInMapExtent|nein|Boolean|false|Suche im aktuellen Kartenausschnitt|
-|allowMultipleQueriesPerLayer|nein|Boolean|false|gibt an ob für einen Layer mehrere Filter aktiv sein dürfen|
-|name|nein|String||Name des Filters
-|info|nein|String||Kleiner Info-Text der im Filter angezeigt wird
-|predefinedRules|nein|Object||Regel für den vordefinierten Filter. Besteht aus Attributnamen und Attributwert(e)
-|attributeWhiteList|nein|Array[String] / Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)]||Filterbare Attribute. Können entweder als Array of Strings (Attributnamen) oder als Array[[Object](#markdown-header-portalconfigmenutoolschildrenfilterpredefinedqueriesattributewhitelist)] übergeben werden. Wird ein Array of Strigns übergeben, so werden bei Mehrfachauswahl die Werte eines Attributes mit ODER verknüpft.
-|snippetType|nein|String|nicht gesetzt|z.B. checkbox-classic|
-
-**Beispiel:**
-
-```
-#!json
-
-"filter": {
-     "name": "Filter",
-     "glyphicon": "glyphicon-filter",
-     "isGeneric": false,
-     "isInitOpen": true,
-     "allowMultipleQueriesPerLayer": false,
-     "predefinedQueries": [
-         {
-             "layerId": "8190",
-             "isActive": false,
-             "isSelected": false,
-             "isVisible": false,
-             "name": "Grundschulen",
-             "predefinedRules": [
-                 {
-                     "attrName": "kapitelbezeichnung",
-                     "values": ["Grundschulen"]
-                 }
-             ],
-             "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "parallelklassen_1", "schwerpunktschule", "bilingual"],
-             "snippetType": "checkbox-classic"
-         }
-     ]
- }
-```
-#### Portalconfig.menu.tools.children.filter.predefinedQueries.attributeWhitelist ####
-Auflistung der Attribute die bei einer Mehrfachauswahl berücksichtigt werden sollen.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|ja|String||Attribut-Name.|
-|matchingMode|ja|String||Modus wie die Werte eines Attributes bei Mehrfachauswahl verknüpft werden sollen. "AND" für UND-Verknüpfung oder "OR" für ODER-Verknüfpung innerhalb eines Attributes.|
-
-**Beispiel:**
-
-```
-#!json
-
-"attributeWhiteList": [
-  {"name": "bezirk", "matchingMode": "OR"},
-  {"name": "stadtteil", "matchingMode": "OR"},
-  {"name": "abschluss", "matchingMode": "AND"},
-  {"name": "anzahl_schueler", "matchingMode": "AND"},
-  {"name": "fremdsprache", "matchingMode": "AND"}
-]
-```
-
-
-#### Portalconfig.menu.tools.children.gfi ######
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|isActive|nein|Boolean|false|Werkzeug wird initial (beim Laden des Portals) aktiviert.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|isVisibleInMenu|nein|Boolean|true|Gibt an ob das Werkzeug im Menu angezeigt wird.|
-
-
-******
-******
-
-#### Portalconfig.menu.tools.children.kmlimport ######
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-******
-******
-
-#### Portalconfig.menu.tools.children.measure ######
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-******
-******
-
-
-
-#### Portalconfig.menu.tools.children.parcelSearch ######
-Flurstücksuche
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|configJSON|nein|String||Pfad zur *gemarkungen_xx.json* (weitere Infos finden Sie im Anschluss an diese Tabelle).|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|parcelDenominator|nein|Boolean|false|Gibt an ob auch Flure mit an die *StoredQuery* übergeben werden.|
-|serviceId|nein|String||ID, des Gazeteer-WFS. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|storedQueryID|nein|String||Name der *StoredQuery*, die angesprochen werden soll.|
-|createReport|nein|Bool|false|Gibt an ob eine Berichtsfunktionalität erstellt werden soll.|
-|reportServiceId|nein|String||Gibt die ID des Dienstes an, der aufgerufen werden soll.|
-|mapMarkerType|nein|String|"Parcel"|Gibt an wie im MapMarker Modul auf das Flurstück gezoomt und markiert wird.|
-
-******
-******
-
-
-__Gemarkungen_xx.json__
-Die *gemarkungen_xx.json* wird benötigt, um anhand des Gemarkungsnamens die ID der Gemarkung aufzulösen.
-Wird das Array für die Flure nicht gefüllt (Spezialfall für HH), so muss für das Werkzeug der Parameter *parcelDenominator* auf *false* gesetzt werden.
-Wird *parcelDenominator* auf *true* gesetzt, so verlangt das Werkzeug auch „flur“-Einträge in der *gemarkung_xx.json*. In der Werkzeugoberfläche kann man nun die Flurstückssuche weiter auf die Flure einschränken.
-**ACHTUNG:** Dieses Tool und Teile der Konfiguration sind abhängig von den nutzerseitig angelegten Web-Diensten und Datenbankfunktionen.
-
-**Beispiel einer *gemarkungs_xx.json* ohne „flur“:**
-
-
-```
-#!json
-
-{
-    "Allermöhe": { "id": "0601", "flur": []},
-    "Alsterdorf": { "id": "0424", "flur": []},
-    "Alt-Rahlstedt": { "id": "0544", "flur": []},
-…
-}
-
-
-```
-
-**Beispiel einer *gemarkungs_xx.json* mit „flur“:**
-
-
-```
-#!json
-
-{
-    "Allermöhe": { "id": "0601", "flur": [„Flur1“,“Flur2“]},
-    "Alsterdorf": { "id": "0424", "flur": [„011“,“012“,“013“]},
-    "Alt-Rahlstedt": { "id": "0544", "flur": [„025“,“026“,…]},
-…
-}
-
-```
-
-******
-******
-
-#### Portalconfig.menu.tools.children.print ######
-Bis zur Version 3.0.0 kann noch auf MapFish Print 2 gedruck werden. Ab dann wird die alte Drucktechnologie komplett abgelöst durch den neuen MapFish Print 3.
-Die Dokumentation von MapFish Print 3 finden sie hier: [http://mapfish.github.io/mapfish-print-doc/](http://mapfish.github.io/mapfish-print-doc/)
-
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|[gfi(@deprecated in 3.0.0)]()|nein|Boolean|false|Gibt an, ob nur die Karte oder auch geöffnete GFI-Informationen ausgedruckt werden sollen.|
-|[printID(@deprecated in 3.0.0)]()|nein|String|"9999"|ID des Druckdienstes in der restConf. Siehe [rest-services.json](rest-services.json.md). Ab v3.0.0 ersetzt durch mapfishServiceId|
-|mapfishServiceId|nein|String||ID des neuen Druckdienstes (Mapfish-Print-3) in der restConf. Siehe [rest-services.json](rest-services.json.md).|
-|title|nein|String|"PrintResult"|Der Titel erscheint auf dem Ausdruck der Karte.|
-|[gfiMarker(@deprecated in 3.0.0)](#markdown-header-gfiMarker)|nein|Object||Ist ein Objekt, um den Standardkonfigurierten roten Kreis mit schwarzem Punkt für die Markierung des GFI im Druck zu überschreiben.|
-|[configYAML(@deprecated in 3.0.0)]()|nein|String|master|Der Name der YAML-Datei der MapFish-Webapp. Ab v3.0.0 ersetzt durch printAppId|
-|printAppId|nein|String|master|Der Name der Druck-App für den Mapfish-Print-3.|
-|version|nein|String||Flag die angibt welche Druckversion verwendet werden soll. Bei "mapfish_print_3" wird der Mapfish-Print-3 verwendet. @deprecated in 3.0.0|
-|[outputFilename(@deprecated in 3.0.0)]()|nein|String|Ausdruck|Der Dateiname der PDF, den die MapFish-Webapp erstellt.|
-
-**Beispiel Mapfish-Print-2:**
-```
-#!json
-
-"print": {
-    "name": "Karte drucken",
-    "glyphicon": "glyphicon-print",
-    "printID": "99999",
-    "title": "Master",
-    "gfi": true,
-    "outputFilename": "DruckPDF",
-    "gfiMarker": {
-        "outerCircle": {
-            "fill": false,
-            "pointRadius": 8,
-            "stroke": true,
-            "strokeColor": "#ff0000",
-            "strokeWidth": 3
-        },
-    "point": {
-        "fill": true,
-        "pointRadius": 1,
-        "fillColor": "#000000",
-        "stroke": false
-    }
-  }
-}
-```
-**Beispiel Mapfish-Print-3:**
-```
-#!json
-
-"print": {
-    "name": "Karte drucken",
-    "glyphicon": "glyphicon-print",
-    "mapfishServiceId": "mapfish_qs",
-    "printAppId": "mrh",
-    "title": "Master",
-    "version": "mapfish_print_3"
+"overviewmap": {
+    "resolution": 305.7487246381551,
+    "baselayer": "452"
 }
 ```
 
-******
-******
-#### Portalconfig.menu.tools.children.print.gfiMarker ####
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|outerCircle|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
-|point|nein|Object||Kann die im Beispiel enthaltenen Attribute haben und mit entsprechenden Werten gefüllt werden.|
-
-#### Portalconfig.menu.tools.children.routing ######
-Der Routenplaner ermöglicht ein Routing innerhalb des Portals über den externen Anbieter VIOM (Berlin). Der VIOM-Dienst berechnet aufgrund von Start- und Ziel-Koordinate tageszeitabhängig die schnellste Route. Folgende Parameter müssen am Werkzeug vorhanden sein:
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|isInitOpen|nein|Boolean|false|Gibt an, ob das Routingmodul beim initialen Laden des Portals geöffnet ist.|
-|bkgGeosearchID|ja|String||ID des GeoSuchdienstes des BKG. Anhand der vom Nutzer angeklickten finalen Adresse wandelt dieser Dienst den Namen in eine Koordinate um und gibt diese zurück. Die Koordinate wird benötigt, um den Routingdienst mit Daten zu füllen. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|bkgSuggestID|ja|String||ID des Vorschlagsdienstes des BKG. Der Dienst gibt eine Trefferliste möglicher Adressen zurück, die auf den Eingabestring des Nutzers passen. Werden als Dropdown-Menü dargestellt. Wird in der [rest-services.json](rest-services.json.md) aufgelöst.|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-|viomRoutingID|ja|String||ID des Routing-Dienstes. Wird in der [rest-services.json](rest-services.json.md) aufgelöst. Dort müssen die URL und die providerID definiert sein.|
-
-
-******
-******
-
-
-#### Portalconfig.menu.tools.children.searchByCoord ######
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|isActive|nein|Boolean|false|Werkzeug wird initial (beim Laden des Portals) aktiviert.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-
-******
-******
-
-#### Portalconfig.menu.tools.children.wfsFeatureFilter ######
-Der Filter sucht in ausgewählten Layern nach filterbaren Attributen, die am  Layer, mit Parametern unter [filterOptions](#markdown-header-filteroptions) in der WFS-Layer-Konfiguration  definiert  werden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|onlyDesktop|nein|Boolean|false|Werkzeug wird nur in der Desktop-Variante des Portals angezeigt.|
-
-**Beispiel tools:**
-
-
+**Beispiel overviewmap als Boolean:**
 ```
 #!json
-
- "tools": {
-        "name": "Werkzeuge",
-        "glyphicon": "glyphicon-wrench",
-        "children": {
-          "parcelSearch": {
-            "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search",
-            "serviceId": "6",
-            "StoredQueryID": "Flurstueck",
-            "configJSON": "/../../node_modules/lgv-config/gemarkungen_hh.json",
-            "parcelDenominator": false
-          },
-          "measure": {
-            "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full",
-            "onlyDesktop": true
-          },
-          "coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
-          },
-          "gfi": {
-            "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
-            "isActive": true
-          },
-          "print": {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print"
-          },
-          "searchByCoord": {
-            "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record"
-          },
-          "kmlimport": {
-            "name": "KML Import",
-            "glyphicon": "glyphicon-import"
-          },
-          "wfsFeatureFilter": {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter"
-          },
-          "extendedFilter": {
-            "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter"
-          },
-          "routing": {
-            "name": "Routenplaner",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5"
-          },
-          "draw": {
-            "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
-          },
-          "featureLister": {
-              "name": "Liste",
-              "glyphicon": "glyphicon-menu-hamburger",
-              "lister": 10
-          },
-          "animation": {
-            "name": "Pendler Animation",
-            "glyphicon": "glyphicon-play-circle"
-          }
-        }
-      }
+"overviewmap": true
 ```
 
+***
 
-******
-******
-
-#### Portalconfig.menu.tools.children.schulwegrouting ######
-Das Schulwegrouting ermöglicht das Routing von einer eingegebenen Addresse zur angegebenen Schule.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|layerId|ja|String|""|Id des Layers der die Schulstandorte enthält.|
-
-******
-******
-#### Portalconfig.menu.tools.children.compareFeatures ######
-Die Vergleichsliste ermöglicht einen Vergleich zwischen mehrerer Features eines Vektor-Layers. Über ein Radio.trigger() können features zugefügt werden. Werden Features aus unterschiedlichen Layern zugefügt, so werden die Features nach Layer sortiert.
-Es werden nur die Attribute in der gegebenen Reihenfolge angezeigt, die in der services.json am Layerobjekt konfiguriert sind.
-Auch gibt es eine Möglichkeit die Vergleichsliste zu exportieren
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|numberOfFeaturesToShow|nein|integer|3|Anzahl der Features, die maximal pro Layer vergleichen werden kann|
-|numberOfAttributesToShow|nein|integer|12|Anzahl der Attribute die beim öffnen der Vergleichsliste angezeigt wird. Über einen Button ("mehr Infos") können dann alle Attribute angezeigt werden.|
-
-******
-******
-#### Portalconfig.menu.tools.children.layerslider ######
-Der Layerslider ermöglicht die Konfiguration eines Stack von Layern, die nacheinander mittels Play, Pause, Stop, Forward und Backward abgespielt werden können. Die Layer müssen hierfür regulär konfiguriert sein und werden mittels Radio nur sichtbar / unsichtbar geschaltet. Der layerslider eignet sich daher gut, um bspw. historische Karten in festgelegter Reihenfolge abzuspielen.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-|title|nein|String||Überschrift im Tool-Window.|
-|timeInterval|nein|number|2000|Zeitinterval in Millisekunden. Min-Interval = 500.|
-|layerIds|ja|Objekt[]||Konfiguration des Stack an Layern in spezifischer Reihenfolge.|
-|layerIds.title|ja|string||Titel des Layers im Layerslider.|
-|layerIds.layerId|ja|string||Wert aus der [services.json](services.json.md).|
-
-**Beispiel einer *layerslider*-Konfiguration:**
-
-```
-#!json
-
-"layerslider": {
-  "name": "Zeitreihe",
-  "glyphicon": "glyphicon-film",
-  "title": "Simulation von Beispiel-WMS",
-  "timeInterval": 2000,
-  "layerIds": [
-    {
-      "title": "Dienst 1",
-      "layerId": "8730"
-    },
-    {
-      "title": "Dienst 2",
-      "layerId": "2426"
-    },
-    {
-      "title": "Dienst 3",
-      "layerId": "4561"
-    }
-  ]
-}
-
-```
-
-******
-******
-#### Portalconfig.menu.tools.children.addwms ######
-Das Tool ermöglicht das nachträgliche Hinzufügen weiterer WMS über Eingabe von Dienst-URL. Der Dienst wird untersucht und dessen Layer werden unterhalb der [Fachdaten](#markdown-header-themenconfigfachdaten) in einem separaten Bereich hinzugefügt. Dieses Tool steht nur in Portalen vom Baumtyp [custom](#markdown-header-portalconfig) zur Verfügung.
-
-Dieses Tool nutzt zum Einbinden die konfigurierte [Proxy-URL](config.js.md#configjs). Der Proxy muss entsprechend konfiguriert sein und die Dienst-URL durchleiten. Ggf. muss ein offener Proxy definiert werden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|name|nein|String||Name des Werkzeuges im Menüeintrag.|
-
-******
-******
-
-#### Portalconfig.menu.tree ####
-Unter *tree* wird der Themenbaum konfiguriert.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|glyphicon|nein|String||Das Glyphicon (Bootstrap Class) als Logo.|
-|isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum beim initialen Laden des Portals geöffnet ist oder nicht.|
-|name|nein|String||Name des Reiters unter dem der Baum in der Menüleiste erscheint.|
-|isAlwaysExpanded|nein|Array[String]||Ids der Kataloge im Themenbaum, die immer offen bleiben. Mögliche Werte sind "Baselayer", "Overlayer", "SelectedLayer".|
-
-**Beispiel einer *tree*-Konfiguration:**
-
-
-```
-#!json
-
-"tree": {
-        "name": "Themen",
-        "glyphicon": "glyphicon-list",
-        "isInitOpen": true
-      }
-
-```
-
-******
-******
-
-### Portalconfig.portalTitle ###
+### Portalconfig.portalTitle
 In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1110,547 +350,1137 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
 
 **Beispiel portalTitle:**
-
-
 ```
 #!json
-
 "portalTitle": {
-  "title": "Master",
-  "logo": "../../img/hh-logo.png",
-  "link": "http://geoinfo.hamburg.de",
-  "toolTip": "Landesbetrieb Geoinformation und Vermessung"
-}
-
-```
-
-******
-
-### Portalconfig.searchBar ###
-Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden. Auch diese Konfigurationen sind vom Typ *object*. Sie sind ebenfalls verlinkt und werden im Anschluss an diese Auflistung näher beschrieben.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[bkg](#markdown-header-portalconfigsearchbarbkg)|nein|Object||Ein deutschlandweites Ortsverzeichnis.|
-|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)|nein|Object||Das Ortsverzeichnis von Hamburg.|
-|minChars||Number||Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|placeholder|nein|String|"Suche"|Platzhaltertext in der Suchleiste. Gibt dem Nutzer an welche Themen gesucht werden können.|
-|recommendedListLength|nein|Integer|5|Anzahl der Suchvorschläge.|
-|quickHelp|nein|Boolean|false|Gibt an ob eine portalseitige Hilfe angezeigt werden soll. Wenn sie nicht gesetzt ist, wird der globale Wert aus der config.js verwendet.|
-|[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)|nein|Object||Durchsuchen von speziell definierten WFS-Layern.|
-|[tree](#markdown-header-portalconfigsearchbartree)|nein|Object||Themensuche. Durchsucht den Themenbaum des Portals.|
-|[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)|nein|Object||(deprecated) Durchsuchen von sichtbar geschalteten WFS-Layern.|
-|[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)|nein|Object||Durchsuchen von sichtbar geschalteten Vektor-Layern.|
-|zoomLevel||Number||Zoomstufe, in der das gesuchte Objekt angezeigt wird.|
-|renderToDOM|nein|String||HTML ID an deren Objekt sich die Suchleiste rendern soll. Bei  "#searchbarInMap" wird die Suchleiste auf der Karte gezeichnet.|
-
-******
-
-#### Portalconfig.searchBar.bkg ####
-Der Suchdienst des BKG ([Bundesamt für Kartographie und Geodäsie](https://www.bkg.bund.de/DE/Home/home.html)) wird angefragt.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|epsg|nein|String|EPSG:25832|EPSG-Code des verwendeten Koordinatensystems.|
-|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung in der gesucht wird.|
-|filter|nein|String|filter=(typ:*)|Filterstring|
-|geosearchServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|score|nein|Number|0.6|Score-Wert, der die Qualität der Ergebnisse auswertet.|
-|suggestCount|nein|Number|20|Anzahl der über *suggest* angefragten Vorschläge.|
-|suggestServiceId|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
-
-**Beispiel bkg:**
-
-
-```
-#!json
-
-"bkg": {
-            "minChars": 3,
-            "suggestServiceId": "4",
-            "geosearchServiceId": "5",
-            "extent": [454591, 5809000, 700000, 6075769],
-            "suggestCount": 10,
-            "epsg": "EPSG:25832",
-            "filter": "filter=(typ:*)",
-            "score": 0.6
-        }
-
-```
-
-******
-
-#### Portalconfig.searchBar.gazetteer ####
-Der Gazetteer-Dienst des LGV wird angefragt.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor Suche initiiert wird.|
-|searchDistricts|nein|Boolean|false|Soll nach Stadtteilen gesucht werden?|
-|searchHouseNumbers|nein|Boolean|false|Sollen auch Hausnummern gesucht werden oder nur Straßen?|
-|searchParcels|nein|Boolean|false|Soll nach Flurstücken gesucht werden?|
-|searchStreetKey|nein|Boolean|false|Soll nach Strassenschlüsseln gesucht werden?|
-|searchStreets|nein|Boolean|false|Soll nach Straßennamen gesucht werden? Voraussetzung für *searchHouseNumbers*.|
-|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
-|url||String||URL des WFS-Dienstes|
-
-**Beispiel gazetteer:**
-
-
-```
-#!json
-
-"gazetteer": {
-            "minChars": 3,
-            "serviceId": "6",
-            "searchStreets": true,
-            "searchHouseNumbers": true,
-            "searchDistricts": true,
-            "searchParcels": true,
-            "searchStreetKey": true
-        }
-
-```
-
-******
-
-#### Portalconfig.searchBar.specialWFS ####
-Über die specialWFS-Suche können WFS-Dienste in die Suchfunktion eingebunden werden, ohne das diese Daten der Karte oder dem Layerbaum hinzugefügt werden. Wird eine Suche ausgelöst wird der definierte WFS in Version 1.1.0 über einen POST-Request mit Filterparametern abgefragt. Hierdurch bleibt die Suche auch bei größeren Datenmengen im Dienst performant. Die Suchtreffer werden mit definierbarer Textangabe und Glyphicon in der Liste angezeigt. Durch Auswahl eines Eintrags wird die Standard-Funktion für Suchtreffer verwandt und auf das Objekt gezoomt.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[definitions](#markdown-header-portalconfigsearchbarspecialwfsdefinitions)|ja|Array[Object]||Ein Array von Dienst-Objekten die initial ausgelesen werden.|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|glyphicon|nein|String|"glyphicon-home"|Standard-Glyphicon in Trefferleiste.|
-|maxFeatures|nein|Number|20|Setzt das maxFeatures Attribut bei der WFS-Abfrage zur Limitierung der Treffer.|
-|timeout|nein|Number|6000|Timeout der Ajax-Requests im Millisekunden.|
-
-
-##### Portalconfig.searchBar.specialWFS.definitions #####
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|url|ja|String||URL des WFS-Dienstes|
-|name|ja|String||MetaName der Kategorie. Wird nur zur Anzeige in der Vorschlagssuche verwendet.|
-|glyphicon|nein|String|"glyphicon-home"|Bezeichnung des Glyphicons zur Anzeige in der Vorschlagssuche.|
-|typeName|nein|String||NEU! Layername des WFS Dienstes im POST-Request.|
-|propertyNames|nein|Array[String]||NEU! Liste der Attribute, die zur Übereinstimmungssuche verwendet werden.|
-|geometryName|nein|String|"app:geom"|NEU! Attributname aus der die Geometrie zur Anzeige entnommen wird.|
-|maxFeatures|Number|String|20|NEU! Setzt das maxFeatures Attribut an diesen WFS zur Limitierung der Treffer pro WFS.|
-|data|nein|String||DEPRECATED ab V_3.0.0! Parameter des WFS-Requests zum Filtern der featureMember auf Suchstring.|
-
-**Beispiel specialWFS:**
-
-
-```
-#!json
-
-  "specialWFS":
-      {
-        "minChars": 5,
-        "timeout": 10000,
-        "definitions": [
-          {
-            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": ["app:name"],
-            "name": "B-Plan"
-          },
-          {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_imverfahren",
-            "propertyNames": ["app:plan"],
-            "geometryName": "app:the_geom",
-            "name": "im Verfahren"
-          }
-        ]
-      },
-```
-
-*****
-
-#### Portalconfig.searchBar.tree ####
-Alle Layer im Themenbaum des Portals, werden durchsucht.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-
-**Beispiel tree:**
-
-
-```
-#!json
-
- "tree": {
-           "minChars": 3
-         }
-```
-
-
-******
-
-#### Portalconfig.searchBar.visibleWFS  (deprecated) ####
-Alle sichtbaren WFS-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
-Ersetzt durch [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-
-**Beispiel visibleWFS:**
-
-
-```
-#!json
-
-"visibleWFS": {
-           "minChars": 3
-       }
-```
-
-******
-
-#### Portalconfig.searchBar.visibleVector ####
-Alle sichtbaren Vektor-Dienste werden nach einem vordefinierten Attribut durchsucht, dass am Layer mit  "searchField": definiert wird.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|layerTypes|nein|Array [String]|["WFS"]|Vektor-Layer-Typen, die durchsucht werden sollen.|
-
-**Beispiel visibleVector:**
-
-
-```
-#!json
-
-"visibleVector": {
-           "minChars": 3,
-           "layerTypes": ["WFS", "GeoJSON"]
-       }
-```
-
-******
-
-#### Portalconfig.searchBar.osm ####
-Suche bei OpenStreetMap ueber Stadt, Straße und Hausnummer
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
-|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
-|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
-
-**Beispiel osm:**
-
-```
-#!json
-
-"osm": {
-    "minChars": 3,
-    "serviceId": "9",
-    "limit": 60,
-    "states": "Hamburg"
+    "title": "Master",
+    "logo": "../../img/hh-logo.png",
+    "link": "http://geoinfo.hamburg.de",
+    "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
 ```
 
-******
-******
-******
+***
 
-## Themenconfig ##
-Layer die in der [services.json](services.json.md) beschrieben sind, können über die *Themenconfig* in das Portal über ihre ID eingebunden und zusätzlich konfiguriert werden. Die Konfiguration spiegelt die Themenbaumstruktur im Portal wieder. Sie ist unterteilt in Hintergrundkarten und Fachdaten.
-
-
-```
-#!json
-
-"Themenconfig":
-  {
-    "Hintergrundkarten": {},
-    "Fachdaten": {}
-  }
-
-```
-
-******
-
-### Themenconfig.Hintergrundkarten ###
-Der Abschnitt Hintergrundkarten besteht aus dem Attribut _Layer_. Es ist ein Array bestehend aus Objekten, welche jeweils einen Layer in der Karte beschreiben. In Portalen mit dem Baumtyp *light*, werden die unter Hintergrundkarten beschriebenen Layer entsprechend der Konfigurationsreihenfolge von unten nach oben im Themenbaum einsortiert. Bei Portalen vom Baumtyp *custom* werden die Layer im Menüpunkt Themen/Hintergrundkarten, ebenfalls von unten nach oben, einsortiert.
+### Portalconfig.mapView
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|id|ja|Array [String] oder String|ID des Layersaus [services.json](services.json.md).|
-|name|nein|String|Name aus der [services.json](services.json.md)|Layername|
-|transparency|nein|Number|0|Layertransparenz|
-|visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
-|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
-|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
+|backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|
+|startCenter|nein|[Coordinate](#markdown-header-datatypescoordinate)|[565874, 5934140]|Die initiale Zentrumskoordinate.|
+|options|nein|[option](#markdown-header-portalconfigmapviewoption)[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|
+|resolution|nein|Float|15.874991427504629|Die initiale Auflösung der Karte aus options. Vorzug vor zoomLevel.|
+|zoomLevel|nein|Integer||Der initiale ZoomLevel aus Options. Nachrangig zu resolution.|
+|epsg|nein|String|"EPSG:25832"|Der EPSG-Code der Projektion der Karte. Der EPSG-Code muss als namedProjection definiert sein.|
 
-
-**Beispiel Hintergrundkarten:**
-
-
+**Beispiel:**
 ```
 #!json
-
-"Hintergrundkarten":
-    {
-      "Layer": [
+"mapView": {
+    "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+    "startCenter": [561210, 5932600],
+    "options": [
         {
-          "id": "453",
-          "transparency": "80"
+            "resolution": 611.4974492763076,
+            "scale": 2311167,
+            "zoomLevel": 0
         },
         {
-          "id": "452"
+            "resolution": 305.7487246381551,
+            "scale": 1155583,
+            "zoomLevel": 1
         },
         {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": true
+            "resolution": 152.87436231907702,
+            "scale": 577791,
+            "zoomLevel": 2
+        },
+        {
+            "resolution": 76.43718115953851,
+            "scale": 288896,
+            "zoomLevel": 3
+        },
+        {
+            "resolution": 38.21859057976939,
+            "scale": 144448,
+            "zoomLevel": 4
+        },
+        {
+            "resolution": 19.109295289884642,
+            "scale": 72223,
+            "zoomLevel": 5
+        },
+        {
+            "resolution": 9.554647644942321,
+            "scale": 36112,
+            "zoomLevel": 6
+        },
+        {
+            "resolution": 4.7773238224711605,
+            "scale": 18056,
+            "zoomLevel": 7
+        },
+        {
+            "resolution": 2.3886619112355802,
+            "scale": 9028,
+            "zoomLevel": 8
+        },
+        {
+            "resolution": 1.1943309556178034,
+            "scale": 4514,
+            "zoomLevel": 9
+        },
+        {
+            "resolution": 0.5971654778089017,
+            "scale": 2257,
+            "zoomLevel": 10
         }
-      ]
+    ],
+    "extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
+    "resolution": 15.874991427504629,
+    "zoomLevel": 1,
+    "epsg": "EPSG:25832"
     }
-
 ```
 
-******
+***
 
+#### Portalconfig.mapView.option
 
-### Themenconfig.Fachdaten ###
-Wenn es sich um Portale vom Baumtyp *custom* handelt, gibt es die zusätzliche Möglichkeit, Layer unterhalb von Fachdaten in Ordner zusammenzufassen. Ordner können wiederum auch Unerordner enthalten, so kann eine beliebig tiefe Verschachtelung entstehen.
+Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das zoomLevel ist, desto kleiner ist die scale. und desto näher hat man gezoomt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|Layer|nein|Array||Layerobjekte|
-|Ordner|nein|Array||Ordnerobjekte|
-|Titel|nein|String||Ordnername|
-|isFolderSelectable|nein|Boolean|[globaler Wert](config.js.md#tree)|Legt fest, ob eine Auswahlbox zur Selektierung aller Layer eines Ordners angezeigt werden soll. Diese Eigenschaft ist nur für Blatt-Ordner (die ausschließlich Layer enthalten) relevant.|
+|resolution|ja|Number||Auflösung der definierten Zoomstufe.|
+|scale|ja|Integer||Maßstabszahl der definierten Zoomstufe.|
+|zoomLevel|ja|Integer||Zoomstufe der definierten Zoomstufe.|
 
-**Beispiel Ordnerkonfiguration Fachdaten:**
-
-
+**Beispiel einer mapview Option**
 ```
 #!json
+{
+    "resolution": 611.4974492763076,
+    "scale": 2311167,
+    "zoomLevel": 0
+}
+```
 
- "Fachdaten":
+***
+
+### Portalconfig.menu
+Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
+|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) darstellt.|
+|tree|nein|[tree](#markdown-header-portalconfigmenutree)||Darstellung udn Position des Themenbaums.|
+
+***
+
+#### Portalconfig.menu.tree
+Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ergibt sich aus der Reihenfolge in der *Config.json*.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Themenbaumes.|
+|glyphicon|nein|String||CSS Klasse des glyphicons.|
+|isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|
+
+***
+
+#### Portalconfig.menu.folder
+Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" noch das attribut "children" besitzt.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Ordners im Menu.|
+|glyphicon|ja|String|"glyphicon-folder-open"|CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
+|children|nein|[tool](#markdown-header-portalconfigmenutool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
+
+**Beispiel eines folders**
+```
+#!json
+"tools":{
+    "name": "Werkzeuge",
+    "glyphicon": "glyphicon-wrench",
+    "children": {
+        "name": "Legende",
+        "glyphicon": "glyphicon-book"
+    }
+}
+```
+
+***
+
+#### Portalconfig.menu.tools
+Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|einwohnerabfrage|nein|[tool](#markdown-header-portalconfigmenutool)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
+|compareFeatures|nein|[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)|| Vergleichsmöglichkeit von Vector-Features.|
+|parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)||Flurstückssuche.|
+|measure|nein|[tool](#markdown-header-portalconfigmenutool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|
+|coord|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|
+|gfi|nein|[tool](#markdown-header-portalconfigmenutool)||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|
+|print|nein|[print](#markdown-header-portalconfigmenutoolprint)||Druckmodul mit dem die Karte als PDF exportiert werden kann.|
+|searchByCoord|nein|[tool](#markdown-header-portalconfigmenutool)||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|
+|kmlimport|nein|[tool](#markdown-header-portalconfigmenutool)||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|
+|wfsFeatureFilter|nein|[tool](#markdown-header-portalconfigmenutool)||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|
+|extendedFilter|nein|[tool](#markdown-header-portalconfigmenutool)||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|
+|routing|nein|[routing](#markdown-header-portalconfigmenutoolrouting)||Routing. Über dieses Werkzeug können Routen berechnet werden.|
+|draw|nein|[tool](#markdown-header-portalconfigmenutool)||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|
+|styleWMS|nein|[tool](#markdown-header-portalconfigmenutool)||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|
+|featureLister|nein|[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)||Listet alle Features eines Vektor Layers auf.|
+|lines|nein|[lines](#markdown-header-portalconfigmenutoollines)||Pendlerdarstellung als linenhafte Objekte.|
+|animation|nein|[animation](#markdown-header-portalconfigmenutoolanimation)||Pendleranimation als punkthafte Objekte.|
+|saveSelection|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|
+|layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
+|legend|nein|[tool](#markdown-header-portalconfigmenutool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
+|contact|nein|[contact](#markdown-header-portalconfigmenutoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
+|schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)||Schulwegrouting.|
+|filter|nein|[filter](#markdown-header-portalconfigmenutoolfilter)||Neues Filtermodul.|
+***
+
+#### Portalconfig.menu.tool
+Über den Attribut-key des Werkzeuges wird definiert, welches Werkzeug mit welchen Eigenschaften geladen wird. Jedes Tool besitzt mindestens die unten aufgeführten Attribute. Welche Tools konfigurierbar sind, finden Sie unter [tools](#markdown-header-portalconfigmenutools).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Werkzeuges im Menu.|
+|glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|
+|onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|
+
+**Beispiel eines Tools**
+```
+#!json
+"legend":{
+    "name": "Legende",
+    "glyphicon": "glyphicon-book"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.filter
+Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|
+|minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|
+|liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|
+|predefinedQueries|nein|[predinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
+
+**Beispiel**
+```
+#!json
+"filter":{
+    "name": "Filter",
+    "glyphicon": "glyphicon-filter",
+    "deactivateGFI": false,
+    "isGeneric": false,
+    "isInitOpen": false,
+    "allowMultipleQueriesPerLayer": false,
+    "predefinedQueries": [
         {
-          "Ordner": [
-            {
-              "Titel": "Lage und Gebietszugehörigkeit",
-              "Ordner": [
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Grundschulen",
+            "predefinedRules": [
                 {
-                  "Titel": "Überschwemmungsgebiete",
-                  "Ordner": [
-                    {
-                      "Titel": "Überschwemmungsgebiete",
-                      "isFolderSelectable": true,
-                      "Layer": [
-                        {
-                          "id": "1103",
-                          "visibility": false
-                        },
-                        {
-                          "id": "1104",
-                          "visibility": false
-                        }
-                      ]
-                    }
-                  ],
-                  "Layer": [
-                    {
-                      "id": "684",
-                      "visibility": false
-                    }
-                  ]
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Grundschulen", "Langformschulen"]
                 }
-              ],
- "Layer": [
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Stadtteilschulen",
+            "predefinedRules": [
                 {
-                  "id": "2427",
-                  "visibility": false
-                },
-                {
-                  "id": "2426",
-                  "visibility": false
-                },
-                {
-                  "id": "936",
-                  "visibility": false,
-                  "name": "Hafengebiet (§ 2 HafenEG)",
-                  "metaName": "Hafengebiet (§ 2 HafenEG)"
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Stadtteilschulen", "Langformschulen"]
                 }
-              ]
-            }
-         ]
-       }
-
-
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Gymnasien",
+            "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Gymnasien"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
+        },
+        {
+            "layerId": "8712",
+            "isActive": false,
+            "isSelected": false,
+            "name": "Sonderschulen",
+            "predefinedRules": [
+                {
+                    "attrName": "kapitelbezeichnung",
+                    "values": ["Sonderschulen"]
+                }
+            ],
+            "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
+        },
+        {
+        "layerId": "1711",
+        "isActive": true,
+        "isSelected": true,
+        "name": "Krankenhäuser",
+        "predefinedRules": [],
+        "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
+        }
+    ]
+}
 ```
 
-******
+***
 
-### Themenconfig.Fachdaten.Layer ###
-In diesem Abschnitt werden die Konfigurationsoptionen zur Steuerung der Darstellung von Layern auf der Karte beschrieben.
-
-**Folgende Konfigurationen sind allgemeingültig:**
+#### Portalconfig.menu.tool.filter.predefinedQuery
+Objekt, das eine Filtereinstelung definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|displayInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden?|
-|gfiTheme|nein|String|Wert aus der [services.json](services.json.md) sonst *"default"*|Individueller Style für das GFI-Popover *(„default“* / *„table“*).|
-|id|ja|Array [String] oder String||Siehe [Eingabe von ID](#markdown-header-layerid).|
-|children|nein|Array [Themenconfig.Fachdaten.Layer]||Für Grouplayer. Siehe [Eingabe von ID](#markdown-header-layerid).
-|layerAttribution|nein|HTML-String|ID des Layers aus der [services.json](services.json.md)|Zusatzinformationen zum Layer, die in der Karte angezeigt werden sollen. Voraussetzung Control [attributions](#markdown-header-portalconfigcontrols) ist aktiviert.|
-|legendURL|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|URL zur Legende|
-|maxScale|nein|String|Wert aus der [services.json](services.json.md)|Höchste Maßstabszahl, bei der ein Layer angezeigt wird.|
-|minScale|nein|String|Wert aus der [services.json](services.json.md)|Niedrigste Maßstabszahl, bei der ein Layer angezeigt wird.|
-|name|nein|Array[String] oder String|Wert aus der [services.json](services.json.md)|Layername|
-|transparency|nein|Number|0|Layertransparenz|
-|visibility|nein|Boolean|false|Initiale Sichtbarkeit des Layers.|
-|supported|nein|Array[String]|["2D","3D"]| kann einzelne Layer nur für 3D oder 2D aktivieren.|
-|autoRefresh|nein|Number||Automatischer Reload des Layers zum Aktualisieren der Inhalte (in Millisekunden > 500).|
-|isVisibleInTree|nein|Boolean|true|Soll der Layer im Themenbaum angezeigt werden|
-|isNeverVisibleInTree|nein|Boolean|false|Soll der Layer niemals im Themenbaum angezeigt werden|
+|layerId|ja|String||Id des Layers. Muss auch in der Themenconfig konfiguriert sein.|
+|isActive|nein|Boolean|false|Gibt an ob diese Filtereinstellung initial durchgeführt werden soll.|
+|isSelected|nein|Boolean|false|Gibt an ob diese Filtereinstellung initial angezeigt werden soll.|
+|searchInMapExtent|nein|Boolean|false|Gibt an ob nur die Features im Kartenauschnitt gefiltert werden sollen.|
+|info|nein|String||Kurzer Info text der über der Filtereinstellung erscheint.|
+|predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
+|attributeWhiteList|nein|String[]/[attributeWhiteList](#markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
+|snippetType|nein|String||Datentyp des Attributes. Wenn nciht angegeben wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird benötigt im Projekt DIPAS auf der Touchtabl-Variante des Portals.|
 
-**Folgende Layerkonfigurationen gelten nur für WMS:**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|attributesToStyle|nein|Array[String]||Attribute über die gestlyt werden soll.|
-|featureCount|nein|Number|1|Anzahl der Features beim GFI-Request.|
-|geomType|nein|String||Geometrietyp des Layers, bisher nur Polygon.|
-|infoFormat|nein|String|Wert aus der [services.json](services.json.md) sonst *„text/xml“*|Format für die GFI-Abfrage.|
-|styleable|nein|Boolean||True -> Layer kann im Client anders gestylt werden. Zusätzlich müssen *geomType* und *attributesToStyle* gesetzt werden.|
-|styles|nein|Array [String]||Nur bei WMS-Layern. Fragt dem WMS mit eingetragenem Styles-Eintrag ab.|
-|extent|nein|Array[]|[454591, 5809000, 700000, 6075769]|Koordinatenbasierte Ausdehnung des WMS Dienstes, der WMS Dienst wird nur in dem Extent angezeigt (Die entsprechenden Kachel).||
-
-**Folgende Layerkonfigurationen gelten nur für WFS:**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|clusterDistance|nein|Number||Werte > 0 nutzen, entspricht dem Radius in Px auf der Karte, in welchem alle Features eines Layers zu einem einzigen Feature aggregiert werden.|
-|extendedFilter|nein|Boolean||Um sämtliche verfügbare WFS zu filtern, muss dies für jeden WFS-Layer in der Layer-Konfiguration dem Werkzeug extendedFilter erlaubt werden, den Layer auch zu verwenden. Siehe [Portalconfig.menu.tools.children.extendedFilter](#markdown-header-PortalconfigmenutoolschildrenextendedFilter)|
-|[filterOptions](#markdown-header-filteroptions)|nein|Object||Filtereinstellungen für diesen Layer, wird vom Tool  [wfsFeatureFilter](#markdown-header-portalconfigmenutoolschildrenwfsfeaturefilter) ausgewertet|
-|mouseHoverField|nein|Array [String] oder String||Attributename, der beim MouseHover-Event als Tooltip angzeigt wird. Voraussetzung Control „Mousehover“ ist aktiviert (siehe [config.js](config.js.md)).|
-|routable|nein|Boolean||true -> wenn dieser Layer beim der GFI-Abfrage als Routing Destination ausgewählt werden darf. Voraussetzung Routing ist konfiguriert.|
-|searchField|nein|String || Attray [String]||Attribut angeben, nach dem in der searchBar.visibleVector gesucht werden soll .|
-|styleId|ja|String||Weist dem Layer den Style aus der [style.json](style.json.md)zu.|
-|hitTolerance|nein|Number||Toleranz in Pixel beim Abrufen von Feature Infos.|
-
-
-#### filterOptions ####
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|fieldName|ja|String||Attributname des WFS nach dem  gefiltert werden soll..|
-|filterName|ja|String||Name des Filters im Werkzeug|
-|filterString|ja|String||Mögliche Filterwerte, welche der Nutzer als Dropdown-Menü erhält.|
-|filterType|ja|String||Name des zulässigen Filtertyps. Derzeit nur combo.|
-
-**Beispiel Fachdaten:**
-
-
+**Beispiel**
 ```
 #!json
+{
+    "layerId": "8712",
+    "isActive": false,
+    "isSelected": false,
+    "name": "Grundschulen",
+    "predefinedRules": [
+        {
+            "attrName": "kapitelbezeichnung",
+            "values": ["Grundschulen", "Langformschulen"]
+        }
+    ],
+    "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
+}
+```
 
-“Layer”: [
-   {
-          "id": "2407",
-          "visibility": false,
-          "infoFormat": "text/html"
-      },
+***
+
+#### Portalconfig.menu.tool.filter.predefinedQuery.predefinedRule
+Filterregel die die Daten immer vorfiltert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|attrName|ja|String||Attributname nach dem vorgefiltert werden soll.|
+|values|ja|String[]||Attributwerte für das Vorfiltern.|
+
+**Beispiel**
+```
+#!json
+{
+    "attrName": "kapitelbezeichnung",
+    "values": ["Grundschulen", "Langformschulen"]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
+Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
+Er kann aber auch ein Objekt sein.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Attributname.|
+|matchingMode|nein|enum["AND", "OR"]|"OR"|Logische Verknüpfung mehrerer Attributwerte (bei Mehrfachauswahl) innerhalb eines Attributes.|
+
+**Beispiel als String**
+```
+#!json
+"Grundschulen"
+```
+
+**Beispiel als Objekt**
+```
+#!json
+{
+    "name": "Grundschulen",
+    "matchingMode": "AND"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.schulwegrouting
+Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|layerId|ja|String||Id des Layers der de Schulen enthält. Dieser Layer muss auch in den [Themenconfig](#markdown-header-themenconfig) konfiguriert sein.|
+
+**Beispiel**
+```
+#!json
+"schulwegrouting": {
+    "name": "Schulweg-Routing",
+    "glyphicon": "glyphicon-filter",
+    "layerId": "8712"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.compareFeatures
+Hier können Vector Features miteinander verglichen werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|numberOfFeaturesToShow|nein|Integer|3|Anzahl der Features die maximal miteinander vergleichen werden können.|
+|numberOfAttributesToShow|nein|Integer|12|Anzahl der Attribute die angezeigt wird. Gibt es mehr Attribute können diese über einen Button zusätzlich ein-/ bzw. ausgeblendet werden.|
+
+**Beispiel**
+```
+#!json
+"compareFeatures": {
+    "name": "Vergleichsliste",
+    "glyphicon": "glyphicon-th-list",
+    "numberOfFeaturesToShow": 5,
+    "numberOfAttributesToShow": 10
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.parcelSearch
+Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WFS abgefragt.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|
+|storedQueryId|ja|String||Id der stored query die verwendet werden soll.|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält.|
+|parcelDenominator|nein|Boolean|false|Flag ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|
+
+**Beispiel**
+```
+#!json
+"parcelSearch": {
+    "name": "Flurstückssuche",
+    "glyphicon": "glyphicon-search",
+    "serviceId": "6",
+    "storedQueryID": "Flurstueck",
+    "configJSON": "/lgv-config/gemarkungen_hh.json",
+    "parcelDenominator": false
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.print
+Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdienst über MapfishPrint 2 oder der moderne Druckdienst, der MapfishPrint 3 verwendet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|mapfishServiceId|ja|String||Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat|
+|filename|nein|String|"report"|Dateiname des Druckergebnisses|
+|title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|
+|version|nein|String||@deprecated in 3.0.0. Flag ob das alte oder neue Druckmodul verwendet werden soll. Bei "mapfsih_print_3" wird das neue modul verwendet, sonst das alte.|
+|printID|nein|String|"9999"|@deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|outputFilename|nein|String|"report"|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
+|gfi|nein|Boolean|false|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
+|configYAML|nein|String|"/master"|@deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|
+
+**Beispiel alte Konfiguration mit MapfishPrint2**
+```
+#!json
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "printID": "123456",
+    "configYAML": "/master",
+    "outputFilename": "report",
+    "title": "Mein Titel",
+    "gfi": true
+}
+```
+
+**Beispiel neue Konfiguration mit MapfishPrint3**
+```
+#!json
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "mapfishServiceId": "mapfish_printservice_id",
+    "printAppId": "mrh",
+    "filename": "Ausdruck",
+    "title": "Mein Titel",
+    "version" : "mapfish_print_3"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.routing
+Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|viomRoutingID|ja|String||Id des Routingdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|bkgSuggestID|ja|String||Id des Vorschlagsdienstes des BKG. Er wird verwendet um Addressvorschläge zu liefern. Wird in der rest-services.json abgelegt.|
+|bkgGeosearchID|ja|String||Id des Geokodierungsdienstes des BKG. Er wird verwendet um gewählte Addressen in Koordinaten umzuwandeln. Wird in der rest-services.json abgelegt.|
+|isInitOpen|nein|Boolean|false|Flag ob das tool initial geöffnet sein soll.|
+
+**Beispiel**
+```
+#!json
+"routing": {
+    "name": "Routenplaner",
+    "glyphicon": "glyphicon-road",
+    "viomRoutingID": "1",
+    "bkgSuggestID": "2",
+    "bkgGeosearchID": "3",
+    "isInitOpen": false
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.featureLister
+Modul, das Vektor Features darstellt. Durch hovern über ein feature in der Liste wird auf der Karte der Marker gesetzt.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|maxFeatures|nein|Integer|20|Anzahl der zu zeigenden Features. Über einen Button können weitere features in dieser Anzahl zugeladen werden.|
+
+**Beispiel**
+```
+#!json
+"featureLister": {
+    "name": "Liste",
+    "glyphicon": "glyphicon-menu-hamburger",
+    "maxFeatures": 10
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.lines
+Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+
+**Beispiel**
+```
+#!json
+"animation": {
+    "name": "Pendler (Animation)",
+    "glyphicon": "glyphicon-play-circle",
+    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "params": {
+        "REQUEST": "GetFeature",
+        "SERVICE": "WFS",
+        "TYPENAME": "app:mrh_kreise",
+        "VERSION": "1.1.0",
+        "maxFeatures": "10000"
+    },
+    "featureType": "mrh_einpendler_gemeinde",
+    "attrAnzahl": "anzahl_einpendler",
+    "attrGemeinde": "wohnort",
+    "zoomlevel": 1,
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.animation
+Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|steps|nein|Integer|50|Anzahl der Schritte, die in der Animation durchgeführt werden sollen.|
+|minPx|nein|Integer|5|Minimalgröße der Kreisdarstellung der Pendler.|
+|maxPx|nein|Integer|20|Maximalgröße der Kreisdarstellung der Pendler.|
+|colors|nein|String[]|[]|Anzahl der Farben im RGBA-Muster ("rgba(255,0,0,1)").|
+
+**Beispiel**
+```
+#!json
+"animation": {
+    "name": "Pendler (Animation)",
+    "glyphicon": "glyphicon-play-circle",
+    "steps": 30,
+    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "params": {
+        "REQUEST": "GetFeature",
+        "SERVICE": "WFS",
+        "TYPENAME": "app:mrh_kreise",
+        "VERSION": "1.1.0",
+        "maxFeatures": "10000"
+    },
+    "featureType": "mrh_einpendler_gemeinde",
+    "attrAnzahl": "anzahl_einpendler",
+    "attrGemeinde": "wohnort",
+    "minPx": 5,
+    "maxPx": 30,
+    "zoomlevel": 1,
+    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.pendlerCore
+Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch [lines](#markdown-header-portalconfigmenutoollines) und [animation](#markdown-header-portalconfigmenutoolanimation)
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|
+|url|nein|String|"http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|Url des WFS Dienstes der abgefragt werden soll.|
+|params|nein|[param](#markdown-header-portalconfigmenutoolpendlercoreparam)||Parameter mit denen der Dienst abgefragt werden soll.|
+|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|
+|attrAnzahl|nein|String|"anzahl_einpendler"|Attributname das die Anzahl der Pendler pro Gemeinde enthält.|
+|attrGemeinde|nein|String|"wohnort"|Attributname das die Gemeinde enthält.|
+
+***
+
+#### Portalconfig.menu.tool.pendlerCore.param
+Parameter die für die Anfrage des Dienstes relevant sind.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|REQUEST|nein|String|"GetFeature"|Art des Requests.|
+|SERVICE|nein|String|"WFS"|Typ des Dienstes.|
+|TYPENAME|nein|String|"app:mrh_kreise"|Typename des Layers.|
+|VERSION|nein|String|"1.1.0"|Version des WFS.|
+|maxFeatures|nein|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|
+
+***
+
+#### Portalconfig.menu.tool.contact
+Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|from|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|
+|to|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|
+|cc|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[]|CC der Email.|
+|bcc|nein|[email](#markdown-header-portalconfigmenutoolcontactemail)[]|[]|BCC der Email.|
+|ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
+|textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
+|includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
+
+**Beispiel**
+```
+#!json
+"contact":{
+    "name": "Kontakt",
+    "glyphicon": "glyphicon-envelope",
+    "serviceID": "123",
+    "from": [
+        {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name":"LGVGeoportalHilfe"
+        }
+    ],
+    "to": [
+        {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name":"LGVGeoportalHilfe"
+        }
+    ],
+    "cc": [],
+    "bcc": [],
+    "ccTouser": true,
+    "textPlaceholder": "Hier Text eingeben."
+    "includeSystemInfo": true
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.contact.email
+Email Objekt bestehend aus der email und aus dem Anzeigename.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|email|nein|String||Email.|
+|name|nein|String||Anzeigename.|
+
+**Beispiel**
+```
+#!json
+{
+    "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+    "name":"LGVGeoportalHilfe"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerslider
+Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hintereinander an bzw auszuschalten. Dadurch kann z.B. eine Zeitreihe verschiedener Zustände animiert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|ja|String||Titel der im Werkzeug vorkommt.|
+|timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|
+|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|
+
+**Beispiel**
+```
+#!json
+"layerslider": {
+    "name": "Zeitreihe",
+    "glyphicon": "glyphicon-film",
+    "title": "Simulation von Beispiel-WMS",
+    "timeInterval": 2000,
+    "layerIds": [
+        {
+            "title": "Dienst 1",
+            "layerId": "123"
+        },
+        {
+            "title": "Dienst 2",
+            "layerId": "456"
+        },
+        {
+            "title": "Dienst 3",
+            "layerId": "789"
+        }
+    ]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.layerslider.layerId
+Definiert einen Layer für den Layerslider.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|
+|layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+
+**Beispiel**
+```
+#!json
+{
+    "title": "Dienst 1",
+    "layerId": "123"
+}
+```
+
+***
+
+#### Portalconfig.menu.staticlinks
+Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des staticLink-Objekts im Menu.|
+|glyphicon|nein|String|"glyphicon-globe"|CSS Klasse des Glyphicons, das vor dem staticLink-Objekt im Menu angezeigt wird.|
+|url|nein|String||Url welche in einem neuen Tab angezeigt werden soll.|
+|onClickTrigger|nein|[onClickTrigger](#markdown-header-portalconfigmenustaticlinksonclicktrigger)[]||Array von OnClickTrigger events.|
+
+**Beispiel**
+```
+#!json
+"staticlinks": [
     {
-          "id": "1711",
-          "styleId": "1711",
-          "visibility": false,
-          "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-          "mouseHoverField": ["name", "strasse"],
-          "searchField": "name",
-          "extendedFilter": true,
-          "filterOptions": [
+        "name": "Hamburg",
+        "glyphicon": "glyphicon-globe",
+        "url": "http://www.hamburg.de"
+    },
+    {
+        "name": "Alert",
+        "glyphicon": "glyphicon-globe",
+        "onClickTrigger": [
             {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtsklinik",
-              "filterString": ["*", "Ja", "Nein"]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                "channel": "Alert",
+                "event": "alert",
+                "data": "Hello World!"
             }
-          ]
+        ]
     }
 ]
 ```
-### Layer.id ###
-Die [id einer Layerkonfiguration](#markdown-header-themenconfigfachdatenlayer) kann auf drei unterschiedliche Arten definiert werden:
 
-**Beispiel für einfache Layer:**
+***
 
-In diesem Fall wird die genannte ID in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer.
+#### Portalconfig.menu.staticlinks.onClickTrigger
+Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
 
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|channel|ja|String||Name des Radio channels.|
+|event|ja|String||Event des Radio channels das getriggered werden soll.|
+|data|nein|String/Boolean/Number||Daten die mit geschickt werden sollen.|
+
+**Beispiel**
 ```
 #!json
-
 {
-  "id": "453"
+    "channel": "Alert",
+    "event": "alert",
+    "data": "Hello World!"
 }
 ```
 
-**Beispiel für WMS multiple Layers:**
+***
 
-In diesem Fall wird zunächst der erste Eintrag des Array in der [services.json](services.json.md) gesucht. Der gefundene Eintrag definiert den Layer gemäß den Angaben in der [services.json](services.json.md) vollständig.
-Alle weiteren Werte im Array werden dahingehend ausgewertet, dass ihre _layers_-Angabe den  _layers-Parameter_ des Dienstes erweitern. Dies dient der gleichzeitigen Abfrage aller Layer in einem Request. Näheres kann der [Dokumentation](http://docs.geoserver.org/latest/en/user/services/wms/reference.html#wms-getmap) entnommen werden. Dem Themenbaum wird nur ein Eintrag hinzugefügt.
+## Themenconfig
+Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkommen. Je nach vonfiguration des Baumtyps können auch Ordner Strukturen in den [Fachdaten](#markdown-header-themenconfigfachdaten) angegeben werden.
 
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Hintergrundkarten|ja|[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)||Definition der Hintergrundkarten|
+|Fachdaten|ja|String||Definition der Fachdaten.|
+
+**Beispiel**
 ```
 #!json
-
-{
-  "id":["538","539","540"]
+"Themenconfig": {
+    "Hintergrundkarten": {},
+    "Fachdaten": {}
 }
 ```
 
-**Beispiel für openlayers Layer Collection (GroupLayer):**
+***
 
-In diesem Fall wird ein ol/layer/Group Object gebildet. Ein Grouplayer kann aus ganz unterschiedlichen Layertypen bestehen, bspw. auch gemischt aus WMS und WFS. Ein Grouplayer stellt den Inhalt über einen Eintrag im Themenbaum zur Verfügung. Siehe auch die [openlayers Dokumentation](https://openlayers.org/en/latest/apidoc/module-ol_layer_Group-LayerGroup.html).
+### Themenconfig.Hintergrundkarten
+Hier werden die Hintergrundkarten definiert
 
-* Die Konfiguration erfolgt über den Parameter _children_. Er ist ein Array bestehend aus [Layerkonfigurationen](#markdown-header-themenconfigfachdatenlayer).
-* Das Attribut _id_ wird in diesem Fall als unique _String_ erwartet und darf nicht in der [services.json](services.json.md) gelistet sein.
-    * Über diesen Eintrag werden die _children_ gruppiert.
-    * Über diesen Eintrag ist ein parametrisierter Aufruf möglich.
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
 
-Es gelten folgende Besonderheiten:
-
-* Im Falle eines GFI wird jeder Layer einzeln abgefragt.
-* Legenden werden aus allen children einzeln erstellt und gemeinsam dargestellt.
-* Die Layerinformationen werden gekürzt (nur erster Layer) übernommen.
-
+**Beispiel**
 ```
 #!json
+"Hintergrundkarten": {
+    "Layer": [
+        {
+            "id": "123
+        }
+    ]
+},
+```
 
+***
+
+### Themenconfig.Fachdaten
+Hier werden die Fachdaten definiert
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
+
+**Beispiel**
+```
+#!json
+"Fachdaten": {
+    "Layer": [
+        {
+            "id": "123
+        }
+    ]
+},
+```
+
+***
+
+### Themenconfig.Ordner
+Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|Titel|ja|String||Titel des Ordners.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
+
+**Beispiel Ordner mit einem Layer**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein Ordner"
+            "Layer": [
+                {
+                    "id": "123
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Beispiel Ordner mit einem Unterordner in dem eine Layer konfiguriert ist**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein erster Ordner"
+            "Ordner": [
+                {
+                    "Titel": "Mein zweiter Ordner"
+                    "Layer": [
+                        {
+                            "id": "123
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Beispiel Ordner einem Unterordner. Auf der Ebene des Unterordners ist auch nochmal ein Layer definiert**
+```
+#!json
+"Fachdaten": {
+    "Ordner": [
+        {
+            "Titel": "Mein erster Ordner"
+            "Ordner": [
+                {
+                    "Titel": "Mein zweiter Ordner"
+                    "Layer": [
+                        {
+                            "id": "123
+                        }
+                    ]
+                }
+            ],
+            "Layer": [
+                {
+                    "id": "456
+                }
+            ]
+        }
+    ]
+}
+```
+
+***
+
+### Themenconfig.Layer
+Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
+Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String/String[]||Id des Layers. In der [services.json](services.json.md) werden die ids aufgelöst und die notwendigen Informationen herangezogen.|
+|children|nein|[Layer](#markdown-header-themenconfiglayer)[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Falle ist eine einzigartige Id manuell zu wählen.|
+|name|nein|String||Name des Layers.|
+|transparency|nein|Integer|0|Transparenz des Layers.|
+|visibility|nein|Boolean|false|Sichtbarkeit des Layers.|
+|supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
+|displayInTree|nein|Boolean|false|Gibt an ob der Layer im Themenbaum angezeigt werden soll.|
+|gfiTheme|nein|String|"default"|Wert aus [services.json](services.json.md). Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
+|layerAttribution|nein|String||Wert aus [services.json](services.json.md). HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
+|legendURL|nein|String||Wert aus [services.json](services.json.md). Url die verwendet wird um die Legende anzufragen.|
+|maxScale|nein|String||Wert aus [services.json](services.json.md). Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|minScale|nein|String||Wert aus [services.json](services.json.md). Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|
+|isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|
+|isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|
+
+**Beispiel mit einer Id**
+```
+#!json
 {
-  "id": "myUniqueId",
-  "children": [
+    "id": "123"
+}
+```
+
+**Beispiel mit einem Array von Ids**
+```
+#!json
+{
+    "id": ["123", "456", "789"],
+    "name": "mein testlayer"
+}
+```
+
+***
+
+#### Themenconfig.Layer.WMS
+Hier werde WMS typische Attribute aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|attributesToStyle|nein|String[]||Array von Attributen nach denen der WMS gestylt werden kann. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|featureCount|nein|Integer|1|Anzahl der Features die zurückgegeben werden sollen bei einer GetFeatureInfo-Abfrage.|
+|geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|styleable|nein|Boolean||Zeigt an der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in [tools](#markdown-header-portalconfigmenutools).|
+|infoFormat|nein|String|"text/xml"|Wert aus [services.json](services.json.md). Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|
+|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|
+
+**Beispiel**
+```
+#!json
+{
+    "id": "123456",
+    "name": "MyWMSLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "attributesToStyle": ["MyFirstAttr"],
+    "featureCount": 2,
+    "geomType": "geometry",
+    "infoFormat": "text/html",
+    "styleable": true,
+    "styles": ["firstStyle", "secondStyle"]
+}
+```
+
+***
+
+#### Themenconfig.Layer.Vector
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|clusterDistance|nein|Integer||Pixelradius. Innerhalb dieses PRadius werden alle features zu einem feature "geclustered".|
+|extendedFilter|nein|Boolean||Gibt an ob dieser layer vom Werkzeug "extendedFilter" in [tools](#markdown-header-portalconfigmenutools) verwendet werden kann.|
+|filterOptions|nein|[filterOption](#markdown-header-themenconfiglayervectorfilteroption)[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt werden.|
+|mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|
+|routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolrouting) konfiguriert sein.|
+|searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|
+|styleId|nein|String||Id die den Style definiert. Id wird in der [style.json](style.json.md) aufgelöst.|
+|hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|
+
+**Beispiel**
+```
+#!json
+{
+"id": "123456",
+"name": "MyVectorLayerName",
+"transparency": 0,
+"visibility": true,
+"supported": ["2D"],
+"extent": [454591, 5809000, 700000, 6075769],
+"displayInTree": true,
+"gfiTheme": "default",
+"layerAttribution": "MyBoldAttribution for layer 123456",
+"legendURL": "https://myServer/myService/legend.pdf",
+"maxScale": "100000",
+"minScale": "1000",
+"autoRefresh": "10000",
+"isVisibleInTree": true,
+"isNeverVisibleInTree": false,
+"clusterDistance": 60,
+"extendedFilter": true,
+"filterOptions": [
     {
-      "id": "947"
+        "fieldName": "myFirstAttributeToFilter",
+        "filterName": "Filter_1",
+        "filterString": ["*", "value1", "value2"],
+        "filterType": "combo"
     },
     {
-      "id": "946"
-    },
-    {
-      "id":"2714",
-      "gfiTheme":"reisezeiten",
-      "styleId":"2119"
-    },
-    {
-      "id": "1562"
+        "fieldName": "mySecondAttributeToFilter",
+        "filterName": "Filter_2",
+        "filterString": ["*", "value3", "value4"],
+        "filterType": "combo"
     }
-  ]
+],
+"mouseHoverField": "name",
+"routable": false,
+"searchField": "name",
+"styleId": "123456",
+"hitTolerance": 50,
 }
 ```
->Zurück zur [Dokumentation Masterportal](doc.md).
+
+***
+
+#### Themenconfig.Layer.Vector.filterOption
+Filteroption die vom Werkzeug "wfsFeatureFilter" in [tools](#markdown-header-portalconfigmenutools) benötigt wird.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|fieldName|ja|String||Attributname nach dem zu filtern ist.|
+|filterName|ja|String||Name des Filters im Werkzeug.|
+|filterString|ja|String[]||Array von Attributwerten nach denen gefiltert werden kann. Bei "*" werden alle Wertausprägungen angezeigt.|
+|filterType|ja|String||typ des Filters Momentan wird nur "combo" unterstützt.|
+
+**Beispiel**
+```
+#!json
+{
+    "fieldName": "myFirstAttributeToFilter",
+    "filterName": "Filter_1",
+    "filterString": ["*", "value1", "value2"],
+    "filterType": "combo"
+}
+```
+
+***
+
+# Datatypes
+In diesem Kapitel werden die erwarteten Datentypen definiert.
+
+## Datatypes.Coordinate
+
+Eine Koordinate besteht aus einem Array bestehend aus zwei Zahlen. Die erste repräsentiert den Rechtswert, die zweite den Hochwert.
+
+**Beispiel Koordinate bestehend aus Ganzzahlen(Integer)**
+```
+#!json
+[561210, 5932600]
+```
+
+**Beispiel Koordinate bestehend aus Gleitkommazahlen(Float)**
+```
+#!json
+[561210.1458, 5932600.12358]
+```
+
+***
+
+## Datatypes.Extent
+
+Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschreibt einen rechteckigen Gültigkeitsbereich. Dabei wird ein Rechteck aufgespannt, das durch die "linke untere" und die "rechte obere" Ecke definiert wird. Das Schema lautet [Rechtswert-Links-Unten, Hochwert-Links-Unten, Rechtswert-Rechts-Oben, Hochwert-Rechts-Oben] oder [minx, miny, maxx, maxy].
+
+**Beispiel Extent**
+```
+#!json
+[510000.0, 5850000.0, 625000.4, 6000000.0]
+```
+***

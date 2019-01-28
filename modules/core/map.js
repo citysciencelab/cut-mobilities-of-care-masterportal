@@ -60,6 +60,7 @@ const map = Backbone.Model.extend({
             "updateSize": function () {
                 this.get("map").updateSize();
             },
+            "setTime": this.setTime,
             "activateMap3d": this.activateMap3d,
             "deactivateMap3d": this.deactivateMap3d,
             "setCameraParameter": this.setCameraParameter
@@ -193,6 +194,10 @@ const map = Backbone.Model.extend({
     createMap3d: function () {
         var map3d = new OLCesium({
             map: this.get("map"),
+            time: this.returnCesiumTime.bind(this),
+            sceneOptions: {
+                shadows: true
+            },
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (olMap, scene) {
                 return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
@@ -200,6 +205,21 @@ const map = Backbone.Model.extend({
         });
 
         return map3d;
+    },
+    returnCesiumTime: function () {
+        if (this.time) {
+            return this.time;
+        }
+
+        const date = Cesium.JulianDate.now();
+
+        Cesium.JulianDate.addDays(date, 200, date);
+        Cesium.JulianDate.addHours(date, 12, date);
+        return date;
+
+    },
+    setTime: function (time) {
+        this.time = time;
     },
     handle3DEvents: function () {
         var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
@@ -306,7 +326,7 @@ const map = Backbone.Model.extend({
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
-            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event});
+            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
     deactivateMap3d: function () {
