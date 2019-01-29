@@ -446,7 +446,9 @@
         "id": "8730"
       },
       {
-        "id": "10220"
+        "id": "13091",
+        "visibility": true,
+        "gfiTheme": "radverkehrszaehlstellen"
       },
       {
         "id": "2426"
@@ -529,7 +531,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": true,
+        "visibility": false,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -551,7 +553,7 @@
       },
       {
         "id": "8712",
-        "visibility": true,
+        "visibility": false,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",
@@ -575,7 +577,7 @@
       },
       {
         "id": "8145",
-        "visibility": true,
+        "visibility": false,
         "styleId": "8145",
         "hitTolerance": 25,
         "mouseHoverField": "kategorie",
