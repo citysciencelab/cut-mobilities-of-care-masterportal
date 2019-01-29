@@ -43,13 +43,7 @@ const Legend = Tool.extend({
     getLegend: function (layer) {
         var layerSources = layer.get("layerSource"); // Array oder undefined
 
-        if (layer.get("isVisibleInMap")) {
-            return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
-        }
-        return {
-            layername: layer.get("name"),
-            legend: null
-        };
+        return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
     },
 
     updateParamsStyleWMSArray: function (params) {
