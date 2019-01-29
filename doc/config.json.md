@@ -66,6 +66,9 @@ Konfiguration der Searchbar
 ***
 
 #### Portalconfig.searchbar.bkg
+
+[type:Extent]: # (Datatypes.Extent)
+
 Konfiguration des BKG Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -364,6 +367,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 
 ### Portalconfig.mapView
 
+[type:Extent]: # (Datatypes.Extent)
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|
@@ -517,6 +522,30 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 #### Portalconfig.menu.tools
 
 [inherits]: # (Portalconfig.menu.folder)
+
+[type:tool]: # (Portalconfig.menu.tool)
+
+[type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
+
+[type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
+
+[type:print]: # (Portalconfig.menu.tool.print)
+
+[type:routing]: # (Portalconfig.menu.tool.routing)
+
+[type:featureLister]: # (Portalconfig.menu.tool.featureLister)
+
+[type:lines]: # (Portalconfig.menu.tool.lines)
+
+[type:animation]: # (Portalconfig.menu.tool.animation)
+
+[type:layerslider]: # (Portalconfig.menu.tool.layerslider)
+
+[type:contact]: # (Portalconfig.menu.tool.contact)
+
+[type:schulwegrouting]: # (Portalconfig.menu.tool.schulwegrouting)
+
+[type:filter]: # (Portalconfig.menu.tool.filter)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -1327,8 +1356,14 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 ***
 
 ### Themenconfig.Layer
+
+[type:Layer]: # (Themenconfig.Layer)
+
+[type:Extent]: # (Datatypes.Extent)
+
 Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
+
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
