@@ -159,6 +159,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
             tempArr.push({
                 class: "dot",
                 style: "circle",
+                date: splitted[0],
                 timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                 total: total,
                 tableData: Radio.request("Util", "punctuate", total),
@@ -445,8 +446,8 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
     createDownloadContent: function () {
         var downloadDataArray = [];
 
-        downloadDataArray.push(this.createDownloadFeature(this.get("dayDataset").data, "letzter Tag"));
-        downloadDataArray.push(this.createDownloadFeature(this.get("lastSevenDaysDataset").data, "letzte 7 Tage"));
+        downloadDataArray.push(this.createDownloadFeature(this.get("dayDataset").data));
+        // downloadDataArray.push(this.createDownloadFeature(this.get("lastSevenDaysDataset").data, "letzte 7 Tage"));
         // activeTabData = this.get("yearDataset").data;
         // _.each(activeTabData, function (ele, index) {
         //     activeTabData[index].timestamp = ele.timestamp + ". KW";
@@ -459,19 +460,21 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
     /**
      * createDownloadFeature prepares the features for the csv download
      * @param  {array} dataset contains the dataset of the active tab
-     * @param  {string} period contains the name of the dataset period
      * @return {array} dataArray array with the dataset object
      */
-    createDownloadFeature: function (dataset, period) {
-        var dataObject = {
-                "Zeitraum": period
-            },
+    createDownloadFeature: function (dataset) {
+        var dataObject = {},
             dataArray = [];
 
         _.each(dataset, function (ele) {
-            dataObject[ele.timestamp] = Radio.request("Util", "punctuate", ele.total);
+            dataObject = {
+                "Datum": ele.date,
+                "Zeitraum(von)": ele.timestamp,
+                "Anzahl Fahrräder": Radio.request("Util", "punctuate", ele.total)
+            };
+            dataArray.push(dataObject);
         });
-        dataArray.push(dataObject);
+        dataArray.push(dataObject);console.log(dataset);
         return dataArray;
     },
 
