@@ -42,6 +42,7 @@ const StyleList = Backbone.Collection.extend({
      */
     parse: function (data) {
         var layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
+            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"}),
             styleIds = [],
             filteredData = [];
 
@@ -57,6 +58,11 @@ const StyleList = Backbone.Collection.extend({
                         styleIds.push(child.styleId);
                     }
                 });
+            }
+        });
+        _.each(tools, function (tool) {
+            if (_.has(tool, "styleId")) {
+                styleIds.push(tool.styleId);
             }
         });
         filteredData = data.filter(function (styleModel) {

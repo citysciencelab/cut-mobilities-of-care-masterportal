@@ -795,6 +795,7 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|
 |configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält.|
 |parcelDenominator|nein|Boolean|false|Flag ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|
+|styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|
 
 **Beispiel**
 ```
@@ -805,7 +806,8 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
     "serviceId": "6",
     "storedQueryID": "Flurstueck",
     "configJSON": "/lgv-config/gemarkungen_hh.json",
-    "parcelDenominator": false
+    "parcelDenominator": false,
+    "styleId": "flaecheninfo"
 }
 ```
 
