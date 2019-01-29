@@ -40,7 +40,7 @@
             <div id="legende" class="tab-pane fade in active">
                 <p>
                 <% if (_.isNull(legend.legend) || _.isEmpty(legend.legend) || legend.legend[0].img === "") {
-                    print ("<p>Legende wird nur von einem bereits aktiviertem Layer angezeigt!</p>");                    
+                    print ("<p>Legende wird erst beim aktivieren des Layers geladen!</p>");                    
                 }
                 else {
                     _.each(legend.legend, function (legend) {
