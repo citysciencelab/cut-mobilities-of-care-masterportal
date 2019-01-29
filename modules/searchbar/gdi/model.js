@@ -19,6 +19,13 @@ const GdiModel = Backbone.Model.extend({
             this.setMinChars(config.minChars);
         }
 
+        if (!_.isUndefined(config.serviceId)) {
+            this.setServiceId(config.serviceId);
+        }
+
+        ElasticSearch.setSorting("_score", "desc");
+
+
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
@@ -32,7 +39,7 @@ const GdiModel = Backbone.Model.extend({
                         {
                             query: searchString,
                             type: "most_fields",
-                            fields: ["datasets.keywords", "name", "datasets.md_name"]
+                            fields: ["datasets.keywords", "name^2", "datasets.md_name^2"] // müsste noch , "datasets.description" sein, wenn auch in Beschreibung gesucht werden soll
                             // fuzziness: "2"
                         }
                     },
@@ -45,13 +52,13 @@ const GdiModel = Backbone.Model.extend({
             }
         };
 
-//todo: serviceid aus config übergeben, minchars verarbeiten
-        ElasticSearch.search("elastic", query).then(response => {
+        // todo: minchars verarbeiten, Sortierung nach Score, nicht Alphabetisch!
+        ElasticSearch.search(this.getServiceId(), query).then(response => {
             if (response.hits) {
                 _.each(response.hits, function (hit) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.name,
-                        type: "Thema",
+                        type: "Thema_neu",
                         glyphicon: "glyphicon-map-marker",
                         id: hit.id
                     });
@@ -60,6 +67,18 @@ const GdiModel = Backbone.Model.extend({
 
             Radio.trigger("Searchbar", "createRecommendedList");
         });
+    },
+    setMinChars: function (value) {
+        this.set("minChars", value);
+    },
+    getMinChars: function () {
+        return this.get("minChars");
+    },
+    setServiceId: function (value) {
+        this.set("serviceId", value);
+    },
+    getServiceId: function () {
+        return this.get("serviceId");
     }
 
 

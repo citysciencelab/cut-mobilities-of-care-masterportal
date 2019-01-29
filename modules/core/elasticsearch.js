@@ -1,11 +1,12 @@
 var sorting = {},
-    size = 10000;
+    size = 10000,
+    timeout = 600;
 
 function prepareSearchBody (query) {
     var searchBody = {};
 
     if (!_.isEmpty(sorting)) {
-        searchBody.sort = [sorting];
+        searchBody.sort = sorting;
     }
 
     searchBody.from = 0;
@@ -22,8 +23,7 @@ export function setTimeOut (value) {
 }
 
 export function setSorting (key, value) {
-    sorting.key = key;
-    sorting.value = value;
+    sorting[key] = value;
 }
 
 export function setSize (value) {
@@ -51,43 +51,42 @@ export function search (serviceId, query) {
         result.status = "error";
         result.message = "ElasticSearch Service with id " + serviceId + " not found.";
         // console.error(JSON.stringify(result));
-        // return result;
+        return result;
     }
     else if (_.isUndefined(query)) {
         result.status = "error";
         result.message = "ElasticSearch query not found.";
         // console.error(JSON.stringify(result));
-        // return result;
+        return result;
     }
-    else {
-        return fetch(searchUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: searchBody
-        })
-            .then(response => response.json())
-            .then(response => {
-                var datasources = [];
 
-                result.status = "success";
+    return fetch(searchUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        body: searchBody
+    })
+        .then(response => response.json())
+        .then(response => {
+            var datasources = [];
 
-                if (response.hits) {
-                    _.each(response.hits.hits, function (hit) {
-                        datasources.push(hit._source);
-                    })
-                }
+            result.status = "success";
 
-                result.hits = datasources;
-                return result;
+            if (response.hits) {
+                _.each(response.hits.hits, function (hit) {
+                    datasources.push(hit._source);
+                });
             }
-            )
-            .catch(err => {
-                result.status = "error";
-                result.message = "ElasticSearch query went wrong with message: " + err;
-                console.error("error", err);
-                return result;
-            });
-    }
+
+            result.hits = datasources;
+            return result;
+        })
+        .catch(err => {
+            result.status = "error";
+            result.message = "ElasticSearch query went wrong with message: " + err;
+            console.error("error", err);
+            return result;
+        });
+
 }
