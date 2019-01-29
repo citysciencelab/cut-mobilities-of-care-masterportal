@@ -515,6 +515,9 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 ***
 
 #### Portalconfig.menu.tools
+
+[inherits]: # (Portalconfig.menu.folder)
+
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -565,6 +568,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 ***
 
 #### Portalconfig.menu.tool.filter
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -732,6 +738,9 @@ Er kann aber auch ein Objekt sein.
 ***
 
 #### Portalconfig.menu.tool.schulwegrouting
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -751,6 +760,9 @@ Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jed
 ***
 
 #### Portalconfig.menu.tool.compareFeatures
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Hier können Vector Features miteinander verglichen werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -772,6 +784,9 @@ Hier können Vector Features miteinander verglichen werden.
 ***
 
 #### Portalconfig.menu.tool.parcelSearch
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WFS abgefragt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -797,6 +812,9 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 ***
 
 #### Portalconfig.menu.tool.print
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdienst über MapfishPrint 2 oder der moderne Druckdienst, der MapfishPrint 3 verwendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -842,6 +860,9 @@ Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdiens
 ***
 
 #### Portalconfig.menu.tool.routing
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -867,6 +888,9 @@ Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen P
 ***
 
 #### Portalconfig.menu.tool.featureLister
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Modul, das Vektor Features darstellt. Durch hovern über ein feature in der Liste wird auf der Karte der Marker gesetzt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -886,6 +910,9 @@ Modul, das Vektor Features darstellt. Durch hovern über ein feature in der List
 ***
 
 #### Portalconfig.menu.tool.lines
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 **Beispiel**
@@ -912,6 +939,9 @@ Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metr
 ***
 
 #### Portalconfig.menu.tool.animation
+
+[inherits]: # (Portalconfig.menu.tool.pendlerCore)
+
 Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -949,6 +979,9 @@ Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg)
 ***
 
 #### Portalconfig.menu.tool.pendlerCore
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch [lines](#markdown-header-portalconfigmenutoollines) und [animation](#markdown-header-portalconfigmenutoolanimation)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -976,6 +1009,9 @@ Parameter die für die Anfrage des Dienstes relevant sind.
 ***
 
 #### Portalconfig.menu.tool.contact
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1038,6 +1074,9 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 ***
 
 #### Portalconfig.menu.tool.layerslider
+
+[inherits]: # (Portalconfig.menu.tool)
+
 Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hintereinander an bzw auszuschalten. Dadurch kann z.B. eine Zeitreihe verschiedener Zustände animiert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1330,6 +1369,9 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 ***
 
 #### Themenconfig.Layer.WMS
+
+[inherits]: # (Themenconfig.Layer)
+
 Hier werde WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1372,6 +1414,9 @@ Hier werde WMS typische Attribute aufgelistet.
 ***
 
 #### Themenconfig.Layer.Vector
+
+[inherits]: # (Themenconfig.Layer)
+
 Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
