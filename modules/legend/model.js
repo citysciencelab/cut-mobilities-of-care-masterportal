@@ -185,12 +185,10 @@ const Legend = Tool.extend({
                 }
             }, this);
 
-            if (defs.length > 0) {
-                return {
-                    layername: layername,
-                    legend: defs
-                };
-            }
+            return {
+                layername: layername,
+                legend: defs
+            };
         }
         return {
             layername: layername,
