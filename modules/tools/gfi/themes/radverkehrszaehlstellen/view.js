@@ -59,7 +59,7 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
             this.$(".chartCheckbox").prop("checked", true);
             this.$(".tableCheckbox").prop("checked", true);
             this.loadDiagramm(activeTab);
-            this.fadeInDownloadButton(activeTab);
+            this.fadeInDownloadButton();
         }
         else if (activeTab === "info") {
             this.$("#gfiList").addClass("in active");
@@ -132,9 +132,9 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
      * @param  {string} activeTab contains the value of the active tab
      * @return {void}
      */
-    fadeInDownloadButton: function (activeTab) {
+    fadeInDownloadButton: function () {
         this.$(".radverkehrszaehlstellen.downloadButton").addClass("in active");
-        this.model.createDownloadContent(activeTab);
+        this.model.createDownloadContent();
     },
     /**
      * appendChildren overrides the function to append image children to the gfi
@@ -146,11 +146,10 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
             imageRadverkehrszaehlstellenDiv = this.$(".imageRadverkehrszaehlstellenDiv");
 
         imageRadverkehrszaehlstellenDiv.removeClass("has-image");
-        _.each(children, function (element, index) {
+        _.each(children, function (element) {
             element.val.$el.prepend("<p class=imageRadverkehrszaehlstellenP>" + element.key + ": </p>");
             if (element.type && element.type === "image") {
-                imageRadverkehrszaehlstellenDiv.append("<div class='col-xs-6 col-md-6'></div>");
-                imageRadverkehrszaehlstellenDiv.children()[index].append(element.val.$el[0]);
+                imageRadverkehrszaehlstellenDiv.append("<div class='col-xs-6 col-md-6'>" + element.val.$el[0].innerHTML + "</div>");
                 imageRadverkehrszaehlstellenDiv.addClass("has-image");
             }
         }, this);

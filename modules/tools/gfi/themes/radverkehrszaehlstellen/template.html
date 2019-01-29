@@ -6,13 +6,13 @@
 </div>
 <ul class="nav nav-pills">
     <li value= "info" class="tab-toggle active"><a data-toggle="tab" href="#gfiList">Info</a></li>
-  <% if (!_.isNull(dayDataset)) { %>
+  <% if (!_.isEmpty(dayDataset)) { %>
     <li value= "day" class="tab-toggle"><a data-toggle="tab" href="#chart">letzter Tag</a></li>
   <% } %>
-  <% if (!_.isNull(lastSevenDaysDataset)) { %>
+  <% if (!_.isEmpty(lastSevenDaysDataset)) { %>
     <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>
   <% } %>
-  <% if (!_.isNull(yearDataset)) { %>
+  <% if (!_.isEmpty(yearDataset)) { %>
     <li value= "year" class="tab-toggle"><a data-toggle="tab" href="#chart">Jahr</a></li>
   <% } %>
 </ul>
@@ -47,7 +47,7 @@
                     </td>
                 <% }
                 else { %>
-                    <td>
+                    <td class = "infoGFIContent">
                         <%= value.attrValue%>
                     </td>
                     <td>
@@ -75,7 +75,8 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% _.each(dayDataset.data, function (day){%>
+                <% if (!_.isEmpty(dayDataset)) {
+                    _.each(dayDataset.data, function (day){%>
                 <th class="text-align-center"><%=day.timestamp%></th>
                 <% });%>
             </thead>
@@ -84,8 +85,9 @@
                 <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
                 <% _.each(dayDataset.data, function (day){%>
-                    <td class="data"><%=day.total%></td>
-                <% });%>
+                    <td class="data"><%=day.tableData%></td>
+                <% });
+                }%>
                 </tr>
             </tbody>
         </table>
@@ -94,7 +96,8 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
+                <% if (!_.isEmpty(lastSevenDaysDataset)) {
+                _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
                 <th class="text-align-center"><%=lastSevenDays.timestamp%></th>
                 <% });%>
             </thead>
@@ -103,8 +106,9 @@
                 <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
                 <% _.each(lastSevenDaysDataset.data, function (lastSevenDays) {%>
-                    <td class="data"><%=lastSevenDays.total%></td>
-                <% });%>
+                    <td class="data"><%=lastSevenDays.tableData%></td>
+                <% });
+                }%>
                 </tr>
             </tbody>
         </table>
@@ -113,7 +117,8 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% _.each(yearDataset.data, function (year) {%>
+                <% if (!_.isEmpty(yearDataset)) {
+                _.each(yearDataset.data, function (year) {%>
                 <th class="text-align-center"><%=year.timestamp + " KW"%></th>
                 <% });%>
             </thead>
@@ -122,8 +127,9 @@
                 <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
                 <% _.each(yearDataset.data, function (year) {%>
-                    <td class="data"><%=year.total%></td>
-                <% });%>
+                    <td class="data"><%=year.tableData%></td>
+                <% });
+                }%>
                 </tr>
             </tbody>
         </table>

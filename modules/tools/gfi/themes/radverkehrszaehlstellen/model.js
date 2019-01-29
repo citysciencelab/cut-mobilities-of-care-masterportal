@@ -5,9 +5,9 @@ import * as moment from "moment";
 const RadverkehrszaehlstellenTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
         {
-            dayDataset: null,
-            lastSevenDaysDataset: null,
-            yearDataset: null,
+            dayDataset: {},
+            lastSevenDaysDataset: {},
+            yearDataset: {},
             activeTab: "info",
             size: {},
             downloadData: []
@@ -161,6 +161,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
                 style: "circle",
                 timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                 total: total,
+                tableData: Radio.request("Util", "punctuate", total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -192,6 +193,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
                 style: "circle",
                 timestamp: new Date(year, month, day, 0, 0, 0, 0),
                 total: total,
+                tableData: Radio.request("Util", "punctuate", total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -224,6 +226,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
                 timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                 year: year,
                 total: total,
+                tableData: Radio.request("Util", "punctuate", total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -439,34 +442,29 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
      * @param  {string} activeTab contains the value of the active tab
      * @return {void}
      */
-    createDownloadContent: function (activeTab) {
-        var activeTabData;
+    createDownloadContent: function () {
+        var downloadDataArray = [];
 
-        if (activeTab === "day") {
-            activeTabData = this.get("dayDataset").data;
-        }
-        else if (activeTab === "lastSevenDays") {
-            activeTabData = this.get("lastSevenDaysDataset").data;
-        }
-        else if (activeTab === "year") {
-            activeTabData = this.get("yearDataset").data;
-            _.each(activeTabData, function (ele, index) {
-                activeTabData[index].timestamp = ele.timestamp + ". KW";
-            });
-        }
+        downloadDataArray.push(this.createDownloadFeature(this.get("dayDataset").data, "letzter Tag"));
+        downloadDataArray.push(this.createDownloadFeature(this.get("lastSevenDaysDataset").data, "letzte 7 Tage"));
+        // activeTabData = this.get("yearDataset").data;
+        // _.each(activeTabData, function (ele, index) {
+        //     activeTabData[index].timestamp = ele.timestamp + ". KW";
+        // });
 
-        this.setDownloadData(this.createDownloadFeature(activeTabData));
+        this.setDownloadData(downloadDataArray);
 
     },
 
     /**
      * createDownloadFeature prepares the features for the csv download
      * @param  {array} dataset contains the dataset of the active tab
+     * @param  {string} period contains the name of the dataset period
      * @return {array} dataArray array with the dataset object
      */
-    createDownloadFeature: function (dataset) {
+    createDownloadFeature: function (dataset, period) {
         var dataObject = {
-                "Name": this.get("gfiContent")[0].Name
+                "Zeitraum": period
             },
             dataArray = [];
 
@@ -482,12 +480,14 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
      * @return {void}
      */
     download: function () {
-        const featureArray = this.get("downloadData");
+        const featureArrays = this.get("downloadData");
 
-        let csv = "",
+        let csv = this.get("gfiContent")[0].Name + "\n",
             blob = "";
 
-        csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featureArray, ";");
+        _.each(featureArrays, function (featureArray) {
+            csv += Radio.request("Util", "convertArrayOfObjectsToCsv", featureArray, ";") + "\n";
+        });
         blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
 
         if (navigator.msSaveBlob) { // IE 10+
@@ -524,12 +524,19 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
         _.each(data, function (ele) {
             tickValuesArray.push(ele.timestamp);
         });
+
         tickValuesArray = _.filter(tickValuesArray, function (d, i) {
             var val;
 
             if (d === "1") {
                 startsWith = 1;
                 val = i;
+            }
+            else if (i + 1 === tickValuesArray.length) {
+                val = 0;
+            }
+            else if (tickValuesArray.length < 10) {
+                val = 0;
             }
             else if (i === (xThinningVal - startsWith)) {
                 val = 0;
@@ -540,6 +547,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
             }
             return !val;
         });
+
         return tickValuesArray;
     },
 
