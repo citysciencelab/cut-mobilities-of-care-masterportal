@@ -353,6 +353,7 @@ const GraphModel = Backbone.Model.extend({
                 return d.class;
             })
             .on("mouseover", function (d) {
+                d[yAttrToShow] = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
