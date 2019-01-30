@@ -60,7 +60,11 @@ const GdiModel = Backbone.Model.extend({
                         name: hit.name,
                         type: "Thema_neu",
                         glyphicon: "glyphicon-map-marker",
-                        id: hit.id
+                        id: hit.id,
+                        triggerEvent: {
+                            channel: "unknown",
+                            event: "unknown"
+                        }
                     });
                 }, this);
             }
