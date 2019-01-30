@@ -34,6 +34,12 @@ const LayerInformation = Backbone.Model.extend({
             }
         });
 
+        channel.reply({
+            "getIsVisible": function () {
+                return this.get("isVisible");
+            }
+        }, this);
+
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function (isMobile) {
                 this.trigger("removeView");
