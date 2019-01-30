@@ -5,7 +5,6 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style.js";
 import {MultiLineString, Point} from "ol/geom.js";
 import {WKT} from "ol/format.js";
 import Feature from "ol/Feature.js";
-import { zoomWithoutConstraints } from "ol/interaction/Interaction";
 
 const SchulwegRouting = Tool.extend({
 
