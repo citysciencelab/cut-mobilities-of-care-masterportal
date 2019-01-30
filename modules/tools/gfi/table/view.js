@@ -39,6 +39,7 @@ const GFIDetachedTableView = DesktopView.extend({
             });
         }
     },
+
     toggle: function () {
         if (this.model.get("isVisible")) {
             this.$el.show();
