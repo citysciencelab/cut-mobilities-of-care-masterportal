@@ -40,7 +40,7 @@ const MapMarkerModel = Backbone.Model.extend({
         if (_.has(searchConf, "zoomLevel")) {
             this.setZoomLevel(searchConf.zoomLevel);
         }
-        if (parcelSearchConf.styleId) {
+        if (parcelSearchConf && parcelSearchConf.styleId) {
             this.setMapMarkerPolygonStyle(parcelSearchConf.styleId);
         }
     },
