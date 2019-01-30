@@ -31,12 +31,14 @@ const GFIDetachedTableView = DesktopView.extend({
             x = touch.clientX - width,
             y = touch.clientY;
 
-        this.$el.css({
-            "left": x + "px",
-            "top": y + "px"
-        });
+        // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
+        if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width()) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height())) {
+            this.$el.css({
+                "left": x + "px",
+                "top": y + "px"
+            });
+        }
     },
-
     toggle: function () {
         if (this.model.get("isVisible")) {
             this.$el.show();
