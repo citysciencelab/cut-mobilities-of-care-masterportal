@@ -5,6 +5,7 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style.js";
 import {MultiLineString, Point} from "ol/geom.js";
 import {WKT} from "ol/format.js";
 import Feature from "ol/Feature.js";
+import { zoomWithoutConstraints } from "ol/interaction/Interaction";
 
 const SchulwegRouting = Tool.extend({
 
@@ -27,10 +28,7 @@ const SchulwegRouting = Tool.extend({
         requestIDs: [],
         routeResult: {},
         routeDescription: [],
-        checkBoxHVV: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "HVV Verkehrsnetz"
-        }),
+        checkBoxHVV: undefined,
         renderToSidebar: true,
         renderToWindow: false,
         glyphicon: "glyphicon-filter"
@@ -40,6 +38,12 @@ const SchulwegRouting = Tool.extend({
         var channel = Radio.channel("SchulwegRouting");
 
         this.superInitialize();
+
+        this.setCheckBoxHVV(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "HVV Verkehrsnetz"
+        }));
+
         this.listenTo(channel, {
             "selectSchool": function (schoolId) {
                 this.trigger("updateSelectedSchool", schoolId);
@@ -543,6 +547,10 @@ const SchulwegRouting = Tool.extend({
         }, this);
 
         return targetList;
+    },
+
+    setCheckBoxHVV: function (value) {
+        this.set("checkBoxHVV", value);
     },
 
     setSchoolList: function (value) {
