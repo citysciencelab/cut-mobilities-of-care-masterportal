@@ -366,6 +366,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ### Portalconfig.mapView
 
 [type:Extent]: # (Datatypes.Extent)
+
 [type:Coordinate]: # (Datatypes.Coordinate)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
