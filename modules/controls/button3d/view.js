@@ -63,7 +63,7 @@ const Button3dView = Backbone.View.extend({
             Radio.trigger("Map", "deactivateMap3d");
             Radio.trigger("Alert", "alert:remove");
             Radio.trigger("Filter", "enable");
-            this.$("#3d_titel").text("Auswahl einschalten");
+            this.$("#3d_titel").text("Ansicht einschalten");
         }
         else {
             if (Radio.request("ObliqueMap", "isActive")) {
@@ -75,7 +75,7 @@ const Button3dView = Backbone.View.extend({
                 Radio.trigger("ObliqueMap", "deactivate");
                 return;
             }
-            this.$("#3d_titel").text("Auswahl ausschalten");
+            this.$("#3d_titel").text("Ansicht ausschalten");
             Radio.trigger("Filter", "disable");
             Radio.trigger("ModelList", "toggleWfsCluster", false);
             Radio.trigger("Map", "activateMap3d");
