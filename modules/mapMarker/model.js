@@ -31,13 +31,17 @@ const MapMarkerModel = Backbone.Model.extend({
         zoomLevel: 7
     },
     initialize: function () {
-        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
+        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr,
+            parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0];
 
         Radio.trigger("Map", "addOverlay", this.get("marker"));
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
         if (_.has(searchConf, "zoomLevel")) {
             this.setZoomLevel(searchConf.zoomLevel);
+        }
+        if (parcelSearchConf && parcelSearchConf.styleId) {
+            this.setMapMarkerPolygonStyle(parcelSearchConf.styleId);
         }
     },
 
@@ -135,6 +139,19 @@ const MapMarkerModel = Backbone.Model.extend({
         this.get("polygon").setVisible(false);
     },
 
+    /**
+     * setMapMarkerPolygonStyle styles the mapMArker polygon via the style model from the stylelist
+     * @param {string} mapMarkerStyleId styleId for the mapMarker polygon to find the style model
+     * @return {void}
+     */
+    setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
+        var styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
+
+        if (styleListModel) {
+            this.get("polygon").setStyle(styleListModel.createStyle(this.get("polygon"), false));
+        }
+    },
+
     // setter for zoomLevel
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
@@ -160,6 +177,11 @@ const MapMarkerModel = Backbone.Model.extend({
     // setter for polygon
     setPolygon: function (value) {
         this.set("polygon", value);
+    },
+
+    // setter for polygonStyle
+    setStyle: function (value) {
+        this.set("style", value);
     }
 });
 

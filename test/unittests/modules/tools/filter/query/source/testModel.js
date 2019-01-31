@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Model from "@modules/tools/filter/query/source/wfs.js";
+import Model from "@modules/tools/filter/query/source/model.js";
 import Util from "@testUtil";
 
 describe("filter/query/source/wfs", function () {

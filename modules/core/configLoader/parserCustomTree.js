@@ -34,7 +34,7 @@ const CustomTreeParser = Parser.extend({
                     objsFromRawList = Radio.request("RawLayerList", "getLayerAttributesList");
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
 
-                    if (layerExtended.id.length !== mergedObjsFromRawList.layers.split(",").length) { // Wenn nicht alle LayerIDs des Arrays definiert, dann Abbruch
+                    if (_.isNull(mergedObjsFromRawList)) { // Wenn Layer nicht definiert, dann Abbruch
                         return;
                     }
                     layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"), {"isChildLayer": false});
@@ -52,7 +52,7 @@ const CustomTreeParser = Parser.extend({
                         return undefined;
                     }, this);
 
-                    layerExtended.children = _.filter(layerExtended.children, function (childLayer) {
+                    layerExtended.children = layerExtended.children.filter(function (childLayer) {
                         return !_.isUndefined(childLayer);
                     });
 

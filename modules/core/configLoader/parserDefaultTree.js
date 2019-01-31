@@ -22,7 +22,7 @@ const DefaultTreeParser = Parser.extend({
      * @return {Object[]} layerList - Objekte aus der services.json
      */
     filterList: function (layerList) {
-        return _.filter(layerList, function (element) {
+        return layerList.filter(function (element) {
             if (!_.has(element, "datasets")) {
                 return false;
             }
@@ -56,7 +56,7 @@ const DefaultTreeParser = Parser.extend({
      * @return {Object[]} layerList - Objekte aus der services.json die genau einem Datensatz zugeordnet sind
      */
     createLayerPerDataset: function (layerList) {
-        var layerListPerDataset = _.filter(layerList, function (element) {
+        var layerListPerDataset = layerList.filter(function (element) {
             return element.datasets.length > 1;
         });
 
@@ -69,7 +69,7 @@ const DefaultTreeParser = Parser.extend({
                 layerList.push(newLayer);
             });
         });
-        return _.filter(layerList, function (element) {
+        return layerList.filter(function (element) {
             return element.datasets.length === 1;
         });
     },
