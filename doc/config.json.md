@@ -39,9 +39,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
-|simpleLister|nein|[simpleLister](#markdown-header-portalconfigsimplelister)||Der SimpleLister zeigt alle Features eines im Kartenausschnitt ausgewählten vektor Layers an.|
-|mapMarkerModul|nein|[mapMarkerModul](#markdown-header-portalconfig.mapmarkermodul)||Gibt an, ob der auf der Karte verwendete Marker-Pin verschiebbar sein soll, oder nicht.|
+|searchbar|nein|[searchbar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 
 ***
 
@@ -368,6 +366,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ### Portalconfig.mapView
 
 [type:Extent]: # (Datatypes.Extent)
+[type:Coordinate]: # (Datatypes.Coordinate)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -478,9 +477,31 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|info|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
-|tools|nein|[folder](#markdown-header-portalconfigmenufolder)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutool) darstellt.|
+|info|nein|[info](#markdown-header-portalconfigmenuinfo)||Ordner im Menü, der [tools](#markdown-header-portalconfigmenutools) oder [staticlinks](#markdown-header-portalconfigmenustaticlinks) darstellt.|
+|tools|nein|[tools](#markdown-header-portalconfigmenutools)||Ordner im Menü, der Werkzeuge darstellt.|
 |tree|nein|[tree](#markdown-header-portalconfigmenutree)||Darstellung udn Position des Themenbaums.|
+
+***
+
+### Portalconfig.menu.info
+
+[inherits]: # (Portalconfig.menu.folder)
+
+Informations-Ordner in dem Werkzeuge oder staticlinks eingetragen werden können.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|children|nein|[children](#markdown-header-portalconfigmenuinfochildren)||Konfiguration der Kindelemente des Informations Ordners.|
+
+***
+
+### Portalconfig.menu.info.children
+
+Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|children|nein|[tools](#markdown-header-portalconfigmenutoolschildren)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||Konfiguration der Kindelemente des Informations Ordners.|
 
 ***
 
@@ -496,13 +517,18 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 ***
 
 #### Portalconfig.menu.folder
+
+[type:tool]: # (Portalconfig.menu.tool)
+
+[type:staticlinks]: # (Portalconfig.menu.staticlinks)
+
 Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" noch das attribut "children" besitzt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|ja|String||Name des Ordners im Menu.|
 |glyphicon|ja|String|"glyphicon-folder-open"|CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
-|children|nein|[tool](#markdown-header-portalconfigmenutool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||CSS Klasse des Glyphicons, das vor dem Ordnernamen im Menu angezeigt wird.|
+|children|nein|[tool](#markdown-header-portalconfigmenutool)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||Kindelemente dieses Ordners.|
 
 **Beispiel eines folders**
 ```
@@ -511,8 +537,10 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
     "name": "Werkzeuge",
     "glyphicon": "glyphicon-wrench",
     "children": {
-        "name": "Legende",
-        "glyphicon": "glyphicon-book"
+        {
+            "name": "Legende",
+            "glyphicon": "glyphicon-book"
+        }
     }
 }
 ```
@@ -522,6 +550,16 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 #### Portalconfig.menu.tools
 
 [inherits]: # (Portalconfig.menu.folder)
+
+[type:tool]: # (Portalconfig.menu.tool)
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|children|nein|[children](#markdown-header-portalconfigmenutoolschildren)||Konfiguration der Werkzeuge.|
+
+***
+
+#### Portalconfig.menu.tools.children
 
 [type:tool]: # (Portalconfig.menu.tool)
 
@@ -574,6 +612,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |contact|nein|[contact](#markdown-header-portalconfigmenutoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
 |schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)||Schulwegrouting.|
 |filter|nein|[filter](#markdown-header-portalconfigmenutoolfilter)||Neues Filtermodul.|
+
 ***
 
 #### Portalconfig.menu.tool
@@ -1163,24 +1202,17 @@ Definiert einen Layer für den Layerslider.
 ***
 
 #### Portalconfig.menu.staticlinks
-Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
+Das Array staticlink beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|name|ja|String||Name des staticLink-Objekts im Menu.|
-|glyphicon|nein|String|"glyphicon-globe"|CSS Klasse des Glyphicons, das vor dem staticLink-Objekt im Menu angezeigt wird.|
-|url|nein|String||Url welche in einem neuen Tab angezeigt werden soll.|
-|onClickTrigger|nein|[onClickTrigger](#markdown-header-portalconfigmenustaticlinksonclicktrigger)[]||Array von OnClickTrigger events.|
+|staticlinks|nein|[staticlink](#markdown-header-portalconfigmenustaticlinksstaticlink)[]||Array von Statischen links.|
 
-**Beispiel**
+
+**Beispiel als onClickTrigger**
 ```
 #!json
 "staticlinks": [
-    {
-        "name": "Hamburg",
-        "glyphicon": "glyphicon-globe",
-        "url": "http://www.hamburg.de"
-    },
     {
         "name": "Alert",
         "glyphicon": "glyphicon-globe",
@@ -1197,8 +1229,46 @@ Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen 
 
 ***
 
-#### Portalconfig.menu.staticlinks.onClickTrigger
-Das Array staticlinks beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events. Ein Staticlink-Objekt enthält folgende attribute.
+#### Portalconfig.menu.staticlinks.staticlink
+Ein Staticlink-Objekt enthält folgende attribute.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des staticLink-Objekts im Menu.|
+|glyphicon|nein|String|"glyphicon-globe"|CSS Klasse des Glyphicons, das vor dem staticLink-Objekt im Menu angezeigt wird.|
+|url|nein|String||Url welche in einem neuen Tab angezeigt werden soll.|
+|onClickTrigger|nein|[onClickTrigger](#markdown-header-portalconfigmenustaticlinksstaticlinkonclicktrigger)[]||Array von OnClickTrigger events.|
+
+**Beispiel als url**
+```
+#!json
+{
+    "name": "Hamburg",
+    "glyphicon": "glyphicon-globe",
+    "url": "http://www.hamburg.de"
+}
+```
+
+**Beispiel als onClickTrigger**
+```
+#!json
+{
+    "name": "Alert",
+    "glyphicon": "glyphicon-globe",
+    "onClickTrigger": [
+        {
+            "channel": "Alert",
+            "event": "alert",
+            "data": "Hello World!"
+        }
+    ]
+}
+```
+
+***
+
+#### Portalconfig.menu.staticlinks.staticlink.onClickTrigger
+Über einen onClickTrigger wird ein Event getriggert und eventuell daten mitgeschickt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1224,7 +1294,7 @@ Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkomm
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |Hintergrundkarten|ja|[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)||Definition der Hintergrundkarten|
-|Fachdaten|ja|String||Definition der Fachdaten.|
+|Fachdaten|ja|[Fachdaten](#markdown-header-themenconfigfachdaten)||Definition der Fachdaten.|
 
 **Beispiel**
 ```
@@ -1238,6 +1308,9 @@ Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkomm
 ***
 
 ### Themenconfig.Hintergrundkarten
+
+[type:Layer]: # (Themenconfig.Layer)
+
 Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1259,6 +1332,10 @@ Hier werden die Hintergrundkarten definiert
 ***
 
 ### Themenconfig.Fachdaten
+
+[type:Layer]: # (Themenconfig.Layer)
+[type:Ordner]: # (Themenconfig.Ordner)
+
 Hier werden die Fachdaten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
