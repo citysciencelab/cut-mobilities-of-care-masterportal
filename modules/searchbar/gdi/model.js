@@ -35,12 +35,11 @@ const GdiModel = Backbone.Model.extend({
         var query = {
             bool: {
                 must: [
-                    {multi_match:
-                        {
-                            query: searchString,
-                            type: "most_fields",
-                            fields: ["datasets.keywords", "name^2", "datasets.md_name^2"] // müsste noch , "datasets.description" sein, wenn auch in Beschreibung gesucht werden soll
-                            // fuzziness: "2"
+                    {
+                        query_string: {
+                            "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
+                            "query": "*" + searchString + "*",
+                            "lowercase_expanded_terms": false
                         }
                     },
                     {match:
@@ -52,25 +51,27 @@ const GdiModel = Backbone.Model.extend({
             }
         };
 
-        // todo: minchars verarbeiten, Sortierung nach Score, nicht Alphabetisch!
-        ElasticSearch.search(this.getServiceId(), query).then(response => {
-            if (response.hits) {
-                _.each(response.hits, function (hit) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        name: hit.name,
-                        type: "Thema_neu",
-                        glyphicon: "glyphicon-map-marker",
-                        id: hit.id,
-                        triggerEvent: {
-                            channel: "unknown",
-                            event: "unknown"
-                        }
-                    });
-                }, this);
-            }
+        // ToDo: Event erzeugen und hier antriggern, dass einen passenden Layer erzeugt und anzeigt
+        if (searchString.length >= this.getMinChars()) {
+            ElasticSearch.search(this.getServiceId(), query).then(response => {
+                if (response.hits) {
+                    _.each(response.hits, function (hit) {
+                        Radio.trigger("Searchbar", "pushHits", "hitList", {
+                            name: hit.name,
+                            type: "Thema_neu",
+                            glyphicon: "glyphicon-map-marker",
+                            id: hit.id,
+                            triggerEvent: {
+                                channel: "unknown",
+                                event: "unknown"
+                            }
+                        });
+                    }, this);
+                }
 
-            Radio.trigger("Searchbar", "createRecommendedList");
-        });
+                Radio.trigger("Searchbar", "createRecommendedList");
+            });
+        }
     },
     setMinChars: function (value) {
         this.set("minChars", value);
