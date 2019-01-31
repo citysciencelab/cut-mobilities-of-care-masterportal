@@ -1,3 +1,14 @@
+# Changelog LGV Master-Portal 2.2.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - ed565a391 Die Information im Filter werden nun wieder dargestellt. Ein Fehler der das Starten in einer lokalen Entwicklungsumgebung verhindert wurde behoben.
+  - 1ef6166db Hinweise im Einwohnertool wurden angepasst
+
 # Changelog LGV Master-Portal 2.2.2
 
 NEU:
