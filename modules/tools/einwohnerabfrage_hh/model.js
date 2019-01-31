@@ -28,7 +28,6 @@ const Einwohnerabfrage = Tool.extend({
             offset: [15, 20],
             positioning: "top-left"
         }),
-        requests: [],
         data: {},
         dataReceived: false,
         requesting: false,
@@ -67,9 +66,6 @@ const Einwohnerabfrage = Tool.extend({
 
         this.listenTo(this, {
             "change:isActive": this.setStatus
-        });
-        this.listenTo(Radio.channel("WPS"), {
-            "response": this.handleResponse
         });
         this.listenTo(Radio.channel("CswParser"), {
             "fetchedMetaData": this.fetchedMetaData
@@ -131,40 +127,28 @@ const Einwohnerabfrage = Tool.extend({
     },
     /**
      * Called when the wps modules returns a request
-     * @param  {string} requestId - uniqueId used to identfy if request was sent by this model
      * @param  {string} response - the response xml of the wps
      * @param  {number} status - the HTTPStatusCode
      * @returns {void}
      */
-    handleResponse: function (requestId, response, status) {
+    handleResponse: function (response, status) {
         var parsedData;
 
         this.setRequesting(false);
-        if (this.isEinwohnerRequest(this.get("requests"), requestId)) {
-            parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
-            this.removeId(this.get("requests"), requestId);
-            if (status === 200) {
-                if (parsedData.ErrorOccured === "yes") {
-                    this.handleWPSError(parsedData);
-                }
-                else {
-                    this.handleSuccess(parsedData);
-                }
+        parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.einwohner;
+
+        if (status === 200) {
+            if (parsedData.ErrorOccured === "yes") {
+                this.handleWPSError(parsedData);
             }
             else {
-                this.resetView();
+                this.handleSuccess(parsedData);
             }
         }
+        else {
+            this.resetView();
+        }
         this.trigger("renderResult");
-    },
-    /**
-     * Check if this request id is known by this model
-     * @param  {string[]} ownRequests - contains all ids of requests triggered by this module
-     * @param  {string} requestId - the id returned by the wps
-     * @returns {boolean} true | false
-     */
-    isEinwohnerRequest: function (ownRequests, requestId) {
-        return _.contains(ownRequests, requestId);
     },
     /**
      * Displays Errortext if the WPS returns an Error
@@ -208,7 +192,7 @@ const Einwohnerabfrage = Tool.extend({
                     stringVal = this.chooseUnitAndPunctuate(value);
                 }
                 else {
-                    stringVal = Radio.request("Util", "punctuate", value) + this.getFormattedDecimalString(value, 3);
+                    stringVal = Radio.request("Util", "punctuate", value);
                 }
                 list[key] = stringVal;
             }
@@ -225,43 +209,21 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {string} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
-        var decimals = "",
-            newValue;
+        var newValue;
 
         if (value < 250000) {
-            decimals = this.getFormattedDecimalString(value, maxDecimals);
-            return Radio.request("Util", "punctuate", value) + decimals + " m²";
+            return Radio.request("Util", "punctuate", value.toFixed(maxDecimals)) + " m²";
         }
         if (value < 10000000) {
             newValue = value / 10000.0;
-            decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-            return Radio.request("Util", "punctuate", newValue) + decimals + " ha";
+            return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " ha";
         }
         newValue = value / 1000000.0;
-        decimals = this.getFormattedDecimalString(newValue, maxDecimals);
 
-        return Radio.request("Util", "punctuate", newValue) + decimals + " km²";
+        return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " km²";
     },
-    /**
-     * Returns the pecimal part cut aftera  max length of number represented as string
-     * adds "," in front of decimals if applicable
-     * @param  {string} number input number
-     * @param  {num} maxLength decimals are cut after maxlength chars
-     * @returns {String} decimals string with leading with ',' is not empty
-     */
-    getFormattedDecimalString: function (number, maxLength) {
-        var decimals = "",
-            formattedString = number.toString();
 
-        if (formattedString.indexOf(".") !== -1) {
-            decimals = formattedString.split(".")[1];
-            if (maxLength > 0 && decimals.length > 0) {
-                return "," + decimals.substring(0, maxLength);
-            }
-        }
-        return "";
-    },
     /**
      * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
      * @returns {void}
@@ -272,19 +234,6 @@ const Einwohnerabfrage = Tool.extend({
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-        }
-    },
-    /**
-     * Removes an ID from an array of ID
-     * @param  {string[]} requests - All IDs
-     * @param  {string} requestId - Id to remove
-     * @returns {void}
-     */
-    removeId: function (requests, requestId) {
-        var index = requests.indexOf(requestId);
-
-        if (index > -1) {
-            requests.splice(index, 1);
         }
     },
     /**
@@ -419,16 +368,13 @@ const Einwohnerabfrage = Tool.extend({
      * @returns {void}
      */
     makeRequest: function (geoJson) {
-        var requestId = _.uniqueId("wps");
-
         this.setDataReceived(false);
         this.setRequesting(true);
         this.trigger("renderResult");
 
-        this.get("requests").push(requestId);
-        Radio.trigger("WPS", "request", "1001", requestId, "einwohner_ermitteln.fmw", {
+        Radio.trigger("WPS", "request", "1001", "einwohner_ermitteln.fmw", {
             "such_flaeche": JSON.stringify(geoJson)
-        });
+        }, this.handleResponse.bind(this));
     },
     prepareData: function (geoJson) {
         var prepared = {};

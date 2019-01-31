@@ -65,7 +65,7 @@ const FeatureLister = Backbone.View.extend({
             sortOrder = this.$(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
             sortColumn = spanTarget.parentElement.textContent,
             tableLength = this.$("#featurelist-list-table tr").length - 1,
-            features = _.filter(this.model.get("layer").features, function (feature) {
+            features = this.model.get("layer").features.filter(function (feature) {
                 return feature.id >= 0 && feature.id <= tableLength;
             }),
             featuresExtended = _.each(features, function (feature) {
@@ -246,7 +246,7 @@ const FeatureLister = Backbone.View.extend({
     * Liest Features von - bis aus Layer aus. Löscht ggf. bisherige Inhalte der Tabelle.
     */
     readFeatures: function (from, to, dropTableFirst) {
-        var features = _.filter(this.model.get("layer").features, function (feature) {
+        var features = this.model.get("layer").features.filter(function (feature) {
             return feature.id >= from && feature.id <= to;
         });
 

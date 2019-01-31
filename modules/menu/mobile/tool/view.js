@@ -15,9 +15,7 @@ const ItemView = Backbone.View.extend({
     render: function () {
         var attr = this.model.toJSON();
 
-        if (this.model.get("isVisibleInMenu") !== false) {
-            this.$el.html(this.template(attr));
-        }
+        this.$el.html(this.template(attr));
         return this;
     },
     checkItem: function () {

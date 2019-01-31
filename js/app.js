@@ -30,6 +30,7 @@ import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
 import CoordPopupView from "../modules/tools/getCoord/view";
+import ShadowView from "../modules/tools/shadow/view";
 import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import SearchByCoordView from "../modules/tools/searchByCoord/view";
@@ -79,17 +80,27 @@ import "es6-promise/auto";
 var sbconfig, controls, controlsView;
 
 function loadApp () {
+
+    // Prepare config for Utils
+    var utilConfig = {};
+    if (_.has(Config, "uiStyle")) {
+        utilConfig.uiStyle = Config.uiStyle.toUpperCase();
+    }
+    if (_.has(Config, "proxyHost")) {
+        utilConfig.proxyHost = Config.proxyHost;
+    }
+
     // RemoteInterface laden
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
     }
     // Core laden
     new Autostarter();
-    new Util(_.has(Config, "uiStyle") ? {uiStyle: Config.uiStyle.toUpperCase()} : {});
+    new Util(utilConfig);
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new RawLayerList(null, {url: Config.layerConf});
-    new Preparser();
+    new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
     new CRS();
@@ -169,6 +180,10 @@ function loadApp () {
             }
             case "coord": {
                 new CoordPopupView({model: tool});
+                break;
+            }
+            case "shadow": {
+                new ShadowView({model: tool});
                 break;
             }
             case "measure": {
@@ -372,6 +387,7 @@ function loadApp () {
             new module.default;
         })
         .catch(error => {
+            console.error(error);
             Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
         });
     }
