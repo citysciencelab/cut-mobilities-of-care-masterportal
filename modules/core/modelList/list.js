@@ -427,9 +427,12 @@ const ModelList = Backbone.Collection.extend({
     insertIntoSelectionIDX: function (model) {
         var idx = 0;
 
-        if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
+        if (model.has("selectionIDX")) {
+            this.selectionIDX.push(model);
+            this.updateModelIndeces();
+        }
+        else if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
             idx = this.appendToSelectionIDX(model);
-            // idx = this.selectionIDX.push(model) - 1;
         }
         else {
             while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
@@ -550,10 +553,11 @@ const ModelList = Backbone.Collection.extend({
                 layer.isSelected = false;
             }, this);
 
-            _.each(paramLayers, function (paramLayer) {
+            _.each(paramLayers, function (paramLayer, index) {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
                 if (_.isUndefined(lightModel) === false) {
+                    lightModel.selectionIDX = index;
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
