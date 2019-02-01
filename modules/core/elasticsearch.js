@@ -1,8 +1,7 @@
 var sorting = {},
-    size = 10000,
-    timeout = 600;
+    size = 10000;
 
-function prepareSearchBody (query) {
+export function prepareSearchBody (query) {
     var searchBody = {};
 
     if (!_.isEmpty(sorting)) {
@@ -13,21 +12,19 @@ function prepareSearchBody (query) {
     searchBody.size = size;
     searchBody.query = query;
 
-    console.log(JSON.stringify(searchBody));
-
     return JSON.stringify(searchBody);
 }
 
-export function setTimeOut (value) {
-    timeout = value;
-}
-
 export function setSorting (key, value) {
-    sorting[key] = value;
+    if (key && value) {
+        sorting[key] = value;
+    }
 }
 
 export function setSize (value) {
-    size = value;
+    if (typeof value === "number") {
+        size = value;
+    }
 }
 
 /**

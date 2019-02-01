@@ -32,24 +32,7 @@ const GdiModel = Backbone.Model.extend({
     },
 
     search: function (searchString) {
-        var query = {
-            bool: {
-                must: [
-                    {
-                        query_string: {
-                            "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
-                            "query": "*" + searchString + "*",
-                            "lowercase_expanded_terms": false
-                        }
-                    },
-                    {match:
-                        {
-                            typ: "WMS"
-                        }
-                    }
-                ]
-            }
-        };
+        var query = this.createQuery(searchString);
 
         // ToDo: Event erzeugen und hier antriggern, dass einen passenden Layer erzeugt und anzeigt
         if (searchString.length >= this.getMinChars()) {
@@ -72,6 +55,28 @@ const GdiModel = Backbone.Model.extend({
                 Radio.trigger("Searchbar", "createRecommendedList");
             });
         }
+    },
+    createQuery: function (searchString) {
+        var query = {
+            bool: {
+                must: [
+                    {
+                        query_string: {
+                            "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
+                            "query": "*" + searchString + "*",
+                            "lowercase_expanded_terms": false
+                        }
+                    },
+                    {match:
+                        {
+                            typ: "WMS"
+                        }
+                    }
+                ]
+            }
+        };
+
+        return query;
     },
     setMinChars: function (value) {
         this.set("minChars", value);
