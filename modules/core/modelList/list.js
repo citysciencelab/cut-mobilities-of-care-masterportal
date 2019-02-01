@@ -450,7 +450,7 @@ const ModelList = Backbone.Collection.extend({
             this.updateModelIndeces();
         }
         else if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
-            idx = this.appendToSelectionIDX(model);
+            this.appendToSelectionIDX(model);
         }
         else {
             while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
@@ -459,7 +459,6 @@ const ModelList = Backbone.Collection.extend({
             this.selectionIDX.splice(idx, 0, model);
             this.updateModelIndeces();
         }
-        return idx;
     },
     insertIntoSelectionIDXAt: function (model, idx) {
         this.selectionIDX.splice(idx, 0, model);
