@@ -13,15 +13,9 @@ const Einwohnerabfrage = Tool.extend({
         deactivateGFI: true,
         renderToWindow: true,
         // checkbox snippet for alkis adressen layer
-        checkBoxAddress: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
-        }),
+        checkBoxAddress: undefined,
         // checkbox snippet for zensus raster layer
-        checkBoxRaster: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "Raster Layer anzeigen (ab 1: 100.000)"
-        }),
+        checkBoxRaster: undefined,
         drawInteraction: undefined,
         isCollapsed: undefined,
         isCurrentWin: undefined,
@@ -60,6 +54,16 @@ const Einwohnerabfrage = Tool.extend({
 
     initialize: function () {
         this.superInitialize();
+
+        this.setCheckBoxAddress(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
+        }));
+        this.setCheckBoxRaster(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "Raster Layer anzeigen (ab 1: 100.000)"
+        }));
+
         this.listenTo(this, {
             "change:isActive": this.setStatus
         });
@@ -550,6 +554,14 @@ const Einwohnerabfrage = Tool.extend({
             isSelected: value,
             isVisibleInMap: value
         });
+    },
+
+    setCheckBoxAddress: function (value) {
+        this.set("checkBoxAddress", value);
+    },
+
+    setCheckBoxRaster: function (value) {
+        this.set("checkBoxRaster", value);
     },
 
     setData: function (value) {
