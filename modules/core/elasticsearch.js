@@ -66,13 +66,14 @@ export function search (serviceId, query) {
     })
         .then(response => response.json())
         .then(response => {
-            var datasources = [];
+            var datasources = [],
+                param = "_source";
 
             result.status = "success";
 
             if (response.hits) {
                 _.each(response.hits.hits, function (hit) {
-                    datasources.push(hit._source);
+                    datasources.push(hit[param]);
                 });
             }
 
