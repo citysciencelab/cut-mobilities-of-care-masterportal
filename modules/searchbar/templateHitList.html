@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <% _.each(typeList, function (type) {
     var hitListOfType = _.where(hitList, {type: type}); %>
-    <% if (type != "Thema_neu") {
+    <% if (type != "ext. Thema") {
     hitListOfType = _.sortBy(hitListOfType, "name");
 } %>
     <li class="list-group-item type"><span class="badge"><%= hitListOfType.length %></span><%= type %></li><div style="max-height: 220px; overflow-y: auto; overflow-x: hidden; display: none;">

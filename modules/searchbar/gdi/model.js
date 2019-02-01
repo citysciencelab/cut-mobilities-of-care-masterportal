@@ -41,7 +41,7 @@ const GdiModel = Backbone.Model.extend({
                     _.each(response.hits, function (hit) {
                         Radio.trigger("Searchbar", "pushHits", "hitList", {
                             name: hit.name,
-                            type: "Thema_neu",
+                            type: "ext. Thema",
                             glyphicon: "glyphicon-map-marker",
                             id: hit.id,
                             triggerEvent: {
