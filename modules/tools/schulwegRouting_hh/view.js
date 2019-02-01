@@ -190,6 +190,7 @@ const SchulwegRoutingView = Backbone.View.extend({
     },
     closeView: function () {
         this.model.setIsActive(false);
+        Radio.trigger("ModelList", "toggleDefaultTool");
     },
     selectSchool: function (evt) {
         var schoolname = evt.target.value;

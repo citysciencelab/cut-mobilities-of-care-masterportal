@@ -1,18 +1,13 @@
 import {expect} from "chai";
 import Model from "@modules/tools/einwohnerabfrage_hh/model.js";
-import TestUtil from "@testUtil";
 import Util from "@modules/core/util.js";
 
 describe("tools/einwohnerabfrageModel", function () {
-    var model,
-        testUtilModel,
-        cswResponseXml;
+    var model;
 
     before(function () {
         model = new Model();
-        testUtilModel = new TestUtil();
         new Util();
-        cswResponseXml = testUtilModel.getCswResponse();
     });
 
     describe("roundRadius", function () {
@@ -98,20 +93,6 @@ describe("tools/einwohnerabfrageModel", function () {
         });
     });
 
-    describe("getFormattedDecimalString", function () {
-        it("should return empty String for number without decimals", function () {
-            expect(model.getFormattedDecimalString(1234567, 5)).to.equal("");
-        });
-        it("should return correct decimals with devider when maxlength < numder of decimals", function () {
-            expect(model.getFormattedDecimalString(1234.567, 1)).to.equal(",5");
-        });
-        it("should return correct decimals with devider when maxlength > numder of decimals", function () {
-            expect(model.getFormattedDecimalString(123456.7, 5)).to.equal(",7");
-        });
-        it("should return correct decimals without devider when maxlength === 0", function () {
-            expect(model.getFormattedDecimalString(123456.7, 0)).to.equal("");
-        });
-    });
     describe("chooseUnitAndPunctuate", function () {
         it("should return correct unit for value < 250000", function () {
             expect(model.chooseUnitAndPunctuate(567, 0)).to.have.string("m²");
@@ -123,7 +104,7 @@ describe("tools/einwohnerabfrageModel", function () {
             expect(model.chooseUnitAndPunctuate(99999999, 0)).to.have.string("km²");
         });
         it("should return correctly formatted number with unit", function () {
-            expect(model.chooseUnitAndPunctuate(1234567.123, 3)).to.equal("123,456 ha");
+            expect(model.chooseUnitAndPunctuate(1234567.123, 3)).to.equal("123,457 ha");
         });
         it("should return correctly formatted number with unit when number > 250000 and value < 10000000 maxlength === 0", function () {
             expect(model.chooseUnitAndPunctuate(1234567.123, 0)).to.equal("123 ha");
@@ -132,7 +113,7 @@ describe("tools/einwohnerabfrageModel", function () {
             expect(model.chooseUnitAndPunctuate(14567.123, 0)).to.equal("14.567 m²");
         });
         it("should return correctly formatted number with unit when value > 10000000 &&  maxlength === 1", function () {
-            expect(model.chooseUnitAndPunctuate(99999999.999, 1)).to.equal("99,9 km²");
+            expect(model.chooseUnitAndPunctuate(99999999.999, 1)).to.equal("100,0 km²");
         });
     });
 });

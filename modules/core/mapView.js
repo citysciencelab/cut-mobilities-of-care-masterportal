@@ -62,18 +62,17 @@ const MapView = Backbone.Model.extend({
                 zoomLevel: 9
             }
         ],
-        startResolution: 15.874991427504629,
+        resolution: 15.874991427504629,
         startCenter: [565874, 5934140],
         units: "m",
         DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
     },
 
     /**
-     * Die initiale Größe der #map beträgt 100%.
-     * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
+     * @param {object} attributes - initial values
      * @returns {void}
      */
-    initialize: function () {
+    initialize: function (attributes) {
         var channel = Radio.channel("MapView");
 
         channel.reply({
@@ -120,7 +119,12 @@ const MapView = Backbone.Model.extend({
             }
         });
 
-        this.setConfig();
+        // overwrite the resolution if zoomLevel is configured and resolution is not
+        if (attributes && attributes.resolution && attributes.zoomLevel !== undefined) {
+            const resolution = this.get("options")[attributes.zoomLevel].resolution;
+
+            this.setResolution(resolution);
+        }
         this.setResolutions();
         this.setUrlParams();
         this.setProjection();
@@ -175,59 +179,8 @@ const MapView = Backbone.Model.extend({
 
     resetView: function () {
         this.get("view").setCenter(this.get("startCenter"));
-        this.get("view").setResolution(this.get("startResolution"));
+        this.get("view").setResolution(this.get("resolution"));
         Radio.trigger("MapMarker", "hideMarker");
-    },
-
-    /*
-    * Finalisierung der Initialisierung für config.json
-    */
-    setConfig: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus Config.json in spezifischer Reihenfolge
-        */
-        var mapViewSettings = Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}),
-            mapViewOptions = _.find(mapViewSettings, {"id": "options"}),
-            mapViewEpsg = _.find(mapViewSettings, {"id": "epsg"}),
-            mapViewImage = _.find(mapViewSettings, {"id": "backgroundImage"}),
-            mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
-            mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
-            mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
-            mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"}),
-            res;
-
-        if (_.isUndefined(mapViewOptions) === false) {
-            this.set("options", []);
-            _.each(mapViewOptions.attr, function (opt) {
-                this.pushHits("options", opt);
-            }, this);
-        }
-
-        if (_.isUndefined(mapViewEpsg) === false) {
-            this.setEpsg(mapViewEpsg.attr);
-        }
-
-        if (_.isUndefined(mapViewImage) === false) {
-            this.setBackgroundImage(mapViewImage.attr);
-            this.setBackground(mapViewImage.attr);
-        }
-
-        if (_.isUndefined(mapViewStartCenter) === false) {
-            this.setStartCenter(mapViewStartCenter.attr);
-        }
-
-        if (_.isUndefined(mapViewExtent) === false) {
-            this.setExtent(mapViewExtent.attr);
-        }
-
-        if (_.isUndefined(mapViewResolution) === false) {
-            this.setStartResolution(mapViewResolution.attr);
-        }
-        else if (_.isUndefined(mapViewZoomLevel) === false) {
-            res = this.get("options")[mapViewZoomLevel.attr].resolution;
-
-            this.setStartResolution(res);
-        }
     },
 
     setUrlParams: function () {
@@ -242,13 +195,8 @@ const MapView = Backbone.Model.extend({
         }
 
         if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.set("startResolution", this.get("resolutions")[zoomLevelFromParamUrl]);
+            this.set("resolution", this.get("resolutions")[zoomLevelFromParamUrl]);
         }
-    },
-
-    // setter for epsg
-    setEpsg: function (value) {
-        this.set("epsg", value);
     },
 
     setBackground: function (value) {
@@ -263,8 +211,8 @@ const MapView = Backbone.Model.extend({
         this.set("startCenter", value);
     },
 
-    setStartResolution: function (value) {
-        this.set("startResolution", value);
+    setResolution: function (value) {
+        this.set("resolution", value);
     },
     toggleBackground: function () {
         if (this.get("background") === "white") {
@@ -277,11 +225,6 @@ const MapView = Backbone.Model.extend({
 
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    // setter for extent
-    setExtent: function (value) {
-        this.set("extent", value);
     },
 
     /**
@@ -321,7 +264,7 @@ const MapView = Backbone.Model.extend({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
-            resolution: this.get("startResolution"),
+            resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
         });
 
@@ -401,13 +344,6 @@ const MapView = Backbone.Model.extend({
         var mapSize = Radio.request("Map", "getSize");
 
         return this.get("view").calculateExtent(mapSize);
-    },
-
-    pushHits: function (attribute, value) {
-        var tempArray = _.clone(this.get(attribute));
-
-        tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
     }
 });
 
