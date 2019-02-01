@@ -1316,7 +1316,7 @@ Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)/[GroupLayer](#markdown-header-themenconfiggrouplayer)[]||Definition der Layer.|
 
 **Beispiel**
 ```
@@ -1335,13 +1335,16 @@ Hier werden die Hintergrundkarten definiert
 ### Themenconfig.Fachdaten
 
 [type:Layer]: # (Themenconfig.Layer)
+
+[type:GroupLayer]: # (Themenconfig.GroupLayer)
+
 [type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Fachdaten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)/[GroupLayer](#markdown-header-themenconfiggrouplayer)[]||Definition der Layer.|
 |Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
 
 **Beispiel**
@@ -1359,12 +1362,17 @@ Hier werden die Fachdaten definiert
 ***
 
 ### Themenconfig.Ordner
+
+[type:Layer]: # (Themenconfig.Layer)
+
+[type:GroupLayer]: # (Themenconfig.GroupLayer)
+
 Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |Titel|ja|String||Titel des Ordners.|
-|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der Layer.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)/[GroupLayer](#markdown-header-themenconfiggrouplayer)[]||Definition der Layer.|
 |Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
 
 **Beispiel Ordner mit einem Layer**
@@ -1435,9 +1443,57 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 ***
 
-### Themenconfig.Layer
+### Themenconfig.GroupLayer
 
 [type:Layer]: # (Themenconfig.Layer)
+
+[type:Extent]: # (Datatypes.Extent)
+
+Hier werden die GruppenLayer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der [services.json](services.json.md) definiert, kann jedoch hier am Layer überschrieben werden.
+Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markdown-header-themenconfiglayerwms) und [Vector](#markdown-header-themenconfiglayervector).
+
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String/String[]||Id des Layers. In der [services.json](services.json.md) werden die ids aufgelöst und die notwendigen Informationen herangezogen.|
+|children|nein|[Layer](#markdown-header-themenconfiglayer)[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Falle ist eine einzigartige Id manuell zu wählen.|
+|name|nein|String||Name des Layers.|
+|transparency|nein|Integer|0|Transparenz des Layers.|
+|visibility|nein|Boolean|false|Sichtbarkeit des Layers.|
+|supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|
+|extent|nein|[Extent](#markdown-header-datatypesextent)|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|
+|displayInTree|nein|Boolean|false|Gibt an ob der Layer im Themenbaum angezeigt werden soll.|
+|gfiTheme|nein|String|"default"|Wert aus [services.json](services.json.md). Gibt an welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|
+|layerAttribution|nein|String||Wert aus [services.json](services.json.md). HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|
+|legendURL|nein|String||Wert aus [services.json](services.json.md). Url die verwendet wird um die Legende anzufragen.|
+|maxScale|nein|String||Wert aus [services.json](services.json.md). Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|minScale|nein|String||Wert aus [services.json](services.json.md). Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|
+|autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|
+|isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|
+|isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|
+
+**Beispiel**
+```
+#!json
+{
+    "id": "myId",
+    "name": "myGroupLayer",
+    "children": [
+        {
+            "id": "123",
+            "name": "myLayer_1"
+        },
+        {
+            "id": "456",
+            "name": "myLayer_2"
+        }
+    ]
+}
+```
+
+***
+
+### Themenconfig.Layer
 
 [type:Extent]: # (Datatypes.Extent)
 
@@ -1447,8 +1503,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|id|ja|String/String[]||Id des Layers. In der [services.json](services.json.md) werden die ids aufgelöst und die notwendigen Informationen herangezogen.|
-|children|nein|[Layer](#markdown-header-themenconfiglayer)[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Falle ist eine einzigartige Id manuell zu wählen.|
+|id|ja|String/String[]||Id des Layers. In der [services.json](services.json.md) werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids diesselbe URL ansprechen, also den selben Dienst benutzen.|
 |name|nein|String||Name des Layers.|
 |transparency|nein|Integer|0|Transparenz des Layers.|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|
