@@ -55,7 +55,7 @@ const Einwohnerabfrage = Tool.extend({
         uniqueIdList: [],
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
-        alkisAdressLayerId: "441"
+        alkisAdressLayerId: "9726"
     }),
 
     initialize: function () {
