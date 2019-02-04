@@ -113,6 +113,9 @@ const GdiModel = Backbone.Model.extend({
                 url: servicesEntry.url,
                 version: servicesEntry.version
             });
+
+        Radio.trigger("ModelList", "addModelsByAttributes", {id: servicesEntry.id});
+        Radio.trigger("ModelList", "refreshLightTree");
     },
     setMinChars: function (value) {
         this.set("minChars", value);

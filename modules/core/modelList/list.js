@@ -72,7 +72,8 @@ const ModelList = Backbone.Collection.extend({
                 this.trigger("renderTree");
             },
             "toggleWfsCluster": this.toggleWfsCluster,
-            "toggleDefaultTool": this.toggleDefaultTool
+            "toggleDefaultTool": this.toggleDefaultTool,
+            "refreshLightTree": this.refreshLightTree
         }, this);
 
         this.listenTo(this, {
@@ -780,6 +781,10 @@ const ModelList = Backbone.Collection.extend({
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
         });
+    },
+
+    refreshLightTree: function () {
+        this.trigger("updateLightTree");
     }
 });
 
