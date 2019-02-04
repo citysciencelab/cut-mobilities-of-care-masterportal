@@ -607,7 +607,7 @@ const SearchbarView = Backbone.View.extend({
             hit = _.findWhere(this.model.get("hitList"), {id: hitId});
 
         if (_.has(hit, "triggerEvent")) {
-            // bei Layersuche in der GDI kein Action bei Maushover
+            // bei gdi-Suche kein Aktion bei Maushover
             if (hit.type !== "ext. Thema") {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
             }

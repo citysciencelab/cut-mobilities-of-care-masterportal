@@ -14,6 +14,11 @@ const GdiModel = Backbone.Model.extend({
      * @returns {void}
      */
     initialize: function (config) {
+        var channel = Radio.channel("GDI-Search");
+
+        channel.on({
+            "addLayer": this.addLayer
+        }, this);
 
         if (!_.isUndefined(config.minChars)) {
             this.setMinChars(config.minChars);
@@ -45,8 +50,8 @@ const GdiModel = Backbone.Model.extend({
                             glyphicon: "glyphicon-list",
                             id: hit.id,
                             triggerEvent: {
-                                channel: "unknown",
-                                event: "unknown"
+                                channel: "GDI-Search",
+                                event: "addLayer"
                             }
                         });
                     }, this);
@@ -77,6 +82,37 @@ const GdiModel = Backbone.Model.extend({
         };
 
         return query;
+    },
+    addLayer: function (hit) {
+        var servicesEntry = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: hit.id}),
+            treeType = Radio.request("Parser", "getTreeType"),
+            parentId = "tree",
+            level = 0;
+
+        if (treeType === "custom") {
+            parentId = "abc";
+            level = 2;
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
+                Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
+                Radio.trigger("ModelList", "renderTree");
+                $("#Overlayer").parent().after($("#ExternalLayer").parent());
+            }
+            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
+                Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1);
+            }
+        }
+
+        Radio.trigger("Parser",
+            "addGDILayer",
+            {
+                name: servicesEntry.name,
+                id: servicesEntry.id,
+                parentId: parentId,
+                level: level,
+                layers: servicesEntry.layers,
+                url: servicesEntry.url,
+                version: servicesEntry.version
+            });
     },
     setMinChars: function (value) {
         this.set("minChars", value);
