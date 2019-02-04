@@ -151,7 +151,8 @@ const PrintModel = Tool.extend({
         if (this.get("isScaleAvailable")) {
             spec.buildScale(this.get("currentScale"));
         }
-        spec.buildLayers(visibleLayerList);
+        spec.buildLayers(this.sortVisibleLayerListByZindex(visibleLayerList));
+
         if (this.get("isGfiAvailable")) {
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
@@ -159,6 +160,25 @@ const PrintModel = Tool.extend({
 
         spec = _.omit(spec, "uniqueIdList");
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+    },
+
+    /**
+     * sorts the visible layer list by zIndex from layer
+     * layers with undefined zIndex come to the beginning of array
+     * @param {array} visibleLayerList with visble layer
+     * @returns {array} sorted visibleLayerList
+     */
+    sortVisibleLayerListByZindex: function (visibleLayerList) {
+        var visibleLayerListWithZIndex = _.filter(visibleLayerList, function (layer) {
+                return !_.isUndefined(layer.getZIndex());
+            }),
+            visibleLayerListWithoutZIndex = _.difference(visibleLayerList, visibleLayerListWithZIndex);
+
+        visibleLayerListWithoutZIndex.push(_.sortBy(visibleLayerListWithZIndex, function (layer) {
+            return layer.getZIndex();
+        }));
+
+        return _.flatten(visibleLayerListWithoutZIndex);
     },
 
     /**
