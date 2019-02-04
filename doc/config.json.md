@@ -345,10 +345,10 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|title|nein|String|Master|Name des Portals.|
+|title|nein|String|"Master"|Name des Portals.|
 |logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
-|link|nein|String|http://geoinfo.hamburg.de|URL der externen Seite, auf die verlinkt wird.|
-|tooltip|nein|String|Landesbetrieb Geoinformation und Vermessung|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+|link|nein|String|"http://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
+|tooltip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
 
 **Beispiel portalTitle:**
 ```
@@ -497,6 +497,10 @@ Informations-Ordner in dem Werkzeuge oder staticlinks eingetragen werden können
 ***
 
 ### Portalconfig.menu.info.children
+
+[type:tools]: # (Portalconfig.menu.tools)
+
+[type:staticlinks]: # (Portalconfig.menu.staticlinks)
 
 Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
 
@@ -647,7 +651,7 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|
-|predefinedQueries|nein|[predinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
+|predefinedQueries|nein|[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|
 
 **Beispiel**
 ```
@@ -738,7 +742,7 @@ Objekt, das eine Filtereinstelung definiert.
 |searchInMapExtent|nein|Boolean|false|Gibt an ob nur die Features im Kartenauschnitt gefiltert werden sollen.|
 |info|nein|String||Kurzer Info text der über der Filtereinstellung erscheint.|
 |predefinedRules|nein|[predefinedRule](#markdown-header-portalconfigmenutoolfilterpredefinedquerypredefinedrule)[]||Filterregel die die Daten vorfiltert.|
-|attributeWhiteList|nein|String[]/[attributeWhiteList](#markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
+|attributeWhiteList|nein|String[]/[attributeWhiteListObject](#markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject)[]||Whitelist an Attributen die verwendet werden sollen.|
 |snippetType|nein|String||Datentyp des Attributes. Wenn nciht angegeben wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird benötigt im Projekt DIPAS auf der Touchtabl-Variante des Portals.|
 
 **Beispiel**
@@ -1312,6 +1316,8 @@ Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkomm
 
 [type:Layer]: # (Themenconfig.Layer)
 
+[type:GroupLayer]: # (Themenconfig.GroupLayer)
+
 Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -1366,6 +1372,8 @@ Hier werden die Fachdaten definiert
 [type:Layer]: # (Themenconfig.Layer)
 
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
+
+[type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
 
