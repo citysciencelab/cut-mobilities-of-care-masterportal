@@ -10,7 +10,8 @@ const LayerView = Backbone.View.extend({
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
-        "change select": "setTransparency"
+        "change select": "setTransparency",
+        "click .remove-layer": "removeLayer"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -99,6 +100,10 @@ const LayerView = Backbone.View.extend({
     },
     decTransparency: function () {
         this.model.decTransparency(10);
+    },
+    removeLayer: function () {
+        //this.model.removeLayer();
+        console.log("ich bin da");
     }
 });
 
