@@ -80,7 +80,8 @@ const PrintModel = Tool.extend({
     },
 
     createMapFishServiceUrl: function (id) {
-        var serviceUrl = Radio.request("RestReader", "getServiceById", id).get("url");
+        var service = Radio.request("RestReader", "getServiceById", id),
+            serviceUrl = _.isUndefined(service) ? "" : service.get("url");
 
         this.setMapfishServiceUrl(serviceUrl);
     },
@@ -177,6 +178,7 @@ const PrintModel = Tool.extend({
         visibleLayerListWithoutZIndex.push(_.sortBy(visibleLayerListWithZIndex, function (layer) {
             return layer.getZIndex();
         }));
+console.log(_.flatten(visibleLayerListWithoutZIndex));
 
         return _.flatten(visibleLayerListWithoutZIndex);
     },
