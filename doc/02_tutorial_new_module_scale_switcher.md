@@ -1,13 +1,13 @@
 
 ## Tutorial: Ein neues Tool erstellen (Scale-Switcher)
-Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Moduls.
+Eine Schritt für Schritt Dokumentation zur Erstellung eines neuen Tools (Moduls).
 
 ### Beispiel Anforderung
 Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann. Dabei soll über ein Drop-Down-Menü der Maßstab ausgewählt werden. Sobald der Maßstab gesetzt wurde, soll sich die Karte anpassen.
 Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
-### Neues Modul anlegen
-Ins Verzeichnis "modules -> tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Modul es sich dabei handelt - z.B. "scale". Die für dieses Modul benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten. Stylingparameter werden in der style.less konfiguriert.
+### Neues Tool anlegen
+In das Verzeichnis "modules -> tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scale". Die für dieses Tool benötigten Dateien anlegen. In der View (view.js) wird auf Interaktion mit dem Nutzer reagiert und das Tool neu gerendert. Dazu wird das Template (template.html) benötigt, welches den Bauplan des Tools enthält. Im Model (model.js) werden die Daten und deren Logik vorgehalten. Stylingparameter werden in der style.less konfiguriert.
 ```
 -  modules
    | -> tools
@@ -33,7 +33,7 @@ export default ScaleView;
 ```
 
 ### Scale View initialisieren
-In die datei *js/app.js* wechseln, Scale View importieren und initialiseren. Darauf achten, dass das Module grundsätzlich erst nach dem Core initialsiert werden. Das Initialsieren eines Tools erfolgt als switch-case Anweiszung innerhalb einer vorgesehene _.each Schleife Zurzeit ab Zeile 157.
+In die datei *js/app.js* wechseln, Scale View importieren und initialiseren. Darauf achten, dass das Tool grundsätzlich erst nach dem Core initialsiert werden. (Dies gilt für jedes Modul) Das Initialsieren eines Tools erfolgt als switch-case Anweiszung innerhalb einer vorgesehene _.each Schleife Zurzeit ab Zeile 157.
 ```js
 
 // View importieren
@@ -122,7 +122,7 @@ Datei *modules/tools/scale/style.less* öffnen und folgenden Code eingeben.
     border: 2px solid red;
 }
 
-Damit es keine Probleme mit less Regeln anderer Module gibt, wird über eine definierte Klasse "scale-switcher" gestylt.
+Damit es keine Probleme mit less Regeln anderer Module/Tools gibt, wird über eine definierte Klasse "scale-switcher" gestylt.
 ```
 
 ### Model erstellen und zurückgeben
@@ -192,7 +192,7 @@ export default ScaleModel;
 ```
 
 ### Maßstäbe der Karte abfragen und setzen
-Die Kommunikation mit anderen Modulen erfolgt über Backbone.Radio. In diesem Fall mit dem *MapView* Modul (*modules/core/mapView.js*), in dem alle Scales definiert sind. Das *MapView* Modul stellt bereits über Backbone.Radio die Funktion *getScales* zur Verfügung, über die alle Scales abgefragt werden können.
+Die Kommunikation mit anderen Modulen/Tools erfolgt über Backbone.Radio. In diesem Fall mit dem *MapView* Modul (*modules/core/mapView.js*), in dem alle Scales definiert sind. Das *MapView* Modul stellt bereits über Backbone.Radio die Funktion *getScales* zur Verfügung, über die alle Scales abgefragt werden können.
  Diese Maßstäbe werden mittels *Radio* requested und im ScaleModel über die entsprechende Setter-Funktion gesetzt. Um sicher zu gehen, dass die *Map* bereits geladen ist wird ein Listener definiert, der auf eine entsprechende Nachricht wartet, bevor getScales getriggert wird.
 ```js
 
