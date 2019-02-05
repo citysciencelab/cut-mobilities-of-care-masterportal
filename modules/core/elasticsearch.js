@@ -57,6 +57,7 @@ export function search (serviceId, query) {
         return result;
     }
 
+    /* eigentlich die schickere Variante, aber läuft nicht im IE...
     return fetch(searchUrl, {
         method: "POST",
         headers: {
@@ -85,6 +86,41 @@ export function search (serviceId, query) {
             result.message = "ElasticSearch query went wrong with message: " + err;
             console.error("error", err);
             return result;
-        });
+        });*/
+
+    $.ajax({
+        dataType: "json",
+        url: searchUrl,
+        async: false,
+        headers: {
+            "Content-Type": "application/json; charset=utf-8"
+        },
+        type: "POST",
+        data: searchBody,
+
+        // handling response
+        success: function (response) {
+            var datasources = [],
+                param = "_source";
+
+            result.status = "success";
+
+            if (response.hits) {
+                _.each(response.hits.hits, function (hit) {
+                    datasources.push(hit[param]);
+                });
+            }
+
+            result.hits = datasources;
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            result.status = "error";
+            result.message = "ElasticSearch query went wrong with message: " + thrownError;
+            console.error("error", thrownError);
+            return result;
+        }
+    });
+
+    return result;
 
 }

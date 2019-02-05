@@ -225,14 +225,14 @@ const Parser = Backbone.Model.extend({
         }, this);
     },
 
-    addFolder: function (name, id, parentId, level) {
+    addFolder: function (name, id, parentId, level, isExpanded) {
         var folder = {
             type: "folder",
             name: name,
             glyphicon: "glyphicon-plus-sign",
             id: id,
             parentId: parentId,
-            isExpanded: false,
+            isExpanded: isExpanded ? isExpanded : false,
             level: level
         };
 
@@ -293,7 +293,7 @@ const Parser = Backbone.Model.extend({
         this.addItem(layer);
     },
     /* fügt einen Layer aus der Elastic-Search-GDI-Suche hinzu
-        das Objekt beinhaltet: {name, id, parentId, level, layers, url, version}
+        das Objekt beinhaltet: {name, id, parentId, level, layers, url, version, gfiAttributes, datasets}
         */
     addGDILayer: function (values) {
         var layer = {
@@ -315,14 +315,14 @@ const Parser = Backbone.Model.extend({
             featureCount: "3",
             minScale: "0",
             maxScale: "2500000",
-            gfiAttributes: "showAll",
+            gfiAttributes: values.gfiAttributes,
             layerAttribution: "nicht vorhanden",
             legendURL: "",
             cache: false,
             isSelected: true,
             isVisibleInTree: true,
             isChildLayer: false,
-            datasets: []
+            datasets: values.datasets
         };
 
         this.addItemAtTop(layer);

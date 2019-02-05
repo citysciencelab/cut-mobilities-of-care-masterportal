@@ -642,6 +642,11 @@ const ModelList = Backbone.Collection.extend({
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);
         }
+
+        // für DIPAS Table Ansicht
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            $("#table-nav-layers-panel").collapse("show");
+        }
     },
 
     /**

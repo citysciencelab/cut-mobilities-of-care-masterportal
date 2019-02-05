@@ -37,28 +37,28 @@ const GdiModel = Backbone.Model.extend({
     },
 
     search: function (searchString) {
-        var query = this.createQuery(searchString);
+        var query = this.createQuery(searchString),
+            response = null;
 
-        // ToDo: Event erzeugen und hier antriggern, dass einen passenden Layer erzeugt und anzeigt
         if (searchString.length >= this.getMinChars()) {
-            ElasticSearch.search(this.getServiceId(), query).then(response => {
-                if (response.hits) {
-                    _.each(response.hits, function (hit) {
-                        Radio.trigger("Searchbar", "pushHits", "hitList", {
-                            name: hit.name,
-                            type: "ext. Thema",
-                            glyphicon: "glyphicon-list",
-                            id: hit.id,
-                            triggerEvent: {
-                                channel: "GDI-Search",
-                                event: "addLayer"
-                            }
-                        });
-                    }, this);
-                }
+            response = ElasticSearch.search(this.getServiceId(), query);
+            if (response && response.hits) {
+                _.each(response.hits, function (hit) {
+                    Radio.trigger("Searchbar", "pushHits", "hitList", {
+                        name: hit.name,
+                        type: "ext. Thema",
+                        glyphicon: "glyphicon-list",
+                        id: hit.id,
+                        triggerEvent: {
+                            channel: "GDI-Search",
+                            event: "addLayer"
+                        },
+                        source: hit
+                    });
+                }, this);
+            }
 
-                Radio.trigger("Searchbar", "createRecommendedList");
-            });
+            Radio.trigger("Searchbar", "createRecommendedList");
         }
     },
     createQuery: function (searchString) {
@@ -84,38 +84,49 @@ const GdiModel = Backbone.Model.extend({
         return query;
     },
     addLayer: function (hit) {
-        var servicesEntry = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: hit.id}),
-            treeType = Radio.request("Parser", "getTreeType"),
+        var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
             level = 0;
 
-        if (treeType === "custom") {
-            parentId = "abc";
-            level = 2;
-            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
-                Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
-                Radio.trigger("ModelList", "renderTree");
-                $("#Overlayer").parent().after($("#ExternalLayer").parent());
+        if (hit.source) {
+
+            if (treeType === "custom") {
+                parentId = "extthema";
+                level = 2;
+                if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
+                    Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
+                    Radio.trigger("ModelList", "renderTree");
+                    $("#Overlayer").parent().after($("#ExternalLayer").parent());
+                }
+                if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
+                    Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1, true);
+                }
             }
-            if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
-                Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1);
+
+            Radio.trigger("Parser",
+                "addGDILayer",
+                {
+                    name: hit.source.name,
+                    id: hit.source.id,
+                    parentId: parentId,
+                    level: level,
+                    layers: hit.source.layers,
+                    url: hit.source.url,
+                    version: hit.source.version,
+                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                    datasets: hit.source.datasets
+                });
+
+            if (treeType === "light") {
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
+                Radio.trigger("ModelList", "refreshLightTree");
             }
+
+            Radio.trigger("ModelList", "showModelInTree", hit.source.id);
         }
-
-        Radio.trigger("Parser",
-            "addGDILayer",
-            {
-                name: servicesEntry.name,
-                id: servicesEntry.id,
-                parentId: parentId,
-                level: level,
-                layers: servicesEntry.layers,
-                url: servicesEntry.url,
-                version: servicesEntry.version
-            });
-
-        Radio.trigger("ModelList", "addModelsByAttributes", {id: servicesEntry.id});
-        Radio.trigger("ModelList", "refreshLightTree");
+        else {
+            console.error("Es konnte kein Eintrag für Layer " + hit.id + " in ElasticSearch gefunden werden.");
+        }
     },
     setMinChars: function (value) {
         this.set("minChars", value);
