@@ -219,6 +219,9 @@ const List = Backbone.Collection.extend(
                 else if (attrs.id === "coord") {
                     return new GetCoord(attrs, options);
                 }
+                else if (attrs.id === "shadow") {
+                    return new Shadow(attrs, options);
+                }
                 else if (attrs.id === "measure") {
                     return new Measure(attrs, options);
                 }
