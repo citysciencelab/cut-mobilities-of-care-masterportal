@@ -17,10 +17,8 @@ const SnippetModel = Backbone.Model.extend({
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
-        if ("Config" in window) {
-            if (_.has(Config, "infoJson")) {
-                this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
-            }
+        if (Config && _.has(Config, "infoJson")) {
+            this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
         }
     },
 

@@ -11,7 +11,14 @@ const ParcelSearchView = Backbone.View.extend({
         "change #cadastralDistrictField": "cadastralDistrictFieldChanged",
         "change #parcelField": "setParcelNumber",
         "change #parcelFieldDenominator": "setParcelDenominatorNumber",
-        "keyup #parcelField": "setParcelNumber",
+        "keyup #parcelField": function (evt) {
+            if (evt.keyCode === 13) {
+                this.submitClicked();
+            }
+            else {
+                this.setParcelNumber(evt);
+            }
+        },
         "keyup #parcelFieldDenominator": "setParcelDenominatorNumber",
         "click #submitbutton": "submitClicked",
         "click #reportbutton": "reportClicked"

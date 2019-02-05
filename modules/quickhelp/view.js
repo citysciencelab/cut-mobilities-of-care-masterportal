@@ -33,7 +33,7 @@ const QuickHelpView = Backbone.View.extend({
 
             channel.reply({
                 "isSet": true
-            })
+            });
 
             this.render();
 

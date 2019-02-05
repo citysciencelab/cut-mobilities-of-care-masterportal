@@ -440,6 +440,11 @@ const Parser = Backbone.Model.extend({
                 objectsByIds.push(lay);
             }
         });
+
+        // Wenn nicht alle LayerIDs des Arrays gefunden werden
+        if (objectsByIds.length !== ids.length) {
+            return null;
+        }
         // Das erste Objekt wird kopiert
         newObject = _.clone(objectsByIds[0]);
         // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt

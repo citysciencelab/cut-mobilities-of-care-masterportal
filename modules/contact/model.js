@@ -33,7 +33,8 @@ const ContactModel = Tool.extend({
         contactInfo: "",
         portalConfig: {},
         renderToWindow: true,
-        glyphicon: "glyphicon-envelope"
+        glyphicon: "glyphicon-envelope",
+        serviceID: undefined
     }),
     initialize: function () {
         this.superInitialize();

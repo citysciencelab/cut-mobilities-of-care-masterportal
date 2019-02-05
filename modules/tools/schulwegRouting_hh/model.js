@@ -31,10 +31,7 @@ const SchulwegRouting = Tool.extend({
         isActive: false,
         routeResult: {},
         routeDescription: [],
-        checkBoxHVV: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "HVV Verkehrsnetz"
-        }),
+        checkBoxHVV: undefined,
         renderToSidebar: true,
         renderToWindow: false,
         glyphicon: "glyphicon-filter"
@@ -44,6 +41,12 @@ const SchulwegRouting = Tool.extend({
         var channel = Radio.channel("SchulwegRouting");
 
         this.superInitialize();
+
+        this.setCheckBoxHVV(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "HVV Verkehrsnetz"
+        }));
+
         this.listenTo(channel, {
             "selectSchool": function (schoolId) {
                 this.trigger("updateSelectedSchool", schoolId);
@@ -532,6 +535,10 @@ const SchulwegRouting = Tool.extend({
         }, this);
 
         return targetList;
+    },
+
+    setCheckBoxHVV: function (value) {
+        this.set("checkBoxHVV", value);
     },
 
     setSchoolList: function (value) {

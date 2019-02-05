@@ -35,6 +35,8 @@ const MeasureView = Backbone.View.extend({
         }
         else {
             this.undelegateEvents();
+            this.unregisterListener();
+            this.removeIncompleteDrawing();
         }
         return this;
     },
@@ -49,6 +51,16 @@ const MeasureView = Backbone.View.extend({
 
     deleteFeatures: function () {
         this.model.deleteFeatures();
+    },
+
+    removeIncompleteDrawing: function () {
+        this.model.removeIncompleteDrawing();
+    },
+
+    unregisterListener: function () {
+        this.model.unregisterPointerMoveListener(this.model);
+        this.model.unregisterClickListener(this.model);
+        Radio.trigger("Map", "removeInteraction", this.model.get("draw"));
     }
 });
 

@@ -220,6 +220,11 @@
             "name": "Koordinaten abfragen",
             "glyphicon": "glyphicon-screenshot"
           },
+          "shadow":
+          {
+            "name": "Schatten",
+            "glyphicon": "glyphicon-screenshot"
+          },
           "gfi":
           {
             "name": "Informationen abfragen",
