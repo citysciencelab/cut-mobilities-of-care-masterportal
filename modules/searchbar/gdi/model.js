@@ -62,6 +62,7 @@ const GdiModel = Backbone.Model.extend({
         }
     },
     createQuery: function (searchString) {
+        /* Zur Zeit noch nicht fuzzy */
         var query = {
             bool: {
                 must: [
@@ -86,43 +87,53 @@ const GdiModel = Backbone.Model.extend({
     addLayer: function (hit) {
         var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
-            level = 0;
+            level = 0,
+            layerTreeId;
 
         if (hit.source) {
 
-            if (treeType === "custom") {
-                parentId = "extthema";
-                level = 2;
-                if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
-                    Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
-                    Radio.trigger("ModelList", "renderTree");
-                    $("#Overlayer").parent().after($("#ExternalLayer").parent());
-                }
-                if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
-                    Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1, true);
-                }
-            }
+            /* Erst mal prüfen, ob es den Layer schon im Themenbaum gibt */
+            layerTreeId = Radio.request("Parser", "getItemByAttributes", {id: hit.source.id});
+            /* wenn es den Layer noch nicht gibt, diesen aus dem ElasticSearch-Ergebnis erzeugen */
+            if (_.isUndefined(layerTreeId)) {
 
-            Radio.trigger("Parser",
-                "addGDILayer",
-                {
-                    name: hit.source.name,
-                    id: hit.source.id,
-                    parentId: parentId,
-                    level: level,
-                    layers: hit.source.layers,
-                    url: hit.source.url,
-                    version: hit.source.version,
-                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
-                    datasets: hit.source.datasets
-                });
+                if (treeType === "custom") {
+                    /* Im Custom-Tree erst mal einen neuen Folder erzeugen und diesem den Folder "Ext.Thema" hinzufügen (falls es diese noch nicht gibt) */
+                    parentId = "extthema";
+                    level = 2;
+                    if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
+                        Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
+                        Radio.trigger("ModelList", "renderTree");
+                        $("#Overlayer").parent().after($("#ExternalLayer").parent());
+                    }
+                    if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
+                        Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1, true);
+                    }
+                }
 
-            if (treeType === "light") {
+                /* Dann den neuen Layer aus dem ElasicSearch-Ergebnis erzeugen */
+                Radio.trigger("Parser",
+                    "addGDILayer",
+                    {
+                        name: hit.source.name,
+                        id: hit.source.id,
+                        parentId: parentId,
+                        level: level,
+                        layers: hit.source.layers,
+                        url: hit.source.url,
+                        version: hit.source.version,
+                        gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                        datasets: hit.source.datasets
+                    });
+
+                /* und der ModelList hinzufügen */
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
-                Radio.trigger("ModelList", "refreshLightTree");
             }
 
             Radio.trigger("ModelList", "showModelInTree", hit.source.id);
+            if (treeType === "light") {
+                Radio.trigger("ModelList", "refreshLightTree");
+            }
         }
         else {
             console.error("Es konnte kein Eintrag für Layer " + hit.id + " in ElasticSearch gefunden werden.");
