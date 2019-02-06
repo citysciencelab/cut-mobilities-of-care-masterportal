@@ -21,43 +21,77 @@ const ZoomToFeature = Backbone.Model.extend({
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
         this.createCenterList();
-        this.setIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("offsetX"));
+        this.putIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("offsetX"));
         this.zoomToFeatures();
     },
-    setIconsForFeatureIds: function (featureCenterList, imgLink, offsetX) {
-        var vectorLayer,
-            icons = [];
+
+    /**
+     * sets icons for the passed feature list
+     * @param {array} featureCenterList - contains centercoordinates from features
+     * @param {string} imgLink - path to icon as image
+     * @param {number} offsetX - Moving the icon around the x-axis
+     * @returns {void}
+     */
+    putIconsForFeatureIds: function (featureCenterList, imgLink, offsetX) {
+        var iconFeatures = [];
 
         _.each(featureCenterList, function (featureCenter, index) {
-            var id = "featureIcon" + index,
-                iconFeature,
-                iconStyle;
-
-            iconFeature = new Feature({
-                geometry: new Point(featureCenter),
-                name: id
-            });
-
-            iconStyle = new Style({
-                image: new Icon({
-                    anchor: [0.5, offsetX],
-                    anchorXUnits: "fraction",
-                    anchorYUnits: "pixels",
-                    src: imgLink
-                })
-            });
+            var featureName = "featureIcon" + index,
+                iconFeature = this.createIconFeature(featureCenter, featureName),
+                iconStyle = this.createIconStyle(iconFeature, imgLink, offsetX);
 
             iconFeature.setStyle(iconStyle);
-            icons.push(iconFeature);
+            iconFeatures.push(iconFeature);
         }, this);
 
-        vectorLayer = new VectorLayer({
-            source: new VectorSource({
-                features: icons
+        Radio.trigger("Map", "addLayerOnTop", this.createIconVectorLayer(iconFeatures));
+    },
+
+    /**
+     * creates a feature from the passed center point
+     * @param {array} featureCenter - contains centercoordinates from features
+     * @param {string} featureName - unique name for the feature
+     * @returns {ol/feature} iconFeature
+     */
+    createIconFeature: function (featureCenter, featureName) {
+        return new Feature({
+            geometry: new Point(featureCenter),
+            name: featureName
+        });
+
+    },
+
+    /**
+     * creates the style from the image for the feature
+     * @param {ol/feature} iconFeature - faeture to draw
+     * @param {string} imgLink - path to icon as image
+     * @param {number} offsetX - Moving the icon around the x-axis
+     * @return {ol/style} iconStyle
+     */
+    createIconStyle: function (iconFeature, imgLink, offsetX) {
+        return new Style({
+            image: new Icon({
+                anchor: [0.5, offsetX],
+                anchorXUnits: "fraction",
+                anchorYUnits: "pixels",
+                src: imgLink
             })
         });
-        Radio.trigger("Map", "addLayerOnTop", vectorLayer);
     },
+
+    /**
+     * creates a VectorLayer with a VectorSource from the features
+     * @param {array} iconFeatures - contains the features to draw
+     * @returns {ol/vectorlayer} iconVectorLayer
+     */
+    createIconVectorLayer: function (iconFeatures) {
+        return new VectorLayer({
+            source: new VectorSource({
+                features: iconFeatures
+            })
+        });
+    },
+
     getFeaturesFromWFS: function () {
         if (!_.isUndefined(this.get("ids"))) {
             this.requestFeaturesFromWFS(this.get("wfsId"));
