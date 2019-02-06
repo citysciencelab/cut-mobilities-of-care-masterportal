@@ -436,7 +436,8 @@
       },
       {
         "id": "4561",
-        "infoFormat": "text/html"
+        "infoFormat": "text/html",
+        "visibility": true
       },
       {
         "id": "441"
