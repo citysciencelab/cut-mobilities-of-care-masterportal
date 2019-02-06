@@ -12,7 +12,7 @@ const ZoomToFeature = Backbone.Model.extend({
         imgLink: "/lgv-config/img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560",
-        centerList: [],
+        featureCenterList: [],
         format: new WFS(),
         features: [],
         anchor: {
@@ -20,13 +20,14 @@ const ZoomToFeature = Backbone.Model.extend({
             anchorY: 24,
             anchorXUnits: "fraction",
             anchorYUnits: "pixels"
-        }
+        },
+        imageScale: 2
     },
     initialize: function () {
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
-        this.createCenterList();
-        this.putIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("anchor"));
+        this.createFeatureCenterList();
+        this.putIconsForFeatureIds(this.get("featureCenterList"), this.get("imgLink"), this.get("anchor"), this.get("imageScale"));
         this.zoomToFeatures();
     },
 
@@ -35,15 +36,16 @@ const ZoomToFeature = Backbone.Model.extend({
      * @param {array} featureCenterList - contains centercoordinates from features
      * @param {string} imgLink - path to icon as image
      * @param {object} anchor - Position for the icon
+     * @param {number} imageScale - factor scale the icon
      * @returns {void}
      */
-    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor) {
+    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale) {
         var iconFeatures = [];
 
         _.each(featureCenterList, function (featureCenter, index) {
             var featureName = "featureIcon" + index,
                 iconFeature = this.createIconFeature(featureCenter, featureName),
-                iconStyle = this.createIconStyle(imgLink, anchor);
+                iconStyle = this.createIconStyle(imgLink, anchor, imageScale);
 
             iconFeature.setStyle(iconStyle);
             iconFeatures.push(iconFeature);
@@ -69,15 +71,17 @@ const ZoomToFeature = Backbone.Model.extend({
      * creates the style from the image for the feature
      * @param {string} imgLink - path to icon as image
      * @param {object} anchor - Position for the icon
+     * @param {number} imageScale - factor scale the icon
      * @return {ol/style} iconStyle
      */
-    createIconStyle: function (imgLink, anchor) {
+    createIconStyle: function (imgLink, anchor, imageScale) {
         return new Style({
             image: new Icon({
                 anchor: [anchor.anchorX, anchor.anchorY],
                 anchorXUnits: anchor.anchorXUnits,
                 anchorYUnits: anchor.anchorYUnits,
-                src: imgLink
+                src: imgLink,
+                scale: imageScale
             })
         });
     },
@@ -109,12 +113,12 @@ const ZoomToFeature = Backbone.Model.extend({
     setFormat: function (value) {
         this.set("format", value);
     },
-    setCenterList: function (value) {
-        this.set("centerList", value);
+    setFeatureCenterList: function (value) {
+        this.set("featureCenterList", value);
     },
 
     // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
-    createCenterList: function () {
+    createFeatureCenterList: function () {
         var ids = this.get("ids") || null,
             attribute = this.get("attribute") || null,
             features = this.get("features");
@@ -132,7 +136,7 @@ const ZoomToFeature = Backbone.Model.extend({
                     deltaY = extent[3] - extent[1],
                     center = [extent[0] + (deltaX / 2), extent[1] + (deltaY / 2)];
 
-                this.get("centerList").push(center);
+                this.get("featureCenterList").push(center);
             }, this);
         }
     },

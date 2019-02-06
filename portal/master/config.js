@@ -14,7 +14,8 @@ const Config = {
             anchorY: 24,
             anchorXUnits: "fraction",
             anchorYUnits: "pixels"
-        }
+        },
+        imageScale: 2
     },
     namedProjections: [
         // GK DHDN
