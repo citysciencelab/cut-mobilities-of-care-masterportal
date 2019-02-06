@@ -15,13 +15,18 @@ const ZoomToFeature = Backbone.Model.extend({
         centerList: [],
         format: new WFS(),
         features: [],
-        offsetX: 24
+        anchor: {
+            anchorX: 0.5,
+            anchorY: 24,
+            anchorXUnits: "fraction",
+            anchorYUnits: "pixels"
+        }
     },
     initialize: function () {
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
         this.createCenterList();
-        this.putIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("offsetX"));
+        this.putIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("anchor"));
         this.zoomToFeatures();
     },
 
@@ -29,16 +34,16 @@ const ZoomToFeature = Backbone.Model.extend({
      * sets icons for the passed feature list
      * @param {array} featureCenterList - contains centercoordinates from features
      * @param {string} imgLink - path to icon as image
-     * @param {number} offsetX - Moving the icon around the x-axis
+     * @param {object} anchor - Position for the icon
      * @returns {void}
      */
-    putIconsForFeatureIds: function (featureCenterList, imgLink, offsetX) {
+    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor) {
         var iconFeatures = [];
 
         _.each(featureCenterList, function (featureCenter, index) {
             var featureName = "featureIcon" + index,
                 iconFeature = this.createIconFeature(featureCenter, featureName),
-                iconStyle = this.createIconStyle(iconFeature, imgLink, offsetX);
+                iconStyle = this.createIconStyle(imgLink, anchor);
 
             iconFeature.setStyle(iconStyle);
             iconFeatures.push(iconFeature);
@@ -58,22 +63,20 @@ const ZoomToFeature = Backbone.Model.extend({
             geometry: new Point(featureCenter),
             name: featureName
         });
-
     },
 
     /**
      * creates the style from the image for the feature
-     * @param {ol/feature} iconFeature - faeture to draw
      * @param {string} imgLink - path to icon as image
-     * @param {number} offsetX - Moving the icon around the x-axis
+     * @param {object} anchor - Position for the icon
      * @return {ol/style} iconStyle
      */
-    createIconStyle: function (iconFeature, imgLink, offsetX) {
+    createIconStyle: function (imgLink, anchor) {
         return new Style({
             image: new Icon({
-                anchor: [0.5, offsetX],
-                anchorXUnits: "fraction",
-                anchorYUnits: "pixels",
+                anchor: [anchor.anchorX, anchor.anchorY],
+                anchorXUnits: anchor.anchorXUnits,
+                anchorYUnits: anchor.anchorYUnits,
                 src: imgLink
             })
         });

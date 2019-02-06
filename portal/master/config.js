@@ -9,7 +9,12 @@ const Config = {
         imgLink: "/lgv-config/img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560",
-        offsetX: 24
+        anchor: {
+            anchorX: 0.5,
+            anchorY: 24,
+            anchorXUnits: "fraction",
+            anchorYUnits: "pixels"
+        }
     },
     namedProjections: [
         // GK DHDN
