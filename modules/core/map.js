@@ -45,6 +45,7 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "addLayerOnTop": this.addLayerOnTop,
             "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
             "addInteraction": this.addInteraction,
@@ -233,8 +234,8 @@ const map = Backbone.Model.extend({
         var map3d = new OLCesium({
             map: this.get("map"),
             stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (map, scene) {
-                return [new WMSRasterSynchronizer(map, scene), new VectorSynchronizer(map, scene), new FixedOverlaySynchronizer(map, scene)];
+            createSynchronizers: function (newMap, scene) {
+                return [new WMSRasterSynchronizer(newMap, scene), new VectorSynchronizer(newMap, scene), new FixedOverlaySynchronizer(newMap, scene)];
             }
         });
 
@@ -405,7 +406,7 @@ const map = Backbone.Model.extend({
     },
     /**
     * Layer-Handling
-    * @param {ol.layer} layer -
+    * @param {ol/layer} layer -
     * @returns {void}
     */
     addLayer: function (layer) {
@@ -421,6 +422,7 @@ const map = Backbone.Model.extend({
         });
         // Index vom ersten VectorLayer in der Layerlist
         index = _.indexOf(layerList, firstVectorLayer);
+        
         if (index !== -1 && _.has(firstVectorLayer, "id") === false) {
             // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
             this.get("map").getLayers().insertAt(index, layer);
@@ -428,6 +430,15 @@ const map = Backbone.Model.extend({
         else {
             this.get("map").getLayers().push(layer);
         }
+    },
+
+    /**
+     * put the layer on top of the map
+     * @param {ol/layer} layer to be placed on top of the map
+     * @returns {void}
+     */
+    addLayerOnTop: function (layer) {
+        this.get("map").getLayers().push(layer);
     },
 
     removeLayer: function (layer) {
