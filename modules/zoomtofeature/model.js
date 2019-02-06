@@ -1,5 +1,9 @@
+import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
-import Overlay from "ol/Overlay.js";
+import Point from "ol/geom/Point.js";
+import {Icon, Style} from "ol/style.js";
+import {Vector as VectorLayer} from "ol/layer.js";
+import VectorSource from "ol/source/Vector.js";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
@@ -11,35 +15,48 @@ const ZoomToFeature = Backbone.Model.extend({
         centerList: [],
         format: new WFS(),
         features: [],
-        markers: []
+        offsetX: 24
     },
     initialize: function () {
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
         this.createCenterList();
-        this.setMarkerForFeatureIds();
+        this.setIconsForFeatureIds(this.get("centerList"), this.get("imgLink"), this.get("offsetX"));
         this.zoomToFeatures();
     },
-    setMarkerForFeatureIds: function () {
-        _.each(this.get("centerList"), function (center, i) {
-            var id = "featureMarker" + i,
-                marker;
+    setIconsForFeatureIds: function (featureCenterList, imgLink, offsetX) {
+        var vectorLayer,
+            icons = [];
 
-            // lokaler Pfad zum IMG-Ordner ist anders
-            $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + this.get("imgLink") + "'></div>");
+        _.each(featureCenterList, function (featureCenter, index) {
+            var id = "featureIcon" + index,
+                iconFeature,
+                iconStyle;
 
-            marker = new Overlay({
-                id: id,
-                offset: [-12, 0],
-                positioning: "bottom-center",
-                element: document.getElementById(id),
-                stopEvent: false
+            iconFeature = new Feature({
+                geometry: new Point(featureCenter),
+                name: id
             });
 
-            marker.setPosition(center);
-            this.get("markers").push(marker);
-            Radio.trigger("Map", "addOverlay", marker);
+            iconStyle = new Style({
+                image: new Icon({
+                    anchor: [0.5, offsetX],
+                    anchorXUnits: "fraction",
+                    anchorYUnits: "pixels",
+                    src: imgLink
+                })
+            });
+
+            iconFeature.setStyle(iconStyle);
+            icons.push(iconFeature);
         }, this);
+
+        vectorLayer = new VectorLayer({
+            source: new VectorSource({
+                features: icons
+            })
+        });
+        Radio.trigger("Map", "addLayer", vectorLayer);
     },
     getFeaturesFromWFS: function () {
         if (!_.isUndefined(this.get("ids"))) {
