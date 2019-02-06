@@ -194,8 +194,15 @@ const SearchbarView = Backbone.View.extend({
     renderRecommendedList: function () {
         var attr = this.model.toJSON(),
             template;
-            // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
-            // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+
+        // Falls der Themenbaum auf dem Tisch geöffnet ist, soll dieser bei der Initialisierung der Suche
+        // geschlossen werden.
+        if ($("#table-nav-layers-panel").length > 0) {
+            $("#table-nav-layers-panel").collapse("hide");
+            Radio.trigger("TableMenu", "deactivateCloseClickFrame");
+        }
+        // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+        // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
         this.prepareAttrStrings(attr.hitList);
         template = _.template(SearchbarRecommendedListTemplate);
