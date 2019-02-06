@@ -57,7 +57,6 @@ const ZoomToFeature = Backbone.Model.extend({
             })
         });
         Radio.trigger("Map", "addLayerOnTop", vectorLayer);
-        // Radio.trigger("Map", "addLayerToIndex", [vectorLayer, 100]);
     },
     getFeaturesFromWFS: function () {
         if (!_.isUndefined(this.get("ids"))) {
