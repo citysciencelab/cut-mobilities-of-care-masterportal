@@ -8,7 +8,8 @@ const Config = {
         attribute: "flaechenid",
         imgLink: "/lgv-config/img/location_eventlotse.svg",
         layerId: "4561",
-        wfsId: "4560"
+        wfsId: "4560",
+        offsetX: 24
     },
     namedProjections: [
         // GK DHDN
