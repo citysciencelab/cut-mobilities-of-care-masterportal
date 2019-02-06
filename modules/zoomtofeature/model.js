@@ -5,7 +5,7 @@ const ZoomToFeature = Backbone.Model.extend({
     defaults: {
         ids: [],
         attribute: "flaechenid",
-        imgLink: "../img/location_eventlotse.svg",
+        imgLink: "/lgv-config/img/location_eventlotse.svg",
         layerId: "4561",
         wfsId: "4560",
         centerList: [],
@@ -73,7 +73,7 @@ const ZoomToFeature = Backbone.Model.extend({
                         }
                         return 0;
                     }),
-                    extent = feature[0].getGeometry().getExtent(),
+                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent(),
                     deltaX = extent[2] - extent[0],
                     deltaY = extent[3] - extent[1],
                     center = [extent[0] + (deltaX / 2), extent[1] + (deltaY / 2)];
@@ -88,7 +88,7 @@ const ZoomToFeature = Backbone.Model.extend({
         var LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: wfsId}),
             url = LayerPrefs.url,
             version = LayerPrefs.version,
-            typename = LayerPrefs.name,
+            typename = LayerPrefs.featureType,
             data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
 
         this.sendRequest(url, data);
@@ -132,7 +132,7 @@ const ZoomToFeature = Backbone.Model.extend({
                 var feature = _.filter(features, function (feat) {
                         return feat.get(attribute) === id ? 1 : 0;
                     }),
-                    extent = feature[0].getGeometry().getExtent();
+                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent();
 
                 // erste bbox direkt füllen
                 if (index === 0) {
