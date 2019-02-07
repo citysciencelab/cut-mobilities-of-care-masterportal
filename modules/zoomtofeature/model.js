@@ -19,8 +19,8 @@ const ZoomToFeature = Backbone.Model.extend({
             anchorY: 24,
             anchorXUnits: "fraction",
             anchorYUnits: "pixels"
-        },
-        imageScale: 2
+        }, // @deprecated in version 3.0.0
+        imageScale: 2 // @deprecated in version 3.0.0
     },
     initialize: function () {
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
@@ -52,10 +52,11 @@ const ZoomToFeature = Backbone.Model.extend({
                 iconStyle;
 
             if (!_.isUndefined(styleId)) {
-                iconStyle = this.createIconStyleNew(iconFeature, styleId);
+                iconStyle = this.createIconStyle(iconFeature, styleId);
             }
             else {
-                iconStyle = this.createIconStyle(imgLink, anchor, imageScale);
+                // @deprecated in version 3.0.0 - this.createIconStyle() verwenden
+                iconStyle = this.createIconStyleOld(imgLink, anchor, imageScale);
             }
 
             iconFeature.setStyle(iconStyle);
@@ -63,23 +64,6 @@ const ZoomToFeature = Backbone.Model.extend({
         }, this);
 
         Radio.trigger("Map", "addLayerOnTop", this.createIconVectorLayer(iconFeatures));
-    },
-
-    /**
-     * creates an Style over model from StyleList
-     * @param {*} iconFeature feature to be style
-     * @param {string} styleId - to the configured style
-     * @returns {ol/style} featureStyle
-     */
-    createIconStyleNew: function (iconFeature, styleId) {
-        var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
-            featureStyle = new Style();
-
-        if (!_.isUndefined(stylelistmodel)) {
-            featureStyle = stylelistmodel.createStyle(iconFeature);
-        }
-
-        return featureStyle;
     },
 
     /**
@@ -96,13 +80,31 @@ const ZoomToFeature = Backbone.Model.extend({
     },
 
     /**
+     * creates an Style over model from StyleList
+     * @param {*} iconFeature feature to be style
+     * @param {string} styleId - to the configured style
+     * @returns {ol/style} featureStyle
+     */
+    createIconStyle: function (iconFeature, styleId) {
+        var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
+            featureStyle = new Style();
+
+        if (!_.isUndefined(stylelistmodel)) {
+            featureStyle = stylelistmodel.createStyle(iconFeature);
+        }
+
+        return featureStyle;
+    },
+
+    /**
      * creates the style from the image for the feature
      * @param {string} imgLink - path to icon as image
      * @param {object} anchor - Position for the icon
      * @param {number} imageScale - factor scale the icon
      * @return {ol/style} iconStyle
+     * @deprecated in version 3.0.0
      */
-    createIconStyle: function (imgLink, anchor, imageScale) {
+    createIconStyleOld: function (imgLink, anchor, imageScale) {
         return new Style({
             image: new Icon({
                 anchor: [anchor.anchorX, anchor.anchorY],
