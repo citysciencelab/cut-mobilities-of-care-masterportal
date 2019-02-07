@@ -318,6 +318,17 @@ function loadApp () {
                     }
                     break;
                 }
+                case "backforwardview": {
+                    if (control.attr === true) {
+                        var el = controlsView.addRowTR(control.id);
+
+                        require(["modules/controls/backforward/view"], function (backforwardview) {
+                            new backforwardview({el: el});
+                        });
+                    }
+                    break;
+                }
+
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id);
