@@ -10,7 +10,6 @@ const ZoomToFeature = Backbone.Model.extend({
         ids: [],
         attribute: "flaechenid",
         imgLink: "/lgv-config/img/location_eventlotse.svg",
-        layerId: "4561",
         wfsId: "4560",
         featureCenterList: [],
         format: new WFS(),
@@ -27,7 +26,11 @@ const ZoomToFeature = Backbone.Model.extend({
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
         this.createFeatureCenterList();
-        this.putIconsForFeatureIds(this.get("featureCenterList"), this.get("imgLink"), this.get("anchor"), this.get("imageScale"));
+        this.putIconsForFeatureIds(this.get("featureCenterList"),
+            this.get("imgLink"),
+            this.get("anchor"),
+            this.get("imageScale"),
+            this.get("styleId"));
         this.zoomToFeatures();
     },
 
@@ -37,21 +40,46 @@ const ZoomToFeature = Backbone.Model.extend({
      * @param {string} imgLink - path to icon as image
      * @param {object} anchor - Position for the icon
      * @param {number} imageScale - factor scale the icon
+     * @param {string} styleId - to the configured style
      * @returns {void}
      */
-    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale) {
+    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleId) {
         var iconFeatures = [];
 
         _.each(featureCenterList, function (featureCenter, index) {
             var featureName = "featureIcon" + index,
                 iconFeature = this.createIconFeature(featureCenter, featureName),
+                iconStyle;
+
+            if (!_.isUndefined(styleId)) {
+                iconStyle = this.createIconStyleNew(iconFeature, styleId);
+            }
+            else {
                 iconStyle = this.createIconStyle(imgLink, anchor, imageScale);
+            }
 
             iconFeature.setStyle(iconStyle);
             iconFeatures.push(iconFeature);
         }, this);
 
         Radio.trigger("Map", "addLayerOnTop", this.createIconVectorLayer(iconFeatures));
+    },
+
+    /**
+     * creates an Style over model from StyleList
+     * @param {*} iconFeature feature to be style
+     * @param {string} styleId - to the configured style
+     * @returns {ol/style} featureStyle
+     */
+    createIconStyleNew: function (iconFeature, styleId) {
+        var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
+            featureStyle = new Style();
+
+        if (!_.isUndefined(stylelistmodel)) {
+            featureStyle = stylelistmodel.createStyle(iconFeature);
+        }
+
+        return featureStyle;
     },
 
     /**
