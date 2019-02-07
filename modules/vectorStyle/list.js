@@ -59,11 +59,22 @@ const StyleList = Backbone.Collection.extend({
                 });
             }
         });
+
+        styleIds.push(this.getStyleIdForZoomToFeature());
         filteredData = _.filter(data, function (styleModel) {
             return _.contains(styleIds, styleModel.layerId);
         });
 
         return filteredData;
+    },
+
+    getStyleIdForZoomToFeature: function () {
+        var styleId;
+
+        if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
+            styleId = Config.zoomToFeature.styleId;
+        }
+        return styleId;
     }
 });
 
