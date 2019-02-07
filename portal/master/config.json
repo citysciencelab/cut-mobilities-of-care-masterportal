@@ -35,8 +35,8 @@
         "minChars": 3,
         "serviceId": "10",
         "limit": 60,
-        "states": "Hamburg",
-        "classes": "place,highway,building,shop,historic,leisure"
+        "states": "Hamburg Thüringen Hessen Nordrhein-Westfalen",
+        "classes": "place,highway,building,shop,historic,leisure,county"
       },
       "specialWFS":
       {

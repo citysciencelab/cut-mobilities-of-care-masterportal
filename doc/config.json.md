@@ -97,6 +97,33 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
+#### Portalconfig.searchBar.osm ####
+Suche bei OpenStreetMap ueber Stadt, Strasse und Hausnummer
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|serviceID|ja|String||Gibt die ID fuer die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewuenschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundeslaender (entsprechend der Ausgabe fuer "address.state" der Treffer), fuer die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+|classes|nein|string|kann die Klassen , fuer die Ergebnisse erzielt werden sollen, enthalten|
+
+**Beispiel**
+
+```
+#!json
+
+"osm": {
+    "minChars": 3,
+    "serviceId": "10",
+    "limit": 60,
+    "states": "Hamburg Nordhrein-Westfalen Niedersachsen"
+    "classes": "place,highway,building,shop,historic,leisure,city,county"
+}
+```
+
+***
+
 #### Portalconfig.searchbar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
