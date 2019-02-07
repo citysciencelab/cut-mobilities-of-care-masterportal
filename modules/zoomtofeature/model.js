@@ -23,27 +23,28 @@ const ZoomToFeature = Backbone.Model.extend({
         imageScale: 2 // @deprecated in version 3.0.0
     },
     initialize: function () {
+        this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
         this.createFeatureCenterList();
         this.putIconsForFeatureIds(this.get("featureCenterList"),
-            this.get("imgLink"),
-            this.get("anchor"),
-            this.get("imageScale"),
-            this.get("styleId"));
+            this.get("imgLink"), // @deprecated in version 3.0.0
+            this.get("anchor"), // @deprecated in version 3.0.0
+            this.get("imageScale"), // @deprecated in version 3.0.0
+            this.get("styleListModel"));
         this.zoomToFeatures();
     },
 
     /**
      * sets icons for the passed feature list
      * @param {array} featureCenterList - contains centercoordinates from features
-     * @param {string} imgLink - path to icon as image
-     * @param {object} anchor - Position for the icon
-     * @param {number} imageScale - factor scale the icon
-     * @param {string} styleId - to the configured style
+     * @param {string} imgLink - path to icon as image //@deprecated in version 3.0.0
+     * @param {object} anchor - Position for the icon  //@deprecated in version 3.0.0
+     * @param {number} imageScale - factor scale the icon  //@deprecated in version 3.0.0
+     * @param {object} styleListModel - contains the configured style
      * @returns {void}
      */
-    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleId) {
+    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleListModel) {
         var iconFeatures = [];
 
         _.each(featureCenterList, function (featureCenter, index) {
@@ -51,8 +52,8 @@ const ZoomToFeature = Backbone.Model.extend({
                 iconFeature = this.createIconFeature(featureCenter, featureName),
                 iconStyle;
 
-            if (!_.isUndefined(styleId)) {
-                iconStyle = this.createIconStyle(iconFeature, styleId);
+            if (!_.isUndefined(this.get("styleId"))) {
+                iconStyle = this.createIconStyle(iconFeature, styleListModel);
             }
             else {
                 // @deprecated in version 3.0.0 - this.createIconStyle() verwenden
@@ -81,16 +82,15 @@ const ZoomToFeature = Backbone.Model.extend({
 
     /**
      * creates an Style over model from StyleList
-     * @param {*} iconFeature feature to be style
-     * @param {string} styleId - to the configured style
+     * @param {ol/Feature} iconFeature feature to be style
+     * @param {object} styleListModel - contains the configured style
      * @returns {ol/style} featureStyle
      */
-    createIconStyle: function (iconFeature, styleId) {
-        var stylelistmodel = Radio.request("StyleList", "returnModelById", styleId),
-            featureStyle = new Style();
+    createIconStyle: function (iconFeature, styleListModel) {
+        var featureStyle = new Style();
 
-        if (!_.isUndefined(stylelistmodel)) {
-            featureStyle = stylelistmodel.createStyle(iconFeature);
+        if (!_.isUndefined(styleListModel)) {
+            featureStyle = styleListModel.createStyle(iconFeature);
         }
 
         return featureStyle;
@@ -102,7 +102,7 @@ const ZoomToFeature = Backbone.Model.extend({
      * @param {object} anchor - Position for the icon
      * @param {number} imageScale - factor scale the icon
      * @return {ol/style} iconStyle
-     * @deprecated in version 3.0.0
+     * @deprecated in version 3.0.0 - this.createIconStyle() verwenden
      */
     createIconStyleOld: function (imgLink, anchor, imageScale) {
         return new Style({
@@ -135,18 +135,6 @@ const ZoomToFeature = Backbone.Model.extend({
         }
     },
 
-    // setter for features
-    setFeatures: function (value) {
-        this.set("features", value);
-    },
-    // setter for format
-    setFormat: function (value) {
-        this.set("format", value);
-    },
-    setFeatureCenterList: function (value) {
-        this.set("featureCenterList", value);
-    },
-
     // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
     createFeatureCenterList: function () {
         var ids = this.get("ids") || null,
@@ -174,9 +162,9 @@ const ZoomToFeature = Backbone.Model.extend({
     // baut sich aus den Config-prefs die URL zusammen
     requestFeaturesFromWFS: function (wfsId) {
         var LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: wfsId}),
-            url = LayerPrefs.url,
-            version = LayerPrefs.version,
-            typename = LayerPrefs.featureType,
+            url = LayerPrefs && LayerPrefs.hasOwnProperty("url") ? LayerPrefs.url : "",
+            version = LayerPrefs && LayerPrefs.hasOwnProperty("version") ? LayerPrefs.version : "",
+            typename = LayerPrefs && LayerPrefs.hasOwnProperty("featureType") ? LayerPrefs.featureType : "",
             data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
 
         this.sendRequest(url, data);
@@ -241,8 +229,30 @@ const ZoomToFeature = Backbone.Model.extend({
             Radio.trigger("Map", "setBBox", bbox);
         }
     },
+
+    // setter for ids
     setIds: function (value) {
         this.set("ids", value);
+    },
+
+    // setter for features
+    setFeatures: function (value) {
+        this.set("features", value);
+    },
+
+    // setter for format
+    setFormat: function (value) {
+        this.set("format", value);
+    },
+
+    // setter for featureCenterList
+    setFeatureCenterList: function (value) {
+        this.set("featureCenterList", value);
+    },
+
+    // setter for styleListModel
+    setStyleListModel: function (value) {
+        this.set("styleListModel", value);
     }
 });
 
