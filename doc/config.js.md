@@ -87,7 +87,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|version|nein|Array[Object]||Array von Versionsnummerobjekten. Dieser Wert wird beim build-Prozess aus der package.json ausgelesen und hier eingesetzt.|
+|version|nein|Array[Object]||Array von Versionsnummerobjekten. Dieser Wert wird beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen.|
 
 ******
 ### footer.urls ###
@@ -124,7 +124,7 @@ footer: {
         }
     ],
     version: {
-        "Version" : "$Version"
+        "Version": "$Version"
     }
 }
 ```
