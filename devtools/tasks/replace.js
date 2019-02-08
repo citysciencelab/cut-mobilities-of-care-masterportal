@@ -27,17 +27,17 @@ module.exports = function (environment, destination) {
     {
         "files": destination + "/config.js",
         "from": /\/lgv-config/g,
-        "to": "../lgv-config"
+        "to": "../../lgv-config"
     },
     {
         "files": destination + "/config.json",
         "from": /\/lgv-config/g,
-        "to": "../lgv-config"
+        "to": "../../lgv-config"
     },
     {
         "files": destination + "/index.html",
         "from": /\/lgv-config/g,
-        "to": "../lgv-config"
+        "to": "../../lgv-config"
     });
 
     if (environment === "Internet") {
