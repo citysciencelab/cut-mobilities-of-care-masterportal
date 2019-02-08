@@ -103,10 +103,10 @@ Suche bei OpenStreetMap ueber Stadt, Strasse und Hausnummer
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
-|serviceID|ja|String||Gibt die ID fuer die URL in der [rest-services.json](rest-services.json.md) vor.|
-|limit|nein|Number|Gibt die maximale Zahl der gewuenschten, ungefilterten Ergebnisse an.|
-|states|nein|string|kann die Namen der Bundeslaender (entsprechend der Ausgabe fuer "address.state" der Treffer), fuer die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
-|classes|nein|string|kann die Klassen , fuer die Ergebnisse erzielt werden sollen, enthalten|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+|classes|nein|string|kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
 
 **Beispiel**
 
