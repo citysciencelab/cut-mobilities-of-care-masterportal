@@ -318,17 +318,6 @@ function loadApp () {
                     }
                     break;
                 }
-                case "backforwardview": {
-                    if (control.attr === true || (_.isUndefined(control.attr["glyphicon-forward"]) === false && _.isUndefined(control.attr["glyphicon-backward"]) === false)) {
-                        var el = controlsView.addRowTR(control.id);
-
-                        require(["modules/controls/backforward/view"], function (backforwardview) {
-                            new backforwardview({el: el});
-                        });
-                    }
-                    break;
-                }
-
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id);
@@ -336,13 +325,12 @@ function loadApp () {
                     }
                     break;
                 }
-                case "backforwardview":{
-                    if (control.attr === true || (control.attr["icon-forward"] && control.attr["icon-backward"])) {
+                case "backforwardview": {
+                    if (control.attr === true || (_.isUndefined(control.attr["glyphicon-forward"]) === false && _.isUndefined(control.attr["glyphicon-backward"]) === false)) {
                         var el = controlsView.addRowTR(control.id);
-                        require(["modules/controls/backforward/view"], function(backforwardview) {
-                            new backforwardview({
-                                el: el
-                            });
+
+                        require(["modules/controls/backforward/view"], function () {
+                            new BackforwardView({el: el});
                         });
                     }
                     break;
