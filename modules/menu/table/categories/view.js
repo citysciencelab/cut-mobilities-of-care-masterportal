@@ -5,6 +5,8 @@ const CategoryView = Backbone.View.extend({
         "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
     initialize: function () {
+        var channel = Radio.channel("Filter");
+
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementCategory": this.hideCategoryMenu
         });
@@ -12,6 +14,11 @@ const CategoryView = Backbone.View.extend({
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Category");
         });
+
+        channel.on({
+            "disable": this.disableCategoryButton,
+            "enable": this.enableCategoryButton
+        }, this);
 
         this.render();
     },
@@ -29,20 +36,28 @@ const CategoryView = Backbone.View.extend({
         if (this.$(".table-nav-cat-panel").hasClass("in")) {
             this.hideCategoryMenu();
         }
-        else {
+        else if (!this.$el.hasClass("disableCategoryButton")) {
             this.showCategoryMenu();
         }
     },
     hideCategoryMenu: function () {
         this.$(".table-nav-cat-panel").removeClass("in");
-        this.$(".table-category-list").removeClass("table-category-active");
+        this.$el.removeClass("table-category-active");
         Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     },
     showCategoryMenu: function () {
-        this.$(".table-category-list").addClass("table-category-active");
+        this.$el.addClass("table-category-active");
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
         Radio.request("TableMenu", "setActiveElement", "Category");
+    },
+    disableCategoryButton: function () {
+        this.$("#table-nav-cat-panel-icon").addClass("disableCategoryIcon");
+        this.$el.addClass("disableCategoryButton");
+    },
+    enableCategoryButton: function () {
+        this.$("#table-nav-cat-panel-icon").removeClass("disableCategoryIcon");
+        this.$el.removeClass("disableCategoryButton");
     }
 });
 

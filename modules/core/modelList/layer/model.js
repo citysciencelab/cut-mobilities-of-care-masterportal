@@ -388,6 +388,11 @@ const Layer = Item.extend({
 
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
+    },
+    removeLayer: function () {
+        var test = this.get("id");
+
+        this.collection.removeLayerById(test);
     }
 
 });

@@ -21,6 +21,7 @@
     width: 485px;
     height: 50px;
     font-family: @font_family_1;
+    touch-action: pan-x pan-y;
 }
 .table-nav {
     border-radius: 12px;
@@ -155,6 +156,9 @@ a {
     border-top: 1px solid #C0C0C0;
     >a {
         color: @color_3;
+        >.icon-btn3d1 {
+            padding-right: 5px;
+        }
     }
 }
 #table-nav-layers-panel-toggler {
@@ -225,6 +229,7 @@ a {
 .layers {
     padding-left: 0px;
     padding-bottom: 12px;
+    touch-action: pan-x pan-y;
 }
 .icon-checkbox2 {
     &:before {
@@ -282,6 +287,9 @@ a {
 }
 #table-nav-layers-panel {
     .layers {
+        max-height: 360px;
+        overflow-x: hidden;
+        margin: 4px 4px;
         .layer-item {
             font-family: @font_family_2;
             font-size: 17px;
@@ -291,6 +299,16 @@ a {
                 overflow: auto;
             }
         }
+    }
+    .layers::-webkit-scrollbar {
+        background: #cccccc;
+        width: 10px;
+        border-radius: 10px;
+    }
+    .layers::-webkit-scrollbar-thumb {
+        background: #003063;
+        border-radius: 10px;
+        border: 1px solid #ccc;
     }
     ul#layers {
         border: none;
@@ -380,8 +398,16 @@ a {
     position: absolute;
     top: 0px;
     left: 0px;
+    touch-action: none;
 }
 .closeclick-deactivated {
     height: 10px;
     width: 10px;
+}
+.disableCategoryIcon {
+    cursor: default;
+}
+
+.disableCategoryButton {
+    opacity: 0.2;
 }

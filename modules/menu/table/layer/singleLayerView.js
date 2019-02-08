@@ -102,8 +102,7 @@ const LayerView = Backbone.View.extend({
         this.model.decTransparency(10);
     },
     removeLayer: function () {
-        //this.model.removeLayer();
-        console.log("ich bin da");
+        this.model.removeLayer();
     }
 });
 

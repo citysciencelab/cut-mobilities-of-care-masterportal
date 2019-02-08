@@ -31,6 +31,7 @@ import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addwms/model";
 import GetCoord from "../../tools/getCoord/model";
+import Shadow from "../../tools/shadow/model";
 import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
@@ -177,6 +178,9 @@ const ModelList = Backbone.Collection.extend({
             }
             else if (attrs.id === "coord") {
                 return new GetCoord(attrs, options);
+            }
+            else if (attrs.id === "shadow") {
+                return new Shadow(attrs, options);
             }
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
@@ -747,6 +751,9 @@ const ModelList = Backbone.Collection.extend({
         var model = this.getModelById(id);
 
         model.hideAllFeatures();
+    },
+    removeLayerById: function (id) {
+        this.remove(id);
     },
 
     /**

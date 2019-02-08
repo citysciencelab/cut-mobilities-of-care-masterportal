@@ -22,7 +22,7 @@ in der normalen shell **UND** in der Admin-shell (git-shell als Admin ausführen
 ```
 
 ### Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v6.11.4-x64 mit NPM 3.10.10
+[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v10.15.0 mit NPM 6.4.1
 
 Test in cmd:
 
