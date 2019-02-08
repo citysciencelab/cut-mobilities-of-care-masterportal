@@ -3,6 +3,7 @@ import TableNavModel from "./model";
 import LayerListView from "./layer/listView";
 import CategoryList from "./categories/view";
 import ToolView from "./tool/view";
+import CloseClickView from "./closeClickView";
 
 const Menu = Backbone.View.extend({
     initialize: function () {
@@ -11,6 +12,10 @@ const Menu = Backbone.View.extend({
         this.renderCategoryList();
         this.renderTools();
         this.hideContextMenu();
+
+        this.listenTo(this.model, {
+            "appendFilterContent": this.appendFilterContent
+        });
     },
     model: new TableNavModel(),
     id: "table-nav",
@@ -19,6 +24,8 @@ const Menu = Backbone.View.extend({
     render: function () {
         $(this.el).html(this.template());
         $(".lgv-container").append(this.$el);
+
+        new CloseClickView().render();
 
         return this;
     },
@@ -33,6 +40,14 @@ const Menu = Backbone.View.extend({
     },
     hideContextMenu: function () {
         $("body").attr("oncontextmenu", "return false;");
+    },
+    /**
+     * add HTML content to the Categories Window
+     * @param {DOM} element - from a tool view
+     * @returns {void}
+     */
+    appendFilterContent: function (element) {
+        this.$el.find(".table-filter-container").append(element);
     }
 });
 

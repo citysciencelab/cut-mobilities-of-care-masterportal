@@ -12,8 +12,8 @@ const FolderView = Backbone.View.extend({
         "click .rotate-pin": "unfixTree",
         "click .rotate-pin-back": "fixTree",
         "click .layer-selection-save": function () {
-            this.model.collection.setActiveToolToFalse(this.model);
-            Radio.trigger("ModelList", "setModelAttributesById", "saveSelection", {isActive: true});
+            this.model.collection.setActiveToolsToFalse(this.model);
+            this.model.collection.get("saveSelection").setIsActive(true);
             // Schließt den Baum
             $(".nav li:first-child").removeClass("open");
             // Schließt die Mobile Navigation

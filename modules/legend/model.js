@@ -43,13 +43,7 @@ const Legend = Tool.extend({
     getLegend: function (layer) {
         var layerSources = layer.get("layerSource"); // Array oder undefined
 
-        if (layer.get("isVisibleInMap")) {
-            return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
-        }
-        return {
-            layername: layer.get("name"),
-            legend: null
-        };
+        return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
     },
 
     updateParamsStyleWMSArray: function (params) {
@@ -136,7 +130,7 @@ const Legend = Tool.extend({
             sortedModelList = _.sortBy(modelList, function (layer) {
                 return layer.get("name");
             }),
-            visibleLayer = _.filter(sortedModelList, function (layer) {
+            visibleLayer = sortedModelList.filter(function (layer) {
                 return layer.get("legendURL") !== "ignore";
             }),
             tempArray = [];
@@ -191,12 +185,10 @@ const Legend = Tool.extend({
                 }
             }, this);
 
-            if (defs.length > 0) {
-                return {
-                    layername: layername,
-                    legend: defs
-                };
-            }
+            return {
+                layername: layername,
+                legend: defs
+            };
         }
         return {
             layername: layername,
