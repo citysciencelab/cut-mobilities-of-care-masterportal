@@ -1,5 +1,3 @@
-// var sorting = {},
-//    size = 10000;
 
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
@@ -14,18 +12,6 @@ export function prepareSearchBody (query, sorting, size) {
 
     return JSON.stringify(searchBody);
 }
-
-/* export function setSorting (key, value) {
-    if (key && value) {
-        sorting[key] = value;
-    }
-}
-
-export function setSize (value) {
-    if (typeof value === "number") {
-        size = value;
-    }
-} */
 
 /**
 * sends query against ElasticSearch-Index

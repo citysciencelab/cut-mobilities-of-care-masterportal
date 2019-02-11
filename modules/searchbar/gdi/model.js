@@ -24,7 +24,6 @@ const GdiModel = Backbone.Model.extend({
 
         this.setSorting("_score", "desc");
 
-
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
