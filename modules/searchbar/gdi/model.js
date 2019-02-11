@@ -4,7 +4,9 @@ import * as ElasticSearch from "../../core/elasticsearch";
 const GdiModel = Backbone.Model.extend({
     defaults: {
         minChars: 3,
-        serviceId: ""
+        serviceId: "",
+        sorting: {},
+        size: 10000
     },
     /**
      * @description Initialise GDI-Search via ElasticSearch
@@ -13,22 +15,14 @@ const GdiModel = Backbone.Model.extend({
      * @param {string} config.serviceId - rest-services Id
      * @returns {void}
      */
-    initialize: function (config) {
+    initialize: function () {
         var channel = Radio.channel("GDI-Search");
 
         channel.on({
             "addLayer": this.addLayer
         }, this);
 
-        if (!_.isUndefined(config.minChars)) {
-            this.setMinChars(config.minChars);
-        }
-
-        if (!_.isUndefined(config.serviceId)) {
-            this.setServiceId(config.serviceId);
-        }
-
-        ElasticSearch.setSorting("_score", "desc");
+        this.setSorting("_score", "desc");
 
 
         this.listenTo(Radio.channel("Searchbar"), {
@@ -40,8 +34,8 @@ const GdiModel = Backbone.Model.extend({
         var query = this.createQuery(searchString),
             response = null;
 
-        if (searchString.length >= this.getMinChars()) {
-            response = ElasticSearch.search(this.getServiceId(), query);
+        if (searchString.length >= this.get("minChars")) {
+            response = ElasticSearch.search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
             if (response && response.hits) {
                 _.each(response.hits, function (hit) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
@@ -142,16 +136,19 @@ const GdiModel = Backbone.Model.extend({
     setMinChars: function (value) {
         this.set("minChars", value);
     },
-    getMinChars: function () {
-        return this.get("minChars");
-    },
     setServiceId: function (value) {
         this.set("serviceId", value);
     },
-    getServiceId: function () {
-        return this.get("serviceId");
+    setSorting: function (key, value) {
+        if (key && value) {
+            this.get("sorting")[key] = value;
+        }
+    },
+    setSize: function (value) {
+        if (typeof value === "number") {
+            this.set("size", value);
+        }
     }
-
 
 });
 
