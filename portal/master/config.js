@@ -30,7 +30,7 @@ const Config = {
             }
         ],
         version: {
-            "Version" : "$Version"
+            "Version": "$Version"
         }
     },
     quickHelp: {
