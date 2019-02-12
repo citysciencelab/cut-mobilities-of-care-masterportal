@@ -6,9 +6,8 @@ const Config = {
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
-        imgLink: "/lgv-config/img/location_eventlotse.svg",
-        layerId: "4561",
-        wfsId: "4560"
+        wfsId: "4560",
+        styleId: "location_eventlotse"
     },
     namedProjections: [
         // GK DHDN
