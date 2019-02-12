@@ -17,4 +17,11 @@
 <% }); %>
 <% if (hitList.length >= recommendedListLength) { %>
     <li class="list-group-item results"><div><span>alle Ergebnisse anzeigen</span><span class="glyphicon glyphicon-play-circle"></span></div></li>
+    <div id="search-funnel"></div>
+    <div id="search-right-funnel-corner"></div>
+<% } %>
+<% if (hitList.length < recommendedListLength) { %>
+    <li class="list-group-item results"></li>
+    <div id="search-funnel"></div>
+    <div id="search-right-funnel-corner"></div>
 <% } %>
