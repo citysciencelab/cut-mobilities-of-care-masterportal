@@ -36,6 +36,7 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.addClass("layer-settings-activated");
         }
+
         return this;
     },
     renderSetting: function () {
@@ -55,6 +56,9 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
+        }
+        if (!_.has(Radio.request("Parser", "getPortalConfig").searchBar, "gdi")) {
+            this.$el.find(".remove-layer").remove();
         }
     },
     toggleIsSelected: function () {
@@ -103,6 +107,8 @@ const LayerView = Backbone.View.extend({
     },
     removeLayer: function () {
         this.model.removeLayer();
+        this.model.toggleIsVisibleInMap();
+        this.$el.remove();
     }
 });
 

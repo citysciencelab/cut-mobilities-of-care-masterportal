@@ -112,9 +112,6 @@ const LayerView = Backbone.View.extend({
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".nav li:first-child").removeClass("open");
     },
-    removeLayer: function () {
-        this.model.removeLayer();
-    },
     /**
      * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
      * @param {Backbone.Model} model -
