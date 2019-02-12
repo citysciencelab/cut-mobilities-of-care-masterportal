@@ -178,7 +178,6 @@ const PrintModel = Tool.extend({
         visibleLayerListWithoutZIndex.push(_.sortBy(visibleLayerListWithZIndex, function (layer) {
             return layer.getZIndex();
         }));
-console.log(_.flatten(visibleLayerListWithoutZIndex));
 
         return _.flatten(visibleLayerListWithoutZIndex);
     },
