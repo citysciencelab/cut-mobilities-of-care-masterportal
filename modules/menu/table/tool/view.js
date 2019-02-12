@@ -16,7 +16,7 @@ const ToolView = Backbone.View.extend({
     template: _.template(MenuTemplate),
     render: function () {
         var collection = Radio.request("ModelList", "getCollection"),
-            models = _.filter(collection.models, function (model) {
+            models = collection.models.filter(function (model) {
                 return model.get("type") === "tool" || model.get("type") === "folder";
             });
 
@@ -58,6 +58,7 @@ const ToolView = Backbone.View.extend({
     closeToolMenu: function () {
         $("div.table-tools").removeClass("table-tools-active");
         $("div.table-tools-menu").hide();
+        Radio.trigger("TableMenu", "deactivateCloseClickFrame");
     }
 });
 

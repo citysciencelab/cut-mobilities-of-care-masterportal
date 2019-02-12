@@ -19,7 +19,8 @@ const map = Backbone.Model.extend({
 
     initialize: function () {
         var channel = Radio.channel("Map"),
-            mapView = new MapView();
+            mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
+            mapView = new MapView(mapViewSettings);
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -27,10 +28,7 @@ const map = Backbone.Model.extend({
             "getLayers": this.getLayers,
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
-            "getEventPixel": this.getEventPixel,
-            "hasFeatureAtPixel": this.hasFeatureAtPixel,
             "getSize": this.getSize,
-            "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
             "registerListener": this.registerListener,
             "getMap": function () {
@@ -60,10 +58,10 @@ const map = Backbone.Model.extend({
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
-            "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
             "updateSize": function () {
                 this.get("map").updateSize();
             },
+            "setTime": this.setTime,
             "activateMap3d": this.activateMap3d,
             "deactivateMap3d": this.deactivateMap3d,
             "setCameraParameter": this.setCameraParameter
@@ -173,33 +171,6 @@ const map = Backbone.Model.extend({
     },
 
     /**
-    * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
-    * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-    * @return {ol.Pixel} pixel
-    */
-    getEventPixel: function (evt) {
-        return this.get("map").getEventPixel(evt);
-    },
-
-    /**
-    * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-    * @param  {ol.Coordinate} value -
-    * @return {ol.Pixel} pixel
-    */
-    getPixelFromCoordinate: function (value) {
-        return this.get("map").getPixelFromCoordinate(value);
-    },
-
-    /**
-    * Ermittelt ob Features ein Pixel im Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @return {Boolean} true | false
-    */
-    hasFeatureAtPixel: function (pixel) {
-        return this.get("map").hasFeatureAtPixel(pixel);
-    },
-
-    /**
     * Rückgabe der Features an einer Pixelkoordinate
     * @param  {pixel} pixel    Pixelkoordinate
     * @param  {object} options layerDefinition und pixelTolerance
@@ -209,15 +180,6 @@ const map = Backbone.Model.extend({
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
-    /**
-    * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @param  {Function} callback - Die Feature Callback Funktion
-    * @returns {void}
-    */
-    forEachFeatureAtPixel: function (pixel, callback) {
-        this.get("map").forEachFeatureAtPixel(pixel, callback);
-    },
     getMapMode: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
@@ -233,13 +195,32 @@ const map = Backbone.Model.extend({
     createMap3d: function () {
         var map3d = new OLCesium({
             map: this.get("map"),
+            time: this.returnCesiumTime.bind(this),
+            sceneOptions: {
+                shadows: true
+            },
             stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (newMap, scene) {
-                return [new WMSRasterSynchronizer(newMap, scene), new VectorSynchronizer(newMap, scene), new FixedOverlaySynchronizer(newMap, scene)];
+            createSynchronizers: function (olMap, scene) {
+                return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
             }
         });
 
         return map3d;
+    },
+    returnCesiumTime: function () {
+        if (this.time) {
+            return this.time;
+        }
+
+        const date = Cesium.JulianDate.now();
+
+        Cesium.JulianDate.addDays(date, 200, date);
+        Cesium.JulianDate.addHours(date, 12, date);
+        return date;
+
+    },
+    setTime: function (time) {
+        this.time = time;
     },
     handle3DEvents: function () {
         var eventHandler = new OLCesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
@@ -346,7 +327,7 @@ const map = Backbone.Model.extend({
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
-            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event});
+            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
     deactivateMap3d: function () {
@@ -474,7 +455,7 @@ const map = Backbone.Model.extend({
 
     // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
     setImportDrawMeasureLayersOnTop: function (layers) {
-        var layersOnTop = _.filter(layers.getArray(), function (layer) {
+        var layersOnTop = layers.getArray().filter(function (layer) {
             return layer.get("alwaysOnTop") === true;
         });
 
@@ -504,7 +485,7 @@ const map = Backbone.Model.extend({
             layerFeatures = olLayer.getSource().getFeatures();
         }
 
-        features = _.filter(layerFeatures, function (feature) {
+        features = layerFeatures.filter(function (feature) {
             return _.contains(ids, feature.getId());
         });
         if (features.length > 0) {

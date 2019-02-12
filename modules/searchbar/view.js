@@ -4,7 +4,7 @@ import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedL
 import SearchbarHitListTemplate from "text-loader!./templateHitList.html";
 import GAZModel from "./gaz/model";
 import SpecialWFSModel from "./specialWFS/model";
-import VisibleWFSModel from "./visibleWFS/model";
+import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./OSM/model";
@@ -110,8 +110,12 @@ const SearchbarView = Backbone.View.extend({
         if (_.has(config, "specialWFS") === true) {
             new SpecialWFSModel(config.specialWFS);
         }
-        if (_.has(config, "visibleWFS") === true) {
-            new VisibleWFSModel(config.visibleWFS);
+        if (_.has(config, "visibleVector") === true) {
+            new VisibleVectorModel(config.visibleVector);
+        }
+        else if (_.has(config, "visibleWFS") === true) {
+            // Deprecated mit neuer Stable
+            new VisibleVectorModel(config.visibleWFS);
         }
         if (_.has(config, "bkg") === true) {
             new BKGModel(config.bkg);
@@ -190,8 +194,15 @@ const SearchbarView = Backbone.View.extend({
     renderRecommendedList: function () {
         var attr = this.model.toJSON(),
             template;
-            // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
-            // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
+
+        // Falls der Themenbaum auf dem Tisch geöffnet ist, soll dieser bei der Initialisierung der Suche
+        // geschlossen werden.
+        if ($("#table-nav-layers-panel").length > 0) {
+            $("#table-nav-layers-panel").collapse("hide");
+            Radio.trigger("TableMenu", "deactivateCloseClickFrame");
+        }
+        // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+        // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
         this.prepareAttrStrings(attr.hitList);
         template = _.template(SearchbarRecommendedListTemplate);
@@ -587,6 +598,7 @@ const SearchbarView = Backbone.View.extend({
         this.focusOnEnd(this.$("#searchInput"));
         this.hideMarker();
         Radio.trigger("MapMarker", "hideMarker");
+        Radio.trigger("MapMarker", "hidePolygon");
         this.clearSelection();
         // Suchvorschläge löschen
         this.$("#searchInputUL").html("");

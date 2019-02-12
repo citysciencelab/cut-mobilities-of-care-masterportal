@@ -32,7 +32,6 @@ const Parser = Backbone.Model.extend({
     },
 
     initialize: function () {
-
         var channel = Radio.channel("Parser");
 
         channel.reply({
@@ -90,7 +89,6 @@ const Parser = Backbone.Model.extend({
         this.parseMenu(this.get("portalConfig").menu, "root");
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
-        this.parseMapView(this.get("portalConfig").mapView);
 
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
@@ -183,20 +181,6 @@ const Parser = Backbone.Model.extend({
             type: "searchBar",
             attr: searchbarConfig
         });
-    },
-
-    /** [parseMapView description]
-     * @param  {[type]} items [description]
-     * @return {[type]}       [description]
-     */
-    parseMapView: function (items) {
-        _.each(items, function (value, key) {
-            this.addItem({
-                type: "mapView",
-                id: key,
-                attr: value
-            });
-        }, this);
     },
 
     /**
@@ -370,7 +354,7 @@ const Parser = Backbone.Model.extend({
      * @return {[type]} [description]
      */
     createModelList: function () {
-        new ModelList(_.filter(this.get("itemList"), function (model) {
+        new ModelList(this.get("itemList").filter(function (model) {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -451,6 +435,11 @@ const Parser = Backbone.Model.extend({
                 objectsByIds.push(lay);
             }
         });
+
+        // Wenn nicht alle LayerIDs des Arrays gefunden werden
+        if (objectsByIds.length !== ids.length) {
+            return null;
+        }
         // Das erste Objekt wird kopiert
         newObject = _.clone(objectsByIds[0]);
         // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
@@ -482,7 +471,7 @@ const Parser = Backbone.Model.extend({
     },
 
     getItemsByMetaID: function (metaID) {
-        var layers = _.filter(this.get("itemList"), function (item) {
+        var layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
