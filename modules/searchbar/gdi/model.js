@@ -39,7 +39,7 @@ const GdiModel = Backbone.Model.extend({
                 _.each(response.hits, function (hit) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.name,
-                        type: "ext. Thema",
+                        type: "Thema",
                         glyphicon: "glyphicon-list",
                         id: hit.id,
                         triggerEvent: {
@@ -100,7 +100,7 @@ const GdiModel = Backbone.Model.extend({
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: parentId}))) {
-                        Radio.trigger("Parser", "addFolder", "Ext. Thema", parentId, "ExternalLayer", 1, true);
+                        Radio.trigger("Parser", "addFolder", "Thema", parentId, "ExternalLayer", 1, true);
                     }
                 }
 
