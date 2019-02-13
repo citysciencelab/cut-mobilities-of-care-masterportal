@@ -121,7 +121,7 @@ const OsmModel = Backbone.Model.extend({
                     weg = hit.address.road || hit.address.pedestrian;
                     county = hit.address.county;
                     display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
-                    if (!_.isUndefined(county)) {
+                    if (!_.isUndefined(county)){
                         if(_.isUndefined(display)){
                             display = county;
                         }
@@ -196,8 +196,8 @@ const OsmModel = Backbone.Model.extend({
                     (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1) 
-                ) {
+                    (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+                ){
                     hits.push(param);
                 }
             });
