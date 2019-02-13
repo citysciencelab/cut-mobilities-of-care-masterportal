@@ -60,6 +60,10 @@
       {
         "minChars": 3
       },
+      "gdi":{
+		"minChars": 3,
+		"serviceId": "elastic"
+	  },
       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "menu":

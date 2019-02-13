@@ -73,7 +73,8 @@ const ModelList = Backbone.Collection.extend({
                 this.trigger("renderTree");
             },
             "toggleWfsCluster": this.toggleWfsCluster,
-            "toggleDefaultTool": this.toggleDefaultTool
+            "toggleDefaultTool": this.toggleDefaultTool,
+            "refreshLightTree": this.refreshLightTree
         }, this);
 
         this.listenTo(this, {
@@ -645,6 +646,11 @@ const ModelList = Backbone.Collection.extend({
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);
         }
+
+        // für DIPAS Table Ansicht
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            $("#table-nav-layers-panel").collapse("show");
+        }
     },
 
     /**
@@ -787,6 +793,10 @@ const ModelList = Backbone.Collection.extend({
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
         });
+    },
+
+    refreshLightTree: function () {
+        this.trigger("updateLightTree");
     }
 });
 

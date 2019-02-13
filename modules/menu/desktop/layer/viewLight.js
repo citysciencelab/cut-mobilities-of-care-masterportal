@@ -120,7 +120,7 @@ const LayerView = Backbone.View.extend({
     },
     removeLayer: function () {
         this.model.removeLayer();
-        this.model.toggleIsVisibleInMap();
+        this.model.setIsVisibleInMap(false);
         this.$el.remove();
     },
     /**
