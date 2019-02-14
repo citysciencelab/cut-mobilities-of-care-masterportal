@@ -87,7 +87,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|version|nein|Array[Object]||Array von Versionsnummerobjekten. Dieser Wert wird beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen.|
+|version|nein|Array[Object]||Array von Versionsnummerobjekten. Erstes Objekt im Array ist ein Boolean, der angibt ob die Versionsnummern angezeigt werden sollen oder nicht. Bei allen anderen Objekten wird der Wert beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen.|
 
 ******
 ### footer.urls ###
@@ -124,7 +124,8 @@ footer: {
         }
     ],
     version: {
-        "Version": "$Version"
+        "showVersion". true,
+        "MasterportalVersion": "$Version"
     }
 }
 ```

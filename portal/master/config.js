@@ -31,7 +31,7 @@ const Config = {
         ],
         version: {
             "showVersion": true,
-            "MasterportalVersion": "2.1.1"
+            "MasterportalVersion": "$Version"
         }
     },
     quickHelp: {
