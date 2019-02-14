@@ -386,12 +386,12 @@ const Parser = Backbone.Model.extend({
         return _.where(this.get("itemList"), value);
     },
     removeItem: function (id) {
-        // var item = this.get("itemList").filter(item) {
-        //     return item.id === id;
-        // };
-
+        console.log("ich bin da");
+        var itemList = this.get("itemList").filter(function (item) {
+            return item.id !== id;
+        });
+        this.set("itemlist", itemList);
         console.log(this.get("itemList"));
-        this.get("itemList").splice(item, 1);
     },
 
     /**
