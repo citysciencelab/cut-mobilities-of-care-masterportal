@@ -119,8 +119,8 @@ const LayerView = Backbone.View.extend({
         $(".nav li:first-child").removeClass("open");
     },
     removeLayer: function () {
+        Radio.trigger("parser", "removeItem", "id");
         this.model.removeLayer();
-        this.model.setIsVisibleInMap(false);
         this.$el.remove();
     },
     /**

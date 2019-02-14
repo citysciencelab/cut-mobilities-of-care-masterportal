@@ -106,8 +106,8 @@ const LayerView = Backbone.View.extend({
         this.model.decTransparency(10);
     },
     removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", "id");
         this.model.removeLayer();
-        this.model.setIsVisibleInMap(false);
         this.$el.remove();
     }
 });

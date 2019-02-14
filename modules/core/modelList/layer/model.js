@@ -1,4 +1,5 @@
 import Item from ".././item";
+import ModelList from "../list";
 
 const Layer = Item.extend({
     defaults: {
@@ -392,6 +393,7 @@ const Layer = Item.extend({
     removeLayer: function () {
         var layer = this.get("id");
 
+        this.setIsVisibleInMap(false);
         this.collection.removeLayerById(layer);
     }
 

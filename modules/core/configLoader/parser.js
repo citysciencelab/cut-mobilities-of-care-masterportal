@@ -64,7 +64,8 @@ const Parser = Backbone.Model.extend({
             "addFolder": this.addFolder,
             "addLayer": this.addLayer,
             "addGDILayer": this.addGDILayer,
-            "addGeoJSONLayer": this.addGeoJSONLayer
+            "addGeoJSONLayer": this.addGeoJSONLayer,
+            "removeSetItemList": this.removeSetItemList
         }, this);
 
         this.listenTo(this, {
@@ -383,6 +384,14 @@ const Parser = Backbone.Model.extend({
      */
     getItemsByAttributes: function (value) {
         return _.where(this.get("itemList"), value);
+    },
+    removeItem: function (id) {
+        // var item = this.get("itemList").filter(item) {
+        //     return item.id === id;
+        // };
+
+        console.log(this.get("itemList"));
+        this.get("itemList").splice(item, 1);
     },
 
     /**
