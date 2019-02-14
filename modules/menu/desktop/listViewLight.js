@@ -4,7 +4,6 @@ import DesktopLayerViewLight from "./layer/viewLight";
 
 const LightMenu = listView.extend({
     initialize: function () {
-        console.log(Radio.request("Parser", "getPortalConfig").searchBar.gdi);
         this.collection = Radio.request("ModelList", "getCollection");
         Radio.on("Autostart", "startModul", this.startModul, this);
         this.listenTo(this.collection, {
