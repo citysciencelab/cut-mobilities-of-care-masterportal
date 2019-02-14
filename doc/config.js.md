@@ -124,7 +124,7 @@ footer: {
         }
     ],
     version: {
-        "showVersion". true,
+        "showVersion": true,
         "MasterportalVersion": "$Version"
     }
 }
