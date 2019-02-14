@@ -15,6 +15,12 @@
         <% } %>
     <% } %>
 <% }); %>
-<% if (hitList.length >= recommendedListLength) { %>
+<% if (hitList.length >= recommendedListLength && hitList.length !== 0) { %>
     <li class="list-group-item results"><div><span>alle Ergebnisse anzeigen</span><span class="glyphicon glyphicon-play-circle"></span></div></li>
+    <div id="search-funnel"></div>
+    <div id="search-right-funnel-corner"></div>
+<% } else if (hitList.length < recommendedListLength && hitList.length !== 0) { %>
+    <li class="list-group-item results"></li>
+    <div id="search-funnel"></div>
+    <div id="search-right-funnel-corner"></div>
 <% } %>

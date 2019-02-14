@@ -2,6 +2,8 @@ import SearchbarTemplate from "text-loader!./template.html";
 import TemplateTable from "text-loader!./templateTable.html";
 import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedList.html";
 import SearchbarHitListTemplate from "text-loader!./templateHitList.html";
+import SearchbarRecommendedListTableTemplate from "text-loader!./templateTableRecommendedList.html";
+import SearchbarHitListTableTemplate from "text-loader!./templateTableHitList.html";
 import GAZModel from "./gaz/model";
 import SpecialWFSModel from "./specialWFS/model";
 import VisibleVectorModel from "./visibleVector/model";
@@ -139,6 +141,10 @@ const SearchbarView = Backbone.View.extend({
     searchbarKeyNavSelector: "#searchInputUL",
     template: _.template(SearchbarTemplate),
     templateTable: _.template(TemplateTable),
+    templateRecommendedList: _.template(SearchbarRecommendedListTemplate),
+    templateTableRecommendedList: _.template(SearchbarRecommendedListTableTemplate),
+    templateHitList: _.template(SearchbarHitListTemplate),
+    templateTableHitList: _.template(SearchbarHitListTableTemplate),
     render: function () {
         var attr = this.model.toJSON(),
             menuStyle = Radio.request("Util", "getUiStyle");
@@ -192,8 +198,7 @@ const SearchbarView = Backbone.View.extend({
     },
 
     renderRecommendedList: function () {
-        var attr = this.model.toJSON(),
-            template;
+        var attr = this.model.toJSON();
 
         // Falls der Themenbaum auf dem Tisch geöffnet ist, soll dieser bei der Initialisierung der Suche
         // geschlossen werden.
@@ -205,10 +210,14 @@ const SearchbarView = Backbone.View.extend({
         // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
         this.prepareAttrStrings(attr.hitList);
-        template = _.template(SearchbarRecommendedListTemplate);
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            this.$("ul.dropdown-menu-search").html(this.templateTableRecommendedList(attr));
+        }
+        else {
+            this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
+        }
 
         this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
-        this.$("ul.dropdown-menu-search").html(template(attr));
         // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
         // und im Falle eines Tree-Search auch das Menü aufgeklappt.
         if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
@@ -235,7 +244,7 @@ const SearchbarView = Backbone.View.extend({
     },
 
     renderHitList: function () {
-        var attr, template;
+        var attr;
 
         if (this.model.get("hitList").length === 1) {
             this.hitSelected(); // erster und einziger Eintrag in Liste
@@ -245,8 +254,12 @@ const SearchbarView = Backbone.View.extend({
             attr = this.model.toJSON();
             // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
-            template = _.template(SearchbarHitListTemplate);
-            this.$("ul.dropdown-menu-search").html(template(attr));
+        }
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            this.$("ul.dropdown-menu-search").html(this.templateTableHitList(attr));
+        }
+        else {
+            this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
         }
     },
 
