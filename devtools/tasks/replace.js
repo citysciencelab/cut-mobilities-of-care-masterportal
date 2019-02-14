@@ -1,7 +1,6 @@
 var replace = require("replace-in-file"),
+    sourceFile = require("../../package.json"),
     replacements = [];
-
-var sourceFile = require('../../package.json');
 
 module.exports = function (environment, destination) {
     replacements.push({
@@ -21,7 +20,7 @@ module.exports = function (environment, destination) {
     },
     {
         "files": destination + "/config.js",
-        "from": '$Version',
+        "from": "$Version",
         "to": sourceFile.version
     },
     {
