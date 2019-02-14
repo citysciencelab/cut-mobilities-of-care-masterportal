@@ -119,7 +119,7 @@ const LayerView = Backbone.View.extend({
         $(".nav li:first-child").removeClass("open");
     },
     removeLayer: function () {
-        Radio.trigger("Parser", "removeItem", "id");
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
         this.model.removeLayer();
         this.$el.remove();
     },
