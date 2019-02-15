@@ -38,6 +38,7 @@ const GFIDetachedView = DesktopView.extend({
     },
 
     setMarker: function () {
+
         if (this.model.get("isVisible")) {
             if (this.model.get("isMapMarkerVisible")) {
                 Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));

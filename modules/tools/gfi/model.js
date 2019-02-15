@@ -203,6 +203,7 @@ const Gfi = Tool.extend({
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
+
         // für detached MapMarker
         this.setCoordinate(evt.coordinate);
         // Vector

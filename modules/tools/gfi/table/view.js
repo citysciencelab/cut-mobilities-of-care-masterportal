@@ -46,7 +46,7 @@ const GFIDetachedTableView = DesktopView.extend({
             if (this.model.get("isMapMarkerVisible")) {
                 Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
             }
-            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
+            Radio.trigger("Map", "render");
             Radio.trigger("GFI", "afterRender");
         }
         else {
@@ -58,7 +58,7 @@ const GFIDetachedTableView = DesktopView.extend({
     setMarker: function () {
         if (this.model.get("isVisible") === true) {
             Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
-            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
+            Radio.trigger("Map", "render");
         }
     },
 
