@@ -27,7 +27,10 @@ module.exports = function (env, args) {
             ]
         },
         optimization: {
-            minimizer: [new UglifyJsPlugin()]
+            minimizer: [new UglifyJsPlugin({
+                // *** use this attribute to build masterportal.js without uglify ***
+                // include: /\.min\.js$/
+            })]
         },
         stats: {
             "children": false,

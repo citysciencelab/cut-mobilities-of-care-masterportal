@@ -15,6 +15,8 @@ const WFSStyle = Backbone.Model.extend({
         "imageScale": 1,
         "imageOffsetX": 0.5,
         "imageOffsetY": 0.5,
+        "imageOffsetXUnit": "fraction",
+        "imageOffsetYUnit": "fraction",
         // für subclass CIRCLE
         "circleRadius": 10,
         "circleFillColor": [
@@ -109,7 +111,12 @@ const WFSStyle = Backbone.Model.extend({
         ]
     },
     initialize: function () {
-        this.setImagePath(Config.wfsImgPath);
+        if (!_.isUndefined(Config.wfsImgPath)) {
+            this.setImagePath(Config.wfsImgPath);
+        }
+        else {
+            console.warn("wfsImgPath at Config.js is not defined");
+        }
     },
 
     /*
@@ -254,7 +261,7 @@ const WFSStyle = Backbone.Model.extend({
 
         featureValue = feature.get(styleField);
         if (!_.isUndefined(featureValue)) {
-            styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+            styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
                 return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
             })[0];
         }
@@ -379,7 +386,9 @@ const WFSStyle = Backbone.Model.extend({
             scale,
             offset,
             imagestyle,
-            style;
+            style,
+            offsetXUnit,
+            offsetYUnit;
 
         if (isClustered && feature.get("features").length > 1) {
             imagestyle = this.createClusterStyle();
@@ -391,12 +400,16 @@ const WFSStyle = Backbone.Model.extend({
             height = this.get("imageHeight");
             scale = parseFloat(this.get("imageScale"));
             offset = [parseFloat(this.get("imageOffsetX")), parseFloat(this.get("imageOffsetY"))];
+            offsetXUnit = this.get("imageOffsetXUnit");
+            offsetYUnit = this.get("imageOffsetYUnit");
             imagestyle = new Icon({
                 src: src,
                 width: width,
                 height: height,
                 scale: scale,
                 anchor: offset,
+                anchorXUnits: offsetXUnit,
+                anchorYUnits: offsetYUnit,
                 imgSize: isSVG ? [width, height] : ""
             });
         }
@@ -425,6 +438,8 @@ const WFSStyle = Backbone.Model.extend({
             imageoffsetx,
             imageoffsety,
             offset,
+            offsetXUnit,
+            offsetYUnit,
             imagestyle,
             style = this.getDefaultStyle();
 
@@ -434,7 +449,7 @@ const WFSStyle = Backbone.Model.extend({
         else {
             featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
             if (!_.isUndefined(featureValue)) {
-                styleFieldValueObj = _.filter(this.get("styleFieldValues"), function (styleFieldValue) {
+                styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
                     return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 })[0];
             }
@@ -449,12 +464,16 @@ const WFSStyle = Backbone.Model.extend({
             imageoffsetx = styleFieldValueObj.imageOffsetX ? styleFieldValueObj.imageOffsetX : this.get("imageOffsetX");
             imageoffsety = styleFieldValueObj.imageOffsetY ? styleFieldValueObj.imageOffsetY : this.get("imageOffsetY");
             offset = [parseFloat(imageoffsetx), parseFloat(imageoffsety)];
+            offsetXUnit = this.get("imageOffsetXUnit");
+            offsetYUnit = this.get("imageOffsetYUnit");
             imagestyle = new Icon({
                 src: src,
                 width: width,
                 height: height,
                 scale: scale,
                 anchor: offset,
+                anchorXUnits: offsetXUnit,
+                anchorYUnits: offsetYUnit,
                 imgSize: isSVG ? [width, height] : ""
             });
         }
@@ -1183,6 +1202,17 @@ const WFSStyle = Backbone.Model.extend({
     setImageOffsetY: function (value) {
         this.set("imageOffsetY", value);
     },
+
+    // setter for imageOffsetXUnit
+    setImageOffsetXUnit: function (value) {
+        this.set("imageOffsetXUnit", value);
+    },
+
+    // setter for imageOffsetYUnit
+    setImageOffsetYUnit: function (value) {
+        this.set("imageOffsetYUnit", value);
+    },
+
     // setter for circleRadius
     setCircleRadius: function (value) {
         this.set("circleRadius", value);

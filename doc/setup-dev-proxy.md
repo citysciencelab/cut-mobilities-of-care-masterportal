@@ -22,7 +22,7 @@ in der normalen shell **UND** in der Admin-shell (git-shell als Admin ausführen
 ```
 
 ### Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v6.11.4-x64 mit NPM 3.10.10
+[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v10.15.0 mit NPM 6.4.1
 
 Test in cmd:
 
@@ -75,6 +75,8 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 
 In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
 
+**ACHTUNG:** Bitte VOR Konfiguration dieses Parameters den korrekten Systempfad ermitteln!
+(Auf einem deutschsprachigen Win10 ist dies bspw. ```C:\Program Files\nodejs```)
 
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:

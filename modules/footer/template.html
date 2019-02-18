@@ -3,3 +3,15 @@
     <div class="visible-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias_mobil %></a></div>
     <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
 <%}); %>
+<% var showVersion; %>
+<% _.each(version, function(value, key){ %>
+    <% if(key === "showVersion"){ %>
+        <% showVersion = value; %>
+        <% return true; %>
+    <% } %>
+       
+    <% if(showVersion === true){ %>
+        <div class="hidden-xs pull-left"> <%=key%> : <%=value%></div>
+        <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
+    <% } %> 
+<% }); %>

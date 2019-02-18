@@ -1,4 +1,5 @@
 var replace = require("replace-in-file"),
+    sourceFile = require("../../package.json"),
     replacements = [];
 
 module.exports = function (environment, destination) {
@@ -16,6 +17,11 @@ module.exports = function (environment, destination) {
         "files": destination + "/css/style.css",
         "from": /\/lgv-config/g,
         "to": "../../lgv-config"
+    },
+    {
+        "files": destination + "/config.js",
+        "from": "$Version",
+        "to": sourceFile.version
     },
     {
         "files": destination + "/config.js",

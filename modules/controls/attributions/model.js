@@ -42,7 +42,7 @@ const Attributions = Backbone.Model.extend({
         this.trigger("renderAttributions");
     },
     removeAttribution: function (name, text, type) {
-        var filteredAttributions = _.filter(this.get("attributionList"), function (attribution) {
+        var filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
 
@@ -59,7 +59,7 @@ const Attributions = Backbone.Model.extend({
      */
     checkModelsByAttributions: function () {
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredModelList = _.filter(modelList, function (model) {
+            filteredModelList = modelList.filter(function (model) {
                 return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
             });
 
@@ -70,7 +70,7 @@ const Attributions = Backbone.Model.extend({
     },
     removeAllLayerAttributions: function () {
         var attributions = this.get("attributionList"),
-            filteredAttributions = _.filter(attributions, function (attribution) {
+            filteredAttributions = attributions.filter(function (attribution) {
                 return attribution.type !== "layer";
             });
 

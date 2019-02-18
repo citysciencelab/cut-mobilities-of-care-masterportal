@@ -42,6 +42,7 @@ const StyleList = Backbone.Collection.extend({
      */
     parse: function (data) {
         var layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
+            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"}),
             styleIds = [],
             filteredData = [];
 
@@ -59,11 +60,28 @@ const StyleList = Backbone.Collection.extend({
                 });
             }
         });
-        filteredData = _.filter(data, function (styleModel) {
+        styleIds.push(this.getStyleIdForZoomToFeature());
+
+        _.each(tools, function (tool) {
+            if (_.has(tool, "styleId")) {
+                styleIds.push(tool.styleId);
+            }
+        });
+
+        filteredData = data.filter(function (styleModel) {
             return _.contains(styleIds, styleModel.layerId);
         });
 
         return filteredData;
+    },
+
+    getStyleIdForZoomToFeature: function () {
+        var styleId;
+
+        if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
+            styleId = Config.zoomToFeature.styleId;
+        }
+        return styleId;
     }
 });
 
