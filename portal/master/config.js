@@ -27,7 +27,11 @@ const Config = {
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
-        ]
+        ],
+        version: {
+            "showVersion": true,
+            "MasterportalVersion": "$Version"
+        }
     },
     quickHelp: {
         imgPath: "/lgv-config/img/"
