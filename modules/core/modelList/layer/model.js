@@ -311,6 +311,8 @@ const Layer = Item.extend({
     updateLayerTransparency: function () {
         var opacity = (100 - this.get("transparency")) / 100;
 
+        console.log(opacity);
+        
         // Auch wenn die Layer im simple Tree noch nicht selected wurde können
         // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
         if (!_.isUndefined(this.get("layer"))) {
