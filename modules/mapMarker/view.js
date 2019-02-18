@@ -169,6 +169,7 @@ const MapMarker = Backbone.View.extend({
     showMarker: function (coordinate) {
         this.hideMarker();
         if (coordinate.length === 2) {
+
             this.model.get("marker").setPosition(coordinate);
         }
         else {
