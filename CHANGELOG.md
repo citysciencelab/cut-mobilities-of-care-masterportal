@@ -1,3 +1,15 @@
+# Changelog LGV Master-Portal 2.2.2
+
+NEU:
+
+  - 4154b06a1 Nun werden auch zu einer Adresse mit dem Adresszusatz "Haus" Schulen im Schulwegrouting gefunden.
+
+FIXES:
+
+  - d28cc48f6 Beim schließen des Measuretools werden nicht beendete Zeichnungen nun entfernt.
+  - 2ba7934f3 Diverse Fehler im Einwohnertool wurden behoben.
+  - 907afb415 Ein Fehler in der Metadatenkopplung wurde behoben.
+
 # Changelog LGV Master-Portal 2.2.1
 
 NEU:
