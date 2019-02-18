@@ -121,8 +121,8 @@ const OsmModel = Backbone.Model.extend({
                     weg = hit.address.road || hit.address.pedestrian;
                     county = hit.address.county;
                     display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
-                    if (!_.isUndefined(county)){
-                        if(_.isUndefined(display)){
+                    if (!_.isUndefined(county)) {
+                        if (_.isUndefined(display)) {
                             display = county;
                         }
                     }
