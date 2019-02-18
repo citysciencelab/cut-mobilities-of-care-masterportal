@@ -75,6 +75,7 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
+import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
@@ -325,13 +326,10 @@ function loadApp () {
                     }
                     break;
                 }
-                case "backforwardview": {
-                    if (control.attr === true || (_.isUndefined(control.attr["glyphicon-forward"]) === false && _.isUndefined(control.attr["glyphicon-backward"]) === false)) {
-                        var el = controlsView.addRowTR(control.id);
-
-                        require(["modules/controls/backforward/view"], function () {
-                            new BackforwardView({el: el});
-                        });
+                case "backforward": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id);
+                        new BackForwardView({el: element});
                     }
                     break;
                 }
