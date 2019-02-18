@@ -195,7 +195,7 @@ const OsmModel = Backbone.Model.extend({
                     (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
-                ){
+                ) {
                     hits.push(param);
                 }
             });
