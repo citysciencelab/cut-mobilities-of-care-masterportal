@@ -98,7 +98,7 @@ Konfiguration des BKG Suchdienstes
 ***
 
 #### Portalconfig.searchBar.osm ####
-Suche bei OpenStreetMap ueber Stadt, Strasse und Hausnummer
+Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick auf die Lupe oder Enter ausgelöst
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
