@@ -208,10 +208,16 @@ const map = Backbone.Model.extend({
         return map3d;
     },
     returnCesiumTime: function () {
+        var menuStyle = Radio.request("Util", "getUiStyle"),
+            mapTable = Radio.request("Map", "getMap3d"),
+            scene = mapTable.getCesiumScene();
+
         if (this.time) {
             return this.time;
         }
-
+        else if (menuStyle === "TABLE") {
+            scene.shadowMap.enabled = false;
+        }
         const date = Cesium.JulianDate.now();
 
         Cesium.JulianDate.addDays(date, 200, date);
