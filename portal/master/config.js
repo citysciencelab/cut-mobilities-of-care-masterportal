@@ -34,8 +34,8 @@ const Config = {
         imgPath: "/lgv-config/img/"
     },
     portalConf: "./",
-    layerConf: "/lgv-config/services-internet.json",
-    restConf: "/lgv-config/rest-services-internet.json",
+    layerConf: "/lgv-config/services-fhhnet-ALL.json",
+    restConf: "/lgv-config/rest-services-fhhnet.json",
     styleConf: "/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,

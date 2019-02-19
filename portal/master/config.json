@@ -235,7 +235,7 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "99999",
+            "mapfishServiceId": "mapfish_qs",
             "printAppId": "mrh",
             "filename": "Ausdruck",
             "title": "Mein Titel",
