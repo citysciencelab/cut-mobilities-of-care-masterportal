@@ -28,14 +28,36 @@ const GFIDetachedTableView = DesktopView.extend({
     moveGFI: function (evt) {
         var touch = evt.originalEvent.touches[0],
             width = this.$el.find(".gfi-header").width() / 2,
-            x = touch.clientX - width,
-            y = touch.clientY;
+            headerHeight = this.$el.find(".gfi-header").height(),
+            height = this.$el.height(),
+            rotAngle = this.model.get("rotateAngle");
+            console.log(rotAngle)
+            
+        if (rotAngle === 0){
+        	console.log("rotAngel = 0")
+            var x = touch.clientX - width,
+                y = touch.clientY - 20;
+          }
+        else if (rotAngle === -90){
+        	  var x = touch.clientX - width + 40,
+                y = touch.clientY - height / 2;       	
+        }
+        else if (rotAngle === -180){
+        	  var x = touch.clientX - width,
+                y = touch.clientY - height + 10;       	
+        }
+        else if (rotAngle === -270){
+        	  var x = touch.clientX - width - 80,
+                y = touch.clientY - height / 2;       	
+        }
+
 
         // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
         if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
             this.$el.css({
                 "left": x + "px",
-                "top": y + "px"
+                "top": y + "px", 
+                "-webkit-transform-origin": "50% 50%"
             });
         }
     },
@@ -74,7 +96,7 @@ const GFIDetachedTableView = DesktopView.extend({
         }
         $(".gfi-detached-table").css({
             "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
-            "-webkit-transform-origin": "50% 52%"
+            "-webkit-transform-origin": "85% 10%"
         });
     }
 });
