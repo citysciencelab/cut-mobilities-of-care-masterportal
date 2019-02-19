@@ -50,6 +50,7 @@ Konfiguration der Searchbar
 |----|-------------|---|-------|------------|
 |bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
 |gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
+|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)|Konfiguration des GDI (elastic) Suchdienstes.|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
 |recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
@@ -125,6 +126,26 @@ Konfiguration des Gazetteer Suchdienstes
 ```
 
 ***
+
+#### Portalconfig.searchbar.gdi
+Konfiguration des GDI Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
+```
+#!json
+"gdi": {
+    "minChars": 3,
+    "serviceId": "elastic"
+}
+```
+
+***
+
 
 #### Portalconfig.searchbar.specialWFS
 Konfiguration der SpecialWFS Suche

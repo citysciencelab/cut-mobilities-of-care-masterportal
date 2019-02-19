@@ -132,6 +132,8 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |imageScale|nein|String||Skalierung des Bildes.|
 |imageOffsetX|nein|String||Offset des Bildes in X-Richtung.|
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
+|imageOffsetXUnit|nein|String|"fraction"|Einheit des Offsets in X-Richtung.|
+|imageOffsetYUnit|nein|String|"fraction"|Einheit des Offsets in Y-Richtung.|
 
 ### POINT CIRCLE ###
 Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.

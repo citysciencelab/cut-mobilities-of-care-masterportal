@@ -38,6 +38,11 @@
         "states": "Hamburg",
         "classes": "place,highway,building,shop,historic,leisure"
       },
+      "gdi":{
+		"minChars": 3,
+		"serviceId": "elastic"
+	  },
+
       "specialWFS":
       {
         "minChars": 3,
@@ -457,7 +462,8 @@
       },
       {
         "id": "4561",
-        "infoFormat": "text/html"
+        "infoFormat": "text/html",
+        "visibility": true
       },
       {
         "id": "441"

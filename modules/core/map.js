@@ -43,6 +43,7 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "addLayerOnTop": this.addLayerOnTop,
             "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
             "addInteraction": this.addInteraction,
@@ -222,9 +223,9 @@ const map = Backbone.Model.extend({
         this.time = time;
     },
     handle3DEvents: function () {
-        var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+        var eventHandler = new OLCesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
 
-        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), OLCesium.ScreenSpaceEventType.LEFT_CLICK);
     },
     setCameraParameter: function (params) {
         var map3d = this.getMap3d(),
@@ -307,13 +308,13 @@ const map = Backbone.Model.extend({
 
         if (cartesian) {
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-            coords = [Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude)];
+            coords = [OLCesium.Math.toDegrees(cartographic.longitude), OLCesium.Math.toDegrees(cartographic.latitude)];
             height = scene.globe.getHeight(cartographic);
             if (height) {
                 coords = coords.concat([height]);
             }
 
-            distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
+            distance = OLCesium.Cartesian3.distance(cartesian, scene.camera.position);
             resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
             transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
             transformedPickedPosition = null;
@@ -322,7 +323,7 @@ const map = Backbone.Model.extend({
                 pickedPositionCartesian = scene.pickPosition(event.position);
                 if (pickedPositionCartesian) {
                     cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
-                    transformedPickedPosition = transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
+                    transformedPickedPosition = transform([OLCesium.Math.toDegrees(cartographicPickedPosition.longitude), OLCesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
@@ -386,7 +387,7 @@ const map = Backbone.Model.extend({
     },
     /**
     * Layer-Handling
-    * @param {ol.layer} layer -
+    * @param {ol/layer} layer -
     * @returns {void}
     */
     addLayer: function (layer) {
@@ -409,6 +410,15 @@ const map = Backbone.Model.extend({
         else {
             this.get("map").getLayers().push(layer);
         }
+    },
+
+    /**
+     * put the layer on top of the map
+     * @param {ol/layer} layer to be placed on top of the map
+     * @returns {void}
+     */
+    addLayerOnTop: function (layer) {
+        this.get("map").getLayers().push(layer);
     },
 
     removeLayer: function (layer) {

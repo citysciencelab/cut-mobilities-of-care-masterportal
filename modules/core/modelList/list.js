@@ -73,7 +73,8 @@ const ModelList = Backbone.Collection.extend({
                 this.trigger("renderTree");
             },
             "toggleWfsCluster": this.toggleWfsCluster,
-            "toggleDefaultTool": this.toggleDefaultTool
+            "toggleDefaultTool": this.toggleDefaultTool,
+            "refreshLightTree": this.refreshLightTree
         }, this);
 
         this.listenTo(this, {
@@ -445,9 +446,12 @@ const ModelList = Backbone.Collection.extend({
     insertIntoSelectionIDX: function (model) {
         var idx = 0;
 
-        if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
-            idx = this.appendToSelectionIDX(model);
-            // idx = this.selectionIDX.push(model) - 1;
+        if (model.has("selectionIDX")) {
+            this.selectionIDX.push(model);
+            this.updateModelIndeces();
+        }
+        else if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
+            this.appendToSelectionIDX(model);
         }
         else {
             while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
@@ -456,7 +460,6 @@ const ModelList = Backbone.Collection.extend({
             this.selectionIDX.splice(idx, 0, model);
             this.updateModelIndeces();
         }
-        return idx;
     },
     insertIntoSelectionIDXAt: function (model, idx) {
         this.selectionIDX.splice(idx, 0, model);
@@ -568,10 +571,11 @@ const ModelList = Backbone.Collection.extend({
                 layer.isSelected = false;
             }, this);
 
-            _.each(paramLayers, function (paramLayer) {
+            _.each(paramLayers, function (paramLayer, index) {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
                 if (_.isUndefined(lightModel) === false) {
+                    lightModel.selectionIDX = index;
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
@@ -644,6 +648,11 @@ const ModelList = Backbone.Collection.extend({
         // Nur bei Overlayern wird in Tree gescrollt.
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);
+        }
+
+        // für DIPAS Table Ansicht
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            $("#table-nav-layers-panel").collapse("show");
         }
     },
 
@@ -752,6 +761,9 @@ const ModelList = Backbone.Collection.extend({
 
         model.hideAllFeatures();
     },
+    removeLayerById: function (id) {
+        this.remove(id);
+    },
 
     /**
      * delivers model by given id
@@ -784,6 +796,10 @@ const ModelList = Backbone.Collection.extend({
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
         });
+    },
+
+    refreshLightTree: function () {
+        this.trigger("updateLightTree");
     }
 });
 

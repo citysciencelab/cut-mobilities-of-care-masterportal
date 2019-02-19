@@ -1,66 +1,142 @@
+import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
-import Overlay from "ol/Overlay.js";
+import Point from "ol/geom/Point.js";
+import {Icon, Style} from "ol/style.js";
+import {Vector as VectorLayer} from "ol/layer.js";
+import VectorSource from "ol/source/Vector.js";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
         ids: [],
         attribute: "flaechenid",
-        imgLink: "../img/location_eventlotse.svg",
-        layerId: "4561",
+        imgLink: "/lgv-config/img/location_eventlotse.svg",
         wfsId: "4560",
-        centerList: [],
+        featureCenterList: [],
         format: new WFS(),
         features: [],
-        markers: []
+        anchor: {
+            anchorX: 0.5,
+            anchorY: 24,
+            anchorXUnits: "fraction",
+            anchorYUnits: "pixels"
+        }, // @deprecated in version 3.0.0
+        imageScale: 2 // @deprecated in version 3.0.0
     },
     initialize: function () {
+        this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
         this.setIds(Radio.request("ParametricURL", "getZoomToFeatureIds"));
         this.getFeaturesFromWFS();
-        this.createCenterList();
-        this.setMarkerForFeatureIds();
+        this.createFeatureCenterList();
+        this.putIconsForFeatureIds(this.get("featureCenterList"),
+            this.get("imgLink"), // @deprecated in version 3.0.0
+            this.get("anchor"), // @deprecated in version 3.0.0
+            this.get("imageScale"), // @deprecated in version 3.0.0
+            this.get("styleListModel"));
         this.zoomToFeatures();
     },
-    setMarkerForFeatureIds: function () {
-        _.each(this.get("centerList"), function (center, i) {
-            var id = "featureMarker" + i,
-                marker;
 
-            // lokaler Pfad zum IMG-Ordner ist anders
-            $("#map").append("<div id=" + id + " class='featureMarker'><img src='" + this.get("imgLink") + "'></div>");
+    /**
+     * sets icons for the passed feature list
+     * @param {array} featureCenterList - contains centercoordinates from features
+     * @param {string} imgLink - path to icon as image //@deprecated in version 3.0.0
+     * @param {object} anchor - Position for the icon  //@deprecated in version 3.0.0
+     * @param {number} imageScale - factor scale the icon  //@deprecated in version 3.0.0
+     * @param {object} styleListModel - contains the configured style
+     * @returns {void}
+     */
+    putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleListModel) {
+        var iconFeatures = [];
 
-            marker = new Overlay({
-                id: id,
-                offset: [-12, 0],
-                positioning: "bottom-center",
-                element: document.getElementById(id),
-                stopEvent: false
-            });
+        _.each(featureCenterList, function (featureCenter, index) {
+            var featureName = "featureIcon" + index,
+                iconFeature = this.createIconFeature(featureCenter, featureName),
+                iconStyle;
 
-            marker.setPosition(center);
-            this.get("markers").push(marker);
-            Radio.trigger("Map", "addOverlay", marker);
+            if (!_.isUndefined(this.get("styleId"))) {
+                iconStyle = this.createIconStyle(iconFeature, styleListModel);
+            }
+            else {
+                // @deprecated in version 3.0.0 - this.createIconStyle() verwenden
+                iconStyle = this.createIconStyleOld(imgLink, anchor, imageScale);
+            }
+
+            iconFeature.setStyle(iconStyle);
+            iconFeatures.push(iconFeature);
         }, this);
+
+        Radio.trigger("Map", "addLayerOnTop", this.createIconVectorLayer(iconFeatures));
     },
+
+    /**
+     * creates a feature from the passed center point
+     * @param {array} featureCenter - contains centercoordinates from features
+     * @param {string} featureName - unique name for the feature
+     * @returns {ol/feature} iconFeature
+     */
+    createIconFeature: function (featureCenter, featureName) {
+        return new Feature({
+            geometry: new Point(featureCenter),
+            name: featureName
+        });
+    },
+
+    /**
+     * creates an Style over model from StyleList
+     * @param {ol/Feature} iconFeature feature to be style
+     * @param {object} styleListModel - contains the configured style
+     * @returns {ol/style} featureStyle
+     */
+    createIconStyle: function (iconFeature, styleListModel) {
+        var featureStyle = new Style();
+
+        if (!_.isUndefined(styleListModel)) {
+            featureStyle = styleListModel.createStyle(iconFeature);
+        }
+
+        return featureStyle;
+    },
+
+    /**
+     * creates the style from the image for the feature
+     * @param {string} imgLink - path to icon as image
+     * @param {object} anchor - Position for the icon
+     * @param {number} imageScale - factor scale the icon
+     * @return {ol/style} iconStyle
+     * @deprecated in version 3.0.0 - this.createIconStyle() verwenden
+     */
+    createIconStyleOld: function (imgLink, anchor, imageScale) {
+        return new Style({
+            image: new Icon({
+                anchor: [anchor.anchorX, anchor.anchorY],
+                anchorXUnits: anchor.anchorXUnits,
+                anchorYUnits: anchor.anchorYUnits,
+                src: imgLink,
+                scale: imageScale
+            })
+        });
+    },
+
+    /**
+     * creates a VectorLayer with a VectorSource from the features
+     * @param {array} iconFeatures - contains the features to draw
+     * @returns {ol/vectorlayer} iconVectorLayer
+     */
+    createIconVectorLayer: function (iconFeatures) {
+        return new VectorLayer({
+            source: new VectorSource({
+                features: iconFeatures
+            })
+        });
+    },
+
     getFeaturesFromWFS: function () {
         if (!_.isUndefined(this.get("ids"))) {
             this.requestFeaturesFromWFS(this.get("wfsId"));
         }
     },
 
-    // setter for features
-    setFeatures: function (value) {
-        this.set("features", value);
-    },
-    // setter for format
-    setFormat: function (value) {
-        this.set("format", value);
-    },
-    setCenterList: function (value) {
-        this.set("centerList", value);
-    },
-
     // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
-    createCenterList: function () {
+    createFeatureCenterList: function () {
         var ids = this.get("ids") || null,
             attribute = this.get("attribute") || null,
             features = this.get("features");
@@ -73,12 +149,12 @@ const ZoomToFeature = Backbone.Model.extend({
                         }
                         return 0;
                     }),
-                    extent = feature[0].getGeometry().getExtent(),
+                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent(),
                     deltaX = extent[2] - extent[0],
                     deltaY = extent[3] - extent[1],
                     center = [extent[0] + (deltaX / 2), extent[1] + (deltaY / 2)];
 
-                this.get("centerList").push(center);
+                this.get("featureCenterList").push(center);
             }, this);
         }
     },
@@ -86,9 +162,9 @@ const ZoomToFeature = Backbone.Model.extend({
     // baut sich aus den Config-prefs die URL zusammen
     requestFeaturesFromWFS: function (wfsId) {
         var LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: wfsId}),
-            url = LayerPrefs.url,
-            version = LayerPrefs.version,
-            typename = LayerPrefs.name,
+            url = LayerPrefs && LayerPrefs.hasOwnProperty("url") ? LayerPrefs.url : "",
+            version = LayerPrefs && LayerPrefs.hasOwnProperty("version") ? LayerPrefs.version : "",
+            typename = LayerPrefs && LayerPrefs.hasOwnProperty("featureType") ? LayerPrefs.featureType : "",
             data = "service=WFS&version=" + version + "&request=GetFeature&TypeName=" + typename;
 
         this.sendRequest(url, data);
@@ -132,7 +208,7 @@ const ZoomToFeature = Backbone.Model.extend({
                 var feature = features.filter(function (feat) {
                         return feat.get(attribute) === id ? 1 : 0;
                     }),
-                    extent = feature[0].getGeometry().getExtent();
+                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent();
 
                 // erste bbox direkt füllen
                 if (index === 0) {
@@ -153,8 +229,30 @@ const ZoomToFeature = Backbone.Model.extend({
             Radio.trigger("Map", "setBBox", bbox);
         }
     },
+
+    // setter for ids
     setIds: function (value) {
         this.set("ids", value);
+    },
+
+    // setter for features
+    setFeatures: function (value) {
+        this.set("features", value);
+    },
+
+    // setter for format
+    setFormat: function (value) {
+        this.set("format", value);
+    },
+
+    // setter for featureCenterList
+    setFeatureCenterList: function (value) {
+        this.set("featureCenterList", value);
+    },
+
+    // setter for styleListModel
+    setStyleListModel: function (value) {
+        this.set("styleListModel", value);
     }
 });
 
