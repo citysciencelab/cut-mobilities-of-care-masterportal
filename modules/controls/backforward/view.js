@@ -22,14 +22,6 @@ const BackForwardView = Backbone.View.extend({
         }, this);
 
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink);
-        /* window.addEventListener('popstate', function(ev) {
-            if (ev.state === null) {
-                return;
-            }
-            Radio.trigger("MapView", "setCenter", ev.state.center, event.state.zoom);
-            Radio.trigger("BackForwardView", "setUpdate", false);
-            //set new view
-        });*/
         this.render();
     },
     template: _.template(BackForwardTemplate),
@@ -70,9 +62,6 @@ const BackForwardView = Backbone.View.extend({
         BackforwardModel.pushState(evt.map.getView());
     },
     render: function () {
-        // var glyphicons = this.model.getGlyphicons();
-        // this.template = this.template.replace("$glyphicon-for", glyphicons["glyphicon-forward"] || 'glyphicon-step-forward');
-        // this.template = this.template.replace("$glyphicon-back", glyphicons["glyphicon-backward"] || 'glyphicon-step-backward');
         this.$el.html(this.template());
 
         return this;
