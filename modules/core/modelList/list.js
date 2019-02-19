@@ -439,7 +439,7 @@ const ModelList = Backbone.Collection.extend({
             defaultTool = this.getDefaultTool();
 
         activeTools = _.without(activeTools, legendModel);
-        if (activeTools.length === 0) {
+        if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
         }
     },
