@@ -23,10 +23,13 @@ const CustomTreeParser = Parser.extend({
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                     objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
 
-                    if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
+                    if (_.isNull(objFromRawList) && layerExtended.typ !== "StaticImage") { // Wenn LayerID nicht definiert, dann Abbruch
                         return;
+                    }else if (_.isNull(objFromRawList) && layerExtended.typ === "StaticImage") {
+                        layerExtended = _.extend(layerExtended, {"isChildLayer": false});
+                    }else {
+                        layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
                     }
-                    layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
                 }
                 // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
                 // z.B.: {id: ["550,551,552,...,559"], visible: false}
