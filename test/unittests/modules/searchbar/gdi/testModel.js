@@ -13,19 +13,19 @@ describe("modules/searchbar/gdi", function () {
     });
     describe("check Defaults and Settings", function () {
         it("minChars Value should be 4", function () {
-            expect(model.getMinChars()).to.equal(4);
+            expect(model.get("minChars")).to.equal(4);
         });
         it("change of minChars Value should return 5", function () {
             model.setMinChars(5);
-            expect(model.getMinChars()).to.equal(5);
+            expect(model.get("minChars")).to.equal(5);
         });
 
         it("ServiceID Value should be 'elastic'", function () {
-            expect(model.getServiceId()).to.equal("elastic");
+            expect(model.get("serviceId")).to.equal("elastic");
         });
         it("change of ServiceID Value should return 4711", function () {
             model.setServiceId("4711");
-            expect(model.getServiceId()).to.equal("4711");
+            expect(model.get("serviceId")).to.equal("4711");
         });
     });
     describe("createQueryString", function () {

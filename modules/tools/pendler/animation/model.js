@@ -149,7 +149,6 @@ const Animation = PendlerCoreModel.extend({
         max = _.first(coloredFeatures).get(this.get("attrAnzahl"));
         this.setMaxVal(max);
 
-
         this.preparePendlerLegend(coloredFeatures);
         this.createLineString(coloredFeatures);
     },
@@ -224,8 +223,9 @@ const Animation = PendlerCoreModel.extend({
             this.setAnimationLimit(1);
         }
         this.setAnimationCount(0);
+        animationLayer.getSource().clear();
+        animationLayer.setZIndex(9);
         this.setAnimationLayer(animationLayer);
-        this.get("animationLayer").getSource().clear();
         this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.moveFeature.bind(this)));
         if (this.get("animating")) {
             this.stopAnimation([]);
