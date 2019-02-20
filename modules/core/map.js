@@ -95,6 +95,24 @@ const map = Backbone.Model.extend({
         if (Config.startingMap3D) {
             this.activateMap3d();
         }
+
+        if (typeof Config.isInputMap !== "undefined" && Config.isInputMap) {
+            this.registerListener("click", this.setMarker, this);
+        }
+    },
+
+    /**
+     * Funktion wird bei Vorhandensein des Config-Parameters "isInputMap"
+     * als Event-Listener registriert und setzt bei Mausklick immer und
+     * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
+     * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
+     *
+     * @param  {object} event - Name des Layers
+     * @returns {void}
+     */
+    setMarker: function (event) {
+        Radio.trigger("MapMarker", "showMarker", event.coordinate);
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": event.coordinate});
     },
 
     /**
