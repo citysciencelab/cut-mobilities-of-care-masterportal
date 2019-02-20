@@ -58,8 +58,7 @@
       },
       "tree":
       {
-        "minChars": 3,
-        "layersRemoveable": false
+        "minChars": 3
       },
       "gdi":{
 		"minChars": 3,
@@ -326,7 +325,8 @@
       "button3d": true
     },
     "scaleLine": true,
-    "Baumtyp": "custom"
+    "Baumtyp": "custom",
+    "layersRemoveable": false
   },
   "Themenconfig":
   {

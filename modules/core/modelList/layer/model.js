@@ -23,7 +23,8 @@ const Layer = Item.extend({
         showSettings: true,
         hitTolerance: 0,
         styleable: false,
-        isNeverVisibleInTree: false
+        isNeverVisibleInTree: false,
+        isRemoveable: false
     },
 
     initialize: function () {
@@ -43,6 +44,7 @@ const Layer = Item.extend({
             this.prepareLayerObject();
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
+            this.setIsRemoveable(Radio.request("Parser", "getPortalConfig").layersRemoveable);
             this.toggleWindowsInterval();
         }
     },
@@ -389,6 +391,10 @@ const Layer = Item.extend({
 
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
+    },
+    setIsRemoveable: function (value) {
+        // TODO: Abfangen, wenn Value nicht gesetzt in config.json
+        this.set("isRemoveable", value);
     },
     removeLayer: function () {
         var layer = this.get("id");

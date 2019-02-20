@@ -100,7 +100,6 @@
       {
         "name": "Themen",
         "glyphicon": "glyphicon-list",
-        "layersRemoveable": false ,
         "isInitOpen": false
       },
       "ansichten": {
@@ -402,7 +401,8 @@
       "freeze": true
     },
     "scaleLine": true,
-    "Baumtyp": "light"
+    "Baumtyp": "light",
+    "layersRemoveable": true
   },
   "Themenconfig":
   {

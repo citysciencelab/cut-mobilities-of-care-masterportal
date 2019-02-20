@@ -29,7 +29,9 @@
             </select>
        </div>
     </form>
+    <% if (isRemoveable === true) { %>
     <span class="remove-layer">
-            <span class="text" data-toggle="tooltip" data-placement="bottom">Layer entfernen</span>
-    </span>
+                <span class="text" data-toggle="tooltip" data-placement="bottom">Layer entfernen</span>
+            </span>
+    <% } %>
 </div>
