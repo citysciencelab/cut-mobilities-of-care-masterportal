@@ -112,7 +112,13 @@ const map = Backbone.Model.extend({
      */
     setMarker: function (event) {
         Radio.trigger("MapMarker", "showMarker", event.coordinate);
-        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": event.coordinate});
+        if (typeof Config.targetProjection !== 'undefined') {
+            this.coords = Radio.request("CRS", "transformFromMapProjection", Config.targetProjection, event.coordinate);
+        }
+        else {
+            this.coords = event.coordinate;
+        }
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": this.coords});
     },
 
     /**
