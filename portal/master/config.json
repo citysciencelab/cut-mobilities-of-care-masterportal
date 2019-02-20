@@ -416,11 +416,6 @@
           "id": "452"
         },
         {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": false
-        },
-        {
           "id": "12883",
           "name": "Gelände",
           "visibility": true
