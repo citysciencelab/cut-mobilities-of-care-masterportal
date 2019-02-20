@@ -77,9 +77,6 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".item-settings").hide();
             this.$el.find(".item-settings").slideDown();
         }
-        // if (Radio.request("Parser", "getPortalConfig").menu.tree.layersRemoveable === false) {
-        //     this.$el.find(".remove-layer").remove();
-        // }
     },
 
     toggleIsSelected: function () {
