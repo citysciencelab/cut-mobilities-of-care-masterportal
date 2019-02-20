@@ -58,7 +58,8 @@
       },
       "tree":
       {
-        "minChars": 3
+        "minChars": 3,
+        "layersRemoveable": false
       },
       "gdi":{
 		"minChars": 3,
