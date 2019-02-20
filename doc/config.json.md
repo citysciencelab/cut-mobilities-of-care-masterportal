@@ -566,6 +566,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |name|ja|String||Name des Themenbaumes.|
 |glyphicon|nein|String||CSS Klasse des glyphicons.|
 |isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|
+|layersRemoveable|nein|Boolean||Gibt an ob der Layer gelöscht werden darf.|
 
 ***
 
