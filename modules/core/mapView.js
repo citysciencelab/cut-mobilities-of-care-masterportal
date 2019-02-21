@@ -134,7 +134,7 @@ const MapView = Backbone.Model.extend({
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
-            Radio.trigger("RemoteInterface", "postMessage", { "centerPosition": this.getCenter() });
+            Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
     },
 
@@ -154,7 +154,7 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("MapView", "changedOptions", params);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
         Radio.trigger("ClickCounter", "zoomChanged");
-        Radio.trigger("RemoteInterface", "postMessage", { "zoomLevel": this.getZoom() });
+        Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
     },
 
     /**
