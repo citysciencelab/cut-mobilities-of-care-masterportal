@@ -435,27 +435,7 @@
     "Fachdaten":
     {
       "Layer": [
-        {
-          "typ": "StaticImage",
-          "url": "https://www.w3.org/Graphics/PNG/alphatest.png",
-          "name": "Testing PNG File",
-          "visibility": true,
-          "extend": [560296.72, 5932154.22, 562496.72, 5933454.22]
-        },
-        {
-          "typ": "StaticImage",
-          "url": "https://bellard.org/bpg/3.png",
-          "name": "Dices of Hamburg",
-          "visibility": true,
-          "extend": [562396.72, 5932154.22, 564400.72, 5933454.22]
-        },
-        {
-          "typ": "StaticImage",
-          "url": "http://test.geoportal-hamburg.de/beteiligung_grasbrook/sites/all/libraries/masterportal/img/grassbrook.png",
-          "name": "Map of Grassbrook",
-          "visibility": true,
-          "extend": [564929.03, 5930822.18, 568775.03, 5932697.55]
-        },
+      
       {
         "id": "8194"
       },

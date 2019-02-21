@@ -122,7 +122,6 @@ const ModelList = Backbone.Collection.extend({
                 return new WFSLayer(attrs, options);
             }
             else if (attrs.typ === "StaticImage") {
-                console.log("123");
                 return new StaticImageLayer(attrs, options);
             }
             else if (attrs.typ === "GeoJSON") {

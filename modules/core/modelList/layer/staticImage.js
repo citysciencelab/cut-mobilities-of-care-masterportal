@@ -1,6 +1,4 @@
 import Layer from "./model";
-import View from "ol/View.js";
-import {getCenter} from 'ol/extent.js';
 import ImageLayer from 'ol/layer/Image.js';
 import Projection from 'ol/proj/Projection.js';
 import StaticImageSource from 'ol/source/ImageStatic.js';
@@ -13,14 +11,16 @@ const StaticImageLayer = Layer.extend({
     createLayerSource: function () {
         var extent = this.get("extend"),
         projection = new Projection({
-          code: 'xkcd-image',
+          code: 'static-image',
           units: 'pixels',
           extent: extent
         });
+
         // ImageWMS can not be cached
         this.setLayerSource(new StaticImageSource({
             url: this.get("url"),
-            projection: Radio.request("MapView", "getProjection"),
+            // projection: Radio.request("MapView", "getProjection"),
+            projection: projection,
             imageExtent: extent
         }));
     },
