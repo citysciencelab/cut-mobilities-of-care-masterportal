@@ -393,7 +393,7 @@ const Layer = Item.extend({
         this.set("isVisibleInTree", value);
     },
     setIsRemoveable: function (value) {
-        if (value !== undefined) {
+        if (value !== undefined && value !== null && value !== "string") {
             this.set("isRemoveable", value);
         }
     },
