@@ -119,6 +119,7 @@ const map = Backbone.Model.extend({
             this.coords = event.coordinate;
         }
         Radio.trigger("RemoteInterface", "postMessage", {"setMarker": this.coords});
+        Radio.trigger("MapView", "setCenter", this.coords);
     },
 
     /**
