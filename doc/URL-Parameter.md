@@ -14,7 +14,7 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 |bezirk|Zoomt auf den Umring des angegebenen Hamburger Bezirks.|`&bezirk=wandsbek`|
 |center|Verschiebt den Kartenausschnitt auf die angegebene Adresse. Die Koordinaten müssen dem angegebenen Koordinatensystem angehören (siehe [config.namedProjections.epsg](config.js.md)).|`&center=565874,5934140`|
 |projection|*Nur wirksam bei Angabe des Parameters center!* Gibt den Namen des Quellkoordinatensystems an, aus dem die angegebenen Koordinaten stammen.|`&projection=WGS84`|
-|marker|Setzt einen Map Marker auf die angegebenen Koordinaten und zoomt auf diesen. Ist der Parameter `projection` angegeben, werden die Marker-Koordinaten ebenfalls aus der angegebenen Projektion konvertiert.|`&marker=565874,5934140`|
+|marker|Setzt einen Map Marker auf die angegebenen Koordinaten und zoomt auf diesen. Ist der Parameter `projection` angegeben, werden die Marker-Koordinaten aus der angegebenen Projektion konvertiert.|`&marker=565874,5934140`|
 |layerids|Mit diesem Parameter können initial anzuzeigende Layer überschrieben werden. Die Wirkung ist von [config.Portalconfig.Baumtyp](config.json.md) abhängig. Bei *light* werden die layerIds ergänzend sichtbar geschaltet. Ansonsten wird die Voreinstellung komplett überschrieben. Diese Einstellung kann um [Sichtbarkeit](URL-Parameter.md) und [Transparenz](URL-Parameter.md) ergänzt werden.|`&layerids=453,2128`|
 |query|Führt eine Adresssuche im Suchschlitz mit dem angegebenen String aus. Hausnummern müssen mit Komma getrennt werden.|`&query=Neuenfelder Straße,19`|
 |isinitopen|Die übergebene Modul-ID wird initial geöffnet. Von Modulen des Typs Tools, die sich in einem Fenster öffnen, kann immer nur eins offen sein. |`&isinitopen=routing`|

@@ -225,8 +225,7 @@ const ParametricURL = Backbone.Model.extend({
     },
     parseCenter: function (result) {
         var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(","),
-            projection = _.values(_.pick(result, "PROJECTION")).pop(),
-            marker = _.values(_.pick(result, "MARKER")).pop();
+            projection = _.values(_.pick(result, "PROJECTION")).pop();
 
         // parse Strings to numbers
         values = _.map(values, Number);
@@ -237,24 +236,24 @@ const ParametricURL = Backbone.Model.extend({
         }
 
         this.set("center", values);
+    },
+    parseMarker: function (result) {
+        var values = _.values(_.pick(result, "MARKER"))[0].split("@")[1] ? _.values(_.pick(result, "MARKER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "MARKER"))[0].split(","),
+            projection = _.values(_.pick(result, "PROJECTION")).pop();
 
-        // If a marker should be set, trigger it.
-        if (_.isUndefined(marker) === false) {
+        // parse Strings to numbers
+        values = _.map(values, Number);
 
-            // Transform the marker coordinates to numbers first.
-            marker = marker.split(",");
-            marker = _.map(marker, Number);
-
-            // If a projection is present, we need to transform the marker coordinates as well.
-            marker = Radio.request("CRS", "transformToMapProjection", projection, marker);
-
-            // Trigger the marker.
-            Radio.trigger("MapMarker", "showMarker", marker);
-
-            // Zoom on the newly set marker.
-            Radio.trigger("MapMarker", "zoomTo", {coordinate: marker});
-
+        // If a projection is present, we need to transform the marker coordinates as well.
+        if (_.isUndefined(projection) === false) {
+            values = Radio.request("CRS", "transformToMapProjection", projection, values);
         }
+
+        // Trigger the marker.
+        Radio.trigger("MapMarker", "showMarker", values);
+
+        // Zoom on the newly set marker.
+        Radio.trigger("MapMarker", "zoomTo", {coordinate: values});
     },
 
     parseZOOMTOEXTENT: function (result) {
@@ -388,6 +387,13 @@ const ParametricURL = Backbone.Model.extend({
          */
         if (_.has(result, "CENTER")) {
             this.parseCenter(result);
+        }
+
+        /**
+         * Setzt einen Marker, sofern in der URL vorhanden.
+         */
+        if (_.has(result, "MARKER")) {
+            this.parseMarker(result);
         }
 
         if (_.has(result, "ZOOMTOEXTENT")) {
