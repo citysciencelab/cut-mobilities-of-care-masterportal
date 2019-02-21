@@ -190,7 +190,13 @@ const MapView = Backbone.Model.extend({
         *   Auslesen und Überschreiben durch Werte aus ParamUrl
         */
         var centerFromParamUrl = Radio.request("ParametricURL", "getCenter"),
-            zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
+            zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel"),
+            projectionFromParamUrl = Radio.request("ParametricURL", "getProjectionFromUrl"),
+            mapMarkerFromParamUrl = Radio.request("ParametricURL", "getMarkerFromUrl");
+
+        if (!_.isUndefined(projectionFromParamUrl)) {
+            this.set("projectionFromParamUrl", projectionFromParamUrl);
+        }
 
         if (!_.isUndefined(centerFromParamUrl)) {
             this.setStartCenter(centerFromParamUrl);
@@ -198,6 +204,10 @@ const MapView = Backbone.Model.extend({
 
         if (!_.isUndefined(zoomLevelFromParamUrl)) {
             this.set("resolution", this.get("resolutions")[zoomLevelFromParamUrl]);
+        }
+
+        if (!_.isUndefined(mapMarkerFromParamUrl)) {
+            this.set("startMarker", mapMarkerFromParamUrl);
         }
     },
 
@@ -262,9 +272,16 @@ const MapView = Backbone.Model.extend({
     },
 
     setView: function () {
+        var startCenter = this.get("startCenter"),
+            projectionFromParamUrl = this.get("projectionFromParamUrl");
+
+        if (!_.isUndefined(projectionFromParamUrl)) {
+            startCenter = Radio.request("CRS", "transformToMapProjection", projectionFromParamUrl, startCenter);
+        }
+
         var view = new View({
             projection: this.get("projection"),
-            center: this.get("startCenter"),
+            center: startCenter,
             extent: this.get("extent"),
             resolution: this.get("resolution"),
             resolutions: this.get("resolutions")

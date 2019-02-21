@@ -24,6 +24,9 @@ const ParametricURL = Backbone.Model.extend({
             "getInitString": function () {
                 return this.get("initString");
             },
+            "getProjectionFromUrl": function () {
+                return this.get("projectionFromUrl");
+            },
             "getCenter": function () {
                 return this.get("center");
             },
@@ -51,6 +54,9 @@ const ParametricURL = Backbone.Model.extend({
             },
             "getBrwLayerName": function () {
                 return this.get("brwLayerName");
+            },
+            "getMarkerFromUrl": function () {
+                return this.get("markerFromUrl");
             }
         }, this);
 
@@ -223,37 +229,26 @@ const ParametricURL = Backbone.Model.extend({
         Config.view.zoomLevel = 0;
         this.createLayerParamsUsingMetaId(values);
     },
+    parseProjection: function (result) {
+        var projection = _.values(_.pick(result, "PROJECTION")).pop();
+
+        this.set("projectionFromUrl", projection);
+    },
     parseCenter: function (result) {
-        var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(","),
-            projection = _.values(_.pick(result, "PROJECTION")).pop();
+        var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
 
         // parse Strings to numbers
         values = _.map(values, Number);
-
-        // If there is a source projection value, we need to transform the values given.
-        if (_.isUndefined(projection) === false) {
-            values = Radio.request("CRS", "transformToMapProjection", projection, values);
-        }
 
         this.set("center", values);
     },
     parseMarker: function (result) {
-        var values = _.values(_.pick(result, "MARKER"))[0].split("@")[1] ? _.values(_.pick(result, "MARKER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "MARKER"))[0].split(","),
-            projection = _.values(_.pick(result, "PROJECTION")).pop();
+        var values = _.values(_.pick(result, "MARKER"))[0].split("@")[1] ? _.values(_.pick(result, "MARKER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "MARKER"))[0].split(",");
 
         // parse Strings to numbers
         values = _.map(values, Number);
 
-        // If a projection is present, we need to transform the marker coordinates as well.
-        if (_.isUndefined(projection) === false) {
-            values = Radio.request("CRS", "transformToMapProjection", projection, values);
-        }
-
-        // Trigger the marker.
-        Radio.trigger("MapMarker", "showMarker", values);
-
-        // Zoom on the newly set marker.
-        Radio.trigger("MapMarker", "zoomTo", {coordinate: values});
+        this.set("markerFromUrl", values);
     },
 
     parseZOOMTOEXTENT: function (result) {
@@ -378,6 +373,10 @@ const ParametricURL = Backbone.Model.extend({
          */
         if (_.has(result, "MDID")) {
             this.parseMDID(result);
+        }
+
+        if (_.has(result, "PROJECTION")) {
+            this.parseProjection(result);
         }
 
         /**

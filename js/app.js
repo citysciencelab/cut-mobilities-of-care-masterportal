@@ -102,12 +102,9 @@ function loadApp () {
     new RawLayerList(null, {url: Config.layerConf});
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
-    // CRS, Map and MapMarkerView before ParametricURL to enable
-    // for coordinate transformation and marker positions by URL.
+    new ParametricURL();
     new CRS();
     new Map();
-    new MapMarkerView();
-    new ParametricURL();
     new WPS();
     new AddGeoJSON();
     new CswParserModel();
@@ -370,6 +367,7 @@ function loadApp () {
         });
     }
 
+    new MapMarkerView();
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
@@ -385,13 +383,13 @@ function loadApp () {
     // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
     if (CUSTOMMODULE !== "") {
         return import(/* webpackMode: "eager" */ CUSTOMMODULE)
-        .then(module => {
-            new module.default;
-        })
-        .catch(error => {
-            console.error(error);
-            Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-        });
+            .then(module => {
+                new module.default;
+            })
+            .catch(error => {
+                console.error(error);
+                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+            });
     }
 
     Radio.trigger("Util", "hideLoader");
