@@ -96,7 +96,7 @@ const map = Backbone.Model.extend({
             this.activateMap3d();
         }
 
-        if (typeof Config.isInputMap !== "undefined" && Config.isInputMap) {
+        if (_.isUndefined(Config.isInputMap) === false && Config.isInputMap) {
             this.registerListener("click", this.setMarker, this);
         }
     },
@@ -112,7 +112,7 @@ const map = Backbone.Model.extend({
      */
     setMarker: function (event) {
         Radio.trigger("MapMarker", "showMarker", event.coordinate);
-        if (typeof Config.targetProjection !== 'undefined') {
+        if (_.isUndefined(Config.targetProjection) === false) {
             this.coords = Radio.request("CRS", "transformFromMapProjection", Config.targetProjection, event.coordinate);
         }
         else {
