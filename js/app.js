@@ -102,9 +102,12 @@ function loadApp () {
     new RawLayerList(null, {url: Config.layerConf});
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
-    new ParametricURL();
+    // CRS, Map and MapMarkerView before ParametricURL to enable
+    // for coordinate transformation and marker positions by URL.
     new CRS();
     new Map();
+    new MapMarkerView();
+    new ParametricURL();
     new WPS();
     new AddGeoJSON();
     new CswParserModel();
@@ -367,7 +370,6 @@ function loadApp () {
         });
     }
 
-    new MapMarkerView();
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
