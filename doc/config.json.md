@@ -40,7 +40,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
 |searchbar|nein|[searchbar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
-
+|layersRemoveable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
 ***
 
 ### Portalconfig.searchbar
@@ -566,7 +566,6 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 |name|ja|String||Name des Themenbaumes.|
 |glyphicon|nein|String||CSS Klasse des glyphicons.|
 |isInitOpen|nein|Boolean|false|Gibt an ob der Themenbaum initial geöffnet ist.|
-|layersRemoveable|nein|Boolean||Gibt an ob der Layer gelöscht werden darf.|
 
 ***
 

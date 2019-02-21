@@ -393,8 +393,9 @@ const Layer = Item.extend({
         this.set("isVisibleInTree", value);
     },
     setIsRemoveable: function (value) {
-        // TODO: Abfangen, wenn Value nicht gesetzt in config.json
-        this.set("isRemoveable", value);
+        if (value !== undefined) {
+            this.set("isRemoveable", value);
+        }
     },
     removeLayer: function () {
         var layer = this.get("id");
