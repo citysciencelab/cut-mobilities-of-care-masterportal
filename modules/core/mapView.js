@@ -349,7 +349,7 @@ const MapView = Backbone.Model.extend({
         return this.get("view").calculateExtent(mapSize);
     },
 
-    setProjectionFromParamUrl: function(projection) {
+    setProjectionFromParamUrl: function (projection) {
         this.set("projectionFromParamUrl", projection);
     },
 
