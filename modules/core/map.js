@@ -95,6 +95,39 @@ const map = Backbone.Model.extend({
         if (Config.startingMap3D) {
             this.activateMap3d();
         }
+
+        if (!_.isUndefined(Config.inputMap)) {
+            this.registerListener("click", this.addMarker, this);
+        }
+    },
+
+    /**
+     * Funktion wird bei Vorhandensein des Config-Parameters "inputMap"
+     * als Event-Listener registriert und setzt bei Mausklick immer und
+     * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
+     * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
+     *
+     * @param  {event} event - Das MapBrowserPointerEvent
+     * @returns {void}
+     */
+    addMarker: function (event) {
+        var coords = event.coordinate;
+
+        // Set the marker on the map.
+        Radio.trigger("MapMarker", "showMarker", coords);
+
+        // If the marker should be centered, center the map around it.
+        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+            Radio.trigger("MapView", "setCenter", coords);
+        }
+
+        // Should the coordinates get transformed to another coordinate system for broadcast?
+        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
+        }
+
+        // Broadcast the coordinates clicked in the desired coordinate system.
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": coords});
     },
 
     /**
