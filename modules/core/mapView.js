@@ -128,9 +128,9 @@ const MapView = Backbone.Model.extend({
         this.setResolutions();
         this.setProjection();
         this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
-        this.setStartCenter(Radio.request("ParametricURL", "getCenter"));
+        this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
         this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
-        this.setView();
+        this.prepareView();
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
@@ -195,24 +195,20 @@ const MapView = Backbone.Model.extend({
         this.set("backgroundImage", value);
     },
 
-    setStartCenter: function (value) {
+    prepareStartCenter: function (value) {
         var startCenter = value;
 
         if (!_.isUndefined(startCenter)) {
-            if (!_.isUndefined(this.getProjectionFromParamUrl())) {
-                startCenter = Radio.request("CRS", "transformToMapProjection", this.getProjectionFromParamUrl(), startCenter);
+            if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
+                startCenter = Radio.request("CRS", "transformToMapProjection", this.get("projectionFromParamUrl"), startCenter);
             }
-            this.set("startCenter", startCenter);
+            this.setStartCenter(startCenter);
         }
-    },
-
-    getStartCenter: function () {
-        return this.get("startCenter");
     },
 
     setStartZoomLevel: function (value) {
         if (!_.isUndefined(value)) {
-            this.set("resolution", this.getResolutions()[value]);
+            this.set("resolution", this.get("resolutions")[value]);
         }
     },
 
@@ -230,10 +226,6 @@ const MapView = Backbone.Model.extend({
 
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    getResolutions: function () {
-        return this.get("resolutions");
     },
 
     /**
@@ -268,14 +260,18 @@ const MapView = Backbone.Model.extend({
         this.set("projection", proj);
     },
 
-    setView: function () {
-        this.set("view", new View({
+    prepareView: function () {
+        this.setView(new View({
             projection: this.get("projection"),
-            center: this.getStartCenter(),
+            center: this.get("startCenter"),
             extent: this.get("extent"),
             resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
         }));
+    },
+
+    setView: function (view) {
+        this.set("view", view);
     },
 
     setCenter: function (coords, zoomLevel) {
@@ -357,8 +353,8 @@ const MapView = Backbone.Model.extend({
         this.set("projectionFromParamUrl", projection);
     },
 
-    getProjectionFromParamUrl: function () {
-        return this.get("projectionFromParamUrl");
+    setStartCenter: function (value) {
+        this.set("startCenter", value);
     }
 });
 

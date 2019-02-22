@@ -182,6 +182,14 @@ const MapMarkerModel = Backbone.Model.extend({
     // setter for polygonStyle
     setStyle: function (value) {
         this.set("style", value);
+    },
+
+    setProjectionFromParamUrl: function (value) {
+        this.set("projectionFromParamUrl", value);
+    },
+
+    setMarkerFromParamUrl: function (value) {
+        this.set("startMarker", value);
     }
 });
 

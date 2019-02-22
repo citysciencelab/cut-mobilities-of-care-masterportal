@@ -21,7 +21,14 @@ const MapMarker = Backbone.View.extend({
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
-        this.setUrlParams();
+        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+            this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        }
+
+        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+            this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
+        }
+
         this.render();
         // For BauInfo: requests customModule and askes for marker position to set.
         markerPosition = Radio.request("CustomModule", "getMarkerPosition");
@@ -193,19 +200,6 @@ const MapMarker = Backbone.View.extend({
 
     hidePolygon: function () {
         this.model.hideFeature();
-    },
-
-    setUrlParams: function () {
-        var projectionFromParamUrl = Radio.request("ParametricURL", "getProjectionFromUrl"),
-            mapMarkerFromParamUrl = Radio.request("ParametricURL", "getMarkerFromUrl");
-
-        if (!_.isUndefined(projectionFromParamUrl)) {
-            this.model.set("projectionFromParamUrl", projectionFromParamUrl);
-        }
-
-        if (!_.isUndefined(mapMarkerFromParamUrl)) {
-            this.model.set("startMarker", mapMarkerFromParamUrl);
-        }
     },
 
     showStartMarker: function () {
