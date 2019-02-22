@@ -23,9 +23,9 @@ const CustomTreeParser = Parser.extend({
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                     objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
 
-                    if (_.isNull(objFromRawList) && layerExtended.typ !== "StaticImage") { // Wenn LayerID nicht definiert, dann Abbruch
+                    if (_.isNull(objFromRawList) && layerExtended.typ !== "StaticImage" || layerExtended.typ !== "CustomGeoJSON") { // Wenn LayerID nicht definiert, dann Abbruch
                         return;
-                    }else if (_.isNull(objFromRawList) && layerExtended.typ === "StaticImage") {
+                    }else if (_.isNull(objFromRawList) && layerExtended.typ === "StaticImage" || layerExtended.typ === "CustomGeoJSON" ) {
                         layerExtended = _.extend(layerExtended, {"isChildLayer": false});
                     }else {
                         layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});

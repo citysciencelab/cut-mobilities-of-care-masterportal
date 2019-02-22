@@ -19,7 +19,6 @@ const StaticImageLayer = Layer.extend({
         // ImageWMS can not be cached
         this.setLayerSource(new StaticImageSource({
             url: this.get("url"),
-            // projection: Radio.request("MapView", "getProjection"),
             projection: projection,
             imageExtent: extent
         }));
