@@ -9,14 +9,13 @@ const StaticImageLayer = Layer.extend({
      * @return {[type]} [description]
      */
     createLayerSource: function () {
-        var extent = this.get("extend"),
+        var extent = this.get("extent"),
         projection = new Projection({
           code: 'static-image',
           units: 'pixels',
           extent: extent
         });
 
-        // ImageWMS can not be cached
         this.setLayerSource(new StaticImageSource({
             url: this.get("url"),
             projection: projection,
@@ -39,7 +38,7 @@ const StaticImageLayer = Layer.extend({
     createLegendURL: function () {
     },
     checkForScale: function () {
-    }
+    },
 });
 
 export default StaticImageLayer;
