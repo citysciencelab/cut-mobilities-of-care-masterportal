@@ -24,7 +24,7 @@ const Layer = Item.extend({
         hitTolerance: 0,
         styleable: false,
         isNeverVisibleInTree: false,
-        isRemoveable: false
+        isRemovable: false
     },
 
     initialize: function () {
@@ -44,7 +44,7 @@ const Layer = Item.extend({
             this.prepareLayerObject();
             Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
             this.setIsVisibleInMap(this.get("isSelected"));
-            this.setIsRemoveable(Radio.request("Parser", "getPortalConfig").layersRemoveable);
+            this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();
         }
     },
@@ -392,9 +392,9 @@ const Layer = Item.extend({
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
     },
-    setIsRemoveable: function (value) {
+    setIsRemovable: function (value) {
         if (value !== undefined && value !== null && value !== "string") {
-            this.set("isRemoveable", value);
+            this.set("isRemovable", value);
         }
     },
     removeLayer: function () {
