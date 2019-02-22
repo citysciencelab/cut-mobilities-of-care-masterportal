@@ -232,23 +232,16 @@ const ParametricURL = Backbone.Model.extend({
     parseProjection: function (result) {
         var projection = _.values(_.pick(result, "PROJECTION")).pop();
 
-        this.set("projectionFromUrl", projection);
+        if (!_.isUndefined(projection)) {
+            this.setProjectionFromUrl(projection);
+        }
     },
-    parseCenter: function (result) {
-        var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+    parseCoordinates: function (result, property) {
+        var values = _.values(_.pick(result, property))[0].split("@")[1] ? _.values(_.pick(result, property))[0].split("@")[0].split(",") : _.values(_.pick(result, property))[0].split(",");
 
         // parse Strings to numbers
         values = _.map(values, Number);
-
-        this.set("center", values);
-    },
-    parseMarker: function (result) {
-        var values = _.values(_.pick(result, "MARKER"))[0].split("@")[1] ? _.values(_.pick(result, "MARKER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "MARKER"))[0].split(",");
-
-        // parse Strings to numbers
-        values = _.map(values, Number);
-
-        this.set("markerFromUrl", values);
+        return values;
     },
 
     parseZOOMTOEXTENT: function (result) {
@@ -385,14 +378,14 @@ const ParametricURL = Backbone.Model.extend({
          * Angabe des EPSG-Codes der Koordinate über "@"
          */
         if (_.has(result, "CENTER")) {
-            this.parseCenter(result);
+            this.setCenter(this.parseCoordinates(result, "CENTER"));
         }
 
         /**
          * Setzt einen Marker, sofern in der URL vorhanden.
          */
         if (_.has(result, "MARKER")) {
-            this.parseMarker(result);
+            this.setMarkerFromUrl(this.parseCoordinates(result, "MARKER"));
         }
 
         if (_.has(result, "ZOOMTOEXTENT")) {
@@ -572,6 +565,16 @@ const ParametricURL = Backbone.Model.extend({
      */
     setBrwLayerName: function (value) {
         this.set("brwLayerName", value);
+    },
+
+    setProjectionFromUrl: function (value) {
+        this.set("projectionFromUrl", value);
+    },
+    setCenter: function (value) {
+        this.set("center", value);
+    },
+    setMarkerFromUrl: function (value) {
+        this.set("markerFromUrl", value);
     }
 });
 

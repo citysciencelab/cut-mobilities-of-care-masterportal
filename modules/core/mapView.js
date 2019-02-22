@@ -126,8 +126,10 @@ const MapView = Backbone.Model.extend({
             this.setResolution(resolution);
         }
         this.setResolutions();
-        this.setUrlParams();
         this.setProjection();
+        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        this.setStartCenter(Radio.request("ParametricURL", "getCenter"));
+        this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
         this.setView();
 
         // Listener für ol.View
@@ -185,32 +187,6 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("MapMarker", "hideMarker");
     },
 
-    setUrlParams: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus ParamUrl
-        */
-        var centerFromParamUrl = Radio.request("ParametricURL", "getCenter"),
-            zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel"),
-            projectionFromParamUrl = Radio.request("ParametricURL", "getProjectionFromUrl"),
-            mapMarkerFromParamUrl = Radio.request("ParametricURL", "getMarkerFromUrl");
-
-        if (!_.isUndefined(projectionFromParamUrl)) {
-            this.set("projectionFromParamUrl", projectionFromParamUrl);
-        }
-
-        if (!_.isUndefined(centerFromParamUrl)) {
-            this.setStartCenter(centerFromParamUrl);
-        }
-
-        if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.set("resolution", this.get("resolutions")[zoomLevelFromParamUrl]);
-        }
-
-        if (!_.isUndefined(mapMarkerFromParamUrl)) {
-            this.set("startMarker", mapMarkerFromParamUrl);
-        }
-    },
-
     setBackground: function (value) {
         this.set("background", value);
     },
@@ -220,7 +196,24 @@ const MapView = Backbone.Model.extend({
     },
 
     setStartCenter: function (value) {
-        this.set("startCenter", value);
+        var startCenter = value;
+
+        if (!_.isUndefined(startCenter)) {
+            if (!_.isUndefined(this.getProjectionFromParamUrl())) {
+                startCenter = Radio.request("CRS", "transformToMapProjection", this.getProjectionFromParamUrl(), startCenter);
+            }
+            this.set("startCenter", startCenter);
+        }
+    },
+
+    getStartCenter: function () {
+        return this.get("startCenter");
+    },
+
+    setStartZoomLevel: function (value) {
+        if (!_.isUndefined(value)) {
+            this.set("resolution", this.getResolutions()[value]);
+        }
     },
 
     setResolution: function (value) {
@@ -237,6 +230,10 @@ const MapView = Backbone.Model.extend({
 
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
+    },
+
+    getResolutions: function () {
+        return this.get("resolutions");
     },
 
     /**
@@ -272,22 +269,13 @@ const MapView = Backbone.Model.extend({
     },
 
     setView: function () {
-        var startCenter = this.get("startCenter"),
-            projectionFromParamUrl = this.get("projectionFromParamUrl");
-
-        if (!_.isUndefined(projectionFromParamUrl)) {
-            startCenter = Radio.request("CRS", "transformToMapProjection", projectionFromParamUrl, startCenter);
-        }
-
-        var view = new View({
+        this.set("view", new View({
             projection: this.get("projection"),
-            center: startCenter,
+            center: this.getStartCenter(),
             extent: this.get("extent"),
             resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
-        });
-
-        this.set("view", view);
+        }));
     },
 
     setCenter: function (coords, zoomLevel) {
@@ -363,6 +351,14 @@ const MapView = Backbone.Model.extend({
         var mapSize = Radio.request("Map", "getSize");
 
         return this.get("view").calculateExtent(mapSize);
+    },
+
+    setProjectionFromParamUrl: function(projection) {
+        this.set("projectionFromParamUrl", projection);
+    },
+
+    getProjectionFromParamUrl: function () {
+        return this.get("projectionFromParamUrl");
     }
 });
 

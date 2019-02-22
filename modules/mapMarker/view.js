@@ -1,6 +1,5 @@
 
 import MapHandlerModel from "./model";
-import View from "ol/View";
 
 const MapMarker = Backbone.View.extend({
     /**

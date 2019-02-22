@@ -96,30 +96,38 @@ const map = Backbone.Model.extend({
             this.activateMap3d();
         }
 
-        if (_.isUndefined(Config.isInputMap) === false && Config.isInputMap) {
-            this.registerListener("click", this.setMarker, this);
+        if (!_.isUndefined(Config.inputMap)) {
+            this.registerListener("click", this.addMarker, this);
         }
     },
 
     /**
-     * Funktion wird bei Vorhandensein des Config-Parameters "isInputMap"
+     * Funktion wird bei Vorhandensein des Config-Parameters "inputMap"
      * als Event-Listener registriert und setzt bei Mausklick immer und
      * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
      * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
      *
-     * @param  {object} event - Name des Layers
+     * @param  {event} event - Das MapBrowserPointerEvent
      * @returns {void}
      */
-    setMarker: function (event) {
-        Radio.trigger("MapMarker", "showMarker", event.coordinate);
-        if (_.isUndefined(Config.targetProjection) === false) {
-            this.coords = Radio.request("CRS", "transformFromMapProjection", Config.targetProjection, event.coordinate);
+    addMarker: function (event) {
+        var coords = event.coordinate;
+
+        // Set the marker on the map.
+        Radio.trigger("MapMarker", "showMarker", coords);
+
+        // If the marker should be centered, center the map around it.
+        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+            Radio.trigger("MapView", "setCenter", coords);
         }
-        else {
-            this.coords = event.coordinate;
+
+        // Should the coordinates get transformed to another coordinate system for broadcast?
+        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
         }
-        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": this.coords});
-        Radio.trigger("MapView", "setCenter", this.coords);
+
+        // Broadcast the coordinates clicked in the desired coordinate system.
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": coords});
     },
 
     /**
