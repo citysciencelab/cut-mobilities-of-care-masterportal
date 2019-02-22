@@ -50,9 +50,6 @@ const Config = {
     isMenubarVisible: true,
     geoAPI: false,
     clickCounter: {},
-    remoteInterface: {
-        postMessageUrl: "http://localhost:8080"
-    },
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {
