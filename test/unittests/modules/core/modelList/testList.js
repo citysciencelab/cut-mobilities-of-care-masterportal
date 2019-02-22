@@ -122,5 +122,30 @@ describe("core/modelList/list", function () {
                 expect(model.sortLayers(layer, key)).to.be.an("array").that.is.empty;
             });
         });
+        describe("removeLayerById", function () {
+            var xModel = new Backbone.Model({
+                    "id": "1001",
+                    "name": "gLayer"
+                }),
+                yModel = new Backbone.Model({
+                    "id": "1002",
+                    "name": "xLayer"
+                }),
+                zModel = new Backbone.Model({
+                    "id": "1003",
+                    "name": "aLayer"
+                });
+
+            it("schould remove layer", function () {
+                model.add([xModel, yModel, zModel]);
+                model.removeLayerById("1001");
+                expect(model.get("1001")).to.be.undefined;
+            });
+            it("schould return length of collection", function () {
+                model.add([xModel, yModel, zModel]);
+                model.removeLayerById("1003");
+                expect(model).to.have.lengthOf(2);
+            });
+        });
     });
 });
