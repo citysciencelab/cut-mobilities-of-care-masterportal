@@ -402,7 +402,7 @@
     },
     "scaleLine": true,
     "Baumtyp": "light",
-    "layersRemoveable": true
+    "layersRemovable": true
   },
   "Themenconfig":
   {

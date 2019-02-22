@@ -326,7 +326,7 @@
     },
     "scaleLine": true,
     "Baumtyp": "custom",
-    "layersRemoveable": false
+    "layersRemovable": false
   },
   "Themenconfig":
   {

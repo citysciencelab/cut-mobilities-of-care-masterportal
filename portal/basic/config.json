@@ -9,7 +9,7 @@
           "tooltip": "Landesbetrieb Geoinformation und Vermessung"
        },
     "Baumtyp": "light",
-    "layersRemoveable": true,
+    "layersRemovable": true,
     "searchBar":
     {
       "gazetteer":

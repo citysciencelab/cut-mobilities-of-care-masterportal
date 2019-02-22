@@ -8,26 +8,26 @@ describe("core/modelList/layer/model", function () {
         model = new LayerModel();
     });
 
-    describe("setIsRemoveable", function () {
-        it("setIsRemoveable should return true value", function () {
-            model.setIsRemoveable(true);
-            expect(model.get("isRemoveable")).to.be.true;
+    describe("setIsRemovable", function () {
+        it("setIsRemovable should return true value", function () {
+            model.setIsRemovable(true);
+            expect(model.get("isRemovable")).to.be.true;
         });
-        it("setIsRemoveable should return false value", function () {
-            model.setIsRemoveable(false);
-            expect(model.get("isRemoveable")).to.be.false;
+        it("setIsRemovable should return false value", function () {
+            model.setIsRemovable(false);
+            expect(model.get("isRemovable")).to.be.false;
         });
-        it("setIsRemoveable should return undefined value", function () {
-            model.setIsRemoveable(undefined);
-            expect(model.get("isRemoveable")).to.be.false;
+        it("setIsRemovable should return undefined value", function () {
+            model.setIsRemovable(undefined);
+            expect(model.get("isRemovable")).to.be.false;
         });
-        it("setIsRemoveable should return null value", function () {
-            model.setIsRemoveable(null);
-            expect(model.get("isRemoveable")).to.be.false;
+        it("setIsRemovable should return null value", function () {
+            model.setIsRemovable(null);
+            expect(model.get("isRemovable")).to.be.false;
         });
-        it("setIsRemoveable should return string value", function () {
-            model.setIsRemoveable("string");
-            expect(model.get("isRemoveable")).to.be.false;
+        it("setIsRemovable should return string value", function () {
+            model.setIsRemovable("string");
+            expect(model.get("isRemovable")).to.be.false;
         });
     });
 });

@@ -16,7 +16,7 @@ describe("menu/desktop/layer/viewLight", function () {
             isStyleable: false,
             showSettings: true,
             supported: ["2D"],
-            isRemoveable: false,
+            isRemovable: false,
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
@@ -36,8 +36,8 @@ describe("menu/desktop/layer/viewLight", function () {
                         return this.showSettings;
                     case "supported":
                         return this.supported;
-                    case "isRemoveable":
-                        return this.isRemoveable;
+                    case "isRemovable":
+                        return this.isRemovable;
                     default:
                         return null;
                 }
@@ -55,7 +55,7 @@ describe("menu/desktop/layer/viewLight", function () {
                     showSettings: this.showSettings,
                     transparency: 42,
                     isVisibleInMap: true,
-                    isRemoveable: false
+                    isRemovable: false
                 };
             }
         };
