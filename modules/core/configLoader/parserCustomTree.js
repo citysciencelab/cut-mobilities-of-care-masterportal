@@ -22,13 +22,23 @@ const CustomTreeParser = Parser.extend({
                 // z.B.: {id: "5181", visible: false}
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                     objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
+                    // DIPAS -> Steht ein Objekt nicht in der ServicesJSON, hat aber eine url dann wird der Layer ohne Services Eintrag trotzdemübergeben 
+                    if(_.isNull(objFromRawList) && _.has(layerExtended, "url")) {
+                        objFromRawList = layerExtended;
+                    }
+                    // DIPAS -> wenn der Layertyp "StaticImage" übergeben wird brechen wur nicht ab sondern arbeiten mit der neuen ImageURL weiter.
+                    // Wird für den Einsatz eines individuell eingestelölten Bildes benötigt.
+                    if(_.isNull(objFromRawList)){
+                        if (layerExtended.typ !== "StaticImage") { // Wenn LayerID nicht definiert, dann Abbruch
+                          return;
+                        }else if (layerExtended.typ === "StaticImage") {
+                            layerExtended = _.extend(layerExtended, {"isChildLayer": false});
+                        }
 
-                    if (_.isNull(objFromRawList) && layerExtended.typ !== "StaticImage" || layerExtended.typ !== "CustomGeoJSON") { // Wenn LayerID nicht definiert, dann Abbruch
-                        return;
-                    }else if (_.isNull(objFromRawList) && layerExtended.typ === "StaticImage" || layerExtended.typ === "CustomGeoJSON" ) {
-                        layerExtended = _.extend(layerExtended, {"isChildLayer": false});
                     }else {
                         layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
+                        console.log(layerExtended);
+                        
                     }
                 }
                 // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)

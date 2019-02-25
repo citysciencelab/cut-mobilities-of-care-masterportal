@@ -1618,32 +1618,6 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 ```
 
 ***
-#### Themenconfig.Layer.CustomGeoJSON
-
-[inherits]: # (Themenconfig.Layer)
-
-Hier werden typische Attribute für ein statisches GeoJson aufgelistet.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|id|ja|String|"Eineindeutige-ID7711"|Es muss eine eineindeutige ID vergeben werden.|
-|typ|ja|String|"CustomGeoJSON"|Setzt den Layertypen auf CustomGeoJSON welcher individuelle \*.geojson Dateien als Layer darstellen kann.|
-|url|ja|Link|"https://meinedomain.de/map.geojson"|Link zu dem anzuzeigenden Datensatz|
-|name|ja|String|"My Custom GepSJON Layer"|Setzt den Namen des Layers für den Layerbaum|
-
-
-**Beispiel**
-```
-#!json
-{
-    "typ": "CustomGeoJSON",
-    "url": "./map.geojson",
-    "name": "My Custom GepSJON Layer",
-    "visibility": true
-}
-```
-
-***
 #### Themenconfig.Layer.Vector
 
 [inherits]: # (Themenconfig.Layer)
