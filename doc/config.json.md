@@ -1600,7 +1600,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 |----|-------------|---|-------|------------|
 |id|ja|String|"Eineindeutige-ID7711"|Es muss eine eineindeutige ID vergeben werden.|
 |typ|ja|String|"StaticImage"|Setzt den Layertypen auf StaticImage welcher statische Bilder als Layer darstellen kann.|
-|url|ja|Link|"https://meinedomain.de/bild.png"|Link zu dem anzuzegenden Bild|
+|url|ja|Link|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
 |name|ja|String|"Static Image Name"|Setzt den Namen des Layers für den Layerbaum|
 |extend|ja|Array|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
 
@@ -1614,6 +1614,32 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
     "name": "Testing PNG File",
     "visibility": true,
     "extend": [560296.72, 5932154.22, 562496.72, 5933454.22]
+}
+```
+
+***
+#### Themenconfig.Layer.CustomGeoJSON
+
+[inherits]: # (Themenconfig.Layer)
+
+Hier werden typische Attribute für ein statisches GeoJson aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String|"Eineindeutige-ID7711"|Es muss eine eineindeutige ID vergeben werden.|
+|typ|ja|String|"CustomGeoJSON"|Setzt den Layertypen auf CustomGeoJSON welcher individuelle \*.geojson Dateien als Layer darstellen kann.|
+|url|ja|Link|"https://meinedomain.de/map.geojson"|Link zu dem anzuzeigenden Datensatz|
+|name|ja|String|"My Custom GepSJON Layer"|Setzt den Namen des Layers für den Layerbaum|
+
+
+**Beispiel**
+```
+#!json
+{
+    "typ": "CustomGeoJSON",
+    "url": "./map.geojson",
+    "name": "My Custom GepSJON Layer",
+    "visibility": true
 }
 ```
 
