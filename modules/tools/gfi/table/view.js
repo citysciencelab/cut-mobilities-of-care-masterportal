@@ -27,37 +27,42 @@ const GFIDetachedTableView = DesktopView.extend({
 
     moveGFI: function (evt) {
         var touch = evt.originalEvent.touches[0],
+            headerWidth = this.$el.find(".gfi-header").width(),
             width = this.$el.find(".gfi-header").width() / 2,
+            //width = this.$el.width() / 2,
             headerHeight = this.$el.find(".gfi-header").height(),
             height = this.$el.height(),
             rotAngle = this.model.get("rotateAngle");
-            console.log(rotAngle)
             
         if (rotAngle === 0){
-        	console.log("rotAngel = 0")
-            var x = touch.clientX - width,
-                y = touch.clientY - 20;
+            var x = touch.clientX - width - 20,
+                y = touch.clientY - headerHeight;
           }
         else if (rotAngle === -90){
-        	  var x = touch.clientX - width + 40,
-                y = touch.clientY - height / 2;       	
+        	  var x = touch.clientX - headerWidth + 20,
+                y = touch.clientY - width + 20;
         }
         else if (rotAngle === -180){
-        	  var x = touch.clientX - width,
-                y = touch.clientY - height + 10;       	
+        	  var x = touch.clientX - headerWidth - width + 20,
+                y = touch.clientY - headerHeight;       	
         }
         else if (rotAngle === -270){
-        	  var x = touch.clientX - width - 80,
-                y = touch.clientY - height / 2;       	
+        	  var x = touch.clientX - headerWidth,
+                //y = touch.clientY + height - headerHeight -50;     
+                y = touch.clientY + width - 20;  	
         }
+        
 
 
         // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
         if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
             this.$el.css({
-                "left": x + "px",
-                "top": y + "px", 
-                "-webkit-transform-origin": "50% 50%"
+                 "left": x + "px",
+                 "top": y + "px",
+                //"transform": "translate(" + x + "px," + y + "px)",
+                //"-webkit-transform-origin": "50% 50%"
+                "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+              
             });
         }
     },
@@ -90,13 +95,20 @@ const GFIDetachedTableView = DesktopView.extend({
     },
 
     rotateGFI: function () {
+    	
+    	  var width = this.$el.find(".gfi-header").width(),
+        //width = this.$el.width() / 2,
+        headerHeight = this.$el.find(".gfi-header").height()
+
         this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
         if (this.model.get("rotateAngle") === -360) {
             this.model.set("rotateAngle", 0);
         }
         $(".gfi-detached-table").css({
+        // this.$el.css({
             "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
-            "-webkit-transform-origin": "85% 10%"
+            // "-webkit-transform-origin": "85% 10%"
+            "-webkit-transform-origin": width - 20 + "px " + headerHeight + "px"
         });
     }
 });
