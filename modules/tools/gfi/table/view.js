@@ -12,12 +12,41 @@ const GFIDetachedTableView = DesktopView.extend({
         "click .pager-left": "renderPrevious"
     },
     render: function () {
-        var attr = this.model.toJSON();
+        var attr = this.model.toJSON(),
+            that = this;
 
         $("#map").append(this.$el.html(this.template(attr)));
         this.$el.draggable({
             containment: "#map",
             handle: ".gfi-header",
+            drag: function () {
+                var rotAngle = that.model.get("rotateAngle");
+
+                if (rotAngle === 0 || rotAngle === -180) {
+                    $(".gfi-detached-table").css({
+
+                        "-webkit-transform-origin": "50% 50%",
+                        "-ms-transform-origin": "50% 50%",
+                        "-moz-transform-origin": "50% 50%"
+                    });
+                }
+                else if (rotAngle === -90) {
+                    $(".gfi-detached-table").css({
+
+                        "-webkit-transform-origin": "40% 70%",
+                        "-ms-transform-origin": "40% 70%",
+                        "-moz-transform-origin": "40% 70%"
+                    });
+                }
+                else if (rotAngle === -270) {
+                    $(".gfi-detached-table").css({
+
+                        "-webkit-transform-origin": "30% 50%",
+                        "-ms-transform-origin": "30% 50%",
+                        "-moz-transform-origin": "30% 50%"
+                    });
+                }
+            },
             stop: function (evt, ui) {
                 // helper, so that "left" is never 0. needed for gfi/themes/view.js adjustGfiWindow()
                 $(".gfi").css("left", ui.position.left + 1 + "px");
@@ -29,35 +58,62 @@ const GFIDetachedTableView = DesktopView.extend({
         var touch = evt.originalEvent.touches[0],
             width = this.$el.find(".gfi-header").width() / 2,
             headerHeight = this.$el.find(".gfi-header").height(),
-            height = this.$el.height(),
-            rotAngle = this.model.get("rotateAngle");
-            console.log(rotAngle)
-            
-        if (rotAngle === 0){
-        	console.log("rotAngel = 0")
-            var x = touch.clientX - width,
-                y = touch.clientY - 20;
-          }
-        else if (rotAngle === -90){
-        	  var x = touch.clientX - width + 40,
-                y = touch.clientY - height / 2;       	
-        }
-        else if (rotAngle === -180){
-        	  var x = touch.clientX - width,
-                y = touch.clientY - height + 10;       	
-        }
-        else if (rotAngle === -270){
-        	  var x = touch.clientX - width - 80,
-                y = touch.clientY - height / 2;       	
-        }
+            headerWidth = this.$el.find(".gfi-header").width(),
+            // width = this.$el.width() / 2,
+            // height = this.$el.height(),
+            rotAngle = this.model.get("rotateAngle"),
+            x,
+            y;
 
+        /* if (rotAngle === 0) {
+
+            x = touch.clientX - width;
+            y = touch.clientY - 20;
+        }
+        else if (rotAngle === -90) {
+
+            x = touch.clientX - width + 40;
+            y = touch.clientY - height / 2;
+        }
+        else if (rotAngle === -180) {
+
+            x = touch.clientX - width;
+            y = touch.clientY - height + 10;
+        }
+        else if (rotAngle === -270) {
+
+            x = touch.clientX - width - 80;
+            y = touch.clientY - height / 2;
+        } */
+
+        if (rotAngle === 0) {
+
+            x = touch.clientX - width - 20;
+            y = touch.clientY - headerHeight;
+        }
+        else if (rotAngle === -90) {
+
+            x = touch.clientX - headerWidth + 20;
+            y = touch.clientY - width + 20;
+        }
+        else if (rotAngle === -180) {
+
+            x = touch.clientX - headerWidth - width + 20;
+            y = touch.clientY - headerHeight;
+        }
+        else if (rotAngle === -270) {
+
+            x = touch.clientX - headerWidth;
+            y = touch.clientY - width - 20;
+        }
 
         // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
         if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
-            this.$el.css({
+            // this.$el.css({
+            $(".gfi-detached-table").css({
                 "left": x + "px",
-                "top": y + "px", 
-                "-webkit-transform-origin": "50% 50%"
+                "top": y + "px"
+                // "-webkit-transform-origin": "50% 50%"
             });
         }
     },
@@ -90,13 +146,21 @@ const GFIDetachedTableView = DesktopView.extend({
     },
 
     rotateGFI: function () {
+        var width = this.$el.find(".gfi-header").width(),
+            headerHeight = this.$el.find(".gfi-header").height();
+
         this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);
         if (this.model.get("rotateAngle") === -360) {
             this.model.set("rotateAngle", 0);
         }
         $(".gfi-detached-table").css({
+
             "transform": "rotate(" + this.model.get("rotateAngle") + "deg)",
-            "-webkit-transform-origin": "85% 10%"
+            // "-webkit-transform-origin": width - 20 + "px " + headerHeight + "px" // "85% 10%"
+            "-webkit-transform-origin": width - 20 + "px " + headerHeight + "px",
+            "-ms-transform-origin": width - 20 + "px " + headerHeight + "px",
+            "-mos-transform-origin": width - 20 + "px " + headerHeight + "px"
+
         });
     }
 });
