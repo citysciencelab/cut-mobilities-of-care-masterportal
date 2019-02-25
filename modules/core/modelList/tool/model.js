@@ -44,12 +44,10 @@ const Tool = Item.extend({
                     }
                 }
                 else {
-                    if (gfiModel) {
-                        gfiModel.setIsActive(false);
-                    }
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
+                    model.collection.toggleDefaultTool();
                 }
             }
         });

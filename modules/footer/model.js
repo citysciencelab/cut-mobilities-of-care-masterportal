@@ -12,7 +12,8 @@ const FooterModel = Backbone.Model.extend({
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV Hamburg"
             }
-        ]
+        ],
+        version: {}
     }
 });
 

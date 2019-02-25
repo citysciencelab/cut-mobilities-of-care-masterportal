@@ -78,7 +78,9 @@ const RemoteInterface = Backbone.Model.extend({
      * @returns {void}
      */
     postMessage: function (content) {
-        parent.postMessage(content, this.get("postMessageUrl"));
+        if (!_.isUndefined(parent)) {
+            parent.postMessage(content, this.get("postMessageUrl"));
+        }
     },
     /**
      * gets the center coordinate of the feature geometry and triggers it to MapMarker module

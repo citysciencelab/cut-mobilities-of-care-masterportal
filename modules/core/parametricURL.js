@@ -29,6 +29,9 @@ const ParametricURL = Backbone.Model.extend({
             "getInitString": function () {
                 return this.get("initString");
             },
+            "getProjectionFromUrl": function () {
+                return this.get("projectionFromUrl");
+            },
             "getCenter": function () {
                 return this.get("center");
             },
@@ -56,6 +59,9 @@ const ParametricURL = Backbone.Model.extend({
             },
             "getBrwLayerName": function () {
                 return this.get("brwLayerName");
+            },
+            "getMarkerFromUrl": function () {
+                return this.get("markerFromUrl");
             }
         }, this);
 
@@ -228,13 +234,19 @@ const ParametricURL = Backbone.Model.extend({
         Config.view.zoomLevel = 0;
         this.createLayerParamsUsingMetaId(values);
     },
-    parseCenter: function (result) {
-        var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+    parseProjection: function (result) {
+        var projection = _.values(_.pick(result, "PROJECTION")).pop();
+
+        if (!_.isUndefined(projection)) {
+            this.setProjectionFromUrl(projection);
+        }
+    },
+    parseCoordinates: function (result, property) {
+        var values = _.values(_.pick(result, property))[0].split("@")[1] ? _.values(_.pick(result, property))[0].split("@")[0].split(",") : _.values(_.pick(result, property))[0].split(",");
 
         // parse Strings to numbers
         values = _.map(values, Number);
-        this.set("center", values);
-
+        return values;
     },
 
     parseZOOMTOEXTENT: function (result) {
@@ -361,13 +373,24 @@ const ParametricURL = Backbone.Model.extend({
             this.parseMDID(result);
         }
 
+        if (_.has(result, "PROJECTION")) {
+            this.parseProjection(result);
+        }
+
         /**
          * Gibt die initiale Zentrumskoordinate zurück.
          * Ist der Parameter "center" vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
          * Angabe des EPSG-Codes der Koordinate über "@"
          */
         if (_.has(result, "CENTER")) {
-            this.parseCenter(result);
+            this.setCenter(this.parseCoordinates(result, "CENTER"));
+        }
+
+        /**
+         * Setzt einen Marker, sofern in der URL vorhanden.
+         */
+        if (_.has(result, "MARKER")) {
+            this.setMarkerFromUrl(this.parseCoordinates(result, "MARKER"));
         }
 
         if (_.has(result, "ZOOMTOEXTENT")) {
@@ -547,6 +570,16 @@ const ParametricURL = Backbone.Model.extend({
      */
     setBrwLayerName: function (value) {
         this.set("brwLayerName", value);
+    },
+
+    setProjectionFromUrl: function (value) {
+        this.set("projectionFromUrl", value);
+    },
+    setCenter: function (value) {
+        this.set("center", value);
+    },
+    setMarkerFromUrl: function (value) {
+        this.set("markerFromUrl", value);
     }
 });
 

@@ -13,6 +13,9 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
+|inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{targetProjection: "EPSG:4326, setCenter: false}`|
+|inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326`|
+|inputMap.setCenter|nein|Boolean|false|Soll die Karte nach dem setzen eines Markers um den Marker zentriert werden?|`setCenter: true`|
 |layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
 |[mouseHover](#markdown-header-mouseHover)|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.json.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme ([siehe Syntax](http://proj4js.org/#named-projections)).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
@@ -87,6 +90,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
+|version|nein|Array[Object]||Array von Versionsnummerobjekten. Erstes Objekt im Array ist ein Boolean, der angibt ob die Versionsnummern angezeigt werden sollen oder nicht. Bei allen anderen Objekten wird der Wert beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen.|
 
 ******
 ### footer.urls ###
@@ -121,7 +125,11 @@ footer: {
             "url": "http://www.hamburg.de/bsu/timonline",
             "alias": "Kartenunstimmigkeit"
         }
-    ]
+    ],
+    version: {
+        "showVersion": true,
+        "MasterportalVersion": "$Version"
+    }
 }
 ```
 *********
@@ -175,19 +183,18 @@ tree: {
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imgLink|ja|String||Link für den Marker.|
-|layerId|ja|String||ID des Layers an den die Marker gekoppelt werden.|
+|[imgLink(@deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
 |wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
+|styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben..|
 
 **Beispiel:**
 ```
 #!json
 zoomtofeature: {
     attribute: "flaechenid",
-    imgLink: "../img/location_eventlotse.svg",
     wfsId: "4560",
-    layerId: "4561"
+    styleId: "location_eventlotse"
 }
 ```
 ********

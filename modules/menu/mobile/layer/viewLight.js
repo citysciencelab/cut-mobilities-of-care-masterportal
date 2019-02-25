@@ -15,7 +15,8 @@ const LayerView = Backbone.View.extend({
         "click .layer-sort-item > .glyphicon-triangle-top": "moveModelUp",
         "click .layer-sort-item > .glyphicon-triangle-bottom": "moveModelDown",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS"
+        "click .glyphicon-tint": "openStyleWMS",
+        "click .remove-layer": "removeLayer"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -81,6 +82,9 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".item-settings").hide();
             this.$el.find(".item-settings").slideDown();
         }
+        if (!_.has(Radio.request("Parser", "getPortalConfig").searchBar, "gdi")) {
+            this.$el.find(".remove-layer").remove();
+        }
     },
 
     toggleIsSelected: function () {
@@ -120,6 +124,11 @@ const LayerView = Backbone.View.extend({
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".navbar-collapse").removeClass("in");
+    },
+    removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
+        this.model.removeLayer();
+        this.$el.remove();
     }
 });
 

@@ -16,7 +16,8 @@ const LayerView = Backbone.View.extend({
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS"
+        "click .glyphicon-tint": "openStyleWMS",
+        "click .remove-layer": "removeLayer"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -83,6 +84,9 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
         }
+        if (!_.has(Radio.request("Parser", "getPortalConfig").searchBar, "gdi")) {
+            this.$el.find(".remove-layer").remove();
+        }
     },
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
@@ -119,7 +123,11 @@ const LayerView = Backbone.View.extend({
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".nav li:first-child").removeClass("open");
     },
-
+    removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
+        this.model.removeLayer();
+        this.$el.remove();
+    },
     /**
      * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
      * @param {Backbone.Model} model -

@@ -50,6 +50,7 @@ Konfiguration der Searchbar
 |----|-------------|---|-------|------------|
 |bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
 |gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
+|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)|Konfiguration des GDI (elastic) Suchdienstes.|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
 |recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
@@ -97,6 +98,33 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
+#### Portalconfig.searchBar.osm ####
+Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick auf die Lupe oder Enter ausgelöst
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
+|serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
+|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+|classes|nein|string|kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
+
+**Beispiel**
+
+```
+#!json
+
+"osm": {
+    "minChars": 3,
+    "serviceId": "10",
+    "limit": 60,
+    "states": "Hamburg Nordhrein-Westfalen Niedersachsen"
+    "classes": "place,highway,building,shop,historic,leisure,city,county"
+}
+```
+
+***
+
 #### Portalconfig.searchbar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
@@ -125,6 +153,26 @@ Konfiguration des Gazetteer Suchdienstes
 ```
 
 ***
+
+#### Portalconfig.searchbar.gdi
+Konfiguration des GDI Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+
+**Beispiel**
+```
+#!json
+"gdi": {
+    "minChars": 3,
+    "serviceId": "elastic"
+}
+```
+
+***
+
 
 #### Portalconfig.searchbar.specialWFS
 Konfiguration der SpecialWFS Suche

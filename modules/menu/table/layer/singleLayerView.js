@@ -15,7 +15,8 @@ const LayerView = Backbone.View.extend({
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
-        "change select": "setTransparency"
+        "change select": "setTransparency",
+        "click .remove-layer": "removeLayer"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -40,6 +41,7 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.addClass("layer-settings-activated");
         }
+
         return this;
     },
     renderSetting: function () {
@@ -59,6 +61,9 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
+        }
+        if (!_.has(Radio.request("Parser", "getPortalConfig").searchBar, "gdi")) {
+            this.$el.find(".remove-layer").remove();
         }
     },
     toggleIsSelected: function () {
@@ -104,6 +109,11 @@ const LayerView = Backbone.View.extend({
     },
     decTransparency: function () {
         this.model.decTransparency(10);
+    },
+    removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
+        this.model.removeLayer();
+        this.$el.remove();
     }
 });
 

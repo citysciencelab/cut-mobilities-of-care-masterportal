@@ -48,6 +48,7 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "addLayerOnTop": this.addLayerOnTop,
             "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
             "addInteraction": this.addInteraction,
@@ -99,6 +100,39 @@ const map = Backbone.Model.extend({
         if (Config.startingMap3D) {
             this.activateMap3d();
         }
+
+        if (!_.isUndefined(Config.inputMap)) {
+            this.registerListener("click", this.addMarker, this);
+        }
+    },
+
+    /**
+     * Funktion wird bei Vorhandensein des Config-Parameters "inputMap"
+     * als Event-Listener registriert und setzt bei Mausklick immer und
+     * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
+     * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
+     *
+     * @param  {event} event - Das MapBrowserPointerEvent
+     * @returns {void}
+     */
+    addMarker: function (event) {
+        var coords = event.coordinate;
+
+        // Set the marker on the map.
+        Radio.trigger("MapMarker", "showMarker", coords);
+
+        // If the marker should be centered, center the map around it.
+        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+            Radio.trigger("MapView", "setCenter", coords);
+        }
+
+        // Should the coordinates get transformed to another coordinate system for broadcast?
+        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
+        }
+
+        // Broadcast the coordinates clicked in the desired coordinate system.
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": coords});
     },
 
     /**
@@ -212,10 +246,16 @@ const map = Backbone.Model.extend({
         return map3d;
     },
     returnCesiumTime: function () {
+        var menuStyle = Radio.request("Util", "getUiStyle"),
+            mapTable = Radio.request("Map", "getMap3d"),
+            scene = mapTable.getCesiumScene();
+
         if (this.time) {
             return this.time;
         }
-
+        else if (menuStyle === "TABLE") {
+            scene.shadowMap.enabled = false;
+        }
         const date = Cesium.JulianDate.now();
 
         Cesium.JulianDate.addDays(date, 200, date);
@@ -227,9 +267,9 @@ const map = Backbone.Model.extend({
         this.time = time;
     },
     handle3DEvents: function () {
-        var eventHandler = new Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+        var eventHandler = new OLCesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
 
-        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), OLCesium.ScreenSpaceEventType.LEFT_CLICK);
     },
     setCameraParameter: function (params) {
         var map3d = this.getMap3d(),
@@ -312,13 +352,13 @@ const map = Backbone.Model.extend({
 
         if (cartesian) {
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-            coords = [Cesium.Math.toDegrees(cartographic.longitude), Cesium.Math.toDegrees(cartographic.latitude)];
+            coords = [OLCesium.Math.toDegrees(cartographic.longitude), OLCesium.Math.toDegrees(cartographic.latitude)];
             height = scene.globe.getHeight(cartographic);
             if (height) {
                 coords = coords.concat([height]);
             }
 
-            distance = Cesium.Cartesian3.distance(cartesian, scene.camera.position);
+            distance = OLCesium.Cartesian3.distance(cartesian, scene.camera.position);
             resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
             transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
             transformedPickedPosition = null;
@@ -327,7 +367,7 @@ const map = Backbone.Model.extend({
                 pickedPositionCartesian = scene.pickPosition(event.position);
                 if (pickedPositionCartesian) {
                     cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
-                    transformedPickedPosition = transform([Cesium.Math.toDegrees(cartographicPickedPosition.longitude), Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
+                    transformedPickedPosition = transform([OLCesium.Math.toDegrees(cartographicPickedPosition.longitude), OLCesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
@@ -391,7 +431,7 @@ const map = Backbone.Model.extend({
     },
     /**
     * Layer-Handling
-    * @param {ol.layer} layer -
+    * @param {ol/layer} layer -
     * @returns {void}
     */
     addLayer: function (layer) {
@@ -414,6 +454,15 @@ const map = Backbone.Model.extend({
         else {
             this.get("map").getLayers().push(layer);
         }
+    },
+
+    /**
+     * put the layer on top of the map
+     * @param {ol/layer} layer to be placed on top of the map
+     * @returns {void}
+     */
+    addLayerOnTop: function (layer) {
+        this.get("map").getLayers().push(layer);
     },
 
     removeLayer: function (layer) {

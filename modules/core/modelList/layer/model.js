@@ -1,4 +1,5 @@
 import Item from ".././item";
+import ModelList from "../list";
 
 const Layer = Item.extend(
     /** @lends Layer.prototype */
@@ -119,10 +120,56 @@ const Layer = Item.extend(
                     }
                 });
             }
+<<<<<<< HEAD
             this.listenTo(channel, {
                 "updateLayerInfo": function (name) {
                     if (this.get("name") === name && this.get("layerInfoChecked") === true) {
                         this.showLayerInformation();
+=======
+            this.prepareLayerObject();
+            Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
+            this.setIsVisibleInMap(this.get("isSelected"));
+            this.toggleWindowsInterval();
+        }
+        // check if the layer is available (clickable) in the init zoom level before creating the ol-layer
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+    },
+
+    featuresLoaded: function (features) {
+        this.get("channel").trigger("featuresLoaded", this.get("id"), features);
+    },
+
+    /**
+     * Ruft die Einzelfunktionen zur Layererstellung auf.
+     * @returns {void}
+     */
+    prepareLayerObject: function () {
+        this.createLayerSource();
+        this.createLayer();
+        this.updateLayerTransparency();
+        this.getResolutions();
+        this.createLegendURL();
+    },
+
+    /**
+     * Hier wird die Schnittstelle zur Interaktion mit dem Tree registriert.
+     * @return {void}
+     * @param {Radio.channel} channel Kanal dieses Moduls
+     * @listens this~change:isSelected
+     * @listens Layer~updateLayerInfo
+     * @listens Layer~setLayerInfoChecked
+     * @listens this~change:isVisibleInMap
+     * @listens this~change:transparency
+     */
+    registerInteractionTreeListeners: function (channel) {
+        // beim treetype: "light" werden alle Layer initial geladen
+        if (Radio.request("Parser", "getTreeType") !== "light") {
+            this.listenToOnce(this, {
+                // Die LayerSource wird beim ersten Selektieren einmalig erstellt
+                "change:isSelected": function () {
+                    if (_.isUndefined(this.get("layerSource"))) {
+                        this.prepareLayerObject();
+>>>>>>> dev
                     }
                 },
                 "setLayerInfoChecked": function (layerInfoChecked) {
@@ -499,6 +546,34 @@ const Layer = Item.extend(
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         }
+<<<<<<< HEAD
     });
+=======
+
+        return undefined;
+    },
+
+    // setter for name
+    setName: function (value) {
+        this.set("name", value);
+    },
+
+    // setter for legendURL
+    setLegendURL: function (value) {
+        this.set("legendURL", value);
+    },
+
+    setIsVisibleInTree: function (value) {
+        this.set("isVisibleInTree", value);
+    },
+    removeLayer: function () {
+        var layer = this.get("id");
+
+        this.setIsVisibleInMap(false);
+        this.collection.removeLayerById(layer);
+    }
+
+});
+>>>>>>> dev
 
 export default Layer;

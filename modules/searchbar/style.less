@@ -267,7 +267,7 @@ li.results {
             border-top-right-radius: 12px;
             border-top-left-radius: 12px;
         }
-        >div:last-child > .list-group-item:last-child, > .list-group-item:nth-last-child(2):not(.open):last-of-type {
+        >div:last-child > .list-group-item:last-child, > .list-group-item:nth-last-child(even):not(.open):last-of-type {
             border-bottom-right-radius: 12px;
             border-bottom-left-radius: 12px;
         }
@@ -282,6 +282,9 @@ li.results {
     }
     #searchInputUL {
         border-radius: 12px;
+        margin-bottom: 15px;
+        margin-right: -3px;
+        background-color:#F2F2F2;
     }
     #searchInputUL div::-webkit-scrollbar {
         width: 20px;
@@ -373,3 +376,17 @@ input#searchInput.form-control {
         min-width: 300px;
     }
 }
+    #search-funnel {
+    position: absolute;
+    width: 360px;
+    height: 15px;
+    margin-left: 65px;
+    background-image: radial-gradient(circle at 0 100%, transparent 15px, #F2F2F2 15px);
+    }
+    #search-right-funnel-corner {
+    position:absolute;
+    right: 40px;
+    height: 15px;
+    width: 30px;
+    background-image: radial-gradient(circle at 100% 100%, transparent 15px, #F2F2F2 15px);
+    }
