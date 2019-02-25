@@ -105,7 +105,7 @@ const GFIDetachedTableView = DesktopView.extend({
             y = touch.clientY - width + 20;
 
             // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-            if (x >= 0 && x < ($("#map").width() - height - 75) && y >= 0 && y < ($("#map").height() - headerWidth - 10)) {
+            if (x >= 0 && x < ($("#map").width() - height - 75) && y >= 0 && y < ($("#map").height() - width - 10)) {
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
@@ -115,6 +115,9 @@ const GFIDetachedTableView = DesktopView.extend({
         }
         else if (rotAngle === -180) {
 
+            x = touch.clientX - headerWidth - width + 20;
+            y = touch.clientY - headerHeight;
+
             // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
             if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
                 this.$el.css({
@@ -123,9 +126,6 @@ const GFIDetachedTableView = DesktopView.extend({
                     "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
                 });
             }
-
-            x = touch.clientX - headerWidth - width + 20;
-            y = touch.clientY - headerHeight;
         }
         else if (rotAngle === -270) {
 
@@ -133,7 +133,7 @@ const GFIDetachedTableView = DesktopView.extend({
             y = touch.clientY + width - 20;
 
             // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-            if (x >= 0 && x < ($("#map").width() - height - 75) && y >= 0 && y < ($("#map").height() - headerWidth - 10)) {
+            if (x >= 0 && x < ($("#map").width() - width - 75) && y >= 0 && y < ($("#map").height() - headerWidth - 10)) {
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
