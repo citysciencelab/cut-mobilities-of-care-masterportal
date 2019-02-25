@@ -31,6 +31,7 @@ import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addwms/model";
 import GetCoord from "../../tools/getCoord/model";
+import Shadow from "../../tools/shadow/model";
 import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
@@ -71,7 +72,9 @@ const ModelList = Backbone.Collection.extend({
             "renderTree": function () {
                 this.trigger("renderTree");
             },
-            "toggleWfsCluster": this.toggleWfsCluster
+            "toggleWfsCluster": this.toggleWfsCluster,
+            "toggleDefaultTool": this.toggleDefaultTool,
+            "refreshLightTree": this.refreshLightTree
         }, this);
 
         this.listenTo(this, {
@@ -103,6 +106,7 @@ const ModelList = Backbone.Collection.extend({
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             }
         });
+        this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
     selectionIDX: [],
     model: function (attrs, options) {
@@ -176,6 +180,9 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.id === "coord") {
                 return new GetCoord(attrs, options);
             }
+            else if (attrs.id === "shadow") {
+                return new Shadow(attrs, options);
+            }
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
             }
@@ -239,6 +246,9 @@ const ModelList = Backbone.Collection.extend({
             Radio.trigger("Alert", "alert", "unbekannter LayerTyp " + attrs.type + ". Bitte wenden Sie sich an einen Administrator!");
         }
         return null;
+    },
+    getDefaultTool: function () {
+        return this.get(this.defaultToolId);
     },
     /**
     * [checkIsExpanded description]
@@ -413,9 +423,9 @@ const ModelList = Backbone.Collection.extend({
         }
     },
 
-    setActiveToolToFalse: function (model) {
+    setActiveToolsToFalse: function (model) {
         var activeTools = _.without(this.where({isActive: true}), model),
-            legendModel = this.where({id: "legend"})[0];
+            legendModel = this.findWhere({id: "legend"});
 
         activeTools = _.without(activeTools, legendModel);
 
@@ -423,7 +433,16 @@ const ModelList = Backbone.Collection.extend({
             tool.setIsActive(false);
         });
     },
+    toggleDefaultTool: function () {
+        var activeTools = this.where({isActive: true}),
+            legendModel = this.findWhere({id: "legend"}),
+            defaultTool = this.getDefaultTool();
 
+        activeTools = _.without(activeTools, legendModel);
+        if (activeTools.length === 0 && defaultTool !== undefined) {
+            defaultTool.setIsActive(true);
+        }
+    },
     insertIntoSelectionIDX: function (model) {
         var idx = 0;
 
@@ -432,7 +451,7 @@ const ModelList = Backbone.Collection.extend({
             this.updateModelIndeces();
         }
         else if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
-            idx = this.appendToSelectionIDX(model);
+            this.appendToSelectionIDX(model);
         }
         else {
             while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
@@ -441,7 +460,6 @@ const ModelList = Backbone.Collection.extend({
             this.selectionIDX.splice(idx, 0, model);
             this.updateModelIndeces();
         }
-        return idx;
     },
     insertIntoSelectionIDXAt: function (model, idx) {
         this.selectionIDX.splice(idx, 0, model);
@@ -566,6 +584,7 @@ const ModelList = Backbone.Collection.extend({
                     }
                 }
             }, this);
+            this.addModelsByAttributes({typ: "Oblique"});
         }
         else {
             this.addModelsByAttributes({type: "layer", isSelected: true});
@@ -630,6 +649,11 @@ const ModelList = Backbone.Collection.extend({
         // Nur bei Overlayern wird in Tree gescrollt.
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);
+        }
+
+        // für DIPAS Table Ansicht
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            $("#table-nav-layers-panel").collapse("show");
         }
     },
 
@@ -738,6 +762,9 @@ const ModelList = Backbone.Collection.extend({
 
         model.hideAllFeatures();
     },
+    removeLayerById: function (id) {
+        this.remove(id);
+    },
 
     /**
      * delivers model by given id
@@ -770,6 +797,10 @@ const ModelList = Backbone.Collection.extend({
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
         });
+    },
+
+    refreshLightTree: function () {
+        this.trigger("updateLightTree");
     }
 });
 

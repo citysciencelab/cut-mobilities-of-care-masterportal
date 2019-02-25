@@ -109,7 +109,8 @@ const ObliqueMap = Backbone.Model.extend({
 
         map2D = Radio.request("Map", "getMap");
 
-        if (this.isActive()) {
+        if (this.isActive() && this.currentCollection && _.has(this.currentDirection, "currentImage")) {
+            Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {
                 var resolution,
                     resolutionFactor = this.currentLayer.get("resolution");
@@ -163,11 +164,13 @@ const ObliqueMap = Backbone.Model.extend({
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution"),
-                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution(),
-                seResolution = this.get("map").getView().constrainResolution(useResolution);
+                resolutionFactor = this.currentLayer.get("resolution");
 
-            return this.currentDirection.setView(coordinate, seResolution).then(function () {
+            let useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
+
+            useResolution = this.get("map").getView().constrainResolution(useResolution);
+
+            return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {
                     if (this.currentDirection.currentImage.id !== oldImageID) {
                         Radio.trigger("ObliqueMap", "newImage", this.currentDirection.currentImage);
@@ -198,6 +201,7 @@ const ObliqueMap = Backbone.Model.extend({
         var fillArea, oc, containerAttribute, map2D, interactions;
 
         if (!this.isActive()) {
+            Radio.trigger("ObliqueMap", "isActivated", true);
             const center = Radio.request("MapView", "getCenter"),
                 activeTool = Radio.request("ModelList", "getModelByAttributes", {type: "tool", isActive: true}),
                 resolution = Radio.request("MapView", "getOptions").resolution;

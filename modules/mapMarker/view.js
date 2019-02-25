@@ -21,11 +21,22 @@ const MapMarker = Backbone.View.extend({
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
+        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+            this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        }
+
+        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+            this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
+        }
+
         this.render();
         // For BauInfo: requests customModule and askes for marker position to set.
         markerPosition = Radio.request("CustomModule", "getMarkerPosition");
         if (markerPosition) {
             this.showMarker(markerPosition);
+        }
+        else {
+            this.showStartMarker();
         }
     },
     render: function () {
@@ -123,7 +134,6 @@ const MapMarker = Backbone.View.extend({
             // gfiTheme für Flächeninformation soll nur dargestellt und nicht gezommt werden.
             case "flaecheninfo": {
                 this.model.setWkt("POLYGON", coord);
-                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                 this.showPolygon();
                 break;
             }
@@ -170,13 +180,14 @@ const MapMarker = Backbone.View.extend({
     showMarker: function (coordinate) {
         this.hideMarker();
         if (coordinate.length === 2) {
-            
             this.model.get("marker").setPosition(coordinate);
         }
         else {
             this.model.get("marker").setPosition([coordinate[0], coordinate[1]]);
         }
         this.$el.show();
+        // Re-renders the map to remove a marker that's offset by several pixels.
+        Radio.trigger("Map", "render");
     },
 
     hideMarker: function () {
@@ -189,6 +200,18 @@ const MapMarker = Backbone.View.extend({
 
     hidePolygon: function () {
         this.model.hideFeature();
+    },
+
+    showStartMarker: function () {
+        var startMarker = this.model.get("startMarker"),
+            projectionFromParamUrl = this.model.get("projectionFromParamUrl");
+
+        if (!_.isUndefined(startMarker)) {
+            if (!_.isUndefined(projectionFromParamUrl)) {
+                startMarker = Radio.request("CRS", "transformToMapProjection", projectionFromParamUrl, startMarker);
+            }
+            Radio.trigger("MapMarker", "showMarker", startMarker);
+        }
     }
 
 });

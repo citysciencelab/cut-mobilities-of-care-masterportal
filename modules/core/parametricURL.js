@@ -3,7 +3,9 @@ const ParametricURL = Backbone.Model.extend({
         layerParams: [],
         isInitOpen: [],
         zoomToGeometry: "",
-        zoomToFeatureIds: []
+        zoomToFeatureIds: [],
+        brwId: undefined,
+        brwLayerName: undefined
     },
 
     initialize: function () {
@@ -21,6 +23,9 @@ const ParametricURL = Backbone.Model.extend({
             },
             "getInitString": function () {
                 return this.get("initString");
+            },
+            "getProjectionFromUrl": function () {
+                return this.get("projectionFromUrl");
             },
             "getCenter": function () {
                 return this.get("center");
@@ -43,6 +48,15 @@ const ParametricURL = Backbone.Model.extend({
             },
             "getZoomToFeatureIds": function () {
                 return this.get("zoomToFeatureIds");
+            },
+            "getBrwId": function () {
+                return this.get("brwId");
+            },
+            "getBrwLayerName": function () {
+                return this.get("brwLayerName");
+            },
+            "getMarkerFromUrl": function () {
+                return this.get("markerFromUrl");
             }
         }, this);
 
@@ -215,13 +229,19 @@ const ParametricURL = Backbone.Model.extend({
         Config.view.zoomLevel = 0;
         this.createLayerParamsUsingMetaId(values);
     },
-    parseCenter: function (result) {
-        var values = _.values(_.pick(result, "CENTER"))[0].split("@")[1] ? _.values(_.pick(result, "CENTER"))[0].split("@")[0].split(",") : _.values(_.pick(result, "CENTER"))[0].split(",");
+    parseProjection: function (result) {
+        var projection = _.values(_.pick(result, "PROJECTION")).pop();
+
+        if (!_.isUndefined(projection)) {
+            this.setProjectionFromUrl(projection);
+        }
+    },
+    parseCoordinates: function (result, property) {
+        var values = _.values(_.pick(result, property))[0].split("@")[1] ? _.values(_.pick(result, property))[0].split("@")[0].split(",") : _.values(_.pick(result, property))[0].split(",");
 
         // parse Strings to numbers
         values = _.map(values, Number);
-        this.set("center", values);
-
+        return values;
     },
 
     parseZOOMTOEXTENT: function (result) {
@@ -257,7 +277,16 @@ const ParametricURL = Backbone.Model.extend({
         }
         this.setZoomToGeometry(bezirk.name);
     },
+    parseBrwId: function (result) {
+        var brwId = _.values(_.pick(result, "BRWID"))[0];
 
+        this.setBrwId(brwId);
+    },
+    parseBrwLayerName: function (result) {
+        var brwLayerName = _.values(_.pick(result, "BRWLAYERNAME"))[0];
+
+        this.setBrwLayerName(brwLayerName);
+    },
     parseFeatureId: function (result) {
         var ids = _.values(_.pick(result, "FEATUREID"))[0];
 
@@ -339,13 +368,24 @@ const ParametricURL = Backbone.Model.extend({
             this.parseMDID(result);
         }
 
+        if (_.has(result, "PROJECTION")) {
+            this.parseProjection(result);
+        }
+
         /**
          * Gibt die initiale Zentrumskoordinate zurück.
          * Ist der Parameter "center" vorhanden wird dessen Wert zurückgegeben, ansonsten der Standardwert.
          * Angabe des EPSG-Codes der Koordinate über "@"
          */
         if (_.has(result, "CENTER")) {
-            this.parseCenter(result);
+            this.setCenter(this.parseCoordinates(result, "CENTER"));
+        }
+
+        /**
+         * Setzt einen Marker, sofern in der URL vorhanden.
+         */
+        if (_.has(result, "MARKER")) {
+            this.setMarkerFromUrl(this.parseCoordinates(result, "MARKER"));
         }
 
         if (_.has(result, "ZOOMTOEXTENT")) {
@@ -354,6 +394,13 @@ const ParametricURL = Backbone.Model.extend({
 
         if (_.has(result, "BEZIRK")) {
             this.parseBezirk(result);
+        }
+
+        if (_.has(result, "BRWID")) {
+            this.parseBrwId(result);
+        }
+        if (_.has(result, "BRWLAYERNAME")) {
+            this.parseBrwLayerName(result);
         }
 
         /**
@@ -487,6 +534,8 @@ const ParametricURL = Backbone.Model.extend({
         else {
             window.history.replaceState({}, "", baseUrl + params);
         }
+
+        this.parseURL();
     },
 
     // setter for zoomToGeometry
@@ -500,6 +549,32 @@ const ParametricURL = Backbone.Model.extend({
     },
     setZoomToFeatureIds: function (value) {
         this.set("zoomToFeatureIds", value);
+    },
+    /**
+     * Setter for brw id
+     * @param {String} value Brw id
+     * @returns {void}
+     */
+    setBrwId: function (value) {
+        this.set("brwId", value);
+    },
+    /**
+     * Setter for brw layer name
+     * @param {String} value Brw layer name
+     * @returns {void}
+     */
+    setBrwLayerName: function (value) {
+        this.set("brwLayerName", value);
+    },
+
+    setProjectionFromUrl: function (value) {
+        this.set("projectionFromUrl", value);
+    },
+    setCenter: function (value) {
+        this.set("center", value);
+    },
+    setMarkerFromUrl: function (value) {
+        this.set("markerFromUrl", value);
     }
 });
 

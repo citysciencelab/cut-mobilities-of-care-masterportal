@@ -75,7 +75,7 @@ const SensorLayer = Layer.extend({
         var sensorData,
             features,
             isClustered = this.has("clusterDistance"),
-            url = this.get("url"),
+            url = Radio.request("Util", "getProxyURL", this.get("url")),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
             epsg = this.get("epsg");
@@ -107,6 +107,7 @@ const SensorLayer = Layer.extend({
 
         Radio.trigger("Util", "showLoader");
         $.ajax({
+            dataType: "json",
             url: requestURL,
             async: false,
             type: "GET",
@@ -166,7 +167,7 @@ const SensorLayer = Layer.extend({
         }, this);
 
         // only features with geometry
-        features = _.filter(features, function (feature) {
+        features = features.filter(function (feature) {
             return !_.isUndefined(feature.getGeometry());
         });
 
@@ -221,17 +222,32 @@ const SensorLayer = Layer.extend({
             thingsMerge = [],
             requestURL = this.buildSensorThingsURL(url, version, urlParams),
             things = this.getResponseFromRequestURL(requestURL),
-            thingsCount = _.isUndefined(things) ? 0 : things["@iot.count"], // count of all things
-            thingsbyOneRequest = things.value.length, // count of things on one request
+            thingsCount,
+            thingsbyOneRequest,
             aggregateArrays,
             thingsRequestURL,
             index;
+
+        if (_.isUndefined(things) || !_.has(things, "value")) {
+            // Return witout data to prevent crashing
+            console.warn("Sensor-Layer: Result of query was undefined or malformed.");
+            return [];
+        }
+
+        thingsCount = _.isUndefined(things) ? 0 : things["@iot.count"]; // count of all things
+        thingsbyOneRequest = things.value.length; // count of things on one request
 
         allThings.push(things.value);
         for (index = thingsbyOneRequest; index < thingsCount; index += thingsbyOneRequest) {
             thingsRequestURL = requestURL + "&$skip=" + index;
 
             things = this.getResponseFromRequestURL(thingsRequestURL);
+
+            if (_.isUndefined(things) || !_.has(things, "value")) {
+                // Return witout data to prevent crashing
+                console.warn("Sensor-Layer: Result of sub-query was undefined or malformed.");
+                continue;
+            }
             allThings.push(things.value);
         }
 

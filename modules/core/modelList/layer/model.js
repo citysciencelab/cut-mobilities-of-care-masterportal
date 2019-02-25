@@ -1,4 +1,5 @@
 import Item from ".././item";
+import ModelList from "../list";
 
 const Layer = Item.extend({
     defaults: {
@@ -20,7 +21,9 @@ const Layer = Item.extend({
         legendURL: "",
         supported: ["2D"],
         showSettings: true,
-        styleable: false
+        hitTolerance: 0,
+        styleable: false,
+        isNeverVisibleInTree: false
     },
 
     initialize: function () {
@@ -42,6 +45,8 @@ const Layer = Item.extend({
             this.setIsVisibleInMap(this.get("isSelected"));
             this.toggleWindowsInterval();
         }
+        // check if the layer is available (clickable) in the init zoom level before creating the ol-layer
+        this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
     featuresLoaded: function (features) {
@@ -58,7 +63,6 @@ const Layer = Item.extend({
         this.updateLayerTransparency();
         this.getResolutions();
         this.createLegendURL();
-        this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
     /**
@@ -386,6 +390,12 @@ const Layer = Item.extend({
 
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
+    },
+    removeLayer: function () {
+        var layer = this.get("id");
+
+        this.setIsVisibleInMap(false);
+        this.collection.removeLayerById(layer);
     }
 
 });

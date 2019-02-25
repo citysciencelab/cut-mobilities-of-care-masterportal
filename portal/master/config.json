@@ -35,9 +35,14 @@
         "minChars": 3,
         "serviceId": "10",
         "limit": 60,
-        "states": "Hamburg",
-        "classes": "place,highway,building,shop,historic,leisure"
+        "states": "Hamburg Thüringen Hessen Nordrhein-Westfalen",
+        "classes": "place,highway,building,shop,historic,leisure,county"
       },
+      "gdi":{
+		"minChars": 3,
+		"serviceId": "elastic"
+	  },
+
       "specialWFS":
       {
         "minChars": 3,
@@ -45,27 +50,34 @@
         "definitions": [
           {
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:mrh_row_bplan&propertyName=name",
+            "typeName": "app:mrh_row_bplan",
+            "propertyNames": ["app:name"],
             "name": "B-Plan"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+            "typeName": "app:prosin_festgestellt",
+            "propertyNames": ["app:planrecht"],
+            "geometryName": "app:geom",
             "name": "festgestellt"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_imverfahren&propertyName=plan",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
             "name": "im Verfahren"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=app:KitaEinrichtungen&propertyName=app:Name",
+            "typeName": "app:KitaEinrichtungen",
+            "propertyNames": ["app:Name"],
             "name": "Kita"
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-            "data": "service=WFS&request=GetFeature&version=1.1.0&typeName=app:stoerfallbetrieb&propertyName=app:standort",
+            "typeName": "app:stoerfallbetrieb",
+            "propertyNames": ["app:standort"],
             "name": "Störfallbetrieb"
           }
         ]
@@ -211,6 +223,11 @@
           "coord":
           {
             "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "shadow":
+          {
+            "name": "Schatten",
             "glyphicon": "glyphicon-screenshot"
           },
           "gfi":
@@ -380,6 +397,7 @@
       },
       "mousePosition": true,
       "button3d": true,
+      "buttonOblique": true,
       "freeze": true
     },
     "scaleLine": true,
@@ -398,11 +416,6 @@
           "id": "452"
         },
         {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": false
-        },
-        {
           "id": "12883",
           "name": "Gelände",
           "visibility": true
@@ -411,6 +424,11 @@
           "id": "12884",
           "name": "Gebäude LoD2",
           "visibility": true
+        },
+        {
+         "id": "12885",
+         "name": "Oblique",
+         "visibility": true
         }
       ]
     },
@@ -426,6 +444,9 @@
       },
       {
         "id": "8730"
+      },
+      {
+        "id": "10220"
       },
       {
         "id": "2426"
@@ -557,6 +578,7 @@
         "id": "8145",
         "visibility": true,
         "styleId": "8145",
+        "hitTolerance": 25,
         "mouseHoverField": "kategorie",
         "extendedFilter": true
       },

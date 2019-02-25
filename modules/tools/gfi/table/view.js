@@ -31,16 +31,21 @@ const GFIDetachedTableView = DesktopView.extend({
             x = touch.clientX - width,
             y = touch.clientY;
 
-        this.$el.css({
-            "left": x + "px",
-            "top": y + "px"
-        });
+        // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
+        if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
+            this.$el.css({
+                "left": x + "px",
+                "top": y + "px"
+            });
+        }
     },
 
     toggle: function () {
-        if (this.model.get("isVisible") === true) {
+        if (this.model.get("isVisible")) {
             this.$el.show();
-            Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            if (this.model.get("isMapMarkerVisible")) {
+                Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
+            }
             Radio.trigger("GFI", "afterRender");
         }
         else {
@@ -52,7 +57,6 @@ const GFIDetachedTableView = DesktopView.extend({
     setMarker: function () {
         if (this.model.get("isVisible") === true) {
             Radio.trigger("MapMarker", "showMarker", this.model.get("coordinate"));
-            Radio.trigger("MapView", "setCenter", this.model.get("coordinate"));
         }
     },
 

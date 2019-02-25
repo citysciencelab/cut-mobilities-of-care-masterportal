@@ -3,7 +3,6 @@ import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Draw} from "ol/interaction.js";
 import {Polygon, LineString, Point, MultiPoint} from "ol/geom.js";
-import OLCesium from "olcs/OLCesium.js";
 import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
@@ -199,8 +198,8 @@ const Measure = Tool.extend({
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(hit);
             cartographic.height = scene.globe.getHeight(cartographic);
         }
-        lon = OLCesium.Math.toDegrees(cartographic.longitude);
-        lat = OLCesium.Math.toDegrees(cartographic.latitude);
+        lon = Cesium.Math.toDegrees(cartographic.longitude);
+        lat = Cesium.Math.toDegrees(cartographic.latitude);
         coords = [lon, lat, cartographic.height];
         coords = Proj.transform(coords, Proj.get("EPSG:4326"), mapProjection);
         // draw first point
@@ -215,7 +214,7 @@ const Measure = Tool.extend({
         }
         // draw second point as Line and remove first drawn point
         else {
-            distance = OLCesium.Cartesian3.distance(firstHit.cartesian, hit);
+            distance = Cesium.Cartesian3.distance(firstHit.cartesian, hit);
             heightDiff = Math.abs(coords[2] - firstHit.coords[2]);
             feature = this.createLineFeature(firstHit.coords, coords);
             source.addFeature(feature);

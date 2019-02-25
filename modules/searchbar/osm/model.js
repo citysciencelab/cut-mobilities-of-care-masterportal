@@ -112,13 +112,18 @@ const OsmModel = Backbone.Model.extend({
             upper,
             lower,
             center,
-            weg;
+            weg,
+            county;
 
         _.each(data, function (hit) {
             if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
                 if (this.isSearched(hit, this.get("searchParams"))) {
                     weg = hit.address.road || hit.address.pedestrian;
+                    county = hit.address.county;
                     display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
+                    if (!_.isUndefined(county) && _.isUndefined(display)) {
+                        display = county;
+                    }
                     if (!_.isUndefined(weg)) {
                         display = display + ", " + weg;
                         if (!_.isUndefined(hit.address.house_number)) {
@@ -184,6 +189,7 @@ const OsmModel = Backbone.Model.extend({
                 if ((_.has(address, "house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
                     (_.has(address, "road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "county") && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
