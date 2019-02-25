@@ -13,12 +13,9 @@ const FilterView = Backbone.View.extend({
 
                     if (model.get("queryCollection").length < 1) {
                         model.createQueries(model.get("predefinedQueries"));
-                        this.render();
                     }
-                    else {
-                        this.renderDetailView();
-                        this.render();
-                    }
+                    this.render();
+                    this.renderDetailView();
                 }
                 else {
                     this.$el.remove();
