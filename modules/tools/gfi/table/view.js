@@ -56,7 +56,9 @@ const GFIDetachedTableView = DesktopView.extend({
 
     moveGFI: function (evt) {
         var touch = evt.originalEvent.touches[0],
+            headerWidth = this.$el.find(".gfi-header").width(),
             width = this.$el.find(".gfi-header").width() / 2,
+            //width = this.$el.width() / 2,
             headerHeight = this.$el.find(".gfi-header").height(),
             headerWidth = this.$el.find(".gfi-header").width(),
             // width = this.$el.width() / 2,
@@ -109,11 +111,13 @@ const GFIDetachedTableView = DesktopView.extend({
 
         // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
         if (x >= 0 && x < ($("#map").width() - $(".gfi-content").width() - 10) && y >= 0 && y < ($("#map").height() - $(".gfi-content").height() - 75)) {
-            // this.$el.css({
-            $(".gfi-detached-table").css({
-                "left": x + "px",
-                "top": y + "px"
-                // "-webkit-transform-origin": "50% 50%"
+            this.$el.css({
+                 "left": x + "px",
+                 "top": y + "px",
+                //"transform": "translate(" + x + "px," + y + "px)",
+                //"-webkit-transform-origin": "50% 50%"
+                "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+
             });
         }
     },
