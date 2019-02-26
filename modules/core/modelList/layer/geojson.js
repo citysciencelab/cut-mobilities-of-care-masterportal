@@ -21,9 +21,6 @@ const GeoJSONLayer = Layer.extend({
         }
 
         this.setStyleId(this.get("styleId") || this.get("id"));
-        console.log(this.get("styleId"));
-        console.log(Radio.request("StyleList", "returnModelById", this.get("styleId")));
-        
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
     /**
