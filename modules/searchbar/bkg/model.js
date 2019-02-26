@@ -13,7 +13,8 @@ const BKGSearchModel = Backbone.Model.extend({
         filter: "filter=(typ:*)",
         score: 0.6,
         ajaxRequests: {},
-        typeOfRequest: ""
+        typeOfRequest: "",
+        zoomToResult: false
     },
     /**
      * @description Initialisierung der BKG Suggest Suche
@@ -155,22 +156,33 @@ const BKGSearchModel = Backbone.Model.extend({
     /**
      * Startet die präzise Suche eines ausgewählten BKG-Vorschlags
      * @param  {object} hit Objekt des BKG-Vorschlags
+     * @param  {boolean} showOrHideMarker Zeigt an, ob der Marker angezeigt oder versteckt werden soll
      * @return {void}
      */
-    bkgSearch: function (hit) {
+    bkgSearch: function (hit, showOrHideMarker) {
         var name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
+        this.setShowOrHideMarker(showOrHideMarker);
+
         this.setTypeOfRequest("search");
-        this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"));
+        this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"), showOrHideMarker);
     },
     /**
-     * @description Triggert das Zoomen auf den Eintrag
-     * @param  {string} data - Data-XML des request
+     * triggers the zoom on the feature and the drawing or hiding of the marker
+     * @param  {string} data - Data-XML from request
      * @returns {void}
      */
     handleBKGSearchResult: function (data) {
-        Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
+        if (!this.get("showOrHideMarker")) {
+            Radio.trigger("MapMarker", "hideMarker");
+        }
+        else if (this.get("zoomToResult")) {
+            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
+        }
+        else if (this.get("showOrHideMarker")) {
+            Radio.trigger("MapMarker", "showMarker", data.features[0].geometry.coordinates);
+        }
     },
     /**
      * @description Führt einen HTTP-GET-Request aus.
@@ -244,6 +256,10 @@ const BKGSearchModel = Backbone.Model.extend({
      */
     setTypeOfRequest: function (value) {
         this.set("typeOfRequest", value);
+    },
+
+    setShowOrHideMarker: function (value) {
+        this.set("showOrHideMarker", value);
     }
 });
 

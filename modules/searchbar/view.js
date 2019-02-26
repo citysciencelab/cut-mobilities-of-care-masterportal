@@ -629,7 +629,7 @@ const SearchbarView = Backbone.View.extend({
         if (_.has(hit, "triggerEvent")) {
             // bei gdi-Suche kein Aktion bei Maushover
             if (hit.type !== "Thema") {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
             }
         }
         else if (_.has(hit, "coordinate")) {
@@ -640,8 +640,17 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
-    hideMarker: function () {
-        if (this.$(".dropdown-menu-search").css("display") === "block") {
+    hideMarker: function (evt) {
+        var hitId = evt.currentTarget.id,
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+
+        if (_.has(hit, "triggerEvent")) {
+        // bei gdi-Suche kein Aktion bei Maushover
+            if (hit.type !== "Thema") {
+                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
+            }
+        }
+        else if (this.$(".dropdown-menu-search").css("display") === "block") {
             Radio.trigger("MapMarker", "hideMarker");
         }
     },
