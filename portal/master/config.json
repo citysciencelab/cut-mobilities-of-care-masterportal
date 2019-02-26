@@ -493,7 +493,7 @@
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
-          "Pkw_AP30"
+          "mit_dem_pwk_in_30_min_erreichbare_arbeitsplaetze"
         ]
       },
       {
