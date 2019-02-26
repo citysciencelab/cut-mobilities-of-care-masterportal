@@ -28,7 +28,8 @@ const StyleWMS = Tool.extend({
         styleClassAttributes: [],
         styleWMSName: "",
         // Namen und IDs der verfügbaren stylebaren Layer
-        styleableLayerList: []
+        styleableLayerList: [],
+        wmsSoftware: "DEEGREE"
     }),
 
     initialize: function () {
@@ -181,8 +182,16 @@ const StyleWMS = Tool.extend({
         var sld = "";
 
         if (this.isValid() === true) {
-
-            sld = this.createAndGetRootElement();
+            if (this.get("wmsSoftware") === "ESRI") {
+                sld = this.createEsriRootElement();
+            }
+            else if (this.get("wmsSoftware") === "DEEGREE") {
+                sld = this.createDeegreeRootElement();
+            }
+            else {
+                console.error("Konnte mit wmsSoftware=" + this.get("wmsSoftware") + "nicht arbeiten!")
+            }
+            console.log(sld);
 
             this.updateLegend(this.get("styleClassAttributes"));
             this.get("model").get("layer").getSource().updateParams({SLD_BODY: sld, STYLES: "style"});
@@ -218,11 +227,33 @@ const StyleWMS = Tool.extend({
         if (id !== "") {
             model = Radio.request("ModelList", "getModelByAttributes", {id: id});
         }
-
+        this.requestWmsSoftware(model);
         this.setModel(model);
         this.trigger("sync");
     },
 
+    requestWmsSoftware: function (model) {
+        if (model) {
+            $.ajax({
+                url: Radio.request("Util", "getProxyURL", model.get("url")) + "?SERVICE=" + model.get("typ") + "&VERSION=" + model.get("version") + "&REQUEST=GetCapabilities",
+                context: this,
+                success: this.checkWmsSoftwareResponse,
+                async: false
+            });
+        }
+    },
+
+    checkWmsSoftwareResponse: function (data) {
+        const capabilities = data.getElementsByTagName("WMS_Capabilities")[0],
+            isEsri = capabilities.getAttribute("xmlns:esri_wms") !== null;
+
+        if (isEsri) {
+            this.setWmsSoftware("ESRI");
+        }
+        else {
+            this.setWmsSoftware("DEEGREE");
+        }
+    },
     updateLegend: function (attributes) {
         attributes.styleWMSName = this.get("model").get("name");
         Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
@@ -237,25 +268,48 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
+     * ESRI: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
      * und liefert das gesamte SLD zurück
      * @return {string} - das SLD
      * @see {@link http://suite.opengeo.org/ee/docs/4.5/geoserver/styling/sld-reference/index.html|SLD Reference}
      */
-    createAndGetRootElement: function () {
+    createEsriRootElement: function () {
         return "<sld:StyledLayerDescriptor version='1.0.0' xmlns:sld='http://www.opengis.net/sld' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>" +
-                    this.createAndGetNamedLayer() +
+                    this.createEsriNamedLayer() +
                "</sld:StyledLayerDescriptor>";
     },
 
     /**
-     * Erzeugt ein NamedLayer Element und liefert es zurück
+     * DEEGREE: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
+     * und liefert das gesamte SLD zurück
+     * @return {string} - das SLD
+     * @see {@link http://suite.opengeo.org/ee/docs/4.5/geoserver/styling/sld-reference/index.html|SLD Reference}
+     */
+    createDeegreeRootElement: function () {
+        return "<StyledLayerDescriptor xmlns='http://www.opengis.net/se' xmlns:app='http://www.deegree.org/app' xmlns:deegreeogc='http://www.deegree.org/ogc' xmlns:ogc='http://www.opengis.net/ogc' xmlns:sed='http://www.deegree.org/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/se http://schemas.opengis.net/se/1.1.0/FeatureStyle.xsd http://www.deegree.org/se http://schemas.deegree.org/se/1.1.0/Symbolizer-deegree.xsd'>" +
+                    this.createDeegreeNamedLayer() +
+               "</sld:StyledLayerDescriptor>";
+    },
+
+    /**
+     * ESRI: Erzeugt ein NamedLayer Element und liefert es zurück
      * @return {string} sld
      */
-    createAndGetNamedLayer: function () {
+    createEsriNamedLayer: function () {
         return "<sld:NamedLayer>" +
                    "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
-                   this.createAndGetUserStyle() +
+                   this.createEsriUserStyle() +
+               "</sld:NamedLayer>";
+    },
+
+    /**
+     * DEEGREE: Erzeugt ein NamedLayer Element und liefert es zurück
+     * @return {string} sld
+     */
+    createDeegreeNamedLayer: function () {
+        return "<sld:NamedLayer>" +
+                   "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
+                   this.createEsriUserStyle() +
                "</sld:NamedLayer>";
     },
 
@@ -263,11 +317,11 @@ const StyleWMS = Tool.extend({
      * Erzeugt ein UserStyle Element und liefert es zurück
      * @return {string} sld
      */
-    createAndGetUserStyle: function () {
+    createEsriUserStyle: function () {
         return "<sld:UserStyle>" +
                    "<sld:Name>style</sld:Name>" +
                    "<sld:FeatureTypeStyle>" +
-                       this.createAndGetRule() +
+                       this.createEsriRules() +
                    "</sld:FeatureTypeStyle>" +
                "</sld:UserStyle>";
     },
@@ -277,14 +331,14 @@ const StyleWMS = Tool.extend({
      * Abhängig von der Anzahl der Style Klassen
      * @return {string} sld
      */
-    createAndGetRule: function () {
+    createEsriRules: function () {
         var rule = "";
 
         if (this.get("geomType") === "Polygon") {
             _.each(this.get("styleClassAttributes"), function (obj) {
                 rule += "<sld:Rule>" +
-                            this.createAndGetANDFilter(obj.startRange, obj.stopRange) +
-                            this.createAndGetPolygonSymbolizer(obj.color) +
+                            this.createEsriANDFilter(obj.startRange, obj.stopRange) +
+                            this.createEsriPolygonSymbolizer(obj.color) +
                         "</sld:Rule>";
             }, this);
         }
@@ -301,11 +355,11 @@ const StyleWMS = Tool.extend({
      * @param  {string} stopRange - Ende des Wertebereichs
      * @return {string} sld
      */
-    createAndGetANDFilter: function (startRange, stopRange) {
+    createEsriANDFilter: function (startRange, stopRange) {
         return "<ogc:Filter>" +
                    "<ogc:And>" +
-                       this.createAndGetIsGreaterThanOrEqualTo(startRange) +
-                       this.createAndGetIsLessThanOrEqualTo(stopRange) +
+                       this.createEsriIsGreaterThanOrEqualTo(startRange) +
+                       this.createEsriIsLessThanOrEqualTo(stopRange) +
                    "</ogc:And>" +
                "</ogc:Filter>";
     },
@@ -315,7 +369,7 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Anfang des Wertebereichs
      * @return {string} sld
      */
-    createAndGetIsGreaterThanOrEqualTo: function (value) {
+    createEsriIsGreaterThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsGreaterThanOrEqualTo>" +
                    "<ogc:PropertyName>" +
                    this.get("attributeName") +
@@ -331,7 +385,7 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Ende des Wertebereichs
      * @return {string} sld
      */
-    createAndGetIsLessThanOrEqualTo: function (value) {
+    createEsriIsLessThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsLessThanOrEqualTo>" +
                    "<ogc:PropertyName>" +
                    this.get("attributeName") +
@@ -347,9 +401,9 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Style Farbe
      * @return {string} sld
      */
-    createAndGetPolygonSymbolizer: function (value) {
+    createEsriPolygonSymbolizer: function (value) {
         return "<sld:PolygonSymbolizer>" +
-                   this.createAndGetFillParams(value) +
+                   this.createEsriFillParams(value) +
                "</sld:PolygonSymbolizer>";
     },
 
@@ -358,7 +412,7 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Style Farbe
      * @return {string} sld
      */
-    createAndGetFillParams: function (value) {
+    createEsriFillParams: function (value) {
         return "<sld:Fill>" +
                    "<sld:CssParameter name='fill'>" +
                        value +
@@ -388,6 +442,10 @@ const StyleWMS = Tool.extend({
 
     setErrors: function (value) {
         this.set("errors", value);
+    },
+
+    setWmsSoftware: function (value) {
+        this.set("wmsSoftware", value);
     }
 });
 

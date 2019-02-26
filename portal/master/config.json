@@ -479,7 +479,17 @@
       },
       {
         "id": "5708",
-        "visibility": false,
+        "visibility": true,
+        "styleable": true,
+        "geomType": "Polygon",
+        "attributesToStyle": [
+          "Pkw_AP30"
+        ]
+      },
+      {
+        "id": "13765",
+        "name": "Err. Arbeitsplätze deegree",
+        "visibility": true,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
