@@ -1,8 +1,3 @@
-/**
- * @description View to represent one breadcrumb in mobile mode
- * @memberof BreadCrumbView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 
 const BreadCrumbView = Backbone.View.extend({

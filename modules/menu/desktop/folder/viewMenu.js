@@ -1,8 +1,3 @@
-/**
- * @description View for menu in desktop mode
- * @memberof FolderView
- * @extends Backbone.View
- */
 import Template from "text-loader!./templateMenu.html";
 
 const FolderView = Backbone.View.extend({

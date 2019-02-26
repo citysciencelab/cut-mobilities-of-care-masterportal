@@ -1,8 +1,3 @@
-/**
- * @description Model to represent one breadcrumb in mobile mode
- * @memberof BreadCrumbItem
- * @extends Backbone.Model
- */
 const BreadCrumbItem = Backbone.Model.extend({
     defaults: {
         // Name des Items

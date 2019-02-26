@@ -1,8 +1,3 @@
-/**
- * @description List to manage breadcrumbs in mobile mode
- * @memberof BreadCrumbList
- * @extends Backbone.Collection
- */
 import BreadCrumbItem from "./model";
 import "bootstrap/js/collapse";
 
