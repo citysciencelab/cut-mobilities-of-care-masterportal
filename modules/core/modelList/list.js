@@ -2,7 +2,6 @@ import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
-// import CustomGeoJSONLayer from "./layer/customGeojson";
 import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
@@ -128,9 +127,6 @@ const ModelList = Backbone.Collection.extend({
             else if (attrs.typ === "GeoJSON") {
                 return new GeoJSONLayer(attrs, options);
             }
-            // else if (attrs.typ === "CustomGeoJSON") {
-            //     return new CustomGeoJSONLayer(attrs, options);
-            // }
             else if (attrs.typ === "GROUP") {
                 return new GROUPLayer(attrs, options);
             }
