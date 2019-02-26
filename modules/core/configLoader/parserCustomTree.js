@@ -37,8 +37,6 @@ const CustomTreeParser = Parser.extend({
 
                     }else {
                         layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
-                        console.log(layerExtended);
-                        
                     }
                 }
                 // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
