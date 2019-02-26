@@ -171,7 +171,8 @@ const Legend = Tool.extend({
         }
         else if (typ === "SensorThings") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
-        }else if (typ === "StaticImage") {
+        }
+        else if (typ === "StaticImage") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
         }
         else if (typ === "GeoJSON") {
