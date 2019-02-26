@@ -1,8 +1,3 @@
-/**
- * @description Module parse CustomTree
- * @memberof CustomTreeParser
- * @extends ./parser
- */
 import Parser from "./parser";
 
 const CustomTreeParser = Parser.extend({

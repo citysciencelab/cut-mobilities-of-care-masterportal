@@ -1,8 +1,3 @@
-/**
- * @description Module to represent a link in the menu
- * @memberof StaticLink
- * @extends ../item
- */
 import Item from "../item";
 
 const StaticLink = Item.extend({

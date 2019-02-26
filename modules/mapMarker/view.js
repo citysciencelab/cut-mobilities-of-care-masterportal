@@ -1,8 +1,3 @@
-/**
- * @description Module to set mapMarker
- * @memberof MapMarkerView
- * @extends Backbone.View
- */
 import MapHandlerModel from "./model";
 
 const MapMarkerView = Backbone.View.extend({

@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Elektroladesäulen
- * @memberof ElektroladesaeulenTheme
- * @extends ../model
- */
 import Theme from "../model";
 import * as moment from "moment";
 

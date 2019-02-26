@@ -1,8 +1,3 @@
-/**
- * @description Module to create visibleWFS search
- * @memberof VisibleWFSModel
- * @extends Backbone.Model
- */
 import "../model";
 
 const VisibleVectorModel = Backbone.Model.extend({

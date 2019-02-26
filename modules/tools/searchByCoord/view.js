@@ -1,8 +1,3 @@
-/**
- * @description Module for locating given coordinates on map
- * @memberof SearchByCoord
- * @extends Backbone.View
- */
 import SearchByCoordTemplate from "text-loader!./template.html";
 
 const SearchByCoordView = Backbone.View.extend({

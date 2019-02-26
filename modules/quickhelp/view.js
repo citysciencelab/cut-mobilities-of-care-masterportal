@@ -1,8 +1,3 @@
-/**
- * @description View to manage Quickhelp
- * @memberof QuickHelpView
- * @extends Backbone.View
- */
 import TemplateSearch from "text-loader!./templateSearch.html";
 import TemplateTree from "text-loader!./templateTree.html";
 import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";

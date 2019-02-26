@@ -1,8 +1,3 @@
-/**
- * @description GFI-List
- * @memberof ThemeList
- * @extends Backbone.Collection
- */
 import DefaultThemeView from "./default/view";
 import DefaultTheme from "./default/model";
 import Buildings3dThemeView from "./buildings3d/view";

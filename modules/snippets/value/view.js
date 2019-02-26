@@ -1,8 +1,3 @@
-/**
- * @description Module to create value for snippets
- * @memberof SnippetValueView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 
 const SnippetValueView = Backbone.View.extend({

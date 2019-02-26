@@ -1,8 +1,3 @@
-/**
- * @description Module to represent a viewpoint in 3d-mode
- * @memberof Viewpoint
- * @extends .././item
- */
 import Item from ".././item";
 
 const Viewpoint = Item.extend({

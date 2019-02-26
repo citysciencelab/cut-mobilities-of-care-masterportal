@@ -1,8 +1,3 @@
-/**
- * @description Control to show MousePosition
- * @memberof MousePositionView
- * @extends Backbone.View
- */
 import MousePositionTemplate from "text-loader!./template.html";
 
 const MousePositionView = Backbone.View.extend({

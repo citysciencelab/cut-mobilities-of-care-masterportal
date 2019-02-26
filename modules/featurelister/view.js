@@ -1,8 +1,3 @@
-/**
- * @description Module to list features of given vector layer
- * @memberof FeatureListerView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
 

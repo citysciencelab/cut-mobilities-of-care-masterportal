@@ -1,8 +1,3 @@
-/**
- * @description Control to show an overview-map
- * @memberof OverviewMapView
- * @extends Backbone.Model
- */
 import OverviewMapModel from "./model";
 import template from "text-loader!./template.html";
 

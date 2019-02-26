@@ -1,8 +1,3 @@
-/**
- * @description View for single tool in table mode
- * @memberof ToolView
- * @extends Backbone.View
- */
 import MenuTemplate from "text-loader!./menutemplate.html";
 import ToolsView from "./toolview";
 

@@ -1,8 +1,3 @@
-/**
- * @description Control to show closed POIs
- * @memberof POIView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 import POIModel from "./model";
 import "bootstrap/js/tab";

@@ -1,8 +1,3 @@
-/**
- * @description Module to add GeoJson to Map
- * @memberof AddGeoJSON
- * @extends Backbone.Model
- */
 const AddGeoJSON = Backbone.Model.extend({
     defaults: {},
     initialize: function () {

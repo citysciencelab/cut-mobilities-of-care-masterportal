@@ -1,8 +1,3 @@
-/**
- * @description Control to show Attributions
- * @memberof AttributionsModel
- * @extends Backbone.Model
- */
 const AttributionsModel = Backbone.Model.extend({
     defaults: {
         // true wenn der Inhalt (Attributions) angezeigt wird

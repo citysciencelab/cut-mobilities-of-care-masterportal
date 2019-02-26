@@ -1,8 +1,3 @@
-/**
- * @description Module to create osm search
- * @memberof OsmModel
- * @extends Backbone.Model
- */
 import "../model";
 
 const OsmModel = Backbone.Model.extend({

@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Schulinfo
- * @memberof SchulInfoThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import SchulInfoThemeTemplate from "text-loader!./template.html";
 

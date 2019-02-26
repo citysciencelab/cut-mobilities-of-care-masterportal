@@ -1,8 +1,3 @@
-/**
- * @description Module to represent an Interface between the app and the window
- * @memberof RemoteInterface
- * @extends Backbone.Model
- */
 import {getCenter} from "ol/extent.js";
 
 const RemoteInterface = Backbone.Model.extend({

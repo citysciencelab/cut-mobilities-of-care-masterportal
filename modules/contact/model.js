@@ -1,8 +1,3 @@
-/**
- * @description Module to build a contact opportunity by email
- * @memberof ContactModel
- * @extends ../core/modelList/tool/model
- */
 import Tool from "../core/modelList/tool/model";
 
 const ContactModel = Tool.extend({

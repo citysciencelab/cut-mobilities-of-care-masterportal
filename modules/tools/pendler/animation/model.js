@@ -1,8 +1,3 @@
-/**
- * @description Module to animate commuter flows
- * @memberof Animation
- * @extends ../core/model
- */
 import PendlerCoreModel from "../core/model";
 import {Circle, Fill, Style} from "ol/style.js";
 import {Point, LineString} from "ol/geom.js";

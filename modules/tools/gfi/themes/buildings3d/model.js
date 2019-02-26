@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for buildings3d
- * @memberof Buildings3dTheme
- * @extends ../model
- */
 import Theme from "../model";
 
 const Buildings3dTheme = Theme.extend({

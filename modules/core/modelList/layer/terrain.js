@@ -1,8 +1,3 @@
-/**
- * @description Module to represent terrain layer
- * @memberof TerrainLayer
- * @extends ./model
- */
 import Layer from "./model";
 
 const TerrainLayer = Layer.extend({

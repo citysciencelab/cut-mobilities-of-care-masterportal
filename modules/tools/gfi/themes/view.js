@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme-View
- * @memberof ThemeView
- * @extends Backbone.View
- */
 const ThemeView = Backbone.View.extend({
     initialize: function () {
         var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",

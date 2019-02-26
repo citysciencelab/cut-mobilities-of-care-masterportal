@@ -1,8 +1,3 @@
-/**
- * @description Model to filter trees in in hamburg
- * @memberof TreeFilter
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../core/modelList/tool/model";
 
 const TreeFilter = Tool.extend({

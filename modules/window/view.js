@@ -1,8 +1,3 @@
-/**
- * @description View for tool window
- * @memberof Window
- * @extends Backbone.View
- */
 import Window from "./model";
 import templateMax from "text-loader!./templateMax.html";
 import templateTable from "text-loader!./templateTable.html";

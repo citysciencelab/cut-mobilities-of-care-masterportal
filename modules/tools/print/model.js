@@ -1,8 +1,3 @@
-/**
- * @description Module for printing in mapfish-print-2
- * @memberof PrintModel
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";

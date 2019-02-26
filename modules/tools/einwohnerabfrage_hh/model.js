@@ -1,8 +1,3 @@
-/**
- * @description Tool to request inhabitants from drawn geometry
- * @memberof EinwohnerabfrageModel
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";

@@ -1,8 +1,3 @@
-/**
- * @description ListView for modelList in desktop mode
- * @memberof Menu
- * @extends ./listViewMain
- */
 import listView from "./listViewMain";
 import DesktopThemenFolderView from "./folder/viewTree";
 import CatalogFolderView from "./folder/viewCatalog";

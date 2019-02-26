@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for SGV-Online
- * @memberof DefaultThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import DefaultTemplate from "text-loader!./template.html";
 

@@ -1,8 +1,3 @@
-/**
- * @description Module for drawing different geometries and text
- * @memberof DrawToolView
- * @extends Backbone.View
- */
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
 

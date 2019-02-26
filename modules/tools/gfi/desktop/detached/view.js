@@ -1,8 +1,3 @@
-/**
- * @description View for GFI detached in desktop mode
- * @memberof GFIDetachedView
- * @extends ../../view
- */
 import DesktopView from "../../view";
 import Template from "text-loader!../template.html";
 

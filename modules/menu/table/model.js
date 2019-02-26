@@ -1,8 +1,3 @@
-/**
- * @description Model for table mode
- * @memberof TableNavModel
- * @extends Backbone.Model
- */
 const TableNavModel = Backbone.Model.extend({
     defaults: {
         isActiveElement: ""

@@ -1,8 +1,3 @@
-/**
- * @description View for GFI in mobile mode
- * @memberof GFIMobileView
- * @extends ../view
- */
 import GFIView from "../view";
 import Template from "text-loader!./template.html";
 import "bootstrap/js/modal";

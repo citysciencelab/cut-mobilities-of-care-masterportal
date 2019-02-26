@@ -1,8 +1,3 @@
-/**
- * @description Module to slide 2 layers
- * @memberof LayersliderModel
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 
 const LayersliderModel = Tool.extend({

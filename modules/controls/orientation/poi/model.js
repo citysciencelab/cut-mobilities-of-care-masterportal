@@ -1,8 +1,3 @@
-/**
- * @description Control to show closed POIs
- * @memberof POIModel
- * @extends Backbone.Model
- */
 const POIModel = Backbone.Model.extend({
     defaults: {
         poiDistances: [],

@@ -1,8 +1,3 @@
-/**
- * @description Module to manage services from services.json
- * @memberof RawLayerList
- * @extends Backbone.Model
- */
 import {WMSGetFeatureInfo} from "ol/format.js";
 
 const Requestor = Backbone.Model.extend({

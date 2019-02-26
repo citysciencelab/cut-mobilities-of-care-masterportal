@@ -1,8 +1,3 @@
-/**
- * @description Module to measure
- * @memberof MeasureView
- * @extends Backbone.View
- */
 import DefaultTemplate from "text-loader!./default/template.html";
 import TableTemplate from "text-loader!./table/template.html";
 

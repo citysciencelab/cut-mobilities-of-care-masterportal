@@ -1,8 +1,3 @@
-/**
- * @description View for viewpoint in desktop mode
- * @memberof ItemView
- * @extends Backbone.View
- */
 import ItemTemplate from "text-loader!./template.html";
 
 const ItemView = Backbone.View.extend({

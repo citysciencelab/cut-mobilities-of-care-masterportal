@@ -1,8 +1,3 @@
-/**
- * @description Module parse Config
- * @memberof Parser
- * @extends Backbone.Model
- */
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
 

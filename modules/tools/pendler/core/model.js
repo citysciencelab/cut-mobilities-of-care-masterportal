@@ -1,8 +1,3 @@
-/**
- * @description Module for commuter flows
- * @memberof PendlerCoreModel
- * @extends ../../../core/modelList/tool/model
- */
 import Tool from "../../../core/modelList/tool/model";
 import {WFS} from "ol/format.js";
 

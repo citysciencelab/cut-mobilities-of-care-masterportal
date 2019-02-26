@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Schulinfo
- * @memberof SchulInfoTheme
- * @extends ../model
- */
 import Theme from "../model";
 
 const SchulInfoTheme = Theme.extend({

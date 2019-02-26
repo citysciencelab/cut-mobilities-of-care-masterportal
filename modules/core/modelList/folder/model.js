@@ -1,8 +1,3 @@
-/**
- * @description Module to represent Folder in Menu and layer-tree
- * @memberof DefaultTreeParser
- * @extends Backbone.Model
- */
 import Item from "../item";
 
 const Folder = Item.extend({

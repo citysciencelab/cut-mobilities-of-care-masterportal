@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Flächeninfo
- * @memberof FlaecheninfoTheme
- * @extends ../model
- */
 import Theme from "../model";
 
 const FlaecheninfoTheme = Theme.extend({

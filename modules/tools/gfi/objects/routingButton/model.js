@@ -1,8 +1,3 @@
-/**
- * @description Model for Routing-Button in GFI
- * @memberof RoutingButton
- * @extends Backbone.Model
- */
 const RoutingButton = Backbone.Model.extend({
     defaults: {},
     setRoutingDestination: function () {

@@ -1,8 +1,3 @@
-/**
- * @description Module to store functions used by different modules
- * @memberof Util
- * @extends Backbone.Model
- */
 const Util = Backbone.Model.extend({
     defaults: {
         // isViewMobile: false,

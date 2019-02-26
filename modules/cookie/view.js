@@ -1,8 +1,3 @@
-/**
- * @description Module to write Cookies
- * @memberof CookieView
- * @extends Backbone.View
- */
 import CookieModel from "./model";
 import CookieTemplate from "text-loader!./template.html";
 

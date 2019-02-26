@@ -1,8 +1,3 @@
-/**
- * @description Module to create a snippet
- * @memberof SnippetModel
- * @extends Backbone.Model
- */
 import ValueModel from "./value/model";
 
 const SnippetModel = Backbone.Model.extend({

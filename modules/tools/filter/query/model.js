@@ -1,8 +1,3 @@
-/**
- * @description Model Filter Query
- * @memberof QueryModel
- * @extends Backbone.Model
- */
 import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";

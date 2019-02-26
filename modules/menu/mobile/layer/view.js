@@ -1,8 +1,3 @@
-/**
- * @description View for layer in mobile mode
- * @memberof LayerView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 import SelectionTemplate from "text-loader!./templateSelection.html";
 import SettingsTemplate from "text-loader!./templateSettings.html";

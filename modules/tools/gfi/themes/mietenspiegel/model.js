@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Mietenspiegel
- * @memberof MietenspiegelTheme
- * @extends ../model
- */
 import Theme from "../model";
 
 const MietenspiegelTheme = Theme.extend({

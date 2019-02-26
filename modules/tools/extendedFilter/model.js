@@ -1,8 +1,3 @@
-/**
- * @description Module to filter vector features
- * @memberof ExtendedFilter
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 
 const ExtendedFilter = Tool.extend({

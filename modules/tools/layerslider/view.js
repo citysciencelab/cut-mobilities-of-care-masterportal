@@ -1,8 +1,3 @@
-/**
- * @description Module to slide 2 layers
- * @memberof LayersliderView
- * @extends Backbone.View
- */
 import LayersliderTemplate from "text-loader!./template.html";
 
 const LayersliderView = Backbone.View.extend({

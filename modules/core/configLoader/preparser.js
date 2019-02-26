@@ -1,8 +1,3 @@
-/**
- * @description Module parse config.json
- * @memberof Preparser
- * @extends Backbone.Model
- */
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 

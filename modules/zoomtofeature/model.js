@@ -1,8 +1,3 @@
-/**
- * @description Model to zoom to Feature
- * @memberof ZoomToFeature
- * @extends Backbone.Model
- */
 import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
 import Point from "ol/geom/Point.js";

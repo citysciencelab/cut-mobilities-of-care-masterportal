@@ -1,8 +1,3 @@
-/**
- * @description Module for saving current state of map in url
- * @memberof SaveSelection
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 
 const SaveSelection = Tool.extend({

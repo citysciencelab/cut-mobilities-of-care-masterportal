@@ -1,8 +1,3 @@
-/**
- * @description Module for locating given coordinates on map
- * @memberof SearchByCoord
- * @extends ../../core/modelList/tool/model
- */
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
 

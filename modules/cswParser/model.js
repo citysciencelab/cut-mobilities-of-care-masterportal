@@ -1,8 +1,3 @@
-/**
- * @description Module to manage CataloqueServiceWeb (CSW) requests
- * @memberof CswParser
- * @extends Backbone.Model
- */
 import * as moment from "moment";
 
 const CswParser = Backbone.Model.extend({

@@ -1,8 +1,3 @@
-/**
- * @description View for GFI attached in desktop mode
- * @memberof GFIAttachedView
- * @extends ../../view
- */
 import DesktopView from "../../view";
 import Template from "text-loader!../template.html";
 import "bootstrap/js/tooltip";

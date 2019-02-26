@@ -1,8 +1,3 @@
-/**
- * @description Module to set Footer information
- * @memberof FooterModel
- * @extends Backbone.Model
- */
 const FooterModel = Backbone.Model.extend({
     defaults: {
         urls: [

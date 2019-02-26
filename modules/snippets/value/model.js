@@ -1,8 +1,3 @@
-/**
- * @description Module to create slider snippet
- * @memberof SnippetValueModel
- * @extends Backbone.Model
- */
 const SnippetValueModel = Backbone.Model.extend({
     defaults: {
         value: "",

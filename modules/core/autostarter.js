@@ -1,8 +1,3 @@
-/**
- * @description Module to auto start configured Tool or Functionality
- * @memberof Autostarter
- * @extends Backbone.Model
- */
 const Autostarter = Backbone.Model.extend({
     defaults: {
         autostartModuls: [], // Liste aller zu startenden Module

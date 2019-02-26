@@ -1,8 +1,3 @@
-/**
- * @description Module to represent tileset layer
- * @memberof TileSetLayer
- * @extends ./model
- */
 import Layer from "./model";
 
 const TileSetLayer = Layer.extend({

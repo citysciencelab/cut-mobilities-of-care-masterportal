@@ -1,8 +1,3 @@
-/**
- * @description Module to generate Graphs
- * @memberof GraphModel
- * @extends Backbone.Model
- */
 import {scaleBand, scaleLinear} from "d3-scale";
 import {axisBottom, axisLeft} from "d3-axis";
 import {line} from "d3-shape";

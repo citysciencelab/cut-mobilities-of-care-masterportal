@@ -1,8 +1,3 @@
-/**
- * @description Module to build a contact opportunity by email
- * @memberof ContactView
- * @extends ../core/modelList/tool/model
- */
 import Template from "text-loader!./template.html";
 
 const ContactView = Backbone.View.extend({

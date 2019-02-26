@@ -1,8 +1,3 @@
-/**
- * @description Module to create range view for slider
- * @memberof SliderRangeView
- * @extends ../view
- */
 import Template from "text-loader!./template.html";
 import SliderView from "../view";
 

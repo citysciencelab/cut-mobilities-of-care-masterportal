@@ -1,8 +1,3 @@
-/**
- * @description Module to create specialWFS search
- * @memberof SpecialWFSModel
- * @extends Backbone.Model
- */
 import "../model";
 
 const SpecialWFSModel = Backbone.Model.extend({

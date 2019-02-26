@@ -1,8 +1,3 @@
-/**
- * @description Control to show an overview-map
- * @memberof OverviewMapModel
- * @extends Backbone.Model
- */
 import ImageWMS from "ol/source/ImageWMS.js";
 import Image from "ol/layer/Image.js";
 import View from "ol/View.js";

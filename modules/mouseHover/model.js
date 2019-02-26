@@ -1,8 +1,3 @@
-/**
- * @description Model to manage mouseHover over features
- * @memberof MouseHoverPopup
- * @extends Backbone.Model
- */
 import Overlay from "ol/Overlay.js";
 
 const MouseHoverPopup = Backbone.Model.extend({

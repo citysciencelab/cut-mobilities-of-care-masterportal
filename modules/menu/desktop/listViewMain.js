@@ -1,8 +1,3 @@
-/**
- * @description ListView for modelList in desktop mode
- * @memberof Menu
- * @extends Backbone.View
- */
 import DesktopToolView from "./tool/view";
 import DesktopFolderView from "./folder/viewMenu";
 import CatalogFolderView from "./folder/viewCatalog";

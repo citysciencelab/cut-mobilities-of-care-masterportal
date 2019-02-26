@@ -1,15 +1,7 @@
-/**
- * @description Module to display map Data
- * @memberof MapView
- * @extends Backbone.Model
- */
 import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 
 const MapView = Backbone.Model.extend({
-    /**
-     *
-     */
     defaults: {
         epsg: "EPSG:25832",
         background: "",

@@ -1,8 +1,3 @@
-/**
- * @description Module to represent GeoJSON layer
- * @memberof GeoJSONLayer
- * @extends ./model
- */
 import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";

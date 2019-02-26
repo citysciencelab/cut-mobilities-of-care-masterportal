@@ -1,8 +1,3 @@
-/**
- * @description Module for commuter flows as lines
- * @memberof LinesView
- * @extends Backbone.View
- */
 import LinesTemplate from "text-loader!./template.html";
 
 const LinesView = Backbone.View.extend({

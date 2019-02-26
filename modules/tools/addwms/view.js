@@ -1,10 +1,3 @@
-/**
- * @description Dieses Model beinhaltet die Logik, um einen WMS Capabillity Request auszuführen und die Response zu parsen.
- * Aus dem geparseten Objekt werden die Layer ausgelesen und aus diesen Informationen Layerobjekte erzeugt und an die Collection,
- * die die Layer verwaltet geschickt
- * @memberof AddWMSView
- * @extends Backbone.View
- */
 import AddWMSWin from "text-loader!./template.html";
 
 const AddWMSView = Backbone.View.extend({

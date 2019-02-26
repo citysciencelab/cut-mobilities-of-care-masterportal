@@ -1,8 +1,3 @@
-/**
- * @description Module to create portal title
- * @memberof TitleModel
- * @extends Backbone.Model
- */
 const TitleModel = Backbone.Model.extend({
     defaults: {
         // Abwärtskompatibilität muss beachtet werden

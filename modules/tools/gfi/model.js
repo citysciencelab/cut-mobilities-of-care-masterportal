@@ -1,8 +1,3 @@
-/**
- * @description GFI-Model
- * @memberof Gfi
- * @extends ../../core/modelList/tool/model
- */
 import Overlay from "ol/Overlay.js";
 import ThemeList from "./themes/list";
 import DesktopDetachedView from "./desktop/detached/view";

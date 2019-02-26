@@ -1,8 +1,3 @@
-/**
- * @description Model to filter vectorFeatures
- * @memberof WfsFeatureFilter
- * @extends Backbone.View
- */
 import WfsFeatureFilterTemplate from "text-loader!./template.html";
 
 const WfsFeatureFilterView = Backbone.View.extend({

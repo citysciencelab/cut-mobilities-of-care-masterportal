@@ -1,8 +1,3 @@
-/**
- * @description Module to represent group layer
- * @memberof GroupLayer
- * @extends ./model
- */
 import {Group as LayerGroup} from "ol/layer.js";
 import Layer from "./model";
 import WMSLayer from "./wms";

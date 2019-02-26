@@ -1,8 +1,3 @@
-/**
- * @description Tool to download drawn features
- * @memberof DownloadView
- * @extends Backbone.View
- */
 import DownloadWin from "text-loader!./template.html";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";

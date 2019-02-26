@@ -1,8 +1,3 @@
-/**
- * @description Module to create dropdown snippet
- * @memberof DropdownView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 import "bootstrap-select";
 

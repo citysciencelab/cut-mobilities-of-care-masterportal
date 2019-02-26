@@ -1,8 +1,3 @@
-/**
- * @description Module to create a scaleLine
- * @memberof ScaleLineView
- * @extends Backbone.View
- */
 import ScaleLineModel from "./model";
 import ScaleLineTemplate from "text-loader!./template.html";
 

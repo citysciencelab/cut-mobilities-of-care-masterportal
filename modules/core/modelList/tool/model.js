@@ -1,8 +1,3 @@
-/**
- * @description Module to represent any tool
- * @memberof Tool
- * @extends .././item
- */
 import Item from ".././item";
 
 const Tool = Item.extend({

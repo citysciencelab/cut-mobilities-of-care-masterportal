@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Table
- * @memberof TableTheme
- * @extends ../model
- */
 import Theme from "../model";
 
 const TableTheme = Theme.extend({

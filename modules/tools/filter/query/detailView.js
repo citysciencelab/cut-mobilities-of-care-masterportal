@@ -1,8 +1,3 @@
-/**
- * @description Detail View of Filter Query
- * @memberof QueryDetailView
- * @extends Backbone.View
- */
 import SnippetDropdownView from "../../../snippets/dropdown/view";
 import ValueView from "../../../snippets/value/view";
 import SnippetCheckBoxView from "../../../snippets/checkbox/view";

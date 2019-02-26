@@ -1,8 +1,3 @@
-/**
- * @description Module to build formular to request grenznachweis
- * @memberof GrenznachweisModel
- * @extends ../core/modelList/tool/model
- */
 import cookie from "../cookie/view";
 import Tool from "../core/modelList/tool/model";
 import VectorSource from "ol/source/Vector.js";

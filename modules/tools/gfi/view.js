@@ -1,8 +1,3 @@
-/**
- * @description GFI-View
- * @memberof GFIView
- * @extends Backbone.View
- */
 const GFIView = Backbone.View.extend({
     events: {
         "click .glyphicon-remove": "hideGFI",

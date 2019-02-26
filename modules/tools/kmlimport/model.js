@@ -1,8 +1,3 @@
-/**
- * @description Module to import KML
- * @memberof ImportTool
- * @extends ../../core/modelList/tool/model
- */
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
 import {Circle, Fill, Style, Text} from "ol/style.js";

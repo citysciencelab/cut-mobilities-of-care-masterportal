@@ -1,8 +1,3 @@
-/**
- * @description Module for creatung spec.JSON for mapfish-print-3
- * @memberof BuildSpecModel
- * @extends Backbone.Model
- */
 import {Circle as CircleStyle, Icon} from "ol/style.js";
 import {Point} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";

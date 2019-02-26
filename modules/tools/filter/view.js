@@ -1,8 +1,3 @@
-/**
- * @description View of Filter Tool
- * @memberof FilterView
- * @extends Backbone.View
- */
 import QueryDetailView from "./query/detailView";
 import QuerySimpleView from "./query/simpleView";
 import Template from "text-loader!./template.html";

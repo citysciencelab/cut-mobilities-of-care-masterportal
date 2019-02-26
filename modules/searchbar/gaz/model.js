@@ -1,8 +1,3 @@
-/**
- * @description Module to create gaz search
- * @memberof GazetteerModel
- * @extends Backbone.Model
- */
 import "../model";
 
 const GazetteerModel = Backbone.Model.extend({

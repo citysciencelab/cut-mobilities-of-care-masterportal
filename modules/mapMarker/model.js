@@ -1,8 +1,3 @@
-/**
- * @description Module to set mapMarker
- * @memberof MapMarkerModel
- * @extends Backbone.Model
- */
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import Overlay from "ol/Overlay.js";

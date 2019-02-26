@@ -1,8 +1,3 @@
-/**
- * @description Tool to compare vectorFeatures
- * @memberof CompareFeaturesModel
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 
 const CompareFeaturesModel = Tool.extend({

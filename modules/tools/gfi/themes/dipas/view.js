@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for DIPAS
- * @memberof DipasThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import DipasThemeTemplate from "text-loader!./template.html";
 

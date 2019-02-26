@@ -1,8 +1,3 @@
-/**
- * @description Model to manage mouseHover over features
- * @memberof MouseHoverPopupView
- * @extends Backbone.View
- */
 import MouseHoverPopup from "./model";
 
 const MouseHoverPopupView = Backbone.View.extend({

@@ -1,8 +1,3 @@
-/**
- * @description Module to measure
- * @memberof Measure
- * @extends ../../core/modelList/tool/model
- */
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";

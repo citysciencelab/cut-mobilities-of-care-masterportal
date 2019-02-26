@@ -1,8 +1,3 @@
-/**
- * @description View for layer in light tree in mobile mode
- * @memberof LayerView
- * @extends Backbone.View
- */
 import Template from "text-loader!./templateLight.html";
 import SettingTemplate from "text-loader!./templateSettings.html";
 

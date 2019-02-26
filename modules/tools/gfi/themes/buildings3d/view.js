@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for buildings3d
- * @memberof Buildings3dThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import DefaultTemplate from "text-loader!./template.html";
 

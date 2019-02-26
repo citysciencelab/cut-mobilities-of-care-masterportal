@@ -1,8 +1,3 @@
-/**
- * @description Module to manage map Data
- * @memberof Map
- * @extends Backbone.Model
- */
 import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";

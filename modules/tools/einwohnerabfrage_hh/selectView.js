@@ -1,8 +1,3 @@
-/**
- * @description View to display Einwohnerabfrage Tool
- * @memberof SelectView
- * @extends Backbone.View
- */
 import SnippetDropdownView from "../../snippets/dropdown/view";
 import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";

@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme-Model
- * @memberof Theme
- * @extends Backbone.Model
- */
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 

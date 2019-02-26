@@ -1,8 +1,3 @@
-/**
- * @description Model to manage Quickhelp
- * @memberof QuickHelpModel
- * @extends Backbone.Model
- */
 const QuickHelpModel = Backbone.Model.extend({
     defaults: {
         imgPath: "/",

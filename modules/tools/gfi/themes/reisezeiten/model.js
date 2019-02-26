@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Reisezeiten
- * @memberof ReisezeitenTheme
- * @extends ../model
- */
 import Theme from "../model";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";

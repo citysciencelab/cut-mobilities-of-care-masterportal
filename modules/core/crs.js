@@ -1,8 +1,3 @@
-/**
- * @description Module to manage coordinate reference systems (CRS) of the map
- * @memberof CRS
- * @extends Backbone.Model
- */
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 import {register} from "ol/proj/proj4.js";

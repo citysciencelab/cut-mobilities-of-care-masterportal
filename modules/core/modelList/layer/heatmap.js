@@ -1,8 +1,3 @@
-/**
- * @description Module to represent heatmap layer
- * @memberof HeatmapLayer
- * @extends ./model
- */
 import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
 import {Heatmap} from "ol/layer.js";

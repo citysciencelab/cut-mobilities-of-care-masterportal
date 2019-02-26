@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme for Elektroladesäulen
- * @memberof ElektroladesaeulenThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import ElektroladesaeulenThemeTemplate from "text-loader!./template.html";
 

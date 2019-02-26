@@ -1,8 +1,3 @@
-/**
- * @description Module to display oblique map Data (Schrägluftbilder)
- * @memberof ObliqueMap
- * @extends Backbone.Model
- */
 import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import {defaults as olDefaultInteractions} from "ol/interaction.js";

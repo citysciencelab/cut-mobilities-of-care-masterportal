@@ -1,8 +1,3 @@
-/**
- * @description WFS Source of Filter Query
- * @memberof WfsQueryModel
- * @extends ../model
- */
 import SourceModel from "./model";
 
 const WfsQueryModel = SourceModel.extend({

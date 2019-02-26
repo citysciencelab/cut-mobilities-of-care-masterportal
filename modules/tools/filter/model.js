@@ -1,8 +1,3 @@
-/**
- * @description Model of Filter Tool
- * @memberof FilterModel
- * @extends ../../core/modelList/tool/model
- */
 import WfsQueryModel from "./query/source/wfs";
 import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";

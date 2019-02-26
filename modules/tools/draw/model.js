@@ -1,8 +1,3 @@
-/**
- * @description Module for drawing different geometries and text
- * @memberof DrawToolModel
- * @extends ../../core/modelList/tool/model
- */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";

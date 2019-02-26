@@ -1,8 +1,3 @@
-/**
- * @description View for layers in table mode
- * @memberof LayerView
- * @extends Backbone.View
- */
 import ListTemplate from "text-loader!./templates/template.html";
 import SingleLayerView from "./singleLayerView";
 

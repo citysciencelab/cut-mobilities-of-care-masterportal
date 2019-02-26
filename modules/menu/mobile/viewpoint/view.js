@@ -1,8 +1,3 @@
-/**
- * @description View for viewpoint in mobile mode
- * @memberof ItemView
- * @extends Backbone.View
- */
 define(function (require) {
 
     var ItemTemplate = require("text!modules/menu/mobile/tool/template.html"),

@@ -1,8 +1,3 @@
-/**
- * @description Module to set Footer information
- * @memberof FooterView
- * @extends Backbone.View
- */
 import Template from "text-loader!./template.html";
 import Footermodel from "./model";
 

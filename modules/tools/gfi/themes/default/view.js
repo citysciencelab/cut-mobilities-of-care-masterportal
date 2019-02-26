@@ -1,8 +1,3 @@
-/**
- * @description GFI-Theme default
- * @memberof DefaultThemeView
- * @extends ../view
- */
 import ThemeView from "../view";
 import DefaultTemplate from "text-loader!./template.html";
 

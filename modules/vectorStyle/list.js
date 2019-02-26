@@ -1,8 +1,3 @@
-/**
- * @description Collection to store vectorStyles
- * @memberof StyleList
- * @extends Backbone.Collection
- */
 import WFSStyle from "./model";
 
 const StyleList = Backbone.Collection.extend({

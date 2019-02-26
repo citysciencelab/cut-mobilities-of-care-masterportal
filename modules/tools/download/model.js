@@ -1,8 +1,3 @@
-/**
- * @description Tool to download drawn features
- * @memberof DownloadModel
- * @extends ../../core/modelList/tool/model
- */
 import proj4 from "proj4";
 import {KML} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";

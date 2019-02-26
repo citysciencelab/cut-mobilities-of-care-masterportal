@@ -1,8 +1,3 @@
-/**
- * @description View
- * @memberof ViomRouting
- * @extends Backbone.View
- */
 import RoutingWin from "text-loader!./template.html";
 
 const RoutingView = Backbone.View.extend({

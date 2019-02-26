@@ -1,8 +1,3 @@
-/**
- * @description Module for printing in mapfish-print-3
- * @memberof PrintModel
- * @extends ../../core/modelList/tool/model
- */
 import Tool from "../../core/modelList/tool/model";
 import BuildSpecModel from "./buildSpec";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";

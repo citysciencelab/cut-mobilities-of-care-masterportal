@@ -1,8 +1,3 @@
-/**
- * @description View to manage configured Controls
- * @memberof ControlsView
- * @extends Backbone.View
- */
 const ControlsView = Backbone.View.extend({
     className: "controls-view",
     initialize: function () {

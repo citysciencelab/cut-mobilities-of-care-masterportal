@@ -1,8 +1,3 @@
-/**
- * @description View for GFI in table mode
- * @memberof GFIDetachedTableView
- * @extends ../view
- */
 import DesktopView from "../view";
 import Template from "text-loader!./template.html";
 

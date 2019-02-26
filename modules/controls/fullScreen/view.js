@@ -1,8 +1,3 @@
-/**
- * @description Control to make app run in fullscreen-mode
- * @memberof FullScreenView
- * @extends Backbone.View
- */
 const FullScreenView = Backbone.View.extend({
     events: {
         "click .full-screen-button": "toggleFullScreen",

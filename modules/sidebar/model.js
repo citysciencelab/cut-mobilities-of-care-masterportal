@@ -1,8 +1,3 @@
-/**
- * @description Module to create searchbar
- * @memberof SidebarModel
- * @extends Backbone.Model
- */
 const SidebarModel = Backbone.Model.extend({
     defaults: {
         // true if sidebar is visible

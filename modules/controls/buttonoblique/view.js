@@ -1,8 +1,3 @@
-/**
- * @description Control to activate oblique-mode (Schrägluftbilder)
- * @memberof ButtonObliqueView
- * @extends Backbone.View
- */
 import ButtonObliqueTemplate from "text-loader!./template.html";
 
 const ButtonObliqueView = Backbone.View.extend({
