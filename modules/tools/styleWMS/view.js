@@ -5,7 +5,7 @@ import "bootstrap-colorpicker";
 const StyleWMSView = Backbone.View.extend({
     events: {
         // Auswahl des Layers
-        "change #layerField": "setModelByID",
+        "change #layerField": "setModelById",
         // Auswahl der Attribute
         "change #attributField": "setAttributeName",
         // Auswahl Anzahl der Klassen
@@ -60,15 +60,16 @@ const StyleWMSView = Backbone.View.extend({
     render: function () {
         var attr = this.model.toJSON();
 
+        this.setElement(document.getElementsByClassName("win-body")[0]);
         // if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
         if (this.model.get("isActive") === true) {
 
             if (attr.styleableLayerList.length === 0) {
                 // Es existieren keine stylebaren Layer
-                $(".win-body").append(this.$el.html(this.templateNoStyleableLayers()));
+                this.$el.html(this.templateNoStyleableLayers());
             }
             else {
-                $(".win-body").append(this.$el.html(this.template(attr)));
+                this.$el.html(this.template(attr));
 
                 if (attr.model !== null && attr.model !== undefined) {
                     // Selektiere den momentan ausgewählen Layer (wenn Tool über den Themenbaum geöffnet wurde).
@@ -100,8 +101,8 @@ const StyleWMSView = Backbone.View.extend({
         this.model.setAttributeName(evt.target.value);
     },
 
-    setModelByID: function (evt) {
-        this.model.setModelByID(evt.target.value);
+    setModelById: function (evt) {
+        this.model.setModelById(evt.target.value);
     },
 
     /**

@@ -59,6 +59,7 @@ const StyleWMS = Tool.extend({
                 if (value !== null && value !== undefined) {
                     this.setAttributeName(this.defaults.attributeName);
                     this.setGeomType(value.get("geomType"));
+                    this.requestWmsSoftware(value);
                 }
             },
             // ändert sich der Attributname wird die Anzahl der Klassen zurückgesetzt
@@ -189,10 +190,8 @@ const StyleWMS = Tool.extend({
                 sld = this.createDeegreeRootElement();
             }
             else {
-                console.error("Konnte mit wmsSoftware=" + this.get("wmsSoftware") + "nicht arbeiten!")
+                console.error("Konnte mit wmsSoftware=" + this.get("wmsSoftware") + "nicht arbeiten!");
             }
-            console.log(sld);
-
             this.updateLegend(this.get("styleClassAttributes"));
             this.get("model").get("layer").getSource().updateParams({SLD_BODY: sld, STYLES: "style"});
         }
@@ -221,13 +220,12 @@ const StyleWMS = Tool.extend({
 
     // Setze das Layer-Model anhand einer gegebenen ID (aus dem Layer-Dialog).
     // Wenn dort kein Layer ausgewählt wurde, wird das Model genullt.
-    setModelByID: function (id) {
+    setModelById: function (id) {
         var model = null;
 
         if (id !== "") {
             model = Radio.request("ModelList", "getModelByAttributes", {id: id});
         }
-        this.requestWmsSoftware(model);
         this.setModel(model);
         this.trigger("sync");
     },
@@ -288,7 +286,7 @@ const StyleWMS = Tool.extend({
     createDeegreeRootElement: function () {
         return "<StyledLayerDescriptor xmlns='http://www.opengis.net/se' xmlns:app='http://www.deegree.org/app' xmlns:deegreeogc='http://www.deegree.org/ogc' xmlns:ogc='http://www.opengis.net/ogc' xmlns:sed='http://www.deegree.org/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/se http://schemas.opengis.net/se/1.1.0/FeatureStyle.xsd http://www.deegree.org/se http://schemas.deegree.org/se/1.1.0/Symbolizer-deegree.xsd'>" +
                     this.createDeegreeNamedLayer() +
-               "</sld:StyledLayerDescriptor>";
+               "</StyledLayerDescriptor>";
     },
 
     /**
@@ -307,14 +305,14 @@ const StyleWMS = Tool.extend({
      * @return {string} sld
      */
     createDeegreeNamedLayer: function () {
-        return "<sld:NamedLayer>" +
-                   "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
-                   this.createEsriUserStyle() +
-               "</sld:NamedLayer>";
+        return "<NamedLayer>" +
+                   "<Name>" + this.get("model").get("layers") + "</Name>" +
+                   this.createDeegreeUserStyle() +
+               "</NamedLayer>";
     },
 
     /**
-     * Erzeugt ein UserStyle Element und liefert es zurück
+     * ESRI: Erzeugt ein UserStyle Element und liefert es zurück
      * @return {string} sld
      */
     createEsriUserStyle: function () {
@@ -327,7 +325,20 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * Erzeugt 1-n Rule Elemente und liefert sie zurück
+     * DEEGREE: Erzeugt ein UserStyle Element und liefert es zurück
+     * @return {string} sld
+     */
+    createDeegreeUserStyle: function () {
+        return "<UserStyle>" +
+                "<FeatureTypeStyle>" +
+                   "<Name>style</Name>" +
+                       this.createDeegreeRules() +
+                   "</FeatureTypeStyle>" +
+               "</UserStyle>";
+    },
+
+    /**
+     * ESRI: Erzeugt 1-n Rule Elemente und liefert sie zurück
      * Abhängig von der Anzahl der Style Klassen
      * @return {string} sld
      */
@@ -337,9 +348,32 @@ const StyleWMS = Tool.extend({
         if (this.get("geomType") === "Polygon") {
             _.each(this.get("styleClassAttributes"), function (obj) {
                 rule += "<sld:Rule>" +
-                            this.createEsriANDFilter(obj.startRange, obj.stopRange) +
+                            this.createFilter(obj.startRange, obj.stopRange) +
                             this.createEsriPolygonSymbolizer(obj.color) +
                         "</sld:Rule>";
+            }, this);
+        }
+        else {
+            // TODO: ErrorHandling...
+            console.error("Type of geometry is not supported, abort styling.");
+        }
+        return rule;
+    },
+
+    /**
+     * DEEGREE: Erzeugt 1-n Rule Elemente und liefert sie zurück
+     * Abhängig von der Anzahl der Style Klassen
+     * @return {string} sld
+     */
+    createDeegreeRules: function () {
+        var rule = "";
+
+        if (this.get("geomType") === "Polygon") {
+            _.each(this.get("styleClassAttributes"), function (obj) {
+                rule += "<Rule>" +
+                            this.createFilter(obj.startRange, obj.stopRange) +
+                            this.createDeegreePolygonSymbolizer(obj.color) +
+                        "</Rule>";
             }, this);
         }
         else {
@@ -355,11 +389,11 @@ const StyleWMS = Tool.extend({
      * @param  {string} stopRange - Ende des Wertebereichs
      * @return {string} sld
      */
-    createEsriANDFilter: function (startRange, stopRange) {
+    createFilter: function (startRange, stopRange) {
         return "<ogc:Filter>" +
                    "<ogc:And>" +
-                       this.createEsriIsGreaterThanOrEqualTo(startRange) +
-                       this.createEsriIsLessThanOrEqualTo(stopRange) +
+                       this.createIsGreaterThanOrEqualTo(startRange) +
+                       this.createIsLessThanOrEqualTo(stopRange) +
                    "</ogc:And>" +
                "</ogc:Filter>";
     },
@@ -369,7 +403,7 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Anfang des Wertebereichs
      * @return {string} sld
      */
-    createEsriIsGreaterThanOrEqualTo: function (value) {
+    createIsGreaterThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsGreaterThanOrEqualTo>" +
                    "<ogc:PropertyName>" +
                    this.get("attributeName") +
@@ -385,7 +419,7 @@ const StyleWMS = Tool.extend({
      * @param  {string} value - Ende des Wertebereichs
      * @return {string} sld
      */
-    createEsriIsLessThanOrEqualTo: function (value) {
+    createIsLessThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsLessThanOrEqualTo>" +
                    "<ogc:PropertyName>" +
                    this.get("attributeName") +
@@ -397,27 +431,29 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * Erzeugt ein PolygonSymbolizer Element und liefert es zurück
+     * ESRI: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
      * @param  {string} value - Style Farbe
      * @return {string} sld
      */
     createEsriPolygonSymbolizer: function (value) {
         return "<sld:PolygonSymbolizer>" +
-                   this.createEsriFillParams(value) +
+                    "<sld:Fill>" +
+                        "<sld:CssParameter name='fill'>" + value + "</sld:CssParameter>" +
+                    "</sld:Fill>" +
                "</sld:PolygonSymbolizer>";
     },
 
     /**
-     * Erzeugt ein Fill Element und liefert es zurück
+     * DEEGREE: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
      * @param  {string} value - Style Farbe
      * @return {string} sld
      */
-    createEsriFillParams: function (value) {
-        return "<sld:Fill>" +
-                   "<sld:CssParameter name='fill'>" +
-                       value +
-                   "</sld:CssParameter>" +
-               "</sld:Fill>";
+    createDeegreePolygonSymbolizer: function (value) {
+        return "<PolygonSymbolizer>" +
+                    "<Fill>" +
+                        "<CssParameter name='fill'>" + value + "</CssParameter>" +
+                    "</Fill>" +
+               "</PolygonSymbolizer>";
     },
 
     setModel: function (value) {
