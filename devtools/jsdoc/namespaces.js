@@ -1,9 +1,4 @@
 /**
- * @namespace Configs
- * @description These files are needed for each portal.
- */
-
-/**
  * @namespace Alerting
  * @description Alerting system that responds to given events.
  * Used to have same alert all over the portal.
