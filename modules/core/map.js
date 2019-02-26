@@ -197,7 +197,7 @@ const map = Backbone.Model.extend({
             map: this.get("map"),
             time: shadowTimeFunction,
             sceneOptions: {
-                shadows: false
+                shadows: true
             },
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (olMap, scene) {
