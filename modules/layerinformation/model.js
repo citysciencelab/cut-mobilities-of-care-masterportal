@@ -12,7 +12,10 @@ const LayerInformationModel = Backbone.Model.extend({
         cswId: "3",
         // true wenn die Layerinformation sichtbar ist
         isVisible: false,
-        uniqueIdList: []
+        uniqueIdList: [],
+        datePublication: null,
+        dateRevision: null,
+        periodicity: null
     },
 
     /**
@@ -117,6 +120,9 @@ const LayerInformationModel = Backbone.Model.extend({
             this.set("date", null);
             this.set("metaURL", null);
             this.set("downloadLinks", null);
+            this.set("datePublication", null);
+            this.set("dateRevision", null);
+            this.set("periodicity", null);
         }
         this.trigger("sync");
     },

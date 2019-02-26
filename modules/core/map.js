@@ -230,10 +230,10 @@ const map = Backbone.Model.extend({
     isMap3d: function () {
         return this.getMap3d() && this.getMap3d().getEnabled();
     },
-    createMap3d: function () {
+    createMap3d: function (shadowTimeFunction) {
         var map3d = new OLCesium({
             map: this.get("map"),
-            time: this.returnCesiumTime.bind(this),
+            time: shadowTimeFunction,
             sceneOptions: {
                 shadows: true
             },
@@ -245,23 +245,24 @@ const map = Backbone.Model.extend({
 
         return map3d;
     },
-    returnCesiumTime: function () {
-        var menuStyle = Radio.request("Util", "getUiStyle"),
-            mapTable = Radio.request("Map", "getMap3d"),
-            scene = mapTable.getCesiumScene();
-
+    returnTodaysCesiumDate: function () {
         if (this.time) {
             return this.time;
         }
-        else if (menuStyle === "TABLE") {
-            scene.shadowMap.enabled = false;
-        }
-        const date = Cesium.JulianDate.now();
+        const date = Cesium.JulianDate.now(),
+            timeStamp = Cesium.JulianDate.toGregorianDate(date);
 
-        Cesium.JulianDate.addDays(date, 200, date);
-        Cesium.JulianDate.addHours(date, 12, date);
-        return date;
+        timeStamp.hour = 13; // UTC Standardtime +1
+        timeStamp.minute = 0;
+        timeStamp.second = 0;
+        timeStamp.millisecond = 0;
 
+        return Cesium.JulianDate.fromDate(new Date(timeStamp.year, timeStamp.month - 1, timeStamp.day, timeStamp.hour, timeStamp.minute, timeStamp.second, timeStamp.millisecond));
+    },
+    returnConfigCesiumDate: function () {
+        const modifiedTime = Cesium.JulianDate.fromDate(new Date(Config.shadowTime.year, Config.shadowTime.month - 1, Config.shadowTime.day, Config.shadowTime.hour, Config.shadowTime.minute, Config.shadowTime.second, Config.shadowTime.millisecond));
+
+        return modifiedTime;
     },
     setTime: function (time) {
         this.time = time;
@@ -309,10 +310,11 @@ const map = Backbone.Model.extend({
     },
     activateMap3d: function () {
         var camera,
+            shadowTimeFunction = _.has(Config, "shadowTime") ? this.returnConfigCesiumDate : this.returnTodaysCesiumDate,
             cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
 
         if (!this.getMap3d()) {
-            this.setMap3d(this.createMap3d());
+            this.setMap3d(this.createMap3d(shadowTimeFunction));
             this.handle3DEvents();
             this.setCesiumSceneDefaults();
             this.setCameraParameter(cameraParameter);

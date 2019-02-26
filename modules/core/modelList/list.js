@@ -1,5 +1,6 @@
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
+import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
@@ -160,6 +161,9 @@ const ModelList = Backbone.Collection.extend(
                     }
                     return new WFSLayer(attrs, options);
 
+                }
+                else if (attrs.typ === "StaticImage") {
+                    return new StaticImageLayer(attrs, options);
                 }
                 else if (attrs.typ === "GeoJSON") {
                     return new GeoJSONLayer(attrs, options);

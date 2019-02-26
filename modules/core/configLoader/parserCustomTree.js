@@ -25,11 +25,20 @@ const CustomTreeParser = Parser.extend({
 
                 // Für Singel-Layer (ol.layer.Layer)
                 // z.B.: {id: "5181", visible: false}
+
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                     objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
+                    // DIPAS -> Steht ein Objekt nicht in der ServicesJSON, hat aber eine url dann wird der Layer ohne Services Eintrag trotzdemübergeben
 
-                    if (_.isNull(objFromRawList)) { // Wenn LayerID nicht definiert, dann Abbruch
-                        return;
+                    // DIPAS -> wenn der Layertyp "StaticImage" übergeben wird brechen wur nicht ab sondern arbeiten mit der neuen ImageURL weiter.
+                    // Wird für den Einsatz eines individuell eingestelölten Bildes benötigt.
+                    if (_.isNull(objFromRawList)) {
+                        if (_.has(layerExtended, "url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                            objFromRawList = layerExtended;
+                        }
+                        else {
+                            return;
+                        }
                     }
                     layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
                 }
