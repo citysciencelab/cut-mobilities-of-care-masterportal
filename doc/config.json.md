@@ -80,6 +80,7 @@ Konfiguration des BKG Suchdienstes
 |score|nein|Number|0.6|Score der die Qualität der Suchergebnisse definiert.|
 |suggestCount|nein|Integer|20|Anzahl der Vorschläge.|
 |suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|
+|zoomToResult|nein|Boolean||Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|
 
 **Beispiel**
 ```
@@ -92,7 +93,8 @@ Konfiguration des BKG Suchdienstes
     "suggestCount": 10,
     "epsg": "EPSG:25832",
     "filter": "filter=(typ:*)",
-    "score": 0.6
+    "score": 0.6,
+    "zoomToResult": true
 }
 ```
 
