@@ -61,6 +61,7 @@ const GFIDetachedTableView = DesktopView.extend({
             height = this.$el.height(),
             headerHeight = this.$el.find(".gfi-header").height(),
             rotAngle = this.model.get("rotateAngle"),
+            transformOrigin = headerWidth - 20 + "px " + headerHeight + "px",
             x,
             y;
 
@@ -75,9 +76,9 @@ const GFIDetachedTableView = DesktopView.extend({
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
-                    "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-ms-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-moz-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+                    "-webkit-transform-origin": transformOrigin,
+                    "-ms-transform-origin": transformOrigin,
+                    "-moz-transform-origin": transformOrigin
                 });
             }
         }
@@ -91,9 +92,9 @@ const GFIDetachedTableView = DesktopView.extend({
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
-                    "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-ms-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-moz-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+                    "-webkit-transform-origin": transformOrigin,
+                    "-ms-transform-origin": transformOrigin,
+                    "-moz-transform-origin": transformOrigin
                 });
             }
         }
@@ -107,9 +108,9 @@ const GFIDetachedTableView = DesktopView.extend({
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
-                    "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-ms-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-moz-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+                    "-webkit-transform-origin": transformOrigin,
+                    "-ms-transform-origin": transformOrigin,
+                    "-moz-transform-origin": transformOrigin
                 });
             }
         }
@@ -123,9 +124,9 @@ const GFIDetachedTableView = DesktopView.extend({
                 this.$el.css({
                     "left": x + "px",
                     "top": y + "px",
-                    "-webkit-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-ms-transform-origin": headerWidth - 20 + "px " + headerHeight + "px",
-                    "-moz-transform-origin": headerWidth - 20 + "px " + headerHeight + "px"
+                    "-webkit-transform-origin": transformOrigin,
+                    "-ms-transform-origin": transformOrigin,
+                    "-moz-transform-origin": transformOrigin
                 });
             }
         }
