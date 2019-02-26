@@ -64,26 +64,6 @@ const GFIDetachedTableView = DesktopView.extend({
             x,
             y;
 
-        /* if (rotAngle === 0) {
-
-            x = touch.clientX - width;
-            y = touch.clientY - 20;
-        }
-        else if (rotAngle === -90) {
-
-            x = touch.clientX - width + 40;
-            y = touch.clientY - height / 2;
-        }
-        else if (rotAngle === -180) {
-
-            x = touch.clientX - width;
-            y = touch.clientY - height + 10;
-        }
-        else if (rotAngle === -270) {
-
-            x = touch.clientX - width - 80;
-            y = touch.clientY - height / 2;
-        } */
 
         if (rotAngle === 0) {
 
