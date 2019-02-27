@@ -29,7 +29,7 @@ const StyleWMS = Tool.extend({
         styleWMSName: "",
         // Namen und IDs der verfügbaren stylebaren Layer
         styleableLayerList: [],
-        wmsSoftware: "DEEGREE"
+        wmsSoftware: "OGC"
     }),
 
     initialize: function () {
@@ -179,18 +179,14 @@ const StyleWMS = Tool.extend({
      * @returns {void}
      */
     createSLD: function () {
-
         var sld = "";
 
         if (this.isValid() === true) {
             if (this.get("wmsSoftware") === "ESRI") {
                 sld = this.createEsriRootElement();
             }
-            else if (this.get("wmsSoftware") === "DEEGREE") {
-                sld = this.createDeegreeRootElement();
-            }
             else {
-                console.error("Konnte mit wmsSoftware=" + this.get("wmsSoftware") + "nicht arbeiten!");
+                sld = this.createOgcRootElement();
             }
             this.updateLegend(this.get("styleClassAttributes"));
             this.get("model").get("layer").getSource().updateParams({SLD_BODY: sld, STYLES: "style"});
@@ -249,7 +245,7 @@ const StyleWMS = Tool.extend({
             this.setWmsSoftware("ESRI");
         }
         else {
-            this.setWmsSoftware("DEEGREE");
+            this.setWmsSoftware("OGC");
         }
     },
     updateLegend: function (attributes) {
@@ -278,14 +274,14 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * DEEGREE: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
+     * OGC: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
      * und liefert das gesamte SLD zurück
      * @return {string} - das SLD
      * @see {@link http://suite.opengeo.org/ee/docs/4.5/geoserver/styling/sld-reference/index.html|SLD Reference}
      */
-    createDeegreeRootElement: function () {
+    createOgcRootElement: function () {
         return "<StyledLayerDescriptor xmlns='http://www.opengis.net/se' xmlns:app='http://www.deegree.org/app' xmlns:deegreeogc='http://www.deegree.org/ogc' xmlns:ogc='http://www.opengis.net/ogc' xmlns:sed='http://www.deegree.org/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/se http://schemas.opengis.net/se/1.1.0/FeatureStyle.xsd http://www.deegree.org/se http://schemas.deegree.org/se/1.1.0/Symbolizer-deegree.xsd'>" +
-                    this.createDeegreeNamedLayer() +
+                    this.createOgcNamedLayer() +
                "</StyledLayerDescriptor>";
     },
 
@@ -301,13 +297,13 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * DEEGREE: Erzeugt ein NamedLayer Element und liefert es zurück
+     * OGC: Erzeugt ein NamedLayer Element und liefert es zurück
      * @return {string} sld
      */
-    createDeegreeNamedLayer: function () {
+    createOgcNamedLayer: function () {
         return "<NamedLayer>" +
                    "<Name>" + this.get("model").get("layers") + "</Name>" +
-                   this.createDeegreeUserStyle() +
+                   this.createOgcUserStyle() +
                "</NamedLayer>";
     },
 
@@ -325,14 +321,14 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * DEEGREE: Erzeugt ein UserStyle Element und liefert es zurück
+     * OGC: Erzeugt ein UserStyle Element und liefert es zurück
      * @return {string} sld
      */
-    createDeegreeUserStyle: function () {
+    createOgcUserStyle: function () {
         return "<UserStyle>" +
                 "<FeatureTypeStyle>" +
                    "<Name>style</Name>" +
-                       this.createDeegreeRules() +
+                       this.createOgcRules() +
                    "</FeatureTypeStyle>" +
                "</UserStyle>";
     },
@@ -361,18 +357,18 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * DEEGREE: Erzeugt 1-n Rule Elemente und liefert sie zurück
+     * OGC: Erzeugt 1-n Rule Elemente und liefert sie zurück
      * Abhängig von der Anzahl der Style Klassen
      * @return {string} sld
      */
-    createDeegreeRules: function () {
+    createOgcRules: function () {
         var rule = "";
 
         if (this.get("geomType") === "Polygon") {
             _.each(this.get("styleClassAttributes"), function (obj) {
                 rule += "<Rule>" +
                             this.createFilter(obj.startRange, obj.stopRange) +
-                            this.createDeegreePolygonSymbolizer(obj.color) +
+                            this.createOgcPolygonSymbolizer(obj.color) +
                         "</Rule>";
             }, this);
         }
@@ -444,11 +440,11 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * DEEGREE: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
+     * OGC: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
      * @param  {string} value - Style Farbe
      * @return {string} sld
      */
-    createDeegreePolygonSymbolizer: function (value) {
+    createOgcPolygonSymbolizer: function (value) {
         return "<PolygonSymbolizer>" +
                     "<Fill>" +
                         "<CssParameter name='fill'>" + value + "</CssParameter>" +
