@@ -54,7 +54,9 @@ if (!("Config" in window)) {
     scriptTagsArray.forEach(function (scriptTag) {
         if (scriptTag.getAttribute("data-masterportal-config") !== null) {
             // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
-            configPath = scriptTag.getAttribute("data-masterportal-config") + "?noext";
+            configPath = scriptTag.getAttribute("data-masterportal-config")
+                + (scriptTag.getAttribute("data-masterportal-config").indexOf("?") !== -1 ? "&" : "?")
+                + "noext";
         }
     }, this);
 
