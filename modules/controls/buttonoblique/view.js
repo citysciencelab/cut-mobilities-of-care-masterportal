@@ -1,7 +1,3 @@
-// define(function (require) {
-
-//     var ButtonObliqueTemplate = require("text-loader!./template.html"),
-//         ButtonObliqueView;
 import ButtonObliqueTemplate from "text-loader!./template.html";
 
 const ButtonObliqueView = Backbone.View.extend({

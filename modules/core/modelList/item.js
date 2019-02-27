@@ -1,46 +1,103 @@
-const Item = Backbone.Model.extend({
-    defaults: {
-        name: "",
-        id: "",
-        parentId: "",
-        type: "", // welcher Node-Type - folder/layer/tool/staticlink ...
-        title: "test", // angezeigter Titel
-        glyphicon: "", // Bootstrap Glyphicon Class,
-        isInThemen: false,
-        level: 0,
-        isVisibleInTree: false
-    },
-    setId: function (value) {
-        this.set("id", value);
-    },
+const Item = Backbone.Model.extend(
+    /** @lends Item.prototype */
+    {
+        /**
+         * @class Item
+         * @description Module to represent any Item (Folder, Tool, Layer, ...)
+         * @extends Backbone.Model
+         * @memberof ModelList
+         * @constructs
+         * @property {String} name="" Name of item
+         * @property {String} id="" Id of item
+         * @property {String} parentId="" Parent id of item
+         * @property {String} type="" Type of item: folder/layer/tool/staticlink
+         * @property {String} title="no title defined" Title of item to be displayed
+         * @property {String} glyphicon="" Bootstrap glyphicon class of item
+         * @property {Boolean} isInThemen=false Flag if item is in layer tree
+         * @property {Number} level=0 Level of selected layer
+         * @property {Boolean} isVisibleInTree=false Flag if item is initially visible in layer tree
+         */
+        defaults: {
+            name: "",
+            id: "",
+            parentId: "",
+            type: "",
+            title: "no title defined",
+            glyphicon: "",
+            isInThemen: false,
+            level: 0,
+            isVisibleInTree: false
+        },
+        /**
+         * Setter for id
+         * @param {String} value Id
+         * @returns {void}
+         */
+        setId: function (value) {
+            this.set("id", value);
+        },
 
-    setParentId: function (value) {
-        this.set("parentId", value);
-    },
+        /**
+         * Setter for parentId
+         * @param {String} value ParentId
+         * @returns {void}
+         */
+        setParentId: function (value) {
+            this.set("parentId", value);
+        },
 
-    setName: function (value) {
-        this.set("name", value);
-    },
+        /**
+         * Setter for name
+         * @param {String} value Name
+         * @returns {void}
+         */
+        setName: function (value) {
+            this.set("name", value);
+        },
+        /**
+         * Setter for type
+         * @param {String} value Type
+         * @returns {void}
+         */
+        setType: function (value) {
+            return this.set("type", value);
+        },
 
-    setType: function (type) {
-        return this.set("type", type);
-    },
+        /**
+         * Setter for glyphicon
+         * @param {String} value Glyphicon
+         * @returns {void}
+         */
+        setGlyphicon: function (value) {
+            return this.set("glyphicon", value);
+        },
 
-    setGlyphicon: function (glyphicon) {
-        return this.set("glyphicon", glyphicon);
-    },
+        /**
+         * Setter for isInThemen
+         * @param {Boolean} value Flag if item is in themen
+         * @returns {void}
+         */
+        setIsInThemen: function (value) {
+            this.set("isInThemen", value);
+        },
 
-    setIsInThemen: function (value) {
-        this.set("isInThemen", value);
-    },
+        /**
+         * Setter for level
+         * @param {String} value Level
+         * @returns {void}
+         */
+        setLevel: function (value) {
+            this.set("level", value);
+        },
 
-    setLevel: function (value) {
-        this.set("level", value);
-    },
-
-    setIsVisibleInTree: function (value) {
-        this.set("isVisibleInTree", value);
-    }
-});
+        /**
+         * Setter for isVisibleInTree
+         * @param {Boolean} value Flag if item is visible in layertree
+         * @returns {void}
+         */
+        setIsVisibleInTree: function (value) {
+            this.set("isVisibleInTree", value);
+        }
+    });
 
 export default Item;

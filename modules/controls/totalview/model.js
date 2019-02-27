@@ -1,4 +1,4 @@
-const TotalviewmapModel = Backbone.Model.extend({
+const TotalViewMapModel = Backbone.Model.extend({
     defaults: {
     },
     setTotalView: function () {
@@ -6,4 +6,4 @@ const TotalviewmapModel = Backbone.Model.extend({
     }
 });
 
-export default TotalviewmapModel;
+export default TotalViewMapModel;

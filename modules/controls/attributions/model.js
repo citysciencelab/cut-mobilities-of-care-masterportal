@@ -1,4 +1,4 @@
-const Attributions = Backbone.Model.extend({
+const AttributionsModel = Backbone.Model.extend({
     defaults: {
         // true wenn der Inhalt (Attributions) angezeigt wird
         isContentVisible: true,
@@ -135,4 +135,4 @@ const Attributions = Backbone.Model.extend({
 
 });
 
-export default Attributions;
+export default AttributionsModel;

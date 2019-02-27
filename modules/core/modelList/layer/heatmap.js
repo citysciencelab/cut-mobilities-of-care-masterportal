@@ -76,7 +76,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * draw heatmap with initialize features
-     * @param  {[Ol.Feature]} features - all features from associated sensorLayer
+     * @param  {ol.Feature[]} features - all features from associated sensorLayer
      * @returns {void}
      */
     initializeHeatmap: function (features) {
@@ -112,7 +112,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * update the heatmap with given feature
-     * @param  {Ol.Feature} feature - feature to be update
+     * @param  {ol.Feature} feature - feature to be update
      * @return {void}
      */
     updateHeatmap: function (feature) {
@@ -157,7 +157,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * normalizes the values to a scale from 0 to 1
-     * @param  {[Ol.Feature]} featuresWithValue - features that have a value
+     * @param  {ol.Feature[]} featuresWithValue - features that have a value
      * @returns {void}
      */
     normalizeWeight: function (featuresWithValue) {
@@ -172,10 +172,10 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * count given states of a feature
-     * @param  {Ol.Feature} feature - feature
+     * @param  {ol.Feature} feature - feature
      * @param  {string} heatmapAttribute - attribute that contains the value
      * @param  {string} heatmapValue - value
-     * @return {[String]} count
+     * @return {String[]} count
      */
     countStates: function (feature, heatmapAttribute, heatmapValue) {
         var state = String(feature.get(heatmapAttribute)),
@@ -213,7 +213,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * Setter for attribute "layer"
-     * @param {Ol.layer} value - HeatmapLayer
+     * @param {ol.layer} value - HeatmapLayer
      * @returns {void}
      */
     setLayer: function (value) {
@@ -222,7 +222,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * Setter for attribute "layerSource"
-     * @param {Ol.source} value - HeatmapLayerSource
+     * @param {ol.source} value - HeatmapLayerSource
      * @returns {void}
      */
     setLayerSource: function (value) {

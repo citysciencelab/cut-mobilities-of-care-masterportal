@@ -5,8 +5,8 @@ import StaticImageSource from "ol/source/ImageStatic.js";
 
 const StaticImageLayer = Layer.extend({
     /**
-     * [createLayerSource description]
-     * @return {[type]} [description]
+     * Creates layer source for staticImage
+     * @return {void}
      */
     createLayerSource: function () {
         var extent = this.get("extent"),
@@ -24,8 +24,8 @@ const StaticImageLayer = Layer.extend({
     },
 
     /**
-     * [createLayer description]
-     * @return {[type]} [description]
+     * Creates Layer for staticImage
+     * @return {void}
      */
     createLayer: function () {
         this.setLayer(new ImageLayer({

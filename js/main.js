@@ -1,3 +1,7 @@
+/**
+ * @file
+ * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
+ */
 import "@babel/polyfill";
 import {loadApp} from "./app";
 import "../css/bootstrap.less";

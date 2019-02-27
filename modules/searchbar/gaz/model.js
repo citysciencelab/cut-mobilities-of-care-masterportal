@@ -240,7 +240,7 @@ const GazetteerModel = Backbone.Model.extend({
     },
     /**
      * [getStreets description]
-     * @param  {[type]} data [description]
+     * @param  {String} data [description]
      * @returns {void}
      */
     getStreets: function (data) {
@@ -288,8 +288,8 @@ const GazetteerModel = Backbone.Model.extend({
 
     /**
      * [getDistricts description]
-     * @param  {[type]} data [description]
-     * @return {[type]}      [description]
+     * @param  {String} data [description]
+     * @return {void}
      */
     getDistricts: function (data) {
         var hits = $("wfs\\:member,member", data),

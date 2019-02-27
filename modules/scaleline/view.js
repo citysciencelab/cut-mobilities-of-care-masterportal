@@ -1,9 +1,9 @@
-import ScaleLine from "./model";
+import ScaleLineModel from "./model";
 import ScaleLineTemplate from "text-loader!./template.html";
 
 const ScaleLineView = Backbone.View.extend({
     initialize: function () {
-        this.model = new ScaleLine();
+        this.model = new ScaleLineModel();
         this.listenTo(this.model, "change:scaleLineValue", this.render);
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
