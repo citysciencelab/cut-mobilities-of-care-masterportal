@@ -1,3 +1,13 @@
+# Changelog LGV Master-Portal 2.2.6
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 184198d7f Cesium wird nun über die index.html geladen
+
 # Changelog LGV Master-Portal 2.2.5
 
 NEU:
