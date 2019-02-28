@@ -1,6 +1,6 @@
 import Template from "text-loader!./template.html";
 
-const ContactView = Backbone.View.extend({
+const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
     events: {
         "keyup #contactName": "setUserAttributes",
         "keyup #contactEmail": "setUserAttributes",
@@ -8,6 +8,14 @@ const ContactView = Backbone.View.extend({
         "keyup #contactText": "setUserAttributes",
         "click .contactButton": "send"
     },
+    /**
+     * @class ContactView
+     * @extends Backbone.View
+     * @memberof Contact
+     * @constructs
+     * @listens ContactModel#changeIsActive
+     * @listens ContactModel#changeInvalid
+     */
     initialize: function () {
         this.template = _.template(Template);
         this.listenTo(this.model, {
@@ -18,6 +26,13 @@ const ContactView = Backbone.View.extend({
             this.render(this.model, true);
         }
     },
+
+    /**
+     * Renders contact tool
+     * @param {ContactModel} model Contact model
+     * @param {Boolean} value Flag to show if contact is active
+     * @returns {void}
+     */
     render: function (model, value) {
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -27,18 +42,39 @@ const ContactView = Backbone.View.extend({
         }
         return this;
     },
+
+    /**
+     * Sets the maximum height. Uses window.offset and the heihgt of the menu and footer
+     * @returns {void}
+     */
     setMaxHeight: function () {
         var height = window.offsetHeight - 130;
 
         this.$el.css("max-height", height);
         this.$el.css("max-width", 400);
     },
+
+    /**
+     * Sets user attributes by user input
+     * @param {KeyboardEvent} evt Keyup event
+     * @returns {void}
+     */
     setUserAttributes: function (evt) {
         this.model.setUserAttributes(evt);
     },
+
+    /**
+     * Sends email
+     * @returns {void}
+     */
     send: function () {
         this.model.send();
     },
+
+    /**
+     * Shows if the users inputs are valid
+     * @returns {void}
+     */
     showValidity: function () {
         var errors = this.model.validationError;
 
@@ -58,6 +94,12 @@ const ContactView = Backbone.View.extend({
             this.toggleSendButton(true);
         }
     },
+
+    /**
+     * Activates or deactivates the send button
+     * @param {Boolean} val Flag if User can send the email. Email can only be sended when all input fields are valid
+     * @returns {void}
+     */
     toggleSendButton: function (val) {
         if (val === true) {
             this.$(".contactButton").removeClass("disabled");
@@ -66,6 +108,12 @@ const ContactView = Backbone.View.extend({
             this.$(".contactButton").addClass("disabled");
         }
     },
+
+    /**
+     * Shows or hides error messages on userName
+     * @param {Boolean} val  Flag if userName input is valid
+     * @returns {void}
+     */
     toggleUserNameValid: function (val) {
         if (val === true) {
             this.$("#contactNameDiv").addClass("has-success");
@@ -80,6 +128,12 @@ const ContactView = Backbone.View.extend({
             this.$("#contactNameLabel").removeClass("contactHide");
         }
     },
+
+    /**
+     * Shows or hides error messages on userEmail
+     * @param {Boolean} val  Flag if userEmail input is valid
+     * @returns {void}
+     */
     toggleUserEmailValid: function (val) {
         if (val === true) {
             this.$("#contactEmailDiv").addClass("has-success");
@@ -94,6 +148,12 @@ const ContactView = Backbone.View.extend({
             this.$("#contactEmailLabel").removeClass("contactHide");
         }
     },
+
+    /**
+     * Shows or hides error messages on userTel
+     * @param {Boolean} val  Flag if userTel input is valid
+     * @returns {void}
+     */
     toggleUserTelValid: function (val) {
         if (val === true) {
             this.$("#contactTelDiv").addClass("has-success");
@@ -108,6 +168,12 @@ const ContactView = Backbone.View.extend({
             this.$("#contactTelLabel").removeClass("contactHide");
         }
     },
+
+    /**
+     * Shows or hides error messages on userText
+     * @param {Boolean} val  Flag if userText input is valid
+     * @returns {void}
+     */
     toggleTextValid: function (val) {
         if (val === true) {
             this.$("#textDiv").addClass("has-success");

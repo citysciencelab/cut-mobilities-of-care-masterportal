@@ -5,6 +5,11 @@
  */
 
 /**
+ * @namespace Contact
+ * @description Contact Formular that allows the user to generate and send an email to the defined email account.
+ */
+
+/**
  * @namespace App
  * @description Loads core and instances all modules that have to be loaded, due to portal config
  */

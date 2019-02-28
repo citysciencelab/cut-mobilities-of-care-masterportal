@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 
-const ContactModel = Tool.extend({
+const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         maxLines: "5",
         from: [{
@@ -23,17 +23,63 @@ const ContactModel = Tool.extend({
         userName: "",
         userEmail: "",
         userTel: "",
-        isCurrentWin: false,
         includeSystemInfo: false,
         contactInfo: "",
-        renderToWindow: true,
         glyphicon: "glyphicon-envelope",
         serviceID: undefined
     }),
+
+    /**
+     * @class ContactModel
+     * @extends Tool
+     * @memberof Contact
+     * @constructs
+     * @property {String} maxLines="5" Number of lines for the textarea of the form
+     * @property {Object[]} [from=[{"email":"lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]] Default sender of email. Email object existst of:
+     * @property {String} from.email Email address
+     * @property {String} from.name Email name to be shown
+     * @property {Object[]} [to=[{"email":"lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]] Default receiver of email. Email object existst of:
+     * @property {String} to.email Email address
+     * @property {String} to.name Email name to be shown
+     * @property {Object[]} [cc=[]] CC emails. Email object existst of:
+     * @property {String} cc.email Email address
+     * @property {String} cc.name Email name to be shown
+     * @property {Boolean} ccToUser=false Flag if user should get an email.
+     * @property {Object[]} [bcc=[]] BCC emails. Email object existst of:
+     * @property {String} bcc.email Email address
+     * @property {String} bcc.name Email name to be shown
+     * @property {String} [textPlaceholder="Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"] Placeholder for user input textarea
+     * @property {String} text="" Users text
+     * @property {String} url="" Url of email service
+     * @property {String} ticketId="" Generated Id of user ticket. Format "mm.dd.-[Id]"
+     * @property {String} systemInfo="" System info
+     * @property {String} subject="" Subject of email
+     * @property {String} userName="" name of user
+     * @property {String} userEmail="" email of user
+     * @property {String} userTel="" telephone number of user
+     * @property {Boolean} includeSystemInfo=false Flag if sytsem info should be included in email
+     * @property {String} contactInfo="" Additional text that can be shown above the contact form
+     * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
+     * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
+     * @fires Parser#RadioRequestParserGetPortalConfig
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires ContactModel#changeIsActive
+     * @fires ContactModel#changeInvalid
+     */
     initialize: function () {
         this.superInitialize();
         this.setAttributes(Radio.request("Parser", "getPortalConfig"));
     },
+
+    /**
+     * Creates and sets the initially needed attributes
+     * @param {JSON} configJson configJson
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @returns {void}
+     */
     setAttributes: function (configJson) {
         var portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
             hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
@@ -52,6 +98,10 @@ const ContactModel = Tool.extend({
         }
     },
 
+    /**
+     * Generates the ticketId using date. Format is "mm.dd-[uniqueId]"
+     * @returns {String} The generated id
+     */
     generateTicketId: function () {
         var date = new Date(),
             day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
@@ -61,6 +111,11 @@ const ContactModel = Tool.extend({
         return ticketId;
     },
 
+    /**
+     * Sets the user attributes on user input
+     * @param {KeyboardEvent} evt Event fired if user makes input in form
+     * @returns {void}
+     */
     setUserAttributes: function (evt) {
         switch (evt.target.id) {
             case "contactEmail": {
@@ -86,6 +141,11 @@ const ContactModel = Tool.extend({
         this.isValid();
     },
 
+    /**
+     * validates the user inputs. Backbone function that is called on this.isValid()
+     * @param {Object} attributes User inputs
+     * @return {Boolean} Flag if validation failed or not
+     */
     validate: function (attributes) {
         var userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
             userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
@@ -106,6 +166,13 @@ const ContactModel = Tool.extend({
 
     },
 
+    /**
+     * Sends the email via ajax request
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @returns {void}
+     */
     send: function () {
         var cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
             text,
@@ -153,82 +220,128 @@ const ContactModel = Tool.extend({
         });
     },
 
-    // setter for url
+    /**
+     * Setter for url
+     * @param {String} value url
+     * @returns {void}
+     */
     setUrl: function (value) {
         this.set("url", value);
     },
 
-    // setter for ticketId
+    /**
+     * Setter for ticketId
+     * @param {String} value ticketId
+     * @returns {void}
+     */
     setTicketId: function (value) {
         this.set("ticketId", value);
     },
 
-    // setter for systemInfo
+    /**
+     * Setter for systemInfo
+     * @param {String} value systemInfo
+     * @returns {void}
+     */
     setSystemInfo: function (value) {
         this.set("systemInfo", value);
     },
 
-    // setter for includeSystemInfo
+    /**
+     * Setter for includeSystemInfo
+     * @param {Boolean} value includeSystemInfo
+     * @returns {void}
+     */
     setIncludeSystemInfo: function (value) {
         this.set("includeSystemInfo", value);
     },
 
-    // setter for subject
+    /**
+     * Setter for subject
+     * @param {String} value subject
+     * @returns {void}
+     */
     setSubject: function (value) {
         this.set("subject", value);
     },
 
-    // setter for isCollapsed
-    setIsCollapsed: function (value) {
-        this.set("isCollapsed", value);
-    },
-
-    // setter for isCurrentWin
-    setIsCurrentWin: function (value) {
-        this.set("isCurrentWin", value);
-    },
-
-    // setter for userName
+    /**
+     * Setter for userName
+     * @param {String} value userName
+     * @returns {void}
+     */
     setUserName: function (value) {
         this.set("userName", value);
     },
 
-    // setter for userEmail
+    /**
+     * Setter for userEmail
+     * @param {String} value userEmail
+     * @returns {void}
+     */
     setUserEmail: function (value) {
         this.set("userEmail", value);
     },
 
-    // setter for userTel
+    /**
+     * Setter for userTel
+     * @param {String} value userTel
+     * @returns {void}
+     */
     setUserTel: function (value) {
         this.set("userTel", value);
     },
 
-    // setter for text
+    /**
+     * Setter for text
+     * @param {String} value text
+     * @returns {void}
+     */
     setText: function (value) {
         this.set("text", value);
     },
 
-    // setter for cc
+    /**
+     * Setter for cc
+     * @param {Object[]} value cc
+     * @returns {void}
+     */
     setCc: function (value) {
         this.set("cc", value);
     },
 
-    // setter for ccToUser
+    /**
+     * Setter for ccToUser
+     * @param {Boolean} value ccToUser
+     * @returns {void}
+     */
     setCcToUser: function (value) {
         this.set("ccToUser", value);
     },
 
-    // setter for from
+    /**
+     * Setter for from
+     * @param {Object[]} value from
+     * @returns {void}
+     */
     setFrom: function (value) {
         this.set("from", value);
     },
 
-    // setter for to
+    /**
+     * Setter for to
+     * @param {Object[]} value to
+     * @returns {void}
+     */
     setTo: function (value) {
         this.set("to", value);
     },
 
-    // setter for bcc
+    /**
+     * Setter for bcc
+     * @param {Object[]} value bcc
+     * @returns {void}
+     */
     setBcc: function (value) {
         this.set("bcc", value);
     }

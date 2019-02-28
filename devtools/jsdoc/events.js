@@ -65,6 +65,53 @@
 */
 
 
+/** -------------------- PARSER -------------------- */
+
+/**
+ * @event Parser#RadioRequestParserGetPortalConfig
+ * @example Radio.trigger("Parser", "getPortalConfig")
+ * @description Event that returns the config.json of the portal
+ */
+
+
+/** --------------------CONTACT -------------------- */
+
+/**
+ * @event ContactModel#changeIsActive
+ * @description Is fired when attribute isActive changes
+ */
+
+ /**
+ * @event ContactModel#changeInvalid
+ * @description Is fired when attribute isActive changes
+ */
+
+
+/** -------------------- REST READER -------------------- */
+
+/**
+ * @event RestReader#RadioRequestRestReaderGetServicebyId
+ * @param {String} id Id of RestService
+ * @example Radio.trigger("RestReader", "getServiceById", id)
+ * @description Event that returns the config.json of the portal
+ */
+
+
+/** -------------------- UTIL -------------------- */
+
+/**
+ * @event Util#RadioTriggerUtilShowLoader
+ * @example Radio.trigger("Util", "showLoader")
+ * @description Shows loading gif
+ */
+
+/**
+ * @event Util#RadioTriggerUtilHideLoader
+ * @example Radio.trigger("Util", "hideLoader")
+ * @description Shows loading gif
+ */
+
+
 /** -------------------- LAYER -------------------- */
 
 /**
