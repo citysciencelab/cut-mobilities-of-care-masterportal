@@ -49,6 +49,20 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @property {String} styleableLayer.name Name of styleable Layer
      * @property {String} styleableLayer.id Id of styleable Layer
      * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
+     * @listens StyleWmsModel#RadioTriggerStyleWmsopenStyleWms
+     * @listens StyleWmsModel#changeModel
+     * @listens StyleWmsModel#changeAttributeName
+     * @listens StyleWmsModel#changeNumberOfClasses
+     * @listens StyleWmsModel#changeSetSld
+     * @listens List#RadioTriggerModelListUpdatedSelectedLayerList
+     * @fires List#RadioRequestModelListGetModelsByAttributes
+     * @fires List#RadioTriggerModelListSetModelAttributesById
+     * @fires List#RadioRequestModelListGetModelByAttributes
+     * @fires Util#RadioRequestUtilGetProxyUrl
+     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
+     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
+     * @fires StyleWmsModel#sync
+     * @fires StyleWmsModel#changeIsactive
      */
     initialize: function () {
         var channel = Radio.channel("StyleWMS");
@@ -106,6 +120,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Refreshes the styleableLayerList
      * Takes the layermodels that are selected in the layer tree. Takes the layer name and the layer id
+     * @fires List#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
     refreshStyleableLayerList: function () {
@@ -248,6 +263,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Set the selected layer model by its id
      * @param {String} id Id of layer
+     * @fires List#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
     setModelById: function (id) {
@@ -263,6 +279,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Checks the current service if it is made from esri software or not.
      * @param {Layer} model WmsLayerModel The model of the layer to be checked
+     * @fires Util#RadioRequestUtilGetProxyUrl
      * @returns {void}
      */
     requestWmsSoftware: function (model) {
@@ -296,6 +313,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Triggers the legnd to update itself
      * @param {Object[]} attributes Attributes for createing the Legend from StyleWMS
+     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
      * @returns {void}
      */
     updateLegend: function (attributes) {
@@ -305,6 +323,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
     /**
      * Triggers the legend to reset the stylewms params
+     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
      * @returns {void}
      */
     resetLegend: function () {

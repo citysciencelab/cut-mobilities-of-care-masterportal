@@ -38,6 +38,11 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @extends Backbone.View
      * @memberOf StyleWMS
      * @constructs
+     * @listens StyleWmsModel#sync
+     * @listens StyleWmsModel#changeIsActive
+     * @listens StyleWmsModel#changeModel
+     * @listens StyleWmsModel#changeAttributeName
+     * @listens StyleWmsModel#changeNumberOfClasses
      */
     initialize: function () {
         this.listenTo(this.model, {
