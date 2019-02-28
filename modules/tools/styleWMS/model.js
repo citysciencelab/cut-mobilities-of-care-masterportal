@@ -1,37 +1,55 @@
 import Tool from "../../core/modelList/tool/model";
 
-const StyleWMS = Tool.extend({
+const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
-        // true wenn dieses Tool im Fenster angezeigt wird und damit aktiv ist
         isCurrentWin: false,
-        // true wenn das Fenster minimiert ist
         isCollapsed: false,
-        // Bootstrap Glyphicon Class
         glyphicon: "glyphicon-tint",
-        // Name (Überschrift) der Funktion
         name: "Style WMS",
-        // ID des Tools
         id: "styleWMS",
-        // Id vom Model dessen Layer ein neues Styling bekommt
         modelId: "",
-        // Model dessen Layer ein neues Styling bekommt
         model: null,
-        // Art der Layer Geometrie
         geomType: "",
-        // Name des Attributs, auf das der Style angewendet wird
         attributeName: "default",
-        // Anzahl der verfügbaren Style-Klassen
         numberOfClassesList: ["1", "2", "3", "4", "5"],
-        // Anzahl der verwendeten Style-Klassen
         numberOfClasses: "default",
-        // Die Angaben der Style Klassen (Wertebereich und Farbe)
         styleClassAttributes: [],
         styleWMSName: "",
-        // Namen und IDs der verfügbaren stylebaren Layer
         styleableLayerList: [],
         wmsSoftware: "OGC"
     }),
 
+    /**
+     * @class StyleWmsModel
+     * @description Tool that can modify the style of a WMS.
+     * Therefore a sld-body is created and sent via the get-map-request.
+     * Caution: Only works for numerical values
+     * @extends Tool
+     * @memberof StyleWMS
+     * @constructs
+     * @property {Boolean} isCurrentWin=false Flag if this tool is shown in the toolwindow and thus is active
+     * @property {Boolean} isCollapsed=false Flag if this tool window is collapsed
+     * @property {String} glyphicon="glyphicon-tint" Icon that is shown before the tool name
+     * @property {String} name="Style WMS" Name of the Tool
+     * @property {String} id="StyleWMS" id of Tool
+     * @property {String} modelId="" Id of layer model to be styled
+     * @property {WmsLayer} model=null Layer model to be styled
+     * @property {String} geomType="" Geometry type of data shown in wms layer. important for creating the correct sld
+     * @property {String} attributeName="default" Name of attribute to be styled
+     * @property {String[]} numberOfClassesList=["1", "2", "3", "4", "5"] Array that defines the maximum amount of styling classes
+     * @property {String} numberOfClasses="default" Flag that shows how many styling classes are used
+     * @property {styleClassAttribute[]} styleClassAttributes=[] Array of defined styleclassattributes
+     * @property {Object} styleClassAttribute One user defined style class
+     * @property {Integer} styleClassAttribute.startRange Start of value range to style
+     * @property {Integer} styleClassAttribute.stopRange Stop of value range to style
+     * @property {String} styleClassAttribute.color Color as hex code
+     * @property {String} styleWMSName="" Name of Layer to be styled
+     * @property {styleableLayer[]} styleableLayerList=[] List of Layers that can be used for restyling
+     * @property {Object} styleableLayer Object containing the name and the id of the styleable layer
+     * @property {String} styleableLayer.name Name of styleable Layer
+     * @property {String} styleableLayer.id Id of styleable Layer
+     * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
+     */
     initialize: function () {
         var channel = Radio.channel("StyleWMS");
 
@@ -39,22 +57,21 @@ const StyleWMS = Tool.extend({
         channel.on({
             "openStyleWMS": function (model) {
 
-                // Prüfe ob bereits ein Fenster offen ist, wenn nicht erzeuge ein Fenster
+                // Check if tool window is already open,if not, open it
                 if (this.get("isActive") !== true) {
                     this.setIsActive(true);
                     Radio.trigger("Window", "toggleWin", this);
                 }
 
-                // Übernehme den im Themenbaum angeklickten Layer
+                // Take layer that is selected in Layer tree
                 this.setModel(model);
                 this.trigger("sync");
             }
         }, this);
 
-        // Eigene Listener
+        // Own Listeners
         this.listenTo(this, {
-            // ändert sich das Model, wird der entsprechende Geometrietyp gesetzt
-            // und der Attributname zurückgesetzt
+            // If model changes, set the geometry type and reset attribute name
             "change:model": function (model, value) {
                 if (value !== null && value !== undefined) {
                     this.setAttributeName(this.defaults.attributeName);
@@ -62,7 +79,7 @@ const StyleWMS = Tool.extend({
                     this.requestWmsSoftware(value);
                 }
             },
-            // ändert sich der Attributname wird die Anzahl der Klassen zurückgesetzt
+            // If attributeName changes, reset numberOfClasses and styleClassAttributes
             "change:attributeName": function () {
                 this.setNumberOfClasses(this.defaults.numberOfClasses);
                 this.resetStyleClassAttributes();
@@ -70,7 +87,7 @@ const StyleWMS = Tool.extend({
             "change:numberOfClasses": function () {
                 this.resetStyleClassAttributes();
             },
-            // Sendet das SLD an die layerlist, sobald es erzeugt wurde
+            // Send sld to modellist as soon as it is generated
             "change:setSLD": function () {
                 Radio.trigger("ModelList", "setModelAttributesById", this.get("model").get("id"), {"SLDBody": this.get("setSLD"), paramStyle: "style"});
             }
@@ -79,21 +96,23 @@ const StyleWMS = Tool.extend({
             "updatedSelectedLayerList": function () {
                 this.refreshStyleableLayerList();
                 if (this.get("isActive") === true) {
-                    // Wenn das Tool gerade aktiv ist aktualisiere den Inhalt.
+                    // if tool is active , refresh the content
                     this.trigger("sync");
                 }
             }
         });
     },
 
-    // Aktualisiere die Liste stylebarer Layer
+    /**
+     * Refreshes the styleableLayerList
+     * Takes the layermodels that are selected in the layer tree. Takes the layer name and the layer id
+     * @returns {void}
+     */
     refreshStyleableLayerList: function () {
-
         var styleableLayerList = [],
             layerModelList,
             result;
 
-        // Berücksichtige selektierte stylebare Layer
         layerModelList = Radio.request("ModelList", "getModelsByAttributes", {styleable: true, isSelected: true});
 
         _.each(layerModelList, function (layerModel) {
@@ -102,7 +121,7 @@ const StyleWMS = Tool.extend({
 
         this.set("styleableLayerList", styleableLayerList);
 
-        // Wenn das aktuelle layerModel nicht mehr enthalten ist wird es deaktiviert
+        // If current layer model is not selected any more, remove it
         if (this.get("model") !== null && this.get("model") !== undefined) {
             result = _.find(styleableLayerList, function (styleableLayer) {
                 return styleableLayer.id === this.get("model").get("id");
@@ -110,15 +129,14 @@ const StyleWMS = Tool.extend({
 
             if (result === undefined) {
                 this.setModel(null);
-                // "sync" wird später an anderer Stelle getriggert.
             }
         }
     },
 
     /**
-     * Wenn die validierten Attribute valide sind, wird nichts zurückgegeben
-     * Anderenfalls die Fehlermeldungen
-     * Triggert ein "invalid" an sich selbst, wenn die Validation fehlschlägt
+     * If validated attributes are valid, then noting is returned.
+     * Otherwise Error message are created
+     * Triggers "invalid" to itself if validation fails
      * @param  {Object} attributes - Backbone.Model.attributes
      * @return {Object[]} errors - Die Fehlermeldungen
      * @see {@link http://backbonejs.org/#Model-validate|Backbone}
@@ -175,7 +193,7 @@ const StyleWMS = Tool.extend({
     },
 
     /**
-     * Prüft ob die Style-Klassen valide sind. Wenn ja, wird das SLD erstellt und gesetzt
+     * Creates sld body after attributes have been validated. Distinguished between esri and ogc
      * @returns {void}
      */
     createSLD: function () {
@@ -193,6 +211,10 @@ const StyleWMS = Tool.extend({
         }
     },
 
+    /**
+     * Removes sld body of getMapRequest
+     * @returns {void}
+     */
     removeSLDBody: function () {
         var source = this.get("model").get("layer").getSource(),
             params = source.getParams();
@@ -204,18 +226,30 @@ const StyleWMS = Tool.extend({
         source.updateParams(params);
     },
 
+    /**
+     * Resets the Tool
+     * @returns {void}
+     */
     resetModel: function () {
         this.removeSLDBody();
         this.setNumberOfClasses(this.defaults.numberOfClasses);
         this.resetStyleClassAttributes();
         this.resetLegend();
     },
+
+    /**
+     * Resets styleClassAttributes to default values
+     * @returns {void}
+     */
     resetStyleClassAttributes: function () {
         this.setStyleClassAttributes(this.defaults.styleClassAttributes);
     },
 
-    // Setze das Layer-Model anhand einer gegebenen ID (aus dem Layer-Dialog).
-    // Wenn dort kein Layer ausgewählt wurde, wird das Model genullt.
+    /**
+     * Set the selected layer model by its id
+     * @param {String} id Id of layer
+     * @returns {void}
+     */
     setModelById: function (id) {
         var model = null;
 
@@ -226,6 +260,11 @@ const StyleWMS = Tool.extend({
         this.trigger("sync");
     },
 
+    /**
+     * Checks the current service if it is made from esri software or not.
+     * @param {Layer} model WmsLayerModel The model of the layer to be checked
+     * @returns {void}
+     */
     requestWmsSoftware: function (model) {
         if (model) {
             $.ajax({
@@ -237,6 +276,11 @@ const StyleWMS = Tool.extend({
         }
     },
 
+    /**
+     * Parses the Capabilities and looks for namespace "xmlns:esri_wms". If so the software is "ESRI", otherwise "OGC"
+     * @param {XMLDocument} data Response from getCapabilities request
+     * @returns {void}
+     */
     checkWmsSoftwareResponse: function (data) {
         const capabilities = data.getElementsByTagName("WMS_Capabilities")[0],
             isEsri = capabilities.getAttribute("xmlns:esri_wms") !== null;
@@ -248,95 +292,105 @@ const StyleWMS = Tool.extend({
             this.setWmsSoftware("OGC");
         }
     },
+
+    /**
+     * Triggers the legnd to update itself
+     * @param {Object[]} attributes Attributes for createing the Legend from StyleWMS
+     * @returns {void}
+     */
     updateLegend: function (attributes) {
         attributes.styleWMSName = this.get("model").get("name");
         Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
     },
 
+    /**
+     * Triggers the legend to reset the stylewms params
+     * @returns {void}
+     */
     resetLegend: function () {
         Radio.trigger("StyleWMS", "resetParamsStyleWMS", this.get("model"));
     },
 
+    /**
+     * Triggers the layerinfo to update
+     * @param {String} layerName Name of Layer
+     * @returns {void}
+     */
     updateLayerInfo: function (layerName) {
         Radio.trigger("Layer", "updateLayerInfo", layerName);
     },
 
     /**
-     * ESRI: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
-     * und liefert das gesamte SLD zurück
-     * @return {string} - das SLD
-     * @see {@link http://suite.opengeo.org/ee/docs/4.5/geoserver/styling/sld-reference/index.html|SLD Reference}
+     * ESRI: Creates sld for version 1.0.0
+     * @return {String} complete sld
      */
     createEsriRootElement: function () {
         return "<sld:StyledLayerDescriptor version='1.0.0' xmlns:sld='http://www.opengis.net/sld' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>" +
                     this.createEsriNamedLayer() +
-               "</sld:StyledLayerDescriptor>";
+            "</sld:StyledLayerDescriptor>";
     },
 
     /**
-     * OGC: Erzeugt das Root Element der SLD (StyledLayerDescriptor) für die Version 1.0.0
-     * und liefert das gesamte SLD zurück
-     * @return {string} - das SLD
-     * @see {@link http://suite.opengeo.org/ee/docs/4.5/geoserver/styling/sld-reference/index.html|SLD Reference}
+     * OGC: Creates sld for version 1.0.0
+     * @return {String} complete sld
      */
     createOgcRootElement: function () {
         return "<StyledLayerDescriptor xmlns='http://www.opengis.net/se' xmlns:app='http://www.deegree.org/app' xmlns:deegreeogc='http://www.deegree.org/ogc' xmlns:ogc='http://www.opengis.net/ogc' xmlns:sed='http://www.deegree.org/se' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/se http://schemas.opengis.net/se/1.1.0/FeatureStyle.xsd http://www.deegree.org/se http://schemas.deegree.org/se/1.1.0/Symbolizer-deegree.xsd'>" +
                     this.createOgcNamedLayer() +
-               "</StyledLayerDescriptor>";
+            "</StyledLayerDescriptor>";
     },
 
     /**
-     * ESRI: Erzeugt ein NamedLayer Element und liefert es zurück
-     * @return {string} sld
+     * ESRI: Create namedLayer
+     * @return {string} namedLayer-tag
      */
     createEsriNamedLayer: function () {
         return "<sld:NamedLayer>" +
-                   "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
-                   this.createEsriUserStyle() +
-               "</sld:NamedLayer>";
+                "<sld:Name>" + this.get("model").get("layers") + "</sld:Name>" +
+                this.createEsriUserStyle() +
+            "</sld:NamedLayer>";
     },
 
     /**
-     * OGC: Erzeugt ein NamedLayer Element und liefert es zurück
-     * @return {string} sld
+     * OGC: Create namedLayer
+     * @return {string} namedLayer-tag
      */
     createOgcNamedLayer: function () {
         return "<NamedLayer>" +
-                   "<Name>" + this.get("model").get("layers") + "</Name>" +
-                   this.createOgcUserStyle() +
-               "</NamedLayer>";
+                "<Name>" + this.get("model").get("layers") + "</Name>" +
+                this.createOgcUserStyle() +
+            "</NamedLayer>";
     },
 
     /**
-     * ESRI: Erzeugt ein UserStyle Element und liefert es zurück
-     * @return {string} sld
+     * ESRI: Create userStyle
+     * @return {string} userStyle-tag
      */
     createEsriUserStyle: function () {
         return "<sld:UserStyle>" +
-                   "<sld:Name>style</sld:Name>" +
-                   "<sld:FeatureTypeStyle>" +
-                       this.createEsriRules() +
-                   "</sld:FeatureTypeStyle>" +
-               "</sld:UserStyle>";
+                "<sld:Name>style</sld:Name>" +
+                "<sld:FeatureTypeStyle>" +
+                    this.createEsriRules() +
+                "</sld:FeatureTypeStyle>" +
+            "</sld:UserStyle>";
     },
 
     /**
-     * OGC: Erzeugt ein UserStyle Element und liefert es zurück
-     * @return {string} sld
+     * OGC: Create userStyle
+     * @return {string} userStyle-tag
      */
     createOgcUserStyle: function () {
         return "<UserStyle>" +
                 "<FeatureTypeStyle>" +
-                   "<Name>style</Name>" +
-                       this.createOgcRules() +
-                   "</FeatureTypeStyle>" +
-               "</UserStyle>";
+                "<Name>style</Name>" +
+                    this.createOgcRules() +
+                "</FeatureTypeStyle>" +
+            "</UserStyle>";
     },
 
     /**
-     * ESRI: Erzeugt 1-n Rule Elemente und liefert sie zurück
-     * Abhängig von der Anzahl der Style Klassen
-     * @return {string} sld
+     * ESRI: Create rules
+     * @return {string} rules-tags
      */
     createEsriRules: function () {
         var rule = "";
@@ -350,16 +404,14 @@ const StyleWMS = Tool.extend({
             }, this);
         }
         else {
-            // TODO: ErrorHandling...
             console.error("Type of geometry is not supported, abort styling.");
         }
         return rule;
     },
 
     /**
-     * OGC: Erzeugt 1-n Rule Elemente und liefert sie zurück
-     * Abhängig von der Anzahl der Style Klassen
-     * @return {string} sld
+     * OGC: Create rules
+     * @return {string} rules-tags
      */
     createOgcRules: function () {
         var rule = "";
@@ -373,112 +425,146 @@ const StyleWMS = Tool.extend({
             }, this);
         }
         else {
-            // TODO: ErrorHandling...
             console.error("Type of geometry is not supported, abort styling.");
         }
         return rule;
     },
 
     /**
-     * Erzeugt ein AND-Filter Element und liefert es zurück
-     * @param  {string} startRange - Anfang des Wertebereichs
-     * @param  {string} stopRange - Ende des Wertebereichs
-     * @return {string} sld
+     * Creates Filter
+     * @param  {string} startRange Start of value range
+     * @param  {string} stopRange End of value range
+     * @returns {String} filter -tag
      */
     createFilter: function (startRange, stopRange) {
         return "<ogc:Filter>" +
-                   "<ogc:And>" +
-                       this.createIsGreaterThanOrEqualTo(startRange) +
-                       this.createIsLessThanOrEqualTo(stopRange) +
-                   "</ogc:And>" +
-               "</ogc:Filter>";
+                "<ogc:And>" +
+                    this.createIsGreaterThanOrEqualTo(startRange) +
+                    this.createIsLessThanOrEqualTo(stopRange) +
+                "</ogc:And>" +
+            "</ogc:Filter>";
     },
 
     /**
-     * Erzeugt ein PropertyIsGreaterThanOrEqualTo Element und liefert es zurück
-     * @param  {string} value - Anfang des Wertebereichs
-     * @return {string} sld
+     * Creates propertyIsGreaterThanOrEqualTo element
+     * @param  {string} value Start of value range
+     * @return {string} propertyIsGreaterThanOrEqualTo-tag
      */
     createIsGreaterThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsGreaterThanOrEqualTo>" +
-                   "<ogc:PropertyName>" +
-                   this.get("attributeName") +
-                   "</ogc:PropertyName>" +
-                   "<ogc:Literal>" +
-                       value +
-                   "</ogc:Literal>" +
-               "</ogc:PropertyIsGreaterThanOrEqualTo>";
+                "<ogc:PropertyName>" +
+                this.get("attributeName") +
+                "</ogc:PropertyName>" +
+                "<ogc:Literal>" +
+                    value +
+                "</ogc:Literal>" +
+            "</ogc:PropertyIsGreaterThanOrEqualTo>";
     },
 
     /**
-     * Erzeugt ein PropertyIsLessThanOrEqualTo Element und liefert es zurück
-     * @param  {string} value - Ende des Wertebereichs
-     * @return {string} sld
+     * Creates propertyIsLessThanOrEqualTo element
+     * @param  {string} value End of value range
+     * @return {string} propertyIsLessThanOrEqualTo-tag
      */
     createIsLessThanOrEqualTo: function (value) {
         return "<ogc:PropertyIsLessThanOrEqualTo>" +
-                   "<ogc:PropertyName>" +
-                   this.get("attributeName") +
-                   "</ogc:PropertyName>" +
-                   "<ogc:Literal>" +
-                       value +
-                   "</ogc:Literal>" +
-               "</ogc:PropertyIsLessThanOrEqualTo>";
+                "<ogc:PropertyName>" +
+                this.get("attributeName") +
+                "</ogc:PropertyName>" +
+                "<ogc:Literal>" +
+                    value +
+                "</ogc:Literal>" +
+            "</ogc:PropertyIsLessThanOrEqualTo>";
     },
 
     /**
-     * ESRI: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
-     * @param  {string} value - Style Farbe
-     * @return {string} sld
+     * ESRI: Create polygonSymbolizer
+     * @param  {string} value Color as hex
+     * @return {string} polygonSymbolizer-tag
      */
     createEsriPolygonSymbolizer: function (value) {
         return "<sld:PolygonSymbolizer>" +
                     "<sld:Fill>" +
                         "<sld:CssParameter name='fill'>" + value + "</sld:CssParameter>" +
                     "</sld:Fill>" +
-               "</sld:PolygonSymbolizer>";
+            "</sld:PolygonSymbolizer>";
     },
 
     /**
-     * OGC: Erzeugt ein PolygonSymbolizer Element und liefert es zurück
-     * @param  {string} value - Style Farbe
-     * @return {string} sld
+     * OGC: Create polygonSymbolizer
+     * @param  {string} value Color as hex
+     * @return {string} polygonSymbolizer-tag
      */
     createOgcPolygonSymbolizer: function (value) {
         return "<PolygonSymbolizer>" +
                     "<Fill>" +
                         "<CssParameter name='fill'>" + value + "</CssParameter>" +
                     "</Fill>" +
-               "</PolygonSymbolizer>";
+            "</PolygonSymbolizer>";
     },
 
+    /**
+     * Setter of model
+     * @param {Layer} value layer model
+     * @returns {void}
+     */
     setModel: function (value) {
         this.set("model", value);
     },
 
+    /**
+     * Setter of geomType
+     * @param {String} value geomType
+     * @returns {void}
+     */
     setGeomType: function (value) {
         this.set("geomType", value);
     },
 
+    /**
+     * Setter of attributeName
+     * @param {String} value attributeName
+     * @returns {void}
+     */
     setAttributeName: function (value) {
         this.set("attributeName", value);
     },
 
+    /**
+     * Setter of numberOfClasses
+     * @param {String} value numberOfClasses
+     * @returns {void}
+     */
     setNumberOfClasses: function (value) {
         this.set("numberOfClasses", value);
     },
 
+    /**
+     * Setter of styleClassAttributes
+     * @param {Object[]} value styleClassAttributes
+     * @returns {void}
+     */
     setStyleClassAttributes: function (value) {
         this.set("styleClassAttributes", value);
     },
 
+    /**
+     * Setter of errors
+     * @param {Object[]} value errors
+     * @returns {void}
+     */
     setErrors: function (value) {
         this.set("errors", value);
     },
 
+    /**
+     * Setter of wmsSoftware
+     * @param {String} value wmsSoftware
+     * @returns {void}
+     */
     setWmsSoftware: function (value) {
         this.set("wmsSoftware", value);
     }
 });
 
-export default StyleWMS;
+export default StyleWmsModel;

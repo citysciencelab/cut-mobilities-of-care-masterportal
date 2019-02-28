@@ -1,8 +1,20 @@
-import StyleWMSTemplate from "text-loader!./template.html";
-import StyleWMSTemplateNoStyleableLayers from "text-loader!./templateNoStyleableLayers.html";
+import StyleWmsTemplate from "text-loader!./template.html";
+import StyleWmsTemplateNoStyleableLayers from "text-loader!./templateNoStyleableLayers.html";
 import "bootstrap-colorpicker";
 
-const StyleWMSView = Backbone.View.extend({
+/**
+ * @member StyleWmsTemplate
+ * @description Template used to create the user inut form
+ * @memberof StyleWMS
+ */
+
+/**
+ * @member StyleWmsTemplateNoStyleableLayers
+ * @description Template used if no styleable Layers are available
+ * @memberof StyleWMS
+ */
+
+const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
     events: {
         // Auswahl des Layers
         "change #layerField": "setModelById",
@@ -19,12 +31,17 @@ const StyleWMSView = Backbone.View.extend({
         "click .reset": "reset",
         "click .glyphicon-remove": "hide"
     },
-    initialize: function () {
 
+    /**
+     * @class StyleWmsView
+     * @description View for style wms. Reacts to user input
+     * @extends Backbone.View
+     * @memberOf StyleWMS
+     * @constructs
+     */
+    initialize: function () {
         this.listenTo(this.model, {
-            // Aktualisiere die Layerliste, wenn Layer aktiviert / deaktiviert wurden.
             "sync": this.render,
-            // wird das fenster geschlossen, so wird das Layer-Model zurückgesetzt
             "change:isActive": function (model, value) {
                 if (!value) {
                     this.model.setModel(null);
@@ -34,13 +51,9 @@ const StyleWMSView = Backbone.View.extend({
                     this.render();
                 }
             },
-            // ändert sich eins dieser Attribute wird neu gezeichnet
             "change:model change:attributeName change:numberOfClasses": this.render,
-            // Liefert die validate Methode Error Meldungen zurück, werden diese angezeigt
             "invalid": this.showErrorMessages
         });
-        // Erzeuge die initiale Layer-Liste (für den Light-Modus in dem Fall wichtig, in dem stylebare
-        // Layer initial sichtbar sind. Im custom-Modus wird dies an andere Stelle getriggert.)
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshStyleableLayerList();
         }
@@ -49,8 +62,8 @@ const StyleWMSView = Backbone.View.extend({
         }
     },
     className: "wmsStyle-window",
-    template: _.template(StyleWMSTemplate),
-    templateNoStyleableLayers: _.template(StyleWMSTemplateNoStyleableLayers),
+    template: _.template(StyleWmsTemplate),
+    templateNoStyleableLayers: _.template(StyleWmsTemplateNoStyleableLayers),
 
 
     /**
@@ -61,65 +74,66 @@ const StyleWMSView = Backbone.View.extend({
         var attr = this.model.toJSON();
 
         this.setElement(document.getElementsByClassName("win-body")[0]);
-        // if (this.model.get("isCurrentWin") === true && this.model.get("isCollapsed") === false) {
         if (this.model.get("isActive") === true) {
 
             if (attr.styleableLayerList.length === 0) {
-                // Es existieren keine stylebaren Layer
                 this.$el.html(this.templateNoStyleableLayers());
             }
             else {
                 this.$el.html(this.template(attr));
 
                 if (attr.model !== null && attr.model !== undefined) {
-                    // Selektiere den momentan ausgewählen Layer (wenn Tool über den Themenbaum geöffnet wurde).
                     this.$el.find("#layerField").find("option[value='" + attr.model.get("id") + "']").attr("selected", true);
-
-                    // aktiviert den/die colorpicker
                     this.$el.find("[class*=selected-color]").parent().colorpicker({format: "hex"});
                 }
             }
 
-            // Lausche auf Events (nötig, wenn das Fenster zwischenzeitlich geschlossen war)
+            // Listen to event, neccessary if window was closed inbetween
             this.delegateEvents();
         }
 
         return this;
     },
 
+    /**
+     * resets Tool
+     * @returns {void}
+     */
     reset: function () {
         this.model.resetModel();
         this.render();
     },
 
     /**
-     * Ruft setAttributeName im Model auf und übergibt den Attributnamen
-     * @param {ChangeEvent} evt -
+     * Calls setAttributeName in model
+     * @param {ChangeEvent} evt  -
      * @returns {void}
      */
     setAttributeName: function (evt) {
         this.model.setAttributeName(evt.target.value);
     },
 
+    /**
+     * Calls setModelById in model
+     * @param {ChangeEvent} evt  -
+     * @returns {void}
+     */
     setModelById: function (evt) {
         this.model.setModelById(evt.target.value);
     },
 
     /**
-     * Ruft setNumberOfClasses im Model auf und übergibt die Anzahl der Klassen
-     * Alle Colorpicker werden scharf geschaltet
+     * Calls setNumberOfClasses in model
      * @param {ChangeEvent} evt -
      * @returns {void}
      */
     setNumberOfClasses: function (evt) {
         this.model.setNumberOfClasses(evt.target.value);
-
-        // Update attribute values
         this.setStyleClassAttributes();
     },
 
     /**
-     * Erstellt die Style-Klassen und übergibt sie an die Setter Methode im Model
+     * Creates and sets style-classes in model
      * @returns {void}
      */
     setStyleClassAttributes: function () {
@@ -137,12 +151,16 @@ const StyleWMSView = Backbone.View.extend({
         this.model.setStyleClassAttributes(styleClassAttributes);
     },
 
+    /**
+     * Creates sld in model
+     * @returns {void}
+     */
     createSLD: function () {
         this.model.createSLD();
     },
 
     /**
-     * zeigt die Error Meldungen im Formular an
+     * Shows error Messages
      * @returns {void}
      */
     showErrorMessages: function () {
@@ -174,7 +192,7 @@ const StyleWMSView = Backbone.View.extend({
     },
 
     /**
-     * löscht die Error Meldungen aus dem Formular
+     * Removes error messages
      * @returns {void}
      */
     removeErrorMessages: function () {
@@ -182,9 +200,13 @@ const StyleWMSView = Backbone.View.extend({
         this.$el.find("[class*=selected-color], [class*=start-range], [class*=stop-range]").parent().removeClass("has-error");
     },
 
+    /**
+     * Hides Tool
+     * @returns {void}
+     */
     hide: function () {
         this.$el.hide();
     }
 });
 
-export default StyleWMSView;
+export default StyleWmsView;
