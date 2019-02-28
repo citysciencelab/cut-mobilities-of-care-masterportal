@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<div class= "panel text-align-center radPegelHeader">
+<div class= "panel text-align-center bikeLevelHeader">
     <strong><%= gfiContent[0].Name %></strong>
     <br>
     <small>Art: <%= gfiContent[0].Typ%></small>
@@ -10,15 +10,15 @@
     <li value= "day" class="tab-toggle"><a data-toggle="tab" href="#chart">letzter Tag</a></li>
   <% } %>
   <% if (!_.isEmpty(lastSevenDaysDataset)) { %>
-    <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>
+    <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>Dauerzählstellen
   <% } %>
   <% if (!_.isEmpty(yearDataset)) { %>
     <li value= "year" class="tab-toggle"><a data-toggle="tab" href="#chart">Jahr</a></li>
   <% } %>
 </ul>
 <div class="tab-content">
-    <div id="gfiList" class="tab-pane radverkehrszaehlstellen fade in active">
-        <div class="imageRadverkehrszaehlstellenDiv">
+    <div id="gfiList" class="tab-pane continuousCountingBike fade in active">
+        <div class="imageContinuousCountingBikeDiv">
         </div>
         <table class="table table-striped">
             <tbody>
@@ -58,20 +58,20 @@
             </tbody>
         </table>
     </div>
-    <div class="radverkehrszaehlstellen tab-pane form-check fade">
+    <div class="continuousCountingBike tab-pane form-check fade">
         <input type="checkbox" class="chartCheckbox form-check-input" id="chartCheck" checked>
         <label class="form-check-label" for="chartCheck">Diagramm</label>
     </div>
-    <div id="chart" class="tab-pane radverkehrszaehlstellen fade">
+    <div id="chart" class="tab-pane continuousCountingBike fade">
         <div id="d3-div" class="graph">
             <div class="graph-tooltip-div"></div>
         </div>
     </div>
-    <div class="radverkehrszaehlstellen tab-pane form-check fade">
+    <div class="continuousCountingBike tab-pane form-check fade">
         <input type="checkbox" class="tableCheckbox form-check-input" id="tableCheck" checked>
         <label class="form-check-label" for="tableCheck">Tabelle</label>
     </div>
-    <div id="tableday" class="tab-pane radverkehrszaehlstellen table fade">
+    <div id="tableDay" class="tab-pane continuousCountingBike table fade">
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
@@ -92,7 +92,7 @@
             </tbody>
         </table>
     </div>
-    <div id="tablelastSevenDays" class="tab-pane radverkehrszaehlstellen table fade">
+    <div id="tableLastSevenDays" class="tab-pane continuousCountingBike table fade">
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
@@ -113,7 +113,7 @@
             </tbody>
         </table>
     </div>
-    <div id="tableyear" class="tab-pane radverkehrszaehlstellen table fade">
+    <div id="tableYear" class="tab-pane continuousCountingBike table fade">
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
@@ -134,7 +134,7 @@
             </tbody>
         </table>
     </div>
-    <div class="radverkehrszaehlstellen tab-pane downloadButton fade">
+    <div class="continuousCountingBike tab-pane downloadButton fade">
         <button class="btn csv-download">Download
             <span class="glyphicon glyphicon-save"></span>
         </button>

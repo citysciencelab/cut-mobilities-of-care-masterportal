@@ -2,7 +2,7 @@ import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
-const RadverkehrszaehlstellenTheme = Theme.extend({
+const ContinousCountingBikeTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             dayDataset: {},
@@ -474,7 +474,7 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
             };
             dataArray.push(dataObject);
         });
-        dataArray.push(dataObject);console.log(dataset);
+        dataArray.push(dataObject);
         return dataArray;
     },
 
@@ -590,4 +590,4 @@ const RadverkehrszaehlstellenTheme = Theme.extend({
     }
 });
 
-export default RadverkehrszaehlstellenTheme;
+export default ContinousCountingBikeTheme;

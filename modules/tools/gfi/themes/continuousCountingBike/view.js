@@ -1,10 +1,10 @@
 import ThemeView from "../view";
-import RadverkehrszaehlstellenTemplate from "text-loader!./template.html";
+import ContinuousCountingBikeTemplate from "text-loader!./template.html";
 
-const RadverkehrszaehlstellenView = ThemeView.extend({
+const ContinuousCountingBikeView = ThemeView.extend({
     tagName: "div",
-    className: "radverkehrszaehlstellen",
-    template: _.template(RadverkehrszaehlstellenTemplate),
+    className: "continousCountingBike",
+    template: _.template(ContinuousCountingBikeTemplate),
     events: {
         "click .tab-toggle": "toggleTab",
         "change input": function (evt) {
@@ -39,7 +39,7 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
         });
 
         // get all tabContent to remove "in active" classes
-        _.each(this.$(".active.radverkehrszaehlstellen"), function (ele) {
+        _.each(this.$(".active.continuousCountingBike"), function (ele) {
             if (!_.isNull(ele.getAttribute("id"))) {
                 tabContentList.push("#" + ele.getAttribute("id"));
             }
@@ -53,7 +53,7 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
         activeContent.addClass("in active");
         this.$el.find("#chart").width("auto");
         if (activeTab !== "info") {
-            this.$(".radverkehrszaehlstellen.form-check").addClass("in active");
+            this.$(".continuousCountingBike.form-check").addClass("in active");
             this.$("#chart").addClass("in active");
             this.fadeIn("tableCheck", activeTab);
             this.$(".chartCheckbox").prop("checked", true);
@@ -133,7 +133,7 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
      * @return {void}
      */
     fadeInDownloadButton: function () {
-        this.$(".radverkehrszaehlstellen.downloadButton").addClass("in active");
+        this.$(".continuuousCountingBike.downloadButton").addClass("in active");
         this.model.createDownloadContent();
     },
     /**
@@ -143,14 +143,14 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
      */
     appendChildren: function () {
         var children = this.model.get("children"),
-            imageRadverkehrszaehlstellenDiv = this.$(".imageRadverkehrszaehlstellenDiv");
+            imageContinuousCountingBikeDiv = this.$(".imageContinuousCountingBikeDiv");
 
-        imageRadverkehrszaehlstellenDiv.removeClass("has-image");
+        imageContinuousCountingBikeDiv.removeClass("has-image");
         _.each(children, function (element) {
-            element.val.$el.prepend("<p class=imageRadverkehrszaehlstellenP>" + element.key + ": </p>");
+            element.val.$el.prepend("<p class=imageContinuousCountingBikeP>" + element.key + ": </p>");
             if (element.type && element.type === "image") {
-                imageRadverkehrszaehlstellenDiv.append("<div class='col-xs-6 col-md-6'>" + element.val.$el[0].innerHTML + "</div>");
-                imageRadverkehrszaehlstellenDiv.addClass("has-image");
+                imageContinuousCountingBikeDiv.append("<div class='col-xs-6 col-md-6'>" + element.val.$el[0].innerHTML + "</div>");
+                imageContinuousCountingBikeDiv.addClass("has-image");
             }
         }, this);
     },
@@ -169,4 +169,4 @@ const RadverkehrszaehlstellenView = ThemeView.extend({
     }
 });
 
-export default RadverkehrszaehlstellenView;
+export default ContinuousCountingBikeView;
