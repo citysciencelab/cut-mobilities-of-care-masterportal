@@ -21,6 +21,11 @@
  */
 
 /**
+ * @namespace StyleWMS
+ * @description Tool that can modify wms tiles on request using an SLD-BODY
+ */
+
+/**
  * @namespace Main
  * @description Loading basic requirements such as the css. Then it starts the App.
  */

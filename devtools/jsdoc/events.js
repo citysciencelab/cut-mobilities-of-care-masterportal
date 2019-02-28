@@ -1,3 +1,57 @@
+/** -------------------- StyleWMS -------------------- */
+
+/**
+ * @event StyleWmsModel#RadioTriggerStyleWmsopenStyleWms
+ * @param {Object} model Layer model to be styled
+ * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
+ * @example Radio.trigger("StyleWMS", "openStyleWMS", model)
+ */
+
+/**
+ * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
+ * @param {Object} model Layer model to be styled
+ * @description Resets the stylewms params for legend
+ * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
+ */
+
+/**
+ * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
+ * @param {Object[]} attributes -
+ * @description Sets the style wms params for legend so that the legend can be updated
+ * @example Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes)
+ */
+
+/**
+ * @event StyleWmsModel#changeModel
+ * @description Triggered when layer model to style changes
+ */
+
+/**
+ * @event StyleWmsModel#changeIsActive
+ * @description Triggered when stylewms model gets activated
+ */
+
+/**
+ * @event StyleWmsModel#changeAttributeName
+ * @description Triggered when attributeName changes
+ */
+
+/**
+ * @event StyleWmsModel#changeNumberOfClasses
+ * @description Triggered when numberOfClasses changes
+ */
+
+/**
+ * @event StyleWmsModel#changeSetSld
+ * @description Triggered when setSLD changes
+ */
+
+/**
+ * @event StyleWmsModel#sync
+ * @description Triggered when setSLD changes
+ */
+
+
 /** -------------------- ALERTING -------------------- */
 
 /**
