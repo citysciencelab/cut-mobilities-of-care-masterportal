@@ -1,5 +1,6 @@
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
+import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
@@ -40,6 +41,7 @@ import StyleWMS from "../../tools/styleWMS/model";
 import LayersliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
+
 
 const ModelList = Backbone.Collection.extend({
     initialize: function () {
@@ -119,7 +121,9 @@ const ModelList = Backbone.Collection.extend({
                     return new GeoJSONLayer(attrs, options);
                 }
                 return new WFSLayer(attrs, options);
-
+            }
+            else if (attrs.typ === "StaticImage") {
+                return new StaticImageLayer(attrs, options);
             }
             else if (attrs.typ === "GeoJSON") {
                 return new GeoJSONLayer(attrs, options);

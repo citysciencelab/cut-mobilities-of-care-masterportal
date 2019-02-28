@@ -1,11 +1,11 @@
 import {expect} from "chai";
-import LayerModel from "@modules/core/modelList/layer/model.js";
+import WMSLayer from "@modules/core/modelList/layer/wms.js";
 
-describe("core/modelList/layer/model", function () {
+describe("core/modelList/layer/wms", function () {
     var model = {};
 
     before(function () {
-        model = new LayerModel();
+        model = new WMSLayer();
     });
 
     describe("setIsRemovable", function () {

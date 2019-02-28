@@ -143,7 +143,7 @@ describe("core/modelList/list", function () {
             });
             it("schould return length of collection", function () {
                 model.add([xModel, yModel, zModel]);
-                model.removeLayerById("1003");
+                model.removeLayerById("1001");
                 expect(model).to.have.lengthOf(2);
             });
         });

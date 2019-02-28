@@ -47,6 +47,8 @@ const Layer = Item.extend({
             this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();
         }
+        // check if the layer is available (clickable) in the init zoom level before creating the ol-layer
+        this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
     featuresLoaded: function (features) {
@@ -63,7 +65,6 @@ const Layer = Item.extend({
         this.updateLayerTransparency();
         this.getResolutions();
         this.createLegendURL();
-        this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
     /**
