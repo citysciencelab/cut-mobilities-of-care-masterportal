@@ -1,4 +1,4 @@
-import Tool from "../core/modelList/tool/model";
+import Tool from "../../core/modelList/tool/model";
 
 const ContactModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {

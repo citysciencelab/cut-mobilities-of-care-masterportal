@@ -48,7 +48,7 @@ import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addwms/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
-import Contact from "../modules/contact/view";
+import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treefilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featurelister/view";
