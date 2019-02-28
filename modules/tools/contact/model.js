@@ -2,13 +2,13 @@ import Tool from "../../core/modelList/tool/model";
 
 const ContactModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
-        maxLines: Radio.request("Util", "isAny") ? "5" : "10",
+        maxLines: "5",
         from: [{
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "email": "jonas.weiter@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
         to: [{
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "email": "jonas.weiter@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
         cc: [],
@@ -17,7 +17,7 @@ const ContactModel = Tool.extend({
         textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
         text: "",
         url: "",
-        ticketID: "",
+        ticketId: "",
         systemInfo: "",
         subject: "",
         userName: "",
@@ -26,42 +26,42 @@ const ContactModel = Tool.extend({
         isCurrentWin: false,
         includeSystemInfo: false,
         contactInfo: "",
-        portalConfig: {},
         renderToWindow: true,
         glyphicon: "glyphicon-envelope",
         serviceID: undefined
     }),
     initialize: function () {
         this.superInitialize();
-        this.setPortalConfig(Radio.request("Parser", "getPortalConfig"));
-        this.setAttributes();
+        this.setAttributes(Radio.request("Parser", "getPortalConfig"));
     },
-    setAttributes: function () {
-        var portalConfig = _.has(this.get("portalConfig"), "portalTitle") ? this.get("portalConfig") : "",
-            portalTitle = _.has(portalConfig.portalTitle, "title") ? portalConfig.portalTitle.title : document.title,
+    setAttributes: function (configJson) {
+        var portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
             hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
             platformString = "<br>Platform: " + navigator.platform + "<br>",
             cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
             userAgentString = "UserAgent: " + navigator.userAgent,
             systemInfo = hrefString + platformString + cookiesString + userAgentString,
-            isSubjectUndefined = _.isUndefined(this) === false ? _.isUndefined(this.get("subject")) : true,
-            subject = isSubjectUndefined === true ? "Supportanfrage zum Portal " + portalTitle : this.get("subject"),
-            date = new Date(),
-            day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
-            month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
-            ticketID = month + day + "-" + _.random(1000, 9999),
+            subject = this.get("subject") !== "" ? this.get("subject") : "Supportanfrage zum Portal " + portalTitle,
             resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined;
 
         if (_.isUndefined(resp) === false && resp.get("url")) {
             this.setUrl(resp.get("url"));
-            this.setTicketID(ticketID);
+            this.setTicketId(this.generateTicketId());
             this.setSystemInfo(this.get("includeSystemInfo") === true ? systemInfo : "");
             this.setSubject(subject, {validate: true});
         }
     },
 
-    setUserAttributes: function (evt) {
+    generateTicketId: function () {
+        var date = new Date(),
+            day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
+            month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
+            ticketId = month + day + "-" + _.random(1000, 9999);
 
+        return ticketId;
+    },
+
+    setUserAttributes: function (evt) {
         switch (evt.target.id) {
             case "contactEmail": {
                 this.setUserEmail(evt.target.value);
@@ -123,7 +123,7 @@ const ContactModel = Tool.extend({
             to: this.get("to"),
             cc: cc,
             bcc: this.get("bcc"),
-            subject: this.get("ticketID") + ": " + this.get("subject"),
+            subject: this.get("ticketId") + ": " + this.get("subject"),
             text: text
         };
 
@@ -147,7 +147,7 @@ const ContactModel = Tool.extend({
                     Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
                 }
                 else {
-                    Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketID") + "</strong>.", kategorie: "alert-success"});
+                    Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
                 }
             }
         });
@@ -158,9 +158,9 @@ const ContactModel = Tool.extend({
         this.set("url", value);
     },
 
-    // setter for ticketID
-    setTicketID: function (value) {
-        this.set("ticketID", value);
+    // setter for ticketId
+    setTicketId: function (value) {
+        this.set("ticketId", value);
     },
 
     // setter for systemInfo
@@ -231,13 +231,7 @@ const ContactModel = Tool.extend({
     // setter for bcc
     setBcc: function (value) {
         this.set("bcc", value);
-    },
-
-    // setter for portalConfig
-    setPortalConfig: function (value) {
-        this.set("portalConfig", value);
     }
-
 });
 
 export default ContactModel;
