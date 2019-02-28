@@ -1,19 +1,9 @@
-/**
- * Module for drawing different geometries and text
- * @exports module:lgv.lgv/modules/tools/draw/model
- * @module lgv/modules/tools/draw/model
- */
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
-    /**
-     * @class DrawTool
-     * @name module:lgv.lgv/modules/tools/draw/model
-     * @augments Backbone.Model
-     */
     defaults: _.extend({}, Tool.prototype.defaults, {
         drawInteraction: undefined,
         selectInteraction: undefined,

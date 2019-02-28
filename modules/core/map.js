@@ -263,9 +263,12 @@ const map = Backbone.Model.extend({
         this.time = time;
     },
     handle3DEvents: function () {
-        var eventHandler = new OLCesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+        var eventHandler;
 
-        eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), OLCesium.ScreenSpaceEventType.LEFT_CLICK);
+        if (window.Cesium) {
+            eventHandler = new window.Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
+            eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        }
     },
     setCameraParameter: function (params) {
         var map3d = this.getMap3d(),

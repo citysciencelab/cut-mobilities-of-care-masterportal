@@ -1,7 +1,7 @@
 import ThemeView from "../view";
 import DefaultTemplate from "text-loader!./template.html";
 
-const DefaultThemeView = ThemeView.extend({
+const ItGbmThemeView = ThemeView.extend({
     className: "it-gbm",
     template: _.template(DefaultTemplate),
     events: {
@@ -12,4 +12,4 @@ const DefaultThemeView = ThemeView.extend({
     }
 });
 
-export default DefaultThemeView;
+export default ItGbmThemeView;

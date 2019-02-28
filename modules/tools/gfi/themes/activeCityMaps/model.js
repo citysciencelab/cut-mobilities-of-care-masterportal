@@ -129,9 +129,8 @@ const ActiveCityMapsTheme = Theme.extend({
 
     /**
      * categorizes gfiContent according to categories in themeConfig
-     * @param  {[type]} gfiContent  [description]
-     * @param  {[type]} themeConfig [description]
-     * @return {[type]}             [description]
+     * @param  {Array} gfiContent  [description]
+     * @return {Array}             [description]
      */
     createFeatureInfos: function (gfiContent) {
         var featureInfos = [];

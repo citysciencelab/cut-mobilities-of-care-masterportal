@@ -1,4 +1,3 @@
-
 import Template from "text-loader!./template.html";
 import Footermodel from "./model";
 

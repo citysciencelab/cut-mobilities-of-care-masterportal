@@ -101,9 +101,11 @@ Wir unterscheiden Fehlermeldungen in:
 var html = "<div id='my-id'></div>";
 ```
 
-#### Kommentare
-* Mehrzeilige Kommentare sind gut
-* Funktionen werden, wenn überhaupt, immer im JSDoc Style kommentiert.
+#### Kommentare / JSDOC
+* Mehrzeilige Kommentare innerhalb der Funktionen sind gut
+* Module werden im JSDoc beschrieben (Namespaces, Events, Class)
+* Funktionen werden immer mit validem! JSDoc beschrieben.
+* Sprache ist Englisch
 
 #### Try-Catch-Blöcke
 * Try-Catch-Blöcke nach Möglichkeit vermeiden

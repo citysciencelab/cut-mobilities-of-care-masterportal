@@ -35,7 +35,7 @@ const WMSLayer = Layer.extend({
 
     /**
      * [createLayerSource description]
-     * @return {[type]} [description]
+     * @return {void}
      */
     createLayerSource: function () {
         var params,
@@ -103,7 +103,7 @@ const WMSLayer = Layer.extend({
 
     /**
      * [createLayer description]
-     * @return {[type]} [description]
+     * @return {void}
      */
     createLayer: function () {
         var layerobjects = {
@@ -127,7 +127,7 @@ const WMSLayer = Layer.extend({
 
     /**
      * Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
-     * @return {[type]} [description]
+     * @return {void}
      */
     createLegendURL: function () {
         var layerNames,
@@ -267,7 +267,7 @@ const WMSLayer = Layer.extend({
 
     /**
      * [getLayers description]
-     * @return {[type]} [description]
+     * @return {Object[]} [description]
      */
     getLayers: function () {
         return this.get("layers");

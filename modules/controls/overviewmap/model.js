@@ -3,7 +3,7 @@ import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {OverviewMap} from "ol/control.js";
 
-const OverviewmapModel = Backbone.Model.extend({
+const OverviewMapModel = Backbone.Model.extend({
     defaults: {
         baselayer: "",
         newOvmView: ""
@@ -104,4 +104,4 @@ const OverviewmapModel = Backbone.Model.extend({
 
 });
 
-export default OverviewmapModel;
+export default OverviewMapModel;
