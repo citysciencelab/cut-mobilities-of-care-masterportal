@@ -88,9 +88,9 @@ const CompareFeaturesModel = Tool.extend({
     },
     /**
      * checks if attribute is in gfiAttributes
-     * @param  {[type]} gfiAttributes [description]
-     * @param  {[type]} attribute  [description]
-     * @return {[type]}            [description]
+     * @param  {Object[]} gfiAttributes Array for GFI
+     * @param  {String} attribute  Attribute to be found
+     * @return {Boolean}  Flag if attribute is FOund
      */
     checkForAttribute: function (gfiAttributes, attribute) {
         var isAttributeFound = false;

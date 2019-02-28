@@ -21,7 +21,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
      * @param {string} config.suggestServiceId - ID aus rest-services für URL für schnelles Suggest.
      * @param {string} [config.geosearchServiceId] - ID aus rest-services für URL für ausführliche Search.
-     * @param {[float]} [config.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
+     * @param {float[]} [config.extent=454591, 5809000, 700000, 6075769] - Koordinatenbasierte Ausdehnung in der gesucht wird.
      * @param {integer} [config.suggestCount=20] - Anzahl der über suggest angefragten Vorschläge.
      * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
      * @param {string} [config.filter=filter=(typ:*)] - Filterstring
@@ -129,7 +129,7 @@ const BKGSearchModel = Backbone.Model.extend({
 
     /**
      * Fügt die Vorschläge den Suchtreffern hinzu
-     * @param  {[object]} data Array der Treffer
+     * @param  {object[]} data Array der Treffer
      * @return {void}
      */
     pushSuggestions: function (data) {

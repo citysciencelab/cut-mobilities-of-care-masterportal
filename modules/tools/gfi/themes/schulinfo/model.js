@@ -137,9 +137,9 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * categorizes gfiContent according to categories in themeConfig
-     * @param  {[type]} gfiContent  [description]
-     * @param  {[type]} themeConfig [description]
-     * @return {[type]}             [description]
+     * @param  {Object[]} gfiContent  [description]
+     * @param  {Object[]} themeConfig [description]
+     * @return {Object[]}             [description]
      */
     createFeatureInfos: function (gfiContent, themeConfig) {
         var featureInfos = [];
@@ -205,8 +205,8 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * determines Selected Content to show in .gfi-content
-     * @param  {[type]} featureInfos [description]
-     * @return {[type]}              [description]
+     * @param  {Object[]} featureInfos [description]
+     * @return {void}
      */
     determineSelectedContent: function (featureInfos) {
         var selectedContent = featureInfos.filter(function (featureInfo) {
@@ -217,9 +217,9 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * checks if attribute is in gfiContent
-     * @param  {[type]} gfiContent [description]
-     * @param  {[type]} attribute  [description]
-     * @return {[type]}            [description]
+     * @param  {Object[]} gfiContent [description]
+     * @param  {String} attribute name
+     * @return {Boolean} Flag if Attribute is found
      */
     checkForAttribute: function (gfiContent, attribute) {
         var isAttributeFound = false;
@@ -232,8 +232,8 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * updates featureInfos.
-     * @param  {[type]} newName [description]
-     * @return {[type]}                 [description]
+     * @param  {String} newName new name of Feature Info
+     * @return {void}
      */
     updateFeatureInfos: function (newName) {
         var featureInfos = this.get("featureInfos");
@@ -244,9 +244,9 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * setsFeature selected where feature.name === newName
-     * @param {[type]} newName -
-     * @param {[type]} featureInfos -
-     * @returns {object} featureInfos
+     * @param {String} newName - new name of Feature info
+     * @param {Object[]} featureInfos -
+     * @returns {Object[]} featureInfos
      */
     setIsSelected: function (newName, featureInfos) {
         var newNameFound = false;
@@ -266,9 +266,9 @@ const SchulInfoTheme = Theme.extend({
     },
     /**
      * checks is newName is in featureInfos
-     * @param  {[type]}  newName      [description]
-     * @param  {[type]}  featureInfos [description]
-     * @return {Boolean}              [description]
+     * @param  {String}  newName to be checked in featureInfos
+     * @param  {Object[]}  featureInfos array of objects
+     * @return {Boolean}  Flag if new name is found
      */
     isNewNameInFeatureInfos: function (newName, featureInfos) {
         var newNameFound = false,

@@ -2,9 +2,6 @@ import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 
 const MapView = Backbone.Model.extend({
-    /**
-     *
-     */
     defaults: {
         epsg: "EPSG:25832",
         background: "",
@@ -332,8 +329,8 @@ const MapView = Backbone.Model.extend({
     },
 
     /**
-     *
-     * @return {[type]} [description]
+     * Return current Zoom of MapView
+     * @return {float} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();

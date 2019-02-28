@@ -1,7 +1,3 @@
-// define(function (require) {
-
-//     var Button3dTemplate = require("text-loader!./template.html"),
-//         Button3dView;
 import Button3dTemplate from "text-loader!./template.html";
 
 const Button3dView = Backbone.View.extend({
