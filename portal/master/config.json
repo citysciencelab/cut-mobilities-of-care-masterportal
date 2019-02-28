@@ -29,7 +29,8 @@
         "suggestCount": 10,
         "epsg": "EPSG:25832",
         "filter": "filter=(typ:*)",
-        "score": 0.6
+        "score": 0.6,
+        "zoomToResult": true
       },
       "osm": {
         "minChars": 3,
