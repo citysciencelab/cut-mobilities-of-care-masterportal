@@ -87,7 +87,7 @@ const Animation = PendlerCoreModel.extend({
     /**
      * Bricht eine Animation ab (und entfernt die zugehörigen Punkte).
      * Verwendung beispielsweise bei Änderung der Abfrageparameter.
-     * @returns {Void} Kein Rückgabewert
+     * @returns {void} Kein Rückgabewert
      */
     clear: function () {
         var animationLayer;
@@ -127,6 +127,15 @@ const Animation = PendlerCoreModel.extend({
             coloredFeatures,
             min,
             max;
+
+        // Handling for "no data": Just refresh legend (clear and print message).
+        if (rawFeatures.length === 0) {
+
+            // Since legend is already rendered while data is fetched it's necessary to introduce a flag for empty result.
+            // Otherwise the message for "empty result" is printed always before the data has been fetched.
+            this.set("emptyResult", true);
+            return;
+        }
 
         this.centerGemeinde(true);
 
@@ -232,7 +241,7 @@ const Animation = PendlerCoreModel.extend({
     },
     /**
      * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
-     * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+     * @param  {type[]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
      * @returns {void}
      */
     repeatAnimation: function (features) {
@@ -320,7 +329,7 @@ const Animation = PendlerCoreModel.extend({
      * Füge Punkte nach Ende der Animation dem Layer hinzu
      * @param {Object[]} features Hinzuzufügende Features
      * @param {Object} layer Ziel-Layer
-     * @returns {Void} Keine Rückgabe
+     * @returns {void} Keine Rückgabe
      */
     addFeaturesToLayer: function (features, layer) {
         var currentPoint, coordinates,

@@ -1,4 +1,3 @@
-
 import DefaultThemeView from "./default/view";
 import DefaultTheme from "./default/model";
 import Buildings3dThemeView from "./buildings3d/view";
@@ -24,6 +23,7 @@ import VerkehrsStaerkenRadThemeView from "./verkehrsstaerken_rad/view";
 import ItGbmTheme from "./itgbm/model";
 import ItGbmThemeView from "./itgbm/view";
 import DipasThemeView from "./dipas/view";
+import DipasTheme from "./dipas/model";
 import FlaecheninfoTheme from "./flaecheninfo/model";
 import FlaecheninfoThemeView from "./flaecheninfo/view";
 import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
@@ -44,6 +44,9 @@ const ThemeList = Backbone.Collection.extend({
 
         if (attrs.gfiTheme === "table") {
             theme = new TableTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "dipas") {
+            theme = new DipasTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "reisezeiten") {
             theme = new ReisezeitenTheme(attrs, options);

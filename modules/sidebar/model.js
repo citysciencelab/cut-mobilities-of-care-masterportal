@@ -1,4 +1,4 @@
-const Sidebar = Backbone.Model.extend({
+const SidebarModel = Backbone.Model.extend({
     defaults: {
         // true if sidebar is visible
         isVisible: false,
@@ -36,4 +36,4 @@ const Sidebar = Backbone.Model.extend({
     }
 });
 
-export default Sidebar;
+export default SidebarModel;

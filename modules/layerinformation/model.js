@@ -1,13 +1,16 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
 
-const LayerInformation = Backbone.Model.extend({
+const LayerInformationModel = Backbone.Model.extend({
     defaults: {
         // konfiguriert in der rest-services.json
         cswId: "3",
         // true wenn die Layerinformation sichtbar ist
         isVisible: false,
-        uniqueIdList: []
+        uniqueIdList: [],
+        datePublication: null,
+        dateRevision: null,
+        periodicity: null
     },
 
     /**
@@ -33,6 +36,12 @@ const LayerInformation = Backbone.Model.extend({
                 this.setIsVisible(true);
             }
         });
+
+        channel.reply({
+            "getIsVisible": function () {
+                return this.get("isVisible");
+            }
+        }, this);
 
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function (isMobile) {
@@ -106,6 +115,9 @@ const LayerInformation = Backbone.Model.extend({
             this.set("date", null);
             this.set("metaURL", null);
             this.set("downloadLinks", null);
+            this.set("datePublication", null);
+            this.set("dateRevision", null);
+            this.set("periodicity", null);
         }
         this.trigger("sync");
     },
@@ -143,4 +155,4 @@ const LayerInformation = Backbone.Model.extend({
     }
 });
 
-export default LayerInformation;
+export default LayerInformationModel;

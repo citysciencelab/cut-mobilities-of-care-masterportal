@@ -24,7 +24,7 @@ const WFSLayer = Layer.extend({
     /**
      * Wird vom Model getriggert und erzeugt eine vectorSource.
      * Ggf. auch eine clusterSource
-     * @return {[type]} [description]
+     * @return {void}
      * @uses this createClusterLayerSource
      */
     createLayerSource: function () {
@@ -36,7 +36,7 @@ const WFSLayer = Layer.extend({
 
     /**
      * [createClusterLayerSource description]
-     * @return {[type]} [description]
+     * @return {void} [description]
      */
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
@@ -47,7 +47,7 @@ const WFSLayer = Layer.extend({
 
     /**
      * [createLayer description]
-     * @return {[type]} [description]
+     * @return {void} [description]
      */
     createLayer: function () {
         this.setLayer(new VectorLayer({
@@ -58,6 +58,7 @@ const WFSLayer = Layer.extend({
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
+            hitTolerance: this.get("hitTolerance"),
             altitudeMode: "clampToGround"
         }));
 
@@ -66,7 +67,7 @@ const WFSLayer = Layer.extend({
 
     /**
      * [setClusterLayerSource description]
-     * @param {[type]} value [description]
+     * @param {ol.source.vector} value [description]
      * @returns {void}
      */
     setClusterLayerSource: function (value) {
@@ -131,7 +132,7 @@ const WFSLayer = Layer.extend({
     /**
      * Erzeugt aus einer XML-Response eine ol.features Collection
      * @param  {xml} data die XML-Response
-     * @return {ol/Feature[]}   Collection aus ol/Feature
+     * @return {ol.feature[]}   Collection aus ol/Feature
      */
     getFeaturesFromData: function (data) {
         var wfsReader,
@@ -143,7 +144,7 @@ const WFSLayer = Layer.extend({
         features = wfsReader.readFeatures(data);
 
         // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
-        features = _.filter(features, function (feature) {
+        features = features.filter(function (feature) {
             return !_.isUndefined(feature.getGeometry());
         });
 
@@ -154,14 +155,6 @@ const WFSLayer = Layer.extend({
         var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (!_.isUndefined(stylelistmodel)) {
-            /**
-             * function that takes a feature and resolution and returns an array of styles
-             * Erfordert beide Parameter, sonst Laufzeitfehler (in ol <= 4.6.5)
-             * @param  {[ol.feature]} feature
-             * @param  {number} resolution
-             * @return {[ol.style.Style]}
-             * @tutorial https://openlayers.org/en/latest/apidoc/ol.html#.StyleFunction
-             */
             this.setStyle(function (feature) {
                 return stylelistmodel.createStyle(feature, this.get("isClustered"));
             }.bind(this));

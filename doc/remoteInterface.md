@@ -76,6 +76,7 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"showPositionByExtent": [xMin, yMin, xMax, yMax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtent|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
@@ -89,9 +90,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+
 ### transactFeatureById
 Wird diese Funktion angetriggered, so wird ein Feature eines gegebenen WFST-Layers modifiziert.
 
@@ -101,12 +104,14 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"transactFeatureById": "id", "layerId": layerId, "attributes": attrs, "mode": "update"}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |transactFeaturesById|String|Id des Features.|
 |layerId|String|Id des Layers.|
 |attributes|String|JSON mit den Attributes des Features.|
 |mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
+
 ### zoomToExtent
 Wird diese Funktion angetriggered, so wird die Karte auf den übergebenen Extent gezoomt.
 
@@ -116,9 +121,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"zoomToExtent": [xmin, ymin, xmax, ymax]}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |zoomToExtent|Array|Extent.|
+
 ### highlightfeature
 Wird diese Funktion angetriggered, so wird ein Vektor-Feature in der Karte gehighlightet.
 
@@ -128,9 +135,11 @@ var iframe = document.getElementById("id").contentWindow;
 iframe.postMessage({"highlightfeature": "layerid,featureId"}, domain);
 ```
 Attribute des JSON-Objektes:
+
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
+
 ### hidePosition
 Wird diese Funktion angetriggered, so wird der Marker versteckt.
 
@@ -142,6 +151,22 @@ iframe.postMessage("hidePosition", domain);
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+
+## Nachricht ans Radio senden
+Eine Möglichkeit, via postMessage direkt das Radio des Masterportals anzusprechen ist, den Radio-Channel und die anzutriggernde Funktion zu übergeben.
+
+**Beispiel-Aufruf von extern**
+```js
+var iframe = document.getElementById("id").contentWindow;
+iframe.postMessage({"radio_channel": "Draw", "radio_function": "initWithoutGUI", "radio_para_object": {"drawType": "Polygon"}}, domain);
+```
+Attribute des JSON-Objektes:
+
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|radio_channel|String|Der Radio-Channel, der angesprochen werden soll.|
+|radio_function|String|Die Funktion des Radio-Channels, die angesprochen werden soll.|
+|radio_para_object|Object|(optional) Ein Parameter-Objekt, das an die Radio-Funktion übergeben wird.|
 
 # **Karte**
 

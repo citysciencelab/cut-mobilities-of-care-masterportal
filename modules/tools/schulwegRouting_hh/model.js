@@ -24,7 +24,6 @@ const SchulwegRouting = Tool.extend({
         // route layer
         layer: undefined,
         isActive: false,
-        requestIDs: [],
         routeResult: {},
         routeDescription: [],
         checkBoxHVV: undefined,
@@ -63,10 +62,6 @@ const SchulwegRouting = Tool.extend({
                     }
                 }
             }
-        });
-
-        this.listenTo(Radio.channel("WPS"), {
-            "response": this.handleResponse
         });
 
         this.listenTo(Radio.channel("Gaz"), {
@@ -169,32 +164,29 @@ const SchulwegRouting = Tool.extend({
         });
         return data;
     },
-    handleResponse: function (requestID, response, status) {
+    handleResponse: function (response, status) {
         var parsedData;
 
-        if (this.isRoutingRequest(this.get("requestIDs"), requestID)) {
-            this.toggleLoader(false);
-            this.removeId(this.get("requestIDs"), requestID);
-            if (status === 200) {
-                if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
-                    parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
-                    if (parsedData.ErrorOccured === "yes") {
-                        this.handleWPSError(parsedData);
-                    }
-                    else {
-                        this.handleSuccess(parsedData);
-                    }
+        this.toggleLoader(false);
+        if (status === 200) {
+            if (_.has(response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData, "Schulweg")) {
+                parsedData = response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.Schulweg.Ergebnis;
+                if (parsedData.ErrorOccured === "yes") {
+                    this.handleWPSError(parsedData);
                 }
                 else {
-                    Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
-                        + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
-                        + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
-                        + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
+                    this.handleSuccess(parsedData);
                 }
             }
             else {
-                this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
+                Radio.trigger("Alert", "alert", "<b>Entschuldigung</b><br>"
+                    + "Routing konnte nicht berechnet werden, mit folgender Fehlermeldung:<br><br>"
+                    + "<i>" + response.ExecuteResponse.ProcessOutputs.Output.Data.ComplexData.serviceResponse.statusInfo.message + "</i><br><br>"
+                    + "Bitte wenden Sie sich mit dieser Fehlermeldung an den Administrator.");
             }
+        }
+        else {
+            this.handleWPSError("Routing kann nicht durchgeführt werden.<br>Bitte versuchen Sie es später erneut (Status: " + status + ").");
         }
     },
     handleWPSError: function (response) {
@@ -280,9 +272,8 @@ const SchulwegRouting = Tool.extend({
         }
     },
     sendRequest: function (requestID, requestObj) {
-        this.get("requestIDs").push(requestID);
         this.toggleLoader(true);
-        Radio.trigger("WPS", "request", "1001", requestID, "schulwegrouting_wps.fmw", requestObj);
+        Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this));
     },
     toggleLoader: function (show) {
         if (show) {
@@ -300,13 +291,6 @@ const SchulwegRouting = Tool.extend({
 
         object[attrName] = dataObj;
         return object;
-    },
-    removeId: function (requests, requestId) {
-        var index = requests.indexOf(requestId);
-
-        if (index > -1) {
-            requests.splice(index, 1);
-        }
     },
     isRoutingRequest: function (ownRequests, requestID) {
         return _.contains(ownRequests, requestID);
@@ -420,7 +404,7 @@ const SchulwegRouting = Tool.extend({
      * @returns {object[]} filtered list of addresses
      */
     filterAddressList: function (addressList, searchRegExp) {
-        return _.filter(addressList, function (address) {
+        return addressList.filter(function (address) {
             return address.joinAddress.search(searchRegExp) !== -1;
         }, this);
     },
@@ -536,7 +520,7 @@ const SchulwegRouting = Tool.extend({
 
         _.each(streetNameList, function (street) {
             var streetNameParts = _.contains(street, " ") ? street.split(" ") : [street],
-                resultStreets = _.filter(streetNameParts, function (part) {
+                resultStreets = streetNameParts.filter(function (part) {
                     return part.toLowerCase() === targetStreet.toLowerCase();
                 }, this);
 

@@ -26,7 +26,7 @@ const DropdownView = Backbone.View.extend({
 
     /**
      * renders the view depending on the isOpen attribute
-     * @return {jQuery} - this DOM element as a jQuery object
+     * @return {Object} - this
      */
     render: function () {
         var attr;
@@ -57,7 +57,7 @@ const DropdownView = Backbone.View.extend({
 
     /**
      * marks the selected value(s) in the dropdown list
-     * @return {[type]} [description]
+     * @return {void}
      */
     markSelectedValues: function () {
         var models = this.model.get("valuesCollection").where({isSelected: true}),

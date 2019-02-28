@@ -32,7 +32,6 @@ const Parser = Backbone.Model.extend({
     },
 
     initialize: function () {
-
         var channel = Radio.channel("Parser");
 
         channel.reply({
@@ -64,7 +63,9 @@ const Parser = Backbone.Model.extend({
             "addItems": this.addItems,
             "addFolder": this.addFolder,
             "addLayer": this.addLayer,
-            "addGeoJSONLayer": this.addGeoJSONLayer
+            "addGDILayer": this.addGDILayer,
+            "addGeoJSONLayer": this.addGeoJSONLayer,
+            "removeItem": this.removeItem
         }, this);
 
         this.listenTo(this, {
@@ -90,7 +91,6 @@ const Parser = Backbone.Model.extend({
         this.parseMenu(this.get("portalConfig").menu, "root");
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
-        this.parseMapView(this.get("portalConfig").mapView);
 
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
@@ -113,7 +113,7 @@ const Parser = Backbone.Model.extend({
      * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
      * @param {object} items Einzelnen Ebenen der Menüleiste, bsp. contact, legend, tools und tree
      * @param {string} parentId gibt an wem die items hinzugefügt werden
-     * @return {undefined}
+     * @return {void}
      */
     parseMenu: function (items, parentId) {
         _.each(items, function (value, key) {
@@ -175,8 +175,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [parseSearchBar description]
-     * @param  {[type]} searchbarConfig [description]
-     * @return {[type]}       [description]
+     * @param  {Object} searchbarConfig [description]
+     * @return {void}
      */
     parseSearchBar: function (searchbarConfig) {
         this.addItem({
@@ -185,24 +185,10 @@ const Parser = Backbone.Model.extend({
         });
     },
 
-    /** [parseMapView description]
-     * @param  {[type]} items [description]
-     * @return {[type]}       [description]
-     */
-    parseMapView: function (items) {
-        _.each(items, function (value, key) {
-            this.addItem({
-                type: "mapView",
-                id: key,
-                attr: value
-            });
-        }, this);
-    },
-
     /**
      * [parseControls description]
-     * @param  {[type]} items [description]
-     * @return {[type]}       [description]
+     * @param  {Array} items [description]
+     * @return {void}
      */
     parseControls: function (items) {
         _.each(items, function (value, key) {
@@ -217,7 +203,7 @@ const Parser = Backbone.Model.extend({
     /**
      * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
      * @param {object} obj - Item
-     * @return {undefined}
+     * @return {void}
      */
     addItem: function (obj) {
         if (!_.isUndefined(obj.visibility)) {
@@ -232,7 +218,7 @@ const Parser = Backbone.Model.extend({
      *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
      *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
      *  @param {object} attr Layerobjekt
-     *  @return {undefined}
+     *  @return {void}
      */
     addItems: function (objs, attr) {
         _.each(objs, function (obj) {
@@ -240,14 +226,14 @@ const Parser = Backbone.Model.extend({
         }, this);
     },
 
-    addFolder: function (name, id, parentId, level) {
+    addFolder: function (name, id, parentId, level, isExpanded) {
         var folder = {
             type: "folder",
             name: name,
             glyphicon: "glyphicon-plus-sign",
             id: id,
             parentId: parentId,
-            isExpanded: false,
+            isExpanded: isExpanded ? isExpanded : false,
             level: level
         };
 
@@ -307,11 +293,46 @@ const Parser = Backbone.Model.extend({
 
         this.addItem(layer);
     },
+    /* fügt einen Layer aus der Elastic-Search-GDI-Suche hinzu
+        das Objekt beinhaltet: {name, id, parentId, level, layers, url, version, gfiAttributes, datasets}
+        */
+    addGDILayer: function (values) {
+        var layer = {
+            type: "layer",
+            name: values.name,
+            id: values.id,
+            parentId: values.parentId,
+            level: values.level,
+            url: values.url,
+            typ: "WMS",
+            layers: values.layers,
+            format: "image/png",
+            version: values.version,
+            singleTile: false,
+            transparent: true,
+            transparency: 0,
+            tilesize: "512",
+            gutter: "0",
+            featureCount: "3",
+            minScale: "0",
+            maxScale: "2500000",
+            gfiAttributes: values.gfiAttributes,
+            layerAttribution: "nicht vorhanden",
+            legendURL: "",
+            cache: false,
+            isSelected: true,
+            isVisibleInTree: true,
+            isChildLayer: false,
+            datasets: values.datasets
+        };
+
+        this.addItemAtTop(layer);
+    },
 
     /**
      * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
      * @param {Object} obj - Item
-     * @return {undefined}
+     * @return {void}
      */
     addItemAtTop: function (obj) {
         if (!_.isUndefined(obj.visibility)) {
@@ -349,8 +370,8 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [getItemByAttributes description]
-     * @param  {[type]} value [description]
-     * @return {[type]}       [description]
+     * @param  {Object} value [description]
+     * @return {Object}       [description]
      */
     getItemByAttributes: function (value) {
         return _.findWhere(this.get("itemList"), value);
@@ -358,19 +379,25 @@ const Parser = Backbone.Model.extend({
 
     /**
      * [getItemsByAttributes description]
-     * @param  {[type]} value [description]
-     * @return {[type]}       [description]
+     * @param  {Object} value [description]
+     * @return {Array}       [description]
      */
     getItemsByAttributes: function (value) {
         return _.where(this.get("itemList"), value);
     },
+    removeItem: function (id) {
+        var itemList = this.get("itemList").filter(function (item) {
+            return item.id !== id;
+        });
+        this.set("itemList", itemList);
+    },
 
     /**
      * [createModelList description]
-     * @return {[type]} [description]
+     * @return {ModelList} [description]
      */
     createModelList: function () {
-        new ModelList(_.filter(this.get("itemList"), function (model) {
+        new ModelList(this.get("itemList").filter(function (model) {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -451,6 +478,11 @@ const Parser = Backbone.Model.extend({
                 objectsByIds.push(lay);
             }
         });
+
+        // Wenn nicht alle LayerIDs des Arrays gefunden werden
+        if (objectsByIds.length !== ids.length) {
+            return null;
+        }
         // Das erste Objekt wird kopiert
         newObject = _.clone(objectsByIds[0]);
         // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
@@ -482,7 +514,7 @@ const Parser = Backbone.Model.extend({
     },
 
     getItemsByMetaID: function (metaID) {
-        var layers = _.filter(this.get("itemList"), function (item) {
+        var layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;

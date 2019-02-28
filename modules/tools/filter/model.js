@@ -1,4 +1,5 @@
 import WfsQueryModel from "./query/source/wfs";
+import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
@@ -15,7 +16,8 @@ const FilterModel = Tool.extend({
         sendToRemote: false,
         renderToSidebar: true,
         renderToWindow: false,
-        glyphicon: "glyphicon-filter"
+        glyphicon: "glyphicon-filter",
+        uiStyle: "DEFAULT"
     }),
     initialize: function () {
         var channel = Radio.channel("Filter");
@@ -25,6 +27,20 @@ const FilterModel = Tool.extend({
             "resetFilter": this.resetFilter
         });
 
+        channel.reply({
+            "getIsInitialLoad": function () {
+                return this.get("isInitialLoad");
+            },
+            "getFilterName": function (layerId) {
+                var predefinedQuery = this.get("predefinedQueries").filter(function (query) {
+                    return query.layerId === layerId;
+                });
+
+                return predefinedQuery[0].name;
+            }
+        }, this);
+
+        this.set("uiStyle", Radio.request("Util", "getUiStyle"));
         this.set("queryCollection", new Backbone.Collection());
         this.listenTo(this.get("queryCollection"), {
             "deactivateAllModels": function (model) {
@@ -33,7 +49,9 @@ const FilterModel = Tool.extend({
             "deselectAllModels": this.deselectAllModels,
             "featureIdsChanged": function (featureIds, layerId) {
                 this.updateMap();
-                this.updateGFI(featureIds, layerId);
+                if (!this.get("queryCollection").models[0].get("isAutoRefreshing")) {
+                    this.updateGFI(featureIds, layerId);
+                }
                 this.updateFilterObject();
             },
             "closeFilter": function () {
@@ -48,7 +66,7 @@ const FilterModel = Tool.extend({
                     filterModels;
 
                 if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
-                    filterModels = _.filter(predefinedQueries, function (query) {
+                    filterModels = predefinedQueries.filter(function (query) {
                         return query.layerId === layerId;
                     });
 
@@ -107,7 +125,7 @@ const FilterModel = Tool.extend({
     },
     /**
      * updates the Features shown on the Map
-     * @return {[type]} [description]
+     * @return {void}
      */
     updateMap: function () {
         // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
@@ -163,8 +181,8 @@ const FilterModel = Tool.extend({
 
     /**
      * collects the ids from of all features that match the filter, maps them to the layerids
-     * @param  {[object]} queries query objects
-     * @return {object} Map object mapping layers to featuresids
+     * @param  {Object[]} queries query objects
+     * @return {Object} Map object mapping layers to featuresids
      */
     groupFeatureIdsByLayer: function (queries) {
         var allFeatureIds = [],
@@ -195,8 +213,8 @@ const FilterModel = Tool.extend({
 
     /**
      * collects all featureIds of a group of queries into a list of uniqueIds
-     * @param  {[object]} queryGroup group of queries
-     * @return {[string]} unique list of all feature ids
+     * @param  {Object[]} queryGroup group of queries
+     * @return {String[]} unique list of all feature ids
      */
     collectFilteredIds: function (queryGroup) {
         var featureIdList = [];
@@ -212,11 +230,12 @@ const FilterModel = Tool.extend({
     },
 
     createQueries: function (queries) {
-        var queryObjects = Radio.request("ParametricURL", "getFilter");
+        var queryObjects = Radio.request("ParametricURL", "getFilter"),
+            queryObject,
+            oneQuery;
 
         _.each(queries, function (query) {
-            var queryObject,
-                oneQuery = query;
+            oneQuery = query;
 
             if (!_.isUndefined(queryObjects)) {
                 queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
@@ -232,32 +251,44 @@ const FilterModel = Tool.extend({
             query;
 
         if (!_.isUndefined(layer)) {
-            query = layer.get("typ") === "WFS" || layer.get("typ") === "GeoJSON" || layer.get("typ") === "GROUP" ? new WfsQueryModel(model) : undefined;
+            query = this.getQueryByTyp(layer.get("typ"), model);
+            if (!_.isNull(query)) {
+                if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
+                    _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+                }
 
-            if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
-                _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
-            }
+                if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                    query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
+                }
 
-            if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
-                query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
-            }
+                if (!_.isUndefined(this.get("sendToRemote"))) {
+                    query.set("sendToRemote", this.get("sendToRemote"));
+                }
+                if (!_.isUndefined(this.get("minScale"))) {
+                    query.set("minScale", this.get("minScale"));
+                }
 
-            if (!_.isUndefined(this.get("sendToRemote"))) {
-                query.set("sendToRemote", this.get("sendToRemote"));
-            }
-            if (!_.isUndefined(this.get("minScale"))) {
-                query.set("minScale", this.get("minScale"));
-            }
+                if (query.get("isSelected")) {
+                    query.setIsDefault(true);
+                    query.setIsActive(true);
+                }
 
-            if (query.get("isSelected")) {
-                query.setIsDefault(true);
-                query.setIsActive(true);
+                this.get("queryCollection").add(query);
             }
-
-            this.get("queryCollection").add(query);
         }
     },
 
+    getQueryByTyp: function (layerTyp, model) {
+        var query = null;
+
+        if (layerTyp === "WFS" || layerTyp === "GROUP") {
+            query = new WfsQueryModel(model);
+        }
+        else if (layerTyp === "GeoJSON") {
+            query = new GeoJsonQueryModel(model);
+        }
+        return query;
+    },
     setIsActive: function (value) {
         this.set("isActive", value);
     },

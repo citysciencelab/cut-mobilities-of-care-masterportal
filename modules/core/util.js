@@ -3,7 +3,8 @@ const Util = Backbone.Model.extend({
         // isViewMobile: false,
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-        uiStyle: "DEFAULT"
+        uiStyle: "DEFAULT",
+        proxyHost: ""
     },
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -55,19 +56,24 @@ const Util = Backbone.Model.extend({
     },
     /**
      * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {[type]} value - feature attribute values
+     * @param  {String} value - feature attribute values
      * @returns {string} punctuated value
      */
     punctuate: function (value) {
         var pattern = /(-?\d+)(\d{3})/,
             stringValue = value.toString(),
+            decimals,
             predecimals = stringValue;
 
         if (stringValue.indexOf(".") !== -1) {
             predecimals = stringValue.split(".")[0];
+            decimals = stringValue.split(".")[1];
         }
         while (pattern.test(predecimals)) {
             predecimals = predecimals.replace(pattern, "$1.$2");
+        }
+        if (decimals) {
+            return predecimals + "," + decimals;
         }
         return predecimals;
     },
@@ -251,14 +257,15 @@ const Util = Backbone.Model.extend({
             parser.hostname = window.location.hostname;
         }
         hostname = parser.hostname.split(".").join("_");
-        result = result.replace(parser.hostname, "/" + hostname);
+        result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
+
         return result;
     },
 
     /**
      * Setter für Attribut isViewMobile
      * @param {boolean} value sichtbar
-     * @return {undefined}
+     * @return {void}
      */
     setIsViewMobile: function (value) {
         this.set("isViewMobile", value);
@@ -266,7 +273,7 @@ const Util = Backbone.Model.extend({
 
     /**
      * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
-     * @return {undefined}
+     * @return {void}
      */
     toggleIsViewMobile: function () {
         if (window.innerWidth >= 768) {

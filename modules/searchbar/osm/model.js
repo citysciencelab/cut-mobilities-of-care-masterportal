@@ -100,7 +100,7 @@ const OsmModel = Backbone.Model.extend({
     /**
      * Treffer der ersten Suche auswerten; Angebotsliste erstellen
      * [pushSuggestions description]
-     * @param  {[type]} data [description]
+     * @param  {Array} data [description]
      * @returns {void}
      */
     pushSuggestions: function (data) {
@@ -112,13 +112,18 @@ const OsmModel = Backbone.Model.extend({
             upper,
             lower,
             center,
-            weg;
+            weg,
+            county;
 
         _.each(data, function (hit) {
             if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
                 if (this.isSearched(hit, this.get("searchParams"))) {
                     weg = hit.address.road || hit.address.pedestrian;
+                    county = hit.address.county;
                     display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
+                    if (!_.isUndefined(county) && _.isUndefined(display)) {
+                        display = county;
+                    }
                     if (!_.isUndefined(weg)) {
                         display = display + ", " + weg;
                         if (!_.isUndefined(hit.address.house_number)) {
@@ -170,8 +175,8 @@ const OsmModel = Backbone.Model.extend({
 
     /**
      * stellt fest, ob Das Ergebnis alle eingegebenen Parameter enthält
-     * @param  {[object]} searched Das zu untersuchende Suchergebnis
-     * @param  {[array]} params Das Ergebnis aufgesplittet
+     * @param  {object[]} searched Das zu untersuchende Suchergebnis
+     * @param  {array[]} params Das Ergebnis aufgesplittet
      * @returns {boolean} true | false
      */
     isSearched: function (searched, params) {
@@ -184,6 +189,7 @@ const OsmModel = Backbone.Model.extend({
                 if ((_.has(address, "house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
                     (_.has(address, "road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (_.has(address, "county") && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
@@ -200,7 +206,7 @@ const OsmModel = Backbone.Model.extend({
 
     /**
      * stellt fest ob der Treffer von den Parametern angezeigt wird oder nicht
-     * @param  {[type]} hit [description] Suchtreffer
+     * @param  {Object} hit [description] Suchtreffer
      * @returns {boolean} true | false
      */
     canShowHit: function (hit) {
@@ -239,10 +245,10 @@ const OsmModel = Backbone.Model.extend({
 
     /**
      * @description Fphrt einen HTTP-GET-Request aus und speichert dessen id
-     * @param  {[type]} url             [description]
-     * @param  {[type]} data            [description]
-     * @param  {[type]} successFunction [description]
-     * @return {[type]}                 [description]
+     * @param  {String} url             [description]
+     * @param  {JSON} data            [description]
+     * @param  {function} successFunction [description]
+     * @return {void}
      */
     ajaxSend: function (url, data, successFunction) {
         this.setAjaxRequest($.ajax({

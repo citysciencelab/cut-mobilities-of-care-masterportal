@@ -36,7 +36,7 @@ const Menu = listView.extend({
     },
     /**
      * Rendert die  Auswahlliste
-     * @return {[type]} [description]
+     * @return {void}
      */
     renderSelectedList: function () {
         var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
@@ -86,7 +86,7 @@ const Menu = listView.extend({
             this.collection.setVisibleByParentIsExpanded(parentId);
         }
 
-        layer = _.filter(models, function (model) {
+        layer = models.filter(function (model) {
             return model.get("type") === "layer";
         });
 
@@ -102,7 +102,7 @@ const Menu = listView.extend({
 
         this.addOverlayViews(layer);
 
-        folders = _.filter(models, function (model) {
+        folders = models.filter(function (model) {
             return model.get("type") === "folder";
         });
 
@@ -126,7 +126,7 @@ const Menu = listView.extend({
         this.renderSubTree(parentId, 0, 10, false);
     },
     addViewsToItemsOfType: function (type, items, parentId) {
-        var viewItems = _.filter(items, function (model) {
+        var viewItems = items.filter(function (model) {
             return model.get("type") === type;
         });
 
@@ -154,14 +154,16 @@ const Menu = listView.extend({
                     new DesktopThemenFolderView({model: model});
                 }
             }
-            else {
+            else if (!model.get("isNeverVisibleInTree")) {
                 new DesktopLayerView({model: model});
             }
         }, this);
     },
     addSelectionView: function (models) {
         _.each(models, function (model) {
-            new SelectionView({model: model});
+            if (!model.get("isNeverVisibleInTree")) {
+                new SelectionView({model: model});
+            }
         }, this);
     },
     startModul: function (modulId) {

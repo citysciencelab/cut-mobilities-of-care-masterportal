@@ -19,7 +19,8 @@ const map = Backbone.Model.extend({
 
     initialize: function () {
         var channel = Radio.channel("Map"),
-            mapView = new MapView();
+            mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
+            mapView = new MapView(mapViewSettings);
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -27,10 +28,7 @@ const map = Backbone.Model.extend({
             "getLayers": this.getLayers,
             "getWGS84MapSizeBBOX": this.getWGS84MapSizeBBOX,
             "createLayerIfNotExists": this.createLayerIfNotExists,
-            "getEventPixel": this.getEventPixel,
-            "hasFeatureAtPixel": this.hasFeatureAtPixel,
             "getSize": this.getSize,
-            "getPixelFromCoordinate": this.getPixelFromCoordinate,
             "getFeaturesAtPixel": this.getFeaturesAtPixel,
             "registerListener": this.registerListener,
             "getMap": function () {
@@ -60,10 +58,10 @@ const map = Backbone.Model.extend({
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
-            "forEachFeatureAtPixel": this.forEachFeatureAtPixel,
             "updateSize": function () {
                 this.get("map").updateSize();
             },
+            "setTime": this.setTime,
             "activateMap3d": this.activateMap3d,
             "deactivateMap3d": this.deactivateMap3d,
             "setCameraParameter": this.setCameraParameter
@@ -97,6 +95,39 @@ const map = Backbone.Model.extend({
         if (Config.startingMap3D) {
             this.activateMap3d();
         }
+
+        if (!_.isUndefined(Config.inputMap)) {
+            this.registerListener("click", this.addMarker, this);
+        }
+    },
+
+    /**
+     * Funktion wird bei Vorhandensein des Config-Parameters "inputMap"
+     * als Event-Listener registriert und setzt bei Mausklick immer und
+     * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
+     * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
+     *
+     * @param  {event} event - Das MapBrowserPointerEvent
+     * @returns {void}
+     */
+    addMarker: function (event) {
+        var coords = event.coordinate;
+
+        // Set the marker on the map.
+        Radio.trigger("MapMarker", "showMarker", coords);
+
+        // If the marker should be centered, center the map around it.
+        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+            Radio.trigger("MapView", "setCenter", coords);
+        }
+
+        // Should the coordinates get transformed to another coordinate system for broadcast?
+        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
+        }
+
+        // Broadcast the coordinates clicked in the desired coordinate system.
+        Radio.trigger("RemoteInterface", "postMessage", {"setMarker": coords});
     },
 
     /**
@@ -173,33 +204,6 @@ const map = Backbone.Model.extend({
     },
 
     /**
-    * Gibt die Kartenpixelposition für ein Browser-Event relative zum Viewport zurück
-    * @param  {Event} evt - Mouse Events | Keyboard Events | ...
-    * @return {ol.Pixel} pixel
-    */
-    getEventPixel: function (evt) {
-        return this.get("map").getEventPixel(evt);
-    },
-
-    /**
-    * Gibt die Pixelposition im Viewport zu einer Koordinate zurück
-    * @param  {ol.Coordinate} value -
-    * @return {ol.Pixel} pixel
-    */
-    getPixelFromCoordinate: function (value) {
-        return this.get("map").getPixelFromCoordinate(value);
-    },
-
-    /**
-    * Ermittelt ob Features ein Pixel im Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @return {Boolean} true | false
-    */
-    hasFeatureAtPixel: function (pixel) {
-        return this.get("map").hasFeatureAtPixel(pixel);
-    },
-
-    /**
     * Rückgabe der Features an einer Pixelkoordinate
     * @param  {pixel} pixel    Pixelkoordinate
     * @param  {object} options layerDefinition und pixelTolerance
@@ -209,15 +213,6 @@ const map = Backbone.Model.extend({
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
-    /**
-    * Iteriert über alle Features, die ein Pixel auf dem Viewport schneiden
-    * @param  {ol.Pixel} pixel -
-    * @param  {Function} callback - Die Feature Callback Funktion
-    * @returns {void}
-    */
-    forEachFeatureAtPixel: function (pixel, callback) {
-        this.get("map").forEachFeatureAtPixel(pixel, callback);
-    },
     getMapMode: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
@@ -230,16 +225,42 @@ const map = Backbone.Model.extend({
     isMap3d: function () {
         return this.getMap3d() && this.getMap3d().getEnabled();
     },
-    createMap3d: function () {
+    createMap3d: function (shadowTimeFunction) {
         var map3d = new OLCesium({
             map: this.get("map"),
+            time: shadowTimeFunction,
+            sceneOptions: {
+                shadows: true
+            },
             stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (newMap, scene) {
-                return [new WMSRasterSynchronizer(newMap, scene), new VectorSynchronizer(newMap, scene), new FixedOverlaySynchronizer(newMap, scene)];
+            createSynchronizers: function (olMap, scene) {
+                return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
             }
         });
 
         return map3d;
+    },
+    returnTodaysCesiumDate: function () {
+        if (this.time) {
+            return this.time;
+        }
+        const date = Cesium.JulianDate.now(),
+            timeStamp = Cesium.JulianDate.toGregorianDate(date);
+
+        timeStamp.hour = 13; // UTC Standardtime +1
+        timeStamp.minute = 0;
+        timeStamp.second = 0;
+        timeStamp.millisecond = 0;
+
+        return Cesium.JulianDate.fromDate(new Date(timeStamp.year, timeStamp.month - 1, timeStamp.day, timeStamp.hour, timeStamp.minute, timeStamp.second, timeStamp.millisecond));
+    },
+    returnConfigCesiumDate: function () {
+        const modifiedTime = Cesium.JulianDate.fromDate(new Date(Config.shadowTime.year, Config.shadowTime.month - 1, Config.shadowTime.day, Config.shadowTime.hour, Config.shadowTime.minute, Config.shadowTime.second, Config.shadowTime.millisecond));
+
+        return modifiedTime;
+    },
+    setTime: function (time) {
+        this.time = time;
     },
     handle3DEvents: function () {
         var eventHandler;
@@ -287,10 +308,11 @@ const map = Backbone.Model.extend({
     },
     activateMap3d: function () {
         var camera,
+            shadowTimeFunction = _.has(Config, "shadowTime") ? this.returnConfigCesiumDate : this.returnTodaysCesiumDate,
             cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
 
         if (!this.getMap3d()) {
-            this.setMap3d(this.createMap3d());
+            this.setMap3d(this.createMap3d(shadowTimeFunction));
             this.handle3DEvents();
             this.setCesiumSceneDefaults();
             this.setCameraParameter(cameraParameter);
@@ -349,7 +371,7 @@ const map = Backbone.Model.extend({
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
-            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event});
+            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
     deactivateMap3d: function () {
@@ -477,7 +499,7 @@ const map = Backbone.Model.extend({
 
     // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
     setImportDrawMeasureLayersOnTop: function (layers) {
-        var layersOnTop = _.filter(layers.getArray(), function (layer) {
+        var layersOnTop = layers.getArray().filter(function (layer) {
             return layer.get("alwaysOnTop") === true;
         });
 
@@ -507,7 +529,7 @@ const map = Backbone.Model.extend({
             layerFeatures = olLayer.getSource().getFeatures();
         }
 
-        features = _.filter(layerFeatures, function (feature) {
+        features = layerFeatures.filter(function (feature) {
             return _.contains(ids, feature.getId());
         });
         if (features.length > 0) {

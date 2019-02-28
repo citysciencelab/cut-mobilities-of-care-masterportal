@@ -36,16 +36,21 @@
       {
         "minChar": 3,
         "definitions": [
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-          "data": "typeNames=prosin_festgestellt&propertyName=planrecht",
-          "name": "bplan"
-        },
-        {
-          "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene?service=WFS&request=GetFeature&version=2.0.0",
-          "data": "typeNames=prosin_imverfahren&propertyName=plan",
-          "name": "bplan"
-        }]
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_festgestellt",
+            "propertyNames": ["app:planrecht"],
+            "geometryName": "app:geom",
+            "name": "festgestellt"
+          },
+          {
+            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "typeName": "app:prosin_imverfahren",
+            "propertyNames": ["app:plan"],
+            "geometryName": "app:the_geom",
+            "name": "im Verfahren"
+          }
+        ]
       },
       "visibleWFS":
       {
@@ -55,6 +60,10 @@
       {
         "minChars": 3
       },
+      "gdi":{
+		"minChars": 3,
+		"serviceId": "elastic"
+	  },
       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "menu":
@@ -324,26 +333,22 @@
     {
       "Layer": [
       {
-        "id": ["149", "150", "151", "152", "153", "154", "155", "156", "157", "158", "159", "160", "161", "162", "163", "164", "165", "166", "167", "168", "169", "170", "171", "172", "173", "174", "175", "176", "177", "178"],
+        "id": ["149", "150", "151", "152", "153", "154", "155", "157", "13926", "13927", "159", "160", "161", "156", "158", "13928", "162", "163", "164", "165", "166", "167", "168", "169", "170", "13930", "171", "172", "173", "174", "13931", "175", "176", "177", "178"],
         "name": "ALKIS grau-blau"
       },
       {
-        "id": ["368", "369", "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385", "386", "387", "388", "389", "390", "391", "392", "393", "394", "395", "396", "397"],
+        "id": ["368", "369", "370", "371", "372", "373", "374", "376", "13923", "13924", "378", "379", "380", "375", "377", "13920", "381", "382", "383", "384", "385", "386", "387", "388", "389", "13921", "390", "391", "392", "393", "13922", "394", "395", "396", "397"],
         "name": "ALKIS farbig"
       },
       {
         "id": "452"
       },
       {
-        "id": ["713", "714", "715", "716"],
-        "name": "Geobasiskarten (schwarz-weiß)"
-      },
-      {
-        "id": ["1043", "1044", "1045", "1046"],
+        "id": ["1043", "1044", "1045", "1046", "13649", "13652", "13654", "13656"],
         "name": "Geobasiskarten (grau-blau)"
       },
       {
-        "id": ["717", "718", "719", "720"],
+        "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
         "visibility": true,
         "name": "Geobasiskarten (farbig)"
       },

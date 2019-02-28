@@ -7,7 +7,7 @@ import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
 const GroupLayer = Layer.extend({
-    defaults: _.extend({}, Layer.prototype.defaults,{
+    defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true
     }),

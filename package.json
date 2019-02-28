@@ -13,7 +13,8 @@
     "test": "webpack-dev-server --config devtools/webpack.test.js --hot --inline",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js",
-    "buildPortalsForStable": "node devtools/tasks/exampleBuild.js && node devtools/tasks/portalsForStableCopy.js"
+    "buildPortalsForStable": "node devtools/tasks/exampleBuild.js && node devtools/tasks/portalsForStableCopy.js",
+    "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
   },
   "dependencies": {
     "backbone": "1.3.x",
@@ -32,6 +33,7 @@
     "ol": "^5.3.0",
     "olcs": "^2.5.0",
     "proj4": "2.x",
+    "rbush": "^2.0.2",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
@@ -58,6 +60,7 @@
     "glob": "4.2.1",
     "inquirer": "^6.2.0",
     "jaguarjs-jsdoc": "0.0.1",
+    "jsdoc": "^3.5.5",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "lgv-config": "git+https://bitbucket.org/lgv-g12/lgv-config.git",

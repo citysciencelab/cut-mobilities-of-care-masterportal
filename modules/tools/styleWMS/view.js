@@ -54,8 +54,8 @@ const StyleWMSView = Backbone.View.extend({
 
 
     /**
-     * [render description]
-     * @return {[type]} [description]
+     * render styleWms view
+     * @return {Backbone.View} returns itself when rendered
      */
     render: function () {
         var attr = this.model.toJSON();

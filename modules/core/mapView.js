@@ -2,9 +2,6 @@ import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 
 const MapView = Backbone.Model.extend({
-    /**
-     *
-     */
     defaults: {
         epsg: "EPSG:25832",
         background: "",
@@ -62,18 +59,17 @@ const MapView = Backbone.Model.extend({
                 zoomLevel: 9
             }
         ],
-        startResolution: 15.874991427504629,
+        resolution: 15.874991427504629,
         startCenter: [565874, 5934140],
         units: "m",
         DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
     },
 
     /**
-     * Die initiale Größe der #map beträgt 100%.
-     * Der MenuLoader wird zu einem späteren Zeitpunkt required und verkleinert ggf. die Menüleiste.
+     * @param {object} attributes - initial values
      * @returns {void}
      */
-    initialize: function () {
+    initialize: function (attributes) {
         var channel = Radio.channel("MapView");
 
         channel.reply({
@@ -120,16 +116,24 @@ const MapView = Backbone.Model.extend({
             }
         });
 
-        this.setConfig();
+        // overwrite the resolution if zoomLevel is configured and resolution is not
+        if (attributes && attributes.resolution && attributes.zoomLevel !== undefined) {
+            const resolution = this.get("options")[attributes.zoomLevel].resolution;
+
+            this.setResolution(resolution);
+        }
         this.setResolutions();
-        this.setUrlParams();
         this.setProjection();
-        this.setView();
+        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
+        this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
+        this.prepareView();
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
+            Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
     },
 
@@ -149,6 +153,7 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("MapView", "changedOptions", params);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
         Radio.trigger("ClickCounter", "zoomChanged");
+        Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
     },
 
     /**
@@ -175,80 +180,8 @@ const MapView = Backbone.Model.extend({
 
     resetView: function () {
         this.get("view").setCenter(this.get("startCenter"));
-        this.get("view").setResolution(this.get("startResolution"));
+        this.get("view").setResolution(this.get("resolution"));
         Radio.trigger("MapMarker", "hideMarker");
-    },
-
-    /*
-    * Finalisierung der Initialisierung für config.json
-    */
-    setConfig: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus Config.json in spezifischer Reihenfolge
-        */
-        var mapViewSettings = Radio.request("Parser", "getItemsByAttributes", {type: "mapView"}),
-            mapViewOptions = _.find(mapViewSettings, {"id": "options"}),
-            mapViewEpsg = _.find(mapViewSettings, {"id": "epsg"}),
-            mapViewImage = _.find(mapViewSettings, {"id": "backgroundImage"}),
-            mapViewStartCenter = _.find(mapViewSettings, {"id": "startCenter"}),
-            mapViewExtent = _.find(mapViewSettings, {"id": "extent"}),
-            mapViewResolution = _.find(mapViewSettings, {"id": "resolution"}),
-            mapViewZoomLevel = _.find(mapViewSettings, {"id": "zoomLevel"}),
-            res;
-
-        if (_.isUndefined(mapViewOptions) === false) {
-            this.set("options", []);
-            _.each(mapViewOptions.attr, function (opt) {
-                this.pushHits("options", opt);
-            }, this);
-        }
-
-        if (_.isUndefined(mapViewEpsg) === false) {
-            this.setEpsg(mapViewEpsg.attr);
-        }
-
-        if (_.isUndefined(mapViewImage) === false) {
-            this.setBackgroundImage(mapViewImage.attr);
-            this.setBackground(mapViewImage.attr);
-        }
-
-        if (_.isUndefined(mapViewStartCenter) === false) {
-            this.setStartCenter(mapViewStartCenter.attr);
-        }
-
-        if (_.isUndefined(mapViewExtent) === false) {
-            this.setExtent(mapViewExtent.attr);
-        }
-
-        if (_.isUndefined(mapViewResolution) === false) {
-            this.setStartResolution(mapViewResolution.attr);
-        }
-        else if (_.isUndefined(mapViewZoomLevel) === false) {
-            res = this.get("options")[mapViewZoomLevel.attr].resolution;
-
-            this.setStartResolution(res);
-        }
-    },
-
-    setUrlParams: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus ParamUrl
-        */
-        var centerFromParamUrl = Radio.request("ParametricURL", "getCenter"),
-            zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
-
-        if (!_.isUndefined(centerFromParamUrl)) {
-            this.setStartCenter(centerFromParamUrl);
-        }
-
-        if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.set("startResolution", this.get("resolutions")[zoomLevelFromParamUrl]);
-        }
-    },
-
-    // setter for epsg
-    setEpsg: function (value) {
-        this.set("epsg", value);
     },
 
     setBackground: function (value) {
@@ -259,12 +192,25 @@ const MapView = Backbone.Model.extend({
         this.set("backgroundImage", value);
     },
 
-    setStartCenter: function (value) {
-        this.set("startCenter", value);
+    prepareStartCenter: function (value) {
+        var startCenter = value;
+
+        if (!_.isUndefined(startCenter)) {
+            if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
+                startCenter = Radio.request("CRS", "transformToMapProjection", this.get("projectionFromParamUrl"), startCenter);
+            }
+            this.setStartCenter(startCenter);
+        }
     },
 
-    setStartResolution: function (value) {
-        this.set("startResolution", value);
+    setStartZoomLevel: function (value) {
+        if (!_.isUndefined(value)) {
+            this.set("resolution", this.get("resolutions")[value]);
+        }
+    },
+
+    setResolution: function (value) {
+        this.set("resolution", value);
     },
     toggleBackground: function () {
         if (this.get("background") === "white") {
@@ -277,11 +223,6 @@ const MapView = Backbone.Model.extend({
 
     setResolutions: function () {
         this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    // setter for extent
-    setExtent: function (value) {
-        this.set("extent", value);
     },
 
     /**
@@ -316,15 +257,17 @@ const MapView = Backbone.Model.extend({
         this.set("projection", proj);
     },
 
-    setView: function () {
-        var view = new View({
+    prepareView: function () {
+        this.setView(new View({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
-            resolution: this.get("startResolution"),
+            resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
-        });
+        }));
+    },
 
+    setView: function (view) {
         this.set("view", view);
     },
 
@@ -386,8 +329,8 @@ const MapView = Backbone.Model.extend({
     },
 
     /**
-     *
-     * @return {[type]} [description]
+     * Return current Zoom of MapView
+     * @return {float} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();
@@ -403,11 +346,12 @@ const MapView = Backbone.Model.extend({
         return this.get("view").calculateExtent(mapSize);
     },
 
-    pushHits: function (attribute, value) {
-        var tempArray = _.clone(this.get(attribute));
+    setProjectionFromParamUrl: function (projection) {
+        this.set("projectionFromParamUrl", projection);
+    },
 
-        tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
+    setStartCenter: function (value) {
+        this.set("startCenter", value);
     }
 });
 

@@ -1,6 +1,6 @@
 import Theme from "../model";
 
-const DefaultTheme = Theme.extend({
+const Buildings3dTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults, {
         roofTypes: {
             "1000": "Flachdach",
@@ -71,4 +71,4 @@ const DefaultTheme = Theme.extend({
     }
 });
 
-export default DefaultTheme;
+export default Buildings3dTheme;

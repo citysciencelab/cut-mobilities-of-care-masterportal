@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<% _.each(typeList, function (type) {
+    var hitListOfType = _.sortBy(_.where(hitList, {type: type}), "name"); %>
+    <li class="list-group-item type"><span class="badge"><%= hitListOfType.length %></span><%= type %></li><div style="max-height: 220px; overflow-y: auto; overflow-x: hidden; display: none;">
+        <% _.each(hitListOfType, function (hit) { %>
+            <% if (hit.model !== undefined && hit.typ === "nodeLayer" && hit.metaName !== null) { %>
+                <% if (hit.glyphicon !== undefined) { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><p id="searchInputLi"><span class="glyphicon <%= hit.glyphicon %>"></span><%= hit.metaName %><small><%= hit.type %></small></p></li>
+                <% } else { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= hit.metaName %></span><small><%= hit.type %></small></li>
+                <% }
+             }
+             else { %>
+                <% if (hit.glyphicon !== undefined) { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><p id="searchInputLi"><span class="glyphicon <%= hit.glyphicon %>"></span><%= hit.name %><small><%= hit.type %></small></p></li>
+                <% } else { %>
+                    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName %>"><img src="<%= hit.imageSrc %>"><span><%= _.isUndefined(hit.shortName)? hit.name : hit.shortName %></span><small><%= _.isUndefined(hit.additionalInfo)? hit.type: hit.additionalInfo %></small></li>
+                <% } %>
+            <% } %>
+        <% }); %></div>
+            <div id="search-funnel"></div>
+            <div id="search-right-funnel-corner"></div>
+<% }); %>

@@ -51,34 +51,39 @@
 </div>
 <% } %>
 <% if (typeof direction !== "undefined") { %>
-<table class="table">
-    <% _.each(pendlerLegend, function(gemeinde){ %>
-        <tr>
-            <td><div class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></div></td>
-            <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
-        </tr>
-    <% }); %>
-</table>
-<hr>
-<div class="form-group">
-    <button class="btn btn-default csv-download">
-        <span class="glyphicon glyphicon-download"></span>&nbsp;CSV Download
-    </button>
-    <% if (animating === true) { %>
-        <button class="btn btn-default pull-right reset">
-            <span class="glyphicon glyphicon-stop"></span>&nbsp;Reset
+    <% if (pendlerLegend.length > 0) { %>
+        <table class="table">
+            <% _.each(pendlerLegend, function(gemeinde){ %>
+                <tr>
+                    <td>
+                        <div class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></div></td>
+                    <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
+                </tr>
+            <% }); %>
+        </table>
+        <hr>
+        <div class="form-group">
+        <button class="btn btn-default csv-download">
+            <span class="glyphicon glyphicon-download"></span>&nbsp;CSV Download
         </button>
+        <% if (animating === true) { %>
+            <button class="btn btn-default pull-right reset">
+                <span class="glyphicon glyphicon-stop"></span>&nbsp;Reset
+            </button>
+        <% }
+        else { %>
+            <button class="btn btn-default pull-right start">
+                <span class="glyphicon glyphicon-play"></span>&nbsp;Start
+            </button>
+        <% } %>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default btn-remove-features">
+                <span class="glyphicon glyphicon-trash"></span>&nbsp;Geometrien löschen
+            </button>
+        </div>
     <% }
-    else { %>
-        <button class="btn btn-default pull-right start">
-            <span class="glyphicon glyphicon-play"></span>&nbsp;Start
-        </button>
+    else if (emptyResult) { %>
+        <p class="keinePendlerBewegungen">Keine pendelnden Personen bekannt!</p>
     <% } %>
-</div>
-<div class="form-group">
-    <button class="btn btn-default btn-remove-features">
-        <span class="glyphicon glyphicon-trash"></span>&nbsp;Geometrien löschen
-    </button>
-</div>
-
 <% } %>

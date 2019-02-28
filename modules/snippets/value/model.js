@@ -1,4 +1,4 @@
-const Model = Backbone.Model.extend({
+const SnippetValueModel = Backbone.Model.extend({
     defaults: {
         value: "",
         type: ""
@@ -31,4 +31,4 @@ const Model = Backbone.Model.extend({
     }
 });
 
-export default Model;
+export default SnippetValueModel;
