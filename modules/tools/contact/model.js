@@ -4,11 +4,11 @@ const ContactModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         maxLines: "5",
         from: [{
-            "email": "jonas.weiter@gv.hamburg.de",
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
         to: [{
-            "email": "jonas.weiter@gv.hamburg.de",
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
         cc: [],
