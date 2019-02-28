@@ -4,7 +4,7 @@ import "bootstrap-colorpicker";
 
 /**
  * @member StyleWmsTemplate
- * @description Template used to create the user inut form
+ * @description Template used to create the user input form
  * @memberof StyleWMS
  */
 

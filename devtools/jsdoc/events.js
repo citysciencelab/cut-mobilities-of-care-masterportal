@@ -10,7 +10,7 @@
 /**
  * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
  * @param {Object} model Layer model to be styled
- * @description Resets the stylewms parasm for legend
+ * @description Resets the stylewms params for legend
  * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
  */
 

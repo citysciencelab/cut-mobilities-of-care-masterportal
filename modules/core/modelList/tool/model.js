@@ -63,7 +63,7 @@ const Tool = Item.extend(
         }
     },
     /**
-     * Activates or deactivated tool
+     * Activates or deactivates tool
      * @param {Boolean} value Flag if tool is active
      */
     setIsActive: function (value) {

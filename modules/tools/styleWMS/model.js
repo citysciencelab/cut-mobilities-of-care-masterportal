@@ -149,7 +149,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     },
 
     /**
-     * If validated attributes are valid, then noting is returned.
+     * If validated attributes are valid, then nothing is returned.
      * Otherwise Error message are created
      * Triggers "invalid" to itself if validation fails
      * @param  {Object} attributes - Backbone.Model.attributes
@@ -311,8 +311,8 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     },
 
     /**
-     * Triggers the legnd to update itself
-     * @param {Object[]} attributes Attributes for createing the Legend from StyleWMS
+     * Triggers the legend to update itself
+     * @param {Object[]} attributes Attributes for creating the legend from StyleWMS
      * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
      * @returns {void}
      */
