@@ -640,15 +640,22 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * hides the map marker
+     * @param {event} evt mouse leave event
+     * @returns {void}
+     */
     hideMarker: function (evt) {
-        var hitId = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+        var hitId,
+            hit;
 
-        if (_.has(hit, "triggerEvent")) {
-        // bei gdi-Suche kein Aktion bei Maushover
-            if (hit.type !== "Thema") {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
-            }
+        if (!_.isUndefined(evt)) {
+            hitId = evt.currentTarget.id;
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+        }
+
+        if (_.has(hit, "triggerEvent") && hit.type !== "Thema") {
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
         }
         else if (this.$(".dropdown-menu-search").css("display") === "block") {
             Radio.trigger("MapMarker", "hideMarker");
