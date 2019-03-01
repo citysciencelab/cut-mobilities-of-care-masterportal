@@ -1,4 +1,39 @@
 /**
+ * @namespace MapMarker
+ * @description MapMarker
+ */
+
+/**
+ * @namespace GFI
+ * @description Get Feature Info
+ */
+
+/**
+ * @namespace Title
+ * @description Portal title
+ */
+
+/**
+ * @namespace Quickhelp
+ * @description fooBar
+ */
+
+/**
+ * @namespace Util
+ * @description fooBar
+ */
+
+/**
+ * @namespace Menu
+ * @description Definition of menu
+ */
+
+/**
+ * @namespace Searchbar
+ * @description fooBar
+ */
+
+/**
  * @namespace Alerting
  * @description Alerting system that responds to given events.
  * Used to have same alert all over the portal.
