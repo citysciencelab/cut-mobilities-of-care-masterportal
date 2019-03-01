@@ -25,56 +25,29 @@ export function search (serviceId, query, sorting, size) {
     var result = {},
         searchUrl,
         searchBody,
-        serviceUrl;
+        serviceUrl,
+        serviceUrlCheck;
 
-    serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
-    searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
-    searchBody = prepareSearchBody(query, sorting, size);
+    serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
-
-    if (_.isUndefined(serviceUrl)) {
+    if (!_.isUndefined(serviceUrlCheck)) {
+        serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
+        searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
+        searchBody = prepareSearchBody(query, sorting, size);
+    }
+    else if (_.isUndefined(serviceUrlCheck)) {
         result.status = "error";
         result.message = "ElasticSearch Service with id " + serviceId + " not found.";
-        // console.error(JSON.stringify(result));
+        console.error(JSON.stringify(result));
         return result;
     }
     else if (_.isUndefined(query)) {
         result.status = "error";
         result.message = "ElasticSearch query not found.";
-        // console.error(JSON.stringify(result));
+        console.error(JSON.stringify(result));
         return result;
     }
 
-    /* eigentlich die schickere Variante, aber läuft nicht im IE...
-    return fetch(searchUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8"
-        },
-        body: searchBody
-    })
-        .then(response => response.json())
-        .then(response => {
-            var datasources = [],
-                param = "_source";
-
-            result.status = "success";
-
-            if (response.hits) {
-                _.each(response.hits.hits, function (hit) {
-                    datasources.push(hit[param]);
-                });
-            }
-
-            result.hits = datasources;
-            return result;
-        })
-        .catch(err => {
-            result.status = "error";
-            result.message = "ElasticSearch query went wrong with message: " + err;
-            console.error("error", err);
-            return result;
-        });*/
 
     $.ajax({
         dataType: "json",
