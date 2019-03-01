@@ -18,7 +18,8 @@ const Layer = Item.extend(
             showSettings: true,
             hitTolerance: 0,
             styleable: false,
-            isNeverVisibleInTree: false
+            isNeverVisibleInTree: false,
+            isRemovable: false
         },
         /**
          * @class Layer
@@ -69,6 +70,7 @@ const Layer = Item.extend(
                 this.prepareLayerObject();
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), this.get("selectionIDX")]);
                 this.setIsVisibleInMap(this.get("isSelected"));
+                this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
                 this.toggleWindowsInterval();
             }
         },
@@ -499,6 +501,17 @@ const Layer = Item.extend(
          */
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
+        },
+        setIsRemovable: function (value) {
+            if (value !== undefined && value !== null && value !== "string") {
+                this.set("isRemovable", value);
+            }
+        },
+        removeLayer: function () {
+            var layer = this.get("id");
+
+            this.setIsVisibleInMap(false);
+            this.collection.removeLayerById(layer);
         }
     });
 

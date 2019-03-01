@@ -402,7 +402,8 @@
       "freeze": true
     },
     "scaleLine": true,
-    "Baumtyp": "light"
+    "Baumtyp": "light",
+    "layersRemovable": true
   },
   "Themenconfig":
   {
