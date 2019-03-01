@@ -628,13 +628,8 @@ const SearchbarView = Backbone.View.extend({
 
         if (_.has(hit, "triggerEvent")) {
             // bei gdi-Suche kein Aktion bei Maushover
-<<<<<<< HEAD
             if (hit.type !== "Fachthema") {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
-=======
-            if (hit.type !== "Thema") {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
->>>>>>> dev
             }
         }
         else if (_.has(hit, "coordinate")) {
