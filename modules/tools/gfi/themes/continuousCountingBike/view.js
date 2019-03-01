@@ -3,7 +3,7 @@ import ContinuousCountingBikeTemplate from "text-loader!./template.html";
 
 const ContinuousCountingBikeView = ThemeView.extend({
     tagName: "div",
-    className: "continousCountingBike",
+    className: "continuousCountingBike",
     template: _.template(ContinuousCountingBikeTemplate),
     events: {
         "click .tab-toggle": "toggleTab",
@@ -133,7 +133,7 @@ const ContinuousCountingBikeView = ThemeView.extend({
      * @return {void}
      */
     fadeInDownloadButton: function () {
-        this.$(".continuuousCountingBike.downloadButton").addClass("in active");
+        this.$(".continuousCountingBike.downloadButton").addClass("in active");
         this.model.createDownloadContent();
     },
     /**

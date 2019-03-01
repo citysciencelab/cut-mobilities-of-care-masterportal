@@ -2,7 +2,7 @@ import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
-const ContinousCountingBikeTheme = Theme.extend({
+const ContinuousCountingBikeTheme = Theme.extend({
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             dayDataset: {},
@@ -10,12 +10,13 @@ const ContinousCountingBikeTheme = Theme.extend({
             yearDataset: {},
             activeTab: "info",
             size: {},
-            downloadData: []
+            downloadData: [],
+            downloadLink: ""
         }),
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.replaceValuesWithChildObjects();
+                // this.replaceValuesWithChildObjects();
                 this.parseGfiContent();
             }
         });
@@ -88,11 +89,11 @@ const ContinousCountingBikeTheme = Theme.extend({
 
         if (!_.isUndefined(this.get("gfiContent"))) {
             gfiContent = this.get("gfiContent")[0];
-            infoGFIContent = _.omit(gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name", "Typ"]);
+            infoGFIContent = _.omit(gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name", "Typ", "Download"]);
             dayLine = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
             lastSevenDaysLine = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
             yearLine = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
-
+            this.setDownloadLink(_.has(gfiContent, "Download") ? gfiContent.Jahrgangslinie : null);
             _.each(infoGFIContent, function (attribute, key) {
                 var gfiAttributes,
                     isnum,
@@ -587,7 +588,12 @@ const ContinousCountingBikeTheme = Theme.extend({
     // setter for yearDataset
     setYearDataset: function (value) {
         this.set("yearDataset", value);
+    },
+
+    // setter for downloadLink
+    setDownloadLink: function (value) {
+        this.set("downloadLink", value);
     }
 });
 
-export default ContinousCountingBikeTheme;
+export default ContinuousCountingBikeTheme;
