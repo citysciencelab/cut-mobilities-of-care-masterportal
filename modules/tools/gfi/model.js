@@ -211,7 +211,7 @@ const Gfi = Tool.extend({
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        unionParams = this.unionAllParams(vectorGFIParams, wmsGFIParams, GFIParams3d);
+        unionParams = vectorGFIParams.concat(wmsGFIParams, GFIParams3d);
 
         if (unionParams.length === 0) {
             this.setIsVisible(false);
@@ -220,30 +220,6 @@ const Gfi = Tool.extend({
             this.get("overlay").setPosition(evt.coordinate);
             this.get("themeList").reset(unionParams);
         }
-    },
-    /**
-     * Unions all gfi params into one array
-     * @param {Object[]} vectorGFIParams All gfi params of vector layers
-     * @param {Object[]} wmsGFIParams All gfi params of wms layers
-     * @param {Object[]} GFIParams3d All gfi params in 3d mode
-     * @returns {Object[]} Array with all gfi params
-     */
-    unionAllParams: function (vectorGFIParams, wmsGFIParams, GFIParams3d) {
-        const unionArray = [];
-
-        vectorGFIParams.forEach(vectorParam => {
-            unionArray.push(vectorParam);
-        });
-
-        wmsGFIParams.forEach(wmsParam => {
-            unionArray.push(wmsParam);
-        });
-
-        GFIParams3d.forEach(gfi3dParam => {
-            unionArray.push(gfi3dParam);
-        });
-
-        return unionArray;
     },
 
     setGfiParams3d: function (evt) {
