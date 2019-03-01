@@ -194,10 +194,10 @@ const Gfi = Tool.extend({
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
-            vectorGFIParams,
-            wmsGFIParams,
+            vectorGFIParams = [],
+            wmsGFIParams = [],
             GFIParams3d = [],
-            unionParams;
+            unionParams = [];
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
@@ -211,14 +211,39 @@ const Gfi = Tool.extend({
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        unionParams = _.union(vectorGFIParams, wmsGFIParams, GFIParams3d);
-        if (_.isEmpty(unionParams)) {
+        unionParams = this.unionAllParams(vectorGFIParams, wmsGFIParams, GFIParams3d);
+
+        if (unionParams.length === 0) {
             this.setIsVisible(false);
         }
         else {
             this.get("overlay").setPosition(evt.coordinate);
-            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams, GFIParams3d));
+            this.get("themeList").reset(unionParams);
         }
+    },
+    /**
+     * Unions all gfi params into one array
+     * @param {Object[]} vectorGFIParams All gfi params of vector layers
+     * @param {Object[]} wmsGFIParams All gfi params of wms layers
+     * @param {Object[]} GFIParams3d All gfi params in 3d mode
+     * @returns {Object[]} Array with all gfi params
+     */
+    unionAllParams: function (vectorGFIParams, wmsGFIParams, GFIParams3d) {
+        const unionArray = [];
+
+        vectorGFIParams.forEach(vectorParam => {
+            unionArray.push(vectorParam);
+        });
+
+        wmsGFIParams.forEach(wmsParam => {
+            unionArray.push(wmsParam);
+        });
+
+        GFIParams3d.forEach(gfi3dParam => {
+            unionArray.push(gfi3dParam);
+        });
+
+        return unionArray;
     },
 
     setGfiParams3d: function (evt) {
@@ -330,25 +355,29 @@ const Gfi = Tool.extend({
                 }),
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 
-            modelAttributes.gfiFeatureList = [];
-
             _.each(features, function (featureAtPixel) {
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.gfiFeatureList.push(featureAtPixel);
+                    modelAttributes.gfiFeatureList = [featureAtPixel];
                     modelAttributes.feature = featureAtPixel;
+                    vectorGfiParams.push(modelAttributes);
                 }
                 // Cluster Feature
                 else {
                     _.each(featureAtPixel.get("features"), function (feature) {
-                        modelAttributes.gfiFeatureList.push(feature);
-                        modelAttributes.feature = feature;
+                        const clonedModelAttributes = _.clone(modelAttributes);
+
+                        clonedModelAttributes.gfiFeatureList = [feature];
+                        clonedModelAttributes.feature = feature;
+                        // dirty hack until gfi gets completely refactored!
+                        // we are resetting the gfitheme-list. and for each model there must be a unique id
+                        // now if we have a cluster feature with 2 features. the layer ids are the same, and only one layer gets added to the themelist
+                        // that is why we add "_[uniqueId]", so that the gfiTheme-list contains two options theme models
+                        clonedModelAttributes.id += _.uniqueId("_");
+                        vectorGfiParams.push(clonedModelAttributes);
                     });
                 }
             }, this);
-            if (!_.isEmpty(modelAttributes.gfiFeatureList)) {
-                vectorGfiParams.push(modelAttributes);
-            }
         }, this);
 
         return vectorGfiParams;
