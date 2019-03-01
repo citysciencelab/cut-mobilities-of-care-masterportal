@@ -23,9 +23,9 @@ const ItGbmTheme = Theme.extend({
     },
     /**
     * adds " ha" on Gewerbliche Standorte and " m²" on Flurstücke where key is inside attrArray
-    * @param {object} gfiContent -
-    * @param {string[]} attrArray -
-    * @returns {object} gfiContent
+    * @param {Object} gfiContent -
+    * @param {String[]} attrArray -
+    * @returns {Object} gfiContent
     */
     addUnits: function (gfiContent, attrArray) {
         _.each(gfiContent, function (value, key) {
@@ -43,8 +43,8 @@ const ItGbmTheme = Theme.extend({
     },
     /**
      * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {[type]} value - feature attribute values
-     * @return {[type]} newValue - feature attribute values as string with new punctuation
+     * @param  {String} value - feature attribute values
+     * @return {String} newValue - feature attribute values as string with new punctuation
      */
     punctuate: function (value) {
         var pattern = /(-?\d+)(\d{3})/,

@@ -1,7 +1,7 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
 
-const LayerInformation = Backbone.Model.extend({
+const LayerInformationModel = Backbone.Model.extend({
     defaults: {
         // konfiguriert in der rest-services.json
         cswId: "3",
@@ -155,4 +155,4 @@ const LayerInformation = Backbone.Model.extend({
     }
 });
 
-export default LayerInformation;
+export default LayerInformationModel;

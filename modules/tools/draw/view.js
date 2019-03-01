@@ -1,18 +1,7 @@
-/**
- * Module for drawing different geometries and text
- * @exports module:lgv.lgv/modules/tools/draw/view
- * @module lgv/modules/tools/draw/view
- */
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
 
 const DrawToolView = Backbone.View.extend({
-    /**
-     * @class DrawTool
-     * @name module:lgv.lgv/modules/tools/draw/view
-     * @constructor
-     * @augments Backbone.Model
-     */
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
@@ -32,7 +21,7 @@ const DrawToolView = Backbone.View.extend({
     /**
      * initialize the drawTool
      * that would be called by creates this tool
-     * craete an instance from download tool
+     * create an instance from download tool
      * @return {void}
      */
     initialize: function () {

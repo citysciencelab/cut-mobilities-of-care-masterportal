@@ -16,13 +16,13 @@
               <% }); %>
             <% } %>
 
-            <% if (datePublication !== null) { %>
+            <% if (typeof datePublication !== "undefined" && datePublication !== null) { %>
                 <p>Publikation / Erstellung: <%= datePublication %></p>
             <% } %>
-            <% if (dateRevision !== null) { %>
+            <% if (typeof dateRevision !== "undefined" && dateRevision !== null) { %>
                 <p>Letzte Änderung: <%= dateRevision %></p>
             <% } %>
-            <% if (periodicity !== null) { %>
+            <% if (typeof periodicity !== "undefined" && periodicity !== null) { %>
                 <p>Periodizität: <%= periodicity %></p>
             <% } %>
                 <hr>

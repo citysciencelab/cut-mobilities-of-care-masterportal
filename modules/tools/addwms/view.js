@@ -1,7 +1,3 @@
-/**
-@Discription Stellt das Tool-fenster da, in dem ein WMS per URL angefordert werden kann
-@Author: RL
-**/
 import AddWMSWin from "text-loader!./template.html";
 
 const AddWMSView = Backbone.View.extend({

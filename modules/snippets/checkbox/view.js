@@ -20,7 +20,7 @@ const CheckboxSnippetView = Backbone.View.extend({
 
     render: function () {
         var attr = this.model.toJSON();
-        
+
         if (attr.snippetType === "checkbox-classic") {
             this.$el.html(this.templateClassic(attr));
             this.delegateEvents();

@@ -52,7 +52,7 @@ const SourceModel = QueryModel.extend({
     },
     /**
      * Waits for the Layer to load its features and proceeds requests the metadata
-     * @return {[type]} [description]
+     * @return {void}
      */
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("Layer"), {
@@ -154,7 +154,7 @@ const SourceModel = QueryModel.extend({
      * [getValuesFromFeature description]
      * @param  {ol.feature} feature olfeature
      * @param  {string} attrName [description]
-     * @return {[string]}          [description]
+     * @return {string[]} [description]
      */
     getValuesFromFeature: function (feature, attrName) {
         var values = this.parseValuesFromString(feature, attrName);
@@ -166,7 +166,7 @@ const SourceModel = QueryModel.extend({
      * parses attribute values with pipe-sign ("|") and returnes array with single values
      * @param  {ol.feature} feature olfeature
      * @param  {string} attributeName - key name of a feature attribute
-     * @return {array} array of string[] || number[]
+     * @return {string[]} array of string[] || number[]
      */
     parseValuesFromString: function (feature, attributeName) {
         var values = [],
@@ -235,7 +235,7 @@ const SourceModel = QueryModel.extend({
      * runs predefined rules,
      * determines selected values from snippets,
      * derives featureIds from matching Features and triggers "featureIdsChanged" to filterModel
-     * @return {[type]} [description]
+     * @return {void}
      */
     runFilter: function () {
         var features = this.runPredefinedRules(),

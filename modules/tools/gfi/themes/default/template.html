@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <tbody>
+<% let anlagenCounter = 1; %>
 <%  _.each(gfiContent[0], function(value, key) {
         if (infoFormat === "text/html") { %>
             <tr colspan="1" >
@@ -18,10 +19,17 @@
     </td>
     <td>
         <% if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") { %>
-            <!-- Hack für Flüchtlingsportal -->
-            <% _.each(value.split("|"), function (val, index) { %>
-                <a href="<%= val %>" target="_blank">Anlage <%= index + 1 %></a><br>
-            <% }); %>
+            <% if (value.split("|").length > 1) { %>
+                <% _.each(value.split("|"), function (val) { %>
+                    <a href="<%= val %>" target="_blank">Anlage <%= anlagenCounter %></a><br>
+                    <% anlagenCounter++; %>
+                <% }); %>
+            <% }
+            else { %>
+                <a href="<%= value %>" target="_blank">Anlage <%= anlagenCounter %></a>
+                <% anlagenCounter++; %>
+            <% } %>
+
         <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") { %>
             <a href="<%= value %>" target="_blank">Link</a>
         <% } else if (value.substr(0, 4) == "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49"
