@@ -358,29 +358,37 @@ const Gfi = Tool.extend({
             _.each(features, function (featureAtPixel) {
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.gfiFeatureList = [featureAtPixel];
-                    modelAttributes.feature = featureAtPixel;
-                    vectorGfiParams.push(modelAttributes);
+                    vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, featureAtPixel));
                 }
                 // Cluster Feature
                 else {
                     _.each(featureAtPixel.get("features"), function (feature) {
-                        const clonedModelAttributes = _.clone(modelAttributes);
-
-                        clonedModelAttributes.gfiFeatureList = [feature];
-                        clonedModelAttributes.feature = feature;
-                        // dirty hack until gfi gets completely refactored!
-                        // we are resetting the gfitheme-list. and for each model there must be a unique id
-                        // now if we have a cluster feature with 2 features. the layer ids are the same, and only one layer gets added to the themelist
-                        // that is why we add "_[uniqueId]", so that the gfiTheme-list contains two options theme models
-                        clonedModelAttributes.id += _.uniqueId("_");
-                        vectorGfiParams.push(clonedModelAttributes);
-                    });
+                        vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, feature));
+                    }, this);
                 }
             }, this);
         }, this);
 
         return vectorGfiParams;
+    },
+
+    /**
+     * Adds gfifeatureList and feature to model attributes.
+     * Manipulates the model id which is a DIRTY HACK until gfi gets completely refactored!
+     * we are resetting the gfitheme-list. and for each model there must be a unique id
+     * now if we have a cluster feature with 2 features. the layer ids are the same, and only one layer gets added to the themelist
+     * that is why we add "_[uniqueId]", so that the gfiTheme-list contains two options theme models
+     * @param {Object} modelAttributes Model attributes needed for gfi
+     * @param {ol.feature} feature Vector feature that was found on click event
+     * @returns {Object} Prepared vector gfi param
+     */
+    prepareVectorGfiParam: function (modelAttributes, feature) {
+        const clonedModelAttributes = _.clone(modelAttributes);
+
+        clonedModelAttributes.gfiFeatureList = [feature];
+        clonedModelAttributes.feature = feature;
+        clonedModelAttributes.id += _.uniqueId("_");
+        return clonedModelAttributes;
     },
 
     /**
