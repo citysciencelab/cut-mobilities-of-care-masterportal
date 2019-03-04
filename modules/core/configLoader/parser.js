@@ -410,7 +410,8 @@ const Parser = Backbone.Model.extend({
     addTreeMenuItems: function (treeType) {
         var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
             tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
-            isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [];
+            isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
+            isMobile = Radio.request("Util", "isViewMobile");
 
         this.addItem({
             type: "folder",
@@ -423,7 +424,8 @@ const Parser = Backbone.Model.extend({
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
             level: 0
         });
-        if (treeType === "default" || !_.isUndefined(this.get("overlayer_3d"))) {
+
+        if (!isMobile && (treeType === "default" || !_.isUndefined(this.get("overlayer_3d")))) {
             this.addItem({
                 type: "folder",
                 name: "3D Daten",
