@@ -107,8 +107,11 @@ const DefaultTreeParser = Parser.extend({
         }, this);
     },
     create3dLayer: function (layerList) {
+        var isMobile = Radio.request("Util", "isViewMobile"),
+            isVisibleInTree = isMobile ? "false" : "true";
+
         _.each(layerList, function (layer) {
-            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: "true"}, layer));
+            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: isVisibleInTree}, layer));
         }, this);
     },
 
