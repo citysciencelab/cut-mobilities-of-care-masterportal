@@ -141,7 +141,7 @@ describe("tools/styleWMS/model", function () {
             styleWMS.setNumberOfClasses(2);
 
             // Assume that the SLD is valid xml. if it is not the before-block will fail after this line.
-            sld = $.parseXML(styleWMS.createAndGetRootElement());
+            sld = $.parseXML(styleWMS.createEsriRootElement());
             $sld = $(sld);
         });
 
@@ -269,17 +269,6 @@ describe("tools/styleWMS/model", function () {
                 }
 
             });
-        });
-
-        it("should include the custom sld if set", function () {
-            var styleWMS,
-                params;
-
-            styleWMS = new CustomStyleWMS();
-            styleWMS.createSLD();
-            params = styleWMS.get("model").get("layer").getSource().getParams();
-
-            expect(_.isEqual({testParam: "yes", SLD_BODY: "<testSLD></testSLD>", STYLES: "style"}, params)).to.be.equal(true);
         });
 
         it("should vanish after reseting the style", function () {

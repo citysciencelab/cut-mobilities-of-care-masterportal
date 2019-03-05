@@ -194,10 +194,10 @@ const Gfi = Tool.extend({
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
             visibleVectorLayerList = gfiParamsList.vectorLayerList,
-            vectorGFIParams,
-            wmsGFIParams,
+            vectorGFIParams = [],
+            wmsGFIParams = [],
             GFIParams3d = [],
-            unionParams;
+            unionParams = [];
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
@@ -211,13 +211,14 @@ const Gfi = Tool.extend({
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
-        unionParams = _.union(vectorGFIParams, wmsGFIParams, GFIParams3d);
-        if (_.isEmpty(unionParams)) {
+        unionParams = vectorGFIParams.concat(wmsGFIParams, GFIParams3d);
+
+        if (unionParams.length === 0) {
             this.setIsVisible(false);
         }
         else {
             this.get("overlay").setPosition(evt.coordinate);
-            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams, GFIParams3d));
+            this.get("themeList").reset(unionParams);
         }
     },
 
@@ -330,28 +331,40 @@ const Gfi = Tool.extend({
                 }),
                 modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
 
-            modelAttributes.gfiFeatureList = [];
-
             _.each(features, function (featureAtPixel) {
                 // Feature
                 if (_.has(featureAtPixel.getProperties(), "features") === false) {
-                    modelAttributes.gfiFeatureList.push(featureAtPixel);
-                    modelAttributes.feature = featureAtPixel;
+                    vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, featureAtPixel));
                 }
                 // Cluster Feature
                 else {
                     _.each(featureAtPixel.get("features"), function (feature) {
-                        modelAttributes.gfiFeatureList.push(feature);
-                        modelAttributes.feature = feature;
-                    });
+                        vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, feature));
+                    }, this);
                 }
             }, this);
-            if (!_.isEmpty(modelAttributes.gfiFeatureList)) {
-                vectorGfiParams.push(modelAttributes);
-            }
         }, this);
 
         return vectorGfiParams;
+    },
+
+    /**
+     * Adds gfifeatureList and feature to model attributes.
+     * Manipulates the model id which is a DIRTY HACK until gfi gets completely refactored!
+     * we are resetting the gfitheme-list. and for each model there must be a unique id
+     * now if we have a cluster feature with 2 features. the layer ids are the same, and only one layer gets added to the themelist
+     * that is why we add "_[uniqueId]", so that the gfiTheme-list contains two options theme models
+     * @param {Object} modelAttributes Model attributes needed for gfi
+     * @param {ol.feature} feature Vector feature that was found on click event
+     * @returns {Object} Prepared vector gfi param
+     */
+    prepareVectorGfiParam: function (modelAttributes, feature) {
+        const clonedModelAttributes = _.clone(modelAttributes);
+
+        clonedModelAttributes.gfiFeatureList = [feature];
+        clonedModelAttributes.feature = feature;
+        clonedModelAttributes.id += _.uniqueId("_");
+        return clonedModelAttributes;
     },
 
     /**
