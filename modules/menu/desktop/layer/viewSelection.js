@@ -70,9 +70,6 @@ const LayerView = Backbone.View.extend({
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
         }
-        if (!_.has(Radio.request("Parser", "getPortalConfig").searchBar, "gdi")) {
-            this.$el.find(".remove-layer").remove();
-        }
     },
 
     toggleIsSelected: function () {

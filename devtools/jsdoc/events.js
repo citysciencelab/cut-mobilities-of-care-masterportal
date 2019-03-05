@@ -394,3 +394,135 @@
  * @event List#UpdateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
+
+
+/** -------------------- SEARCHBAR -------------------- */
+
+/**
+ * @event Searchbar#renderRecommendedList
+ * @description is triggered by SearchbarModel
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarDeleteSearchString
+ * @description is triggered by SearchbarModel
+ * @example Radio.trigger("Searchbar", "deleteSearchString");
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarSetFocus
+ * @description is triggered by SearchbarModel
+ * @example Radio.trigger("Searchbar", "setFocus");
+ */
+
+/**
+ * @event Searchbar#RadioTriggerViewZoomHitSelected
+ * @description is triggered by HitSelected
+ * @example Radio.trigger("ViewZoom", "hitSelected");
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarSearchAll
+ * @description trigger searchString to Searchbar
+ * @param {String} searchString contains the string to search
+ * @example Radio.trigger("Searchbar", "searchAll", searchString);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarHit
+ * @description triggers the hit
+ * @param {String} hit contains the hit
+ * @example Radio.trigger("Searchbar", "hit", hit);
+ */
+
+
+/** -------------------- MENU -------------------- */
+
+/**
+ * @event Menu#RadioTriggerTableMenuHideMenuElementSearchbar
+ * @description is triggered by TableMenu
+ * @example Radio.trigger("TableMenu", "hideMenuElementSearchbar")
+ */
+
+/**
+ * @event Menu#RadioTriggerMenuLoaderReady
+ * @description is triggered by MenuLoader
+ * @param {String} parentElementId id from parent
+ * @example Radio.trigger("MenuLoader", "ready", parentElementId)
+ */
+
+/**
+ * @event Menu#RadioTriggerTableMenuDeactivateCloseClickFrame
+ * @description foobar
+ * @example Radio.trigger("TableMenu", "deactivateCloseClickFrame");
+ */
+
+
+/** -------------------- UTIL -------------------- */
+
+/**
+ * @event Util#RadioTriggerUtilIsViewMobileChanged
+ * @description is triggered by Util if mobil is changed
+ * @param {boolean} isViewMobile flag if current view is in mobile mode
+ * @example Radio.trigger("Util", "isViewMobileChangend", isViewMobile)
+ */
+
+
+/** -------------------- QUICKHELP -------------------- */
+
+/**
+ * @event Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+ * @description is triggered by Quickhelp
+ * @param {String} topic topic for quickhelp to show
+ * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
+ */
+
+
+/** -------------------- TITLE -------------------- */
+
+/**
+ * @event Title#RadioTriggerTitleSetSize
+ * @description is triggered when title has to be resized
+ * @example Radio.trigger("Title", "setSize");
+ */
+
+
+/** -------------------- GFI -------------------- */
+
+/**
+ * @event GFI#RadioTriggerGFISetIsVisible
+ * @description sets isVisible
+ * @param {boolean} isVisible visibility of gfi
+ * @example Radio.trigger("GFI", "setIsVisible", false);
+ */
+
+
+/** -------------------- MAPMARKER -------------------- */
+
+/**
+ * @event MapMarker#RadioTriggerMapMarkerZoomTo
+ * @description triggers MapMarker to zoom to given hit using given scale
+ * @param {object} hit contains the hit
+ * @param {number} scale for map
+ * @example Radio.trigger("MapMarker", "zoomTo", hit, scale);
+ */
+
+/**
+ * @event MapMarker#RadioTriggerMapMarkerHideMarker
+ * @description hides the mapMarker
+ * @example Radio.trigger("MapMarker", "hideMarker");
+ */
+
+/**
+ * @event MapMarker#RadioTriggerMapMarkerHidePolygon
+ * @description hides the mapMarkerPolygon
+ * @example Radio.trigger("MapMarker", "hidePolygon");
+ */
+
+/**
+ * @event MapMarker#RadioTriggerMapMarkerShowMarker
+ * @description shows the mapMarker
+ * @param {number[]} coordinate mapMarker position
+ * @example Radio.trigger("MapMarker", "showMarker", coordinate);
+ */
+
