@@ -13,7 +13,37 @@ import OSMModel from "./OSM/model";
 import GdiModel from "./gdi/model";
 import Searchbar from "./model";
 
-const SearchbarView = Backbone.View.extend({
+/**
+ * @member SearchbarTemplate
+ * @description Template for searchbar
+ * @memberof Searchbar
+ */
+/**
+ * @member TemplateTable
+ * @description Template for table
+ * @memberof Searchbar
+ */
+/**
+ * @member SearchbarRecommendedListTemplate
+ * @description Template for recommendedList
+ * @memberof Searchbar
+ */
+/**
+ * @member SearchbarHitListTemplate
+ * @description Template for hitList
+ * @memberof Searchbar
+ */
+/**
+ * @member SearchbarRecommendedListTableTemplate
+ * @description Template for recommendedListTable
+ * @memberof Searchbar
+ */
+/**
+ * @member SearchbarHitListTableTemplate
+ * @description Template for hitListTable
+ * @memberof Searchbar
+ */
+const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */{
     events: {
         "paste input": "waitForEvent",
         "keyup input": "waitForEvent",
@@ -43,6 +73,29 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * @class SearchbarView
+     * @extends Backbone.View
+     * @memberof Searchbar
+     * @constructs
+     * @param {Object} config config
+     * @listens Searchbar#renderRecommendedList
+     * @listens Menu#RadioTriggerTableMenuHideMenuElementSearchbar
+     * @listens Searchbar#RadioTriggerSearchbarDeleteSearchString
+     * @listens Searchbar#RadioTriggerSearchbarSetFocus
+     * @listens Menu#RadioTriggerMenuLoaderReady
+     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Searchbar#RadioTriggerViewZoomHitSelected
+     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @fires Title#RadioTriggerTitleSetSize
+     * @fires Searchbar#RadioTriggerSearchbarSearchAll
+     * @fires GFI#RadioTriggerGFISetIsVisible
+     * @fires MapMarker#RadioTriggerMapMarkerZoomTo
+     * @fires Searchbar#RadioTriggerSearchbarHit
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function (config) {
         this.model = new Searchbar(config);
 
@@ -53,8 +106,8 @@ const SearchbarView = Backbone.View.extend({
 
         this.className = "navbar-form col-xs-9";
 
-        this.listenTo(this.model, "renderRecommendedList", function () {
-            this.renderRecommendedList();
+        this.listenTo(this.model, {
+            "renderRecommendedList": this.renderRecommendedList
         });
 
         this.listenTo(Radio.channel("TableMenu"), {
@@ -149,6 +202,10 @@ const SearchbarView = Backbone.View.extend({
     templateTableRecommendedList: _.template(SearchbarRecommendedListTableTemplate),
     templateHitList: _.template(SearchbarHitListTemplate),
     templateTableHitList: _.template(SearchbarHitListTableTemplate),
+    /**
+     * todo
+     * @returns {*} todo
+     */
     render: function () {
         var attr = this.model.toJSON(),
             menuStyle = Radio.request("Util", "getUiStyle");
@@ -172,6 +229,11 @@ const SearchbarView = Backbone.View.extend({
         }
         return this;
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     initialRender: function () {
         this.render();
         if (!_.isUndefined(this.model.get("initSearchString"))) {
@@ -193,6 +255,7 @@ const SearchbarView = Backbone.View.extend({
     setSearchbarString: function (searchstring) {
         this.$("#searchInput").val(searchstring);
     },
+
     /**
     * @description Verbirgt die Menubar
     * @returns {void}
@@ -201,6 +264,10 @@ const SearchbarView = Backbone.View.extend({
         this.$(".dropdown-menu-search").hide();
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     renderRecommendedList: function () {
         var attr = this.model.toJSON();
 
@@ -229,6 +296,12 @@ const SearchbarView = Backbone.View.extend({
         }
         this.$("#searchInput + span").show();
     },
+
+    /**
+     * todo
+     * @param {*} hitlist todo
+     * @returns {*} todo
+     */
     prepareAttrStrings: function (hitlist) {
         // kepps hit.names from overflowing
         _.each(hitlist, function (hit) {
@@ -243,10 +316,18 @@ const SearchbarView = Backbone.View.extend({
         }, this);
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     searchAll: function () {
         Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     renderHitList: function () {
         var attr;
 
@@ -320,6 +401,11 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * todo
+     * @param {*} e todo
+     * @returns {*} todo
+     */
     navigateList: function (e) {
         var selected = {},
             firstListElement = {},
@@ -353,30 +439,75 @@ const SearchbarView = Backbone.View.extend({
             }
         }
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     getSelectedElement: function () {
         return this.$el.find(this.searchbarKeyNavSelector + " .selected");
     },
 
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     clearSelection: function () {
         this.getSelectedElement().removeClass("selected");
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     isLastElement: function (element) {
         return element.is(":last-child");
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     isFirstElement: function (element) {
         return element.is(":first-child");
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     isChildElement: function (element) {
         return element.parent().prev().hasClass("type");
     },
 
+    /**
+     * todo
+     * @param {*} selected todo
+     * @returns {*} todo
+     */
     getFirstChildElement: function (selected) {
         return selected.next().children().first();
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     isFolderElement: function (element) {
         return element.hasClass("type");
     },
 
+    /**
+     * todo
+     * @param {*} li todo
+     * @returns {*} todo
+     */
     scrollToNext: function (li) {
         var parent = li.parent(),
             pos = parent.scrollTop(),
@@ -384,6 +515,12 @@ const SearchbarView = Backbone.View.extend({
 
         parent.scrollTop(scrollHeight);
     },
+
+    /**
+     * todo
+     * @param {*} li todo
+     * @returns {*} todo
+     */
     scrollToPrev: function (li) {
         var parent = li.parent(),
             pos = parent.scrollTop(),
@@ -391,10 +528,21 @@ const SearchbarView = Backbone.View.extend({
 
         parent.scrollTop(scrollHeight);
     },
+
+    /**
+     * todo
+     * @param {*} element todo
+     * @returns {*} todo
+     */
     resetScroll: function (element) {
         element.scrollTop(0);
     },
 
+    /**
+     * todo
+     * @param {*} selected todo
+     * @returns {*} todo
+     */
     nextElement: function (selected) {
         var next = {};
 
@@ -425,10 +573,20 @@ const SearchbarView = Backbone.View.extend({
         next.addClass("selected");
     },
 
+    /**
+     * todo
+     * @param {*} selected todo
+     * @returns {*} todo
+     */
     getNextElement: function (selected) {
         return selected.nextAll("li:first");
     },
 
+    /**
+     * todo
+     * @param {*} selected todo
+     * @returns {*} todo
+     */
     prevElement: function (selected) {
         var prev = {};
 
@@ -456,9 +614,19 @@ const SearchbarView = Backbone.View.extend({
         }
         prev.addClass("selected");
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     getFirstElement: function () {
         return this.$el.find(this.searchbarKeyNavSelector + " li").first();
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     getLastElement: function () {
         return this.$el.find(this.searchbarKeyNavSelector + " li").last();
     },
@@ -518,6 +686,11 @@ const SearchbarView = Backbone.View.extend({
         this.setSearchString(evt);
     },
 
+    /**
+     * todo
+     * @param {*} evt todo
+     * @returns {*} todo
+     */
     setSearchString: function (evt) {
         if (evt.target.value.length === 0) {
             // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
@@ -576,6 +749,11 @@ const SearchbarView = Backbone.View.extend({
         this.model.setSearchFieldisSelected(selectedElement);
     },
 
+    /**
+     * todo
+     * @param {*} target todo
+     * @returns {*} todo
+     */
     collapseHits: function (target) {
         this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
         if (target.next().css("display") === "block") {
@@ -589,6 +767,11 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * todo
+     * @param {*} evt todo
+     * @returns {*} todo
+     */
     toggleStyleForRemoveIcon: function (evt) {
         if (evt.type === "focusin") {
             if (navigator.appVersion.indexOf("MSIE 9.") !== -1) {
@@ -608,6 +791,10 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     deleteSearchString: function () {
         this.model.setSearchString("");
         this.$("#searchInput").val("");
@@ -622,6 +809,11 @@ const SearchbarView = Backbone.View.extend({
 
     },
 
+    /**
+     * todo
+     * @param {*} evt todo
+     * @returns {*} todo
+     */
     showMarker: function (evt) {
         var hitId = evt.currentTarget.id,
             hit = _.findWhere(this.model.get("hitList"), {id: hitId});
@@ -640,15 +832,23 @@ const SearchbarView = Backbone.View.extend({
         }
     },
 
+    /**
+     * hides the map marker
+     * @param {event} evt mouse leave event
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @returns {void}
+     */
     hideMarker: function (evt) {
-        var hitId = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+        var hitId,
+            hit;
 
-        if (_.has(hit, "triggerEvent")) {
-        // bei gdi-Suche kein Aktion bei Maushover
-            if (hit.type !== "Thema") {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
-            }
+        if (!_.isUndefined(evt)) {
+            hitId = evt.currentTarget.id;
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+        }
+
+        if (_.has(hit, "triggerEvent") && hit.type !== "Thema") {
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
         }
         else if (this.$(".dropdown-menu-search").css("display") === "block") {
             Radio.trigger("MapMarker", "hideMarker");
