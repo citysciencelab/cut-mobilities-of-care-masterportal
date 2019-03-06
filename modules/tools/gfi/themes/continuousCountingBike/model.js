@@ -97,7 +97,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
             _.each(infoGFIContent, function (attribute, key) {
                 var gfiAttributes,
                     isnum,
-                    editedAttribute;
+                    editedAttribute,
+                    strongestFrequentedMonth;
 
                 if (attribute.indexOf("|") !== -1) {
                     isnum = new RegExp(/^\d+$/).test(attribute.split("|")[1]);
@@ -106,7 +107,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
                         editedAttribute[1] = Radio.request("Util", "punctuate", editedAttribute[1]);
                     }
                     if (key === "Stärkster Monat im Jahr") {
-                        editedAttribute[0] = moment(editedAttribute[0], "month", "de").format("MMMM");
+                        strongestFrequentedMonth = new Date(2019, editedAttribute[0] - 1);
+                        editedAttribute[0] = moment(strongestFrequentedMonth, "month", "de").format("MMMM");
                     }
                     gfiAttributes = {
                         attrName: key,
