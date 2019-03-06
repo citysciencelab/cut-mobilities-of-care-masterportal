@@ -363,6 +363,7 @@ const Gfi = Tool.extend({
 
         clonedModelAttributes.gfiFeatureList = [feature];
         clonedModelAttributes.feature = feature;
+        clonedModelAttributes.themeId = clonedModelAttributes.id;
         clonedModelAttributes.id += _.uniqueId("_");
         return clonedModelAttributes;
     },
