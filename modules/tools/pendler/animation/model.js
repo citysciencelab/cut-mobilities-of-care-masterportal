@@ -87,7 +87,7 @@ const Animation = PendlerCoreModel.extend({
     /**
      * Bricht eine Animation ab (und entfernt die zugehörigen Punkte).
      * Verwendung beispielsweise bei Änderung der Abfrageparameter.
-     * @returns {Void} Kein Rückgabewert
+     * @returns {void} Kein Rückgabewert
      */
     clear: function () {
         var animationLayer;
@@ -148,7 +148,6 @@ const Animation = PendlerCoreModel.extend({
         this.setMinVal(min);
         max = _.first(coloredFeatures).get(this.get("attrAnzahl"));
         this.setMaxVal(max);
-
 
         this.preparePendlerLegend(coloredFeatures);
         this.createLineString(coloredFeatures);
@@ -224,8 +223,9 @@ const Animation = PendlerCoreModel.extend({
             this.setAnimationLimit(1);
         }
         this.setAnimationCount(0);
+        animationLayer.getSource().clear();
+        animationLayer.setZIndex(9);
         this.setAnimationLayer(animationLayer);
-        this.get("animationLayer").getSource().clear();
         this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.moveFeature.bind(this)));
         if (this.get("animating")) {
             this.stopAnimation([]);
@@ -241,7 +241,7 @@ const Animation = PendlerCoreModel.extend({
     },
     /**
      * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
-     * @param  {[type]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
+     * @param  {type[]} features werden für das hinzufügen auf die Layer nach der naimation durchgereicht
      * @returns {void}
      */
     repeatAnimation: function (features) {
@@ -329,7 +329,7 @@ const Animation = PendlerCoreModel.extend({
      * Füge Punkte nach Ende der Animation dem Layer hinzu
      * @param {Object[]} features Hinzuzufügende Features
      * @param {Object} layer Ziel-Layer
-     * @returns {Void} Keine Rückgabe
+     * @returns {void} Keine Rückgabe
      */
     addFeaturesToLayer: function (features, layer) {
         var currentPoint, coordinates,

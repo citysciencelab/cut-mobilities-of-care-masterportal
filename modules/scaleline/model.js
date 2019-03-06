@@ -1,4 +1,4 @@
-const ScaleLine = Backbone.Model.extend({
+const ScaleLineModel = Backbone.Model.extend({
 
     defaults: {
         // Maßstabszahl
@@ -61,4 +61,4 @@ const ScaleLine = Backbone.Model.extend({
 
 });
 
-export default ScaleLine;
+export default ScaleLineModel;

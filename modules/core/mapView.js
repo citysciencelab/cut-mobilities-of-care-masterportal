@@ -2,9 +2,6 @@ import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
 
 const MapView = Backbone.Model.extend({
-    /**
-     *
-     */
     defaults: {
         epsg: "EPSG:25832",
         background: "",
@@ -126,14 +123,17 @@ const MapView = Backbone.Model.extend({
             this.setResolution(resolution);
         }
         this.setResolutions();
-        this.setUrlParams();
         this.setProjection();
-        this.setView();
+        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
+        this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
+        this.prepareView();
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
         this.get("view").on("change:center", function () {
             Radio.trigger("MapView", "changedCenter", this.getCenter());
+            Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
     },
 
@@ -153,6 +153,7 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("MapView", "changedOptions", params);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
         Radio.trigger("ClickCounter", "zoomChanged");
+        Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
     },
 
     /**
@@ -183,22 +184,6 @@ const MapView = Backbone.Model.extend({
         Radio.trigger("MapMarker", "hideMarker");
     },
 
-    setUrlParams: function () {
-        /*
-        *   Auslesen und Überschreiben durch Werte aus ParamUrl
-        */
-        var centerFromParamUrl = Radio.request("ParametricURL", "getCenter"),
-            zoomLevelFromParamUrl = Radio.request("ParametricURL", "getZoomLevel");
-
-        if (!_.isUndefined(centerFromParamUrl)) {
-            this.setStartCenter(centerFromParamUrl);
-        }
-
-        if (!_.isUndefined(zoomLevelFromParamUrl)) {
-            this.set("resolution", this.get("resolutions")[zoomLevelFromParamUrl]);
-        }
-    },
-
     setBackground: function (value) {
         this.set("background", value);
     },
@@ -207,8 +192,21 @@ const MapView = Backbone.Model.extend({
         this.set("backgroundImage", value);
     },
 
-    setStartCenter: function (value) {
-        this.set("startCenter", value);
+    prepareStartCenter: function (value) {
+        var startCenter = value;
+
+        if (!_.isUndefined(startCenter)) {
+            if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
+                startCenter = Radio.request("CRS", "transformToMapProjection", this.get("projectionFromParamUrl"), startCenter);
+            }
+            this.setStartCenter(startCenter);
+        }
+    },
+
+    setStartZoomLevel: function (value) {
+        if (!_.isUndefined(value)) {
+            this.set("resolution", this.get("resolutions")[value]);
+        }
     },
 
     setResolution: function (value) {
@@ -259,15 +257,17 @@ const MapView = Backbone.Model.extend({
         this.set("projection", proj);
     },
 
-    setView: function () {
-        var view = new View({
+    prepareView: function () {
+        this.setView(new View({
             projection: this.get("projection"),
             center: this.get("startCenter"),
             extent: this.get("extent"),
             resolution: this.get("resolution"),
             resolutions: this.get("resolutions")
-        });
+        }));
+    },
 
+    setView: function (view) {
         this.set("view", view);
     },
 
@@ -329,8 +329,8 @@ const MapView = Backbone.Model.extend({
     },
 
     /**
-     *
-     * @return {[type]} [description]
+     * Return current Zoom of MapView
+     * @return {float} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();
@@ -344,6 +344,14 @@ const MapView = Backbone.Model.extend({
         var mapSize = Radio.request("Map", "getSize");
 
         return this.get("view").calculateExtent(mapSize);
+    },
+
+    setProjectionFromParamUrl: function (projection) {
+        this.set("projectionFromParamUrl", projection);
+    },
+
+    setStartCenter: function (value) {
+        this.set("startCenter", value);
     }
 });
 

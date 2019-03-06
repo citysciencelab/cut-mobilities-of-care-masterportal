@@ -8,7 +8,7 @@ import {createBox} from "ol/interaction/Draw.js";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
-const Einwohnerabfrage = Tool.extend({
+const EinwohnerabfrageModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         renderToWindow: true,
@@ -609,4 +609,4 @@ const Einwohnerabfrage = Tool.extend({
     }
 });
 
-export default Einwohnerabfrage;
+export default EinwohnerabfrageModel;

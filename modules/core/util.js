@@ -56,7 +56,7 @@ const Util = Backbone.Model.extend({
     },
     /**
      * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {[type]} value - feature attribute values
+     * @param  {String} value - feature attribute values
      * @returns {string} punctuated value
      */
     punctuate: function (value) {
@@ -265,7 +265,7 @@ const Util = Backbone.Model.extend({
     /**
      * Setter für Attribut isViewMobile
      * @param {boolean} value sichtbar
-     * @return {undefined}
+     * @return {void}
      */
     setIsViewMobile: function (value) {
         this.set("isViewMobile", value);
@@ -273,7 +273,7 @@ const Util = Backbone.Model.extend({
 
     /**
      * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
-     * @return {undefined}
+     * @return {void}
      */
     toggleIsViewMobile: function () {
         if (window.innerWidth >= 768) {

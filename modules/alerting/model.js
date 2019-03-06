@@ -1,32 +1,37 @@
-const AlertingModel = Backbone.Model.extend({
+const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
     defaults: {
-        // http://getbootstrap.com/components/#alerts-examples
+        channel: Radio.channel("Alert"),
         category: "alert-info",
-        // true wenn Close Button dargestellt werden soll
         isDismissable: true,
-        // true wenn OK Button dargestellt werden soll
         isConfirmable: false,
-        // Position der Messages [top-center | center-center]
         position: "top-center",
-        // letzte/aktuelle Alert Message
         message: "",
         animation: false
     },
+    /**
+     * @class AlertingModel
+     * @extends Backbone.Model
+     * @memberof Alerting
+     * @constructs
+     * @property {Radio.channel} channel=Radio.channel("Alert") Radio channel for communication
+     * @property {String} category="alert-info" Category of alert. bootstrap css class
+     * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
+     * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
+     * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
+     * @property {String} message="" The message of the alert
+     * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
+     * @fires AlertingModel#render
+     * @listens AlertingModel#RadioTriggerAlertAlert
+     */
     initialize: function () {
-        var channel = Radio.channel("Alert");
-
-        this.listenTo(channel, {
-            "alert": this.setParams,
-            "alert:remove": function () {
-                this.trigger("removeAll");
-            }
+        this.listenTo(this.get("channel"), {
+            "alert": this.setParams
         }, this);
     },
-
     /**
-     * Wird ein String übergeben, handelt es sich dabei um die Alert Message
-     * Ist es ein Objekt, werden die entsprechenden Attribute gesetzt
-     * @param {String|Object} val -
+     * Sets given parameters on model.
+     * @param {String|Object} val Value string or object with information about the alert
+     * @fires  AlertingModel#event:render
      * @returns {void}
      */
     setParams: function (val) {
@@ -37,7 +42,7 @@ const AlertingModel = Backbone.Model.extend({
         else if (_.isObject(val)) {
             this.setMessage(val.text);
             if (_.has(val, "id") === true) {
-                this.setId(val.id);
+                this.setId(String(val.id));
             }
             else {
                 this.setId(_.uniqueId());
@@ -64,29 +69,64 @@ const AlertingModel = Backbone.Model.extend({
         this.trigger("render");
     },
 
+    /**
+     * Setter for id
+     * @param {String} value Id
+     * @returns {void}
+     */
     setId: function (value) {
-        this.set("id", value.toString());
+        this.set("id", value);
     },
-
+    /**
+     * Setter for category
+     * @param {String} value category
+     * @returns {void}
+     */
     setCategory: function (value) {
         this.set("category", value);
     },
 
+    /**
+     * Setter for isDismissable
+     * @param {Boolean} value Flag if alert is dismissable
+     * @returns {void}
+     */
     setIsDismissable: function (value) {
         this.set("isDismissable", value);
     },
 
+    /**
+     * Setter for isConfirmable
+     * @param {Boolean} value Flag if alert is confirmable
+     * @returns {void}
+     */
     setIsConfirmable: function (value) {
         this.set("isConfirmable", value);
     },
 
+    /**
+     * Setter for message
+     * @param {String} value Message to be shown
+     * @returns {void}
+     */
     setMessage: function (value) {
         this.set("message", value);
     },
 
+    /**
+     * Setter for position
+     * @param {String} value Positioning of alert
+     * @returns {void}
+     */
     setPosition: function (value) {
         this.set("position", value);
     },
+
+    /**
+     * Setter for animation
+     * @param {Boolean/Number} value False if no animation is wanted. Number for fade-out in millis
+     * @returns {void}
+     */
     setAnimation: function (value) {
         this.set("animation", value);
     }

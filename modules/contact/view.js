@@ -1,6 +1,6 @@
 import Template from "text-loader!./template.html";
 
-const formularView = Backbone.View.extend({
+const ContactView = Backbone.View.extend({
     events: {
         "keyup #contactName": "setUserAttributes",
         "keyup #contactEmail": "setUserAttributes",
@@ -122,4 +122,4 @@ const formularView = Backbone.View.extend({
     }
 });
 
-export default formularView;
+export default ContactView;

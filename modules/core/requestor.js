@@ -5,7 +5,8 @@ const Requestor = Backbone.Model.extend({
     requestCount: 0,
     pContent: [],
     /**
-     * params: [0] = Objekt mit name und url
+     * @param {Array} params Objekt mit name und url
+     * @returns {void}
      */
     requestFeatures: function (params) {
         this.groupContentByTyp(params);
