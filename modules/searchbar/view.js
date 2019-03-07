@@ -2,7 +2,6 @@ import SearchbarTemplate from "text-loader!./template.html";
 import TemplateTable from "text-loader!./templateTable.html";
 import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedList.html";
 import SearchbarHitListTemplate from "text-loader!./templateHitList.html";
-import SearchbarRecommendedListTableTemplate from "text-loader!./templateTableRecommendedList.html";
 import SearchbarHitListTableTemplate from "text-loader!./templateTableHitList.html";
 import GAZModel from "./gaz/model";
 import SpecialWFSModel from "./specialWFS/model";
@@ -31,11 +30,6 @@ import Searchbar from "./model";
 /**
  * @member SearchbarHitListTemplate
  * @description Template for hitList
- * @memberof Searchbar
- */
-/**
- * @member SearchbarRecommendedListTableTemplate
- * @description Template for recommendedListTable
  * @memberof Searchbar
  */
 /**
@@ -199,7 +193,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     template: _.template(SearchbarTemplate),
     templateTable: _.template(TemplateTable),
     templateRecommendedList: _.template(SearchbarRecommendedListTemplate),
-    templateTableRecommendedList: _.template(SearchbarRecommendedListTableTemplate),
     templateHitList: _.template(SearchbarHitListTemplate),
     templateTableHitList: _.template(SearchbarHitListTableTemplate),
     /**
@@ -271,6 +264,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     renderRecommendedList: function () {
         var attr = this.model.toJSON();
 
+        attr.uiStyle = Radio.request("Util", "getUiStyle");
+
         // Falls der Themenbaum auf dem Tisch geöffnet ist, soll dieser bei der Initialisierung der Suche
         // geschlossen werden.
         if ($("#table-nav-layers-panel").length > 0) {
@@ -281,12 +276,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
         this.prepareAttrStrings(attr.hitList);
-        if (Radio.request("Util", "getUiStyle") === "TABLE") {
-            this.$("ul.dropdown-menu-search").html(this.templateTableRecommendedList(attr));
-        }
-        else {
-            this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
-        }
+        this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
 
         this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
         // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
