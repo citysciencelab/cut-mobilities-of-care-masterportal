@@ -1,16 +1,33 @@
 import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
-
-const AlertingView = Backbone.View.extend({
+/**
+ * @member AlertingTemplate
+ * @description Template used to create the alert message
+ * @memberof Alerting
+ */
+const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     events: {
         "click .close": "alertClosed",
         "click .alert-confirm": "alertConfirmed"
     },
+    /**
+     * @class AlertingView
+     * @extends Backbone.View
+     * @memberof Alerting
+     * @constructs
+     * @fires AlertingView#RadioTriggerAlertClosed
+     * @fires AlertingView#RadioTriggerAlertConfirmed
+     * @listens AlertingModel#render
+     * @listens AlertingModel#changePosition
+     * @listens AlertingView#RadioTriggerAlertAlertRemove
+     */
     initialize: function () {
+        this.listenTo(this.model.get("channel"), {
+            "alert:remove": this.removeAll
+        }, this);
         this.listenTo(this.model, {
             "render": this.render,
-            "removeAll": this.removeAll,
             "change:position": this.positionAlerts
         }, this);
 
@@ -20,6 +37,10 @@ const AlertingView = Backbone.View.extend({
     className: "top-center",
     model: new AlertingModel(),
     template: _.template(AlertingTemplate),
+    /**
+     * Renders the data to DOM.
+     * @return {AlertingView} returns this
+     */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -32,6 +53,12 @@ const AlertingView = Backbone.View.extend({
         return this;
     },
 
+    /**
+     * Reacts to click on dismiss button.
+     * @param {Event} evt Click event on dismissable alert
+     * @fires AlertingView#event:RadioTriggerAlertClosed
+     * @return {void}
+     */
     alertClosed: function (evt) {
         var div = $(evt.currentTarget).parent(),
             isDismissable = div.length > 0 ? $(div[0]).hasClass("alert-dismissable") : false;
@@ -41,6 +68,13 @@ const AlertingView = Backbone.View.extend({
         }
 
     },
+
+    /**
+     * Reacts to click on confirm button.
+     * @param {Event} evt Click event on confirmable alert
+     * @fires AlertingView#event:RadioTriggerAlertConfirmed
+     * @return {void}
+     */
     alertConfirmed: function (evt) {
         var div = $(evt.currentTarget).parent();
 
@@ -49,7 +83,7 @@ const AlertingView = Backbone.View.extend({
     },
 
     /**
-     * Positioniert der Alerts über css-Klassen
+     * Sets position of alert via css-classes.
      * @param  {Backbone.Model} model - this.model
      * @param  {String} value - this.model.get("position")
      * @returns {void}
@@ -62,7 +96,7 @@ const AlertingView = Backbone.View.extend({
     },
 
     /**
-     * Entfernt alle Meldungen
+     * Removes all alerts
      * @returns {void}
      */
     removeAll: function () {

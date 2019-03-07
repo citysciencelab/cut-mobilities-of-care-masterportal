@@ -29,15 +29,21 @@
         "suggestCount": 10,
         "epsg": "EPSG:25832",
         "filter": "filter=(typ:*)",
-        "score": 0.6
+        "score": 0.6,
+        "zoomToResult": true
       },
       "osm": {
         "minChars": 3,
         "serviceId": "10",
         "limit": 60,
-        "states": "Hamburg",
-        "classes": "place,highway,building,shop,historic,leisure"
+        "states": "Hamburg Thüringen Hessen Nordrhein-Westfalen",
+        "classes": "place,highway,building,shop,historic,leisure,county"
       },
+      "gdi":{
+		"minChars": 3,
+		"serviceId": "elastic"
+	  },
+
       "specialWFS":
       {
         "minChars": 3,
@@ -396,7 +402,8 @@
       "freeze": true
     },
     "scaleLine": true,
-    "Baumtyp": "light"
+    "Baumtyp": "light",
+    "layersRemovable": true
   },
   "Themenconfig":
   {
@@ -409,11 +416,6 @@
         },
         {
           "id": "452"
-        },
-        {
-          "id": ["713", "714", "715", "716"],
-          "name": "Geobasiskarten (schwarz-weiß)",
-          "visibility": false
         },
         {
           "id": "12883",
@@ -459,7 +461,8 @@
       },
       {
         "id": "4561",
-        "infoFormat": "text/html"
+        "infoFormat": "text/html",
+        "visibility": true
       },
       {
         "id": "441"
@@ -480,11 +483,21 @@
       },
       {
         "id": "5708",
-        "visibility": false,
+        "visibility": true,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
           "Pkw_AP30"
+        ]
+      },
+      {
+        "id": "13765",
+        "name": "Err. Arbeitsplätze deegree",
+        "visibility": true,
+        "styleable": true,
+        "geomType": "Polygon",
+        "attributesToStyle": [
+          "mit_dem_pwk_in_30_min_erreichbare_arbeitsplaetze"
         ]
       },
       {

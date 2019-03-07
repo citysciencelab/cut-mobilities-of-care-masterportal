@@ -8,20 +8,14 @@ import {createBox} from "ol/interaction/Draw.js";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
-const Einwohnerabfrage = Tool.extend({
+const EinwohnerabfrageModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         renderToWindow: true,
         // checkbox snippet for alkis adressen layer
-        checkBoxAddress: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
-        }),
+        checkBoxAddress: undefined,
         // checkbox snippet for zensus raster layer
-        checkBoxRaster: new SnippetCheckboxModel({
-            isSelected: false,
-            label: "Raster Layer anzeigen (ab 1: 100.000)"
-        }),
+        checkBoxRaster: undefined,
         drawInteraction: undefined,
         isCollapsed: undefined,
         isCurrentWin: undefined,
@@ -55,11 +49,21 @@ const Einwohnerabfrage = Tool.extend({
         uniqueIdList: [],
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
-        alkisAdressLayerId: "441"
+        alkisAdressLayerId: "9726"
     }),
 
     initialize: function () {
         this.superInitialize();
+
+        this.setCheckBoxAddress(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
+        }));
+        this.setCheckBoxRaster(new SnippetCheckboxModel({
+            isSelected: false,
+            label: "Raster Layer anzeigen (ab 1: 100.000)"
+        }));
+
         this.listenTo(this, {
             "change:isActive": this.setStatus
         });
@@ -552,6 +556,14 @@ const Einwohnerabfrage = Tool.extend({
         });
     },
 
+    setCheckBoxAddress: function (value) {
+        this.set("checkBoxAddress", value);
+    },
+
+    setCheckBoxRaster: function (value) {
+        this.set("checkBoxRaster", value);
+    },
+
     setData: function (value) {
         this.set("data", value);
     },
@@ -597,4 +609,4 @@ const Einwohnerabfrage = Tool.extend({
     }
 });
 
-export default Einwohnerabfrage;
+export default EinwohnerabfrageModel;

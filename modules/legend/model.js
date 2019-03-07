@@ -43,13 +43,7 @@ const Legend = Tool.extend({
     getLegend: function (layer) {
         var layerSources = layer.get("layerSource"); // Array oder undefined
 
-        if (layer.get("isVisibleInMap")) {
-            return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
-        }
-        return {
-            layername: layer.get("name"),
-            legend: null
-        };
+        return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
     },
 
     updateParamsStyleWMSArray: function (params) {
@@ -178,6 +172,9 @@ const Legend = Tool.extend({
         else if (typ === "SensorThings") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
         }
+        else if (typ === "StaticImage") {
+            return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+        }
         else if (typ === "GeoJSON") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
         }
@@ -191,12 +188,10 @@ const Legend = Tool.extend({
                 }
             }, this);
 
-            if (defs.length > 0) {
-                return {
-                    layername: layername,
-                    legend: defs
-                };
-            }
+            return {
+                layername: layername,
+                legend: defs
+            };
         }
         return {
             layername: layername,

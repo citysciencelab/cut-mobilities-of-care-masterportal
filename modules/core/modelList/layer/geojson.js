@@ -27,7 +27,7 @@ const GeoJSONLayer = Layer.extend({
      * [createLayerSource description]
      * Wird vom Model getriggert und erzeugt eine vectorSource.
      * Ggf. auch eine clusterSource
-     * @return {[type]} [description]
+     * @return {void}
      * @uses this createClusterLayerSource
      */
     createLayerSource: function () {
@@ -38,7 +38,7 @@ const GeoJSONLayer = Layer.extend({
     },
     /**
      * [createClusterLayerSource description]
-     * @return {[type]} [description]
+     * @return {void}
      */
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
@@ -48,7 +48,7 @@ const GeoJSONLayer = Layer.extend({
     },
     /**
      * [createLayer description]
-     * @return {[type]} [description]
+     * @return {void}
      */
     createLayer: function () {
         this.setLayer(new VectorLayer({
@@ -71,7 +71,7 @@ const GeoJSONLayer = Layer.extend({
     },
     /**
      * [setClusterLayerSource description]
-     * @param {[type]} value [description]
+     * @param {ol.source.vector} value [description]
      * @returns {void}
      */
     setClusterLayerSource: function (value) {
@@ -160,7 +160,7 @@ const GeoJSONLayer = Layer.extend({
     /**
      * sets style function for features or layer
      * @param  {Backbone.Model} stylelistmodel Model für Styles
-     * @returns {undefined}
+     * @returns {void}
      */
     setStyleFunction: function (stylelistmodel) {
         if (_.isUndefined(stylelistmodel)) {
@@ -189,7 +189,7 @@ const GeoJSONLayer = Layer.extend({
     /**
      * Zeigt nur die Features an, deren Id übergeben wird
      * @param  {string[]} featureIdList Liste der FeatureIds
-     * @return {undefined}
+     * @return {void}
      */
     showFeaturesByIds: function (featureIdList) {
         this.hideAllFeatures();
@@ -205,7 +205,7 @@ const GeoJSONLayer = Layer.extend({
 
     /**
      * sets null style (=no style) for all features
-     * @return {undefined}
+     * @return {void}
      */
     hideAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();
@@ -233,7 +233,7 @@ const GeoJSONLayer = Layer.extend({
 
     /**
      * sets style for all features
-     * @return {undefined}
+     * @return {void}
      */
     showAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();

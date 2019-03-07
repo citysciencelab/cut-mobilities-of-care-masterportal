@@ -6,9 +6,8 @@ const Config = {
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
-        imgLink: "/lgv-config/img/location_eventlotse.svg",
-        layerId: "4561",
-        wfsId: "4560"
+        wfsId: "4560",
+        styleId: "location_eventlotse"
     },
     namedProjections: [
         // GK DHDN
@@ -28,7 +27,11 @@ const Config = {
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
-        ]
+        ],
+        version: {
+            "showVersion": true,
+            "MasterportalVersion": "$Version"
+        }
     },
     quickHelp: {
         imgPath: "/lgv-config/img/"
@@ -47,11 +50,17 @@ const Config = {
     isMenubarVisible: true,
     geoAPI: false,
     clickCounter: {},
-    remoteInterface: {
-        postMessageUrl: "http://localhost:8080"
-    },
     startingMap3D: false,
     obliqueMap: true,
+    shadowTime: {
+        year: "2014",
+        month: "6",
+        day: "20",
+        hour: "13",
+        minute: "0",
+        second: "0",
+        millisecond: "0"
+    },
     cesiumParameter: {
         tileCacheSize: 20,
         enableLighting: false,

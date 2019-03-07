@@ -84,8 +84,8 @@ const QueryModel = Backbone.Model.extend({
 
     /**
      * [description]
-     * @param  {[type]} featureAttributesMap [description]
-     * @return {[type]}                      [description]
+     * @param  {Object[]} featureAttributesMap Mapping array for feature attributes
+     * @return {void}
      */
     addSnippets: function (featureAttributesMap) {
         _.each(featureAttributesMap, function (featureAttribute) {
@@ -123,7 +123,7 @@ const QueryModel = Backbone.Model.extend({
     },
     /**
      * adds a snippet for the map extent search
-     * @return {[type]} [description]
+     * @return {void}
      */
     addSearchInMapExtentSnippet: function () {
         this.get("snippetCollection").add(new SnippetCheckboxModel({

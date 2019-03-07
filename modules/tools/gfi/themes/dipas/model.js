@@ -2,13 +2,15 @@ import Theme from "../model";
 
 const DipasTheme = Theme.extend({
     initialize: function () {
+        var featureList = this.get("gfiFeatureList");
+
         this.listenTo(this, {
-            "change:isReady": this.getIconPath(this.get("feature").get("Thema"))
+            "change:isReady": this.getIconPath(featureList[0].get("Thema"))
         });
     },
 
     getIconPath: function (value) {
-        var styleModel = Radio.request("StyleList", "returnModelById", this.get("id")),
+        var styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId")),
             valueStyle = null,
             iconPath = "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png";
 

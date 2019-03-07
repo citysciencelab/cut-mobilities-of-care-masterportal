@@ -1,6 +1,6 @@
 import Model from "./model";
 
-const TotalView = Backbone.View.extend({
+const TotalViewMapView = Backbone.View.extend({
     events: {
         "click div#start-totalview": "setTotalView"
     },
@@ -45,4 +45,4 @@ const TotalView = Backbone.View.extend({
 
 });
 
-export default TotalView;
+export default TotalViewMapView;

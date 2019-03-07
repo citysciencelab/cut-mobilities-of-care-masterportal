@@ -70,7 +70,7 @@ const DropdownModel = SnippetModel.extend({
 
     /**
     * resetCollection
-    * @return {[type]} [description]
+    * @return {void}
     */
     resetValues: function () {
         var collection = this.get("valuesCollection").models;

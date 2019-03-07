@@ -21,6 +21,7 @@
     width: 485px;
     height: 50px;
     font-family: @font_family_1;
+    touch-action: pan-x pan-y;
 }
 .table-nav {
     border-radius: 12px;
@@ -134,7 +135,7 @@ a {
     }
     #funnel {
         bottom: 0px;
-        left: 33px;
+        left: 26px;
         #middle-funnel {
             width: 24px;
         }
@@ -228,6 +229,7 @@ a {
 .layers {
     padding-left: 0px;
     padding-bottom: 12px;
+    touch-action: pan-x pan-y;
 }
 .icon-checkbox2 {
     &:before {
@@ -339,6 +341,14 @@ a {
             font-size: 14px;
             padding-top: 6px;
         }
+        .remove-layer {
+            color: #F2F2F2;
+            background-color: #808080;
+            border-radius: 10px;
+            padding: 6px 4px 4px 4px;
+            margin-left: 95px;
+            cursor: pointer;
+        }
     }
     .icon-info {
         position: absolute;
@@ -389,8 +399,16 @@ a {
     position: absolute;
     top: 0px;
     left: 0px;
+    touch-action: none;
 }
 .closeclick-deactivated {
     height: 10px;
     width: 10px;
+}
+.disableCategoryIcon {
+    cursor: default;
+}
+
+.disableCategoryButton {
+    opacity: 0.2;
 }

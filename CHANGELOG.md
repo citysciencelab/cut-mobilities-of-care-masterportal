@@ -1,3 +1,39 @@
+# Changelog LGV Master-Portal 2.2.4
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 49cee3555 Die Reihenfolge der Pendleranimationen wird nun beim Drucken korrekt eingehalten
+  - a3c1fbcaa Die Darstellung der Symbole beim Verwenden von zoomToFeature kann jetzt über die style_v2.json konfiguriert werden
+  - ba18ea631 PLZ und Ort wurden vom Schulwegrouting entfernt
+  - e3c3c1fd2 Die Layerreihenfolge wird beim verwenden von Auswahl speichern nun beibehalten
+
+# Changelog LGV Master-Portal 2.2.3
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - ed565a391 Die Information im Filter werden nun wieder dargestellt. Ein Fehler der das Starten in einer lokalen Entwicklungsumgebung verhindert wurde behoben.
+  - 1ef6166db Hinweise im Einwohnertool wurden angepasst
+
+# Changelog LGV Master-Portal 2.2.2
+
+NEU:
+
+  - 4154b06a1 Nun werden auch zu einer Adresse mit dem Adresszusatz "Haus" Schulen im Schulwegrouting gefunden.
+
+FIXES:
+
+  - d28cc48f6 Beim schließen des Measuretools werden nicht beendete Zeichnungen nun entfernt.
+  - 2ba7934f3 Diverse Fehler im Einwohnertool wurden behoben.
+  - 907afb415 Ein Fehler in der Metadatenkopplung wurde behoben.
+
 # Changelog LGV Master-Portal 2.2.1
 
 NEU:

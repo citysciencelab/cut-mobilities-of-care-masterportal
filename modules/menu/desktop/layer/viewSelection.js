@@ -12,7 +12,8 @@ const LayerView = Backbone.View.extend({
         "click .arrows > .glyphicon-arrow-down": "moveModelDown",
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
-        "click .glyphicon-tint": "openStyleWMS"
+        "click .glyphicon-tint": "openStyleWMS",
+        "click .remove-layer": "removeLayer"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -111,6 +112,11 @@ const LayerView = Backbone.View.extend({
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".nav li:first-child").removeClass("open");
+    },
+    removeLayer: function () {
+        Radio.trigger("Parser", "removeItem", this.model.get("id"));
+        this.model.removeLayer();
+        this.$el.remove();
     },
     /**
      * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
