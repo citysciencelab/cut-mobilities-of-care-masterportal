@@ -144,8 +144,14 @@ const LayerView = Backbone.View.extend({
         }
     },
 
-    toggleByMapMode: function (mode) {
-        if (this.model.get("supported").indexOf(mode) >= 0) {
+    /**
+     * adds only layers to the tree that support the current mode of the map
+     * e.g. 2D, 3D
+     * @param {String} mapMode - current mode from map
+     * @returns {void}
+     */
+    toggleByMapMode: function (mapMode) {
+        if (this.model.get("supported").indexOf(mapMode) >= 0) {
             this.$el.show();
         }
         else {
