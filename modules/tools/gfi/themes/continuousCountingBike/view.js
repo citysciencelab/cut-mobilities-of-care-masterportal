@@ -134,7 +134,6 @@ const ContinuousCountingBikeView = ThemeView.extend({
      */
     fadeInDownloadButton: function () {
         this.$(".continuousCountingBike.downloadButton").addClass("in active");
-        this.model.createDownloadContent();
     },
     /**
      * appendChildren overrides the function to append image children to the gfi

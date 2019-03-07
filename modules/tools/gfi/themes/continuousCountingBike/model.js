@@ -16,7 +16,6 @@ const ContinuousCountingBikeTheme = Theme.extend({
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                // this.replaceValuesWithChildObjects();
                 this.parseGfiContent();
             }
         });
@@ -93,7 +92,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
             dayLine = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
             lastSevenDaysLine = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
             yearLine = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
-            this.setDownloadLink(_.has(gfiContent, "Download") ? gfiContent.Jahrgangslinie : null);
+            this.setDownloadLink(_.has(gfiContent, "Download") ? gfiContent.Download : null);
             _.each(infoGFIContent, function (attribute, key) {
                 var gfiAttributes,
                     isnum,
@@ -442,78 +441,11 @@ const ContinuousCountingBikeTheme = Theme.extend({
     },
 
     /**
-     * createDownloadContent get the dataset for the active tab and pass it to the setter function
-     * @param  {string} activeTab contains the value of the active tab
-     * @return {void}
-     */
-    createDownloadContent: function () {
-        var downloadDataArray = [];
-
-        downloadDataArray.push(this.createDownloadFeature(this.get("dayDataset").data));
-        // downloadDataArray.push(this.createDownloadFeature(this.get("lastSevenDaysDataset").data, "letzte 7 Tage"));
-        // activeTabData = this.get("yearDataset").data;
-        // _.each(activeTabData, function (ele, index) {
-        //     activeTabData[index].timestamp = ele.timestamp + ". KW";
-        // });
-
-        this.setDownloadData(downloadDataArray);
-
-    },
-
-    /**
-     * createDownloadFeature prepares the features for the csv download
-     * @param  {array} dataset contains the dataset of the active tab
-     * @return {array} dataArray array with the dataset object
-     */
-    createDownloadFeature: function (dataset) {
-        var dataObject = {},
-            dataArray = [];
-
-        _.each(dataset, function (ele) {
-            dataObject = {
-                "Datum": ele.date,
-                "Zeitraum(von)": ele.timestamp,
-                "Anzahl Fahrräder": Radio.request("Util", "punctuate", ele.total)
-            };
-            dataArray.push(dataObject);
-        });
-        dataArray.push(dataObject);
-        return dataArray;
-    },
-
-    /**
-     * download execute the csv download
+     * download executes the csv download
      * @return {void}
      */
     download: function () {
-        const featureArrays = this.get("downloadData");
-
-        let csv = this.get("gfiContent")[0].Name + "\n",
-            blob = "";
-
-        _.each(featureArrays, function (featureArray) {
-            csv += Radio.request("Util", "convertArrayOfObjectsToCsv", featureArray, ";") + "\n";
-        });
-        blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
-
-        if (navigator.msSaveBlob) { // IE 10+
-            navigator.msSaveBlob(blob, "export.csv");
-        }
-        else {
-            const link = document.createElement("a");
-
-            if (link.download !== undefined) { // feature detection
-                // Browsers that support HTML5 download attribute
-                const url = URL.createObjectURL(blob);
-
-                link.setAttribute("href", url);
-                link.setAttribute("download", "export.csv");
-                link.style.visibility = "hidden";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-        }
+        window.open(this.get("downloadLink"));
     },
 
     /**
