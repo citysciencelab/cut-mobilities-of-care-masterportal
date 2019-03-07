@@ -324,8 +324,9 @@ const GraphModel = Backbone.Model.extend({
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
         var dat = data.filter(function (obj) {
-            return obj[yAttrToShow] !== "-";
-        });
+                return obj[yAttrToShow] !== "-";
+            }),
+            yAttributeToShow;
 
         svg.select(".graph-diagram").selectAll("points")
             .data(dat)
@@ -353,11 +354,11 @@ const GraphModel = Backbone.Model.extend({
                 return d.class;
             })
             .on("mouseover", function (d) {
-                d[yAttrToShow] = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                tooltipDiv.html(d[yAttrToShow])
+                tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px; text-align: center;")
                     .style("left", (event.layerX - 25) + "px")
                     .style("top", (event.layerY - 35) + "px");
@@ -372,10 +373,11 @@ const GraphModel = Backbone.Model.extend({
                     }, tooltipDiv);
             }, tooltipDiv)
             .on("click", function (d) {
+                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                tooltipDiv.html(d[yAttrToShow])
+                tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px;")
                     .style("left", (event.layerX - 25) + "px")
                     .style("top", (event.layerY - 35) + "px");
