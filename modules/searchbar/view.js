@@ -2,7 +2,6 @@ import SearchbarTemplate from "text-loader!./template.html";
 import TemplateTable from "text-loader!./templateTable.html";
 import SearchbarRecommendedListTemplate from "text-loader!./templateRecommendedList.html";
 import SearchbarHitListTemplate from "text-loader!./templateHitList.html";
-import SearchbarHitListTableTemplate from "text-loader!./templateTableHitList.html";
 import GAZModel from "./gaz/model";
 import SpecialWFSModel from "./specialWFS/model";
 import VisibleVectorModel from "./visibleVector/model";
@@ -30,11 +29,6 @@ import Searchbar from "./model";
 /**
  * @member SearchbarHitListTemplate
  * @description Template for hitList
- * @memberof Searchbar
- */
-/**
- * @member SearchbarHitListTableTemplate
- * @description Template for hitListTable
  * @memberof Searchbar
  */
 const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */{
@@ -194,7 +188,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     templateTable: _.template(TemplateTable),
     templateRecommendedList: _.template(SearchbarRecommendedListTemplate),
     templateHitList: _.template(SearchbarHitListTemplate),
-    templateTableHitList: _.template(SearchbarHitListTableTemplate),
     /**
      * todo
      * @returns {*} todo
@@ -327,15 +320,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else {
             this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
             attr = this.model.toJSON();
+            attr.uiStyle = Radio.request("Util", "getUiStyle");
             // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
-        if (Radio.request("Util", "getUiStyle") === "TABLE") {
-            this.$("ul.dropdown-menu-search").html(this.templateTableHitList(attr));
-        }
-        else {
-            this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
-        }
+        this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
     },
 
     /*
