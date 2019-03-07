@@ -389,7 +389,8 @@ const Parser = Backbone.Model.extend({
         var itemList = this.get("itemList").filter(function (item) {
             return item.id !== id;
         });
-        this.set("itemList", itemList);
+
+        this.setItemList(itemList);
     },
 
     /**
