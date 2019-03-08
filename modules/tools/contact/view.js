@@ -44,11 +44,11 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
     },
 
     /**
-     * Sets the maximum height. Uses window.offset and the heihgt of the menu and footer
+     * Sets the maximum height. Uses window.offset and the height of the menu and footer
      * @returns {void}
      */
     setMaxHeight: function () {
-        var height = window.offsetHeight - 130;
+        var height = document.getElementsByClassName("lgv-container")[0].offsetHeight - 130;
 
         this.$el.css("max-height", height);
         this.$el.css("max-width", 400);
