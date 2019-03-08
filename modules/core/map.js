@@ -352,13 +352,13 @@ const map = Backbone.Model.extend({
 
         if (cartesian) {
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-            coords = [OLCesium.Math.toDegrees(cartographic.longitude), OLCesium.Math.toDegrees(cartographic.latitude)];
+            coords = [window.Cesium.Math.toDegrees(cartographic.longitude), window.Cesium.Math.toDegrees(cartographic.latitude)];
             height = scene.globe.getHeight(cartographic);
             if (height) {
                 coords = coords.concat([height]);
             }
 
-            distance = OLCesium.Cartesian3.distance(cartesian, scene.camera.position);
+            distance = window.Cesium.Cartesian3.distance(cartesian, scene.camera.position);
             resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
             transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
             transformedPickedPosition = null;
@@ -367,7 +367,7 @@ const map = Backbone.Model.extend({
                 pickedPositionCartesian = scene.pickPosition(event.position);
                 if (pickedPositionCartesian) {
                     cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
-                    transformedPickedPosition = transform([OLCesium.Math.toDegrees(cartographicPickedPosition.longitude), OLCesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
+                    transformedPickedPosition = transform([window.Cesium.Math.toDegrees(cartographicPickedPosition.longitude), window.Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
