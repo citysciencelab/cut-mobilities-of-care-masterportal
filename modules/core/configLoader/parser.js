@@ -537,6 +537,10 @@ const Parser = Backbone.Model.extend({
     getInitVisibBaselayer: function () {
         var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
 
+        if (_.isUndefined(layer)) {
+            return undefined;
+        }
+
         if (_.isArray(layer.id)) {
             layer.id = layer.id[0];
         }
