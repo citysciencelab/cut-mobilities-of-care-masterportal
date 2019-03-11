@@ -389,6 +389,7 @@ const Parser = Backbone.Model.extend({
         var itemList = this.get("itemList").filter(function (item) {
             return item.id !== id;
         });
+
         this.set("itemList", itemList);
     },
 
@@ -533,6 +534,10 @@ const Parser = Backbone.Model.extend({
      */
     getInitVisibBaselayer: function () {
         var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
+
+        if (_.isUndefined(layer)) {
+            return undefined;
+        }
 
         if (_.isArray(layer.id)) {
             layer.id = layer.id[0];

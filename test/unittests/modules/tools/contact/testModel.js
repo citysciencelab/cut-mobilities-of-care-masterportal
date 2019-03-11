@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Model from "@modules/contact/model.js";
+import Model from "@modules/tools/contact/model.js";
 
 
 describe("contact/model", function () {
@@ -28,10 +28,6 @@ describe("contact/model", function () {
                 value: "Hier sollte das Anliegen stehen"
             }
         };
-
-    before(function () {
-
-    });
 
     describe("setUserAttributes", function () {
         it("should return true when attribute email length > 1 and matches the regex", function () {
