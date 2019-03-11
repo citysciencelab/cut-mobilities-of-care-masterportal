@@ -177,6 +177,26 @@ li.results {
             color: @color_4;
         }
     }
+
+    .list-group-item {
+
+            .glyphicon {
+                float:left;
+            }
+            .list-group-item-theme {
+                float: right;
+            }
+            .list-group-item-name {
+                display: inline-block;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                max-width: 70%;
+                clear: both;
+            }
+
+        }
+
 }
 #table-searchForm {
     button.btn.btn-default.btn-table-search {
@@ -261,6 +281,9 @@ li.results {
             white-space: nowrap;
             width: 480px;
 
+            .list-group-item-name {
+                max-width: 75%;
+            }
 
         }
         li {
