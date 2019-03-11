@@ -94,7 +94,13 @@ function loadApp () {
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
     }
-    // Core laden
+
+    if (_.has(Config, "quickHelp")) {
+        new QuickHelpView(Config.quickHelp);
+    }
+
+
+   // Core laden
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -135,11 +141,6 @@ function loadApp () {
 
     if (_.has(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
-    }
-
-
-    if (_.has(Config, "quickHelp")) {
-        new QuickHelpView(Config.quickHelp);
     }
 
     if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
