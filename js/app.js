@@ -99,7 +99,6 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-
    // Core laden
     new Autostarter();
     new Util(utilConfig);
