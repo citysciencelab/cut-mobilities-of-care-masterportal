@@ -328,7 +328,7 @@ function loadApp () {
                 }
                 case "backforward": {
                     if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
+                        element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
