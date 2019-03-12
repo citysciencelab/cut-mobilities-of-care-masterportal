@@ -123,15 +123,15 @@ const ContinuousCountingBikeTheme = Theme.extend({
                 preparedInfoGFIContent.push(gfiAttributes);
             });
             if (dayLine) {
-                this.prepareDayDataset(this.splitDayDataset(dayLine));
+                this.setDayDataset(this.prepareDayDataset(this.splitDayDataset(dayLine)));
             }
 
             if (lastSevenDaysLine) {
-                this.prepareLastSevenDaysDataset(this.splitLastSevenDaysDataset(lastSevenDaysLine));
+                this.setLastSevenDaysDataset(this.prepareLastSevenDaysDataset(this.splitLastSevenDaysDataset(lastSevenDaysLine)));
             }
 
             if (yearLine) {
-                this.prepareYearDataset(this.splitYearDataset(yearLine));
+                this.setYearDataset(this.prepareYearDataset(this.splitYearDataset(yearLine)));
             }
             this.setInfoGFIContent(preparedInfoGFIContent);
         }
@@ -143,7 +143,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
      * @return {array} tempArr array with prepared objects of the data
      */
     splitDayDataset: function (dayLine) {
-        var dataSplit = dayLine.split("|"),
+        var dataSplit = dayLine ? dayLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
@@ -178,7 +178,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
      * @return {array} tempArr array with prepared objects of the data
      */
     splitLastSevenDaysDataset: function (lastSevenDaysLine) {
-        var dataSplit = lastSevenDaysLine.split("|"),
+        var dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
@@ -212,7 +212,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
      * @return {array} tempArr array with prepared objects of the data
      */
     splitYearDataset: function (yearLine) {
-        var dataSplit = yearLine.split("|"),
+        var dataSplit = yearLine ? yearLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
@@ -244,17 +244,17 @@ const ContinuousCountingBikeTheme = Theme.extend({
      * @returns {void}
      */
     prepareDayDataset: function (data) {
-        var datum = moment(data[0].timestamp).format("DD.MM.YYYY"),
-            graphArray = this.getDataAttributes(data[0]),
-            newData = _.map(data, function (val) {
+        var date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
+            graphArray = data ? this.getDataAttributes(data[0]) : "",
+            newData = data ? _.map(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("HH:mm") + " Uhr";
                 return val;
-            }),
-            legendArray = this.getLegendAttributes(data[0]);
+            }) : "",
+            legendArray = data ? this.getLegendAttributes(data[0]) : "";
 
-        this.setDayDataset({
+        return {
             data: newData,
-            xLabel: "Tagesverlauf am " + datum,
+            xLabel: "Tagesverlauf am " + date,
             yLabel: {
                 label: "Anzahl Fahrräder/Stunde",
                 offset: 10
@@ -262,27 +262,27 @@ const ContinuousCountingBikeTheme = Theme.extend({
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 6),
             legendArray: legendArray
-        });
+        };
     },
 
     /**
-     * prepareLastSevenDaysDataset creates an object for  the lastSevenDaysDataset
+     * prepareLastSevenDaysDataset creates an object for the lastSevenDaysDataset
      * @param {array} data array of objects from lastSevenDaysLineData
      * @returns {void}
      */
     prepareLastSevenDaysDataset: function (data) {
-        var startDatum = moment(data[0].timestamp).format("DD.MM.YYYY"),
-            endeDatum = moment(_.last(data).timestamp).format("DD.MM.YYYY"),
-            graphArray = this.getDataAttributes(data[0]),
-            newData = _.map(data, function (val) {
+        var startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
+            endDate = data ? moment(_.last(data).timestamp).format("DD.MM.YYYY") : "",
+            graphArray = data ? this.getDataAttributes(data[0]) : "",
+            newData = data ? _.map(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
                 return val;
-            }),
-            legendArray = this.getLegendAttributes(data[0]);
+            }) : "",
+            legendArray = data ? this.getLegendAttributes(data[0]) : "";
 
-        this.setLastSevenDaysDataset({
+        return {
             data: newData,
-            xLabel: "Woche vom " + startDatum + " bis " + endeDatum,
+            xLabel: "Woche vom " + startDate + " bis " + endDate,
             yLabel: {
                 label: "Anzahl Fahrräder/Tag",
                 offset: 10
@@ -290,7 +290,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 1),
             legendArray: legendArray
-        });
+        };
     },
 
     /**
@@ -299,16 +299,17 @@ const ContinuousCountingBikeTheme = Theme.extend({
      * @returns {void}
      */
     prepareYearDataset: function (data) {
-        var graphArray = this.getDataAttributes(data[0]),
-            newData = _.each(data, function (val) {
+        var graphArray = data ? this.getDataAttributes(data[0]) : "",
+            newData = data ? _.each(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("w");
                 return val;
-            }),
-            legendArray = this.getLegendAttributes(data[0]);
+            }) : "",
+            legendArray = data ? this.getLegendAttributes(data[0]) : "",
+            year = data ? data[0] : "";
 
-        this.setYearDataset({
+        return {
             data: newData,
-            xLabel: "KW im Jahr " + data[0].year,
+            xLabel: "KW im Jahr " + year,
             yLabel: {
                 label: "Anzahl Fahrräder/Woche",
                 offset: 10
@@ -316,7 +317,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
             graphArray: graphArray,
             xAxisTickValues: this.createxAxisTickValues(data, 5),
             legendArray: legendArray
-        });
+        };
     },
 
     /**
@@ -327,10 +328,10 @@ const ContinuousCountingBikeTheme = Theme.extend({
     getDataAttributes: function (inspectData) {
         var showData = ["total"];
 
-        if (!_.isNull(inspectData.r_in)) {
+        if (inspectData && !_.isNull(inspectData.r_in)) {
             showData.push("r_in");
         }
-        if (!_.isNull(inspectData.r_out)) {
+        if (inspectData && !_.isNull(inspectData.r_out)) {
             showData.push("r_out");
         }
 
@@ -340,7 +341,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
     /**
      * getLegendAttributes returns an array for the graphic legend
      * @param  {object} inspectData contains the first row of the dataset
-     * @return {array}             [description]
+     * @return {array} legendData contains an array of objecs for the graphic legend
      */
     getLegendAttributes: function (inspectData) {
         var legendData = [{
@@ -349,14 +350,14 @@ const ContinuousCountingBikeTheme = Theme.extend({
             style: "circle"
         }];
 
-        if (!_.isNull(inspectData.r_in)) {
+        if (inspectData && !_.isNull(inspectData.r_in)) {
             legendData.push({
                 key: "r_in",
                 value: "Fahrräder stadteinwärts"
             });
         }
 
-        if (!_.isNull(inspectData.r_out)) {
+        if (inspectData && !_.isNull(inspectData.r_out)) {
             legendData.push({
                 key: "r_out",
                 value: "Fahrräder stadtauswärts"
