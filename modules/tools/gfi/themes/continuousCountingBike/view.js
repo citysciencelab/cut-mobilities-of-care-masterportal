@@ -1,7 +1,11 @@
 import ThemeView from "../view";
 import ContinuousCountingBikeTemplate from "text-loader!./template.html";
-
-const ContinuousCountingBikeView = ThemeView.extend({
+/**
+ * @member ContinuousCountingBikeTemplate
+ * @description Template used to create gfi for continuousCountingBike
+ * @memberof ContinuoisCountingBike
+ */
+const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContinuoiusCountingBikeView.prototype */{
     tagName: "div",
     className: "continuousCountingBike",
     template: _.template(ContinuousCountingBikeTemplate),
@@ -21,6 +25,13 @@ const ContinuousCountingBikeView = ThemeView.extend({
             this.model.download();
         }
     },
+
+    /**
+     * @class ContinuoiusCountingBikeView
+     * @extends ThemeView.View
+     * @memberof GFI
+     * @constructs
+     */
 
     /**
      * toggleTabis called when an other tab is activated

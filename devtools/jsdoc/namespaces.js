@@ -61,6 +61,11 @@
  */
 
 /**
+ * @namespace Graph
+ * @description Module for generating graphics via d3
+ */
+
+/**
  * @namespace Main
  * @description Loading basic requirements such as the css. Then it starts the App.
  */

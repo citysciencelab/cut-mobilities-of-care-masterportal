@@ -467,6 +467,22 @@
  * @example Radio.trigger("Util", "isViewMobileChangend", isViewMobile)
  */
 
+/**
+ * @event Util#RadioRequestUtilPunctuate
+ * @description converts value to string and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+ * @param {String} value contains the string wich will be converted
+ * @example Radio.request("Util", "punctuate", "3000.50");
+ */
+
+
+/** -------------------- GRAPH -------------------- */
+
+/**
+ * @event Graph#RadioTriggerGraphCreateGraph
+ * @description starts the generating of a graphic
+ * @param {Object} graphConfig contains the options for the graphic
+ * @example Radio.trigger("Graph", "createGraph", );
+ */
 
 /** -------------------- QUICKHELP -------------------- */
 

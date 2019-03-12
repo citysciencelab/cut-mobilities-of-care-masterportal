@@ -2,17 +2,29 @@ import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
-const ContinuousCountingBikeTheme = Theme.extend({
+const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingBikeThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             dayDataset: {},
             lastSevenDaysDataset: {},
             yearDataset: {},
             activeTab: "info",
-            size: {},
-            downloadData: [],
             downloadLink: ""
         }),
+    /**
+     * @class ContiniuousCountingBikeTheme
+     * @extends Theme
+     * @memberof GFI
+     * @constructs
+     * @property {Object} dayDataset={} Empty object for the dataset of yesterday
+     * @property {Object} lastSevenDaysDataset={} Empty object for the dataset of the last seven days
+     * @property {Object} yearDataset={} Empty object for the dataset of the aktual year
+     * @property {String} activeTab="info" Contains the name of the active tab
+     * @property {String} downloadLink="" Link for the download data
+     * @fires Util#RadioRequestUtilPunctuate
+     * @fires Graph#RadioTriggerGraphCreateGraph
+     * @listens ContiniuousCountingBikeTheme#ThisChange:IsReady
+     */
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
@@ -76,6 +88,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
     },
     /**
      * ParseGfiContent parses the gfiContent into several variables for the graphics and for the info tab.
+     * @fires Util#event:RadioRequestUtilPunctuate
      * @return {void}
      */
     parseGfiContent: function () {
@@ -139,8 +152,9 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * splitDayDataset creates a json for the graphic module with the dayLine data.
-     * @param  {string} dayLine contains the dayLine data of gfiContent
-     * @return {array} tempArr array with prepared objects of the data
+     * @param  {String} dayLine contains the dayLine data of gfiContent
+     * @fires Util#event:RadioRequestUtilPunctuate
+     * @return {Array} tempArr array with prepared objects of the data
      */
     splitDayDataset: function (dayLine) {
         var dataSplit = dayLine ? dayLine.split("|") : "",
@@ -174,8 +188,9 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * splitLastSevenDaysDataset creates a json for the graphic module with the lastSevenDaysLine data.
-     * @param  {string} lastSevenDaysLine contains the lastSevenDays data of gfiContent
-     * @return {array} tempArr array with prepared objects of the data
+     * @param  {String} lastSevenDaysLine contains the lastSevenDays data of gfiContent
+     * @fires Util#event:RadioRequestUtilPunctuate
+     * @return {Array} tempArr array with prepared objects of the data
      */
     splitLastSevenDaysDataset: function (lastSevenDaysLine) {
         var dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
@@ -208,8 +223,9 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * splitYearDataset creates a json for the graphic module with the yearLine data.
-     * @param  {string} yearLine contains the year data of gfiContent
-     * @return {array} tempArr array with prepared objects of the data
+     * @param  {String} yearLine contains the year data of gfiContent
+     * @fires Util#event:RadioRequestUtilPunctuate
+     * @return {Array} tempArr array with prepared objects of the data
      */
     splitYearDataset: function (yearLine) {
         var dataSplit = yearLine ? yearLine.split("|") : "",
@@ -240,7 +256,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * prepareDayDataset creates an object for  the dayDataset
-     * @param {array} data array of objects from dayLineData
+     * @param {Array} data array of objects from dayLineData
      * @returns {void}
      */
     prepareDayDataset: function (data) {
@@ -267,7 +283,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * prepareLastSevenDaysDataset creates an object for the lastSevenDaysDataset
-     * @param {array} data array of objects from lastSevenDaysLineData
+     * @param {Array} data array of objects from lastSevenDaysLineData
      * @returns {void}
      */
     prepareLastSevenDaysDataset: function (data) {
@@ -295,7 +311,7 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * prepareYearDataset creates an object for the yearDataset
-     * @param {array} data array of objects from yearLineData
+     * @param {Array} data array of objects from yearLineData
      * @returns {void}
      */
     prepareYearDataset: function (data) {
@@ -322,8 +338,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * getDataAttributes returns an array of key values.
-     * @param  {object} inspectData contains the first row of the dataset
-     * @return {array} showData array with key values
+     * @param  {Object} inspectData contains the first row of the dataset
+     * @return {Array} showData array with key values
      */
     getDataAttributes: function (inspectData) {
         var showData = ["total"];
@@ -340,8 +356,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * getLegendAttributes returns an array for the graphic legend
-     * @param  {object} inspectData contains the first row of the dataset
-     * @return {array} legendData contains an array of objecs for the graphic legend
+     * @param  {Object} inspectData contains the first row of the dataset
+     * @return {Array} legendData contains an array of objecs for the graphic legend
      */
     getLegendAttributes: function (inspectData) {
         var legendData = [{
@@ -370,7 +386,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
     /**
      * createD3Document creates an object for the graph model to create the graphic
      * via radio trigger, the graphConfig object is transferred to the graph module
-     * @param  {string} activeTab contains the value of the active tab
+     * @param  {String} activeTab contains the value of the active tab
+     * @fires Graph#event:RadioTriggerGraphCreateGraph
      * @return {void}
      */
     createD3Document: function (activeTab) {
@@ -401,8 +418,8 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * getDatasetByActiveTab returns the dataset object for the active tab
-     * @param  {string} activeTab contains the value of the active tab
-     * @return {object} dataset returns an object of the prepaired dataset for the active tab
+     * @param  {String} activeTab contains the value of the active tab
+     * @return {Object} dataset returns an object of the prepaired dataset for the active tab
      */
     getDatasetByActiveTab: function (activeTab) {
         var dataset;
@@ -451,9 +468,9 @@ const ContinuousCountingBikeTheme = Theme.extend({
 
     /**
      * createxAxisTickValues returns an array of the tick values for the graph module
-     * @param  {array} data array of objects from dayLineData
-     * @param  {integer} xThinning number for the distance between the ticks
-     * @return {array} tickValuesArray array of the tick values
+     * @param  {Array} data array of objects from dayLineData
+     * @param  {Integer} xThinning number for the distance between the ticks
+     * @return {Array} tickValuesArray array of the tick values
      */
     createxAxisTickValues: function (data, xThinning) {
         var tickValuesArray = [],
@@ -498,11 +515,6 @@ const ContinuousCountingBikeTheme = Theme.extend({
     // setter for infoGFIContent
     setInfoGFIContent: function (value) {
         this.set("infoGFIContent", value);
-    },
-
-    // setter for downloadData
-    setDownloadData: function (value) {
-        this.set("downloadData", value);
     },
 
     // setter for setSize
