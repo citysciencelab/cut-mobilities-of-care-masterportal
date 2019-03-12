@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <div class = "dipas-gfi-content">
-    <% _.each(gfiContent[0], function(value, key) { %>
-        <% if (key === "Thema") { %>
+    <% if (_.has(gfiContent[0], "Thema")) { %>
         <div class="dipas-gfi-icon"><img src="<%= iconPath %>"></div>
-        <div class = "dipas-gfi-thema"><%= value %></div>
-        <% }%>
-    <% });%>
-    <% _.each(gfiContent[0], function(value, key) { %>
-        <% if (key === "Name") { %>
-        <div class = "dipas-gfi-name"><%= value %></div>
-        <% }%>
-    <% });%>
-    <% _.each(gfiContent[0], function(value, key) { %>
-        <% if (key === "Description") { %>
-        <div class = "dipas-gfi-description"><%= value %></div>
-        <% }%>
-    <% });%>
+        <div class = "dipas-gfi-thema"><%= gfiContent[0].Thema %></div>
+    <% } %>
+
+    <% if (_.has(gfiContent[0], 'Name')) { %>
+        <% if (uiStyle !== "TABLE" && _.has(gfiContent[0], 'Link')) { %>
+            <div class = "dipas-gfi-name"><a href="<%= gfiContent[0].Link %>" target="_top"><%= gfiContent[0].Name %></a></div>
+        <% } else { %>
+            <div class = "dipas-gfi-name"><%= gfiContent[0].Name %></div>
+        <% } %>
+    <% } %>
+
+    <% if (_.has(gfiContent[0], "Description")) { %>
+        <div class = "dipas-gfi-description"><%= gfiContent[0].Description %></div>
+    <% } %>
+
+    <% if (uiStyle !== "TABLE" && _.has(gfiContent[0], 'Link')) { %>
+        <a class="dipas-gfi-more" href="<%= gfiContent[0].Link %>" target="_top">mehr</a>
+    <% } %>
 </div>
