@@ -18,7 +18,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
      * @constructs
      * @property {Object} dayDataset={} Empty object for the dataset of yesterday
      * @property {Object} lastSevenDaysDataset={} Empty object for the dataset of the last seven days
-     * @property {Object} yearDataset={} Empty object for the dataset of the aktual year
+     * @property {Object} yearDataset={} Empty object for the dataset of the current year
      * @property {String} activeTab="info" Contains the name of the active tab
      * @property {String} downloadLink="" Link for the download data
      * @fires Util#RadioRequestUtilPunctuate
@@ -507,37 +507,67 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
         return tickValuesArray;
     },
 
-    // setter for activeTab
+    /**
+     * Setter for activeTab
+     * @param {String} value Contains the active tab
+     * @returns {void}
+     */
     setActiveTab: function (value) {
         this.set("activeTab", value);
     },
 
-    // setter for infoGFIContent
+    /**
+     * Setter for infoGFIContent
+     * @param {Array} value Contains the feature information for the info tab
+     * @returns {void}
+     */
     setInfoGFIContent: function (value) {
         this.set("infoGFIContent", value);
     },
 
-    // setter for setSize
+    /**
+     * Setter for setSize
+     * @param {Object} value Contains an object with width and height attributes
+     * @returns {void}
+     */
     setSize: function (value) {
         this.set("size", value);
     },
 
-    // setter for dayDataset
+    /**
+     * Setter for dayDataset
+     * @param {Object} value Contains the yesterday dataset
+     * @returns {void}
+     */
     setDayDataset: function (value) {
         this.set("dayDataset", value);
     },
 
     // setter for lastSevenDaysDataset
+    /**
+     * Setter for lastSevenDaysDataset
+     * @param {Object} value Contains the dataset of the last seven days
+     * @returns {void}
+     */
     setLastSevenDaysDataset: function (value) {
         this.set("lastSevenDaysDataset", value);
     },
 
     // setter for yearDataset
+    /**
+     * Setter for yearDataset
+     * @param {Object} value Contains the dataset of the current year
+     * @returns {void}
+     */
     setYearDataset: function (value) {
         this.set("yearDataset", value);
     },
 
-    // setter for downloadLink
+    /**
+     * Setter for downloadLink
+     * @param {String} value Contains the downloadLink
+     * @returns {void}
+     */
     setDownloadLink: function (value) {
         this.set("downloadLink", value);
     }
