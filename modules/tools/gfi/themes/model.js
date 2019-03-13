@@ -312,6 +312,10 @@ const Theme = Backbone.Model.extend({
     translateGFI: function (gfiList, gfiAttributes) {
         var pgfi = [];
 
+        if (gfiAttributes === "ignore") {
+            return pgfi;
+        }
+
         _.each(gfiList, function (element) {
             var preGfi = {},
                 gfi = {};
