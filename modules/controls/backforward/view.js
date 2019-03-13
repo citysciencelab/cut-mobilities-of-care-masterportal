@@ -15,7 +15,7 @@ const BackForwardView = Backbone.View.extend({
             "getView": this
         }, this);
 
-        Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink);
+        Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
     },
     template: _.template(BackForwardTemplate),
@@ -24,9 +24,9 @@ const BackForwardView = Backbone.View.extend({
     updatePermalink: function () {
         var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
             backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
-            View = Radio.request("BackForwardView", "getView"),
-            centerScales = View.model.getCenterScales(),
-            currentPos = View.model.getCurrentPos(),
+            centerScales = this.model.get("CenterScales"),
+            currentPos = this.model.get("currentPos"),
+            that = this,
             scale,
             center;
 
@@ -39,29 +39,29 @@ const BackForwardView = Backbone.View.extend({
                 center = Radio.request("MapView", "getCenter");
                 centerScales.push([center, scale]);
             }, 100);
-            View.model.setCenterScales(centerScales);
+            this.model.setCenterScales(centerScales);
         }
-        else if (centerScales.length > 0 && View.model.getWentFor() === false) {
+        else if (centerScales.length > 0 && this.model.get("wentFor") === false) {
             $(backButton).css("pointer-events", "auto");
             $(forButton).css("pointer-events", "none");
 
             setTimeout(function () {
                 if (currentPos < centerScales.length - 1) {
                     centerScales.splice(currentPos + 1);
-                    View.model.setCurrentPos(currentPos);
+                    that.model.setCurrentPos(currentPos);
                 }
                 else if (centerScales.length === 10) {
                     centerScales.shift(centerScales[0]);
-                    View.model.setCurrentPos(currentPos - 1);
+                    that.model.setCurrentPos(currentPos - 1);
                 }
                 scale = Radio.request("MapView", "getOptions").scale;
                 center = Radio.request("MapView", "getCenter");
                 centerScales.push([center, scale]);
-                View.model.setCurrentPos(View.model.getCurrentPos() + 1);
+                that.model.setCurrentPos(that.model.get("currentPos") + 1);
             }, 100);
-            View.model.setCenterScales(centerScales);
+            this.model.setCenterScales(centerScales);
         }
-        View.model.setWentFor(false);
+        this.model.setWentFor(false);
     },
     render: function () {
         this.$el.html(this.template());
@@ -70,28 +70,28 @@ const BackForwardView = Backbone.View.extend({
     setNextView: function () {
         var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
             backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
-            centerScales = this.model.getCenterScales();
+            centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);
         $(backButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.getCurrentPos() + 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.getCurrentPos()][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.getCurrentPos()][0]);
-        if (this.model.getCurrentPos() === centerScales.length - 1) {
+        this.model.setCurrentPos(this.model.get("currentPos") + 1);
+        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+        if (this.model.get("currentPos") === centerScales.length - 1) {
             $(forButton).css("pointer-events", "none");
         }
     },
     setLastView: function () {
         var backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
             forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            centerScales = this.model.getCenterScales();
+            centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);
         $(forButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.getCurrentPos() - 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.getCurrentPos()][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.getCurrentPos()][0]);
-        if (this.model.getCurrentPos() === 0) {
+        this.model.setCurrentPos(this.model.get("currentPos") - 1);
+        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+        if (this.model.get("currentPos") === 0) {
             $(backButton).css("pointer-events", "none");
         }
     }
