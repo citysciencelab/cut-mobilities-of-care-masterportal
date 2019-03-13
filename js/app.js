@@ -75,6 +75,7 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
+import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
@@ -322,6 +323,13 @@ function loadApp () {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id);
                         new AttributionsView({el: element});
+                    }
+                    break;
+                }
+                case "backforward": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
                     }
                     break;
                 }
