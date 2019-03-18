@@ -9,8 +9,8 @@ const WMSLayer = Layer.extend({
         // extended die Layer defaults by value
         return _.extend(_.result(Layer.prototype, "defaults"), {
             infoFormat: "text/xml",
-            // Eine Veränderung der SESSIONID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
-            sessionId: _.random(9999999),
+            // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
+            cacheId: _.random(9999999),
             supported: ["2D", "3D"],
             showSettings: true,
             extent: null,
@@ -42,7 +42,7 @@ const WMSLayer = Layer.extend({
             source;
 
         params = {
-            SESSIONID: this.get("sessionId"),
+            CACHEID: this.get("cacheId"),
             LAYERS: this.get("layers"),
             FORMAT: this.get("format") === "nicht vorhanden" ? "image/png" : this.get("format"),
             VERSION: this.get("version"),
@@ -242,9 +242,9 @@ const WMSLayer = Layer.extend({
      * @returns {void}
      */
     updateSource: function () {
-        this.newSessionId();
+        this.newCacheId();
 
-        this.get("layer").getSource().updateParams({SESSIONID: this.get("sessionId")});
+        this.get("layer").getSource().updateParams({CACHEID: this.get("cacheId")});
     },
 
     setInfoFormat: function (value) {
@@ -282,11 +282,11 @@ const WMSLayer = Layer.extend({
     },
 
     /*
-    * random setter for sessionId
+    * random setter for cacheId
     * @returns {void}
     */
-    newSessionId: function () {
-        this.set("sessionId", _.random(9999999));
+    newCacheId: function () {
+        this.set("cacheId", _.random(9999999));
     }
 });
 
