@@ -1,6 +1,7 @@
 const TableNavModel = Backbone.Model.extend({
     defaults: {
-        isActiveElement: ""
+        isActiveElement: "",
+        rotateAngle: 0
     },
 
     initialize: function () {

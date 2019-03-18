@@ -14,14 +14,35 @@
 
 /**************** Layer Settings ****************/
 #table-nav {
-    z-index: 5;
-    bottom: 80px;
+    z-index: 5;;
     position: absolute;
-    left: calc(50% - 485px / 2);
     width: 485px;
     height: 50px;
     font-family: @font_family_1;
     touch-action: pan-x pan-y;
+    border-radius: 12px;
+}
+.table-nav-0deg {
+    bottom: 80px;
+    left: calc(50% - 485px / 2);
+    width: 485px;
+    height: 50px;
+    transform: rotate(0deg);
+}
+.table-nav-90deg {
+    left: -80px;
+    top: calc(50% - 80px);
+    transform: rotate(90deg);
+}
+.table-nav-180deg {
+    left: calc(50% - 485px / 2 + 40px);
+    top: 80px;
+    transform: rotate(180deg);
+}
+.table-nav-270deg {
+    right: -80px;
+    top: calc(50% + 40px);
+    transform: rotate(270deg);
 }
 .table-nav {
     border-radius: 12px;
