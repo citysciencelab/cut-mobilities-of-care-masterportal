@@ -773,7 +773,9 @@ const ModelList = Backbone.Collection.extend(
 
             // fÃ¼r DIPAS Table Ansicht
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
+                Radio.request("ModelList", "getModelByAttributes", {id: modelId}).setIsJustAdded(true);
                 $("#table-nav-layers-panel").collapse("show");
+
             }
         },
 
