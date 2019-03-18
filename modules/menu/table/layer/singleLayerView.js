@@ -36,6 +36,9 @@ const LayerView = Backbone.View.extend({
             this.$el.append(this.templateSettings(attr));
             this.$el.addClass("layer-settings-activated");
         }
+        if (this.model.get("isJustAdded") === true) {
+            this.$(".title").addClass("just-added");
+        }
 
         return this;
     },
@@ -62,6 +65,7 @@ const LayerView = Backbone.View.extend({
         var layerCollection = Radio.request("ModelList", "getCollection").where({type: "layer"});
 
         this.setSettingsVisibility(layerCollection, this.model);
+        this.unsetJustAdded();
 
         this.model.toggleIsSelected();
         this.render();
@@ -80,9 +84,11 @@ const LayerView = Backbone.View.extend({
         return layerCollection;
     },
     showLayerInformation: function () {
+        this.unsetJustAdded();
         this.model.showLayerInformation();
     },
     toggleIsSettingVisible: function () {
+        this.unsetJustAdded();
         this.model.toggleIsSettingVisible();
     },
     setTransparency: function (evt) {
@@ -106,6 +112,10 @@ const LayerView = Backbone.View.extend({
         Radio.trigger("Parser", "removeItem", this.model.get("id"));
         this.model.removeLayer();
         this.$el.remove();
+    },
+    unsetJustAdded: function () {
+        this.$(".title").removeClass("just-added");
+        this.model.setIsJustAdded(false);
     }
 });
 

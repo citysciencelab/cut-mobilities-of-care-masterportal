@@ -323,7 +323,8 @@ const Parser = Backbone.Model.extend({
             isSelected: true,
             isVisibleInTree: true,
             isChildLayer: false,
-            datasets: values.datasets
+            datasets: values.datasets,
+            isJustAdded: values.isJustAdded
         };
 
         this.addItemAtTop(layer);
