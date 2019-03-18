@@ -482,7 +482,7 @@
       },
       {
         "id": "5708",
-        "visibility": true,
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -492,7 +492,7 @@
       {
         "id": "13765",
         "name": "Err. Arbeitsplätze deegree",
-        "visibility": true,
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
