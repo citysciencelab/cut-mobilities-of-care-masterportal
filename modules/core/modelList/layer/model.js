@@ -507,6 +507,9 @@ const Layer = Item.extend(
                 this.set("isRemovable", value);
             }
         },
+        setIsJustAdded: function (value) {
+            this.set("isJustAdded", value);
+        },
         removeLayer: function () {
             var layer = this.get("id");
 
