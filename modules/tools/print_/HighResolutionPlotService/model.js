@@ -5,17 +5,40 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
 const PrintModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
+        // available layouts of the specified print configuration
+        layoutList: [],
+        currentLayout: undefined,
+        // available scales of the specified print configuration
+        scaleList: [],
+        // current print scale
+        currentScale: undefined,
+        // available formats of the specified print configuration
+        formatList: [],
+        currentFormat: "pdf",
+        // true if the current layout supports legend
+        isLegendAvailable: false,
+        // true if the current layout supports gfi
+        isGfiAvailable: false,
+        // true if gfi is active
+        isGfiActive: false,
+        // is scale selected by the user over the view
+        isScaleSelectedManually: false,
+        // true if the current layout supports meta data
+        isMetaDataAvailable: false,
+        // true if the current layout supports scale
+        isScaleAvailable: false,
+        eventListener: {},
         printID: "99999",
         MM_PER_INCHES: 25.4,
         POINTS_PER_INCH: 72,
         title: "PrintResult",
         outputFilename: "Ausdruck",
         outputFormat: "pdf",
-        gfiToPrint: [], // die sichtbaren GFIs
+        gfiToPrint: [], //  visible GFIs
         center: [],
         scale: {},
         layerToPrint: [],
-        fetched: false, // gibt an, ob info.json schon geladen wurde
+        fetched: false, // declares if info.json is already loaded
         gfi: false,
         printurl: "",
         gfiMarker: {
@@ -33,18 +56,17 @@ const PrintModel = Tool.extend({
                 stroke: false
             }
         },
-        // configYAML: "/master",
         deactivateGFI: false,
         renderToWindow: true,
         proxyURL: "",
         glyphicon: "glyphicon-print",
         precomposeListener: {},
-        postcomposeListener: {}
+        postcomposeListener: {},
+        DOTS_PER_INCH: 72,
+        INCHES_PER_METER: 39.37
     }),
 
-    /*
-     * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
-     */
+    // Determine the URL to fetch in setStatus with query of ServiceId
     url: function () {
         var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
             url = resp && resp.get("url") ? resp.get("url") : null,
@@ -57,51 +79,242 @@ const PrintModel = Tool.extend({
             else {
                 printurl = url;
             }
-    
-            console.log(printurl);
+
             this.set("printurl", printurl);
-            console.log(this);
             // return this.get("proxyURL") + "?url=" + printurl + "/info.json";
             return printurl + "/info.json";
         }
-        return "undefined"; // muss String übergeben, sonst Laufzeitfehler
+        return "undefined"; // has to return a string, otherwise runtime error
     },
 
-    //
     initialize: function () {
+        var channel = Radio.channel("Print");
+
         this.superInitialize();
+        console.log("Hallo dEE Print");
 
         this.listenTo(this, {
-            "change:layout change:scale change:isActive": this.updatePrintPage,
-            "change:specification": this.getPDFURL,
-            "change:isActive": this.setStatus
+            "change:isActive": function (model, value) {
+                if (model.get("layoutList").length === 0) {
+                    this.getCapabilities(model, value);
+                }
+                this.togglePostcomposeListener(model, value);
+                this.updatePrintPage();
+            },
+            "change:layout": this.updatePrintPage,
+            "change:scale": this.updatePrintPage,
+            "change:specification": this.getPDFURL
         });
 
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": this.setScaleByMapView,
             "changedCenter": this.setCenter
         });
+
+        this.listenTo(Radio.channel("GFI"), {
+            "isVisible": function (isGfiActive) {
+                if (!isGfiActive) {
+                    this.setIsGfiSelected(false);
+                }
+                this.setIsGfiActive(isGfiActive);
+            }
+        });
+        channel.on({
+            "createPrintJob": this.createPrintJob
+        }, this);
     },
 
-    // Überschreibt ggf. den Titel für den Ausdruck. Default Value kann in der config.js eingetragen werden.
+    getCapabilities: function () {
+        var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
+            url = resp && resp.get("url") ? resp.get("url") : null;
+
+        this.set("printurl", url);
+
+        if (this.get("currentLayer") === undefined) {
+            $.ajax({
+                url: url + "/info.json",
+                type: "GET",
+                data: "",
+                context: this,
+                success: this.updateParameter
+            });
+        }
+    },
+    updateParameter: function (response) {
+
+        this.setLayoutList(response.layouts);
+        this.setCurrentLayout(response.layouts[0]);
+        this.setScaleList(response.scales);
+        this.setFormatList(response.outputFormats);
+        this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
+        this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
+        this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
+        this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
+        this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
+        this.togglePostcomposeListener(this, true);
+
+    },
+
+    print: function () {
+        var drawLayer = Radio.request("Draw", "getLayer");
+
+        this.set("layerToPrint", []);
+        this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+        this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}));
+
+        if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
+            this.setLayer(drawLayer);
+        }
+        this.getGfiForPrint();
+    },
+
+    /**
+     * returns the layout for the given layout name
+     * @param {object[]} layoutList - available layouts of the specified print configuration
+     * @param {string} layoutName - name for the layout to be found
+     * @returns {object} layout
+     */
+    getLayoutByName: function (layoutList, layoutName) {
+        return _.find(layoutList, function (layout) {
+            return layout.name === layoutName;
+        });
+    },
+
+    getPrintMapScales: function () {
+        return this.get("scaleList");
+    },
+
+    // Overwrites the title of the print if necessary. Default value can be set via config.js.
     setTitleFromForm: function () {
         if ($("#titleField").val()) {
             this.setTitle($("#titleField").val());
         }
     },
 
-    // Setzt das Format(DinA4/A3 Hoch-/Querformat) für den Ausdruck.
+    /**
+     * if the tool is activated and there is a layout,
+     * a callback function is registered to the postcompose event of the map
+     * @param {Backbone.Model} model - this
+     * @param {boolean} value - is this tool activated or not
+     * @returns {void}
+     */
+    togglePostcomposeListener: function (model, value) {
+        if (value && model.get("layoutList").length !== 0) {
+            this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
+
+        }
+        else {
+            Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
+        }
+        Radio.trigger("Map", "render");
+    },
+    /**
+     * draws the print page rectangle onto the canvas
+     * @param {ol.render.Event} evt - postcompose
+     * @returns {void}
+     */
+    createPrintMask: function (evt) {
+        var frameState = evt.frameState,
+            context = evt.context,
+            scale;
+
+        // scale was selected by the user over the view
+        if (this.get("isScaleSelectedManually")) {
+            scale = this.get("currentScale");
+        }
+        else {
+            scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
+            this.setCurrentScale(scale);
+        }
+        this.drawMask(frameState.size, context);
+        this.drawPrintPage(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), scale, context);
+        context.fillStyle = "rgba(0, 5, 25, 0.55)";
+        context.fill();
+    },
+    /**
+     * draws a mask on the whole map
+     * @param {ol.Size} mapSize - size of the map in px
+     * @param {CanvasRenderingContext2D} context - context of the postcompose event
+     * @returns {void}
+     */
+    drawMask: function (mapSize, context) {
+        var mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
+            mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
+
+        context.beginPath();
+        // Outside polygon, must be clockwise
+        context.moveTo(0, 0);
+        context.lineTo(mapWidth, 0);
+        context.lineTo(mapWidth, mapHeight);
+        context.lineTo(0, mapHeight);
+        context.lineTo(0, 0);
+        context.closePath();
+    },
+    /**
+     * draws the print page
+     * @param {ol.Size} mapSize - size of the map in px
+     * @param {number} resolution - resolution of the map in m/px
+     * @param {number} printMapSize - size of the map on the report in dots
+     * @param {number} scale - the optimal print scale
+     * @param {CanvasRenderingContext2D} context - context of the postcompose event
+     * @returns {void}
+     */
+    drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
+        var center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
+            boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
+            boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
+            minx = center[0] - (boundWidth / 2),
+            miny = center[1] - (boundHeight / 2),
+            maxx = center[0] + (boundWidth / 2),
+            maxy = center[1] + (boundHeight / 2);
+
+        // Inner polygon,must be counter-clockwise
+        context.moveTo(minx, miny);
+        context.lineTo(minx, maxy);
+        context.lineTo(maxx, maxy);
+        context.lineTo(maxx, miny);
+        context.lineTo(minx, miny);
+        context.closePath();
+    },
+
+    /**
+     * gets the optimal print scale for a map
+     * @param {ol.Size} mapSize - size of the map in px
+     * @param {number} resolution - resolution of the map in m/px
+     * @param {ol.Size} printMapSize - size of the map on the report in dots
+     * @param {object[]} scaleList - supported print scales, sorted in ascending order
+     * @returns {number} the optimal scale
+     */
+    getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
+        var mapWidth = mapSize[0] * resolution,
+            mapHeight = mapSize[1] * resolution,
+            scaleWidth = mapWidth * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[0],
+            scaleHeight = mapHeight * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[1],
+            scale = Math.min(scaleWidth, scaleHeight),
+            optimalScale = scaleList[0];
+
+        scaleList.forEach(function (printMapScale) {
+            if (scale > printMapScale) {
+                optimalScale = printMapScale;
+            }
+        });
+
+        return optimalScale;
+    },
+
+    // Sets format (DinA4/ A3 Hoch-/Querformat) for print.
     setLayout: function (index) {
         this.set("layout", this.get("layouts")[index]);
     },
-    // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
+
+    // Sets scale for print with the print settings.
     setScale: function (index) {
         var scaleval = this.get("scales")[index].valueInt;
 
         Radio.trigger("MapView", "setScale", scaleval);
     },
 
-    // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
+    // Sets scale for print with the zoom of the map.
     setScaleByMapView: function () {
         var newScale = _.find(this.get("scales"), function (scale) {
             return scale.valueInt === Radio.request("MapView", "getOptions").scale;
@@ -110,28 +323,26 @@ const PrintModel = Tool.extend({
         this.set("scale", newScale);
     },
 
-    // Setzt die Zentrumskoordinate.
+    // Sets center coordinate.
     setCenter: function (value) {
         this.set("center", value);
     },
 
-    //
     setStatus: function (bmodel, value) {
         var scaletext;
 
         if (value && this.get("layouts") === undefined) {
             if (this.get("fetched") === false) {
-                // get print config (info.json)
                 this.fetch({
                     cache: false,
                     success: function (model) {
+                        model.set("layoutList", model.get("layouts"));
                         _.each(model.get("scales"), function (scale) {
                             scale.valueInt = parseInt(scale.value, 10);
                             scaletext = scale.valueInt.toString();
                             scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                             scale.name = "1: " + scaletext;
                         });
-                        model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
                         model.setScaleByMapView();
                         model.set("isCollapsed", false);
                         model.set("fetched", true);
@@ -170,19 +381,6 @@ const PrintModel = Tool.extend({
         }
     },
 
-    getLayersForPrint: function () {
-        var drawLayer = Radio.request("Draw", "getLayer");
-
-        this.set("layerToPrint", []);
-        this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-        this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}));
-
-        if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
-            this.setLayer(drawLayer);
-        }
-        this.getGfiForPrint();
-    },
-
     setGROUPLayerToPrint: function (layers) {
         var sortedLayers;
 
@@ -203,9 +401,9 @@ const PrintModel = Tool.extend({
                     if (layer.has("styles")) {
                         style.push(layer.get("styles"));
                     }
-                    // Für jeden angegebenen Layer muss ein Style angegeben werden.
-                    // Wenn ein Style mit einem Blank angegeben wird,
-                    // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+                    // For each given layer a style must be declared.
+                    // If a style is given with a blank,
+                    // the Default-Style of the layer is used. Example for 3 layers: countries,,cities
                     else {
                         numberOfLayer = layer.get("layers").split(",").length;
                         defaultStyle = "";
@@ -237,7 +435,7 @@ const PrintModel = Tool.extend({
             return layer.get("selectionIDX");
         });
         _.each(sortedLayers, function (layer) {
-            // nur wichtig für treeFilter
+            // only important for treeFilter
             var params = {},
                 style = [],
                 layerURL = layer.get("url"),
@@ -254,9 +452,9 @@ const PrintModel = Tool.extend({
             if (layer.has("styles")) {
                 style.push(layer.get("styles"));
             }
-            // Für jeden angegebenen Layer muss ein Style angegeben werden.
-            // Wenn ein Style mit einem Blank angegeben wird,
-            // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
+            // A style is necessary for each stated layer.
+            // If a style is given with a blank,
+            // the Default-Style of the layer is used. Example for 3 layers: countries,,cities
             else {
                 numberOfLayer = layer.get("layers").split(",").length;
                 defaultStyle = "";
@@ -266,7 +464,7 @@ const PrintModel = Tool.extend({
                 }
                 style.push(defaultStyle);
             }
-            // Damit Web-Atlas gedruckt werden kann
+            // necessary to print Web-Atlas
             if (layer.get("url").indexOf("gdi_mrh_themen") >= 0) {
                 layerURL = layer.get("url").replace("gdi_mrh_themen", "gdi_mrh_themen_print");
             }
@@ -307,7 +505,7 @@ const PrintModel = Tool.extend({
                 isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
                 styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             }
-            // Alle features die eine Kreis-Geometrie haben
+            // All features that have a circle-geometry
             _.each(layer.getSource().getFeatures(), function (feature) {
                 if (feature.getGeometry() instanceof Circle) {
                     // creates a regular polygon from a circle with 32(default) sides
@@ -332,12 +530,12 @@ const PrintModel = Tool.extend({
                     }
                 });
 
-                // Punkte
+                // Points
                 if (type === "Point" || type === "MultiPoint") {
                     printStyleObj = this.createPointStyleForPrint(style);
                     featureStyles[index] = printStyleObj;
                 }
-                // Polygone oder Linestrings
+                // Polygons or Linestrings
                 else {
                     featureStyles[index] = {
                         fillColor: this.getColor(style.getFill().getColor()).color,
@@ -362,7 +560,7 @@ const PrintModel = Tool.extend({
             imgPath = this.createImagePath(),
             imgName = style.getImage() instanceof Icon ? style.getImage().getSrc() : undefined;
 
-        // Punkte ohne Text
+        // Points without text
         if (_.isNull(style.getText()) || _.isUndefined(style.getText())) {
             // style image is an Icon
             if (!_.isUndefined(imgName)) {
@@ -389,7 +587,7 @@ const PrintModel = Tool.extend({
                 };
             }
         }
-        // Texte
+        // Texts
         else {
             pointStyleObject = {
                 label: style.getText().getText(),
@@ -425,17 +623,17 @@ const PrintModel = Tool.extend({
             this.setLayer(layer);
         }, this);
         specification = {
-            layout: this.get("layout").name,
+            layout: this.get("currentLayout").name,
             srs: Radio.request("MapView", "getProjection").getCode(),
             units: "m",
             outputFilename: this.get("outputFilename"),
-            outputFormat: this.get("outputFormat"),
+            outputFormat: this.get("currentFormat"),
             layers: this.get("layerToPrint"),
             pages: [
                 {
                     center: Radio.request("MapView", "getCenter"),
-                    scale: this.get("scale").value,
-                    scaleText: this.get("scale").name,
+                    scale: this.get("currentScale"),
+                    scaleText: "1 : " + this.get("currentScale"),
                     geodetic: true,
                     dpi: "96",
                     mapTitle: this.get("title")
@@ -452,13 +650,13 @@ const PrintModel = Tool.extend({
         this.set("specification", specification);
     },
     /**
-     * Checkt, ob Kreis an GFI-Position gezeichnet werden soll und fügt ggf. Layer ein.
+     * Checks, if a circle should be drawn at GFI-Position and, if necessary, adds a layer.
      * @param {number[]} gfiPosition -
      * @returns {void}
      */
     setGFIPos: function (gfiPosition) {
         if (gfiPosition !== null) {
-            gfiPosition[0] = gfiPosition[0] + 0.25; // Verbesserung der Punktlage im Print
+            gfiPosition[0] = gfiPosition[0] + 0.25; // improvment of Point location in Print
             this.push("layerToPrint", {
                 type: "Vector",
                 styleProperty: "styleId",
@@ -497,21 +695,20 @@ const PrintModel = Tool.extend({
     },
 
     /**
-    * Setzt die createURL in Abhängigkeit der GFI
+    * Sets createURL in dependence of GFI
     * @returns {void}
     */
     getGfiForPrint: function () {
         var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
             gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
-            gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
-            gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
-            // printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
-            printGFI = this.get("gfi"), // soll laut config Parameter gedruckt werden?
-            printurl = this.get("printurl"); // URL des Druckdienstes
+            gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitle
+            gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Coordinates of GFI
+            printGFI = this.get("gfi"), // should be printed according to config parameter?
+            printurl = this.get("printurl"); // URL of print service
 
         this.set("gfiParams", gfiParams);
         this.set("gfiTitle", gfiTitle);
-        // Wenn eine GFIPos vorhanden ist, und die Anzahl der gfiParameter != 0 ist
+        // If GFIPos exists and number of gfiParameter is != 0
         if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
             this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
         }
@@ -522,11 +719,10 @@ const PrintModel = Tool.extend({
     },
 
     /**
-     * @desc Führt einen HTTP-Post-Request aus.
+     * @desc Conducts an HTTP-Post-Request.
      * @returns {void}
      */
     getPDFURL: function () {
-
         $.ajax({
             // url: this.get("proxyURL") + "?url=" + this.get("createURL"),
             url: this.get("createURL"),
@@ -551,8 +747,8 @@ const PrintModel = Tool.extend({
     },
 
     /**
-     * @desc Öffnet das erzeugte PDF im Browser.
-     * @param {Object} data - Antwort vom Druckdienst. Enthält die URL zur erzeugten PDF.
+     * @desc Opens the generated PDF in the browser.
+     * @param {Object} data - Answer from print service. Contains the URL for the generated PDF.
      * @returns {void}
      */
     openPDF: function (data) {
@@ -560,9 +756,9 @@ const PrintModel = Tool.extend({
     },
 
     /**
-     * @desc Hilfsmethode um ein Attribut vom Typ Array zu setzen.
-     * @param {String} attribute - Das Attribut das gesetzt werden soll.
-     * @param {whatever} value - Der Wert des Attributs.
+     * @desc Helper method to set an attribute of type array.
+     * @param {String} attribute - The attribute to set.
+     * @param {whatever} value - The value of the attribute.
      * @returns {void}
      */
     push: function (attribute, value) {
@@ -572,15 +768,15 @@ const PrintModel = Tool.extend({
         this.set(attribute, _.flatten(tempArray));
     },
 
-    // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.
-    // Ist es ein rgb(a) String, wird er in ein hexadezimal String umgewandelt.
-    // Wenn vorhanden, wird die Opacity(default = 1) überschrieben.
-    // Gibt den hexadezimal String und die Opacity zurück.
+    // Proofs if it is a rgb(a) or a hexadecimel String.
+    // If it is a rgb(a) string, it will be converted to an hexadecimal string.
+    // If available, the opacity(default = 1) is overwritten.
+    // returns an hexadecimel String and the opacity.
     getColor: function (value) {
         var color = value,
             opacity = 1;
 
-        // color kommt als array--> parsen als String
+        // color comes as array--> parse to String
         color = color.toString();
 
         if (color.search("#") === -1) {
@@ -603,12 +799,12 @@ const PrintModel = Tool.extend({
 
     },
 
-    // Setzt den hexadezimal String zusammen und gibt ihn zurück.
+    // returns the assembled hexadecimal string.
     rgbToHex: function (red, green, blue) {
         return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
     },
 
-    // Ein Integer (color) wird in ein hexadezimal String umgewandelt und zurückgegeben.
+    // Converts an integer (color) to hexadecimal string and return it.
     componentToHex: function (color) {
         var hex = color.toString(16);
 
@@ -671,6 +867,40 @@ const PrintModel = Tool.extend({
         return [minx, miny, maxx, maxy];
     },
 
+    /**
+     * gets the optimal map resolution for a print scale and a map size
+     * @param {number} scale - print scale for the report
+     * @param {number[]} mapSize - the current map size
+     * @param {number[]} printMapSize - size of the map on the report
+     * @returns {number} the optimal resolution
+     */
+    getOptimalResolution: function (scale, mapSize, printMapSize) {
+        var dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
+            resolutionX = printMapSize[0] * scale / (dotsPerMeter * mapSize[0]),
+            resolutiony = printMapSize[1] * scale / (dotsPerMeter * mapSize[1]);
+
+        return Math.max(resolutionX, resolutiony);
+    },
+
+    /**
+     * returns the size of the map on the report
+     * @returns {number[]} width and height
+     */
+    getPrintMapSize: function () {
+        var layoutMapInfo = this.getAttributeInLayoutByName("map");
+
+        return [layoutMapInfo.width, layoutMapInfo.height];
+    },
+
+    /**
+     * returns a capabilities attribute object of the current layout, corresponding to the given name
+     * @param {string} name - name of the attribute to get
+     * @returns {object|undefined} corresponding attribute or null
+     */
+    getAttributeInLayoutByName: function (name) {
+        return this.get("currentLayout")[name];
+    },
+
     setPrecomposeListener: function (value) {
         this.set("precomposeListener", value);
     },
@@ -678,10 +908,98 @@ const PrintModel = Tool.extend({
     setPostcomposeListener: function (value) {
         this.set("postcomposeListener", value);
     },
-
+    /**
+     * @param {boolean} value - true if the current layout supports meta data
+     * @returns {void}
+     */
+    setIsMetaDataAvailable: function (value) {
+        this.set("isMetaDataAvailable", value);
+    },
     // setter for title
     setTitle: function (value) {
         this.set("title", value);
+    },
+    /**
+     * @param {object[]} value - current print layout
+     * @returns {void}
+     */
+    setCurrentLayout: function (value) {
+        this.set("currentLayout", value);
+    },
+    /**
+     * @param {string} value - current print format
+     * @returns {void}
+     */
+    setCurrentFormat: function (value) {
+        this.set("currentFormat", value);
+    },
+    /**
+     * @param {boolean} value - true if mapfish can print gfi
+     * @returns {void}
+     */
+    setIsGfiAvailable: function (value) {
+        this.set("isGfiAvailable", value);
+    },
+    /**
+     * @param {boolean} value - true if gfi is active
+     * @returns {void}
+     */
+    setIsGfiActive: function (value) {
+        this.set("isGfiActive", value);
+    },
+    /**
+     * @param {boolean} value - true if mapfish can print legend
+     * @returns {void}
+     */
+    setIsLegendAvailable: function (value) {
+        this.set("isLegendAvailable", value);
+    },
+    /**
+     * @param {boolean} value - true if mapfish can print scale
+     * @returns {void}
+     */
+    setIsScaleAvailable: function (value) {
+        this.set("isScaleAvailable", value);
+    },
+    /**
+     * @param {number} value - current print scale
+     * @returns {void}
+     */
+    setCurrentScale: function (value) {
+        this.set("currentScale", value.toString());
+    },
+
+    setLayoutList: function (layouts) {
+        var that = this;
+
+        _.each(layouts, function (layout) {
+            that.get("layoutList").push(layout);
+        });
+    },
+    setFormatList: function (formats) {
+        var that = this;
+
+        _.each(formats, function (format) {
+            that.get("formatList").push(format.name);
+        });
+    },
+    setScaleList: function (scales) {
+        var that = this;
+
+        _.each(scales, function (scale) {
+            that.get("scaleList").push(scale.value);
+        });
+    },
+
+    /**
+     * @param {boolean} value - true if the scale is selected by the user
+     * @returns {void}
+     */
+    setIsScaleSelectedManually: function (value) {
+        this.set("isScaleSelectedManually", value);
+    },
+    setEventListener: function (value) {
+        this.set("eventListener", value);
     }
 });
 
