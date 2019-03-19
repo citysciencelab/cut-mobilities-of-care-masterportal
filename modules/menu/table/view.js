@@ -25,11 +25,48 @@ const Menu = Backbone.View.extend({
     className: "table-nav-0deg",
     template: _.template(MainTemplate),
     render: function () {
+        var that = this;
+
         $(this.el).html(this.template());
         $(".lgv-container").append(this.$el);
         this.$el.draggable({
             containment: "#map",
-            handle: ".icon-drag"
+            handle: ".icon-drag",
+            drag: function () {
+                var rotAngle = that.model.get("rotateAngle");
+
+                if (rotAngle === 0 || rotAngle === 180) {
+                    that.$el.css({
+
+                        "-webkit-transform-origin": "50% 50%",
+                        "-ms-transform-origin": "50% 50%",
+                        "-moz-transform-origin": "50% 50%"
+                    });
+                }
+                else if (rotAngle === 90) {
+                    that.$el.css({
+
+                        "-webkit-transform-origin": "5% 50%",
+                        "-ms-transform-origin": "5% 50%",
+                        "-moz-transform-origin": "5% 50%"
+                    });
+                }
+                else if (rotAngle === 270) {
+                    that.$el.css({
+
+                        "-webkit-transform-origin": "240px 240px",
+                        "-ms-transform-origin": "30% 50%",
+                        "-moz-transform-origin": "30% 50%"
+                    });
+                }
+            },
+            stop: function (evt, ui) {
+                var pos = ui.helper.offset(),
+                    x = pos.left,
+                    y = pos.top;
+
+                that.placeMenu(x, y);
+            }
         });
 
         new CloseClickView().render();
@@ -62,6 +99,8 @@ const Menu = Backbone.View.extend({
             x = touch.clientX - 20,
             y = touch.clientY - 20,
             rotateAngle = this.model.get("rotateAngle"),
+            menuWidth = $("#table-nav").width(),
+            menuHeight = $("#table-nav").height(),
             that = this;
 
         if (rotateAngle === 0) {
@@ -72,23 +111,22 @@ const Menu = Backbone.View.extend({
         }
         else if (rotateAngle === 90) {
             this.$el.css({
-                "left": x - $("#table-nav").width() / 2 + $("#table-nav").height() / 2 + "px",
-                "top": y + $("#table-nav").width() / 2 - $("#table-nav").height() / 2 + "px"
+                "left": x - menuWidth / 2 + menuHeight / 2 + "px",
+                "top": y + menuWidth / 2 - menuHeight / 2 + "px"
             });
         }
         else if (rotateAngle === 180) {
             this.$el.css({
-                "left": x - $("#table-nav").width() + $("#table-nav").height() / 2 + "px",
+                "left": x - menuWidth + menuHeight / 2 + "px",
                 "top": y + "px"
             });
         }
         else if (rotateAngle === 270) {
             this.$el.css({
-                "left": x - $("#table-nav").width() / 2 + $("#table-nav").height() / 2 + "px",
-                "top": y - $("#table-nav").width() / 2 + "px"
+                "left": x - menuWidth / 2 + menuHeight / 2 + "px",
+                "top": y - menuWidth / 2 + "px"
             });
         }
-
 
         this.$el.on("touchend", function () {
 
@@ -97,6 +135,34 @@ const Menu = Backbone.View.extend({
 
     },
     placeMenu: function (x, y) {
+        var currentClass = $("#table-nav").attr("class"),
+            posClass,
+            minPos;
+
+        minPos = this.calcSnapPosition(x, y);
+
+        if (minPos === 0) {
+            posClass = "table-nav-0deg";
+            this.model.set("rotateAngle", 0);
+        }
+        else if (minPos === 1) {
+            posClass = "table-nav-90deg";
+            this.model.set("rotateAngle", 90);
+        }
+        else if (minPos === 2) {
+            posClass = "table-nav-180deg";
+            this.model.set("rotateAngle", 180);
+        }
+        else if (minPos === 3) {
+            posClass = "table-nav-270deg";
+            this.model.set("rotateAngle", 270);
+        }
+
+        this.$el.removeClass(currentClass);
+        this.$el.addClass(posClass);
+        this.$el.removeAttr("style");
+    },
+    calcSnapPosition (x, y) {
         var mapWidth,
             mapHeight,
             distTop,
@@ -105,65 +171,25 @@ const Menu = Backbone.View.extend({
             distRight,
             distArray = [],
             minDist,
-            minPos,
-            currentClass = $("#table-nav").attr("class"),
-            posClass;
+            minPos;
 
         mapWidth = Math.round($(".lgv-container").width());
         mapHeight = Math.round($(".lgv-container").height());
 
+        // calculate the distances of the current finger position to the middle positions of each side
+        distBottom = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (mapHeight - y) * (mapHeight - y));
         distLeft = Math.sqrt((0 - x) * (0 - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y));
         distTop = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (0 - y) * (0 - y));
         distRight = Math.sqrt((mapWidth - x) * (mapWidth - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y));
-        distBottom = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (mapHeight - y) * (mapHeight - y));
 
+        distArray.push(distBottom);
         distArray.push(distLeft);
         distArray.push(distTop);
         distArray.push(distRight);
-        distArray.push(distBottom);
         minDist = _.min(distArray);
         minPos = distArray.indexOf(minDist);
 
-        if (minPos === 0) {
-            posClass = "table-nav-90deg";
-            this.model.set("rotateAngle", 90);
-        }
-        else if (minPos === 1) {
-            posClass = "table-nav-180deg";
-            this.model.set("rotateAngle", 180);
-        }
-        else if (minPos === 2) {
-            posClass = "table-nav-270deg";
-            this.model.set("rotateAngle", 270);
-        }
-        else if (minPos === 3) {
-            posClass = "table-nav-0deg";
-            this.model.set("rotateAngle", 0);
-        }
-
-        this.$el.removeClass(currentClass);
-        this.$el.addClass(posClass);
-        this.$el.removeAttr("style");
-
-        /*this.$el.css({
-            "left": "-80px",
-            "top": "calc(50% - 80px)",
-            "transform": "rotate(90deg)"
-        });*/
-
-
-
-
-        // this.$el.attr("id", "table-nav-90deg")
-
-        /* var rotateAngle = 90,
-            moveToX = "-100px",
-            moveToY = "-100px";
-
-        $("#table-nav").css({
-
-            "transform": "translate(" + moveToX + ", " + moveToY + ") rotate(" + rotateAngle + "deg)"
-        }); */
+        return minPos;
     }
 });
 
