@@ -14,7 +14,7 @@ import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
 import PrintV2 from "../../tools/print_/model";
-import Print from "../../tools/print_/HighResolutionPlotService/model";
+import Print from "../../tools/print/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -192,7 +192,7 @@ const ModelList = Backbone.Collection.extend(
             }
             else if (attrs.type === "tool") {
                 if (attrs.id === "print") {
-                    if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
+                    if (attrs.version === undefined) {
                         return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                     }
                     return new PrintV2(attrs, options);
