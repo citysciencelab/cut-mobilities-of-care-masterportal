@@ -14,13 +14,13 @@ import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
 import PrintV2 from "../../tools/print_/model";
-import Print from "../../tools/print/model";
+import Print from "../../tools/print_/HighResolutionPlotService/model";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Contact from "../../contact/model";
+import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
 import KmlImport from "../../tools/kmlimport/model";
@@ -192,7 +192,7 @@ const ModelList = Backbone.Collection.extend(
             }
             else if (attrs.type === "tool") {
                 if (attrs.id === "print") {
-                    if (attrs.version === undefined) {
+                    if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
                         return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                     }
                     return new PrintV2(attrs, options);

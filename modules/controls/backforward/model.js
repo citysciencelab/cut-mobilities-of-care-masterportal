@@ -1,20 +1,18 @@
-define(function (require) {
-
-    var Backbone = require("backbone"),
-        Radio = require("backbone.radio"),
-        ol = require("openlayers"),
-        BackForwardModel;
-
-  BackForwardModel = Backbone.Model.extend({
-      defaults: {
-        baselayer: "",
-        newOvmView: ""
-      },
-      // wird aufgerufen wenn das Model erstellt wird
-      initialize: function () {
-         console.log('BackForwardModel');
-      }
-    });
-
-    return BackForwardModel;
+const BackForwardModel = Backbone.Model.extend({
+    defaults: {
+        CenterScales: [],
+        wentFor: false,
+        currentPos: 0
+    },
+    setCenterScales: function (val) {
+        this.set("CenterScales", val);
+    },
+    setWentFor: function (bool) {
+        this.set("wentFor", bool);
+    },
+    setCurrentPos: function (val) {
+        this.set("currentPos", val);
+    }
 });
+
+export default BackForwardModel;

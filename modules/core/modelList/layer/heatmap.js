@@ -56,7 +56,7 @@ const HeatmapLayer = Layer.extend({
             typ: this.get("typ"),
             id: this.get("id"),
             weight: function (feature) {
-                return feature.get("normalizeWeightForHeatmap");
+                return feature.get("weightForHeatmap");
             },
             gfiAttributes: this.get("gfiAttributes"),
             blur: this.get("blur"),

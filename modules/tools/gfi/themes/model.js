@@ -12,7 +12,9 @@ const Theme = Backbone.Model.extend({
         // Info-Format für WMS-GFI
         infoFormat: undefined,
         // GFI Attribute
-        gfiContent: undefined
+        gfiContent: undefined,
+        // uiStyle Setting
+        uiStyle: "default"
     },
 
     requestFeatureInfos: function () {
@@ -250,6 +252,7 @@ const Theme = Backbone.Model.extend({
     },
 
     setGfiContent: function (value) {
+        this.setUiStyle(Radio.request("Util", "getUiStyle"));
         this.set("gfiContent", value);
     },
 
@@ -308,6 +311,10 @@ const Theme = Backbone.Model.extend({
 
     translateGFI: function (gfiList, gfiAttributes) {
         var pgfi = [];
+
+        if (gfiAttributes === "ignore") {
+            return pgfi;
+        }
 
         _.each(gfiList, function (element) {
             var preGfi = {},
@@ -388,6 +395,10 @@ const Theme = Backbone.Model.extend({
             });
         });
         return content;
+    },
+
+    setUiStyle: function (value) {
+        this.set("uiStyle", value);
     }
 });
 
