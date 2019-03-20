@@ -1,0 +1,2 @@
+./test/unittests/**/*.test.js
+--bail
