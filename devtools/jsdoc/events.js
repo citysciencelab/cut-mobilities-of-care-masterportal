@@ -580,7 +580,7 @@
 /** -------------------- GFIVIEW -------------------- */
 
 /**
- * @event gfiView#render
+ * @event gfiView#RadioTriggerRender
  * @description Triggered when GFI has to render.
  * @example Radio.trigger("gfiView", "render");
  */
