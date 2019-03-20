@@ -124,11 +124,10 @@ const GroupLayer = Layer.extend({
     * @returns {void}
     **/
     checkForScale: function (options) {
-        var isOutOfRange = false;
-
+        var isOutOfRange = true;
         _.each(this.get("layerSource"), function (layerSource) {
-            if (parseFloat(options.scale, 10) >= layerSource.get("maxScale") || parseFloat(options.scale, 10) <= layerSource.get("minScale")) {
-                isOutOfRange = true;
+            if (parseFloat(options.scale, 10) <= layerSource.get("maxScale") && parseFloat(options.scale, 10) >= layerSource.get("minScale")) {
+                isOutOfRange = false;
             }
         });
         this.setIsOutOfRange(isOutOfRange);
