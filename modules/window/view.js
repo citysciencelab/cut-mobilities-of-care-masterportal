@@ -44,6 +44,27 @@ const WindowView = Backbone.View.extend({
                 this.$el.html(this.templateTable(attr));
                 document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
                 this.$el.addClass("table-tool-window");
+
+                if ($("#table-nav").attr("class") === "table-nav-0deg ui-draggable" || $("#table-nav").attr("class") === "table-nav-0deg") {
+                    this.$el.css({
+                        "transform": "rotate(0deg)"
+                    });
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-90deg") {
+                    this.$el.css({
+                        "transform": "rotate(90deg)"
+                    });
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-180deg") {
+                    this.$el.css({
+                        "transform": "rotate(180deg)"
+                    });
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-270deg") {
+                    this.$el.css({
+                        "transform": "rotate(270deg)"
+                    });
+                }
             }
             else {
                 this.$el.html(this.templateMax(attr));
