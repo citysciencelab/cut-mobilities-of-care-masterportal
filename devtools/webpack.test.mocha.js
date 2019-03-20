@@ -1,6 +1,5 @@
 var webpack = require("webpack"),
     path = require("path");
-    dom = require("jsdom-global")();
 
 module.exports = {
     target: "node",
@@ -31,7 +30,8 @@ module.exports = {
             Backbone: "backbone",
             Radio: "backbone.radio",
             _: "underscore",
-            Config: path.resolve(__dirname, "../test/unittests/deps/testConfigConsole")
+            Config: path.resolve(__dirname, "../test/unittests/deps/testConfigConsole"),
+            XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer")
         }),
         new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
     ]
