@@ -321,7 +321,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
                 return val;
             }) : "",
             legendArray = data ? this.getLegendAttributes(data[0]) : "",
-            year = data ? data[0] : "";
+            year = data ? data[0].year : "";
 
         return {
             data: newData,
