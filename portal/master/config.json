@@ -399,7 +399,8 @@
       "mousePosition": true,
       "button3d": true,
       "buttonOblique": true,
-      "freeze": true
+      "freeze": true,
+      "backforward" : true
     },
     "scaleLine": true,
     "Baumtyp": "light",

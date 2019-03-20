@@ -50,7 +50,8 @@ Konfiguration der Searchbar
 |----|-------------|---|-------|------------|
 |bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
 |gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
-|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)|Konfiguration des GDI (elastic) Suchdienstes.|
+|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)||Konfiguration des GDI (elastic) Suchdienstes.|
+|osm|nein|[osm](#markdown-header-portalconfigsearchbarosm)||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
 |recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
@@ -100,16 +101,16 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
-#### Portalconfig.searchBar.osm ####
+#### Portalconfig.searchbar.osm ####
 Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick auf die Lupe oder Enter ausgelöst
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
 |serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
-|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
-|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
-|classes|nein|string|kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
+|limit|nein|Number||Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string||kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+|classes|nein|string||kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
 
 **Beispiel**
 
@@ -308,6 +309,8 @@ Konfiguration der Suche über die sichtbaren WFS
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+|backforwardview|nein|Boolean/Object|false|Boolean: Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+
 
 ***
 
@@ -1650,7 +1653,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 |----|-------------|---|-------|------------|
 |id|ja|String|"Eineindeutige-ID7711"|Es muss eine eineindeutige ID vergeben werden.|
 |typ|ja|String|"StaticImage"|Setzt den Layertypen auf StaticImage welcher statische Bilder als Layer darstellen kann.|
-|url|ja|Link|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
+|url|ja|String|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
 |name|ja|String|"Static Image Name"|Setzt den Namen des Layers für den Layerbaum|
 |extent|ja|Array|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
 

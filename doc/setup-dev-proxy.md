@@ -1,4 +1,4 @@
->So wird die lokale Entwicklungsumgebung eingerichtet.
+So wird die lokale Entwicklungsumgebung eingerichtet.
 
 [TOC]
 

@@ -1,3 +1,23 @@
+# Changelog LGV Master-Portal 2.2.6
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 184198d7f Cesium wird nun über die index.html geladen
+
+# Changelog LGV Master-Portal 2.2.5
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - 61eaf2c18 Der Filter zeigt jetzt bei jedem öffnen die detailview an
+
 # Changelog LGV Master-Portal 2.2.4
 
 NEU:
