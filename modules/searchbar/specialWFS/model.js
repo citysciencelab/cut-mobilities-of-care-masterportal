@@ -236,22 +236,21 @@ const SpecialWFSModel = Backbone.Model.extend({
                 });
             }
             else {
-                console.error("Antwort eines specialWFS konnte nicht verarbeitet werden");
-                console.error(element);
+                console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
     },
 
     /**
-     * Fehlerbehandlung
-     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * Logs error in console
+     * @param {object} err error object from ajax request
      * @returns {void}
      */
     showError: function (err) {
         var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        console.error("Alert", "alert", "Dienst nicht erreichbar. " + detail);
+        console.error("Service unavailable. " + detail);
     },
 
     /**

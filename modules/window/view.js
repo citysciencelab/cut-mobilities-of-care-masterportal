@@ -16,6 +16,15 @@ const WindowView = Backbone.View.extend({
         this.$el.draggable({
             containment: "#map",
             handle: ".move",
+            start: function (event, ui) {
+                // As .draggable works by manipulating the css top and left values the following code is necessary if the bottom and right values
+                // are used for the positioning of the tool window (as is the case for the table tool window). Otherwise dragging the window will
+                // resize the window if no height and width values are set.
+                ui.helper.css({
+                    right: "auto",
+                    bottom: "auto"
+                });
+            },
             stop: function (event, ui) {
                 ui.helper.css({"height": "", "width": ""});
             }
