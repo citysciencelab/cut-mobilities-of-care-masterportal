@@ -1,4 +1,16 @@
 /**
+ * @namespace Themes
+ * @memberOf GFI
+ * @description GFI-Themes
+ */
+
+/**
+ * @namespace ContiniuousCountingBikeTheme
+ * @memberOf GFI.Themes
+ * @description GFI Theme for ContiniuousCountingBike
+ */
+
+/**
  * @namespace MapMarker
  * @description MapMarker
  */

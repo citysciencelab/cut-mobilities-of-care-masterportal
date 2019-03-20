@@ -12,9 +12,9 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
             downloadLink: ""
         }),
     /**
-     * @class ContiniuousCountingBikeTheme
-     * @extends Theme
-     * @memberof GFI
+     * @class ContiniuousCountingBikeThemeModel
+     * @extends GFI.Themes
+     * @memberof GFI.Themes.ContiniuousCountingBikeTheme
      * @constructs
      * @property {Object} dayDataset={} Empty object for the dataset of yesterday
      * @property {Object} lastSevenDaysDataset={} Empty object for the dataset of the last seven days
@@ -339,7 +339,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
     /**
      * getDataAttributes returns an array of key values.
      * @param  {Object} inspectData contains the first row of the dataset
-     * @return {Array} showData array with key values
+     * @return {String[]} showData array with key values
      */
     getDataAttributes: function (inspectData) {
         var showData = ["total"];

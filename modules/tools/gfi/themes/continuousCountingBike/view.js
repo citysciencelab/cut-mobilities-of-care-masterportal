@@ -3,12 +3,9 @@ import ContinuousCountingBikeTemplate from "text-loader!./template.html";
 /**
  * @member ContinuousCountingBikeTemplate
  * @description Template used to create gfi for continuousCountingBike
- * @memberof ContinuoisCountingBike
+ * @memberof GFI.Themes.ContiniuousCountingBikeTheme
  */
-const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContinuoiusCountingBikeView.prototype */{
-    tagName: "div",
-    className: "continuousCountingBike",
-    template: _.template(ContinuousCountingBikeTemplate),
+const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCountingBikeThemeView.prototype */{
     events: {
         "click .tab-toggle": "toggleTab",
         "change input": function (evt) {
@@ -25,13 +22,15 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContinuoiusCounti
             this.model.download();
         }
     },
-
     /**
-     * @class ContinuoiusCountingBikeView
-     * @extends ThemeView.View
-     * @memberof GFI
+     * @class ContiniuousCountingBikeThemeView
+     * @extends GFI.Themes
+     * @memberof GFI.Themes.ContiniuousCountingBikeTheme
      * @constructs
      */
+    tagName: "div",
+    className: "continuousCountingBike",
+    template: _.template(ContinuousCountingBikeTemplate),
 
     /**
      * toggleTabis called when an other tab is activated

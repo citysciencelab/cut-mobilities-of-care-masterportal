@@ -474,6 +474,27 @@
  * @example Radio.request("Util", "punctuate", "3000.50");
  */
 
+/**
+ * @event Util#RadioRequestUtilIsViewMobile
+ * @description checks if device is mobile
+ * @returns {Boolean} device is mobile
+ * @example Radio.request("Util", "isViewMobile");
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetProxyURL
+ * @description returns the proxyURL
+ * @param {String} url to be proxied
+ * @returns {string} proxyURL
+ * @example Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetIgnoredKeys
+ * @description returns the ignoredKeys
+ * @returns {string[]} ignoredKeys
+ * @example Radio.request("Util", "getIgnoredKeys");
+ */
 
 /** -------------------- GRAPH -------------------- */
 
@@ -482,6 +503,14 @@
  * @description starts the generating of a graphic
  * @param {Object} graphConfig contains the options for the graphic
  * @example Radio.trigger("Graph", "createGraph", );
+ */
+
+/** -------------------- GFILIST -------------------- */
+
+/**
+ * @event gfiList#RadioTriggerRedraw
+ * @description request feature infos for each model
+ * @example Radio.trigger("gfiList", "redraw", );
  */
 
 /** -------------------- QUICKHELP -------------------- */
@@ -512,6 +541,12 @@
  * @example Radio.trigger("GFI", "setIsVisible", false);
  */
 
+/**
+ * @event GFI#RadioRequestGFIGetCurrentView
+ * @description returns currentView
+ * @returns {Backbone.View} GFI-View
+ * @example Radio.request("GFI", "getCurrentView");
+ */
 
 /** -------------------- MAPMARKER -------------------- */
 
@@ -540,5 +575,21 @@
  * @description shows the mapMarker
  * @param {number[]} coordinate mapMarker position
  * @example Radio.trigger("MapMarker", "showMarker", coordinate);
+ */
+
+/** -------------------- GFIVIEW -------------------- */
+
+/**
+ * @event gfiView#render
+ * @description Triggered when GFI has to render.
+ * @example Radio.trigger("gfiView", "render");
+ */
+
+/** -------------------- MOUSEHOVER -------------------- */
+
+/**
+ * @event MouseHover#RadioTriggerMouseHoverHide
+ * @description hides the mouse hover div
+ * @example Radio.trigger("MouseHover", "hide");
  */
 

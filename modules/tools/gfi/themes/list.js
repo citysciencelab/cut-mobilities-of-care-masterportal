@@ -32,7 +32,15 @@ import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
 
 
-const ThemeList = Backbone.Collection.extend({
+const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
+    /**
+     * @class ThemeList
+     * @extends GFI
+     * @memberof GFI.Themes
+     * @constructs
+     * @listens gfiList#RadioTriggerRedraw
+     * @fires MouseHover#RadioTriggerMouseHoverHide
+     */
     model: function (attrs, options) {
         var gfiTheme = attrs.gfiTheme,
             theme;

@@ -1,4 +1,13 @@
-const ThemeView = Backbone.View.extend({
+const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
+    /**
+     * @class ThemeView
+     * @extends GFI
+     * @memberof GFI.Themes
+     * @constructs
+     * @listens AlertingView#RadioTriggerAlertClosed
+     * @fires Util#RadioRequestUtilIsViewMobile
+     * @fires GFI#RadioRequestGFIGetCurrentView
+     */
     initialize: function () {
         var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
             channel = Radio.channel("gfiView");
