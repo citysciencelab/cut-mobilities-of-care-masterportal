@@ -44,7 +44,7 @@
 		"serviceId": "elastic"
 	  },
      "visibleVector": {
-        "gfiOnClick": true
+        "gfiOnClick": false
       },
       "specialWFS":
       {
