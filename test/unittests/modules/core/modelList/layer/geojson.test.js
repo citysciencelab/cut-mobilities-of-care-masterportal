@@ -1,5 +1,8 @@
+<<<<<<< HEAD:test/unittests/modules/core/modelList/layer/testGeoJson.test.js
 import {expect} from "chai";
 import {assert} from "chai";
+=======
+>>>>>>> update test for geojson and preparser in console:test/unittests/modules/core/modelList/layer/geojson.test.js
 import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
 import MapView from "@modules/core/mapView.js";
 import Util from "@testUtil";
