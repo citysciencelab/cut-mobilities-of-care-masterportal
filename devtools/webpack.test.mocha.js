@@ -1,9 +1,5 @@
 var webpack = require("webpack"),
-    path = require("path"),
-    chai = require("chai"),
-    chaiHttp = require("chai-http");
-
-    chai.use(chaiHttp);
+    path = require("path");
 
 module.exports = {
     target: "node",
