@@ -3,6 +3,17 @@ import CustomTreeParser from "./parserCustomTree";
 
 const Preparser = Backbone.Model.extend({
     defaults: {},
+
+    /**
+     * @class Preparser
+     * @extends Backbone.Model
+     * @memberof Core
+     * @constructs
+     * @fires Util#getConfig
+     * @description Loading and preperation for parsing (calls parser for default or custom tree) of the configuration file (config.json).
+     * @param {*} attributes todo
+     * @param {*} options todo
+     */
     initialize: function (attributes, options) {
         this.url = this.getUrlPath(options.url);
         this.fetch({async: false,
@@ -16,27 +27,49 @@ const Preparser = Backbone.Model.extend({
         });
     },
 
+    /**
+    * Request config path from util.
+    * This seperate helper method enables unit tests of the getUrlPath-method.
+    * @fires Util#getConfig
+    * @return {string} relative path or absolute url to config file
+    */
+    requestConfigFromUtil: function () {
+        return Radio.request("Util", "getConfig");
+    },
+
+    /**
+    * build url to config file. decide between absolute or relative path
+    * @param {string} url - base url for config
+    * @return {string} url to config file
+    */
     getUrlPath: function (url) {
         var path = url !== undefined ? url : "config.json",
-            addPath,
-            isAddPathValid;
+            configPath;
 
         if (path.slice(-6) === "?noext") {
             path = url;
         }
         else if (path.slice(-5) !== ".json") {
-            addPath = Radio.request("Util", "getConfig");
-            isAddPathValid = addPath.length > 1;
-            // removes trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+            configPath = this.requestConfigFromUtil();
 
-            if (isAddPathValid) {
-                if (path.slice(-1) === "/") {
-                    path = path.slice(0, -1);
+            if (configPath && configPath.length > 0) {
+
+                if (configPath.match(/^https?:\/\//)) {
+                    // the provided path is an absolute path
+                    path = configPath;
+
                 }
-                if (addPath.slice(0, 1) === "/") {
-                    addPath = addPath.slice(1);
+                else {
+                    // the provided path is a relative path
+                    // remove trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
+                    if (path.slice(-1) === "/") {
+                        path = path.slice(0, -1);
+                    }
+                    if (configPath.slice(0, 1) === "/") {
+                        configPath = configPath.slice(1);
+                    }
+                    path = path + "/" + configPath;
                 }
-                path = path + "/" + addPath;
             }
             else {
                 path = "config.json";
@@ -46,6 +79,11 @@ const Preparser = Backbone.Model.extend({
         return path;
     },
 
+    /**
+    * todo
+    * @param {*} response todo
+    * @returns {*} todo
+    */
     parse: function (response) {
         var attributes = {
             portalConfig: response.Portalconfig,
@@ -65,6 +103,11 @@ const Preparser = Backbone.Model.extend({
         }
     },
 
+    /**
+    * todo
+    * @param {*} globalFlag todo
+    * @returns {*} todo
+    */
     parseIsFolderSelectable: function (globalFlag) {
         if (globalFlag === false) {
             return false;
@@ -72,6 +115,10 @@ const Preparser = Backbone.Model.extend({
         return true;
     },
 
+    /**
+    * todo
+    * @returns {*} todo
+    */
     requestSnippetInfos: function () {
         var infos,
             url;
