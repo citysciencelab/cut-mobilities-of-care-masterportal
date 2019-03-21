@@ -34,11 +34,10 @@ const PrintModel = Tool.extend({
         title: "PrintResult",
         outputFilename: "Ausdruck",
         outputFormat: "pdf",
-        gfiToPrint: [], //  visible GFIs
+        // gfiToPrint: [], //  visible GFIs
         center: [],
         scale: {},
         layerToPrint: [],
-        fetched: false, // declares if info.json is already loaded
         gfi: false,
         printurl: "",
         gfiMarker: {
@@ -56,8 +55,6 @@ const PrintModel = Tool.extend({
                 stroke: false
             }
         },
-        deactivateGFI: false,
-        renderToWindow: true,
         proxyURL: "",
         glyphicon: "glyphicon-print",
         precomposeListener: {},
@@ -66,33 +63,10 @@ const PrintModel = Tool.extend({
         INCHES_PER_METER: 39.37
     }),
 
-    // Determine the URL to fetch in setStatus with query of ServiceId
-    url: function () {
-        var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
-            url = resp && resp.get("url") ? resp.get("url") : null,
-            printurl;
-
-        if (url) {
-            if (this.get("configYAML")) {
-                printurl = url + this.get("configYAML");
-            }
-            else {
-                printurl = url;
-            }
-
-            this.set("printurl", printurl);
-            // return this.get("proxyURL") + "?url=" + printurl + "/info.json";
-            return printurl + "/info.json";
-        }
-        return "undefined"; // has to return a string, otherwise runtime error
-    },
-
     initialize: function () {
         var channel = Radio.channel("Print");
 
         this.superInitialize();
-        console.log("Hallo dEE Print");
-
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (model.get("layoutList").length === 0) {
@@ -101,13 +75,14 @@ const PrintModel = Tool.extend({
                 this.togglePostcomposeListener(model, value);
                 this.updatePrintPage();
             },
-            "change:layout": this.updatePrintPage,
-            "change:scale": this.updatePrintPage,
             "change:specification": this.getPDFURL
         });
 
         this.listenTo(Radio.channel("MapView"), {
-            "changedOptions": this.setScaleByMapView,
+            "changedOptions": function () {
+                this.setIsScaleSelectedManually(false);
+                this.setScaleByMapView();
+            },
             "changedCenter": this.setCenter
         });
 
@@ -126,18 +101,28 @@ const PrintModel = Tool.extend({
 
     getCapabilities: function () {
         var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
-            url = resp && resp.get("url") ? resp.get("url") : null;
+            url = resp && resp.get("url") ? resp.get("url") : null,
+            printurl;
 
-        this.set("printurl", url);
+        if (url) {
+            if (this.get("configYAML")) {
+                printurl = url + this.get("configYAML");
+            }
+            else {
+                printurl = url;
+            }
 
-        if (this.get("currentLayer") === undefined) {
-            $.ajax({
-                url: url + "/info.json",
-                type: "GET",
-                data: "",
-                context: this,
-                success: this.updateParameter
-            });
+            this.set("printurl", printurl);
+
+            if (this.get("currentLayer") === undefined) {
+                $.ajax({
+                    url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
+                    type: "GET",
+                    data: "",
+                    context: this,
+                    success: this.updateParameter
+                });
+            }
         }
     },
     updateParameter: function (response) {
@@ -182,13 +167,6 @@ const PrintModel = Tool.extend({
 
     getPrintMapScales: function () {
         return this.get("scaleList");
-    },
-
-    // Overwrites the title of the print if necessary. Default value can be set via config.js.
-    setTitleFromForm: function () {
-        if ($("#titleField").val()) {
-            this.setTitle($("#titleField").val());
-        }
     },
 
     /**
@@ -298,20 +276,7 @@ const PrintModel = Tool.extend({
                 optimalScale = printMapScale;
             }
         });
-
         return optimalScale;
-    },
-
-    // Sets format (DinA4/ A3 Hoch-/Querformat) for print.
-    setLayout: function (index) {
-        this.set("layout", this.get("layouts")[index]);
-    },
-
-    // Sets scale for print with the print settings.
-    setScale: function (index) {
-        var scaleval = this.get("scales")[index].valueInt;
-
-        Radio.trigger("MapView", "setScale", scaleval);
     },
 
     // Sets scale for print with the zoom of the map.
@@ -326,41 +291,6 @@ const PrintModel = Tool.extend({
     // Sets center coordinate.
     setCenter: function (value) {
         this.set("center", value);
-    },
-
-    setStatus: function (bmodel, value) {
-        var scaletext;
-
-        if (value && this.get("layouts") === undefined) {
-            if (this.get("fetched") === false) {
-                this.fetch({
-                    cache: false,
-                    success: function (model) {
-                        model.set("layoutList", model.get("layouts"));
-                        _.each(model.get("scales"), function (scale) {
-                            scale.valueInt = parseInt(scale.value, 10);
-                            scaletext = scale.valueInt.toString();
-                            scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
-                            scale.name = "1: " + scaletext;
-                        });
-                        model.setScaleByMapView();
-                        model.set("isCollapsed", false);
-                        model.set("fetched", true);
-                    },
-                    error: function () {
-                        Radio.trigger("Alert", "alert", {text: "<strong>Druckkonfiguration konnte nicht geladen werden!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
-                        Radio.trigger("Window", "setIsVisible", false);
-                    },
-                    complete: function () {
-                        Radio.trigger("Util", "hideLoader");
-                    },
-                    beforeSend: function () {
-                        Radio.trigger("Util", "showLoader");
-                    }
-                });
-                this.updatePrintPage();
-            }
-        }
     },
 
     updatePrintPage: function () {
@@ -724,8 +654,7 @@ const PrintModel = Tool.extend({
      */
     getPDFURL: function () {
         $.ajax({
-            // url: this.get("proxyURL") + "?url=" + this.get("createURL"),
-            url: this.get("createURL"),
+            url: this.get("proxyURL") + "?url=" + this.get("createURL"),
             type: "POST",
             context: this,
             async: false,
