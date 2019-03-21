@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 

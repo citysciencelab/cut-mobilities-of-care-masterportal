@@ -1,4 +1,4 @@
-import PrintModel from "@modules/tools/print_/Mapfish3_PlotServicel.js";
+import PrintModel from "@modules/tools/print_/model.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 

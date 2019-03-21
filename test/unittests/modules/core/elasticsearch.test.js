@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import * as ElasticSearch from "@modules/core/elasticsearch.js";
 import Model from "@modules/searchbar/gdi/model.js";
 

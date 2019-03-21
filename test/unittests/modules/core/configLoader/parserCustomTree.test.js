@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import CustomTreeParser from "@modules/core/configLoader/parserCustomTree.js";
 
 describe("core/configLoader/parserCustomTree", function () {

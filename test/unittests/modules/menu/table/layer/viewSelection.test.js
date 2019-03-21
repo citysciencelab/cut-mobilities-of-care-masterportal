@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import SingleLayerView from "@modules/menu/table/layer/singleLayerView.js";
 
 describe("menu/table/layer/singleLayerView", function () {

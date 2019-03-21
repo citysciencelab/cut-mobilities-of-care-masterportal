@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/searchbar/gdi/model.js";
 
 describe("modules/searchbar/gdi", function () {

@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/snippets/multicheckbox/model.js";
 
 describe("Multicheckbox Model", function () {

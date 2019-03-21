@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/core/modelList/list.js";
 
 describe("core/modelList/list", function () {

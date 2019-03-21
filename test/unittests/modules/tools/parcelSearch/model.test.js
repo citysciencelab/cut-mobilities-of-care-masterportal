@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/parcelSearch/model.js";
 
 describe("tools/Flurstückssuche", function () {

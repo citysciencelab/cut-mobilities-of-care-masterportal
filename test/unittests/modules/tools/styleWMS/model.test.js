@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import StyleWMS from "@modules/tools/styleWMS/model.js";
 
 describe("tools/styleWMS/model", function () {

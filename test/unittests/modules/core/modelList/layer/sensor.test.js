@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import SensorLayerModel from "@modules/core/modelList/layer/sensor.js";
 import * as moment from "moment";
 import Feature from "ol/Feature.js";

@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Style, Text} from "ol/style.js";

@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/core/util.js";
 
 describe("core/Util", function () {

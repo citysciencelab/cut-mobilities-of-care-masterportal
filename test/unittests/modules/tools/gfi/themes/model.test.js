@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/gfi/themes/model.js";
 
 var model;

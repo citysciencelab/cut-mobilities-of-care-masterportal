@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import ViewTree from "@modules/menu/desktop/folder/viewTree.js";
 
 describe("menu/desktop/folder/viewTree", function () {

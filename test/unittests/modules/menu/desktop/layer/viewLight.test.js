@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import LayerView from "@modules/menu/desktop/layer/viewLight.js";
 
 describe("menu/desktop/layer/viewLight", function () {

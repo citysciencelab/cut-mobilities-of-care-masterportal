@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/alerting/model.js";
 
 describe("alerting/model", function () {

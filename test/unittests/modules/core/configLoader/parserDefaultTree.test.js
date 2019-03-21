@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import DefaultTreeParser from "@modules/core/configLoader/parserDefaultTree.js";
 import testServices from "../../../resources/testServices.json";
 import Collection from "@modules/core/rawLayerList.js";

@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/controls/orientation/poi/model.js";
 import Style from "@modules/vectorStyle/model.js";
 import Feature from "ol/Feature.js";

@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/filter/query/model.js";
 
 describe("modules/tools/filter/query/model", function () {

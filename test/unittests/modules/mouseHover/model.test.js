@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/mouseHover/model.js";
 
 describe("mouseHover", function () {

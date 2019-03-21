@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import StyleWMS from "@modules/tools/styleWMS/view.js";
 import StyleWMSModel from "@modules/tools/styleWMS/model.js";
 

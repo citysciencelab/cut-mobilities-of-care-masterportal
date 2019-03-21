@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import ListView from "@modules/menu/mobile/listView.js";
 
 describe("menu/mobile/folder/view", function () {

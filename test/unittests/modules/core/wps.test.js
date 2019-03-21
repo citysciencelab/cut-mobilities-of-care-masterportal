@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/core/wps.js";
 
 describe("core/WPS", function () {

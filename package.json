@@ -49,6 +49,7 @@
     "babel-loader": "^8.0.0",
     "canvas": "^2.4.1",
     "chai": "4.1.1",
+    "chai-http": "^4.2.1",
     "child-process-promise": "^2.2.1",
     "css-loader": "^1.0.0",
     "deep-extend": "^0.3.2",

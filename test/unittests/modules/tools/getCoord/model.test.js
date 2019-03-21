@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/getCoord/model.js";
 
 var position1 = [564337.37, 5935980.05],

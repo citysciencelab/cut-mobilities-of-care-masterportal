@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/searchByCoord/model.js";
 
 var etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "564459.13", "key": "Wert der Breite"}],
