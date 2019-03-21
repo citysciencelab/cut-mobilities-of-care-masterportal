@@ -106,9 +106,7 @@ const VisibleVectorModel = Backbone.Model.extend({
                 layer_id: model.get("id"),
                 additionalInfo: this.getAdditionalInfo(model, feature),
                 feature: feature,
-                gfiObject: this.getGfiObject(feature, model),
-                gfiAttributes: model.get("gfiAttributes"),
-                ol_layer: model.get("layer")
+                gfiAttributes: model.get("gfiAttributes")
             };
 
             if (this.getGfiOnClick() === true) {
@@ -121,31 +119,6 @@ const VisibleVectorModel = Backbone.Model.extend({
             featureArray.push(featureObject);
         }, this);
         return featureArray;
-    },
-
-    /**
-     * gets a gfi Object
-     * @param  {object} feature a feature object
-     * @param  {Backbone.Model} model model of visibleVector
-     * @return {object} gfiObject
-     */
-    getGfiObject: function (feature, model) {
-        var gfiObject = {};
-
-        if (model.get("gfiAttributes") === "showAll") {
-            _.each(_.omit(feature.getProperties(), "geometry"), function (value, key) {
-                gfiObject[key] = value;
-            });
-        }
-        else if (model.get("gfiAttributes") === "ignore") {
-            gfiObject = "ignore";
-        }
-        else {
-            _.each(model.get("gfiAttributes"), function (value, key) {
-                gfiObject[value] = feature.getProperties()[key];
-            });
-        }
-        return gfiObject;
     },
 
     /**
