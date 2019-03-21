@@ -1,6 +1,6 @@
 import {expect} from "chai";
 import Model from "@modules/tools/compareFeatures/model.js";
-import Util from "../../../Util";
+import Util from "@testUtil";
 
 describe("tools/compareFeatures", function () {
     var model,

@@ -27,6 +27,7 @@
     "bootstrap-toggle": "2.x.x",
     "cesium": "1.50.0",
     "d3": "4.9.x",
+    "dom-parser": "^0.1.5",
     "jquery": "2.x",
     "jquery-ui": "1.x",
     "moment": "2.x",
