@@ -43,7 +43,9 @@
 		"minChars": 3,
 		"serviceId": "elastic"
 	  },
-
+     "visibleVector": {
+        "gfiOnClick": false
+      },
       "specialWFS":
       {
         "minChars": 3,
