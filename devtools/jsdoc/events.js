@@ -242,6 +242,12 @@
  * @example Radio.trigger("MapView", "getResoByScale", scale)
  */
 
+/**
+ * @event MapView#RadioRequestGetProjection
+ * @description Event that returns the map projection
+ * @returns {object} Projection of type ol/proj
+ * @example Radio.request("MapView", "getProjection");
+ */
 
 /** -------------------- LAYER INFORMATION -------------------- */
 
@@ -640,3 +646,19 @@
  * @example Radio.trigger("MouseHover", "hide");
  */
 
+/** -------------------- STYLELIST -------------------- */
+
+/**
+ * @event StyleList#RadioRequestReturnModelById
+ * @description filters styles by id
+ * @returns {function} Styling-Function
+ * @example Radio.request("StyleList", "returnModelById", "1711");
+ */
+
+/** -------------------- REMOTEINTERFACE -------------------- */
+
+/**
+ * @event RemoteInterface#RadioTriggerPostMessage
+ * @description Triggers a PostMessage to the RemoteInterface
+ * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
+ */

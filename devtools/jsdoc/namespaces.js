@@ -73,6 +73,18 @@
  */
 
 /**
+ * @namespace Item
+ * @memberOf ModelList
+ * @description Module to gather all ModelList Items
+ */
+
+/**
+ * @namespace Layer
+ * @memberOf ModelList.Item
+ * @description Module to gather all Layermodels
+ */
+
+/**
  * @namespace StyleWMS
  * @description Tool that can modify wms tiles on request using an SLD-BODY
  */

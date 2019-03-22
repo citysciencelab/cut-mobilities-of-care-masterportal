@@ -4,13 +4,32 @@ import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
-const GeoJSONLayer = Layer.extend({
+const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
+    /**
+     * @class Class representing a GeoJSONLayer
+     * @description Module to represent GeoJSONLayer
+     * @extends Layer
+     * @constructs
+     * @inheritdoc
+     * @memberOf ModelList.Item.Layer
+     * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
+     * @property {number} [clusterDistance="undefined"] Distance to group features to clusters
+     * @property {string} [styleId="ol default"] ID of style in style.json
+     * @fires StyleList#RadioRequestReturnModelById
+     * @fires MapView#RadioRequestGetProjection
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires RemoteInterface#RadioTriggerPostMessage
+     */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
-        showSettings: true,
         isClustered: false
     }),
 
+    /**
+     * @fires StyleList#RadioRequestReturnModelById
+     * @returns {void}
+     */
     initialize: function () {
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
@@ -23,12 +42,10 @@ const GeoJSONLayer = Layer.extend({
         this.setStyleId(this.get("styleId") || this.get("id"));
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
+
     /**
-     * [createLayerSource description]
-     * Wird vom Model getriggert und erzeugt eine vectorSource.
-     * Ggf. auch eine clusterSource
-     * @return {void}
-     * @uses this createClusterLayerSource
+     * Triggert by Layer to create a layerSource respectively a clusterLayerSource
+     * @returns {void}
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
@@ -36,9 +53,10 @@ const GeoJSONLayer = Layer.extend({
             this.createClusterLayerSource();
         }
     },
+
     /**
-     * [createClusterLayerSource description]
-     * @return {void}
+     * Triggert by createLayerSource to create a clusterLayerSource
+     * @returns {void}
      */
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
@@ -46,9 +64,11 @@ const GeoJSONLayer = Layer.extend({
             distance: this.get("clusterDistance")
         }));
     },
+
     /**
-     * [createLayer description]
-     * @return {void}
+     * Triggert by Layer to create a ol/layer/Vector
+     * @fires MapView#RadioRequestGetProjection
+     * @returns {void}
      */
     createLayer: function () {
         this.setLayer(new VectorLayer({
@@ -62,6 +82,7 @@ const GeoJSONLayer = Layer.extend({
             altitudeMode: "clampToGround",
             hitTolerance: this.get("hitTolerance")
         }));
+
         if (_.isUndefined(this.get("geojson"))) {
             this.updateSource();
         }
@@ -69,55 +90,93 @@ const GeoJSONLayer = Layer.extend({
             this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
         }
     },
+
     /**
-     * [setClusterLayerSource description]
-     * @param {ol.source.vector} value [description]
+     * Setter for clusterLayerSource
+     * @param {ol.source.vector} value clusterLayerSource
      * @returns {void}
      */
     setClusterLayerSource: function (value) {
         this.set("clusterLayerSource", value);
     },
+
     /**
-     * Lädt das GeoJSON neu
-     * @param  {boolean} [showLoader=false] Zeigt einen Loader während der Request läuft
+     * Sends GET request with or without wfs parameter according to typ
+     * @param  {boolean} [showLoader=false] shows loader div
      * @returns {void}
      */
     updateSource: function (showLoader) {
-        var params = {
-            request: "GetFeature",
-            service: "WFS",
-            typeName: this.get("featureType"),
-            outputFormat: "application/geo+json",
-            version: this.get("version")
-        };
+        const typ = this.get("typ"),
+            url = Radio.request("Util", "getProxyURL", this.get("url")),
+            xhr = new XMLHttpRequest(),
+            that = this;
 
-        $.ajax({
-            beforeSend: function () {
-                if (showLoader) {
-                    Radio.trigger("Util", "showLoader");
-                }
-            },
-            url: Radio.request("Util", "getProxyURL", this.get("url")),
-            data: params,
-            async: true,
-            type: "GET",
-            context: this,
-            success: function (data) {
-                this.handleData(data, Radio.request("MapView", "getProjection").getCode());
-            },
-            complete: function () {
-                if (showLoader) {
-                    Radio.trigger("Util", "hideLoader");
-                }
-            }
-        });
+        let paramUrl;
+
+        if (typ === "WFS") {
+            paramUrl = url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType") + "&OUTPUTFORMAT=application/geo+json&VERSION=" + this.get("version");
+        }
+        else if (typ === "GeoJSON") {
+            paramUrl = url;
+        }
+
+        if (showLoader) {
+            Radio.trigger("Util", "showLoader");
+        }
+
+        xhr.open("GET", paramUrl, true);
+        xhr.timeout = 10000;
+        xhr.onload = function (event) {
+            that.handleResponse(event.currentTarget.responseText, xhr.status, showLoader);
+        };
+        xhr.ontimeout = function () {
+            that.handleResponse({}, "timeout", showLoader);
+        };
+        xhr.onabort = function () {
+            that.handleResponse({}, "abort", showLoader);
+        };
+        xhr.send();
     },
+
+    /**
+     * Handles the xhr response
+     * @fires MapView#RadioRequestGetProjection
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @param {string} responseText response as GeoJson
+     * @param {integer|string} status status of xhr-request
+     * @param {boolean} [showLoader=false] Flag to show Loader
+     * @returns {void}
+     */
+    handleResponse: function (responseText, status, showLoader) {
+        if (status === 200) {
+            this.handleData(responseText, Radio.request("MapView", "getProjection").getCode());
+        }
+        else {
+            Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status + ")");
+        }
+
+        if (showLoader) {
+            Radio.trigger("Util", "hideLoader");
+        }
+    },
+
+    /**
+     * takes the response, parses the geojson and creates ol.features
+     * @fires RemoteInterface#RadioTriggerPostMessage
+     * @param   {string} data   response as GeoJson
+     * @param   {string} mapCrs EPSG-Code of ol.map
+     * @returns {void}
+     */
     handleData: function (data, mapCrs) {
         var jsonCrs = _.has(data, "crs") && data.crs.properties.name ? data.crs.properties.name : "EPSG:4326",
             features = this.parseDataToFeatures(data),
             newFeatures = [];
 
-        if (jsonCrs !== mapCrs) {
+        if (!features) {
+            return;
+        }
+        else if (jsonCrs !== mapCrs) {
             features = this.transformFeatures(features, jsonCrs, mapCrs);
         }
 
@@ -142,12 +201,33 @@ const GeoJSONLayer = Layer.extend({
         this.featuresLoaded(features);
     },
 
+    /**
+     * Tries to parse data string to ol.format.GeoJson
+     * @param   {string} data string to parse
+     * @throws Will throw an error if the argument cannot be parsed.
+     * @returns {object}    ol/format/GeoJSON/features
+     */
     parseDataToFeatures: function (data) {
-        var geojsonReader = new GeoJSON();
+        const geojsonReader = new GeoJSON();
+        let jsonObjects;
 
-        return geojsonReader.readFeatures(data);
+        try {
+            jsonObjects = geojsonReader.readFeatures(data);
+        }
+        catch (err) {
+            console.error("GeoJSON cannot be parsed.");
+        }
+
+        return jsonObjects;
     },
 
+    /**
+     * Transforms features between CRS
+     * @param   {feature[]} features Array of ol.features
+     * @param   {string}    crs      EPSG-Code of feature
+     * @param   {string}    mapCrs   EPSG-Code of ol.map
+     * @returns {void}
+     */
     transformFeatures: function (features, crs, mapCrs) {
         _.each(features, function (feature) {
             var geometry = feature.getGeometry();
@@ -173,9 +253,13 @@ const GeoJSONLayer = Layer.extend({
         }
     },
 
-    // wird in layerinformation benötigt. --> macht vlt. auch für Legende Sinn?!
+    /**
+     * creates the legendUrl used by layerinformation
+     * @fires StyleList#RadioRequestReturnModelById
+     * @returns {void}
+     */
     createLegendURL: function () {
-        var style;
+        let style;
 
         if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
@@ -187,7 +271,7 @@ const GeoJSONLayer = Layer.extend({
     },
 
     /**
-     * Zeigt nur die Features an, deren Id übergeben wird
+     * Filters the visibility of features by ids
      * @param  {string[]} featureIdList Liste der FeatureIds
      * @return {void}
      */
@@ -218,8 +302,8 @@ const GeoJSONLayer = Layer.extend({
     },
 
     /**
-     * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-     * @param {object} options -
+     * Sets inside or outside of scale range
+     * @param {object} options scale options
      * @returns {void}
      */
     checkForScale: function (options) {
@@ -232,8 +316,8 @@ const GeoJSONLayer = Layer.extend({
     },
 
     /**
-     * sets style for all features
-     * @return {void}
+     * sets undefined style for all features so the layer style will be used
+     * @returns {void}
      */
     showAllFeatures: function () {
         var collection = this.get("layerSource").getFeatures();
