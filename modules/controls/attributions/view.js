@@ -8,9 +8,9 @@ const AttributionsView = Backbone.View.extend({
     },
     initialize: function () {
         var channel = Radio.channel("AttributionsView"),
-            isViewMobile = Radio.request("Util", "isViewMobile");
+            jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
-        this.model = new Attributions();
+        this.model = new Attributions(jAttributionsConfig);
 
         this.listenTo(channel, {
             "renderAttributions": this.renderAttributions
@@ -19,39 +19,29 @@ const AttributionsView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isContentVisible": this.renderAttributions,
             "change:attributionList": this.renderAttributions,
-            "change:isVisibleInMap": this.toggleIsVisibleInMap,
+            "change:isVisibleInMap": this.changeIsVisibleInMap,
             "renderAttributions": this.renderAttributions
         });
 
-
-        if (isViewMobile === true) {
-            this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
-        }
-        else {
-            this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
-        }
         this.model.checkModelsByAttributions();
-        this.render();
+        this.renderAttributions();
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
+    /*
     render: function () {
         var attr = this.model.toJSON();
 
         this.$el.html(this.templateShow(attr));
-        if (this.model.get("isVisibleInMap") === true) {
-            this.$el.show();
-            this.$el.addClass("attributions-view");
-        }
-        else {
-            this.$el.hide();
-        }
+
+        this.changeIsVisibleInMap(this.model.get("isVisibleInMap"));
 
         if (attr.attributionList.length === 0) {
             this.$(".attributions-div").removeClass("attributions-div");
         }
         return this;
     },
+    */
 
     renderAttributions: function () {
         var attr = this.model.toJSON();
@@ -74,7 +64,7 @@ const AttributionsView = Backbone.View.extend({
         this.model.toggleIsContentVisible();
     },
 
-    toggleIsVisibleInMap: function (isVisible) {
+    changeIsVisibleInMap: function (isVisible) {
         if (isVisible) {
             this.$el.show();
             this.$el.addClass("attributions-view");

@@ -12,17 +12,15 @@ const AttributionsModel = Backbone.Model.extend({
     },
 
     initialize: function () {
-        var channel = Radio.channel("Attributions"),
-            config = Radio.request("Parser", "getPortalConfig").controls.attributions;
+        var channel = Radio.channel("Attributions");
 
-        if (typeof config === "object") {
-            if (_.has(config, "isInitOpenDesktop") === true) {
-                this.setIsInitOpenDesktop(config.isInitOpenDesktop);
-            }
-            if (_.has(config, "isInitOpenMobile") === true) {
-                this.setIsInitOpenMobile(config.isInitOpenMobile);
-            }
+        if (Radio.request("Util", "isViewMobile")) {
+            this.setIsContentVisible(this.get("isInitOpenMobile"));
         }
+        else {
+            this.setIsContentVisible(this.get("isInitOpenDesktop"));
+        }
+
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.checkModelsByAttributions
         });
@@ -37,8 +35,8 @@ const AttributionsModel = Backbone.Model.extend({
             name: name,
             text: text
         });
+
         this.setIsVisibleInMap(true);
-        this.setIsContentVisible(true);
         this.trigger("renderAttributions");
     },
     removeAttribution: function (name, text, type) {
@@ -132,7 +130,6 @@ const AttributionsModel = Backbone.Model.extend({
             this.setIsContentVisible(true);
         }
     }
-
 });
 
 export default AttributionsModel;
