@@ -108,6 +108,12 @@ const Gfi = Tool.extend({
             }
         }, this);
 
+        this.listenTo(Radio.channel("VisibleVector"), {
+            "gfiOnClick": function (hit) {
+                this.setGfiOfFeature(hit);
+            }
+        });
+
         this.initView();
     },
     listenToThemeList: function () {
@@ -442,6 +448,36 @@ const Gfi = Tool.extend({
 
             this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
         }
+    },
+
+    /**
+     * Generates a GFI when the feature layer is clicked
+     * @param {object} hit   Feature Object
+     * @returns {void}
+     */
+    setGfiOfFeature: function (hit) {
+        var vectorGFIParams = {},
+            coordinate = Radio.request("Map", "getMap").getPixelFromCoordinate(hit.coordinate),
+            model = Radio.request("ModelList", "getModelByAttributes", {id: hit.layer_id});
+
+        Radio.trigger("ClickCounter", "gfi");
+        this.setCoordinate(coordinate);
+
+        // Vector
+        vectorGFIParams = {
+            feature: hit.feature,
+            gfiAttributes: hit.gfiAttributes,
+            gfiTheme: model.get("gfiTheme"),
+            id: model.get("id"),
+            themeId: model.get("id"),
+            name: model.get("name"),
+            typ: model.get("typ"),
+            gfiFeatureList: [hit.feature]
+        };
+
+        this.setThemeIndex(0);
+        this.get("themeList").reset(vectorGFIParams);
+        Radio.trigger("MapMarker", "zoomTo", hit, 5000);
     },
 
     // Setter

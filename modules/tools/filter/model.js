@@ -80,7 +80,7 @@ const FilterModel = Tool.extend({
     },
 
     resetFilter: function (feature) {
-        if (feature && feature.getStyleFunction()() === null) {
+        if (feature && feature.getStyleFunction() === null) {
             this.deselectAllModels();
             this.deactivateAllModels();
             this.resetAllQueries();
