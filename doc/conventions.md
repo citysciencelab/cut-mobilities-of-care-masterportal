@@ -106,6 +106,28 @@ var html = "<div id='my-id'></div>";
 * Module werden im JSDoc beschrieben (Namespaces, Events, Class)
 * Funktionen werden immer mit validem! JSDoc beschrieben.
 * Sprache ist Englisch
+#### Bei Refactorings/Erweiterungen ist pro Datei mindestens folgendes auszuführen:
+* Klasse und Namespace im JSDoc beschreiben, falls noch nciht vorhanden
+* Die refactorten/erweiterten Funktionen per JSDoc beschreiben
+* Übrige Funktionen beschreiben oder mit einem JSDoc-Todo markieren, damit alle Funktionen schonmal im JSDoc sind!
+
+```javascript
+/**
+* todo
+* @returns {*} todo
+*/
+functionWithoutParams: function () {...}
+```
+
+```javascript
+/**
+* todo
+* @param {*} param1 todo
+* @returns {*} todo
+*/
+functionWithParams: function (param1) {...}
+```
+
 
 #### Try-Catch-Blöcke
 * Try-Catch-Blöcke nach Möglichkeit vermeiden

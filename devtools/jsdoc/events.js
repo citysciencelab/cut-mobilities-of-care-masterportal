@@ -126,7 +126,7 @@
  * @example Radio.trigger("Parser", "getPortalConfig")
  * @description Event that returns the config.json of the portal
  */
- 
+
  /**
  * @event Parser#RadioTriggerRemoveItem
  * @example Radio.trigger("Parser", "removeItem")
@@ -194,14 +194,14 @@
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute transparency has changed
  */
- 
+
  /**
  * @event Layer#changeIsSettingVisible
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute isSettingVisible has changed
  */
- 
+
 /**
  * @event Layer#RadioTriggerLayerUpdateLayerInfo
  * @param {String} name The name of the layer.
@@ -527,6 +527,51 @@
  * @example Radio.trigger("Util", "isViewMobileChangend", isViewMobile)
  */
 
+/**
+ * @event Util#RadioRequestUtilPunctuate
+ * @description converts value to string and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+ * @param {String} value contains the string wich will be converted
+ * @example Radio.request("Util", "punctuate", "3000.50");
+ */
+
+/**
+ * @event Util#RadioRequestUtilIsViewMobile
+ * @description checks if device is mobile
+ * @returns {Boolean} device is mobile
+ * @example Radio.request("Util", "isViewMobile");
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetProxyURL
+ * @description returns the proxyURL
+ * @param {String} url to be proxied
+ * @returns {string} proxyURL
+ * @example Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetIgnoredKeys
+ * @description returns the ignoredKeys
+ * @returns {string[]} ignoredKeys
+ * @example Radio.request("Util", "getIgnoredKeys");
+ */
+
+/** -------------------- GRAPH -------------------- */
+
+/**
+ * @event Graph#RadioTriggerGraphCreateGraph
+ * @description starts the generating of a graphic
+ * @param {Object} graphConfig contains the options for the graphic
+ * @example Radio.trigger("Graph", "createGraph", );
+ */
+
+/** -------------------- GFILIST -------------------- */
+
+/**
+ * @event gfiList#RadioTriggerRedraw
+ * @description request feature infos for each model
+ * @example Radio.trigger("gfiList", "redraw", );
+ */
 
 /** -------------------- QUICKHELP -------------------- */
 
@@ -555,7 +600,14 @@
  * @param {boolean} isVisible visibility of gfi
  * @example Radio.trigger("GFI", "setIsVisible", false);
  */
- 
+
+/**
+ * @event GFI#RadioRequestGFIGetCurrentView
+ * @description returns currentView
+ * @returns {Backbone.View} GFI-View
+ * @example Radio.request("GFI", "getCurrentView");
+ */
+
 
 /** -------------------- MAPMARKER -------------------- */
 
@@ -584,5 +636,21 @@
  * @description shows the mapMarker
  * @param {number[]} coordinate mapMarker position
  * @example Radio.trigger("MapMarker", "showMarker", coordinate);
+ */
+
+/** -------------------- GFIVIEW -------------------- */
+
+/**
+ * @event gfiView#RadioTriggerRender
+ * @description Triggered when GFI has to render.
+ * @example Radio.trigger("gfiView", "render");
+ */
+
+/** -------------------- MOUSEHOVER -------------------- */
+
+/**
+ * @event MouseHover#RadioTriggerMouseHoverHide
+ * @description hides the mouse hover div
+ * @example Radio.trigger("MouseHover", "hide");
  */
 

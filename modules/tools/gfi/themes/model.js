@@ -1,7 +1,16 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 
-const Theme = Backbone.Model.extend({
+const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
+    /**
+     * @class ThemeModel
+     * @extends GFI
+     * @memberof GFI.Themes
+     * @constructs
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Util#RadioRequestUtilGetProxyURL
+     * @fires Util#RadioRequestUtilGetIgnoredKeys
+     */
     defaults: {
         // ist das Theme sichtbar
         isVisible: false,

@@ -1,4 +1,16 @@
 /**
+ * @namespace Themes
+ * @memberOf GFI
+ * @description GFI-Themes
+ */
+
+/**
+ * @namespace ContiniuousCountingBikeTheme
+ * @memberOf GFI.Themes
+ * @description GFI Theme for ContiniuousCountingBike
+ */
+
+/**
  * @namespace MapMarker
  * @description MapMarker
  */
@@ -63,6 +75,11 @@
 /**
  * @namespace StyleWMS
  * @description Tool that can modify wms tiles on request using an SLD-BODY
+ */
+
+/**
+ * @namespace Graph
+ * @description Module for generating graphics via d3
  */
 
 /**
