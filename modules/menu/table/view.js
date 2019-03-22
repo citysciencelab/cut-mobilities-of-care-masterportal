@@ -55,8 +55,8 @@ const Menu = Backbone.View.extend({
                     that.$el.css({
 
                         "-webkit-transform-origin": "240px 240px",
-                        "-ms-transform-origin": "30% 50%",
-                        "-moz-transform-origin": "30% 50%"
+                        "-ms-transform-origin": "240px 240px",
+                        "-moz-transform-origin": "240px 240px"
                     });
                 }
             },

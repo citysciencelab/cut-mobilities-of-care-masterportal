@@ -47,32 +47,37 @@ const WindowView = Backbone.View.extend({
     templateTable: _.template(templateTable),
     render: function () {
         const attr = this.model.toJSON();
+        var currentClass,
+            currentTableClass;
 
         if (this.model.get("isVisible") === true) {
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
                 this.$el.html(this.templateTable(attr));
                 document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
-                this.$el.addClass("table-tool-window");
+                currentClass = $("#window").attr("class").split(" ");
+
+                _.each(currentClass, function (item) {
+
+                    if (item.startsWith("table-tool-window")) {
+                        currentTableClass = item;
+                    }
+                });
 
                 if ($("#table-nav").attr("class") === "table-nav-0deg ui-draggable" || $("#table-nav").attr("class") === "table-nav-0deg") {
-                    this.$el.css({
-                        "transform": "rotate(0deg)"
-                    });
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window");
                 }
                 else if ($("#table-nav").attr("class") === "table-nav-90deg") {
-                    this.$el.css({
-                        "transform": "rotate(90deg)"
-                    });
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-90deg");
                 }
                 else if ($("#table-nav").attr("class") === "table-nav-180deg") {
-                    this.$el.css({
-                        "transform": "rotate(180deg)"
-                    });
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-180deg");
                 }
                 else if ($("#table-nav").attr("class") === "table-nav-270deg") {
-                    this.$el.css({
-                        "transform": "rotate(270deg)"
-                    });
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-270deg");
                 }
             }
             else {
