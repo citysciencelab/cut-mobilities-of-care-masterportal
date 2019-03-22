@@ -60,10 +60,10 @@ const CategoryView = Backbone.View.extend({
         }
         else if ($("#table-nav").attr("class") === "table-nav-270deg" || $("#table-nav").attr("class") === "table-nav-90deg") {
             this.$("#table-nav-cat-panel").css({
-                "left": "-150px"
+                "left": "-170px"
             });
             this.$("#funnel").css({
-                "left": "155px"
+                "left": "175px"
             });
         }
 
