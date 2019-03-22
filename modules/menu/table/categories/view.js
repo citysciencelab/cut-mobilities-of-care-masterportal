@@ -49,6 +49,24 @@ const CategoryView = Backbone.View.extend({
         this.$el.addClass("table-category-active");
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
+
+        if ($("#table-nav").attr("class") === "table-nav-0deg" || $("#table-nav").attr("class") === "table-nav-180deg") {
+            this.$("#table-nav-cat-panel").css({
+                "left": ""
+            });
+            this.$("#funnel").css({
+                "left": ""
+            });
+        }
+        else if ($("#table-nav").attr("class") === "table-nav-270deg" || $("#table-nav").attr("class") === "table-nav-90deg") {
+            this.$("#table-nav-cat-panel").css({
+                "left": "-150px"
+            });
+            this.$("#funnel").css({
+                "left": "155px"
+            });
+        }
+
         Radio.request("TableMenu", "setActiveElement", "Category");
     },
     disableCategoryButton: function () {
