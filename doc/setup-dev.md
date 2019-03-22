@@ -8,7 +8,7 @@
 [git](http://git-scm.com/) installieren.
 
 ## Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v10.15.0 mit NPM 6.4.1
+[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: 10.15.3 LTS mit NPM 6.4.1
 
 Test in cmd:
 
