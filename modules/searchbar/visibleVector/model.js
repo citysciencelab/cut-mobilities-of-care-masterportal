@@ -1,4 +1,18 @@
+
 import "../model";
+
+function getAllFuncs(obj) {
+    var props = [];
+
+    do {
+        props = props.concat(Object.getOwnPropertyNames(obj));
+    } while (obj = Object.getPrototypeOf(obj));
+
+    return props.sort().filter(function(e, i, arr) {
+       if (e!=arr[i+1] && typeof obj[e] == 'function') return true;
+    });
+}
+
 
 const VisibleVectorModel = Backbone.Model.extend({
     /**
@@ -72,7 +86,21 @@ const VisibleVectorModel = Backbone.Model.extend({
                 }, this);
             }
             else {
+
+
+
                 filteredFeatures = features.filter(function (feature) {
+                    console.log(feature.getKeys());
+
+
+                    console.log("----------------------------------");
+
+                    console.log(feature.get(""));
+                    console.log(model.get("searchField"));
+                    console.log(feature.get(model.get("searchField")));
+
+                    console.log("----------------------------------");
+
                     var value = feature.get(model.get("searchField")).toUpperCase();
 
                     return value.indexOf(searchString.toUpperCase()) !== -1;
