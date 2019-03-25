@@ -68,19 +68,25 @@
  */
 
 /**
- * @namespace ModelList
- * @description Module to gather all Models
+ * @namespace Core
+ * @description Loads core and instances all modules that have to be loaded, due to portal config
  */
 
 /**
- * @namespace Item
- * @memberOf ModelList
- * @description Module to gather all ModelList Items
+ * @namespace ModelList
+ * @memberOf Core
+ * @description List module to gather all item models
+ */
+
+/**
+ * @namespace ConfigLoader
+ * @memberOf Core
+ * @description Parser module to gather portal configuration
  */
 
 /**
  * @namespace Layer
- * @memberOf ModelList.Item
+ * @memberOf Core.ModelList
  * @description Module to gather all Layermodels
  */
 

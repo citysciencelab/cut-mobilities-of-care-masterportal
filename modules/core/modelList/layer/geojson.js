@@ -11,7 +11,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @extends Layer
      * @constructs
      * @inheritdoc
-     * @memberOf ModelList.Item.Layer
+     * @memberOf Core.ModelList.Layer
      * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
      * @property {number} [clusterDistance="undefined"] Distance to group features to clusters
      * @property {string} [styleId="ol default"] ID of style in style.json

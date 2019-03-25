@@ -5,7 +5,7 @@ const Item = Backbone.Model.extend(
          * @class Item
          * @description Module to represent any Item (Folder, Tool, Layer, ...)
          * @extends Backbone.Model
-         * @memberof ModelList.Item
+         * @memberOf Core.ModelList
          * @constructs
          * @property {String} name="" Name of item
          * @property {String} id="" Id of item

@@ -127,6 +127,12 @@
  * @description Event that returns the config.json of the portal
  */
 
+ /**
+ * @event Parser#RadioTriggerRemoveItem
+ * @example Radio.trigger("Parser", "removeItem")
+ * @description Event that removes an item from the layertree
+ */
+
 
 /** --------------------CONTACT -------------------- */
 
@@ -165,6 +171,11 @@
  * @description Shows loading gif
  */
 
+/**
+ * @event Util#RadioRequestGetConfig
+ * @example Radio.request("Util", "getConfig")
+ * @description Request config path
+ */
 
 /** -------------------- LAYER -------------------- */
 
@@ -187,6 +198,13 @@
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute transparency has changed
+ */
+
+ /**
+ * @event Layer#changeIsSettingVisible
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isSettingVisible has changed
  */
 
 /**
@@ -600,6 +618,7 @@
  * @returns {Backbone.View} GFI-View
  * @example Radio.request("GFI", "getCurrentView");
  */
+
 
 /** -------------------- MAPMARKER -------------------- */
 
