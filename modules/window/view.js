@@ -56,6 +56,8 @@ const WindowView = Backbone.View.extend({
                 document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
                 currentClass = $("#window").attr("class").split(" ");
 
+                this.$el.addClass("table-tool-win-all");
+
                 _.each(currentClass, function (item) {
 
                     if (item.startsWith("table-tool-window")) {

@@ -25,7 +25,6 @@ const Menu = Backbone.View.extend({
     className: "table-nav-0deg",
     template: _.template(MainTemplate),
     render: function () {
-        var that = this;
 
         $(this.el).html(this.template());
         $(".lgv-container").append(this.$el);
@@ -33,10 +32,10 @@ const Menu = Backbone.View.extend({
             containment: "#map",
             handle: ".icon-drag",
             drag: function () {
-                var rotAngle = that.model.get("rotateAngle");
+                var rotAngle = this.model.get("rotateAngle");
 
                 if (rotAngle === 0 || rotAngle === 180) {
-                    that.$el.css({
+                    this.$el.css({
 
                         "-webkit-transform-origin": "50% 50%",
                         "-ms-transform-origin": "50% 50%",
@@ -44,7 +43,7 @@ const Menu = Backbone.View.extend({
                     });
                 }
                 else if (rotAngle === 90) {
-                    that.$el.css({
+                    this.$el.css({
 
                         "-webkit-transform-origin": "5% 50%",
                         "-ms-transform-origin": "5% 50%",
@@ -52,21 +51,21 @@ const Menu = Backbone.View.extend({
                     });
                 }
                 else if (rotAngle === 270) {
-                    that.$el.css({
+                    this.$el.css({
 
                         "-webkit-transform-origin": "240px 240px",
                         "-ms-transform-origin": "240px 240px",
                         "-moz-transform-origin": "240px 240px"
                     });
                 }
-            },
+            }.bind(this),
             stop: function (evt, ui) {
                 var pos = ui.helper.offset(),
                     x = pos.left,
                     y = pos.top;
 
-                that.placeMenu(x, y);
-            }
+                this.placeMenu(x, y);
+            }.bind(this)
         });
 
         new CloseClickView().render();
@@ -98,10 +97,9 @@ const Menu = Backbone.View.extend({
         var touch = evt.originalEvent.touches[0],
             x = touch.clientX - 20,
             y = touch.clientY - 20,
-            rotateAngle = this.model.get("rotateAngle"),
+            rotateAngle = this.model.getRotateAngle(),
             menuWidth = $("#table-nav").width(),
-            menuHeight = $("#table-nav").height(),
-            that = this;
+            menuHeight = $("#table-nav").height();
 
         if (rotateAngle === 0) {
             this.$el.css({
@@ -129,9 +127,8 @@ const Menu = Backbone.View.extend({
         }
 
         this.$el.on("touchend", function () {
-
-            that.placeMenu(x, y);
-        });
+            this.placeMenu(x, y);
+        }.bind(this));
 
     },
     placeMenu: function (x, y) {
@@ -143,19 +140,19 @@ const Menu = Backbone.View.extend({
 
         if (minPos === 0) {
             posClass = "table-nav-0deg";
-            this.model.set("rotateAngle", 0);
+            this.model.setRotateAngle(0);
         }
         else if (minPos === 1) {
             posClass = "table-nav-90deg";
-            this.model.set("rotateAngle", 90);
+            this.model.setRotateAngle(90);
         }
         else if (minPos === 2) {
             posClass = "table-nav-180deg";
-            this.model.set("rotateAngle", 180);
+            this.model.setRotateAngle(180);
         }
         else if (minPos === 3) {
             posClass = "table-nav-270deg";
-            this.model.set("rotateAngle", 270);
+            this.model.setRotateAngle(270);
         }
 
         this.$el.removeClass(currentClass);

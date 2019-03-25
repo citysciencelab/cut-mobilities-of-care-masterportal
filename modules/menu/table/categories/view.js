@@ -50,7 +50,7 @@ const CategoryView = Backbone.View.extend({
         this.$(".table-nav-cat-panel").addClass("in");
         this.$("div.btn-group.header").hide();
 
-        if ($("#table-nav").attr("class") === "table-nav-0deg" || $("#table-nav").attr("class") === "table-nav-180deg") {
+        if (this.$("#table-nav").attr("class") === "table-nav-0deg" || this.$("#table-nav").attr("class") === "table-nav-180deg") {
             this.$("#table-nav-cat-panel").css({
                 "left": ""
             });
@@ -58,7 +58,7 @@ const CategoryView = Backbone.View.extend({
                 "left": ""
             });
         }
-        else if ($("#table-nav").attr("class") === "table-nav-270deg" || $("#table-nav").attr("class") === "table-nav-90deg") {
+        else if (this.$("#table-nav").attr("class") === "table-nav-270deg" || this.$("#table-nav").attr("class") === "table-nav-90deg") {
             this.$("#table-nav-cat-panel").css({
                 "left": "-170px"
             });
