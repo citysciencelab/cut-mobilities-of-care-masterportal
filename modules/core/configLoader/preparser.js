@@ -1,15 +1,15 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 
-const Preparser = Backbone.Model.extend({
+const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {},
-
     /**
      * @class Preparser
      * @extends Backbone.Model
-     * @memberof Core
+     * @memberof Core.ConfigLoader
      * @constructs
-     * @fires Util#getConfig
+     * @fires Util#RadioRequestGetConfig
+     * @fires AlertingModel#RadioTriggerAlertAlert
      * @description Loading and preperation for parsing (calls parser for default or custom tree) of the configuration file (config.json).
      * @param {*} attributes todo
      * @param {*} options todo
@@ -30,7 +30,7 @@ const Preparser = Backbone.Model.extend({
     /**
     * Request config path from util.
     * This seperate helper method enables unit tests of the getUrlPath-method.
-    * @fires Util#getConfig
+    * @fires Util#RadioRequestGetConfig
     * @return {string} relative path or absolute url to config file
     */
     requestConfigFromUtil: function () {

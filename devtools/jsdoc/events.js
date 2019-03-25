@@ -171,6 +171,11 @@
  * @description Shows loading gif
  */
 
+/**
+ * @event Util#RadioRequestGetConfig
+ * @example Radio.request("Util", "getConfig")
+ * @description Request config path
+ */
 
 /** -------------------- LAYER -------------------- */
 

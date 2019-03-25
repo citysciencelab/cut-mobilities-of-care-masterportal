@@ -68,8 +68,20 @@
  */
 
 /**
+ * @namespace Core
+ * @description Loads core and instances all modules that have to be loaded, due to portal config
+ */
+
+/**
  * @namespace ModelList
+ * @memberOf Core
  * @description Module to gather all Models
+ */
+
+/**
+ * @namespace ConfigLoader
+ * @memberOf Core
+ * @description Module to gather config
  */
 
 /**
