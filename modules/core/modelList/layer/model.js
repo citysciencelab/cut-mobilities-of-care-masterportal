@@ -502,11 +502,31 @@ const Layer = Item.extend(
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         },
+
+        /**
+         * Setter for isRemovable
+         * @param {Boolean} value Flag if layer is removable from the tree
+         * @returns {void}
+         */
         setIsRemovable: function (value) {
             if (value !== undefined && value !== null && value !== "string") {
                 this.set("isRemovable", value);
             }
         },
+
+        /**
+         * Setter for isJustAdded (currently only used in uiStyle = table)
+         * @param {Boolean} value Flag if layer has just been added to the tree
+         * @returns {void}
+         */
+        setIsJustAdded: function (value) {
+            this.set("isJustAdded", value);
+        },
+
+        /**
+         * Removes the layer from the map and the collection
+         * @returns {void}
+         */
         removeLayer: function () {
             var layer = this.get("id");
 

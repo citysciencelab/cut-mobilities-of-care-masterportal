@@ -293,8 +293,8 @@ const Parser = Backbone.Model.extend({
 
         this.addItem(layer);
     },
-    /* fügt einen Layer aus der Elastic-Search-GDI-Suche hinzu
-        das Objekt beinhaltet: {name, id, parentId, level, layers, url, version, gfiAttributes, datasets}
+    /* adds a layer from the elastic serach gdi search
+        the object {values} includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
         */
     addGDILayer: function (values) {
         var layer = {
@@ -323,7 +323,8 @@ const Parser = Backbone.Model.extend({
             isSelected: true,
             isVisibleInTree: true,
             isChildLayer: false,
-            datasets: values.datasets
+            datasets: values.datasets,
+            isJustAdded: values.isJustAdded
         };
 
         this.addItemAtTop(layer);
