@@ -89,7 +89,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run testConsole"
+      "pre-commit": "npm run testConsole"
     }
   }
 }
