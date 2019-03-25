@@ -1,12 +1,11 @@
 var webpack = require("webpack"),
     path = require("path");
 
+require("jsdom-global")();
+global.DOMParser = window.DOMParser;
+
 module.exports = {
-    entry: "mocha-loader!./test/unittests/SpecRunner.js",
-    output: {
-        path: path.resolve(__dirname, "test"),
-        filename: "bundle.js"
-    },
+    target: "node",
     mode: "development",
     resolve: {
         alias: {
@@ -15,27 +14,16 @@ module.exports = {
             "@portalconfigs": path.resolve(__dirname, "../portalconfigs")
         }
     },
-    externals: {
-        config: "Config"
-    },
-    devServer: {
-        port: 9009,
-        publicPath: "/test/",
-        open: true,
-        openPage: "test/unittests/Testrunner.html"
-    },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env"]
-                    }
-                }
-            }
+          {
+            test: /\.node$/,
+            use: 'node-loader'
+          },
+          {
+            test: /\.js$/,
+            use: 'babel-loader'
+          }
         ]
     },
     plugins: [
@@ -44,7 +32,12 @@ module.exports = {
             $: "jquery",
             Backbone: "backbone",
             Radio: "backbone.radio",
-            _: "underscore"
-        })
+            _: "underscore",
+            Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
+            XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
+            fs: "fs",
+            requestAnimationFrame: "raf"
+        }),
+        new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
     ]
 };
