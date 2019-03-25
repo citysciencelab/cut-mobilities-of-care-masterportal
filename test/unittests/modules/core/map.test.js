@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/core/map.js";
 import Util from "@testUtil";
 import Preparser from "@modules/core/configLoader/preparser";

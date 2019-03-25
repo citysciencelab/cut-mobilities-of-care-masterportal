@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/pendler/lines/model.js";
 
 var model, createTestFeature;
@@ -19,7 +18,7 @@ createTestFeature = function (pendlerAnzahl, wohnort) {
 };
 
 describe("Pendler-Lines", function () {
-    describe("Verarbeitung der abgefargten Daten", function () {
+    describe("Verarbeitung der abgefragten Daten", function () {
         before(function () {
             var featuresInput = [],
                 i;

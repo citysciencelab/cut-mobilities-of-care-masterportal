@@ -35,7 +35,8 @@ module.exports = {
             _: "underscore",
             Config: path.resolve(__dirname, "../test/unittests/deps/testConfigConsole"),
             XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
-            fs: "fs"
+            fs: "fs",
+            requestAnimationFrame: "raf"
         }),
         new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
     ]

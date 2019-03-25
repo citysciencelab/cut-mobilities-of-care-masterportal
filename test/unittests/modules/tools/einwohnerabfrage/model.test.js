@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/einwohnerabfrage_hh/model.js";
 import Util from "@modules/core/util.js";
 

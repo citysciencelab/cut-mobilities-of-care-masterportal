@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import BuildSpecModel from "@modules/tools/print_/buildSpec.js";
 import Util from "@testUtil";
 import Style from "@modules/vectorStyle/model";
@@ -179,14 +178,14 @@ describe("tools/print_/buildSpec", function () {
             expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
                 legendType: "wfsImage",
                 geometryType: "",
-                imageUrl: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink1.png",
+                imageUrl: "null/lgv-config/img/imgLink1.png",
                 color: "",
                 label: "Layer1"
             });
             expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
                 legendType: "wfsImage",
                 geometryType: "",
-                imageUrl: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/imgLink2.png",
+                imageUrl: "null/lgv-config/img/imgLink2.png",
                 color: "",
                 label: "Layer2"
             });
@@ -458,8 +457,8 @@ describe("tools/print_/buildSpec", function () {
                     RoutenName: "1. Grüner Ring",
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
-                    Verlauf: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n",
-                    Routeninformation: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n"
+                    Verlauf: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n",
+                    Routeninformation: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n"
                 },
                 geometry: {
                     type: "MultiLineString",
@@ -662,8 +661,8 @@ describe("tools/print_/buildSpec", function () {
                     RoutenName: "1. Grüner Ring",
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
-                    Verlauf: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n",
-                    Routeninformation: "\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\n"
+                    Verlauf: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n",
+                    Routeninformation: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n"
                 },
                 geometry: {
                     type: "MultiLineString",
@@ -830,7 +829,7 @@ describe("tools/print_/buildSpec", function () {
                 style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
             expect(buildSpecModel.buildPointStyleIcon(style.getImage(), vectorLayer)).to.deep.own.include({
-                externalGraphic: "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img/krankenhaus.png",
+                externalGraphic: "null/lgv-config/img/krankenhaus.png",
                 graphicHeight: NaN, // image kann im test nicht gefunden werden, daher kann size nicht berechnet werden
                 graphicWidth: NaN,
                 type: "point"

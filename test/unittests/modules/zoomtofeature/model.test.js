@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/zoomtofeature/model";
 import Feature from "ol/Feature";
 

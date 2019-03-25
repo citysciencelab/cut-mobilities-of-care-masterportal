@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Model from "@modules/tools/schulwegRouting_hh/model.js";
 import Util from "@testUtil";
 import {MultiLineString, Point} from "ol/geom.js";

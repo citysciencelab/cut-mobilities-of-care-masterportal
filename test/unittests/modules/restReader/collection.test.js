@@ -1,11 +1,11 @@
-import {expect} from "chai";
 import Collection from "@modules/restReader/collection.js";
+import testRestServices from "../../resources/testRestServices.json";
 
 describe("core/RestReader", function () {
     let collection;
 
     before(function () {
-        collection = new Collection(null, {"url": "resources/testRestServices.json"});
+        collection = new Collection(testRestServices, {"url": "abc"});
     });
 
     describe("constructor", function () {

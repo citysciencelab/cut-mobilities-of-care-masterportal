@@ -1,4 +1,3 @@
-import {expect} from "chai";
 import Collection from "@modules/core/rawLayerList.js";
 import testServices from "../../resources/testServices.json";
 
@@ -6,8 +5,8 @@ describe("core/rawLayerList", function () {
     var collection;
 
     before(function () {
-        // Pass null to create an empty Collection with options
-        collection = new Collection(null, {url: "resources/testServices.json"});
+        // Pass testServices to create a Collection with the testServices
+        collection = new Collection(testServices, {url: "abc"});
     });
 
     describe("parse", function () {
