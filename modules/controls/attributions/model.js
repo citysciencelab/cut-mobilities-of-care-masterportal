@@ -8,12 +8,26 @@ const AttributionsModel = Backbone.Model.extend({
         isInitOpenMobile: false,
         // Modellist mit Attributions
         attributionList: [],
+        // @todo: Shouldnt values of defaults be hard coded?
         isOverviewmap: Boolean(Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}))
     },
-
+    /**
+     * @class AttributionsModel
+     * @extends Backbone.Model
+     * @memberof Attributions
+     * @constructs
+     * @property {Radio.channel} channel=Radio.channel("Attributions") Radio channel for communication
+     * @property {Boolean} isContentVisible=true Flag if attributions copy is visible
+     * @property {Boolean} isVisibleInMap=false Flag if whole module is visible
+     * @property {Boolean} isInitOpenDesktop=true Flag if module is initially activated upon load in desktop environment
+     * @property {Boolean} isInitOpenMobile=false Flag if module is initially activated upon load in mobile environment
+     * @property {Array} attributionList=[] todo
+     * @property {Boolean} isOverviewmap=? todo
+     * @listens AttributionsModel#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens AlertingModel#RadioTriggerAttributionsCreateAttribution
+     * @listens AlertingModel#RadioTriggerAttributionsRemoveAttribution
+     */
     initialize: function () {
-        var channel = Radio.channel("Attributions");
-
         if (Radio.request("Util", "isViewMobile")) {
             this.setIsContentVisible(this.get("isInitOpenMobile"));
         }
@@ -24,30 +38,44 @@ const AttributionsModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.checkModelsByAttributions
         });
-        channel.on({
+        this.listenTo(Radio.channel("Attributions"), {
             "createAttribution": this.createAttribution,
             "removeAttribution": this.removeAttribution
-        }, this);
+        });
     },
+    /**
+     * Creates a single attribution and pushes it into attributions array.
+     * Sets module visibility to true and renders it.
+     * @todo Should this method do 3 different things?
+     * @param {String} name Attribution name
+     * @param {String} text Attribution copy
+     * @param {String} type Attribution type
+     * @fires  AttributionsModel#event:renderAttributions
+     * @returns {void}
+     */
     createAttribution: function (name, text, type) {
         this.get("attributionList").push({
             type: type,
             name: name,
             text: text
         });
-
         this.setIsVisibleInMap(true);
         this.trigger("renderAttributions");
     },
+    /**
+     * Removes a single attribution from attributions array.
+     * Renders module.
+     * @param {String} name Attribution name
+     * @param {String} text Attribution copy
+     * @param {String} type Attribution type
+     * @fires  AttributionsModel#event:renderAttributions
+     * @returns {void}
+     */
     removeAttribution: function (name, text, type) {
         var filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
-
         this.setAttributionList(filteredAttributions);
-        if (filteredAttributions.length === 0) {
-            this.setIsContentVisible(false);
-        }
         this.trigger("renderAttributions");
     },
     /**
@@ -66,13 +94,19 @@ const AttributionsModel = Backbone.Model.extend({
             this.generateAttributions(filteredModelList);
         }
     },
+    /**
+     * Removes all attributions of type "layer" from attributions array.
+     * Renders module.
+     * @fires  AttributionsModel#event:renderAttributions
+     * @returns {void}
+     */
     removeAllLayerAttributions: function () {
         var attributions = this.get("attributionList"),
             filteredAttributions = attributions.filter(function (attribution) {
                 return attribution.type !== "layer";
             });
-
         this.setAttributionList(filteredAttributions);
+        this.trigger("renderAttributions");
     },
     /**
      * Holt sich aus der ModelList die aktuellen in der Karte sichtbaren Layern,
@@ -106,6 +140,9 @@ const AttributionsModel = Backbone.Model.extend({
 
     setAttributionList: function (value) {
         this.set("attributionList", value);
+        if (value.length === 0) {
+            this.setIsContentVisible(false);
+        }
     },
 
     // setter for isInitOpenDesktop
