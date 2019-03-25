@@ -162,14 +162,15 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * takes the response, parses the geojson and creates ol.features
+     * Takes the response, parses the geojson and creates ol.features.
+     * According to the GeoJSON Specification (RFC 7946) the geometry is expected to be in EPSG:4326.
      * @fires RemoteInterface#RadioTriggerPostMessage
      * @param   {string} data   response as GeoJson
      * @param   {string} mapCrs EPSG-Code of ol.map
      * @returns {void}
      */
     handleData: function (data, mapCrs) {
-        var jsonCrs = _.has(data, "crs") && data.crs.properties.name ? data.crs.properties.name : "EPSG:4326",
+        var jsonCrs = "EPSG:4326",
             features = this.parseDataToFeatures(data),
             newFeatures = [];
 
