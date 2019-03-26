@@ -305,12 +305,19 @@ const Layer = Item.extend(
         toggleAttributionsInterval: function () {
             var channelName, eventName, timeout;
 
+            console.log(this.has("layerAttribution"));
+            console.log(_.isObject(this.get("layerAttribution")));
+            console.log(this.get("layerAttribution"));
+
+
             if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
                 channelName = this.get("layerAttribution").channel;
                 eventName = this.get("layerAttribution").eventname;
                 timeout = this.get("layerAttribution").timeout;
+                console.log(this.get("layerAttribution"));
 
                 if (this.get("isVisibleInMap") === true) {
+
                     Radio.trigger(channelName, eventName, this);
                     this.get("layerAttribution").interval = setInterval(function (model) {
                         Radio.trigger(channelName, eventName, model);

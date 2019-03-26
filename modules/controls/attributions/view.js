@@ -19,30 +19,18 @@ const AttributionsView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isContentVisible": this.renderAttributions,
             "change:attributionList": this.renderAttributions,
-            "change:isVisibleInMap": this.changeIsVisibleInMap,
+            "change:isVisibleInMap": this.toggleIsVisibleInMap,
             "renderAttributions": this.renderAttributions
         });
 
-        this.model.checkModelsByAttributions();
-        this.renderAttributions();
+        this.toggleIsVisibleInMap(this.model.get("isVisibleInMap"));
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
-    /*
     render: function () {
-        var attr = this.model.toJSON();
-
-        this.$el.html(this.templateShow(attr));
-
-        this.changeIsVisibleInMap(this.model.get("isVisibleInMap"));
-
-        if (attr.attributionList.length === 0) {
-            this.$(".attributions-div").removeClass("attributions-div");
-        }
+        this.renderAttributions();
         return this;
     },
-    */
-
     renderAttributions: function () {
         var attr = this.model.toJSON();
 
@@ -58,13 +46,17 @@ const AttributionsView = Backbone.View.extend({
         else {
             this.$(".attributions-div").addClass("attributions-div");
         }
+        return this;
     },
 
     toggleIsContentVisible: function () {
         this.model.toggleIsContentVisible();
     },
 
-    changeIsVisibleInMap: function (isVisible) {
+    toggleIsVisibleInMap: function (isVisible) {
+        console.log("toggleIsVisibleInMap");
+        //TODO das hier muss öfter getriggert werden.
+
         if (isVisible) {
             this.$el.show();
             this.$el.addClass("attributions-view");

@@ -39,10 +39,24 @@ const AttributionsModel = Backbone.Model.extend({
             "updateVisibleInMapList": this.checkModelsByAttributions
         });
         this.listenTo(Radio.channel("Attributions"), {
+            //"createAttribution": this.test,
             "createAttribution": this.createAttribution,
             "removeAttribution": this.removeAttribution
         });
+
+        console.log(this.get("isVisibleInMap"));
+
+        this.setIsVisibleInMap(this.get("isVisibleInMap"));
+
+        console.log(this.get("isContentVisible"));
+
+        //this.setIsContentVisible(this.get("isContentVisible"));
+        this.setIsContentVisible(false );
+
+
+
     },
+
     /**
      * Creates a single attribution and pushes it into attributions array.
      * Sets module visibility to true and renders it.
@@ -59,7 +73,8 @@ const AttributionsModel = Backbone.Model.extend({
             name: name,
             text: text
         });
-        this.setIsVisibleInMap(true);
+        //this.setIsVisibleInMap(true);
+        this.setIsContentVisible(true);
         this.trigger("renderAttributions");
     },
     /**
@@ -72,6 +87,7 @@ const AttributionsModel = Backbone.Model.extend({
      * @returns {void}
      */
     removeAttribution: function (name, text, type) {
+        console.log("removeAttribution");
         var filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
@@ -135,6 +151,8 @@ const AttributionsModel = Backbone.Model.extend({
     },
 
     setIsVisibleInMap: function (value) {
+        console.log(value);
+
         this.set("isVisibleInMap", value);
     },
 
