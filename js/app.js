@@ -314,7 +314,7 @@ function loadApp () {
                     break;
                 }
                 case "totalview": {
-                    if (control.attr === true) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         new TotalView();
                     }
                     break;
