@@ -75,13 +75,19 @@
 /**
  * @namespace ModelList
  * @memberOf Core
- * @description Module to gather all Models
+ * @description List module to gather all item models
  */
 
 /**
  * @namespace ConfigLoader
  * @memberOf Core
- * @description Module to gather config
+ * @description Parser module to gather portal configuration
+ */
+
+/**
+ * @namespace Layer
+ * @memberOf Core.ModelList
+ * @description Module to gather all Layermodels
  */
 
 /**

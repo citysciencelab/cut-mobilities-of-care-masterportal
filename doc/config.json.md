@@ -1676,7 +1676,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1693,42 +1693,51 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 ```
 #!json
 {
-"id": "123456",
-"name": "MyVectorLayerName",
-"transparency": 0,
-"visibility": true,
-"supported": ["2D"],
-"extent": [454591, 5809000, 700000, 6075769],
-"displayInTree": true,
-"gfiTheme": "default",
-"layerAttribution": "MyBoldAttribution for layer 123456",
-"legendURL": "https://myServer/myService/legend.pdf",
-"maxScale": "100000",
-"minScale": "1000",
-"autoRefresh": "10000",
-"isVisibleInTree": true,
-"isNeverVisibleInTree": false,
-"clusterDistance": 60,
-"extendedFilter": true,
-"filterOptions": [
-    {
-        "fieldName": "myFirstAttributeToFilter",
-        "filterName": "Filter_1",
-        "filterString": ["*", "value1", "value2"],
-        "filterType": "combo"
-    },
-    {
-        "fieldName": "mySecondAttributeToFilter",
-        "filterName": "Filter_2",
-        "filterString": ["*", "value3", "value4"],
-        "filterType": "combo"
-    }
-],
-"mouseHoverField": "name",
-"routable": false,
-"searchField": "name",
-"styleId": "123456",
-"hitTolerance": 50,
+    "id": "123456",
+    "name": "MyVectorLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "clusterDistance": 60,
+    "extendedFilter": true,
+    "filterOptions": [
+        {
+            "fieldName": "myFirstAttributeToFilter",
+            "filterName": "Filter_1",
+            "filterString": ["*", "value1", "value2"],
+            "filterType": "combo"
+        },
+        {
+            "fieldName": "mySecondAttributeToFilter",
+            "filterName": "Filter_2",
+            "filterString": ["*", "value3", "value4"],
+            "filterType": "combo"
+        }
+    ],
+    "mouseHoverField": "name",
+    "routable": false,
+    "searchField": "name",
+    "styleId": "123456",
+    "hitTolerance": 50
+},
+{
+    "id" : "11111",
+    "name" : "lokale GeoJSON",
+    "url" : "portal/master/test.json",
+    "typ" : "GeoJSON",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : ""
 }
 ```
 

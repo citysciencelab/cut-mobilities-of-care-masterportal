@@ -6,7 +6,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     /**
      * @class Preparser
      * @extends Backbone.Model
-     * @memberof Core.ConfigLoader
+     * @memberOf Core.ConfigLoader
      * @constructs
      * @fires Util#RadioRequestGetConfig
      * @fires AlertingModel#RadioTriggerAlertAlert
