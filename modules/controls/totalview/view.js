@@ -1,5 +1,3 @@
-import Model from "./model";
-
 const TotalViewMapView = Backbone.View.extend(/**@lends TotalViewMapView.prototype */{
     events: {
         "click div#start-totalview": "setTotalView"
