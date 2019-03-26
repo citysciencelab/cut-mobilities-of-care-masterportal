@@ -18,8 +18,6 @@ const TotalViewMapView = Backbone.View.extend(/**@lends TotalViewMapView.prototy
         var style = Radio.request("Util", "getUiStyle"),
             el;
 
-        this.model = new Model();
-
         if (style === "DEFAULT") {
             el = Radio.request("ControlsView", "addRowTR", "totalview");
             this.setElement(el[0]);
