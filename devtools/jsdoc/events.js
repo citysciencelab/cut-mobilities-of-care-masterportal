@@ -94,27 +94,27 @@
 /** -------------------- CLICK COUNTER -------------------- */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterToolChanged
+ * @event ClickCounter#RadioTriggerClickCounterToolChanged
  * @example Radio.trigger("ClickCounter", "toolChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterCalcRoute
+ * @event ClickCounter#RadioTriggerClickCounterCalcRoute
  * @example Radio.trigger("ClickCounter", "calcRoute")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterZoomChanged
+ * @event ClickCounter#RadioTriggerClickCounterZoomChanged
  * @example Radio.trigger("ClickCounter", "zoomChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
+ * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
  * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterGfi
+ * @event ClickCounter#RadioTriggerClickCounterGfi
  * @example Radio.trigger("ClickCounter", "gfi")
 */
 
@@ -233,7 +233,7 @@
  * @event Map#RadioTriggerMapChange
  * @param {String} mode Mode of the map.
  * @description Event that gets fired when the map mode ("2D" / "3D") has changed.
- * @example Radio.trigger("Map", "changed", mode)
+ * @example Radio.trigger("Map", "change", mode)
  */
 
 /**
@@ -241,6 +241,13 @@
  * @description Adds layer to given index
  * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
  * @example Radio.trigger("Map", "addLayerToIndex", array)
+ */
+
+ /**
+ * @event Map#RadioRequestMapGetMapMode
+ * @description Adds layer to given index
+ * @returns {string} - The mode of the map. Value can be "2D" or "3D"
+ * @example Radio.request("Map", "getMapMode")
  */
 
 
@@ -265,6 +272,18 @@
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewSetZoomLevelUp
+ * @description Event that sets the zoom-level one counter up
+ * @example Radio.trigger("MapView", "setZoomLevelUp");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewSetZoomLevelDown
+ * @description Event that sets the zoom-level one counter down
+ * @example Radio.trigger("MapView", "setZoomLevelDown");
  */
 
 /** -------------------- LAYER INFORMATION -------------------- */
@@ -680,4 +699,29 @@
  * @event RemoteInterface#RadioTriggerPostMessage
  * @description Triggers a PostMessage to the RemoteInterface
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
+ */
+
+ /** -------------------- ControlsView -------------------- */
+
+/**
+ * @event ControlsView#RadioRequestControlsViewAddRowTr
+ * @description Creates an HTML-Element at the end of the top-right section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
+ * @example Radio.request("ControlsView", "addRowTR", id, showMobile);
+ */
+
+ /**
+ * @event ControlsView#RadioRequestControlsViewAddRowBr
+ * @description Creates an HTML-Element at the end of the bottom-right section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
+ * @example Radio.request("ControlsView", "addRowBR", id, showMobile);
+ */
+
+  /**
+ * @event ControlsView#RadioRequestControlsViewAddRowBl
+ * @description Creates an HTML-Element at the end of the bottom-left section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @example Radio.request("ControlsView", "addRowBL", id);
  */
