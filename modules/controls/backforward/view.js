@@ -7,9 +7,12 @@ const BackForwardView = Backbone.View.extend({
         "click .backward": "setLastView"
     },
     initialize: function () {
-        var channel = Radio.channel("BackForwardView");
+        var channel = Radio.channel("BackForwardView"),
+            tpl;
 
         this.model = new BackForwardModel();
+        tpl = this.modifyTemplate(BackForwardTemplate);
+        this.template = _.template(tpl);
 
         channel.reply({
             "getView": this
@@ -18,12 +21,51 @@ const BackForwardView = Backbone.View.extend({
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
     },
-    template: _.template(BackForwardTemplate),
     id: "backforward",
 
+    render: function () {
+        this.$el.html(this.template());
+        return this;
+    },
+
+    modifyTemplate: function (tpl) {
+        var result,
+            forwardGlyph = this.model.getForGlyphicon(),
+            backwardGlyph = this.model.getBackGlyphicon(),
+            buttons,
+            re;
+
+        if (!forwardGlyph && !backwardGlyph) {
+            result = tpl;
+            return result;
+        }
+        else if (!forwardGlyph && Boolean(backwardGlyph)) {
+            buttons = {
+                "glyphicon-step-backward": backwardGlyph
+            };
+        }
+        else if (Boolean(forwardGlyph) && !backwardGlyph) {
+            buttons = {
+                "glyphicon-step-forward": forwardGlyph
+            };
+        }
+        else if (Boolean(forwardGlyph) && Boolean(backwardGlyph)) {
+            buttons = {
+                "glyphicon-step-forward": forwardGlyph,
+                "glyphicon-step-backward": backwardGlyph
+            };
+        }
+
+        re = new RegExp(Object.keys(buttons).join("|"), "gi");
+        result = tpl.replace(re, function (matched) {
+            return buttons[matched];
+        });
+
+        return result;
+    },
     updatePermalink: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
+        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+            backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales"),
             currentPos = this.model.get("currentPos"),
             that = this,
@@ -63,13 +105,9 @@ const BackForwardView = Backbone.View.extend({
         }
         this.model.setWentFor(false);
     },
-    render: function () {
-        this.$el.html(this.template());
-        return this;
-    },
     setNextView: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
+        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+            backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);
@@ -82,8 +120,8 @@ const BackForwardView = Backbone.View.extend({
         }
     },
     setLastView: function () {
-        var backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
-            forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
+        var backButton = document.getElementsByClassName("backward glyphicon")[0],
+            forButton = document.getElementsByClassName("forward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);

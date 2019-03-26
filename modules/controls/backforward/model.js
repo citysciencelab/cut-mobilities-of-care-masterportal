@@ -4,6 +4,15 @@ const BackForwardModel = Backbone.Model.extend({
         wentFor: false,
         currentPos: 0
     },
+    initialize: function () {
+        this.config = Radio.request("Parser", "getItemByAttributes", {id: "backforward"});
+    },
+    getForGlyphicon: function () {
+        return _.isUndefined(this.config) === false ? this.config.attr.glyphiconFor : this.config;
+    },
+    getBackGlyphicon: function () {
+        return _.isUndefined(this.config) === false ? this.config.attr.glyphiconBack : this.config;
+    },
     setCenterScales: function (val) {
         this.set("CenterScales", val);
     },

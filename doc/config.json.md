@@ -310,7 +310,7 @@ Konfiguration der Suche über die sichtbaren WFS
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
-|backforwardview|nein|Boolean/Object|false|Boolean: Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+|backforwardview|nein|[backforward](#markdown-header-portalconfigcontrolsbackforward)|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
 
 
 ***
@@ -390,6 +390,32 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 ```
 #!json
 "overviewmap": true
+```
+
+***
+
+#### Portalconfig.controls.backforward
+
+Das Attribut backforward kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Buttons zur Steuerung der letzten und nächsten Kartenansichten mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphiconFor|nein|String||Über den Parameter glyphiconFor kann ein anderes Glyphicon für das Vorschalten der Kartenansicht verwendet werden.|
+|glyphiconBack|nein|String||Über den Parameter glyphiconBack kann ein anderes Glyphicon für das Zurückschalten der Kartenansicht verwendet werden.|
+
+**Beispiel backforward als Object:**
+```
+#!json
+"backforward" : {
+    "glyphiconFor": "glyphicon-fast-forward",
+    "glyphiconBack": "glyphicon-fast-backward"
+}
+```
+
+**Beispiel backforward als Boolean:**
+```
+#!json
+"backforward": true
 ```
 
 ***
