@@ -156,27 +156,6 @@
  * @description Event that returns the config.json of the portal
  */
 
-
-/** -------------------- UTIL -------------------- */
-
-/**
- * @event Util#RadioTriggerUtilShowLoader
- * @example Radio.trigger("Util", "showLoader")
- * @description Shows loading gif
- */
-
-/**
- * @event Util#RadioTriggerUtilHideLoader
- * @example Radio.trigger("Util", "hideLoader")
- * @description Shows loading gif
- */
-
-/**
- * @event Util#RadioRequestGetConfig
- * @example Radio.request("Util", "getConfig")
- * @description Request config path
- */
-
 /** -------------------- LAYER -------------------- */
 
 /**
@@ -284,6 +263,12 @@
  * @event MapView#RadioTriggerMapViewSetZoomLevelDown
  * @description Event that sets the zoom-level one counter down
  * @example Radio.trigger("MapView", "setZoomLevelDown");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewResetView
+ * @description Resets the map view
+ * @example Radio.trigger("MapView", "resetVIew");
  */
 
 /** -------------------- LAYER INFORMATION -------------------- */
@@ -586,6 +571,30 @@
  * @example Radio.request("Util", "getIgnoredKeys");
  */
 
+/**
+ * @event Util#RadioTriggerUtilShowLoader
+ * @example Radio.trigger("Util", "showLoader")
+ * @description Shows loading gif
+ */
+
+/**
+ * @event Util#RadioTriggerUtilHideLoader
+ * @example Radio.trigger("Util", "hideLoader")
+ * @description Shows loading gif
+ */
+
+/**
+ * @event Util#RadioRequestGetConfig
+ * @example Radio.request("Util", "getConfig")
+ * @description Request config path
+ */
+ /**
+ * @event Util#RadioRequestUtilGetUiStyle
+ * @description returns the ignoredKeys
+ * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
+ * @example Radio.request("Util", "getUiStyle");
+ */
+
 /** -------------------- GRAPH -------------------- */
 
 /**
@@ -704,7 +713,7 @@
  /** -------------------- ControlsView -------------------- */
 
 /**
- * @event ControlsView#RadioRequestControlsViewAddRowTr
+ * @event Controls#RadioRequestControlsViewAddRowTr
  * @description Creates an HTML-Element at the end of the top-right section of the controls and returns the element
  * @param {String} id Id of element to be returned
  * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
@@ -712,7 +721,7 @@
  */
 
  /**
- * @event ControlsView#RadioRequestControlsViewAddRowBr
+ * @event Controls#RadioRequestControlsViewAddRowBr
  * @description Creates an HTML-Element at the end of the bottom-right section of the controls and returns the element
  * @param {String} id Id of element to be returned
  * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
@@ -720,7 +729,7 @@
  */
 
   /**
- * @event ControlsView#RadioRequestControlsViewAddRowBl
+ * @event Controls#RadioRequestControlsViewAddRowBl
  * @description Creates an HTML-Element at the end of the bottom-left section of the controls and returns the element
  * @param {String} id Id of element to be returned
  * @example Radio.request("ControlsView", "addRowBL", id);

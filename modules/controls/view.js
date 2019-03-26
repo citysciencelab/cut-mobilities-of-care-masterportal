@@ -7,9 +7,9 @@ const ControlsView = Backbone.View.extend(/** @lends ControlsView.prototype */{
      * @constructs
      * @description This view component manages the placements of the controls.
      * It gets triggered by the app.js for the controls to be placed
-     * @listens ControlsView#RadioRequestControlsViewAddRowTr
-     * @listens ControlsView#RadioRequestControlsViewAddRowBr
-     * @listens ControlsView#RadioRequestControlsViewAddRowBl
+     * @listens Controls#RadioRequestControlsViewAddRowTr
+     * @listens Controls#RadioRequestControlsViewAddRowBr
+     * @listens Controls#RadioRequestControlsViewAddRowBl
      */
     initialize: function () {
         var channel = Radio.channel("ControlsView");

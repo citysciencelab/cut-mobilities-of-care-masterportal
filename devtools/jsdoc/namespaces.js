@@ -11,6 +11,12 @@
  * @description Zoom Buttons for zooming in and zooming out of the map.
  */
 
+ /**
+ * @namespace TotalView
+ * @memberof Controls
+ * @description Control to toggle back and forth in map states.
+ */
+
 /**
  * @namespace Themes
  * @memberOf GFI
