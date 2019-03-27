@@ -1,4 +1,4 @@
-const AttributionsModel = Backbone.Model.extend({
+const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.prototype */{
     defaults: {
         // true wenn der Inhalt (Attributions) angezeigt wird
         isContentVisible: false,
@@ -20,11 +20,10 @@ const AttributionsModel = Backbone.Model.extend({
      * @property {Boolean} isVisibleInMap=false Flag if whole module is visible
      * @property {Boolean} isInitOpenDesktop=true Flag if module is initially activated upon load in desktop environment
      * @property {Boolean} isInitOpenMobile=false Flag if module is initially activated upon load in mobile environment
-     * @property {Array} attributionList=[] todo
+     * @property {Array} attributionList=[] Array of attributions of all layers
      * @property {Boolean} isOverviewmap=? todo
-     * @listens AttributionsModel#RadioTriggerModelListUpdateVisibleInMapList
-     * @listens AlertingModel#RadioTriggerAttributionsCreateAttribution
-     * @listens AlertingModel#RadioTriggerAttributionsRemoveAttribution
+     * @listens ModelList#RadioTriggerUpdateVisibleInMapList
+     * @fires  Attributions#AttributionsRenderAttributions
      */
     initialize: function () {
         if (Radio.request("Util", "isViewMobile")) {
@@ -53,7 +52,7 @@ const AttributionsModel = Backbone.Model.extend({
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
-     * @fires  AttributionsModel#event:renderAttributions
+     * @fires  Attributions#AttributionsRenderAttributions
      * @returns {void}
      */
     createAttribution: function (name, text, type) {
@@ -70,7 +69,7 @@ const AttributionsModel = Backbone.Model.extend({
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
-     * @fires  AttributionsModel#event:renderAttributions
+     * @fires  Attributions#AttributionsRenderAttributions
      * @returns {void}
      */
     removeAttribution: function (name, text, type) {
@@ -100,7 +99,7 @@ const AttributionsModel = Backbone.Model.extend({
     /**
      * Removes all attributions of type "layer" from attributions array.
      * Renders module.
-     * @fires  AttributionsModel#event:renderAttributions
+     * @fires  Attributions#AttributionsRenderAttributions
      * @returns {void}
      */
     removeAllLayerAttributions: function () {
@@ -133,30 +132,53 @@ const AttributionsModel = Backbone.Model.extend({
         }, this);
     },
 
+    /**
+     * Setter for isContentVisible
+     * @param {Boolean} value
+     * @returns {void}
+     */
     setIsContentVisible: function (value) {
         this.set("isContentVisible", value);
     },
 
+    /**
+     * Setter for isContentVisible
+     * @param {Boolean} value
+     * @returns {void}
+     */
     setIsVisibleInMap: function (value) {
         this.set("isVisibleInMap", value);
     },
 
+    /**
+     * Setter for attributionList
+     * @param {Boolean} value flag
+     * @returns {void}
+     */
     setAttributionList: function (value) {
         this.set("attributionList", value);
     },
 
-    // setter for isInitOpenDesktop
+    /**
+     * Setter for isInitOpenDesktop
+     * @param {Boolean} value flag
+     * @returns {void}
+     */
     setIsInitOpenDesktop: function (value) {
         this.set("isInitOpenDesktop", value);
     },
 
-    // setter for isInitOpenMobile
+    /**
+     * Setter for isInitOpenMobile
+     * @param {Boolean} value flag
+     * @returns {void}
+     */
     setIsInitOpenMobile: function (value) {
         this.set("isInitOpenMobile", value);
     },
 
     /**
-     * Toggle für Attribut "isContentVisible"
+     * Toggle isContentVisible value
      * @returns {void}
      */
     toggleIsContentVisible: function () {
