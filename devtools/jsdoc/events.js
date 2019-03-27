@@ -681,3 +681,11 @@
  * @description Triggers a PostMessage to the RemoteInterface
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
+
+
+ /** -------------------- VERKEHRSSTÄRKEN THEME -------------------- */
+
+/**
+ * @event VerkehrsstaerkenTheme#ChangeIsReady
+ * @description Flag if theme model is ready and can start to process the gfi content.
+ */

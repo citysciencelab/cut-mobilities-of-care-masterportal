@@ -1,14 +1,31 @@
 import ThemeView from "../view";
 import VerkehrsStaerkenThemeTemplate from "text-loader!./template.html";
 
-const VerkehrsStaerkenThemeView = ThemeView.extend({
+const VerkehrsStaerkenThemeView = ThemeView.extend(/**@lends VerkehrsStaerkenThemeView.prototype*/{
     tagName: "div",
     className: "verkehrsstaerken",
+    /**
+     * @member VerkehrsStaerkenThemeTemplate
+     * @description Template used to create gfi for Verkehrsstaerken
+     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     */
     template: _.template(VerkehrsStaerkenThemeTemplate),
+    /**
+     * @class VerkehrsStaerkenThemeView
+     * @extends ThemeView
+     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     * @constructs
+     */
     events: {
         "click .kat": "changeKat",
         "click .tab-toggle": "toggleTab"
     },
+
+    /**
+     * Changes the category of the graph
+     * @param {Event} evt Click event
+     * @returns {void}
+     */
     changeKat: function (evt) {
         this.$(".graph svg").remove();
         this.$(".btn-group").children("button").each(function () {
@@ -21,12 +38,22 @@ const VerkehrsStaerkenThemeView = ThemeView.extend({
         });
         this.model.createD3Document(evt.currentTarget.id);
     },
+
+    /**
+     * Creates the Diagramm
+     * @returns {void}
+     */
     loadDiagramm: function () {
         var attr = this.$("#diagramm").find(".active")[0].value;
 
         this.$(".graph svg").remove();
         this.model.createD3Document(attr);
     },
+
+    /**
+     * Toggles the tabs between the table and the diagram
+     * @param {Event} evt Click event
+     */
     toggleTab: function (evt) {
         var contentId = this.$(evt.currentTarget).attr("value");
 

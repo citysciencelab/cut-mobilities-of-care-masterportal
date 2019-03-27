@@ -10,6 +10,12 @@
  * @description GFI Theme for ContiniuousCountingBike
  */
 
+ /**
+ * @namespace VerkehrsstaerkenTheme
+ * @memberOf GFI.Themes
+ * @description GFI Theme for Verkehrsstärken
+ */
+
 /**
  * @namespace MapMarker
  * @description MapMarker

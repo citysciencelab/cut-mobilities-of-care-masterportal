@@ -1,7 +1,7 @@
 import Theme from "../model";
 import "../../../graph/model";
 
-const VerkehrsStaerkenTheme = Theme.extend({
+const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             ansicht: "Diagrammansicht",
@@ -13,13 +13,30 @@ const VerkehrsStaerkenTheme = Theme.extend({
             rowNames: [],
             dataset: []
         }),
+    /**
+     * @class VerkehrsStaerkenThemeModel
+     * @extends Theme
+     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     * @constructs
+     * @property {String} ansicht="Diagrammansicht" Mode of View to be displayed.
+     * @property {String} link="http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx" Download link for data.
+     * @property {String} zaehlstelle="" Id of current counting station.
+     * @property {String} bezeichnung="" Name of current counting station.
+     * @property {String} art="" Type of counting station.
+     * @property {Number[]} years=[] Array of years to be shown.
+     * @property {String[]} rowNames=[] Array of row names.
+     * @property {Object[]} dataset=[] Parsed dataset with all the information needed for table and diagram.
+     * @listens VerkehrsstaerkenTheme#ChangeIsReady
+     * @fires Graph#RadioTriggerGraphCreateGraph
+     */
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": this.parseGfiContent
         });
     },
     /**
-     * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+     * Parses the gfi content and prepares the dataset.
+     * Extracts the year and the row names
      * @returns {void}
      */
     parseGfiContent: function () {
@@ -81,6 +98,12 @@ const VerkehrsStaerkenTheme = Theme.extend({
         }
     },
 
+    /**
+     * Prepares the Dataset and sets it directly in the model
+     * @param {Object[]} dataPerYear Array of objects containing the data by year.
+     * @param {Number[]} years Array of available years
+     * @returns {void}
+     */
     combineYearsData: function (dataPerYear, years) {
         var dataset = [];
 
@@ -120,7 +143,7 @@ const VerkehrsStaerkenTheme = Theme.extend({
         this.set("dataset", value);
     },
     /**
-     * Alle children und Routable-Button (alles Module) im gfiContent müssen hier removed werden.
+     * Removes all children and routables
      * @returns {void}
      */
     destroy: function () {
@@ -142,8 +165,10 @@ const VerkehrsStaerkenTheme = Theme.extend({
         }, this);
     },
     /*
-    * noData comes as "-" from WMS. turn noData into ""
-    * try to parse data to float
+    * Parses the data and prepares them for creating the table or the graph.
+    * Creates new attributes in data objects.
+    * Tries to parse data to float.
+    * @returns {Object[]} - parsed data.
     */
     parseData: function (dataArray) {
         var parsedDataArray = [];
@@ -176,6 +201,12 @@ const VerkehrsStaerkenTheme = Theme.extend({
         return parsedDataArray;
     },
 
+    /**
+     * Maps the string "*" to "Ja".
+     * If not, returnes the original value.
+     * @param {String} value Input string.
+     * @returns {String} - The mapped string.
+     */
     parseDataValue: function (value) {
         if (value === "*") {
             return "Ja";
@@ -184,9 +215,9 @@ const VerkehrsStaerkenTheme = Theme.extend({
     },
 
     /**
-     * Ermittelt die Bezeichnung und das Styling der Legendeneinträge
-     * @param   {string}    value   Art
-     * @returns {Object[]}          Legendendefinitionen
+     * Creates the definitions for the diagrams legend
+     * @param   {string} value Attribute value
+     * @returns {Object[]} - Definitions for diagram legend
      */
     legendData: function (value) {
         var attr = [];
@@ -223,9 +254,9 @@ const VerkehrsStaerkenTheme = Theme.extend({
     },
 
     /**
-     * Gibt die Bezeichnung der y-Achse zurück
-     * @param   {string} value  Art
-     * @returns {string}        Bezeichnung der y-Achse
+     * Mapping of the the y-axis name
+     * @param   {String} value  Value
+     * @returns {String} - Mapped y-axis name
      */
     yAxisLabel: function (value) {
         if (value === "DTV") {
@@ -237,6 +268,12 @@ const VerkehrsStaerkenTheme = Theme.extend({
         return "SV-Anteil am DTVw (%)";
     },
 
+    /**
+     * Generates the graph config and triggers the Graph-functionality to create the graph
+     * @param {String} key Name of category
+     * @returns {void}
+     * @fires Graph#RadioTriggerGraphCreateGraph
+     */
     createD3Document: function (key) {
         var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
             heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
@@ -273,4 +310,4 @@ const VerkehrsStaerkenTheme = Theme.extend({
     }
 });
 
-export default VerkehrsStaerkenTheme;
+export default VerkehrsStaerkenThemeModel;
