@@ -39,11 +39,11 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchbar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
 ***
 
-### Portalconfig.searchbar
+### Portalconfig.searchBar
 Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -65,7 +65,7 @@ Konfiguration der Searchbar
 
 ***
 
-#### Portalconfig.searchbar.bkg
+#### Portalconfig.searchBar.bkg
 
 [type:Extent]: # (Datatypes.Extent)
 
@@ -101,7 +101,7 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
-#### Portalconfig.searchbar.osm ####
+#### Portalconfig.searchBar.osm ####
 Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick auf die Lupe oder Enter ausgelöst
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -128,7 +128,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick au
 
 ***
 
-#### Portalconfig.searchbar.gazetteer
+#### Portalconfig.searchBar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -157,7 +157,7 @@ Konfiguration des Gazetteer Suchdienstes
 
 ***
 
-#### Portalconfig.searchbar.gdi
+#### Portalconfig.searchBar.gdi
 Konfiguration des GDI Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -177,7 +177,7 @@ Konfiguration des GDI Suchdienstes
 ***
 
 
-#### Portalconfig.searchbar.specialWFS
+#### Portalconfig.searchBar.specialWFS
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -214,7 +214,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.specialWFS.definition
+#### Portalconfig.searchBar.specialWFS.definition
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -242,7 +242,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.tree
+#### Portalconfig.searchBar.tree
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -259,7 +259,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.visibleWFS
+#### Portalconfig.searchBar.visibleWFS
 Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -276,13 +276,14 @@ Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwende
 
 ***
 
-#### Portalconfig.searchbar.visibleVector
+#### Portalconfig.searchBar.visibleVector
 Konfiguration der Suche über die sichtbaren WFS
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+|gfiOnClick|nein|Boolean|false|Öffnet das GetFeatureInfo (gfi) bei Klick auf das Suchergebnis.|
 
 **Beispiel**
 ```
@@ -1675,7 +1676,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1692,42 +1693,51 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 ```
 #!json
 {
-"id": "123456",
-"name": "MyVectorLayerName",
-"transparency": 0,
-"visibility": true,
-"supported": ["2D"],
-"extent": [454591, 5809000, 700000, 6075769],
-"displayInTree": true,
-"gfiTheme": "default",
-"layerAttribution": "MyBoldAttribution for layer 123456",
-"legendURL": "https://myServer/myService/legend.pdf",
-"maxScale": "100000",
-"minScale": "1000",
-"autoRefresh": "10000",
-"isVisibleInTree": true,
-"isNeverVisibleInTree": false,
-"clusterDistance": 60,
-"extendedFilter": true,
-"filterOptions": [
-    {
-        "fieldName": "myFirstAttributeToFilter",
-        "filterName": "Filter_1",
-        "filterString": ["*", "value1", "value2"],
-        "filterType": "combo"
-    },
-    {
-        "fieldName": "mySecondAttributeToFilter",
-        "filterName": "Filter_2",
-        "filterString": ["*", "value3", "value4"],
-        "filterType": "combo"
-    }
-],
-"mouseHoverField": "name",
-"routable": false,
-"searchField": "name",
-"styleId": "123456",
-"hitTolerance": 50,
+    "id": "123456",
+    "name": "MyVectorLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "clusterDistance": 60,
+    "extendedFilter": true,
+    "filterOptions": [
+        {
+            "fieldName": "myFirstAttributeToFilter",
+            "filterName": "Filter_1",
+            "filterString": ["*", "value1", "value2"],
+            "filterType": "combo"
+        },
+        {
+            "fieldName": "mySecondAttributeToFilter",
+            "filterName": "Filter_2",
+            "filterString": ["*", "value3", "value4"],
+            "filterType": "combo"
+        }
+    ],
+    "mouseHoverField": "name",
+    "routable": false,
+    "searchField": "name",
+    "styleId": "123456",
+    "hitTolerance": 50
+},
+{
+    "id" : "11111",
+    "name" : "lokale GeoJSON",
+    "url" : "portal/master/test.json",
+    "typ" : "GeoJSON",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : ""
 }
 ```
 

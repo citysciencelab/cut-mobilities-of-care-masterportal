@@ -22,6 +22,6 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 |visibility|nur gemeinsam mit layerids zu verwenden. Sichtbarkeit der Layer kommagetrennt als Boolean (true, false)|`&layerids=453,2128&visibility=true,false`|
 |zoomlevel|Zoomt auf die Maßstabsstufe, die angegeben wurde (siehe [config.view.options](config.js.md)).|`&zoomlevel=2`|
 |featureid|Zoomt auf die Features des WFS-Dienstes, der in der config.js konfiguriert ist (siehe [config.zoomtofeature](config.js.md)).|`&featureid=18,26`|
-|config| Endpunkt des in der config.js([config.portalConf](config.js.md)) angegebenen Knotens. Der Pfad-Knoten in der config.js wird mit diesem Paramter kombiniert und ergibt den kompletten Pfad zur config.json.|`&config=config.json`|
+|config| Legt eine zu verwendende Konfigurationsdatei fest. Die Angabe erfolgt mittels einer absoluten URL (`http://...` bzw. `https://...`) oder eines relativen Pfades. Im zweiten Fall wird der in der config.js([config.portalConf](config.js.md)) angegebene Pfad mit diesem Parameter kombiniert und ergibt den kompletten Pfad zur config.json.|`&config=config.json`|
 |style| Definiert ob eine besondere Variante der Bedienelemente angezeigt werden soll, z.B. komplett ohne Bedienlemente zur Einbindung als Iframe ("simple") |`&style=simple`|
 |highlightfeature| Definiert welches Feature aus welchem layer gehighlighted werden soll. Dabei werden in einem String die LayerId und dann die FeatureId kommasepariert übergeben. |`&highlightfeature=`layerid`,`featureId|
