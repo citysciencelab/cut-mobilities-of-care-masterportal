@@ -53,7 +53,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
             rowNames = _.keys(this.get("gfiContent")[0]);
 
             _.each(rowNames, function (rowName) {
-                var newRowName, index, yearDigits, charBeforeYear;
+                var newRowName;
 
                 year = parseInt(rowName.slice(-4), 10);
 
@@ -68,18 +68,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                 }
                 // jahresDatensätze parsen
                 else if (!_.isNaN(year)) {
-                    newRowName = "";
-                    index = rowName.indexOf(String(year)) - 1;
-                    yearDigits = rowName.slice(-4).length;
-                    charBeforeYear = rowName.slice(index, -yearDigits);
-
-                    // vorzeichen vor year prüfen
-                    if (charBeforeYear === "_") {
-                        newRowName = rowName.replace("_" + String(year), "").trim();
-                    }
-                    else {
-                        newRowName = rowName.replace(" " + String(year), "").trim();
-                    }
+                    newRowName = this.createNewRowName(rowName, year);
                     yearData = {
                         year: year,
                         attrName: newRowName,
@@ -98,6 +87,29 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
         }
     },
 
+    /**
+     * Removes the year from the end of the rowName.
+     * After that if the last character is a " " or a "_", this also gets removed
+     * @param {String} rowName Name of Row from gfiContent
+     * @param {String/Number} year Year
+     * @returns {String} - New row name withour the year at the end
+     */
+    createNewRowName: function (rowName, year) {
+        var newRowName = "",
+            yearAsString = String(year),
+            index = rowName.indexOf(yearAsString) - 1,
+            yearDigits = rowName.slice(-4).length,
+            charBeforeYear = rowName.slice(index, -yearDigits);
+
+        if (charBeforeYear === "_") {
+            newRowName = rowName.replace("_" + yearAsString, "").trim();
+        }
+        else {
+            newRowName = rowName.replace(" " + yearAsString, "").trim();
+        }
+
+        return newRowName;
+    },
     /**
      * Prepares the Dataset and sets it directly in the model
      * @param {Object[]} dataPerYear Array of objects containing the data by year.
