@@ -3,11 +3,24 @@ import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {OverviewMap} from "ol/control.js";
 
-const OverviewMapModel = Backbone.Model.extend({
+const OverviewMapModel = Backbone.Model.extend(/**@lends OverviewMapModel.prototype */{
     defaults: {
         baselayer: "",
         newOvmView: ""
     },
+    /**
+     * @class OverviewMapModel
+     * @memberof Controls.Overviewmap
+     * @extends Backbone.Model
+     * @constructs
+     * @fires Map#RadioRequestMapGetMap
+     * @fires MapView#RadioRequestMapViewGetResolutions
+     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
+     * @fires Map#RadioTriggerMapAddControl
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     */
     initialize: function () {
         var map = Radio.request("Map", "getMap"),
             maxResolution = _.first(Radio.request("MapView", "getResolutions")),
@@ -35,6 +48,10 @@ const OverviewMapModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Creates a new overview map.
+     * @returns {ol/control/OverviewMap} - The generated overview map.
+     */
     newOverviewmap: function () {
         var overviewmap = new OverviewMap({
             collapsible: false,
@@ -49,6 +66,14 @@ const OverviewMapModel = Backbone.Model.extend({
         return overviewmap;
     },
 
+    /**
+     * @description Derives the baselayer from the given layer collection
+     * @param {Layer[]} layers The Array of layers
+     * @param {string} baselayer The id of the baselayer
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @returns {object} - Baselayer params.
+     */
     getBaseLayerFromCollection: function (layers, baselayer) {
         var modelFromCollection,
             baseLayerParams;
@@ -77,6 +102,11 @@ const OverviewMapModel = Backbone.Model.extend({
 
     },
 
+    /**
+     * Creates the layer for the overview map
+     * @param {string} baselayer Id of baselayer
+     * @returns {ol/Image} - The open layer image layer
+     */
     getOvmLayer: function (baselayer) {
         var imageLayer;
 

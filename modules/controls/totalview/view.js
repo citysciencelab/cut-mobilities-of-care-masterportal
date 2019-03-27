@@ -1,14 +1,20 @@
-import Model from "./model";
-
-const TotalViewMapView = Backbone.View.extend({
+const TotalViewMapView = Backbone.View.extend(/**@lends TotalViewMapView.prototype */{
     events: {
         "click div#start-totalview": "setTotalView"
     },
+    /**
+     * @class TotalViewMapView
+     * @extends Backbone.View
+     * @memberof Controls.TotalView
+     * @constructs
+     * @fires Util#RadioRequestUtilGetUiStyle
+     * @fires Controls#RadioRequestControlsViewAddRowTr
+     * @fires MapView#RadioTriggerMapViewResetView
+     * @listens Menu#RadioTriggerMenuLoaderReady
+     */
     initialize: function () {
         var style = Radio.request("Util", "getUiStyle"),
             el;
-
-        this.model = new Model();
 
         if (style === "DEFAULT") {
             el = Radio.request("ControlsView", "addRowTR", "totalview");
@@ -31,14 +37,28 @@ const TotalViewMapView = Backbone.View.extend({
     template: _.template("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>"),
     tabletemplate: _.template("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>"),
     id: "totalview",
+
+    /**
+     * Render-Function
+     * @returns {TotalViewMapView}
+     */
     render: function () {
         this.$el.html(this.template());
 
         return this;
     },
+    /**
+     * Renders the table template
+     * @returns {void}
+     */
     renderToToolbar: function () {
         this.$el.prepend(this.tabletemplate());
     },
+
+    /**
+     * Resets the mapView
+     * @fires MapView#RadioTriggerMapViewResetView
+     */
     setTotalView: function () {
         Radio.trigger("MapView", "resetView");
     }
