@@ -23,9 +23,10 @@ const Layer = Item.extend(
         },
         /**
          * @class Layer
+         * @abstract
          * @description Module to represent any layer
          * @extends Item
-         * @memberOf Item
+         * @memberOf Core.ModelList.Layer
          * @constructs
          * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
          * @property {Boolean} isVisibleInMap=false Flag if layer is visible in map

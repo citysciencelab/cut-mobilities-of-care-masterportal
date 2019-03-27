@@ -50,7 +50,7 @@ const ModelList = Backbone.Collection.extend(
      * @description Collection that manages all models.
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Collection
-     * @memberOf ModelList
+     * @memberOf Core.ModelList
      * @constructs
      * @listens List#RadioRequestModelListGetCollection
      * @listens List#RadioRequestModelListGetModelsByAttributes

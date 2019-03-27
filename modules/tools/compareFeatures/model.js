@@ -73,8 +73,9 @@ const CompareFeaturesModel = Tool.extend({
      */
     prepareFeatureListToShow: function (gfiAttributes) {
         var list = [],
-            featureList = this.get("groupedFeatureList")[this.get("layerId")];
-
+            // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
+            layerId = parseInt(this.get("layerId").split("_")[0], 10),
+            featureList = this.get("groupedFeatureList")[layerId];
         Object.keys(gfiAttributes).forEach(function (key) {
             var row = {};
 
@@ -109,6 +110,11 @@ const CompareFeaturesModel = Tool.extend({
      */
     groupedFeaturesBy: function (featureList, property) {
         return _.groupBy(featureList, function (feature) {
+            // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
+            if (property === 'layerId') {
+                // Only use the first digit group delimited by underscore
+                return feature.get(property).split("_")[0];
+            }
             return feature.get(property);
         });
     },
@@ -165,6 +171,9 @@ const CompareFeaturesModel = Tool.extend({
      */
     getFeatureIds: function (groupedFeatureList, layerId) {
         var idList = [];
+
+        // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
+        layerId = layerId.split("_")[0];
 
         groupedFeatureList[layerId].forEach(function (feature) {
             idList.push(feature.getId());

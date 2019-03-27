@@ -51,6 +51,22 @@ const ToolView = Backbone.View.extend({
         }
         else {
             $("div.table-tools").addClass("table-tools-active");
+            if ($("#table-nav").attr("class") === "table-nav-0deg" || $("#table-nav").attr("class") === "table-nav-180deg") {
+                this.$("#table-tools-menu").css({
+                    "left": ""
+                });
+                this.$("#funnel").css({
+                    "left": ""
+                });
+            }
+            else if ($("#table-nav").attr("class") === "table-nav-270deg" || $("#table-nav").attr("class") === "table-nav-90deg") {
+                this.$("#table-tools-menu").css({
+                    "left": "-150px"
+                });
+                this.$("#funnel").css({
+                    "left": "125px"
+                });
+            }
             $("div.table-tools-menu").show();
             Radio.request("TableMenu", "setActiveElement", "Tool");
         }

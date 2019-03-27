@@ -9,11 +9,11 @@ const ClickCounterView = Backbone.View.extend(
         * @constructs
         * @param {String} desktopURL [description]
         * @param {String} mobileURL  [description]
-        * @listens ClickCounterView#RadioTriggerClickCounterToolChanged
-        * @listens ClickCounterView#RadioTriggerClickCounterCalcRoute
-        * @listens ClickCounterView#RadioTriggerClickCounterZoomChanged
-        * @listens ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
-        * @listens ClickCounterView#RadioTriggerClickCounterGfi
+        * @listens ClickCounter#RadioTriggerClickCounterToolChanged
+        * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
+        * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
+        * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
+        * @listens ClickCounter#RadioTriggerClickCounterGfi
         */
         initialize: function (desktopURL, mobileURL) {
             var channel = Radio.channel("ClickCounter");
