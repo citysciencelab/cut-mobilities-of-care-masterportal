@@ -187,7 +187,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                     parsedDataObj.class = "dot_visible";
                     parsedDataObj.style = "rect";
                 }
-                else if (isNaN(parseFloatVal)) {
+                if (isNaN(parseFloatVal)) {
                     parsedDataObj[dataAttr] = parseDataVal;
                 }
                 else {
