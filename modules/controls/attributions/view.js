@@ -6,6 +6,17 @@ const AttributionsView = Backbone.View.extend({
     events: {
         "click .attributions-button": "toggleIsContentVisible"
     },
+    /**
+     * @class AttributionsView
+     * @extends Backbone.Model
+     * @memberof Attributions
+     * @constructs
+     * @listens AttributionsView#RadioTriggerAttributionsViewRenderAttributions
+     * @listens AttributionsModel#event:change~IsContentVisible
+     * @listens AttributionsModel#event:change~AttributionList
+     * @listens AttributionsModel#event:change~IsVisibleInMap
+     * @listens AttributionsModel#AttributionsModelRenderAttributions
+     */
     initialize: function () {
         var channel = Radio.channel("AttributionsView"),
             jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
@@ -19,11 +30,11 @@ const AttributionsView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isContentVisible": this.renderAttributions,
             "change:attributionList": this.renderAttributions,
-            "change:isVisibleInMap": this.toggleIsVisibleInMap,
+            "change:isVisibleInMap": this.readIsVisibleInMap,
             "renderAttributions": this.renderAttributions
         });
 
-        this.toggleIsVisibleInMap(this.model.get("isVisibleInMap"));
+        this.readIsVisibleInMap();
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
@@ -53,11 +64,8 @@ const AttributionsView = Backbone.View.extend({
         this.model.toggleIsContentVisible();
     },
 
-    toggleIsVisibleInMap: function (isVisible) {
-        console.log("toggleIsVisibleInMap");
-        //TODO das hier muss öfter getriggert werden.
-
-        if (isVisible) {
+    readIsVisibleInMap: function () {
+        if (this.model.get("isVisibleInMap")) {
             this.$el.show();
             this.$el.addClass("attributions-view");
         }

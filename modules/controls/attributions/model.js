@@ -1,9 +1,9 @@
 const AttributionsModel = Backbone.Model.extend({
     defaults: {
         // true wenn der Inhalt (Attributions) angezeigt wird
-        isContentVisible: true,
+        isContentVisible: false,
         // true wenn das Control auf der Karte angezeigt wird
-        isVisibleInMap: false,
+        isVisibleInMap: true,
         isInitOpenDesktop: true,
         isInitOpenMobile: false,
         // Modellist mit Attributions
@@ -16,7 +16,6 @@ const AttributionsModel = Backbone.Model.extend({
      * @extends Backbone.Model
      * @memberof Attributions
      * @constructs
-     * @property {Radio.channel} channel=Radio.channel("Attributions") Radio channel for communication
      * @property {Boolean} isContentVisible=true Flag if attributions copy is visible
      * @property {Boolean} isVisibleInMap=false Flag if whole module is visible
      * @property {Boolean} isInitOpenDesktop=true Flag if module is initially activated upon load in desktop environment
@@ -39,21 +38,11 @@ const AttributionsModel = Backbone.Model.extend({
             "updateVisibleInMapList": this.checkModelsByAttributions
         });
         this.listenTo(Radio.channel("Attributions"), {
-            //"createAttribution": this.test,
             "createAttribution": this.createAttribution,
             "removeAttribution": this.removeAttribution
         });
 
-        console.log(this.get("isVisibleInMap"));
-
-        this.setIsVisibleInMap(this.get("isVisibleInMap"));
-
-        console.log(this.get("isContentVisible"));
-
-        //this.setIsContentVisible(this.get("isContentVisible"));
-        this.setIsContentVisible(false );
-
-
+        this.checkModelsByAttributions();
 
     },
 
@@ -73,8 +62,6 @@ const AttributionsModel = Backbone.Model.extend({
             name: name,
             text: text
         });
-        //this.setIsVisibleInMap(true);
-        this.setIsContentVisible(true);
         this.trigger("renderAttributions");
     },
     /**
@@ -87,7 +74,6 @@ const AttributionsModel = Backbone.Model.extend({
      * @returns {void}
      */
     removeAttribution: function (name, text, type) {
-        console.log("removeAttribution");
         var filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
@@ -100,15 +86,16 @@ const AttributionsModel = Backbone.Model.extend({
      * @returns {void}
      */
     checkModelsByAttributions: function () {
+
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
             filteredModelList = modelList.filter(function (model) {
                 return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
-            });
+            }),
+            bShowAttributions = (filteredModelList.length > 0);
 
         this.removeAllLayerAttributions();
-        if (filteredModelList.length > 0) {
-            this.generateAttributions(filteredModelList);
-        }
+        this.generateAttributions(filteredModelList);
+        this.setIsVisibleInMap(bShowAttributions);
     },
     /**
      * Removes all attributions of type "layer" from attributions array.
@@ -151,16 +138,11 @@ const AttributionsModel = Backbone.Model.extend({
     },
 
     setIsVisibleInMap: function (value) {
-        console.log(value);
-
         this.set("isVisibleInMap", value);
     },
 
     setAttributionList: function (value) {
         this.set("attributionList", value);
-        if (value.length === 0) {
-            this.setIsContentVisible(false);
-        }
     },
 
     // setter for isInitOpenDesktop
