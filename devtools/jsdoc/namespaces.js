@@ -11,6 +11,12 @@
  * @description Zoom Buttons for zooming in and zooming out of the map.
  */
 
+  /**
+ * @namespace Overviewmap
+ * @memberof Controls
+ * @description Small map on the bottom right of the Application, that gives the user an overview.
+ */
+
  /**
  * @namespace TotalView
  * @memberof Controls

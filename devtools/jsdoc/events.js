@@ -133,6 +133,19 @@
  * @description Event that removes an item from the layertree
  */
 
+ /**
+ * @event Parser#RadioRequestParserGetItemByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemByAttributes", attributes)
+ */
+
+ /**
+ * @event Parser#RadioRequestParserGetInitVisibBaseLayer
+ * @returns {String} - Id of initial visible baselayer
+ * @example Radio.request("Parser", "getInitVisibBaselayer")
+ */
+
 
 /** --------------------CONTACT -------------------- */
 
@@ -229,6 +242,18 @@
  * @example Radio.request("Map", "getMapMode")
  */
 
+ /**
+ * @event Map#RadioRequestMapGetMap
+ * @returns {ol/map} - The Openlayers Map.
+ * @example Radio.request("Map", "getMap")
+ */
+
+ /**
+ * @event Map#RadioTriggerMapAddControl
+ * @param {object} control Control to be added to map.
+ * @example Radio.trigger("Map", "addControl", control)
+ */
+
 
 /** -------------------- MAP VIEW -------------------- */
 
@@ -269,6 +294,12 @@
  * @event MapView#RadioTriggerMapViewResetView
  * @description Resets the map view
  * @example Radio.trigger("MapView", "resetVIew");
+ */
+
+ /**
+ * @event MapView#RadioRequestMapViewGetResolutions
+ * @returns {object[]} - Returns the resolutions of the map
+ * @example Radio.trigger("MapView", "getResolutions");
  */
 
 /** -------------------- LAYER INFORMATION -------------------- */
@@ -733,4 +764,14 @@
  * @description Creates an HTML-Element at the end of the bottom-left section of the controls and returns the element
  * @param {String} id Id of element to be returned
  * @example Radio.request("ControlsView", "addRowBL", id);
+ */
+
+
+/** -------------------- RawLayerList -------------------- */
+
+/**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
+ * @param {String} params Object of Params.
+ * @returns {Layer} - Layer that matches the given params.
+ * @example Radio.request("RawLayerList", "getLayerWhere", params);
  */
