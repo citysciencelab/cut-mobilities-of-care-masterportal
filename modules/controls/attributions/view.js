@@ -2,48 +2,58 @@ import TemplateShow from "text-loader!./templateShow.html";
 import TemplateHide from "text-loader!./templateHide.html";
 import Attributions from "./model";
 
-const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.prototype */{
+const AttributionsView = Backbone.View.extend({
     events: {
         "click .attributions-button": "toggleIsContentVisible"
     },
-    /**
-     * @class AttributionsView
-     * @extends Backbone.Model
-     * @memberof Attributions
-     * @constructs
-     * @listens Attributions#RadioTriggerAttributionsRenderAttributions
-     * @listens Attributions#changeIsContentVisible
-     * @listens Attributions#changeAttributionList
-     * @listens Attributions#changeIsVisibleInMap
-     * @listens Attributions#AttributionsRenderAttributions
-     */
     initialize: function () {
-        var channel = Radio.channel("Attributions"),
-            jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
+        var channel = Radio.channel("AttributionsView"),
+            isViewMobile = Radio.request("Util", "isViewMobile");
 
-        this.model = new Attributions(jAttributionsConfig);
+        this.model = new Attributions();
 
         this.listenTo(channel, {
-            "renderAttributions": this.render
+            "renderAttributions": this.renderAttributions
         });
 
         this.listenTo(this.model, {
-            "change:isContentVisible": this.render,
-            "change:attributionList": this.render,
-            "change:isVisibleInMap": this.readIsVisibleInMap,
-            "renderAttributions": this.render
+            "change:isContentVisible": this.renderAttributions,
+            "change:attributionList": this.renderAttributions,
+            "change:isVisibleInMap": this.toggleIsVisibleInMap,
+            "renderAttributions": this.renderAttributions
         });
 
-        this.readIsVisibleInMap();
+
+        if (isViewMobile === true) {
+            this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
+        }
+        else {
+            this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
+        }
+        this.model.checkModelsByAttributions();
+        this.render();
     },
     templateShow: _.template(TemplateShow),
     templateHide: _.template(TemplateHide),
-
-    /**
-     * Modules render method. Decides whitch control click icon to show depending on model's isContentVisible property.
-     * @return {self}
-     */
     render: function () {
+        var attr = this.model.toJSON();
+
+        this.$el.html(this.templateShow(attr));
+        if (this.model.get("isVisibleInMap") === true) {
+            this.$el.show();
+            this.$el.addClass("attributions-view");
+        }
+        else {
+            this.$el.hide();
+        }
+
+        if (attr.attributionList.length === 0) {
+            this.$(".attributions-div").removeClass("attributions-div");
+        }
+        return this;
+    },
+
+    renderAttributions: function () {
         var attr = this.model.toJSON();
 
         if (this.model.get("isContentVisible") === true) {
@@ -58,23 +68,14 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
         else {
             this.$(".attributions-div").addClass("attributions-div");
         }
-        return this;
     },
 
-    /**
-     * Wrapper method for model's toggleIsContentVisible()
-     * @return {void}
-     */
     toggleIsContentVisible: function () {
-        return this.model.toggleIsContentVisible();
+        this.model.toggleIsContentVisible();
     },
 
-    /**
-     * Decides whether to display the module or to hide it. Uses model property isVisibleInMap for it.
-     * @return {void}
-     */
-    readIsVisibleInMap: function () {
-        if (this.model.get("isVisibleInMap")) {
+    toggleIsVisibleInMap: function (isVisible) {
+        if (isVisible) {
             this.$el.show();
             this.$el.addClass("attributions-view");
         }
