@@ -93,6 +93,12 @@
  */
 
 /**
+ * @namespace Attributions
+ * @description Module to display additional layer infos in a separate modal
+ * used for Verkehrsportal.
+ */
+
+/**
  * @namespace Core
  * @description Loads core and instances all modules that have to be loaded, due to portal config
  */

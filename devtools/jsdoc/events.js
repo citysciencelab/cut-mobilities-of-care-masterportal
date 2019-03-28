@@ -501,6 +501,41 @@
  * @example this.trigger("updateOverlayerView", id)
  */
 
+/** -------------------- ATTRIBUTIONS ----------------- */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#changeIsContentVisible
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeAttributionList
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeIsVisibleInMap
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#AttributionsRenderAttributions
+ * @description Event for a changing property
+ */
+
+
 
 /** -------------------- SEARCHBAR -------------------- */
 

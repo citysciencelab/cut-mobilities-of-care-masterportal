@@ -135,6 +135,7 @@ const ModelList = Backbone.Collection.extend(
                 "change:isSelected": function (model) {
                     if (model.get("type") === "layer") {
                         this.resetSelectionIdx(model);
+
                         model.setIsVisibleInMap(model.get("isSelected"));
                     }
                     this.trigger("updateSelection");
