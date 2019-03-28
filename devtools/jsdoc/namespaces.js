@@ -1,4 +1,29 @@
 /**
+ * @namespace Controls
+ * @description Controls are small Elements that allow the user to interact directly with the Application.
+ * In the Application the controls are situated in red squares on the map on the right side of the window.
+ * All Controls have the same look and feel, so the UX should be equal throughout all controls.
+ */
+
+ /**
+ * @namespace Zoom
+ * @memberof Controls
+ * @description Zoom Buttons for zooming in and zooming out of the map.
+ */
+
+  /**
+ * @namespace Overviewmap
+ * @memberof Controls
+ * @description Small map on the bottom right of the Application, that gives the user an overview.
+ */
+
+ /**
+ * @namespace TotalView
+ * @memberof Controls
+ * @description Control to toggle back and forth in map states.
+ */
+
+/**
  * @namespace Themes
  * @memberOf GFI
  * @description GFI-Themes

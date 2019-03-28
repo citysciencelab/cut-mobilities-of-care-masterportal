@@ -409,7 +409,7 @@ Das Attribut totalview kann vom Typ Boolean oder Object sein. Wenn es vom Typ Bo
 "totalview" : {
     "glyphicon": "glyphicon-step-forward",
     "tableGlyphicon": "glyphicon-step-forward"
-      },
+},
 ```
 
 **Beispiel totalview als Boolean:**

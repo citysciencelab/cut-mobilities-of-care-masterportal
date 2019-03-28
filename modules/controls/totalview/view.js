@@ -1,16 +1,22 @@
-import Model from "./model";
-
-const TotalViewMapView = Backbone.View.extend({
+const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.prototype */{
     events: {
         "click div#start-totalview": "setTotalView"
     },
+    /**
+     * @class TotalViewMapView
+     * @extends Backbone.View
+     * @memberof Controls.TotalView
+     * @constructs
+     * @fires Util#RadioRequestUtilGetUiStyle
+     * @fires Controls#RadioRequestControlsViewAddRowTr
+     * @fires MapView#RadioTriggerMapViewResetView
+     * @listens Menu#RadioTriggerMenuLoaderReady
+     */
     initialize: function () {
         var style = Radio.request("Util", "getUiStyle"),
             el,
             tpl,
             tabletpl;
-
-        this.model = new Model();
 
         tpl = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>");
         tabletpl = this.modifyTableTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>");
@@ -36,20 +42,42 @@ const TotalViewMapView = Backbone.View.extend({
         }
     },
     id: "totalview",
+
+    /**
+     * Render-Function
+     * @returns {TotalViewMapView}
+     */
     render: function () {
         this.$el.html(this.template());
 
         return this;
     },
+    /**
+     * Renders the table template
+     * @returns {void}
+     */
     renderToToolbar: function () {
         this.$el.prepend(this.tableTemplate());
     },
+
+    /**
+     * Resets the mapView
+     * @fires MapView#RadioTriggerMapViewResetView
+     */
     setTotalView: function () {
         Radio.trigger("MapView", "resetView");
     },
+    /**
+     * Changes the glyphicon for the Button if a modification exists
+     * @param {String} tpl initial template
+     * @return {String} template with possile modified glyphicon
+     */
     modifyTemplate: function (tpl) {
         var result,
-            button = this.model.getButton();
+            button,
+            config = Radio.request("Parser", "getItemByAttributes", {id: "totalview"});
+
+        button = _.isUndefined(config) === false ? config.attr.glyphicon : config;
 
         if (!button) {
             result = tpl;
@@ -59,9 +87,17 @@ const TotalViewMapView = Backbone.View.extend({
         }
         return result;
     },
+    /**
+     * Changes the glyphicon for the Button in Table Mode if a modification exists
+     * @param {String} tpl initial template
+     * @return {String} template with possile modified glyphicon
+     */
     modifyTableTemplate: function (tpl) {
         var result,
-            button = this.model.getTableButton();
+            button,
+            config = Radio.request("Parser", "getItemByAttributes", {id: "totalview"});
+
+        button = _.isUndefined(config) === false ? config.attr.tableGlyphicon : config;
 
         if (!button) {
             result = tpl;
@@ -70,7 +106,7 @@ const TotalViewMapView = Backbone.View.extend({
             result = tpl.replace(/icon-home/g, button);
         }
         return result;
-    },
+    }
 
 });
 

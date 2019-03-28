@@ -37,7 +37,8 @@ const Tool = Item.extend(
     superInitialize: function () {
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                var gfiModel = model.collection.findWhere({id: "gfi"});
+                var gfiModel = model.collection.findWhere({id: "gfi"}),
+                    activeTools = [];
 
                 if (value) {
                     if (model.get("renderToWindow")) {
@@ -47,12 +48,16 @@ const Tool = Item.extend(
                     if (gfiModel) {
                         gfiModel.setIsActive(!model.get("deactivateGFI"));
                     }
+                    this.collection.setActiveToolsToFalse(model);
                 }
                 else {
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
-                    model.collection.toggleDefaultTool();
+                    activeTools = model.collection.where({isActive: true});
+                    if (activeTools.length === 0) {
+                        model.collection.toggleDefaultTool();
+                    }
                 }
             }
         });
