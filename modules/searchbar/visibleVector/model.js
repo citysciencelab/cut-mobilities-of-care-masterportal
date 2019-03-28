@@ -1,10 +1,7 @@
 
 import "../model";
 
-const VisibleVectorModel = Backbone.Model.extend({
-    /**
-    *
-    */
+const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.prototype */{
     defaults: {
         inUse: false,
         minChars: 3,
@@ -33,6 +30,11 @@ const VisibleVectorModel = Backbone.Model.extend({
 
     },
 
+    /**
+     * @todo
+     * @param {string} searchString String to search for in properties of all model's features
+     * @returns {void}
+     */
     prepSearch: function (searchString) {
         var sPrepSearchString,
             aVectorLayerModels = [],
@@ -59,10 +61,22 @@ const VisibleVectorModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Checks if given feature is actually a clustered feature with content
+     * @param {object} oFeature Feature to test as cluster
+     * @returns {boolean} Flag if feature is a cluster
+     */
     isClusteredFeature: function isClusteredFeature (oFeature) {
         return _.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
     },
 
+    /**
+     * Same as Feature.get() but if Feature is actually a cluster, it returns the value of the first child
+     * feature found.
+     * @param {object} oFeature The feature object to read the value from
+     * @param {string} sProperty Property Key
+     * @returns {mixed} Requested feature property value
+     */
     getWithClusterFallback: function getWithClusterFallback (oFeature, sProperty) {
         if (!this.isClusteredFeature(oFeature)) {
             return oFeature.get(sProperty);
@@ -70,6 +84,13 @@ const VisibleVectorModel = Backbone.Model.extend({
         return oFeature.get("features")[0].get(sProperty);
     },
 
+    /**
+     * Filters (clustered) features according to given search string.
+     * @param {array} aFeatures Array of features to filter
+     * @param {string} sSearchField Feature field key to look for value
+     * @param {string} searchString Given string to search inside features
+     * @returns {array} Array of features containing searched string
+     */
     filterFeaturesArrayRec: function filterFeaturesArrayRec (aFeatures, sSearchField, sSearchString) {
         var aFilteredFeatures = [];
 
@@ -97,6 +118,12 @@ const VisibleVectorModel = Backbone.Model.extend({
         return aFilteredFeatures;
     },
 
+    /**
+     * Filters features of all models according to given search string. Searched Fields are defined in config
+     * @param {array} models Array of models to pick features from
+     * @param {string} searchString Given string to search inside features
+     * @returns {array} Array of features containing searched string
+     */
     findMatchingFeatures: function (models, searchString) {
         var aResultFeatures = [];
 
@@ -117,7 +144,6 @@ const VisibleVectorModel = Backbone.Model.extend({
 
         return aResultFeatures;
     },
-
 
     /**
      * gets a new feature object
