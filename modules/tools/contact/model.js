@@ -176,7 +176,9 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     send: function () {
         var cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
             text,
-            dataToSend;
+            dataToSend,
+            closeAndDelete = this.attributes.deleteAfterSend,
+            withTicketNo = this.attributes.withTicketNo;
 
         if (this.get("ccToUser") === true) {
             cc.push({
@@ -214,10 +216,30 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
                     Radio.trigger("Alert", "alert", {text: data.message, kategorie: "alert-warning"});
                 }
                 else {
-                    Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
+                    if (withTicketNo === false) {
+                        Radio.trigger("Alert", "alert", {text: "Ihre Anfrage wurde erfolgreich versendet", kategorie: "alert-success"});
+                    }
+                    else {
+                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
+                    }
+                    if (closeAndDelete === true) {
+                        Radio.trigger("WindowView", "hide");
+                        this.cleanFields();
+                    }
                 }
             }
         });
+    },
+
+    /**
+     * Resets the form after successfull sending
+     * @returns {void}
+     */
+    cleanFields: function () {
+        this.setUserName("");
+        this.setUserEmail("");
+        this.setUserTel("");
+        this.setText("");
     },
 
     /**

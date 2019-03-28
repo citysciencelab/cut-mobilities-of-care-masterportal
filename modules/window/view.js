@@ -10,6 +10,8 @@ const WindowView = Backbone.View.extend({
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
+        var channel = Radio.channel("WindowView");
+
         this.listenTo(this.model, {
             "change:isVisible change:winType": this.render
         });
@@ -38,6 +40,11 @@ const WindowView = Backbone.View.extend({
                 "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
             });
         }, this));
+
+        channel.on({
+            "hide": this.hide
+        }, this);
+
         this.render();
     },
     id: "window",
