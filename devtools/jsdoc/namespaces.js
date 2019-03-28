@@ -67,7 +67,7 @@
 
 /**
  * @namespace Searchbar
- * @description fooBar
+ * @description todo
  */
 
 /**

@@ -570,6 +570,28 @@
  */
 
 /**
+ * @event Searchbar#RadioTriggerSearchbarSearch
+ * @description trigger searchString to Searchbar
+ * @param {String} searchString contains the string to search
+ * @example Radio.trigger("Searchbar", "search", searchString);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarPushHits
+ * @description trigger transfer of search hits as a list
+ * @param {String} sListname Name of list
+ * @param {Array} aHitListArray Array of search hits
+ * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarCreateRecommendedList
+ * @description todo
+ * @param {String} todo todo
+ * @example Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
+ */
+
+/**
  * @event Searchbar#RadioTriggerSearchbarHit
  * @description triggers the hit
  * @param {String} hit contains the hit

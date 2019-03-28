@@ -9,9 +9,16 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         gfiOnClick: false
     },
     /**
+     * @class VisibleVectorModel
      * @description Initialisierung der visibleVector Suche
+     * @extends Backbone.Model
+     * @memberof Searchbar.VisibleVector
+     * @constructs
      * @param {Object} config - Das Konfigurationsobjekt der Suche in sichtbaren Vector-Layern.
      * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+     * @listens Searchbar#RadioTriggerSearchbarSearch
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     initialize: function (config) {
@@ -31,7 +38,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * @todo
+     * description
+     * @todo description
      * @param {string} searchString String to search for in properties of all model's features
      * @returns {void}
      */
@@ -71,8 +79,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * Same as Feature.get() but if Feature is actually a cluster, it returns the value of the first child
-     * feature found.
+     * Same as Feature.get() but if Feature is actually a cluster, it returns the value of the
+     * first child feature found.
      * @param {object} oFeature The feature object to read the value from
      * @param {string} sProperty Property Key
      * @returns {mixed} Requested feature property value
@@ -88,7 +96,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * Filters (clustered) features according to given search string.
      * @param {array} aFeatures Array of features to filter
      * @param {string} sSearchField Feature field key to look for value
-     * @param {string} searchString Given string to search inside features
+     * @param {string} sSearchString Given string to search inside features
      * @returns {array} Array of features containing searched string
      */
     filterFeaturesArrayRec: function filterFeaturesArrayRec (aFeatures, sSearchField, sSearchString) {
@@ -119,7 +127,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * Filters features of all models according to given search string. Searched Fields are defined in config
+     * Filters features of all models according to given search string. Searched Fields are
+     * defined in config.
      * @param {array} models Array of models to pick features from
      * @param {string} searchString Given string to search inside features
      * @returns {array} Array of features containing searched string
@@ -146,7 +155,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * gets a new feature object
+     * Gets a new feature object.
      * @param  {string} searchField Attribute feature has to be searche through
      * @param  {ol.Feature} filteredFeatures openlayers feature
      * @param  {Backbone.Model} model model of visibleVector
@@ -181,7 +190,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * gets centroid point for a openlayers geometry
+     * Gets centroid point for a openlayers geometry.
      * @param  {ol.geom.Geometry} geometry geometry to get centroid from
      * @return {ol.Coordinate} centroid coordinate
      */
@@ -195,7 +204,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     },
 
     /**
-     * returns an image source of a feature style
+     * Returns an image source of a feature style.
      * @param  {ol.Feature} feature openlayers feature
      * @param  {Backbone.Model} model model to get layer to get style from
      * @return {string} imagesource
@@ -222,6 +231,12 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
 
     },
 
+    /**
+     * Get additional feature info.
+     * @param {object} model model to get feature from
+     * @param {object} feature feature to get info from
+     * @returns {mixed} found additional info
+     */
     getAdditionalInfo: function (model, feature) {
         var additionalInfo;
 
@@ -232,32 +247,54 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         return additionalInfo;
     },
 
-    // setter for minChars
+    /**
+     * Setter for minChars property
+     * @param {mixed} value todo
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for LayerTypes to search in
+    /**
+     * Setter for layerTypes property
+     * @param {mixed} value todo
+     * @returns {void}
+     */
     setLayerTypes: function (value) {
         this.set("layerTypes", value);
     },
 
-    // getter for LayerTypes to search in
+    /**
+     * Getter for layerTypes property
+     * @returns {mixed} todo
+     */
     getLayerTypes: function () {
         return this.get("layerTypes");
     },
 
-    // setter for gfiOnClick-Functionality
+    /**
+     * Setter for gfiOnClick property
+     * @param {boolean} value todo
+     * @returns {void}
+     */
     setGfiOnClick: function (value) {
         this.set("gfiOnClick", value);
     },
 
-    // getter for gfiOnClick-Functionality
+    /**
+     * Getter for gfiOnClick property
+     * @returns {boolean} todo
+     */
     getGfiOnClick: function () {
         return this.get("gfiOnClick");
     },
 
-    // setter for inUse
+    /**
+     * Setter for inUse property
+     * @param {boolean} value todo
+     * @returns {void}
+     */
     setInUse: function (value) {
         this.set("inUse", value);
     }

@@ -14,6 +14,15 @@ const SearchbarModel = Backbone.Model.extend({
         // isHitListReady: true
     },
 
+    /**
+     * @class SearchbarModel
+     * @description todo
+     * @extends Backbone.Model
+     * @memberof Searchbar
+     * @constructs
+     * @todo
+     * @returns {void}
+     */
     initialize: function () {
         this.listenTo(Radio.channel("Searchbar"), {
             "createRecommendedList": this.createRecommendedList,
