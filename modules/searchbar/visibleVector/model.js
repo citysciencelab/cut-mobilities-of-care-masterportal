@@ -1,19 +1,6 @@
 
 import "../model";
 
-function getAllFuncs(obj) {
-    var props = [];
-
-    do {
-        props = props.concat(Object.getOwnPropertyNames(obj));
-    } while (obj = Object.getPrototypeOf(obj));
-
-    return props.sort().filter(function(e, i, arr) {
-       if (e!=arr[i+1] && typeof obj[e] == 'function') return true;
-    });
-}
-
-
 const VisibleVectorModel = Backbone.Model.extend({
     /**
     *
@@ -45,72 +32,90 @@ const VisibleVectorModel = Backbone.Model.extend({
         });
 
     },
+
     prepSearch: function (searchString) {
-        var prepSearchString,
-            vectorLayerModels = [],
-            filteredModels;
+        var sPrepSearchString,
+            aVectorLayerModels = [],
+            aFoundMatchingFeatures = [],
+            aFilteredModels;
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
-            prepSearchString = searchString.replace(" ", "");
+            sPrepSearchString = searchString.replace(" ", "");
 
             _.each(this.getLayerTypes(), function (layerType) {
-                vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
+                aVectorLayerModels = aVectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
             }, this);
 
-            filteredModels = _.union(vectorLayerModels).filter(function (model) {
+            aFilteredModels = _.union(aVectorLayerModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
-            this.findMatchingFeatures(filteredModels, prepSearchString);
+            aFoundMatchingFeatures = this.findMatchingFeatures(aFilteredModels, sPrepSearchString);
+            Radio.trigger("Searchbar", "pushHits", "hitList", aFoundMatchingFeatures);
+
             Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
             this.setInUse(false);
         }
     },
+
+    isClusteredFeature: function isClusteredFeature (oFeature) {
+        return _.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
+    },
+
+    getWithClusterFallback: function getWithClusterFallback (oFeature, sProperty) {
+        if (!this.isClusteredFeature(oFeature)) {
+            return oFeature.get(sProperty);
+        }
+        return oFeature.get("features")[0].get(sProperty);
+    },
+
+    filterFeaturesArrayRec: function filterFeaturesArrayRec (aFeatures, sSearchField, sSearchString) {
+        var aFilteredFeatures = [];
+
+        aFilteredFeatures = aFeatures.filter(function (oFeature) {
+            var aFilteredSubFeatures = [],
+                sTestFieldValue;
+
+            // if feature is clustered
+            if (this.isClusteredFeature(oFeature)) {
+                // enter recursion
+                aFilteredSubFeatures = this.filterFeaturesArrayRec(oFeature.get("features"), sSearchField, sSearchString);
+
+                // set sub features for this cluster
+                if (aFilteredSubFeatures.length > 0) {
+                    oFeature.set("features", aFilteredSubFeatures);
+                    return true;
+                }
+                // filter this feature when no sub feature is left
+                return false;
+            }
+            sTestFieldValue = oFeature.get(sSearchField).toString().toUpperCase();
+            // test if property value contains searched string as substring
+            return sTestFieldValue.indexOf(sSearchString.toUpperCase()) !== -1;
+        }, this);
+        return aFilteredFeatures;
+    },
+
     findMatchingFeatures: function (models, searchString) {
-        var featureArray = [];
+        var aResultFeatures = [];
 
         _.each(models, function (model) {
-            var features = model.get("layer").getSource().getFeatures(),
+            var aFeatures = model.get("layer").getSource().getFeatures(),
+                aSearchFields = model.get("searchField"),
                 filteredFeatures;
 
-            if (_.isArray(model.get("searchField"))) {
-                _.each(model.get("searchField"), function (field) {
-                    filteredFeatures = features.filter(function (feature) {
-                        var value = feature.get(field).toString().toUpperCase();
-
-                        return value.indexOf(searchString.toUpperCase()) !== -1;
-                    });
-                    // createFeatureObject for each feature
-                    featureArray.push(this.getFeatureObject(field, filteredFeatures, model));
-                }, this);
+            if (_.isArray(aSearchFields) === false) {
+                aSearchFields = [aSearchFields];
             }
-            else {
 
-
-
-                filteredFeatures = features.filter(function (feature) {
-                    console.log(feature.getKeys());
-
-
-                    console.log("----------------------------------");
-
-                    console.log(feature.get(""));
-                    console.log(model.get("searchField"));
-                    console.log(feature.get(model.get("searchField")));
-
-                    console.log("----------------------------------");
-
-                    var value = feature.get(model.get("searchField")).toUpperCase();
-
-                    return value.indexOf(searchString.toUpperCase()) !== -1;
-                });
-                // createFeatureObject for each feature
-                featureArray.push(this.getFeatureObject(model.get("searchField"), filteredFeatures, model));
-            }
+            _.each(aSearchFields, function (sSearchField) {
+                filteredFeatures = this.filterFeaturesArrayRec(aFeatures, sSearchField, searchString, []);
+                aResultFeatures.push(this.getFeatureObject(sSearchField, filteredFeatures, model));
+            }, this);
         }, this);
 
-        Radio.trigger("Searchbar", "pushHits", "hitList", featureArray);
+        return aResultFeatures;
     },
 
 
@@ -126,7 +131,7 @@ const VisibleVectorModel = Backbone.Model.extend({
 
         _.each(filteredFeatures, function (feature) {
             var featureObject = {
-                name: feature.get(searchField),
+                name: this.getWithClusterFallback(feature, "bezeichnung"),
                 type: model.get("name"),
                 coordinate: this.getCentroidPoint(feature.getGeometry()),
                 imageSrc: this.getImageSource(feature, model),
@@ -195,7 +200,7 @@ const VisibleVectorModel = Backbone.Model.extend({
         var additionalInfo;
 
         if (!_.isUndefined(model.get("additionalInfoField"))) {
-            additionalInfo = feature.getProperties()[model.get("additionalInfoField")];
+            additionalInfo = this.getWithClusterFallback(feature, model.get("additionalInfoField"));
         }
 
         return additionalInfo;
