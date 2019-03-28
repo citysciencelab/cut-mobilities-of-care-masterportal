@@ -43,7 +43,9 @@
 		"minChars": 3,
 		"serviceId": "elastic"
 	  },
-
+     "visibleVector": {
+        "gfiOnClick": false
+      },
       "specialWFS":
       {
         "minChars": 3,
@@ -399,7 +401,8 @@
       "mousePosition": true,
       "button3d": true,
       "buttonOblique": true,
-      "freeze": true
+      "freeze": true,
+      "backforward" : true
     },
     "scaleLine": true,
     "Baumtyp": "light",
@@ -448,7 +451,9 @@
         "id": "8730"
       },
       {
-        "id": "10220"
+        "id": "10220",
+        "visibility": true,
+        "gfiTheme": "continuousCountingBike"
       },
       {
         "id": "2426"
@@ -460,7 +465,7 @@
       {
         "id": "4561",
         "infoFormat": "text/html",
-        "visibility": true
+        "visibility": false
       },
       {
         "id": "441"
@@ -481,7 +486,7 @@
       },
       {
         "id": "5708",
-        "visibility": true,
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -491,7 +496,7 @@
       {
         "id": "13765",
         "name": "Err. Arbeitsplätze deegree",
-        "visibility": true,
+        "visibility": false,
         "styleable": true,
         "geomType": "Polygon",
         "attributesToStyle": [
@@ -542,7 +547,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": true,
+        "visibility": false,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -564,7 +569,7 @@
       },
       {
         "id": "8712",
-        "visibility": true,
+        "visibility": false,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",
@@ -588,7 +593,7 @@
       },
       {
         "id": "8145",
-        "visibility": true,
+        "visibility": false,
         "styleId": "8145",
         "hitTolerance": 25,
         "mouseHoverField": "kategorie",

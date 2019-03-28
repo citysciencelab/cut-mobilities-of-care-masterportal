@@ -14,14 +14,33 @@
 
 /**************** Layer Settings ****************/
 #table-nav {
-    z-index: 5;
-    bottom: 80px;
+    z-index: 5;;
     position: absolute;
-    left: calc(50% - 485px / 2);
     width: 485px;
     height: 50px;
     font-family: @font_family_1;
     touch-action: pan-x pan-y;
+    border-radius: 12px;
+}
+.table-nav-0deg {
+    bottom: 80px;
+    left: calc(50% - 485px / 2);
+    transform: rotate(0deg);
+}
+.table-nav-90deg {
+    left: -80px;
+    top: calc(50% - 80px);
+    transform: rotate(90deg);
+}
+.table-nav-180deg {
+    left: calc(50% - 485px / 2 + 40px);
+    top: 80px;
+    transform: rotate(180deg);
+}
+.table-nav-270deg {
+    right: -80px;
+    top: calc(50% + 40px);
+    transform: rotate(270deg);
 }
 .table-nav {
     border-radius: 12px;
@@ -33,6 +52,11 @@
     height: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
     padding: 5px;
+}
+#table-nav-drag{
+    width: 20px;
+    height: 40px;
+    position: absolute;
 }
 #table-layer-list {
     position: relative;
@@ -246,6 +270,13 @@ a {
         padding-left: 8px;
     }
 }
+.icon-drag{
+    &:before {
+        display: block;
+        left: 0em;
+        font-size: 26px;
+    }
+}
 .icon-burgermenu_alt {
     #table-nav-layers-panel-toggler {
         background-color: @background_color_3;
@@ -298,6 +329,10 @@ a {
                 min-width: 385px;
                 overflow: auto;
             }
+            .just-added {
+                font-weight: bold;
+                color: #003063;
+            }
         }
     }
     .layers::-webkit-scrollbar {
@@ -346,7 +381,7 @@ a {
             background-color: #808080;
             border-radius: 10px;
             padding: 6px 4px 4px 4px;
-            margin-left: 95px;
+            margin-left: 85px;
             cursor: pointer;
         }
     }

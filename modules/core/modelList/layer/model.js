@@ -23,9 +23,10 @@ const Layer = Item.extend(
         },
         /**
          * @class Layer
+         * @abstract
          * @description Module to represent any layer
          * @extends Item
-         * @memberOf Item
+         * @memberOf Core.ModelList.Layer
          * @constructs
          * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
          * @property {Boolean} isVisibleInMap=false Flag if layer is visible in map
@@ -502,11 +503,31 @@ const Layer = Item.extend(
         setIsVisibleInTree: function (value) {
             this.set("isVisibleInTree", value);
         },
+
+        /**
+         * Setter for isRemovable
+         * @param {Boolean} value Flag if layer is removable from the tree
+         * @returns {void}
+         */
         setIsRemovable: function (value) {
             if (value !== undefined && value !== null && value !== "string") {
                 this.set("isRemovable", value);
             }
         },
+
+        /**
+         * Setter for isJustAdded (currently only used in uiStyle = table)
+         * @param {Boolean} value Flag if layer has just been added to the tree
+         * @returns {void}
+         */
+        setIsJustAdded: function (value) {
+            this.set("isJustAdded", value);
+        },
+
+        /**
+         * Removes the layer from the map and the collection
+         * @returns {void}
+         */
         removeLayer: function () {
             var layer = this.get("id");
 

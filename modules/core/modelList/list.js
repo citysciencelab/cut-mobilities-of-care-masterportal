@@ -20,7 +20,7 @@ import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Contact from "../../contact/model";
+import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
 import KmlImport from "../../tools/kmlimport/model";
@@ -50,7 +50,7 @@ const ModelList = Backbone.Collection.extend(
      * @description Collection that manages all models.
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Collection
-     * @memberOf ModelList
+     * @memberOf Core.ModelList
      * @constructs
      * @listens List#RadioRequestModelListGetCollection
      * @listens List#RadioRequestModelListGetModelsByAttributes
@@ -759,7 +759,7 @@ const ModelList = Backbone.Collection.extend(
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
             this.closeAllExpandedFolder();
-            // ÃƒÂ¶ffnet den Themenbaum
+            // öffnet den Themenbaum
             $("#root li:first-child").addClass("open");
             // Parent und eventuelle Siblings werden hinzugefÃƒÂ¼gt
             this.addAndExpandModelsRecursive(lightModel.parentId);
@@ -771,9 +771,11 @@ const ModelList = Backbone.Collection.extend(
                 this.scrollToLayer(lightModel.name);
             }
 
-            // fÃ¼r DIPAS Table Ansicht
+            // für DIPAS Table Ansicht
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
+                Radio.request("ModelList", "getModelByAttributes", {id: modelId}).setIsJustAdded(true);
                 $("#table-nav-layers-panel").collapse("show");
+
             }
         },
 

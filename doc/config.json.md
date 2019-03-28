@@ -39,18 +39,19 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchbar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
 ***
 
-### Portalconfig.searchbar
+### Portalconfig.searchBar
 Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |bkg|nein|[bkg](#markdown-header-portalconfigsearchbarbkg)||Konfiguration des BKG Suchdienstes.|
 |gazetteer|nein|[gazetteer](#markdown-header-portalconfigsearchbargazetteer)||Konfiguration des Gazetteer Suchdienstes.|
-|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)|Konfiguration des GDI (elastic) Suchdienstes.|
+|gdi|nein|[gdi](#markdown-header-portalconfigsearchbargdi)||Konfiguration des GDI (elastic) Suchdienstes.|
+|osm|nein|[osm](#markdown-header-portalconfigsearchbarosm)||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
 |recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
@@ -64,7 +65,7 @@ Konfiguration der Searchbar
 
 ***
 
-#### Portalconfig.searchbar.bkg
+#### Portalconfig.searchBar.bkg
 
 [type:Extent]: # (Datatypes.Extent)
 
@@ -107,9 +108,9 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick au
 |----|-------------|---|-------|------------|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|
 |serviceID|ja|String||Gibt die ID für die URL in der [rest-services.json](rest-services.json.md) vor.|
-|limit|nein|Number|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
-|states|nein|string|kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
-|classes|nein|string|kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
+|limit|nein|Number||Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|
+|states|nein|string||kann die Namen der Bundesländer (entsprechend der Ausgabe für "address.state" der Treffer), für die Ergebnisse erzielt werden sollen, enthalten; Trenner beliebig|
+|classes|nein|string||kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten|
 
 **Beispiel**
 
@@ -127,7 +128,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick au
 
 ***
 
-#### Portalconfig.searchbar.gazetteer
+#### Portalconfig.searchBar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -156,7 +157,7 @@ Konfiguration des Gazetteer Suchdienstes
 
 ***
 
-#### Portalconfig.searchbar.gdi
+#### Portalconfig.searchBar.gdi
 Konfiguration des GDI Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -176,7 +177,7 @@ Konfiguration des GDI Suchdienstes
 ***
 
 
-#### Portalconfig.searchbar.specialWFS
+#### Portalconfig.searchBar.specialWFS
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -213,7 +214,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.specialWFS.definition
+#### Portalconfig.searchBar.specialWFS.definition
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -241,7 +242,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.tree
+#### Portalconfig.searchBar.tree
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -258,7 +259,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.visibleWFS
+#### Portalconfig.searchBar.visibleWFS
 Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -275,13 +276,14 @@ Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwende
 
 ***
 
-#### Portalconfig.searchbar.visibleVector
+#### Portalconfig.searchBar.visibleVector
 Konfiguration der Suche über die sichtbaren WFS
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+|gfiOnClick|nein|Boolean|false|Öffnet das GetFeatureInfo (gfi) bei Klick auf das Suchergebnis.|
 
 **Beispiel**
 ```
@@ -308,6 +310,8 @@ Konfiguration der Suche über die sichtbaren WFS
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
+|backforwardview|nein|Boolean/Object|false|Boolean: Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+
 
 ***
 
@@ -1650,7 +1654,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 |----|-------------|---|-------|------------|
 |id|ja|String|"Eineindeutige-ID7711"|Es muss eine eineindeutige ID vergeben werden.|
 |typ|ja|String|"StaticImage"|Setzt den Layertypen auf StaticImage welcher statische Bilder als Layer darstellen kann.|
-|url|ja|Link|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
+|url|ja|String|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
 |name|ja|String|"Static Image Name"|Setzt den Namen des Layers für den Layerbaum|
 |extent|ja|Array|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
 
@@ -1672,7 +1676,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1689,42 +1693,51 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 ```
 #!json
 {
-"id": "123456",
-"name": "MyVectorLayerName",
-"transparency": 0,
-"visibility": true,
-"supported": ["2D"],
-"extent": [454591, 5809000, 700000, 6075769],
-"displayInTree": true,
-"gfiTheme": "default",
-"layerAttribution": "MyBoldAttribution for layer 123456",
-"legendURL": "https://myServer/myService/legend.pdf",
-"maxScale": "100000",
-"minScale": "1000",
-"autoRefresh": "10000",
-"isVisibleInTree": true,
-"isNeverVisibleInTree": false,
-"clusterDistance": 60,
-"extendedFilter": true,
-"filterOptions": [
-    {
-        "fieldName": "myFirstAttributeToFilter",
-        "filterName": "Filter_1",
-        "filterString": ["*", "value1", "value2"],
-        "filterType": "combo"
-    },
-    {
-        "fieldName": "mySecondAttributeToFilter",
-        "filterName": "Filter_2",
-        "filterString": ["*", "value3", "value4"],
-        "filterType": "combo"
-    }
-],
-"mouseHoverField": "name",
-"routable": false,
-"searchField": "name",
-"styleId": "123456",
-"hitTolerance": 50,
+    "id": "123456",
+    "name": "MyVectorLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "clusterDistance": 60,
+    "extendedFilter": true,
+    "filterOptions": [
+        {
+            "fieldName": "myFirstAttributeToFilter",
+            "filterName": "Filter_1",
+            "filterString": ["*", "value1", "value2"],
+            "filterType": "combo"
+        },
+        {
+            "fieldName": "mySecondAttributeToFilter",
+            "filterName": "Filter_2",
+            "filterString": ["*", "value3", "value4"],
+            "filterType": "combo"
+        }
+    ],
+    "mouseHoverField": "name",
+    "routable": false,
+    "searchField": "name",
+    "styleId": "123456",
+    "hitTolerance": 50
+},
+{
+    "id" : "11111",
+    "name" : "lokale GeoJSON",
+    "url" : "portal/master/test.json",
+    "typ" : "GeoJSON",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : ""
 }
 ```
 

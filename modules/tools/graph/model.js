@@ -137,18 +137,13 @@ const GraphModel = Backbone.Model.extend({
     },
 
 
-    createAxisBottom: function (scale, xThinningFactor, xAxisTicks) {
+    createAxisBottom: function (scale, xAxisTicks, xAxisTickValues) {
         var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
             d3Object;
 
-        if (_.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
+        if (!_.isUndefined(xAxisTickValues) && _.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
             d3Object = _.isUndefined(scale) ? undefined : axisBottom(scale)
-                .tickValues(scale.domain().filter(function (d, i) {
-                    var val = i % xThinningFactor;
-
-                    return !val;
-                }))
-
+                .tickValues(xAxisTickValues)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
@@ -329,8 +324,9 @@ const GraphModel = Backbone.Model.extend({
 
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
         var dat = data.filter(function (obj) {
-            return obj[yAttrToShow] !== "-";
-        });
+                return obj[yAttrToShow] !== "-";
+            }),
+            yAttributeToShow;
 
         svg.select(".graph-diagram").selectAll("points")
             .data(dat)
@@ -358,17 +354,18 @@ const GraphModel = Backbone.Model.extend({
                 return d.class;
             })
             .on("mouseover", function (d) {
+                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                tooltipDiv.html(d[yAttrToShow])
-                    .attr("style", "background: gray")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 5) + "px");
+                tooltipDiv.html(yAttributeToShow)
+                    .attr("style", "background-color: buttonface; border-radius: 4px; text-align: center;")
+                    .style("left", (event.layerX - 25) + "px")
+                    .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv)
             .on("mouseout", function () {
                 tooltipDiv.transition()
-                    .duration(500)
+                    .duration(200)
                     .style("opacity", 0)
                     .on("end", function () {
                         tooltipDiv.style("left", "0px");
@@ -376,13 +373,14 @@ const GraphModel = Backbone.Model.extend({
                     }, tooltipDiv);
             }, tooltipDiv)
             .on("click", function (d) {
+                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                tooltipDiv.html(d[yAttrToShow])
-                    .attr("style", "background: gray")
-                    .style("left", (event.offsetX + 5) + "px")
-                    .style("top", (event.offsetY - 5) + "px");
+                tooltipDiv.html(yAttributeToShow)
+                    .attr("style", "background-color: buttonface; border-radius: 4px;")
+                    .style("left", (event.layerX - 25) + "px")
+                    .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv);
     },
 
@@ -490,8 +488,8 @@ const GraphModel = Backbone.Model.extend({
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
-            xThinning = graphConfig.xThinning ? graphConfig.xThinning : 1,
-            xAxis = this.createAxisBottom(scaleX, xThinning, xAxisTicks),
+            xAxisTickValues = graphConfig.xAxisTickValues,
+            xAxis = this.createAxisBottom(scaleX, xAxisTicks, xAxisTickValues),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
@@ -583,7 +581,7 @@ const GraphModel = Backbone.Model.extend({
             yAxisTicks = graphConfig.yAxisTicks,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
-            xAxis = this.createAxisBottom(scaleX, 1, xAxisTicks),
+            xAxis = this.createAxisBottom(scaleX, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),

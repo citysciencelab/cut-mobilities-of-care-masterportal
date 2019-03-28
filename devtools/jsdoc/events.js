@@ -94,30 +94,80 @@
 /** -------------------- CLICK COUNTER -------------------- */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterToolChanged
+ * @event ClickCounter#RadioTriggerClickCounterToolChanged
  * @example Radio.trigger("ClickCounter", "toolChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterCalcRoute
+ * @event ClickCounter#RadioTriggerClickCounterCalcRoute
  * @example Radio.trigger("ClickCounter", "calcRoute")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterZoomChanged
+ * @event ClickCounter#RadioTriggerClickCounterZoomChanged
  * @example Radio.trigger("ClickCounter", "zoomChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterLayerVisibleChanged
+ * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
  * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
 */
 
 /**
- * @event ClickCounterView#RadioTriggerClickCounterGfi
+ * @event ClickCounter#RadioTriggerClickCounterGfi
  * @example Radio.trigger("ClickCounter", "gfi")
 */
 
+
+/** -------------------- PARSER -------------------- */
+
+/**
+ * @event Parser#RadioRequestParserGetPortalConfig
+ * @example Radio.trigger("Parser", "getPortalConfig")
+ * @description Event that returns the config.json of the portal
+ */
+
+ /**
+ * @event Parser#RadioTriggerRemoveItem
+ * @example Radio.trigger("Parser", "removeItem")
+ * @description Event that removes an item from the layertree
+ */
+
+ /**
+ * @event Parser#RadioRequestParserGetItemByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemByAttributes", attributes)
+ */
+
+ /**
+ * @event Parser#RadioRequestParserGetInitVisibBaseLayer
+ * @returns {String} - Id of initial visible baselayer
+ * @example Radio.request("Parser", "getInitVisibBaselayer")
+ */
+
+
+/** --------------------CONTACT -------------------- */
+
+/**
+ * @event ContactModel#changeIsActive
+ * @description Is fired when attribute isActive changes
+ */
+
+ /**
+ * @event ContactModel#changeInvalid
+ * @description Is fired when attribute isActive changes
+ */
+
+
+/** -------------------- REST READER -------------------- */
+
+/**
+ * @event RestReader#RadioRequestRestReaderGetServicebyId
+ * @param {String} id Id of RestService
+ * @example Radio.trigger("RestReader", "getServiceById", id)
+ * @description Event that returns the config.json of the portal
+ */
 
 /** -------------------- LAYER -------------------- */
 
@@ -140,6 +190,13 @@
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute transparency has changed
+ */
+
+ /**
+ * @event Layer#changeIsSettingVisible
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isSettingVisible has changed
  */
 
 /**
@@ -168,7 +225,7 @@
  * @event Map#RadioTriggerMapChange
  * @param {String} mode Mode of the map.
  * @description Event that gets fired when the map mode ("2D" / "3D") has changed.
- * @example Radio.trigger("Map", "changed", mode)
+ * @example Radio.trigger("Map", "change", mode)
  */
 
 /**
@@ -176,6 +233,25 @@
  * @description Adds layer to given index
  * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
  * @example Radio.trigger("Map", "addLayerToIndex", array)
+ */
+
+ /**
+ * @event Map#RadioRequestMapGetMapMode
+ * @description Adds layer to given index
+ * @returns {string} - The mode of the map. Value can be "2D" or "3D"
+ * @example Radio.request("Map", "getMapMode")
+ */
+
+ /**
+ * @event Map#RadioRequestMapGetMap
+ * @returns {ol/map} - The Openlayers Map.
+ * @example Radio.request("Map", "getMap")
+ */
+
+ /**
+ * @event Map#RadioTriggerMapAddControl
+ * @param {object} control Control to be added to map.
+ * @example Radio.trigger("Map", "addControl", control)
  */
 
 
@@ -195,6 +271,36 @@
  * @example Radio.trigger("MapView", "getResoByScale", scale)
  */
 
+/**
+ * @event MapView#RadioRequestGetProjection
+ * @description Event that returns the map projection
+ * @returns {object} Projection of type ol/proj
+ * @example Radio.request("MapView", "getProjection");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewSetZoomLevelUp
+ * @description Event that sets the zoom-level one counter up
+ * @example Radio.trigger("MapView", "setZoomLevelUp");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewSetZoomLevelDown
+ * @description Event that sets the zoom-level one counter down
+ * @example Radio.trigger("MapView", "setZoomLevelDown");
+ */
+
+ /**
+ * @event MapView#RadioTriggerMapViewResetView
+ * @description Resets the map view
+ * @example Radio.trigger("MapView", "resetVIew");
+ */
+
+ /**
+ * @event MapView#RadioRequestMapViewGetResolutions
+ * @returns {object[]} - Returns the resolutions of the map
+ * @example Radio.trigger("MapView", "getResolutions");
+ */
 
 /** -------------------- LAYER INFORMATION -------------------- */
 
@@ -467,6 +573,75 @@
  * @example Radio.trigger("Util", "isViewMobileChangend", isViewMobile)
  */
 
+/**
+ * @event Util#RadioRequestUtilPunctuate
+ * @description converts value to string and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
+ * @param {String} value contains the string wich will be converted
+ * @example Radio.request("Util", "punctuate", "3000.50");
+ */
+
+/**
+ * @event Util#RadioRequestUtilIsViewMobile
+ * @description checks if device is mobile
+ * @returns {Boolean} device is mobile
+ * @example Radio.request("Util", "isViewMobile");
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetProxyURL
+ * @description returns the proxyURL
+ * @param {String} url to be proxied
+ * @returns {string} proxyURL
+ * @example Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+ */
+
+/**
+ * @event Util#RadioRequestUtilGetIgnoredKeys
+ * @description returns the ignoredKeys
+ * @returns {string[]} ignoredKeys
+ * @example Radio.request("Util", "getIgnoredKeys");
+ */
+
+/**
+ * @event Util#RadioTriggerUtilShowLoader
+ * @example Radio.trigger("Util", "showLoader")
+ * @description Shows loading gif
+ */
+
+/**
+ * @event Util#RadioTriggerUtilHideLoader
+ * @example Radio.trigger("Util", "hideLoader")
+ * @description Shows loading gif
+ */
+
+/**
+ * @event Util#RadioRequestGetConfig
+ * @example Radio.request("Util", "getConfig")
+ * @description Request config path
+ */
+ /**
+ * @event Util#RadioRequestUtilGetUiStyle
+ * @description returns the ignoredKeys
+ * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
+ * @example Radio.request("Util", "getUiStyle");
+ */
+
+/** -------------------- GRAPH -------------------- */
+
+/**
+ * @event Graph#RadioTriggerGraphCreateGraph
+ * @description starts the generating of a graphic
+ * @param {Object} graphConfig contains the options for the graphic
+ * @example Radio.trigger("Graph", "createGraph", );
+ */
+
+/** -------------------- GFILIST -------------------- */
+
+/**
+ * @event gfiList#RadioTriggerRedraw
+ * @description request feature infos for each model
+ * @example Radio.trigger("gfiList", "redraw", );
+ */
 
 /** -------------------- QUICKHELP -------------------- */
 
@@ -494,6 +669,13 @@
  * @description sets isVisible
  * @param {boolean} isVisible visibility of gfi
  * @example Radio.trigger("GFI", "setIsVisible", false);
+ */
+
+/**
+ * @event GFI#RadioRequestGFIGetCurrentView
+ * @description returns currentView
+ * @returns {Backbone.View} GFI-View
+ * @example Radio.request("GFI", "getCurrentView");
  */
 
 
@@ -526,3 +708,70 @@
  * @example Radio.trigger("MapMarker", "showMarker", coordinate);
  */
 
+/** -------------------- GFIVIEW -------------------- */
+
+/**
+ * @event gfiView#RadioTriggerRender
+ * @description Triggered when GFI has to render.
+ * @example Radio.trigger("gfiView", "render");
+ */
+
+/** -------------------- MOUSEHOVER -------------------- */
+
+/**
+ * @event MouseHover#RadioTriggerMouseHoverHide
+ * @description hides the mouse hover div
+ * @example Radio.trigger("MouseHover", "hide");
+ */
+
+/** -------------------- STYLELIST -------------------- */
+
+/**
+ * @event StyleList#RadioRequestReturnModelById
+ * @description filters styles by id
+ * @returns {function} Styling-Function
+ * @example Radio.request("StyleList", "returnModelById", "1711");
+ */
+
+/** -------------------- REMOTEINTERFACE -------------------- */
+
+/**
+ * @event RemoteInterface#RadioTriggerPostMessage
+ * @description Triggers a PostMessage to the RemoteInterface
+ * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
+ */
+
+ /** -------------------- ControlsView -------------------- */
+
+/**
+ * @event Controls#RadioRequestControlsViewAddRowTr
+ * @description Creates an HTML-Element at the end of the top-right section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
+ * @example Radio.request("ControlsView", "addRowTR", id, showMobile);
+ */
+
+ /**
+ * @event Controls#RadioRequestControlsViewAddRowBr
+ * @description Creates an HTML-Element at the end of the bottom-right section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @param {Boolean} showMobile Flag if Control should be shown in mobile mode
+ * @example Radio.request("ControlsView", "addRowBR", id, showMobile);
+ */
+
+  /**
+ * @event Controls#RadioRequestControlsViewAddRowBl
+ * @description Creates an HTML-Element at the end of the bottom-left section of the controls and returns the element
+ * @param {String} id Id of element to be returned
+ * @example Radio.request("ControlsView", "addRowBL", id);
+ */
+
+
+/** -------------------- RawLayerList -------------------- */
+
+/**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
+ * @param {String} params Object of Params.
+ * @returns {Layer} - Layer that matches the given params.
+ * @example Radio.request("RawLayerList", "getLayerWhere", params);
+ */

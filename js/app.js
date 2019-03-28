@@ -48,7 +48,7 @@ import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addwms/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
-import Contact from "../modules/contact/view";
+import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treefilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featurelister/view";
@@ -75,6 +75,7 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
+import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
@@ -94,7 +95,12 @@ function loadApp () {
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
     }
-    // Core laden
+
+    if (_.has(Config, "quickHelp")) {
+        new QuickHelpView(Config.quickHelp);
+    }
+
+   // Core laden
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -135,11 +141,6 @@ function loadApp () {
 
     if (_.has(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
-    }
-
-
-    if (_.has(Config, "quickHelp")) {
-        new QuickHelpView(Config.quickHelp);
     }
 
     if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
@@ -322,6 +323,13 @@ function loadApp () {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id);
                         new AttributionsView({el: element});
+                    }
+                    break;
+                }
+                case "backforward": {
+                    if (control.attr === true) {
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
                     }
                     break;
                 }

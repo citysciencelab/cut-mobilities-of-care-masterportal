@@ -116,7 +116,8 @@ const GdiModel = Backbone.Model.extend({
                         url: hit.source.url,
                         version: hit.source.version,
                         gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
-                        datasets: hit.source.datasets
+                        datasets: hit.source.datasets,
+                        isJustAdded: true
                     });
 
                 /* und der ModelList hinzufügen */
