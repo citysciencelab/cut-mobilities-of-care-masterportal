@@ -119,6 +119,12 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
                 // filter this feature when no sub feature is left
                 return false;
             }
+
+            // if this key is not set, filter
+            if (_.isUndefined(oFeature.get(sSearchField))) {
+                return false;
+            }
+
             sTestFieldValue = oFeature.get(sSearchField).toString().toUpperCase();
             // test if property value contains searched string as substring
             return sTestFieldValue.indexOf(sSearchString.toUpperCase()) !== -1;
@@ -166,7 +172,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
 
         _.each(filteredFeatures, function (feature) {
             var featureObject = {
-                name: this.getWithClusterFallback(feature, "bezeichnung"),
+                // "bezeichnung" hard coded? Or use searchField?
+                name: this.getWithClusterFallback(feature, searchField),
                 type: model.get("name"),
                 coordinate: this.getCentroidPoint(feature.getGeometry()),
                 imageSrc: this.getImageSource(feature, model),
