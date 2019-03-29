@@ -14,7 +14,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     /**
      * @class AttributionsModel
      * @extends Backbone.Model
-     * @memberof Attributions
+     * @memberof Controls.Attributions
      * @constructs
      * @property {Boolean} isContentVisible=true Flag if attributions copy is visible
      * @property {Boolean} isVisibleInMap=false Flag if whole module is visible
@@ -85,12 +85,17 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {void}
      */
     checkModelsByAttributions: function () {
-
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
             filteredModelList = modelList.filter(function (model) {
                 return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
             }),
             bShowAttributions = (filteredModelList.length > 0);
+
+        // Upon change of visible layers, attribution pane must be opened.
+        // This is a requested ferature.
+        if (bShowAttributions) {
+            this.setIsContentVisible(true);
+        }
 
         this.removeAllLayerAttributions();
         this.generateAttributions(filteredModelList);

@@ -9,7 +9,7 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
     /**
      * @class AttributionsView
      * @extends Backbone.Model
-     * @memberof Attributions
+     * @memberof Controls.Attributions
      * @constructs
      * @listens Attributions#RadioTriggerAttributionsRenderAttributions
      * @listens Attributions#changeIsContentVisible
@@ -34,9 +34,20 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
             "renderAttributions": this.render
         });
 
+        this.model.checkModelsByAttributions();
+
         this.readIsVisibleInMap();
     },
+    /**
+     * Shows the attributions pane
+     * @returns {void}
+     */
     templateShow: _.template(TemplateShow),
+
+    /**
+     * Hides the attributions pane
+     * @returns {void}
+     */
     templateHide: _.template(TemplateHide),
 
     /**
