@@ -26,13 +26,12 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @fires  Attributions#AttributionsRenderAttributions
      */
     initialize: function () {
-
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.updateAttributions
         });
         this.listenTo(Radio.channel("Attributions"), {
-            "createAttribution": this.createAttribution,
-            "removeAttribution": this.removeAttribution
+            "createAttribution": this.onCreateAttribution,
+            "removeAttribution": this.onRemoveAttribution
         });
 
         this.updateAttributions();
@@ -44,11 +43,31 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
             this.setIsContentVisible(this.get("isInitOpenDesktop"));
         }
     },
-
+    /**
+     * Event listener function for "createAttribution" event. Activates and opens attribution pane.
+     * @param {String} name Attribution name
+     * @param {String} text Attribution copy
+     * @param {String} type Attribution type
+     * @returns {void}
+     */
+    onCreateAttribution: function (name, text, type) {
+        this.setIsVisibleInMap(true);
+        this.setIsContentVisible(true);
+        this.createAttribution(name, text, type);
+    },
+    /**
+     * Event listener function for "removeAttribution" event.
+     * @param {String} name Attribution name
+     * @param {String} text Attribution copy
+     * @param {String} type Attribution type
+     * @returns {void}
+     */
+    onRemoveAttribution: function (name, text, type) {
+        this.removeAttribution(name, text, type);
+    },
     /**
      * Creates a single attribution and pushes it into attributions array.
      * Sets module visibility to true and renders it.
-     * @todo Should this method do 3 different things?
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
@@ -61,6 +80,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
             name: name,
             text: text
         });
+
         this.trigger("renderAttributions");
     },
     /**
@@ -77,6 +97,10 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
 
+        if (this.get("attributionList").length === 0) {
+            this.setIsVisibleInMap(false);
+        }
+
         this.setAttributionList(filteredAttributions);
         this.trigger("renderAttributions");
     },
@@ -85,6 +109,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {void}
      */
     updateAttributions: function updateAttributions () {
+
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
             filteredModelList = modelList.filter(function (model) {
                 return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
@@ -101,6 +126,8 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         if (bAttributionsAvailable) {
             this.setIsContentVisible(true);
         }
+
+        this.trigger("renderAttributions");
     },
     /**
      * Removes all attributions of type "layer" from attributions array.

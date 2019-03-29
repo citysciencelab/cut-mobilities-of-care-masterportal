@@ -97,6 +97,7 @@
  * @memberOf Controls
  * @description Module to display additional layer infos in a separate modal
  * used for Verkehrsportal.
+ * @nagelfe todo anforderungen noch nachtragen
  */
 
 /**
