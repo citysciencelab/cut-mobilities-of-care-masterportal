@@ -56,6 +56,12 @@ const Parser = Backbone.Model.extend({
             "getInitVisibBaselayer": this.getInitVisibBaselayer
         }, this);
 
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function (isViewMobile) {
+                this.addOrRemove3DFolder(this.get("treeType"), isViewMobile, this.get("overlayer_3d"));
+            }
+        });
+
         channel.on({
             "setCategory": this.setCategory,
             "addItem": this.addItem,
@@ -215,6 +221,21 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
+     * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) an der angegbenen Position hinzu
+     * @param {object} obj - Item
+     * @param {number} position - position in ItemList
+     * @return {void}
+     */
+    addItemByPosition: function (obj, position) {
+        if (!_.isUndefined(obj.visibility)) {
+            obj.isSelected = obj.visibility;
+            obj.isVisibleInMap = obj.visibility;
+            delete obj.visibility;
+        }
+        this.get("itemList").splice(position, 0, obj);
+    },
+
+    /**
      *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
      *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
      *  @param {object} attr Layerobjekt
@@ -344,31 +365,6 @@ const Parser = Backbone.Model.extend({
         this.get("itemList").unshift(obj);
     },
 
-    // Setter für Attribut "itemList"
-    setItemList: function (value) {
-        this.set("itemList", value);
-    },
-
-    // setter für Attribut "baselayer"
-    setBaselayer: function (value) {
-        this.set("baselayer", value);
-    },
-
-    // Setter für Attribut "overlayer"
-    setOverlayer: function (value) {
-        this.set("overlayer", value);
-    },
-
-    // Setter für Attribut "treeType"
-    setTreeType: function (value) {
-        this.set("treeType", value);
-    },
-
-    // Setter für Attribut "category"
-    setCategory: function (value) {
-        this.set("category", value);
-    },
-
     /**
      * [getItemByAttributes description]
      * @param  {Object} value [description]
@@ -409,11 +405,17 @@ const Parser = Backbone.Model.extend({
         }));
     },
 
+    /**
+     * regulates the folder structure of the theme tree taking into account the map mode
+     * @param {String} treeType - type of topic tree
+     * @returns {void}
+     */
     addTreeMenuItems: function (treeType) {
         var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
             tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
             isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
-            isMobile = Radio.request("Util", "isViewMobile");
+            isMobile = Radio.request("Util", "isViewMobile"),
+            overLayer3d = this.get("overlayer_3d");
 
         this.addItem({
             type: "folder",
@@ -427,18 +429,8 @@ const Parser = Backbone.Model.extend({
             level: 0
         });
 
-        if (!isMobile && (treeType === "default" || !_.isUndefined(this.get("overlayer_3d")))) {
-            this.addItem({
-                type: "folder",
-                name: "3D Daten",
-                // glyphicon: "glyphicon-plus-sign",
-                id: "3d_daten",
-                parentId: "tree",
-                isInThemen: true,
-                isInitiallyExpanded: false,
-                level: 0
-            });
-        }
+        this.addOrRemove3DFolder(treeType, isMobile, overLayer3d);
+
         this.addItem({
             type: "folder",
             name: "Fachdaten",
@@ -462,6 +454,50 @@ const Parser = Backbone.Model.extend({
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "SelectedLayer"),
             level: 0
         });
+    },
+
+    /**
+     * adds or removes a folder for 3d data to topic tree considering the map mode
+     * @param {String} treeType - type of tree
+     * @param {boolean} isMobile - vsible map mode from portal
+     * @param {object} overLayer3d - contains layer fro 3d mode
+     * @returns {void}
+     */
+    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d) {
+        var id3d = "3d_daten";
+
+        if (!isMobile && (treeType === "default" || !_.isUndefined(overLayer3d))) {
+            this.addItemByPosition({
+                type: "folder",
+                name: "3D Daten",
+                id: id3d,
+                parentId: "tree",
+                isInThemen: true,
+                isInitiallyExpanded: false,
+                level: 0
+            }, this.postionFor3DFolder(this.get("itemList")));
+        }
+        else {
+            this.removeItem(id3d);
+            Radio.trigger("ModelList", "removeModelsById", id3d);
+        }
+    },
+
+    /**
+     * get the position where the 3d folder has to be inserted in the itemlist
+     * @param {array} itemList - contains the items
+     * @returns {number} postion for 3d folder
+     */
+    postionFor3DFolder: function (itemList) {
+        var position = itemList.length + 1;
+
+        _.each(itemList, function (item, index) {
+            if (item.name === "Hintergrundkarten") {
+                position = index + 1;
+            }
+        });
+
+        return position;
     },
 
     /**
@@ -546,6 +582,31 @@ const Parser = Backbone.Model.extend({
             layer.id = layer.id[0];
         }
         return layer;
+    },
+
+    // Setter für Attribut "itemList"
+    setItemList: function (value) {
+        this.set("itemList", value);
+    },
+
+    // setter für Attribut "baselayer"
+    setBaselayer: function (value) {
+        this.set("baselayer", value);
+    },
+
+    // Setter für Attribut "overlayer"
+    setOverlayer: function (value) {
+        this.set("overlayer", value);
+    },
+
+    // Setter für Attribut "treeType"
+    setTreeType: function (value) {
+        this.set("treeType", value);
+    },
+
+    // Setter für Attribut "category"
+    setCategory: function (value) {
+        this.set("category", value);
     }
 });
 
