@@ -5,6 +5,11 @@ const FolderView = Backbone.View.extend({
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleDisplayByMapMode
         });
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function () {
+                this.toggleDisplayByMapMode(Radio.request("Map", "getMapMode"));
+            }
+        });
         this.render();
     },
     tagName: "li",
