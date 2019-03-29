@@ -3,7 +3,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         // true wenn der Inhalt (Attributions) angezeigt wird
         isContentVisible: false,
         // true wenn das Control auf der Karte angezeigt wird
-        isVisibleInMap: true,
+        isVisibleInMap: false,
         isInitOpenDesktop: true,
         isInitOpenMobile: false,
         // Modellist mit Attributions
@@ -26,23 +26,23 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @fires  Attributions#AttributionsRenderAttributions
      */
     initialize: function () {
-        if (Radio.request("Util", "isViewMobile")) {
-            this.setIsContentVisible(this.get("isInitOpenMobile"));
-        }
-        else {
-            this.setIsContentVisible(this.get("isInitOpenDesktop"));
-        }
 
         this.listenTo(Radio.channel("ModelList"), {
-            "updateVisibleInMapList": this.checkModelsByAttributions
+            "updateVisibleInMapList": this.updateAttributions
         });
         this.listenTo(Radio.channel("Attributions"), {
             "createAttribution": this.createAttribution,
             "removeAttribution": this.removeAttribution
         });
 
-        this.checkModelsByAttributions();
+        this.updateAttributions();
 
+        if (Radio.request("Util", "isViewMobile")) {
+            this.setIsContentVisible(this.get("isInitOpenMobile"));
+        }
+        else {
+            this.setIsContentVisible(this.get("isInitOpenDesktop"));
+        }
     },
 
     /**
@@ -76,30 +76,31 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         var filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
+
         this.setAttributionList(filteredAttributions);
         this.trigger("renderAttributions");
     },
     /**
-     * Es wird geprüft, ob Attributions bei den aktuell in der Karten sichtbaren Layern vorliegen
-     * Wenn ja, wird die Funktion generateAttributions aufgerufen
+     * Updates attributions functionality data. Usually called upon layer visibility change.
      * @returns {void}
      */
-    checkModelsByAttributions: function () {
+    updateAttributions: function updateAttributions () {
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
             filteredModelList = modelList.filter(function (model) {
                 return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
             }),
-            bShowAttributions = (filteredModelList.length > 0);
-
-        // Upon change of visible layers, attribution pane must be opened.
-        // This is a requested ferature.
-        if (bShowAttributions) {
-            this.setIsContentVisible(true);
-        }
+            bAttributionsAvailable = filteredModelList.length > 0;
 
         this.removeAllLayerAttributions();
         this.generateAttributions(filteredModelList);
-        this.setIsVisibleInMap(bShowAttributions);
+
+        this.setIsVisibleInMap(bAttributionsAvailable);
+
+        // Upon change of visible layers, attribution pane must be opened.
+        // This is a requested ferature.
+        if (bAttributionsAvailable) {
+            this.setIsContentVisible(true);
+        }
     },
     /**
      * Removes all attributions of type "layer" from attributions array.
@@ -112,6 +113,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
             filteredAttributions = attributions.filter(function (attribution) {
                 return attribution.type !== "layer";
             });
+
         this.setAttributionList(filteredAttributions);
         this.trigger("renderAttributions");
     },
@@ -139,7 +141,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
 
     /**
      * Setter for isContentVisible
-     * @param {Boolean} value
+     * @param {Boolean} value flag if attributions pane is visible
      * @returns {void}
      */
     setIsContentVisible: function (value) {
@@ -148,7 +150,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
 
     /**
      * Setter for isContentVisible
-     * @param {Boolean} value
+     * @param {Boolean} value flag if attributions functionality (pane + control button) is visible
      * @returns {void}
      */
     setIsVisibleInMap: function (value) {

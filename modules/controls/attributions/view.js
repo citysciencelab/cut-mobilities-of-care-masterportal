@@ -34,9 +34,8 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
             "renderAttributions": this.render
         });
 
-        this.model.checkModelsByAttributions();
-
         this.readIsVisibleInMap();
+        this.render();
     },
     /**
      * Shows the attributions pane
@@ -52,7 +51,7 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
 
     /**
      * Modules render method. Decides whitch control click icon to show depending on model's isContentVisible property.
-     * @return {self}
+     * @returns {object} self
      */
     render: function () {
         var attr = this.model.toJSON();
