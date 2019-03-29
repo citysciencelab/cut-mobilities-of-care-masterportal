@@ -14,8 +14,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @extends Backbone.Model
      * @memberof Searchbar.VisibleVector
      * @constructs
-     * @param {Object} config - Das Konfigurationsobjekt der Suche in sichtbaren Vector-Layern.
-     * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+     * @param {Object} config - Config JSON for Searchbar in visible vector layers
+     * @param {integer} [config.minChars=3] - minimum character count to initialize a seach
      * @listens Searchbar#RadioTriggerSearchbarSearch
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
@@ -74,7 +74,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @param {object} oFeature Feature to test as cluster
      * @returns {boolean} Flag if feature is a cluster
      */
-    isClusteredFeature: function isClusteredFeature (oFeature) {
+    isClusteredFeature: function (oFeature) {
         return _.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
     },
 
@@ -85,7 +85,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @param {string} sProperty Property Key
      * @returns {mixed} Requested feature property value
      */
-    getWithClusterFallback: function getWithClusterFallback (oFeature, sProperty) {
+    getWithClusterFallback: function (oFeature, sProperty) {
         if (!this.isClusteredFeature(oFeature)) {
             return oFeature.get(sProperty);
         }
@@ -99,7 +99,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @param {string} sSearchString Given string to search inside features
      * @returns {array} Array of features containing searched string
      */
-    filterFeaturesArrayRec: function filterFeaturesArrayRec (aFeatures, sSearchField, sSearchString) {
+    filterFeaturesArrayRec: function (aFeatures, sSearchField, sSearchString) {
         var aFilteredFeatures = [];
 
         aFilteredFeatures = aFeatures.filter(function (oFeature) {

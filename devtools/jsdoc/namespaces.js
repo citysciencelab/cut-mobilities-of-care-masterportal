@@ -5,19 +5,19 @@
  * All Controls have the same look and feel, so the UX should be equal throughout all controls.
  */
 
- /**
+/**
  * @namespace Zoom
  * @memberof Controls
  * @description Zoom Buttons for zooming in and zooming out of the map.
  */
 
-  /**
+/**
  * @namespace Overviewmap
  * @memberof Controls
  * @description Small map on the bottom right of the Application, that gives the user an overview.
  */
 
- /**
+/**
  * @namespace TotalView
  * @memberof Controls
  * @description Control to toggle back and forth in map states.
@@ -67,6 +67,12 @@
 
 /**
  * @namespace Searchbar
+ * @description todo
+ */
+
+/**
+ * @namespace VisibleVector
+ * @memberOf Searchbar
  * @description todo
  */
 
