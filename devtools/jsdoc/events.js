@@ -122,28 +122,129 @@
 /** -------------------- PARSER -------------------- */
 
 /**
- * @event Parser#RadioRequestParserGetPortalConfig
- * @example Radio.trigger("Parser", "getPortalConfig")
- * @description Event that returns the config.json of the portal
- */
-
- /**
- * @event Parser#RadioTriggerRemoveItem
- * @example Radio.trigger("Parser", "removeItem")
- * @description Event that removes an item from the layertree
- */
-
- /**
  * @event Parser#RadioRequestParserGetItemByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemByAttributes", attributes)
  */
+/**
+ * @event Parser#RadioRequestParserGetItemsByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item[]} - Layer/Tool/Folder/control
+ * @example Radio.trigger("Parser", "getItemsByAttributes", attributes)
+ */
+/**
+ * @event Parser#RadioRequestParserGetTreeType
+ * @example Radio.trigger("Parser", "getTreeType")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategory
+ * @example Radio.trigger("Parser", "getCategory")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategories
+ * @example Radio.trigger("Parser", "getCategories")
+ */
 
- /**
+/**
+ * @event Parser#RadioRequestParserGetPortalConfig
+ * @example Radio.trigger("Parser", "getPortalConfig")
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetItemsByMetaID
+ * @param {*} metaID - todo
+ * @returns {*} todo
+ * @example Radio.trigger("Parser", "getItemsByMetaID", metaID)
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetSnippetInfos
+ * @example Radio.trigger("Parser", "getSnippetInfos")
+ */
+
+/**
  * @event Parser#RadioRequestParserGetInitVisibBaseLayer
- * @returns {String} - Id of initial visible baselayer
- * @example Radio.request("Parser", "getInitVisibBaselayer")
+ * @example Radio.trigger("Parser", "getInitVisibBaselayer")
+ */
+
+/**
+ * @event Parser#RadioTriggerParsersetCategory
+ * @param {*} value -todo
+ * @returns {*} todo
+ * @example Radio.trigger("Parser", "setCategory", value)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItem
+ * @param {Object} obj - Item
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addItem", obj)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddItemAtTop
+ * @param {Object} obj - Item
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addItemAtTop", obj)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItems
+ * @param {array} objs Array of related objects, e.g. categories in Themenbaum
+ * @param {object} attr Layerobject
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addItems", objs, attr)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddFolder
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} isExpanded - todo
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addFolder", name, id, parentId, level, isExpanded)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} layers - todo
+ * @param {*} url - todo
+ * @param {*} version - todo
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddGDILayer
+ * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addGDILayer", values)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddGeoJSONLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} geojson - todo
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserRemoveItem
+ * @description Event that removes an item from the layertree
+ * @param {String} id - id from item that be removed
+ * @returns {void}
+ * @example Radio.trigger("Parser", "removeItem", id)
+ */
+
+/**
+ * @event Parser#ChangeCategory
  */
 
 
@@ -360,6 +461,12 @@
  * @event List#RadioTriggerModelListRemoveModelsByParentId
  * @description See {@link List#removeModelsByParentId}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", parentId)
+ */
+
+/**
+ * @event List#RadioTriggerModelListremoveModelsById
+ * @description See {@link List#removeModelsById}
+ * @example Radio.trigger("ModelList", "removeModelsByParentId", id)
  */
 
 /**

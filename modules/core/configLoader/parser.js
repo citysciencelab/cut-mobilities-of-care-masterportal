@@ -1,24 +1,15 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
 
-const Parser = Backbone.Model.extend({
+const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     defaults: {
-        // "light-models"
         itemList: [],
-        // Themenconfig.Fachdaten
         overlayer: [],
-        // Themenconfig.Hintergrundkarten
         baselayer: [],
-        // Portalconfig
         portalConfig: {},
-        // Baumtyp
         treeType: "",
-        // Fachdaten Kategorien für DefaultTree
         categories: ["Opendata", "Inspire", "Behörde"],
-        // Aktuelle Kategorie
         category: "Opendata",
-        // Nur für Lighttree: Index der zuletzt eingefügten Layer,
-        // wird für die Sortierung/das Verschieben benötigt
         selectionIDX: -1,
         onlyDesktopTools: [
             "measure",
@@ -31,6 +22,46 @@ const Parser = Backbone.Model.extend({
         ]
     },
 
+    /**
+     * @class Parser
+     * @description Parse the configured models from config datas
+     * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
+     * @extends Backbone.Model
+     * @memberOf Core.configLoader
+     * @constructs
+     * @property {Array} itemList=[] lightModels
+     * @property {Array} overlayer=[] Themenconfig.Fachdaten
+     * @property {Array} baselayer=[] Themenconfig.Hintergrundkarten
+     * @property {Object} portalConfig={} Portalconfig
+     * @property {String} treeType="" the attribute Baumtyp
+     * @property {String[]} categories=["Opendata", "Inspire", "Behörde"] categories for Fachdaten in DefaultTree
+     * @property {String} category="Opendata" selected category for Fachdaten in DefaultTree
+     * @property {Number} selectionIDX=-1 Index of the last inserted layers. Required for sorting/moving (only for the treeType lightTree)
+     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
+     * @listens Parser#RadioRequestParserGetItemByAttributes
+     * @listens Parser#RadioRequestParserGetItemsByAttributes
+     * @listens Parser#RadioRequestParserGetTreeType
+     * @listens Parser#RadioRequestParserGetCategory
+     * @listens Parser#RadioRequestParserGetCategories
+     * @listens Parser#RadioRequestParserGetPortalConfig
+     * @listens Parser#RadioRequestParserGetItemsByMetaID
+     * @listens Parser#RadioRequestParserGetSnippetInfos
+     * @listens Parser#RadioRequestParserGetInitVisibBaselayer
+     * @listens Parser#RadioTriggerParsersetCategory
+     * @listens Parser#RadioTriggerParserAddItem
+     * @listens Parser#RadioTriggerParserAddItemAtTop
+     * @listens Parser#RadioTriggerParserAddItems
+     * @listens Parser#RadioTriggerParserAddFolder
+     * @listens Parser#RadioTriggerParserAddLayer
+     * @listens Parser#RadioTriggerParserAddGDILayer
+     * @listens Parser#RadioTriggerParserAddGeoJSONLayer
+     * @listens Parser#RadioTriggerParserRemoveItem
+     * @listens Parser#ChangeCategory
+     * @fires Parser#RadioTriggerModelListRemoveModelsByParentId
+     * @fires Parser#RadioTriggerModelListRenderTree
+     * @fires Parser#RadioTriggerModelListSetModelAttributesById
+     * @fires Parser#RadioTriggerModelListRemoveModelsById
+     */
     initialize: function () {
         var channel = Radio.channel("Parser");
 
@@ -55,12 +86,6 @@ const Parser = Backbone.Model.extend({
             },
             "getInitVisibBaselayer": this.getInitVisibBaselayer
         }, this);
-
-        this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": function (isViewMobile) {
-                this.addOrRemove3DFolder(this.get("treeType"), isViewMobile, this.get("overlayer_3d"));
-            }
-        });
 
         channel.on({
             "setCategory": this.setCategory,
@@ -94,6 +119,13 @@ const Parser = Backbone.Model.extend({
                 Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
             }
         });
+
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function (isViewMobile) {
+                this.addOrRemove3DFolder(this.get("treeType"), isViewMobile, this.get("overlayer_3d"));
+            }
+        });
+
         this.parseMenu(this.get("portalConfig").menu, "root");
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
@@ -116,9 +148,9 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Parsed die Menüeinträge (alles außer dem Inhalt des Baumes)
-     * @param {object} items Einzelnen Ebenen der Menüleiste, bsp. contact, legend, tools und tree
-     * @param {string} parentId gibt an wem die items hinzugefügt werden
+     * Parsed the menu entries (everything except the contents of the tree)
+     * @param {Object} items Single levels of the menu bar, e.g. contact, legend, tools and tree
+     * @param {String} parentId indicates to whom the items will be added
      * @return {void}
      */
     parseMenu: function (items, parentId) {
@@ -180,8 +212,8 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * [parseSearchBar description]
-     * @param  {Object} searchbarConfig [description]
+     * @todo
+     * @param  {Object} searchbarConfig - todo
      * @return {void}
      */
     parseSearchBar: function (searchbarConfig) {
@@ -192,8 +224,8 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * [parseControls description]
-     * @param  {Array} items [description]
+     * @todo
+     * @param  {Array} items - todo
      * @return {void}
      */
     parseControls: function (items) {
@@ -207,8 +239,8 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Ende hinzu
-     * @param {object} obj - Item
+     * Adds an item(layer, folder, ...) to the end of the attribute "itemList".
+     * @param {Object} obj - Item
      * @return {void}
      */
     addItem: function (obj) {
@@ -221,9 +253,9 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) an der angegbenen Position hinzu
-     * @param {object} obj - Item
-     * @param {number} position - position in ItemList
+     * Adds an item(layer, folder, ...) to the attribute "itemList" at the specified position.
+     * @param {Object} obj - Item
+     * @param {Number} position - position in ItemList
      * @return {void}
      */
     addItemByPosition: function (obj, position) {
@@ -236,9 +268,9 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     *  Ermöglicht ein Array von Objekten, die alle attr gemeinsam haben zu erzeugen
-     *  @param {array} objs Array von zusammengehörenden Objekten, bsp. Kategorien im Themenbaum
-     *  @param {object} attr Layerobjekt
+     *  Allows to create an array of objects that all have attr in common
+     *  @param {array} objs Array of related objects, e.g. categories in Themenbaum
+     *  @param {object} attr Layerobject
      *  @return {void}
      */
     addItems: function (objs, attr) {
@@ -247,6 +279,15 @@ const Parser = Backbone.Model.extend({
         }, this);
     },
 
+    /**
+     * @todo
+     * @param {*} name - todo
+     * @param {*} id - todo
+     * @param {*} parentId - todo
+     * @param {*} level - todo
+     * @param {*} isExpanded - todo
+     * @returns {void}
+     */
     addFolder: function (name, id, parentId, level, isExpanded) {
         var folder = {
             type: "folder",
@@ -261,6 +302,17 @@ const Parser = Backbone.Model.extend({
         this.addItem(folder);
     },
 
+    /**
+     * @todo
+     * @param {*} name - todo
+     * @param {*} id - todo
+     * @param {*} parentId - todo
+     * @param {*} level - todo
+     * @param {*} layers - todo
+     * @param {*} url - todo
+     * @param {*} version - todo
+     * @returns {void}
+     */
     addLayer: function (name, id, parentId, level, layers, url, version) {
         var layer = {
             type: "layer",
@@ -292,6 +344,13 @@ const Parser = Backbone.Model.extend({
         this.addItem(layer);
     },
 
+    /**
+     * @todo
+     * @param {*} name - todo
+     * @param {*} id - todo
+     * @param {*} geojson - todo
+     * @returns {void}
+     */
     addGeoJSONLayer: function (name, id, geojson) {
         var layer = {
             type: "layer",
@@ -314,9 +373,12 @@ const Parser = Backbone.Model.extend({
 
         this.addItem(layer);
     },
-    /* adds a layer from the elastic serach gdi search
-        the object {values} includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
-        */
+
+    /**
+     * adds a layer from the elastic serach gdi search
+     * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
+     * @returns {void}
+     */
     addGDILayer: function (values) {
         var layer = {
             type: "layer",
@@ -352,7 +414,7 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Fügt dem Attribut "itemList" ein Item(layer, folder, ...) am Beginn hinzu
+     * Adds an item(layer, folder, ...) at the beginning to the attribute "itemList
      * @param {Object} obj - Item
      * @return {void}
      */
@@ -366,22 +428,28 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * [getItemByAttributes description]
-     * @param  {Object} value [description]
-     * @return {Object}       [description]
+     * get an item from itemList by a given value
+     * @param  {Object} value - todo
+     * @return {Object} item
      */
     getItemByAttributes: function (value) {
         return _.findWhere(this.get("itemList"), value);
     },
 
     /**
-     * [getItemsByAttributes description]
-     * @param  {Object} value [description]
-     * @return {Array}       [description]
+     * get one ore more item from itemList by a given value
+     * @param  {Object} value - t odo
+     * @return {Array} Items
      */
     getItemsByAttributes: function (value) {
         return _.where(this.get("itemList"), value);
     },
+
+    /**
+     * removes an item from itemList by a given id
+     * @param {String} id - id from item that be removed
+     * @returns {void}
+     */
     removeItem: function (id) {
         var itemList = this.get("itemList").filter(function (item) {
             return item.id !== id;
@@ -391,8 +459,8 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * [createModelList description]
-     * @return {ModelList} [description]
+     * @todo
+     * @return {ModelList} todo
      */
     createModelList: function () {
         new ModelList(this.get("itemList").filter(function (model) {
@@ -461,6 +529,7 @@ const Parser = Backbone.Model.extend({
      * @param {String} treeType - type of tree
      * @param {boolean} isMobile - vsible map mode from portal
      * @param {object} overLayer3d - contains layer fro 3d mode
+     * @fires Parser#RadioTriggerModelListRemoveModelsById
      * @returns {void}
      */
     addOrRemove3DFolder: function (treeType, isMobile, overLayer3d) {
@@ -501,10 +570,10 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Gruppiert Objekte aus der layerlist, die mit den Ids in der übergebenen Liste übereinstimmen
-     * @param  {string[]} ids - Array von Ids deren Objekte gruppiert werden
-     * @param  {Object[]} layerlist - Objekte aus der services.json
-     * @return {Object[]} layerlist - Objekte aus der services.json
+     * Groups objects from the layerlist that match the IDs in the passed list.
+     * @param  {string[]} ids - Array of ids whose objects are grouped together
+     * @param  {Object[]} layerlist - Objects from the services.json
+     * @return {Object[]} layerlist - Objects from the services.json
      */
     mergeObjectsByIds: function (ids, layerlist) {
         var objectsByIds = [],
@@ -542,9 +611,9 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Generiert eine Uniq-Id mit Prefix
-     * Zuvor werden alle Leerzeichen aus dem Prefix entfernt
-     * @param  {String} value - Prefix für Uniq-Id
+     * Generates a Uniq ID with prefix
+     * Before that, all spaces are removed from the prefix.
+     * @param  {String} value - Prefix for Uniq-Id
      * @return {String} value - Uniq-Id
      */
     createUniqId: function (value) {
@@ -553,6 +622,11 @@ const Parser = Backbone.Model.extend({
         return _.uniqueId(trimmedValue);
     },
 
+    /**
+     * @todo
+     * @param {*} metaID - todo
+     * @returns {*} todo
+     */
     getItemsByMetaID: function (metaID) {
         var layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
@@ -567,9 +641,9 @@ const Parser = Backbone.Model.extend({
     },
 
     /**
-     * Gibt den initial sichtbaren Baselayer aus der config.json zurück
-     * bei Array mehrer id wird nur die erste übergeben
-     * @return {String} layer - inital sichtbarer Baselayer
+     * Returns the initial visible baselayer from config.json.
+     * for array several id only the first one is passed
+     * @return {String} layer inital visible baselayer
      */
     getInitVisibBaselayer: function () {
         var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
@@ -584,27 +658,47 @@ const Parser = Backbone.Model.extend({
         return layer;
     },
 
-    // Setter für Attribut "itemList"
+    /**
+     * Setter for attribute "itemList"
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setItemList: function (value) {
         this.set("itemList", value);
     },
 
-    // setter für Attribut "baselayer"
+    /**
+     * Setter for attribute "itemList"
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setBaselayer: function (value) {
         this.set("baselayer", value);
     },
 
-    // Setter für Attribut "overlayer"
+    /**
+     * Setter for attribute "overlayer"
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setOverlayer: function (value) {
         this.set("overlayer", value);
     },
 
-    // Setter für Attribut "treeType"
+    /**
+     * Setter for attribute "treeType"
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setTreeType: function (value) {
         this.set("treeType", value);
     },
 
-    // Setter für Attribut "category"
+    /**
+     * Setter for attribute "category"
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setCategory: function (value) {
         this.set("category", value);
     }
