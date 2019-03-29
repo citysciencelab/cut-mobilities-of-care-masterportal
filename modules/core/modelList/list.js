@@ -13,8 +13,8 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
-import Print2 from "../../tools/print_/model";
-import Print from "../../tools/print_/HighResolutionPlotService/model";
+import PrintV2 from "../../tools/print_/Mapfish3_PlotServicel";
+import Print from "../../tools/print_/HighResolution_Mapfish2_PlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -195,7 +195,7 @@ const ModelList = Backbone.Collection.extend(
                     if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
                         return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                     }
-                    return new Print2(attrs, options);
+                    return new PrintV2(attrs, options);
                 }
                 else if (attrs.id === "gfi") {
                     return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);

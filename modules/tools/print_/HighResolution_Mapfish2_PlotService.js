@@ -1,4 +1,4 @@
-import Tool from "../../../core/modelList/tool/model";
+import Tool from "../../core/modelList/tool/model";
 import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
@@ -99,6 +99,10 @@ const PrintModel = Tool.extend({
         }, this);
     },
 
+    /**
+     * Gets the capabilities for a specific print configuration
+     * @returns {void}
+     */
     getCapabilities: function () {
         var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
             url = resp && resp.get("url") ? resp.get("url") : null,
@@ -116,7 +120,8 @@ const PrintModel = Tool.extend({
 
             if (this.get("currentLayer") === undefined) {
                 $.ajax({
-                    url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
+                    // url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
+                    url: printurl + "/info.json",
                     type: "GET",
                     data: "",
                     context: this,
@@ -125,6 +130,11 @@ const PrintModel = Tool.extend({
             }
         }
     },
+    /**
+     * parses all capabilites
+     * @param {*} response - response from print service
+     * @returns {void}
+     */
     updateParameter: function (response) {
 
         this.setLayoutList(response.layouts);
@@ -139,7 +149,10 @@ const PrintModel = Tool.extend({
         this.togglePostcomposeListener(this, true);
 
     },
-
+    /**
+     * is called from View by clicking the print button
+     * @returns {void}
+     */
     print: function () {
         var drawLayer = Radio.request("Draw", "getLayer");
 
@@ -152,7 +165,6 @@ const PrintModel = Tool.extend({
         }
         this.getGfiForPrint();
     },
-
     /**
      * returns the layout for the given layout name
      * @param {object[]} layoutList - available layouts of the specified print configuration
@@ -164,11 +176,12 @@ const PrintModel = Tool.extend({
             return layout.name === layoutName;
         });
     },
-
+    /**
+     * @return {Array} - All available Scales of Print service
+     */
     getPrintMapScales: function () {
         return this.get("scaleList");
     },
-
     /**
      * if the tool is activated and there is a layout,
      * a callback function is registered to the postcompose event of the map
@@ -254,7 +267,6 @@ const PrintModel = Tool.extend({
         context.lineTo(minx, miny);
         context.closePath();
     },
-
     /**
      * gets the optimal print scale for a map
      * @param {ol.Size} mapSize - size of the map in px
@@ -278,8 +290,10 @@ const PrintModel = Tool.extend({
         });
         return optimalScale;
     },
-
-    // Sets scale for print with the zoom of the map.
+    /**
+     * Sets scale for print with the zoom of the map.
+     * @returns {void}
+     */
     setScaleByMapView: function () {
         var newScale = _.find(this.get("scales"), function (scale) {
             return scale.valueInt === Radio.request("MapView", "getOptions").scale;
@@ -287,12 +301,18 @@ const PrintModel = Tool.extend({
 
         this.set("scale", newScale);
     },
-
-    // Sets center coordinate.
+    /**
+     * Sets center coordinate.
+     * @param {array} value - coordinates of the map center
+     * @returns {void}
+     */
     setCenter: function (value) {
         this.set("center", value);
     },
-
+    /**
+     * updates the Print Page
+     * @returns {void}
+     */
     updatePrintPage: function () {
         if (this.has("scale") && this.has("layout")) {
             if (this.get("isActive")) {
@@ -310,7 +330,11 @@ const PrintModel = Tool.extend({
             Radio.trigger("Map", "render");
         }
     },
-
+    /**
+     * manage printing of group layers
+     * @param {*} layers - group layers
+     * @returns {void}
+     */
     setGROUPLayerToPrint: function (layers) {
         var sortedLayers;
 
@@ -357,7 +381,11 @@ const PrintModel = Tool.extend({
             }, this);
         }, this);
     },
-
+    /**
+     * manage printing of WMS layers
+     * @param {*} layers - WMS layers
+     * @returns {void}
+     */
     setWMSLayerToPrint: function (layers) {
         var sortedLayers;
 
@@ -416,7 +444,11 @@ const PrintModel = Tool.extend({
             });
         }, this);
     },
-
+    /**
+     * sets layer properties
+     * @param {*} layer - layer
+     * @returns {void}
+     */
     setLayer: function (layer) {
         var features = [],
             featureStyles = {},
@@ -485,6 +517,11 @@ const PrintModel = Tool.extend({
             });
         }
     },
+    /**
+     * creates the Style of a Point for printing
+     * @param {*} style - style configurations
+     * @return {Object} - Point with styles
+     */
     createPointStyleForPrint: function (style) {
         var pointStyleObject = {},
             imgPath = this.createImagePath(),
@@ -526,6 +563,10 @@ const PrintModel = Tool.extend({
         }
         return pointStyleObject;
     },
+    /**
+     * gets the path of an image
+     * @return {String} - path of the image
+     */
     createImagePath: function () {
         var imgPath = window.location.origin + "/lgv-config/img/";
 
@@ -535,7 +576,11 @@ const PrintModel = Tool.extend({
         }
         return imgPath;
     },
-
+    /**
+     * GFI Managing
+     * @param {*} gfiPosition - Position of GFI
+     * @returns {void}
+     */
     setSpecification: function (gfiPosition) {
         var layers = Radio.request("Map", "getLayers").getArray(),
             animationLayer = _.filter(layers, function (layer) {
@@ -581,7 +626,7 @@ const PrintModel = Tool.extend({
     },
     /**
      * Checks, if a circle should be drawn at GFI-Position and, if necessary, adds a layer.
-     * @param {number[]} gfiPosition -
+     * @param {number[]} gfiPosition - gfi Position
      * @returns {void}
      */
     setGFIPos: function (gfiPosition) {
@@ -623,7 +668,6 @@ const PrintModel = Tool.extend({
         }
         this.setSpecification(gfiPosition);
     },
-
     /**
     * Sets createURL in dependence of GFI
     * @returns {void}
@@ -654,7 +698,9 @@ const PrintModel = Tool.extend({
      */
     getPDFURL: function () {
         $.ajax({
-            url: this.get("proxyURL") + "?url=" + this.get("createURL"),
+            // url: this.get("proxyURL") + "?url=" + this.get("createURL"),
+            url: this.get("createURL"),
+
             type: "POST",
             context: this,
             async: false,
@@ -674,7 +720,6 @@ const PrintModel = Tool.extend({
             }
         });
     },
-
     /**
      * @desc Opens the generated PDF in the browser.
      * @param {Object} data - Answer from print service. Contains the URL for the generated PDF.
@@ -683,7 +728,6 @@ const PrintModel = Tool.extend({
     openPDF: function (data) {
         window.open(data.getURL);
     },
-
     /**
      * @desc Helper method to set an attribute of type array.
      * @param {String} attribute - The attribute to set.
@@ -696,11 +740,13 @@ const PrintModel = Tool.extend({
         tempArray.push(value);
         this.set(attribute, _.flatten(tempArray));
     },
-
-    // Proofs if it is a rgb(a) or a hexadecimel String.
-    // If it is a rgb(a) string, it will be converted to an hexadecimal string.
-    // If available, the opacity(default = 1) is overwritten.
-    // returns an hexadecimel String and the opacity.
+    /**
+     * Proofs if it is a rgb(a) or a hexadecimel String.
+     * If it is a rgb(a) string, it will be converted to an hexadecimal string.
+     * If available, the opacity(default = 1) is overwritten.
+     * @param {Array} value - Color
+     * @return {String} - hexadecimal String and opacity
+     */
     getColor: function (value) {
         var color = value,
             opacity = 1;
@@ -725,27 +771,42 @@ const PrintModel = Tool.extend({
             "color": color,
             "opacity": opacity
         };
-
     },
-
-    // returns the assembled hexadecimal string.
+    /**
+     * returns the assembled hexadecimal string.
+     * @param {Int} red - rgb color code
+     * @param {Int} green - rgb color code
+     * @param {Int} blue - rgb color code
+     * @return {String} - hex color code
+     */
     rgbToHex: function (red, green, blue) {
         return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
     },
-
-    // Converts an integer (color) to hexadecimal string and return it.
+    /**
+     * Converts an integer (color) to hexadecimal string and return it.
+     * @param {Int} color - rgb color code
+     * @return {String} - hex color code
+     */
     componentToHex: function (color) {
         var hex = color.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
-
+    /**
+     * Saves event contex of Precompose
+     * @param {*} evt - event
+     * @returns {void}
+     */
     handlePreCompose: function (evt) {
         var ctx = evt.context;
 
         ctx.save();
     },
-
+    /**
+     * create print bounding box
+     * @param {*} evt - event
+     * @returns {void}
+     */
     handlePostCompose: function (evt) {
         var ctx = evt.context,
             size = Radio.request("Map", "getSize"),
@@ -776,7 +837,10 @@ const PrintModel = Tool.extend({
         ctx.fill();
         ctx.restore();
     },
-
+    /**
+     * calculate the pixels of page bounds
+     * @return {Array} - page bounds in pixels
+     */
     calculatePageBoundsPixels: function () {
         var s = this.get("scale").value,
             width = this.get("layout").map.width,
@@ -795,7 +859,6 @@ const PrintModel = Tool.extend({
         maxy = center[1] + (h / 2);
         return [minx, miny, maxx, maxy];
     },
-
     /**
      * gets the optimal map resolution for a print scale and a map size
      * @param {number} scale - print scale for the report
@@ -810,7 +873,6 @@ const PrintModel = Tool.extend({
 
         return Math.max(resolutionX, resolutiony);
     },
-
     /**
      * returns the size of the map on the report
      * @returns {number[]} width and height
@@ -820,7 +882,6 @@ const PrintModel = Tool.extend({
 
         return [layoutMapInfo.width, layoutMapInfo.height];
     },
-
     /**
      * returns a capabilities attribute object of the current layout, corresponding to the given name
      * @param {string} name - name of the attribute to get
@@ -829,11 +890,17 @@ const PrintModel = Tool.extend({
     getAttributeInLayoutByName: function (name) {
         return this.get("currentLayout")[name];
     },
-
+    /**
+     * @param {*} value - eventlistener on Map for precompose
+     * @returns {void}
+     */
     setPrecomposeListener: function (value) {
         this.set("precomposeListener", value);
     },
-
+    /**
+     * @param {*} value - eventlistener on Map for postcompose
+     * @returns {void}
+     */
     setPostcomposeListener: function (value) {
         this.set("postcomposeListener", value);
     },
@@ -844,7 +911,10 @@ const PrintModel = Tool.extend({
     setIsMetaDataAvailable: function (value) {
         this.set("isMetaDataAvailable", value);
     },
-    // setter for title
+    /**
+     * @param {String} value  - Title
+     * @returns {void}
+     */
     setTitle: function (value) {
         this.set("title", value);
     },
@@ -897,7 +967,10 @@ const PrintModel = Tool.extend({
     setCurrentScale: function (value) {
         this.set("currentScale", value.toString());
     },
-
+    /**
+     * @param {*} layouts - list of layouts
+     * @returns {void}
+     */
     setLayoutList: function (layouts) {
         var that = this;
 
@@ -905,6 +978,10 @@ const PrintModel = Tool.extend({
             that.get("layoutList").push(layout);
         });
     },
+    /**
+     * @param {*} formats - list of formats from plot service
+     * @returns {void}
+     */
     setFormatList: function (formats) {
         var that = this;
 
@@ -912,6 +989,10 @@ const PrintModel = Tool.extend({
             that.get("formatList").push(format.name);
         });
     },
+    /**
+     * @param {*} scales - list of scales from plot service
+     * @returns {void}
+     */
     setScaleList: function (scales) {
         var that = this;
 
@@ -919,7 +1000,6 @@ const PrintModel = Tool.extend({
             that.get("scaleList").push(scale.value);
         });
     },
-
     /**
      * @param {boolean} value - true if the scale is selected by the user
      * @returns {void}
@@ -927,6 +1007,10 @@ const PrintModel = Tool.extend({
     setIsScaleSelectedManually: function (value) {
         this.set("isScaleSelectedManually", value);
     },
+    /**
+     * @param {*} value - Eventlistener for Map on postcompose
+     * @returns {void}
+     */
     setEventListener: function (value) {
         this.set("eventListener", value);
     }
