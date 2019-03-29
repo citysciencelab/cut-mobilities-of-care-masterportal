@@ -21,6 +21,8 @@ const LayerView = Backbone.View.extend({
             "change:isVisibleInTree": this.removeIfNotVisible,
             "change:isOutOfRange": this.toggleColor
         });
+
+        this.toggleByMapMode(Radio.request("Map", "getMapMode"));
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
     tagName: "li",
@@ -130,6 +132,21 @@ const LayerView = Backbone.View.extend({
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".navbar-collapse").removeClass("in");
+    },
+
+    /**
+     * adds only layers to the tree that support the current mode of the map
+     * e.g. 2D, 3D
+     * @param {String} mapMode - current mode from map
+     * @returns {void}
+     */
+    toggleByMapMode: function (mapMode) {
+        if (this.model.get("supported").indexOf(mapMode) >= 0) {
+            this.$el.show();
+        }
+        else {
+            this.$el.hide();
+        }
     }
 
 });
