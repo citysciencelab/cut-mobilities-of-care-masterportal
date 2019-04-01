@@ -789,3 +789,100 @@
  * @param {Object} cswObj Object of CSW request information.
  * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
  */
+
+
+/** -------------------- FeatureLister -------------------- */
+
+/**
+ * @event FeatureLister#RadioTriggerToggle
+ * @description Toggles the feature lister
+ * @example Radio.trigger("FeatureLister", "toggle");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToListe
+ * @description switches the tab to the tab 'list'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToListe", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToTheme
+ * @description switches the tab to the tab 'theme'
+ * @example Radio.trigger("FeatureLister", "switchTabToTheme");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToDetails
+ * @description switches the tab to the tab 'details'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToDetails", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerNewTheme
+ * @description highlight layer on click and set it as current
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "newTheme", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerHoverTr
+ * @description show marker when hover on list entry in table
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "hoverTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSelectTr
+ * @description sets the selected layer als active after click on table entry
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "selectTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerMoreFeatures
+ * @description reads more features and displays them
+ * @example Radio.trigger("FeatureLister", "moreFeatures");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerOrderList
+ * @description sorts the selected column
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "orderList", evt);
+ */
+
+/**
+ * @event FeatureLister#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerList
+ * @description Triggered when layerList changes
+ */
+
+/**
+ * @event FeatureLister#changeLayer
+ * @description Triggered when layer changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureProps
+ * @description Triggered when featureProps changes
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiHit
+ * @description highlightes given features from gfi hits
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "gfiHit", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiClose
+ * @description un-highlightes given features from gfi close
+ * @example Radio.trigger("FeatureLister", "gfiClose");
+ */
+
