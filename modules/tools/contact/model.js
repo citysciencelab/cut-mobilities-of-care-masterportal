@@ -26,7 +26,9 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         includeSystemInfo: false,
         contactInfo: "",
         glyphicon: "glyphicon-envelope",
-        serviceID: undefined
+        serviceID: undefined,
+        closeAndDelete: false,
+        withTicketNo: true
     }),
 
     /**
@@ -88,7 +90,17 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             userAgentString = "UserAgent: " + navigator.userAgent,
             systemInfo = hrefString + platformString + cookiesString + userAgentString,
             subject = this.get("subject") !== "" ? this.get("subject") : "Supportanfrage zum Portal " + portalTitle,
-            resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined;
+            resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined,
+            closeAndDelete = this.get("deleteAfterSend"),
+            withTicketNo = this.get("withTicketNo");
+
+        if (_.isUndefined(closeAndDelete) === false) {
+            this.setCloseAndDelete(closeAndDelete);
+        }
+
+        if (_.isUndefined(withTicketNo) === false) {
+            this.setWithTicketNo(withTicketNo);
+        }
 
         if (_.isUndefined(resp) === false && resp.get("url")) {
             this.setUrl(resp.get("url"));
@@ -177,8 +189,8 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         var cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
             text,
             dataToSend,
-            closeAndDelete = this.attributes.deleteAfterSend,
-            withTicketNo = this.attributes.withTicketNo;
+            closeAndDelete = this.get("closeAndDelete"),
+            withTicketNo = this.get("withTicketNo");
 
         if (this.get("ccToUser") === true) {
             cc.push({
@@ -366,6 +378,22 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      */
     setBcc: function (value) {
         this.set("bcc", value);
+    },
+    /**
+     * Setter for closeAndDelte
+     * @param {Boolean} value true: close and delete contact after send, false: do not close after send
+     * @returns {void}
+     */
+    setCloseAndDelete: function (value) {
+        this.set("closeAndDelete", value);
+    },
+    /**
+     * Setter for withTicketNo
+     * @param {Boolean} value true: use Ticket Number, false: do not use Ticket Number
+     * @returns {void}
+     */
+    setWithTicketNo: function (value) {
+        this.set("withTicketNo", value);
     }
 });
 
