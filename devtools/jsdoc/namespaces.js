@@ -83,12 +83,6 @@
  * @description Popup to inform user about cookies.
  */
 
- /**
- * @namespace VerkehrsstaerkenTheme
- * @memberOf GFI.Themes
- * @description GFI Theme for Verkehrsstärken
- */
-
 /**
  * @namespace MapMarker
  * @description MapMarker

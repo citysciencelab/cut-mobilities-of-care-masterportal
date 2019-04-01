@@ -16,7 +16,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
     /**
      * @class VerkehrsStaerkenThemeModel
      * @extends Theme
-     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     * @memberof Tools.GFI.Themes.VerkehrsStaerken
      * @constructs
      * @property {String} ansicht="Diagrammansicht" Mode of View to be displayed.
      * @property {String} link="http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx" Download link for data.
@@ -26,7 +26,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @property {Number[]} years=[] Array of years to be shown.
      * @property {String[]} rowNames=[] Array of row names.
      * @property {Object[]} dataset=[] Parsed dataset with all the information needed for table and diagram.
-     * @listens VerkehrsstaerkenTheme#ChangeIsReady
+     * @listens Theme#changeIsReady
      * @fires Graph#RadioTriggerGraphCreateGraph
      */
     initialize: function () {

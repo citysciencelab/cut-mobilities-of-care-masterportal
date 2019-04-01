@@ -7,13 +7,13 @@ const VerkehrsStaerkenThemeView = ThemeView.extend(/**@lends VerkehrsStaerkenThe
     /**
      * @member VerkehrsStaerkenThemeTemplate
      * @description Template used to create gfi for Verkehrsstaerken
-     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     * @memberof Tools.GFI.Themes.VerkehrsStaerken
      */
     template: _.template(VerkehrsStaerkenThemeTemplate),
     /**
      * @class VerkehrsStaerkenThemeView
      * @extends ThemeView
-     * @memberof GFI.Themes.VerkehrsstaerkenTheme
+     * @memberof Tools.GFI.Themes.VerkehrsStaerken
      * @constructs
      */
     events: {

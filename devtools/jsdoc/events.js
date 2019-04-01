@@ -902,14 +902,6 @@
  */
 
 
- /** -------------------- VERKEHRSSTÄRKEN THEME -------------------- */
-
-/**
- * @event VerkehrsstaerkenTheme#ChangeIsReady
- * @description Flag if theme model is ready and can start to process the gfi content.
- */
-
-
 /** -------------------- CONTROLS -------------------- */
 
 /**
