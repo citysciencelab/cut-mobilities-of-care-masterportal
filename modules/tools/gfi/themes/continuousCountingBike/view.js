@@ -3,7 +3,7 @@ import ContinuousCountingBikeTemplate from "text-loader!./template.html";
 /**
  * @member ContinuousCountingBikeTemplate
  * @description Template used to create gfi for continuousCountingBike
- * @memberof GFI.Themes.ContiniuousCountingBikeTheme
+ * @memberof Tools.GFI.Themes.ContiniuousCountingBikeTheme
  */
 const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCountingBikeThemeView.prototype */{
     events: {

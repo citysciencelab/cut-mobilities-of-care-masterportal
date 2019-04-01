@@ -25,7 +25,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * Therefore a sld-body is created and sent via the get-map-request.
      * Caution: Only works for numerical values
      * @extends Tool
-     * @memberof StyleWMS
+     * @memberof Tools.StyleWMS
      * @constructs
      * @property {Boolean} isCurrentWin=false Flag if this tool is shown in the toolwindow and thus is active
      * @property {Boolean} isCollapsed=false Flag if this tool window is collapsed
