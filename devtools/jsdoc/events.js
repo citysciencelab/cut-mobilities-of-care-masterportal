@@ -135,19 +135,23 @@
  */
 /**
  * @event Parser#RadioRequestParserGetTreeType
+ * @returns {*} todo
  * @example Radio.request("Parser", "getTreeType")
  */
 /**
  * @event Parser#RadioRequestParserGetCategory
+ * @returns {*} todo
  * @example Radio.request("Parser", "getCategory")
  */
 /**
  * @event Parser#RadioRequestParserGetCategories
+ * @returns {*} todo
  * @example Radio.request("Parser", "getCategories")
  */
 
 /**
  * @event Parser#RadioRequestParserGetPortalConfig
+ * @returns {*} todo
  * @example Radio.request("Parser", "getPortalConfig")
  */
 
@@ -160,31 +164,30 @@
 
 /**
  * @event Parser#RadioRequestParserGetSnippetInfos
+ * @returns {*} todo
  * @example Radio.request("Parser", "getSnippetInfos")
  */
 
 /**
  * @event Parser#RadioRequestParserGetInitVisibBaselayer
+ * @returns {*} todo
  * @example Radio.request("Parser", "getInitVisibBaselayer")
  */
 
 /**
  * @event Parser#RadioTriggerParsersetCategory
  * @param {*} value -todo
- * @returns {*} todo
  * @example Radio.trigger("Parser", "setCategory", value)
  */
 
 /**
  * @event Parser#RadioTriggerParserAddItem
  * @param {Object} obj - Item
- * @returns {void}
  * @example Radio.trigger("Parser", "addItem", obj)
  */
 /**
  * @event Parser#RadioTriggerParserAddItemAtTop
  * @param {Object} obj - Item
- * @returns {void}
  * @example Radio.trigger("Parser", "addItemAtTop", obj)
  */
 
@@ -192,7 +195,6 @@
  * @event Parser#RadioTriggerParserAddItems
  * @param {array} objs Array of related objects, e.g. categories in Themenbaum
  * @param {object} attr Layerobject
- * @returns {void}
  * @example Radio.trigger("Parser", "addItems", objs, attr)
  */
 
@@ -203,7 +205,6 @@
  * @param {*} parentId - todo
  * @param {*} level - todo
  * @param {*} isExpanded - todo
- * @returns {void}
  * @example Radio.trigger("Parser", "addFolder", name, id, parentId, level, isExpanded)
  */
 
@@ -223,7 +224,6 @@
 /**
  * @event Parser#RadioTriggerParserAddGDILayer
  * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
- * @returns {void}
  * @example Radio.trigger("Parser", "addGDILayer", values)
  */
 /**
@@ -231,7 +231,6 @@
  * @param {*} name - todo
  * @param {*} id - todo
  * @param {*} geojson - todo
- * @returns {void}
  * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
  */
 
@@ -239,7 +238,6 @@
  * @event Parser#RadioTriggerParserRemoveItem
  * @description Event that removes an item from the layertree
  * @param {String} id - id from item that be removed
- * @returns {void}
  * @example Radio.trigger("Parser", "removeItem", id)
  */
 
