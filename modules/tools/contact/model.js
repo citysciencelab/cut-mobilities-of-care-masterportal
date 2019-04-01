@@ -32,7 +32,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     /**
      * @class ContactModel
      * @extends Tool
-     * @memberof Contact
+     * @memberof Tools.Contact
      * @constructs
      * @property {String} maxLines="5" Number of lines for the textarea of the form
      * @property {Object[]} [from=[{"email":"lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]] Default sender of email. Email object existst of:
