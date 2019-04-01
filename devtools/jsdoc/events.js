@@ -1,7 +1,7 @@
 /** -------------------- StyleWMS -------------------- */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWMSopenStyleWMS
+ * @event StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
  * @param {Object} model Layer model to be styled
  * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
  * @example Radio.trigger("StyleWMS", "openStyleWMS", model)
@@ -301,14 +301,14 @@
  */
 
 /**
- * @event Layer#ChangeIsVisibleInTree
+ * @event Layer#changeIsVisibleInTree
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute isVisibleInTree has changed
  */
 
 /**
- * @event Layer#ChangeIsOutOfRange
+ * @event Layer#changeIsOutOfRange
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute isOutOfRange has changed

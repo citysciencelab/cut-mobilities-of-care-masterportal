@@ -20,10 +20,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @extends Backbone.View
      * @memberOf Menu.Desktop.Layer
      * @constructs
-     * @listens Layer#ChangeIsSelected
-     * @listens Layer#ChangeIsSettingVisible
-     * @listens Layer#ChangeTransparency
-     * @listens Layer#ChangeIsOutOfRange
+     * @listens Layer#changeIsSelected
+     * @listens Layer#changeIsSettingVisible
+     * @listens Layer#changeTransparency
+     * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS

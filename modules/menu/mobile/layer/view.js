@@ -20,10 +20,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @extends Backbone.View
      * @memberOf Menu.Mobile.Layer
      * @constructs
-     * @listens Core.ModelList.Layer#ChangeIsSelected
-     * @listens Core.ModelList.Layer#ChangeIsSettingVisible
-     * @listens Core.ModelList.Layer#ChangeIsVisibleInTree
-     * @listens Core.ModelList.Layer#ChangeIsOutOfRange
+     * @listens Layer#changeIsSelected
+     * @listens Layer#changeIsSettingVisible
+     * @listens Layer#changeIsVisibleInTree
+     * @listens Layer#changeIsOutOfRange
      * @fires Map#RadioRequestMapGetMapMode
      * @fires BreadCrumb#RadioRequestBreadCrumbGetLastItem
      * @fires ModelList#RadioTriggerModelListSetIsSelectedOnParent
