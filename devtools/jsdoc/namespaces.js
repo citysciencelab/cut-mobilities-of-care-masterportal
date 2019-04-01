@@ -100,8 +100,13 @@
 
 /**
  * @namespace Attributions
+ * @memberOf Controls
  * @description Module to display additional layer infos in a separate modal
- * used for Verkehrsportal.
+ * used for Verkehrsportal. Notice that following requirements must be met:
+ * - attribution pane must be opened upon selecting a layer with attribution data
+ * - attribution pane must be opened upon activating the tool pane "Pendler-Tool"
+ * - attribution pane must be initially opened, if respective isInitOpenDesktop/isInitOpenMobile config
+ * param is set to true and a layer with attribution data is visible
  */
 
 /**
