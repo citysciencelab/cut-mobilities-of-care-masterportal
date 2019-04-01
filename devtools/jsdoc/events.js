@@ -119,6 +119,14 @@
 */
 
 
+/** -------------------- LEGEND -------------------- */
+
+/**
+ * @event Legend#RadioRequestLegendGetLegend
+ * @param {layer} layer The layer, to which the legend should be returned.
+ * @example Radio.request("Legend", "getLegend", layer)
+*/
+
 /** -------------------- PARSER -------------------- */
 
 /**
