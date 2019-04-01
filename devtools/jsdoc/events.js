@@ -55,37 +55,37 @@
 /** -------------------- ALERTING -------------------- */
 
 /**
- * @event AlertingModel#changePosition
+ * @event Alerting#changePosition
  * @param {Backbone/Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Triggered when Model attribute position has changed.
  */
 
 /**
- * @event AlertingModel#render
+ * @event Alerting#render
  * @description Triggered when View has to render.
  * @example this.trigger("render")
  */
 
 /**
- * @event AlertingModel#RadioTriggerAlertAlert
+ * @event Alerting#RadioTriggerAlertAlert
  * @param {String/Object} alert The alert object or string needed to create the alert.
  * @example Radio.trigger("Alert", "alert", alert)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertAlertRemove
+ * @event Alerting#RadioTriggerAlertAlertRemove
  * @example Radio.trigger("Alert", "alert:remove")
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertClosed
+ * @event Alerting#RadioTriggerAlertClosed
  * @param {String} id The id of the alert that has been closed.
  * @example Radio.trigger("Alert", "closed", id)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertConfirmed
+ * @event Alerting#RadioTriggerAlertConfirmed
  * @param {String} id The id of the alert that has been confirmed.
  * @example Radio.trigger("Alert", "confirmed", id)
  */
