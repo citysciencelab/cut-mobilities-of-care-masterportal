@@ -772,6 +772,20 @@
 /**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
  * @param {String} params Object of Params.
- * @returns {Layer} - Layer that matches the given params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
+ */
+
+
+/** -------------------- CswParser -------------------- */
+
+/**
+ * @event CswParser#RadioTriggerGetMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "getMetaData", cswObj);
+ */
+
+/**
+ * @event CswParser#RadioTriggerFetchedMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
  */
