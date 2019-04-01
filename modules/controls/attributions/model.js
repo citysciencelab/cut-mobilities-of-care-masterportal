@@ -26,8 +26,6 @@ const AttributionsModel = Backbone.Model.extend({
      * @fires  Attributions#AttributionsRenderAttributions
      */
     initialize: function () {
-        var channel = Radio.channel("Attributions");
-
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.updateAttributions
         });
@@ -44,9 +42,6 @@ const AttributionsModel = Backbone.Model.extend({
         else {
             this.setIsContentVisible(this.get("isInitOpenDesktop"));
         }
-
-        console.log(this.get("isContentVisible"));
-
     },
     /**
      * Event listener function for "createAttribution" event. Activates and opens attribution pane.

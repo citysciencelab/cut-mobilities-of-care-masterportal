@@ -22,7 +22,6 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
             jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
         this.model = new Attributions(jAttributionsConfig);
-
         this.listenTo(channel, {
             "renderAttributions": this.render
         });
@@ -35,7 +34,6 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
         });
 
         this.readIsVisibleInMap();
-        console.log(this.model.get("isContentVisible"));
         this.render();
     },
     /**
@@ -55,6 +53,7 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
      */
     render: function () {
         var attr = this.model.toJSON();
+
         if (this.model.get("isContentVisible") === true && this.model.get("attributionList").length > 0) {
             this.$el.html(this.templateShow(attr));
             this.$(".attributions-div").addClass("attributions-div");
@@ -90,4 +89,5 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
         }
     }
 });
+
 export default AttributionsView;
