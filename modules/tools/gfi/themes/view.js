@@ -1,8 +1,8 @@
 const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     /**
      * @class ThemeView
-     * @extends GFI
-     * @memberof GFI.Themes
+     * @extends Tools.GFI
+     * @memberof Tools.GFI.Themes
      * @constructs
      * @listens gfiView#RadioTriggerRender
      * @fires Util#RadioRequestUtilIsViewMobile

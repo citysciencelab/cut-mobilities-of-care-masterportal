@@ -13,8 +13,8 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
         }),
     /**
      * @class ContiniuousCountingBikeThemeModel
-     * @extends GFI.Themes
-     * @memberof GFI.Themes.ContiniuousCountingBikeTheme
+     * @extends Tools.GFI.Themes
+     * @memberof Tools.GFI.Themes.ContiniuousCountingBikeTheme
      * @constructs
      * @property {Object} dayDataset={} Empty object for the dataset of yesterday
      * @property {Object} lastSevenDaysDataset={} Empty object for the dataset of the last seven days
