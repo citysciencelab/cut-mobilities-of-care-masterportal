@@ -2,7 +2,7 @@ import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
-const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingBikeThemeModel.prototype */{
+const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBikeTheme.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults,
         {
             dayDataset: {},
@@ -12,9 +12,9 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
             downloadLink: ""
         }),
     /**
-     * @class ContiniuousCountingBikeThemeModel
-     * @extends GFI.Themes
-     * @memberof GFI.Themes.ContiniuousCountingBikeTheme
+     * @class ContinuousCountingBikeTheme
+     * @extends Theme
+     * @memberof GFI.Themes.ContinuousCountingBikeTheme
      * @constructs
      * @property {Object} dayDataset={} Empty object for the dataset of yesterday
      * @property {Object} lastSevenDaysDataset={} Empty object for the dataset of the last seven days
@@ -23,7 +23,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContiniuousCountingB
      * @property {String} downloadLink="" Link for the download data
      * @fires Util#RadioRequestUtilPunctuate
      * @fires Graph#RadioTriggerGraphCreateGraph
-     * @listens ContiniuousCountingBikeTheme#ThisChange:IsReady
+     * @listens Theme#changeIsReady
      */
     initialize: function () {
         this.listenTo(this, {

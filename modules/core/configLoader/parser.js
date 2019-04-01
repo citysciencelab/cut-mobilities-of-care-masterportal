@@ -27,7 +27,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @description Parse the configured models from config datas
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Model
-     * @memberOf Core.configLoader
+     * @memberOf Core.ConfigLoader
      * @constructs
      * @property {Array} itemList=[] lightModels
      * @property {Array} overlayer=[] Themenconfig.Fachdaten
@@ -57,10 +57,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @listens Parser#RadioTriggerParserAddGeoJSONLayer
      * @listens Parser#RadioTriggerParserRemoveItem
      * @listens Parser#ChangeCategory
-     * @fires Parser#RadioTriggerModelListRemoveModelsByParentId
-     * @fires Parser#RadioTriggerModelListRenderTree
-     * @fires Parser#RadioTriggerModelListSetModelAttributesById
-     * @fires Parser#RadioTriggerModelListRemoveModelsById
+     * @fires List#RadioTriggerModelListRemoveModelsByParentId
+     * @fires List#RadioTriggerModelListRenderTree
+     * @fires List#RadioTriggerModelListSetModelAttributesById
+     * @fires List#RadioTriggerModelListRemoveModelsById
      */
     initialize: function () {
         var channel = Radio.channel("Parser");
@@ -212,7 +212,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param  {Object} searchbarConfig - todo
      * @return {void}
      */
@@ -224,7 +224,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param  {Array} items - todo
      * @return {void}
      */
@@ -280,7 +280,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param {*} name - todo
      * @param {*} id - todo
      * @param {*} parentId - todo
@@ -303,7 +303,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param {*} name - todo
      * @param {*} id - todo
      * @param {*} parentId - todo
@@ -345,7 +345,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param {*} name - todo
      * @param {*} id - todo
      * @param {*} geojson - todo
@@ -459,7 +459,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @return {ModelList} todo
      */
     createModelList: function () {
@@ -623,7 +623,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * @todo
+     * todo
      * @param {*} metaID - todo
      * @returns {*} todo
      */

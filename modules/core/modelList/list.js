@@ -58,7 +58,7 @@ const ModelList = Backbone.Collection.extend(/** @lends List.prototype */{
      * @listens List#RadioTriggerModelListHideAllFeatures
      * @listens List#RadioTriggerModelListShowFeaturesById
      * @listens List#RadioTriggerModelListRemoveModelsByParentId
-     * @listens List#RadioTriggerModelListremoveModelsById
+     * @listens List#RadioTriggerModelListRemoveModelsById
      * @listens List#RadioTriggerModelListAddInitialyNeededModels
      * @listens List#RadioTriggerModelListAddModelsByAttributes
      * @listens List#RadioTriggerModelListSetIsSelectedOnChildLayers

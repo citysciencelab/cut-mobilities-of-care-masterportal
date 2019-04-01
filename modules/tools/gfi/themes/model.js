@@ -1,9 +1,9 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 
-const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
+const Theme = Backbone.Model.extend(/** @lends Theme.prototype */{
     /**
-     * @class ThemeModel
+     * @class Theme
      * @extends GFI
      * @memberof GFI.Themes
      * @constructs

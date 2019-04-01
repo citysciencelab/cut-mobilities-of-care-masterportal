@@ -5,11 +5,6 @@
  * All Controls have the same look and feel, so the UX should be equal throughout all controls.
  */
 
-/**
- * @namespace Parser
- * @memberof Core.configLoader
- * @description Parse the configured models from config datas
- */
 
 /**
  * @namespace Zoom
