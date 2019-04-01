@@ -28,7 +28,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
      * @fires Map#AddOverlay
      * @fires Map#RegisterListenerPointermove
      * @fires Parser#GetItemsByAttributes
-     * @listens MouseHover#RadioTriggerMouseHover
+     * @listens MouseHover#RadioTriggerMouseHoverHide
      */
 
     initialize: function () {
