@@ -1,10 +1,10 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 
-const Theme = Backbone.Model.extend(/** @lends Theme.prototype */{
+const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     /**
-     * @class Theme
-     * @extends Tools.GFI
+     * @class ThemeModel
+     * @extends GFI
      * @memberof Tools.GFI.Themes
      * @constructs
      * @fires AlertingModel#RadioTriggerAlertAlert
