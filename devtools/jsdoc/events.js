@@ -235,21 +235,27 @@
  * @example Radio.trigger("Map", "addLayerToIndex", array)
  */
 
- /**
+/**
  * @event Map#RadioRequestMapGetMapMode
  * @description Adds layer to given index
  * @returns {string} - The mode of the map. Value can be "2D" or "3D"
  * @example Radio.request("Map", "getMapMode")
  */
 
- /**
+/**
  * @event Map#RadioRequestMapGetMap
  * @returns {ol/map} - The Openlayers Map.
  * @example Radio.request("Map", "getMap")
  */
 
- /**
+/**
  * @event Map#RadioTriggerMapAddControl
+ * @param {object} control Control to be added to map.
+ * @example Radio.trigger("Map", "addControl", control)
+ */
+
+/**
+ * @event Map#RadioTriggerSetGFIParams
  * @param {object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
  */
@@ -871,6 +877,16 @@
 /**
  * @event FeatureLister#changeFeatureProps
  * @description Triggered when featureProps changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerId
+ * @description Triggered when layerId changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureId
+ * @description Triggered when featureId changes
  */
 
 /**
