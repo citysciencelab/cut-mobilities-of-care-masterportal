@@ -43,6 +43,5 @@ const Config = {
         },
     isMenubarVisible: true,
     geoAPI: false,
-    clickCounter: {},
-    remoteInterface: true
+    clickCounter: {}
 };
