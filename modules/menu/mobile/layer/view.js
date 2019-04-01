@@ -2,7 +2,7 @@ import Template from "text-loader!./template.html";
 import SelectionTemplate from "text-loader!./templateSelection.html";
 import SettingsTemplate from "text-loader!./templateSettings.html";
 
-const LayerView = Backbone.View.extend({
+const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
         "click .layer-item": "toggleIsSelected",
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
@@ -14,6 +14,21 @@ const LayerView = Backbone.View.extend({
         "change select": "setTransparency",
         "click .glyphicon-tint": "openStyleWMS"
     },
+
+    /**
+     * @class LayerView
+     * @extends Backbone.View
+     * @memberOf Menu.Mobile.Layer
+     * @constructs
+     * @listens Core.ModelList.Layer#ChangeIsSelected
+     * @listens Core.ModelList.Layer#ChangeIsSettingVisible
+     * @listens Core.ModelList.Layer#ChangeIsVisibleInTree
+     * @listens Core.ModelList.Layer#ChangeIsOutOfRange
+     * @fires Map#RadioRequestMapGetMapMode
+     * @fires BreadCrumb#RadioRequestBreadCrumbGetLastItem
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnParent
+     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isSelected change:isVisibleInMap": this.render,
@@ -32,9 +47,10 @@ const LayerView = Backbone.View.extend({
     templateSetting: _.template(SettingsTemplate),
 
     /**
-     * Wenn der Layer außerhalb seines Maßstabsberreich ist, wenn die view ausgegraut und nicht anklickbar
-     * @param {Backbone.Model} model -
-     * @param {boolean} value -
+     * If the layer is outside its scale range,
+     * if the view is grayed out and not clickable
+     * @param {Backbone.Model} model - todo
+     * @param {boolean} value - todo
      * @returns {void}
      */
     toggleColor: function (model, value) {
@@ -49,6 +65,11 @@ const LayerView = Backbone.View.extend({
             }
         }
     },
+
+    /**
+     * todo
+     * @returns {Backbone.View} todo
+     */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -66,7 +87,7 @@ const LayerView = Backbone.View.extend({
     },
 
     /**
-     * Zeichnet die Einstellungen (Transparenz, Metainfos, ...)
+     * Draws the settings (transparency, metainfo, ...)
      * @returns {void}
      */
     renderSetting: function () {
@@ -87,48 +108,93 @@ const LayerView = Backbone.View.extend({
         }
     },
 
+    /**
+     * todo
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnParent
+     * @returns {void}
+     */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.render();
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     removeFromSelection: function () {
         this.model.setIsSettingVisible(false);
         this.model.setIsSelected(false);
         this.$el.remove();
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     showLayerInformation: function () {
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     toggleIsSettingVisible: function () {
         this.model.toggleIsSettingVisible();
     },
 
+    /**
+     * todo
+     * @param {*} evt - todo
+     * @returns {void}
+     */
     setTransparency: function (evt) {
         this.model.setTransparency(parseInt(evt.target.value, 10));
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     moveModelDown: function () {
         this.model.moveDown();
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     moveModelUp: function () {
         this.model.moveUp();
     },
+
+    /**
+     * todo
+     * @returns {void}
+     */
     removeIfNotVisible: function () {
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
         }
     },
+
+    /**
+     * todo
+     * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
+     * @returns {void}
+     */
     openStyleWMS: function () {
         Radio.trigger("StyleWMS", "openStyleWMS", this.model);
         $(".navbar-collapse").removeClass("in");

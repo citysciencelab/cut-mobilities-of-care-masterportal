@@ -21,7 +21,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @memberOf Menu.Desktop.Layer
      * @constructs
      * @listens Core.ModelList.Layer#ChangeIsSelected
-     * @listens Core.ModelList.Layer#ChaneIsSettingVisible
+     * @listens Core.ModelList.Layer#ChangeIsSettingVisible
      * @listens Core.ModelList.Layer#ChangeTransparency
      * @listens Core.ModelList.Layer#ChangeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
