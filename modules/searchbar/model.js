@@ -1,4 +1,4 @@
-const SearchbarModel = Backbone.Model.extend({
+const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype */{
     defaults: {
         placeholder: "Suche",
         recommendedList: "",
@@ -180,8 +180,8 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * Removes all hits with the given filter
-     * @param  {string} attribute Name of the object to be filtered
-     * @param  {object[]} filter Filter parameters
+     * @param  {string} attribute object to be filtered
+     * @param  {object[]} filter filter parameters
      * @return {Void} Nothing
      */
     removeHits: function (attribute, filter) {

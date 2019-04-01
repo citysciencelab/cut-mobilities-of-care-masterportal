@@ -1,4 +1,4 @@
-const AttributionsModel = Backbone.Model.extend({
+const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.prototype */{
     defaults: {
         // true wenn der Inhalt (Attributions) angezeigt wird
         isContentVisible: true,

@@ -1,5 +1,4 @@
-const ClickCounterModel = Backbone.Model.extend(
-    /** @lends ClickCounterModel.prototype */
+const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.prototype */
     {
         defaults: {
             countframeid: _.uniqueId("countframe"),
