@@ -2,58 +2,58 @@ import TemplateShow from "text-loader!./templateShow.html";
 import TemplateHide from "text-loader!./templateHide.html";
 import Attributions from "./model";
 
-const AttributionsView = Backbone.View.extend({
+const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.prototype */{
     events: {
         "click .attributions-button": "toggleIsContentVisible"
     },
+    /**
+     * @class AttributionsView
+     * @extends Backbone.Model
+     * @memberof Controls.Attributions
+     * @constructs
+     * @listens Attributions#RadioTriggerAttributionsRenderAttributions
+     * @listens Attributions#changeIsContentVisible
+     * @listens Attributions#changeAttributionList
+     * @listens Attributions#changeIsVisibleInMap
+     * @listens Attributions#AttributionsRenderAttributions
+     */
     initialize: function () {
-        var channel = Radio.channel("AttributionsView"),
-            isViewMobile = Radio.request("Util", "isViewMobile");
+        var channel = Radio.channel("Attributions"),
+            jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
-        this.model = new Attributions();
+        this.model = new Attributions(jAttributionsConfig);
 
         this.listenTo(channel, {
-            "renderAttributions": this.renderAttributions
+            "renderAttributions": this.render
         });
 
         this.listenTo(this.model, {
-            "change:isContentVisible": this.renderAttributions,
-            "change:attributionList": this.renderAttributions,
-            "change:isVisibleInMap": this.toggleIsVisibleInMap,
-            "renderAttributions": this.renderAttributions
+            "change:isContentVisible": this.render,
+            "change:attributionList": this.render,
+            "change:isVisibleInMap": this.readIsVisibleInMap,
+            "renderAttributions": this.render
         });
 
-
-        if (isViewMobile === true) {
-            this.model.setIsContentVisible(this.model.get("isInitOpenMobile"));
-        }
-        else {
-            this.model.setIsContentVisible(this.model.get("isInitOpenDesktop"));
-        }
-        this.model.checkModelsByAttributions();
+        this.readIsVisibleInMap();
         this.render();
     },
+    /**
+     * Shows the attributions pane
+     * @returns {void}
+     */
     templateShow: _.template(TemplateShow),
+
+    /**
+     * Hides the attributions pane
+     * @returns {void}
+     */
     templateHide: _.template(TemplateHide),
+
+    /**
+     * Modules render method. Decides whitch control click icon to show depending on model's isContentVisible property.
+     * @returns {object} self
+     */
     render: function () {
-        var attr = this.model.toJSON();
-
-        this.$el.html(this.templateShow(attr));
-        if (this.model.get("isVisibleInMap") === true) {
-            this.$el.show();
-            this.$el.addClass("attributions-view");
-        }
-        else {
-            this.$el.hide();
-        }
-
-        if (attr.attributionList.length === 0) {
-            this.$(".attributions-div").removeClass("attributions-div");
-        }
-        return this;
-    },
-
-    renderAttributions: function () {
         var attr = this.model.toJSON();
 
         if (this.model.get("isContentVisible") === true) {
@@ -68,14 +68,23 @@ const AttributionsView = Backbone.View.extend({
         else {
             this.$(".attributions-div").addClass("attributions-div");
         }
+        return this;
     },
 
+    /**
+     * Wrapper method for model's toggleIsContentVisible()
+     * @return {void}
+     */
     toggleIsContentVisible: function () {
-        this.model.toggleIsContentVisible();
+        return this.model.toggleIsContentVisible();
     },
 
-    toggleIsVisibleInMap: function (isVisible) {
-        if (isVisible) {
+    /**
+     * Decides whether to display the module or to hide it. Uses model property isVisibleInMap for it.
+     * @return {void}
+     */
+    readIsVisibleInMap: function () {
+        if (this.model.get("isVisibleInMap")) {
             this.$el.show();
             this.$el.addClass("attributions-view");
         }
