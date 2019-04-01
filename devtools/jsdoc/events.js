@@ -901,7 +901,8 @@
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
 
-/** -------------------- ControlsView -------------------- */
+
+/** -------------------- CONTROLS -------------------- */
 
 /**
  * @event Controls#RadioRequestControlsViewAddRowTr
@@ -927,7 +928,7 @@
  */
 
 
-/** -------------------- RawLayerList -------------------- */
+/** -------------------- RAWLAYERLIST -------------------- */
 
 /**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
