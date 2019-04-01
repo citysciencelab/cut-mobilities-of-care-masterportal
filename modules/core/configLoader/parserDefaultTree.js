@@ -5,6 +5,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @class DefaultTreeParser
      * @extends Parser
      * @memberOf Core.ConfigLoader
+     * @fires Util#RadioRequestUtilIsViewMobile
      * @constructs
      */
     defaults: _.extend({}, Parser.prototype.defaults, {
@@ -129,6 +130,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     /**
      * todo
      * @param {*} layerList - todo
+     * @fires Util#RadioRequestUtilIsViewMobile
      * @returns {void}
      */
     create3dLayer: function (layerList) {

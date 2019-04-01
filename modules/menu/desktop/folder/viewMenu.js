@@ -1,6 +1,15 @@
 import Template from "text-loader!./templateMenu.html";
 
-const FolderView = Backbone.View.extend({
+const FolderView = Backbone.View.extend(/** @lends FolderView.prototype */{
+    /**
+     * @class FolderView
+     * @extends Backbone.View
+     * @memberOf Menu.Desktop.Folder
+     * @constructs
+     * @listens Map#RadioTriggerMapChange
+     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @fires Map#RadioRequestMapGetMapMode
+     */
     initialize: function () {
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleDisplayByMapMode
