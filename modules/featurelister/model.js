@@ -31,16 +31,16 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @property {Object} highlightedFeature=null Feature that is currently highlighted
      * @property {Object} highlightedFeatureStyle=null Feature style of the currently highlighted feature
      * @property {String} glyphicon="glyphicon-menu-hamburger" id of the glyphicon to use in the template
-     * @fires FetureLister#changeLayerId
-     * @fires FetureLister#changeFeatureId
+     * @fires FeatureLister#changeLayerId
+     * @fires FeatureLister#changeFeatureId
      * @fires FeatureLister#changeIsActive
      * @fires FeatureLister#changeLayerList
      * @fires FeatureLister#changeLayer
      * @fires FeatureLister#changeFeatureProps
      * @listens ModelList#RadioTriggerUpdateVisibleInMapList
      * @listens Map#RadioTriggerSetGFIParams
-     * @listens FetureLister#changeLayerId
-     * @listens FetureLister#changeFeatureId
+     * @listens FeatureLister#changeLayerId
+     * @listens FeatureLister#changeFeatureId
      */
     initialize: function () {
         this.superInitialize();
