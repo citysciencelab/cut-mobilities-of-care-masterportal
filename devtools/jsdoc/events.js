@@ -775,3 +775,18 @@
  * @returns {Layer} - Layer that matches the given params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
  */
+
+ /**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @description Returns the object of the layer that matches the given params.
+ * @param {Object} params Object of Params.
+ * @returns {Object} - Layer attributes.
+ * @example Radio.request("RawLayerList", "getLayerAttributesWhere", params);
+ */
+
+ /**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+ * @description Returns the rawlayerList as json.
+ * @returns {RawLayerList} - The rawLayerlist.
+ * @example Radio.request("RawLayerList", "getLayerAttributesList");
+ */

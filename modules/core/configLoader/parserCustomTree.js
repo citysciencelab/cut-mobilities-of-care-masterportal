@@ -1,14 +1,26 @@
 import Parser from "./parser";
 
-const CustomTreeParser = Parser.extend({
-
+const CustomTreeParser = Parser.extend(/**@lends CustomTreeParser.prototype */{
     /**
-     * Parsed response.Themenconfig
-     * Die Objekte aus der config.json und services.json werden über die Id zusammengeführt
+     * @class CustomTreeParser
+     * @extends Parser
+     * @memberof Core.ConfigLoader
+     * @constructs
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+     */
+    defaults: _.extend({}, Layer.prototype.defaults, {}),
+    /**
+     * Recursive function.
+     * Parses the config.json. response.Themenconfig.
+     * The object from config.json and services.json are merged by id.
+     *
      * @param  {Object} object - Baselayer | Overlayer | Folder
-     * @param  {string} parentId Elternid
-     * @param  {Number} level - Rekursionsebene = Ebene im Themenbaum
-     * @return {undefined}
+     * @param  {string} parentId Id of parent item.
+     * @param  {Number} level Level of recursion. Equals to level in layertree.
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+     * @returns {void}
      */
     parseTree: function (object, parentId, level) {
         if (_.has(object, "Layer")) {
@@ -131,6 +143,13 @@ const CustomTreeParser = Parser.extend({
         }
     },
 
+    /**
+     * Returns a flag if layer has to be displayed.
+     * @param {Number} level The layers level in the layertree.
+     * @param {String} type Type of Item.
+     * @param {Boolean} isInThemen  Flag if layer or folder is in layertree
+     * @returns {Boolean} - Flag if layer is visible in layertree
+     */
     getIsVisibleInTree: function (level, type, isInThemen) {
         var isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
 
