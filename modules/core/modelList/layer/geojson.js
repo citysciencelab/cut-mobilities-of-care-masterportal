@@ -10,7 +10,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @description Module to represent GeoJSONLayer
      * @extends Layer
      * @constructs
-     * @inheritdoc
      * @memberOf Core.ModelList.Layer
      * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
      * @property {number} [clusterDistance="undefined"] Distance to group features to clusters

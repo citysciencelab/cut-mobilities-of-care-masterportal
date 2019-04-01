@@ -340,6 +340,22 @@
  */
 
 
+/** -------------------- HEATMAP LAYER -------------------- */
+/**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
+ */
+
+ /**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadupdateHeatmap", layerId, features)
+ */
+
+
 /** -------------------- MAP -------------------- */
 
 /**
