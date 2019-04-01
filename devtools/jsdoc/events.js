@@ -301,6 +301,20 @@
  */
 
 /**
+ * @event Layer#ChangeIsVisibleInTree
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isVisibleInTree has changed
+ */
+
+/**
+ * @event Layer#ChangeIsOutOfRange
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isOutOfRange has changed
+ */
+
+/**
  * @event Layer#RadioTriggerLayerUpdateLayerInfo
  * @param {String} name The name of the layer.
  * @example Radio.trigger("Layer", "updateLayerInfo", name)
