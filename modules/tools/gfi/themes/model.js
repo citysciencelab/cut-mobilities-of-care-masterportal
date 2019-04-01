@@ -5,7 +5,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     /**
      * @class ThemeModel
      * @extends GFI
-     * @memberof Tools.GFI.Themes
+     * @memberof GFI.Themes
      * @constructs
      * @fires AlertingModel#RadioTriggerAlertAlert
      * @fires Util#RadioRequestUtilGetProxyURL
