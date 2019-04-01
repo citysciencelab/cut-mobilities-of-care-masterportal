@@ -34,12 +34,10 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.prepSearch
         });
-
     },
 
     /**
      * description
-     * @todo description
      * @param {string} searchString String to search for in properties of all model's features
      * @returns {void}
      */

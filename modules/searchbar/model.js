@@ -20,7 +20,6 @@ const SearchbarModel = Backbone.Model.extend({
      * @extends Backbone.Model
      * @memberof Searchbar
      * @constructs
-     * @todo
      * @returns {void}
      */
     initialize: function () {
@@ -208,8 +207,8 @@ const SearchbarModel = Backbone.Model.extend({
     /**
      * changes the filename extension of given filepath
      * @param  {String} src source string
-     * @param  {String} ext     file extension
-     * @return {String}  file extension
+     * @param  {String} ext file extension
+     * @return {String} file extension
      */
     changeFileExtension: function (src, ext) {
         if (_.isUndefined(src)) {
@@ -223,9 +222,9 @@ const SearchbarModel = Backbone.Model.extend({
 
     /**
      * crops names of hits to length zeichen
-     * @param  {String} s [the search result]
-     * @param  {number} length  [name length]
-     * @returns {string} s
+     * @param  {String} s todo
+     * @param  {number} length todo
+     * @returns {string} s todo
      */
     shortenString: function (s, length) {
         if (_.isUndefined(s)) {
