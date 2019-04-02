@@ -16,11 +16,11 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
      * @extends Backbone.View
      * @memberof Alerting
      * @constructs
-     * @fires AlertingView#RadioTriggerAlertClosed
-     * @fires AlertingView#RadioTriggerAlertConfirmed
-     * @listens AlertingModel#render
-     * @listens AlertingModel#changePosition
-     * @listens AlertingView#RadioTriggerAlertAlertRemove
+     * @fires Alerting#RadioTriggerAlertClosed
+     * @fires Alerting#RadioTriggerAlertConfirmed
+     * @listens Alerting#render
+     * @listens Alerting#changePosition
+     * @listens Alerting#RadioTriggerAlertAlertRemove
      */
     initialize: function () {
         this.listenTo(this.model.get("channel"), {
@@ -56,7 +56,7 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     /**
      * Reacts to click on dismiss button.
      * @param {Event} evt Click event on dismissable alert
-     * @fires AlertingView#event:RadioTriggerAlertClosed
+     * @fires AlertingView#RadioTriggerAlertClosed
      * @return {void}
      */
     alertClosed: function (evt) {
@@ -72,7 +72,7 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     /**
      * Reacts to click on confirm button.
      * @param {Event} evt Click event on confirmable alert
-     * @fires AlertingView#event:RadioTriggerAlertConfirmed
+     * @fires AlertingView#RadioTriggerAlertConfirmed
      * @return {void}
      */
     alertConfirmed: function (evt) {

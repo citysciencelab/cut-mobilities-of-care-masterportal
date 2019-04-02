@@ -528,7 +528,8 @@
         "id": "2404",
         "styleId": "45",
         "clusterDistance": 40,
-        "routable": true
+        "routable": true,
+        "searchField": "bezeichnung"
       },
       {
         "id": "4479"

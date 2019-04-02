@@ -11,7 +11,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
     /**
      * @class ContactView
      * @extends Backbone.View
-     * @memberof Tools.Contact
+     * @memberof Contact
      * @constructs
      * @listens ContactModel#changeIsActive
      * @listens ContactModel#changeInvalid

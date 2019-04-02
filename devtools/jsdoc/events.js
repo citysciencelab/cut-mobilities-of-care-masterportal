@@ -1,53 +1,53 @@
 /** -------------------- StyleWMS -------------------- */
 
 /**
- * @event StyleWmsModel#RadioTriggerStyleWmsopenStyleWms
+ * @event StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
  * @param {Object} model Layer model to be styled
  * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
  * @example Radio.trigger("StyleWMS", "openStyleWMS", model)
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
+ * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
  * @param {Object} model Layer model to be styled
  * @description Resets the stylewms params for legend
  * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
+ * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
  * @param {Object[]} attributes -
  * @description Sets the style wms params for legend so that the legend can be updated
  * @example Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes)
  */
 
 /**
- * @event StyleWmsModel#changeModel
+ * @event StyleWMS#changeModel
  * @description Triggered when layer model to style changes
  */
 
 /**
- * @event StyleWmsModel#changeIsActive
+ * @event StyleWMS#changeIsActive
  * @description Triggered when stylewms model gets activated
  */
 
 /**
- * @event StyleWmsModel#changeAttributeName
+ * @event StyleWMS#changeAttributeName
  * @description Triggered when attributeName changes
  */
 
 /**
- * @event StyleWmsModel#changeNumberOfClasses
+ * @event StyleWMS#changeNumberOfClasses
  * @description Triggered when numberOfClasses changes
  */
 
 /**
- * @event StyleWmsModel#changeSetSld
+ * @event StyleWMS#changeSetSld
  * @description Triggered when setSLD changes
  */
 
 /**
- * @event StyleWmsModel#sync
+ * @event StyleWms#sync
  * @description Triggered when setSLD changes
  */
 
@@ -55,37 +55,37 @@
 /** -------------------- ALERTING -------------------- */
 
 /**
- * @event AlertingModel#changePosition
+ * @event Alerting#changePosition
  * @param {Backbone/Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Triggered when Model attribute position has changed.
  */
 
 /**
- * @event AlertingModel#render
+ * @event Alerting#render
  * @description Triggered when View has to render.
  * @example this.trigger("render")
  */
 
 /**
- * @event AlertingModel#RadioTriggerAlertAlert
+ * @event Alerting#RadioTriggerAlertAlert
  * @param {String/Object} alert The alert object or string needed to create the alert.
  * @example Radio.trigger("Alert", "alert", alert)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertAlertRemove
+ * @event Alerting#RadioTriggerAlertAlertRemove
  * @example Radio.trigger("Alert", "alert:remove")
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertClosed
+ * @event Alerting#RadioTriggerAlertClosed
  * @param {String} id The id of the alert that has been closed.
  * @example Radio.trigger("Alert", "closed", id)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertConfirmed
+ * @event Alerting#RadioTriggerAlertConfirmed
  * @param {String} id The id of the alert that has been confirmed.
  * @example Radio.trigger("Alert", "confirmed", id)
  */
@@ -119,13 +119,15 @@
 */
 
 
-/** -------------------- PARSER -------------------- */
+/** -------------------- LEGEND -------------------- */
 
 /**
- * @event Parser#RadioRequestParserGetPortalConfig
- * @example Radio.trigger("Parser", "getPortalConfig")
- * @description Event that returns the config.json of the portal
- */
+ * @event Legend#RadioRequestLegendGetLegend
+ * @param {layer} layer The layer, to which the legend should be returned.
+ * @example Radio.request("Legend", "getLegend", layer)
+*/
+
+/** -------------------- PARSER -------------------- */
 
 /**
  * @event Parser#RadioTriggerRemoveItem
@@ -139,11 +141,122 @@
  * @returns {Item} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemByAttributes", attributes)
  */
+/**
+ * @event Parser#RadioRequestParserGetItemsByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item[]} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemsByAttributes", attributes)
+ */
+/**
+ * @event Parser#RadioRequestParserGetTreeType
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getTreeType")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategory
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getCategory")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategories
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getCategories")
+ */
 
 /**
- * @event Parser#RadioRequestParserGetInitVisibBaseLayer
- * @returns {String} - Id of initial visible baselayer
+ * @event Parser#RadioRequestParserGetPortalConfig
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getPortalConfig")
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetItemsByMetaID
+ * @param {*} metaID - todo
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getItemsByMetaID", metaID)
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetSnippetInfos
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getSnippetInfos")
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetInitVisibBaselayer
+ * @returns {*} todo
  * @example Radio.request("Parser", "getInitVisibBaselayer")
+ */
+
+/**
+ * @event Parser#RadioTriggerParsersetCategory
+ * @param {*} value -todo
+ * @example Radio.trigger("Parser", "setCategory", value)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItem
+ * @param {Object} obj - Item
+ * @example Radio.trigger("Parser", "addItem", obj)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddItemAtTop
+ * @param {Object} obj - Item
+ * @example Radio.trigger("Parser", "addItemAtTop", obj)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItems
+ * @param {array} objs Array of related objects, e.g. categories in Themenbaum
+ * @param {object} attr Layerobject
+ * @example Radio.trigger("Parser", "addItems", objs, attr)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddFolder
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} isExpanded - todo
+ * @example Radio.trigger("Parser", "addFolder", name, id, parentId, level, isExpanded)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} layers - todo
+ * @param {*} url - todo
+ * @param {*} version - todo
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddGDILayer
+ * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
+ * @example Radio.trigger("Parser", "addGDILayer", values)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddGeoJSONLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} geojson - todo
+ * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserRemoveItem
+ * @description Event that removes an item from the layertree
+ * @param {String} id - id from item that be removed
+ * @example Radio.trigger("Parser", "removeItem", id)
+ */
+
+/**
+ * @event Parser#ChangeCategory
  */
 
 
@@ -200,6 +313,20 @@
  */
 
 /**
+ * @event Layer#changeIsVisibleInTree
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isVisibleInTree has changed
+ */
+
+/**
+ * @event Layer#changeIsOutOfRange
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isOutOfRange has changed
+ */
+
+/**
  * @event Layer#RadioTriggerLayerUpdateLayerInfo
  * @param {String} name The name of the layer.
  * @example Radio.trigger("Layer", "updateLayerInfo", name)
@@ -219,6 +346,22 @@
  */
 
 
+/** -------------------- HEATMAP LAYER -------------------- */
+/**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
+ */
+
+/**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadupdateHeatmap", layerId, features)
+ */
+
+
 /** -------------------- MAP -------------------- */
 
 /**
@@ -229,11 +372,19 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddLayer
+ * @description Adds layer to map
+ * @param {Object} layer Layer to add to map
+ * @example Radio.trigger("Map", "addLayer", layer)
+ */
+
+/**
  * @event Map#RadioTriggerMapAddLayerToIndex
  * @description Adds layer to given index
  * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
  * @example Radio.trigger("Map", "addLayerToIndex", array)
  */
+
 
 /**
  * @event Map#RadioRequestMapGetMapMode
@@ -250,7 +401,13 @@
 
 /**
  * @event Map#RadioTriggerMapAddControl
- * @param {object} control Control to be added to map.
+ * @param {Object} control Control to be added to map.
+ * @example Radio.trigger("Map", "addControl", control)
+ */
+
+/**
+ * @event Map#RadioTriggerMapSetGFIParams
+ * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
  */
 
@@ -266,6 +423,20 @@
  * @param {Function} callback - The Callback Function
  * @param {Object} context -
  * @example Radio.trigger("Map", "RegisterListener", event, callback, context)
+ */
+
+/**
+ * @event Map#RadioTriggerMapAddInteraction
+ * @description Adds an interaction to the map (e.g. draw)
+ * @param {Object} interaction Interaction to be added to map.
+ * @example Radio.trigger("Map", "addInteraction", interaction)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRemoveInteraction
+ * @description Removes an interaction from the map (e.g. draw)
+ * @param {Object} interaction Interaction to be removed from the map.
+ * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
 
@@ -324,197 +495,268 @@
  * @example Radio.trigger("LayerInformation", "add", options)
  */
 
+/** -------------------- OBLIQUE MAP-------------------- */
+
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapRegisterLayer
+ * @param {ObliqueLayer} layer ObliqueLayer.
+ * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
+ */
+
+/**
+ * @event ObliqueMap#RadioRequestObliqueMapIsActive
+ * @returns {Boolean} - Flag if ObliqueMap is active.
+ * @example Radio.request("ObliqueMap", "isActive")
+ */
+
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
+ * @param {ObliqueLayer} layer ObliqueLayer.
+ * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
+ */
+
+
 /** -------------------- MODEL LIST -------------------- */
 
 /**
- * @event List#RadioRequestModelListGetCollection
+ * @event ModelList#RadioRequestModelListGetCollection
  * @description Returns itself
  * @example Radio.request("ModelList", "getCollection")
  */
 
 /**
- * @event List#RadioRequestModelListGetModelsByAttributes
+ * @event ModelList#RadioRequestModelListGetModelsByAttributes
  * @param {Object} attributes Attributes used to find models to be returned
  * @description Returns the models that match the given attributes
  * @example Radio.request("ModelList", "getModelsByAttributes", attributes)
  */
 
 /**
- * @event List#RadioRequestModelListGetModelByAttributes
+ * @event ModelList#RadioRequestModelListGetModelByAttributes
  * @param {Object} attributes Attributes used to find model to be returned
  * @description Returns the first model that matches the given attributes. If model cannot be found, the function look for a group layer model containing the attributes
  * @example Radio.request("ModelList", "getModelByAttributes", attributes)
  */
 
 /**
- * @event List#RadioTriggerModelListSetModelAttributesById
+ * @event ModelList#RadioTriggerModelListSetModelAttributesById
  * @description See {@link List#setModelAttributesById}
  * @example Radio.trigger("ModelList", "setModelAttributesById", id, attrs)
  */
 
 /**
- * @event List#RadioTriggerModelListShowAllFeatures
+ * @event ModelList#RadioTriggerModelListShowAllFeatures
  * @description See {@link List#showAllFeatures}
  * @example Radio.trigger("ModelList", "showAllFeatures", id)
  */
 
 /**
- * @event List#RadioTriggerModelListHideAllFeatures
+ * @event ModelList#RadioTriggerModelListHideAllFeatures
  * @description See {@link List#hideAllFeatures}
  * @example Radio.trigger("ModelList", "hideAllFeatures", id)
  */
 
 /**
- * @event List#RadioTriggerModelListShowFeaturesById
+ * @event ModelList#RadioTriggerModelListShowFeaturesById
  * @description See {@link List#showFeaturesById}
  * @example Radio.trigger("ModelList", "showFeaturesById", id, featureIds)
  */
 
 /**
- * @event List#RadioTriggerModelListRemoveModelsByParentId
+ * @event ModelList#RadioTriggerModelListRemoveModelsByParentId
  * @description See {@link List#removeModelsByParentId}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", parentId)
  */
 
 /**
- * @event List#RadioTriggerModelListAddInitialyNeededModels
+ * @event ModelList#RadioTriggerModelListRemoveModelsById
+ * @description See {@link List#removeModelsById}
+ * @example Radio.trigger("ModelList", "removeModelsByParentId", id)
+ */
+
+/**
+ * @event ModelList#RadioTriggerModelListAddInitialyNeededModels
  * @description See {@link List#addInitialyNeededModels}
  * @example Radio.trigger("ModelList", "addInitialyNeededModels")
  */
 
 /**
- * @event List#RadioTriggerModelListAddModelsByAttributes
+ * @event ModelList#RadioTriggerModelListAddModelsByAttributes
  * @description See {@link List#addModelsByAttributes}
  * @example Radio.trigger("ModelList", "addModelsByAttributes", attrs)
  */
 
 /**
- * @event List#RadioTriggerModelListSetIsSelectedOnChildLayers
+ * @event ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
  * @description See {@link List#setIsSelectedOnChildLayers}
  * @example Radio.trigger("ModelList", "setIsSelectedOnChildLayers", model)
  */
 
 /**
- * @event List#RadioTriggerModelListSetIsSelectedOnParent
+ * @event ModelList#RadioTriggerModelListSetIsSelectedOnParent
  * @description See {@link List#setIsSelectedOnParent}
  * @example Radio.trigger("ModelList", "setIsSelectedOnParent", model)
  */
 
 /**
- * @event List#RadioTriggerModelListShowModelInTree
+ * @event ModelList#RadioTriggerModelListShowModelInTree
  * @description See {@link List#showModelInTree}
  * @example Radio.trigger("ModelList", "showModelInTree", modelId)
  */
 
 /**
- * @event List#RadioTriggerModelListCloseAllExpandedFolder
+ * @event ModelList#RadioTriggerModelListCloseAllExpandedFolder
  * @description See {@link List#closeAllExpandedFolder}
  * @example Radio.trigger("ModelList", "closeAllExpandedFolder")
  */
 
 /**
- * @event List#RadioTriggerModelListSetAllDescendantsInvisible
+ * @event ModelList#RadioTriggerModelListSetAllDescendantsInvisible
  * @description See {@link List#setAllDescendantsInvisible}
  * @example Radio.trigger("ModelList", "setAllDescendantsInvisible", parentId, isMobile)
  */
 
 /**
- * @event List#RadioTriggerModelListRenderTree
- * @fires List#RenderTree
+ * @event ModelList#RadioTriggerModelListRenderTree
+ * @fires ModelList#RenderTree
  * @example Radio.trigger("ModelList", "renderTree")
  */
 
 /**
- * @event List#RenderTree
+ * @event ModelList#RenderTree
  * @description Triggers "renderTree"
  * @example this.trigger("renderTree")
  */
 
 /**
- * @event List#RadioTriggerModelListToggleWfsCluster
+ * @event ModelList#RadioTriggerModelListToggleWfsCluster
  * @description See {@link List#toggleWfsCluster}
  * @example Radio.trigger("ModelList", "toggleWfsCluster", value)
  */
 
 /**
- * @event List#RadioTriggerModelListToggleDefaultTool
+ * @event ModelList#RadioTriggerModelListToggleDefaultTool
  * @description See {@link List#toggleDefaultTool}
  * @example Radio.trigger("ModelList", "toggleDefaultTool")
  */
 
 /**
- * @event List#ChangeIsVisibleInMap
+ * @event ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @description Triggered when one item has a change in the attribute isVisibleInMap
- * @fires List#RadioTriggerModelListUpdateVisibleInMapList
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeIsExpanded
+ * @event ModelList#ChangeIsExpanded
  * @description Triggered when one item has a change in the attribute isExpaned
- * @fires List#UpdateOverlayerView
- * @fires List#UpdateSelection
- * @fires List#TraverseTree
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#UpdateOverlayerView
+ * @fires ModelList#UpdateSelection
+ * @fires ModelList#TraverseTree
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeIsSelected
+ * @event ModelList#ChangeIsSelected
  * @description Triggered when one item has a change in the attribute IsSelected
- * @fires List#UpdateSelection
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#UpdateSelection
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeTransparency
+ * @event ModelList#ChangeTransparency
  * @description Triggered when one item has a change in the attribute transparency
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeSelectionIDX
+ * @event ModelList#ChangeSelectionIDX
  * @description Triggered when one item has a change in the attribute selectionIDX
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#UpdateSelection
+ * @event ModelList#UpdateSelection
  * @description Triggered when selection was updated
  * @example this.trigger("updateSelection", model)
  */
 
 /**
- * @event List#UpdateLightTree
+ * @event ModelList#UpdateLightTree
  * @description Triggered when light tree was updated
  * @example this.trigger("updateLightTree")
  */
 
 /**
- * @event List#ChangeSelectedList
+ * @event ModelList#ChangeSelectedList
  * @description Triggered when selected list has changed
  */
 
 /**
- * @event List#TraverseTree
+ * @event ModelList#TraverseTree
  * @description Used for mobile
  * @example this.trigger("traverseTree")
  */
 
 /**
- * @event List#RadioTriggerModelListUpdateVisibleInMapList
+ * @event ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @example Radio.trigger("ModelList", "updateVisibleInMapList")
  */
 
 /**
- * @event List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @event ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  * @example Radio.trigger("ModelList", "updatedSelectedLayerList")
  */
 
 /**
- * @event List#UpdateOverlayerView
+ * @event ModelList#UpdateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
 
+/** -------------------- ATTRIBUTIONS ----------------- */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsCreateAttribution
+ * @description todo
+ * @example this.trigger("Attributions", "createAttribution");
+ */
+/**
+ * @event Attributions#RadioTriggerAttributionsRemoveAttribution
+ * @description todo
+ * @example this.trigger("Attributions", "removeAttribution");
+ */
+
+/**
+ * @event Attributions#changeIsContentVisible
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeAttributionList
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeIsVisibleInMap
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#renderAttributions
+ * @description Event for a changing property
+ */
 
 /** -------------------- SEARCHBAR -------------------- */
 
@@ -546,6 +788,35 @@
  * @description trigger searchString to Searchbar
  * @param {String} searchString contains the string to search
  * @example Radio.trigger("Searchbar", "searchAll", searchString);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarSearch
+ * @description trigger searchString to Searchbar
+ * @param {String} searchString contains the string to search
+ * @example Radio.trigger("Searchbar", "search", searchString);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarPushHits
+ * @description trigger transfer of search hits as a list
+ * @param {String} sListname Name of list
+ * @param {Array} aHitListArray Array of search hits
+ * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarCreateRecommendedList
+ * @description todo
+ * @param {String} todo todo
+ * @example Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarRemoveHits
+ * @description todo
+ * @param {String} todo todo
+ * @example Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
  */
 
 /**
@@ -677,6 +948,15 @@
  * @description Triggered when the Quickhelp View has to render.
  * @example this.trigger("render")
  */
+/** -------------------- WINDOW -------------------- */
+
+/**
+ * @event Window#RadioTriggerWindowCollapseWin
+ * @description is triggered by tool
+ * @param {Backbone.Model} model toolModel that is shown in toolwindow
+ * @example Radio.trigger("Window", "collapseWin", model);
+ */
+
 
 /** -------------------- TITLE -------------------- */
 
@@ -703,6 +983,12 @@
  * @example Radio.request("GFI", "getCurrentView");
  */
 
+/** -------------------- GFI.THEME -------------------- */
+
+/**
+ * @event Theme#changeIsReady
+ * @description Triggered when gfi theme is loaded
+ */
 
 /** -------------------- MAPMARKER -------------------- */
 
@@ -778,7 +1064,8 @@
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
 
-/** -------------------- ControlsView -------------------- */
+
+/** -------------------- CONTROLS -------------------- */
 
 /**
  * @event Controls#RadioRequestControlsViewAddRowTr
@@ -804,11 +1091,182 @@
  */
 
 
-/** -------------------- RawLayerList -------------------- */
+/** -------------------- RAWLAYERLIST -------------------- */
 
 /**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
  * @param {String} params Object of Params.
- * @returns {Layer} - Layer that matches the given params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
+ */
+
+/**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @description Returns the object of the layer that matches the given params.
+ * @param {Object} params Object of Params.
+ * @returns {Object} - Layer attributes.
+ * @example Radio.request("RawLayerList", "getLayerAttributesWhere", params);
+ */
+
+/**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+ * @description Returns the rawlayerList as json.
+ * @returns {RawLayerList} - The rawLayerlist.
+ * @example Radio.request("RawLayerList", "getLayerAttributesList");
+
+
+/** -------------------- CswParser -------------------- */
+
+/**
+ * @event CswParser#RadioTriggerGetMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "getMetaData", cswObj);
+ */
+
+/**
+ * @event CswParser#RadioTriggerFetchedMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
+ */
+
+
+/** -------------------- FeatureLister -------------------- */
+
+/**
+ * @event FeatureLister#RadioTriggerToggle
+ * @description Toggles the feature lister
+ * @example Radio.trigger("FeatureLister", "toggle");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToListe
+ * @description switches the tab to the tab 'list'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToListe", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToTheme
+ * @description switches the tab to the tab 'theme'
+ * @example Radio.trigger("FeatureLister", "switchTabToTheme");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToDetails
+ * @description switches the tab to the tab 'details'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToDetails", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerNewTheme
+ * @description highlight layer on click and set it as current
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "newTheme", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerHoverTr
+ * @description show marker when hover on list entry in table
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "hoverTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSelectTr
+ * @description sets the selected layer als active after click on table entry
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "selectTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerMoreFeatures
+ * @description reads more features and displays them
+ * @example Radio.trigger("FeatureLister", "moreFeatures");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerOrderList
+ * @description sorts the selected column
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "orderList", evt);
+ */
+
+/**
+ * @event FeatureLister#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerList
+ * @description Triggered when layerList changes
+ */
+
+/**
+ * @event FeatureLister#changeLayer
+ * @description Triggered when layer changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureProps
+ * @description Triggered when featureProps changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerId
+ * @description Triggered when layerId changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureId
+ * @description Triggered when featureId changes
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiHit
+ * @description highlightes given features from gfi hits
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "gfiHit", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiClose
+ * @description un-highlightes given features from gfi close
+ * @example Radio.trigger("FeatureLister", "gfiClose");
+ */
+
+
+/** -------------------- Formular -------------------- */
+
+/**
+ * @event Formular#RadioTriggerKeyUp
+ * @description Reacts on a key up event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerClick
+ * @description Reacts on a click event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerFocusOut
+ * @description Reacts on a focus out event in the formular
+ */
+
+/**
+ * @event Formular#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Formular#render
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
+ */
+
+/**
+ * @event Formular#invalid
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
  */

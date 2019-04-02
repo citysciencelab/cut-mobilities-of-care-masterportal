@@ -10,14 +10,13 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @description Module to represent GeoJSONLayer
      * @extends Layer
      * @constructs
-     * @inheritdoc
      * @memberOf Core.ModelList.Layer
      * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
      * @property {number} [clusterDistance="undefined"] Distance to group features to clusters
      * @property {string} [styleId="ol default"] ID of style in style.json
      * @fires StyleList#RadioRequestReturnModelById
      * @fires MapView#RadioRequestGetProjection
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires RemoteInterface#RadioTriggerPostMessage
      */
@@ -141,7 +140,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     /**
      * Handles the xhr response
      * @fires MapView#RadioRequestGetProjection
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @fires Util#RadioTriggerUtilHideLoader
      * @param {string} responseText response as GeoJson
      * @param {integer|string} status status of xhr-request

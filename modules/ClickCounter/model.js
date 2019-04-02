@@ -1,5 +1,4 @@
-const ClickCounterModel = Backbone.Model.extend(
-    /** @lends ClickCounterModel.prototype */
+const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.prototype */
     {
         defaults: {
             countframeid: _.uniqueId("countframe"),
@@ -18,6 +17,8 @@ const ClickCounterModel = Backbone.Model.extend(
         * @property {String} usedURL="" Currently used url.
         * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
         * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
+        * @listens Util#RadioTriggerUtilIsViewMobileChanged
+        * @fires Util#RadioRequestIsViewMobile
         */
         initialize: function (desktopURL, mobileURL) {
             var isMobile = Radio.request("Util", "isViewMobile"),

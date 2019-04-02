@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-const CswParser = Backbone.Model.extend({
+const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype */{
     defaults: {
         cswId: "3"
     },
@@ -13,6 +13,16 @@ const CswParser = Backbone.Model.extend({
         }
         return url;
     },
+    /**
+     * @class CswParserModel
+     * @extends Backbone.Model
+     * @memberof CswParser
+     * @constructs
+     * @property {String} cswId="" Id of csw service, corresponding to rest-services.json
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires CswParser#RadioTriggerFetchedMetaData
+     * @listens CswParser#RadioTriggerGetMetaData
+     */
     initialize: function () {
         var channel = Radio.channel("CswParser");
 
@@ -20,6 +30,12 @@ const CswParser = Backbone.Model.extend({
             "getMetaData": this.getMetaData
         }, this);
     },
+    /**
+     * Requests the meta data from the corresponding service.
+     * @param {Object} cswObj Object of CSW request information.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
     getMetaData: function (cswObj) {
         $.ajax({
             url: this.url(),
@@ -41,7 +57,13 @@ const CswParser = Backbone.Model.extend({
             }
         });
     },
-
+    /**
+     * Parses the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @param {Object} cswObj Object of CSW request information.
+     * @fires CswParser#RadioTriggerFetchedMetaData
+     * @returns {void}
+     */
     parseData: function (xmlDoc, cswObj) {
         var parsedData = {};
 
@@ -103,6 +125,11 @@ const CswParser = Backbone.Model.extend({
         cswObj.parsedData = parsedData;
         Radio.trigger("CswParser", "fetchedMetaData", cswObj);
     },
+    /**
+     * Parses the download link part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {Array} downloadLinks array of download links
+     */
     parseDownloadLinks: function (xmlDoc) {
         var transferOptions = $("gmd\\:MD_DigitalTransferOptions,MD_DigitalTransferOptions", xmlDoc),
             downloadLinks = [],
@@ -123,6 +150,12 @@ const CswParser = Backbone.Model.extend({
         });
         return downloadLinks.length > 0 ? downloadLinks : null;
     },
+    /**
+     * Parses the title part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @param {Object} cswObj Object of CSW request information.
+     * @returns {String} title Title of the meta data entry
+     */
     parseTitle: function (xmlDoc, cswObj) {
         var ci_Citation = $("gmd\\:CI_Citation,CI_Citation", xmlDoc)[0],
             gmdTitle = _.isUndefined(ci_Citation) === false ? $("gmd\\:title,title", ci_Citation) : undefined,
@@ -130,6 +163,11 @@ const CswParser = Backbone.Model.extend({
 
         return title;
     },
+    /**
+     * Parses the address part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {Object} address Address of the meta data entry's owner
+     */
     parseAddress: function (xmlDoc) {
         var orga = this.parseOrga(xmlDoc, "owner"),
             addressField = $("gmd\\:CI_Address,CI_Address", orga),
@@ -148,6 +186,11 @@ const CswParser = Backbone.Model.extend({
 
         return address;
     },
+    /**
+     * Parses the abstract text part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} abstractText Abstract text of the meta data entry
+     */
     parseAbstractText: function (xmlDoc) {
         var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
 
@@ -157,6 +200,11 @@ const CswParser = Backbone.Model.extend({
 
         return abstractText;
     },
+    /**
+     * Parses the URL part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} url URL of the meta data entry's owner
+     */
     parseUrl: function (xmlDoc) {
         var orga = this.parseOrga(xmlDoc, "owner"),
             urlField = $("gmd\\:CI_OnlineResource,CI_OnlineResource", orga),
@@ -165,6 +213,11 @@ const CswParser = Backbone.Model.extend({
 
         return url;
     },
+    /**
+     * Parses the e-mail part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} email e-mail of the meta data entry's owner
+     */
     parseEmail: function (xmlDoc) {
         var orga = this.parseOrga(xmlDoc, "owner"),
             emailField = $("gmd\\:electronicMailAddress,electronicMailAddress", orga),
@@ -172,6 +225,11 @@ const CswParser = Backbone.Model.extend({
 
         return email;
     },
+    /**
+     * Parses the phone number part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} phone phone number of the meta data entry's owner
+     */
     parseTel: function (xmlDoc) {
         var orga = this.parseOrga(xmlDoc, "owner"),
             phoneField = $("gmd\\:CI_Telephone,CI_Telephone", orga),
@@ -182,6 +240,11 @@ const CswParser = Backbone.Model.extend({
         return phone;
 
     },
+    /**
+     * Parses the organisation name of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} orgaName name of the organisation of the meta data entry's owner
+     */
     parseOrgaOwner: function (xmlDoc) {
         var orga = this.parseOrga(xmlDoc, "owner"),
             orgaField = $("gmd\\:organisationName,organisationName", orga),
@@ -189,6 +252,12 @@ const CswParser = Backbone.Model.extend({
 
         return orgaName;
     },
+    /**
+     * Parses the organisation part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @param {String} roleType Type of role which shall be parsed ("owner", "pointOfContact").
+     * @returns {String} orga details of organisation of the meta data entry's owner
+     */
     parseOrga: function (xmlDoc, roleType) {
         var identificationInfo = $("gmd\\:identificationInfo,identificationInfo", xmlDoc),
             pointOfContact = $("gmd\\:pointOfContact,pointOfContact", identificationInfo),
@@ -279,6 +348,11 @@ const CswParser = Backbone.Model.extend({
         }
         return dateTimeString;
     },
+    /**
+     * Parses the periodicity part of the data returned by the meta data request.
+     * @param {Object} xmlDoc Result of the meta data request.
+     * @returns {String} dateType type of date for this frequency
+     */
     parsePeriodicity: function (xmlDoc) {
         var resourceMaintenance = $("gmd\\:resourceMaintenance,resourceMaintenance", xmlDoc),
             maintenanceInformation = $("gmd\\:MD_MaintenanceInformation,MD_MaintenanceInformation", resourceMaintenance),
@@ -304,4 +378,4 @@ const CswParser = Backbone.Model.extend({
     }
 });
 
-export default CswParser;
+export default CswParserModel;

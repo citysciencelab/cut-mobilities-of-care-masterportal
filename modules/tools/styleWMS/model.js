@@ -49,20 +49,20 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @property {String} styleableLayer.name Name of styleable Layer
      * @property {String} styleableLayer.id Id of styleable Layer
      * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
-     * @listens StyleWmsModel#RadioTriggerStyleWmsopenStyleWms
-     * @listens StyleWmsModel#changeModel
-     * @listens StyleWmsModel#changeAttributeName
-     * @listens StyleWmsModel#changeNumberOfClasses
-     * @listens StyleWmsModel#changeSetSld
+     * @listens StyleWMS#RadioTriggerStyleWMSopenStyleWMS
+     * @listens StyleWMS#changeModel
+     * @listens StyleWMS#changeAttributeName
+     * @listens StyleWMS#changeNumberOfClasses
+     * @listens StyleWMS#changeSetSld
      * @listens List#RadioTriggerModelListUpdatedSelectedLayerList
      * @fires List#RadioRequestModelListGetModelsByAttributes
      * @fires List#RadioTriggerModelListSetModelAttributesById
      * @fires List#RadioRequestModelListGetModelByAttributes
      * @fires Util#RadioRequestUtilGetProxyUrl
-     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
-     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
-     * @fires StyleWmsModel#sync
-     * @fires StyleWmsModel#changeIsactive
+     * @fires StyleWMS#RadioTriggerStyleWMSResetParamsStyleWMS
+     * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
+     * @fires StyleWMSModel#sync
+     * @fires StyleWMSModel#changeIsactive
      */
     initialize: function () {
         var channel = Radio.channel("StyleWMS");
@@ -313,7 +313,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Triggers the legend to update itself
      * @param {Object[]} attributes Attributes for creating the legend from StyleWMS
-     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
+     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
      * @returns {void}
      */
     updateLegend: function (attributes) {
@@ -323,7 +323,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
     /**
      * Triggers the legend to reset the stylewms params
-     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
+     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
      * @returns {void}
      */
     resetLegend: function () {

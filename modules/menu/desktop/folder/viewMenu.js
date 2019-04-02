@@ -1,9 +1,23 @@
 import Template from "text-loader!./templateMenu.html";
 
-const FolderView = Backbone.View.extend({
+const FolderView = Backbone.View.extend(/** @lends FolderView.prototype */{
+    /**
+     * @class FolderView
+     * @extends Backbone.View
+     * @memberOf Menu.Desktop.Folder
+     * @constructs
+     * @listens Map#RadioTriggerMapChange
+     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @fires Map#RadioRequestMapGetMapMode
+     */
     initialize: function () {
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleDisplayByMapMode
+        });
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function () {
+                this.toggleDisplayByMapMode(Radio.request("Map", "getMapMode"));
+            }
         });
         this.render();
     },
@@ -18,11 +32,16 @@ const FolderView = Backbone.View.extend({
     },
 
     /**
-     * @param {string} mode - "3D" | "2D" | "Oblique"
+     * adds only layers to the tree that support the current mode of the map
+     * e.g. 2D, 3D
+     * @param {String} mapMode - current mode from map
      * @returns {void}
      */
-    toggleDisplayByMapMode: function (mode) {
-        if (mode === "Oblique" && _.contains(this.model.get("obliqueModeBlacklist"), this.model.get("id"))) {
+    toggleDisplayByMapMode: function (mapMode) {
+        var obliqueModeBlacklist = this.model.get("obliqueModeBlacklist"),
+            modelId = this.model.get("id");
+
+        if (mapMode === "Oblique" && _.contains(obliqueModeBlacklist, modelId)) {
             this.$el.hide();
         }
         else {

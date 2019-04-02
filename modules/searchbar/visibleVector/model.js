@@ -1,9 +1,7 @@
+
 import "../model";
 
-const VisibleVectorModel = Backbone.Model.extend({
-    /**
-    *
-    */
+const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.prototype */{
     defaults: {
         inUse: false,
         minChars: 3,
@@ -11,9 +9,21 @@ const VisibleVectorModel = Backbone.Model.extend({
         gfiOnClick: false
     },
     /**
+     * @class VisibleVectorModel
      * @description Initialisierung der visibleVector Suche
-     * @param {Object} config - Das Konfigurationsobjekt der Suche in sichtbaren Vector-Layern.
-     * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
+     * @extends Backbone.Model
+     * @memberof Searchbar.VisibleVector
+     * @constructs
+     * @property {Boolean} inUse=false todo
+     * @property {Number} minChars=3 todo
+     * @property {String[]} layerTypes=["WFS"] todo
+     * @property {Boolean} gfiOnClick=false todo
+     * @param {Object} config - Config JSON for Searchbar in visible vector layers
+     * @param {integer} [config.minChars=3] - minimum character count to initialize a seach
+     * @listens Searchbar#RadioTriggerSearchbarSearch
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     initialize: function (config) {
@@ -29,65 +39,135 @@ const VisibleVectorModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.prepSearch
         });
-
     },
+
+    /**
+     * description
+     * @param {string} searchString String to search for in properties of all model's features
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
+     * @returns {void}
+     */
     prepSearch: function (searchString) {
-        var prepSearchString,
-            vectorLayerModels = [],
-            filteredModels;
+        var sPrepSearchString,
+            aVectorLayerModels = [],
+            aFoundMatchingFeatures = [],
+            aFilteredModels;
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
-            prepSearchString = searchString.replace(" ", "");
+            sPrepSearchString = searchString.replace(" ", "");
 
             _.each(this.getLayerTypes(), function (layerType) {
-                vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
+                aVectorLayerModels = aVectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
             }, this);
 
-            filteredModels = _.union(vectorLayerModels).filter(function (model) {
+            aFilteredModels = _.union(aVectorLayerModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
-            this.findMatchingFeatures(filteredModels, prepSearchString);
+            aFoundMatchingFeatures = this.findMatchingFeatures(aFilteredModels, sPrepSearchString);
+            Radio.trigger("Searchbar", "pushHits", "hitList", aFoundMatchingFeatures);
+
             Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
             this.setInUse(false);
         }
     },
-    findMatchingFeatures: function (models, searchString) {
-        var featureArray = [];
-
-        _.each(models, function (model) {
-            var features = model.get("layer").getSource().getFeatures(),
-                filteredFeatures;
-
-            if (_.isArray(model.get("searchField"))) {
-                _.each(model.get("searchField"), function (field) {
-                    filteredFeatures = features.filter(function (feature) {
-                        var value = feature.get(field).toString().toUpperCase();
-
-                        return value.indexOf(searchString.toUpperCase()) !== -1;
-                    });
-                    // createFeatureObject for each feature
-                    featureArray.push(this.getFeatureObject(field, filteredFeatures, model));
-                }, this);
-            }
-            else {
-                filteredFeatures = features.filter(function (feature) {
-                    var value = feature.get(model.get("searchField")).toUpperCase();
-
-                    return value.indexOf(searchString.toUpperCase()) !== -1;
-                });
-                // createFeatureObject for each feature
-                featureArray.push(this.getFeatureObject(model.get("searchField"), filteredFeatures, model));
-            }
-        }, this);
-
-        Radio.trigger("Searchbar", "pushHits", "hitList", featureArray);
-    },
-
 
     /**
-     * gets a new feature object
+     * Checks if given feature is actually a clustered feature with content
+     * @param {object} oFeature Feature to test as cluster
+     * @returns {boolean} Flag if feature is a cluster
+     */
+    isClusteredFeature: function (oFeature) {
+        return _.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
+    },
+
+    /**
+     * Same as Feature.get() but if Feature is actually a cluster, it returns the value of the
+     * first child feature found.
+     * @param {object} oFeature The feature object to read the value from
+     * @param {string} sProperty Property Key
+     * @returns {mixed} Requested feature property value
+     */
+    getWithClusterFallback: function (oFeature, sProperty) {
+        if (!this.isClusteredFeature(oFeature)) {
+            return oFeature.get(sProperty);
+        }
+        return oFeature.get("features")[0].get(sProperty);
+    },
+
+    /**
+     * Filters (clustered) features according to given search string.
+     * @param {array} aFeatures Array of features to filter
+     * @param {string} sSearchField Feature field key to look for value
+     * @param {string} sSearchString Given string to search inside features
+     * @returns {array} Array of features containing searched string
+     */
+    filterFeaturesArrayRec: function (aFeatures, sSearchField, sSearchString) {
+        var aFilteredFeatures = [];
+
+        aFilteredFeatures = aFeatures.filter(function (oFeature) {
+            var aFilteredSubFeatures = [],
+                sTestFieldValue;
+
+            // if feature is clustered
+            if (this.isClusteredFeature(oFeature)) {
+                // enter recursion
+                aFilteredSubFeatures = this.filterFeaturesArrayRec(oFeature.get("features"), sSearchField, sSearchString);
+
+                // set sub features for this cluster
+                if (aFilteredSubFeatures.length > 0) {
+                    oFeature.set("features", aFilteredSubFeatures);
+                    return true;
+                }
+                // filter this feature when no sub feature is left
+                return false;
+            }
+
+            // if this key is not set, filter
+            if (_.isUndefined(oFeature.get(sSearchField))) {
+                return false;
+            }
+
+            sTestFieldValue = oFeature.get(sSearchField).toString().toUpperCase();
+            // test if property value contains searched string as substring
+            return sTestFieldValue.indexOf(sSearchString.toUpperCase()) !== -1;
+        }, this);
+        return aFilteredFeatures;
+    },
+
+    /**
+     * Filters features of all models according to given search string. Searched Fields are
+     * defined in config.
+     * @param {array} models Array of models to pick features from
+     * @param {string} searchString Given string to search inside features
+     * @returns {array} Array of features containing searched string
+     */
+    findMatchingFeatures: function (models, searchString) {
+        var aResultFeatures = [];
+
+        _.each(models, function (model) {
+            var aFeatures = model.get("layer").getSource().getFeatures(),
+                aSearchFields = model.get("searchField"),
+                filteredFeatures;
+
+            if (_.isArray(aSearchFields) === false) {
+                aSearchFields = [aSearchFields];
+            }
+
+            _.each(aSearchFields, function (sSearchField) {
+                filteredFeatures = this.filterFeaturesArrayRec(aFeatures, sSearchField, searchString, []);
+                aResultFeatures.push(this.getFeatureObject(sSearchField, filteredFeatures, model));
+            }, this);
+        }, this);
+
+        return aResultFeatures;
+    },
+
+    /**
+     * Gets a new feature object.
      * @param  {string} searchField Attribute feature has to be searche through
      * @param  {ol.Feature} filteredFeatures openlayers feature
      * @param  {Backbone.Model} model model of visibleVector
@@ -98,7 +178,8 @@ const VisibleVectorModel = Backbone.Model.extend({
 
         _.each(filteredFeatures, function (feature) {
             var featureObject = {
-                name: feature.get(searchField),
+                // "bezeichnung" hard coded? Or use searchField?
+                name: this.getWithClusterFallback(feature, searchField),
                 type: model.get("name"),
                 coordinate: this.getCentroidPoint(feature.getGeometry()),
                 imageSrc: this.getImageSource(feature, model),
@@ -122,7 +203,7 @@ const VisibleVectorModel = Backbone.Model.extend({
     },
 
     /**
-     * gets centroid point for a openlayers geometry
+     * Gets centroid point for a openlayers geometry.
      * @param  {ol.geom.Geometry} geometry geometry to get centroid from
      * @return {ol.Coordinate} centroid coordinate
      */
@@ -136,7 +217,7 @@ const VisibleVectorModel = Backbone.Model.extend({
     },
 
     /**
-     * returns an image source of a feature style
+     * Returns an image source of a feature style.
      * @param  {ol.Feature} feature openlayers feature
      * @param  {Backbone.Model} model model to get layer to get style from
      * @return {string} imagesource
@@ -163,42 +244,70 @@ const VisibleVectorModel = Backbone.Model.extend({
 
     },
 
+    /**
+     * Get additional feature info.
+     * @param {object} model model to get feature from
+     * @param {object} feature feature to get info from
+     * @returns {mixed} found additional info
+     */
     getAdditionalInfo: function (model, feature) {
         var additionalInfo;
 
         if (!_.isUndefined(model.get("additionalInfoField"))) {
-            additionalInfo = feature.getProperties()[model.get("additionalInfoField")];
+            additionalInfo = this.getWithClusterFallback(feature, model.get("additionalInfoField"));
         }
 
         return additionalInfo;
     },
 
-    // setter for minChars
+    /**
+     * Setter for minChars property
+     * @param {mixed} value todo
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for LayerTypes to search in
+    /**
+     * Setter for layerTypes property
+     * @param {mixed} value todo
+     * @returns {void}
+     */
     setLayerTypes: function (value) {
         this.set("layerTypes", value);
     },
 
-    // getter for LayerTypes to search in
+    /**
+     * Getter for layerTypes property
+     * @returns {mixed} todo
+     */
     getLayerTypes: function () {
         return this.get("layerTypes");
     },
 
-    // setter for gfiOnClick-Functionality
+    /**
+     * Setter for gfiOnClick property
+     * @param {boolean} value todo
+     * @returns {void}
+     */
     setGfiOnClick: function (value) {
         this.set("gfiOnClick", value);
     },
 
-    // getter for gfiOnClick-Functionality
+    /**
+     * Getter for gfiOnClick property
+     * @returns {boolean} todo
+     */
     getGfiOnClick: function () {
         return this.get("gfiOnClick");
     },
 
-    // setter for inUse
+    /**
+     * Setter for inUse property
+     * @param {boolean} value todo
+     * @returns {void}
+     */
     setInUse: function (value) {
         this.set("inUse", value);
     }
