@@ -53,11 +53,11 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * Shows the map if the "Schräglüftbilder" button is deactivated.
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
-     * @fires AlertingView#RadioTriggerAlertAlertRemove
+     * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Map#RadioRequestMapIsMap3d
      * @fires Map#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @listens Map#RadioOnceMapChange
      * @returns {void}
      */

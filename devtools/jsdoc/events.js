@@ -540,7 +540,17 @@
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
  */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapDeactivate
+ * @param {Boolean} - Flag if ObliqueMap is Deactivated
+ * @example Radio.trigger("ObliqueMap", "deactivate")
+ */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapActivate
+ * @param {Boolean} - Flag if ObliqueMap is activated
+ * @example Radio.trigger("ObliqueMap", "activate")
+ */
 /** -------------------- MODEL LIST -------------------- */
 
 /**
