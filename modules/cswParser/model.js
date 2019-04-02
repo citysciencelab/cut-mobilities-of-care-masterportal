@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-const CswParser = Backbone.Model.extend(/** @lends CswParser.prototype */{
+const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype */{
     defaults: {
         cswId: "3"
     },
@@ -14,7 +14,7 @@ const CswParser = Backbone.Model.extend(/** @lends CswParser.prototype */{
         return url;
     },
     /**
-     * @class CswParser
+     * @class CswParserModel
      * @extends Backbone.Model
      * @memberof CswParser
      * @constructs
@@ -378,4 +378,4 @@ const CswParser = Backbone.Model.extend(/** @lends CswParser.prototype */{
     }
 });
 
-export default CswParser;
+export default CswParserModel;
