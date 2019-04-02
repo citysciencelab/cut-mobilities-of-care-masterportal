@@ -8,21 +8,21 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
     },
     /**
      * @class AttributionsView
-     * @extends Backbone.Model
+     * @extends Backbone.View
      * @memberof Controls.Attributions
      * @constructs
      * @listens Attributions#RadioTriggerAttributionsRenderAttributions
      * @listens Attributions#changeIsContentVisible
      * @listens Attributions#changeAttributionList
      * @listens Attributions#changeIsVisibleInMap
-     * @listens Attributions#AttributionsRenderAttributions
+     * @listens Attributions#renderAttributions
+     * @fires Parser#RadioRequestParserGetPortalConfig
      */
     initialize: function () {
         var channel = Radio.channel("Attributions"),
             jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
         this.model = new Attributions(jAttributionsConfig);
-
         this.listenTo(channel, {
             "renderAttributions": this.render
         });
@@ -48,7 +48,6 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
      * @returns {void}
      */
     templateHide: _.template(TemplateHide),
-
     /**
      * Modules render method. Decides whitch control click icon to show depending on model's isContentVisible property.
      * @returns {object} self
@@ -56,20 +55,18 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
     render: function () {
         var attr = this.model.toJSON();
 
-        if (this.model.get("isContentVisible") === true) {
+        if (this.model.get("isContentVisible") === true && this.model.get("attributionList").length > 0) {
             this.$el.html(this.templateShow(attr));
+            this.$(".attributions-div").addClass("attributions-div");
         }
         else {
             this.$el.html(this.templateHide(attr));
-        }
-        if (_.isEmpty(attr.attributionList) === true) {
             this.$(".attributions-div").removeClass("attributions-div");
         }
-        else {
-            this.$(".attributions-div").addClass("attributions-div");
-        }
+
         return this;
     },
+
 
     /**
      * Wrapper method for model's toggleIsContentVisible()
