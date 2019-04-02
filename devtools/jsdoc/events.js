@@ -255,7 +255,7 @@
  */
 
 /**
- * @event Map#RadioTriggerSetGFIParams
+ * @event Map#RadioTriggerMapSetGFIParams
  * @param {object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
  */

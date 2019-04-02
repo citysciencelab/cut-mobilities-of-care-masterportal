@@ -22,10 +22,10 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @constructs
      * @property {Number} maxFeatures=20 maximally loaded features per layer, can be configured
      * @property {Boolean} isActive=false Flag if the model is active
-     * @property {Array} layerlist=[] Array of {id, name, features}
+     * @property {Array} layerlist Array of {id, name, features}
      * @property {String} layerid="" id of visible Layer which shall be shown
      * @property {Core.ModelList.Layer} layer={} Layer of the layerlist with requested layerid
-     * @property {Array} headers=[] Array table headers in the list
+     * @property {Array} headers Array table headers in the list
      * @property {String} featureid="" id of the feature to be shown
      * @property {Object} featureProps={} Properties of the feature with requested featureid
      * @property {Object} highlightedFeature=null Feature that is currently highlighted
@@ -37,8 +37,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @fires FeatureLister#changeLayerList
      * @fires FeatureLister#changeLayer
      * @fires FeatureLister#changeFeatureProps
-     * @listens ModelList#RadioTriggerUpdateVisibleInMapList
-     * @listens Map#RadioTriggerSetGFIParams
+     * @listens List#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens Map#RadioTriggerMapSetGFIParams
      * @listens FeatureLister#changeLayerId
      * @listens FeatureLister#changeFeatureId
      */
@@ -79,7 +79,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     /**
      * Takes the selected feature, checks the properties and zooms to it
      * @fires Alerting#RadioTriggerAlertAlert
-     * @fires MapMarker#RadioTriggerZoomTo
+     * @fires MapMarker#RadioTriggerMapMarkerZoomTo
      * @return {void}
      */
     getFeatureWithFeatureId: function () {
@@ -172,7 +172,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     },
     /**
      * Checks the layer list and adds new layers
-     * @fires ModelList#RadioRequestGetModelsByAttributes
+     * @fires List#RadioRequestModelListGetModelsByAttributes
      * @return {void}
      */
     checkVisibleLayer: function () {
@@ -224,7 +224,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     /**
      * Gets the features from a layer when the layer is selected
      * @param {String} layerId id of the layer to read the features
-     * @fires ModelList#RadioRequestGetModelsByAttributes
+     * @fires List#RadioRequestModelListGetModelsByAttributes
      * @return {void}
      */
     getFeatureList: function (layerId) {
