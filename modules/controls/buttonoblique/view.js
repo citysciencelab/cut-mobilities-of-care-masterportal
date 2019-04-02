@@ -1,9 +1,16 @@
 import ButtonObliqueTemplate from "text-loader!./template.html";
 
-const ButtonObliqueView = Backbone.View.extend({
+const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prototype */{
     events: {
         "click .buttonOblique": "mapChange"
     },
+    /**
+     * @class ButtonObliqueView
+     * @extends Backbone.View
+     * @memberOf Controls.Buttonoblique
+     * @constructs
+     * @description This control shows a user an oblique aerial picture
+     */
     initialize: function () {
         var channel = Radio.channel("Map");
 
@@ -14,6 +21,12 @@ const ButtonObliqueView = Backbone.View.extend({
         this.template = _.template(ButtonObliqueTemplate);
         this.render();
     },
+    /**
+     * Shows the "Schrägluftbilder" button as selected.
+     * Shows the "Schrägluftbilder" button as not selected.
+     * @param  {string} map Mode of the map
+     * @returns {void}
+     */
     change: function (map) {
         if (map === "Oblique") {
             this.$("#buttonOblique").addClass("toggleButtonPressed");
@@ -22,6 +35,11 @@ const ButtonObliqueView = Backbone.View.extend({
             this.$("#buttonOblique").removeClass("toggleButtonPressed");
         }
     },
+    /**
+     * Render Function
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @returns {ButtonObliqueView} - Returns itself
+     */
     render: function () {
         this.$el.html(this.template);
         if (Radio.request("ObliqueMap", "isActive")) {
@@ -30,6 +48,19 @@ const ButtonObliqueView = Backbone.View.extend({
 
         return this;
     },
+    /**
+     * Shows the oblique aerial picture if the "Schräglüftbilder" button is activated.
+     * Shows the map if the "Schräglüftbilder" button is deactivated.
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
+     * @fires AlertingView#RadioTriggerAlertAlertRemove
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Map#RadioTriggerMapDeactivateMap3d
+     * @fires ObliqueMap#RadioTriggerObliqueMapActivate
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @listens Map#RadioOnceMapChange
+     * @returns {void}
+     */
     mapChange: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             Radio.trigger("ObliqueMap", "deactivate");

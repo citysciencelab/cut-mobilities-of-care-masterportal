@@ -1,11 +1,18 @@
 import BackForwardTemplate from "text-loader!./template.html";
 import BackForwardModel from "./model";
 
-const BackForwardView = Backbone.View.extend({
+const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototype */{
     events: {
         "click .forward": "setNextView",
         "click .backward": "setLastView"
     },
+    /**
+     * @class BackForwardView
+     * @memberof Controls.Backforward
+     * @extends Backbone.View
+     * @constructs
+     * @fires Map#RadioTriggerMapRegisterListenerMovenend
+     */
     initialize: function () {
         var channel = Radio.channel("BackForwardView");
 
@@ -18,9 +25,19 @@ const BackForwardView = Backbone.View.extend({
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
     },
+    /**
+     * @member BackForwardTemplate
+     * @description Template used for the backward and forward buttons.
+     * @memberof Controls.Backforward
+     */
     template: _.template(BackForwardTemplate),
     id: "backforward",
-
+    /**
+     * Updates the permanent link in the map when backward or forward button is clicked.
+     * @fires MapView#RadioRequestMapViewGetOptions
+     * @fires MapView#RadioRequestMapViewGetCenter
+     * @returns {void}
+     */
     updatePermalink: function () {
         var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
             backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
@@ -63,10 +80,20 @@ const BackForwardView = Backbone.View.extend({
         }
         this.model.setWentFor(false);
     },
+    /**
+     * Render Function
+     * @returns {BackForwardView} - Returns itself
+     */
     render: function () {
         this.$el.html(this.template());
         return this;
     },
+    /**
+     * Setter for nextview
+     * @fires MapView#RadioTriggerMapViewSetScale
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     * @returns {void}
+     */
     setNextView: function () {
         var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
             backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
@@ -81,6 +108,12 @@ const BackForwardView = Backbone.View.extend({
             $(forButton).css("pointer-events", "none");
         }
     },
+    /**
+     * Setter for lastview
+     * @fires MapView#RadioTriggerMapViewSetScale
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     * @returns {void}
+     */
     setLastView: function () {
         var backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
             forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
