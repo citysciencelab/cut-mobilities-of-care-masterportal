@@ -918,6 +918,15 @@
  * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
  */
 
+/** -------------------- WINDOW -------------------- */
+
+/**
+ * @event Window#RadioTriggerWindowCollapseWin
+ * @description is triggered by tool
+ * @param {Backbone.Model} model toolModel that is shown in toolwindow
+ * @example Radio.trigger("Window", "collapseWin", model);
+ */
+
 
 /** -------------------- TITLE -------------------- */
 
