@@ -373,6 +373,13 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddLayer
+ * @description Adds layer to map
+ * @param {Object} layer Layer to add to map
+ * @example Radio.trigger("Map", "addLayer", layer)
+ */
+
+/**
  * @event Map#RadioRequestMapGetMapMode
  * @description Adds layer to given index
  * @returns {string} - The mode of the map. Value can be "2D" or "3D"
@@ -387,8 +394,28 @@
 
 /**
  * @event Map#RadioTriggerMapAddControl
- * @param {object} control Control to be added to map.
+ * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
+ */
+
+/**
+ * @event Map#RadioTriggerMapSetGFIParams
+ * @param {Object} control Control to be added to map.
+ * @example Radio.trigger("Map", "addControl", control)
+ */
+
+/**
+ * @event Map#RadioTriggerMapAddInteraction
+ * @description Adds an interaction to the map (e.g. draw)
+ * @param {Object} interaction Interaction to be added to map.
+ * @example Radio.trigger("Map", "addInteraction", interaction)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRemoveInteraction
+ * @description Removes an interaction from the map (e.g. draw)
+ * @param {Object} interaction Interaction to be removed from the map.
+ * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
 
@@ -978,11 +1005,10 @@
 /**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
  * @param {String} params Object of Params.
- * @returns {Layer} - Layer that matches the given params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
  */
 
- /**
+/**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
  * @description Returns the object of the layer that matches the given params.
  * @param {Object} params Object of Params.
@@ -990,9 +1016,166 @@
  * @example Radio.request("RawLayerList", "getLayerAttributesWhere", params);
  */
 
- /**
+/**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
  * @description Returns the rawlayerList as json.
  * @returns {RawLayerList} - The rawLayerlist.
  * @example Radio.request("RawLayerList", "getLayerAttributesList");
+
+
+/** -------------------- CswParser -------------------- */
+
+/**
+ * @event CswParser#RadioTriggerGetMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "getMetaData", cswObj);
+ */
+
+/**
+ * @event CswParser#RadioTriggerFetchedMetaData
+ * @param {Object} cswObj Object of CSW request information.
+ * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
+ */
+
+
+/** -------------------- FeatureLister -------------------- */
+
+/**
+ * @event FeatureLister#RadioTriggerToggle
+ * @description Toggles the feature lister
+ * @example Radio.trigger("FeatureLister", "toggle");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToListe
+ * @description switches the tab to the tab 'list'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToListe", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToTheme
+ * @description switches the tab to the tab 'theme'
+ * @example Radio.trigger("FeatureLister", "switchTabToTheme");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSwitchTabToDetails
+ * @description switches the tab to the tab 'details'
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "switchTabToDetails", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerNewTheme
+ * @description highlight layer on click and set it as current
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "newTheme", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerHoverTr
+ * @description show marker when hover on list entry in table
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "hoverTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerSelectTr
+ * @description sets the selected layer als active after click on table entry
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "selectTr", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerMoreFeatures
+ * @description reads more features and displays them
+ * @example Radio.trigger("FeatureLister", "moreFeatures");
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerOrderList
+ * @description sorts the selected column
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "orderList", evt);
+ */
+
+/**
+ * @event FeatureLister#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerList
+ * @description Triggered when layerList changes
+ */
+
+/**
+ * @event FeatureLister#changeLayer
+ * @description Triggered when layer changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureProps
+ * @description Triggered when featureProps changes
+ */
+
+/**
+ * @event FeatureLister#changeLayerId
+ * @description Triggered when layerId changes
+ */
+
+/**
+ * @event FeatureLister#changeFeatureId
+ * @description Triggered when featureId changes
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiHit
+ * @description highlightes given features from gfi hits
+ * @param {Event} evt Object of Event which has been fired
+ * @example Radio.trigger("FeatureLister", "gfiHit", evt);
+ */
+
+/**
+ * @event FeatureLister#RadioTriggerGfiClose
+ * @description un-highlightes given features from gfi close
+ * @example Radio.trigger("FeatureLister", "gfiClose");
+ */
+
+
+/** -------------------- Formular -------------------- */
+
+/**
+ * @event Formular#RadioTriggerKeyUp
+ * @description Reacts on a key up event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerClick
+ * @description Reacts on a click event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerFocusOut
+ * @description Reacts on a focus out event in the formular
+ */
+
+/**
+ * @event Formular#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Formular#render
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
+ */
+
+/**
+ * @event Formular#invalid
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
  */
