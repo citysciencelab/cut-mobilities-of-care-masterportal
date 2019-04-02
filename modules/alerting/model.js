@@ -20,8 +20,9 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
      * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
      * @property {String} message="" The message of the alert
      * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
-     * @fires AlertingModel#render
-     * @listens AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#render
+     * @fires Alerting#changePosition
+     * @listens Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
         this.listenTo(this.get("channel"), {
@@ -31,7 +32,7 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
     /**
      * Sets given parameters on model.
      * @param {String|Object} val Value string or object with information about the alert
-     * @fires  AlertingModel#event:render
+     * @fires  AlertingModel#render
      * @returns {void}
      */
     setParams: function (val) {

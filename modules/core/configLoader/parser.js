@@ -57,10 +57,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @listens Parser#RadioTriggerParserAddGeoJSONLayer
      * @listens Parser#RadioTriggerParserRemoveItem
      * @listens Parser#ChangeCategory
-     * @fires List#RadioTriggerModelListRemoveModelsByParentId
-     * @fires List#RadioTriggerModelListRenderTree
-     * @fires List#RadioTriggerModelListSetModelAttributesById
-     * @fires List#RadioTriggerModelListRemoveModelsById
+     * @fires ModelList#RadioTriggerModelListRemoveModelsByParentId
+     * @fires ModelList#RadioTriggerModelListRenderTree
+     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires ModelList#RadioTriggerModelListRemoveModelsById
      */
     initialize: function () {
         var channel = Radio.channel("Parser");
