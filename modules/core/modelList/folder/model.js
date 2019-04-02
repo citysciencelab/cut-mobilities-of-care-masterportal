@@ -1,30 +1,37 @@
 import Item from "../item";
 
-const Folder = Item.extend({
+const Folder = Item.extend(/**@lends Folder.prototype */{
     defaults: _.extend({}, Item.prototype.defaults, {
-        // true wenn die Node zur ersten Ebene gehört
         isRoot: false,
-        // true wenn der Inhalt(Kinder) der Node angezeigt wird
         isExpanded: false,
         isInitiallyExpanded: false,
         isAlwaysExpanded: false,
-        // true wenn alle Kinder ausgewöhlt sind
         isSelected: false,
-        // welcher Node-Type - folder/layer/item
         type: "",
-        // die ID der Parent-Node
         parentId: "",
-        // true wenn der Ordner nur Leafs als Kinder hat
         isLeafFolder: false,
-        // UniqueId
         id: "",
-        // Glyphicon massen auswahl
         selectAllGlyphicon: "glyphicon-unchecked",
         glyphicon: "glyphicon-folder-open",
-        // these folder are not displayed in oblique mode
         obliqueModeBlacklist: ["tree", "tools"]
     }),
-
+    /**
+     * @class Folder
+     * @extends Item
+     * @memberof Core.ModelList.Folder
+     * @constructs
+     * @property {Boolean} isRoot=false Flag if folder belongs to first level.
+     * @property {Boolean} isExpanded=false Flag if folder is expanded.
+     * @property {Boolean} isInitiallyExpanded=false Flag if folder is expanded initially.
+     * @property {Boolean} isSelected=false Flag if all children are selected.
+     * @property {String} type="" Flag what kind of item it is. "folder".
+     * @property {String} parentId="" Id of parent node.
+     * @property {Boolean} isLeafFolder=false Flag if folder does not have subfolders.
+     * @property {String} id="" Unique id for folder.
+     * @property {String} selectAllGlyphicon="glyphicon-unchecked" Glyphicon class of folder to select all children.
+     * @property {String} glyphicon="glyphicon-folder-open" Glyphicon class of folder
+     * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schrägluftbilder").
+     */
     initialize: function () {
         var items,
             isEveryLayerSelected;
@@ -42,10 +49,22 @@ const Folder = Item.extend({
         }
     },
 
+    /**
+     * Setter for attribute "isExpanded".
+     * @param {Boolean} value Flag for isExpanded.
+     * @param {Object} options Backbone options for setter
+     * @returns {void}
+     */
     setIsExpanded: function (value, options) {
         this.set("isExpanded", value, options);
     },
 
+    /**
+     * Setter for attribute "isSelected"
+     * @param {Boolean} value Flag for isSelected.
+     * @param {Boolean} silent Flag if attribute should be set in silent-mode.
+     * returns {void}
+     */
     setIsSelected: function (value, silent) {
         if (_.isUndefined(silent)) {
             this.set("isSelected", value);
@@ -54,7 +73,7 @@ const Folder = Item.extend({
     },
 
     /**
-     * "Toggled" das Attribut "isChecked"
+     * Toggles the attribute "isSelected"
      * @returns {void}
      */
     toggleIsSelected: function () {
@@ -66,6 +85,10 @@ const Folder = Item.extend({
         }
     },
 
+    /**
+     * Toggles the attribute "isExpanded".
+     * @returns {void}
+     */
     toggleIsExpanded: function () {
         if (this.get("isExpanded") === true) {
             this.setIsExpanded(false);
@@ -78,6 +101,11 @@ const Folder = Item.extend({
         }
     },
 
+    /**
+     * Sets the attribute "selectAllGlyphicon"
+     * @param {String} value Glyphicon class.
+     * @returns {void}
+     */
     setSelectAllGlyphicon: function (value) {
         this.set("selectAllGlyphicon", value);
     }
