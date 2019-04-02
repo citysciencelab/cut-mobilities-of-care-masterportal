@@ -14,9 +14,14 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @extends Backbone.Model
      * @memberof Searchbar.VisibleVector
      * @constructs
+     * @property {Boolean} inUse=false todo
+     * @property {Number} minChars=3 todo
+     * @property {String[]} layerTypes=["WFS"] todo
+     * @property {Boolean} gfiOnClick=false todo
      * @param {Object} config - Config JSON for Searchbar in visible vector layers
      * @param {integer} [config.minChars=3] - minimum character count to initialize a seach
      * @listens Searchbar#RadioTriggerSearchbarSearch
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
@@ -39,6 +44,9 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     /**
      * description
      * @param {string} searchString String to search for in properties of all model's features
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     prepSearch: function (searchString) {

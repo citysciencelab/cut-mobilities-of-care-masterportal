@@ -8,14 +8,15 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
     },
     /**
      * @class AttributionsView
-     * @extends Backbone.Model
+     * @extends Backbone.View
      * @memberof Controls.Attributions
      * @constructs
      * @listens Attributions#RadioTriggerAttributionsRenderAttributions
      * @listens Attributions#changeIsContentVisible
      * @listens Attributions#changeAttributionList
      * @listens Attributions#changeIsVisibleInMap
-     * @listens Attributions#AttributionsRenderAttributions
+     * @listens Attributions#renderAttributions
+     * @fires Parser#RadioRequestParserGetPortalConfig
      */
     initialize: function () {
         var channel = Radio.channel("Attributions"),

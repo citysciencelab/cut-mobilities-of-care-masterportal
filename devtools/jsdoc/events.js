@@ -426,197 +426,197 @@
 /** -------------------- MODEL LIST -------------------- */
 
 /**
- * @event List#RadioRequestModelListGetCollection
+ * @event ModelList#RadioRequestModelListGetCollection
  * @description Returns itself
  * @example Radio.request("ModelList", "getCollection")
  */
 
 /**
- * @event List#RadioRequestModelListGetModelsByAttributes
+ * @event ModelList#RadioRequestModelListGetModelsByAttributes
  * @param {Object} attributes Attributes used to find models to be returned
  * @description Returns the models that match the given attributes
  * @example Radio.request("ModelList", "getModelsByAttributes", attributes)
  */
 
 /**
- * @event List#RadioRequestModelListGetModelByAttributes
+ * @event ModelList#RadioRequestModelListGetModelByAttributes
  * @param {Object} attributes Attributes used to find model to be returned
  * @description Returns the first model that matches the given attributes. If model cannot be found, the function look for a group layer model containing the attributes
  * @example Radio.request("ModelList", "getModelByAttributes", attributes)
  */
 
 /**
- * @event List#RadioTriggerModelListSetModelAttributesById
+ * @event ModelList#RadioTriggerModelListSetModelAttributesById
  * @description See {@link List#setModelAttributesById}
  * @example Radio.trigger("ModelList", "setModelAttributesById", id, attrs)
  */
 
 /**
- * @event List#RadioTriggerModelListShowAllFeatures
+ * @event ModelList#RadioTriggerModelListShowAllFeatures
  * @description See {@link List#showAllFeatures}
  * @example Radio.trigger("ModelList", "showAllFeatures", id)
  */
 
 /**
- * @event List#RadioTriggerModelListHideAllFeatures
+ * @event ModelList#RadioTriggerModelListHideAllFeatures
  * @description See {@link List#hideAllFeatures}
  * @example Radio.trigger("ModelList", "hideAllFeatures", id)
  */
 
 /**
- * @event List#RadioTriggerModelListShowFeaturesById
+ * @event ModelList#RadioTriggerModelListShowFeaturesById
  * @description See {@link List#showFeaturesById}
  * @example Radio.trigger("ModelList", "showFeaturesById", id, featureIds)
  */
 
 /**
- * @event List#RadioTriggerModelListRemoveModelsByParentId
+ * @event ModelList#RadioTriggerModelListRemoveModelsByParentId
  * @description See {@link List#removeModelsByParentId}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", parentId)
  */
 
 /**
- * @event List#RadioTriggerModelListRemoveModelsById
+ * @event ModelList#RadioTriggerModelListRemoveModelsById
  * @description See {@link List#removeModelsById}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", id)
  */
 
 /**
- * @event List#RadioTriggerModelListAddInitialyNeededModels
+ * @event ModelList#RadioTriggerModelListAddInitialyNeededModels
  * @description See {@link List#addInitialyNeededModels}
  * @example Radio.trigger("ModelList", "addInitialyNeededModels")
  */
 
 /**
- * @event List#RadioTriggerModelListAddModelsByAttributes
+ * @event ModelList#RadioTriggerModelListAddModelsByAttributes
  * @description See {@link List#addModelsByAttributes}
  * @example Radio.trigger("ModelList", "addModelsByAttributes", attrs)
  */
 
 /**
- * @event List#RadioTriggerModelListSetIsSelectedOnChildLayers
+ * @event ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
  * @description See {@link List#setIsSelectedOnChildLayers}
  * @example Radio.trigger("ModelList", "setIsSelectedOnChildLayers", model)
  */
 
 /**
- * @event List#RadioTriggerModelListSetIsSelectedOnParent
+ * @event ModelList#RadioTriggerModelListSetIsSelectedOnParent
  * @description See {@link List#setIsSelectedOnParent}
  * @example Radio.trigger("ModelList", "setIsSelectedOnParent", model)
  */
 
 /**
- * @event List#RadioTriggerModelListShowModelInTree
+ * @event ModelList#RadioTriggerModelListShowModelInTree
  * @description See {@link List#showModelInTree}
  * @example Radio.trigger("ModelList", "showModelInTree", modelId)
  */
 
 /**
- * @event List#RadioTriggerModelListCloseAllExpandedFolder
+ * @event ModelList#RadioTriggerModelListCloseAllExpandedFolder
  * @description See {@link List#closeAllExpandedFolder}
  * @example Radio.trigger("ModelList", "closeAllExpandedFolder")
  */
 
 /**
- * @event List#RadioTriggerModelListSetAllDescendantsInvisible
+ * @event ModelList#RadioTriggerModelListSetAllDescendantsInvisible
  * @description See {@link List#setAllDescendantsInvisible}
  * @example Radio.trigger("ModelList", "setAllDescendantsInvisible", parentId, isMobile)
  */
 
 /**
- * @event List#RadioTriggerModelListRenderTree
- * @fires List#RenderTree
+ * @event ModelList#RadioTriggerModelListRenderTree
+ * @fires ModelList#RenderTree
  * @example Radio.trigger("ModelList", "renderTree")
  */
 
 /**
- * @event List#RenderTree
+ * @event ModelList#RenderTree
  * @description Triggers "renderTree"
  * @example this.trigger("renderTree")
  */
 
 /**
- * @event List#RadioTriggerModelListToggleWfsCluster
+ * @event ModelList#RadioTriggerModelListToggleWfsCluster
  * @description See {@link List#toggleWfsCluster}
  * @example Radio.trigger("ModelList", "toggleWfsCluster", value)
  */
 
 /**
- * @event List#RadioTriggerModelListToggleDefaultTool
+ * @event ModelList#RadioTriggerModelListToggleDefaultTool
  * @description See {@link List#toggleDefaultTool}
  * @example Radio.trigger("ModelList", "toggleDefaultTool")
  */
 
 /**
- * @event List#ChangeIsVisibleInMap
+ * @event ModelList#ChangeIsVisibleInMap
  * @description Triggered when one item has a change in the attribute isVisibleInMap
- * @fires List#RadioTriggerModelListUpdateVisibleInMapList
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeIsExpanded
+ * @event ModelList#ChangeIsExpanded
  * @description Triggered when one item has a change in the attribute isExpaned
- * @fires List#UpdateOverlayerView
- * @fires List#UpdateSelection
- * @fires List#TraverseTree
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#UpdateOverlayerView
+ * @fires ModelList#UpdateSelection
+ * @fires ModelList#TraverseTree
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeIsSelected
+ * @event ModelList#ChangeIsSelected
  * @description Triggered when one item has a change in the attribute IsSelected
- * @fires List#UpdateSelection
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#UpdateSelection
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeTransparency
+ * @event ModelList#ChangeTransparency
  * @description Triggered when one item has a change in the attribute transparency
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#ChangeSelectionIDX
+ * @event ModelList#ChangeSelectionIDX
  * @description Triggered when one item has a change in the attribute selectionIDX
- * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event List#UpdateSelection
+ * @event ModelList#UpdateSelection
  * @description Triggered when selection was updated
  * @example this.trigger("updateSelection", model)
  */
 
 /**
- * @event List#UpdateLightTree
+ * @event ModelList#UpdateLightTree
  * @description Triggered when light tree was updated
  * @example this.trigger("updateLightTree")
  */
 
 /**
- * @event List#ChangeSelectedList
+ * @event ModelList#ChangeSelectedList
  * @description Triggered when selected list has changed
  */
 
 /**
- * @event List#TraverseTree
+ * @event ModelList#TraverseTree
  * @description Used for mobile
  * @example this.trigger("traverseTree")
  */
 
 /**
- * @event List#RadioTriggerModelListUpdateVisibleInMapList
+ * @event ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @example Radio.trigger("ModelList", "updateVisibleInMapList")
  */
 
 /**
- * @event List#RadioTriggerModelListUpdatedSelectedLayerList
+ * @event ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  * @example Radio.trigger("ModelList", "updatedSelectedLayerList")
  */
 
 /**
- * @event List#UpdateOverlayerView
+ * @event ModelList#UpdateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
 
@@ -635,6 +635,17 @@
  */
 
 /**
+ * @event Attributions#RadioTriggerAttributionsCreateAttribution
+ * @description todo
+ * @example this.trigger("Attributions", "createAttribution");
+ */
+/**
+ * @event Attributions#RadioTriggerAttributionsRemoveAttribution
+ * @description todo
+ * @example this.trigger("Attributions", "removeAttribution");
+ */
+
+/**
  * @event Attributions#changeIsContentVisible
  * @description Event for a changing property
  */
@@ -650,7 +661,7 @@
  */
 
 /**
- * @event Attributions#AttributionsRenderAttributions
+ * @event Attributions#renderAttributions
  * @description Event for a changing property
  */
 
@@ -705,6 +716,13 @@
 
 /**
  * @event Searchbar#RadioTriggerSearchbarCreateRecommendedList
+ * @description todo
+ * @param {String} todo todo
+ * @example Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarRemoveHits
  * @description todo
  * @param {String} todo todo
  * @example Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");

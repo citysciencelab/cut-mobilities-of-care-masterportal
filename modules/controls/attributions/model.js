@@ -22,8 +22,12 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @property {Boolean} isInitOpenMobile=false Flag if module is initially activated upon load in mobile environment
      * @property {Array} attributionList=[] Array of attributions of all layers
      * @property {Boolean} isOverviewmap=? todo
-     * @listens ModelList#RadioTriggerUpdateVisibleInMapList
-     * @fires  Attributions#AttributionsRenderAttributions
+     * @listens ModelList#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens Attributions#RadioTriggerAttributionsCreateAttribution
+     * @listens Attributions#RadioTriggerAttributionsRemoveAttribution
+     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Util#RadioRequestUtilIsViewMobile
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      */
     initialize: function () {
         this.listenTo(Radio.channel("ModelList"), {
@@ -108,6 +112,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     },
     /**
      * Updates attributions functionality data. Usually called upon layer visibility change.
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
     updateAttributions: function updateAttributions () {
@@ -147,8 +152,8 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         this.trigger("renderAttributions");
     },
     /**
-     * Holt sich aus der ModelList die aktuellen in der Karte sichtbaren Layern,
-     * filter die ohne Attributions raus und schreibt sie in "modelList"
+     * Retrieves the current layers visible in the map from the ModelList,
+     * filter them out without attributions and writes them in "modelList".
      * @param {Model} filteredModelList ModelList
      * @returns {void}
      */
@@ -168,7 +173,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         }, this);
     },
     /**
-     * Setter for isContentVisible
+     * Setter for "isContentVisible"
      * @param {Boolean} value flag if attributions pane is visible
      * @returns {void}
      */
@@ -176,7 +181,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         this.set("isContentVisible", value);
     },
     /**
-     * Setter for isContentVisible
+     * Setter for "isContentVisible"
      * @param {Boolean} value flag if attributions functionality (pane + control button) is visible
      * @returns {void}
      */
@@ -184,7 +189,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         this.set("isVisibleInMap", value);
     },
     /**
-     * Setter for attributionList
+     * Setter for "attributionList"
      * @param {Boolean} value flag
      * @returns {void}
      */
@@ -192,7 +197,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         this.set("attributionList", value);
     },
     /**
-     * Setter for isInitOpenDesktop
+     * Setter for "isInitOpenDesktop"
      * @param {Boolean} value flag
      * @returns {void}
      */
@@ -201,7 +206,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     },
 
     /**
-     * Setter for isInitOpenMobile
+     * Setter for "isInitOpenMobile"
      * @param {Boolean} value flag
      * @returns {void}
      */
@@ -210,7 +215,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     },
 
     /**
-     * Toggle für Attribut "isContentVisible"
+     * Toggle for Attribute "isContentVisible"
      * @returns {void}
      */
     toggleIsContentVisible: function () {
