@@ -42,44 +42,44 @@ import LayersliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 
-const ModelList = Backbone.Collection.extend(/** @lends List.prototype */{
+const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
-     * @class List
+     * @class ModelList
      * @description Collection that manages all models.
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Collection
      * @memberOf Core.ModelList
      * @constructs
-     * @listens List#RadioRequestModelListGetCollection
-     * @listens List#RadioRequestModelListGetModelsByAttributes
-     * @listens List#RadioRequestModelListGetModelByAttributes
-     * @listens List#RadioTriggerModelListSetModelAttributesById
-     * @listens List#RadioTriggerModelListShowAllFeatures
-     * @listens List#RadioTriggerModelListHideAllFeatures
-     * @listens List#RadioTriggerModelListShowFeaturesById
-     * @listens List#RadioTriggerModelListRemoveModelsByParentId
-     * @listens List#RadioTriggerModelListRemoveModelsById
-     * @listens List#RadioTriggerModelListAddInitialyNeededModels
-     * @listens List#RadioTriggerModelListAddModelsByAttributes
-     * @listens List#RadioTriggerModelListSetIsSelectedOnChildLayers
-     * @listens List#RadioTriggerModelListSetIsSelectedOnParent
-     * @listens List#RadioTriggerModelListShowModelInTree
-     * @listens List#RadioTriggerModelListCloseAllExpandedFolder
-     * @listens List#RadioTriggerModelListSetAllDescendantsInvisible
-     * @listens List#RadioTriggerModelListToggleWfsCluster
-     * @listens List#RadioTriggerModelListRenderTree
-     * @listens List#RadioTriggerModelListToggleDefaultTool
-     * @listens List#ChangeIsVisibleInMap
-     * @listens List#ChangeIsExpanded
-     * @listens List#ChangeIsSelected
-     * @listens List#ChangeTransparency
-     * @listens List#ChangeSelectionIDX
-     * @fires List#RadioTriggerModelListUpdateVisibleInMapList
-     * @fires List#RadioTriggerModelListUpdatedSelectedLayerList
-     * @fires List#UpdateOverlayerView
-     * @fires List#UpdateSelection
-     * @fires List#TraverseTree
-     * @fires List#RenderTree
+     * @listens ModelList#RadioRequestModelListGetCollection
+     * @listens ModelList#RadioRequestModelListGetModelsByAttributes
+     * @listens ModelList#RadioRequestModelListGetModelByAttributes
+     * @listens ModelList#RadioTriggerModelListSetModelAttributesById
+     * @listens ModelList#RadioTriggerModelListShowAllFeatures
+     * @listens ModelList#RadioTriggerModelListHideAllFeatures
+     * @listens ModelList#RadioTriggerModelListShowFeaturesById
+     * @listens ModelList#RadioTriggerModelListRemoveModelsByParentId
+     * @listens ModelList#RadioTriggerModelListRemoveModelsById
+     * @listens ModelList#RadioTriggerModelListAddInitialyNeededModels
+     * @listens ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @listens ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
+     * @listens ModelList#RadioTriggerModelListSetIsSelectedOnParent
+     * @listens ModelList#RadioTriggerModelListShowModelInTree
+     * @listens ModelList#RadioTriggerModelListCloseAllExpandedFolder
+     * @listens ModelList#RadioTriggerModelListSetAllDescendantsInvisible
+     * @listens ModelList#RadioTriggerModelListToggleWfsCluster
+     * @listens ModelList#RadioTriggerModelListRenderTree
+     * @listens ModelList#RadioTriggerModelListToggleDefaultTool
+     * @listens ModelList#ChangeIsVisibleInMap
+     * @listens ModelList#ChangeIsExpanded
+     * @listens ModelList#ChangeIsSelected
+     * @listens ModelList#ChangeTransparency
+     * @listens ModelList#ChangeSelectionIDX
+     * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
+     * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @fires ModelList#UpdateOverlayerView
+     * @fires ModelList#UpdateSelection
+     * @fires ModelList#TraverseTree
+     * @fires ModelList#RenderTree
      *
      */
     initialize: function () {
@@ -566,9 +566,9 @@ const ModelList = Backbone.Collection.extend(/** @lends List.prototype */{
      * Moves layer in selection one index down
      * @param {Layer} model Layer model to be pulled down
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @fires List#UpdateSelection
-     * @fires List#UpdateLightTree
-     * @fires List#ChangeSelectedList
+     * @fires ModelList#UpdateSelection
+     * @fires ModelList#UpdateLightTree
+     * @fires ModelList#ChangeSelectedList
      * @return {void}
      */
     moveModelDown: function (model) {
@@ -592,9 +592,9 @@ const ModelList = Backbone.Collection.extend(/** @lends List.prototype */{
      * Moves layer in selection one index up
      * @param  {Layer} model Layer model to be pulled up
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @fires List#UpdateSelection
-     * @fires List#UpdateLightTree
-     * @fires List#ChangeSelectedList
+     * @fires ModelList#UpdateSelection
+     * @fires ModelList#UpdateLightTree
+     * @fires ModelList#ChangeSelectedList
      * @return {void}
      */
     moveModelUp: function (model) {
@@ -963,6 +963,10 @@ const ModelList = Backbone.Collection.extend(/** @lends List.prototype */{
         });
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     refreshLightTree: function () {
         this.trigger("updateLightTree");
     }
