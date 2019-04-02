@@ -1,6 +1,6 @@
 import Item from "../item";
 
-const Folder = Item.extend(/**@lends Folder.prototype */{
+const Folder = Item.extend(/** @lends Folder.prototype */{
     defaults: _.extend({}, Item.prototype.defaults, {
         isRoot: false,
         isExpanded: false,
@@ -63,7 +63,7 @@ const Folder = Item.extend(/**@lends Folder.prototype */{
      * Setter for attribute "isSelected"
      * @param {Boolean} value Flag for isSelected.
      * @param {Boolean} silent Flag if attribute should be set in silent-mode.
-     * returns {void}
+     * @returns {void}
      */
     setIsSelected: function (value, silent) {
         if (_.isUndefined(silent)) {
