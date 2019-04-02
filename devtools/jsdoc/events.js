@@ -236,6 +236,13 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddLayer
+ * @description Adds layer to map
+ * @param {Object} layer Layer to add to map
+ * @example Radio.trigger("Map", "addLayer", layer)
+ */
+
+/**
  * @event Map#RadioRequestMapGetMapMode
  * @description Adds layer to given index
  * @returns {string} - The mode of the map. Value can be "2D" or "3D"
@@ -250,14 +257,28 @@
 
 /**
  * @event Map#RadioTriggerMapAddControl
- * @param {object} control Control to be added to map.
+ * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
  */
 
 /**
  * @event Map#RadioTriggerMapSetGFIParams
- * @param {object} control Control to be added to map.
+ * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
+ */
+
+/**
+ * @event Map#RadioTriggerMapAddInteraction
+ * @description Adds an interaction to the map (e.g. draw)
+ * @param {Object} interaction Interaction to be added to map.
+ * @example Radio.trigger("Map", "addInteraction", interaction)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRemoveInteraction
+ * @description Removes an interaction from the map (e.g. draw)
+ * @param {Object} interaction Interaction to be removed from the map.
+ * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
 
@@ -902,3 +923,39 @@
  * @example Radio.trigger("FeatureLister", "gfiClose");
  */
 
+
+/** -------------------- Formular -------------------- */
+
+/**
+ * @event Formular#RadioTriggerKeyUp
+ * @description Reacts on a key up event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerClick
+ * @description Reacts on a click event in the formular
+ */
+
+/**
+ * @event Formular#RadioTriggerFocusOut
+ * @description Reacts on a focus out event in the formular
+ */
+
+/**
+ * @event Formular#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Formular#render
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
+ */
+
+/**
+ * @event Formular#invalid
+ * @param {GrenznachweisModel} model Model which holds the attributes to render
+ * @param {Boolean} value Empty the formular or render it
+ * @description Renders the formular
+ */
