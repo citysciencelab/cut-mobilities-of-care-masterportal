@@ -755,7 +755,7 @@
  * @example this.trigger("render")
  */
 
- /**
+/**
  * @event MouseHover#destroy
  * @description Triggered when the popup needs to be closed.
  * @example this.trigger("destroy")
