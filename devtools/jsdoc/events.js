@@ -1,53 +1,53 @@
 /** -------------------- StyleWMS -------------------- */
 
 /**
- * @event StyleWmsModel#RadioTriggerStyleWmsopenStyleWms
+ * @event StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
  * @param {Object} model Layer model to be styled
  * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
  * @example Radio.trigger("StyleWMS", "openStyleWMS", model)
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWms
+ * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
  * @param {Object} model Layer model to be styled
  * @description Resets the stylewms params for legend
  * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWms
+ * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
  * @param {Object[]} attributes -
  * @description Sets the style wms params for legend so that the legend can be updated
  * @example Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes)
  */
 
 /**
- * @event StyleWmsModel#changeModel
+ * @event StyleWMS#changeModel
  * @description Triggered when layer model to style changes
  */
 
 /**
- * @event StyleWmsModel#changeIsActive
+ * @event StyleWMS#changeIsActive
  * @description Triggered when stylewms model gets activated
  */
 
 /**
- * @event StyleWmsModel#changeAttributeName
+ * @event StyleWMS#changeAttributeName
  * @description Triggered when attributeName changes
  */
 
 /**
- * @event StyleWmsModel#changeNumberOfClasses
+ * @event StyleWMS#changeNumberOfClasses
  * @description Triggered when numberOfClasses changes
  */
 
 /**
- * @event StyleWmsModel#changeSetSld
+ * @event StyleWMS#changeSetSld
  * @description Triggered when setSLD changes
  */
 
 /**
- * @event StyleWmsModel#sync
+ * @event StyleWms#sync
  * @description Triggered when setSLD changes
  */
 
@@ -122,28 +122,127 @@
 /** -------------------- PARSER -------------------- */
 
 /**
- * @event Parser#RadioRequestParserGetPortalConfig
- * @example Radio.trigger("Parser", "getPortalConfig")
- * @description Event that returns the config.json of the portal
- */
-
- /**
- * @event Parser#RadioTriggerRemoveItem
- * @example Radio.trigger("Parser", "removeItem")
- * @description Event that removes an item from the layertree
- */
-
- /**
  * @event Parser#RadioRequestParserGetItemByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemByAttributes", attributes)
  */
+/**
+ * @event Parser#RadioRequestParserGetItemsByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item[]} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemsByAttributes", attributes)
+ */
+/**
+ * @event Parser#RadioRequestParserGetTreeType
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getTreeType")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategory
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getCategory")
+ */
+/**
+ * @event Parser#RadioRequestParserGetCategories
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getCategories")
+ */
 
- /**
- * @event Parser#RadioRequestParserGetInitVisibBaseLayer
- * @returns {String} - Id of initial visible baselayer
+/**
+ * @event Parser#RadioRequestParserGetPortalConfig
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getPortalConfig")
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetItemsByMetaID
+ * @param {*} metaID - todo
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getItemsByMetaID", metaID)
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetSnippetInfos
+ * @returns {*} todo
+ * @example Radio.request("Parser", "getSnippetInfos")
+ */
+
+/**
+ * @event Parser#RadioRequestParserGetInitVisibBaselayer
+ * @returns {*} todo
  * @example Radio.request("Parser", "getInitVisibBaselayer")
+ */
+
+/**
+ * @event Parser#RadioTriggerParsersetCategory
+ * @param {*} value -todo
+ * @example Radio.trigger("Parser", "setCategory", value)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItem
+ * @param {Object} obj - Item
+ * @example Radio.trigger("Parser", "addItem", obj)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddItemAtTop
+ * @param {Object} obj - Item
+ * @example Radio.trigger("Parser", "addItemAtTop", obj)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddItems
+ * @param {array} objs Array of related objects, e.g. categories in Themenbaum
+ * @param {object} attr Layerobject
+ * @example Radio.trigger("Parser", "addItems", objs, attr)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddFolder
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} isExpanded - todo
+ * @example Radio.trigger("Parser", "addFolder", name, id, parentId, level, isExpanded)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} parentId - todo
+ * @param {*} level - todo
+ * @param {*} layers - todo
+ * @param {*} url - todo
+ * @param {*} version - todo
+ * @returns {void}
+ * @example Radio.trigger("Parser", "addLayer", name, id, parentId, level, layers, url, version)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserAddGDILayer
+ * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
+ * @example Radio.trigger("Parser", "addGDILayer", values)
+ */
+/**
+ * @event Parser#RadioTriggerParserAddGeoJSONLayer
+ * @param {*} name - todo
+ * @param {*} id - todo
+ * @param {*} geojson - todo
+ * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
+ */
+
+/**
+ * @event Parser#RadioTriggerParserRemoveItem
+ * @description Event that removes an item from the layertree
+ * @param {String} id - id from item that be removed
+ * @example Radio.trigger("Parser", "removeItem", id)
+ */
+
+/**
+ * @event Parser#ChangeCategory
  */
 
 
@@ -154,7 +253,7 @@
  * @description Is fired when attribute isActive changes
  */
 
- /**
+/**
  * @event ContactModel#changeInvalid
  * @description Is fired when attribute isActive changes
  */
@@ -192,11 +291,25 @@
  * @description Fired if attribute transparency has changed
  */
 
- /**
+/**
  * @event Layer#changeIsSettingVisible
  * @param {Backbone.Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Fired if attribute isSettingVisible has changed
+ */
+
+/**
+ * @event Layer#changeIsVisibleInTree
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isVisibleInTree has changed
+ */
+
+/**
+ * @event Layer#changeIsOutOfRange
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isOutOfRange has changed
  */
 
 /**
@@ -305,25 +418,25 @@
  * @example Radio.request("MapView", "getProjection");
  */
 
- /**
+/**
  * @event MapView#RadioTriggerMapViewSetZoomLevelUp
  * @description Event that sets the zoom-level one counter up
  * @example Radio.trigger("MapView", "setZoomLevelUp");
  */
 
- /**
+/**
  * @event MapView#RadioTriggerMapViewSetZoomLevelDown
  * @description Event that sets the zoom-level one counter down
  * @example Radio.trigger("MapView", "setZoomLevelDown");
  */
 
- /**
+/**
  * @event MapView#RadioTriggerMapViewResetView
  * @description Resets the map view
  * @example Radio.trigger("MapView", "resetVIew");
  */
 
- /**
+/**
  * @event MapView#RadioRequestMapViewGetResolutions
  * @returns {object[]} - Returns the resolutions of the map
  * @example Radio.trigger("MapView", "getResolutions");
@@ -387,6 +500,12 @@
  * @event List#RadioTriggerModelListRemoveModelsByParentId
  * @description See {@link List#removeModelsByParentId}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", parentId)
+ */
+
+/**
+ * @event List#RadioTriggerModelListRemoveModelsById
+ * @description See {@link List#removeModelsById}
+ * @example Radio.trigger("ModelList", "removeModelsByParentId", id)
  */
 
 /**
@@ -528,6 +647,41 @@
  * @example this.trigger("updateOverlayerView", id)
  */
 
+/** -------------------- ATTRIBUTIONS ----------------- */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @description Triggers rerender of attributions module
+ * @example this.trigger("Attributions", "renderAttributions");
+ */
+
+/**
+ * @event Attributions#changeIsContentVisible
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeAttributionList
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#changeIsVisibleInMap
+ * @description Event for a changing property
+ */
+
+/**
+ * @event Attributions#AttributionsRenderAttributions
+ * @description Event for a changing property
+ */
+
+
 
 /** -------------------- SEARCHBAR -------------------- */
 
@@ -646,7 +800,7 @@
  * @example Radio.request("Util", "getConfig")
  * @description Request config path
  */
- /**
+/**
  * @event Util#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
@@ -705,6 +859,12 @@
  * @example Radio.request("GFI", "getCurrentView");
  */
 
+/** -------------------- GFI.THEME -------------------- */
+
+/**
+ * @event Theme#changeIsReady
+ * @description Triggered when gfi theme is loaded
+ */
 
 /** -------------------- MAPMARKER -------------------- */
 
@@ -768,7 +928,8 @@
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
 
- /** -------------------- ControlsView -------------------- */
+
+/** -------------------- CONTROLS -------------------- */
 
 /**
  * @event Controls#RadioRequestControlsViewAddRowTr
@@ -778,7 +939,7 @@
  * @example Radio.request("ControlsView", "addRowTR", id, showMobile);
  */
 
- /**
+/**
  * @event Controls#RadioRequestControlsViewAddRowBr
  * @description Creates an HTML-Element at the end of the bottom-right section of the controls and returns the element
  * @param {String} id Id of element to be returned
@@ -786,7 +947,7 @@
  * @example Radio.request("ControlsView", "addRowBR", id, showMobile);
  */
 
-  /**
+/**
  * @event Controls#RadioRequestControlsViewAddRowBl
  * @description Creates an HTML-Element at the end of the bottom-left section of the controls and returns the element
  * @param {String} id Id of element to be returned
@@ -794,7 +955,7 @@
  */
 
 
-/** -------------------- RawLayerList -------------------- */
+/** -------------------- RAWLAYERLIST -------------------- */
 
 /**
  * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere

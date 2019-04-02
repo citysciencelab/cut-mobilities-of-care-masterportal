@@ -5,6 +5,7 @@
  * All Controls have the same look and feel, so the UX should be equal throughout all controls.
  */
 
+
 /**
  * @namespace Attributions
  * @memberof Controls
@@ -713,6 +714,17 @@
  * @namespace ClickCounter
  * @description This functionality registers user click behaviour and updates the url of an created iframe
  * used for Verkehrsportal.
+ */
+
+/**
+ * @namespace Attributions
+ * @memberOf Controls
+ * @description Module to display additional layer infos in a separate modal
+ * used for Verkehrsportal. Notice that following requirements must be met:
+ * - attribution pane must be opened upon selecting a layer with attribution data
+ * - attribution pane must be opened upon activating the tool pane "Pendler-Tool"
+ * - attribution pane must be initially opened, if respective isInitOpenDesktop/isInitOpenMobile config
+ * param is set to true and a layer with attribution data is visible
  */
 
 /**
