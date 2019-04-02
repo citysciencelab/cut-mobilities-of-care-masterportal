@@ -1,6 +1,6 @@
 import Parser from "./parser";
 
-const CustomTreeParser = Parser.extend(/**@lends CustomTreeParser.prototype */{
+const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
     /**
      * @class CustomTreeParser
      * @extends Parser
@@ -9,7 +9,7 @@ const CustomTreeParser = Parser.extend(/**@lends CustomTreeParser.prototype */{
      * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
      */
-    defaults: _.extend({}, Layer.prototype.defaults, {}),
+    defaults: _.extend({}, Parser.prototype.defaults, {}),
     /**
      * Recursive function.
      * Parses the config.json. response.Themenconfig.
