@@ -55,37 +55,37 @@
 /** -------------------- ALERTING -------------------- */
 
 /**
- * @event AlertingModel#changePosition
+ * @event Alerting#changePosition
  * @param {Backbone/Model} model The model whose attribute hat changed.
  * @param {Boolean} value The attribute value that has changed.
  * @description Triggered when Model attribute position has changed.
  */
 
 /**
- * @event AlertingModel#render
+ * @event Alerting#render
  * @description Triggered when View has to render.
  * @example this.trigger("render")
  */
 
 /**
- * @event AlertingModel#RadioTriggerAlertAlert
+ * @event Alerting#RadioTriggerAlertAlert
  * @param {String/Object} alert The alert object or string needed to create the alert.
  * @example Radio.trigger("Alert", "alert", alert)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertAlertRemove
+ * @event Alerting#RadioTriggerAlertAlertRemove
  * @example Radio.trigger("Alert", "alert:remove")
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertClosed
+ * @event Alerting#RadioTriggerAlertClosed
  * @param {String} id The id of the alert that has been closed.
  * @example Radio.trigger("Alert", "closed", id)
  */
 
 /**
- * @event AlertingView#RadioTriggerAlertConfirmed
+ * @event Alerting#RadioTriggerAlertConfirmed
  * @param {String} id The id of the alert that has been confirmed.
  * @example Radio.trigger("Alert", "confirmed", id)
  */
@@ -118,6 +118,14 @@
  * @example Radio.trigger("ClickCounter", "gfi")
 */
 
+
+/** -------------------- LEGEND -------------------- */
+
+/**
+ * @event Legend#RadioRequestLegendGetLegend
+ * @param {layer} layer The layer, to which the legend should be returned.
+ * @example Radio.request("Legend", "getLegend", layer)
+*/
 
 /** -------------------- PARSER -------------------- */
 
@@ -332,6 +340,22 @@
  */
 
 
+/** -------------------- HEATMAP LAYER -------------------- */
+/**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
+ */
+
+ /**
+ * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+ * @param {String} layerId Id of vector layer.
+ * @param {ol/Feature[]} features Features that have been loaded.
+ * @example Radio.trigger("HeatmapLayer", "loadupdateHeatmap", layerId, features)
+ */
+
+
 /** -------------------- MAP -------------------- */
 
 /**
@@ -422,6 +446,27 @@
  * @param {Object} options Options of mapview status
  * @example Radio.trigger("LayerInformation", "add", options)
  */
+
+/** -------------------- OBLIQUE MAP-------------------- */
+
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapRegisterLayer
+ * @param {ObliqueLayer} layer ObliqueLayer.
+ * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
+ */
+
+ /**
+ * @event ObliqueMap#RadioRequestObliqueMapIsActive
+ * @returns {Boolean} - Flag if ObliqueMap is active.
+ * @example Radio.request("ObliqueMap", "isActive")
+ */
+
+ /**
+ * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
+ * @param {ObliqueLayer} layer ObliqueLayer.
+ * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
+ */
+
 
 /** -------------------- MODEL LIST -------------------- */
 
@@ -935,4 +980,19 @@
  * @param {String} params Object of Params.
  * @returns {Layer} - Layer that matches the given params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
+ */
+
+ /**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @description Returns the object of the layer that matches the given params.
+ * @param {Object} params Object of Params.
+ * @returns {Object} - Layer attributes.
+ * @example Radio.request("RawLayerList", "getLayerAttributesWhere", params);
+ */
+
+ /**
+ * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+ * @description Returns the rawlayerList as json.
+ * @returns {RawLayerList} - The rawLayerlist.
+ * @example Radio.request("RawLayerList", "getLayerAttributesList");
  */
