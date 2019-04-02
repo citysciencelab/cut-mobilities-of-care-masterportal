@@ -1,4 +1,4 @@
-const QuickHelpModel = Backbone.Model.extend({
+const QuickHelpModel = Backbone.Model.extend(/** @lends MouseHoverPopup.prototype */{
     defaults: {
         imgPath: "/",
         allgemein: "allgemein.png",
@@ -14,6 +14,24 @@ const QuickHelpModel = Backbone.Model.extend({
         utmFormeln: "UTM_Formeln.png"
     },
 
+    /**
+     * @class QuickHelpModel
+     * @extends Backbone.Model
+     * @memberof quickhelp
+     * @constructs
+     * @property {String} imgPath="/"
+     * @property {String} allgemein="allgemein.png"
+     * @property {String} allgemein2="allgemein2.png"
+     * @property {String} allgemein3="allgemein3.png"
+     * @property {String} allgemein4="allgemein4.png"
+     * @property {String} themen="themen.png"
+     * @property {String} themen2="themen_2.png"
+     * @property {String} statistikFlaecheNiemeier="Statistik_Flaeche_Niemeier.png"
+     * @property {String} statistikStreckeUniErlangen="Statistik_Strecke_UniErlangen.png"
+     * @property {String} utmStreifen="UTM_Streifen.png"
+     * @property {String} utmVerzerrung="UTM_Verzerrung.png"
+     * @property {String} utmFormeln="UTM_Formeln.png"
+     */
     initialize: function (attr) {
         if (_.isObject(attr) && _.has(attr, "imgPath")) {
             this.setImgPath(attr.imgPath);

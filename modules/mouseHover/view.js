@@ -1,6 +1,15 @@
 import MouseHoverPopup from "./model";
 
-const MouseHoverPopupView = Backbone.View.extend({
+const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.prototype */{
+    /**
+     * @class MouseHoverPopup
+     * @extends Backbone.View
+     * @memberof MouseHover
+     * @constructs
+     * @property {string} attr attribute
+     * @listens MouseHover#render
+     * @listens MouseHover#destroy
+     */
     initialize: function (attr) {
         this.model = new MouseHoverPopup(attr);
         this.listenTo(this.model, {
@@ -13,7 +22,7 @@ const MouseHoverPopupView = Backbone.View.extend({
 
     /**
      * Renders the Bootstrap-Tooltip into the mousehoverpopup
-     * html: true - So that <br> will be integrated
+     * html: true - So that html br will be integrated
      * trigger: manual - solves bug with hiding tooltip
      * @param {string} text -
      * @returns {void}

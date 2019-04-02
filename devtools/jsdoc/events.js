@@ -254,6 +254,20 @@
  * @example Radio.trigger("Map", "addControl", control)
  */
 
+/**
+ * @event Map#RadioTriggerMapAddOverlay
+ * @param {ol/overlay} overlay Overlay to be added to map.
+ * @example Radio.trigger("Map", "addOverlay", overlay)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRegisterListener
+ * @param {String | Object} event Event to be registered
+ * @param {Function} callback - The Callback Function
+ * @param {Object} context -
+ * @example Radio.trigger("Map", "RegisterListener", event, callback, context)
+ */
+
 
 /** -------------------- MAP VIEW -------------------- */
 
@@ -722,6 +736,18 @@
  * @event MouseHover#RadioTriggerMouseHoverHide
  * @description hides the mouse hover div
  * @example Radio.trigger("MouseHover", "hide");
+ */
+
+/**
+ * @event MouseHover#render
+ * @description Triggered when View has to render the popup.
+ * @example this.trigger("render")
+ */
+
+ /**
+ * @event MouseHover#destroy
+ * @description Triggered when the popup needs to be closed.
+ * @example this.trigger("destroy")
  */
 
 /** -------------------- STYLELIST -------------------- */

@@ -18,16 +18,16 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
      * @memberof mouseHover
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("MouseHover") Radio channel for communication
-     * @property {Object} overlay="new Overlay" New OpenLayers Overlay instance
-     * @property {String} textPosition=null
-     * @property {Array} textArray=null
-     * @property {Number} minShift=5
-     * @property {Number} numFeaturesToShow=2
-     * @property {String} infoText="(weitere Objekte. Bitte zoomen.)"
+     * @property {ol.Feature} overlay=newOverlay({id:"mousehover-overlay"}) New OpenLayers Overlay instance
+     * @property {String} textPosition=null Position for the popup to open
+     * @property {Array} textArray=null Array to hold the text for the popup
+     * @property {Number} minShift=5 Minimum shift to check if the mouse position changed significantly
+     * @property {Number} numFeaturesToShow=2 Maximum number of texts to show
+     * @property {String} infoText="(weitereObjekte.Bittezoomen.)" Default info text to add to the popup
      * @fires MouseHover#render
-     * @fires Map#AddOverlay
-     * @fires Map#RegisterListenerPointermove
-     * @fires Parser#GetItemsByAttributes
+     * @fires Map#RadioTriggerMapAddOverlay
+     * @fires Map#RadioTriggerMapRegisterListener
+     * @fires Parser#RadioRequestParserGetItemByAttributes
      * @listens MouseHover#RadioTriggerMouseHoverHide
      */
 
@@ -43,7 +43,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
     /**
     * Gets MouseHoverInfos from config.
-    * @fires  Parser#GetItemsByAttributes
+    * @fires Parser#RadioRequestParserGetItemByAttributes
     * @returns {void}
     */
     getMouseHoverInfosFromConfig: function () {
@@ -111,8 +111,8 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
     /**
      * Checks if the feature is a cluster feature
-     * @param {Object} feature at pixel
-     * @returns {Boolean} result of feature check
+     * @param {ol.Feature} feature feature at pixel
+     * @returns {Boolean} boolean  True or False result of feature check
      */
     isClusterFeature: function (feature) {
         if (feature.getProperties().features) {
@@ -122,7 +122,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
     /**
      * Create feature array
-     * @param {Object} featureAtPixel feature at pixel
+     * @param {ol.Feature} featureAtPixel feature at pixel
      * @returns {Array} pFeatureArray Array of features at pixel
      */
     fillFeatureArray: function (featureAtPixel) {
@@ -220,7 +220,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
      * Checks if both arrays are identical
      * @param  {Array}  array1 new text
      * @param  {Array}  array2 old text
-     * @return {Boolean}       result of the check
+     * @return {Boolean} boolean True or False result of the check
      */
     isTextEqual: function (array1, array2) {
         var diff1 = _.difference(array1, array2),
@@ -252,7 +252,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
      * Return the string for the popup
      * @param  {String | Array} mouseHoverField Content for popup
      * @param  {Object} featureProperties       Properties of features
-     * @returns {String}                        string of popup content
+     * @returns {String} value String of popup content
      */
     pickValue: function (mouseHoverField, featureProperties) {
         var value = "";
@@ -277,8 +277,8 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
 
     /**
      * This function examines the pFeatureArray and extracts the text to show
-     * @param  {Array} featureArray Features at MousePosition
-     * @returns {string}            text to show
+     * @param  {Array} featureArray Array of features at MousePosition
+     * @returns {Array} textArrayBreaked Array containing text to show
      */
     checkTextArray: function (featureArray) {
         var mouseHoverInfos = this.get("mouseHoverInfos"),
@@ -306,7 +306,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     /**
      * Adapt the number of texts to show to "numFeaturesToShow" through _.sample
      * @param  {Array} textArray Array containing all texts
-     * @return {Array}           Array containing correct number of texts
+     * @return {Array} Array Array containing correct number of texts
      */
     checkMaxFeaturesToShow: function (textArray) {
         var maxNum = this.get("numFeaturesToShow"),
@@ -324,9 +324,9 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
 
     /**
-     * add <br> betweeen every element in values
-     * @param  {Array} textArray Array without <br>
-     * @return {Array}           Array with <br>
+     * add html br between every element in values
+     * @param  {Array} textArray Array without html br
+     * @return {Array} textArrayBreaked Array with html br
      */
     addBreak: function (textArray) {
         var textArrayBreaked = [];
