@@ -15,7 +15,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     /**
      * @class MouseHoverPopup
      * @extends Backbone.Model
-     * @memberof mouseHover
+     * @memberof MouseHover
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("MouseHover") Radio channel for communication
      * @property {ol.Feature} overlay=newOverlay({id:"mousehover-overlay"}) New OpenLayers Overlay instance

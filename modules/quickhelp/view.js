@@ -4,16 +4,40 @@ import TemplateMeasureTool from "text-loader!./templateMeasureTool.html";
 import QuickHelpModel from "./model";
 import "jquery-ui/ui/widgets/draggable";
 
-const QuickHelpView = Backbone.View.extend({
+/**
+ * @member TemplateSearch
+ * @description Template used to create the quickhelp for Search
+ * @memberof Quickhelp
+ */
+
+/**
+ * @member TemplateTree
+ * @description Template used to create the quickhelp for Tree Search
+ * @memberof Quickhelp
+ */
+
+/**
+ * @member TemplateMeasureTool
+ * @description Template used to create the quickhelp for the measure tool
+ * @memberof Quickhelp
+ */
+const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */{
     events: {
         "click .glyphicon-remove": "removeWindow",
         "click .glyphicon-print": "printHelp"
     },
 
     /**
-     * Initialisiert die QuickHelp
-     * @param   {boolean | object} attr Konfiguration
-     * @deprecated Boolean-Prüfung auf true entfällt mit Version 3.0 zwecks dedizierter Path-Übergabe
+     * Initialises the QuickHelp
+     * @class QuickHelpView
+     * @extends Backbone.View
+     * @memberof Quickhelp
+     * @constructs
+     * @param   {boolean | object} attr Configuration
+     * @deprecated Boolean-Examines if true. Deprecated in Version 3.0 due to deprecated path pass
+     * @listens Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @listens Quickhelp#RadioRequestQuickhelpIsSet
+     * @listens Quickhelp#render
      * @returns {void}
      */
     initialize: function (attr) {
@@ -42,17 +66,27 @@ const QuickHelpView = Backbone.View.extend({
     templateTree: _.template(TemplateTree),
     templateMeasureTool: _.template(TemplateMeasureTool),
     className: "quick-help-window ui-widget-content",
+
+    /**
+     * Renders the data to DOM.
+     * @return {Quickhelp} returns this
+     */
     render: function () {
         $("body").append(this.$el);
         return this;
     },
+
+    /**
+     * Remove the window
+     * @return {void}
+     */
     removeWindow: function () {
         this.$el.hide("slow");
     },
 
     /**
-     * [showWindow description]
-     * @param {String} value [description]
+     * showWindow
+     * @param {String} value Type of window (search | tree | measure)
      * @returns {void}
      */
     showWindow: function (value) {
@@ -78,6 +112,10 @@ const QuickHelpView = Backbone.View.extend({
         this.$el.show("slow");
     },
 
+    /**
+     * Opens the print window
+     * @return {void}
+     */
     printHelp: function () {
         var htmlToPrint = document.getElementsByClassName("quick-help-window")[0],
             newWin = window.open("");

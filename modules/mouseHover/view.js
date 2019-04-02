@@ -2,11 +2,11 @@ import MouseHoverPopup from "./model";
 
 const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.prototype */{
     /**
-     * @class MouseHoverPopup
+     * @class MouseHoverPopupView
      * @extends Backbone.View
      * @memberof MouseHover
      * @constructs
-     * @property {string} attr attribute
+     * @param {boolean | object} attr Configuration
      * @listens MouseHover#render
      * @listens MouseHover#destroy
      */

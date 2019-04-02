@@ -1,4 +1,4 @@
-const QuickHelpModel = Backbone.Model.extend(/** @lends MouseHoverPopup.prototype */{
+const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype */{
     defaults: {
         imgPath: "/",
         allgemein: "allgemein.png",
@@ -17,7 +17,7 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends MouseHoverPopup.prototyp
     /**
      * @class QuickHelpModel
      * @extends Backbone.Model
-     * @memberof quickhelp
+     * @memberof Quickhelp
      * @constructs
      * @property {String} imgPath="/"
      * @property {String} allgemein="allgemein.png"
@@ -31,6 +31,7 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends MouseHoverPopup.prototyp
      * @property {String} utmStreifen="UTM_Streifen.png"
      * @property {String} utmVerzerrung="UTM_Verzerrung.png"
      * @property {String} utmFormeln="UTM_Formeln.png"
+     * @param {boolean | object} attr Configuration
      */
     initialize: function (attr) {
         if (_.isObject(attr) && _.has(attr, "imgPath")) {
@@ -38,7 +39,7 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends MouseHoverPopup.prototyp
         }
     },
 
-    /*
+    /**
     * setter for imgPath
     * @param {string} value imgPath
     * @returns {void}

@@ -666,6 +666,17 @@
  * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
  */
 
+/**
+ * @event Quickhelp#RadioRequestQuickhelpIsSet
+ * @description Returns isSet value
+ * @example Radio.request("Quickhelp", "isSet");
+ */
+
+/**
+ * @event Quickhelp#render
+ * @description Triggered when the Quickhelp View has to render.
+ * @example this.trigger("render")
+ */
 
 /** -------------------- TITLE -------------------- */
 
