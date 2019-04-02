@@ -1,7 +1,11 @@
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
-
-const FeatureListerView = Backbone.View.extend({
+/**
+ * @member FeatureListerTemplate
+ * @description Template used to create the feature lister
+ * @memberof FeatureLister
+ */
+const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prototype */{
     events: {
         "click .glyphicon-remove": "toggle",
         "click #featurelistFeaturelist": "switchTabToListe", // wechselt den sichtbaren Tab
@@ -13,6 +17,28 @@ const FeatureListerView = Backbone.View.extend({
         "click .featurelist-list-button": "moreFeatures", // Klick auf Button zum Nachladen von Features
         "click .featurelist-list-table-th": "orderList" // Klick auf Sortiersymbol in thead
     },
+    /**
+     * @class FeatureListerView
+     * @extends Backbone.View
+     * @memberof FeatureLister
+     * @constructs
+     * @fires FeatureLister#RadioTriggerToggle
+     * @fires FeatureLister#RadioTriggerSwitchTabToListe
+     * @fires FeatureLister#RadioTriggerSwitchTabToTheme
+     * @fires FeatureLister#RadioTriggerSwitchTabToDetails
+     * @fires FeatureLister#RadioTriggerNewTheme
+     * @fires FeatureLister#RadioTriggerHoverTr
+     * @fires FeatureLister#RadioTriggerSelectTr
+     * @fires FeatureLister#RadioTriggerMoreFeatures
+     * @fires FeatureLister#RadioTriggerOrderList
+     * @listens FeatureLister#changeIsActive
+     * @listens FeatureLister#changeLayerList
+     * @listens FeatureLister#changeLayer
+     * @listens FeatureLister#changeFeatureProps
+     * @listens FeatureLister#RadioTriggerGfiHit
+     * @listens FeatureLister#RadioTriggerGfiClose
+     * @listens FeatureLister#RadioTriggerSwitchTabToTheme
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
@@ -33,17 +59,20 @@ const FeatureListerView = Backbone.View.extend({
     },
     className: "featurelist-win",
     template: _.template(Template),
-    /*
-    * Wenn im Model das Schließen des GFI empfangen wurde, werden die Elemente in der Tabelle wieder enthighlighted.
-    */
+    /**
+     * When the model receives the closing of a gfi, the corresponding elements in the table must be un-highlighted
+     * @return {void}
+     */
     deselectGFIHit: function () {
         this.$("#featurelist-list-table tr").each(function (inte, tr) {
             this.$(tr).removeClass("info");
         }, this);
     },
-    /*
-    * Wenn im Model ein GFI empfangen wurde, wird dieses in der Liste gesucht und ggf. gehighlighted.
-    */
+    /**
+     * When the model receives the opening of a gfi, the corresponding elements in the table must be searched and highlighted
+     * @param {Event} evt Event, which gfi has been openend in the model
+     * @return {void}
+     */
     selectGFIHit: function (evt) {
         var gesuchteId = evt.id;
 
@@ -56,10 +85,12 @@ const FeatureListerView = Backbone.View.extend({
             }
         }, this);
     },
-    /*
-    * Findet das Spanelement der Spalte, die geklickt wurde. Liest dann die derzeit dargestellten Features aus und sortiert diese. Leert die aktuelle (unsortierte) Tabelle
-    * und überschreibt sie mit den sortierten Features.
-    */
+    /**
+     * Finds the span-element of the column which was clicked. Reads the currently viewed features and sorts them.
+     * Empties the currently unsorted table and overwrites it with the freshly sorted features.
+     * @param {Event} evt Event, which table header has been clicked
+     * @return {void}
+     */
     orderList: function (evt) {
         var spanTarget = this.$(evt.target).find("span")[0] ? this.$(evt.target).find("span")[0] : evt.target,
             sortOrder = this.$(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
@@ -89,9 +120,11 @@ const FeatureListerView = Backbone.View.extend({
         this.$("#featurelist-list-table tbody").empty();
         this.writeFeaturesToTable(featuresSorted);
     },
-    /*
-    * Ermittelt die Anzahl der derzeit dargestellten Features, erhöht diese und liest diese Features aus. Stellt sie dann dar.
-    */
+    /**
+     * Finds the number of currently displayed features, increases it and reads these features. Shows the features.
+     * @param {Event} evt Event, which table header has been clicked
+     * @return {void}
+     */
     moreFeatures: function () {
         var countFeatures = this.$("#featurelist-list-table tbody").children().length,
             maxFeatures = this.model.get("maxFeatures"),
@@ -99,9 +132,10 @@ const FeatureListerView = Backbone.View.extend({
 
         this.readFeatures(countFeatures, toFeatures, false);
     },
-    /*
-    * Bei change der Feature-Props wird in den Details-Tab gewechselt und dort werden die Detailinformationen des Features (wie GFI) aufgelistet.
-    */
+    /**
+     * When changing the featureProps, change to details tab and show the detail information of the feature (like in gfi)
+     * @return {void}
+     */
     showFeatureProps: function () {
         var props = this.model.get("featureProps");
 
@@ -119,9 +153,11 @@ const FeatureListerView = Backbone.View.extend({
             this.$("#featurelistFeaturedetails").addClass("disabled");
         }
     },
-    /*
-    * Wechselt den Tab
-    */
+    /**
+     * Changes the tab to the tab 'list'
+     * @param {Event} evt Event, which tab has been clicked
+     * @return {void}
+     */
     switchTabToListe: function (evt) {
         if (evt && this.$("#featurelistFeaturelist").hasClass("disabled")) {
             return;
@@ -139,9 +175,10 @@ const FeatureListerView = Backbone.View.extend({
         this.$("#featurelist-list").show();
         this.$("#featurelist-details").hide();
     },
-    /*
-    * Wechselt den Tab
-    */
+    /**
+     * Changes the tab to the tab 'theme'
+     * @return {void}
+     */
     switchTabToTheme: function () {
         _.each(this.$(".featurelist-navtabs").children(), function (child) {
             if (child.id === "featurelistThemeChooser") {
@@ -158,9 +195,11 @@ const FeatureListerView = Backbone.View.extend({
         this.model.downlightFeature();
         this.model.set("layerid", {});
     },
-    /*
-    * Wechselt den Tab
-    */
+    /**
+     * Changes the tab to the tab 'details'
+     * @param {Event} evt Event, which tab has been clicked
+     * @return {void}
+     */
     switchTabToDetails: function (evt) {
         if (evt && this.$("#featurelistFeaturedetails").hasClass("disabled")) {
             return;
@@ -178,26 +217,32 @@ const FeatureListerView = Backbone.View.extend({
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").show();
     },
-    /*
-    * Setted FeatureId bei Klick auf Feature in Tabelle
-    */
+    /**
+     * Sets featureId when clicked on a feature in the table
+     * @param {Event} evt Event, which feature has been clicked
+     * @return {void}
+     */
     selectTr: function (evt) {
         var featureid = evt.currentTarget.id;
 
         this.model.set("featureid", featureid);
     },
-    /*
-    * Zeigt Marker bei Hover
-    */
+    /**
+     * Shows marker on of a feature in the table
+     * @param {Event} evt Event, which feature has been hovered
+     * @return {void}
+     */
     hoverTr: function (evt) {
         var featureid = evt.currentTarget.id;
 
         this.model.downlightFeature();
         this.model.highlightFeature(featureid);
     },
-    /*
-    * Bei Klick auf Layer wird dieser gehighlighted und Layerid wird gesertzt
-    */
+    /**
+     * When clicking on a layer, this layer is highlighted and the layerid is set
+     * @param {Event} evt Event, which layer has been clicked
+     * @return {void}
+     */
     newTheme: function (evt) {
         this.model.set("layerid", evt.currentTarget.id);
         // setze active Class
@@ -206,10 +251,11 @@ const FeatureListerView = Backbone.View.extend({
         }, this);
         this.$(evt.currentTarget).addClass("active");
     },
-    /*
-    * Wird ein neuer Layer ausgewählt, werden aus allen Features mögliche Keys ermittelt und daraus Überschriften thead gebildet. Anschließend wird Funktion
-    * zum Lesen der Features aufgerufen.
-    */
+    /**
+     * When a new layer is selected, all features are scanned for possible keys. These are basis for new headlines 'thead'.
+     * Then the function for reading the features can be called
+     * @return {void}
+     */
     updateLayerList: function () {
         // lt. Mathias liefern Dienste, bei denen ein Feature in einem Attribut ein null-Value hat, dieses nicht aus und es erscheint gar nicht am Feature.
         var layer = this.model.get("layer"),
@@ -242,9 +288,13 @@ const FeatureListerView = Backbone.View.extend({
             this.$("#featurelistFeaturelist").addClass("disabled");
         }
     },
-    /*
-    * Liest Features von - bis aus Layer aus. Löscht ggf. bisherige Inhalte der Tabelle.
-    */
+    /**
+     * Reads the features from - to of the layer and empties current table, if requested
+     * @param {Number} from start feature id for filtering
+     * @param {Number} to end feature id for filtering
+     * @param {Boolean} dropTableFirst decide wheather to empty the table first
+     * @return {void}
+     */
     readFeatures: function (from, to, dropTableFirst) {
         var features = this.model.get("layer").features.filter(function (feature) {
             return feature.id >= from && feature.id <= to;
@@ -257,9 +307,11 @@ const FeatureListerView = Backbone.View.extend({
         this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
         this.writeFeaturesToTable(features);
     },
-    /*
-    * Nimmt die darzustellenden Features entgegen un schreibt sie in tbody. Zeigt ggf. Nachlade-Button.
-    */
+    /**
+     * Writes given features to 'tbody' and displays 'more'-button if necessary
+     * @param {Array} features array of features to display in the table
+     * @return {void}
+     */
     writeFeaturesToTable: function (features) {
         var totalFeaturesCount = this.model.get("layer").features.length,
             shownFeaturesCount,
@@ -299,17 +351,19 @@ const FeatureListerView = Backbone.View.extend({
             this.$(".featurelist-list-footer").hide();
         }
     },
-    /*
-    * Ändert den Titel des Tabellen-Tabs auf Layernamen.
-    */
+    /**
+     * Changes the titel of the table tab to the name of the layer
+     * @return {void}
+     */
     updateLayerHeader: function () {
         var name = this.model.get("layer").name ? this.model.get("layer").name : "";
 
         this.$("#featurelist-list-header").text(name);
     },
-    /*
-    * Erzeugt Auflistung der selektierbaren Layer.
-    */
+    /**
+     * Creates a list of selectable layers
+     * @return {void}
+     */
     updateVisibleLayer: function () {
         var ll = this.model.get("layerlist");
 
@@ -318,7 +372,12 @@ const FeatureListerView = Backbone.View.extend({
             this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
         }, this);
     },
-
+    /**
+     * Renders the feature lister
+     * @param {Object} model todo
+     * @param {String} value todo
+     * @return {FeatureListerView} returns this
+     */
     render: function (model, value) {
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -331,6 +390,10 @@ const FeatureListerView = Backbone.View.extend({
         }
         return this;
     },
+    /**
+     * Toggles the feature lister
+     * @return {void}
+     */
     toggle: function () {
         if (this.$el.is(":visible") === true) {
             this.updateVisibleLayer();
@@ -343,6 +406,10 @@ const FeatureListerView = Backbone.View.extend({
         }
         this.model.downlightFeature();
     },
+    /**
+     * Set the maximal height which may be used by the feature lister table
+     * @return {void}
+     */
     setMaxHeight: function () {
         var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
             shownFeaturesCount = $("#featurelist-list-table tr").length - 1,

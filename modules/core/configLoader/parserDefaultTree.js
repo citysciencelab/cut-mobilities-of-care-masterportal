@@ -1,7 +1,21 @@
 import Parser from "./parser";
 
-const DefaultTreeParser = Parser.extend({
+const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype */{
+    /**
+     * @class DefaultTreeParser
+     * @extends Parser
+     * @memberOf Core.ConfigLoader
+     * @fires Util#RadioRequestUtilIsViewMobile
+     * @constructs
+     */
+    defaults: _.extend({}, Parser.prototype.defaults, {
+    }),
 
+    /**
+     * todo
+     * @param {*} layerList - todo
+     * @returns {void}
+     */
     parseTree: function (layerList) {
         // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
         // Und nur Layer die min. einem Metadatensatz zugeordnet sind
@@ -17,9 +31,9 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * Filtert alle Objekte aus der layerList, die kein WMS sind und min. einem Datensatz zugordnet sind
-     * @param  {Object[]} layerList - Objekte aus der services.json
-     * @return {Object[]} layerList - Objekte aus der services.json
+     * Filters all objects from the layerList that are not WMS and are assigned to at least one data record.
+     * @param  {Object[]} layerList - Objekte from services.json
+     * @return {Object[]} layerList - Objekte from services.json
      */
     filterList: function (layerList) {
         return layerList.filter(function (element) {
@@ -32,9 +46,9 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * Entfernt alle Layer, die bereits im Cache dargestellt werden.
-     * @param  {Object[]} layerList - Objekte aus der services.json
-     * @return {Object[]} layerList - Objekte aus der services.json
+     * Removes all layers that are already displayed in the cache.
+     * @param  {Object[]} layerList - Objekte from services.json
+     * @return {Object[]} layerList - Objekte from services.json
      */
     deleteLayersIncludeCache: function (layerList) {
         var cacheLayerMetaIDs = [],
@@ -50,10 +64,10 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * Holt sich aus der layerList alle Objekte die mehr als einen Datensatz haben
-     * Erzeugt pro Datensatz einen neuen Layer
-     * @param  {Object[]} layerList - Objekte aus der services.json
-     * @return {Object[]} layerList - Objekte aus der services.json die genau einem Datensatz zugeordnet sind
+     * Retrieves all objects with more than one record from the layerList
+     * Creates a new layer per dataset
+     * @param  {Object[]} layerList - Objekte from services.json
+     * @return {Object[]} layerList - Objects from services.json that are assigned to exactly one dataset
      */
     createLayerPerDataset: function (layerList) {
         var layerListPerDataset = layerList.filter(function (element) {
@@ -75,7 +89,7 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * Erzeugt den Themen Baum aus der von Rawlaylist geparsten Services.json
+     * Creates the layertree from the Services.json parsed by Rawlayerlist.
      * @param {object[]} layerList -
      * @returns {void}
      */
@@ -101,17 +115,38 @@ const DefaultTreeParser = Parser.extend({
         // Models für Oblique Daten erzeugen
         this.createObliqueLayer(typeGroup.oblique);
     },
+
+    /**
+     * todo
+     * @param {*} layerList - todo
+     * @returns {void}
+     */
     createObliqueLayer: function (layerList) {
         _.each(layerList, function (layer) {
             this.addItem(_.extend({type: "layer"}, layer));
         }, this);
     },
+
+    /**
+     * todo
+     * @param {*} layerList - todo
+     * @fires Util#RadioRequestUtilIsViewMobile
+     * @returns {void}
+     */
     create3dLayer: function (layerList) {
+        var isMobile = Radio.request("Util", "isViewMobile"),
+            isVisibleInTree = isMobile ? "false" : "true";
+
         _.each(layerList, function (layer) {
-            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: "true"}, layer));
+            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: isVisibleInTree}, layer));
         }, this);
     },
 
+    /**
+     * todo
+     * @param {*} layerList - todo
+     * @returns {void}
+     */
     createBaselayer: function (layerList) {
         _.each(this.get("baselayer").Layer, function (layer) {
             var newLayer;
@@ -127,11 +162,11 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * unterteilung der nach metaName groupierten Layer in Ordner und Layer
-     * wenn eine MetaNameGroup nur einen Eintrag hat soll sie
-     * als Layer und nicht als Ordner hinzugefügt werden
-     * @param {object[]} metaNameGroups -
-     * @param {string} name -
+     * subdivide the layers grouped by metaName into folders
+     * and layers if a MetaNameGroup has only one entry
+     * it should be added as layer and not as folder
+     * @param {object[]} metaNameGroups - todo
+     * @param {string} name - todo
      * @returns {object} categories
     */
     splitIntoFolderAndLayer: function (metaNameGroups, name) {
@@ -158,9 +193,10 @@ const DefaultTreeParser = Parser.extend({
         }, this);
         return categories;
     },
+
     /**
-     * Gruppiert die Layer nach Kategorie und MetaName
-     * @param  {Object} overlays die Fachdaten als Object
+     * Groups layers by category and MetaName
+     * @param  {Object} overlays - The technical data as an object
      * @returns {void}
      */
     groupDefaultTreeOverlays: function (overlays) {
@@ -193,8 +229,8 @@ const DefaultTreeParser = Parser.extend({
     },
 
     /**
-     * Erzeugt alle Models für den DefaultTree
-     * @param  {Object} tree aus den categorien und MetaNamen erzeugter Baum
+     * Creates all models for the DefaultTree
+     * @param  {Object} tree tree created from the categories and MetaNames
      * @returns {void}
      */
     createModelsForDefaultTree: function (tree) {
