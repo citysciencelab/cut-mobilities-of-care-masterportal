@@ -348,7 +348,7 @@
  * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
  */
 
- /**
+/**
  * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
  * @param {String} layerId Id of vector layer.
  * @param {ol/Feature[]} features Features that have been loaded.
@@ -418,6 +418,12 @@
  * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
+/**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description Event fires if map size is updated
+ * @param {Object} caller todo!
+ * @example Radio.trigger("Map", "updateSize")
+ */
 
 /** -------------------- MAP VIEW -------------------- */
 
@@ -482,13 +488,13 @@
  * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
  */
 
- /**
+/**
  * @event ObliqueMap#RadioRequestObliqueMapIsActive
  * @returns {Boolean} - Flag if ObliqueMap is active.
  * @example Radio.request("ObliqueMap", "isActive")
  */
 
- /**
+/**
  * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
@@ -688,7 +694,7 @@
  */
 
 /**
- * @event ModelList#UpdateOverlayerView
+ * @event ModelList#updateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
 
@@ -736,8 +742,6 @@
  * @event Attributions#renderAttributions
  * @description Event for a changing property
  */
-
-
 
 /** -------------------- SEARCHBAR -------------------- */
 

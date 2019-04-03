@@ -4,7 +4,22 @@ import CatalogFolderView from "./folder/viewCatalog";
 import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
 
-const Menu = listView.extend({
+const Menu = listView.extend(/** @lends Menu.prototype */{
+    /**
+     * @class Menu
+     * @extends listView
+     * @memberof Menu.Desktop
+     * @constructs
+     * @description This View presents a list of menu items
+     * @fires ModelList#RadioRequestModelListGetCollection
+     * @fires Menu#updateLightTree
+     * @fires Autostart#RadioTriggerAutostartInitializedModul
+     * @fires Parser#RadioRequestParserGetItemsByAttributes
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @listens ModelList#updateOverlayerView
+     * @listens ModelList#updateSelection
+     * @listens ModelList#renderTree
+     */
     initialize: function () {
         this.collection = Radio.request("ModelList", "getCollection");
 
@@ -34,6 +49,7 @@ const Menu = listView.extend({
         $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
     },
+
     /**
      * Rendert die  Auswahlliste
      * @return {void}
@@ -52,14 +68,17 @@ const Menu = listView.extend({
             this.addSelectionView(selectedModels);
         }
     },
+
     /**
      * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
      * @param {string} parentId -
      * @param {number} level -
      * @param {number} levelLimit -
      * @param {boolean} firstTime -
+     * @fires Parser#RadioRequestParserGetItemsByAttributes
      * @returns {void}
      */
+
     renderSubTree: function (parentId, level, levelLimit, firstTime) {
         var lightModels,
             models,
@@ -122,9 +141,16 @@ const Menu = listView.extend({
             this.renderSubTree(folder.get("id"), level + 1, levelLimit, false);
         }, this);
     },
+
+    /**
+     *
+     * @param {number} parentId - ID of the parent item
+     * @returns {void}
+     */
     updateOverlayer: function (parentId) {
         this.renderSubTree(parentId, 0, 10, false);
     },
+
     addViewsToItemsOfType: function (type, items, parentId) {
         var viewItems = items.filter(function (model) {
             return model.get("type") === type;
@@ -142,6 +168,12 @@ const Menu = listView.extend({
         this.addOverlayViews(items);
         return items;
     },
+
+    /**
+     *
+     * @param {Array} models - Array of models
+     * @returns {void}
+     */
     addOverlayViews: function (models) {
         _.each(models, function (model) {
             if (model.get("type") === "folder") {
@@ -159,6 +191,12 @@ const Menu = listView.extend({
             }
         }, this);
     },
+
+    /**
+     *
+     * @param {*} models - todo
+     * @returns {void}
+     */
     addSelectionView: function (models) {
         _.each(models, function (model) {
             if (!model.get("isNeverVisibleInTree")) {
@@ -166,6 +204,12 @@ const Menu = listView.extend({
             }
         }, this);
     },
+
+    /**
+     *
+     * @param {String} modulId -
+     * @returns {void}
+     */
     startModul: function (modulId) {
         var modul = this.collection.find(function (model) {
             return model.get("id").toLowerCase() === modulId;

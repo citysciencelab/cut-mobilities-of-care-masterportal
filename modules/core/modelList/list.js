@@ -76,7 +76,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#ChangeSelectionIDX
      * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
-     * @fires ModelList#UpdateOverlayerView
+     * @fires ModelList#updateOverlayerView
      * @fires ModelList#UpdateSelection
      * @fires ModelList#TraverseTree
      * @fires ModelList#RenderTree
