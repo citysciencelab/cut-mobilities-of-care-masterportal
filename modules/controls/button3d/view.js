@@ -19,7 +19,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Util#RadioRequestUtilGetUiStyle
      * @fires Map#RadioRequestMapIsMap3d
      * @fires ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Map#RadioTriggerMapDeactivate3d
+     * @fires Map#RadioTriggerMapDeactivateMap3d
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Filter#RadioTriggerFilterEnable
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
@@ -96,7 +96,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * Shows the map in 2D-mode if the 3d button is deactivated.
      * @fires Map#RadioRequestMapIsMap3d
      * @fires ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Map#RadioTriggerMapDeactivate3d
+     * @fires Map#RadioTriggerMapDeactivateMap3d
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Filter#RadioTriggerFilterEnable
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
