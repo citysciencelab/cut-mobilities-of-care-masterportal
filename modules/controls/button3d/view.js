@@ -1,4 +1,9 @@
 import Button3dTemplate from "text-loader!./template.html";
+/**
+ * @member Button3dTemplate
+ * @description Template used for the 3D Button
+ * @memberof Button3D
+ */
 
 const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     events: {
@@ -8,10 +13,21 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     /**
      * @class Button3dView
      * @extends Backbone.View
-     * @memberOf Controls.Button3d
+     * @memberOf Controls.Button3D
      * @constructs
      * @description This control gives a user the 3D interface in the map.
      * @fires Util#RadioRequestUtilGetUiStyle
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires ModelList#RadioTriggerModelListToggleWfsCluster
+     * @fires Map#RadioTriggerMapDeactivated3d
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Filter#RadioTriggerFilterEnable
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
+     * @fires Filter#RadioTriggerFilterDisable
+     * @fires Map#RadioTriggerMapActivateMap3d
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @listens Map#RadioOnceMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map"),
@@ -79,7 +95,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * Shows the map in 3D-mode if 3d button is activated.
      * Shows the map in 2D-mode if the 3d button is deactivated.
      * @fires Map#RadioRequestMapIsMap3d
-     * @fires List#RadioTriggerModelListToggleWfsCluster
+     * @fires ModelList#RadioTriggerModelListToggleWfsCluster
      * @fires Map#RadioTriggerMapDeactivated3d
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Filter#RadioTriggerFilterEnable

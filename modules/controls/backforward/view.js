@@ -1,6 +1,10 @@
 import BackForwardTemplate from "text-loader!./template.html";
 import BackForwardModel from "./model";
-
+/**
+ * @member BackForwardTemplate
+ * @description Template used for backward and forward functionality
+ * @memberof BackForward
+ */
 const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototype */{
     events: {
         "click .forward": "setNextView",
@@ -8,10 +12,14 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
     },
     /**
      * @class BackForwardView
-     * @memberof Controls.Backforward
+     * @memberof Controls.BackForward
      * @extends Backbone.View
      * @constructs
      * @fires Map#RadioTriggerMapRegisterListenerMovenend
+     * @fires MapView#RadioRequestMapViewGetOptions
+     * @fires MapView#RadioRequestMapViewGetCenter
+     * @fires MapView#RadioTriggerMapViewSetScale
+     * @fires MapView#RadioTriggerMapViewSetCenter
      */
     initialize: function () {
         var channel = Radio.channel("BackForwardView");
@@ -28,7 +36,7 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
     /**
      * @member BackForwardTemplate
      * @description Template used for the backward and forward buttons.
-     * @memberof Controls.Backforward
+     * @memberof Controls.BackForward
      */
     template: _.template(BackForwardTemplate),
     id: "backforward",

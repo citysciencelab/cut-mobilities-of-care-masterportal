@@ -1,4 +1,9 @@
 import ButtonObliqueTemplate from "text-loader!./template.html";
+/**
+ * @member ButtonObliqueTemplate
+ * @description Template used for the "Schräglüftbilder" button
+ * @memberof ButtonOblique
+ */
 
 const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prototype */{
     events: {
@@ -7,9 +12,17 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
     /**
      * @class ButtonObliqueView
      * @extends Backbone.View
-     * @memberOf Controls.Buttonoblique
+     * @memberOf Controls.ButtonOblique
      * @constructs
      * @description This control shows a user an oblique aerial picture
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Map#RadioTriggerMapDeactivateMap3d
+     * @fires ObliqueMap#RadioTriggerObliqueMapActivate
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @listens Map#RadioOnceMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map");

@@ -1284,3 +1284,17 @@
  * @param {Boolean} value Empty the formular or render it
  * @description Renders the formular
  */
+
+/** ------------------------ Filter ----------------------------- */
+
+/**
+ * @event Filter#RadioTriggerFilterEnable
+ * @description Enables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "enable")
+ */
+
+/**
+ * @event Filter#RadioTriggerFilterDisable
+ * @description Diables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "disable")
+ */
