@@ -1153,6 +1153,8 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 |ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
 |textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
 |includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
+|deleteAfterSend|nein|Boolean|false|Flag ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|
+|withTicketNo|nein|Boolean|true|Flag ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|
 
 **Beispiel**
 ```
@@ -1177,7 +1179,9 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
     "bcc": [],
     "ccTouser": true,
     "textPlaceholder": "Hier Text eingeben."
-    "includeSystemInfo": true
+    "includeSystemInfo": true,
+    "deleteAfterSend": true,
+    "withTicketNo": false
 }
 ```
 

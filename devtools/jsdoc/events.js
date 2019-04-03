@@ -927,6 +927,14 @@
  * @example Radio.trigger("Window", "collapseWin", model);
  */
 
+/** -------------------- WINDOWVIEW -------------------- */
+
+/**
+ * @event WindowView#RadioTriggerWindowHide
+ * @description is triggered by tool
+ * @example Radio.trigger("WindowView", "hide");
+ */
+
 
 /** -------------------- TITLE -------------------- */
 
