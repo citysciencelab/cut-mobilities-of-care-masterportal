@@ -2,7 +2,7 @@ import ButtonObliqueTemplate from "text-loader!./template.html";
 /**
  * @member ButtonObliqueTemplate
  * @description Template used for the "Schräglüftbilder" button
- * @memberof ButtonOblique
+ * @memberof Controls.ButtonOblique
  */
 
 const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prototype */{
@@ -12,7 +12,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
     /**
      * @class ButtonObliqueView
      * @extends Backbone.View
-     * @memberOf Controls.ButtonOblique
+     * @memberof Controls.ButtonOblique
      * @constructs
      * @description This control shows a user an oblique aerial picture
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive

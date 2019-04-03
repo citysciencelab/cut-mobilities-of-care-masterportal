@@ -3,7 +3,7 @@ import BackForwardModel from "./model";
 /**
  * @member BackForwardTemplate
  * @description Template used for backward and forward functionality
- * @memberof BackForward
+ * @memberof Controls.BackForward
  */
 const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototype */{
     events: {
@@ -33,11 +33,6 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
     },
-    /**
-     * @member BackForwardTemplate
-     * @description Template used for the backward and forward buttons.
-     * @memberof Controls.BackForward
-     */
     template: _.template(BackForwardTemplate),
     id: "backforward",
     /**
