@@ -436,7 +436,7 @@
  */
 
 /**
- * @event Map#RadioTriggerMapDeactivate3d
+ * @event Map#RadioTriggerMapDeactivateMap3d
  * @description Event that gets fired when the map is deactivated from "3D" mode
  * @example Radio.trigger("Map", "deactivateMap3d")
  */
