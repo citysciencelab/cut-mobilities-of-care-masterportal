@@ -34,7 +34,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {void}
      */
     addFeatureToList: function (feature) {
-        if (!this.isFeatureListFull(feature.get("layerId"), this.get("groupedFeatureList"), this.get("numberOfFeaturesToShow"))) {
+        if (!this.isFeatureListFull(feature.get("layerId").split("_")[0], this.get("groupedFeatureList"), this.get("numberOfFeaturesToShow"))) {
             this.setLayerId(feature.get("layerId"));
             this.setFeatureIsOnCompareList(feature, true);
             this.beautifyAttributeValues(feature);
@@ -76,6 +76,7 @@ const CompareFeaturesModel = Tool.extend({
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             layerId = parseInt(this.get("layerId").split("_")[0], 10),
             featureList = this.get("groupedFeatureList")[layerId];
+
         Object.keys(gfiAttributes).forEach(function (key) {
             var row = {};
 
@@ -111,7 +112,7 @@ const CompareFeaturesModel = Tool.extend({
     groupedFeaturesBy: function (featureList, property) {
         return _.groupBy(featureList, function (feature) {
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
-            if (property === 'layerId') {
+            if (property === "layerId") {
                 // Only use the first digit group delimited by underscore
                 return feature.get(property).split("_")[0];
             }
@@ -170,12 +171,11 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {string[]} featureIdList
      */
     getFeatureIds: function (groupedFeatureList, layerId) {
-        var idList = [];
+        var idList = [],
+            // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
+            layerIdSplit = layerId.split("_")[0];
 
-        // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
-        layerId = layerId.split("_")[0];
-
-        groupedFeatureList[layerId].forEach(function (feature) {
+        groupedFeatureList[layerIdSplit].forEach(function (feature) {
             idList.push(feature.getId());
         });
         return idList;
