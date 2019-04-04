@@ -481,6 +481,22 @@
  * @example Radio.trigger("LayerInformation", "add", options)
  */
 
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationSync
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationRemoveView
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerSetIsVisibleToFalse
+ * @description todo
+ */
+
+
 /** -------------------- OBLIQUE MAP-------------------- */
 
 /**
@@ -489,13 +505,13 @@
  * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
  */
 
- /**
+/**
  * @event ObliqueMap#RadioRequestObliqueMapIsActive
  * @returns {Boolean} - Flag if ObliqueMap is active.
  * @example Radio.request("ObliqueMap", "isActive")
  */
 
- /**
+/**
  * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
