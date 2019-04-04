@@ -47,6 +47,7 @@ const CoordPopup = Tool.extend({
 
     checkPosition: function (position) {
         if (this.get("updatePosition")) {
+            Radio.trigger("MapMarker", "showMarker", position);
             this.setPositionMapProjection(position);
         }
     },
@@ -57,24 +58,7 @@ const CoordPopup = Tool.extend({
 
         this.setPositionMapProjection(position);
         this.setUpdatePosition(!updatePosition);
-        this.toggleMapMarker(position, updatePosition, isViewMobile);
-    },
-
-    /**
-     * Shows the map marker when the coordinate is frozen.
-     * Otherwise, the MapMarker hide
-     * @param {array} position at which was clicked
-     * @param {boolean} updatePosition display of the position is frozen
-     * @param {boolean} isViewMobile is portal in view or desktop version
-     * @returns {void}
-     */
-    toggleMapMarker: function (position, updatePosition, isViewMobile) {
-        var showHideMarker = updatePosition || isViewMobile ? "showMarker" : "hideMarker",
-            mapViewCenter = Radio.request("MapView", "getCenter");
-
-        Radio.trigger("MapMarker", showHideMarker, position);
-        Radio.trigger("MapView", "setCenter", position);
-        Radio.trigger("MapView", "setCenter", mapViewCenter);
+        Radio.trigger("MapMarker", "showMarker", position);
     },
 
     returnTransformedPosition: function (targetProjection) {
