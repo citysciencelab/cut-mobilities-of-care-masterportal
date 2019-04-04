@@ -19,18 +19,18 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
      * @extends Backbone.Model
      * @memberof Quickhelp
      * @constructs
-     * @property {String} imgPath="/"
-     * @property {String} allgemein="allgemein.png"
-     * @property {String} allgemein2="allgemein2.png"
-     * @property {String} allgemein3="allgemein3.png"
-     * @property {String} allgemein4="allgemein4.png"
-     * @property {String} themen="themen.png"
-     * @property {String} themen2="themen_2.png"
-     * @property {String} statistikFlaecheNiemeier="Statistik_Flaeche_Niemeier.png"
-     * @property {String} statistikStreckeUniErlangen="Statistik_Strecke_UniErlangen.png"
-     * @property {String} utmStreifen="UTM_Streifen.png"
-     * @property {String} utmVerzerrung="UTM_Verzerrung.png"
-     * @property {String} utmFormeln="UTM_Formeln.png"
+     * @property {String} imgPath="/" "todo"
+     * @property {String} allgemein="allgemein.png" "todo"
+     * @property {String} allgemein2="allgemein2.png" "todo"
+     * @property {String} allgemein3="allgemein3.png" "todo"
+     * @property {String} allgemein4="allgemein4.png" "todo"
+     * @property {String} themen="themen.png" "todo"
+     * @property {String} themen2="themen_2.png" "todo"
+     * @property {String} statistikFlaecheNiemeier="Statistik_Flaeche_Niemeier.png" "todo"
+     * @property {String} statistikStreckeUniErlangen="Statistik_Strecke_UniErlangen.png" "todo"
+     * @property {String} utmStreifen="UTM_Streifen.png" "todo"
+     * @property {String} utmVerzerrung="UTM_Verzerrung.png" "todo"
+     * @property {String} utmFormeln="UTM_Formeln.png" "todo"
      * @param {boolean | object} attr Configuration
      */
     initialize: function (attr) {

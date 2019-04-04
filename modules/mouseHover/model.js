@@ -1,6 +1,6 @@
 import Overlay from "ol/Overlay.js";
 
-const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototype */{
+const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupModel.prototype */{
     defaults: {
         overlay: new Overlay({
             id: "mousehover-overlay"
@@ -13,7 +13,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
 
     /**
-     * @class MouseHoverPopup
+     * @class MouseHoverPopupModel
      * @extends Backbone.Model
      * @memberof MouseHover
      * @constructs
@@ -27,7 +27,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
      * @fires MouseHover#render
      * @fires Map#RadioTriggerMapAddOverlay
      * @fires Map#RadioTriggerMapRegisterListener
-     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Parser#RadioRequestParserGetItemsByAttributes
      * @listens MouseHover#RadioTriggerMouseHoverHide
      */
 
@@ -43,7 +43,7 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     },
     /**
     * Gets MouseHoverInfos from config.
-    * @fires Parser#RadioRequestParserGetItemByAttributes
+    * @fires Parser#RadioRequestParserGetItemsByAttributes
     * @returns {void}
     */
     getMouseHoverInfosFromConfig: function () {
@@ -157,7 +157,6 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     /**
      * Checks Drag-Modus
      * @param  {evt} evt Event-Object
-     * @listens "Map:pointermove"
      * @returns {void}
      */
     checkDragging: function (evt) {
@@ -378,4 +377,4 @@ const MouseHoverPopup = Backbone.Model.extend(/** @lends MouseHoverPopup.prototy
     }
 });
 
-export default MouseHoverPopup;
+export default MouseHoverPopupModel;

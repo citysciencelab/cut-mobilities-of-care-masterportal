@@ -34,7 +34,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      * @memberof Quickhelp
      * @constructs
      * @param   {boolean | object} attr Configuration
-     * @deprecated Boolean-Examines if true. Deprecated in Version 3.0 due to deprecated path pass
+     * @deprecated Boolean-Examines if true. Deprecated in Version 3.0 due to dedicated path pass
      * @listens Quickhelp#RadioTriggerQuickhelpShowWindowHelp
      * @listens Quickhelp#RadioRequestQuickhelpIsSet
      * @listens Quickhelp#render

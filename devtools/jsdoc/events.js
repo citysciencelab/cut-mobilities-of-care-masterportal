@@ -136,12 +136,6 @@
  */
 
 /**
- * @event Parser#RadioRequestParserGetItemByAttributes
- * @param {object} attributes The Object that contains the attributes
- * @returns {Item} - Layer/Tool/Folder/control
- * @example Radio.request("Parser", "getItemByAttributes", attributes)
- */
-/**
  * @event Parser#RadioRequestParserGetItemsByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item[]} - Layer/Tool/Folder/control
@@ -438,7 +432,6 @@
  * @param {Object} interaction Interaction to be removed from the map.
  * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
-
 
 /** -------------------- MAP VIEW -------------------- */
 
