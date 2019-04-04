@@ -542,6 +542,22 @@
  * @example Radio.trigger("LayerInformation", "add", options)
  */
 
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationSync
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationRemoveView
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerSetIsVisibleToFalse
+ * @description todo
+ */
+
+
 /** -------------------- OBLIQUE MAP-------------------- */
 
 /**
