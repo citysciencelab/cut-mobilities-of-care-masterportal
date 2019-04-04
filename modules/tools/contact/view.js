@@ -58,7 +58,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
         var channel = this.model.get("channel");
 
         if (value) {
-            this.model.set("resizeWindowHandler", this.render.bind(this));
+            this.model.setResizeWindowHandler(this.render.bind(this));
             channel.trigger("registerListener", "resize", this.model.get("resizeWindowHandler"));
             this.render();
         }
