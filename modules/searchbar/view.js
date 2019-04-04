@@ -276,6 +276,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.prepareAttrStrings(attr.hitList);
         this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
         this.$("ul.dropdown-menu-search").css("max-height", height);
+        this.$("ul.dropdown-menu-search").css("width", width);
         this.$("ul.dropdown-menu-search").css("max-width", width);
 
         viewport.setAttribute("content", "height=" + height + "px, width=" + width + "px, initial-scale=1.0");
