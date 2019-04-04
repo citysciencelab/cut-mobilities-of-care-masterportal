@@ -433,6 +433,29 @@
  * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
+/**
+  * @event Map#RadioTriggerMapRegisterListenerMovenend
+  * @example Radio.trigger("Map", "registerListener", "moveend")
+  */
+
+/**
+ * @event Map#RadioRequestMapIsMap3d
+ * @description Event that gets fired when the map is in "3D" mode
+ * @example Radio.request("Map", "isMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapActivateMap3d
+ * @description Event that gets fired when the map is activated to "3D" mode
+ * @example Radio.trigger("Map", "activateMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapDeactivateMap3d
+ * @description Event that gets fired when the map is deactivated from "3D" mode
+ * @example Radio.trigger("Map", "deactivateMap3d")
+ */
+
 /** -------------------- MAP VIEW -------------------- */
 
 /**
@@ -440,6 +463,18 @@
  * @param {Object} options Options of mapview status
  * @description Event that gets fired when the map view options have changed. The options are scale, center, zoomLevel
  * @example Radio.trigger("MapView", "changedOptions", options)
+ */
+
+/**
+ * @event MapView#RadioRequestMapViewGetOptions
+ * @description Event that gets the map view options. The options are scale, center, zoomLevel
+ * @example Radio.Request("MapView", "getOptions")
+ */
+
+/**
+ * @event MapView#RadioRequestMapViewGetCenter
+ * @description Event that gets the center of the map view
+ * @example Radio.Request("MapView", "getCenter")
  */
 
 /**
@@ -454,6 +489,18 @@
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
+ */
+
+/**
+ * @event MapView#RadioTriggerMapViewSetScale
+ * @description Event that sets the scale of the map view
+ * @example Radio.trigger("MapView", "setScale", model)
+ */
+
+/**
+ * @event MapView#RadioTriggerMapViewSetCenter
+ * @description Event that sets the center of the map view
+ * @example Radio.trigger("MapView", "setCenter", model)
  */
 
 /**
@@ -508,7 +555,17 @@
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
  */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapDeactivate
+ * @param {Boolean} - Flag if ObliqueMap is Deactivated
+ * @example Radio.trigger("ObliqueMap", "deactivate")
+ */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapActivate
+ * @param {Boolean} - Flag if ObliqueMap is activated
+ * @example Radio.trigger("ObliqueMap", "activate")
+ */
 /** -------------------- MODEL LIST -------------------- */
 
 /**
@@ -1270,4 +1327,18 @@
  * @param {GrenznachweisModel} model Model which holds the attributes to render
  * @param {Boolean} value Empty the formular or render it
  * @description Renders the formular
+ */
+
+/** ------------------------ Filter ----------------------------- */
+
+/**
+ * @event Filter#RadioTriggerFilterEnable
+ * @description Enables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "enable")
+ */
+
+/**
+ * @event Filter#RadioTriggerFilterDisable
+ * @description Diables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "disable")
  */
