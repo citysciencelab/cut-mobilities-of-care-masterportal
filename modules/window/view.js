@@ -13,6 +13,11 @@ const WindowView = Backbone.View.extend({
         this.listenTo(this.model, {
             "change:isVisible change:winType": this.render
         });
+        this.listenTo(Radio.channel("Contact"), {
+            "registerListener": this.registerListener,
+            "unregisterListener": this.unregisterListener
+        });
+
         this.$el.draggable({
             containment: "#map",
             handle: ".move",
@@ -119,6 +124,26 @@ const WindowView = Backbone.View.extend({
             toolModel.setIsActive(false);
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
+    },
+
+    /**
+     * Registered listener for certain events from window
+     * @param {String} event - the event that be register
+     * @param {function} handler - handler that is released by event
+     * @returns {void}
+     */
+    registerListener: function (event, handler) {
+        $(window).on(event, handler);
+    },
+
+    /**
+     * Unregistered listener for certain events from window
+     * @param {String} event - the event that be unregister
+     * @param {function} handler - handler that is released by event
+     * @returns {void}
+     */
+    unregisterListener: function (event, handler) {
+        $(window).off(event, handler);
     }
 });
 
