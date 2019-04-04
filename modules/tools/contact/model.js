@@ -26,7 +26,8 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         includeSystemInfo: false,
         contactInfo: "",
         glyphicon: "glyphicon-envelope",
-        serviceID: undefined
+        serviceID: undefined,
+        channel: Radio.channel("Contact")
     }),
 
     /**
