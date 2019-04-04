@@ -26,7 +26,8 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         includeSystemInfo: false,
         contactInfo: "",
         glyphicon: "glyphicon-envelope",
-        serviceID: undefined
+        serviceID: undefined,
+        channel: Radio.channel("Contact")
     }),
 
     /**
@@ -344,6 +345,15 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      */
     setBcc: function (value) {
         this.set("bcc", value);
+    },
+
+    /**
+     * Setter for "resizeWindowHandler"
+     * @param {Object[]} value resizeWindowHandler
+     * @returns {void}
+     */
+    setResizeWindowHandler: function (value) {
+        this.set("resizeWindowHandler", value);
     }
 });
 
