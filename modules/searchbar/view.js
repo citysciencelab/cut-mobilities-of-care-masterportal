@@ -257,7 +257,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     renderRecommendedList: function () {
-        var attr = this.model.toJSON();
+        var attr = this.model.toJSON(),
+            height = document.getElementsByClassName("lgv-container")[0].offsetHeight - 130;
 
         attr.uiStyle = Radio.request("Util", "getUiStyle");
 
@@ -272,6 +273,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         this.prepareAttrStrings(attr.hitList);
         this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
+        this.$("ul.dropdown-menu-search").css("max-height", height);
 
         this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
         // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
