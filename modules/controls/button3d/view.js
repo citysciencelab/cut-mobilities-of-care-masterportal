@@ -27,7 +27,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Filter#RadioTriggerFilterDisable
      * @fires Map#RadioTriggerMapActivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioOnceMapChange
+     * @listens Map#RadioTriggerMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map"),
@@ -104,7 +104,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Filter#RadioTriggerFilterDisable
      * @fires Map#RadioTriggerMapActivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioOnceMapChange
+     * @listens Map#RadioTriggerMapChange
      * @return {void}
      */
     mapChange: function () {

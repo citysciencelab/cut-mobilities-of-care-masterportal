@@ -22,7 +22,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires Map#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioOnceMapChange
+     * @listens Map#RadioTriggerMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map");
@@ -71,7 +71,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires Map#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioOnceMapChange
+     * @listens Map#RadioTriggerMapChange
      * @returns {void}
      */
     mapChange: function () {
