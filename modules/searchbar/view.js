@@ -174,6 +174,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             new GdiModel(config.gdi);
         }
 
+        this.model.setHitIsClick(false);
+
         // Hack für flexible Suchleiste
         $(window).on("resize", function () {
             if (window.innerWidth >= 768) {
@@ -366,7 +368,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
         if (_.has(hit, "triggerEvent")) {
-            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+            this.model.setHitIsClick(true);
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
         }
         else {
             Radio.trigger("MapMarker", "zoomTo", hit, 5000);
@@ -828,7 +831,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (_.has(hit, "triggerEvent")) {
         // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
-            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick") {
+            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
             }
         }
