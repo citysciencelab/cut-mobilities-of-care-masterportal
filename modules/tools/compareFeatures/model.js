@@ -224,7 +224,8 @@ const CompareFeaturesModel = Tool.extend({
         });
     },
     preparePrint: function (rowsToShow) {
-        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
+        var realLayerId = this.get("layerId").split("_")[0],
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: realLayerId}),
             features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
             tableBody = this.prepareTableBody(features, rowsToShow),
             pdfDef = {
