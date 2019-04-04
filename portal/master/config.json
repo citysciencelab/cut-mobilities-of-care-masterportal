@@ -59,8 +59,8 @@
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_festgestellt",
-            "propertyNames": ["app:planrecht"],
+            "typeName": "app:hh_hh_festgestellt",
+            "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
