@@ -130,11 +130,11 @@
 /** -------------------- PARSER -------------------- */
 
 /**
- * @event Parser#RadioRequestParserGetItemByAttributes
- * @param {object} attributes The Object that contains the attributes
- * @returns {Item} - Layer/Tool/Folder/control
- * @example Radio.request("Parser", "getItemByAttributes", attributes)
+ * @event Parser#RadioTriggerRemoveItem
+ * @example Radio.trigger("Parser", "removeItem")
+ * @description Event that removes an item from the layertree
  */
+
 /**
  * @event Parser#RadioRequestParserGetItemsByAttributes
  * @param {object} attributes The Object that contains the attributes
@@ -348,7 +348,7 @@
  * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
  */
 
- /**
+/**
  * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
  * @param {String} layerId Id of vector layer.
  * @param {ol/Feature[]} features Features that have been loaded.
@@ -366,18 +366,19 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddLayer
+ * @description Adds layer to map
+ * @param {Object} layer Layer to add to map
+ * @example Radio.trigger("Map", "addLayer", layer)
+ */
+
+/**
  * @event Map#RadioTriggerMapAddLayerToIndex
  * @description Adds layer to given index
  * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
  * @example Radio.trigger("Map", "addLayerToIndex", array)
  */
 
-/**
- * @event Map#RadioTriggerMapAddLayer
- * @description Adds layer to map
- * @param {Object} layer Layer to add to map
- * @example Radio.trigger("Map", "addLayer", layer)
- */
 
 /**
  * @event Map#RadioRequestMapGetMapMode
@@ -405,6 +406,20 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddOverlay
+ * @param {ol/overlay} overlay Overlay to be added to map.
+ * @example Radio.trigger("Map", "addOverlay", overlay)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRegisterListener
+ * @param {String | Object} event Event to be registered
+ * @param {Function} callback - The Callback Function
+ * @param {Object} context -
+ * @example Radio.trigger("Map", "RegisterListener", event, callback, context)
+ */
+
+/**
  * @event Map#RadioTriggerMapAddInteraction
  * @description Adds an interaction to the map (e.g. draw)
  * @param {Object} interaction Interaction to be added to map.
@@ -417,7 +432,6 @@
  * @param {Object} interaction Interaction to be removed from the map.
  * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
-
 
 /** -------------------- MAP VIEW -------------------- */
 
@@ -482,13 +496,13 @@
  * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
  */
 
- /**
+/**
  * @event ObliqueMap#RadioRequestObliqueMapIsActive
  * @returns {Boolean} - Flag if ObliqueMap is active.
  * @example Radio.request("ObliqueMap", "isActive")
  */
 
- /**
+/**
  * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
@@ -620,7 +634,7 @@
  */
 
 /**
- * @event ModelList#ChangeIsVisibleInMap
+ * @event ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @description Triggered when one item has a change in the attribute isVisibleInMap
  * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
@@ -736,8 +750,6 @@
  * @event Attributions#renderAttributions
  * @description Event for a changing property
  */
-
-
 
 /** -------------------- SEARCHBAR -------------------- */
 
@@ -918,6 +930,17 @@
  * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
  */
 
+/**
+ * @event Quickhelp#RadioRequestQuickhelpIsSet
+ * @description Returns isSet value
+ * @example Radio.request("Quickhelp", "isSet");
+ */
+
+/**
+ * @event Quickhelp#render
+ * @description Triggered when the Quickhelp View has to render.
+ * @example this.trigger("render")
+ */
 /** -------------------- WINDOW -------------------- */
 
 /**
@@ -1011,6 +1034,18 @@
  * @event MouseHover#RadioTriggerMouseHoverHide
  * @description hides the mouse hover div
  * @example Radio.trigger("MouseHover", "hide");
+ */
+
+/**
+ * @event MouseHover#render
+ * @description Triggered when View has to render the popup.
+ * @example this.trigger("render")
+ */
+
+/**
+ * @event MouseHover#destroy
+ * @description Triggered when the popup needs to be closed.
+ * @example this.trigger("destroy")
  */
 
 /** -------------------- STYLELIST -------------------- */
