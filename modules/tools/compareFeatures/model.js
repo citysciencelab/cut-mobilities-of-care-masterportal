@@ -34,7 +34,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {void}
      */
     addFeatureToList: function (feature) {
-        if (!this.isFeatureListFull(feature.get("layerId"), this.get("groupedFeatureList"), this.get("numberOfFeaturesToShow"))) {
+        if (!this.isFeatureListFull(feature.get("layerId").split("_")[0], this.get("groupedFeatureList"), this.get("numberOfFeaturesToShow"))) {
             this.setLayerId(feature.get("layerId"));
             this.setFeatureIsOnCompareList(feature, true);
             this.beautifyAttributeValues(feature);
