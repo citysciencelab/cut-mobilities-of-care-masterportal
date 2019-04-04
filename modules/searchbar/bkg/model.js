@@ -87,7 +87,7 @@ const BKGSearchModel = Backbone.Model.extend({
     directPushSuggestions: function (data) {
         if (data.length === 1) {
             this.bkgSearch({
-                name: data[0].suggestion,
+                name: data[0].suggestion
             });
         }
         else {
