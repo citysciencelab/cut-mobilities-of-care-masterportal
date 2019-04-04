@@ -349,6 +349,15 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      */
     setQuickHelp: function (value) {
         this.set("quickHelp", value);
+    },
+
+    /**
+     * Setter for "hitIsClick"
+     * @param {String} value hitIsClick
+     * @returns {void}
+     */
+    setHitIsClick: function (value) {
+        this.set("hitIsClick", value);
     }
 });
 
