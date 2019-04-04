@@ -387,6 +387,13 @@
  */
 
 /**
+ * @event Map#RadioRequestMapCreateLayerIfNotExists
+ * @description Creates a layer if it does not exist
+ * @returns {Object} - The newly created layer
+ * @example Radio.request("Map", "createLayerIfNotExists", "newLayerName");
+ */
+
+/**
  * @event Map#RadioRequestMapGetMap
  * @returns {ol/map} - The Openlayers Map.
  * @example Radio.request("Map", "getMap")
@@ -1235,4 +1242,19 @@
  * @param {GrenznachweisModel} model Model which holds the attributes to render
  * @param {Boolean} value Empty the formular or render it
  * @description Renders the formular
+ */
+
+
+/** -------------------- HighlightFeature -------------------- */
+
+/**
+ * @event HighlightFeature#RadioTriggerHighlightfeatureHighlightFeature
+ * @param {String} featureToAdd String with comma seperated information about the feature to add "layerId, featureId"
+ * @description Hightlights a specific feature
+ */
+
+/**
+ * @event HighlightFeature#RadioTriggerHighlightfeatureHighlightPolygon
+ * @param {ol.Feature} feature the feature to be highlighted
+ * @description Hightlights a specific polygon
  */

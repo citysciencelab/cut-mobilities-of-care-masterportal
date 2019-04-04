@@ -21,7 +21,7 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * @property {Style} polygonStyle Default style to hightlight a feature
      * @fires ParametricURL#RadioRequestParametricURLGetHighlightFeature
      * @fires Map#RadioRequestMapCreateLayerIfNotExists
-     * @fires List#RadioRequestModelListGetModelByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelByAttributes
      * @listens Layer#RadioTriggerLayerFeaturesLoaded
      * @listens HighlightFeature#RadioTriggerHighlightfeatureHighlightFeature
      * @listens HighlightFeature#RadioTriggerHighlightfeatureHighlightPolygon
@@ -55,7 +55,7 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * Searches the feature which shall be hightlighted
      * @param {String} layerId Id of the layer, containing the feature to hightlight
      * @param {String} featureId Id of feature which shall be hightlighted
-     * @fires List#RadioRequestModelListGetModelByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelByAttributes
      * @listens Layer#RadioTriggerLayerFeaturesLoaded
      * @return {void}
      */
