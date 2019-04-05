@@ -579,7 +579,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             return;
         }
 
+        // skip specified layers
         if (Radio.request("Map", "getMapMode") === "2D" && (this.selectionIDX[newIDX].get("typ") === "Terrain3D" || this.selectionIDX[newIDX].get("typ") === "Oblique" || this.selectionIDX[newIDX].get("typ") === "TileSet3D")) {
+            model.setSelectionIDX(newIDX - 1);
+            this.moveModelDown(model);
             return;
         }
 
@@ -613,7 +616,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             return;
         }
 
+        // skip specified layers
         if (Radio.request("Map", "getMapMode") === "2D" && (this.selectionIDX[newIDX].get("typ") === "Terrain3D" || this.selectionIDX[newIDX].get("typ") === "Oblique" || this.selectionIDX[newIDX].get("typ") === "TileSet3D")) {
+            model.setSelectionIDX(newIDX + 1);
+            this.moveModelUp(model);
             return;
         }
 
