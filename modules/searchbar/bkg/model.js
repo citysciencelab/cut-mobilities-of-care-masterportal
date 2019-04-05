@@ -79,6 +79,7 @@ const BKGSearchModel = Backbone.Model.extend({
         if (searchString.length >= this.get("minChars")) {
             $("#searchInput").val(searchString);
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+
             this.setTypeOfRequest("direct");
             this.sendRequest(this.get("bkgSuggestURL"), request, this.directPushSuggestions, false, this.get("typeOfRequest"));
         }
@@ -174,14 +175,14 @@ const BKGSearchModel = Backbone.Model.extend({
      * @returns {void}
      */
     handleBKGSearchResult: function (data) {
-        if (!this.get("showOrHideMarker")) {
+        if (this.get("showOrHideMarker") === true) {
+            Radio.trigger("MapMarker", "showMarker", data.features[0].geometry.coordinates);
+        }
+        else {
             Radio.trigger("MapMarker", "hideMarker");
         }
-        else if (this.get("zoomToResult")) {
+        if (this.get("zoomToResult")) {
             Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
-        }
-        else if (this.get("showOrHideMarker")) {
-            Radio.trigger("MapMarker", "showMarker", data.features[0].geometry.coordinates);
         }
     },
     /**
