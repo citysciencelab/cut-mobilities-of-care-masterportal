@@ -23,7 +23,7 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
      * @listens Legend#hide
      * @listens Legend#changeLegendParams
      * @listens Legend#changeParamsStyleWMSArray
-     * @listens Legend#changeIsActive
+     * @listens Tool#changeIsActive
      */
     initialize: function () {
         this.listenTo(this.model, {

@@ -152,10 +152,6 @@
  * @description todo
 */
 
-/**
- * @event Legend#changeIsActive
- * @description todo
-*/
 
 /** -------------------- PARSER -------------------- */
 
@@ -1424,5 +1420,13 @@
 /**
  * @event ParametricURL#RadioRequestParametricURLGetHighlightFeature
  * @returns {Object} featureToHighlight Feature to highlight
+ */
+
+
+/** -------------------- Tool -------------------- */
+
+/**
+ * @event Tool#changeIsActive
+ * @description Fired when param isActive changes
  */
 

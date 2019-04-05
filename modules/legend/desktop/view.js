@@ -23,7 +23,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      * @listens Legend#hide
      * @listens Legend#changeLegendParams
      * @listens Legend#changeParamsStyleWMSArray
-     * @listens Legend#changeIsActive
+     * @listens Tool#changeIsActive
      * @listens Map#RadioTriggerMapUpdateSize
      */
     initialize: function () {

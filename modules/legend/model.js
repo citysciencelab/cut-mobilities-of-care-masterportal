@@ -30,6 +30,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @listens StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
      * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @fires StyleList#RadioRequestReturnModelById
+     * @fires Legend#changeLegendParams
+     * @fires Legend#changeParamsStyleWMSArray
      */
     initialize: function () {
         var channel = Radio.channel("Legend");
