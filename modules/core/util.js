@@ -164,7 +164,9 @@ const Util = Backbone.Model.extend({
 
         range.selectNodeContents(el);
         selection.removeAllRanges();
-        selection.addRange(range);
+        if (!this.isInternetExplorer()) {
+            selection.addRange(range);
+        }
         el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
 
         el.readOnly = oldReadOnly;
