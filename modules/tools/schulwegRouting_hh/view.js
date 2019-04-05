@@ -84,6 +84,11 @@ const SchulwegRoutingView = Backbone.View.extend({
         var attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
+        this.renderRouteResult(this.model, this.model.get("routeResult"));
+        this.renderRouteDescription(this.model, this.model.get("routeDescription"));
+        this.updateRegionalSchool(this.model.get("schoolWithAdress"));
+        this.togglePrintEnabled(this.model.get("printRoute"));
+
         this.initSelectpicker();
         this.setPresetValues();
         this.$el.find(".routing-checkbox").append(this.checkBoxHVV.render().$el);
@@ -95,9 +100,11 @@ const SchulwegRoutingView = Backbone.View.extend({
     togglePrintEnabled: function (value) {
         if (value) {
             this.$el.find(".print-route").removeAttr("disabled");
+            this.model.setPrintRoute(true);
         }
         else {
             this.$el.find(".print-route").attr("disabled", true);
+            this.model.setPrintRoute(false);
         }
     },
     setPresetValues: function () {
@@ -133,14 +140,14 @@ const SchulwegRoutingView = Backbone.View.extend({
     },
 
     renderRouteResult: function (model, value) {
-        var attr = this.model.toJSON();
+        var attr = model.toJSON();
 
         if (Object.keys(value).length !== 0) {
             this.$el.find(".result").html(this.templateRouteResult(attr));
         }
     },
     renderRouteDescription: function (model, value) {
-        var attr = this.model.toJSON();
+        var attr = model.toJSON();
 
         if (value.length > 0) {
             this.$el.find(".description").html(this.templateRouteDescription(attr));

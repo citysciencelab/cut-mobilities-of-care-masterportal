@@ -464,7 +464,16 @@
       },
       {
         "id": "1933",
-        "infoFormat": "application/vnd.ogc.gml"
+        "infoFormat": "application/vnd.ogc.gml",
+        "styles": [
+          "geofox_stations"
+        ],
+        "name": [
+          "HVV Haltestellen"
+        ],
+        "legendURL": [
+          "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
+        ]
       },
       {
         "id": "4561",
