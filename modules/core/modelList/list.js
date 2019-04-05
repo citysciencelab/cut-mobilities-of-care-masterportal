@@ -171,7 +171,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.typ === "GROUP") {
                 return new GROUPLayer(attrs, options);
             }
-            else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
+            else if (attrs.typ === "SensorThings") {
                 return new SensorLayer(attrs, options);
             }
             else if (attrs.typ === "Heatmap") {
@@ -575,17 +575,25 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var oldIDX = model.get("selectionIDX"),
             newIDX = oldIDX - 1;
 
-        if (oldIDX > 0) {
-            this.removeFromSelectionIDX(model);
-            this.insertIntoSelectionIDXAt(model, newIDX);
-            if (model.get("isSelected")) {
-                Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
-            }
-            this.trigger("updateSelection");
-            this.trigger("updateLightTree");
-            // Trigger fÃƒÂ¼r mobil
-            this.trigger("changeSelectedList");
+        if (newIDX < 0) {
+            return;
         }
+
+        if (Radio.request("Map", "getMapMode") === "2D" && (this.selectionIDX[newIDX].get("typ") === "Terrain3D" || this.selectionIDX[newIDX].get("typ") === "Oblique" || this.selectionIDX[newIDX].get("typ") === "TileSet3D")) {
+            return;
+        }
+
+        this.removeFromSelectionIDX(model);
+        this.insertIntoSelectionIDXAt(model, newIDX);
+
+        Radio.trigger("Map", "addLayerToIndex", [this.selectionIDX[oldIDX].get("layer"), oldIDX]);
+        if (model.get("isSelected")) {
+            Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
+        }
+        this.trigger("updateSelection");
+        this.trigger("updateLightTree");
+        // Trigger fÃƒÂ¼r mobil
+        this.trigger("changeSelectedList");
     },
 
     /**
@@ -601,19 +609,27 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var oldIDX = model.get("selectionIDX"),
             newIDX = oldIDX + 1;
 
-        if (oldIDX < this.selectionIDX.length - 1) {
-            this.removeFromSelectionIDX(model);
-            this.insertIntoSelectionIDXAt(model, newIDX);
-            // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃƒÂ¶nnen
-            // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
-            if (model.get("isSelected")) {
-                Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
-            }
-            this.trigger("updateSelection");
-            this.trigger("updateLightTree");
-            // Trigger fÃƒÂ¼r mobil
-            this.trigger("changeSelectedList");
+        if (newIDX > this.selectionIDX.length - 1) {
+            return;
         }
+
+        if (Radio.request("Map", "getMapMode") === "2D" && (this.selectionIDX[newIDX].get("typ") === "Terrain3D" || this.selectionIDX[newIDX].get("typ") === "Oblique" || this.selectionIDX[newIDX].get("typ") === "TileSet3D")) {
+            return;
+        }
+
+        this.removeFromSelectionIDX(model);
+        this.insertIntoSelectionIDXAt(model, newIDX);
+
+        Radio.trigger("Map", "addLayerToIndex", [this.selectionIDX[oldIDX].get("layer"), oldIDX]);
+        // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃƒÂ¶nnen
+        // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
+        if (model.get("isSelected")) {
+            Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
+        }
+        this.trigger("updateSelection");
+        this.trigger("updateLightTree");
+        // Trigger fÃƒÂ¼r mobil
+        this.trigger("changeSelectedList");
     },
 
     /**
