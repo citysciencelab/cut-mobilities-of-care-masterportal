@@ -9,7 +9,7 @@ import ContentTemplate from "text-loader!../content.html";
  * @member ContentTemplate
  * @description Template of legend content identical for mobile and desktop view
  * @see Legend.ContentTemplate
- * @memberOf Legend.Mobile
+ * @memberof Legend.Mobile
  */
 const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.prototype */{
     events: {
