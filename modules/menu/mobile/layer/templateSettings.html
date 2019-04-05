@@ -7,10 +7,12 @@
     <div class="layer-sort-item pull-right">
         <span class="glyphicon glyphicon-triangle-top"></span>
         <span class="glyphicon glyphicon-triangle-bottom"></span>
-        <% if (styleable === true) { %>
-            <span class="glyphicon glyphicon-tint"</span>
-        <% } %>
     </div>
+    <% } %>
+    <% if (styleable === true) { %>
+      <div class="pull-right">
+        <span class="glyphicon glyphicon-tint"></span>
+      </div>
     <% } %>
     <form class="form-inline pull-left" role="form">
         <div class="form-group">
@@ -30,8 +32,8 @@
        </div>
     </form>
     <% if (isRemovable === true) { %>
-    <span class="remove-layer">
-                <span class="text" data-toggle="tooltip" data-placement="bottom">Layer entfernen</span>
-            </span>
+    <div class="remove-layer pull-right">
+      <span class="glyphicon glyphicon-remove-sign"></span>
+    </div>
     <% } %>
 </div>
