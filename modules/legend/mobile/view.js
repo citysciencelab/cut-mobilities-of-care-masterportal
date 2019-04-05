@@ -1,10 +1,30 @@
 import LegendTemplate from "text-loader!./template.html";
 import ContentTemplate from "text-loader!../content.html";
-
-const MobileLegendView = Backbone.View.extend({
+/**
+ * @member LegendTemplate
+ * @description Template of mobile legend
+ * @memberof Legend.Mobile
+ */
+/**
+ * @member ContentTemplate
+ * @description Template of legend content identical for mobile and desktop view
+ * @see Legend.ContentTemplate
+ * @memberof Legend.Mobile
+ */
+const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.prototype */{
     events: {
         "click .glyphicon-remove": "hide"
     },
+    /**
+     * @class MobileLegendView
+     * @extends Backbone.View
+     * @memberof Legend.Mobile
+     * @constructs
+     * @listens Legend#hide
+     * @listens Legend#changeLegendParams
+     * @listens Legend#changeParamsStyleWMSArray
+     * @listens Tool#changeIsActive
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:legendParams": this.paramsChanged,
@@ -23,16 +43,18 @@ const MobileLegendView = Backbone.View.extend({
     className: "modal bs-example-modal-sm legend fade in",
     template: _.template(LegendTemplate),
     contentTemplate: _.template(ContentTemplate),
+    /**
+    * todo
+    * @returns {Legend.Mobile.MobileLegendView} returns this
+    */
     render: function () {
         var attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         return this;
     },
-
     /**
-     * Steuert Maßnahmen zur Aufbereitung der Legende.
-     * @listens this.model~change:legendParams
+     * Reacts on change of legend params and rebuilds legend
      * @returns {void}
      */
     paramsChanged: function () {
@@ -44,11 +66,9 @@ const MobileLegendView = Backbone.View.extend({
             this.render();
         }
     },
-
     /**
-     * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
-     * Dieses wird im template benötigt.
-     * @param {object[]} legendParams Legendenobjekte by reference
+     * Adds the rendered HTML to the legend definition, is needed in the template
+     * @param {Object[]} legendParams Legend objects via reference
      * @returns {void}
      */
     addContentHTML: function (legendParams) {
@@ -58,6 +78,10 @@ const MobileLegendView = Backbone.View.extend({
             }, this);
         }, this);
     },
+    /**
+    * todo
+    * @returns {void}
+    */
     show: function () {
         if (this.$("body").find(".legend-win").length === 0) {
             this.render();
@@ -65,11 +89,18 @@ const MobileLegendView = Backbone.View.extend({
         this.model.setLayerList();
         this.$el.modal("show");
     },
+    /**
+    * todo
+    * @returns {void}
+    */
     hide: function () {
         this.$el.modal("hide");
         this.model.setIsActive(false);
     },
-
+    /**
+    * todo
+    * @returns {void}
+    */
     removeView: function () {
         this.$el.modal("hide");
         this.remove();
