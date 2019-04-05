@@ -1,10 +1,31 @@
 import LegendTemplate from "text-loader!./template.html";
 import ContentTemplate from "text-loader!../content.html";
-
-const LegendView = Backbone.View.extend({
+/**
+ * @member LegendTemplate
+ * @description Template of desktop legend
+ * @memberof Legend.Desktop
+ */
+/**
+ * @member ContentTemplate
+ * @description Template of legend content identical for mobile and desktop view
+ * @see Legend.ContentTemplate
+ * @memberOf Legend.Desktop
+ */
+const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     events: {
         "click .glyphicon-remove": "hide"
     },
+    /**
+     * @class LegendView
+     * @extends Backbone.View
+     * @memberof Legend.Desktop
+     * @constructs
+     * @listens Legend#hide
+     * @listens Legend#changeLegendParams
+     * @listens Legend#changeParamsStyleWMSArray
+     * @listens Legend#changeIsActive
+     * @listens Map#RadioTriggerMapUpdateSize
+     */
     initialize: function () {
         $(window).resize(function () {
             if ($(".legend-win-content").height() !== null) {
@@ -35,7 +56,10 @@ const LegendView = Backbone.View.extend({
     className: "legend-win",
     template: _.template(LegendTemplate),
     contentTemplate: _.template(ContentTemplate),
-
+    /**
+    * todo
+    * @returns {Legend.Desktop.LegendView} returns this
+    */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -48,10 +72,8 @@ const LegendView = Backbone.View.extend({
         });
         return this;
     },
-
     /**
-     * Steuert Maßnahmen zur Aufbereitung der Legende.
-     * @listens this.model~change:legendParams
+     * Reacts on change of legend params and rebuilds legend
      * @returns {void}
      */
     paramsChanged: function () {
@@ -64,11 +86,9 @@ const LegendView = Backbone.View.extend({
             this.render();
         }
     },
-
     /**
-     * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
-     * Dieses wird im template benötigt.
-     * @param {object[]} legendParams Legendenobjekte by reference
+     * Adds the rendered HTML to the legend definition, is needed in the template
+     * @param {Object[]} legendParams Legend objects via reference
      * @returns {void}
      */
     addContentHTML: function (legendParams) {
@@ -78,7 +98,10 @@ const LegendView = Backbone.View.extend({
             }, this);
         }, this);
     },
-
+    /**
+    * todo
+    * @returns {void}
+    */
     show: function () {
         if ($("body").find(".legend-win").length === 0) {
             this.render();
@@ -86,20 +109,27 @@ const LegendView = Backbone.View.extend({
         this.model.setLayerList();
         this.$el.show();
     },
+    /**
+    * todo
+    * @returns {void}
+    */
     hide: function () {
         this.$el.hide();
         this.model.setIsActive(false);
     },
+    /**
+    * todo
+    * @returns {void}
+    */
     removeView: function () {
         this.$el.hide();
         this.remove();
     },
-
     /**
-     * Passt die Höhe der Legende an die Klasse lgv-container an.
-     * Derzeit wird die Funktion ausgeführt auf die updateSize Funtkion der Map.
-     * @returns {void}
-     */
+    * Fits the legend height according to the class lgv-container
+    * currently this function is executed when map sends updateSize
+    * @returns {void}
+    */
     updateLegendSize: function () {
         $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
     }

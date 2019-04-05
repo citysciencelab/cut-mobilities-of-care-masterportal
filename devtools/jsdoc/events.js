@@ -127,6 +127,36 @@
  * @example Radio.request("Legend", "getLegend", layer)
 */
 
+/**
+ * @event Legend#RadioRequestLegendGetLegendParams
+ * @returns {Object} legendParams legendParams
+*/
+
+/**
+ * @event Legend#RadioTriggerLegendSetLayerList
+ * @description todo
+*/
+
+/**
+ * @event Legend#hide
+ * @description todo
+*/
+
+/**
+ * @event Legend#changeLegendParams
+ * @description todo
+*/
+
+/**
+ * @event Legend#changeParamsStyleWMSArray
+ * @description todo
+*/
+
+/**
+ * @event Legend#changeIsActive
+ * @description todo
+*/
+
 /** -------------------- PARSER -------------------- */
 
 /**
@@ -461,6 +491,11 @@
  * @event Map#RadioTriggerMapDeactivateMap3d
  * @description Event that gets fired when the map is deactivated from "3D" mode
  * @example Radio.trigger("Map", "deactivateMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description todo
  */
 
 /** -------------------- MAP VIEW -------------------- */
