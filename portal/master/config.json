@@ -203,7 +203,7 @@
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": true
+            "onlyDesktop": false
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
