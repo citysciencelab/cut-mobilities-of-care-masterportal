@@ -20,7 +20,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     * @property {Boolean} isMobile Boolean to indicate if view is in desktop or mobile mode.
     * @fires Util#RadioRequestIsViewMobile
     * @listens Util#RadioTriggerUtilIsViewMobileChanged
-    * @listens ClickCounter#RadioTriggerClickCounterToolChanged x
+    * @listens ClickCounter#RadioTriggerClickCounterToolChanged
     * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
     * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
     * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
