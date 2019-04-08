@@ -20,7 +20,7 @@ const POIModel = Backbone.Model.extend({
      */
     calcInfos: function () {
         this.getFeatures();
-        this.calcActiveCategory();
+        this.initActiveCategory();
     },
 
     /**
@@ -60,13 +60,18 @@ const POIModel = Backbone.Model.extend({
      * Geht das Array an POI-Features durch und gibt ersten Eintrag zurück, der Features enthält und setzt diese Kategorie (Distanz)
      * @returns {void}
      */
-    calcActiveCategory: function () {
-        var poi = this.get("poiFeatures"),
+    initActiveCategory: function () {
+        var poi,
+            first;
+
+        if (!_.isNumber(this.get("activeCategory"))) {
+            poi = this.get("poiFeatures");
             first = _.find(poi, function (dist) {
                 return dist.features.length > 0;
             });
 
-        this.setActiveCategory(first ? first.category : poi[0].category);
+            this.setActiveCategory(first ? first.category : poi[0].category);
+        }
     },
 
     /**
