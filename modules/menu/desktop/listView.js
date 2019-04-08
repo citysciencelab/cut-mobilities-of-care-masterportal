@@ -1,24 +1,24 @@
-import listView from "./listViewMain";
+import ListViewMain from "./listViewMain";
 import DesktopThemenFolderView from "./folder/viewTree";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
 
-const Menu = listView.extend(/** @lends Menu.prototype */{
+const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
     /**
-     * @class Menu
-     * @extends listView
+     * @class ListView
+     * @extends ListViewMain
      * @memberof Menu.Desktop
      * @constructs
-     * @description This View presents a list of menu items
      * @fires ModelList#RadioRequestModelListGetCollection
-     * @fires Menu#updateLightTree
+     * @fires ModelList#UpdateLightTree
      * @fires Autostart#RadioTriggerAutostartInitializedModul
      * @fires Parser#RadioRequestParserGetItemsByAttributes
      * @fires Parser#RadioRequestParserGetTreeType
-     * @listens ModelList#updateOverlayerView
-     * @listens ModelList#updateSelection
-     * @listens ModelList#renderTree
+     * @listens Autostart#RadioTriggerAutostartStartModul
+     * @listens ModelList#UpdateOverlayerView
+     * @listens ModelList#UpdateSelection
+     * @listens ModelList#RenderTree
      */
     initialize: function () {
         this.collection = Radio.request("ModelList", "getCollection");
@@ -41,9 +41,13 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
         this.renderSelectedList();
         Radio.trigger("Autostart", "initializedModul", "tree");
     },
+    /**
+     * Renders the data to DOM.
+     * @return {void}
+     */
     render: function () {
         $("#tree").html("");
-        // Eine Themenebene rendern
+        // Renders a Theme level
         this.renderSubTree("tree", 0, 0, true);
         $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
@@ -51,7 +55,7 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     * Rendert die  Auswahlliste
+     * Renders the selection list
      * @return {void}
      */
     renderSelectedList: function () {
@@ -70,15 +74,15 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     * Rendert rekursiv alle Themen unter ParentId bis als rekursionsstufe Levellimit erreicht wurde
-     * @param {string} parentId -
-     * @param {number} level -
-     * @param {number} levelLimit -
-     * @param {boolean} firstTime -
+     * Renders all themes based on parentId recursively until all levels are reached
+     * @param {string} parentId to do
+     * @param {number} level to do
+     * @param {number} levelLimit to do
+     * @param {boolean} firstTime to do
      * @fires Parser#RadioRequestParserGetItemsByAttributes
-     * @returns {void}
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @return {void}
      */
-
     renderSubTree: function (parentId, level, levelLimit, firstTime) {
         var lightModels,
             models,
@@ -143,14 +147,22 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     *
+     * Updates Overlayer
      * @param {number} parentId - ID of the parent item
-     * @returns {void}
+     * @return {void}
      */
     updateOverlayer: function (parentId) {
         this.renderSubTree(parentId, 0, 10, false);
     },
 
+    /**
+     * Add Views to Items based on type
+     * @param {number} type to do
+     * @param {*} items to do
+     * @param {number} parentId ID of the parent item
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @return {Array} items
+     */
     addViewsToItemsOfType: function (type, items, parentId) {
         var viewItems = items.filter(function (model) {
             return model.get("type") === type;
@@ -170,9 +182,9 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     *
+     * Add Overlay Views
      * @param {Array} models - Array of models
-     * @returns {void}
+     * @return {void}
      */
     addOverlayViews: function (models) {
         _.each(models, function (model) {
@@ -193,9 +205,9 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     *
+     * Add Selection View
      * @param {*} models - todo
-     * @returns {void}
+     * @return {void}
      */
     addSelectionView: function (models) {
         _.each(models, function (model) {
@@ -206,9 +218,9 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     },
 
     /**
-     *
-     * @param {String} modulId -
-     * @returns {void}
+     * Start the List View Modul
+     * @param {String} modulId to do
+     * @return {void}
      */
     startModul: function (modulId) {
         var modul = this.collection.find(function (model) {
@@ -224,4 +236,4 @@ const Menu = listView.extend(/** @lends Menu.prototype */{
     }
 });
 
-export default Menu;
+export default ListView;
