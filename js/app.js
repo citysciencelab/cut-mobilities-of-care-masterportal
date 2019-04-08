@@ -321,7 +321,7 @@ function loadApp () {
                 }
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id);
+                        element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
