@@ -17,8 +17,8 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     * @property {String} countframeid=_.uniqueId("countframe") Id of iframe.
     * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
     * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
-    * @property {Boolean} isMobile Boolean to indicate if view is in desktop or mobile mode.
-    * @fires Util#RadioRequestIsViewMobile
+    * @property {Boolean} isMobile=false Boolean to indicate if view is in desktop or mobile mode.
+    * @fires Util#RadioRequestUtilIsViewMobile
     * @listens Util#RadioTriggerUtilIsViewMobileChanged
     * @listens ClickCounter#RadioTriggerClickCounterToolChanged
     * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
@@ -48,10 +48,10 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     },
 
     /**
-    * Request config path from util.
+    * Request isViewMobile state of page
     * This seperate helper method enables unit tests of the setInitialIsMobile-method.
-    * @fires Util#RadioRequestIsViewMobile
-    * @return {Boolean} is view in mobile mode or not
+    * @fires Util#RadioRequestUtilIsViewMobile
+    * @return {Boolean} Boolean is view in mobile mode or not
     */
     requestIsViewMobile: function () {
         return Radio.request("Util", "isViewMobile");
@@ -81,7 +81,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
 
     /**
      * Returns the string to use in the iFrame according to isViewMobile mode.
-     * @returns {String} URL to use in iFrame
+     * @returns {String} URL URL to use in iFrame
      */
     getURL: function () {
         if (this.get("isMobile")) {
@@ -91,8 +91,8 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     },
 
     /**
-     * Register Listener
-     * @listens ClickCounter#RadioTriggerClickCounterToolChanged x
+     * Register all the listener used in this model
+     * @listens ClickCounter#RadioTriggerClickCounterToolChanged
      * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
      * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
      * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
@@ -129,7 +129,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     },
 
     /**
-     * refreshes iframe with given id and used url
+     * Refreshes the iframe setting a specific URL
      * @return {void}
      */
     refreshIframe: function () {
