@@ -1,67 +1,170 @@
-const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.prototype */
-    {
-        defaults: {
-            countframeid: _.uniqueId("countframe"),
-            usedURL: "", // beutzte iFrame-URL, kann desktop oder mobile sein
-            desktopURL: "", // URL die verwendet wird, wenn nicht mobile
-            mobileURL: "" // URL die verwendet wird, wenn mobile
-        },
-        /**
-        * @class ClickCounterModel
-        * @extends Backbone.Model
-        * @memberof ClickCounter
-        * @constructs
-        * @param {String} desktopURL Url to be used in iframe when app runs in desktop mode
-        * @param {String} mobileURL  Url to be used in iframe when app runs in mobile mode
-        * @property {String} countframeid=_.uniqueId("countframe") Id of iframe.
-        * @property {String} usedURL="" Currently used url.
-        * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
-        * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
-        * @listens Util#RadioTriggerUtilIsViewMobileChanged
-        * @fires Util#RadioRequestIsViewMobile
-        */
-        initialize: function (desktopURL, mobileURL) {
-            var isMobile = Radio.request("Util", "isViewMobile"),
-                usedURL = isMobile === true ? mobileURL : desktopURL;
+const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.prototype */{
+    defaults: {
+        countframeid: _.uniqueId("countframe"),
+        desktopURL: "",
+        mobileURL: "",
+        isMobile: false
+    },
+    /**
+    * @class ClickCounterModel
+    * @extends Backbone.Model
+    * @memberof ClickCounter
+    * @constructs
+    * @classdesc Creates an invisible iFrame that points to an desktopURL or mobileURL according to the state of isViewMobile respectively a given URL parameter. The iFrame gets refreshed when specific clicks are done.
+    * @param {String} desktopURL URL that gets refreshed when in desktop mode
+    * @param {String} mobileURL  URL that gets refreshed when in mobile mode
+    * @param {String} [staticLink=undefined]  URL type to use ignoring isMobile mode. [desktop|mobile|undefined]
+    * @property {String} countframeid=_.uniqueId("countframe") Id of iframe.
+    * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
+    * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
+    * @property {Boolean} isMobile Boolean to indicate if view is in desktop or mobile mode.
+    * @fires Util#RadioRequestIsViewMobile
+    * @listens Util#RadioTriggerUtilIsViewMobileChanged
+    * @listens ClickCounter#RadioTriggerClickCounterToolChanged x
+    * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
+    * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
+    * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
+    * @listens ClickCounter#RadioTriggerClickCounterGfi
+    */
+    initialize: function (desktopURL, mobileURL, staticLink) {
+        this.setURL(desktopURL, mobileURL, staticLink);
+        this.setInitialIsMobile();
+        this.addIFrame2Body();
+        this.registerListener();
+        this.refreshIframe();
+    },
 
-            this.set("desktopURL", desktopURL);
+    /**
+     * Adds an iFrame with a specific id and url to document.body
+     * @returns {void}
+     */
+    addIFrame2Body: function () {
+        const iframe = document.createElement("iframe");
 
-            this.set("mobileURL", mobileURL);
+        iframe.setAttribute("id", this.get("countframeid"));
+        iframe.style.display = "none";
+        iframe.src = this.getURL();
+        document.body.appendChild(iframe);
+    },
 
-            this.set("usedURL", usedURL);
+    /**
+    * Request config path from util.
+    * This seperate helper method enables unit tests of the setInitialIsMobile-method.
+    * @fires Util#RadioRequestIsViewMobile
+    * @return {Boolean} is view in mobile mode or not
+    */
+    requestIsViewMobile: function () {
+        return Radio.request("Util", "isViewMobile");
+    },
 
-            this.listenTo(Radio.channel("Util"), {
-                "isViewMobileChanged": this.updateURL
-            });
-            // Erzeuge iFrame
-            $("<iframe style='display:none' src='" + this.get("usedURL") + "' id='" + this.get("countframeid") + "' width='0' height='0' frameborder='0'/>").appendTo("body");
-        },
-        /**
-         * Sets attribute "usedURl"
-         * @param  {Boolean} isMobile Flag if app runs in mobile mode
-         * @return {void}
-         */
-        updateURL: function (isMobile) {
-            var usedURL;
-
-            if (isMobile) {
-                usedURL = this.get("mobileURL");
-            }
-            else {
-                usedURL = this.get("desktopURL");
-            }
-            this.set("usedURL", usedURL);
-        },
-        /**
-         * refreshed iframe with given id and used url
-         * @return {void}
-         */
-        refreshIframe: function () {
-            var id = this.get("countframeid"),
-                url = this.get("usedURL");
-
-            $("#" + id).attr("src", url);
+    /**
+     * Sets the iFrame URL for desktop and mobile state
+     * @param {String} desktopURL URL that gets refreshed when in desktop mode
+     * @param {String} mobileURL  URL that gets refreshed when in mobile mode
+     * @param {String} [staticLink=undefined]  URL to use ignoring mobile state
+     * @returns {void}
+     */
+    setURL: function (desktopURL, mobileURL, staticLink) {
+        if (staticLink === "desktop") {
+            this.setDesktopURL(desktopURL);
+            this.setMobileURL(desktopURL);
         }
-    });
+        else if (staticLink === "mobile") {
+            this.setDesktopURL(mobileURL);
+            this.setMobileURL(mobileURL);
+        }
+        else {
+            this.setDesktopURL(desktopURL);
+            this.setMobileURL(mobileURL);
+        }
+    },
+
+    /**
+     * Returns the string to use in the iFrame according to isViewMobile mode.
+     * @returns {String} URL to use in iFrame
+     */
+    getURL: function () {
+        if (this.get("isMobile")) {
+            return this.get("mobileURL");
+        }
+        return this.get("desktopURL");
+    },
+
+    /**
+     * Register Listener
+     * @listens ClickCounter#RadioTriggerClickCounterToolChanged x
+     * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
+     * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
+     * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
+     * @listens ClickCounter#RadioTriggerClickCounterGfi
+     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @returns {void}
+     */
+    registerListener: function () {
+        const channel = Radio.channel("ClickCounter");
+
+        channel.on({
+            "toolChanged": this.refreshIframe,
+            "calcRoute": this.refreshIframe,
+            "zoomChanged": this.refreshIframe,
+            "layerVisibleChanged": this.refreshIframe,
+            "gfi": this.refreshIframe
+        }, this);
+
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": this.setIsMobile
+        });
+    },
+
+    /**
+     * Sets initially isViewMobile-mode
+     * @returns {void}
+     */
+    setInitialIsMobile: function () {
+        const isViewMobile = this.requestIsViewMobile();
+
+        if (_.isBoolean(isViewMobile)) {
+            this.setIsMobile(isViewMobile);
+        }
+    },
+
+    /**
+     * refreshes iframe with given id and used url
+     * @return {void}
+     */
+    refreshIframe: function () {
+        const id = this.get("countframeid"),
+            url = this.getURL();
+
+        document.getElementById(id).src = url;
+    },
+
+    /*
+    * setter for desktopURL
+    * @param {String} value desktopURL
+    * @returns {void}
+    */
+    setDesktopURL: function (value) {
+        this.set("desktopURL", value);
+    },
+
+    /*
+    * setter for mobileURL
+    * @param {String} value mobileURL
+    * @returns {void}
+    */
+    setMobileURL: function (value) {
+        this.set("mobileURL", value);
+    },
+
+    /*
+    * setter for isMobile
+    * @param {Boolean} value isMobile
+    * @returns {void}
+    */
+    setIsMobile: function (value) {
+        this.set("isMobile", value);
+    }
+});
 
 export default ClickCounterModel;
