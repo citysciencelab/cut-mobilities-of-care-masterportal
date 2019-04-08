@@ -37,7 +37,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @fires FeatureLister#changeLayerList
      * @fires FeatureLister#changeLayer
      * @fires FeatureLister#changeFeatureProps
-     * @listens List#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @listens Map#RadioTriggerMapSetGFIParams
      * @listens FeatureLister#changeLayerId
      * @listens FeatureLister#changeFeatureId
@@ -172,7 +172,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     },
     /**
      * Checks the layer list and adds new layers
-     * @fires List#RadioRequestModelListGetModelsByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @return {void}
      */
     checkVisibleLayer: function () {
@@ -224,7 +224,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     /**
      * Gets the features from a layer when the layer is selected
      * @param {String} layerId id of the layer to read the features
-     * @fires List#RadioRequestModelListGetModelsByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @return {void}
      */
     getFeatureList: function (layerId) {
