@@ -19,7 +19,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
     initialize: function () {
         this.template = _.template(Template);
         this.listenTo(this.model, {
-            "change:isActive": this.handleIsActive,
+            "change:isActive": this.render,
             "invalid": this.showValidity
         });
 
@@ -45,26 +45,6 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
             this.delegateEvents();
         }
         return this;
-    },
-
-    /**
-     * Registers at the window for resize if the tool is active and satartet render.
-     * Otherwise the registry is removed
-     * @param {Backbone.Model} model - contact model
-     * @param {Boolean} value - represents if this tool is active
-     * @returns {void}
-     */
-    handleIsActive: function (model, value) {
-        var channel = this.model.get("channel");
-
-        if (value) {
-            this.model.setResizeWindowHandler(this.render.bind(this));
-            channel.trigger("registerListener", "resize", this.model.get("resizeWindowHandler"));
-            this.render();
-        }
-        else {
-            channel.trigger("unregisterListener", "resize", this.model.get("resizeWindowHandler"));
-        }
     },
 
     /**
