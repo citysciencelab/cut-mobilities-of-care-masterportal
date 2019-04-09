@@ -37,7 +37,7 @@ const WindowView = Backbone.View.extend({
         $(window).resize($.proxy(function () {
             this.$el.css({
                 "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
-                "overflow": "scroll"
+                "overflow": "auto"
             });
         }, this));
         this.render();
