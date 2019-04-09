@@ -473,7 +473,8 @@ const GraphModel = Backbone.Model.extend({
      * @returns {void}
      */
     createLineGraph: function (graphConfig) {
-        var selector = graphConfig.selector,
+        var isMobile = Radio.request("Util", "isViewMobile"),
+            selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
             scaleTypeY = graphConfig.scaleTypeY,
             data = graphConfig.data,
@@ -482,8 +483,9 @@ const GraphModel = Backbone.Model.extend({
             yAxisLabel = graphConfig.yAxisLabel,
             attrToShowArray = graphConfig.attrToShowArray,
             margin = graphConfig.margin,
+            marginBottom = isMobile ? margin.bottom + 20 : margin.bottom,
             width = graphConfig.width - margin.left - margin.right,
-            height = graphConfig.height - margin.top - margin.bottom,
+            height = graphConfig.height - margin.top - marginBottom,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
             xAxisTicks = graphConfig.xAxisTicks,
@@ -495,8 +497,7 @@ const GraphModel = Backbone.Model.extend({
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
-            valueLine,
-            isMobile = Radio.request("Util", "isViewMobile");
+            valueLine;
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
@@ -513,7 +514,7 @@ const GraphModel = Backbone.Model.extend({
 
         if (isMobile) {
             this.rotateXAxisTexts(svg);
-            this.translateXAxislabelText(svg);
+            this.translateXAxislabelText(svg, yAxisLabel.translate);
         }
 
         this.setGraphParams({
@@ -538,11 +539,12 @@ const GraphModel = Backbone.Model.extend({
     /**
      * moves the label of the X-axis downwards
      * @param {String} svg - svg with d3 object
+     * @param {number} yAxisLableTranslate - translationon on the y-axis
      * @return {void}
      */
-    translateXAxislabelText: function (svg) {
+    translateXAxislabelText: function (svg, yAxisLableTranslate) {
         svg.select(".xAxisDraw").selectAll(".xAxisLabelText")
-            .attr("transform", "translate(0, 6)");
+            .attr("transform", "translate(0, " + yAxisLableTranslate + ")");
     },
 
     /**

@@ -313,7 +313,8 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                 },
                 yAxisLabel: {
                     label: this.yAxisLabel(key),
-                    offset: 10
+                    offset: 10,
+                    translate: 6
                 },
                 attrToShowArray: [key]
             };
