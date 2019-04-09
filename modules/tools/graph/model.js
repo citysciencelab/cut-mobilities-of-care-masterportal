@@ -514,7 +514,7 @@ const GraphModel = Backbone.Model.extend({
 
         if (isMobile) {
             this.rotateXAxisTexts(svg);
-            this.translateXAxislabelText(svg, yAxisLabel.translate);
+            this.translateXAxislabelText(svg, xAxisLabel.translate);
         }
 
         this.setGraphParams({
@@ -539,12 +539,12 @@ const GraphModel = Backbone.Model.extend({
     /**
      * moves the label of the X-axis downwards
      * @param {String} svg - svg with d3 object
-     * @param {number} yAxisLableTranslate - translationon on the y-axis
+     * @param {number} xAxisLableTranslate - translationon on the x-axis
      * @return {void}
      */
-    translateXAxislabelText: function (svg, yAxisLableTranslate) {
+    translateXAxislabelText: function (svg, xAxisLableTranslate) {
         svg.select(".xAxisDraw").selectAll(".xAxisLabelText")
-            .attr("transform", "translate(0, " + yAxisLableTranslate + ")");
+            .attr("transform", "translate(0, " + xAxisLableTranslate + ")");
     },
 
     /**
