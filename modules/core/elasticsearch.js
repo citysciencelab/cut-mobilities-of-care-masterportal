@@ -1,4 +1,3 @@
-
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
 
@@ -14,19 +13,20 @@ export function prepareSearchBody (query, sorting, size) {
 }
 
 /**
-* sends query against ElasticSearch-Index
-* @param {string} serviceId - id of ElasticSearch Element in rest-services.json
-* @param {object} query - json-notated Query to post to
-* @param {object} sorting - object used for sorting the query
-* @param {number} size - size of the query
-* @return {object} result - Resultobject of ElasticQuery
-*/
+ * sends query against ElasticSearch-Index
+ * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
+ * @param {object} query - json-notated Query to post to
+ * @param {object} sorting - object used for sorting the query
+ * @param {number} size - size of the query
+ * @return {object} result - Resultobject of ElasticQuery
+ */
 export function search (serviceId, query, sorting, size) {
     var result = {},
         searchUrl,
         searchBody,
         serviceUrl,
-        serviceUrlCheck;
+        serviceUrlCheck,
+        ajax = this.get("ajaxRequests");
 
     serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
@@ -47,9 +47,12 @@ export function search (serviceId, query, sorting, size) {
         console.error(JSON.stringify(result));
         return result;
     }
-
-
-    $.ajax({
+    if (ajax[serviceId] !== null && !_.isUndefined(ajax[serviceId])) {
+        ajax[serviceId].abort();
+        this.polishAjax(serviceId);
+    }
+    this.ajaxSend(serviceId, query, sorting, size);
+    this.get("ajaxRequests")[serviceId] = $.ajax({
         dataType: "json",
         url: searchUrl,
         async: false,
@@ -79,9 +82,10 @@ export function search (serviceId, query, sorting, size) {
             result.message = "ElasticSearch query went wrong with message: " + thrownError;
             console.error("error", thrownError);
             return result;
+        },
+        complete: function () {
+            this.polishAjax(serviceId);
         }
     });
-
     return result;
-
 }
