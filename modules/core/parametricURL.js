@@ -499,6 +499,11 @@ const ParametricURL = Backbone.Model.extend({
 
             this.set("highlightfeature", value);
         }
+        if (_.has(result, "CLICKCOUNTER")) {
+            value = _.values(_.pick(result, "CLICKCOUNTER"))[0];
+
+            Config.clickCounter.staticLink = value;
+        }
     },
 
     /**
