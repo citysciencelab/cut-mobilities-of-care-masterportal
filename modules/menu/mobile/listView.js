@@ -220,10 +220,7 @@ const MobileMenu = Backbone.View.extend({
                     return;
                 }
             }
-
-            if (!_.isUndefined(nodeView)) {
-                this.doAppendNodeView(nodeView);
-            }
+            this.doAppendNodeView(nodeView);
         }, this);
     },
 
