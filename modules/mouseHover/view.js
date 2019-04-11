@@ -26,15 +26,13 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
     /**
      * Checks the device type. Disable the ability on smartphones and tablets as they usually don't have a mouse to hover.
      * @fires Util#RadioRequestUtilIsAny
-     * @returns {Boolean}
+     * @returns {Boolean} touchdevice true:known touchdevice false:not known as touchdevice
      */
     isTouchdevice: function () {
         if (Radio.request("Util", "isAny") === null) {
             return false;
         }
-        else {
-            return true;
-        }
+        return true;
     },
 
     /**
