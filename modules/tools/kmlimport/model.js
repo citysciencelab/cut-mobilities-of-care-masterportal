@@ -122,7 +122,7 @@ const ImportTool = Tool.extend({
             }
         }.bind(this));
 
-        _.each(features, function (feature, i) {
+        _.each(features, function (feature) {
             var type = feature.getGeometry().getType(),
                 featureStyleFunction = feature.getStyleFunction(),
                 styles = featureStyleFunction(feature),
@@ -132,7 +132,7 @@ const ImportTool = Tool.extend({
             if (type === "Point") {
                 // wenn Text
                 if (feature.get("name") !== undefined) {
-                    feature.setStyle(this.getTextStyle(feature.get("name"), style, textFonts[i]));
+                    feature.setStyle(this.getTextStyle(feature.get("name"), style, textFonts[pointStyleCounter]));
                 }
                 // wenn Punkt
                 else {
@@ -146,8 +146,8 @@ const ImportTool = Tool.extend({
                     });
 
                     feature.setStyle(style);
-                    pointStyleCounter++;
                 }
+                pointStyleCounter++;
             }
         }, this);
 
