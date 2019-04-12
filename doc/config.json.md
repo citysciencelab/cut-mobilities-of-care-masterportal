@@ -39,7 +39,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|searchBar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
 ***
 
@@ -1651,6 +1651,7 @@ Hier werde WMS typische Attribute aufgelistet.
 #### Themenconfig.Layer.StaticImage
 
 [inherits]: # (Themenconfig.Layer)
+[type:Extent]: # (Datatypes.Extent)
 
 Hier werden typische Attribute für ein StaticImage aufgelistet.
 
@@ -1660,7 +1661,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 |typ|ja|String|"StaticImage"|Setzt den Layertypen auf StaticImage welcher statische Bilder als Layer darstellen kann.|
 |url|ja|String|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
 |name|ja|String|"Static Image Name"|Setzt den Namen des Layers für den Layerbaum|
-|extent|ja|Array|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
+|extent|ja|[Extent](#markdown-header-datatypesextent)|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
 
 
 **Beispiel**
