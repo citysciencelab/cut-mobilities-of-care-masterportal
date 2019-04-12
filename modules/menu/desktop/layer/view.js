@@ -96,7 +96,7 @@ const LayerView = Backbone.View.extend({
     showLayerInformation: function () {
         this.model.showLayerInformation();
         // Navigation wird geschlossen
-        $("div.collapse.navbar-collapse").removeClass("in");
+        this.$("div.collapse.navbar-collapse").removeClass("in");
     },
     toggleIsSettingVisible: function () {
         this.model.toggleIsSettingVisible();

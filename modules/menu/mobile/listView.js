@@ -35,8 +35,8 @@ const MobileMenu = Backbone.View.extend({
     render: function () {
         var rootModels = this.collection.where({parentId: "root"});
 
-        $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
-        $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
+        this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
+        this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
         this.addViews(rootModels);
         return this;
     },
@@ -126,7 +126,7 @@ const MobileMenu = Backbone.View.extend({
             slideOut = "right";
         }
 
-        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
+        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
             // befinden wir uns in der Auswahl sind die models bereits nach ihrem SelectionIndex sortiert
@@ -151,9 +151,10 @@ const MobileMenu = Backbone.View.extend({
                 // Folder zuerst zeichnen
                 that.addViews(groupedModels.folder);
                 that.addViews(groupedModels.other);
+                that.updateLightTree();
             }
         });
-        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
+        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
     },
 
     doRequestTreeType: function () {
@@ -161,7 +162,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        this.$("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
     /**
@@ -231,7 +232,7 @@ const MobileMenu = Backbone.View.extend({
         this.breadCrumbListView.removeView();
         this.remove();
         this.collection.setAllModelsInvisible();
-        $("#map").before(this.el);
+        this.$("#map").before(this.el);
     },
     startModul: function (modulId) {
         var modul = this.collection.find(function (model) {
