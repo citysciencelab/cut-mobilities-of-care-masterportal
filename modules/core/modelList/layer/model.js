@@ -58,7 +58,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.registerInteractionMapViewListeners();
 
         //  add layer, when it should be initially visible
-        //  in lighttree add also non selected, because all Layer need to have an selectionIDX. Needed for changing layer orders
         if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
 
             this.prepareLayerObject();

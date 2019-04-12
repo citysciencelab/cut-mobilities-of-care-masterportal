@@ -128,7 +128,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (model.get("id") === "SelectedLayer") {
                     this.trigger("updateSelection", model);
                 }
-                // Trigger fÃ¼r mobiles Wandern im Baum
+                // Trigger for mobile tree traversion
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
@@ -289,12 +289,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         return null;
     },
+    /**
+     * Returns the default tool of the app
+     * @return {Tool} The tool with the same id as the defaultToolId
+     */
     getDefaultTool: function () {
         return this.get(this.defaultToolId);
     },
     /**
-     * Returns the default tool of the app
-     * @return {Tool} The tool with the same id as the defaultToolId
+     * Todo
+     * @return {void}
      */
     closeAllExpandedFolder: function () {
         var folderModel = this.findWhere({isExpanded: true});
@@ -481,13 +485,18 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
     },
 
+    /**
+     * Initializes selectionIDX property if not properly set yet.
+     * @param {layer} model the layer model to this property on
+     * @return {integer} the index number, which has been associated to the model
+     */
     initModelIndex: function (model) {
         var aLayerModels = this.where({type: "layer"}),
+            iResultIndex = 0,
             iMaxIndex = 0;
 
         if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
-
-            return;
+            return model.get("selectionIDX");
         }
 
         _.each(aLayerModels, function (oLayerModel) {
@@ -495,13 +504,17 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 iMaxIndex = oLayerModel.get("selectionIDX");
             }
         }, this);
-        model.setSelectionIDX(iMaxIndex + 1);
+
+        iResultIndex = iMaxIndex + 1;
+
+        model.setSelectionIDX(iResultIndex);
+
+        return iResultIndex;
     },
 
     /**
      * Moves layer in selection one index down
      * @param {Layer} model Layer model to be pulled down
-     * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
@@ -514,6 +527,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             iMin = 0,
             affectedModel;
 
+        // find next index and layer to swap with
         _.each(visibleLayerModels, function (modelTemp) {
             if (modelTemp.get("selectionIDX") < oldIDX && (oldIDX - modelTemp.get("selectionIDX") < iMin || newIDX === false)) {
                 newIDX = modelTemp.get("selectionIDX");
@@ -527,9 +541,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         affectedModel = this.where({selectionIDX: newIDX})[0];
 
+        // swap layers
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
 
+        // in case the other layer is one of the following special ones (in 2D mode), skip it
         if (Radio.request("Map", "getMapMode") === "2D"
             &&
             (
@@ -552,6 +568,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.sortLayersVisually();
     },
 
+    /**
+     * Sorts map layers (in map) according to their selectionIDX property values. Actually this should be
+     * done using open layers layer zIndex property.
+     * @todo use open layers zIndex prop instead
+     * @return {void}
+     */
     sortLayersVisually: function () {
         var layers = this.where({type: "layer"}),
             layersCopy = layers.slice().sort(function (layer1, layer2) {
@@ -568,7 +590,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Moves layer in selection one index up
      * @param  {Layer} model Layer model to be pulled up
-     * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
@@ -581,6 +602,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             iMin = 0,
             affectedModel;
 
+        // find next index and layer to swap with
         _.each(visibleLayerModels, function (modelTemp) {
             if (modelTemp.get("selectionIDX") > oldIDX && (modelTemp.get("selectionIDX") - oldIDX < iMin || newIDX === false)) {
                 newIDX = modelTemp.get("selectionIDX");
@@ -594,9 +616,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         affectedModel = this.where({selectionIDX: newIDX})[0];
 
+        // swap layers
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
 
+        // in case the other layer is one of the following special ones (in 2D mode), skip it
         if (Radio.request("Map", "getMapMode") === "2D"
             &&
             (
