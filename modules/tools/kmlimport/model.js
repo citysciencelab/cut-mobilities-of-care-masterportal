@@ -99,8 +99,6 @@ const ImportTool = Tool.extend({
             if ($(placemark).find("name")[0]) {
                 textFont = $(placemark).find("font")[0];
                 textFont = this.parseStringBetween(textFont, ">", "<");
-                console.log(textFont);
-
                 textFonts.push(textFont);
             }
             // kein Text
