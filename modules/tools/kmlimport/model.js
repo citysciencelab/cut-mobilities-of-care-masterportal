@@ -84,7 +84,8 @@ const ImportTool = Tool.extend({
             pointStyleColors = [],
             pointStyleTransparencies = [],
             pointStyleRadiuses = [],
-            pointStyleCounter = 0;
+            pointStyleCounter = 0,
+            textFonts = [];
 
             // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
         $(kml).find("Point").each(function (i, point) {
@@ -92,29 +93,37 @@ const ImportTool = Tool.extend({
                 pointStyle,
                 color,
                 transparency,
-                radius;
+                radius,
+                textFont;
 
+            if ($(placemark).find("name")[0]) {
+                textFont = $(placemark).find("font")[0];
+                textFont = this.parseStringBetween(textFont, ">", "<");
+                textFonts.push(textFont);
+                pointStyleColors.push(undefined);
+                pointStyleTransparencies.push(undefined);
+                pointStyleRadiuses.push(undefined);
+            }
             // kein Text
-            if (!$(placemark).find("name")[0]) {
+            else {
                 pointStyle = $(placemark).find("pointstyle")[0];
                 color = $(pointStyle).find("color")[0];
                 transparency = $(pointStyle).find("transparency")[0];
                 radius = $(pointStyle).find("radius")[0];
 
                 // rgb in array schreiben
-                color = new XMLSerializer().serializeToString(color);
-                color = color.split(">")[1].split("<")[0];
+                color = this.parseStringBetween(color, ">", "<");
                 pointStyleColors.push(color);
                 // transparenz in array schreiben
-                transparency = new XMLSerializer().serializeToString(transparency);
-                transparency = transparency.split(">")[1].split("<")[0];
+                transparency = this.parseStringBetween(transparency, ">", "<");
                 pointStyleTransparencies.push(transparency);
                 // punktradius in array schreiben
-                radius = new XMLSerializer().serializeToString(radius);
-                radius = parseInt(radius.split(">")[1].split("<")[0], 10);
+                radius = this.parseStringBetween(radius, ">", "<");
+                radius = parseInt(radius, 10);
                 pointStyleRadiuses.push(radius);
+                textFonts.push(undefined);
             }
-        });
+        }.bind(this));
 
         _.each(features, function (feature) {
             var type = feature.getGeometry().getType(),
@@ -126,7 +135,7 @@ const ImportTool = Tool.extend({
             if (type === "Point") {
                 // wenn Text
                 if (feature.get("name") !== undefined) {
-                    feature.setStyle(this.getTextStyle(feature.get("name"), style));
+                    feature.setStyle(this.getTextStyle(feature.get("name"), style, textFonts[pointStyleCounter]));
                 }
                 // wenn Punkt
                 else {
@@ -140,19 +149,27 @@ const ImportTool = Tool.extend({
                     });
 
                     feature.setStyle(style);
-                    pointStyleCounter++;
                 }
+                pointStyleCounter++;
             }
         }, this);
 
 
     },
+    parseStringBetween: function (string, startChar, endChar) {
+        var parsedString = "";
 
-    getTextStyle: function (name, style) {
+        parsedString = new XMLSerializer().serializeToString(string);
+        parsedString = parsedString.split(startChar)[1].split(endChar)[0];
+        return parsedString;
+    },
+
+    getTextStyle: function (name, style, font) {
         return new Style({
             text: new Text({
                 text: name,
-                font: "8px Arial",
+                textAlign: "left",
+                font: font,
                 fill: style.getText().getFill(),
                 scale: style.getText().getScale()
             })
