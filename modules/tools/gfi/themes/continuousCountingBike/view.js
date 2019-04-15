@@ -43,7 +43,9 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
             activeContent = this.$("#" + activeTab),
             tabContentList = [];
 
-        $(".gfi > .gfi-content").css("max-height", "80vh");
+        if (!_.has(Config, "uiStyle") || Config.uiStyle !== "table") {
+            $(".gfi > .gfi-content").css("max-height", "80vh");
+        }
 
         // deactivate all tabs
         this.$(evt.currentTarget).parent().find("li").each(function (index, li) {
