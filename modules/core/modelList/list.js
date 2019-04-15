@@ -76,6 +76,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#ChangeSelectionIDX
      * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateOverlayerView
      * @fires ModelList#UpdateSelection
      * @fires ModelList#TraverseTree
@@ -515,6 +516,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Moves layer in selection one index down
      * @param {Layer} model Layer model to be pulled down
+     * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
@@ -590,6 +592,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Moves layer in selection one index up
      * @param  {Layer} model Layer model to be pulled up
+     * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
