@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
 
@@ -20,13 +21,13 @@ export function prepareSearchBody (query, sorting, size) {
  * @param {number} size - size of the query
  * @return {object} result - Resultobject of ElasticQuery
  */
-export function search (serviceId, query, sorting, size) {
+export function search (serviceId, query, sorting, size, model) {
     var result = {},
         searchUrl,
         searchBody,
         serviceUrl,
         serviceUrlCheck,
-        ajax = this.get("ajaxRequests");
+        ajax = model.get("ajaxRequests");
 
     serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
@@ -51,8 +52,8 @@ export function search (serviceId, query, sorting, size) {
         ajax[serviceId].abort();
         this.polishAjax(serviceId);
     }
-    this.ajaxSend(serviceId, query, sorting, size);
-    this.get("ajaxRequests")[serviceId] = $.ajax({
+    model.ajaxSend(serviceId, query, sorting, size);
+    model.get("ajaxRequests")[serviceId] = $.ajax({
         dataType: "json",
         url: searchUrl,
         async: false,
@@ -84,7 +85,13 @@ export function search (serviceId, query, sorting, size) {
             return result;
         },
         complete: function () {
-            this.polishAjax(serviceId);
+            model.polishAjax(serviceId);
+        },
+        polishAjax: function (type) {
+            // var ajax = this.get("ajaxRequests"),
+            var cleanedAjax = _.omit(ajax, type);
+
+            this.set("ajaxRequests", cleanedAjax);
         }
     });
     return result;
