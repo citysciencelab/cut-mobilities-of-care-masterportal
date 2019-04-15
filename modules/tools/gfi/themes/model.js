@@ -62,7 +62,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         $.ajax({
             url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
             context: this,
-            success: successFunction
+            success: successFunction,
+            error: this.gfiErrorHandler
         });
     },
 
@@ -108,13 +109,19 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             url: url,
             context: this,
             success: successFunction,
-            error: function () {
-                Radio.trigger("Alert", "alert",
-                    {text: "<strong>Die Informationen zu dem ausgewählten Objekt konnten nicht abgefragt werden.</strong>"
-                    + " Bitte versuchen Sie es später erneut."
-                    + " Falls das Problem weiterhin besteht wenden Sie sich an den Administrator.", kategorie: "alert-warning"});
-            }
+            error: this.gfiErrorHandler
         });
+    },
+
+    /**
+     * Error handler for unanswered GFI requests
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @param   {object} jqXHR error object
+     * @returns {void}
+     */
+    gfiErrorHandler: function (jqXHR) {
+        console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
+        Radio.trigger("Alert", "Die Informationen zu dem ausgewählten Objekt kann derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
     },
 
     /**
