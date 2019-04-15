@@ -390,7 +390,7 @@
       "attributions":
       {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false
+        "isInitOpenMobile": true
       },
       "overviewmap":
       {
@@ -434,7 +434,7 @@
           "visibility": true
         },
         {
-         "id": "12885",
+         "id": "14261",
          "name": "Oblique",
          "visibility": true
         }

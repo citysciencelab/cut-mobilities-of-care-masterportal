@@ -198,6 +198,9 @@ const MobileMenu = Backbone.View.extend({
                     if (model.get("isVisibleInMenu")) {
                         nodeView = new ToolView({model: model});
                     }
+                    else {
+                        return;
+                    }
                     break;
                 }
                 case "staticlink": {

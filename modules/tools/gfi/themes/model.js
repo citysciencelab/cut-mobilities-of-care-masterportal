@@ -86,8 +86,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             url: url,
             context: this,
             success: successFunction,
-            error: function (jqXHR, textStatus) {
-                Radio.trigger("Alert", "alert", "Ajax-Request " + textStatus);
+            error: function () {
+                Radio.trigger("Alert", "alert",
+                    {text: "<strong>Die Informationen zu dem ausgewählten Objekt konnten nicht abgefragt werden.</strong>"
+                    + " Bitte versuchen Sie es später erneut."
+                    + " Falls das Problem weiterhin besteht wenden Sie sich an den Administrator.", kategorie: "alert-warning"});
             }
         });
     },

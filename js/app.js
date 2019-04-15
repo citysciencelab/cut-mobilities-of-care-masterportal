@@ -21,7 +21,7 @@ import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import LayerinformationModel from "../modules/layerinformation/model";
 import FooterView from "../modules/footer/view";
-import ClickCounterView from "../modules/ClickCounter/view";
+import ClickCounterModel from "../modules/ClickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickhelp/view";
 import ScaleLineView from "../modules/scaleline/view";
@@ -134,9 +134,8 @@ function loadApp () {
         new FooterView(Config.footer);
     }
 
-
     if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
-        new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
+        new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
     if (_.has(Config, "mouseHover")) {
@@ -321,7 +320,7 @@ function loadApp () {
                 }
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id);
+                        element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
