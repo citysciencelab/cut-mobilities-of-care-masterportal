@@ -383,6 +383,9 @@ const DownloadModel = Tool.extend({
 
                 if (feature.getStyle().getText()) {
                     textFonts.push(feature.getStyle().getText().getFont());
+                    pointOpacities.push(undefined);
+                    pointColors.push(undefined);
+                    pointRadiuses.push(undefined);
                 }
                 // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                 else {
