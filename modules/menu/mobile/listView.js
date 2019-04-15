@@ -129,8 +129,10 @@ const MobileMenu = Backbone.View.extend({
         this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
-            // befinden wir uns in der Auswahl sind die models bereits nach ihrem SelectionIndex sortiert
             if (currentList === "Selection") {
+                modelsToShow = _.sortBy(modelsToShow, function (layer) {
+                    return layer.get("selectionIDX");
+                }).reverse();
                 that.addViews(modelsToShow);
             }
             else {
