@@ -181,7 +181,13 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             if (window.innerWidth >= 768) {
                 $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
+            $(".dropdown-menu-search").css({
+                "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
+                "overflow": "auto"
+            });
         });
+
+
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
