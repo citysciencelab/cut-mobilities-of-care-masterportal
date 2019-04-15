@@ -55,6 +55,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Requestor function for GFI of WMS layers with infoFormat "text/html"
+     * @fires Util#RadioRequestUtilGetProxyURL
      * @param   {function} successFunction function to be called after successfull request
      * @returns {void}
      */
@@ -98,6 +99,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Requestor function for GFI of WMS layers
+     * @fires Util#RadioRequestUtilGetProxyURL
      * @param   {function} successFunction function to be called after successfull request
      * @returns {void}
      */
@@ -333,6 +335,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Checks validity of a key according to configured list of ignored keys
+     * @fires Util#RadioRequestUtilGetIgnoredKeys
      * @param {string}      key         Name of the key
      * @returns {boolean}   isValidKey  returns the validita of a key
      */
