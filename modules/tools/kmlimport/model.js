@@ -100,6 +100,9 @@ const ImportTool = Tool.extend({
                 textFont = $(placemark).find("font")[0];
                 textFont = this.parseStringBetween(textFont, ">", "<");
                 textFonts.push(textFont);
+                pointStyleColors.push(undefined);
+                pointStyleTransparencies.push(undefined);
+                pointStyleRadiuses.push(undefined);
             }
             // kein Text
             else {
