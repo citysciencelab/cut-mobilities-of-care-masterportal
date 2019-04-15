@@ -76,9 +76,6 @@ const MobileMenu = Backbone.View.extend({
     renderSelection: function (withAnimation) {
         var models = this.collection.where({isSelected: true, type: "layer"});
 
-        models = _.sortBy(models, function (layer) {
-            return layer.get("selectionIDX");
-        }).reverse();
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
         }
@@ -87,6 +84,9 @@ const MobileMenu = Backbone.View.extend({
             _.each(models, function (model) {
                 model.setIsVisibleInTree(false);
             }, this);
+            models = _.sortBy(models, function (layer) {
+                return layer.get("selectionIDX");
+            }).reverse();
 
             this.addViews(models);
         }
@@ -150,8 +150,11 @@ const MobileMenu = Backbone.View.extend({
                 }
                 // Folder zuerst zeichnen
                 that.addViews(groupedModels.folder);
+
+                groupedModels.other = _.sortBy(groupedModels.other, function (layer) {
+                    return layer.get("selectionIDX");
+                }).reverse();
                 that.addViews(groupedModels.other);
-                that.updateLightTree();
             }
         });
         this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
