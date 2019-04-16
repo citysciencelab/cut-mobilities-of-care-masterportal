@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 const ElasticSearchModel = Backbone.Model.extend({
     defaults: {
         ajaxRequests: {}
@@ -23,7 +24,7 @@ const ElasticSearchModel = Backbone.Model.extend({
         this.set("ajaxRequests", cleanedAjax);
     },
 
-    ajaxSend: function (serviceId, searchBody, searchUrl, result) {
+    ajaxSend: function (serviceId, searchBody, searchUrl) {
         this.get("ajaxRequests")[serviceId] = $.ajax({
             dataType: "json",
             context: this,
@@ -36,24 +37,24 @@ const ElasticSearchModel = Backbone.Model.extend({
             data: searchBody,
             success: function (response) {
                 // handling response
+                console.log(this);
                 var datasources = [],
                     param = "_source";
 
-                result.status = "success";
-                console.log(result);
+                this.status = "success";
                 if (response.hits) {
                     _.each(response.hits.hits, function (hit) {
                         datasources.push(hit[param]);
                     });
                 }
 
-                result.hits = datasources;
+                this.hits = datasources;
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                result.status = "error";
-                result.message = "ElasticSearch query went wrong with message: " + thrownError;
+                this.status = "error";
+                this.message = "ElasticSearch query went wrong with message: " + thrownError;
                 console.error("error", thrownError);
-                return result;
+                return this;
             },
             complete: function () {
                 this.polishAjax(serviceId);
@@ -69,7 +70,7 @@ const ElasticSearchModel = Backbone.Model.extend({
      * @param {number} size - size of the query
      * @return {object} result - Resultobject of ElasticQuery
      */
-    search(serviceId, query, sorting, size) {
+    search (serviceId, query, sorting, size) {
         var result = {},
             searchUrl,
             searchBody,
@@ -102,7 +103,7 @@ const ElasticSearchModel = Backbone.Model.extend({
             this.polishAjax(serviceId);
         }
         else {
-            this.ajaxSend(serviceId, searchBody, searchUrl, result);
+            this.ajaxSend(serviceId, searchBody, searchUrl);
         }
 
     }
