@@ -1,9 +1,22 @@
 import ItemTemplate from "text-loader!./template.html";
-
-const ItemView = Backbone.View.extend({
+/**
+ * @member ToolTemplate
+ * @description Template for a Tool
+ * @memberof Menu.Desktop.Tool
+ */
+const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     events: {
         "click": "checkItem"
     },
+    /**
+    * @class ToolView
+    * @extends Backbone.View
+    * @memberof Menu.Desktop.Tool
+    * @constructs
+    * @fires ClickCounter#RadioTriggerClickCounterToolChanged
+    * @fires Map#RadioRequestMapGetMapMode
+    * @listens Map#RadioTriggerMapChange
+    */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
@@ -22,6 +35,10 @@ const ItemView = Backbone.View.extend({
     tagName: "li",
     className: "dropdown",
     template: _.template(ItemTemplate),
+    /**
+     * @todo Write the documentation.
+     * @returns {this} this
+     */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -30,6 +47,11 @@ const ItemView = Backbone.View.extend({
         }
         return this;
     },
+    /**
+     * @todo Write the documentation.
+     * @param {String} mode Flag of the view mode
+     * @returns {void}
+     */
     toggleSupportedVisibility: function (mode) {
         if (mode === "2D") {
             this.$el.show();
@@ -58,7 +80,10 @@ const ItemView = Backbone.View.extend({
             this.$el.addClass("submenu-style");
         }
     },
-
+    /**
+     * @todo Write the documentation.
+     * @returns {void}
+     */
     toggleIsActiveClass: function () {
         if (this.model.get("isActive") === true) {
             this.$el.addClass("active");
@@ -67,8 +92,12 @@ const ItemView = Backbone.View.extend({
             this.$el.removeClass("active");
         }
     },
-
+    /**
+     * @todo Write the documentation.
+     * @returns {void}
+     */
     checkItem: function () {
+        Radio.trigger("ClickCounter", "toolChanged");
         if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
         }
@@ -81,4 +110,4 @@ const ItemView = Backbone.View.extend({
     }
 });
 
-export default ItemView;
+export default ToolView;

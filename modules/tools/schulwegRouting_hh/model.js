@@ -227,6 +227,7 @@ const SchulwegRouting = Tool.extend({
             school = this.filterSchoolById(this.get("schoolList"), schoolId);
             this.setRegionalSchool(school);
             schoolWithAdress = school.get("schulname") + ", " + school.get("adresse_strasse_hausnr");
+            this.setSchoolWithAdress(schoolWithAdress);
             this.trigger("updateRegionalSchool", schoolWithAdress);
         }
         else {
@@ -572,6 +573,12 @@ const SchulwegRouting = Tool.extend({
     },
     setRouteDescription: function (value) {
         this.set("routeDescription", value);
+    },
+    setSchoolWithAdress: function (value) {
+        this.set("schoolWithAdress", value);
+    },
+    setPrintRoute: function (value) {
+        this.set("printRoute", value);
     }
 });
 

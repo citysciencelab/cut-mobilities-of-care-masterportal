@@ -1,8 +1,6 @@
 import Item from ".././item";
 
-const Tool = Item.extend(
-    /** @lends Tool.prototype */
-    {
+const Tool = Item.extend(/** @lends Tool.prototype */{
     defaults: {
         isVisibleInMenu: true,
         isRoot: false,
@@ -72,6 +70,7 @@ const Tool = Item.extend(
     /**
      * Activates or deactivates tool
      * @param {Boolean} value Flag if tool is active
+     * @returns {void}
      */
     setIsActive: function (value) {
         this.set("isActive", value);

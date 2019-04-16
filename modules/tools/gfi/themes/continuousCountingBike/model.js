@@ -406,7 +406,8 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 xAttr: "timestamp",
                 xAxisTickValues: dataset.xAxisTickValues,
                 xAxisLabel: {
-                    label: dataset.xLabel
+                    label: dataset.xLabel,
+                    translate: 20
                 },
                 yAxisLabel: dataset.yLabel,
                 attrToShowArray: dataset.graphArray,

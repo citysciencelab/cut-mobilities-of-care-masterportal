@@ -174,12 +174,20 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             new GdiModel(config.gdi);
         }
 
+        this.model.setHitIsClick(false);
+
         // Hack für flexible Suchleiste
         $(window).on("resize", function () {
             if (window.innerWidth >= 768) {
                 $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
+            $(".dropdown-menu-search").css({
+                "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
+                "overflow": "auto"
+            });
         });
+
+
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
@@ -255,7 +263,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     renderRecommendedList: function () {
-        var attr = this.model.toJSON();
+        var attr = this.model.toJSON(),
+            height = document.getElementsByClassName("lgv-container")[0].offsetHeight - 130,
+            width = this.$("#searchForm").width();
 
         attr.uiStyle = Radio.request("Util", "getUiStyle");
 
@@ -270,8 +280,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         this.prepareAttrStrings(attr.hitList);
         this.$("ul.dropdown-menu-search").html(this.templateRecommendedList(attr));
+        this.$("ul.dropdown-menu-search").css("max-height", height);
+        this.$("ul.dropdown-menu-search").css("width", width);
+        this.$("ul.dropdown-menu-search").css("max-width", width);
 
-        this.$("ul.dropdown-menu-search").css("max-width", this.$("#searchForm").width());
         // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
         // und im Falle eines Tree-Search auch das Menü aufgeklappt.
         if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
@@ -366,7 +378,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
         if (_.has(hit, "triggerEvent")) {
-            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit);
+            this.model.setHitIsClick(true);
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
         }
         else {
             Radio.trigger("MapMarker", "zoomTo", hit, 5000);
@@ -828,7 +841,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (_.has(hit, "triggerEvent")) {
         // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
-            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick") {
+            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
             }
         }
