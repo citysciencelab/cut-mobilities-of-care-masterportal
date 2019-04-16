@@ -1,6 +1,5 @@
 import "../model";
-import * as ElasticSearch from "../../core/elasticsearch";
-import {prepareSearchBody} from "../../core/elasticsearch";
+import ElasticSearch from "../../core/elasticsearch";
 
 const GdiModel = Backbone.Model.extend({
     defaults: {
@@ -8,7 +7,8 @@ const GdiModel = Backbone.Model.extend({
         serviceId: "",
         sorting: {},
         size: 10000,
-        ajaxRequests: {}
+        elasticSearch: new ElasticSearch()
+        // ajaxRequests: {}
     },
     /**
      * @description Initialise GDI-Search via ElasticSearch
@@ -36,7 +36,7 @@ const GdiModel = Backbone.Model.extend({
             response = null;
 
         if (searchString.length >= this.get("minChars")) {
-            response = ElasticSearch.search(this.get("serviceId"), query, this.get("sorting"), this.get("size"), this);
+            response = this.get("elasticSearch").search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
             if (response && response.hits) {
                 _.each(response.hits, function (hit) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
@@ -150,101 +150,7 @@ const GdiModel = Backbone.Model.extend({
         if (typeof value === "number") {
             this.set("size", value);
         }
-    } // ,
-
-    // ajaxSend: function (data, successFunction, typeRequest) {
-    //     this.get("ajaxRequests")[typeRequest] = $.ajax({
-    //         url: this.get("gazetteerURL"),
-    //         data: data,
-    //         dataType: "xml",
-    //         context: this,
-    //         type: "GET",
-    //         success: successFunction,
-    //         timeout: 6000,
-    //         typeRequest: typeRequest,
-    //         error: function (err) {
-    //             if (err.status !== 0) { // Bei abort keine Fehlermeldung
-    //                 this.showError(err);
-    //             }
-    //
-    //             // Markiere den Algorithmus für das entsprechende Suchziel als erledigt
-    //             if (typeRequest === "onlyOneStreetName2" || typeRequest === "onlyOneStreetName1") {
-    //                 Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetsOrHouseNumbers");
-    //             }
-    //             else if (typeRequest === "searchStreetKey2") {
-    //                 Radio.trigger("Searchbar", "abortSearch", "gazetteer_streetKeys");
-    //             }
-    //
-    //         },
-    //         complete: function () {
-    //             this.polishAjax(typeRequest);
-    //         }
-    //     }, this);
-    // },
-
-    /*ajaxSend: function (serviceId, query, sorting, size) {
-        var serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url"),
-            searchUrl = Radio.request("Util", "getProxyURL", serviceUrl),
-            searchBody = prepareSearchBody(query, sorting, size),
-            result = {};
-
-        this.get("ajaxRequests")[serviceId] = $.ajax({
-            dataType: "json",
-            url: searchUrl,
-            async: false,
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            type: "POST",
-            data: searchBody,
-
-            // handling response
-            success: function (response) {
-                var datasources = [],
-                    param = "_source";
-
-                result.status = "success";
-
-                if (response.hits) {
-                    _.each(response.hits.hits, function (hit) {
-                        datasources.push(hit[param]);
-                    });
-                }
-
-                result.hits = datasources;
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                result.status = "error";
-                result.message = "ElasticSearch query went wrong with message: " + thrownError;
-                console.error("error", thrownError);
-                return result;
-            },
-            complete: function () {
-                this.polishAjax(serviceId);
-            }
-        });
-    },
-    /!**
-     * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
-     * @param {string} type Bezeichnung des Typs
-     * @returns {void}
-     *!/
-    polishAjax: function (type) {
-        var ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
-
-        this.set("ajaxRequests", cleanedAjax);
-    },
-    /!**
-     * Triggert die Darstellung einer Fehlermeldung
-     * @param {object} err Fehlerobjekt aus Ajax-Request
-     * @returns {void}
-     *!/
-    showError: function (err) {
-        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
-
-        Radio.trigger("Alert", "alert", "URL nicht erreichbar. " + detail);
-    }*/
+    }
 });
 
 export default GdiModel;
