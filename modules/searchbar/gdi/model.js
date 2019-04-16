@@ -150,7 +150,7 @@ const GdiModel = Backbone.Model.extend({
         if (typeof value === "number") {
             this.set("size", value);
         }
-    },
+    } // ,
 
     // ajaxSend: function (data, successFunction, typeRequest) {
     //     this.get("ajaxRequests")[typeRequest] = $.ajax({
@@ -181,7 +181,8 @@ const GdiModel = Backbone.Model.extend({
     //         }
     //     }, this);
     // },
-    ajaxSend: function (serviceId, query, sorting, size) {
+
+    /*ajaxSend: function (serviceId, query, sorting, size) {
         var serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url"),
             searchUrl = Radio.request("Util", "getProxyURL", serviceUrl),
             searchBody = prepareSearchBody(query, sorting, size),
@@ -217,35 +218,33 @@ const GdiModel = Backbone.Model.extend({
                 result.message = "ElasticSearch query went wrong with message: " + thrownError;
                 console.error("error", thrownError);
                 return result;
-            } //,
-            // complete: function () {
-            //     this.polishAjax(serviceId);
-            // }
+            },
+            complete: function () {
+                this.polishAjax(serviceId);
+            }
         });
-    } // ,
-
-    /**
+    },
+    /!**
      * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
      * @param {string} type Bezeichnung des Typs
      * @returns {void}
-     */
-    // polishAjax: function (type) {
-    //     var ajax = this.get("ajaxRequests"),
-    //         cleanedAjax = _.omit(ajax, type);
-    //
-    //     this.set("ajaxRequests", cleanedAjax);
-    // }
-    //
-    // /**
-    //  * Triggert die Darstellung einer Fehlermeldung
-    //  * @param {object} err Fehlerobjekt aus Ajax-Request
-    //  * @returns {void}
-    //  */
-    // showError: function (err) {
-    //     var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
-    //
-    //     Radio.trigger("Alert", "alert", "URL nicht erreichbar. " + detail);
-    // }
+     *!/
+    polishAjax: function (type) {
+        var ajax = this.get("ajaxRequests"),
+            cleanedAjax = _.omit(ajax, type);
+
+        this.set("ajaxRequests", cleanedAjax);
+    },
+    /!**
+     * Triggert die Darstellung einer Fehlermeldung
+     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * @returns {void}
+     *!/
+    showError: function (err) {
+        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+
+        Radio.trigger("Alert", "alert", "URL nicht erreichbar. " + detail);
+    }*/
 });
 
 export default GdiModel;
