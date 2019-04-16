@@ -1,4 +1,4 @@
-/* eslint-disable require-jsdoc */
+
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
 
@@ -48,11 +48,12 @@ export function search (serviceId, query, sorting, size, model) {
         console.error(JSON.stringify(result));
         return result;
     }
+    //var ajax = model.get("ajaxRequests");
     if (ajax[serviceId] !== null && !_.isUndefined(ajax[serviceId])) {
         ajax[serviceId].abort();
         this.polishAjax(serviceId);
     }
-    model.ajaxSend(serviceId, query, sorting, size);
+    // model.ajaxSend(serviceId, query, sorting, size);
     model.get("ajaxRequests")[serviceId] = $.ajax({
         dataType: "json",
         url: searchUrl,
@@ -83,15 +84,15 @@ export function search (serviceId, query, sorting, size, model) {
             result.message = "ElasticSearch query went wrong with message: " + thrownError;
             console.error("error", thrownError);
             return result;
-        },
+        } ,
         complete: function () {
-            model.polishAjax(serviceId);
+            this.polishAjax(serviceId);
         },
         polishAjax: function (type) {
-            // var ajax = this.get("ajaxRequests"),
+            //var ajax = this.get("ajaxRequests"),
             var cleanedAjax = _.omit(ajax, type);
 
-            this.set("ajaxRequests", cleanedAjax);
+            model.set("ajaxRequests", cleanedAjax);
         }
     });
     return result;
