@@ -24,7 +24,7 @@ const ElasticSearchModel = Backbone.Model.extend({
         this.set("ajaxRequests", cleanedAjax);
     },
 
-    ajaxSend: function (serviceId, searchBody, searchUrl) {
+    ajaxSend: function (serviceId, searchBody, searchUrl, result) {
         this.get("ajaxRequests")[serviceId] = $.ajax({
             dataType: "json",
             context: this,
@@ -37,24 +37,23 @@ const ElasticSearchModel = Backbone.Model.extend({
             data: searchBody,
             success: function (response) {
                 // handling response
-                console.log(this);
                 var datasources = [],
                     param = "_source";
 
-                this.status = "success";
+                result.status = "success";
                 if (response.hits) {
                     _.each(response.hits.hits, function (hit) {
                         datasources.push(hit[param]);
                     });
                 }
 
-                this.hits = datasources;
+                result.hits = datasources;
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                this.status = "error";
-                this.message = "ElasticSearch query went wrong with message: " + thrownError;
+                result.status = "error";
+                result.message = "ElasticSearch query went wrong with message: " + thrownError;
                 console.error("error", thrownError);
-                return this;
+                return result;
             },
             complete: function () {
                 this.polishAjax(serviceId);
@@ -103,9 +102,9 @@ const ElasticSearchModel = Backbone.Model.extend({
             this.polishAjax(serviceId);
         }
         else {
-            this.ajaxSend(serviceId, searchBody, searchUrl);
+            this.ajaxSend(serviceId, searchBody, searchUrl, result);
         }
-
+        return result;
     }
 });
 
