@@ -1,7 +1,14 @@
-const CookieModel = Backbone.Model.extend({
+const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
     defaults: {
         approved: false
     },
+    /**
+     * @class CookieModel
+     * @extends Backbone.Model
+     * @memberof Cookie
+     * @constructs
+     * @property {Boolean} approved=false Flag if Cookies were approved
+     */
     initialize: function () {
         var pathname = window.location.pathname.replace(/([.*+?^=!:${}()|[\]/\\])/g, "");
 
@@ -9,13 +16,26 @@ const CookieModel = Backbone.Model.extend({
         this.set("cookieEnabled", navigator.cookieEnabled);
         this.set("approved", this.hasItem()); // wenn schon ein Item existiert, dann wurde schon zugestimmt.
     },
+    /**
+     * Sets the attributes approved=true and calls setItem("").
+     * @returns {void}
+     */
     approval: function () {
         this.set("approved", true);
         this.setItem("");
     },
+
+    /**
+     * Sets the attribute approved=false.
+     * @returns {void}
+     */
     refusal: function () {
         this.set("approved", false);
     },
+    /**
+     * todo
+     * @returns {*} - todo
+     */
     getItem: function () {
         var sKey = this.get("sKey");
 
@@ -26,6 +46,15 @@ const CookieModel = Backbone.Model.extend({
         return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
 
     },
+
+    /**
+     * todo
+     * @param {*} sValue todo.
+     * @param {*} vEnd todo.
+     * @param {*} sPath todo.
+     * @param {*} sDomain todo.
+     * @param {*} bSecure todo.
+     */
     setItem: function (sValue, vEnd, sPath, sDomain, bSecure) {
         var sKey = this.get("sKey"),
             sExpires = "";
@@ -56,6 +85,13 @@ const CookieModel = Backbone.Model.extend({
         document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
         return true;
     },
+
+    /**
+     * Todo.
+     * @param {*} sPath todo.
+     * @param {*} sDomain todo.
+     * @returns {Boolean} - todo
+     */
     removeItem: function (sPath, sDomain) {
         var sKey = this.get("sKey");
 
@@ -69,11 +105,21 @@ const CookieModel = Backbone.Model.extend({
         document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
         return true;
     },
+
+    /**
+     * Todo.
+     * @returns{*} - todo.
+     */
     hasItem: function () {
         var sKey = this.get("sKey");
 
         return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
     },
+
+    /**
+     * Todo.
+     * @returns {*} - todo.
+     */
     keys: function () {
         var aKeys = document.cookie.replace(/((?:^|\s*;)[^=]+)(?=;|$)|^\s*|\s*(?:=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:=[^;]*)?;\s*/),
             nLen,

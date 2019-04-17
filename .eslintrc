@@ -171,7 +171,15 @@
         "one-var": "error",
         "one-var-declaration-per-line": "error",
         "quotes": "error",
-        "require-jsdoc": 0,
+        "require-jsdoc": ["error", {
+            "require": {
+                "FunctionDeclaration": true,
+                "MethodDefinition": true,
+                "ClassDeclaration": true,
+                "ArrowFunctionExpression": true,
+                "FunctionExpression": true
+            }
+        }],
         "semi": "error",
         "semi-spacing": "error",
         "semi-style": "error",

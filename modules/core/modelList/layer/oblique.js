@@ -2,12 +2,28 @@ import Layer from "./model";
 import Collection from "vcs-oblique/src/vcs/oblique/collection";
 import {get} from "ol/proj.js";
 
-const ObliqueLayer = Layer.extend({
+const ObliqueLayer = Layer.extend(/**@lends  ObliqueLayer.prototype*/{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["none"],
         showSettings: false,
         isVisibleInTree: false
     }),
+    /**
+     * @class ObliqueLayer
+     * @extends Layer
+     * @memberof Core.ModelList.Layer
+     * @constructs
+     * @property {String[]} supported=["none"] Shows that this layer is not supported in "2D" and "3D".
+     * @property {Boolean} showSettings=false Flag that for this layer the layerinformation can not be displayed.
+     * @property {Boolean} isVisibleInTree=false Flag that shows that layer is not visible in layertree.
+     * @fires ObliqueMap#RadioTriggerObliqueMapRegisterLayer
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires ObliqueMap#RadioTriggerObliqueMapActivateLayer
+     * @fires ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
+     * @listens Layer#RadioTriggerLayerUpdateLayerInfo
+     * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
+     * @listens Layer#changeIsVisibleInMap
+     */
     initialize: function () {
         Radio.trigger("ObliqueMap", "registerLayer", this);
         this.listenTo(Radio.channel("Layer"), {
@@ -33,9 +49,9 @@ const ObliqueLayer = Layer.extend({
     },
 
     /**
-     * gibt die Oblique Collection zurück in einem Promise,
-     * falls die Meta Daten noch nicht geladen sind, werden sie geladen.
-     * @returns {Promise} -
+     * Returns the oblique Collection as a promise.
+     * If meta data is not loaded yet, it gets loaded.
+     * @returns {Promise} - Oblique Collection
      */
     getObliqueCollection: function () {
         var projection, proj, obliqueCollection, hideLevels, minZoom;
@@ -61,15 +77,18 @@ const ObliqueLayer = Layer.extend({
 
 
     /**
-     * @param {oblique.Collection} obliqueCollection -
+     * @description Setter for attribute "obliqueCollection".
+     * @param {oblique/Collection} obliqueCollection The oblique collection.
      * @returns {void}
      */
     setObliqueCollection: function (obliqueCollection) {
         this.set("obliqueCollection", obliqueCollection);
     },
+
     /**
-     * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-     * Abhängig vom Attribut "isSelected"
+     * Activates the layer in the oblique map.
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires ObliqueMap#RadioTriggerObliqueMapActivateLayer
      * @returns {void}
      */
     activateLayerOnMap: function () {
@@ -81,8 +100,7 @@ const ObliqueLayer = Layer.extend({
     },
 
     /**
-     * wird von der ObliqueMap aufgerufen, wenn ein anderer Oblique Layer aktiviert wird.
-     * (dies ist die einzige Möglichkeit den layer zu deaktivieren)
+     * Called from obliqueMap, if another oblique layer gets activated.
      * @returns {void}
      */
     deactivateLayer: function () {
@@ -91,10 +109,8 @@ const ObliqueLayer = Layer.extend({
     },
 
     /**
-     * Setter für Attribut "isVisibleInMap"
-     * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
-     * wird nur ausgeführt wenn der Layer aktiviert wird. Oblique Layer können nicht direkt ausgeschaltet werden,
-     * nur indirekt indem ein anderer Layer aktiviert wird. über die Funktion deactivateLayer
+     * Setter for attribute "isVisibleInMap".
+     * If layer is set visible, the function activateLayerOnMap() is called.
      * @param {boolean} value -
      * @returns {void}
      */

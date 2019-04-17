@@ -1,6 +1,7 @@
 const TableNavModel = Backbone.Model.extend({
     defaults: {
-        isActiveElement: ""
+        isActiveElement: "",
+        rotateAngle: 0
     },
 
     initialize: function () {
@@ -45,7 +46,12 @@ const TableNavModel = Backbone.Model.extend({
         Radio.trigger("TableMenu", "hideMenuElement" + this.get("isActiveElement"));
         this.deactivateCloseClickFrame();
     },
-
+    setRotateAngle (value) {
+        this.set("rotateAngle", value);
+    },
+    getRotateAngle () {
+        return this.get("rotateAngle");
+    },
     deactivateCloseClickFrame: function () {
         $("#closeclick-view").removeClass("closeclick-activated");
         $("#closeclick-view").addClass("closeclick-deactivated");

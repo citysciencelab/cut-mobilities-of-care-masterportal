@@ -5,13 +5,13 @@ import "bootstrap-colorpicker";
 /**
  * @member StyleWmsTemplate
  * @description Template used to create the user input form
- * @memberof StyleWMS
+ * @memberof Tools.StyleWMS
  */
 
 /**
  * @member StyleWmsTemplateNoStyleableLayers
  * @description Template used if no styleable Layers are available
- * @memberof StyleWMS
+ * @memberof Tools.StyleWMS
  */
 
 const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
@@ -36,7 +36,7 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @class StyleWmsView
      * @description View for style wms. Reacts to user input
      * @extends Backbone.View
-     * @memberOf StyleWMS
+     * @memberOf Tools.StyleWMS
      * @constructs
      * @listens StyleWmsModel#sync
      * @listens StyleWmsModel#changeIsActive

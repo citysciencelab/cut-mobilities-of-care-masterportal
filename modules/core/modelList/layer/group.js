@@ -6,20 +6,29 @@ import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
-const GroupLayer = Layer.extend({
+const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true
     }),
-
+    /**
+     * @class GroupLayer
+     * @extends Layer
+     * @memberof Core.ModelList.Layer
+     * @constructs
+     * @property {String[]} supported=["2D","3D"] Shows that group layern are supported in "2D" and "3D" mode.
+     * @property {Boolean} showSettings=true Flag that shows if Layer has settings to be shown
+     * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Legend#RadioRequestLegendGetLegend
+     */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
     },
 
     /**
-     * Bei GruppenLayern sind die LayerSources deren childLayer.
-     * Damit die layerSources nicht die layer.initialize() durchlaufen,
-     * wurde isChildLayer: true im parser gesetzt.
+     * Creates the layersources.
+     * For group layer the layersources are the children.
+     * To prevent the layer sources to call layer.initialize() the flag "isChildLayer" is set to true in preparser.
      * @return {void}
      */
     createLayerSource: function () {
@@ -51,7 +60,7 @@ const GroupLayer = Layer.extend({
     },
 
     /**
-     * Erzeugt einen Gruppenlayer mit den layerSources
+     * Creates the gouplayer with its layersources
      * @return {void}
      */
     createLayer: function () {
@@ -67,7 +76,7 @@ const GroupLayer = Layer.extend({
     },
 
     /**
-     * Erzeugt die legendenURLs der child-Layer
+     * Creates the legendUrls of each child layer
      * @return {void}
      */
     createLegendURL: function () {
@@ -77,8 +86,8 @@ const GroupLayer = Layer.extend({
     },
 
     /**
-     * Startet updateSource() an allen layerSources, an denen es vorhanden ist.
-     * Nicht alle Layertypen unterstützen updateSource().
+     * runs the function updateSource() in all layer sources, that support this function.
+     * Not all layer types support the function updateSource().
      * @returns {void}
      */
     updateSource: function () {
@@ -90,7 +99,9 @@ const GroupLayer = Layer.extend({
     },
 
     /**
-     * Diese Funktion initiiert für den abgefragten Layer die Darstellung der Information und Legende.
+     * This function start the presentation of the layerinformation and legend.
+     * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Legend#RadioRequestLegendGetLegend
      * @returns {void}
      */
     showLayerInformation: function () {
@@ -119,16 +130,18 @@ const GroupLayer = Layer.extend({
     },
 
     /**
-    * Prüft anhand der Scale aller layerSources, ob der Layer sichtbar ist oder nicht
+    * Checks all layer sources by scale.
+    * If at least one source's min-and-max-scale is within the given scale, the attribute isOutofRange is set to false.
+    * Otherwise it is set to true.
     * @param {object} options   Object mit zu prüfender .scale
     * @returns {void}
     **/
     checkForScale: function (options) {
-        var isOutOfRange = false;
+        var isOutOfRange = true;
 
         _.each(this.get("layerSource"), function (layerSource) {
-            if (parseFloat(options.scale, 10) >= layerSource.get("maxScale") || parseFloat(options.scale, 10) <= layerSource.get("minScale")) {
-                isOutOfRange = true;
+            if (parseFloat(options.scale, 10) <= layerSource.get("maxScale") && parseFloat(options.scale, 10) >= layerSource.get("minScale")) {
+                isOutOfRange = false;
             }
         });
         this.setIsOutOfRange(isOutOfRange);
