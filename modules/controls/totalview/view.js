@@ -28,8 +28,13 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
             this.setElement(el[0]);
             this.render();
         }
+
         else if (style === "TABLE") {
             this.listenTo(Radio.channel("MenuLoader"), {
+                /**
+                * initializes the settings for table style
+                * @returns {void}
+                */
                 "ready": function () {
                     this.setElement("#table-tools-menu");
                     this.renderToToolbar();
@@ -45,7 +50,7 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
 
     /**
      * Render-Function
-     * @returns {TotalViewMapView}
+     * @returns {TotalViewMapView} TotalViewMapView
      */
     render: function () {
         this.$el.html(this.template());
@@ -63,6 +68,7 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
     /**
      * Resets the mapView
      * @fires MapView#RadioTriggerMapViewResetView
+     * @returns {void}
      */
     setTotalView: function () {
         Radio.trigger("MapView", "resetView");
