@@ -10,12 +10,24 @@ const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.proto
         wentFor: false,
         currentPos: 0
     },
+    /**
+     * Create backforward control instance
+     * @returns {void}
+     */
     initialize: function () {
         this.config = Radio.request("Parser", "getItemByAttributes", {id: "backforward"});
     },
+    /**
+     * Gets the glyphicon for the forwards button
+     * @return {String} glyphicon for forward button
+     */
     getForGlyphicon: function () {
         return _.isUndefined(this.config) === false ? this.config.attr.glyphiconFor : this.config;
     },
+    /**
+     * Gets the glyphicon for the backward button
+     * @return {String} glyphicon for backward button
+     */
     getBackGlyphicon: function () {
         return _.isUndefined(this.config) === false ? this.config.attr.glyphiconBack : this.config;
     },

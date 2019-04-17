@@ -38,11 +38,20 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
     },
     id: "backforward",
 
+    /**
+     * render the control backforward
+     * @return {Backbone.View} BackForwardView
+     */
     render: function () {
         this.$el.html(this.template());
         return this;
     },
 
+    /**
+     * modifies the template with the configured backforward glyphicons
+     * @param {Backbone.Template} tpl BackForwardTemplate
+     * @return {Backbone.Template} modified template
+     */
     modifyTemplate: function (tpl) {
         var result,
             forwardGlyph = this.model.getForGlyphicon(),
@@ -126,14 +135,7 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
         }
         this.model.setWentFor(false);
     },
-    /**
-     * Render Function
-     * @returns {BackForwardView} - Returns itself
-     */
-    render: function () {
-        this.$el.html(this.template());
-        return this;
-    },
+
     /**
      * Setter for nextview
      * @fires MapView#RadioTriggerMapViewSetScale
