@@ -14,18 +14,18 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      */
     initialize: function () {
         var style = Radio.request("Util", "getUiStyle"),
-            el,
-            tpl,
-            tabletpl;
+            element,
+            template,
+            tableTemplate;
 
-        tpl = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>");
-        tabletpl = this.modifyTableTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>");
-        this.template = _.template(tpl);
-        this.tableTemplate = _.template(tabletpl);
+        template = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>", false);
+        tableTemplate = this.modifyTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>", true);
+        this.template = _.template(template);
+        this.tableTemplate = _.template(tableTemplate);
 
         if (style === "DEFAULT") {
-            el = Radio.request("ControlsView", "addRowTR", "totalview");
-            this.setElement(el[0]);
+            element = Radio.request("ControlsView", "addRowTR", "totalview");
+            this.setElement(element[0]);
             this.render();
         }
 
@@ -76,44 +76,24 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
     /**
      * Changes the glyphicon for the Button if a modification exists
      * @param {String} tpl initial template
+     * @param {Boolean} isMobile if true changes the glyphicon in Table Mode
      * @return {String} template with possile modified glyphicon
      */
-    modifyTemplate: function (tpl) {
+    modifyTemplate: function (tpl, isMobile) {
         var result,
-            button,
             config = Radio.request("Parser", "getItemByAttributes", {id: "totalview"});
 
-        button = _.isUndefined(config) === false ? config.attr.glyphicon : config;
-
-        if (!button) {
+        if (config.attr === true) {
             result = tpl;
         }
-        else {
-            result = tpl.replace(/glyphicon-fast-backward/g, button);
-        }
-        return result;
-    },
-    /**
-     * Changes the glyphicon for the Button in Table Mode if a modification exists
-     * @param {String} tpl initial template
-     * @return {String} template with possile modified glyphicon
-     */
-    modifyTableTemplate: function (tpl) {
-        var result,
-            button,
-            config = Radio.request("Parser", "getItemByAttributes", {id: "totalview"});
-
-        button = _.isUndefined(config) === false ? config.attr.tableGlyphicon : config;
-
-        if (!button) {
-            result = tpl;
+        else if (isMobile) {
+            result = tpl.replace(/icon-home/g, config.attr.tableGlyphicon);
         }
         else {
-            result = tpl.replace(/icon-home/g, button);
+            result = tpl.replace(/glyphicon-fast-backward/g, config.attr.glyphicon);
         }
         return result;
     }
-
 });
 
 export default TotalViewMapView;
