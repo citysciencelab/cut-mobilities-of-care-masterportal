@@ -139,7 +139,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
         document.getElementById(id).src = url;
     },
 
-    /*
+    /**
     * setter for desktopURL
     * @param {String} value desktopURL
     * @returns {void}
@@ -148,7 +148,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
         this.set("desktopURL", value);
     },
 
-    /*
+    /**
     * setter for mobileURL
     * @param {String} value mobileURL
     * @returns {void}
@@ -157,7 +157,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
         this.set("mobileURL", value);
     },
 
-    /*
+    /**
     * setter for isMobile
     * @param {Boolean} value isMobile
     * @returns {void}
