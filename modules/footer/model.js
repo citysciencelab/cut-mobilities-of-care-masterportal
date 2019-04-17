@@ -1,4 +1,12 @@
-const FooterModel = Backbone.Model.extend({
+const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
+    /**
+     * @class FooterModel
+     * @extends Backbone.Model
+     * @memberof Footer
+     * @constructs
+     * @property {Array} urls Array of URLs to be displayed in the Footer (defaults to LGV Hamburg)
+     * @property {Object} version={} Version of Masterportal to be shown in the footer
+     */
     defaults: {
         urls: [
             {

@@ -2,7 +2,7 @@ import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
 import {Heatmap} from "ol/layer.js";
 
-const HeatmapLayer = Layer.extend({
+const HeatmapLayer = Layer.extend(/**@lends HeatmapLayer.prototype */{
 
     defaults: _.extend({}, Layer.prototype.defaults, {
         radius: 10,
@@ -11,7 +11,18 @@ const HeatmapLayer = Layer.extend({
             "#00f", "#0ff", "#0f0", "#ff0", "#f00"
         ]
     }),
-
+    /**
+     * @class HeatmapLayer
+     * @description Module to represent HeatmapLayer
+     * @extends Layer
+     * @constructs
+     * @memberOf Core.ModelList.Layer
+     * @property {Number} radius=10 Radius to calculate the heatmap.
+     * @property {Number} blur=15 Blur for heatmap.
+     * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
+     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     */
     initialize: function () {
         var channel = Radio.channel("HeatmapLayer");
 
@@ -25,12 +36,24 @@ const HeatmapLayer = Layer.extend({
         });
     },
 
+    /**
+     * Loads the initial heatmap features.
+     * @param {String} layerId Id of layer whose data has to be loaded.
+     * @param {ol/Feature[]} features Features that have to be used for heatmap layer.
+     * @returns {void}
+     */
     loadInitialData: function (layerId, features) {
         if (this.checkDataLayerId(layerId)) {
             this.initializeHeatmap(features);
         }
     },
 
+    /**
+     * Loads or updates the feature in the heatmap.
+     * @param {String} layerId Id of layer whose data data has to be loaded
+     * @param {ol/feature} feature  Feature that was updated.
+     * @returns {void}
+     */
     loadupdateHeatmap: function (layerId, feature) {
         if (this.checkDataLayerId(layerId)) {
             this.updateHeatmap(feature);
@@ -38,7 +61,7 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * creates ol.source.Vector as LayerSource
+     * Creates an empty vectorSource as the layer source.
      * @returns {void}
      */
     createLayerSource: function () {
@@ -46,7 +69,7 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * creates the heatmapLayer
+     * Creates the heatmap layer.
      * @returns {void}
      */
     createLayer: function () {
@@ -66,17 +89,17 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * check the triggered id with given the layerid
+     * Checks if triggered layer id equals the id of current heatmap-layer.
      * @param  {String} layerId - id from layer
-     * @returns {void}
+     * @returns {Boolean} - Flag if layerId matches the dataLayerId
      */
     checkDataLayerId: function (layerId) {
         return this.get("dataLayerId") === layerId;
     },
 
     /**
-     * draw heatmap with initialize features
-     * @param  {ol.Feature[]} features - all features from associated sensorLayer
+     * Draws the heatmap with initialize features
+     * @param  {ol/Feature[]} features All features from associated sensorLayer
      * @returns {void}
      */
     initializeHeatmap: function (features) {
@@ -106,14 +129,18 @@ const HeatmapLayer = Layer.extend({
             this.normalizeWeight(layerSource.getFeatures());
         }
     },
+    /**
+     * overwrites createlegendURL from class Layer. Is not yet implemented in heatmap layer.
+     * @returns {void}
+     */
     createLegendURL: function () {
         console.error("legendURL for heatmap not yet implemented");
     },
 
     /**
-     * update the heatmap with given feature
-     * @param  {ol.Feature} feature - feature to be update
-     * @return {void}
+     * Updates the heatmap with given feature.
+     * @param  {ol/Feature} feature Feature to be updated.
+     * @returns {void}
      */
     updateHeatmap: function (feature) {
         var attribute = this.get("attribute"),
@@ -156,8 +183,8 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * normalizes the values to a scale from 0 to 1
-     * @param  {ol.Feature[]} featuresWithValue - features that have a value
+     * Normalizes the values to a scale from 0 to 1.
+     * @param  {ol/Feature[]} featuresWithValue Features that have a value.
      * @returns {void}
      */
     normalizeWeight: function (featuresWithValue) {
@@ -171,11 +198,11 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * count given states of a feature
-     * @param  {ol.Feature} feature - feature
-     * @param  {string} heatmapAttribute - attribute that contains the value
-     * @param  {string} heatmapValue - value
-     * @return {String[]} count
+     * Counts the given states of a feature.
+     * @param  {ol/Feature} feature Feature.
+     * @param  {string} heatmapAttribute Attribute that contains the value.
+     * @param  {string} heatmapValue Value.
+     * @return {String[]}  - count.
      */
     countStates: function (feature, heatmapAttribute, heatmapValue) {
         var state = String(feature.get(heatmapAttribute)),
@@ -198,8 +225,8 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-    * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-    * @param {object} options -
+    * Checks by scale if layer is visible or not.
+    * @param {object} options Options from mapView
     * @returns {void}
     **/
     checkForScale: function (options) {
@@ -212,8 +239,8 @@ const HeatmapLayer = Layer.extend({
     },
 
     /**
-     * Setter for attribute "layer"
-     * @param {ol.layer} value - HeatmapLayer
+     * Setter for attribute "layer".
+     * @param {ol/Layer} value HeatmapLayer.
      * @returns {void}
      */
     setLayer: function (value) {
@@ -222,7 +249,7 @@ const HeatmapLayer = Layer.extend({
 
     /**
      * Setter for attribute "layerSource"
-     * @param {ol.source} value - HeatmapLayerSource
+     * @param {ol/Source} value HeatmapLayerSource.
      * @returns {void}
      */
     setLayerSource: function (value) {

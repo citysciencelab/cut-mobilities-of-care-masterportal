@@ -3,7 +3,7 @@ import ContinuousCountingBikeTemplate from "text-loader!./template.html";
 /**
  * @member ContinuousCountingBikeTemplate
  * @description Template used to create gfi for continuousCountingBike
- * @memberof GFI.Themes.ContiniuousCountingBikeTheme
+ * @memberof Tools.GFI.Themes.ContiniuousCountingBikeTheme
  */
 const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCountingBikeThemeView.prototype */{
     events: {
@@ -42,6 +42,10 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         var activeTab = this.$(evt.currentTarget).attr("value"),
             activeContent = this.$("#" + activeTab),
             tabContentList = [];
+
+        if (!_.has(Config, "uiStyle") || Config.uiStyle !== "table") {
+            $(".gfi > .gfi-content").css("max-height", "80vh");
+        }
 
         // deactivate all tabs
         this.$(evt.currentTarget).parent().find("li").each(function (index, li) {

@@ -1,6 +1,6 @@
 import {Fill, Stroke, Style} from "ol/style.js";
 
-const HighlightFeature = Backbone.Model.extend({
+const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureModel.prototype */{
     defaults: {
         polygonStyle: new Style({
             stroke: new Stroke({
@@ -13,6 +13,19 @@ const HighlightFeature = Backbone.Model.extend({
             })
         })
     },
+    /**
+     * @class HighlightFeatureModel
+     * @extends Backbone.Model
+     * @memberof HighlightFeature
+     * @constructs
+     * @property {Style} polygonStyle Default style to hightlight a feature
+     * @fires ParametricURL#RadioRequestParametricURLGetHighlightFeature
+     * @fires Map#RadioRequestMapCreateLayerIfNotExists
+     * @fires ModelList#RadioRequestModelListGetModelByAttributes
+     * @listens Layer#RadioTriggerLayerFeaturesLoaded
+     * @listens HighlightFeature#RadioTriggerHighlightfeatureHighlightFeature
+     * @listens HighlightFeature#RadioTriggerHighlightfeatureHighlightPolygon
+     */
     initialize: function () {
         var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
             channel = Radio.channel("Highlightfeature"),
@@ -28,11 +41,24 @@ const HighlightFeature = Backbone.Model.extend({
             this.getAndAddFeature(temp[0], temp[1]);
         }
     },
+    /**
+     * Hightlights a specific feature
+     * @param {String} featureToAdd String with comma seperated information about the feature to add "layerId, featureId"
+     * @return {void}
+     */
     highlightFeature: function (featureToAdd) {
         var temp = featureToAdd.split(",");
 
         this.getAndAddFeature(temp[0], temp[1]);
     },
+    /**
+     * Searches the feature which shall be hightlighted
+     * @param {String} layerId Id of the layer, containing the feature to hightlight
+     * @param {String} featureId Id of feature which shall be hightlighted
+     * @fires ModelList#RadioRequestModelListGetModelByAttributes
+     * @listens Layer#RadioTriggerLayerFeaturesLoaded
+     * @return {void}
+     */
     getAndAddFeature: function (layerId, featureId) {
         var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             features;
@@ -54,6 +80,12 @@ const HighlightFeature = Backbone.Model.extend({
             }
         }
     },
+    /**
+     * Adds the feature to a layer that has the hightlight style. If layer does not exist, it will be created.
+     * @param {ol.Feature} feature feature which shall be added to the hightlight-layer
+     * @fires Map#RadioRequestMapCreateLayerIfNotExists
+     * @return {void}
+     */
     addFeature: function (feature) {
         var highlightLayer,
             source;
@@ -65,6 +97,10 @@ const HighlightFeature = Backbone.Model.extend({
             feature.setStyle(this.createStyle());
         }
     },
+    /**
+     * Creates a style for highlighting features
+     * @return {Style} returns new Style with stroke and fill
+     */
     createStyle: function () {
         return new Style({
             stroke: new Stroke({
@@ -76,11 +112,11 @@ const HighlightFeature = Backbone.Model.extend({
             })
         });
     },
-
     /**
      * highlights a polygon feature
-     * @param {ol.Feature} feature - the feature to be highlighted
-     * @returns {void}
+     * @param {ol.Feature} feature the feature to be highlighted
+     * @fires Map#RadioRequestMapCreateLayerIfNotExists
+     * @return {void}
      */
     highlightPolygon: function (feature) {
         const highlightLayer = Radio.request("Map", "createLayerIfNotExists", "highlightLayer"),
@@ -92,4 +128,4 @@ const HighlightFeature = Backbone.Model.extend({
     }
 });
 
-export default HighlightFeature;
+export default HighlightFeatureModel;

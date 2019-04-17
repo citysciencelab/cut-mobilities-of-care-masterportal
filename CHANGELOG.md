@@ -1,3 +1,25 @@
+# Changelog LGV Master-Portal 2.3.0
+
+NEU:
+  - Neues GFI-Theme: "Dauerradzählstellen"
+  - Neues Control: "Backforward", zum Vor- und Zurückspulen des Kartenzustandes
+  - JSDOC: teilweise implementiert
+  - Suche funktioniert nun bei Cluster-Features und GEOJSON-Layer
+  - BKG-Suche: Zoom auf Ergebnis ist nun konfigurierbar
+  - OSM-Suche: Erweitert um Parameter "county"
+  - Footer: Versionsnummer des Portals ist nun anzeigbar
+  - Shadow-Tool: Schatten-Implementierung für 3D-View
+  - Filter: Optimierung für Touch-Table-UI
+  - Proxy-Host ist nun konfigurierbar
+  - Custom-Modules lassen sich nun mithilfe von Unit-Tests testen
+  - GFI zeigt nun Infos zu mehreren Features eines WFS
+  - GFI: Hit-Tolerance bei Vektor-Layern konfigurierbar
+  - Zeichnen-Modul: Per Remote-Interface steuerbar
+
+FIXES:
+  - Diverse Bugfixes
+
+
 # Changelog LGV Master-Portal 2.2.6
 
 NEU:

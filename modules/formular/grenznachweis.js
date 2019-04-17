@@ -5,7 +5,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {Stroke, Style} from "ol/style.js";
 import {Draw} from "ol/interaction.js";
 
-const GrenznachweisModel = Tool.extend({
+const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         nutzungsbedingungakzeptiert: false,
         gebuehrenordnungakzeptiert: false,
@@ -36,6 +36,50 @@ const GrenznachweisModel = Tool.extend({
         wpsurl: "",
         renderToWindow: true
     }),
+    /**
+     * @class GrenznachweisModel
+     * @extends Core.ModelList.Tool
+     * @memberof Formular
+     * @constructs
+     * @property {Boolean} nutzungsbedingungakzeptiert=false Flag, if user accepted the terms of usage
+     * @property {Boolean} gebuehrenordnungakzeptiert=false Flag, if user accepted the scale of fees
+     * @property {String} lage="" Position of the requestet parcel
+     * @property {Boolean} zweckGebaeudeeinmessung=false Flag, if user orders a 'Gebäudeeinmessung'
+     * @property {Boolean} zweckGebaeudeabsteckung=false Flag, if user orders a 'Gebäudeabsteckung'
+     * @property {Boolean} zweckLageplan=false Flag, if user orders a 'Lageplan'
+     * @property {Boolean} zweckSonstiges=false Flag, if user orders something else
+     * @property {String} freitext="" Field to insert some free text
+     * @property {String} punkte="knick-eckpunkte" Definition of selected points
+     * @property {String} kundenanrede="Herr" Customers title
+     * @property {VectorSource} source Geometry source for interactive order
+     * @property {String} kundenname="" Customer name
+     * @property {String} kundenfirma="" Customer company
+     * @property {String} kundenadresse="" Customer address
+     * @property {String} kundenplz="" Customer postal code
+     * @property {String} kundenort="" Customer city
+     * @property {String} kundenemail="" Customer e-mail
+     * @property {String} kundenfestnetz="" Customer phone number
+     * @property {String} kundenmobilfunk="" Customer mobile number
+     * @property {String} auftragsnummer="" Order number
+     * @property {String} kundennummer="" Customer number
+     * @property {Object} errors={} Collection of errors
+     * @property {Boolean} activatedInteraction=false todo
+     * @property {Object} weiterButton={enabled:true,name:"weiter"} Description of button to go on in the formular
+     * @property {Object} zurueckButton={enabled:false,name:"zurück"} Description of button to go back in the formular
+     * @property {String} activeDIV="beschreibung" Shows which HTML div is currently active ('beschreibung' or 'kundendaten')
+     * @property {String} wpsurl="" URL to the WPS service
+     * @property {Boolean} renderToWindow=true Flag, if the fomular shall be rendered to the masterportal tool window.
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires Map#RadioTriggerMapAddLayer
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Searchbar#RadioTriggerSearchbarDeleteSearchString
+     * @fires Window#RadioTriggerWindowCollapseWin
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @fires Formular#render
+     * @fires Map#RadioTriggerMapAddInteraction
+     * @fires Map#RadioTriggerMapRemoveInteraction
+     */
     initialize: function () {
         // lese WPS-Url aus JSON ein
         var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
@@ -60,7 +104,10 @@ const GrenznachweisModel = Tool.extend({
             Radio.trigger("Alert", "alert", "Die WPS-URL konnte nicht ermittelt werden.");
         }
     },
-    // Fenstermanagement-Events
+    /**
+     * Prepares the formular depending on the search result
+     * @return {void}
+     */
     prepWindow: function () {
         if (this.get("lage") === "" && $("#searchInput") && $("#searchInput").val() !== "") {
             this.set("lage", $("#searchInput").val());
@@ -88,6 +135,12 @@ const GrenznachweisModel = Tool.extend({
             return Boolean(new RegExp(pattern, "gi").test(value));
         }
     },
+    /**
+     * Validates the given formular
+     * @param {Object} attributes Input values of the formular
+     * @param {Object} identifier todo
+     * @return {Object} returns Collection of errors or null if valid
+     */
     validate: function (attributes, identifier) {
         var errors = {};
 
@@ -164,7 +217,11 @@ const GrenznachweisModel = Tool.extend({
         }
         return null;
     },
-    // anonymisierte Events
+    /**
+     * Sets the user input to the corresponding variables in the model
+     * @param {Object} evt Event generated when leaving one of the input fields
+     * @return {void}
+     */
     focusout: function (evt) {
         if (evt.target.id === "lagebeschreibung") {
             this.set("lage", evt.target.value);
@@ -194,6 +251,11 @@ const GrenznachweisModel = Tool.extend({
             this.writeCookie();
         }
     },
+    /**
+     * Sets the user input to the corresponding variables in the model
+     * @param {Object} evt Event generated when performing key up in the input fields
+     * @return {void}
+     */
     keyup: function (evt) {
         if (evt.target.id === "lagebeschreibung") {
             this.set("lage", evt.target.value);
@@ -232,6 +294,12 @@ const GrenznachweisModel = Tool.extend({
             this.set("kundenmobilfunk", evt.target.value);
         }
     },
+    /**
+     * Reacts on click in one of the input fields, then triggers the render function or updates the back and forward buttons
+     * @param {Object} evt Event generated when clicking in the input fields
+     * @fires Formular#render
+     * @return {void}
+     */
     click: function (evt) {
         if (evt.target.id === "zweckGebaeudeeinmessung") {
             this.set("zweckGebaeudeeinmessung", evt.target.checked);
@@ -299,12 +367,28 @@ const GrenznachweisModel = Tool.extend({
             this.set("gebuehrenordnungakzeptiert", evt.target.checked);
         }
     },
+    /**
+     * Sets the parameter of the 'forward'-button (enable or disable it and change the name)
+     * @param {Boolean} enabled Flag, if the 'forward'-button shall be enabled or not
+     * @param {String} name Text to display as name on the button
+     * @return {void}
+     */
     changeWeiterButton: function (enabled, name) {
         this.set("weiterButton", {enabled: enabled, name: name});
     },
+    /**
+     * Sets the parameter of the 'back'-button (enable or disable it and change the name)
+     * @param {Boolean} enabled Flag, if the 'back'-button shall be enabled or not
+     * @param {String} name Text to display as name on the button
+     * @return {void}
+     */
     changeZurueckButton: function (enabled, name) {
         this.set("zurueckButton", {enabled: enabled, name: name});
     },
+    /**
+     * Checks the given customer data
+     * @return {void}
+     */
     checkInputKundendaten: function () {
         var checker = this.isValid({validate: true});
 
@@ -313,6 +397,11 @@ const GrenznachweisModel = Tool.extend({
             this.transmitOrder();
         }
     },
+    /**
+     * Checks the given order data
+     * @fires Formular#render
+     * @return {void}
+     */
     checkInputBestelldaten: function () {
         var checker = this.isValid();
 
@@ -322,6 +411,14 @@ const GrenznachweisModel = Tool.extend({
             this.trigger("render", this, this.get("isActive"));
         }
     },
+    /**
+     * Creates and sends the WPS request
+     * @fires Searchbar#RadioTriggerSearchbarDeleteSearchString
+     * @fires Window#RadioTriggerWindowCollapseWin
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @return {void}
+     */
     transmitOrder: function () {
         // kopiere Attributwerte in für den FME-Prozess taugliche Form
         var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
@@ -494,12 +591,22 @@ const GrenznachweisModel = Tool.extend({
         });
         Radio.trigger("Util", "showLoader");
     },
+    /**
+     * Creates triggers the radio to show an error message
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @return {void}
+     */
     showErrorMessage: function () {
         Radio.trigger("Alert", "alert", {
             text: "<strong>Ihr Auftrag wurde leider nicht übermittelt.</strong> Bitte versuchen Sie es später erneut.",
             kategorie: "alert-danger"
         });
     },
+    /**
+     * Creates triggers the radio to show a success message
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @return {void}
+     */
     showSuccessMessage: function () {
         var ergMsg;
 
@@ -514,6 +621,10 @@ const GrenznachweisModel = Tool.extend({
             kategorie: "alert-success"
         });
     },
+    /**
+     * Builds GeoJSON from the user drawing
+     * @return {Object} json
+     */
     buildJSONGeom: function () {
         var featurearray = [];
 
@@ -530,6 +641,10 @@ const GrenznachweisModel = Tool.extend({
         });
         return JSON.stringify(featurearray);
     },
+    /**
+     * Reads a cookie to set customer data
+     * @return {void}
+     */
     readCookie: function () {
         var pCookie = JSON.parse(cookie.model.getItem());
 
@@ -546,6 +661,10 @@ const GrenznachweisModel = Tool.extend({
             this.set("kundenmobilfunk", pCookie.kundenmobilfunk);
         }
     },
+    /**
+     * Sets a cookie to save customer data
+     * @return {void}
+     */
     writeCookie: function () {
         var newCookie = {};
 
@@ -564,6 +683,13 @@ const GrenznachweisModel = Tool.extend({
             cookie.model.setItem(JSON.stringify(newCookie), Infinity);
         }
     },
+    /**
+     * Toggles the draw interaction to allow the user to input a polygon
+     * @fires Map#RadioTriggerMapAddInteraction
+     * @fires Map#RadioTriggerMapRemoveInteraction
+     * @fires Formular#render
+     * @return {void}
+     */
     toggleDrawInteraction: function () {
         if (this.get("activatedInteraction") === false) {
             this.set("draw", new Draw({
@@ -594,11 +720,19 @@ const GrenznachweisModel = Tool.extend({
         }
         this.trigger("render", this, this.get("isActive"));
     },
+    /**
+     * Removes all geometries
+     * @return {void}
+     */
     removeAllGeometries: function () {
         // lösche alle Geometrien
         this.get("source").clear();
         this.sourcechanged();
     },
+    /**
+     * Reacts on changes in the geometry, drawn by the user
+     * @return {void}
+     */
     sourcechanged: function () {
         if (this.get("source").getFeatures().length > 0) {
             this.$("#removegeometrie").removeAttr("disabled");
