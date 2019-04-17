@@ -1,6 +1,14 @@
 import SourceModel from "./model";
 
 const WfsQueryModel = SourceModel.extend({
+
+    /**
+     * @class WfsQueryModel
+     * @extends Tools.Filter.Query.SourceModel
+     * @memberof Tools.Filter.Query.Source
+     * @constructs
+     * @fires Util#getProxyURL
+     */
     initialize: function () {
         this.initializeFunction();
     },
@@ -43,15 +51,43 @@ const WfsQueryModel = SourceModel.extend({
     },
     /**
      * Extract Attribute names and types from DescribeFeatureType-Response and creates the snippets
-     * @param  {XML} response response xml from ajax call
+     * @param  {object} response response xml from ajax call. Depending on the wfs this is a xml-string or a xml-object.
      * @return {object} - Mapobject containing names and types
      */
     parseResponse: function (response) {
-        var elements = $("element", response),
+        var selector = "element",
+            responseString,
+            searchForNamespaceResult,
+            elements,
             featureAttributesMap = [];
 
+        // Serialize xml-object. Skipped if a xml-string was provided.
+        if (!_.isString(response)) {
+            responseString = new XMLSerializer().serializeToString(response);
+        }
+        else {
+            responseString = response;
+        }
+
+        // Detect namespaces. If a namespace was found the selector has to be adapted to get a result later on.
+        searchForNamespaceResult = (/<([^<]+):element/i).exec(responseString);
+        if (searchForNamespaceResult && searchForNamespaceResult.length === 2) {
+            selector = searchForNamespaceResult[1] + "\\:element";
+        }
+
+        elements = $(selector, response);
+
         _.each(elements, function (element) {
-            featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
+
+            var type = $(element).attr("type"),
+                typeWithoutNamespace;
+
+            if (type) {
+                // Remove namespace (if neccesary)
+                typeWithoutNamespace = type.replace(/.*?:?([^:]*)$/i, "$1");
+
+                featureAttributesMap.push({name: $(element).attr("name"), type: typeWithoutNamespace});
+            }
         });
 
         this.createSnippets(featureAttributesMap);
