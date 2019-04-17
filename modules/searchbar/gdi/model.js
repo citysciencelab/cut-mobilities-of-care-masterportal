@@ -8,7 +8,6 @@ const GdiModel = Backbone.Model.extend({
         sorting: {},
         size: 10000,
         elasticSearch: new ElasticSearch()
-        // ajaxRequests: {}
     },
     /**
      * @description Initialise GDI-Search via ElasticSearch
