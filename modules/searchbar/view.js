@@ -44,21 +44,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "click .list-group-item.results": "renderHitList",
         "mouseover .list-group-item.hit": "showMarker",
         "mouseleave .list-group-item.hit": "hideMarker",
-        "click .list-group-item.type": function (e) {
-
-            // fix für Firefox
-            var event = e || window.event;
-
-            this.collapseHits($(event.target));
-        },
-        "click .btn-search-question": function () {
-            Radio.trigger("Quickhelp", "showWindowHelp", "search");
-        },
+        "click .list-group-item.type": "clickListGroupItem",
+        "click .btn-search-question": "clickBtnQuestion",
         "keydown": "navigateList",
-        "click": function () {
-            this.clearSelection();
-            $("#searchInput").focus();
-        }
+        "click": "clickHandler"
     },
 
     /**
@@ -108,20 +97,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         });
 
         this.listenTo(Radio.channel("MenuLoader"), {
-            "ready": function (parentElementId) {
-                this.render(parentElementId);
-                if (!_.isUndefined(this.model.get("initSearchString"))) {
-                    if (this.model.get("isInitialRecommendedListCreated") === true) {
-                        this.renderRecommendedList();
-                        this.$("#searchInput").val(this.model.get("initSearchString"));
-                        this.model.unset("initSearchString", true);
-                    }
-                }
-                if (window.innerWidth >= 768) {
-                    this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
-                    Radio.trigger("Title", "setSize");
-                }
-            }
+            "ready": this.menuLoaderReady
         });
 
         if (config.quickHelp) {
@@ -131,9 +107,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.initialRender();
 
         this.listenTo(Radio.channel("Util"), {
-            "isViewMobileChanged": function () {
-                this.render();
-            }
+            "isViewMobileChanged": this.viewMobileChanged
         });
 
         this.listenTo(Radio.channel("ViewZoom"), {
@@ -242,6 +216,63 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * Handling of click event on a ListGroupItem
+     * @param   {event} e Event
+     * @returns {void}
+     */
+    clickListGroupItem: function (e) {
+        // fix für Firefox
+        var event = e || window.event;
+
+        this.collapseHits($(event.target));
+    },
+
+    /**
+     * Handling of click event on button quickhelp
+     * @returns {void}
+     */
+    clickBtnQuestion: function () {
+        Radio.trigger("Quickhelp", "showWindowHelp", "search");
+    },
+
+    /**
+     * Handling of click event
+     * @returns {void}
+     */
+    clickHandler: function () {
+        this.clearSelection();
+        $("#searchInput").focus();
+    },
+
+    /**
+     * Handling of menuLoader:ready
+     * @param   {String} parentElementId parentElementId
+     * @returns {void}
+     */
+    menuLoaderReady: function (parentElementId) {
+        this.render(parentElementId);
+        if (!_.isUndefined(this.model.get("initSearchString"))) {
+            if (this.model.get("isInitialRecommendedListCreated") === true) {
+                this.renderRecommendedList();
+                this.$("#searchInput").val(this.model.get("initSearchString"));
+                this.model.unset("initSearchString", true);
+            }
+        }
+        if (window.innerWidth >= 768) {
+            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+            Radio.trigger("Title", "setSize");
+        }
+    },
+
+    /**
+     * Handling of isViewMobileChanged
+     * @returns {void}
+     */
+    viewMobileChanged: function () {
+        this.render();
+    },
+
+    /**
     * @description Methode, um den Searchstring über den Radio zu steuern ohne Event auszulösen
     * @param {string} searchstring - Der einzufügende Searchstring
     * @returns {void}
@@ -259,12 +290,23 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * Calculates the height of the dropdown div. Default 100 should allways fit roughly.
+     * @returns {integer} div height
+     */
+    getDropdownHeight: function () {
+        if (document.getElementsByClassName("lgv-container").length > 0) {
+            return document.getElementsByClassName("lgv-container")[0].offsetHeight - 130;
+        }
+        return 100;
+    },
+
+    /**
      * todo
      * @returns {*} todo
      */
     renderRecommendedList: function () {
         var attr = this.model.toJSON(),
-            height = document.getElementsByClassName("lgv-container")[0].offsetHeight - 130,
+            height = this.getDropdownHeight(),
             width = this.$("#searchForm").width();
 
         attr.uiStyle = Radio.request("Util", "getUiStyle");
@@ -339,8 +381,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
     },
 
-    /*
-     * Methode, um den Focus über den Radio in SearchInput zu legen
+    /**
+     * Set focus in searchInput
+     * @returns {void}
      */
     setFocus: function () {
         this.$("#searchInput").focus();
