@@ -59,8 +59,8 @@
           },
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_festgestellt",
-            "propertyNames": ["app:planrecht"],
+            "typeName": "app:hh_hh_festgestellt",
+            "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
@@ -203,7 +203,7 @@
           "einwohnerabfrage": {
             "name": "Einwohneranzahl abfragen",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": true
+            "onlyDesktop": false
           },
           "compareFeatures": {
             "name": "Vergleichsliste",
@@ -287,8 +287,7 @@
           },
           "styleWMS": {
             "name": "Style WMS",
-            "glyphicon": "glyphicon-tint",
-            "onlyDesktop": true
+            "glyphicon": "glyphicon-tint"
           },
           "featureLister": {
             "name": "Liste",
@@ -391,7 +390,7 @@
       "attributions":
       {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false
+        "isInitOpenMobile": true
       },
       "overviewmap":
       {
@@ -421,6 +420,10 @@
           "id": "452"
         },
         {
+          "id": ["4736", "12062", "4745", "4739", "12061", "4742", "12060", "12059"],
+          "name": "Geobasiskarten (schwarz-grau)"
+        },
+        {
           "id": "12883",
           "name": "Gelände",
           "visibility": true
@@ -431,7 +434,7 @@
           "visibility": true
         },
         {
-         "id": "12885",
+         "id": "14261",
          "name": "Oblique",
          "visibility": true
         }
@@ -451,16 +454,23 @@
         "id": "8730"
       },
       {
-        "id": "10220",
-        "visibility": true,
-        "gfiTheme": "continuousCountingBike"
+        "id": "10220"
       },
       {
         "id": "2426"
       },
       {
         "id": "1933",
-        "infoFormat": "application/vnd.ogc.gml"
+        "infoFormat": "application/vnd.ogc.gml",
+        "styles": [
+          "geofox_stations"
+        ],
+        "name": [
+          "HVV Haltestellen"
+        ],
+        "legendURL": [
+          "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
+        ]
       },
       {
         "id": "4561",
@@ -548,7 +558,7 @@
       {
         "id": "1711",
         "styleId": "1711",
-        "visibility": false,
+        "visibility": true,
         "layerAttribution": "<span>Attributierung für Fachlayer</span>",
         "mouseHoverField": ["name", "strasse"],
         "searchField": "name",
@@ -570,7 +580,7 @@
       },
       {
         "id": "8712",
-        "visibility": false,
+        "visibility": true,
         "name": "Schulinfosystem",
         "styleId": "8712",
         "searchField": "schulname",
