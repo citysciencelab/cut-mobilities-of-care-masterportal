@@ -123,7 +123,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      */
     gfiErrorHandler: function (jqXHR) {
         console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
-        Radio.trigger("Alert", "Die Informationen zu dem ausgewählten Objekt kann derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
+        Radio.trigger("Alert", "alert", "Die Informationen zu dem ausgewählten Objekt können derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
     },
 
     /**
