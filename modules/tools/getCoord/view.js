@@ -1,6 +1,6 @@
 import GetCoordTemplate from "text-loader!./template.html";
 
-const GetCoord = Backbone.View.extend(/** @lends ModelList.prototype */{
+const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     events: {
         "click .glyphicon-remove": "destroy",
         "change #coordSystemField": "changedPosition",
