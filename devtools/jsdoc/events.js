@@ -1100,6 +1100,7 @@
  * @example Radio.request("Util", "getConfig")
  * @description Request config path
  */
+
 /**
  * @event Util#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
@@ -1107,6 +1108,12 @@
  * @example Radio.request("Util", "getUiStyle");
  */
 
+/**
+ * @event Util#RadioRequestUtilIsAny
+ * @description returns if the device type is mobile
+ * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isAny");
+ */
 /** -------------------- GRAPH -------------------- */
 
 /**

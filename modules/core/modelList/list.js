@@ -77,6 +77,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
      * @fires ModelList#updateOverlayerView
+     * @fires Map#RadioRequestMapGetMapMode
+     * @fires ModelList#UpdateOverlayerView
      * @fires ModelList#UpdateSelection
      * @fires ModelList#TraverseTree
      * @fires ModelList#RenderTree
@@ -128,13 +130,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 if (model.get("id") === "SelectedLayer") {
                     this.trigger("updateSelection", model);
                 }
-                // Trigger fÃ¼r mobiles Wandern im Baum
+                // Trigger for mobile tree traversion
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isSelected": function (model) {
                 if (model.get("type") === "layer") {
-                    this.resetSelectionIdx(model);
                     model.setIsVisibleInMap(model.get("isSelected"));
                 }
                 this.trigger("updateSelection");
@@ -149,7 +150,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         });
         this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
-    selectionIDX: [],
     model: function (attrs, options) {
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
@@ -171,7 +171,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.typ === "GROUP") {
                 return new GROUPLayer(attrs, options);
             }
-            else if (attrs.typ === "SensorThings" || attrs.typ === "ESRIStreamLayer") {
+            else if (attrs.typ === "SensorThings") {
                 return new SensorLayer(attrs, options);
             }
             else if (attrs.typ === "Heatmap") {
@@ -291,12 +291,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         return null;
     },
+    /**
+     * Returns the default tool of the app
+     * @return {Tool} The tool with the same id as the defaultToolId
+     */
     getDefaultTool: function () {
         return this.get(this.defaultToolId);
     },
     /**
-     * Returns the default tool of the app
-     * @return {Tool} The tool with the same id as the defaultToolId
+     * Todo
+     * @return {void}
      */
     closeAllExpandedFolder: function () {
         var folderModel = this.findWhere({isExpanded: true});
@@ -484,88 +488,36 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Inserts layer model to selected layer list and returns the index of the layer model
-     * @param {Layer} model Layer model that gets added to the selected layer list
-     * @return {Number} idx Index of inserted layer model
+     * Initializes selectionIDX property if not properly set yet.
+     * @param {layer} model the layer model to this property on
+     * @return {integer} the index number, which has been associated to the model
      */
-    insertIntoSelectionIDX: function (model) {
-        var idx = 0;
+    initModelIndex: function (model) {
+        var aLayerModels = this.where({type: "layer"}),
+            iResultIndex = 0,
+            iMaxIndex = 0;
 
-        if (model.has("selectionIDX")) {
-            this.selectionIDX.push(model);
-            this.updateModelIndeces();
+        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
+            return model.get("selectionIDX");
         }
-        else if (this.selectionIDX.length === 0 || model.get("parentId") !== "Baselayer") {
-            this.appendToSelectionIDX(model);
-        }
-        else {
-            while (idx < this.selectionIDX.length && this.selectionIDX[idx].get("parentId") === "Baselayer") {
-                idx++;
+
+        _.each(aLayerModels, function (oLayerModel) {
+            if (oLayerModel.get("selectionIDX") > iMaxIndex) {
+                iMaxIndex = oLayerModel.get("selectionIDX");
             }
-            this.selectionIDX.splice(idx, 0, model);
-            this.updateModelIndeces();
-        }
-    },
+        }, this);
 
-    /**
-     * Inserts layer model at given index
-     * @param {Layer} model Layer model to be added
-     * @param {Number} idx Index where layer model has to be added
-     * @return {void}
-     */
-    insertIntoSelectionIDXAt: function (model, idx) {
-        this.selectionIDX.splice(idx, 0, model);
-        this.updateModelIndeces();
-    },
+        iResultIndex = iMaxIndex + 1;
 
-    /**
-     * Appends layer model to selection
-     * @param {Layer} model Layer model to be added
-     * @return {Number} Index where model has been added
-     */
-    appendToSelectionIDX: function (model) {
-        var idx = this.selectionIDX.push(model) - 1;
+        model.setSelectionIDX(iResultIndex);
 
-        this.updateModelIndeces();
-        return idx;
-    },
-
-    /**
-     * Removes layer model at given index
-     * @param {Number} idx Index of model to be removed
-     * @return {void}
-     */
-    removeFromSelectionIDX: function (idx) {
-        var deleteCid = idx.cid,
-            filteredIDX = _.reject(this.selectionIDX, function (i) {
-                return i.cid === deleteCid;
-            });
-
-        this.selectionIDX = filteredIDX;
-        this.updateModelIndeces();
-    },
-
-    /**
-     * If the tree type is NOT "light", then the layer model gets added if isSelected=true, otherwise removed
-     * @param {Layer} model Layer model
-     * @fires Parser#RadioRequestParserGetTreeType
-     * @return {void}
-     */
-    resetSelectionIdx: function (model) {
-        if (Radio.request("Parser", "getTreeType") !== "light") {
-            if (model.get("isSelected")) {
-                this.insertIntoSelectionIDX(model);
-            }
-            else {
-                this.removeFromSelectionIDX(model);
-            }
-        }
+        return iResultIndex;
     },
 
     /**
      * Moves layer in selection one index down
      * @param {Layer} model Layer model to be pulled down
-     * @fires Map#RadioTriggerMapAddLayerToIndex
+     * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
@@ -573,25 +525,75 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelDown: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            newIDX = oldIDX - 1;
+            visibleLayerModels = this.where({type: "layer"}),
+            newIDX = false,
+            iMin = 0,
+            affectedModel;
 
-        if (oldIDX > 0) {
-            this.removeFromSelectionIDX(model);
-            this.insertIntoSelectionIDXAt(model, newIDX);
-            if (model.get("isSelected")) {
-                Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
+        // find next index and layer to swap with
+        _.each(visibleLayerModels, function (modelTemp) {
+            if (modelTemp.get("selectionIDX") < oldIDX && (oldIDX - modelTemp.get("selectionIDX") < iMin || newIDX === false)) {
+                newIDX = modelTemp.get("selectionIDX");
+                iMin = oldIDX - newIDX;
             }
-            this.trigger("updateSelection");
-            this.trigger("updateLightTree");
-            // Trigger fÃƒÂ¼r mobil
-            this.trigger("changeSelectedList");
+        }, this);
+
+        if (newIDX === false) {
+            return;
         }
+
+        affectedModel = this.where({selectionIDX: newIDX})[0];
+
+        // swap layers
+        affectedModel.setSelectionIDX(oldIDX);
+        model.setSelectionIDX(newIDX);
+
+        // in case the other layer is one of the following special ones (in 2D mode), skip it
+        if (Radio.request("Map", "getMapMode") === "2D"
+            &&
+            (
+                affectedModel.get("typ") === "Terrain3D"
+                ||
+                affectedModel.get("typ") === "Oblique"
+                ||
+                affectedModel.get("typ") === "TileSet3D"
+            )
+        ) {
+            this.moveModelDown(model);
+            return;
+        }
+
+        this.trigger("updateSelection");
+        this.trigger("updateLightTree");
+        // Trigger for mobile
+        this.trigger("changeSelectedList");
+
+        this.sortLayersVisually();
+    },
+
+    /**
+     * Sorts map layers (in map) according to their selectionIDX property values. Actually this should be
+     * done using open layers layer zIndex property.
+     * @todo use open layers zIndex prop instead
+     * @return {void}
+     */
+    sortLayersVisually: function () {
+        var layers = this.where({type: "layer"}),
+            layersCopy = layers.slice().sort(function (layer1, layer2) {
+                return layer1.get("selectionIDX") > layer2.get("selectionIDX") ? 1 : -1;
+            });
+
+        _.each(layersCopy, function (layer) {
+            if (_.isUndefined(layer.get("layer")) === false) {
+                Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
+            }
+        }, this);
     },
 
     /**
      * Moves layer in selection one index up
      * @param  {Layer} model Layer model to be pulled up
-     * @fires Map#RadioTriggerMapAddLayerToIndex
+     * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateSelection
      * @fires ModelList#UpdateLightTree
      * @fires ModelList#ChangeSelectedList
@@ -599,21 +601,50 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelUp: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            newIDX = oldIDX + 1;
+            visibleLayerModels = this.where({type: "layer"}),
+            newIDX = false,
+            iMin = 0,
+            affectedModel;
 
-        if (oldIDX < this.selectionIDX.length - 1) {
-            this.removeFromSelectionIDX(model);
-            this.insertIntoSelectionIDXAt(model, newIDX);
-            // Auch wenn die Layer im simple Tree noch nicht selected wurde, kÃƒÂ¶nnen
-            // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugtt und ist undefined
-            if (model.get("isSelected")) {
-                Radio.trigger("Map", "addLayerToIndex", [model.get("layer"), newIDX]);
+        // find next index and layer to swap with
+        _.each(visibleLayerModels, function (modelTemp) {
+            if (modelTemp.get("selectionIDX") > oldIDX && (modelTemp.get("selectionIDX") - oldIDX < iMin || newIDX === false)) {
+                newIDX = modelTemp.get("selectionIDX");
+                iMin = newIDX - oldIDX;
             }
-            this.trigger("updateSelection");
-            this.trigger("updateLightTree");
-            // Trigger fÃƒÂ¼r mobil
-            this.trigger("changeSelectedList");
+        }, this);
+
+        if (newIDX === false) {
+            return;
         }
+
+        affectedModel = this.where({selectionIDX: newIDX})[0];
+
+        // swap layers
+        affectedModel.setSelectionIDX(oldIDX);
+        model.setSelectionIDX(newIDX);
+
+        // in case the other layer is one of the following special ones (in 2D mode), skip it
+        if (Radio.request("Map", "getMapMode") === "2D"
+            &&
+            (
+                affectedModel.get("typ") === "Terrain3D"
+                ||
+                affectedModel.get("typ") === "Oblique"
+                ||
+                affectedModel.get("typ") === "TileSet3D"
+            )
+        ) {
+            this.moveModelUp(model);
+            return;
+        }
+
+        this.trigger("updateSelection");
+        this.trigger("updateLightTree");
+        // Trigger for mobile
+        this.trigger("changeSelectedList");
+
+        this.sortLayersVisually();
     },
 
     /**
@@ -621,10 +652,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * for each model based on their index in the array
      * @return {void}
      */
-    updateModelIndeces: function () {
-        _.each(this.selectionIDX, function (model, index) {
-            model.setSelectionIDX(index);
-        });
+    initModelIndeces: function () {
+        var aLayerModels = this.where({type: "layer"});
+
+        _.each(aLayerModels, function (oLayerModel, iIndex) {
+            if (_.isUndefined(oLayerModel.get("layer")) === false) {
+                oLayerModel.setSelectionIDX(iIndex);
+            }
+        }, this);
+        this.sortLayersVisually();
     },
 
     /**
@@ -649,9 +685,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     addInitialyNeededModels: function () {
-        // lighttree: Alle models gleich hinzufÃƒÂ¼gen, weil es nicht viele sind und sie direkt einen Selection index
-        // benÃ¶tigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
-        // wie sie hinzugefÃ¼gt werden
+        // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
+        // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
+        // wie sie hinzugefügt werden
         var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
             treeType = Radio.request("Parser", "getTreeType"),
             lightModels,
@@ -660,8 +696,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         if (treeType === "light") {
             lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
-
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
+
             this.add(lightModels);
         }
         else if (paramLayers.length > 0) {
@@ -671,11 +707,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 layer.isSelected = false;
             }, this);
 
-            _.each(paramLayers, function (paramLayer, index) {
+            _.each(paramLayers, function (paramLayer) {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
                 if (_.isUndefined(lightModel) === false) {
-                    lightModel.selectionIDX = index;
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
@@ -691,6 +726,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             this.addModelsByAttributes({typ: "Oblique"});
         }
 
+        this.initModelIndeces();
     },
 
     /**

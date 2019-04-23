@@ -358,7 +358,8 @@ const DownloadModel = Tool.extend({
             pointOpacities = [],
             pointColors = [],
             featuresWithPointStyle,
-            pointRadiuses = [];
+            pointRadiuses = [],
+            textFonts = [];
 
         _.each(features, function (feature) {
             var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32")),
@@ -379,16 +380,24 @@ const DownloadModel = Tool.extend({
 
             // wenn Punkt-Geometrie
             if (type === "Point") {
+
+                if (feature.getStyle().getText()) {
+                    textFonts.push(feature.getStyle().getText().getFont());
+                    pointOpacities.push(undefined);
+                    pointColors.push(undefined);
+                    pointRadiuses.push(undefined);
+                }
                 // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
-                if (!feature.getStyle().getText()) {
+                else {
                     color = style.getImage().getFill().getColor();
                     pointOpacities.push(style.getImage().getFill().getColor()[3]);
                     pointColors.push(color[0] + "," + color[1] + "," + color[2]);
                     pointRadiuses.push(style.getImage().getRadius());
+                    textFonts.push(undefined);
                 }
+
             }
         }, context);
-
 
         // KML zerlegen und die Punktstyles einfügen
         featuresWithPointStyle = $.parseXML(format.writeFeatures(features));
@@ -396,10 +405,16 @@ const DownloadModel = Tool.extend({
         $(featuresWithPointStyle).find("Point").each(function (i, point) {
             var placemark = point.parentNode,
                 style,
-                pointStyle;
+                pointStyle,
+                fontStyle;
 
+            if ($(placemark).find("name")[0]) {
+                style = $(placemark).find("LabelStyle")[0];
+                fontStyle = "<font>" + textFonts[i] + "</font>";
+                $(style).append($(fontStyle));
+            }
             // kein Text, muss also Punkt sein
-            if (!$(placemark).find("name")[0]) {
+            else {
                 style = $(placemark).find("Style")[0];
                 pointStyle = "<pointstyle>";
 

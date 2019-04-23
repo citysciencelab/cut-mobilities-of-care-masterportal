@@ -6,18 +6,33 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
      * @extends Backbone.View
      * @memberof MouseHover
      * @constructs
-     * @param {boolean | object} attr Configuration
+     * @classdesc Shows an ol.overlay with configured informations about the hovered feature on the map. It's always disabled on touch devices because they usually don't have a mouse to trigger a hover event.
+     * @fires Util#RadioRequestUtilIsAny
      * @listens MouseHover#render
      * @listens MouseHover#destroy
      */
-    initialize: function (attr) {
-        this.model = new MouseHoverPopup(attr);
-        this.listenTo(this.model, {
-            "render": this.render,
-            "destroy": this.destroy
-        });
+    initialize: function () {
+        if (!this.isTouchdevice()) {
+            this.model = new MouseHoverPopup();
+            this.listenTo(this.model, {
+                "render": this.render,
+                "destroy": this.destroy
+            });
 
-        this.createOverlayElement();
+            this.createOverlayElement();
+        }
+    },
+
+    /**
+     * Checks the device type. Disable the ability on smartphones and tablets as they usually don't have a mouse to hover.
+     * @fires Util#RadioRequestUtilIsAny
+     * @returns {Boolean} touchdevice true:known touchdevice false:not known as touchdevice
+     */
+    isTouchdevice: function () {
+        if (Radio.request("Util", "isAny") === null) {
+            return false;
+        }
+        return true;
     },
 
     /**
