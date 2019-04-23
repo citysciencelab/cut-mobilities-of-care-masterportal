@@ -1,22 +1,43 @@
 import GetCoordTemplate from "text-loader!./template.html";
 
-const GetCoord = Backbone.View.extend({
+const GetCoord = Backbone.View.extend(/** @lends ModelList.prototype */{
     events: {
         "click .glyphicon-remove": "destroy",
         "change #coordSystemField": "changedPosition",
         "click #coordinatesEastingField": "copyToClipboard",
         "click #coordinatesNorthingField": "copyToClipboard"
     },
+    /**
+     * @class GetCoord
+     * @description Get Coordinates Tool
+     * @extends Backbone.View
+     * @memberOf Tools.GetCoord
+     * @constructs
+     * @listens GetCoord#ChangeIsActive
+     * @listens GetCoord#ChangeUrl
+     * @listens GetCoord#ChangePositionMapProjection
+     * @fires Util#RadioTriggerUtilCopyToClipboard
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive change:url": this.render,
             "change:positionMapProjection": this.changedPosition
         });
+        // To initially open this tool it needs to fire change:isActive event on parent model because other
+        // tools need to be closed before - this happens by listening to change:isActive.
         if (this.model.get("isActive") === true) {
-            this.render(this.model, true);
+            this.model.set("isActive", false);
+            this.model.set("isActive", true);
         }
     },
     template: _.template(GetCoordTemplate),
+
+    /*
+     * Todo
+     * @param {object} model Model of GetCoord Tool view
+     * @param {boolean} value Todo
+     * @returns {view} This
+     */
     render: function (model, value) {
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -33,6 +54,10 @@ const GetCoord = Backbone.View.extend({
         return this;
     },
 
+    /*
+     * Todo
+     * @returns {void}
+     */
     changedPosition: function () {
         var targetProjectionName = this.$("#coordSystemField option:selected").val(),
             position = this.model.returnTransformedPosition(targetProjectionName),
@@ -45,6 +70,12 @@ const GetCoord = Backbone.View.extend({
         }
     },
 
+    /*
+     * Todo
+     * @param {object} position Todo
+     * @param {object} targetProjection Todo
+     * @returns {void}
+     */
     adjustPosition: function (position, targetProjection) {
         var coord, easting, northing;
 
@@ -65,6 +96,11 @@ const GetCoord = Backbone.View.extend({
         this.$("#coordinatesNorthingField").val(northing);
     },
 
+    /*
+     * Todo
+     * @param {object} targetProjection Todo
+     * @returns {void}
+     */
     adjustWindow: function (targetProjection) {
         // geographische Koordinaten
         if (targetProjection.projName === "longlat") {
@@ -78,6 +114,12 @@ const GetCoord = Backbone.View.extend({
         }
     },
 
+    /*
+     * Todo
+     * @fires Util#RadioTriggerUtilCopyToClipboard
+     * @param {event} evt Click Event
+     * @returns {void}
+     */
     copyToClipboard: function (evt) {
         Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
     }
