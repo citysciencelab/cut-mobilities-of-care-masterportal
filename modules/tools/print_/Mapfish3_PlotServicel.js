@@ -45,11 +45,49 @@ const PrintModel = Tool.extend({
         glyphicon: "glyphicon-print",
         eventListener: {}
     }),
+
+    /**
+     * @class PrintModel
+     * @extends Tool
+     * @memberof print_
+     * @constructs
+     * @property {String} filename="report" - Output filename
+     * @property {undefined} mapfishServiceId=undefined - id from rest service json for mapfish app
+     * @property {String} printAppId="master" - identifier of one of available mapfish print configurations
+     * @property {Array} layoutList=[] - Array of available layouts of the specified print configuration
+     * @property {undefined} currentLayout=undefined - Holder for the current selected layout
+     * @property {Array} formatList=[] - Array of available formats of the specified print configuration
+     * @property {String} currentFormat="pdf" - The current Format
+     * @property {undefined} currentScale=undefined - Holder for the current rpint scale
+     * @property {String} title="PrintResult" - Initial title for the print page
+     * @property {Boolean} isScaleSelectedManually=false - Flag if the scale was selected by the user over the view
+     * @property {Boolean} isMetaDataAvailable=false - Flag if the current layout supports meta data
+     * @property {Boolean} isGfiAvailable=false - Flag if the current layout supports gfi
+     * @property {Boolean} isGfiActive=false - Flag if gfi is active
+     * @property {Boolean} isLegendAvailable=false - Flag if the current layout supports legend
+     * @property {Boolean} isLegendSelected=true - Flag if the legend is to be printed
+     * @property {Boolean} isScaleAvailable=false - Flag if the current layout supports scale
+     * @property {undefined} plotServiceId=undefined - id from the rest services json for the plot app
+     * @property {Boolean} deactivateGFI=false - Flag if gfi is deactivated
+     * @property {Boolean} renderToWindow=true - todo
+     * @property {Number} DOTS_PER_INCH=72 - todo
+     * @property {Number} INCHES_PER_METER=39.37 - todo
+     * @property {String} glyphicon="glyphicon-print" - Icon for the print button
+     * @property {Object} eventListener={} - todo
+     * @listens Print#RadioTriggerPrintChangeIsActive
+     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @listens GFI#RadioTriggerGFIIsVisible
+     * @listens Print#RadioTriggerPrintCreatePrintJob
+     */
     initialize: function () {
         var channel = Radio.channel("Print");
 
         this.superInitialize();
 
+        /**
+         * @event Print#RadioTriggerPrintChangeIsActive
+         * @description todo
+         */
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (model.get("layoutList").length === 0) {
@@ -59,12 +97,20 @@ const PrintModel = Tool.extend({
             }
         });
 
+        /**
+         * @event MapView#RadioTriggerMapViewChangedOptions
+         * @description todo
+         */
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
             }
         });
 
+        /**
+         * @event GFI#RadioTriggerGFIIsVisible
+         * @description todo
+         */
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": function (isGfiActive) {
                 if (!isGfiActive) {
@@ -73,13 +119,26 @@ const PrintModel = Tool.extend({
                 this.setIsGfiActive(isGfiActive);
             }
         });
+        /**
+         * @event Print#RadioTriggerPrintCreatePrintJob
+         * @description todo
+         */
         channel.on({
             "createPrintJob": this.createPrintJob
         }, this);
         this.createMapFishServiceUrl(this.get("mapfishServiceId"));
     },
 
+    /**
+     * todo
+     * @param {*} id - todo
+     * @returns {void}
+     */
     createMapFishServiceUrl: function (id) {
+        /**
+         * @event todo
+         * @description todo
+         */
         var service = Radio.request("RestReader", "getServiceById", id),
             serviceUrl = _.isUndefined(service) ? "" : service.get("url");
 
@@ -96,6 +155,10 @@ const PrintModel = Tool.extend({
 
         if (value) {
             if (this.get("mapfishServiceId") !== undefined) {
+                /**
+                 * @event todo
+                 * @description todo
+                 */
                 serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url");
                 this.setMapfishServiceUrl(serviceUrl);
                 this.sendRequest(serviceUrl + this.get("printAppId") + "/capabilities.json", "GET", this.parseMapfishCapabilities);
@@ -107,6 +170,11 @@ const PrintModel = Tool.extend({
         }
     },
 
+    /**
+     * todo
+     * @param {*} response - todo
+     * @returns {void}
+     */
     parseMapfishCapabilities: function (response) {
         this.setLayoutList(response.layouts);
         this.setCurrentLayout(response.layouts[0]);
@@ -115,14 +183,32 @@ const PrintModel = Tool.extend({
         this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
         this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
         this.setFormatList(response.formats);
+        /**
+         * @event todo
+         * @description todo
+         */
         this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
         this.togglePostcomposeListener(this, true);
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     print: function () {
+        /**
+         * @event todo
+         * @description todo
+         */
         var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                 return layer.getVisible() === true;
             }),
+            /**
+             * @event todo
+             * @description todo
+             * @event todo2
+             * @description todo2
+             */
             attr = {
                 "layout": this.get("currentLayout").name,
                 "outputFilename": this.get("filename"),
@@ -145,8 +231,16 @@ const PrintModel = Tool.extend({
         }
         if (this.get("isLegendAvailable")) {
             if (this.get("isLegendSelected")) {
+                /**
+                 * @event todo
+                 * @description todo
+                 */
                 Radio.trigger("Legend", "setLayerList");
             }
+            /**
+             * @event todo
+             * @description todo
+             */
             spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"), this.get("isMetaDataAvailable"));
         }
         if (this.get("isScaleAvailable")) {
@@ -155,6 +249,10 @@ const PrintModel = Tool.extend({
         spec.buildLayers(this.sortVisibleLayerListByZindex(visibleLayerList));
 
         if (this.get("isGfiAvailable")) {
+            /**
+             * @event todo
+             * @description todo
+             */
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
         spec = spec.toJSON();
@@ -192,6 +290,10 @@ const PrintModel = Tool.extend({
     createPrintJob: function (printAppId, payload, format) {
         var url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
 
+        /**
+         * @event todo
+         * @description todo
+         */
         Radio.trigger("Util", "showLoader");
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);
     },
@@ -210,6 +312,10 @@ const PrintModel = Tool.extend({
                 this.waitForPrintJob(response);
             }
             else {
+                /**
+                 * @event todo
+                 * @description todo
+                 */
                 Radio.trigger("Util", "hideLoader");
                 window.open(this.get("mapfishServiceUrl") + "report/" + response.ref);
             }
@@ -225,12 +331,24 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
+            /**
+             * @event todo
+             * @description todo
+             */
             this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
 
         }
         else {
+            /**
+             * @event todo
+             * @description todo
+             */
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         }
+        /**
+             * @event todo
+             * @description todo
+             */
         Radio.trigger("Map", "render");
     },
 
@@ -407,6 +525,10 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
+        /**
+         * @event todo
+         * @description todo
+        */
         $.ajax({
             url: Radio.request("Util", "getProxyURL", serviceUrl),
             type: requestType,
@@ -532,6 +654,12 @@ const PrintModel = Tool.extend({
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
     },
+
+    /**
+     * todo
+     * @param {*} value  - todo
+     * @returns {void}
+     */
     setEventListener: function (value) {
         this.set("eventListener", value);
     }

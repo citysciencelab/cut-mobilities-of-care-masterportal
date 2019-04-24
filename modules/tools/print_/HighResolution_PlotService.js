@@ -69,7 +69,6 @@ const PrintModel = Tool.extend({
      * @class PrintModel
      * @extends Tool
      * @memberof print_
-     * @returns {void}
      * @constructs
      * @property {Array} layoutList=[] - Array for all available layouts from plot service
      * @property {undefined} currentLayout=undefined - Holder for the current selected layout

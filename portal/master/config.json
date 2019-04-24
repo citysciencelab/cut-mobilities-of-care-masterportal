@@ -243,10 +243,11 @@
           {
             "name": "Karte drucken",
             "glyphicon": "glyphicon-print",
-            "printID": "99999",
+            "mapfishServiceId": "mapfish_qs",
+            "printAppId": "mrh",
             "filename": "Ausdruck",
             "title": "Mein Titel",
-            "version" : "HighResolutionPlotService"
+            "version" : "mapfish_print_3"
           },
           "searchByCoord":
           {
