@@ -10,9 +10,12 @@ const WindowView = Backbone.View.extend({
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
+        var channel = Radio.channel("WindowView");
+
         this.listenTo(this.model, {
             "change:isVisible change:winType": this.render
         });
+
         this.$el.draggable({
             containment: "#map",
             handle: ".move",
@@ -35,9 +38,15 @@ const WindowView = Backbone.View.extend({
 
         $(window).resize($.proxy(function () {
             this.$el.css({
-                "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+                "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
+                "overflow": "auto"
             });
         }, this));
+
+        channel.on({
+            "hide": this.hide
+        }, this);
+
         this.render();
     },
     id: "window",
@@ -47,12 +56,40 @@ const WindowView = Backbone.View.extend({
     templateTable: _.template(templateTable),
     render: function () {
         const attr = this.model.toJSON();
+        var currentClass,
+            currentTableClass;
 
         if (this.model.get("isVisible") === true) {
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
                 this.$el.html(this.templateTable(attr));
                 document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
-                this.$el.addClass("table-tool-window");
+                currentClass = $("#window").attr("class").split(" ");
+
+                this.$el.addClass("table-tool-win-all");
+
+                _.each(currentClass, function (item) {
+
+                    if (item.startsWith("table-tool-window")) {
+                        currentTableClass = item;
+                    }
+                });
+
+                if ($("#table-nav").attr("class") === "table-nav-0deg ui-draggable" || $("#table-nav").attr("class") === "table-nav-0deg") {
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window");
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-90deg") {
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-90deg");
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-180deg") {
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-180deg");
+                }
+                else if ($("#table-nav").attr("class") === "table-nav-270deg") {
+                    this.$el.removeClass(currentTableClass);
+                    this.$el.addClass("table-tool-window-270deg");
+                }
             }
             else {
                 this.$el.html(this.templateMax(attr));

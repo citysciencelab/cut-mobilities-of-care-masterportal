@@ -1,7 +1,7 @@
 import Requestor from "../core/requestor";
 import Tool from "../core/modelList/tool/model";
 
-const FeatureListerModel = Tool.extend({
+const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
         isActive: false,
@@ -15,6 +15,33 @@ const FeatureListerModel = Tool.extend({
         highlightedFeatureStyle: null,
         glyphicon: "glyphicon-menu-hamburger"
     }),
+    /**
+     * @class FeatureListerModel
+     * @extends Core.ModelList.Tool
+     * @memberof FeatureLister
+     * @constructs
+     * @property {Number} maxFeatures=20 maximally loaded features per layer, can be configured
+     * @property {Boolean} isActive=false Flag if the model is active
+     * @property {Array} layerlist Array of {id, name, features}
+     * @property {String} layerid="" id of visible Layer which shall be shown
+     * @property {Core.ModelList.Layer} layer={} Layer of the layerlist with requested layerid
+     * @property {Array} headers Array table headers in the list
+     * @property {String} featureid="" id of the feature to be shown
+     * @property {Object} featureProps={} Properties of the feature with requested featureid
+     * @property {Object} highlightedFeature=null Feature that is currently highlighted
+     * @property {Object} highlightedFeatureStyle=null Feature style of the currently highlighted feature
+     * @property {String} glyphicon="glyphicon-menu-hamburger" id of the glyphicon to use in the template
+     * @fires FeatureLister#changeLayerId
+     * @fires FeatureLister#changeFeatureId
+     * @fires FeatureLister#changeIsActive
+     * @fires FeatureLister#changeLayerList
+     * @fires FeatureLister#changeLayer
+     * @fires FeatureLister#changeFeatureProps
+     * @listens ModelList#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens Map#RadioTriggerMapSetGFIParams
+     * @listens FeatureLister#changeLayerId
+     * @listens FeatureLister#changeFeatureId
+     */
     initialize: function () {
         this.superInitialize();
 
@@ -26,10 +53,13 @@ const FeatureListerModel = Tool.extend({
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
         this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
     },
-
-    /*
-    * Wird ein GFI geöffnet, wird versucht das entsprechende Feature in der Liste zu finden und zu selektieren
-    */
+    /**
+     * When a gfi opens, this function trys to find the corresponding feature in the list and select it
+     * @param {Event} evt Event, which feature shall be highlighted
+     * @fires FeatureLister#RadioTriggerGfiHit
+     * @fires FeatureLister#RadioTriggerGfiClose
+     * @return {void}
+     */
     highlightMouseFeature: function (evt) {
         var features = this.get("layer").features,
             mapFeatures = evt[0],
@@ -46,9 +76,12 @@ const FeatureListerModel = Tool.extend({
             }, this);
         }, this);
     },
-    /*
-    * Nimmt selektiertes Feature, wertet dessen Properties aus und zoomt ggf. auf Feature
-    */
+    /**
+     * Takes the selected feature, checks the properties and zooms to it
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires MapMarker#RadioTriggerMapMarkerZoomTo
+     * @return {void}
+     */
     getFeatureWithFeatureId: function () {
         var featureid = this.get("featureid"),
             features = this.get("layer").features,
@@ -79,10 +112,11 @@ const FeatureListerModel = Tool.extend({
             this.set("featureProps", {});
         }
     },
-
-    /*
-    * Skaliert den Style des selektierten Features um das 1.5-fache
-    */
+    /**
+     * Scales the style of the selected feature by 1.5
+     * @param {String} id id of the feature to highlight
+     * @return {void}
+     */
     highlightFeature: function (id) {
         // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
         var layer = this.get("layer"),
@@ -103,10 +137,10 @@ const FeatureListerModel = Tool.extend({
             feature.setStyle(clonedStyle);
         }
     },
-
-    /*
-    * Skaliert den Style des zuvor selektierten Features auf den Ursprungswert
-    */
+    /**
+     * Scales the style of the deselected feature back to previous value
+     * @return {void}
+     */
     downlightFeature: function () {
         var highlightedFeature = this.get("highlightedFeature"),
             highlightedFeatureStyle = this.get("highlightedFeatureStyle");
@@ -117,9 +151,10 @@ const FeatureListerModel = Tool.extend({
             this.setHighlightedFeatureStyle(null);
         }
     },
-    /*
-    * Merkt sich selektierten Layer.
-    */
+    /**
+     * Keeps the selected layer in mind
+     * @return {void}
+     */
     getLayerWithLayerId: function () {
         var layers = this.get("layerlist"),
             layer = _.find(layers, {id: this.get("layerid")});
@@ -135,9 +170,11 @@ const FeatureListerModel = Tool.extend({
             this.set("layer", {});
         }
     },
-    /*
-    * Werter Layerlist aus und übernimmt neue Layer
-    */
+    /**
+     * Checks the layer list and adds new layers
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @return {void}
+     */
     checkVisibleLayer: function () {
         var layerlist = this.get("layerlist"),
             modelList = Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, typ: "WFS"}),
@@ -170,9 +207,11 @@ const FeatureListerModel = Tool.extend({
             }
         }, this);
     },
-    /*
-    * Entfernt nicht mehr sichtbare Layer aus Liste
-    */
+    /**
+     * Removes no longer visible layers from the list
+     * @param {Object} layer layer to remove from the list
+     * @return {void}
+     */
     removeLayerFromList: function (layer) {
         var layerlist = this.get("layerlist"),
             remainLayer = layerlist.filter(function (lay) {
@@ -182,9 +221,12 @@ const FeatureListerModel = Tool.extend({
         this.unset("layerlist", {silent: true});
         this.set("layerlist", remainLayer);
     },
-    /*
-    * Übernimmt Features bei Selektion eines Layers.
-    */
+    /**
+     * Gets the features from a layer when the layer is selected
+     * @param {String} layerId id of the layer to read the features
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @return {void}
+     */
     getFeatureList: function (layerId) {
         var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             gfiAttributes = layerModel.get("gfiAttributes"),
@@ -224,9 +266,11 @@ const FeatureListerModel = Tool.extend({
 
         layerFromList.features = ll;
     },
-    /*
-    * Fügt Layer zur Liste hinzu.
-    */
+    /**
+     * Adds layers to the list
+     * @param {Object} layer layer to add to the list
+     * @return {void}
+     */
     addLayerToList: function (layer) {
         var layerlist = this.get("layerlist");
 
@@ -239,13 +283,19 @@ const FeatureListerModel = Tool.extend({
         this.set("layerlist", layerlist);
         this.trigger("switchTabToTheme"); // bei zusätzlichen Layern soll sich gleich der Tab öffnen.
     },
-
-    // setter for highlightedFeature
+    /**
+     * setter for highlightedFeature
+     * @param {Object} value feature to set as highlightedFeature
+     * @return {void}
+     */
     setHighlightedFeature: function (value) {
         this.set("highlightedFeature", value);
     },
-
-    // setter for highlightedFeatureStyle
+    /**
+     * setter for highlightedFeatureStyle
+     * @param {Object} value style to set as highlightedFeatureStyle
+     * @return {void}
+     */
     setHighlightedFeatureStyle: function (value) {
         this.set("highlightedFeatureStyle", value);
     }

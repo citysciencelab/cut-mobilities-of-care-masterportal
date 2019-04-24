@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import PrintModel from "@modules/tools/print_/model.js";
+import PrintModel from "@modules/tools/print_/Mapfish3_PlotServicel.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 

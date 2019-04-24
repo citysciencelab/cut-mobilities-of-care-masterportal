@@ -96,10 +96,10 @@
     "typ" : "EmailService"
   },
   {
-    "id": "99999",
-    "name": "Print Service Prod",
-    "url": "http://wfalgpa005.fhhnet.stadt.hamburg.de/mapfish_print_2.0",
-    "typ": "Print"
+    "id" : "99999",
+    "name" : "Print Service",
+    "url" : "http://dienste.schulung.deegree-enterprise.de/plot-service",
+    "typ" : "PrintService"
   },
   {
     "id": "printqs",

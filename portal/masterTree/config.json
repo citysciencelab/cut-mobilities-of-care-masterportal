@@ -38,8 +38,8 @@
         "definitions": [
           {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_festgestellt",
-            "propertyNames": ["app:planrecht"],
+            "typeName": "app:hh_hh_festgestellt",
+            "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
@@ -332,7 +332,7 @@
   {
     "Hintergrundkarten":
     {
-      "Layer": 
+      "Layer":
         [
           {
             "id": ["149", "150", "151", "152", "153", "154", "155", "157", "13926", "13927", "159", "160", "161", "156", "158", "13928", "162", "163", "164", "165", "166", "167", "168", "169", "170", "13930", "171", "172", "173", "174", "13931", "175", "176", "177", "178"],
@@ -360,7 +360,7 @@
             "id": "453"
           },
           {
-              "id": "12885",
+              "id": "14261",
               "name": "Oblique",
               "visibility": true
           }
@@ -368,7 +368,7 @@
     },
     "Fachdaten_3D":
     {
-      "Layer": 
+      "Layer":
         [
         {
           "id": "12883",
@@ -382,19 +382,19 @@
     },
     "Fachdaten":
     {
-      "Ordner": 
+      "Ordner":
        [
         {
         "Titel": "Lage und Gebietszugehörigkeit",
-        "Ordner": 
+        "Ordner":
           [
             {
               "Titel": "Überschwemmungsgebiete",
-              "Ordner": 
+              "Ordner":
                 [
                   {
                     "Titel": "Überschwemmungsgebiete",
-                    "Layer": 
+                    "Layer":
                       [
                         {
                           "id": "1103"
@@ -405,7 +405,7 @@
                       ]
                   }
                 ],
-            "Layer": 
+            "Layer":
                 [
                   {
                     "id": "684"
@@ -416,7 +416,7 @@
                 ]
             }
         ],
-        "Layer": 
+        "Layer":
           [
             {
               "id": "2427"
@@ -441,7 +441,7 @@
       },
       {
         "Titel": "Vermessungswesen",
-        "Layer": 
+        "Layer":
           [
             {
               "id": "1200",
@@ -461,7 +461,7 @@
       },
       {
         "Titel": "Städtebaurecht",
-        "Layer": 
+        "Layer":
           [
             {
               "id": "1561",
@@ -496,7 +496,7 @@
       },
       {
         "Titel": "Denkmalschutz",
-        "Layer": 
+        "Layer":
           [
             {
               "id": "1757",
@@ -514,11 +514,11 @@
       },
       {
         "Titel": "Naturschutz und Landschaftsschutz",
-        "Ordner": 
+        "Ordner":
           [
             {
             "Titel": "Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
-              "Layer": 
+              "Layer":
                 [
                   {
                     "id": "1689"
@@ -529,7 +529,7 @@
                 ]
             }
          ],
-        "Layer": 
+        "Layer":
           [
               {
                 "id": "1453",
@@ -559,11 +559,11 @@
       },
       {
         "Titel": "Wasserrecht",
-        "Ordner": 
+        "Ordner":
           [
             {
               "Titel": "Überschwemmungsgebiete (ÜSG)",
-              "Layer": 
+              "Layer":
                 [
                   {
                     "id": "2432",
@@ -576,7 +576,7 @@
                ]
             }
           ],
-        "Layer": 
+        "Layer":
           [
             {
                 "id": "685",
@@ -586,7 +586,7 @@
       },
       {
         "Titel": "Luftverkehr",
-        "Layer": 
+        "Layer":
           [
             {
               "id": ["422","420","418","417","416","413","430","412","428","426","427","425","424"],
@@ -597,12 +597,12 @@
       },
       {
         "Titel": "Emissionen",
-        "Ordner": 
+        "Ordner":
           [
 
            {
             "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
-            "Layer":               
+            "Layer":
              [
                 {
                   "id": "2431"
@@ -619,30 +619,30 @@
       },
       {
         "Titel": "Eisenbahnwesen / Personenbeförderung",
-        "Ordner":           
+        "Ordner":
           [
             {
               "Titel": "Hamburger Verkehrsverbund (HVV)",
-              "Layer": 
+              "Layer":
                 [
                   {
                     "id": "1935",
                     "visibility": false,
-                    "styles": 
+                    "styles":
                       [
                       "geofox_Faehre",
                       "geofox-bahn",
                       "geofox-bus",
                       "geofox_BusName"
                       ],
-                    "name": 
+                    "name":
                       [
                       "Fährverbindungen",
                       "Bahnlinien",
                       "Buslinien",
                       "Busliniennummern"
                       ],
-                    "legendURL": 
+                    "legendURL":
                       [
                       "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png",
                       "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png",
@@ -652,15 +652,15 @@
                   },
                   {
                     "id": "1933",
-                    "styles": 
+                    "styles":
                       [
                       "geofox_stations"
                       ],
-                    "name": 
+                    "name":
                       [
                       "Haltestellen"
                       ],
-                    "legendURL": 
+                    "legendURL":
                       [
                       "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
                       ]
@@ -668,7 +668,7 @@
                ]
             }
         ],
-        "Layer": 
+        "Layer":
           [
             {
               "id": "2182"
@@ -690,7 +690,7 @@
 
       {
         "Titel": "Gruppenlayer",
-        "Layer": 
+        "Layer":
           [
             {
               "id": "xyz",
@@ -717,7 +717,7 @@
                       "layerAttribution": "<span>Attributierung für Fachlayer</span>",
                       "mouseHoverField": ["name", "strasse"],
                       "searchField": "name",
-                      "filterOptions": 
+                      "filterOptions":
                         [
                             {
                               "fieldName": "teilnahme_geburtsklinik",

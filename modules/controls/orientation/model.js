@@ -13,15 +13,19 @@ const OrientationModel = Backbone.Model.extend({
             stopEvent: false
         }),
         showPoi: false,
-        poiDistances: [500, 1000, 2000],
         tracking: false, // Flag, ob derzeit getrackt wird.
         geolocation: null, // ol.geolocation wird bei erstmaliger Nutzung initiiert.
+        poiDistances: [500, 1000, 2000], // fallback values, if not defined in config
         position: "",
         isGeolocationDenied: false,
         isGeoLocationPossible: false,
         epsg: "EPSG:25832"
     },
-    initialize: function () {
+    initialize: function (config) {
+        if (_.has(config, "attr") && _.has(config.attr, "poiDistances") && _.isArray(config.attr.poiDistances)) {
+            this.setPoiDistances(config.attr.poiDistances);
+        }
+
         var channel = Radio.channel("geolocation");
 
         channel.on({

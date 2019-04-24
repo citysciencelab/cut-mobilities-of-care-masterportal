@@ -1,7 +1,16 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import * as moment from "moment";
 
-const Theme = Backbone.Model.extend({
+const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
+    /**
+     * @class ThemeModel
+     * @extends GFI
+     * @memberof GFI.Themes
+     * @constructs
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Util#RadioRequestUtilGetProxyURL
+     * @fires Util#RadioRequestUtilGetIgnoredKeys
+     */
     defaults: {
         // ist das Theme sichtbar
         isVisible: false,
@@ -17,10 +26,20 @@ const Theme = Backbone.Model.extend({
         uiStyle: "default"
     },
 
+    /**
+     * Requestor for feature informations on all layer types
+     * @returns {void}
+     */
     requestFeatureInfos: function () {
         if (this.get("typ") === "WMS" || this.get("typ") === "GROUP") {
             if (this.get("infoFormat") === "text/html") {
-                this.getWmsHtmlGfi();
+                // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
+                if (this.get("id") === "2407" || this.get("id") === "4423") {
+                    this.getWmsHtmlGfi(this.parseWmsBohrdatenGfi);
+                }
+                else {
+                    this.getWmsHtmlGfi(this.parseWmsHtmlGfi);
+                }
             }
             else {
                 this.getWmsGfi(this.parseWmsGfi);
@@ -34,41 +53,56 @@ const Theme = Backbone.Model.extend({
         }
     },
 
-    getWmsHtmlGfi: function () {
-        var gfiFeatures;
-
-        // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
-        if (this.get("id") === "2407" || this.get("id") === "4423") {
-            $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
-                context: this,
-                success: function (data) {
-                    var domNodes = $.parseHTML(data);
-
-                    // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
-                    if (domNodes.length > 3) {
-                        window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
-                    }
-                    this.setIsReady(true);
-                }
-            });
-        }
-        else {
-            gfiFeatures = {"html": this.get("gfiUrl")};
-
-            $.ajax({
-                url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
-                context: this,
-                success: function (data) {
-                    if ($(data).find("tbody").children().length > 1) {
-                        this.set("gfiContent", [gfiFeatures]);
-                    }
-                    this.setIsReady(true);
-                }
-            });
-        }
+    /**
+     * Requestor function for GFI of WMS layers with infoFormat "text/html"
+     * @fires Util#RadioRequestUtilGetProxyURL
+     * @param   {function} successFunction function to be called after successfull request
+     * @returns {void}
+     */
+    getWmsHtmlGfi: function (successFunction) {
+        $.ajax({
+            url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
+            context: this,
+            success: successFunction,
+            error: this.gfiErrorHandler
+        });
     },
 
+    /**
+     * Parse response for Bohrdatenportal
+     * @param   {string} data string to be parsed as html
+     * @returns {void}
+     */
+    parseWmsBohrdatenGfi: function (data) {
+        var domNodes = $.parseHTML(data);
+
+        // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
+        if (domNodes.length > 3) {
+            window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+        }
+        this.setIsReady(true);
+    },
+
+    /**
+     * Parse response for WMS as text/html
+     * @param   {string} data response as html
+     * @returns {void}
+     */
+    parseWmsHtmlGfi: function (data) {
+        var gfiFeatures = {"html": this.get("gfiUrl")};
+
+        if ($(data).find("tbody").children().length > 1) {
+            this.set("gfiContent", [gfiFeatures]);
+        }
+        this.setIsReady(true);
+    },
+
+    /**
+     * Requestor function for GFI of WMS layers
+     * @fires Util#RadioRequestUtilGetProxyURL
+     * @param   {function} successFunction function to be called after successfull request
+     * @returns {void}
+     */
     getWmsGfi: function (successFunction) {
         var url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
 
@@ -77,10 +111,19 @@ const Theme = Backbone.Model.extend({
             url: url,
             context: this,
             success: successFunction,
-            error: function (jqXHR, textStatus) {
-                Radio.trigger("Alert", "alert", "Ajax-Request " + textStatus);
-            }
+            error: this.gfiErrorHandler
         });
+    },
+
+    /**
+     * Error handler for unanswered GFI requests
+     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @param   {object} jqXHR error object
+     * @returns {void}
+     */
+    gfiErrorHandler: function (jqXHR) {
+        console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
+        Radio.trigger("Alert", "alert", "Die Informationen zu dem ausgewählten Objekt können derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
     },
 
     /**
@@ -128,8 +171,8 @@ const Theme = Backbone.Model.extend({
     },
 
     /**
-     * Ersetzt doppelte Attribute in einem GFI featurebasiert
-     * @param   {xml} xml GFI
+     * Replace multi attributes of a feature
+     * @param   {xml}   xml GFI
      * @returns {void}
      */
     parseMultiElementNodes: function (xml) {
@@ -146,6 +189,11 @@ const Theme = Backbone.Model.extend({
 
     },
 
+    /**
+     * Parse feature info response of a WMS
+     * @param {(string|xml)}    data   response to parse
+     * @returns {void}
+     */
     parseWmsGfi: function (data) {
         var gfiList = [],
             gfiFormat,
@@ -224,6 +272,11 @@ const Theme = Backbone.Model.extend({
             }
         }, this);
     },
+
+    /**
+     * @todo add jsdoc info about this function
+     * @returns {void}
+     */
     getCesium3DTileFeatureGfi: function () {
         var gfiContent;
 
@@ -232,6 +285,11 @@ const Theme = Backbone.Model.extend({
         this.setGfiContent(gfiContent);
         this.setIsReady(true);
     },
+
+    /**
+     * @todo add jsdoc info about this function
+     * @returns {void}
+     */
     getVectorGfi: function () {
         var gfiContent,
             gfiFeatureList = this.get("gfiFeatureList");
@@ -246,20 +304,41 @@ const Theme = Backbone.Model.extend({
             this.setIsReady(true);
         }
     },
-    // Setter
+
+    /**
+     * Setter for isVisible
+     * @param {boolean} value Value for isVsible
+     * @returns {void}
+     */
     setIsVisible: function (value) {
         this.set("isVisible", value);
     },
 
+    /**
+     * Setter for gfiContent
+     * @param {object} value Value for gfiContent
+     * @returns {void}
+     */
     setGfiContent: function (value) {
         this.setUiStyle(Radio.request("Util", "getUiStyle"));
         this.set("gfiContent", value);
     },
 
+    /**
+     * Setter for isReady
+     * @param {boolean} value Value for isReady
+     * @returns {void}
+     */
     setIsReady: function (value) {
         this.set("isReady", value);
     },
 
+    /**
+     * Checks validity of a key according to configured list of ignored keys
+     * @fires Util#RadioRequestUtilGetIgnoredKeys
+     * @param {string}      key         Name of the key
+     * @returns {boolean}   isValidKey  returns the validita of a key
+     */
     isValidKey: function (key) {
         var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 
@@ -273,7 +352,7 @@ const Theme = Backbone.Model.extend({
     /**
      * checks if the value is a string or array and if it is a string,
      * whether the value is unequal to NULL or an empty string
-     * @param {String|Array} value - value
+     * @param {(string|Array)} value - value
      * @returns {boolean} true or false
      */
     isValidValue: function (value) {
@@ -289,11 +368,20 @@ const Theme = Backbone.Model.extend({
         return false;
     },
 
-    // helper function: first letter upperCase, _ becomes " "
+    /**
+     * helper function: first letter upperCase, _ becomes " "
+     * @param {string} str String to be beautified
+     * @returns {void}
+     */
     beautifyString: function (str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
 
+    /**
+     * helper function to provide information about a "multiTag" attribute on a non parsed JSON string
+     * @param {string} str JSON string to parse and to check
+     * @returns {void}
+     */
     isMultiTag: function (str) {
         var test;
 
@@ -309,6 +397,12 @@ const Theme = Backbone.Model.extend({
         return false;
     },
 
+    /**
+      * Selector of feature infos to show
+      * @param   {object[]}         gfiList        gfiList list array with feature infos
+      * @param   {(string|object)}  gfiAttributes  Flag to describe necessary gfi infos "ignore" || "showAll" or specific list of objects
+      * @returns {object[]}         pgfi           List of objects
+      */
     translateGFI: function (gfiList, gfiAttributes) {
         var pgfi = [];
 
@@ -397,6 +491,11 @@ const Theme = Backbone.Model.extend({
         return content;
     },
 
+    /**
+     * Setter for uiStyle
+     * @param {string} value Value for uiStyle
+     * @returns {void}
+     */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
     }

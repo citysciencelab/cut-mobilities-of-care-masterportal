@@ -107,6 +107,101 @@ var html = "<div id='my-id'></div>";
 * Funktionen werden immer mit validem! JSDoc beschrieben.
 * Sprache ist Englisch
 
+#### Kommentare / JSDOC: Bei Refactorings/Erweiterungen ist pro Datei mindestens folgendes auszuführen:
+* Klasse und Namespace im JSDoc beschreiben, falls noch nciht vorhanden
+* Die refactorten/erweiterten Funktionen per JSDoc beschreiben
+* Übrige Funktionen beschreiben oder mit einem JSDoc-Todo markieren, damit alle Funktionen schonmal im JSDoc sind!
+
+```javascript
+/**
+* todo
+* @returns {*} todo
+*/
+functionWithoutParams: function () {...}
+```
+
+```javascript
+/**
+* todo
+* @param {*} param1 todo
+* @returns {*} todo
+*/
+functionWithParams: function (param1) {...}
+```
+### Kommentare / JSDOC: Events
+Folgende Code-Convention gilt für das Dokumentieren von Events
+
+* Events werden in CamelCase geschrieben.
+* Events sollten nach Möglichkeit im Namespace (Modulname) definiert werden.
+* Ist dies nicht möglich, so ist das Event an die Klasse zu hängen
+* Alle Events werden in der devtool/jsdoc/events.js beschrieben
+
+Event Radio.Trigger
+```javascript
+Radio.trigger("Channel", "Event")
+/**
+ * @event Namespace#RadioTriggerChannelEvent
+ * @description FooBar.
+ * @example Radio.trigger("Channel", "Event")
+ */
+
+Radio.trigger("Channel", "EventWithData", data)
+/**
+ * @event Namespace#RadioTriggerChannelEventWithData
+ * @description FooBar.
+ * @param {*} data Data to be sent with the event
+ * @example Radio.trigger("Channel", "Event", data)
+ */
+```
+
+Event Radio.Request
+```javascript
+Radio.request("Channel", "Event");
+/**
+ * @event Namespace#RadioRequestChannelEvent
+ * @description FooBar.
+ * @returns {*} - Response of this event
+ * @example Radio.request("Channel", "Event")
+ */
+
+Radio.request("Channel", "EventWithData", data);
+/**
+ * @event Namespace#RadioRequestChannelEventWithData
+ * @description FooBar.
+ * @param {*} data Data to be sent with the event
+ * @returns {*} - Response of this evennt
+ * @example Radio.request("Channel", "Event", data)
+ */
+```
+
+Event Model.trigger
+```javascript
+Model.trigger("myTrigger");
+/**
+ * @event Namespace#MyTrigger
+ * @description FooBar.
+ */
+
+Model.trigger("myTriggerWithData", data);
+/**
+ * @event Namespace#MyTriggerWithData
+ * @param {*} data Data to be sent with the event
+ * @description FooBar.
+ */
+```
+
+Event Model.change
+```javascript
+this.listenTo(this, {
+    "change:attributeOne": this.doSomething
+})
+/**
+ * @event Namespace#changeAttributeOne
+ * @description FooBar.
+ */
+```
+
+
 #### Try-Catch-Blöcke
 * Try-Catch-Blöcke nach Möglichkeit vermeiden
 * keine selbst geschriebenen Funktionen im Try-Catch-Block, nur Funktionen aus anderen Bibliotheken.

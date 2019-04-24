@@ -21,6 +21,8 @@ const PrintModel = Tool.extend({
         isGfiAvailable: false,
         // true if gfi is active
         isGfiActive: false,
+        // true if gfi is to be printed
+        isGfiSelected: false,
         // is scale selected by the user over the view
         isScaleSelectedManually: false,
         // true if the current layout supports meta data
@@ -29,8 +31,6 @@ const PrintModel = Tool.extend({
         isScaleAvailable: false,
         eventListener: {},
         printID: "99999",
-        MM_PER_INCHES: 25.4,
-        POINTS_PER_INCH: 72,
         title: "PrintResult",
         outputFilename: "Ausdruck",
         outputFormat: "pdf",
@@ -59,14 +59,67 @@ const PrintModel = Tool.extend({
         glyphicon: "glyphicon-print",
         precomposeListener: {},
         postcomposeListener: {},
+        MM_PER_INCHES: 25.4,
+        POINTS_PER_INCH: 72,
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37
     }),
 
+    /**
+     * @class PrintModel
+     * @extends Tool
+     * @memberof print_
+     * @returns {void}
+     * @constructs
+     * @property {Array} layoutList=[] - Array for all available layouts from plot service
+     * @property {undefined} currentLayout=undefined - Holder for the current selected layout
+     * @property {Array} scaleList=[] - Array for all available scales from plot service
+     * @property {undefined} currentScale=undefined - Holder for the current selected scale
+     * @property {Array} formatList=[] - Array for all available formats from plot service
+     * @property {String} currentFormat="pdf" - Holder for the current selcted format
+     * @property {Boolean} isLegendAvailable=false - Flag if the current layout supports legend
+     * @property {Boolean} isGfiAvailable=false - Flag if the current layout supports gfi
+     * @property {Boolean} isGfiActive=false - Flag if gfi is active
+     * @property {Boolean} isGfiSelected=false - Flag if gfi is to be printed
+     * @property {Boolean} isScaleSelectedManually=false - Flag if scale is selected by the user
+     * @property {Boolean} isMetaDataAvailable=false - Flag if the current layout supports meta data
+     * @property {Boolean} isScaleAvailable=false - Flag if the current layout supports scale
+     * @property {Object} eventListener={} - Holder for an eventListener
+     * @property {String} printID="99999" - Service id for the plot service
+     * @property {String} title="PrintResult" - Initial tilte for the print page
+     * @property {String} outputFilename="Ausdruck" - Filename for print page
+     * @property {String} outputFormat="pdf" - Format for file of print page
+     * @property {Array} center=[] - Array for center coordinates of the map
+     * @property {Object} scale={} - Holder for the print scale
+     * @property {Array} layerToPrint=[] - Array for all layers to be printed
+     * @property {Boolean} gfi=false - Flag if gfi is supported
+     * @property {String} printurl="" - Url to plot service
+     * @property {Object} gfiMarker - Style settings for an gfi marker
+     * @property {String} proxyURL="" - Url to the proxy
+     * @property {String} glyphicon="glyphicon-print" - Icon for the print button
+     * @property {Object} precomposeListener={} - Holder for an PrecomposeListener
+     * @property {Object} postcomposeListener={} - Holder for an PostcomposeListener
+     * @property {Number} MM_PER_INCHES=25.4 - Millimeter per inches
+     * @property {Number} POINTS_PER_INCH=72 - Points per Inch
+     * @property {Number} DOTS_PER_INCH=72 - Dots per inch
+     * @property {Number} INCHES_PER_METER=39.37 - Inches per meter
+     * @listens Print#RadioTriggerPrintChangeIsAvtive
+     * @listens Print#RadioTriggerPrintChangeSpecification
+     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @listens MapView#RadioTriggerMapViewChangedCenter
+     * @listens GFI#RadioTriggerGFIIsVisible
+     * @listens Print#RadioTriggerPrintCreatePrintJob
+     */
     initialize: function () {
         var channel = Radio.channel("Print");
 
         this.superInitialize();
+        /**
+         * @event Print#RadioTriggerPrintChangeIsAvtive
+         * @description sets initial values and activates / deactivates the print mask when the print modul is activated or deactivated
+         * @event Print#RadioTriggerPrintChangeSpecification
+         * @description triggered when the specifications for the ajax request change
+         */
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (model.get("layoutList").length === 0) {
@@ -78,6 +131,11 @@ const PrintModel = Tool.extend({
             "change:specification": this.getPDFURL
         });
 
+        /**
+         * @event MapView#RadioTriggerMapViewChangedOptions
+         * @event MapView#RadioTriggerMapViewChangedCenter
+         * @description process new zomm level or map center when they change
+         */
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
@@ -86,6 +144,10 @@ const PrintModel = Tool.extend({
             "changedCenter": this.setCenter
         });
 
+        /**
+         * @event GFI#RadioTriggerGFIIsVisible
+         * @description triggered when the GFI visibility changed
+         */
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": function (isGfiActive) {
                 if (!isGfiActive) {
@@ -94,6 +156,11 @@ const PrintModel = Tool.extend({
                 this.setIsGfiActive(isGfiActive);
             }
         });
+
+        /**
+         * @event Print#RadioTriggerPrintCreatePrintJob
+         * @description creates a Print Job when triggered
+         */
         channel.on({
             "createPrintJob": this.createPrintJob
         }, this);
@@ -104,6 +171,12 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     getCapabilities: function () {
+        /**
+         * @event RestReader#RadioRequestRestReaderGetServiceByIdWithPrintID
+         * @description gets the service via printID
+         * @param {String} printID - Service Id to be send with the event
+         * @returns {*} - Service get with the service id
+         */
         var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
             url = resp && resp.get("url") ? resp.get("url") : null,
             printurl;
@@ -115,9 +188,7 @@ const PrintModel = Tool.extend({
             else {
                 printurl = url;
             }
-
             this.set("printurl", printurl);
-
             if (this.get("currentLayer") === undefined) {
                 $.ajax({
                     // url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
@@ -130,34 +201,81 @@ const PrintModel = Tool.extend({
             }
         }
     },
+
     /**
-     * parses all capabilites
+     * Parses all capabilites
      * @param {*} response - response from print service
-     * @returns {void}
+     * @return {String} - shows if the function succeeds or fails
      */
     updateParameter: function (response) {
+        var result = "success",
+            isError = true;
 
-        this.setLayoutList(response.layouts);
-        this.setCurrentLayout(response.layouts[0]);
-        this.setScaleList(response.scales);
-        this.setFormatList(response.outputFormats);
-        this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
-        this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
-        this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
-        this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
-        this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
-        this.togglePostcomposeListener(this, true);
+        if (!_.isUndefined(response) && !_.isNull(response) &&
+                response.layouts && response.scales && response.outputFormats &&
+                response.layouts.length > 0 && response.scales.length > 0 && response.outputFormats.length > 0) {
+            this.set("response", response);
+            this.setLayoutList(response.layouts);
+            this.setCurrentLayout(response.layouts[0]);
+            this.setScaleList(response.scales);
+            this.setFormatList(response.outputFormats);
+            /**
+             * @event MapView#RadioRequestMapViewGetOptions
+             * @description - gets the current scale from the map
+             * @returns {*} - the current scale of the map
+             */
+            this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
+            this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
+            this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
+            this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
+            this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
+            this.togglePostcomposeListener(this, true);
+            isError = false;
+        }
 
+        if (isError === true) {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Der response vom Druckdienst ist fehlerhaft",
+                kategorie: "alert-warning"
+            });
+
+            result = "Error";
+        }
+        return result;
     },
+
     /**
-     * is called from View by clicking the print button
+     * Print! Is called from View by clicking the print button
      * @returns {void}
      */
     print: function () {
+        /**
+         * @event Draw#RadioRequestDrawGetLayer
+         * @description gets the layer from the Draw modul
+         * @returns {*} - layer from the Draw modul
+         */
         var drawLayer = Radio.request("Draw", "getLayer");
 
         this.set("layerToPrint", []);
+        /**
+         * @event ModelList#RadioRequestModelListGetModelsByAttributesWithisVisibleInMapAndTyp
+         * @description gets the layer form the Modellist that is visible in map and is from typ WMS
+         * @returns {*} - layer
+         * @param {Boolean} isVisibleInMap - Flag if the layer is visible in the map
+         * @param {String} typ - typ of the layer
+         */
         this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
+        /**
+         * @event ModelList#RadioRequestModelListGetModelsByAttributesWithisVisibleInMapAndTyp
+         * @description gets the layer form the Modellist that is visible in map and is from typ GROUP
+         * @returns {*} - layer
+         * @param {Boolean} isVisibleInMap - Flag if the layer is visible in the map
+         * @param {String} typ - typ of the layer
+         */
         this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}));
 
         if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
@@ -165,25 +283,29 @@ const PrintModel = Tool.extend({
         }
         this.getGfiForPrint();
     },
+
     /**
-     * returns the layout for the given layout name
+     * Returns the layout for the given layout name
      * @param {object[]} layoutList - available layouts of the specified print configuration
      * @param {string} layoutName - name for the layout to be found
-     * @returns {object} layout
+     * @return {object} layout
      */
     getLayoutByName: function (layoutList, layoutName) {
         return _.find(layoutList, function (layout) {
             return layout.name === layoutName;
         });
     },
+
     /**
+     * Gets the scales that are available for printing
      * @return {Array} - All available Scales of Print service
      */
     getPrintMapScales: function () {
         return this.get("scaleList");
     },
+
     /**
-     * if the tool is activated and there is a layout,
+     * If the tool is activated and there is a layout,
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
@@ -191,16 +313,31 @@ const PrintModel = Tool.extend({
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
+            /**
+             * @event Map#RadioRequestMapRegisterListenerWithPostcompose
+             * @description register a postcomposeListener
+             * @returns {*} - eventListener Postcompose
+             * @param {String} postcompose
+             */
             this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
-
         }
         else {
+            /**
+             * @event Map#RadioTriggerMapUnregisterListenerWithEventListener
+             * @description unregister the listener in the eventListener holder from the map
+             * @param {String} - eventlistener
+             */
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         }
+        /**
+         * @event Map#RadioTriggerMapRender
+         * @description renders the map
+         */
         Radio.trigger("Map", "render");
     },
+
     /**
-     * draws the print page rectangle onto the canvas
+     * Draws the print page rectangle onto the canvas
      * @param {ol.render.Event} evt - postcompose
      * @returns {void}
      */
@@ -222,8 +359,9 @@ const PrintModel = Tool.extend({
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
     },
+
     /**
-     * draws a mask on the whole map
+     * Draws a mask on the whole map
      * @param {ol.Size} mapSize - size of the map in px
      * @param {CanvasRenderingContext2D} context - context of the postcompose event
      * @returns {void}
@@ -241,8 +379,9 @@ const PrintModel = Tool.extend({
         context.lineTo(0, 0);
         context.closePath();
     },
+
     /**
-     * draws the print page
+     * Draws the print page
      * @param {ol.Size} mapSize - size of the map in px
      * @param {number} resolution - resolution of the map in m/px
      * @param {number} printMapSize - size of the map on the report in dots
@@ -267,21 +406,39 @@ const PrintModel = Tool.extend({
         context.lineTo(minx, miny);
         context.closePath();
     },
+
     /**
-     * gets the optimal print scale for a map
+     * Gets the optimal print scale for a map
      * @param {ol.Size} mapSize - size of the map in px
      * @param {number} resolution - resolution of the map in m/px
      * @param {ol.Size} printMapSize - size of the map on the report in dots
      * @param {object[]} scaleList - supported print scales, sorted in ascending order
-     * @returns {number} the optimal scale
+     * @return {number | String} the optimal scale or an Error String
      */
     getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
-        var mapWidth = mapSize[0] * resolution,
-            mapHeight = mapSize[1] * resolution,
-            scaleWidth = mapWidth * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[0],
-            scaleHeight = mapHeight * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[1],
-            scale = Math.min(scaleWidth, scaleHeight),
-            optimalScale = scaleList[0];
+        var mapWidth,
+            mapHeight,
+            scaleWidth,
+            scaleHeight,
+            scale,
+            optimalScale,
+            undefVal = mapSize === undefined || resolution === undefined || printMapSize === undefined || scaleList === undefined,
+            nullVal = mapSize === null || resolution === null || printMapSize === null || scaleList === null;
+
+        if (undefVal || nullVal) {
+            return "Error";
+        }
+
+        mapWidth = mapSize[0] * resolution;
+        mapHeight = mapSize[1] * resolution;
+        scaleWidth = mapWidth * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[0];
+        scaleHeight = mapHeight * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[1];
+        scale = Math.min(scaleWidth, scaleHeight);
+        optimalScale = scaleList[0];
+
+        if (isNaN(mapWidth) || isNaN(mapHeight) || isNaN(scaleWidth) || isNaN(scaleHeight) || scaleList.length === 0) {
+            return "Error";
+        }
 
         scaleList.forEach(function (printMapScale) {
             if (scale > printMapScale) {
@@ -290,48 +447,93 @@ const PrintModel = Tool.extend({
         });
         return optimalScale;
     },
+
     /**
      * Sets scale for print with the zoom of the map.
      * @returns {void}
      */
     setScaleByMapView: function () {
-        var newScale = _.find(this.get("scales"), function (scale) {
-            return scale.valueInt === Radio.request("MapView", "getOptions").scale;
+        /**
+         * @event MapView#RadioRequestMapViewGetOptions
+         * @description gets the current scale from the map
+         * @returns {*} - current scale from the map
+         */
+        var newScale = _.find(this.get("scaleList"), function (scale) {
+            return parseInt(scale, 10) === Radio.request("MapView", "getOptions").scale;
         });
 
         this.set("scale", newScale);
     },
+
     /**
      * Sets center coordinate.
      * @param {array} value - coordinates of the map center
      * @returns {void}
      */
     setCenter: function (value) {
-        this.set("center", value);
+        if (Array.isArray(value) && typeof value[0] === "number") {
+            this.set("center", value);
+        }
+        else {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Error! Der übergebene Wert ist ist entweder kein Array oder die Werte im Array sind nicht vom Typ Number",
+                kategorie: "alert-warning"
+            });
+        }
     },
+
     /**
-     * updates the Print Page
+     * Updates the Print Page
      * @returns {void}
      */
     updatePrintPage: function () {
-        if (this.has("scale") && this.has("layout")) {
+        if (this.has("scale") && this.has("currentLayout")) {
             if (this.get("isActive")) {
                 if (_.isEmpty(this.get("precomposeListener"))) {
+                    /**
+                     * @event Map#RadioRequestMapRegisterListenerWithPrecompose
+                     * @description register a precomposeListener
+                     * @param {String} precompose
+                     * @returns {*} - precomposeListener
+                     */
                     this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
                 }
                 if (_.isEmpty(this.get("postcomposeListener"))) {
+                    /**
+                     * @event Map#RadioRequestMapRegisterListenerWithPostcompose
+                     * @description register a postcomposeListener
+                     * @param {String} postcompose
+                     * @returns {*} - postcomposeListener
+                     */
                     this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
                 }
             }
             else {
+                /**
+                 * @event Map#RadioTriggerMapUnregisterListenerWithPrecomposeListener
+                 * @description unregister the precomposeListener from the map
+                 * @param {*} - precomposeListener
+                 * @event Map#RadioTriggerMapUnregisterListenerWithPostcomposeListener
+                 * @description unregister the postcomposeListener from the map
+                 * @param {*} - postcomposeListener
+                 */
                 Radio.trigger("Map", "unregisterListener", this.get("precomposeListener"));
                 Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
             }
+            /**
+             * @event Map#RadioTriggerMapRender
+             * @description renders the map
+             */
             Radio.trigger("Map", "render");
         }
     },
+
     /**
-     * manage printing of group layers
+     * Manage printing of group layers
      * @param {*} layers - group layers
      * @returns {void}
      */
@@ -381,8 +583,9 @@ const PrintModel = Tool.extend({
             }, this);
         }, this);
     },
+
     /**
-     * manage printing of WMS layers
+     * Manage printing of WMS layers
      * @param {*} layers - WMS layers
      * @returns {void}
      */
@@ -444,8 +647,9 @@ const PrintModel = Tool.extend({
             });
         }, this);
     },
+
     /**
-     * sets layer properties
+     * Sets layer properties
      * @param {*} layer - layer
      * @returns {void}
      */
@@ -462,7 +666,17 @@ const PrintModel = Tool.extend({
             // get styleModel if layerId is defined.
             // layer id is not defined for portal-internal layer like animationLayer and import_draw_layer
             // then the style is located directly at the feature, see line 312
-            if (!_.isUndefined(layerId)) {
+            if (!_.isUndefined(layerId) || !_.isUndefined(layer.id)) {
+                /**
+                 * @event ModelList#RadioRequestModelListGetModelsByAttributesWithId
+                 * @description gets the layer form the Modellist that has the passed id
+                 * @param {String} - layerId
+                 * @returns {*} - layer
+                 * @event StyleList#RadioRequestStyleListReturnModelByIdWithStyleId
+                 * @description gets the style from the Stylelist that has the passed styleId
+                 * @param {*} - styleId
+                 * @returns {*} - style
+                 */
                 layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
                 isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
                 styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
@@ -517,8 +731,9 @@ const PrintModel = Tool.extend({
             });
         }
     },
+
     /**
-     * creates the Style of a Point for printing
+     * Creates the Style of a Point for printing
      * @param {*} style - style configurations
      * @return {Object} - Point with styles
      */
@@ -563,8 +778,9 @@ const PrintModel = Tool.extend({
         }
         return pointStyleObject;
     },
+
     /**
-     * gets the path of an image
+     * Gets the path of an image
      * @return {String} - path of the image
      */
     createImagePath: function () {
@@ -576,12 +792,18 @@ const PrintModel = Tool.extend({
         }
         return imgPath;
     },
+
     /**
      * GFI Managing
      * @param {*} gfiPosition - Position of GFI
      * @returns {void}
      */
     setSpecification: function (gfiPosition) {
+        /**
+         * @event Map#RadioRequestMapGetLayers
+         * @description gets all layers from the map
+         * @returns {List} - List of Layers
+         */
         var layers = Radio.request("Map", "getLayers").getArray(),
             animationLayer = _.filter(layers, function (layer) {
                 return layer.get("name") === "animationLayer";
@@ -597,6 +819,14 @@ const PrintModel = Tool.extend({
         _.each(wfsLayer, function (layer) {
             this.setLayer(layer);
         }, this);
+        /**
+         * @event MapView#RadioRequestMapViewGetProjection
+         * @description get the coordinateSystem of the map
+         * @returns {*} coordinateSystem code of the map
+         * @event MapView#RadioRequestMapViewGetCenter
+         * @description gets the center of the map
+         * @returns {Array} - center coordinates of the map
+         */
         specification = {
             layout: this.get("currentLayout").name,
             srs: Radio.request("MapView", "getProjection").getCode(),
@@ -624,6 +854,7 @@ const PrintModel = Tool.extend({
         }
         this.set("specification", specification);
     },
+
     /**
      * Checks, if a circle should be drawn at GFI-Position and, if necessary, adds a layer.
      * @param {number[]} gfiPosition - gfi Position
@@ -668,11 +899,20 @@ const PrintModel = Tool.extend({
         }
         this.setSpecification(gfiPosition);
     },
+
     /**
     * Sets createURL in dependence of GFI
     * @returns {void}
     */
     getGfiForPrint: function () {
+        /**
+         * @event GFI#RadioRequestGFIGetIsVisible
+         * @description requests if the GFI is visible
+         * @returns {Boolean} - flag if GFI is visible
+         * @event GFI#RadioRequestGFIGetGfiForPrint
+         * @description gets the gfi for the print
+         * @returns {*} - gfi for print
+         */
         var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
             gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
             gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitle
@@ -689,7 +929,10 @@ const PrintModel = Tool.extend({
         else {
             this.set("createURL", printurl + "/create.json");
         }
-        this.setGFIPos(gfiPosition);
+
+        if (gfiPosition !== undefined && gfiPosition !== null) {
+            this.setGFIPos(gfiPosition);
+        }
     },
 
     /**
@@ -707,19 +950,32 @@ const PrintModel = Tool.extend({
             data: JSON.stringify(this.get("specification")),
             success: this.openPDF,
             error: function (error) {
+                /**
+                 * @event Alert#RadioTriggerAlertalert
+                 * @description creates an alert with error message
+                 */
                 Radio.trigger("Alert", "alert", {
                     text: "Druck fehlgeschlagen: " + error.statusText,
                     kategorie: "alert-warning"
                 });
             },
             complete: function () {
+                /**
+                 * @event Util#RadioTriggerUtilHideLoader
+                 * @description hides the loader
+                 */
                 Radio.trigger("Util", "hideLoader");
             },
             beforeSend: function () {
+                /**
+                 * @event Util#RadioTriggerUtilShowLoader
+                 * @description showes the loader
+                 */
                 Radio.trigger("Util", "showLoader");
             }
         });
     },
+
     /**
      * @desc Opens the generated PDF in the browser.
      * @param {Object} data - Answer from print service. Contains the URL for the generated PDF.
@@ -728,6 +984,7 @@ const PrintModel = Tool.extend({
     openPDF: function (data) {
         window.open(data.getURL);
     },
+
     /**
      * @desc Helper method to set an attribute of type array.
      * @param {String} attribute - The attribute to set.
@@ -740,38 +997,45 @@ const PrintModel = Tool.extend({
         tempArray.push(value);
         this.set(attribute, _.flatten(tempArray));
     },
+
     /**
      * Proofs if it is a rgb(a) or a hexadecimel String.
      * If it is a rgb(a) string, it will be converted to an hexadecimal string.
-     * If available, the opacity(default = 1) is overwritten.
+     * If available, the opacity (default = 1) is overwritten.
      * @param {Array} value - Color
-     * @return {String} - hexadecimal String and opacity
+     * @return {String} - hexadecimal String and opacity or an Error String
      */
     getColor: function (value) {
         var color = value,
             opacity = 1;
 
-        // color comes as array--> parse to String
-        color = color.toString();
+        if (color !== null && color !== undefined) {
 
-        if (color.search("#") === -1) {
-            color = color.split(",");
-            if (color.length === 4) {
-                opacity = parseFloat(color[3], 10);
+            // color comes as array--> parse to String
+            color = color.toString();
+
+            if (color.search("#") === -1) {
+                color = color.split(",");
+                if (color.length === 4) {
+                    opacity = parseFloat(color[3], 10);
+                }
+                color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
+                if (color === undefined) {
+                    return "Error";
+                }
+                return {
+                    "color": color,
+                    "opacity": opacity
+                };
             }
-            color = this.rgbToHex(parseInt(color[0], 10), parseInt(color[1], 10), parseInt(color[2], 10));
-
             return {
                 "color": color,
                 "opacity": opacity
             };
         }
-
-        return {
-            "color": color,
-            "opacity": opacity
-        };
+        return "Error";
     },
+
     /**
      * returns the assembled hexadecimal string.
      * @param {Int} red - rgb color code
@@ -780,18 +1044,29 @@ const PrintModel = Tool.extend({
      * @return {String} - hex color code
      */
     rgbToHex: function (red, green, blue) {
+        if (this.componentToHex(red) === undefined || this.componentToHex(green) === undefined || this.componentToHex(blue) === undefined) {
+            return undefined;
+        }
+
         return "#" + this.componentToHex(red) + this.componentToHex(green) + this.componentToHex(blue);
     },
+
     /**
      * Converts an integer (color) to hexadecimal string and return it.
      * @param {Int} color - rgb color code
      * @return {String} - hex color code
      */
     componentToHex: function (color) {
-        var hex = color.toString(16);
+        var hex;
+
+        if (isNaN(color)) {
+            return undefined;
+        }
+        hex = color.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
+
     /**
      * Saves event contex of Precompose
      * @param {*} evt - event
@@ -802,6 +1077,7 @@ const PrintModel = Tool.extend({
 
         ctx.save();
     },
+
     /**
      * create print bounding box
      * @param {*} evt - event
@@ -809,10 +1085,15 @@ const PrintModel = Tool.extend({
      */
     handlePostCompose: function (evt) {
         var ctx = evt.context,
+            /**
+            * @event Map#RadioRequestMapGetSize
+            * @description requests the size of the map
+            * @returns {Array} - Array with the size of the map
+            */
             size = Radio.request("Map", "getSize"),
             height = size[1] * DEVICE_PIXEL_RATIO,
             width = size[0] * DEVICE_PIXEL_RATIO,
-            printPageRectangle = this.calculatePageBoundsPixels(),
+            printPageRectangle = this.calculatePageBoundsPixels(size),
             minx = printPageRectangle[0],
             miny = printPageRectangle[1],
             maxx = printPageRectangle[2],
@@ -837,138 +1118,282 @@ const PrintModel = Tool.extend({
         ctx.fill();
         ctx.restore();
     },
+
     /**
      * calculate the pixels of page bounds
-     * @return {Array} - page bounds in pixels
+     * @param {Array} mapSize - size of the map
+     * @return {Array | String} - page bounds in pixels or an Error String
      */
-    calculatePageBoundsPixels: function () {
-        var s = this.get("scale").value,
-            width = this.get("layout").map.width,
-            height = this.get("layout").map.height,
-            resolution = Radio.request("MapView", "getOptions").resolution,
-            w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
-            h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
-            mapSize = Radio.request("Map", "getSize"),
-            center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
-                mapSize[1] * DEVICE_PIXEL_RATIO / 2],
-            minx, miny, maxx, maxy;
+    calculatePageBoundsPixels: function (mapSize) {
+        var s = this.get("scale"),
+            width = this.get("currentLayout"),
+            height = this.get("currentLayout"),
+            /**
+             * @event MapView#RadioRequestMapViewGetOptions
+             * @description gets all MapView Options
+             * @returns {Object} - MapView options
+             */
+            resolution = Radio.request("MapView", "getOptions"),
+            w, h, center, minx, miny, maxx, maxy;
+
+        if (_.isUndefined(s) || _.isUndefined(width) || _.isUndefined(height) || _.isUndefined(resolution) || _.isUndefined(mapSize) || _.isNull(mapSize)) {
+            return "Error";
+        }
+
+        width = width.map.width;
+        height = height.map.height;
+        resolution = resolution.resolution;
+        w = width / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO;
+        h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO;
+        center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
+            mapSize[1] * DEVICE_PIXEL_RATIO / 2];
+
+        if (_.isNaN(w) || _.isNaN(h) || _.isNaN(center[0]) || _.isNaN(center[1])) {
+            return "Error";
+        }
 
         minx = center[0] - (w / 2);
         miny = center[1] - (h / 2);
         maxx = center[0] + (w / 2);
         maxy = center[1] + (h / 2);
+
         return [minx, miny, maxx, maxy];
     },
+
     /**
      * gets the optimal map resolution for a print scale and a map size
      * @param {number} scale - print scale for the report
      * @param {number[]} mapSize - the current map size
      * @param {number[]} printMapSize - size of the map on the report
-     * @returns {number} the optimal resolution
+     * @return {number | String} - the optimal resolution or an Error String
      */
     getOptimalResolution: function (scale, mapSize, printMapSize) {
         var dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
-            resolutionX = printMapSize[0] * scale / (dotsPerMeter * mapSize[0]),
-            resolutiony = printMapSize[1] * scale / (dotsPerMeter * mapSize[1]);
+            resolutionX,
+            resolutiony;
 
+        if (scale === undefined || mapSize === undefined || printMapSize === undefined || scale === null || mapSize === null || printMapSize === null) {
+            return "Error";
+        }
+
+        resolutionX = printMapSize[0] * scale / (dotsPerMeter * mapSize[0]);
+        resolutiony = printMapSize[1] * scale / (dotsPerMeter * mapSize[1]);
+
+        if (isNaN(resolutionX) && isNaN(resolutiony)) {
+            return "Error";
+        }
         return Math.max(resolutionX, resolutiony);
+
     },
+
     /**
      * returns the size of the map on the report
-     * @returns {number[]} width and height
+     * @return {number[]} - width and height
      */
     getPrintMapSize: function () {
         var layoutMapInfo = this.getAttributeInLayoutByName("map");
 
         return [layoutMapInfo.width, layoutMapInfo.height];
     },
+
     /**
      * returns a capabilities attribute object of the current layout, corresponding to the given name
      * @param {string} name - name of the attribute to get
-     * @returns {object|undefined} corresponding attribute or null
+     * @return {object|undefined} - corresponding attribute or null
      */
     getAttributeInLayoutByName: function (name) {
         return this.get("currentLayout")[name];
     },
+
     /**
+     * Sets a precompose Listener for the model
      * @param {*} value - eventlistener on Map for precompose
      * @returns {void}
      */
     setPrecomposeListener: function (value) {
         this.set("precomposeListener", value);
     },
+
     /**
+     * Sets a  postcompose Listener for the model
      * @param {*} value - eventlistener on Map for postcompose
      * @returns {void}
      */
     setPostcomposeListener: function (value) {
         this.set("postcomposeListener", value);
     },
+
     /**
+     * Sets a value for metadata availability for the model
      * @param {boolean} value - true if the current layout supports meta data
      * @returns {void}
      */
     setIsMetaDataAvailable: function (value) {
-        this.set("isMetaDataAvailable", value);
+        if (_.isBoolean(value)) {
+            this.set("isMetaDataAvailable", value);
+        }
+        else {
+            this.set("isMetaDataAvailable", false);
+        }
     },
+
     /**
+     * Sets the title for the print page
      * @param {String} value  - Title
      * @returns {void}
      */
     setTitle: function (value) {
-        this.set("title", value);
+        if (value !== undefined && value !== null) {
+            this.set("title", value);
+        }
+        else {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Bitte einen Titel eingeben",
+                kategorie: "alert-warning"
+            });
+        }
     },
+
     /**
+     * Sets a value for the current Layout
      * @param {object[]} value - current print layout
      * @returns {void}
      */
     setCurrentLayout: function (value) {
-        this.set("currentLayout", value);
+        if (value !== undefined) {
+            this.set("currentLayout", value);
+        }
+        else {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Error! Keine Layouts vom Druckdienst definiert",
+                kategorie: "alert-warning"
+            });
+        }
     },
+
     /**
+     * Sets a value for the current format
      * @param {string} value - current print format
      * @returns {void}
      */
     setCurrentFormat: function (value) {
-        this.set("currentFormat", value);
+        if (value !== undefined) {
+            this.set("currentFormat", value);
+        }
+        else {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Error! Keine Formats vom Druckdienst definiert",
+                kategorie: "alert-warning"
+            });
+        }
     },
+
     /**
+     * Sets a value for the availability of gfi
      * @param {boolean} value - true if mapfish can print gfi
      * @returns {void}
      */
     setIsGfiAvailable: function (value) {
-        this.set("isGfiAvailable", value);
+        if (_.isBoolean(value)) {
+            this.set("isGfiAvailable", value);
+        }
+        else {
+            this.set("isGfiAvailable", false);
+        }
     },
+
     /**
+     * Sets a value for the activity of gfi
      * @param {boolean} value - true if gfi is active
      * @returns {void}
      */
     setIsGfiActive: function (value) {
-        this.set("isGfiActive", value);
+        if (_.isBoolean(value)) {
+            this.set("isGfiActive", value);
+        }
+        else {
+            this.set("isGfiActive", false);
+        }
     },
+
     /**
+     * Sets a value for gfi select
+     * @param {boolean} value - true if gfi is to be printed
+     * @returns {void}
+     */
+    setIsGfiSelected: function (value) {
+        if (_.isBoolean(value)) {
+            this.set("isGfiSelected", value);
+        }
+        else {
+            this.set("isGfiSelected", false);
+        }
+    },
+
+    /**
+     * Sets a value for the availability of the legend
      * @param {boolean} value - true if mapfish can print legend
      * @returns {void}
      */
     setIsLegendAvailable: function (value) {
-        this.set("isLegendAvailable", value);
+        if (_.isBoolean(value)) {
+            this.set("isLegendAvailable", value);
+        }
+        else {
+            this.set("isLegendAvailable", false);
+        }
     },
+
     /**
+     * Sets a value for the availability of the scale
      * @param {boolean} value - true if mapfish can print scale
      * @returns {void}
      */
     setIsScaleAvailable: function (value) {
-        this.set("isScaleAvailable", value);
+        if (_.isBoolean(value)) {
+            this.set("isScaleAvailable", value);
+        }
+        else {
+            this.set("isScaleAvailable", false);
+        }
     },
+
     /**
+     * Sets a value for the current scale of the map
      * @param {number} value - current print scale
      * @returns {void}
      */
     setCurrentScale: function (value) {
-        this.set("currentScale", value.toString());
+        if (value !== undefined) {
+            this.set("currentScale", value.toString());
+        }
+        else {
+            /**
+             * @event Alert#RadioTriggerAlertalert
+             * @description creates an alert with error message
+             */
+            Radio.trigger("Alert", "alert", {
+                text: "Keine Scales vom Druckdienst definiert",
+                kategorie: "alert-warning"
+            });
+        }
     },
+
     /**
-     * @param {*} layouts - list of layouts
+     * Sets all layouts available for a print
+     * @param {*} layouts - list of layouts from plot service
      * @returns {void}
      */
     setLayoutList: function (layouts) {
@@ -978,7 +1403,9 @@ const PrintModel = Tool.extend({
             that.get("layoutList").push(layout);
         });
     },
+
     /**
+     * Sets all formats available for a print
      * @param {*} formats - list of formats from plot service
      * @returns {void}
      */
@@ -989,7 +1416,9 @@ const PrintModel = Tool.extend({
             that.get("formatList").push(format.name);
         });
     },
+
     /**
+     * Sets all scales available for a print
      * @param {*} scales - list of scales from plot service
      * @returns {void}
      */
@@ -1000,14 +1429,23 @@ const PrintModel = Tool.extend({
             that.get("scaleList").push(scale.value);
         });
     },
+
     /**
+     * Sets a value for manually selected scales
      * @param {boolean} value - true if the scale is selected by the user
      * @returns {void}
      */
     setIsScaleSelectedManually: function (value) {
-        this.set("isScaleSelectedManually", value);
+        if (_.isBoolean(value)) {
+            this.set("isScaleSelectedManually", value);
+        }
+        else {
+            this.set("isScaleSelectedManually", false);
+        }
     },
+
     /**
+     * Sets an eventlistener
      * @param {*} value - Eventlistener for Map on postcompose
      * @returns {void}
      */

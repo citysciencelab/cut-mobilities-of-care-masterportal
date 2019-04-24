@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<div class= "panel text-align-center bikeLevelHeader">
+    <strong><%= gfiContent[0].Name %></strong>
+    <br>
+    <small>Art: <%= gfiContent[0].Typ%></small>
+</div>
+<ul class="nav nav-pills">
+    <li value= "info" class="tab-toggle active"><a data-toggle="tab" href="#gfiList">Info</a></li>
+  <% if (!_.isEmpty(dayDataset)) { %>
+    <li value= "day" class="tab-toggle"><a data-toggle="tab" href="#chart">letzter Tag</a></li>
+  <% } %>
+  <% if (!_.isEmpty(lastSevenDaysDataset)) { %>
+    <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>
+  <% } %>
+  <% if (!_.isEmpty(yearDataset)) { %>
+    <li value= "year" class="tab-toggle"><a data-toggle="tab" href="#chart">Jahr</a></li>
+  <% } %>
+</ul>
+<div class="tab-content">
+    <div id="gfiList" class="tab-pane continuousCountingBike fade in active">
+        <div class="imageContinuousCountingBikeDiv">
+        </div>
+        <table class="table table-striped">
+            <tbody>
+                <tr colspan="3">
+                    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
+                    </td>
+                    <td>
+                        Zeitraum
+                    </td>
+                    <td>
+                        Fahrräder
+                    </td>
+                </tr>
+            <%  _.each(infoGFIContent, function(value, index) {%>
+                <tr colspan="3">
+                    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
+                        <%= value.attrName + ""%>
+                    </td>
+                <% if(_.isArray(value.attrValue)) { %>
+                    <td class = "infoGFIContent">
+                        <%= value.attrValue[0] %>
+                    </td>
+
+                    <td class = "infoGFIContent">
+                        <%= value.attrValue[1] %>
+                    </td>
+                <% }
+                else { %>
+                    <td class = "infoGFIContent">
+                        <%= value.attrValue%>
+                    </td>
+                    <td>
+                    </td>
+                <% } %>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div class="continuousCountingBike tab-pane form-check fade">
+        <input type="checkbox" class="chartCheckbox form-check-input" id="chartCheck" checked>
+        <label class="form-check-label" for="chartCheck">Diagramm</label>
+    </div>
+    <div id="chart" class="tab-pane continuousCountingBike fade">
+        <div id="d3-div" class="graph">
+            <div class="graph-tooltip-div"></div>
+        </div>
+    </div>
+    <div class="continuousCountingBike tab-pane form-check fade">
+        <input type="checkbox" class="tableCheckbox form-check-input" id="tableCheck" checked>
+        <label class="form-check-label" for="tableCheck">Tabelle</label>
+    </div>
+    <div id="tableday" class="tab-pane continuousCountingBike table fade">
+        <table class="table table-striped text-align-center">
+            <thead>
+                <th class="text-align-center">Name</th>
+                <% if (!_.isEmpty(dayDataset)) {
+                    _.each(dayDataset.data, function (day){%>
+                <th class="text-align-center"><%=day.timestamp%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(dayDataset.data, function (day){%>
+                    <td class="data"><%=day.tableData%></td>
+                <% });
+                }%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tablelastSevenDays" class="tab-pane continuousCountingBike table fade">
+        <table class="table table-striped text-align-center">
+            <thead>
+                <th class="text-align-center">Name</th>
+                <% if (!_.isEmpty(lastSevenDaysDataset)) {
+                _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
+                <th class="text-align-center"><%=lastSevenDays.timestamp%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(lastSevenDaysDataset.data, function (lastSevenDays) {%>
+                    <td class="data"><%=lastSevenDays.tableData%></td>
+                <% });
+                }%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="tableyear" class="tab-pane continuousCountingBike table fade">
+        <table class="table table-striped text-align-center">
+            <thead>
+                <th class="text-align-center">Name</th>
+                <% if (!_.isEmpty(yearDataset)) {
+                _.each(yearDataset.data, function (year) {%>
+                <th class="text-align-center"><%=year.timestamp + " KW"%></th>
+                <% });%>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="kategory"><%=gfiContent[0].Name%></td>
+                <% _.each(yearDataset.data, function (year) {%>
+                    <td class="data"><%=year.tableData%></td>
+                <% });
+                }%>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="continuousCountingBike tab-pane downloadButton fade">
+        <button class="btn csv-download">Download
+            <span class="glyphicon glyphicon-save"></span>
+        </button>
+    </div>
+</div>

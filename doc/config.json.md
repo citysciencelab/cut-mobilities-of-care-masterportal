@@ -39,11 +39,11 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
-|searchbar|nein|[searchbar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
+|searchBar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
 ***
 
-### Portalconfig.searchbar
+### Portalconfig.searchBar
 Konfiguration der Searchbar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -65,7 +65,7 @@ Konfiguration der Searchbar
 
 ***
 
-#### Portalconfig.searchbar.bkg
+#### Portalconfig.searchBar.bkg
 
 [type:Extent]: # (Datatypes.Extent)
 
@@ -101,7 +101,7 @@ Konfiguration des BKG Suchdienstes
 
 ***
 
-#### Portalconfig.searchbar.osm ####
+#### Portalconfig.searchBar.osm ####
 Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick auf die Lupe oder Enter ausgelöst
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -128,7 +128,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick au
 
 ***
 
-#### Portalconfig.searchbar.gazetteer
+#### Portalconfig.searchBar.gazetteer
 Konfiguration des Gazetteer Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -157,7 +157,7 @@ Konfiguration des Gazetteer Suchdienstes
 
 ***
 
-#### Portalconfig.searchbar.gdi
+#### Portalconfig.searchBar.gdi
 Konfiguration des GDI Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -177,7 +177,7 @@ Konfiguration des GDI Suchdienstes
 ***
 
 
-#### Portalconfig.searchbar.specialWFS
+#### Portalconfig.searchBar.specialWFS
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -214,7 +214,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.specialWFS.definition
+#### Portalconfig.searchBar.specialWFS.definition
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -242,7 +242,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.tree
+#### Portalconfig.searchBar.tree
 Konfiguration der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -259,7 +259,7 @@ Konfiguration der SpecialWFS Suche
 
 ***
 
-#### Portalconfig.searchbar.visibleWFS
+#### Portalconfig.searchBar.visibleWFS
 Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -276,13 +276,14 @@ Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwende
 
 ***
 
-#### Portalconfig.searchbar.visibleVector
+#### Portalconfig.searchBar.visibleVector
 Konfiguration der Suche über die sichtbaren WFS
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+|gfiOnClick|nein|Boolean|false|Öffnet das GetFeatureInfo (gfi) bei Klick auf das Suchergebnis.|
 
 **Beispiel**
 ```
@@ -305,11 +306,11 @@ Konfiguration der Suche über die sichtbaren WFS
 |orientation|nein|[orientation](#markdown-header-portalconfigcontrolsorientation)||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers.|
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |overviewmap|nein|[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|false|Übersichtskarte|
-|totalview|nein|Boolean|false|Zeigt einen Button an, mit dem die Startansicht mit den initialen Einstellungen wiederhergestellt werden kann.|
+|totalview|nein|[totalview](#markdown-header-portalconfigcontrolstotalview)|false|Zeigt einen Button an, mit dem die Startansicht mit den initialen Einstellungen wiederhergestellt werden kann.|
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
-|backforwardview|nein|Boolean/Object|false|Boolean: Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+|backforward|nein|Boolean|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
 
 
 ***
@@ -389,6 +390,32 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 ```
 #!json
 "overviewmap": true
+```
+
+***
+
+#### Portalconfig.controls.totalview
+
+Das Attribut totalview kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt es den Butten an, der in den Defaulteinsellungen gesetzt ist. Ist es vom Typ Object, so gelten folgende Attribute
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Über den Parameter glyphicon kann ein anderes Glyphicon für das Zurückschalten zur Startansicht verwendet werden.|
+|tableGlyphicon|nein|String||Über den Parameter tableGlyphicon kann bei einem TABLE Style ein anderes Glyphicon für das Zurückschalten zur Startansicht verwendet werden.|
+
+**Beispiel totalview als Object:**
+```
+#!json
+"totalview" : {
+    "glyphicon": "glyphicon-step-forward",
+    "tableGlyphicon": "glyphicon-step-forward"
+},
+```
+
+**Beispiel totalview als Boolean:**
+```
+#!json
+"totalview": true
 ```
 
 ***
@@ -1165,6 +1192,8 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
 |ccToUser|nein|Boolean|false|Flag ob der Absender auch als CC eingetragen werden soll.|
 |textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|
 |includeSystemInfo|nein|Boolean|false|Flag ob systeminfos des Absendern mitgeschickt werden sollen.|
+|deleteAfterSend|nein|Boolean|false|Flag ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|
+|withTicketNo|nein|Boolean|true|Flag ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|
 
 **Beispiel**
 ```
@@ -1189,7 +1218,9 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
     "bcc": [],
     "ccTouser": true,
     "textPlaceholder": "Hier Text eingeben."
-    "includeSystemInfo": true
+    "includeSystemInfo": true,
+    "deleteAfterSend": true,
+    "withTicketNo": false
 }
 ```
 
@@ -1659,6 +1690,7 @@ Hier werde WMS typische Attribute aufgelistet.
 #### Themenconfig.Layer.StaticImage
 
 [inherits]: # (Themenconfig.Layer)
+[type:Extent]: # (Datatypes.Extent)
 
 Hier werden typische Attribute für ein StaticImage aufgelistet.
 
@@ -1668,7 +1700,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 |typ|ja|String|"StaticImage"|Setzt den Layertypen auf StaticImage welcher statische Bilder als Layer darstellen kann.|
 |url|ja|String|"https://meinedomain.de/bild.png"|Link zu dem anzuzeigenden Bild|
 |name|ja|String|"Static Image Name"|Setzt den Namen des Layers für den Layerbaum|
-|extent|ja|Array|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
+|extent|ja|[Extent](#markdown-header-datatypesextent)|[560.00, 5950.00, 560.00, 5945.00]|Gibt die Georeferenzierung des Bildes an. Als Koordinatenpaar werden im EPSG25832 Format die Koordinate für die Bildecke oben links und unten rechts erwartet. |
 
 
 **Beispiel**
@@ -1688,7 +1720,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON, SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1705,42 +1737,51 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 ```
 #!json
 {
-"id": "123456",
-"name": "MyVectorLayerName",
-"transparency": 0,
-"visibility": true,
-"supported": ["2D"],
-"extent": [454591, 5809000, 700000, 6075769],
-"displayInTree": true,
-"gfiTheme": "default",
-"layerAttribution": "MyBoldAttribution for layer 123456",
-"legendURL": "https://myServer/myService/legend.pdf",
-"maxScale": "100000",
-"minScale": "1000",
-"autoRefresh": "10000",
-"isVisibleInTree": true,
-"isNeverVisibleInTree": false,
-"clusterDistance": 60,
-"extendedFilter": true,
-"filterOptions": [
-    {
-        "fieldName": "myFirstAttributeToFilter",
-        "filterName": "Filter_1",
-        "filterString": ["*", "value1", "value2"],
-        "filterType": "combo"
-    },
-    {
-        "fieldName": "mySecondAttributeToFilter",
-        "filterName": "Filter_2",
-        "filterString": ["*", "value3", "value4"],
-        "filterType": "combo"
-    }
-],
-"mouseHoverField": "name",
-"routable": false,
-"searchField": "name",
-"styleId": "123456",
-"hitTolerance": 50,
+    "id": "123456",
+    "name": "MyVectorLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "displayInTree": true,
+    "gfiTheme": "default",
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legendURL": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isVisibleInTree": true,
+    "isNeverVisibleInTree": false,
+    "clusterDistance": 60,
+    "extendedFilter": true,
+    "filterOptions": [
+        {
+            "fieldName": "myFirstAttributeToFilter",
+            "filterName": "Filter_1",
+            "filterString": ["*", "value1", "value2"],
+            "filterType": "combo"
+        },
+        {
+            "fieldName": "mySecondAttributeToFilter",
+            "filterName": "Filter_2",
+            "filterString": ["*", "value3", "value4"],
+            "filterType": "combo"
+        }
+    ],
+    "mouseHoverField": "name",
+    "routable": false,
+    "searchField": "name",
+    "styleId": "123456",
+    "hitTolerance": 50
+},
+{
+    "id" : "11111",
+    "name" : "lokale GeoJSON",
+    "url" : "portal/master/test.json",
+    "typ" : "GeoJSON",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : ""
 }
 ```
 
