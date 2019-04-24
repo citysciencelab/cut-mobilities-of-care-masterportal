@@ -1,4 +1,4 @@
-/* eslint-disable require-jsdoc */
+
 const ElasticSearchModel = Backbone.Model.extend({
     defaults: {
         ajaxRequests: {}
@@ -17,19 +17,27 @@ const ElasticSearchModel = Backbone.Model.extend({
         return JSON.stringify(searchBody);
     },
 
-    polishAjax: function (type) {
+    polishAjax: function (serviceId) {
         var ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+            cleanedAjax = _.omit(ajax, serviceId);
 
         this.set("ajaxRequests", cleanedAjax);
     },
 
+    /**
+     * @description Fuehrt einen HTTP-GET-Request aus
+     * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
+     * @param {object} searchBody - body of ElasticQuery
+     * @param {object} searchUrl - url of ElasticSearchService
+     * @param {object} result - Resultobject of ElasticQuery
+     * @return {void}
+     */
     ajaxSend: function (serviceId, searchBody, searchUrl, result) {
         this.get("ajaxRequests")[serviceId] = $.ajax({
             dataType: "json",
             context: this,
             url: searchUrl,
-            async: false,
+            // async: false,
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
@@ -49,12 +57,21 @@ const ElasticSearchModel = Backbone.Model.extend({
 
                 result.hits = datasources;
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                result.status = "error";
-                result.message = "ElasticSearch query went wrong with message: " + thrownError;
-                console.error("error", thrownError);
-                return result;
+            error: function (err) {
+                console.log(err.status);
+                if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                    this.showError(err);
+                }
+                // console.log(Radio.trigger("Searchbar", "abortSearch", "gdi"));
+                Radio.trigger("Searchbar", "abortSearch", "gdi");
             },
+            // error: function (xhr, ajaxOptions, thrownError) {
+            //     result.status = "error";
+            //     result.message = "ElasticSearch query went wrong with message: " + thrownError;
+            //     console.error("error", thrownError);
+            //     console.log(result);
+            //     return result;
+            // },
             complete: function () {
                 this.polishAjax(serviceId);
             }
@@ -96,8 +113,7 @@ const ElasticSearchModel = Backbone.Model.extend({
             console.error(JSON.stringify(result));
             return result;
         }
-
-        if (ajax[serviceId] !== null && !_.isUndefined(ajax[serviceId])) {
+        if (ajax[serviceId] && !_.isUndefined(ajax[serviceId])) {
             ajax[serviceId].abort();
             this.polishAjax(serviceId);
         }
