@@ -559,15 +559,6 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
     });
 
-    describe("getGfiForPrint", function () {
-        it("should return the createURL depending on the gfi settings", function () {
-            var result = print2Model.get("printurl") + "/create.json";
-
-            print2Model.getGfiForPrint();
-            expect(print2Model.get("createURL")).to.deep.equal(result);
-        });
-    });
-
     // other functions
     describe("updateParameter", function () {
         it("should return an Error if the passsed response has empty Arrays for layouts, scales or outputFormats", function () {
