@@ -70,7 +70,7 @@ describe("filter/query/source/wfs", function () {
                 expect(featureAttributesMap).to.be.deep.equal([
                     {
                         name: "OBJECTID",
-                        type: "long"
+                        type: "decimal"
                     },
                     {
                         name: "UUID",
@@ -88,7 +88,7 @@ describe("filter/query/source/wfs", function () {
                 xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:gml=\"http://www.opengis.net/gml\">" +
                     "<xsd:import namespace=\"http://www.opengis.net/gml\" schemaLocation=\"http://localhost:8080/geoserver/schemas/gml/2.1.2/feature.xsd\"/><xsd:complexType " +
                     "name=\"hfpType\"><xsd:complexContent><xsd:extension base=\"gml:AbstractFeatureType\"><xsd:sequence><xsd:element maxOccurs=\"1\" minOccurs=\"0\" " +
-                    "name=\"OBJECTID\" nillable=\"true\" type=\"xsd:long\"/><xsd:element maxOccurs=\"1\" minOccurs=\"0\" name=\"UUID\" nillable=\"true\" type=\"xsd:string\"/>" +
+                    "name=\"OBJECTID\" nillable=\"true\" type=\"xsd:short\"/><xsd:element maxOccurs=\"1\" minOccurs=\"0\" name=\"UUID\" nillable=\"true\" type=\"xsd:string\"/>" +
                     "</xsd:sequence></xsd:extension></xsd:complexContent></xsd:complexType></xsd:schema>",
                 xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
@@ -97,7 +97,7 @@ describe("filter/query/source/wfs", function () {
                 expect(featureAttributesMap).to.be.deep.equal([
                     {
                         name: "OBJECTID",
-                        type: "long"
+                        type: "decimal"
                     },
                     {
                         name: "UUID",

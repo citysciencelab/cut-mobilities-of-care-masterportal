@@ -86,6 +86,11 @@ const WfsQueryModel = SourceModel.extend({
                 // Remove namespace (if neccesary)
                 typeWithoutNamespace = type.replace(/.*?:?([^:]*)$/i, "$1");
 
+                // Summerize numerical types
+                if (typeWithoutNamespace === "long" || typeWithoutNamespace === "double" || typeWithoutNamespace === "short") {
+                    typeWithoutNamespace = "decimal";
+                }
+
                 featureAttributesMap.push({name: $(element).attr("name"), type: typeWithoutNamespace});
             }
         });
