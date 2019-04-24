@@ -929,9 +929,7 @@ const PrintModel = Tool.extend({
             this.set("createURL", printurl + "/create.json");
         }
 
-        if (gfiPosition !== undefined && gfiPosition !== null) {
-            this.setGFIPos(gfiPosition);
-        }
+        this.setGFIPos(gfiPosition);
     },
 
     /**

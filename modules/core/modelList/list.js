@@ -191,7 +191,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                if (attrs.version === undefined) {
+                if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
                     return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new PrintV2(attrs, options);
