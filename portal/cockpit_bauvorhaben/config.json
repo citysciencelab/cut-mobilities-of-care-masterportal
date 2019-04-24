@@ -1,0 +1,225 @@
+{
+	"Portalconfig": {
+		"portalTitle": {
+			"title": "Bauvorhaben",
+			"logo": "/lgv-config/img/hh-logo.png",
+			"link": "http://geoinfo.hamburg.de",
+			"tooltip": "Landesbetrieb Geoinformation und Vermessung"
+		},
+		"Baumtyp": "custom",
+		"searchBar": {
+			"gazetteer": {
+				"minChars": 3,
+				"serviceId": "8",
+				"searchStreets": true,
+				"searchHouseNumbers": true,
+				"searchDistricts": true,
+				"searchParcels": true,
+				"searchStreetKey": true
+			},
+			"zoomLevel": 9,
+			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
+		},
+		"mapView": {
+			"backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+			"startCenter": [561210, 5932600],
+			"extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
+			"zoomLevel": 1
+		},
+		"menu": {
+			"tree": {
+				"name": "Themen",
+				"isInitOpen": false
+			},
+			"tools": {
+				"name": "Werkzeuge",
+				"children": {
+					"gfi": {
+            "name": "Informationen abfragen"
+					},
+					"cockpit": {
+						"name": "Cockpit Bauvorhaben",
+						"glyphicon": "glyphicon-pencil",
+						"isActive": true,
+						"renderToWindow": false
+					}
+				}
+			},
+			"legend": {
+				"name": "Legende"
+			},
+			"contact": {
+				"name": "Kontakt",
+				"serviceID": "80001",
+				"includeSystemInfo": true
+			}
+		},
+		"controls": {
+			"zoom": true,
+			"button3d": true,
+			"buttonOblique": true
+		},
+		"scaleLine": true
+	},
+	"Themenconfig": {
+		"Hintergrundkarten": {
+			"Layer": [
+				{
+					"id": "453",
+					"visibility": true
+				},
+				{
+					"id": "12794",
+					"name": "Luftbilder DOP 10"
+				},
+				{
+					"id": ["4736", "4739", "4742", "4745", "12059", "12060", "12061", "12062"],
+					"name": "Geobasiskarten (schwarz-grau)"
+				},
+				{
+					"id": "12883",
+					"name": "Gelände",
+					"visibility": true
+				},
+				{
+					"id": "12884",
+					"name": "Gebäude LoD2",
+					"visibility": true
+				},
+				{
+					"id": "14261",
+					"name": "Oblique",
+					"visibility": true
+				}
+			]
+		},
+		"Fachdaten": {
+      "Ordner": [
+        {
+          "Titel": "Bauvorhaben",
+          "Ordner": [
+            {
+              "Titel": "Bauvorhaben - beantragt",
+              "isFolderSelectable": false,
+              "Layer": [
+                {
+                  "id": "13874"
+                },
+                {
+                  "id": "13808"
+                },
+                {
+                  "id": "13870"
+                },
+                {
+                  "id": "13866"
+                },
+                {
+                  "id": "13862"
+                },
+                {
+                  "id": "13858"
+                },
+                {
+                  "id": "13854"
+                }
+              ]
+            },
+            {
+              "Titel": "Bauvorhaben - genehmigt",
+              "isFolderSelectable": false,
+              "Layer": [
+                {
+                  "id": ["13872", "13800", "13868", "13864", "13802", "13860", "13856", "13852"],
+                  "name": "Alle genehmigten Bauvorhaben"
+                }
+              ]
+            },
+            {
+              "Titel": "Bauvorhaben - abgelehnt",
+              "isFolderSelectable": false,
+              "Layer": [
+                {
+                  "id": "13873"
+                },
+                {
+                  "id": "13807"
+                },
+                {
+                  "id": "13869"
+                },
+                {
+                  "id": "13865"
+                },
+                {
+                  "id": "13804"
+                },
+                {
+                  "id": "13861"
+                },
+                {
+                  "id": "13857"
+                },
+                {
+                  "id": "13853"
+                }
+              ]
+            },
+            {
+              "Titel": "Bauvorhaben - erloschen",
+              "isFolderSelectable": false,
+              "Layer": [
+                {
+                  "id": "13871"
+                },
+                {
+                  "id": "13806"
+                },
+                {
+                  "id": "13867"
+                },
+                {
+                  "id": "13863"
+                },
+                {
+                  "id": "13803"
+                },
+                {
+                  "id": "13859"
+                },
+                {
+                  "id": "13855"
+                },
+                {
+                  "id": "13851"
+                }
+              ]
+            }
+          ]
+        },
+        {
+         "Titel": "Flächennutzungsplan",
+         "Layer": [
+            {
+              "id": "551"
+            }
+         ]
+        },
+        {
+          "Titel": "Bebauungspläne",
+          "Layer": [
+            {
+              "id": "1561"
+            },
+            {
+              "id": "1562"
+            },
+            {
+              "id": "2941"
+            }
+          ]
+         }
+      ]
+		}
+	}
+}
