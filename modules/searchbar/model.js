@@ -313,6 +313,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
         this.set("recommendedList", _.sortBy(recommendedList, "name"));
         this.trigger("renderRecommendedList");
+
+        if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
+            Radio.trigger("ViewZoom", "hitSelected");
+        }
     },
 
     /**
