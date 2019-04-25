@@ -22,9 +22,9 @@ const PrintView = Backbone.View.extend({
     * @extends Backbone.View
     * @memberof print_
     * @constructs
-    * @listens Print#RadioTriggerPrintChangeIsActive
-    * @listens Print#RadioTriggerPrintChangeIsGfiActive
-    * @listens Print#RadioTriggerPrintChangeCurrentScale
+    * @listens Print#ChangeIsActive
+    * @listens Print#ChangeIsGfiActive
+    * @listens Print#ChangeCurrentScale
     */
     initialize: function () {
         this.template = _.template(PrintTemplate);

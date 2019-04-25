@@ -74,10 +74,10 @@ const PrintModel = Tool.extend({
      * @property {Number} INCHES_PER_METER=39.37 - todo
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} eventListener={} - todo
-     * @listens Print#RadioTriggerPrintChangeIsActive
+     * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
      * @listens GFI#RadioTriggerGFIIsVisible
-     * @listens Print#RadioTriggerPrintCreatePrintJob
+     * @listens Print#CreatePrintJob
      */
     initialize: function () {
         var channel = Radio.channel("Print");
@@ -85,7 +85,7 @@ const PrintModel = Tool.extend({
         this.superInitialize();
 
         /**
-         * @event Print#RadioTriggerPrintChangeIsActive
+         * @listens Print#ChangeIsActive
          * @description todo
          */
         this.listenTo(this, {
@@ -98,7 +98,7 @@ const PrintModel = Tool.extend({
         });
 
         /**
-         * @event MapView#RadioTriggerMapViewChangedOptions
+         * @listens MapView#RadioTriggerMapViewChangedOptions
          * @description todo
          */
         this.listenTo(Radio.channel("MapView"), {
@@ -108,7 +108,7 @@ const PrintModel = Tool.extend({
         });
 
         /**
-         * @event GFI#RadioTriggerGFIIsVisible
+         * @listens GFI#RadioTriggerGFIIsVisible
          * @description todo
          */
         this.listenTo(Radio.channel("GFI"), {
@@ -120,7 +120,7 @@ const PrintModel = Tool.extend({
             }
         });
         /**
-         * @event Print#RadioTriggerPrintCreatePrintJob
+         * @listens Print#CreatePrintJob
          * @description todo
          */
         channel.on({
@@ -132,11 +132,12 @@ const PrintModel = Tool.extend({
     /**
      * todo
      * @param {*} id - todo
+     * @fires todo
      * @returns {void}
      */
     createMapFishServiceUrl: function (id) {
         /**
-         * @event todo
+         * @fires todo
          * @description todo
          */
         var service = Radio.request("RestReader", "getServiceById", id),
@@ -148,6 +149,7 @@ const PrintModel = Tool.extend({
      * Gets the capabilities for a specific print configuration
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
+     * @fires todo
      * @returns {void}
      */
     getCapabilites: function (model, value) {
@@ -156,7 +158,7 @@ const PrintModel = Tool.extend({
         if (value) {
             if (this.get("mapfishServiceId") !== undefined) {
                 /**
-                 * @event todo
+                 * @fires todo
                  * @description todo
                  */
                 serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url");
@@ -173,6 +175,7 @@ const PrintModel = Tool.extend({
     /**
      * todo
      * @param {*} response - todo
+     * @fires todo
      * @returns {void}
      */
     parseMapfishCapabilities: function (response) {
@@ -184,7 +187,7 @@ const PrintModel = Tool.extend({
         this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
         this.setFormatList(response.formats);
         /**
-         * @event todo
+         * @fires todo
          * @description todo
          */
         this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
@@ -193,20 +196,26 @@ const PrintModel = Tool.extend({
 
     /**
      * todo
+     * @fires todo
+     * @fires todo
+     * @fires todo
+     * @fires todo
+     * @fires todo
+     * @fires todo
      * @returns {void}
      */
     print: function () {
         /**
-         * @event todo
+         * @fires todo
          * @description todo
          */
         var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                 return layer.getVisible() === true;
             }),
             /**
-             * @event todo
+             * @fires todo
              * @description todo
-             * @event todo2
+             * @fires todo2
              * @description todo2
              */
             attr = {
@@ -232,13 +241,13 @@ const PrintModel = Tool.extend({
         if (this.get("isLegendAvailable")) {
             if (this.get("isLegendSelected")) {
                 /**
-                 * @event todo
+                 * @fires todo
                  * @description todo
                  */
                 Radio.trigger("Legend", "setLayerList");
             }
             /**
-             * @event todo
+             * @fires todo
              * @description todo
              */
             spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"), this.get("isMetaDataAvailable"));
@@ -250,7 +259,7 @@ const PrintModel = Tool.extend({
 
         if (this.get("isGfiAvailable")) {
             /**
-             * @event todo
+             * @fires todo
              * @description todo
              */
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
@@ -285,13 +294,14 @@ const PrintModel = Tool.extend({
      * @param {string} printAppId - id of the print configuration
      * @param {string} payload - POST body
      * @param {string} format - print job output format
+     * @fires todo
      * @returns {void}
      */
     createPrintJob: function (printAppId, payload, format) {
         var url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
 
         /**
-         * @event todo
+         * @fires todo
          * @description todo
          */
         Radio.trigger("Util", "showLoader");
@@ -300,7 +310,8 @@ const PrintModel = Tool.extend({
 
     /**
      * sends a request to get the status for a print job until it is finished
-     * @param {JSON} response -
+     * @param {JSON} response - todo
+     * @fires todo
      * @returns {void}
      */
     waitForPrintJob: function (response) {
@@ -313,7 +324,7 @@ const PrintModel = Tool.extend({
             }
             else {
                 /**
-                 * @event todo
+                 * @fires todo
                  * @description todo
                  */
                 Radio.trigger("Util", "hideLoader");
@@ -327,12 +338,15 @@ const PrintModel = Tool.extend({
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
+     * @fires todo
+     * @fires todo
+     * @fires todo
      * @returns {void}
      */
     togglePostcomposeListener: function (model, value) {
         if (value && model.get("layoutList").length !== 0) {
             /**
-             * @event todo
+             * @fires todo
              * @description todo
              */
             this.setEventListener(Radio.request("Map", "registerListener", "postcompose", this.createPrintMask.bind(this)));
@@ -340,13 +354,13 @@ const PrintModel = Tool.extend({
         }
         else {
             /**
-             * @event todo
+             * @fires todo
              * @description todo
              */
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         }
         /**
-             * @event todo
+             * @fires todo
              * @description todo
              */
         Radio.trigger("Map", "render");
@@ -522,11 +536,12 @@ const PrintModel = Tool.extend({
      * @param {string} requestType - GET || POST
      * @param {function} successCallback - called if the request succeeds
      * @param {JSON} data - payload
+     * @fires todo
      * @returns {void}
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
         /**
-         * @event todo
+         * @fires todo
          * @description todo
         */
         $.ajax({
