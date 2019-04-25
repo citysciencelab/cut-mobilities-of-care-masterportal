@@ -1,9 +1,23 @@
 <div class="btn-group header">
-    <span class="glyphicon <%=glyphicon%>"></span>
     <span class="tool-name"><%= name %></span>
-    <% if (isViewMobile) { %>
-        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <% } %>
 </div>
-<div class="brw-container">
+<div class="filter">
+    <select class="selectpicker" title="nach Bezirken / Hamburg gesamt" multiple>
+        <% districts.forEach(function (district) { %>
+            <option><%= district %></option>
+        <% }); %>
+    </select>
+    <select class="selectpicker" title="nach Jahren" multiple>
+        <% years.forEach(function (year) { %>
+            <option><%= year %></option>
+        <% }); %>
+    </select>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> Monatsansicht
+        </label>
+    </div>
+</div>
+<div class="graph">
+
 </div>

@@ -38,7 +38,7 @@
             "name": "Informationen abfragen"
 					},
 					"cockpit": {
-						"name": "Cockpit Bauvorhaben",
+						"name": "Filter für genehmigte Bauvorhaben",
 						"glyphicon": "glyphicon-pencil",
 						"isActive": true,
 						"renderToWindow": false

@@ -1,5 +1,7 @@
 import initializeCockpitModel from "../cockpit/model";
 import Template from "text-loader!./template.html";
+import "bootstrap/js/dropdown";
+import "bootstrap-select";
 import "./style.less";
 
 const CockpitView = Backbone.View.extend({
@@ -35,7 +37,24 @@ const CockpitView = Backbone.View.extend({
             Radio.trigger("Sidebar", "toggle", false);
             this.undelegateEvents();
         }
+        this.initDropdown();
         return this;
+    },
+
+    /**
+     * inits the dropdown list
+     * @see {@link https://developer.snapappointments.com/bootstrap-select/options/|Bootstrap-Select}
+     * @returns {void}
+     */
+    initDropdown: function () {
+        this.$el.find(".selectpicker").selectpicker({
+            selectedTextFormat: "static",
+            width: "100%",
+            actionsBox: true,
+            deselectAllText: "Nichts auswählen",
+            selectAllText: "Alle auswählen"
+        });
+        this.$el.find(".selectpicker").selectpicker("selectAll");
     }
 });
 
