@@ -262,6 +262,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * Generate a list with hits of the individual search algorithms.
      * @param {String} triggeredBy Calling search algorithm
      * @fires Searchbar#RadioTriggerSearchbarCheckInitialSearch
+     * @fires ViewZoom#RadioTriggerViewZoomHitSelected
      * @returns {void}
      */
     createRecommendedList: function (triggeredBy) {
