@@ -6,6 +6,16 @@ import "./style.less";
 
 const CockpitView = Backbone.View.extend({
     events: {
+        "changed.bs.select .selectpicker-district": function (evt) {
+            this.mapSelectedValues(evt, "districts");
+        },
+        "changed.bs.select .selectpicker-year": function (evt) {
+            this.mapSelectedValues(evt, "years");
+
+        },
+        "click input": function (e) {
+            this.model.setFilterObjectByKey("monthMode", e.target.checked);
+        }
     },
     /**
      * Initialize function
@@ -13,7 +23,11 @@ const CockpitView = Backbone.View.extend({
      */
     initialize: function () {
         this.model = initializeCockpitModel();
-        this.render(this.model, this.model.get("isActive"));
+        this.listenTo(this.model, {
+            "render": function () {
+                this.render(this.model, this.model.get("isActive"));
+            }
+        });
     },
     id: "cockpit_bauvorhaben",
     template: _.template(Template),
@@ -54,7 +68,20 @@ const CockpitView = Backbone.View.extend({
             deselectAllText: "Nichts auswählen",
             selectAllText: "Alle auswählen"
         });
+        // selects all items
         this.$el.find(".selectpicker").selectpicker("selectAll");
+    },
+
+    /**
+     * maps the selected values from multiple drop-down list
+     * @param {jQuery.Event} evt - changed event
+     * @param {string} key - districts or years
+     * @returns {void}
+     */
+    mapSelectedValues: function (evt, key) {
+        const selectedValues = Array.from(evt.target.selectedOptions).map(option => option.value);
+
+        this.model.setFilterObjectByKey(key, selectedValues);
     }
 });
 

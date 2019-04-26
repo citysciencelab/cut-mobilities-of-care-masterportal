@@ -5,40 +5,11 @@ function initializeCockpitModel () {
     const CockpitModel = Radio.request("ModelList", "getModelByAttributes", {id: "cockpit"}),
         defaults = {
             "isViewMobile": false,
-            "json": [
-                {
-                    "year": 2016,
-                    "month": "August",
-                    "bezirk": "Harburg",
-                    "bauvorhaben": 47,
-                    "wohneinheiten": 105,
-                    "constructionStarted": true
-                },
-                {
-                    "year": 2018,
-                    "month": "August",
-                    "bezirk": "Bergedorf",
-                    "bauvorhaben": 47,
-                    "wohneinheiten": 105,
-                    "constructionStarted": true
-                },
-                {
-                    "year": 2017,
-                    "month": "August",
-                    "bezirk": "Harburg",
-                    "bauvorhaben": 47,
-                    "wohneinheiten": 105,
-                    "constructionStarted": true
-                },
-                {
-                    "year": 2018,
-                    "month": "August",
-                    "bezirk": "Altona",
-                    "bauvorhaben": 47,
-                    "wohneinheiten": 105,
-                    "constructionStarted": true
-                }
-            ]
+            "filterObject": {
+                "districts": [],
+                "years": [],
+                "monthMode": false
+            }
         };
 
     Object.assign(CockpitModel, {
@@ -49,13 +20,25 @@ function initializeCockpitModel () {
          */
         initialize: function () {
             this.superInitialize();
-            this.findYears();
-            this.findDistricts();
-
+            this.requestJson();
         },
 
-        findYears: function () {
-            const t = this.get("json").map(function (obj) {
+        requestJson: function () {
+            $.ajax({
+                // url: Radio.request("Util", "getProxyURL", "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/cockpit_bauvorhaben.json"),
+                url: "https://test.geoportal-hamburg.de/lgv-config/cockpit_bauvorhaben.json",
+                context: this,
+                success: function (data) {
+                    this.filterYears(data);
+                    this.filterDistricts(data);
+                    this.setData(data);
+                    this.trigger("render");
+                }
+            });
+        },
+
+        filterYears: function (data) {
+            const t = data.map(function (obj) {
                 return obj.year;
             });
 
@@ -64,8 +47,8 @@ function initializeCockpitModel () {
             }));
         },
 
-        findDistricts: function () {
-            const t = this.get("json").map(function (obj) {
+        filterDistricts: function (data) {
+            const t = data.map(function (obj) {
                 return obj.bezirk;
             });
 
@@ -78,6 +61,14 @@ function initializeCockpitModel () {
 
         setDistricts: function (value) {
             this.set("districts", value);
+        },
+
+        setData: function (value) {
+            this.set("data", value);
+        },
+
+        setFilterObjectByKey: function (key, value) {
+            this.get("filterObject")[key] = value;
         }
     });
 

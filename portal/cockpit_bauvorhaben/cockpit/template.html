@@ -2,12 +2,12 @@
     <span class="tool-name"><%= name %></span>
 </div>
 <div class="filter">
-    <select class="selectpicker" title="nach Bezirken / Hamburg gesamt" multiple>
+    <select class="selectpicker selectpicker-district" title="nach Bezirken / Hamburg gesamt" multiple>
         <% districts.forEach(function (district) { %>
             <option><%= district %></option>
         <% }); %>
     </select>
-    <select class="selectpicker" title="nach Jahren" multiple>
+    <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
         <% years.forEach(function (year) { %>
             <option><%= year %></option>
         <% }); %>
