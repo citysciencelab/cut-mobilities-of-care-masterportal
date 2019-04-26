@@ -12,45 +12,28 @@
         border-bottom: 1px solid rgb(227,227,227);
         padding: 10px;
         margin-bottom: 10px;
-    }
-    .tool-name {
-        padding-left: 15px;
-        font-family: @font-family-bold;
-    }
-	label {
-		font-family: @font-family-bold;
-    }
-    hr {
-        margin-left: -15px;
-        margin-right: -15px;
-    }
-    .white-backdrop {
-        display: none;
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
-}
-
-@media (min-width: 768px) {
-    #cockpit_bauvorhaben {
-        label, dt, .header {
-            font-size: @font-size;
-        }
-    }
-}
-
-@media (max-width: 767px) {
-    #cockpit_bauvorhaben {
-        label, dt, .header {
+        font-size: @font-size;
+        .tool-name {
+            font-family: @font-family-bold;
             font-size: @font-size-large;
         }
-        .btn-group .glyphicon{
-            font-size: @glyphicon-size;
+    }
+    .filter {
+        padding: 10px 20px 0 20px;
+        border-bottom: 1px solid rgb(227,227,227);
+        .bootstrap-select {
+            margin-bottom: 20px;
         }
-        .list-group button {
+        li > a {
+            font-size:  @font-size;
+        }
+        .bs-actionsbox {
+            padding: 8px;
+        }
+        .checkbox {
+            margin-top: 0;
+        }
+        label {
             font-size: @font-size;
         }
     }
