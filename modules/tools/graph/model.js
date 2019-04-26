@@ -41,18 +41,17 @@ const GraphModel = Backbone.Model.extend({
      * @return {number} maxData
      */
     createMaxValue: function (data, attrToShowArray) {
-        var value,
-            maxData;
+        var maxValue = 0;
 
-        _.each(attrToShowArray, function (attrToShow) {
-            value = _.max(data, function (d) {
-                return d[attrToShow];
+        data.forEach(function (obj) {
+            attrToShowArray.forEach(function (attrToShow) {
+                if (obj[attrToShow] > maxValue) {
+                    maxValue = obj[attrToShow];
+                }
             });
         });
 
-        maxData = _.isUndefined(value) || !_.isObject(value) ? 1 : value[attrToShowArray[0]];
-
-        return maxData;
+        return maxValue;
     },
 
     /**
