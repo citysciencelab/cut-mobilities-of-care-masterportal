@@ -8,19 +8,15 @@ const CockpitView = Backbone.View.extend({
     events: {
         "changed.bs.select .selectpicker-district": function (evt) {
             this.mapSelectedValues(evt, "districts");
-            this.removeOldGraphs();
-            this.model.prepareDataForGraph();
+            this.redrawGraphs();
         },
         "changed.bs.select .selectpicker-year": function (evt) {
             this.mapSelectedValues(evt, "years");
-            this.removeOldGraphs();
-            this.model.prepareDataForGraph();
-
+            this.redrawGraphs();
         },
         "click input": function (e) {
             this.model.setFilterObjectByKey("monthMode", e.target.checked);
-            this.removeOldGraphs();
-            this.model.prepareDataForGraph();
+            this.redrawGraphs();
         }
     },
     /**
@@ -96,10 +92,10 @@ const CockpitView = Backbone.View.extend({
         });
 
         this.model.setFilterObjectByKey(key, selectedValues);
-        this.model.prepareDataForGraph();
     },
-    removeOldGraphs: function () {
+    redrawGraphs: function () {
         this.$el.find(".graph-svg").remove();
+        this.model.prepareDataForGraph();
     }
 });
 

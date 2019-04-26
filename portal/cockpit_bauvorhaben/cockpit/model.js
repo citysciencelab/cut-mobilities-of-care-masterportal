@@ -25,22 +25,62 @@ function initializeCockpitModel () {
         },
         prepareDataForGraph: function () {
             const years = this.get("filterObject").years.sort(),
-                bezirke = this.get("filterObject").districts,
+                districts = this.get("filterObject").districts,
                 isMonthsSelected = this.get("filterObject").monthMode,
                 data = this.get("data"),
-                filteredData = this.filterData(data, bezirke, years),
-                dataBaugenehmigungen = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheiten = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
-                dataWohneinheitenImBau = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]});
+                filteredData = this.filterData(data, districts, years),
+                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
+                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]}),
+                attributesToShow = [];
 
-            this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", "graph-baugenehmigungen-tooltip-div", bezirke, "date");
-            this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-wohneinheiten-tooltip-div", bezirke, "date");
-            this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-wohneineinheiten-noch-nicht-im-bau-tooltip-div", bezirke, "date");
-            this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-wohneineinheiten-im-bau-tooltip-div", bezirke, "date");
+
+            if (filteredData.length > 0) {
+                districts.forEach(function (district) {
+                    switch (district) {
+                        case "Altona": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-altona"});
+                            break;
+                        }
+                        case "Bergedorf": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-bergedorf"});
+                            break;
+                        }
+                        case "Eimsbüttel": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-eimsbuettel"});
+                            break;
+                        }
+                        case "Hamburg-Mitte": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-hamburg-mitte"});
+                            break;
+                        }
+                        case "Hamburg-Nord": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-hamburg-nord"});
+                            break;
+                        }
+                        case "Harburg": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-harburg"});
+                            break;
+                        }
+                        case "Wandsbek": {
+                            attributesToShow.push({attrName: district, attrClass: "graph-line-wandsbek"});
+                            break;
+                        }
+                        default: {
+                            attributesToShow.push({attrName: district, attrClass: "line"});
+                            break;
+                        }
+                    }
+                });
+                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date");
+                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date");
+                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date");
+                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date");
+            }
         },
-        filterData: function (data, bezirke, years) {
-            const filteredDataByBezirk = this.filterByAttribute(data, bezirke, "bezirk"),
+        filterData: function (data, districts, years) {
+            const filteredDataByBezirk = this.filterByAttribute(data, districts, "bezirk"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
                 filteredTotal = this.intersectArrays(filteredDataByBezirk, filteredDataByYear);
 
@@ -69,11 +109,11 @@ function initializeCockpitModel () {
             });
             return intersections;
         },
-        prepareData: function (data, bezirke, years, isMonthsSelected, attrName, condition) {
+        prepareData: function (data, districts, years, isMonthsSelected, attrName, condition) {
             var preparedData = [],
                 months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
-            bezirke.forEach(function (bezirk) {
+            districts.forEach(function (bezirk) {
                 years.forEach(function (year) {
                     months.forEach(function (month) {
                         let filteredObjs = data.filter(obj => obj.bezirk === bezirk && obj.year === year && obj.month === month);
@@ -96,13 +136,13 @@ function initializeCockpitModel () {
                 //todo aggregiere alle monate auf das jahr
             }
             preparedData = this.mergeByAttribute(preparedData, "date", attrName);
-            preparedData = this.addNullValues(preparedData, bezirke);
+            preparedData = this.addNullValues(preparedData, districts);
             preparedData = Radio.request("Util", "sort", preparedData, "date");
             return preparedData;
         },
-        addNullValues: function (data, bezirke) {
+        addNullValues: function (data, districts) {
             data.forEach(function (obj) {
-                bezirke.forEach(function (value) {
+                districts.forEach(function (value) {
                     if (obj[value] === undefined) {
                         obj[value] = 0;
                     }
@@ -130,6 +170,8 @@ function initializeCockpitModel () {
                     const bezirk = obj.bezirk;
 
                     mergedObj[bezirk] = obj[mergeAttr];
+                    mergedObj.class = "dot";
+                    mergedObj.style = "circle";
                 });
                 mergedData.push(mergedObj);
             });
@@ -140,7 +182,7 @@ function initializeCockpitModel () {
             const conditionAttribute = condition.attributeName,
                 conditionValues = condition.values,
                 prefilteredData = this.filterByAttribute(data, conditionValues, conditionAttribute),
-                aggregate = prefilteredData[0];
+                aggregate = Object.assign({}, prefilteredData[0]);
 
             prefilteredData.forEach(function (obj, index) {
                 if (index > 0) {
@@ -151,7 +193,6 @@ function initializeCockpitModel () {
                     }
                 }
             });
-            // aggregate[conditionAttribute] = undefined;
             return [aggregate];
         },
         mapMonth: function (month) {
@@ -197,7 +238,7 @@ function initializeCockpitModel () {
                 }
             }
         },
-        createGraph: function (data, selector, selectorTooltip, attributes, xAttr) {
+        createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr) {
             const graphConfig = {
                 graphType: "Linegraph",
                 selector: selector,
@@ -218,7 +259,7 @@ function initializeCockpitModel () {
                     label: "Anzahl",
                     offset: 10
                 },
-                attrToShowArray: attributes,
+                attrToShowArray: attributesToShow,
                 legendData: []
             };
 

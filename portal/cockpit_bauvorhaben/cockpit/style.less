@@ -37,6 +37,9 @@
             font-size: @font-size;
         }
     }
+    .graph-label {
+        font-size: @font-size;
+    }
     .graph {
         position: relative;
         width: 500px;
@@ -49,5 +52,45 @@
         padding: 2px;
         border: 2px solid white;
         text-align: center;
+    }
+    .graph-line-altona {
+        fill: none;
+        stroke: rgb(255, 0, 0);
+        stroke-width: 2px;
+    }
+    .graph-line-bergedorf {
+        fill: none;
+        stroke: rgb(0, 255, 0);
+        stroke-width: 2px;
+    }
+    .graph-line-eimsbuettel {
+        fill: none;
+        stroke: rgb(0, 0, 255);
+        stroke-width: 2px;
+    }
+    .graph-line-hamburg-mitte {
+        fill: none;
+        stroke: rgb(255, 255, 0);
+        stroke-width: 2px;
+    }
+    .graph-line-hamburg-nord {
+        fill: none;
+        stroke: rgb(255, 0, 255);
+        stroke-width: 2px;
+    }
+    .graph-line-harburg {
+        fill: none;
+        stroke: rgb(0, 255, 255);
+        stroke-width: 2px;
+    }
+    .graph-line-wandsbek {
+        fill: none;
+        stroke: rgb(0, 0, 0);
+        stroke-width: 2px;
+    }
+    .dot {
+        cursor: pointer;
+        stroke: none;
+        fill: rgba(0, 0, 0, 0.1);
     }
 }

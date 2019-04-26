@@ -448,7 +448,19 @@ const GraphModel = Backbone.Model.extend({
                 return d.text;
             });
     },
+    flattenAttrToShowArray: function (attrToShowArray) {
+        const flatAttrToShowArray = [];
 
+        attrToShowArray.forEach(function (attrToShow) {
+            if (typeof attrToShow === "object") {
+                flatAttrToShowArray.push(attrToShow.attrName);
+            }
+            else {
+                flatAttrToShowArray.push(attrToShow);
+            }
+        });
+        return flatAttrToShowArray;
+    },
     /**
      * Erzeugt die d3 Grafik für ein Liniendiagramm
      * @param   {object}    graphConfig                     Konfigurationsobjekt
@@ -481,12 +493,13 @@ const GraphModel = Backbone.Model.extend({
             xAxisLabel = graphConfig.xAxisLabel,
             yAxisLabel = graphConfig.yAxisLabel,
             attrToShowArray = graphConfig.attrToShowArray,
+            flatAttrToShowArray = this.flattenAttrToShowArray(attrToShowArray),
             margin = graphConfig.margin,
             marginBottom = isMobile ? margin.bottom + 20 : margin.bottom,
             width = graphConfig.width - margin.left - margin.right,
             height = graphConfig.height - margin.top - marginBottom,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr),
-            scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray),
+            scaleY = this.createScaleY(data, height, scaleTypeY, flatAttrToShowArray),
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
             xAxisTickValues = graphConfig.xAxisTickValues,
@@ -502,10 +515,18 @@ const GraphModel = Backbone.Model.extend({
             this.appendLegend(svg, graphConfig.legendData);
         }
         _.each(attrToShowArray, function (yAttrToShow) {
-            valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
-            this.appendDataToSvg(svg, data, "line", valueLine);
-            // Add the scatterplot for each point in line
-            this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
+            if (typeof yAttrToShow === "object") {
+                valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
+                this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
+                // Add the scatterplot for each point in line
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv);
+            }
+            else {
+                valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
+                this.appendDataToSvg(svg, data, "line", valueLine);
+                // Add the scatterplot for each point in line
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
+            }
         }, this);
         // Add the Axis
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel);
