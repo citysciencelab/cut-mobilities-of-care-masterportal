@@ -1,6 +1,12 @@
-import Template from "text-loader!./templateCatalog.html";
+import CatalogTemplate from "text-loader!./templateCatalog.html";
 
-const FolderView = Backbone.View.extend({
+/**
+ * @member CatalogTemplate
+ * @description Template used to create the Catalog View
+ * @memberof Menu.Desktop.Folder
+ */
+
+const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prototype */{
     events: {
         "change select": "setSelection",
         "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
@@ -22,6 +28,29 @@ const FolderView = Backbone.View.extend({
             $(".input-save-url").select();
         }
     },
+
+    /**
+     * @class FolderCatalogView
+     * @extends Backbone.View
+     * @memberof Menu.Desktop.Folder
+     * @constructs
+     * @listens Map#RadioTriggerMapChange
+     * @listens FolderCatalogView#changeIsExpanded
+     * @listens FolderCatalogView#isVisibleInTree
+     * @fires FolderCatalogView#toggleIsExpanded
+     * @fires FolderCatalogView#setSelection
+     * @fires FolderCatalogView#toggleBackground
+     * @fires FolderCatalogView#unfixTree
+     * @fires FolderCatalogView#fixTree
+     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @fires MapView#RadioTriggerMapViewToggleBackground
+     * @fires Map#RadioRequestMapGetMapMode
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @fires Parser#RadioRequestParserGetCategory
+     * @fires Parser#RadioRequestParserGetCategories
+     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Parser#RadioRequestParserSetCategory
+     */
     initialize: function () {
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -44,7 +73,16 @@ const FolderView = Backbone.View.extend({
     },
     tagName: "li",
     className: "layer-catalog",
-    template: _.template(Template),
+    template: _.template(CatalogTemplate),
+
+    /**
+     * Renders the data to DOM.
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @fires Parser#RadioRequestParserGetCategory
+     * @fires Parser#RadioRequestParserGetCategories
+     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @return {FolderCatalogView} returns this
+     */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -56,9 +94,17 @@ const FolderView = Backbone.View.extend({
         $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         return this;
     },
+    /**
+     * Toogle Expanded
+     * @return {void}
+     */
     toggleIsExpanded: function () {
         this.model.toggleIsExpanded();
     },
+    /**
+     * Toogle Glyphicon
+     * @return {void}
+     */
     toggleGlyphicon: function () {
         var elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
 
@@ -78,11 +124,20 @@ const FolderView = Backbone.View.extend({
             this.$el.find(".LayerListMaxHeight").css("overflow", "auto");
         }
     },
+    /**
+     * Toogle Background
+     * @return {void}
+     */
     toggleBackground: function () {
         Radio.trigger("MapView", "toggleBackground");
         $(".glyphicon-adjust").toggleClass("rotate-adjust");
         $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
     },
+    /**
+     * Toogle 3dCatalog
+     * @param {*} mode todo
+     * @return {void}
+     */
     togle3dCatalog: function (mode) {
         if (mode === "3D" && this.model.get("id") === "3d_daten") {
             this.$el.show();
@@ -91,24 +146,43 @@ const FolderView = Backbone.View.extend({
             this.$el.hide();
         }
     },
+    /**
+     * Fix tree
+     * @return {void}
+     */
     fixTree: function () {
         $("body").on("click", "#map", this.helpForFixing);
         $("body").on("click", "#searchbar", this.helpForFixing);
         $(".glyphicon-pushpin").addClass("rotate-pin");
         $(".glyphicon-pushpin").removeClass("rotate-pin-back");
     },
+    /**
+     * unfix Tree
+     * @return {void}
+     */
     unfixTree: function () {
         $("body").off("click", "#map", this.helpForFixing);
         $("body").off("click", "#searchbar", this.helpForFixing);
         $(".glyphicon-pushpin").removeClass("rotate-pin");
         $(".glyphicon-pushpin").addClass("rotate-pin-back");
     },
+    /**
+     * Help for fixing
+     * @param {evt} evt todo
+     * @return {void}
+     */
     helpForFixing: function (evt) {
         evt.stopPropagation();
     },
+    /**
+    * Set Selection
+    * @param {evt} evt todo
+    * @fires Parser#RadioRequestParserSetCategory
+    * @return {void}
+    */
     setSelection: function (evt) {
         Radio.trigger("Parser", "setCategory", evt.currentTarget.value);
     }
 });
 
-export default FolderView;
+export default FolderCatalogView;

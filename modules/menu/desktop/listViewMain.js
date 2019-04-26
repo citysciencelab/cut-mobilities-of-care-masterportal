@@ -6,12 +6,22 @@ import DesktopViewpointView from "./viewpoint/view";
 
 import "bootstrap";
 
-const Menu = Backbone.View.extend({
+const ListViewMain = Backbone.View.extend(/** @lends ListViewMain.prototype */{
+    /**
+     * @class ListViewMain
+     * @extends Backbone.View
+     * @memberof Menu.Desktop
+     * @constructs
+     */
     collection: {},
     el: "nav#main-nav",
     attributes: {
         role: "navigation"
     },
+    /**
+     * Render Main
+     * @return {void}
+     */
     renderMain: function () {
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("list-group mobile");
@@ -19,6 +29,10 @@ const Menu = Backbone.View.extend({
 
         this.renderTopMenu();
     },
+    /**
+     * Render the top menu
+     * @return {void}
+     */
     renderTopMenu: function () {
         var models = this.collection.filter(function (model) {
             return model.get("type") === "tool" || model.get("type") === "staticlink" || (model.get("parentId") === "root" && model.get("type") === "folder") || model.get("type") === "viewpoint";
@@ -26,6 +40,11 @@ const Menu = Backbone.View.extend({
 
         this.parseViews(models);
     },
+    /**
+     * Parse Views
+     * @param {Array} models to do
+     * @return {void}
+     */
     parseViews: function (models) {
         _.each(models, function (model) {
             switch (model.get("type")) {
@@ -57,31 +76,60 @@ const Menu = Backbone.View.extend({
             }
         }, this);
     },
+    /**
+     * Add Catalog Folder View
+     * @param {*} model to do
+     * @return {void}
+     */
     addCatalogFolderView: function (model) {
         new CatalogFolderView({model: model});
     },
+    /**
+     * Add Desktop Folder View
+     * @param {*} model to do
+     * @return {void}
+     */
     addDesktopFolderView: function (model) {
         new DesktopFolderView({model: model});
     },
+    /**
+     * Add Viewpoint View
+     * @param {*} model to do
+     * @return {void}
+     */
     addViewpointView: function (model) {
         new DesktopViewpointView({model: model});
     },
+    /**
+     * Add Tool View
+     * @param {*} model to do
+     * @return {void}
+     */
     addToolView: function (model) {
         new DesktopToolView({model: model});
     },
+    /**
+     * Add Static Link View
+     * @param {*} model to do
+     * @return {void}
+     */
     addStaticLinkView: function (model) {
         new DesktopStaticLinkView({model: model});
     },
+    /**
+     * Remove View
+     * @return {void}
+     */
     removeView: function () {
         this.$el.find("ul.nav-menu").html("");
 
-        // remove entfernt alle Listener und das Dom-Element
+        // remove all listeners and the DOM element
         this.remove();
         this.collection.setAllModelsInvisible();
-        // Das Dom-Element wird für den mobile-View beim wechsel benötigt
-        // deswegen wieder anhängen.
+        // The DOM element is needed for the change to and from the mobile view
+        // hence it's added again
         $("#map").before(this.el);
     }
 });
 
-export default Menu;
+export default ListViewMain;
