@@ -1,19 +1,34 @@
 <div class="btn-group header">
-    <span class="glyphicon <%=glyphicon%>"></span>
     <span class="tool-name"><%= name %></span>
-    <% if (isViewMobile) { %>
-        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <% } %>
 </div>
-<div id="d3-div" class="graph graph-baugenehmigungen">
-    <div class="graph-baugenehmigungen-tooltip-div"></div>
+<div class="filter">
+    <select class="selectpicker selectpicker-district" title="nach Bezirken / Hamburg gesamt" multiple>
+        <% districts.forEach(function (district) { %>
+            <option><%= district %></option>
+        <% }); %>
+    </select>
+    <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
+        <% years.forEach(function (year) { %>
+            <option><%= year %></option>
+        <% }); %>
+    </select>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
+        </label>
+    </div>
 </div>
-<div id="d3-div" class="graph graph-wohneinheiten">
-    <div class="graph-wohneinheiten-tooltip-div"></div>
-</div>
-<div id="d3-div" class="graph graph-wohneineinheiten-noch-nicht-im-bau">
-    <div class="graph-wohneineinheiten-noch-nicht-im-bau-tooltip-div"></div>
-</div>
-<div id="d3-div" class="graph graph-wohneineinheiten-im-bau">
-    <div class="graph-graph-wohneineinheiten-im-bau-tooltip-div"></div>
+<div class="graphs">
+    <div class="graph graph-baugenehmigungen">
+        <div class="graph-baugenehmigungen-tooltip-div"></div>
+    </div>
+    <div class="graph graph-wohneinheiten">
+        <div class="graph-wohneinheiten-tooltip-div"></div>
+    </div>
+    <div class="graph graph-wohneineinheiten-noch-nicht-im-bau">
+        <div class="graph-wohneineinheiten-noch-nicht-im-bau-tooltip-div"></div>
+    </div>
+    <div class="graph graph-wohneineinheiten-im-bau">
+        <div class="graph-wohneineinheiten-im-bau-tooltip-div"></div>
+    </div>
 </div>

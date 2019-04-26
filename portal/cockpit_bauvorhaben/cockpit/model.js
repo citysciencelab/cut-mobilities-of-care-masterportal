@@ -5,10 +5,12 @@ function initializeCockpitModel () {
     const CockpitModel = Radio.request("ModelList", "getModelByAttributes", {id: "cockpit"}),
         defaults = {
             "isViewMobile": false,
-            "years": [2015, 2016, 2017],
-            "bezirke": ["Hamburg-Nord", "Altona"],
-            "isMonthsSelected": true,
-            "data": [{ "year" : 2017, "month" : "April", "bezirk" : "Bergedorf", "bauvorhaben" : 21, "wohneinheiten" : 38, "constructionStarted" : true }, { "year" : 2015, "month" : "Oktober", "bezirk" : "Wandsbek", "bauvorhaben" : 78, "wohneinheiten" : 61, "constructionStarted" : true }, { "year" : 2016, "month" : "März", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 25, "wohneinheiten" : 5, "constructionStarted" : false }, { "year" : 2015, "month" : "April", "bezirk" : "Wandsbek", "bauvorhaben" : 49, "wohneinheiten" : 59, "constructionStarted" : true }, { "year" : 2015, "month" : "Januar", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 1, "wohneinheiten" : 0, "constructionStarted" : false }, { "year" : 2015, "month" : "Oktober", "bezirk" : "Altona", "bauvorhaben" : 21, "wohneinheiten" : 158, "constructionStarted" : false }, { "year" : 2019, "month" : "März", "bezirk" : "Hamburg-Mitte", "bauvorhaben" : 60, "wohneinheiten" : 231, "constructionStarted" : false }, { "year" : 2015, "month" : "Oktober", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 20, "wohneinheiten" : 31, "constructionStarted" : false }, { "year" : 2018, "month" : "August", "bezirk" : "Bergedorf", "bauvorhaben" : 10, "wohneinheiten" : 6, "constructionStarted" : false }, { "year" : 2019, "month" : "Februar", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 50, "wohneinheiten" : 109, "constructionStarted" : false }, { "year" : 2017, "month" : "April", "bezirk" : "Wandsbek", "bauvorhaben" : 38, "wohneinheiten" : 151, "constructionStarted" : true }, { "year" : 2019, "month" : "Februar", "bezirk" : "Bergedorf", "bauvorhaben" : 20, "wohneinheiten" : 66, "constructionStarted" : false }, { "year" : 2018, "month" : "September", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 17, "wohneinheiten" : 17, "constructionStarted" : true }, { "year" : 2017, "month" : "April", "bezirk" : "Harburg", "bauvorhaben" : 39, "wohneinheiten" : 134, "constructionStarted" : true }, { "year" : 2018, "month" : "Juni", "bezirk" : "Hamburg-Mitte", "bauvorhaben" : 25, "wohneinheiten" : 80, "constructionStarted" : true }, { "year" : 2015, "month" : "März", "bezirk" : "Bergedorf", "bauvorhaben" : 6, "wohneinheiten" : 2, "constructionStarted" : true }, { "year" : 2015, "month" : "Oktober", "bezirk" : "Eimsbüttel", "bauvorhaben" : 12, "wohneinheiten" : 4, "constructionStarted" : true }, { "year" : 2017, "month" : "Januar", "bezirk" : "Altona", "bauvorhaben" : 24, "wohneinheiten" : 36, "constructionStarted" : true }, { "year" : 2015, "month" : "August", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 32, "wohneinheiten" : 26, "constructionStarted" : true }, { "year" : 2016, "month" : "September", "bezirk" : "Bergedorf", "bauvorhaben" : 46, "wohneinheiten" : 85, "constructionStarted" : true }, { "year" : 2019, "month" : "Januar", "bezirk" : "Hamburg-Mitte", "bauvorhaben" : 50, "wohneinheiten" : 15, "constructionStarted" : false }, { "year" : 2016, "month" : "März", "bezirk" : "Wandsbek", "bauvorhaben" : 54, "wohneinheiten" : 60, "constructionStarted" : true }, { "year" : 2018, "month" : "März", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 37, "wohneinheiten" : 74, "constructionStarted" : true }, { "year" : 2015, "month" : "Oktober", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 44, "wohneinheiten" : 105, "constructionStarted" : true }, { "year" : 2016, "month" : "Januar", "bezirk" : "Wandsbek", "bauvorhaben" : 48, "wohneinheiten" : 108, "constructionStarted" : true }, { "year" : 2017, "month" : "Dezember", "bezirk" : "Wandsbek", "bauvorhaben" : 31, "wohneinheiten" : 106, "constructionStarted" : true }, { "year" : 2015, "month" : "November", "bezirk" : "Bergedorf", "bauvorhaben" : 12, "wohneinheiten" : 1, "constructionStarted" : true }, { "year" : 2016, "month" : "Februar", "bezirk" : "Bergedorf", "bauvorhaben" : 21, "wohneinheiten" : 26, "constructionStarted" : true }, { "year" : 2017, "month" : "Februar", "bezirk" : "Hamburg-Mitte", "bauvorhaben" : 34, "wohneinheiten" : 444, "constructionStarted" : true }, { "year" : 2015, "month" : "Februar", "bezirk" : "Harburg", "bauvorhaben" : 10, "wohneinheiten" : 6, "constructionStarted" : true }, { "year" : 2017, "month" : "September", "bezirk" : "Harburg", "bauvorhaben" : 17, "wohneinheiten" : 24, "constructionStarted" : false }, { "year" : 2017, "month" : "Mai", "bezirk" : "Bergedorf", "bauvorhaben" : 8, "wohneinheiten" : 0, "constructionStarted" : false }, { "year" : 2015, "month" : "November", "bezirk" : "Altona", "bauvorhaben" : 34, "wohneinheiten" : 44, "constructionStarted" : true }, { "year" : 2017, "month" : "Dezember", "bezirk" : "Eimsbüttel", "bauvorhaben" : 9, "wohneinheiten" : 4, "constructionStarted" : true }, { "year" : 2017, "month" : "September", "bezirk" : "Bergedorf", "bauvorhaben" : 11, "wohneinheiten" : 7, "constructionStarted" : false }, { "year" : 2017, "month" : "September", "bezirk" : "Bergedorf", "bauvorhaben" : 19, "wohneinheiten" : 25, "constructionStarted" : true }, { "year" : 2018, "month" : "Juni", "bezirk" : "Altona", "bauvorhaben" : 12, "wohneinheiten" : 47, "constructionStarted" : true }, { "year" : 2015, "month" : "Februar", "bezirk" : "Hamburg-Nord", "bauvorhaben" : 8, "wohneinheiten" : 4, "constructionStarted" : false }]
+            "filterObject": {
+                "districts": [],
+                "years": [],
+                "monthMode": true
+            },
+            "data": []
         };
 
     Object.assign(CockpitModel, {
@@ -19,11 +21,12 @@ function initializeCockpitModel () {
          */
         initialize: function () {
             this.superInitialize();
+            this.requestJson();
         },
         prepareDataForGraph: function () {
-            const years = this.get("years").sort(),
-                bezirke = this.get("bezirke"),
-                isMonthsSelected = this.get("isMonthsSelected"),
+            const years = this.get("filterObject").years.sort(),
+                bezirke = this.get("filterObject").districts,
+                isMonthsSelected = this.get("filterObject").monthMode,
                 data = this.get("data"),
                 filteredData = this.filterData(data, bezirke, years),
                 dataBaugenehmigungen = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
@@ -31,10 +34,6 @@ function initializeCockpitModel () {
                 dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
                 dataWohneinheitenImBau = this.prepareData(filteredData, bezirke, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]});
 
-            // console.log(dataBaugenehmigungen);
-            // console.log(dataWohneinheiten);
-            // console.log(dataWohneinheitenNochNichtImBau);
-            // console.log(dataWohneinheitenImBau);
             this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", "graph-baugenehmigungen-tooltip-div", bezirke, "date");
             this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-wohneinheiten-tooltip-div", bezirke, "date");
             this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-wohneineinheiten-noch-nicht-im-bau-tooltip-div", bezirke, "date");
@@ -88,7 +87,6 @@ function initializeCockpitModel () {
                     }, this);
                 }, this);
             }, this);
-
             if (isMonthsSelected) {
                 preparedData.forEach(function (obj) {
                     obj.date = obj.year + this.mapMonth(obj.month);
@@ -225,8 +223,57 @@ function initializeCockpitModel () {
             };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
+        },
+
+        requestJson: function () {
+            $.ajax({
+                // url: Radio.request("Util", "getProxyURL", "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/cockpit_bauvorhaben.json"),
+                url: "https://test.geoportal-hamburg.de/lgv-config/cockpit_bauvorhaben.json",
+                context: this,
+                success: function (data) {
+                    this.filterYears(data);
+                    this.filterDistricts(data);
+                    this.setData(data);
+                    this.trigger("render");
+                }
+            });
+        },
+
+        filterYears: function (data) {
+            const t = data.map(function (obj) {
+                return obj.year;
+            });
+
+            this.setYears([...new Set(t)].sort(function (a, b) {
+                return b - a;
+            }));
+        },
+
+        filterDistricts: function (data) {
+            const t = data.map(function (obj) {
+                return obj.bezirk;
+            });
+
+            this.setDistricts([...new Set(t)].sort());
+        },
+
+        setYears: function (value) {
+            this.set("years", value);
+        },
+
+        setDistricts: function (value) {
+            this.set("districts", value);
+        },
+
+        setData: function (value) {
+            this.set("data", value);
+        },
+
+        setFilterObjectByKey: function (key, value) {
+            this.get("filterObject")[key] = value;
         }
     });
+
     CockpitModel.initialize();
     return CockpitModel;
 }
