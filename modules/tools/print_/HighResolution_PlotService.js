@@ -191,8 +191,9 @@ const PrintModel = Tool.extend({
             this.set("printurl", printurl);
             if (this.get("currentLayer") === undefined) {
                 $.ajax({
-                    // url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
-                    url: printurl + "/info.json",
+                    url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
+                    // in lokaler Umgebung
+                    // url: printurl + "/info.json",
                     type: "GET",
                     data: "",
                     context: this,
@@ -964,8 +965,9 @@ const PrintModel = Tool.extend({
      */
     getPDFURL: function () {
         $.ajax({
-            // url: this.get("proxyURL") + "?url=" + this.get("createURL"),
-            url: this.get("createURL"),
+            url: this.get("proxyURL") + "?url=" + this.get("createURL"),
+            // in lokaler Umgebung
+            // url: this.get("createURL"),
 
             type: "POST",
             context: this,
