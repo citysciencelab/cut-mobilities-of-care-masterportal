@@ -57,10 +57,10 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
             this.appendRoutableButton();
             if (this.gfiWindow === "detached" && !isViewMobile) {
                 if (this.model.get("infoFormat") === "text/html") {
-                    $(".gfi").addClass("gfi-text-html");
+                    currentView.$el.addClass("gfi-text-html");
                 }
-                else if ($(".gfi").hasClass("gfi-text-html")) {
-                    $(".gfi").removeClass("gfi-text-html");
+                else if (currentView.$el.hasClass("gfi-text-html")) {
+                    currentView.$el.removeClass("gfi-text-html");
                 }
                 this.adjustGfiWindow(currentView, oldGfiWidth, oldLeft);
             }
