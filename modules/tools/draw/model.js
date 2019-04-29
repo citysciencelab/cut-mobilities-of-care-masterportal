@@ -151,7 +151,7 @@ const DrawTool = Tool.extend({
     /**
      * erzeugt ein GeoJSON von allen Featues und gibt es zurück
      * gibt ein leeres Objekt zurück, wenn vorher kein init erfolgt ist (= kein layer gesetzt)
-     * @param {String} geomType "singleGeometry" order "multiGeometry"
+     * @param {String} geomType "singleGeometry" oder "multiGeometry"
      * @returns {String} GeoJSON aller Features als String
      */
     downloadFeaturesWithoutGUI: function (geomType) {
@@ -165,10 +165,7 @@ const DrawTool = Tool.extend({
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
 
-            if (geomType === "singleGeometry") {
-                featuresKonverted = format.writeFeaturesObject(features);
-            }
-            else if (geomType === "multiGeometry") {
+            if (geomType === "multiGeometry") {
 
                 _.each(features, function (item) {
                     multiPolygon.appendPolygon(item.getGeometry());
@@ -178,13 +175,16 @@ const DrawTool = Tool.extend({
                 featureArray.push(multiPolyFeature);
                 featuresKonverted = format.writeFeaturesObject(featureArray);
             }
+            else {
+                featuresKonverted = format.writeFeaturesObject(features);
+            }
         }
 
         return JSON.stringify(featuresKonverted);
     },
     /**
      * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
-     * @param {String} geomType "singleGeometry" order "multiGeometry"
+     * @param {String} geomType "singleGeometry" oder "multiGeometry"
      * @returns {void}
      */
     downloadViaRemoteInterface: function (geomType) {
