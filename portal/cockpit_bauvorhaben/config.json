@@ -131,7 +131,8 @@
               "Layer": [
                 {
                   "id": ["13872", "13800", "13868", "13864", "13802", "13860", "13856", "13852"],
-                  "name": "Alle genehmigten Bauvorhaben"
+                  "name": "Alle genehmigten Bauvorhaben",
+                  "visibility": true
                 }
               ]
             },

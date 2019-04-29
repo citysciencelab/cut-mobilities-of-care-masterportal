@@ -28,6 +28,7 @@ const CockpitView = Backbone.View.extend({
                 this.render(this.model, this.model.get("isActive"));
             }
         });
+        this.render(this.model, this.model.get("isActive"));
     },
     id: "cockpit_bauvorhaben",
     template: _.template(Template),
