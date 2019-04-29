@@ -1,8 +1,8 @@
 const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     /**
      * @class ThemeView
-     * @extends GFI
-     * @memberof GFI.Themes
+     * @extends Tools.GFI
+     * @memberof Tools.GFI.Themes
      * @constructs
      * @listens gfiView#RadioTriggerRender
      * @fires Util#RadioRequestUtilIsViewMobile
@@ -28,6 +28,10 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     defaults: {
         gfiWindow: "detached"
     },
+    /**
+    * todo
+    * @returns {*} todo
+    */
     render: function () {
         var attr;
 
@@ -37,7 +41,12 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         }
         return this;
     },
-
+    /**
+    * todo
+    * @param {*} model todo
+    * @param {*} value todo
+    * @returns {*} todo
+    */
     appendTheme: function (model, value) {
         var isViewMobile = Radio.request("Util", "isViewMobile"),
             currentView = Radio.request("GFI", "getCurrentView"),
@@ -67,7 +76,13 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         }
         this.delegateEvents();
     },
-
+    /**
+    * todo
+    * @param {*} currentView todo
+    * @param {*} oldGfiWidth todo
+    * @param {*} oldLeft todo
+    * @returns {*} todo
+    */
     adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
         var newGfiWidth,
             newLeft;
@@ -96,7 +111,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * Alle Children werden dem gfi-content appended. Eine Übernahme in dessen table ist nicht HTML-konform (<div> kann nicht in <table>).
      * Nur $.append, $.replaceWith usw. sorgen für einen korrekten Zusammenbau eines <div>. Mit element.val.el.innerHTML wird HTML nur kopiert, sodass Events
      * nicht im view ankommen.
-     * @return {undefined}
+     * @returns {*} todo
      */
     appendChildren: function () {
         var children = this.model.get("children");
@@ -114,7 +129,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     },
     /**
      * Fügt den Button dem gfiContent hinzu
-     * @return {undefined}
+     * @returns {*} todo
      */
     appendRoutableButton: function () {
         var rb;
