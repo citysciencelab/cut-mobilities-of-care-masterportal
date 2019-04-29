@@ -36,10 +36,10 @@ function initializeCockpitModel () {
                 isOnlyFlatSelected = this.get("filterObject").flatMode,
                 data = this.get("data"),
                 filteredData = this.filterData(data, districts, years, isOnlyFlatSelected),
-                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
-                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]}),
+                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]}),
+                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]}),
                 attributesToShow = [];
 
             if (filteredData.length > 0) {
@@ -86,14 +86,14 @@ function initializeCockpitModel () {
             }
         },
         filterData: function (data, districts, years, isOnlyFlatSelected) {
-            const filteredDataByDistrict = this.filterByAttribute(data, districts, "bezirk"),
+            const filteredDataByDistrict = this.filterByAttribute(data, districts, "district"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
                 filtered = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
             let filteredTotal = [];
 
             if (isOnlyFlatSelected) {
                 filtered.forEach(function (obj) {
-                    if (obj.wohneinheiten > 0) {
+                    if (obj.living_unit_count > 0) {
                         filteredTotal.push(obj);
                     }
                 });
@@ -134,7 +134,7 @@ function initializeCockpitModel () {
             districts.forEach(function (district) {
                 years.forEach(function (year) {
                     months.forEach(function (month) {
-                        let filteredObjs = data.filter(obj => obj.bezirk === district && obj.year === year && obj.month === month);
+                        let filteredObjs = data.filter(obj => obj.district === district && obj.year === year && obj.month === month);
 
                         if (filteredObjs.length > 1) {
                             filteredObjs = this.aggregateByValues(filteredObjs, condition, attrName);
@@ -165,10 +165,10 @@ function initializeCockpitModel () {
                     districts.forEach(function (district) {
                         const preparedYear = {
                                 date: year,
-                                bezirk: district
+                                district: district
                             },
-                            prefilteredData = data.filter(obj => obj.year === year && obj.bezirk === district),
-                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: "bezirk", values: [district]}, attrName);
+                            prefilteredData = data.filter(obj => obj.year === year && obj.district === district),
+                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: "district", values: [district]}, attrName);
 
                         preparedYear[attrName] = aggregate[0][attrName];
                         preparedData.push(preparedYear);
@@ -204,7 +204,7 @@ function initializeCockpitModel () {
 
                 mergedObj[sortAttrName] = value;
                 filteredObjs.forEach(function (obj) {
-                    const district = obj.bezirk;
+                    const district = obj.district;
 
                     mergedObj[district] = obj[mergeAttr];
                     mergedObj.class = "dot";
@@ -316,7 +316,7 @@ function initializeCockpitModel () {
         },
 
         filterDistricts: function (data) {
-            const t = _.pluck(data, "bezirk");
+            const t = _.pluck(data, "district");
 
             this.setDistricts([...new Set(t)].sort());
         },
