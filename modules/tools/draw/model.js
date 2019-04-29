@@ -1,6 +1,8 @@
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
+import MultiPolygon from "ol/geom/MultiPolygon.js";
+import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend({
@@ -149,26 +151,44 @@ const DrawTool = Tool.extend({
     /**
      * erzeugt ein GeoJSON von allen Featues und gibt es zurück
      * gibt ein leeres Objekt zurück, wenn vorher kein init erfolgt ist (= kein layer gesetzt)
+     * @param {String} geomType "singleGeometry" order "multiGeometry"
      * @returns {String} GeoJSON aller Features als String
      */
-    downloadFeaturesWithoutGUI: function () {
+    downloadFeaturesWithoutGUI: function (geomType) {
         var features = null,
             format = new GeoJSON(),
+            multiPolygon = new MultiPolygon([]),
+            multiPolyFeature = null,
+            featureArray = [],
             featuresKonverted = {"type": "FeatureCollection", "features": []};
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
-            featuresKonverted = format.writeFeaturesObject(features);
+
+            if (geomType === "singleGeometry") {
+                featuresKonverted = format.writeFeaturesObject(features);
+            }
+            else if (geomType === "multiGeometry") {
+
+                _.each(features, function (item) {
+                    multiPolygon.appendPolygon(item.getGeometry());
+                });
+
+                multiPolyFeature = new Feature(multiPolygon);
+                featureArray.push(multiPolyFeature);
+                featuresKonverted = format.writeFeaturesObject(featureArray);
+            }
         }
 
         return JSON.stringify(featuresKonverted);
     },
     /**
      * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
+     * @param {String} geomType "singleGeometry" order "multiGeometry"
      * @returns {void}
      */
-    downloadViaRemoteInterface: function () {
-        var result = this.downloadFeaturesWithoutGUI();
+    downloadViaRemoteInterface: function (geomType) {
+        var result = this.downloadFeaturesWithoutGUI(geomType);
 
         Radio.trigger("RemoteInterface", "postMessage", {
             "downloadViaRemoteInterface": "function identifier",
