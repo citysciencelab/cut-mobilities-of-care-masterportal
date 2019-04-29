@@ -156,7 +156,7 @@ function initializeCockpitModel () {
 
             if (isMonthsSelected) {
                 data.forEach(function (obj) {
-                    obj.date = obj.year + this.mapMonth(obj.month);
+                    obj.date = obj.year + obj.month_short;
                     preparedData.push(obj);
                 }, this);
             }
@@ -232,49 +232,6 @@ function initializeCockpitModel () {
             });
             aggregate[conditionAttribute] = undefined;
             return [aggregate];
-        },
-        mapMonth: function (month) {
-            switch (month) {
-                case "Januar": {
-                    return "01";
-                }
-                case "Februar": {
-                    return "02";
-                }
-                case "März": {
-                    return "03";
-                }
-                case "April": {
-                    return "04";
-                }
-                case "Mai": {
-                    return "05";
-                }
-                case "Juni": {
-                    return "06";
-                }
-                case "Juli": {
-                    return "07";
-                }
-                case "August": {
-                    return "08";
-                }
-                case "September": {
-                    return "09";
-                }
-                case "Oktober": {
-                    return "10";
-                }
-                case "November": {
-                    return "11";
-                }
-                case "Dezember": {
-                    return "12";
-                }
-                default: {
-                    return "";
-                }
-            }
         },
         createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr) {
             const graphConfig = {
