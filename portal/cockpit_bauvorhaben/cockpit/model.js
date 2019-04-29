@@ -84,9 +84,9 @@ function initializeCockpitModel () {
             }
         },
         filterData: function (data, districts, years) {
-            const filteredDataByBezirk = this.filterByAttribute(data, districts, "bezirk"),
+            const filteredDataByDistrict = this.filterByAttribute(data, districts, "bezirk"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
-                filteredTotal = this.intersectArrays(filteredDataByBezirk, filteredDataByYear);
+                filteredTotal = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
 
             return filteredTotal;
         },
@@ -117,10 +117,10 @@ function initializeCockpitModel () {
             var preparedData = [],
                 months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 
-            districts.forEach(function (bezirk) {
+            districts.forEach(function (district) {
                 years.forEach(function (year) {
                     months.forEach(function (month) {
-                        let filteredObjs = data.filter(obj => obj.bezirk === bezirk && obj.year === year && obj.month === month);
+                        let filteredObjs = data.filter(obj => obj.bezirk === district && obj.year === year && obj.month === month);
 
                         if (filteredObjs.length > 1) {
                             filteredObjs = this.aggregateByValues(filteredObjs, condition, attrName);
@@ -131,17 +131,36 @@ function initializeCockpitModel () {
                     }, this);
                 }, this);
             }, this);
-            if (isMonthsSelected) {
-                preparedData.forEach(function (obj) {
-                    obj.date = obj.year + this.mapMonth(obj.month);
-                }, this);
-            }
-            else {
-                //todo aggregiere alle monate auf das jahr
-            }
+            preparedData = this.mergeMonthsToYears(preparedData, isMonthsSelected, years, districts, attrName);
             preparedData = this.mergeByAttribute(preparedData, "date", attrName);
             preparedData = this.addNullValues(preparedData, districts);
             preparedData = Radio.request("Util", "sort", preparedData, "date");
+            return preparedData;
+        },
+        mergeMonthsToYears: function (data, isMonthsSelected, years, districts, attrName) {
+            const preparedData = [];
+
+            if (isMonthsSelected) {
+                data.forEach(function (obj) {
+                    obj.date = obj.year + this.mapMonth(obj.month);
+                    preparedData.push(obj);
+                }, this);
+            }
+            else {
+                years.forEach(function (year) {
+                    districts.forEach(function (district) {
+                        const preparedYear = {
+                                date: year,
+                                bezirk: district
+                            },
+                            prefilteredData = data.filter(obj => obj.year === year && obj.bezirk === district),
+                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: "bezirk", values: [district]}, attrName);
+
+                        preparedYear[attrName] = aggregate[0][attrName];
+                        preparedData.push(preparedYear);
+                    }, this);
+                }, this);
+            }
             return preparedData;
         },
         addNullValues: function (data, districts) {
@@ -171,9 +190,9 @@ function initializeCockpitModel () {
 
                 mergedObj[sortAttrName] = value;
                 filteredObjs.forEach(function (obj) {
-                    const bezirk = obj.bezirk;
+                    const district = obj.bezirk;
 
-                    mergedObj[bezirk] = obj[mergeAttr];
+                    mergedObj[district] = obj[mergeAttr];
                     mergedObj.class = "dot";
                     mergedObj.style = "circle";
                 });
@@ -197,6 +216,7 @@ function initializeCockpitModel () {
                     }
                 }
             });
+            aggregate[conditionAttribute] = undefined;
             return [aggregate];
         },
         mapMonth: function (month) {
@@ -255,11 +275,9 @@ function initializeCockpitModel () {
                 scaleTypeY: "linear",
                 data: data,
                 xAttr: xAttr,
-                xAxisTicks: {
-                    unit: "abc",
-                    values: ["201001", "201101", "201201", "201301", "201401", "201501", "201601", "201701", "201801"],
-                    factor: 2
-                },
+                // xAxisTicks: {
+                //     values: ["201001", "201101", "201201", "201301", "201401", "201501", "201601", "201701", "201801"]
+                // },
                 xAxisLabel: {
                     label: "Jahre",
                     translate: 20
