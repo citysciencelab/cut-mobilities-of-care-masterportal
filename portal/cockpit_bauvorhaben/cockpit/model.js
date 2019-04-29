@@ -29,6 +29,10 @@ function initializeCockpitModel () {
             this.setData(dataJSON);
             this.trigger("render");
         },
+        /**
+         * Prepares data for creating the graphs for Cockpit
+         * @returns {void}
+         */
         prepareDataForGraph: function () {
             const years = this.get("filterObject").years.sort(),
                 districts = this.get("filterObject").districts,
@@ -88,6 +92,12 @@ function initializeCockpitModel () {
                 }
             }
         },
+        /**
+         * Performs a postprocessing of the created graphs.
+         * The texts under the ticks are moved inbetween the ticks on the right
+         * @param {Number} segments Number of segments
+         * @returns {void}
+         */
         postprocessGraphs: function (segments) {
             const tickTexts = $.find(".xAxisDraw > .tick > text"),
                 xAxisDraw = $.find(".xAxisDraw > .domain")[0],
@@ -99,6 +109,14 @@ function initializeCockpitModel () {
                 $(tickText).attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
             });
         },
+        /**
+         * Filters data by selected districts, years and isOnlyFlatSelected
+         * @param {Object[]} data All data
+         * @param {String[]} districts All Selected districts
+         * @param {Number[]} years All selected years
+         * @param {Boolean} isOnlyFlatSelected Flag if only the data objects have to be selected that have an "living_unit_count" > 0
+         * @returns {Object[]} - filtered Data
+         */
         filterData: function (data, districts, years, isOnlyFlatSelected) {
             const filteredDataByDistrict = this.filterByAttribute(data, districts, "district"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
@@ -118,6 +136,13 @@ function initializeCockpitModel () {
 
             return filteredTotal;
         },
+        /**
+         * Filters data objects whose "attributeName" is within the "valuesArray"
+         * @param {Object[]} data Object Array to be filtered
+         * @param {*[]} valuesArray Array of possible Values
+         * @param {String} attributeName Name of the attribute that has to be filtered
+         * @returns {Object[]} - Objects whose "attributeName" matches one value of the "valuesArray"
+         */
         filterByAttribute: function (data, valuesArray, attributeName) {
             const filteredData = [];
 
@@ -131,6 +156,12 @@ function initializeCockpitModel () {
 
             return filteredData;
         },
+        /**
+         * Intersects two arrays returning only the objects that are contained in both
+         * @param {Object[]} array1 First array of objects
+         * @param {Object[]} array2 Second array of object
+         * @returns {Object[]} - Array of objects containing the objects that are in both arrays
+         */
         intersectArrays: function (array1, array2) {
             const intersections = [];
 
@@ -141,6 +172,18 @@ function initializeCockpitModel () {
             });
             return intersections;
         },
+        /**
+         * Prepares the data based on the given params so that the graph can be generated.
+         * @param {Object[]} data All data.
+         * @param {String[]} districts Selected districts.
+         * @param {Number []} years Selected years.
+         * @param {Boolean} isMonthsSelected Flag if months view is checked
+         * @param {String} attrName Name of the atttribute to be aggregated
+         * @param {Object} condition Condition
+         * @param {String} condition.attributeName Attribute name of the condition
+         * @param {*[]} condition.values Attribute values of the condition
+         * @returns {Object[]} - prepared Data.
+         */
         prepareData: function (data, districts, years, isMonthsSelected, attrName, condition) {
             var preparedData = [],
                 months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
@@ -176,6 +219,16 @@ function initializeCockpitModel () {
             preparedData = Radio.request("Util", "sort", preparedData, "date");
             return preparedData;
         },
+        /**
+         * If "isMonthsSelcted"=== true: Creates an attribute "date" on each object consisting of year and month (yyyymm).
+         * If "isMonthsSelcted"=== false: Merges the months for each district and year to a single object. Creates attribute "date" with eqals to "year".
+         * @param {Object[]} data Data to merge.
+         * @param {Boolean} isMonthsSelected Flag if months view is checked.
+         * @param {Number[]} years Selected years.
+         * @param {String[]} districts Selected districts.
+         * @param {String} attrName Attribute name
+         * @returns {Object[]} - merged data.
+         */
         mergeMonthsToYears: function (data, isMonthsSelected, years, districts, attrName) {
             const preparedData = [];
 
@@ -202,6 +255,12 @@ function initializeCockpitModel () {
             }
             return preparedData;
         },
+        /**
+         * Adds for each object the attribute of a district with the value of 0. Only if the attribute is undefined.
+         * @param {Object[]} data Object array to be extended.
+         * @param {String[]} districts Selected districts.
+         * @returns {Object[]} - the extended data.
+         */
         addNullValues: function (data, districts) {
             data.forEach(function (obj) {
                 districts.forEach(function (value) {
@@ -212,6 +271,13 @@ function initializeCockpitModel () {
             });
             return data;
         },
+        /**
+         * Sorts the data by "sortAttrName" and maps the attribute values to the districts.
+         * @param {Object[]} data Data
+         * @param {String} sortAttrName Attribute name the data array is sorted.
+         * @param {String} mergeAttr Attribute name of object that has to be mapped to the district.
+         * @returns {Object[]} - mapped data.
+         */
         mergeByAttribute: function (data, sortAttrName, mergeAttr) {
             let values = [];
             const mergedData = [];
@@ -240,6 +306,15 @@ function initializeCockpitModel () {
 
             return mergedData;
         },
+        /**
+         * Aggregates the data by attrName matching the condition.
+         * @param {Object[]} data Data to be aggregated.
+         * @param {Object} condition Condition.
+         * @param {String} condition.attributeName Attribute name of the condition.
+         * @param {*[]} condition.values Attribute values of the condition.
+         * @param {String} attrName Attribute name to be aggregated.
+         * @returns {Object[]} - Array of on aggregated object.
+         */
         aggregateByValues: function (data, condition, attrName) {
             const conditionAttribute = condition.attributeName,
                 conditionValues = condition.values,
@@ -258,6 +333,20 @@ function initializeCockpitModel () {
             aggregate[conditionAttribute] = undefined;
             return [aggregate];
         },
+        /**
+         * Creates the graph
+         * @param {Object[]} data Prepared data.
+         * @param {String} selector Selector class of graph.
+         * @param {String} selectorTooltip Selector class of graph-tooltip.
+         * @param {attributeToShow[]} attributesToShow Array of attributes to show.
+         * @param {String} xAttr Attribute name for x axis.
+         * @param {Boolean} isMonthsSelected Flag if monthsMode is selected.
+         * @param {Object} attributeToShow Attributes to show.
+         * @param {String} attributeToShow.attrName Attributes name.
+         * @param {String} attributeToShow.attrClass Attributes class.
+         * @returns {void}
+         * @fires Graph#RadioTriggerGraphCreateGraph
+         */
         createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr, isMonthsSelected) {
             const xAxisTicks = this.createTicks(data, isMonthsSelected),
                 graphConfig = {
@@ -287,6 +376,12 @@ function initializeCockpitModel () {
 
             Radio.trigger("Graph", "createGraph", graphConfig);
         },
+        /**
+         * Creates ticks if monthsMode is selected.
+         * @param {Object[]} data Prepared data.
+         * @param {Boolean} isMonthsSelected Flag if monthsMode is selected.
+         * @returns {undefined/Object[]} - xAxisTicks if "isMonthsSelected". Otherwise undefined.
+         */
         createTicks: function (data, isMonthsSelected) {
             let xAxisTicks;
             const values = [];
