@@ -14,8 +14,12 @@ const CockpitView = Backbone.View.extend({
             this.mapSelectedValues(evt, "years");
             this.redrawGraphs();
         },
-        "click input": function (e) {
+        "click input.month": function (e) {
             this.model.setFilterObjectByKey("monthMode", e.target.checked);
+            this.redrawGraphs();
+        },
+        "click input.flat": function (e) {
+            this.model.setFilterObjectByKey("flatMode", e.target.checked);
             this.redrawGraphs();
         }
     },
