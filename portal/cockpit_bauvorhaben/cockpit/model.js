@@ -1,3 +1,5 @@
+import dataJSON from "./cockpit_bauvorhaben.json";
+
 /**
  * @returns {void}
  */
@@ -21,7 +23,10 @@ function initializeCockpitModel () {
          */
         initialize: function () {
             this.superInitialize();
-            this.requestJson();
+            this.filterYears(dataJSON);
+            this.filterDistricts(dataJSON);
+            this.setData(dataJSON);
+            this.trigger("render");
         },
         prepareDataForGraph: function () {
             const years = this.get("filterObject").years.sort(),
@@ -272,24 +277,8 @@ function initializeCockpitModel () {
             Radio.trigger("Graph", "createGraph", graphConfig);
         },
 
-        requestJson: function () {
-            $.ajax({
-                // url: Radio.request("Util", "getProxyURL", "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/cockpit_bauvorhaben.json"),
-                url: "https://test.geoportal-hamburg.de/lgv-config/cockpit_bauvorhaben.json",
-                context: this,
-                success: function (data) {
-                    this.filterYears(data);
-                    this.filterDistricts(data);
-                    this.setData(data);
-                    this.trigger("render");
-                }
-            });
-        },
-
         filterYears: function (data) {
-            const t = data.map(function (obj) {
-                return obj.year;
-            });
+            const t = _.pluck(data, "year");
 
             this.setYears([...new Set(t)].sort(function (a, b) {
                 return b - a;
@@ -297,11 +286,30 @@ function initializeCockpitModel () {
         },
 
         filterDistricts: function (data) {
-            const t = data.map(function (obj) {
-                return obj.bezirk;
-            });
+            const t = _.pluck(data, "bezirk");
 
             this.setDistricts([...new Set(t)].sort());
+        },
+
+        updateLayer: function (filterObject) {
+            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
+
+            if (layer !== undefined) {
+                const layers = [],
+                    layerSource = layer.get("layer").getSource();
+
+                filterObject.years.forEach(function (year) {
+                    if (year !== "2010" && year !== "2019") {
+                        layers.push("bauvorhaben_" + year + "_erledigt");
+                    }
+                });
+                if (layers.length === 0) {
+                    layerSource.updateParams({LAYERS: ","});
+                }
+                else {
+                    layerSource.updateParams({LAYERS: layers.toString()});
+                }
+            }
         },
 
         setYears: function (value) {
@@ -318,6 +326,7 @@ function initializeCockpitModel () {
 
         setFilterObjectByKey: function (key, value) {
             this.get("filterObject")[key] = value;
+            this.updateLayer(this.get("filterObject"));
         }
     });
 
