@@ -83,7 +83,21 @@ function initializeCockpitModel () {
                 this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
+                if (isMonthsSelected) {
+                    this.postprocessGraphs(years.length);
+                }
             }
+        },
+        postprocessGraphs: function (segments) {
+            const tickTexts = $.find(".xAxisDraw > .tick > text"),
+                xAxisDraw = $.find(".xAxisDraw > .domain")[0],
+                xAxisWidth = xAxisDraw.getBoundingClientRect().width,
+                widthPerSegment = Math.round(xAxisWidth / segments);
+
+            tickTexts.forEach(function (tickText) {
+                tickText.innerHTML = tickText.innerHTML.substring(0, 4);
+                $(tickText).attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
+            });
         },
         filterData: function (data, districts, years, isOnlyFlatSelected) {
             const filteredDataByDistrict = this.filterByAttribute(data, districts, "district"),
@@ -260,7 +274,7 @@ function initializeCockpitModel () {
                     xAttr: xAttr,
                     xAxisTicks: xAxisTicks,
                     xAxisLabel: {
-                        label: isMonthsSelected ? "Monate" : "Jahre",
+                        label: "Jahre",
                         translate: 20
                     },
                     yAxisLabel: {
