@@ -140,20 +140,19 @@ const GraphModel = Backbone.Model.extend({
         var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
             d3Object;
 
-        if (scale === undefined) {
-            d3Object = undefined;
+        if (xAxisTicks === undefined) {
+            d3Object = axisBottom(scale);
         }
-        // if (!_.isUndefined(xAxisTickValues) && _.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
-        else if (_.has(xAxisTicks, "ticks") && !_.has(xAxisTicks, "factor")) {
+        else if (_.has(xAxisTicks, "values") && !_.has(xAxisTicks, "factor")) {
             d3Object = axisBottom(scale)
-                .tickValues(xAxisTicks.ticks)
+                .tickValues(xAxisTicks.values)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
         }
-        else if (_.has(xAxisTicks, "ticks") && _.has(xAxisTicks, "factor")) {
+        else if (_.has(xAxisTicks, "values") && _.has(xAxisTicks, "factor")) {
             d3Object = axisBottom(scale)
-                .ticks(xAxisTicks.ticks, xAxisTicks.factor)
+                .ticks(xAxisTicks.values, xAxisTicks.factor)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
