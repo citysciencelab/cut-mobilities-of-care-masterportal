@@ -79,10 +79,10 @@ function initializeCockpitModel () {
                         }
                     }
                 });
-                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date");
-                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date");
-                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date");
-                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date");
+                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
             }
         },
         filterData: function (data, districts, years, isOnlyFlatSelected) {
@@ -129,15 +129,26 @@ function initializeCockpitModel () {
         },
         prepareData: function (data, districts, years, isMonthsSelected, attrName, condition) {
             var preparedData = [],
-                months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+                months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                months_short = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
             districts.forEach(function (district) {
                 years.forEach(function (year) {
-                    months.forEach(function (month) {
+                    months.forEach(function (month, i) {
                         let filteredObjs = data.filter(obj => obj.district === district && obj.year === year && obj.month === month);
+                        const fakeObj = {};
 
                         if (filteredObjs.length > 1) {
                             filteredObjs = this.aggregateByValues(filteredObjs, condition, attrName);
+                        }
+                        // create fake data for each timestep
+                        if (filteredObjs.length === 0) {
+                            fakeObj.year = year;
+                            fakeObj.month = month;
+                            fakeObj.month_short = months_short[i];
+                            fakeObj.district = district;
+                            fakeObj[attrName] = 0;
+                            filteredObjs.push(fakeObj);
                         }
                         if (filteredObjs.length === 1) {
                             preparedData.push(filteredObjs[0]);
@@ -233,37 +244,52 @@ function initializeCockpitModel () {
             aggregate[conditionAttribute] = undefined;
             return [aggregate];
         },
-        createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr) {
-            const graphConfig = {
-                graphType: "Linegraph",
-                selector: selector,
-                width: 400,
-                height: 250,
-                margin: {top: 20, right: 20, bottom: 50, left: 70},
-                svgClass: "graph-svg",
-                selectorTooltip: selectorTooltip,
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                data: data,
-                xAttr: xAttr,
-                // xAxisTicks: {
-                //     values: ["201001", "201101", "201201", "201301", "201401", "201501", "201601", "201701", "201801"]
-                // },
-                xAxisLabel: {
-                    label: "Jahre",
-                    translate: 20
-                },
-                yAxisLabel: {
-                    label: "Anzahl",
-                    offset: 10
-                },
-                attrToShowArray: attributesToShow,
-                legendData: []
-            };
+        createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr, isMonthsSelected) {
+            const xAxisTicks = this.createTicks(data, isMonthsSelected),
+                graphConfig = {
+                    graphType: "Linegraph",
+                    selector: selector,
+                    width: 400,
+                    height: 250,
+                    margin: {top: 20, right: 20, bottom: 50, left: 70},
+                    svgClass: "graph-svg",
+                    selectorTooltip: selectorTooltip,
+                    scaleTypeX: "ordinal",
+                    scaleTypeY: "linear",
+                    data: data,
+                    xAttr: xAttr,
+                    xAxisTicks: xAxisTicks,
+                    xAxisLabel: {
+                        label: isMonthsSelected ? "Monate" : "Jahre",
+                        translate: 20
+                    },
+                    yAxisLabel: {
+                        label: "Anzahl",
+                        offset: 10
+                    },
+                    attrToShowArray: attributesToShow,
+                    legendData: []
+                };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
         },
+        createTicks: function (data, isMonthsSelected) {
+            let xAxisTicks;
+            const values = [];
 
+            if (isMonthsSelected) {
+                data.forEach(function (obj) {
+                    if (obj.date.length === 6 && obj.date.match(/.*01$/)) {
+                        values.push(obj.date);
+                    }
+                });
+                xAxisTicks = {
+                    values: values
+                };
+            }
+
+            return xAxisTicks;
+        },
         filterYears: function (data) {
             const t = _.pluck(data, "year");
 
