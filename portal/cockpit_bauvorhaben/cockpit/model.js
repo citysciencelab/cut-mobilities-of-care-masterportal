@@ -40,7 +40,6 @@ function initializeCockpitModel () {
                 dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]}),
                 attributesToShow = [];
 
-
             if (filteredData.length > 0) {
                 districts.forEach(function (district) {
                     switch (district) {
@@ -299,7 +298,7 @@ function initializeCockpitModel () {
                     layerSource = layer.get("layer").getSource();
 
                 filterObject.years.forEach(function (year) {
-                    if (year !== "2010" && year !== "2019") {
+                    if (year !== 2010 && year !== 2019) {
                         layers.push("bauvorhaben_" + year + "_erledigt");
                     }
                 });
