@@ -1,0 +1,5778 @@
+[
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 38,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 78,
+      "wohneinheiten" : 61,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 59,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 158,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 60,
+      "wohneinheiten" : 231,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 31,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 109,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 151,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 66,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 17,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 134,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 80,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 36,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 85,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 60,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 74,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 105,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 48,
+      "wohneinheiten" : 108,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 106,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 444,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 24,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 44,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 25,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 47,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 36,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 15,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 25,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 38,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 89,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 23,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2013,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 162,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 16,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 19,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 41,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 62,
+      "wohneinheiten" : 47,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 50,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 20,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 60,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 82,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 141,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 23,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 30,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 15,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 129,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 12,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 49,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 41,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 71,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 76,
+      "wohneinheiten" : 95,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 46,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 237,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 76,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 22,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 23,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 10,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 43,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 61,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 29,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 135,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 66,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 60,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 32,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 74,
+      "wohneinheiten" : 103,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 18,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 54,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 247,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 56,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 52,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 283,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 17,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 72,
+      "wohneinheiten" : 284,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 128,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 31,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 66,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 67,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 54,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 67,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 36,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 266,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 33,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 128,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 17,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 116,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 328,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 289,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 43,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 28,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 35,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 56,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 388,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 48,
+      "wohneinheiten" : 264,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 37,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 68,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 50,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 18,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2014,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 112,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 44,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 306,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 125,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 43,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 195,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 113,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 108,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 172,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 171,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 26,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 105,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 45,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 180,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 110,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 62,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 13,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 133,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 52,
+      "wohneinheiten" : 84,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 108,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 111,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 11,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 84,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 33,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 182,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 89,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 110,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 58,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 83,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 72,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 102,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 68,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 50,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 155,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 57,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 68,
+      "wohneinheiten" : 77,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 100,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 54,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 73,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 13,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 11,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 81,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 69,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 13,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 72,
+      "wohneinheiten" : 324,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 17,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 63,
+      "wohneinheiten" : 76,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 64,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 23,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 88,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 41,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 25,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 22,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 29,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 80,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 106,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 103,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2012,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 103,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 128,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 89,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 167,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 55,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 51,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 145,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 195,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 305,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 576,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 82,
+      "wohneinheiten" : 143,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 54,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 59,
+      "wohneinheiten" : 50,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 64,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 167,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 31,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 23,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 72,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 47,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 19,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 19,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 28,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 71,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 10,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 86,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 13,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 75,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 93,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 45,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 14,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 49,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 20,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 20,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 86,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 104,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 36,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 95,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 48,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 43,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2012,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 24,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 12,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 68,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 56,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 222,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 18,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2013,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 227,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 55,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 18,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 159,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 42,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 52,
+      "wohneinheiten" : 139,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 16,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 30,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 40,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 69,
+      "wohneinheiten" : 242,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 19,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 24,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 23,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 39,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 107,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 299,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 103,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 142,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 154,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 86,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 98,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 117,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 80,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 43,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 200,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 70,
+      "wohneinheiten" : 98,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 27,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 28,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 100,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 111,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 12,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 107,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 52,
+      "wohneinheiten" : 131,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 82,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 186,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 16,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 63,
+      "wohneinheiten" : 388,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 22,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 292,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 13,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 153,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 119,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 99,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 171,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 61,
+      "wohneinheiten" : 380,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 205,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 96,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 35,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 43,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 48,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 258,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 113,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 50,
+      "wohneinheiten" : 71,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 13,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 11,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 176,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 147,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 56,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 65,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 57,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 70,
+      "wohneinheiten" : 75,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 18,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 28,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 23,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 98,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 155,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 17,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 190,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 259,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 34,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 16,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 66,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 24,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 25,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 58,
+      "wohneinheiten" : 82,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 48,
+      "wohneinheiten" : 132,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 82,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 105,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 123,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2010,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 52,
+      "wohneinheiten" : 116,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 205,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 59,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 63,
+      "wohneinheiten" : 99,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 59,
+      "wohneinheiten" : 114,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 72,
+      "wohneinheiten" : 66,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 121,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 154,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 16,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 276,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 78,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 16,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 37,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 20,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 122,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 43,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 12,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 150,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 116,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 63,
+      "wohneinheiten" : 296,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 104,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 7,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 22,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 64,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 183,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 84,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 73,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 66,
+      "wohneinheiten" : 88,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 123,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 254,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 29,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 146,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 355,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 22,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 40,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 22,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 42,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 20,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 26,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 197,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 24,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 56,
+      "wohneinheiten" : 93,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 59,
+      "wohneinheiten" : 191,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 62,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 9,
+      "wohneinheiten" : 25,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 18,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 19,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 88,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 43,
+      "wohneinheiten" : 238,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 39,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 46,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 54,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 25,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2014,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 33,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 71,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 60,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 46,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 75,
+      "wohneinheiten" : 310,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 160,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 140,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 41,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 94,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 9,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 2,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 61,
+      "wohneinheiten" : 8,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 63,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 37,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 64,
+      "wohneinheiten" : 86,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 65,
+      "wohneinheiten" : 103,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 118,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 2,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 161,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 137,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 5,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 325,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 113,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 95,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 14,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 67,
+      "wohneinheiten" : 833,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 34,
+      "wohneinheiten" : 87,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 28,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 37,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 21,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 62,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 33,
+      "wohneinheiten" : 46,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 41,
+      "wohneinheiten" : 33,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 20,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 119,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 71,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 99,
+      "wohneinheiten" : 288,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 181,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 38,
+      "wohneinheiten" : 170,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 71,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 11,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 116,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 116,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 31,
+      "wohneinheiten" : 73,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 9,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 76,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 16,
+      "wohneinheiten" : 22,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 37,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 60,
+      "wohneinheiten" : 105,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 15,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 17,
+      "wohneinheiten" : 26,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 123,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 79,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 54,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 54,
+      "wohneinheiten" : 231,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 8,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 6,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 38,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 40,
+      "wohneinheiten" : 72,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 7,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 100,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 14,
+      "wohneinheiten" : 2,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 53,
+      "wohneinheiten" : 88,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 73,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2012,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 1,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 20,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 20,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 4,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 403,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 61,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 13,
+      "wohneinheiten" : 14,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 16,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 52,
+      "wohneinheiten" : 238,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 62,
+      "wohneinheiten" : 68,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 52,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 20,
+      "wohneinheiten" : 27,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 3,
+      "wohneinheiten" : 3,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 86,
+      "wohneinheiten" : 151,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 46,
+      "wohneinheiten" : 48,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2019,
+      "month" : "Februar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 10,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 34,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 22,
+      "wohneinheiten" : 22,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 23,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 277,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Mai",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 19,
+      "wohneinheiten" : 0,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Mai",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 0,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 55,
+      "wohneinheiten" : 77,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 112,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 4,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 3,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 39,
+      "wohneinheiten" : 11,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "November",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 1,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "September",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 51,
+      "wohneinheiten" : 320,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "November",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 26,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Juli",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 37,
+      "wohneinheiten" : 40,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 47,
+      "wohneinheiten" : 23,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "August",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 20,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "September",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 64,
+      "wohneinheiten" : 144,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 8,
+      "wohneinheiten" : 24,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 49,
+      "wohneinheiten" : 14,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 32,
+      "wohneinheiten" : 55,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 60,
+      "wohneinheiten" : 30,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 143,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 35,
+      "wohneinheiten" : 56,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 73,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 62,
+      "wohneinheiten" : 185,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 30,
+      "wohneinheiten" : 36,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "Juni",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 5,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "M�rz",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 292,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2016,
+      "month" : "April",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 7,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 63,
+      "wohneinheiten" : 132,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 42,
+      "wohneinheiten" : 81,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juli",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "April",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 12,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 67,
+      "wohneinheiten" : 149,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 24,
+      "wohneinheiten" : 268,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Juli",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 21,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 18,
+      "wohneinheiten" : 6,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "Februar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 12,
+      "wohneinheiten" : 4,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "August",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 27,
+      "wohneinheiten" : 39,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2018,
+      "month" : "Oktober",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 36,
+      "wohneinheiten" : 21,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2018,
+      "month" : "M�rz",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 57,
+      "wohneinheiten" : 98,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Dezember",
+      "bezirk" : "Harburg",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 15,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Mai",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 11,
+      "wohneinheiten" : 5,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2017,
+      "month" : "Juni",
+      "bezirk" : "Wandsbek",
+      "bauvorhaben" : 70,
+      "wohneinheiten" : 131,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2017,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 45,
+      "wohneinheiten" : 254,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2015,
+      "month" : "Oktober",
+      "bezirk" : "Hamburg-Mitte",
+      "bauvorhaben" : 29,
+      "wohneinheiten" : 16,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Oktober",
+      "bezirk" : "Eimsb�ttel",
+      "bauvorhaben" : 44,
+      "wohneinheiten" : 25,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2019,
+      "month" : "Januar",
+      "bezirk" : "Bergedorf",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 6,
+      "constructionStarted" : true
+  },
+  {
+      "year" : 2015,
+      "month" : "M�rz",
+      "bezirk" : "Altona",
+      "bauvorhaben" : 10,
+      "wohneinheiten" : 1,
+      "constructionStarted" : false
+  },
+  {
+      "year" : 2016,
+      "month" : "Januar",
+      "bezirk" : "Hamburg-Nord",
+      "bauvorhaben" : 25,
+      "wohneinheiten" : 80,
+      "constructionStarted" : true
+  }
+]
