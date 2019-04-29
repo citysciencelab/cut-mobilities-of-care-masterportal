@@ -10,7 +10,8 @@ function initializeCockpitModel () {
             "filterObject": {
                 "districts": [],
                 "years": [],
-                "monthMode": true
+                "monthMode": true,
+                "flatMode": true
             },
             "data": []
         };
