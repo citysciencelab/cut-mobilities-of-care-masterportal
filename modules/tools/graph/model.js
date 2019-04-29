@@ -136,13 +136,14 @@ const GraphModel = Backbone.Model.extend({
     },
 
 
-    createAxisBottom: function (scale, xAxisTicks, xAxisTickValues) {
+    createAxisBottom: function (scale, xAxisTicks) {
         var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
             d3Object;
 
-        if (!_.isUndefined(xAxisTickValues) && _.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
+        // if (!_.isUndefined(xAxisTickValues) && _.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
+        if (_.has(xAxisTicks, "ticks")) {
             d3Object = _.isUndefined(scale) ? undefined : axisBottom(scale)
-                .tickValues(xAxisTickValues)
+                .tickValues(xAxisTicks.ticks)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
@@ -502,14 +503,16 @@ const GraphModel = Backbone.Model.extend({
             scaleY = this.createScaleY(data, height, scaleTypeY, flatAttrToShowArray),
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
-            xAxisTickValues = graphConfig.xAxisTickValues,
-            xAxis = this.createAxisBottom(scaleX, xAxisTicks, xAxisTickValues),
+            // xAxisTickValues = graphConfig.xAxisTickValues,
+            // xAxis = this.createAxisBottom(scaleX, xAxisTicks, xAxisTickValues),
+            xAxis = this.createAxisBottom(scaleX, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
             valueLine;
+console.log(xAxisTicks);
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);

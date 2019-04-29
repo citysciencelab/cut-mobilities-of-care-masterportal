@@ -263,7 +263,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         var date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? _.map(data, function (val) {
-                val.timestamp = moment(val.timestamp).format("HH:mm") + " Uhr";
+                val.timestamp = moment(val.timestamp).format("HH:mm");
                 return val;
             }) : "",
             legendArray = data ? this.getLegendAttributes(data[0]) : "";
@@ -276,7 +276,10 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 offset: 10
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 6),
+            xAxisTicks: {
+                unit: "Uhr",
+                ticks: this.createxAxisTickValues(data, 6)
+            },
             legendArray: legendArray
         };
     },
@@ -304,7 +307,9 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 offset: 10
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 1),
+            xAxisTicks: {
+                ticks: this.createxAxisTickValues(data, 1)
+            },
             legendArray: legendArray
         };
     },
@@ -331,7 +336,10 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 offset: 10
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 5),
+            xAxisTicks: {
+                unit: "Kw",
+                ticks: this.createxAxisTickValues(data, 5)
+            },
             legendArray: legendArray
         };
     },
@@ -404,7 +412,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 scaleTypeY: "linear",
                 data: dataset.data,
                 xAttr: "timestamp",
-                xAxisTickValues: dataset.xAxisTickValues,
+                xAxisTicks: dataset.xAxisTicks,
                 xAxisLabel: {
                     label: dataset.xLabel,
                     translate: 20
