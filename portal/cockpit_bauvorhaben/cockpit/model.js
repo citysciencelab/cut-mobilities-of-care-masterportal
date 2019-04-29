@@ -11,7 +11,7 @@ function initializeCockpitModel () {
                 "districts": [],
                 "years": [],
                 "monthMode": true,
-                "flatMode": true
+                "flatMode": false
             },
             "data": []
         };
@@ -33,8 +33,9 @@ function initializeCockpitModel () {
             const years = this.get("filterObject").years.sort(),
                 districts = this.get("filterObject").districts,
                 isMonthsSelected = this.get("filterObject").monthMode,
+                isOnlyFlatSelected = this.get("filterObject").flatMode,
                 data = this.get("data"),
-                filteredData = this.filterData(data, districts, years),
+                filteredData = this.filterData(data, districts, years, isOnlyFlatSelected),
                 dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
                 dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true, false]}),
                 dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
@@ -84,10 +85,22 @@ function initializeCockpitModel () {
                 this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date");
             }
         },
-        filterData: function (data, districts, years) {
+        filterData: function (data, districts, years, isOnlyFlatSelected) {
             const filteredDataByDistrict = this.filterByAttribute(data, districts, "bezirk"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
-                filteredTotal = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
+                filtered = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
+            let filteredTotal = [];
+
+            if (isOnlyFlatSelected) {
+                filtered.forEach(function (obj) {
+                    if (obj.wohneinheiten > 0) {
+                        filteredTotal.push(obj);
+                    }
+                });
+            }
+            else {
+                filteredTotal = filtered;
+            }
 
             return filteredTotal;
         },
