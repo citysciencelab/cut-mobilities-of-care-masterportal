@@ -19,6 +19,10 @@ const GFIDetachedView = DesktopView.extend({
                 // $(".gfi").css("top", (ui.position.top - 50) + "px");
             }
         });
+
+        if (this.model.getInfoFormatHTML() === true) {
+            $(".gfi").addClass("gfi-text-html");
+        }
     },
 
     toggle: function () {

@@ -31,7 +31,8 @@ const Gfi = Tool.extend({
         rotateAngle: 0,
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
-        unlisten: false
+        unlisten: false,
+        infoFormatHTML: false
     }),
     initialize: function () {
         var channel = Radio.channel("GFI");
@@ -414,6 +415,11 @@ const Gfi = Tool.extend({
             if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
                 layer.attributes.gfiUrl = layer.getGfiUrl();
                 wmsGfiParams.push(layer.attributes);
+
+                if (layer.get("infoFormat") === "text/html") {
+                    this.setInfoFormatHTML(true);
+                }
+
             }
         }, this);
 
@@ -560,6 +566,12 @@ const Gfi = Tool.extend({
 
     setIsMapMarkerVisible: function (value) {
         this.set("isMapMarkerVisible", value);
+    },
+    setInfoFormatHTML: function (value) {
+        this.set("infoFormatHTML", value);
+    },
+    getInfoFormatHTML: function () {
+        return this.get("infoFormatHTML");
     }
 
 });
