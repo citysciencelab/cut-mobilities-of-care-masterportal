@@ -19,10 +19,6 @@ const GFIDetachedView = DesktopView.extend({
                 // $(".gfi").css("top", (ui.position.top - 50) + "px");
             }
         });
-
-        if (this.model.getInfoFormatHTML() === true) {
-            $(".gfi").addClass("gfi-text-html");
-        }
     },
 
     toggle: function () {
@@ -36,6 +32,9 @@ const GFIDetachedView = DesktopView.extend({
         }
         else {
             this.$el.hide();
+            if (this.$el.hasClass("gfi-text-html")) {
+                this.$el.removeClass("gfi-text-html");
+            }
             Radio.trigger("MapMarker", "hideMarker");
             Radio.trigger("GFI", "hideGFI");
         }
