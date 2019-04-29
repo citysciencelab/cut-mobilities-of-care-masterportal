@@ -10,14 +10,14 @@ before(function () {
 describe("tools/graph", function () {
 
     describe("createMaxValue", function () {
-        it("should return 1 for undefined input", function () {
-            expect(model.createMaxValue(undefined, undefined)).to.equal(1);
+        it("should return 0 for undefined input", function () {
+            expect(model.createMaxValue(undefined, undefined)).to.equal(0);
         });
-        it("should return 1 for empty input", function () {
-            expect(model.createMaxValue([], [])).to.equal(1);
+        it("should return 0 for empty input", function () {
+            expect(model.createMaxValue([], [])).to.equal(0);
         });
-        it("should return 1 for inccorect input", function () {
-            expect(model.createMaxValue(["abc"], [321])).to.equal(1);
+        it("should return 0 for inccorect input", function () {
+            expect(model.createMaxValue(["abc"], [321])).to.equal(0);
         });
         it("should return meanvalue for correct input", function () {
             var data = [{
@@ -33,22 +33,22 @@ describe("tools/graph", function () {
         });
     });
     describe("createValues", function () {
-        it("should return an object with minValue 0 and maxValue 1 for undefined input", function () {
+        it("should return an object with minValue 0 and maxValue 0 for undefined input", function () {
             expect(model.createValues(undefined, undefined, undefined)).to.be.an("object").to.deep.include({
                 minValue: 0,
-                maxValue: 1
+                maxValue: 0
             });
         });
-        it("should return an object with minValue 0 and maxValue 1 for empty input", function () {
+        it("should return an object with minValue 0 and maxValue 0 for empty input", function () {
             expect(model.createValues([], [], {})).to.be.an("object").to.deep.include({
                 minValue: 0,
-                maxValue: 1
+                maxValue: 0
             });
         });
-        it("should return an object with minValue 0 and maxValue 1 for incorrect input", function () {
+        it("should return an object with minValue 0 and maxValue 0 for incorrect input", function () {
             expect(model.createValues(["abc"], ["def"], {test: 123})).to.be.an("object").to.deep.include({
                 minValue: 0,
-                maxValue: 1
+                maxValue: 0
             });
         });
         it("should return an object with minValue 0 and maxValue 1 for incorrect input", function () {
