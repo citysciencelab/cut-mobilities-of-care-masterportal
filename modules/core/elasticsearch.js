@@ -37,7 +37,7 @@ const ElasticSearchModel = Backbone.Model.extend({
             dataType: "json",
             context: this,
             url: searchUrl,
-            // async: false,
+            async: false,
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
@@ -57,23 +57,17 @@ const ElasticSearchModel = Backbone.Model.extend({
 
                 result.hits = datasources;
             },
-            error: function (err) {
-                console.log(err.status);
-                if (err.status !== 0) { // Bei abort keine Fehlermeldung
-                    this.showError(err);
+            error: function (xhr, ajaxOptions, thrownError) {
+                result.status = "error";
+                result.message = "ElasticSearch query went wrong with message: " + thrownError;
+                if (xhr.status !== 0) { // Bei abort keine Fehlermeldung
+                    console.error("error", thrownError);
                 }
-                // console.log(Radio.trigger("Searchbar", "abortSearch", "gdi"));
                 Radio.trigger("Searchbar", "abortSearch", "gdi");
+                return result;
             },
-            // error: function (xhr, ajaxOptions, thrownError) {
-            //     result.status = "error";
-            //     result.message = "ElasticSearch query went wrong with message: " + thrownError;
-            //     console.error("error", thrownError);
-            //     console.log(result);
-            //     return result;
-            // },
             complete: function () {
-                this.polishAjax(serviceId);
+                this.polishAjax(result);
             }
         });
     },
