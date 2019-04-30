@@ -3,13 +3,14 @@ const SidebarModel = Backbone.Model.extend({
         // true if sidebar is visible
         isVisible: false,
         // true if viewport width < 768px
-        isMobile: false
+        isMobile: false,
+        width: "30%"
     },
     initialize: function () {
         var channel = Radio.channel("Sidebar");
 
         this.listenTo(channel, {
-            "toggle": this.setIsVisible,
+            "toggle": this.toggle,
             "append": this.addContent
         });
         this.listenTo(Radio.channel("Util"), {
@@ -30,9 +31,17 @@ const SidebarModel = Backbone.Model.extend({
     setIsMobile: function (value) {
         this.set("isMobile", value);
     },
-
+    toggle: function (isVisible, width) {
+        if (width !== undefined) {
+            this.setWidth(width);
+        }
+        this.setIsVisible(isVisible);
+    },
     setIsVisible: function (value) {
         this.set("isVisible", value);
+    },
+    setWidth: function (value) {
+        this.set("width", value);
     }
 });
 

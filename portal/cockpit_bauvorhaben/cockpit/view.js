@@ -50,7 +50,7 @@ const CockpitView = Backbone.View.extend({
 
             this.$el.html(this.template(attr));
             Radio.trigger("Sidebar", "append", this.el);
-            Radio.trigger("Sidebar", "toggle", true);
+            Radio.trigger("Sidebar", "toggle", true, "40%");
             this.delegateEvents();
         }
         else {
