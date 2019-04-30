@@ -4,8 +4,8 @@ import * as moment from "moment";
 const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     /**
      * @class ThemeModel
-     * @extends GFI
-     * @memberof GFI.Themes
+     * @extends Tools.GFI
+     * @memberof Tools.GFI.Themes
      * @constructs
      * @fires AlertingModel#RadioTriggerAlertAlert
      * @fires Util#RadioRequestUtilGetProxyURL
