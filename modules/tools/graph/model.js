@@ -43,13 +43,15 @@ const GraphModel = Backbone.Model.extend({
     createMaxValue: function (data, attrToShowArray) {
         var maxValue = 0;
 
-        data.forEach(function (obj) {
-            attrToShowArray.forEach(function (attrToShow) {
-                if (obj[attrToShow] > maxValue) {
-                    maxValue = obj[attrToShow];
-                }
+        if (data !== undefined && attrToShowArray !== undefined) {
+            data.forEach(function (obj) {
+                attrToShowArray.forEach(function (attrToShow) {
+                    if (obj[attrToShow] > maxValue) {
+                        maxValue = obj[attrToShow];
+                    }
+                });
             });
-        });
+        }
 
         return maxValue;
     },
@@ -140,17 +142,19 @@ const GraphModel = Backbone.Model.extend({
         var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
             d3Object;
 
-        // if (!_.isUndefined(xAxisTickValues) && _.isUndefined(xAxisTicks) || !_.has(xAxisTicks, "ticks")) {
-        if (_.has(xAxisTicks, "ticks")) {
-            d3Object = _.isUndefined(scale) ? undefined : axisBottom(scale)
-                .tickValues(xAxisTicks.ticks)
+        if (xAxisTicks === undefined) {
+            d3Object = axisBottom(scale);
+        }
+        else if (_.has(xAxisTicks, "values") && !_.has(xAxisTicks, "factor")) {
+            d3Object = axisBottom(scale)
+                .tickValues(xAxisTicks.values)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
         }
-        else {
+        else if (_.has(xAxisTicks, "values") && _.has(xAxisTicks, "factor")) {
             d3Object = axisBottom(scale)
-                .ticks(xAxisTicks.ticks, xAxisTicks.factor)
+                .ticks(xAxisTicks.values, xAxisTicks.factor)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
@@ -503,8 +507,6 @@ const GraphModel = Backbone.Model.extend({
             scaleY = this.createScaleY(data, height, scaleTypeY, flatAttrToShowArray),
             xAxisTicks = graphConfig.xAxisTicks,
             yAxisTicks = graphConfig.yAxisTicks,
-            // xAxisTickValues = graphConfig.xAxisTickValues,
-            // xAxis = this.createAxisBottom(scaleX, xAxisTicks, xAxisTickValues),
             xAxis = this.createAxisBottom(scaleX, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
@@ -512,7 +514,6 @@ const GraphModel = Backbone.Model.extend({
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
             valueLine;
-console.log(xAxisTicks);
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);

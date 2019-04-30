@@ -11,7 +11,7 @@ function initializeCockpitModel () {
                 "districts": [],
                 "years": [],
                 "monthMode": true,
-                "flatMode": true
+                "flatMode": false
             },
             "data": []
         };
@@ -29,16 +29,21 @@ function initializeCockpitModel () {
             this.setData(dataJSON);
             this.trigger("render");
         },
+        /**
+         * Prepares data for creating the graphs for Cockpit
+         * @returns {void}
+         */
         prepareDataForGraph: function () {
             const years = this.get("filterObject").years.sort(),
                 districts = this.get("filterObject").districts,
                 isMonthsSelected = this.get("filterObject").monthMode,
+                isOnlyFlatSelected = this.get("filterObject").flatMode,
                 data = this.get("data"),
-                filteredData = this.filterData(data, districts, years),
-                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "bauvorhaben", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [false]}),
-                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "wohneinheiten", {attributeName: "constructionStarted", values: [true]}),
+                filteredData = this.filterData(data, districts, years, isOnlyFlatSelected),
+                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]}),
+                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]}),
                 attributesToShow = [];
 
             if (filteredData.length > 0) {
@@ -78,19 +83,66 @@ function initializeCockpitModel () {
                         }
                     }
                 });
-                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date");
-                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date");
-                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date");
-                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date");
+                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
+                if (isMonthsSelected) {
+                    this.postprocessGraphs(years.length);
+                }
             }
         },
-        filterData: function (data, districts, years) {
-            const filteredDataByBezirk = this.filterByAttribute(data, districts, "bezirk"),
+        /**
+         * Performs a postprocessing of the created graphs.
+         * The texts under the ticks are moved inbetween the ticks on the right
+         * @param {Number} segments Number of segments
+         * @returns {void}
+         */
+        postprocessGraphs: function (segments) {
+            const tickTexts = $.find(".xAxisDraw > .tick > text"),
+                xAxisDraw = $.find(".xAxisDraw > .domain")[0],
+                xAxisWidth = xAxisDraw.getBoundingClientRect().width,
+                widthPerSegment = Math.round(xAxisWidth / segments);
+
+            tickTexts.forEach(function (tickText) {
+                tickText.innerHTML = tickText.innerHTML.substring(0, 4);
+                $(tickText).attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
+            });
+        },
+        /**
+         * Filters data by selected districts, years and isOnlyFlatSelected
+         * @param {Object[]} data All data
+         * @param {String[]} districts All Selected districts
+         * @param {Number[]} years All selected years
+         * @param {Boolean} isOnlyFlatSelected Flag if only the data objects have to be selected that have an "living_unit_count" > 0
+         * @returns {Object[]} - filtered Data
+         */
+        filterData: function (data, districts, years, isOnlyFlatSelected) {
+            const filteredDataByDistrict = this.filterByAttribute(data, districts, "district"),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
-                filteredTotal = this.intersectArrays(filteredDataByBezirk, filteredDataByYear);
+                filtered = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
+            let filteredTotal = [];
+
+            if (isOnlyFlatSelected) {
+                filtered.forEach(function (obj) {
+                    if (obj.living_unit_count > 0) {
+                        filteredTotal.push(obj);
+                    }
+                });
+            }
+            else {
+                filteredTotal = filtered;
+            }
 
             return filteredTotal;
         },
+        /**
+         * Filters data objects whose "attributeName" is within the "valuesArray"
+         * @param {Object[]} data Object Array to be filtered
+         * @param {*[]} valuesArray Array of possible Values
+         * @param {String} attributeName Name of the attribute that has to be filtered
+         * @returns {Object[]} - Objects whose "attributeName" matches one value of the "valuesArray"
+         */
         filterByAttribute: function (data, valuesArray, attributeName) {
             const filteredData = [];
 
@@ -104,6 +156,12 @@ function initializeCockpitModel () {
 
             return filteredData;
         },
+        /**
+         * Intersects two arrays returning only the objects that are contained in both
+         * @param {Object[]} array1 First array of objects
+         * @param {Object[]} array2 Second array of object
+         * @returns {Object[]} - Array of objects containing the objects that are in both arrays
+         */
         intersectArrays: function (array1, array2) {
             const intersections = [];
 
@@ -114,17 +172,40 @@ function initializeCockpitModel () {
             });
             return intersections;
         },
+        /**
+         * Prepares the data based on the given params so that the graph can be generated.
+         * @param {Object[]} data All data.
+         * @param {String[]} districts Selected districts.
+         * @param {Number []} years Selected years.
+         * @param {Boolean} isMonthsSelected Flag if months view is checked
+         * @param {String} attrName Name of the atttribute to be aggregated
+         * @param {Object} condition Condition
+         * @param {String} condition.attributeName Attribute name of the condition
+         * @param {*[]} condition.values Attribute values of the condition
+         * @returns {Object[]} - prepared Data.
+         */
         prepareData: function (data, districts, years, isMonthsSelected, attrName, condition) {
             var preparedData = [],
-                months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+                months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                months_short = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
-            districts.forEach(function (bezirk) {
+            districts.forEach(function (district) {
                 years.forEach(function (year) {
-                    months.forEach(function (month) {
-                        let filteredObjs = data.filter(obj => obj.bezirk === bezirk && obj.year === year && obj.month === month);
+                    months.forEach(function (month, i) {
+                        let filteredObjs = data.filter(obj => obj.district === district && obj.year === year && obj.month === month);
+                        const fakeObj = {};
 
                         if (filteredObjs.length > 1) {
                             filteredObjs = this.aggregateByValues(filteredObjs, condition, attrName);
+                        }
+                        // create fake data for each timestep
+                        if (filteredObjs.length === 0) {
+                            fakeObj.year = year;
+                            fakeObj.month = month;
+                            fakeObj.month_short = months_short[i];
+                            fakeObj.district = district;
+                            fakeObj[attrName] = 0;
+                            filteredObjs.push(fakeObj);
                         }
                         if (filteredObjs.length === 1) {
                             preparedData.push(filteredObjs[0]);
@@ -132,19 +213,54 @@ function initializeCockpitModel () {
                     }, this);
                 }, this);
             }, this);
-            if (isMonthsSelected) {
-                preparedData.forEach(function (obj) {
-                    obj.date = obj.year + this.mapMonth(obj.month);
-                }, this);
-            }
-            else {
-                //todo aggregiere alle monate auf das jahr
-            }
+            preparedData = this.mergeMonthsToYears(preparedData, isMonthsSelected, years, districts, attrName);
             preparedData = this.mergeByAttribute(preparedData, "date", attrName);
             preparedData = this.addNullValues(preparedData, districts);
             preparedData = Radio.request("Util", "sort", preparedData, "date");
             return preparedData;
         },
+        /**
+         * If "isMonthsSelcted"=== true: Creates an attribute "date" on each object consisting of year and month (yyyymm).
+         * If "isMonthsSelcted"=== false: Merges the months for each district and year to a single object. Creates attribute "date" with eqals to "year".
+         * @param {Object[]} data Data to merge.
+         * @param {Boolean} isMonthsSelected Flag if months view is checked.
+         * @param {Number[]} years Selected years.
+         * @param {String[]} districts Selected districts.
+         * @param {String} attrName Attribute name
+         * @returns {Object[]} - merged data.
+         */
+        mergeMonthsToYears: function (data, isMonthsSelected, years, districts, attrName) {
+            const preparedData = [];
+
+            if (isMonthsSelected) {
+                data.forEach(function (obj) {
+                    obj.date = obj.year + obj.month_short;
+                    preparedData.push(obj);
+                }, this);
+            }
+            else {
+                years.forEach(function (year) {
+                    districts.forEach(function (district) {
+                        const preparedYear = {
+                                date: year,
+                                district: district
+                            },
+                            prefilteredData = data.filter(obj => obj.year === year && obj.district === district),
+                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: "district", values: [district]}, attrName);
+
+                        preparedYear[attrName] = aggregate[0][attrName];
+                        preparedData.push(preparedYear);
+                    }, this);
+                }, this);
+            }
+            return preparedData;
+        },
+        /**
+         * Adds for each object the attribute of a district with the value of 0. Only if the attribute is undefined.
+         * @param {Object[]} data Object array to be extended.
+         * @param {String[]} districts Selected districts.
+         * @returns {Object[]} - the extended data.
+         */
         addNullValues: function (data, districts) {
             data.forEach(function (obj) {
                 districts.forEach(function (value) {
@@ -155,6 +271,13 @@ function initializeCockpitModel () {
             });
             return data;
         },
+        /**
+         * Sorts the data by "sortAttrName" and maps the attribute values to the districts.
+         * @param {Object[]} data Data
+         * @param {String} sortAttrName Attribute name the data array is sorted.
+         * @param {String} mergeAttr Attribute name of object that has to be mapped to the district.
+         * @returns {Object[]} - mapped data.
+         */
         mergeByAttribute: function (data, sortAttrName, mergeAttr) {
             let values = [];
             const mergedData = [];
@@ -172,9 +295,9 @@ function initializeCockpitModel () {
 
                 mergedObj[sortAttrName] = value;
                 filteredObjs.forEach(function (obj) {
-                    const bezirk = obj.bezirk;
+                    const district = obj.district;
 
-                    mergedObj[bezirk] = obj[mergeAttr];
+                    mergedObj[district] = obj[mergeAttr];
                     mergedObj.class = "dot";
                     mergedObj.style = "circle";
                 });
@@ -183,6 +306,15 @@ function initializeCockpitModel () {
 
             return mergedData;
         },
+        /**
+         * Aggregates the data by attrName matching the condition.
+         * @param {Object[]} data Data to be aggregated.
+         * @param {Object} condition Condition.
+         * @param {String} condition.attributeName Attribute name of the condition.
+         * @param {*[]} condition.values Attribute values of the condition.
+         * @param {String} attrName Attribute name to be aggregated.
+         * @returns {Object[]} - Array of on aggregated object.
+         */
         aggregateByValues: function (data, condition, attrName) {
             const conditionAttribute = condition.attributeName,
                 conditionValues = condition.values,
@@ -198,85 +330,75 @@ function initializeCockpitModel () {
                     }
                 }
             });
+            aggregate[conditionAttribute] = undefined;
             return [aggregate];
         },
-        mapMonth: function (month) {
-            switch (month) {
-                case "Januar": {
-                    return "01";
-                }
-                case "Februar": {
-                    return "02";
-                }
-                case "März": {
-                    return "03";
-                }
-                case "April": {
-                    return "04";
-                }
-                case "Mai": {
-                    return "05";
-                }
-                case "Juni": {
-                    return "06";
-                }
-                case "Juli": {
-                    return "07";
-                }
-                case "August": {
-                    return "08";
-                }
-                case "September": {
-                    return "09";
-                }
-                case "Oktober": {
-                    return "10";
-                }
-                case "November": {
-                    return "11";
-                }
-                case "Dezember": {
-                    return "12";
-                }
-                default: {
-                    return "";
-                }
-            }
-        },
-        createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr) {
-            const graphConfig = {
-                graphType: "Linegraph",
-                selector: selector,
-                width: 400,
-                height: 250,
-                margin: {top: 20, right: 20, bottom: 50, left: 70},
-                svgClass: "graph-svg",
-                selectorTooltip: selectorTooltip,
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                data: data,
-                xAttr: xAttr,
-                xAxisTicks: {
-                    unit: "abc",
-                    ticks: ["201001", "201101", "201201", "201301", "201401", "201501", "201601", "201701", "201801"],
-                    factor: 2
-                },
-                // xAxisTickValues: ["201001", "201101", "201201", "201301", "201401", "201501", "201601", "201701", "201801"],
-                xAxisLabel: {
-                    label: "Jahre",
-                    translate: 20
-                },
-                yAxisLabel: {
-                    label: "Anzahl",
-                    offset: 10
-                },
-                attrToShowArray: attributesToShow,
-                legendData: []
-            };
+        /**
+         * Creates the graph
+         * @param {Object[]} data Prepared data.
+         * @param {String} selector Selector class of graph.
+         * @param {String} selectorTooltip Selector class of graph-tooltip.
+         * @param {attributeToShow[]} attributesToShow Array of attributes to show.
+         * @param {String} xAttr Attribute name for x axis.
+         * @param {Boolean} isMonthsSelected Flag if monthsMode is selected.
+         * @param {Object} attributeToShow Attributes to show.
+         * @param {String} attributeToShow.attrName Attributes name.
+         * @param {String} attributeToShow.attrClass Attributes class.
+         * @returns {void}
+         * @fires Graph#RadioTriggerGraphCreateGraph
+         */
+        createGraph: function (data, selector, selectorTooltip, attributesToShow, xAttr, isMonthsSelected) {
+            const xAxisTicks = this.createTicks(data, isMonthsSelected),
+                graphConfig = {
+                    graphType: "Linegraph",
+                    selector: selector,
+                    width: 400,
+                    height: 250,
+                    margin: {top: 20, right: 20, bottom: 50, left: 70},
+                    svgClass: "graph-svg",
+                    selectorTooltip: selectorTooltip,
+                    scaleTypeX: "ordinal",
+                    scaleTypeY: "linear",
+                    data: data,
+                    xAttr: xAttr,
+                    xAxisTicks: xAxisTicks,
+                    xAxisLabel: {
+                        label: "Jahre",
+                        translate: 20
+                    },
+                    yAxisLabel: {
+                        label: "Anzahl",
+                        offset: 10
+                    },
+                    attrToShowArray: attributesToShow,
+                    legendData: []
+                };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
         },
+        /**
+         * Creates ticks if monthsMode is selected.
+         * @param {Object[]} data Prepared data.
+         * @param {Boolean} isMonthsSelected Flag if monthsMode is selected.
+         * @returns {undefined/Object[]} - xAxisTicks if "isMonthsSelected". Otherwise undefined.
+         */
+        createTicks: function (data, isMonthsSelected) {
+            let xAxisTicks;
+            const values = [];
 
+            if (isMonthsSelected) {
+                data.forEach(function (obj) {
+                    if (obj.date.length === 6 && obj.date.match(/.*01$/)) {
+                        values.push(obj.date);
+                    }
+                });
+                xAxisTicks = {
+                    values: values
+                };
+            }
+
+            return xAxisTicks;
+        },
         filterYears: function (data) {
             const t = _.pluck(data, "year");
 
@@ -286,7 +408,7 @@ function initializeCockpitModel () {
         },
 
         filterDistricts: function (data) {
-            const t = _.pluck(data, "bezirk");
+            const t = _.pluck(data, "district");
 
             this.setDistricts([...new Set(t)].sort());
         },

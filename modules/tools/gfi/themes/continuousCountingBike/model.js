@@ -278,7 +278,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             graphArray: graphArray,
             xAxisTicks: {
                 unit: "Uhr",
-                ticks: this.createxAxisTickValues(data, 6)
+                values: this.createxAxisTickValues(data, 6)
             },
             legendArray: legendArray
         };
@@ -308,7 +308,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             },
             graphArray: graphArray,
             xAxisTicks: {
-                ticks: this.createxAxisTickValues(data, 1)
+                values: this.createxAxisTickValues(data, 1)
             },
             legendArray: legendArray
         };
@@ -338,7 +338,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             graphArray: graphArray,
             xAxisTicks: {
                 unit: "Kw",
-                ticks: this.createxAxisTickValues(data, 5)
+                values: this.createxAxisTickValues(data, 5)
             },
             legendArray: legendArray
         };
