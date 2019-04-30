@@ -294,22 +294,18 @@ function initializeCockpitModel () {
         updateLayer: function (filterObject) {
             const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
 
-            if (layer !== undefined) {
-                const layers = [],
-                    layerSource = layer.get("layer").getSource();
-
-                filterObject.years.forEach(function (year) {
-                    if (year !== 2010 && year !== 2019) {
-                        layers.push("bauvorhaben_" + year + "_erledigt");
-                    }
+            layer.get("layer").getLayers().forEach(function (ollayer) {
+                const yearByLayerName = filterObject.years.filter(function (year) {
+                    return ollayer.get("name") === year + " - erledigt";
                 });
-                if (layers.length === 0) {
-                    layerSource.updateParams({LAYERS: ","});
+
+                if (yearByLayerName.length === 0) {
+                    ollayer.setVisible(false);
                 }
                 else {
-                    layerSource.updateParams({LAYERS: layers.toString()});
+                    ollayer.setVisible(true);
                 }
-            }
+            });
         },
 
         setYears: function (value) {
@@ -326,7 +322,7 @@ function initializeCockpitModel () {
 
         setFilterObjectByKey: function (key, value) {
             this.get("filterObject")[key] = value;
-            // this.updateLayer(this.get("filterObject"));
+            this.updateLayer(this.get("filterObject"));
         }
     });
 
