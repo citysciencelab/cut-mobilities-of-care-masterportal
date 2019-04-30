@@ -86,16 +86,20 @@ const CockpitView = Backbone.View.extend({
      * @returns {void}
      */
     mapSelectedValues: function (evt, key) {
-        // const selectedValues = Array.from(evt.target.selectedOptions).map(option => option.value);
-        const selectedValues = Array.from(evt.target.selectedOptions).map(function (option) {
-            let value = option.value;
+        let selectedValues = Array.from(evt.target.options).map(function (option) {
+            const isOptionSelected = $(option)[0].selected;
+            let value;
 
-            if (!isNaN(parseInt(value, 10))) {
-                value = parseInt(value, 10);
+            if (isOptionSelected) {
+                value = $(option)[0].value;
+                if (!isNaN(parseInt(value, 10))) {
+                    value = parseInt(value, 10);
+                }
             }
             return value;
         });
 
+        selectedValues = _.without(selectedValues, undefined);
         this.model.setFilterObjectByKey(key, selectedValues);
     },
     redrawGraphs: function () {
