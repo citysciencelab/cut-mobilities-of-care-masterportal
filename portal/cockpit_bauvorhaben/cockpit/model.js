@@ -325,7 +325,7 @@ function initializeCockpitModel () {
 
         setFilterObjectByKey: function (key, value) {
             this.get("filterObject")[key] = value;
-            this.updateLayer(this.get("filterObject"));
+            // this.updateLayer(this.get("filterObject"));
         }
     });
 

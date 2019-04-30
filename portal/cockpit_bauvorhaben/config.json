@@ -130,9 +130,35 @@
               "isFolderSelectable": false,
               "Layer": [
                 {
-                  "id": ["13872", "13800", "13868", "13864", "13802", "13860", "13856", "13852"],
+                  "id": "13872",
                   "name": "Alle genehmigten Bauvorhaben",
-                  "visibility": true
+                  "visibility": true,
+                  "children": [
+                    {
+                      "id": "13872"
+                    },
+                    {
+                      "id": "13800"
+                    },
+                    {
+                      "id": "13868"
+                    },
+                    {
+                      "id": "13864"
+                    },
+                    {
+                      "id": "13802"
+                    },
+                    {
+                      "id": "13860"
+                    },
+                    {
+                      "id": "13856"
+                    },
+                    {
+                      "id": "13852"
+                    }
+                  ]
                 }
               ]
             },
