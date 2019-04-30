@@ -4,6 +4,13 @@
 @glyphicon-size: 18px;
 @default-padding: 6px;
 @vertical-align: text-bottom;
+@color-altona: #a6cee3;
+@color-bergedorf: #1f78b4;
+@color-eimsbuettel: #b2df8a;
+@color-hamburg-mitte: #33a02c;
+@color-hamburg-nord: #fb9a99;
+@color-harburg: #e31a1c;
+@color-wandsbek: #fdbf6f;
 
 
 #cockpit_bauvorhaben {
@@ -37,6 +44,34 @@
             font-size: @font-size;
         }
     }
+    .legend {
+        font: @font-family-bold;
+        font-size: @font-size;
+        .legend-header {
+            font-size: @font-size-large;
+        }
+        .legend-altona {
+            color: @color-altona;
+        }
+        .legend-bergedorf {
+            color: @color-bergedorf;
+        }
+        .legend-eimsbuettel {
+            color: @color-eimsbuettel;
+        }
+        .legend-hamburg-mitte {
+            color: @color-hamburg-mitte;
+        }
+        .legend-hamburg-nord {
+            color: @color-hamburg-nord;
+        }
+        .legend-harburg {
+            color: @color-harburg;
+        }
+        .legend-wandsbek {
+            color: @color-wandsbek;
+        }
+    }
     .graph-label {
         font-size: @font-size;
     }
@@ -55,37 +90,37 @@
     }
     .graph-line-altona {
         fill: none;
-        stroke: #a6cee3;
+        stroke: @color-altona;
         stroke-width: 1px;
     }
     .graph-line-bergedorf {
         fill: none;
-        stroke: #1f78b4;
+        stroke: @color-bergedorf;
         stroke-width: 1px;
     }
     .graph-line-eimsbuettel {
         fill: none;
-        stroke: #b2df8a;
+        stroke: @color-eimsbuettel;
         stroke-width: 1px;
     }
     .graph-line-hamburg-mitte {
         fill: none;
-        stroke: #33a02c;
+        stroke: @color-hamburg-mitte;
         stroke-width: 1px;
     }
     .graph-line-hamburg-nord {
         fill: none;
-        stroke: #fb9a99;
+        stroke: @color-hamburg-nord;
         stroke-width: 1px;
     }
     .graph-line-harburg {
         fill: none;
-        stroke: #e31a1c;
+        stroke: @color-harburg;
         stroke-width: 1px;
     }
     .graph-line-wandsbek {
         fill: none;
-        stroke: #fdbf6f;
+        stroke: @color-wandsbek;
         stroke-width: 1px;
     }
     .dot {
