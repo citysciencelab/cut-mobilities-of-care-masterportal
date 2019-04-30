@@ -45,6 +45,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 41,
+        "living_unit_count" : 12,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2016,
         "month" : "Oktober",
         "month_short" : "10",
@@ -91,6 +100,15 @@
     },
     {
         "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 14,
+        "living_unit_count" : 9,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2015,
         "month" : "November",
         "month_short" : "11",
         "district" : "Hamburg-Nord",
@@ -126,15 +144,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2014,
-        "month" : "Januar",
-        "month_short" : "01",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2017,
         "month" : "Juli",
         "month_short" : "07",
@@ -153,13 +162,13 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2017,
-        "month" : "März",
+        "year" : 2016,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 46,
-        "living_unit_count" : 72,
-        "constructionStarted" : true
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 25,
+        "living_unit_count" : 5,
+        "constructionStarted" : false
     },
     {
         "year" : 2016,
@@ -198,15 +207,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2014,
-        "month" : "Oktober",
-        "month_short" : "10",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 1,
-        "living_unit_count" : 6,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2016,
         "month" : "August",
         "month_short" : "08",
@@ -241,15 +241,6 @@
         "building_project_count" : 30,
         "living_unit_count" : 26,
         "constructionStarted" : false
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 45,
-        "living_unit_count" : 102,
-        "constructionStarted" : true
     },
     {
         "year" : 2019,
@@ -342,24 +333,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2014,
-        "month" : "Mai",
-        "month_short" : "05",
-        "district" : "Bergedorf",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2014,
-        "month" : "Dezember",
-        "month_short" : "12",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2018,
         "month" : "April",
         "month_short" : "04",
@@ -369,15 +342,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 4,
-        "living_unit_count" : 0,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2016,
         "month" : "Mai",
         "month_short" : "05",
@@ -385,6 +349,15 @@
         "building_project_count" : 51,
         "living_unit_count" : 111,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 52,
+        "living_unit_count" : 139,
+        "constructionStarted" : true
     },
     {
         "year" : 2015,
@@ -531,15 +504,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 52,
-        "living_unit_count" : 76,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2017,
         "month" : "August",
         "month_short" : "08",
@@ -549,21 +513,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2017,
-        "month" : "März",
+        "year" : 2018,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 42,
-        "living_unit_count" : 266,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2012,
-        "month" : "August",
-        "month_short" : "08",
-        "district" : "Harburg",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
+        "district" : "Altona",
+        "building_project_count" : 16,
+        "living_unit_count" : 3,
         "constructionStarted" : true
     },
     {
@@ -574,15 +529,6 @@
         "building_project_count" : 34,
         "living_unit_count" : 11,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 10,
-        "living_unit_count" : 1,
-        "constructionStarted" : false
     },
     {
         "year" : 2018,
@@ -630,15 +576,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2010,
-        "month" : "September",
-        "month_short" : "09",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2016,
         "month" : "Februar",
         "month_short" : "02",
@@ -663,6 +600,15 @@
         "district" : "Eimsbüttel",
         "building_project_count" : 21,
         "living_unit_count" : 43,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 57,
+        "living_unit_count" : 150,
         "constructionStarted" : true
     },
     {
@@ -721,6 +667,15 @@
     },
     {
         "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 37,
+        "living_unit_count" : 84,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2018,
         "month" : "November",
         "month_short" : "11",
         "district" : "Hamburg-Nord",
@@ -736,15 +691,6 @@
         "building_project_count" : 8,
         "living_unit_count" : 24,
         "constructionStarted" : false
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 18,
-        "living_unit_count" : 23,
-        "constructionStarted" : true
     },
     {
         "year" : 2016,
@@ -765,6 +711,15 @@
         "constructionStarted" : true
     },
     {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 37,
+        "living_unit_count" : 43,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2017,
         "month" : "Februar",
         "month_short" : "02",
@@ -780,6 +735,15 @@
         "district" : "Harburg",
         "building_project_count" : 39,
         "living_unit_count" : 134,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 45,
+        "living_unit_count" : 102,
         "constructionStarted" : true
     },
     {
@@ -802,12 +766,12 @@
     },
     {
         "year" : 2019,
-        "month" : "März",
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 6,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
+        "district" : "Harburg",
+        "building_project_count" : 25,
+        "living_unit_count" : 8,
+        "constructionStarted" : false
     },
     {
         "year" : 2017,
@@ -834,15 +798,6 @@
         "district" : "Wandsbek",
         "building_project_count" : 44,
         "living_unit_count" : 62,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 5,
-        "living_unit_count" : 0,
         "constructionStarted" : true
     },
     {
@@ -901,15 +856,6 @@
     },
     {
         "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 40,
-        "living_unit_count" : 42,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2018,
         "month" : "November",
         "month_short" : "11",
         "district" : "Harburg",
@@ -933,6 +879,15 @@
         "district" : "Hamburg-Mitte",
         "building_project_count" : 15,
         "living_unit_count" : 71,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 38,
+        "living_unit_count" : 74,
         "constructionStarted" : true
     },
     {
@@ -1026,15 +981,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 66,
-        "living_unit_count" : 149,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2016,
         "month" : "Oktober",
         "month_short" : "10",
@@ -1042,15 +988,6 @@
         "building_project_count" : 26,
         "living_unit_count" : 35,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 51,
-        "living_unit_count" : 153,
-        "constructionStarted" : false
     },
     {
         "year" : 2015,
@@ -1086,15 +1023,6 @@
         "district" : "Wandsbek",
         "building_project_count" : 55,
         "living_unit_count" : 22,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2012,
-        "month" : "August",
-        "month_short" : "08",
-        "district" : "Harburg",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
         "constructionStarted" : false
     },
     {
@@ -1140,15 +1068,6 @@
         "district" : "Bergedorf",
         "building_project_count" : 18,
         "living_unit_count" : 37,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 14,
-        "living_unit_count" : 2,
         "constructionStarted" : false
     },
     {
@@ -1216,21 +1135,12 @@
     },
     {
         "year" : 2017,
-        "month" : "März",
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 38,
-        "living_unit_count" : 41,
+        "district" : "Bergedorf",
+        "building_project_count" : 10,
+        "living_unit_count" : 3,
         "constructionStarted" : false
-    },
-    {
-        "year" : 2014,
-        "month" : "Oktober",
-        "month_short" : "10",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 2,
-        "constructionStarted" : true
     },
     {
         "year" : 2018,
@@ -1278,12 +1188,39 @@
         "constructionStarted" : true
     },
     {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 10,
+        "living_unit_count" : 1,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 48,
+        "living_unit_count" : 264,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2017,
         "month" : "November",
         "month_short" : "11",
         "district" : "Harburg",
         "building_project_count" : 20,
         "living_unit_count" : 32,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 38,
+        "living_unit_count" : 41,
         "constructionStarted" : false
     },
     {
@@ -1321,15 +1258,6 @@
         "building_project_count" : 26,
         "living_unit_count" : 5,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 70,
-        "living_unit_count" : 75,
-        "constructionStarted" : false
     },
     {
         "year" : 2016,
@@ -1428,24 +1356,6 @@
         "district" : "Hamburg-Mitte",
         "building_project_count" : 63,
         "living_unit_count" : 388,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 29,
-        "living_unit_count" : 33,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 41,
-        "living_unit_count" : 22,
         "constructionStarted" : false
     },
     {
@@ -1620,15 +1530,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 54,
-        "living_unit_count" : 60,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2018,
         "month" : "August",
         "month_short" : "08",
@@ -1636,6 +1537,15 @@
         "building_project_count" : 34,
         "living_unit_count" : 34,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 70,
+        "living_unit_count" : 75,
+        "constructionStarted" : false
     },
     {
         "year" : 2016,
@@ -1648,15 +1558,6 @@
     },
     {
         "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 6,
-        "living_unit_count" : 5,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2019,
         "month" : "April",
         "month_short" : "04",
         "district" : "Harburg",
@@ -1665,11 +1566,11 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2015,
-        "month" : "März",
+        "year" : 2019,
+        "month" : "Maerz",
         "month_short" : "03",
         "district" : "Bergedorf",
-        "building_project_count" : 6,
+        "building_project_count" : 7,
         "living_unit_count" : 2,
         "constructionStarted" : true
     },
@@ -1710,6 +1611,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 36,
+        "living_unit_count" : 292,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2015,
         "month" : "Januar",
         "month_short" : "01",
@@ -1743,6 +1653,15 @@
         "district" : "Eimsbüttel",
         "building_project_count" : 50,
         "living_unit_count" : 172,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 66,
+        "living_unit_count" : 149,
         "constructionStarted" : false
     },
     {
@@ -1828,20 +1747,11 @@
     },
     {
         "year" : 2015,
-        "month" : "März",
+        "month" : "Maerz",
         "month_short" : "03",
         "district" : "Hamburg-Nord",
         "building_project_count" : 29,
         "living_unit_count" : 22,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 38,
-        "living_unit_count" : 74,
         "constructionStarted" : true
     },
     {
@@ -1909,15 +1819,6 @@
     },
     {
         "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 25,
-        "living_unit_count" : 5,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2016,
         "month" : "Februar",
         "month_short" : "02",
         "district" : "Wandsbek",
@@ -1941,15 +1842,6 @@
         "district" : "Altona",
         "building_project_count" : 36,
         "living_unit_count" : 21,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 48,
-        "living_unit_count" : 264,
         "constructionStarted" : false
     },
     {
@@ -2070,30 +1962,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 16,
-        "living_unit_count" : 2,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "April",
         "month_short" : "04",
         "district" : "Eimsbüttel",
         "building_project_count" : 22,
         "living_unit_count" : 26,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2014,
-        "month" : "Dezember",
-        "month_short" : "12",
-        "district" : "Wandsbek",
-        "building_project_count" : 1,
-        "living_unit_count" : 10,
         "constructionStarted" : true
     },
     {
@@ -2187,15 +2061,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 57,
-        "living_unit_count" : 73,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2015,
         "month" : "November",
         "month_short" : "11",
@@ -2205,21 +2070,21 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 9,
-        "living_unit_count" : 5,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2016,
         "month" : "Januar",
         "month_short" : "01",
         "district" : "Wandsbek",
         "building_project_count" : 31,
         "living_unit_count" : 20,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 18,
+        "living_unit_count" : 6,
         "constructionStarted" : false
     },
     {
@@ -2250,15 +2115,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2013,
-        "month" : "April",
-        "month_short" : "04",
-        "district" : "Altona",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "Mai",
         "month_short" : "05",
@@ -2269,11 +2125,11 @@
     },
     {
         "year" : 2017,
-        "month" : "März",
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 25,
-        "living_unit_count" : 0,
+        "district" : "Eimsbüttel",
+        "building_project_count" : 40,
+        "living_unit_count" : 227,
         "constructionStarted" : false
     },
     {
@@ -2313,13 +2169,13 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2018,
-        "month" : "März",
+        "year" : 2017,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 16,
-        "living_unit_count" : 11,
-        "constructionStarted" : true
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 42,
+        "living_unit_count" : 266,
+        "constructionStarted" : false
     },
     {
         "year" : 2017,
@@ -2337,15 +2193,6 @@
         "district" : "Wandsbek",
         "building_project_count" : 51,
         "living_unit_count" : 50,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
         "constructionStarted" : true
     },
     {
@@ -2385,15 +2232,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2014,
-        "month" : "November",
-        "month_short" : "11",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 1,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2019,
         "month" : "Februar",
         "month_short" : "02",
@@ -2404,30 +2242,12 @@
     },
     {
         "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 30,
-        "living_unit_count" : 16,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2015,
         "month" : "Januar",
         "month_short" : "01",
         "district" : "Eimsbüttel",
         "building_project_count" : 1,
         "living_unit_count" : 0,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 40,
-        "living_unit_count" : 227,
-        "constructionStarted" : false
     },
     {
         "year" : 2018,
@@ -2448,31 +2268,13 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 24,
-        "living_unit_count" : 6,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 36,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
+        "year" : 2019,
+        "month" : "Maerz",
         "month_short" : "03",
         "district" : "Harburg",
         "building_project_count" : 4,
         "living_unit_count" : 0,
-        "constructionStarted" : false
+        "constructionStarted" : true
     },
     {
         "year" : 2018,
@@ -2482,6 +2284,15 @@
         "building_project_count" : 35,
         "living_unit_count" : 119,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 5,
+        "living_unit_count" : 0,
+        "constructionStarted" : true
     },
     {
         "year" : 2017,
@@ -2673,6 +2484,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 51,
+        "living_unit_count" : 153,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2017,
         "month" : "September",
         "month_short" : "09",
@@ -2691,30 +2511,12 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2012,
-        "month" : "November",
-        "month_short" : "11",
-        "district" : "Bergedorf",
-        "building_project_count" : 1,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "Dezember",
         "month_short" : "12",
         "district" : "Altona",
         "building_project_count" : 60,
         "living_unit_count" : 30,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 6,
-        "living_unit_count" : 6,
         "constructionStarted" : false
     },
     {
@@ -2725,15 +2527,6 @@
         "building_project_count" : 7,
         "living_unit_count" : 0,
         "constructionStarted" : false
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 41,
-        "living_unit_count" : 12,
-        "constructionStarted" : true
     },
     {
         "year" : 2016,
@@ -2817,15 +2610,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2013,
-        "month" : "August",
-        "month_short" : "08",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 5,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "Juli",
         "month_short" : "07",
@@ -2841,15 +2625,6 @@
         "district" : "Hamburg-Mitte",
         "building_project_count" : 53,
         "living_unit_count" : 68,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 29,
-        "living_unit_count" : 31,
         "constructionStarted" : false
     },
     {
@@ -2907,21 +2682,30 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 10,
-        "living_unit_count" : 7,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2015,
         "month" : "September",
         "month_short" : "09",
         "district" : "Hamburg-Nord",
         "building_project_count" : 38,
         "living_unit_count" : 9,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 57,
+        "living_unit_count" : 98,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 52,
+        "living_unit_count" : 76,
         "constructionStarted" : false
     },
     {
@@ -3015,15 +2799,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 13,
-        "living_unit_count" : 5,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2018,
         "month" : "August",
         "month_short" : "08",
@@ -3042,21 +2817,21 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 30,
+        "living_unit_count" : 34,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2018,
         "month" : "November",
         "month_short" : "11",
         "district" : "Harburg",
         "building_project_count" : 23,
         "living_unit_count" : 12,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 18,
-        "living_unit_count" : 6,
         "constructionStarted" : false
     },
     {
@@ -3087,15 +2862,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 10,
-        "living_unit_count" : 135,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2016,
         "month" : "Juni",
         "month_short" : "06",
@@ -3111,6 +2877,15 @@
         "district" : "Harburg",
         "building_project_count" : 29,
         "living_unit_count" : 22,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 36,
+        "living_unit_count" : 1,
         "constructionStarted" : true
     },
     {
@@ -3138,15 +2913,6 @@
         "district" : "Hamburg-Nord",
         "building_project_count" : 21,
         "living_unit_count" : 4,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2012,
-        "month" : "Dezember",
-        "month_short" : "12",
-        "district" : "Harburg",
-        "building_project_count" : 1,
-        "living_unit_count" : 6,
         "constructionStarted" : true
     },
     {
@@ -3186,12 +2952,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2019,
-        "month" : "März",
+        "year" : 2016,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 86,
-        "living_unit_count" : 337,
+        "district" : "Harburg",
+        "building_project_count" : 13,
+        "living_unit_count" : 5,
         "constructionStarted" : false
     },
     {
@@ -3220,6 +2986,15 @@
         "building_project_count" : 40,
         "living_unit_count" : 154,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 73,
+        "living_unit_count" : 247,
+        "constructionStarted" : false
     },
     {
         "year" : 2018,
@@ -3267,6 +3042,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 1,
+        "living_unit_count" : 0,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2015,
         "month" : "April",
         "month_short" : "04",
@@ -3292,6 +3076,24 @@
         "building_project_count" : 45,
         "living_unit_count" : 4,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 29,
+        "living_unit_count" : 33,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 40,
+        "living_unit_count" : 42,
+        "constructionStarted" : true
     },
     {
         "year" : 2015,
@@ -3367,7 +3169,7 @@
     },
     {
         "year" : 2015,
-        "month" : "März",
+        "month" : "Maerz",
         "month_short" : "03",
         "district" : "Bergedorf",
         "building_project_count" : 4,
@@ -3375,12 +3177,12 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2012,
-        "month" : "Mai",
-        "month_short" : "05",
-        "district" : "Altona",
-        "building_project_count" : 1,
-        "living_unit_count" : 1,
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 16,
+        "living_unit_count" : 2,
         "constructionStarted" : true
     },
     {
@@ -3429,6 +3231,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 77,
+        "living_unit_count" : 53,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2018,
         "month" : "September",
         "month_short" : "09",
@@ -3454,6 +3265,15 @@
         "building_project_count" : 55,
         "living_unit_count" : 106,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 39,
+        "living_unit_count" : 24,
+        "constructionStarted" : true
     },
     {
         "year" : 2016,
@@ -3537,12 +3357,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2017,
-        "month" : "März",
+        "year" : 2018,
+        "month" : "Maerz",
         "month_short" : "03",
         "district" : "Bergedorf",
-        "building_project_count" : 10,
-        "living_unit_count" : 3,
+        "building_project_count" : 19,
+        "living_unit_count" : 4,
         "constructionStarted" : false
     },
     {
@@ -3570,6 +3390,24 @@
         "district" : "Eimsbüttel",
         "building_project_count" : 17,
         "living_unit_count" : 8,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 5,
+        "living_unit_count" : 0,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 10,
+        "living_unit_count" : 135,
         "constructionStarted" : true
     },
     {
@@ -3718,6 +3556,15 @@
     },
     {
         "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 24,
+        "living_unit_count" : 6,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2015,
         "month" : "Mai",
         "month_short" : "05",
         "district" : "Hamburg-Mitte",
@@ -3751,15 +3598,6 @@
         "building_project_count" : 26,
         "living_unit_count" : 69,
         "constructionStarted" : false
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 30,
-        "living_unit_count" : 34,
-        "constructionStarted" : true
     },
     {
         "year" : 2015,
@@ -3915,15 +3753,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 29,
-        "living_unit_count" : 145,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2015,
         "month" : "September",
         "month_short" : "09",
@@ -4059,15 +3888,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2014,
-        "month" : "November",
-        "month_short" : "11",
-        "district" : "Wandsbek",
-        "building_project_count" : 1,
-        "living_unit_count" : 12,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2015,
         "month" : "Februar",
         "month_short" : "02",
@@ -4104,15 +3924,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Wandsbek",
-        "building_project_count" : 57,
-        "living_unit_count" : 150,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2015,
         "month" : "November",
         "month_short" : "11",
@@ -4122,22 +3933,13 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2016,
-        "month" : "März",
+        "year" : 2019,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 43,
-        "living_unit_count" : 162,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
+        "district" : "Eimsbüttel",
         "building_project_count" : 39,
-        "living_unit_count" : 24,
-        "constructionStarted" : true
+        "living_unit_count" : 12,
+        "constructionStarted" : false
     },
     {
         "year" : 2015,
@@ -4186,21 +3988,21 @@
     },
     {
         "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 60,
-        "living_unit_count" : 232,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2019,
         "month" : "April",
         "month_short" : "04",
         "district" : "Hamburg-Mitte",
         "building_project_count" : 73,
         "living_unit_count" : 4,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 9,
+        "living_unit_count" : 5,
+        "constructionStarted" : true
     },
     {
         "year" : 2017,
@@ -4254,6 +4056,15 @@
         "district" : "Eimsbüttel",
         "building_project_count" : 31,
         "living_unit_count" : 12,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 46,
+        "living_unit_count" : 72,
         "constructionStarted" : true
     },
     {
@@ -4393,11 +4204,29 @@
     },
     {
         "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 14,
+        "living_unit_count" : 2,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2015,
         "month" : "Mai",
         "month_short" : "05",
         "district" : "Altona",
         "building_project_count" : 29,
         "living_unit_count" : 24,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 16,
+        "living_unit_count" : 11,
         "constructionStarted" : true
     },
     {
@@ -4446,24 +4275,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2014,
-        "month" : "September",
-        "month_short" : "09",
-        "district" : "Wandsbek",
-        "building_project_count" : 1,
-        "living_unit_count" : 2,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 52,
-        "living_unit_count" : 139,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2018,
         "month" : "November",
         "month_short" : "11",
@@ -4509,13 +4320,13 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2014,
-        "month" : "Januar",
-        "month_short" : "01",
-        "district" : "Harburg",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : false
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 18,
+        "living_unit_count" : 23,
+        "constructionStarted" : true
     },
     {
         "year" : 2018,
@@ -4537,6 +4348,15 @@
     },
     {
         "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 4,
+        "living_unit_count" : 0,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2015,
         "month" : "April",
         "month_short" : "04",
         "district" : "Altona",
@@ -4552,15 +4372,6 @@
         "building_project_count" : 30,
         "living_unit_count" : 39,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 41,
-        "living_unit_count" : 15,
-        "constructionStarted" : false
     },
     {
         "year" : 2017,
@@ -4644,15 +4455,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 36,
-        "living_unit_count" : 292,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2018,
         "month" : "Dezember",
         "month_short" : "12",
@@ -4716,15 +4518,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 14,
-        "living_unit_count" : 9,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2016,
         "month" : "Oktober",
         "month_short" : "10",
@@ -4776,6 +4569,15 @@
         "district" : "Bergedorf",
         "building_project_count" : 5,
         "living_unit_count" : 0,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 30,
+        "living_unit_count" : 16,
         "constructionStarted" : false
     },
     {
@@ -4870,24 +4672,6 @@
     },
     {
         "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 57,
-        "living_unit_count" : 98,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 16,
-        "living_unit_count" : 3,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2018,
         "month" : "Oktober",
         "month_short" : "10",
         "district" : "Bergedorf",
@@ -4906,11 +4690,11 @@
     },
     {
         "year" : 2017,
-        "month" : "August",
-        "month_short" : "08",
-        "district" : "Harburg",
-        "building_project_count" : 40,
-        "living_unit_count" : 68,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 30,
+        "living_unit_count" : 36,
         "constructionStarted" : true
     },
     {
@@ -4923,6 +4707,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2017,
+        "month" : "August",
+        "month_short" : "08",
+        "district" : "Harburg",
+        "building_project_count" : 40,
+        "living_unit_count" : 68,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2019,
         "month" : "April",
         "month_short" : "04",
@@ -4932,12 +4725,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2014,
-        "month" : "Dezember",
-        "month_short" : "12",
-        "district" : "Harburg",
-        "building_project_count" : 1,
-        "living_unit_count" : 2,
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 6,
+        "living_unit_count" : 5,
         "constructionStarted" : true
     },
     {
@@ -4981,8 +4774,8 @@
         "month" : "Mai",
         "month_short" : "05",
         "district" : "Harburg",
-        "building_project_count" : 25,
-        "living_unit_count" : 162,
+        "building_project_count" : 26,
+        "living_unit_count" : 169,
         "constructionStarted" : true
     },
     {
@@ -5074,6 +4867,15 @@
         "building_project_count" : 13,
         "living_unit_count" : 12,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 20,
+        "living_unit_count" : 1,
+        "constructionStarted" : false
     },
     {
         "year" : 2015,
@@ -5202,6 +5004,15 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 6,
+        "living_unit_count" : 6,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2018,
         "month" : "September",
         "month_short" : "09",
@@ -5253,15 +5064,6 @@
         "district" : "Eimsbüttel",
         "building_project_count" : 22,
         "living_unit_count" : 7,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 37,
-        "living_unit_count" : 43,
         "constructionStarted" : true
     },
     {
@@ -5400,15 +5202,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 25,
-        "living_unit_count" : 8,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2018,
         "month" : "Februar",
         "month_short" : "02",
@@ -5436,12 +5229,12 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2019,
-        "month" : "März",
+        "year" : 2017,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 73,
-        "living_unit_count" : 247,
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 25,
+        "living_unit_count" : 0,
         "constructionStarted" : false
     },
     {
@@ -5451,24 +5244,6 @@
         "district" : "Wandsbek",
         "building_project_count" : 46,
         "living_unit_count" : 222,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 77,
-        "living_unit_count" : 53,
-        "constructionStarted" : false
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 41,
-        "living_unit_count" : 28,
         "constructionStarted" : false
     },
     {
@@ -5526,33 +5301,6 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2012,
-        "month" : "November",
-        "month_short" : "11",
-        "district" : "Altona",
-        "building_project_count" : 1,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2014,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 1,
-        "living_unit_count" : 1,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 25,
-        "living_unit_count" : 43,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "Januar",
         "month_short" : "01",
@@ -5589,15 +5337,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2016,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 9,
-        "living_unit_count" : 6,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2015,
         "month" : "November",
         "month_short" : "11",
@@ -5616,6 +5355,15 @@
         "constructionStarted" : true
     },
     {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 86,
+        "living_unit_count" : 337,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2018,
         "month" : "September",
         "month_short" : "09",
@@ -5623,6 +5371,15 @@
         "building_project_count" : 51,
         "living_unit_count" : 320,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 10,
+        "living_unit_count" : 7,
+        "constructionStarted" : true
     },
     {
         "year" : 2015,
@@ -5667,6 +5424,15 @@
         "district" : "Hamburg-Nord",
         "building_project_count" : 25,
         "living_unit_count" : 80,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 54,
+        "living_unit_count" : 60,
         "constructionStarted" : true
     },
     {
@@ -5742,15 +5508,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2018,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Bergedorf",
-        "building_project_count" : 19,
-        "living_unit_count" : 4,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2015,
         "month" : "Februar",
         "month_short" : "02",
@@ -5769,6 +5526,15 @@
         "constructionStarted" : true
     },
     {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 25,
+        "living_unit_count" : 43,
+        "constructionStarted" : true
+    },
+    {
         "year" : 2015,
         "month" : "Mai",
         "month_short" : "05",
@@ -5776,6 +5542,15 @@
         "building_project_count" : 21,
         "living_unit_count" : 16,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Wandsbek",
+        "building_project_count" : 57,
+        "living_unit_count" : 73,
+        "constructionStarted" : false
     },
     {
         "year" : 2015,
@@ -5850,6 +5625,15 @@
         "constructionStarted" : true
     },
     {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Eimsbüttel",
+        "building_project_count" : 41,
+        "living_unit_count" : 28,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2017,
         "month" : "Februar",
         "month_short" : "02",
@@ -5868,15 +5652,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2015,
-        "month" : "Dezember",
-        "month_short" : "12",
-        "district" : "Bergedorf",
-        "building_project_count" : 20,
-        "living_unit_count" : 20,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2017,
         "month" : "Februar",
         "month_short" : "02",
@@ -5884,6 +5659,15 @@
         "building_project_count" : 18,
         "living_unit_count" : 15,
         "constructionStarted" : false
+    },
+    {
+        "year" : 2015,
+        "month" : "Dezember",
+        "month_short" : "12",
+        "district" : "Bergedorf",
+        "building_project_count" : 20,
+        "living_unit_count" : 20,
+        "constructionStarted" : true
     },
     {
         "year" : 2017,
@@ -6030,15 +5814,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2014,
-        "month" : "April",
-        "month_short" : "04",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 1,
-        "living_unit_count" : 0,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2015,
         "month" : "Januar",
         "month_short" : "01",
@@ -6102,6 +5877,24 @@
         "constructionStarted" : false
     },
     {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 41,
+        "living_unit_count" : 22,
+        "constructionStarted" : false
+    },
+    {
+        "year" : 2018,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Harburg",
+        "building_project_count" : 29,
+        "living_unit_count" : 31,
+        "constructionStarted" : false
+    },
+    {
         "year" : 2018,
         "month" : "April",
         "month_short" : "04",
@@ -6126,15 +5919,6 @@
         "district" : "Wandsbek",
         "building_project_count" : 13,
         "living_unit_count" : 11,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Altona",
-        "building_project_count" : 5,
-        "living_unit_count" : 0,
         "constructionStarted" : true
     },
     {
@@ -6210,24 +5994,6 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2013,
-        "month" : "Januar",
-        "month_short" : "01",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 3,
-        "constructionStarted" : true
-    },
-    {
-        "year" : 2017,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 30,
-        "living_unit_count" : 36,
-        "constructionStarted" : true
-    },
-    {
         "year" : 2018,
         "month" : "April",
         "month_short" : "04",
@@ -6244,15 +6010,6 @@
         "building_project_count" : 8,
         "living_unit_count" : 15,
         "constructionStarted" : true
-    },
-    {
-        "year" : 2015,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Hamburg-Mitte",
-        "building_project_count" : 20,
-        "living_unit_count" : 1,
-        "constructionStarted" : false
     },
     {
         "year" : 2017,
@@ -6318,21 +6075,21 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2019,
-        "month" : "März",
-        "month_short" : "03",
-        "district" : "Eimsbüttel",
-        "building_project_count" : 39,
-        "living_unit_count" : 12,
-        "constructionStarted" : false
-    },
-    {
         "year" : 2018,
         "month" : "Juli",
         "month_short" : "07",
         "district" : "Altona",
         "building_project_count" : 9,
         "living_unit_count" : 23,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Hamburg-Nord",
+        "building_project_count" : 43,
+        "living_unit_count" : 162,
         "constructionStarted" : true
     },
     {
@@ -6352,6 +6109,24 @@
         "building_project_count" : 24,
         "living_unit_count" : 4,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2015,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 6,
+        "living_unit_count" : 2,
+        "constructionStarted" : true
+    },
+    {
+        "year" : 2016,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Bergedorf",
+        "building_project_count" : 9,
+        "living_unit_count" : 6,
+        "constructionStarted" : false
     },
     {
         "year" : 2016,
@@ -6498,12 +6273,12 @@
         "constructionStarted" : true
     },
     {
-        "year" : 2014,
-        "month" : "Juli",
-        "month_short" : "07",
-        "district" : "Hamburg-Nord",
-        "building_project_count" : 1,
-        "living_unit_count" : 80,
+        "year" : 2017,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 29,
+        "living_unit_count" : 145,
         "constructionStarted" : true
     },
     {
@@ -6532,6 +6307,15 @@
         "building_project_count" : 8,
         "living_unit_count" : 119,
         "constructionStarted" : true
+    },
+    {
+        "year" : 2019,
+        "month" : "Maerz",
+        "month_short" : "03",
+        "district" : "Altona",
+        "building_project_count" : 60,
+        "living_unit_count" : 232,
+        "constructionStarted" : false
     },
     {
         "year" : 2015,
@@ -6660,13 +6444,13 @@
         "constructionStarted" : false
     },
     {
-        "year" : 2018,
-        "month" : "März",
+        "year" : 2016,
+        "month" : "Maerz",
         "month_short" : "03",
-        "district" : "Harburg",
-        "building_project_count" : 37,
-        "living_unit_count" : 84,
-        "constructionStarted" : true
+        "district" : "Hamburg-Mitte",
+        "building_project_count" : 41,
+        "living_unit_count" : 15,
+        "constructionStarted" : false
     },
     {
         "year" : 2015,
