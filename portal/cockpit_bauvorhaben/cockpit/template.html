@@ -12,10 +12,21 @@
             <option><%= year %></option>
         <% }); %>
     </select>
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
-        </label>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label>
+                    <input class="month" type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
+                </label>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label>
+                    <input class="flat" type="checkbox" <% if(filterObject.flatMode) { print('checked');} %>> nur Wohnungsbau
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 <div class="graphs">
