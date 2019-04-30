@@ -352,9 +352,9 @@ function initializeCockpitModel () {
                 graphConfig = {
                     graphType: "Linegraph",
                     selector: selector,
-                    width: 400,
-                    height: 250,
-                    margin: {top: 20, right: 20, bottom: 50, left: 70},
+                    margin: {top: 10, right: 10, bottom: 30, left: 70},
+                    width: this.getGraphWidth(),
+                    height: this.getGraphHeight(10, 30),
                     svgClass: "graph-svg",
                     selectorTooltip: selectorTooltip,
                     scaleTypeX: "ordinal",
@@ -375,6 +375,35 @@ function initializeCockpitModel () {
                 };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
+        },
+        /**
+         * Returns the width from the cockpit-tool. This width is used to be set as graph-width
+         * @returns {Number} - Width for graph in px
+         */
+        getGraphWidth: function () {
+            const element = $.find("#cockpit_bauvorhaben")[0];
+
+            // breite: 570 vs 552
+            // ...kein plan warum der ca 20px zuviel ausgibt
+            // ich ziehs mal ab
+            return $(element).width() - 20;
+        },
+        /**
+         * Returns the height from the cockpit-tool. This height is used to be set as graph-height
+         * @param {Number} marginTop marginTop of graph
+         * @param {Number} marginBottom marginBottom of graph
+         * @returns {Number} - Height for graph in px
+         */
+        getGraphHeight: function (marginTop, marginBottom) {
+            const sidebarHeight = $($.find(".sidebar")[0]).height(),
+                headerHeight = $($.find("#cockpit_bauvorhaben > .header")[0]).height() + 20,
+                filterHeight = $($.find("#cockpit_bauvorhaben > .filter")[0]).height() + 10,
+                graphLabelHeight = 4 * $($.find("#cockpit_bauvorhaben > .graph-label")[0]).height(),
+                offsets = 4 * (marginTop + marginBottom),
+                diff = sidebarHeight - headerHeight - filterHeight - graphLabelHeight - offsets,
+                diffPerGraph = diff / 4;
+
+            return diffPerGraph;
         },
         /**
          * Creates ticks if monthsMode is selected.
