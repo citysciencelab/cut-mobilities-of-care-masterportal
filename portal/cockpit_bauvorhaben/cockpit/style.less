@@ -1,5 +1,6 @@
 @font-family-bold: "UniversNextW04-620CondB", "Arial Narrow", Arial, sans-serif;
 @font-size: 14px;
+@font-size-small: 12px;
 @font-size-large: 16px;
 @glyphicon-size: 18px;
 @default-padding: 6px;
@@ -25,9 +26,11 @@
             font-size: @font-size-large;
         }
     }
+    .row {
+        border-bottom: 1px solid rgb(227,227,227);
+    }
     .filter {
         padding: 10px 20px 0 20px;
-        border-bottom: 1px solid rgb(227,227,227);
         .bootstrap-select {
             margin-bottom: 20px;
         }
@@ -46,10 +49,8 @@
     }
     .legend {
         font: @font-family-bold;
-        font-size: @font-size;
-        .legend-header {
-            font-size: @font-size-large;
-        }
+        font-size: @font-size-small;
+        padding: 10px 20px 0 20px;
         .legend-altona {
             color: @color-altona;
         }

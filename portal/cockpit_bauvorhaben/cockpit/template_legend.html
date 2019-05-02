@@ -1,24 +1,20 @@
 <div>
-    <label class="legend-header">Legende</label>
     <% districts.forEach(function (district) { %>
-        <div class="row">
-                <div class="col-xs-10">
-                <%if (district === "Altona") {%>
-                    <label class="legend-altona"><%=district%></label>
-                <%}else if (district === "Bergedorf") {%>
-                    <label class="legend-bergedorf"><%=district%></label>
-                <%}else if (district === "Eimsbüttel") {%>
-                    <label class="legend-eimsbuettel"><%=district%></label>
-                <%}else if (district === "Hamburg-Mitte") {%>
-                    <label class="legend-hamburg-mitte"><%=district%></label>
-                <%}else if (district === "Hamburg-Nord") {%>
-                    <label class="legend-hamburg-nord"><%=district%></label>
-                <%}else if (district === "Harburg") {%>
-                    <label class="legend-harburg"><%=district%></label>
-                <%}else if (district === "Wandsbek") {%>
-                    <label class="legend-wandsbek"><%=district%></label>
-                <%}%>
-                </div>
-        </div>
+            <label class="col-xs-8"><%=district%></label>
+        <%if (district === "Altona") {%>
+            <span class="legend-altona glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Bergedorf") {%>
+            <span class="legend-bergedorf glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Eimsbüttel") {%>
+            <span class="legend-eimsbuettel glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Hamburg-Mitte") {%>
+            <span class="legend-hamburg-mitte glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Hamburg-Nord") {%>
+            <span class="legend-hamburg-nord glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Harburg") {%>
+            <span class="legend-harburg glyphicon glyphicon-stop col-xs-4"/>
+        <%}else if (district === "Wandsbek") {%>
+            <span class="legend-wandsbek glyphicon glyphicon-stop col-xs-4"/>
+        <%}%>
     <% }); %>
 </div>
