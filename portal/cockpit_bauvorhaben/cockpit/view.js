@@ -31,11 +31,6 @@ const CockpitView = Backbone.View.extend({
      */
     initialize: function () {
         this.model = initializeCockpitModel();
-        this.listenTo(this.model, {
-            "render": function () {
-                this.render(this.model, this.model.get("isActive"));
-            }
-        });
         this.render(this.model, this.model.get("isActive"));
     },
     id: "cockpit_bauvorhaben",
@@ -53,7 +48,7 @@ const CockpitView = Backbone.View.extend({
 
             this.$el.html(this.template(attr));
             Radio.trigger("Sidebar", "append", this.el);
-            Radio.trigger("Sidebar", "toggle", true);
+            Radio.trigger("Sidebar", "toggle", true, "40%");
             this.delegateEvents();
         }
         else {
