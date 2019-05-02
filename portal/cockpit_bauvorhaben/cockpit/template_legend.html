@@ -15,7 +15,10 @@
             <span class="legend-harburg glyphicon glyphicon-stop col-xs-1"/>
         <%}else if (district === "Wandsbek") {%>
             <span class="legend-wandsbek glyphicon glyphicon-stop col-xs-1"/>
+        <%}else {%>
+            <span class="legend-other glyphicon glyphicon-stop col-xs-1"/>
         <%}%>
+
         <label class="col-xs-10"><%=district%></label>
     <% }); %>
 </div>

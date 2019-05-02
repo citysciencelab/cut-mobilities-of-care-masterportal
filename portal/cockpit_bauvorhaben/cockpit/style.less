@@ -12,6 +12,7 @@
 @color-hamburg-nord: #fb9a99;
 @color-harburg: #e31a1c;
 @color-wandsbek: #fdbf6f;
+@color-other: #000000;
 
 
 #cockpit_bauvorhaben {
@@ -73,6 +74,9 @@
         .legend-wandsbek {
             color: @color-wandsbek;
         }
+        .legend-other {
+            color: @color-other;
+        }
     }
     .graph-label {
         font-size: @font-size;
@@ -118,6 +122,11 @@
     .graph-line-wandsbek {
         fill: none;
         stroke: @color-wandsbek;
+        stroke-width: 1px;
+    }
+    .graph-line-other {
+        fill: none;
+        stroke: @color-other;
         stroke-width: 1px;
     }
     .dot {
