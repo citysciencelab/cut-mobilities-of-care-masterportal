@@ -74,8 +74,8 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Erzeugt einen addfeature-Listener
-     * @param   {ol.layer} layer Layer, an dem der Listener registriert wird
+     * Creates an addfeature-Listener
+     * @param   {ol.layer} layer Layer, to which the Listener is registered
      * @returns {void}
      */
     createSourceListenerForStyling: function (layer) {
@@ -88,15 +88,15 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * initialisiert die Zeichenfunktionalität ohne eine Oberfläche dafür bereit zu stellen
-     * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
-     * @param {String} para_object - Ein Objekt, welches die Parameter enthält
-     *                 {String} drawType - welcher Typ soll gezeichet werden ["Point", "LineString", "Polygon", "Circle"]
-     *                 {String} color - Farbe, in rgb (default: "55, 126, 184")
-     *                 {Float} opacity - Transparenz (default: 1.0)
-     *                 {Integer} maxFeatures - wie viele FEatures dürfen maximal auf dem Layer gezeichnet werden (default: unbegrenzt)
-     *                 {String} initialJSON - GeoJSON mit initial auf den Layer zu zeichnenden Features (z.B. zum Editieren)
-     * @returns {String} GeoJSON aller Features als String
+     * initialises the drawing functionality without a GUI
+     * useful for instance for the use via RemoteInterface
+     * @param {String} para_object - an Object which includes the parameters
+     *                 {String} drawType - which type is meant to be drawn ["Point", "LineString", "Polygon", "Circle"]
+     *                 {String} color - color, in rgb (default: "55, 126, 184")
+     *                 {Float} opacity - transparency (default: 1.0)
+     *                 {Integer} maxFeatures - maximum number of Features allowed to be drawn (default: unlimeted)
+     *                 {String} initialJSON - GeoJSON containing the Features to be drawn on the Layer, i.e. for editing
+     * @returns {String} GeoJSON of all Features as a String
      */
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
@@ -142,8 +142,8 @@ const DrawTool = Tool.extend({
         }
     },
     /**
-     * ermöglicht das Editieren von gezeichneten Features, ohne eine Oberfläche zu benötigen
-     * sinnvoll zum Beispiel für die Nutzung über RemoteInterface
+     * enable editing of already drawn Features without a GUI
+     * usefule for instance for the use via RemoteInterface
      * @returns {void}
      */
     editFeaturesWithoutGUI: function () {
@@ -152,10 +152,12 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * erzeugt ein GeoJSON von allen Featues und gibt es zurück
-     * gibt ein leeres Objekt zurück, wenn vorher kein init erfolgt ist (= kein layer gesetzt)
-     * @param {String} geomType "singleGeometry" oder "multiGeometry"
-     * @returns {String} GeoJSON aller Features als String
+     * creates and returns a GeoJSON of all drawn Features without a GUI
+     * returns an empty Object if no init happened previously (= no layer set)
+     * by default single geometries are added to the GeoJSON
+     * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
+     * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
+     * @returns {String} GeoJSON all Features as String
      */
     downloadFeaturesWithoutGUI: function (geomType) {
         var features = null,
@@ -170,19 +172,15 @@ const DrawTool = Tool.extend({
             featureArray = [],
             featuresConverted = {"type": "FeatureCollection", "features": []};
 
-
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
-            console.log(features)
 
             if (geomType === "multiGeometry") {
 
                 _.each(features, function (item) {
                     featureType = item.getGeometry().getType();
-                    console.log(item.getGeometry().getProperties())
 
                     if (featureType === "Polygon") {
-                        console.log(item.getGeometry())
                         multiPolygon.appendPolygon(item.getGeometry());
                     }
                     else if (featureType === "Point") {
@@ -209,13 +207,16 @@ const DrawTool = Tool.extend({
                     multiGeomFeature = new Feature(multiLine);
                     featureArray.push(multiGeomFeature);
                 }
-
+                // The features in the featureArray are converted into a feature collection.
+                // Note, any text added using the draw / text tool is not included in the feature collection
+                // created by writeFeaturesObject(). If any text needs to be included in the feature collection's
+                // properties the feature collection needs to be created in a different way. The text content can be
+                // retrieved by item.getStyle().getText().getText().
                 featuresConverted = format.writeFeaturesObject(featureArray);
             }
             else {
                 _.each(features, function (item) {
                     featureType = item.getGeometry().getType();
-                    console.log(item.getProperties())
 
                     if (featureType === "Circle") {
                         circularPoly = circPoly(item.getGeometry(), 64);
@@ -226,7 +227,11 @@ const DrawTool = Tool.extend({
                         featureArray.push(item);
                     }
                 });
-
+                // The features in the featureArray are converted into a feature collection.
+                // Note, any text added using the draw / text tool is not included in the feature collection
+                // created by  writeFeaturesObject(). If any text needs to be included in the feature collection's
+                // properties the feature collection needs to be created in a different way. The text content can be
+                // retrieved by item.getStyle().getText().getText().
                 featuresConverted = format.writeFeaturesObject(featureArray);
 
             }
@@ -235,8 +240,8 @@ const DrawTool = Tool.extend({
         return JSON.stringify(featuresConverted);
     },
     /**
-     * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
-     * @param {String} geomType "singleGeometry" oder "multiGeometry"
+     * sends the generated GeoJSON to the RemoteInterface in order to communicate with an iframe
+     * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
      * @returns {void}
      */
     downloadViaRemoteInterface: function (geomType) {
@@ -249,7 +254,7 @@ const DrawTool = Tool.extend({
         });
     },
     /**
-     * beendet das Zeichnen via Radio
+     * finishes the draw interaction via Radio
      * @returns {void}
      */
     cancelDrawWithoutGUI: function () {
@@ -353,7 +358,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Erzeugt den ol.style und gibt diesen zurück
+     * Creates and returns the ol.style
      * @param {object} drawType - contains the geometry and description
      * @param {array} color - of drawings
      * @return {ol/style/Style} style
