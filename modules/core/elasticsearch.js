@@ -37,7 +37,6 @@ const ElasticSearchModel = Backbone.Model.extend({
             dataType: "json",
             context: this,
             url: searchUrl,
-            async: false,
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
@@ -54,7 +53,6 @@ const ElasticSearchModel = Backbone.Model.extend({
                         datasources.push(hit[param]);
                     });
                 }
-
                 result.hits = datasources;
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -67,7 +65,7 @@ const ElasticSearchModel = Backbone.Model.extend({
                 return result;
             },
             complete: function () {
-                this.polishAjax(result);
+                this.polishAjax(serviceId);
             }
         });
     },
