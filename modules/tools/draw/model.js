@@ -2,6 +2,9 @@ import {Select, Modify, Draw} from "ol/interaction.js";
 import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
+import MultiPoint from "ol/geom/MultiPoint.js";
+import MultiLine from "ol/geom/MultiLineString.js";
+import {fromCircle as circPoly} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
 
@@ -158,29 +161,78 @@ const DrawTool = Tool.extend({
         var features = null,
             format = new GeoJSON(),
             multiPolygon = new MultiPolygon([]),
-            multiPolyFeature = null,
+            multiPoint = new MultiPoint([]),
+            multiLine = new MultiLine([]),
+            multiGeomFeature = null,
+            circleFeature = null,
+            circularPoly = null,
+            featureType = null,
             featureArray = [],
-            featuresKonverted = {"type": "FeatureCollection", "features": []};
+            featuresConverted = {"type": "FeatureCollection", "features": []};
+
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
+            console.log(features)
 
             if (geomType === "multiGeometry") {
 
                 _.each(features, function (item) {
-                    multiPolygon.appendPolygon(item.getGeometry());
+                    featureType = item.getGeometry().getType();
+                    console.log(item.getGeometry().getProperties())
+
+                    if (featureType === "Polygon") {
+                        console.log(item.getGeometry())
+                        multiPolygon.appendPolygon(item.getGeometry());
+                    }
+                    else if (featureType === "Point") {
+                        multiPoint.appendPoint(item.getGeometry());
+                    }
+                    else if (featureType === "LineString") {
+                        multiLine.appendLineString(item.getGeometry());
+                    }
+                    else if (featureType === "Circle") {
+                        circularPoly = circPoly(item.getGeometry(), 64);
+                        multiPolygon.appendPolygon(circularPoly);
+                    }
                 });
 
-                multiPolyFeature = new Feature(multiPolygon);
-                featureArray.push(multiPolyFeature);
-                featuresKonverted = format.writeFeaturesObject(featureArray);
+                if (multiPolygon.getCoordinates().length > 0) {
+                    multiGeomFeature = new Feature(multiPolygon);
+                    featureArray.push(multiGeomFeature);
+                }
+                if (multiPoint.getCoordinates().length > 0) {
+                    multiGeomFeature = new Feature(multiPoint);
+                    featureArray.push(multiGeomFeature);
+                }
+                if (multiLine.getCoordinates().length > 0) {
+                    multiGeomFeature = new Feature(multiLine);
+                    featureArray.push(multiGeomFeature);
+                }
+
+                featuresConverted = format.writeFeaturesObject(featureArray);
             }
             else {
-                featuresKonverted = format.writeFeaturesObject(features);
+                _.each(features, function (item) {
+                    featureType = item.getGeometry().getType();
+                    console.log(item.getProperties())
+
+                    if (featureType === "Circle") {
+                        circularPoly = circPoly(item.getGeometry(), 64);
+                        circleFeature = new Feature(circularPoly);
+                        featureArray.push(circleFeature);
+                    }
+                    else {
+                        featureArray.push(item);
+                    }
+                });
+
+                featuresConverted = format.writeFeaturesObject(featureArray);
+
             }
         }
 
-        return JSON.stringify(featuresKonverted);
+        return JSON.stringify(featuresConverted);
     },
     /**
      * sendet das erzeugten GeoJSON an das RemoteInterface zur Kommunikation mit einem iframe
