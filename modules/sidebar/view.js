@@ -1,6 +1,16 @@
 import SidebarModel from "./model";
 
-const SidebarView = Backbone.View.extend({
+const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
+    /**
+     * @class SidebarView
+     * @extends Backbone.View
+     * @memberof Sidebar
+     * @constructs
+     * @fires Map#RadioTriggerMapUpdateSize
+     * @listens Sidebar#changeIsVisible
+     * @listens Sidebar#changeIsMobile
+     * @listens Sidebar#addContent
+     */
     initialize: function () {
         this.model = new SidebarModel();
         this.$el.addClass(this.getClassName());
@@ -14,8 +24,8 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * Ermittelt den ClassName dieser View
-     * @returns {string}    ClassName
+     * Creates the class name.
+     * @returns {string} - ClassName
      */
     getClassName: function () {
         if (this.model.get("isMobile")) {
@@ -24,8 +34,8 @@ const SidebarView = Backbone.View.extend({
         return "sidebar";
     },
     /**
-     * add HTML content to this sidebar
-     * @param {DOM} element - from a tool view
+     * Add HTML content to this sidebar
+     * @param {HTML} element - from a tool view
      * @returns {void}
      */
     addContent: function (element) {
@@ -33,25 +43,27 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * shows or hides this view
-     * @param {Backbone.Model} model - this.model
-     * @param {boolean} isVisible - is the sidebar visible
+     * Shows or hides this view.
+     * @param {SidebarModel} model The sidebar model.
+     * @param {boolean} isVisible Flag if sidebar is visible.
      * @return {void}
+     * @fires Map#RadioTriggerMapUpdateSize
      */
     toggle: function (model, isVisible) {
         if (isVisible) {
+            this.$el.css("width", this.model.get("width"));
             this.$el.show();
         }
         else {
             this.$el.hide();
         }
         this.toggleBackdrop(this.model.get("isMobile"), isVisible);
-        this.setMapWidth(this.model.get("isMobile"), isVisible);
+        this.setMapWidth(this.model.get("isMobile"), isVisible, model.get("width"));
         Radio.trigger("Map", "updateSize");
     },
 
     /**
-     * toggles the css class for this view
+     * Toggles the css class for this view
      * @param {Backbone.Model} model - this.model
      * @param {boolean} isMobile -
      * @return {void}
@@ -63,14 +75,17 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * sets the width of the map
+     * Sets the width of the map
      * @param {boolean} isMobile -
      * @param {boolean} isVisible - is the sidebar visible
+     * @param {String} width The width of the sidebar in percent. e.g. "30%"
      * @return {void}
      */
-    setMapWidth: function (isMobile, isVisible) {
+    setMapWidth: function (isMobile, isVisible, width) {
         if (!isMobile && isVisible) {
-            $("#map").css("width", "70%");
+            const diffToHundret = 100 - parseInt(width.substring(0, width.length - 1), 10);
+
+            $("#map").css("width", diffToHundret + "%");
         }
         else {
             $("#map").css("width", "100%");
@@ -78,8 +93,7 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * toggles the backdrop
-     * needed for the mobile mode
+     * Toggles the backdrop. Needed for the mobile mode
      * @param {boolean} isMobile -
      * @param {boolean} isVisible - is the sidebar visible
      * @return {void}
