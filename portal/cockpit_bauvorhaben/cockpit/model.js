@@ -1,5 +1,3 @@
-import dataJSON from "./cockpit_bauvorhaben.json";
-
 /**
  * @returns {void}
  */
@@ -24,10 +22,19 @@ function initializeCockpitModel () {
          */
         initialize: function () {
             this.superInitialize();
-            this.filterYears(dataJSON);
-            this.filterDistricts(dataJSON);
-            this.setData(dataJSON);
-            this.trigger("render");
+            this.url = "/lgv-config/cockpit_bauvorhaben.json";
+            this.fetch({async: false});
+        },
+
+        /**
+         * Backbone function called after fetch() from initialize.
+         * @param {JSON} data The parsed JSON data.
+         * @returns {void}
+         */
+        parse: function (data) {
+            this.filterYears(data);
+            this.filterDistricts(data);
+            this.setData(data);
         },
         /**
          * Prepares data for creating the graphs for Cockpit
