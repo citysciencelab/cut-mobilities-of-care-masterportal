@@ -189,6 +189,8 @@ const DrawTool = Tool.extend({
                     else if (featureType === "LineString") {
                         multiLine.appendLineString(item.getGeometry());
                     }
+                    // Circles cannot be added to a featureCollection
+                    // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
                         circularPoly = circPoly(item.getGeometry(), 64);
                         multiPolygon.appendPolygon(circularPoly);
@@ -218,6 +220,8 @@ const DrawTool = Tool.extend({
                 _.each(features, function (item) {
                     featureType = item.getGeometry().getType();
 
+                    // Circles cannot be added to a featureCollection
+                    // They must therefore be converted into a polygon
                     if (featureType === "Circle") {
                         circularPoly = circPoly(item.getGeometry(), 64);
                         circleFeature = new Feature(circularPoly);
