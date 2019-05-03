@@ -415,33 +415,27 @@ function initializeCockpitModel () {
         },
 
         updateLayer: function (filterObject) {
-            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
+            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13802"});
 
             layer.get("layer").getLayers().forEach(olLayer => {
-                console.info(olLayer.getSource());
                 const yearByLayerName = filterObject.years.filter(function (year) {
-                    return olLayer.get("name") === year + " - erledigt";
+                    return olLayer.get("name") === year + " - genehmigt";
                 });
 
                 if (yearByLayerName.length === 0) {
-                    olLayer.setVisible(true);
-                    // olLayer.getSource().updateParams({SLD_BODY: undefined, STYLES: ""});
-                    this.updateLayerByDistricts(olLayer, ["empty"]);
-                    // console.info(olLayer);
-                    // Radio.request("Map", "getMap").render();
-                    // Radio.request("Map", "getMap").renderSync();
+                    olLayer.setVisible(false);
                 }
                 else {
                     olLayer.setVisible(true);
                     if (filterObject.districts.length > 0) {
-                        this.updateLayerByDistricts(olLayer, filterObject.districts);
+                        this.updateLayerByDistricts(olLayer, filterObject.districts, yearByLayerName[0]);
                     }
                 }
             });
             Radio.trigger("Map", "render");
         },
 
-        updateLayerByDistricts: function (layer, districts) {
+        updateLayerByDistricts: function (layer, districts, year) {
             let orFilter = "",
                 sldBody;
 
@@ -476,19 +470,17 @@ function initializeCockpitModel () {
                         break;
                     }
                     default: {
-                        orFilter += getPropertyIsLike("geschaeftszeichen", "BSW");
                         break;
                     }
                 }
             });
             if (districts.length > 1) {
-                sldBody = getOrFilter(layer.getSource().getParams().LAYERS, orFilter);
+                sldBody = getOrFilter(layer.getSource().getParams().LAYERS, orFilter, year);
             }
             else {
                 sldBody = getFilter(layer.getSource().getParams().LAYERS, orFilter);
             }
-            console.info(sldBody.replace(" ", ""));
-            // sldBody = sldBody.replace(" ", "");
+            sldBody = sldBody.replace(/\n/g, "");
             layer.getSource().updateParams({SLD_BODY: sldBody, STYLES: "style"});
         },
 
