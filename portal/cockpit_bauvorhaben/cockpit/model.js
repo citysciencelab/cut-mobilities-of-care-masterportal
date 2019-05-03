@@ -373,7 +373,7 @@ function initializeCockpitModel () {
                     },
                     attrToShowArray: attributesToShow,
                     legendData: [],
-                    dotSize: 2
+                    dotSize: 3
                 };
 
             Radio.trigger("Graph", "createGraph", graphConfig);
