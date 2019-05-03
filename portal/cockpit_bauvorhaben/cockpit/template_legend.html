@@ -1,24 +1,24 @@
 <div>
-    <% districts.forEach(function (district) { %>
+    <% administrativeUnits.forEach(function (unit) { %>
 
-        <%if (district === "Altona") {%>
+        <%if (unit === "Altona") {%>
             <span class="legend-altona glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Bergedorf") {%>
+        <%}else if (unit === "Bergedorf") {%>
             <span class="legend-bergedorf glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Eimsbüttel") {%>
+        <%}else if (unit === "Eimsbüttel") {%>
             <span class="legend-eimsbuettel glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Hamburg-Mitte") {%>
+        <%}else if (unit === "Hamburg-Mitte") {%>
             <span class="legend-hamburg-mitte glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Hamburg-Nord") {%>
+        <%}else if (unit === "Hamburg-Nord") {%>
             <span class="legend-hamburg-nord glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Harburg") {%>
+        <%}else if (unit === "Harburg") {%>
             <span class="legend-harburg glyphicon glyphicon-stop col-xs-1"/>
-        <%}else if (district === "Wandsbek") {%>
+        <%}else if (unit === "Wandsbek") {%>
             <span class="legend-wandsbek glyphicon glyphicon-stop col-xs-1"/>
         <%}else {%>
             <span class="legend-other glyphicon glyphicon-stop col-xs-1"/>
         <%}%>
 
-        <label class="col-xs-10"><%=district%></label>
+        <label class="col-xs-10"><%=unit%></label>
     <% }); %>
 </div>

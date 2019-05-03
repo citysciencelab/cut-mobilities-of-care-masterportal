@@ -12,6 +12,11 @@ const CockpitView = Backbone.View.extend({
             this.redrawGraphs();
             this.renderLegend();
         },
+        "changed.bs.select .selectpicker-suburb": function (evt) {
+            this.mapSelectedValues(evt, "suburbs");
+            this.redrawGraphs();
+            this.renderLegend();
+        },
         "changed.bs.select .selectpicker-year": function (evt) {
             this.mapSelectedValues(evt, "years");
             this.redrawGraphs();
@@ -64,10 +69,12 @@ const CockpitView = Backbone.View.extend({
      * @returns {void}
      */
     renderLegend: function () {
-        const districts = this.model.get("filterObject").districts;
+        const districts = this.model.get("filterObject").districts,
+            suburbs = this.model.get("filterObject").suburbs,
+            administrativeUnits = suburbs.length > 0 ? suburbs : districts;
 
         this.$el.find(".legend").html("");
-        this.$el.find(".legend").html(this.templateLegend({districts: districts}));
+        this.$el.find(".legend").html(this.templateLegend({administrativeUnits: administrativeUnits}));
     },
     /**
      * inits the dropdown list
@@ -83,7 +90,8 @@ const CockpitView = Backbone.View.extend({
             selectAllText: "Alle auswählen"
         });
         // selects all items
-        this.$el.find(".selectpicker").selectpicker("selectAll");
+        this.$el.find(".selectpicker-district").selectpicker("selectAll");
+        this.$el.find(".selectpicker-year").selectpicker("selectAll");
     },
 
     /**
