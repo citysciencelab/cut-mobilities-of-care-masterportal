@@ -1,3 +1,5 @@
+import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
+
 /**
  * @returns {void}
  */
@@ -450,20 +452,75 @@ function initializeCockpitModel () {
         },
 
         updateLayer: function (filterObject) {
-            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
+            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13802"});
 
-            layer.get("layer").getLayers().forEach(function (ollayer) {
+            layer.get("layer").getLayers().forEach(olLayer => {
                 const yearByLayerName = filterObject.years.filter(function (year) {
-                    return ollayer.get("name") === year + " - erledigt";
+                    return olLayer.get("name") === year + " - genehmigt";
                 });
 
                 if (yearByLayerName.length === 0) {
-                    ollayer.setVisible(false);
+                    olLayer.setVisible(false);
                 }
                 else {
-                    ollayer.setVisible(true);
+                    olLayer.setVisible(true);
+                    if (filterObject.districts.length > 0) {
+                        this.updateLayerByDistricts(olLayer, filterObject.districts, yearByLayerName[0]);
+                    }
+                    else {
+                        olLayer.setVisible(false);
+                    }
                 }
             });
+            Radio.trigger("Map", "render");
+        },
+
+        updateLayerByDistricts: function (layer, districts, year) {
+            let orFilter = "",
+                sldBody;
+
+            districts.forEach(district => {
+                switch (district) {
+                    case "Altona": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "A");
+                        break;
+                    }
+                    case "Bergedorf": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "B");
+                        break;
+                    }
+                    case "Eimsbüttel": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "E");
+                        break;
+                    }
+                    case "Hamburg-Mitte": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "M");
+                        break;
+                    }
+                    case "Hamburg-Nord": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "N");
+                        break;
+                    }
+                    case "Harburg": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "H");
+                        break;
+                    }
+                    case "Wandsbek": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "W");
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            });
+            if (districts.length > 1) {
+                sldBody = getOrFilter(layer.getSource().getParams().LAYERS, orFilter, year);
+            }
+            else {
+                sldBody = getFilter(layer.getSource().getParams().LAYERS, orFilter, year);
+            }
+            layer.getSource().updateParams({SLD_BODY: sldBody, STYLES: "style"});
         },
 
         setYears: function (value) {
