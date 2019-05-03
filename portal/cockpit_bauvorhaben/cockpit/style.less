@@ -5,13 +5,16 @@
 @glyphicon-size: 18px;
 @default-padding: 6px;
 @vertical-align: text-bottom;
-@color-altona: #a6cee3;
-@color-bergedorf: #1f78b4;
-@color-eimsbuettel: #b2df8a;
-@color-hamburg-mitte: #33a02c;
-@color-hamburg-nord: #fb9a99;
-@color-harburg: #e31a1c;
-@color-wandsbek: #fdbf6f;
+@color-0: #a6cee3;
+@color-1: #1f78b4;
+@color-2: #b2df8a;
+@color-3: #33a02c;
+@color-4: #fb9a99;
+@color-5: #e31a1c;
+@color-6: #fdbf6f;
+@color-7: #ff7f00;
+@color-8: #cab2d6;
+@color-9: #6a3d9a;
 @color-other: #000000;
 
 
@@ -53,26 +56,37 @@
         font: @font-family-bold;
         font-size: @font-size-small;
         padding: 10px 20px 0 20px;
-        .legend-altona {
-            color: @color-altona;
+        max-height: 230px;
+        overflow: auto;
+        .legend-0 {
+            color: @color-0;
         }
-        .legend-bergedorf {
-            color: @color-bergedorf;
+        .legend-1 {
+            color: @color-1;
         }
-        .legend-eimsbuettel {
-            color: @color-eimsbuettel;
+        .legend-2 {
+            color: @color-2;
         }
-        .legend-hamburg-mitte {
-            color: @color-hamburg-mitte;
+        .legend-3 {
+            color: @color-3;
         }
-        .legend-hamburg-nord {
-            color: @color-hamburg-nord;
+        .legend-4 {
+            color: @color-4;
         }
-        .legend-harburg {
-            color: @color-harburg;
+        .legend-5 {
+            color: @color-5;
         }
-        .legend-wandsbek {
-            color: @color-wandsbek;
+        .legend-6 {
+            color: @color-6;
+        }
+        .legend-7 {
+            color: @color-7;
+        }
+        .legend-8 {
+            color: @color-8;
+        }
+        .legend-9 {
+            color: @color-9;
         }
         .legend-other {
             color: @color-other;
@@ -98,39 +112,54 @@
         border: 2px solid white;
         text-align: center;
     }
-    .graph-line-altona {
+    .graph-line-0 {
         fill: none;
-        stroke: @color-altona;
+        stroke: @color-0;
         stroke-width: 1px;
     }
-    .graph-line-bergedorf {
+    .graph-line-1 {
         fill: none;
-        stroke: @color-bergedorf;
+        stroke: @color-1;
         stroke-width: 1px;
     }
-    .graph-line-eimsbuettel {
+    .graph-line-2 {
         fill: none;
-        stroke: @color-eimsbuettel;
+        stroke: @color-2;
         stroke-width: 1px;
     }
-    .graph-line-hamburg-mitte {
+    .graph-line-3 {
         fill: none;
-        stroke: @color-hamburg-mitte;
+        stroke: @color-3;
         stroke-width: 1px;
     }
-    .graph-line-hamburg-nord {
+    .graph-line-4 {
         fill: none;
-        stroke: @color-hamburg-nord;
+        stroke: @color-4;
         stroke-width: 1px;
     }
-    .graph-line-harburg {
+    .graph-line-5 {
         fill: none;
-        stroke: @color-harburg;
+        stroke: @color-5;
         stroke-width: 1px;
     }
-    .graph-line-wandsbek {
+    .graph-line-6 {
         fill: none;
-        stroke: @color-wandsbek;
+        stroke: @color-6;
+        stroke-width: 1px;
+    }
+    .graph-line-7 {
+        fill: none;
+        stroke: @color-7;
+        stroke-width: 1px;
+    }
+    .graph-line-8 {
+        fill: none;
+        stroke: @color-8;
+        stroke-width: 1px;
+    }
+    .graph-line-9 {
+        fill: none;
+        stroke: @color-9;
         stroke-width: 1px;
     }
     .graph-line-other {

@@ -1,5 +1,6 @@
 import initializeCockpitModel from "../cockpit/model";
 import Template from "text-loader!./template.html";
+import TemplateSuburbs from "text-loader!./template_dropdown_suburbs.html";
 import TemplateLegend from "text-loader!./template_legend.html";
 import "bootstrap/js/dropdown";
 import "bootstrap-select";
@@ -9,6 +10,14 @@ const CockpitView = Backbone.View.extend({
     events: {
         "changed.bs.select .selectpicker-district": function (evt) {
             this.mapSelectedValues(evt, "districts");
+            this.model.setFilterObjectByKey("suburbs", []);
+            this.model.filterSuburbsByDistricts();
+            this.renderDropdownSuburb();
+            this.redrawGraphs();
+            this.renderLegend();
+        },
+        "changed.bs.select .selectpicker-suburb": function (evt) {
+            this.mapSelectedValues(evt, "suburbs");
             this.redrawGraphs();
             this.renderLegend();
         },
@@ -35,6 +44,7 @@ const CockpitView = Backbone.View.extend({
     },
     id: "cockpit_bauvorhaben",
     template: _.template(Template),
+    templateSuburbs: _.template(TemplateSuburbs),
     templateLegend: _.template(TemplateLegend),
     /**
      * Todo
@@ -47,6 +57,7 @@ const CockpitView = Backbone.View.extend({
             const attr = this.model.toJSON();
 
             this.$el.html(this.template(attr));
+            this.renderDropdownSuburb();
             Radio.trigger("Sidebar", "append", this.el);
             Radio.trigger("Sidebar", "toggle", true, "40%");
             this.delegateEvents();
@@ -56,25 +67,35 @@ const CockpitView = Backbone.View.extend({
             Radio.trigger("Sidebar", "toggle", false);
             this.undelegateEvents();
         }
-        this.initDropdown();
+        this.initDropdowns();
+        // selects all items
+        this.$el.find(".selectpicker-district").selectpicker("selectAll");
+        this.$el.find(".selectpicker-year").selectpicker("selectAll");
         return this;
+    },
+    renderDropdownSuburb: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.find(".placeholder-suburb").html(this.templateSuburbs(attr));
+        this.initDropdowns();
     },
     /**
      * Renders legend
      * @returns {void}
      */
     renderLegend: function () {
-        const districts = this.model.get("filterObject").districts;
+        const districts = this.model.get("filterObject").districts,
+            suburbs = this.model.get("filterObject").suburbs,
+            administrativeUnits = suburbs.length > 0 ? suburbs : districts;
 
-        this.$el.find(".legend").html("");
-        this.$el.find(".legend").html(this.templateLegend({districts: districts}));
+        this.$el.find(".legend").html(this.templateLegend({administrativeUnits: administrativeUnits}));
     },
     /**
      * inits the dropdown list
      * @see {@link https://developer.snapappointments.com/bootstrap-select/options/|Bootstrap-Select}
      * @returns {void}
      */
-    initDropdown: function () {
+    initDropdowns: function () {
         this.$el.find(".selectpicker").selectpicker({
             selectedTextFormat: "static",
             width: "100%",
@@ -82,8 +103,6 @@ const CockpitView = Backbone.View.extend({
             deselectAllText: "Nichts auswählen",
             selectAllText: "Alle auswählen"
         });
-        // selects all items
-        this.$el.find(".selectpicker").selectpicker("selectAll");
     },
 
     /**

@@ -3,11 +3,12 @@
 </div>
 <div class="row">
     <div class="filter col-xs-7">
-        <select class="selectpicker selectpicker-district" title="nach Bezirken / Hamburg gesamt" multiple>
+        <select class="selectpicker selectpicker-district" title="nach Bezirken" multiple>
             <% districts.forEach(function (district) { %>
                 <option><%= district %></option>
             <% }); %>
         </select>
+        <div class="placeholder-suburb"></div>
         <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
             <% years.forEach(function (year) { %>
                 <option><%= year %></option>
