@@ -450,11 +450,11 @@ function initializeCockpitModel () {
         },
 
         updateLayer: function (filterObject) {
-            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
+            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13802"});
 
             layer.get("layer").getLayers().forEach(function (ollayer) {
                 const yearByLayerName = filterObject.years.filter(function (year) {
-                    return ollayer.get("name") === year + " - erledigt";
+                    return ollayer.get("name") === year + " - genehmigt";
                 });
 
                 if (yearByLayerName.length === 0) {
