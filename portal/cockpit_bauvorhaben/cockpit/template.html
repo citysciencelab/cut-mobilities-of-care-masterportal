@@ -28,20 +28,70 @@
     <div class="legend col-xs-5"></div>
 </div>
 <div class="graphs">
-    <div class="graph graph-baugenehmigungen">
-        <label class="graph-label">Anzahl Baugenehmigungen</label>
-        <div class="graph-tooltip-div graph-tooltip-div-1"></div>
-    </div>
-    <div class="graph graph-wohneinheiten">
-            <label class="graph-label">Anzahl Wohneinheiten</label>
-        <div class="graph-tooltip-div graph-tooltip-div-2"></div>
-    </div>
-    <div class="graph graph-wohneinheiten-noch-nicht-im-bau">
-            <label class="graph-label">Anzahl Wohneinheiten (noch nicht im Bau)</label>
-        <div class="graph-tooltip-div graph-tooltip-div-3"></div>
-    </div>
-    <div class="graph graph-wohneinheiten-im-bau">
-            <label class="graph-label">Anzahl Wohneinheiten (im Bau)</label>
-        <div class="graph-tooltip-div graph-tooltip-div-4"></div>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" href="#collapseOne">
+                    Anzahl Baugenehmigungen
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="graph graph-baugenehmigungen">
+                        <div class="graph-tooltip-div graph-tooltip-div-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo">
+                    Anzahl Wohneinheiten
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten">
+                        <div class="graph-tooltip-div graph-tooltip-div-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseThree">
+                        Anzahl Wohneinheiten (noch nicht im Bau)
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten-noch-nicht-im-bau">
+                        <div class="graph-tooltip-div graph-tooltip-div-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapseFour">
+                        Anzahl Wohneinheiten (im Bau)
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten-im-bau">
+                        <div class="graph-tooltip-div graph-tooltip-div-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

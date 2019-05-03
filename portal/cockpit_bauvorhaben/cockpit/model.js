@@ -383,7 +383,7 @@ function initializeCockpitModel () {
          * @returns {Number} - Width for graph in px
          */
         getGraphWidth: function () {
-            const element = $.find("#cockpit_bauvorhaben")[0];
+            const element = $.find(".graphs")[0];
 
             // breite: 570 vs 552
             // ...kein plan warum der ca 20px zuviel ausgibt
@@ -400,9 +400,8 @@ function initializeCockpitModel () {
             const sidebarHeight = $($.find(".sidebar")[0]).height(),
                 headerHeight = $($.find("#cockpit_bauvorhaben > .header")[0]).height() + 20,
                 filterHeight = $($.find("#cockpit_bauvorhaben > .filter")[0]).height() + 10,
-                graphLabelHeight = 4 * $($.find("#cockpit_bauvorhaben > .graph-label")[0]).height(),
                 offsets = 4 * (marginTop + marginBottom),
-                diff = sidebarHeight - headerHeight - filterHeight - graphLabelHeight - offsets,
+                diff = sidebarHeight - headerHeight - filterHeight - offsets,
                 diffPerGraph = diff / 4;
 
             return diffPerGraph;

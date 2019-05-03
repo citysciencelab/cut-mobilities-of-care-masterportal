@@ -5,7 +5,7 @@ import TemplateLegend from "text-loader!./template_legend.html";
 import "bootstrap/js/dropdown";
 import "bootstrap-select";
 import "./style.less";
-import {select, selectAll, event} from "d3-selection";
+import {select, event} from "d3-selection";
 
 const CockpitView = Backbone.View.extend({
     events: {
