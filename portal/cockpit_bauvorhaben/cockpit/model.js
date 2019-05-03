@@ -1,3 +1,5 @@
+import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
+
 /**
  * @returns {void}
  */
@@ -7,11 +9,15 @@ function initializeCockpitModel () {
             "isViewMobile": false,
             "filterObject": {
                 "districts": [],
+                "suburbs": [],
                 "years": [],
                 "monthMode": true,
                 "flatMode": false
             },
-            "data": []
+            "data": [],
+            "years": [],
+            "districts": [],
+            "suburbs": []
         };
 
     Object.assign(CockpitModel, {
@@ -34,6 +40,7 @@ function initializeCockpitModel () {
         parse: function (data) {
             this.filterYears(data);
             this.filterDistricts(data);
+            this.filterSuburbs(data);
             this.setData(data);
         },
         /**
@@ -43,53 +50,31 @@ function initializeCockpitModel () {
         prepareDataForGraph: function () {
             const years = this.get("filterObject").years.sort(),
                 districts = this.get("filterObject").districts,
+                suburbs = this.get("filterObject").suburbs,
+                administrativeUnits = {
+                    values: suburbs.length > 0 ? suburbs : districts,
+                    attrName: suburbs.length > 0 ? "suburb" : "district"
+                },
                 isMonthsSelected = this.get("filterObject").monthMode,
                 isOnlyFlatSelected = this.get("filterObject").flatMode,
                 data = this.get("data"),
-                filteredData = this.filterData(data, districts, years, isOnlyFlatSelected),
-                dataBaugenehmigungen = this.prepareData(filteredData, districts, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheiten = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]}),
-                dataWohneinheitenImBau = this.prepareData(filteredData, districts, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]}),
+                filteredData = this.filterData(data, administrativeUnits, years, isOnlyFlatSelected),
+                dataBaugenehmigungen = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheiten = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]}),
+                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]}),
+                dataWohneinheitenImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]}),
                 attributesToShow = [];
 
             if (filteredData.length > 0) {
-                districts.forEach(function (district) {
-                    switch (district) {
-                        case "Altona": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-altona"});
-                            break;
-                        }
-                        case "Bergedorf": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-bergedorf"});
-                            break;
-                        }
-                        case "Eimsbüttel": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-eimsbuettel"});
-                            break;
-                        }
-                        case "Hamburg-Mitte": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-hamburg-mitte"});
-                            break;
-                        }
-                        case "Hamburg-Nord": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-hamburg-nord"});
-                            break;
-                        }
-                        case "Harburg": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-harburg"});
-                            break;
-                        }
-                        case "Wandsbek": {
-                            attributesToShow.push({attrName: district, attrClass: "graph-line-wandsbek"});
-                            break;
-                        }
-                        default: {
-                            attributesToShow.push({attrName: district, attrClass: "line"});
-                            break;
-                        }
+                administrativeUnits.values.forEach(function (adminUnit, i) {
+                    if (i < 10) {
+                        attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-" + i});
+                    }
+                    else {
+                        attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-other"});
                     }
                 });
+
                 this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
@@ -117,22 +102,24 @@ function initializeCockpitModel () {
             });
         },
         /**
-         * Filters data by selected districts, years and isOnlyFlatSelected
+         * Filters data by selected administrative units, years and isOnlyFlatSelected
          * @param {Object[]} data All data
-         * @param {String[]} districts All Selected districts
+         * @param {Object} administrativeUnits All Selected administrative unit
+         * @param {String[]} administrativeUnits.values All Selected administrative units
+         * @param {String} administrativeUnits.attrName Name of attribute for administrative unit
          * @param {Number[]} years All selected years
          * @param {Boolean} isOnlyFlatSelected Flag if only the data objects have to be selected that have an "living_unit_count" > 0
          * @returns {Object[]} - filtered Data
          */
-        filterData: function (data, districts, years, isOnlyFlatSelected) {
-            const filteredDataByDistrict = this.filterByAttribute(data, districts, "district"),
+        filterData: function (data, administrativeUnits, years, isOnlyFlatSelected) {
+            const filteredDataByAdminUnit = this.filterByAttribute(data, administrativeUnits.values, administrativeUnits.attrName),
                 filteredDataByYear = this.filterByAttribute(data, years, "year"),
-                filtered = this.intersectArrays(filteredDataByDistrict, filteredDataByYear);
+                filtered = this.intersectArrays(filteredDataByAdminUnit, filteredDataByYear);
             let filteredTotal = [];
 
             if (isOnlyFlatSelected) {
                 filtered.forEach(function (obj) {
-                    if (obj.living_unit_count > 0) {
+                    if (obj.isWohnbau > 0) {
                         filteredTotal.push(obj);
                     }
                 });
@@ -182,7 +169,9 @@ function initializeCockpitModel () {
         /**
          * Prepares the data based on the given params so that the graph can be generated.
          * @param {Object[]} data All data.
-         * @param {String[]} districts Selected districts.
+         * @param {Object} administrativeUnits All Selected administrative unit
+         * @param {String[]} administrativeUnits.values All Selected administrative units
+         * @param {String} administrativeUnits.attrName Name of attribute for administrative unit
          * @param {Number []} years Selected years.
          * @param {Boolean} isMonthsSelected Flag if months view is checked
          * @param {String} attrName Name of the atttribute to be aggregated
@@ -191,15 +180,16 @@ function initializeCockpitModel () {
          * @param {*[]} condition.values Attribute values of the condition
          * @returns {Object[]} - prepared Data.
          */
-        prepareData: function (data, districts, years, isMonthsSelected, attrName, condition) {
-            var preparedData = [],
-                months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+        prepareData: function (data, administrativeUnits, years, isMonthsSelected, attrName, condition) {
+            var adminUnitsValues = administrativeUnits.values,
+                adminUnitsAttrName = administrativeUnits.attrName,
+                preparedData = [],
                 months_short = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 
-            districts.forEach(function (district) {
+            adminUnitsValues.forEach(function (adminUnit) {
                 years.forEach(function (year) {
-                    months.forEach(function (month, i) {
-                        let filteredObjs = data.filter(obj => obj.district === district && obj.year === year && obj.month === month);
+                    months_short.forEach(function (month_short) {
+                        let filteredObjs = data.filter(obj => obj[adminUnitsAttrName] === adminUnit && obj.year === year && obj.month_short === month_short);
                         const fakeObj = {};
 
                         if (filteredObjs.length > 1) {
@@ -208,9 +198,8 @@ function initializeCockpitModel () {
                         // create fake data for each timestep
                         if (filteredObjs.length === 0) {
                             fakeObj.year = year;
-                            fakeObj.month = month;
-                            fakeObj.month_short = months_short[i];
-                            fakeObj.district = district;
+                            fakeObj.month_short = month_short;
+                            fakeObj[adminUnitsAttrName] = adminUnit;
                             fakeObj[attrName] = 0;
                             filteredObjs.push(fakeObj);
                         }
@@ -220,24 +209,28 @@ function initializeCockpitModel () {
                     }, this);
                 }, this);
             }, this);
-            preparedData = this.mergeMonthsToYears(preparedData, isMonthsSelected, years, districts, attrName);
-            preparedData = this.mergeByAttribute(preparedData, "date", attrName);
-            preparedData = this.addNullValues(preparedData, districts);
+            preparedData = this.mergeMonthsToYears(preparedData, isMonthsSelected, years, administrativeUnits, attrName);
+            preparedData = this.mergeByAttribute(preparedData, "date", attrName, administrativeUnits.attrName);
+            preparedData = this.addNullValues(preparedData, adminUnitsValues);
             preparedData = Radio.request("Util", "sort", preparedData, "date");
             return preparedData;
         },
         /**
          * If "isMonthsSelcted"=== true: Creates an attribute "date" on each object consisting of year and month (yyyymm).
-         * If "isMonthsSelcted"=== false: Merges the months for each district and year to a single object. Creates attribute "date" with eqals to "year".
+         * If "isMonthsSelcted"=== false: Merges the months for each administrative unit and year to a single object. Creates attribute "date" with eqals to "year".
          * @param {Object[]} data Data to merge.
          * @param {Boolean} isMonthsSelected Flag if months view is checked.
          * @param {Number[]} years Selected years.
-         * @param {String[]} districts Selected districts.
+         * @param {Object} administrativeUnits All Selected administrative unit
+         * @param {String[]} administrativeUnits.values All Selected administrative units
+         * @param {String} administrativeUnits.attrName Name of attribute for administrative unit
          * @param {String} attrName Attribute name
          * @returns {Object[]} - merged data.
          */
-        mergeMonthsToYears: function (data, isMonthsSelected, years, districts, attrName) {
-            const preparedData = [];
+        mergeMonthsToYears: function (data, isMonthsSelected, years, administrativeUnits, attrName) {
+            const adminUnitsValues = administrativeUnits.values,
+                adminUnitsAttrName = administrativeUnits.attrName,
+                preparedData = [];
 
             if (isMonthsSelected) {
                 data.forEach(function (obj) {
@@ -247,14 +240,14 @@ function initializeCockpitModel () {
             }
             else {
                 years.forEach(function (year) {
-                    districts.forEach(function (district) {
+                    adminUnitsValues.forEach(function (adminUnit) {
                         const preparedYear = {
-                                date: year,
-                                district: district
+                                date: year
                             },
-                            prefilteredData = data.filter(obj => obj.year === year && obj.district === district),
-                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: "district", values: [district]}, attrName);
+                            prefilteredData = data.filter(obj => obj.year === year && obj[adminUnitsAttrName] === adminUnit),
+                            aggregate = this.aggregateByValues(prefilteredData, {attributeName: adminUnitsAttrName, values: [adminUnit]}, attrName);
 
+                        preparedYear[adminUnitsAttrName] = adminUnit;
                         preparedYear[attrName] = aggregate[0][attrName];
                         preparedData.push(preparedYear);
                     }, this);
@@ -263,29 +256,30 @@ function initializeCockpitModel () {
             return preparedData;
         },
         /**
-         * Adds for each object the attribute of a district with the value of 0. Only if the attribute is undefined.
+         * Adds for each object the attribute of a administrative unit with the value of 0. Only if the attribute is undefined.
          * @param {Object[]} data Object array to be extended.
-         * @param {String[]} districts Selected districts.
+         * @param {String[]} adminUnitsValues Selected administrative units.
          * @returns {Object[]} - the extended data.
          */
-        addNullValues: function (data, districts) {
+        addNullValues: function (data, adminUnitsValues) {
             data.forEach(function (obj) {
-                districts.forEach(function (value) {
-                    if (obj[value] === undefined) {
-                        obj[value] = 0;
+                adminUnitsValues.forEach(function (adminUnit) {
+                    if (obj[adminUnit] === undefined) {
+                        obj[adminUnit] = 0;
                     }
                 });
             });
             return data;
         },
         /**
-         * Sorts the data by "sortAttrName" and maps the attribute values to the districts.
+         * Sorts the data by "sortAttrName" and maps the attribute values to the attribute in "adminUnitsAttrName".
          * @param {Object[]} data Data
          * @param {String} sortAttrName Attribute name the data array is sorted.
-         * @param {String} mergeAttr Attribute name of object that has to be mapped to the district.
+         * @param {String} mergeAttr Attribute name of object that has to be mapped to the attribute in "adminUnitsAttrName".
+         * @param {String} adminUnitsAttrName Attribute name of the administrative unit.
          * @returns {Object[]} - mapped data.
          */
-        mergeByAttribute: function (data, sortAttrName, mergeAttr) {
+        mergeByAttribute: function (data, sortAttrName, mergeAttr, adminUnitsAttrName) {
             let values = [];
             const mergedData = [];
 
@@ -302,9 +296,9 @@ function initializeCockpitModel () {
 
                 mergedObj[sortAttrName] = value;
                 filteredObjs.forEach(function (obj) {
-                    const district = obj.district;
+                    const adminUnit = obj[adminUnitsAttrName];
 
-                    mergedObj[district] = obj[mergeAttr];
+                    mergedObj[adminUnit] = obj[mergeAttr];
                     mergedObj.class = "dot";
                     mergedObj.style = "circle";
                 });
@@ -450,21 +444,88 @@ function initializeCockpitModel () {
             this.setDistricts([...new Set(t)].sort());
         },
 
-        updateLayer: function (filterObject) {
-            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
+        filterSuburbs: function (data) {
+            const t = _.pluck(data, "suburb");
 
-            layer.get("layer").getLayers().forEach(function (ollayer) {
+            this.setSuburbs([...new Set(t)].sort());
+        },
+
+        filterSuburbsByDistricts: function () {
+            const districts = this.filterByAttribute(this.get("data"), this.get("filterObject").districts, "district");
+
+            this.filterSuburbs(districts);
+        },
+
+        updateLayer: function (filterObject) {
+            const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13802"});
+
+            layer.get("layer").getLayers().forEach(olLayer => {
                 const yearByLayerName = filterObject.years.filter(function (year) {
-                    return ollayer.get("name") === year + " - erledigt";
+                    return olLayer.get("name") === year + " - genehmigt";
                 });
 
                 if (yearByLayerName.length === 0) {
-                    ollayer.setVisible(false);
+                    olLayer.setVisible(false);
                 }
                 else {
-                    ollayer.setVisible(true);
+                    olLayer.setVisible(true);
+                    if (filterObject.districts.length > 0) {
+                        this.updateLayerByDistricts(olLayer, filterObject.districts, yearByLayerName[0]);
+                    }
+                    else {
+                        olLayer.setVisible(false);
+                    }
                 }
             });
+            Radio.trigger("Map", "render");
+        },
+
+        updateLayerByDistricts: function (layer, districts, year) {
+            let orFilter = "",
+                sldBody;
+
+            districts.forEach(district => {
+                switch (district) {
+                    case "Altona": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "A");
+                        break;
+                    }
+                    case "Bergedorf": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "B");
+                        break;
+                    }
+                    case "Eimsbüttel": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "E");
+                        break;
+                    }
+                    case "Hamburg-Mitte": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "M");
+                        break;
+                    }
+                    case "Hamburg-Nord": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "N");
+                        break;
+                    }
+                    case "Harburg": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "H");
+                        break;
+                    }
+                    case "Wandsbek": {
+                        orFilter += getPropertyIsLike("geschaeftszeichen", "W");
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            });
+            if (districts.length > 1) {
+                sldBody = getOrFilter(layer.getSource().getParams().LAYERS, orFilter, year);
+            }
+            else {
+                sldBody = getFilter(layer.getSource().getParams().LAYERS, orFilter, year);
+            }
+            layer.getSource().updateParams({SLD_BODY: sldBody, STYLES: "style"});
         },
 
         setYears: function (value) {
@@ -473,6 +534,10 @@ function initializeCockpitModel () {
 
         setDistricts: function (value) {
             this.set("districts", value);
+        },
+
+        setSuburbs: function (value) {
+            this.set("suburbs", value);
         },
 
         setData: function (value) {
