@@ -1,4 +1,4 @@
-import {getOrFilter, getFilter, getWithoutFilter, getPropertyIsLike} from "./buildSld";
+import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
 
 /**
  * @returns {void}
@@ -467,9 +467,9 @@ function initializeCockpitModel () {
                     if (filterObject.districts.length > 0) {
                         this.updateLayerByDistricts(olLayer, filterObject.districts, yearByLayerName[0]);
                     }
-                    // else {
-                    //     olLayer.setVisible(false);
-                    // }
+                    else {
+                        olLayer.setVisible(false);
+                    }
                 }
             });
             Radio.trigger("Map", "render");
@@ -519,9 +519,7 @@ function initializeCockpitModel () {
             }
             else {
                 sldBody = getFilter(layer.getSource().getParams().LAYERS, orFilter, year);
-                console.info(sldBody);
             }
-            sldBody = sldBody.replace(/\n/g, "");
             layer.getSource().updateParams({SLD_BODY: sldBody, STYLES: "style"});
         },
 
