@@ -1,5 +1,6 @@
 import initializeCockpitModel from "../cockpit/model";
 import Template from "text-loader!./template.html";
+import TemplateLegend from "text-loader!./template_legend.html";
 import "bootstrap/js/dropdown";
 import "bootstrap-select";
 import "./style.less";
@@ -9,6 +10,7 @@ const CockpitView = Backbone.View.extend({
         "changed.bs.select .selectpicker-district": function (evt) {
             this.mapSelectedValues(evt, "districts");
             this.redrawGraphs();
+            this.renderLegend();
         },
         "changed.bs.select .selectpicker-year": function (evt) {
             this.mapSelectedValues(evt, "years");
@@ -29,15 +31,11 @@ const CockpitView = Backbone.View.extend({
      */
     initialize: function () {
         this.model = initializeCockpitModel();
-        this.listenTo(this.model, {
-            "render": function () {
-                this.render(this.model, this.model.get("isActive"));
-            }
-        });
         this.render(this.model, this.model.get("isActive"));
     },
     id: "cockpit_bauvorhaben",
     template: _.template(Template),
+    templateLegend: _.template(TemplateLegend),
     /**
      * Todo
      * @param {initializeCockpitModel} model Todo
@@ -50,7 +48,7 @@ const CockpitView = Backbone.View.extend({
 
             this.$el.html(this.template(attr));
             Radio.trigger("Sidebar", "append", this.el);
-            Radio.trigger("Sidebar", "toggle", true);
+            Radio.trigger("Sidebar", "toggle", true, "40%");
             this.delegateEvents();
         }
         else {
@@ -61,7 +59,16 @@ const CockpitView = Backbone.View.extend({
         this.initDropdown();
         return this;
     },
+    /**
+     * Renders legend
+     * @returns {void}
+     */
+    renderLegend: function () {
+        const districts = this.model.get("filterObject").districts;
 
+        this.$el.find(".legend").html("");
+        this.$el.find(".legend").html(this.templateLegend({districts: districts}));
+    },
     /**
      * inits the dropdown list
      * @see {@link https://developer.snapappointments.com/bootstrap-select/options/|Bootstrap-Select}
@@ -86,16 +93,20 @@ const CockpitView = Backbone.View.extend({
      * @returns {void}
      */
     mapSelectedValues: function (evt, key) {
-        // const selectedValues = Array.from(evt.target.selectedOptions).map(option => option.value);
-        const selectedValues = Array.from(evt.target.selectedOptions).map(function (option) {
-            let value = option.value;
+        let selectedValues = Array.from(evt.target.options).map(function (option) {
+            const isOptionSelected = $(option)[0].selected;
+            let value;
 
-            if (!isNaN(parseInt(value, 10))) {
-                value = parseInt(value, 10);
+            if (isOptionSelected) {
+                value = $(option)[0].value;
+                if (!isNaN(parseInt(value, 10))) {
+                    value = parseInt(value, 10);
+                }
             }
             return value;
         });
 
+        selectedValues = _.without(selectedValues, undefined);
         this.model.setFilterObjectByKey(key, selectedValues);
     },
     redrawGraphs: function () {

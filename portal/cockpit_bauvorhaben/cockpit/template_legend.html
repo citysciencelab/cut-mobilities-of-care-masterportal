@@ -1,0 +1,24 @@
+<div>
+    <% districts.forEach(function (district) { %>
+
+        <%if (district === "Altona") {%>
+            <span class="legend-altona glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Bergedorf") {%>
+            <span class="legend-bergedorf glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Eimsbüttel") {%>
+            <span class="legend-eimsbuettel glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Hamburg-Mitte") {%>
+            <span class="legend-hamburg-mitte glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Hamburg-Nord") {%>
+            <span class="legend-hamburg-nord glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Harburg") {%>
+            <span class="legend-harburg glyphicon glyphicon-stop col-xs-1"/>
+        <%}else if (district === "Wandsbek") {%>
+            <span class="legend-wandsbek glyphicon glyphicon-stop col-xs-1"/>
+        <%}else {%>
+            <span class="legend-other glyphicon glyphicon-stop col-xs-1"/>
+        <%}%>
+
+        <label class="col-xs-10"><%=district%></label>
+    <% }); %>
+</div>

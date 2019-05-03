@@ -1,33 +1,30 @@
 <div class="btn-group header">
     <span class="tool-name"><%= name %></span>
 </div>
-<div class="filter">
-    <select class="selectpicker selectpicker-district" title="nach Bezirken / Hamburg gesamt" multiple>
-        <% districts.forEach(function (district) { %>
-            <option><%= district %></option>
-        <% }); %>
-    </select>
-    <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
-        <% years.forEach(function (year) { %>
-            <option><%= year %></option>
-        <% }); %>
-    </select>
-    <div class="row">
-        <div class="col-xs-6">
-            <div class="checkbox">
-                <label>
-                    <input class="month" type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
-                </label>
-            </div>
+<div class="row">
+    <div class="filter col-xs-7">
+        <select class="selectpicker selectpicker-district" title="nach Bezirken / Hamburg gesamt" multiple>
+            <% districts.forEach(function (district) { %>
+                <option><%= district %></option>
+            <% }); %>
+        </select>
+        <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
+            <% years.forEach(function (year) { %>
+                <option><%= year %></option>
+            <% }); %>
+        </select>
+        <div class="checkbox">
+            <label>
+                <input class="month" type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
+            </label>
         </div>
-        <div class="col-xs-6">
-            <div class="checkbox">
-                <label>
-                    <input class="flat" type="checkbox" <% if(filterObject.flatMode) { print('checked');} %>> nur Wohnungsbau
-                </label>
-            </div>
+        <div class="checkbox">
+            <label>
+                <input class="flat" type="checkbox" <% if(filterObject.flatMode) { print('checked');} %>> nur Wohnungsbau
+            </label>
         </div>
     </div>
+    <div class="legend col-xs-5"></div>
 </div>
 <div class="graphs">
     <div class="graph graph-baugenehmigungen">
