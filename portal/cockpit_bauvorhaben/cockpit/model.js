@@ -64,42 +64,15 @@ function initializeCockpitModel () {
                 attributesToShow = [];
 
             if (filteredData.length > 0) {
-                administrativeUnits.values.forEach(function (adminUnit) {
-                    switch (adminUnit) {
-                        case "Altona": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-altona"});
-                            break;
-                        }
-                        case "Bergedorf": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-bergedorf"});
-                            break;
-                        }
-                        case "Eimsbüttel": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-eimsbuettel"});
-                            break;
-                        }
-                        case "Hamburg-Mitte": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-hamburg-mitte"});
-                            break;
-                        }
-                        case "Hamburg-Nord": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-hamburg-nord"});
-                            break;
-                        }
-                        case "Harburg": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-harburg"});
-                            break;
-                        }
-                        case "Wandsbek": {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-wandsbek"});
-                            break;
-                        }
-                        default: {
-                            attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-other"});
-                            break;
-                        }
+                administrativeUnits.values.forEach(function (adminUnit, i) {
+                    if (i < 10) {
+                        attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-" + i});
+                    }
+                    else {
+                        attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-other"});
                     }
                 });
+
                 this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
