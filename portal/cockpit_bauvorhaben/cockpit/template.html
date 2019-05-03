@@ -8,11 +8,7 @@
                 <option><%= district %></option>
             <% }); %>
         </select>
-        <select class="selectpicker selectpicker-suburb" title="nach Stadtteilen" multiple>
-            <% suburbs.forEach(function (suburb) { %>
-                <option><%= suburb %></option>
-            <% }); %>
-        </select>
+        <div class="placeholder-suburb"></div>
         <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
             <% years.forEach(function (year) { %>
                 <option><%= year %></option>

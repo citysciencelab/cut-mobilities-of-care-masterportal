@@ -447,6 +447,12 @@ function initializeCockpitModel () {
             this.setSuburbs([...new Set(t)].sort());
         },
 
+        filterSuburbsByDistricts: function () {
+            const districts = this.filterByAttribute(this.get("data"), this.get("filterObject").districts, "district");
+
+            this.filterSuburbs(districts);
+        },
+
         updateLayer: function (filterObject) {
             const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13872"});
 
