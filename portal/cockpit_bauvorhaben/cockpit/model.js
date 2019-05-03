@@ -77,8 +77,8 @@ function initializeCockpitModel () {
 
                 this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
                 this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
-                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneineinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
-                this.createGraph(dataWohneinheitenImBau, ".graph-wohneineinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
+                this.createGraph(dataWohneinheitenImBau, ".graph-wohneinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
                 if (isMonthsSelected) {
                     this.postprocessGraphs(years.length);
                 }

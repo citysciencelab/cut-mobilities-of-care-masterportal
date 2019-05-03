@@ -5,6 +5,7 @@ import TemplateLegend from "text-loader!./template_legend.html";
 import "bootstrap/js/dropdown";
 import "bootstrap-select";
 import "./style.less";
+import {select, selectAll, event} from "d3-selection";
 
 const CockpitView = Backbone.View.extend({
     events: {
@@ -131,6 +132,46 @@ const CockpitView = Backbone.View.extend({
     redrawGraphs: function () {
         this.$el.find(".graph-svg").remove();
         this.model.prepareDataForGraph();
+        this.overwriteGraphTooltip();
+    },
+    overwriteGraphTooltip: function () {
+        const svgBaugenehmigungen = select(".graph-baugenehmigungen svg"),
+            svgWohneinheiten = select(".graph-wohneinheiten svg"),
+            svgWohneinheitenNochNichtImBau = select(".graph-wohneinheiten-noch-nicht-im-bau svg"),
+            svgWohneinheitenImBau = select(".graph-wohneinheiten-im-bau svg"),
+            context = this;
+
+        svgBaugenehmigungen.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
+            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-1");
+        });
+        svgWohneinheiten.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
+            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-2");
+        });
+        svgWohneinheitenNochNichtImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
+            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-3");
+        });
+        svgWohneinheitenImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
+            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-4");
+        });
+    },
+    tooltipMouseover: function (data, index, nodeList, tooltipDivClass) {
+        const node = $(nodeList[index])[0],
+            nodeAttributes = node.attributes,
+            namedItem = nodeAttributes.getNamedItem("attrname"),
+            attrVal = $(namedItem).val(),
+            date = this.insertStringAtIndex(data.date, 4, "/"),
+            tooltipString = "(" + attrVal + ")<br>" + date + ": " + data[attrVal],
+            tooltipDiv = this.$el.find(tooltipDivClass);
+
+        tooltipDiv.html(tooltipString)
+            .attr("style", "background-color: buttonface;" +
+                "border-radius: 4px;" +
+                "text-align: center;" +
+                "left: " + (event.layerX - 25) + "px;" +
+                "top: " + (event.layerY - 35) + "px;");
+    },
+    insertStringAtIndex: function (string, index, stringToAdd) {
+        return string.substr(0, index) + stringToAdd + string.substr(index);
     }
 });
 
