@@ -278,7 +278,7 @@ const WMSLayer = Layer.extend({
             projection = Radio.request("MapView", "getProjection"),
             coordinate = Radio.request("GFI", "getCoordinate");
 
-        return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount")});
+        return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount"), STYLES: ""});
     },
 
     /*
