@@ -26,17 +26,11 @@ ${orFilter}
 </ogc:Filter>
 <PointSymbolizer>
 <Graphic>
-<Mark>
-<WellKnownName>square</WellKnownName>
-<Fill>
-<SvgParameter name="fill">#FF0000</SvgParameter>
-</Fill>
-<Stroke>
-<SvgParameter name="stroke">#000000</SvgParameter>
-<SvgParameter name="stroke-width">1</SvgParameter>
-</Stroke>
-</Mark>
-<Size>13</Size>
+<ExternalGraphic>
+<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost/bauvorhaben/${year}.svg"/>
+<Format>image/svg</Format>
+</ExternalGraphic>
+<Size>20</Size>
 </Graphic>
 </PointSymbolizer>
 </Rule>
@@ -65,17 +59,11 @@ ${orFilter}
 </ogc:Filter>
 <PointSymbolizer>
 <Graphic>
-<Mark>
-<WellKnownName>square</WellKnownName>
-<Fill>
-<SvgParameter name="fill">#FF0000</SvgParameter>
-</Fill>
-<Stroke>
-<SvgParameter name="stroke">#000000</SvgParameter>
-<SvgParameter name="stroke-width">1</SvgParameter>
-</Stroke>
-</Mark>
-<Size>13</Size>
+<ExternalGraphic>
+<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://localhost/bauvorhaben/${year}.svg"/>
+<Format>image/svg</Format>
+</ExternalGraphic>
+<Size>20</Size>
 </Graphic>
 </PointSymbolizer>
 </Rule>
