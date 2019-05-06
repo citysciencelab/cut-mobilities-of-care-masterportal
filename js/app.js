@@ -313,27 +313,27 @@ function loadApp () {
                     break;
                 }
                 case "totalview": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         new TotalView();
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
                 }
                 case "backforward": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
                 case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView({el: element});
                     }
