@@ -326,7 +326,7 @@ const GraphModel = Backbone.Model.extend({
         }
     },
 
-    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv) {
+    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
         var dat = data.filter(function (obj) {
                 return obj[yAttrToShow] !== "-";
             }),
@@ -344,7 +344,7 @@ const GraphModel = Backbone.Model.extend({
             .attr("cy", function (d) {
                 return scaleY(d[yAttrToShow]);
             })
-            .attr("r", 5)
+            .attr("r", dotSize)
 
             .attr("x", function (d) {
                 return scaleX(d[xAttr]) + (scaleX.bandwidth() / 2);
@@ -356,6 +356,10 @@ const GraphModel = Backbone.Model.extend({
             .attr("height", 10)
             .attr("class", function (d) {
                 return d.class;
+            })
+            .attr("attrname", yAttrToShow)
+            .attr("attrval", function (d) {
+                return d[yAttrToShow];
             })
             .on("mouseover", function (d) {
                 yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -513,6 +517,7 @@ const GraphModel = Backbone.Model.extend({
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
+            dotSize = graphConfig.dotSize || 5,
             valueLine;
 
         if (_.has(graphConfig, "legendData")) {
@@ -523,13 +528,13 @@ const GraphModel = Backbone.Model.extend({
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
                 this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv, dotSize);
             }
             else {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize);
             }
         }, this);
         // Add the Axis

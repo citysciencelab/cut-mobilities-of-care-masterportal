@@ -1,5 +1,6 @@
 @font-family-bold: "UniversNextW04-620CondB", "Arial Narrow", Arial, sans-serif;
 @font-size: 14px;
+@font-size-xs: 10px;
 @font-size-small: 12px;
 @font-size-large: 16px;
 @glyphicon-size: 18px;
@@ -103,6 +104,12 @@
             font-family: @font-family-bold;
         }
     }
+    .graph {
+        text {
+            font-family: @font-family-bold;
+            font-size: @font-size-xs;
+        }
+    }
 
     .graph-tooltip-div {
         display: inline-block;
@@ -170,6 +177,6 @@
     .dot {
         cursor: pointer;
         stroke: none;
-        fill: rgba(0, 0, 0, 0);
+        fill: rgba(0, 0, 0, .2);
     }
 }
