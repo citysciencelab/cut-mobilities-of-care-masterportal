@@ -7,8 +7,12 @@ import BackForwardModel from "./model";
  */
 const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototype */{
     events: {
-        "click .forward": "setNextView",
-        "click .backward": "setLastView"
+        "click .forward": function () {
+            this.setNextLastView("for");
+        },
+        "click .backward": function () {
+            this.setNextLastView("back");
+        }
     },
     /**
      * @class BackForwardView
@@ -23,11 +27,11 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      */
     initialize: function () {
         var channel = Radio.channel("BackForwardView"),
-            tpl;
+            template;
 
         this.model = new BackForwardModel();
-        tpl = this.modifyTemplate(BackForwardTemplate);
-        this.template = _.template(tpl);
+        template = this.modifyTemplate(BackForwardTemplate);
+        this.template = _.template(template);
 
         channel.reply({
             "getView": this
@@ -54,8 +58,9 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      */
     modifyTemplate: function (tpl) {
         var result,
-            forwardGlyph = this.model.getForGlyphicon(),
-            backwardGlyph = this.model.getBackGlyphicon(),
+            configData = this.model.get("config"),
+            forwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconFor : configData,
+            backwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconBack : configData,
             buttons,
             re;
 
@@ -137,43 +142,36 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
     },
 
     /**
-     * Setter for nextview
+     * Setter for next and last view
+     * @param {String} direction - indicates if backward or forward button was clicked
      * @fires MapView#RadioTriggerMapViewSetScale
      * @fires MapView#RadioTriggerMapViewSetCenter
      * @returns {void}
      */
-    setNextView: function () {
+    setNextLastView: function (direction) {
         var forButton = document.getElementsByClassName("forward glyphicon")[0],
             backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);
-        $(backButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.get("currentPos") + 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
-        if (this.model.get("currentPos") === centerScales.length - 1) {
-            $(forButton).css("pointer-events", "none");
-        }
-    },
-    /**
-     * Setter for lastview
-     * @fires MapView#RadioTriggerMapViewSetScale
-     * @fires MapView#RadioTriggerMapViewSetCenter
-     * @returns {void}
-     */
-    setLastView: function () {
-        var backButton = document.getElementsByClassName("backward glyphicon")[0],
-            forButton = document.getElementsByClassName("forward glyphicon")[0],
-            centerScales = this.model.get("CenterScales");
 
-        this.model.setWentFor(true);
-        $(forButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.get("currentPos") - 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
-        if (this.model.get("currentPos") === 0) {
-            $(backButton).css("pointer-events", "none");
+        if (direction === "for") {
+            $(backButton).css("pointer-events", "auto");
+            this.model.setCurrentPos(this.model.get("currentPos") + 1);
+            Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+            Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+            if (this.model.get("currentPos") === centerScales.length - 1) {
+                $(forButton).css("pointer-events", "none");
+            }
+        }
+        else if (direction === "back") {
+            $(forButton).css("pointer-events", "auto");
+            this.model.setCurrentPos(this.model.get("currentPos") - 1);
+            Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+            Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+            if (this.model.get("currentPos") === 0) {
+                $(backButton).css("pointer-events", "none");
+            }
         }
     }
 });
