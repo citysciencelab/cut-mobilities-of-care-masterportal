@@ -286,11 +286,17 @@ describe("drawModel", function () {
 
     describe("downloadFeaturesWithoutGUI", function () {
         var downloadedFeatures,
-            featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]};
+            featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
+            multiPolygonfeatColFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": [[[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]]}, "properties": null}]};
 
         it("should return FeatureCollection", function () {
             downloadedFeatures = model.downloadFeaturesWithoutGUI();
             expect(downloadedFeatures).to.deep.equal(JSON.stringify(featureCollectionFromJson));
+        });
+
+        it("should return multiPolygon in FeatureCollection", function () {
+            downloadedFeatures = model.downloadFeaturesWithoutGUI("multiGeometry");
+            expect(downloadedFeatures).to.deep.equal(JSON.stringify(multiPolygonfeatColFromJson));
         });
 
     });
