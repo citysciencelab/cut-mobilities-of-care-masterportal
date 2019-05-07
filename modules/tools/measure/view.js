@@ -4,7 +4,7 @@ import TableTemplate from "text-loader!./table/template.html";
 const MeasureView = Backbone.View.extend({
     events: {
         "change select#geomField": "setGeometryType",
-        "change select.styledSelect": "setGeometryType",
+        "change .styledSelect": "setGeometryType",
         "change select#unitField": "setUnit",
         "click button": "deleteFeatures",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
@@ -42,7 +42,7 @@ const MeasureView = Backbone.View.extend({
                     $this.wrap("<div class='select'></div>");
 
                     // Insert a styled div to sit over the top of the hidden select element
-                    $this.after("<select class='styledSelect'></select>");
+                    $this.after("<div class='styledSelect'></div>");
 
                     // Cache the styled select
                     var $styledSelect = $this.next(".styledSelect");
@@ -69,9 +69,9 @@ const MeasureView = Backbone.View.extend({
                     // Show the unordered list when the styled div is clicked (also hides it if the div is clicked again)
                     $styledSelect.click(function (e) {
                         e.stopPropagation();
-                        $(".styledSelect.active").each(function () {
-                            $(this).removeClass("active").next("ul.options").hide();
-                        });
+                        // $(".styledSelect.active").each(function () {
+                        //     $(this).removeClass("active").next("ul.options").hide();
+                        // });
                         $(this).toggleClass("active").next("ul.options").toggle();
                     });
 
@@ -90,38 +90,14 @@ const MeasureView = Backbone.View.extend({
                         $list.hide();
                     });
 
-                    /*const selectElement = document.querySelector(".styledSelect");
-
-                    selectElement.addEventListener("change", (event) => {
-                        console.log("ich bin changed");
-                        const result = document.querySelector("#geomField");
-                        result.textContent = `You like ${event.target.value}`;
-                    });*/
-
-                    $(document).ready(function () {
-                        console.log($(".styledSelect").text());
-                        $(".styledSelect").change(function () {
-                            console.log("ich bin da");
-                            if ($(".styledSelect").text() === "Fläche") {
-                                $("#geomField").html("<option value='Polygon' selected = ''>Fläche</option>");
-                                // $("#geomField :selected").text(Fläche);
-                            }
-                        });
-                        // $("div.styledSelect").on("change", function () {
-                        //     console.log("change ");
-                        //     var selObj = window.getSelection();
-                        //     if (selObj === "Strecke") {
-                        //         console.log("strecke ist da");
-                        //         $("#geomField").html("<option value='LineString' selected = ''>Strecke</option>");
-                        //     }
-                        //     else if (selObj === "Fläche") {
-                        //         console.log("fläche ist da");
-                        //         $("#geomField").html("<option value='Polygon' selected = ''>Fläche</option>");
-                        //     }
-                        // });
+                    $(".styledSelect").bind("DOMSubtreeModified", function () {
+                        if (document.getElementsByClassName("styledSelect")[0].innerHTML === "Fläche") {
+                            $("#geomField").html("<option value='Polygon' selected = ''>Fläche</option>");
+                        }
+                        else {
+                            $("#geomField").html("<option value='LineString' selected = ''>Strecke</option>");
+                        }
                     });
-                    // var e = $("div.styledSelect");
-                    // console.log(e);
                 });
             }
         }
@@ -132,7 +108,6 @@ const MeasureView = Backbone.View.extend({
         }
         return this;
     },
-
     setGeometryType: function (evt) {
         this.model.setGeometryType(evt.target.value);
     },
