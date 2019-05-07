@@ -1,12 +1,30 @@
 import FolderTemplate from "text-loader!./templateTree.html";
 
-const FolderView = Backbone.View.extend({
+/**
+ * @member FolderTemplate
+ * @description Template used to create the Folder View Tree
+ * @memberof Menu.Desktop.Folder
+ */
+
+const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype */{
     events: {
         "click .title, .glyphicon-minus-sign, .glyphicon-plus-sign": "toggleIsExpanded",
         "click .selectall": "toggleIsSelected"
     },
+    /**
+     * @class FolderViewTree
+     * @extends Backbone.View
+     * @memberof Menu.Desktop.Folder
+     * @constructs
+     * @listens FolderViewTree#changeIsSelected
+     * @listens FolderViewTree#changeIsExpanded
+     * @listens FolderViewTree#isVisibleInTree
+     * @fires FolderViewTree#toggleIsExpanded
+     * @fires FolderViewTree#toggleIsSelected
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
+     */
     initialize: function () {
-        // Verhindert, dass sich der Themenbaum wg Bootstrap schließt
+        // prevents the theme tree to close due to Bootstrap
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -23,6 +41,11 @@ const FolderView = Backbone.View.extend({
     className: "themen-folder",
     id: "",
     template: _.template(FolderTemplate),
+
+    /**
+     * Renders the data to DOM.
+     * @return {FolderViewTree} returns this
+     */
     render: function () {
         var attr = this.model.toJSON(),
             paddingLeftValue = 0,
@@ -59,19 +82,37 @@ const FolderView = Backbone.View.extend({
         }
         return this;
     },
+
+    /**
+     * Rerenders the data to DOM.
+     * @return {void}
+     */
     rerender: function () {
         var attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
     },
+    /**
+     * Toogle Expanded
+     * @return {void}
+     */
     toggleIsExpanded: function () {
         this.model.toggleIsExpanded();
     },
+    /**
+     * Toggle Selected
+     * @fires ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
+     * @return {void}
+     */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnChildLayers", this.model);
         this.model.setIsExpanded(true);
     },
+    /**
+     * Remove if not visible
+     * @return {void}
+     */
     removeIfNotVisible: function () {
         if (!this.model.get("isVisibleInTree")) {
             this.remove();
@@ -80,4 +121,4 @@ const FolderView = Backbone.View.extend({
 
 });
 
-export default FolderView;
+export default FolderViewTree;

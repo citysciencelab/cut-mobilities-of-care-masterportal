@@ -15,7 +15,7 @@ const Config = {
         saveSelection: true,
         layerIDsToIgnore: [
             "1912", "1913", "1914", "1915", "1916", "1917", // UESG
-            "215", "216", "217", "218", "219", // Zuständigkeitsgrenzen
+            "367", "216", "2425", "2426", "219", // Zuständigkeitsgrenzen
             "2935", // Baublöcke
             "1791", // nachträgliche Bodenrichtwerte lagetypisch 1964
             "2298", // Strassenbaumkataster grau
