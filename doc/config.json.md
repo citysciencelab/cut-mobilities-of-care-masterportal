@@ -310,7 +310,7 @@ Konfiguration der Suche über die sichtbaren WFS
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
-|backforward|nein|Boolean|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+|backforwardview|nein|[backforward](#markdown-header-portalconfigcontrolsbackforward)|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
 
 
 ***
@@ -394,6 +394,28 @@ Das Attribut overviewmap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 ***
 
+### Portalconfig.portalTitle
+In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|nein|String|"Master"|Name des Portals.|
+|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
+|link|nein|String|"http://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
+|tooltip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+
+**Beispiel portalTitle:**
+```
+#!json
+"portalTitle": {
+    "title": "Master",
+    "logo": "../../img/hh-logo.png",
+    "link": "http://geoinfo.hamburg.de",
+    "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+}
+```
+***
+
 #### Portalconfig.controls.totalview
 
 Das Attribut totalview kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt es den Butten an, der in den Defaulteinsellungen gesetzt ist. Ist es vom Typ Object, so gelten folgende Attribute
@@ -420,25 +442,28 @@ Das Attribut totalview kann vom Typ Boolean oder Object sein. Wenn es vom Typ Bo
 
 ***
 
-### Portalconfig.portalTitle
-In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die Breite der Leiste ausreicht. Der Portaltitle ist mobil nicht verfügbar.
+#### Portalconfig.controls.backforward
+
+Das Attribut backforward kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Buttons zur Steuerung der letzten und nächsten Kartenansichten mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|title|nein|String|"Master"|Name des Portals.|
-|logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
-|link|nein|String|"http://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
-|tooltip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+|glyphiconFor|nein|String||Über den Parameter glyphiconFor kann ein anderes Glyphicon für das Vorschalten der Kartenansicht verwendet werden.|
+|glyphiconBack|nein|String||Über den Parameter glyphiconBack kann ein anderes Glyphicon für das Zurückschalten der Kartenansicht verwendet werden.|
 
-**Beispiel portalTitle:**
+**Beispiel backforward als Object:**
 ```
 #!json
-"portalTitle": {
-    "title": "Master",
-    "logo": "../../img/hh-logo.png",
-    "link": "http://geoinfo.hamburg.de",
-    "toolTip": "Landesbetrieb Geoinformation und Vermessung"
+"backforward" : {
+    "glyphiconFor": "glyphicon-fast-forward",
+    "glyphiconBack": "glyphicon-fast-backward"
 }
+```
+
+**Beispiel backforward als Boolean:**
+```
+#!json
+"backforward": true
 ```
 
 ***

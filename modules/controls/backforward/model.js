@@ -8,7 +8,23 @@ const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.proto
     defaults: {
         CenterScales: [],
         wentFor: false,
-        currentPos: 0
+        currentPos: 0,
+        config: {}
+    },
+    /**
+     * Create backforward control instance
+     * @returns {void}
+     */
+    initialize: function () {
+        this.setConfigData(Radio.request("Parser", "getItemByAttributes", {id: "backforward"}));
+    },
+    /**
+     * Sets the given parameter for config
+     * @param {Object} configData - bakcforward object form config.json
+     * @returns {void}
+     */
+    setConfigData: function (configData) {
+        this.set("config", configData);
     },
     /**
      * Sets given parameters for CenterScales.
