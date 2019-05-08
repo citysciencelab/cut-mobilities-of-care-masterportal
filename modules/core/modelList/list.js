@@ -123,6 +123,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                this.sortLayersVisually();
             },
             "change:isExpanded": function (model) {
                 this.trigger("updateOverlayerView", model.get("id"));
