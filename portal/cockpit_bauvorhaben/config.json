@@ -57,7 +57,8 @@
 		"controls": {
 			"zoom": true,
 			"button3d": true,
-			"buttonOblique": true
+      "buttonOblique": true,
+      "orientation3d": true
 		},
 		"scaleLine": true
 	},
