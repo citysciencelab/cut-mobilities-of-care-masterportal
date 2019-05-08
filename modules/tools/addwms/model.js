@@ -1,15 +1,34 @@
 import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
 
-const AddWMSModel = Tool.extend({
+const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         renderToWindow: true,
         glyphicon: "glyphicon-plus"
     }),
+
+    /**
+     * @class AddWMSModel
+     * @description Todo
+     * @extends Tool
+     * @memberOf Tools
+     * @constructs
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires Util#RadioTriggerUtilGetProxyUrl
+     * @fires ModelList#RadioTriggerModelListRenderTree
+     * @fires Parser#RadioTriggerParserAddFolder
+     * @fires Parser#RadioTriggerParserAddLayer
+     */
     initialize: function () {
         this.superInitialize();
     },
-    // Diese funktion wird benutzt, um Fehlermeldungen im WMSView darzustellen
+
+    /**
+     * todo
+     * @param {string} text The error Message
+     * @return {void}
+     */
     displayError: function (text) {
         if (text === "" || typeof text === "undefined") {
             $(".addWMS.win-body").prepend("<div class=\"addwms_error\">Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!</div>");
@@ -17,7 +36,15 @@ const AddWMSModel = Tool.extend({
         $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
     },
 
-    // Lädt die Capabillities, parsed sie und extrahiert die Daten-Layer
+    /**
+     * todo
+     * @fires Util#RadioTriggerUtilShowLoader
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires Util#RadioTriggerUtilGetProxyUrl
+     * @fires ModelList#RadioTriggerModelListRenderTree
+     * @fires Parser#RadioTriggerParserAddFolder
+     * @return {void}
+     */
     loadAndAddLayers: function () {
         var url = $("#wmsUrl").val();
 
@@ -43,7 +70,8 @@ const AddWMSModel = Tool.extend({
                     capability = parser.read(data);
 
                     this.setWMSVersion(capability.version);
-                    this.setWMSUrl(Radio.request("Util", "getProxyURL", url));
+                    this.setWMSUrl(url);
+
                     if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
                         Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
                         Radio.trigger("ModelList", "renderTree");
@@ -66,6 +94,15 @@ const AddWMSModel = Tool.extend({
 
     },
 
+    /**
+     * todo
+     * @param {object} object todo
+     * @param {string} parentId todo
+     * @param {int} level todo
+     * @fires Parser#RadioTriggerParserAddFolder
+     * @fires Parser#RadioTriggerParserAddLayer
+     * @return {void}
+     */
     parseLayer: function (object, parentId, level) {
         if (_.has(object, "Layer")) {
             _.each(object.Layer, function (layer) {
@@ -78,10 +115,21 @@ const AddWMSModel = Tool.extend({
         }
     },
 
+    /**
+     * Setter for version property
+     * @param {string} value todo
+     * @return {void}
+     */
     setWMSVersion: function (value) {
         this.set("version", value);
     },
 
+    /**
+     * todo
+     * Setter for wmsUrl property
+     * @param {string} value todo
+     * @return {void}
+     */
     setWMSUrl: function (value) {
         this.set("wmsUrl", value);
     }
