@@ -154,36 +154,35 @@ const CockpitView = Backbone.View.extend({
             svgWohneinheiten = select(".graph-wohneinheiten svg"),
             svgWohneinheitenNochNichtImBau = select(".graph-wohneinheiten-noch-nicht-im-bau svg"),
             svgWohneinheitenImBau = select(".graph-wohneinheiten-im-bau svg"),
-            context = this;
+            that = this;
 
         svgBaugenehmigungen.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
-            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-1");
+            that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-1"));
         });
         svgWohneinheiten.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
-            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-2");
+            that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-2"));
         });
         svgWohneinheitenNochNichtImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
-            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-3");
+            that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-3"));
         });
         svgWohneinheitenImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
-            context.tooltipMouseover(data, index, nodeList, ".graph-tooltip-div-4");
+            that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-4"));
         });
     },
-    tooltipMouseover: function (data, index, nodeList, tooltipDivClass) {
+    tooltipMouseover: function (data, index, nodeList, tooltipDiv) {
         const node = $(nodeList[index])[0],
             nodeAttributes = node.attributes,
             namedItem = nodeAttributes.getNamedItem("attrname"),
             attrVal = $(namedItem).val(),
             date = this.insertStringAtIndex(data.date, 4, "/"),
-            tooltipString = "(" + attrVal + ")<br>" + date + ": " + data[attrVal],
-            tooltipDiv = this.$el.find(tooltipDivClass);
+            tooltipString = "(" + attrVal + ")<br>" + date + ": " + data[attrVal];
 
         tooltipDiv.html(tooltipString)
             .attr("style", "background-color: buttonface;" +
                 "border-radius: 4px;" +
                 "text-align: center;" +
                 "left: " + (event.layerX - 25) + "px;" +
-                "top: " + (event.layerY - 35) + "px;");
+                "top: " + (event.layerY - 50) + "px;");
     },
     insertStringAtIndex: function (string, index, stringToAdd) {
         return string.substr(0, index) + stringToAdd + string.substr(index);

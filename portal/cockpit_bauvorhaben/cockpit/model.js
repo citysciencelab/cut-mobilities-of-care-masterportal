@@ -1,5 +1,5 @@
 import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
-
+import {select} from "d3-selection";
 /**
  * @returns {void}
  */
@@ -91,15 +91,23 @@ function initializeCockpitModel () {
          * @returns {void}
          */
         postprocessGraphs: function (segments) {
-            const tickTexts = $.find(".xAxisDraw > .tick > text"),
-                xAxisDraw = $.find(".xAxisDraw > .domain")[0],
+            const xAxisDraw = $.find(".xAxisDraw > .domain")[0],
                 xAxisWidth = xAxisDraw.getBoundingClientRect().width,
                 widthPerSegment = Math.round(xAxisWidth / segments);
 
-            tickTexts.forEach(function (tickText) {
-                tickText.innerHTML = tickText.innerHTML.substring(0, 4);
-                $(tickText).attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
-            });
+            select(".xAxisDraw").selectAll(".tick > text")
+                .html(function (d) {
+                    let returnValue;
+
+                    if (typeof d === "string") {
+                        returnValue = d.substring(0, 4);
+                    }
+                    else {
+                        returnValue = d;
+                    }
+                    return returnValue;
+                })
+                .attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
         },
         /**
          * Filters data by selected administrative units, years and isOnlyFlatSelected
