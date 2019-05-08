@@ -78,22 +78,25 @@
 					"name": "Geobasiskarten (schwarz-grau)"
 				},
 				{
-					"id": "12883",
-					"name": "Gelände",
-					"visibility": true
-				},
-				{
-					"id": "12884",
-					"name": "Gebäude LoD2",
-					"visibility": true
-				},
-				{
 					"id": "14261",
-					"name": "Oblique",
-					"visibility": true
+					"name": "Oblique"
 				}
 			]
-		},
+    },
+    "Fachdaten_3D":
+    {
+      "Layer":
+        [
+        {
+          "id": "12883",
+          "name": "Gelände"
+        },
+        {
+          "id": "12884",
+          "name": "Gebäude LoD2"
+        }
+       ]
+    },
 		"Fachdaten": {
       "Ordner": [
         {
