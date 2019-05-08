@@ -524,7 +524,7 @@ function initializeCockpitModel () {
             else {
                 sldBody = getFilter(layer.getSource().getParams().LAYERS, orFilter, year);
             }
-            layer.getSource().updateParams({SLD_BODY: sldBody, STYLES: "style"});
+            layer.getSource().updateParams({SLD_BODY: sldBody.replace(/\n/g, ""), STYLES: "style"});
         },
 
         setYears: function (value) {
