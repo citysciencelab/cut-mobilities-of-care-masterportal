@@ -156,17 +156,36 @@ const CockpitView = Backbone.View.extend({
             svgWohneinheitenImBau = select(".graph-wohneinheiten-im-bau svg"),
             that = this;
 
+        // Baugenehmigungen
         svgBaugenehmigungen.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
             that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-1"));
         });
+        svgBaugenehmigungen.selectAll(".dot").on("mouseout", function () {
+            that.tooltipMouseout(select(".graph-tooltip-div-1"));
+        });
+
+        // Wohneinheiten
         svgWohneinheiten.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
             that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-2"));
         });
+        svgWohneinheiten.selectAll(".dot").on("mouseout", function () {
+            that.tooltipMouseout(select(".graph-tooltip-div-2"));
+        });
+
+        // Wohneinheiten noch nicht im Bau
         svgWohneinheitenNochNichtImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
             that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-3"));
         });
+        svgWohneinheitenNochNichtImBau.selectAll(".dot").on("mouseout", function () {
+            that.tooltipMouseout(select(".graph-tooltip-div-3"));
+        });
+
+        // Wohneinheiten im Bau
         svgWohneinheitenImBau.selectAll(".dot").on("mouseover", function (data, index, nodeList) {
             that.tooltipMouseover(data, index, nodeList, select(".graph-tooltip-div-4"));
+        });
+        svgWohneinheitenImBau.selectAll(".dot").on("mouseout", function () {
+            that.tooltipMouseout(select(".graph-tooltip-div-4"));
         });
     },
     tooltipMouseover: function (data, index, nodeList, tooltipDiv) {
@@ -183,6 +202,11 @@ const CockpitView = Backbone.View.extend({
                 "text-align: center;" +
                 "left: " + (event.layerX - 25) + "px;" +
                 "top: " + (event.layerY - 50) + "px;");
+    },
+    tooltipMouseout: function (tooltipDiv) {
+        tooltipDiv.style("opacity", 0);
+        tooltipDiv.style("left", "0px");
+        tooltipDiv.style("top", "0px");
     },
     insertStringAtIndex: function (string, index, stringToAdd) {
         return string.substr(0, index) + stringToAdd + string.substr(index);
