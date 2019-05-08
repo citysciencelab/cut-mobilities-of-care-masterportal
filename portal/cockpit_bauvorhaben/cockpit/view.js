@@ -128,7 +128,22 @@ const CockpitView = Backbone.View.extend({
 
         selectedValues = _.without(selectedValues, undefined);
         this.model.setFilterObjectByKey(key, selectedValues);
+        if (key === "years") {
+            this.disableMonthCheckboxByYearsLength(selectedValues);
+        }
     },
+
+    disableMonthCheckboxByYearsLength: function (years) {
+        if (years.length === 1) {
+            document.getElementsByClassName("month")[0].checked = true;
+            document.getElementsByClassName("month")[0].disabled = true;
+            this.model.setFilterObjectByKey("monthMode", true);
+        }
+        else {
+            document.getElementsByClassName("month")[0].disabled = false;
+        }
+    },
+
     redrawGraphs: function () {
         this.$el.find(".graph-svg").remove();
         this.model.prepareDataForGraph();
