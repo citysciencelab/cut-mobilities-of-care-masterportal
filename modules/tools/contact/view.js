@@ -22,8 +22,9 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
             "change:isActive": this.render,
             "invalid": this.showValidity
         });
+
         if (this.model.get("isActive") === true) {
-            this.render(this.model, true);
+            this.render();
         }
     },
 
@@ -33,8 +34,11 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      * @param {Boolean} value Flag to show if contact is active
      * @returns {void}
      */
-    render: function (model, value) {
-        if (value) {
+    render: function () {
+        const model = this.model,
+            isActive = model.get("isActive");
+
+        if (isActive) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
             this.setMaxHeight();

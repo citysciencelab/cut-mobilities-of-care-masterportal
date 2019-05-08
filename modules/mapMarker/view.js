@@ -57,12 +57,13 @@ const MapMarkerView = Backbone.View.extend({
             isMobile,
             coord;
 
-        if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate)) {
+        if (!_.isUndefined(hit.coordinate) && _.isArray(hit.coordinate)) {
             coord = hit.coordinate;
         }
-        else if (_.isUndefined(hit.coordinate) === false && _.isArray(hit.coordinate) === false) {
+        else if (!_.isUndefined(hit.coordinate) && !_.isArray(hit.coordinate)) {
             coord = hit.coordinate.split(" ");
         }
+
         this.hideMarker();
         this.hidePolygon();
         switch (hit.type) {
@@ -90,6 +91,8 @@ const MapMarkerView = Backbone.View.extend({
                 else if (coord.length > 2) {
                     this.model.setWkt("POLYGON", coord);
                     Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+
+                    this.showMarker(this.model.getCenterFromExtent(this.model.getExtent()));
                 }
                 break;
             }

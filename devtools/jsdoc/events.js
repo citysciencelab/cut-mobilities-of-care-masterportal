@@ -168,6 +168,12 @@
  * @example Radio.request("Parser", "getItemsByAttributes", attributes)
  */
 /**
+ * @event Parser#RadioRequestParserGetItemByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item[]} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemByAttributes", attributes)
+ */
+/**
  * @event Parser#RadioRequestParserGetTreeType
  * @returns {*} todo
  * @example Radio.request("Parser", "getTreeType")
@@ -182,6 +188,12 @@
  * @returns {*} todo
  * @example Radio.request("Parser", "getCategories")
  */
+
+/**
+* @event Parser#RadioRequestParserSetCategory
+* @returns {*} todo
+* @example Radio.request("Parser", "setCategory")
+*/
 
 /**
  * @event Parser#RadioRequestParserGetPortalConfig
@@ -467,6 +479,13 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description Event fires if map size is updated
+ * @param {Object} caller todo!
+ * @example Radio.trigger("Map", "updateSize")
+ */
+
+/**
   * @event Map#RadioTriggerMapRegisterListenerMovenend
   * @example Radio.trigger("Map", "registerListener", "moveend")
   */
@@ -563,6 +582,11 @@
  * @event MapView#RadioRequestMapViewGetResolutions
  * @returns {object[]} - Returns the resolutions of the map
  * @example Radio.trigger("MapView", "getResolutions");
+ */
+
+/**
+ * @event MapView#RadioTriggerMapViewToggleBackground
+ * @description todo
  */
 
 /** -------------------- LAYER INFORMATION -------------------- */
@@ -952,6 +976,74 @@
  * @example Radio.trigger("TableMenu", "deactivateCloseClickFrame");
  */
 
+/** -------------------- FOLDER VIEW TREE -------------------- */
+/**
+ * @event FolderViewTree#changeIsSelected
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#isVisibleInTree
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#changeIsSelected
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#changeIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#toggleIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#toggleIsSelected
+ * @description todo
+ */
+
+/** -------------------- FOLDER CATALOG VIEW -------------------- */
+
+/**
+ * @event FolderCatalogView#changeIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#isVisibleInTree
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#toggleIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#setSelection
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#toggleBackground
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#unfixTree
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#fixTree
+ * @description todo
+ */
+
 
 /** -------------------- UTIL -------------------- */
 
@@ -1008,6 +1100,7 @@
  * @example Radio.request("Util", "getConfig")
  * @description Request config path
  */
+
 /**
  * @event Util#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
@@ -1015,6 +1108,12 @@
  * @example Radio.request("Util", "getUiStyle");
  */
 
+/**
+ * @event Util#RadioRequestUtilIsAny
+ * @description returns if the device type is mobile
+ * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isAny");
+ */
 /** -------------------- GRAPH -------------------- */
 
 /**
@@ -1430,3 +1529,14 @@
  * @description Fired when param isActive changes
  */
 
+/** -------------------- Autostart -------------------- */
+
+/**
+ * @event Autostart#RadioTriggerAutostartInitializedModul
+ * @description To do
+ */
+
+/**
+ * @event Autostart#RadioTriggerAutostartStartModul
+ * @description Start the List View Modul
+ */

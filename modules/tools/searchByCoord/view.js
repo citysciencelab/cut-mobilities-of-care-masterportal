@@ -19,6 +19,7 @@ const SearchByCoordView = Backbone.View.extend({
             this.delegateEvents();
         }
         else {
+            Radio.trigger("MapMarker", "hideMarker");
             this.undelegateEvents();
         }
         return this;

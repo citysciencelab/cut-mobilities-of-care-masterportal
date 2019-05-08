@@ -60,6 +60,20 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
+     * creates the center coordinate from a given extent
+     * @param {Number[]} extent - extent
+     * @returns {Number[]} center coordinate
+     */
+    getCenterFromExtent: function (extent) {
+        var deltaY = extent[2] - extent[0],
+            deltaX = extent[3] - extent[1],
+            centerY = extent[0] + deltaY / 2,
+            centerX = extent[1] + deltaX / 2;
+
+        return [centerY, centerX];
+    },
+
+    /**
      * Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
      * @param  {string} type Geometrietyp
      * @param  {number[]} geom Array mit Koordinatenwerten

@@ -262,6 +262,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * Generate a list with hits of the individual search algorithms.
      * @param {String} triggeredBy Calling search algorithm
      * @fires Searchbar#RadioTriggerSearchbarCheckInitialSearch
+     * @fires ViewZoom#RadioTriggerViewZoomHitSelected
      * @returns {void}
      */
     createRecommendedList: function (triggeredBy) {
@@ -313,6 +314,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
         this.set("recommendedList", _.sortBy(recommendedList, "name"));
         this.trigger("renderRecommendedList");
+
+        if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
+            Radio.trigger("ViewZoom", "hitSelected");
+        }
     },
 
     /**
@@ -349,6 +354,15 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      */
     setQuickHelp: function (value) {
         this.set("quickHelp", value);
+    },
+
+    /**
+     * Setter for "hitIsClick"
+     * @param {String} value hitIsClick
+     * @returns {void}
+     */
+    setHitIsClick: function (value) {
+        this.set("hitIsClick", value);
     }
 });
 

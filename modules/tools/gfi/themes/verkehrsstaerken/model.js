@@ -309,7 +309,8 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                 data: this.get("dataset"),
                 xAttr: "year",
                 xAxisLabel: {
-                    label: "Jahr"
+                    label: "Jahr",
+                    translate: 6
                 },
                 yAxisLabel: {
                     label: this.yAxisLabel(key),

@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/tools/filter/query/source/model.js";
 import Util from "@testUtil";
 
-describe("filter/query/source/wfs", function () {
+describe("filter/query/source/model", function () {
     var model,
         utilModel,
         testFeatures;

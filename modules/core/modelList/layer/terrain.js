@@ -49,14 +49,9 @@ const TerrainLayer = Layer.extend({
         //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
         //  selectionIDX benötigen, um verschoben werden zu können
         if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-            if (_.isUndefined(Radio.request("ParametricURL", "getLayerParams")) === false) {
-                this.collection.appendToSelectionIDX(this);
-            }
-            else {
-                this.collection.insertIntoSelectionIDX(this);
-            }
 
             this.createTerrainProvider();
+
             if (this.get("isSelected")) {
                 this.listenToOnce(Radio.channel("Map"), {
                     // Die LayerSource wird beim ersten Selektieren einmalig erstellt

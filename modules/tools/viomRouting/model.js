@@ -40,22 +40,22 @@ const RoutingModel = Tool.extend({
         this.set("startAdresse", "aktueller Standpunkt");
     },
     setParams: function () {
-        var viomRoutingID,
-            bkgSuggestID,
-            bkgGeosearchID,
+        var viomRoutingModel,
+            bkgSuggestModel,
+            bkgGeosearchModel,
             epsgCode,
             bbox;
 
-        viomRoutingID = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID"));
-        bkgSuggestID = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID"));
-        bkgGeosearchID = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID"));
+        viomRoutingModel = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID"));
+        bkgSuggestModel = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID"));
+        bkgGeosearchModel = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID"));
         epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
         bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
 
-        this.set("bkgSuggestURL", bkgSuggestID.get("url"));
-        this.set("bkgGeosearchURL", bkgGeosearchID.get("url"));
-        this.set("viomRoutingURL", viomRoutingID.get("url"));
-        this.set("viomProviderID", viomRoutingID.get("providerID"));
+        this.set("bkgSuggestURL", bkgSuggestModel.get("url"));
+        this.set("bkgGeosearchURL", bkgGeosearchModel.get("url"));
+        this.set("viomRoutingURL", viomRoutingModel.get("url"));
+        this.set("viomProviderID", viomRoutingModel.get("providerID"));
         this.set("bbox", bbox);
         this.set("epsgCode", epsgCode);
     },
@@ -106,7 +106,7 @@ const RoutingModel = Tool.extend({
 
         query = encodeURI(query);
         $.ajax({
-            url: this.get("bkgSuggestURL").indexOf(window.location.host) !== -1 ? this.get("bkgSuggestURL") : Radio.request("Util", "getProxyURL", this.get("bkgSuggestURL")),
+            url: this.get("bkgSuggestURL"),
             data: "count=5" + query + bbox + filter,
             context: this, // das Model
             async: true,
@@ -137,7 +137,7 @@ const RoutingModel = Tool.extend({
     },
     geosearchByBKG: function (value, target) {
         $.ajax({
-            url: this.get("bkgGeosearchURL").indexOf(window.location.host) !== -1 ? this.get("bkgGeosearchURL") : Radio.request("Util", "getProxyURL", this.get("bkgGeosearchURL")),
+            url: this.get("bkgGeosearchURL"),
             data: this.get("epsgCode") + "&count=1&outputformat=json&query=" + encodeURI(value),
             context: this, // das model
             async: true,
@@ -191,7 +191,7 @@ const RoutingModel = Tool.extend({
         }
         $("#loader").show();
         $.ajax({
-            url: this.get("viomRoutingURL").indexOf(window.location.host) !== -1 ? this.get("viomRoutingURL") : Radio.request("Util", "getProxyURL", this.get("viomRoutingURL")),
+            url: this.get("viomRoutingURL"),
             data: request,
             async: true,
             context: this,

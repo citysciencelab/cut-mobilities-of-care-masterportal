@@ -1,8 +1,6 @@
 import Item from ".././item";
 
-const Tool = Item.extend(
-    /** @lends Tool.prototype */
-    {
+const Tool = Item.extend(/** @lends Tool.prototype */{
     defaults: {
         isVisibleInMenu: true,
         isRoot: false,
@@ -47,16 +45,18 @@ const Tool = Item.extend(
                         Radio.trigger("Window", "showTool", model);
                         Radio.trigger("Window", "setIsVisible", true);
                     }
+                    this.collection.setActiveToolsToFalse(model);
+
                     if (gfiModel) {
                         gfiModel.setIsActive(!model.get("deactivateGFI"));
                     }
-                    this.collection.setActiveToolsToFalse(model);
                 }
                 else {
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
                     activeTools = model.collection.where({isActive: true});
+                    
                     if (activeTools.length === 0) {
                         model.collection.toggleDefaultTool();
                     }
@@ -72,6 +72,7 @@ const Tool = Item.extend(
     /**
      * Activates or deactivates tool
      * @param {Boolean} value Flag if tool is active
+     * @returns {void}
      */
     setIsActive: function (value) {
         this.set("isActive", value);

@@ -35,8 +35,8 @@ const MobileMenu = Backbone.View.extend({
     render: function () {
         var rootModels = this.collection.where({parentId: "root"});
 
-        $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
-        $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
+        this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
+        this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
         this.addViews(rootModels);
         return this;
     },
@@ -76,9 +76,6 @@ const MobileMenu = Backbone.View.extend({
     renderSelection: function (withAnimation) {
         var models = this.collection.where({isSelected: true, type: "layer"});
 
-        models = _.sortBy(models, function (layer) {
-            return layer.get("selectionIDX");
-        }).reverse();
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
         }
@@ -87,6 +84,9 @@ const MobileMenu = Backbone.View.extend({
             _.each(models, function (model) {
                 model.setIsVisibleInTree(false);
             }, this);
+            models = _.sortBy(models, function (layer) {
+                return layer.get("selectionIDX");
+            }).reverse();
 
             this.addViews(models);
         }
@@ -126,11 +126,13 @@ const MobileMenu = Backbone.View.extend({
             slideOut = "right";
         }
 
-        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
+        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
-            // befinden wir uns in der Auswahl sind die models bereits nach ihrem SelectionIndex sortiert
             if (currentList === "Selection") {
+                modelsToShow = _.sortBy(modelsToShow, function (layer) {
+                    return layer.get("selectionIDX");
+                }).reverse();
                 that.addViews(modelsToShow);
             }
             else {
@@ -150,10 +152,14 @@ const MobileMenu = Backbone.View.extend({
                 }
                 // Folder zuerst zeichnen
                 that.addViews(groupedModels.folder);
+
+                groupedModels.other = _.sortBy(groupedModels.other, function (layer) {
+                    return layer.get("selectionIDX");
+                }).reverse();
                 that.addViews(groupedModels.other);
             }
         });
-        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
+        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
     },
 
     doRequestTreeType: function () {
@@ -161,7 +167,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        this.$("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
     /**
@@ -198,6 +204,9 @@ const MobileMenu = Backbone.View.extend({
                     if (model.get("isVisibleInMenu")) {
                         nodeView = new ToolView({model: model});
                     }
+                    else {
+                        return;
+                    }
                     break;
                 }
                 case "staticlink": {
@@ -231,7 +240,7 @@ const MobileMenu = Backbone.View.extend({
         this.breadCrumbListView.removeView();
         this.remove();
         this.collection.setAllModelsInvisible();
-        $("#map").before(this.el);
+        this.$("#map").before(this.el);
     },
     startModul: function (modulId) {
         var modul = this.collection.find(function (model) {

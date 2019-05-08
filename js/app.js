@@ -21,7 +21,7 @@ import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import LayerinformationModel from "../modules/layerinformation/model";
 import FooterView from "../modules/footer/view";
-import ClickCounterView from "../modules/ClickCounter/view";
+import ClickCounterModel from "../modules/ClickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickhelp/view";
 import ScaleLineView from "../modules/scaleline/view";
@@ -53,11 +53,6 @@ import TreeFilterView from "../modules/treefilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featurelister/view";
 import PrintView from "../modules/tools/print_/view";
-// @deprecated in version 3.0.0
-// remove "version" in doc and config.
-// rename "print_" to "print"
-// only load PrintView
-import PrintView2 from "../modules/tools/print/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -134,9 +129,8 @@ function loadApp () {
         new FooterView(Config.footer);
     }
 
-
     if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
-        new ClickCounterView(Config.clickCounter.desktop, Config.clickCounter.mobile);
+        new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
     if (_.has(Config, "mouseHover")) {
@@ -196,16 +190,7 @@ function loadApp () {
                 break;
             }
             case "print": {
-                // @deprecated in version 3.0.0
-                // remove "version" in doc and config.
-                // rename "print_" to "print"
-                // only load correct view
-                if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
-                    new PrintView({model: tool});
-                }
-                else {
-                    new PrintView2({model: tool});
-                }
+                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {
@@ -314,27 +299,27 @@ function loadApp () {
                     break;
                 }
                 case "totalview": {
-                    if (control.attr === true) {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         new TotalView();
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id);
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
                 }
                 case "backforward": {
-                    if (control.attr === true) {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
                 case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView({el: element});
                     }

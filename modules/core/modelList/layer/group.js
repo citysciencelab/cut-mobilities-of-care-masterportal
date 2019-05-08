@@ -6,7 +6,7 @@ import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
-const GroupLayer = Layer.extend(/**@lends GroupLayer.prototype */{
+const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true
@@ -138,6 +138,7 @@ const GroupLayer = Layer.extend(/**@lends GroupLayer.prototype */{
     **/
     checkForScale: function (options) {
         var isOutOfRange = true;
+
         _.each(this.get("layerSource"), function (layerSource) {
             if (parseFloat(options.scale, 10) <= layerSource.get("maxScale") && parseFloat(options.scale, 10) >= layerSource.get("minScale")) {
                 isOutOfRange = false;

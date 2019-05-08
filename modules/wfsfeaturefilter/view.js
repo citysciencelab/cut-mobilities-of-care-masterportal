@@ -6,6 +6,10 @@ const WfsFeatureFilterView = Backbone.View.extend({
         "click .panel-heading": "toggleHeading"
     },
     initialize: function () {
+        this.listenTo(Radio.channel("ModelList"), {
+            "updateVisibleInMapList": this.updateFilterSelection
+        });
+
         this.listenTo(this.model, {
             "change:isActive": this.render
         }, this);
@@ -15,6 +19,14 @@ const WfsFeatureFilterView = Backbone.View.extend({
     },
     id: "wfsFilterWin",
     template: _.template(WfsFeatureFilterTemplate),
+    updateFilterSelection: function () {
+        if (this.model.get("isActive") === false) {
+            return;
+        }
+        this.$el.html(this.template(this.model.toJSON()));
+        this.setMaxHeight();
+        this.getFilterInfos();
+    },
     toggleHeading: function (evt) {
         var id = this.$(evt.currentTarget)[0].id;
 
@@ -137,8 +149,9 @@ const WfsFeatureFilterView = Backbone.View.extend({
     render: function (model, value) {
         var layerfilters = this.model.get("layerfilters");
 
+        this.model.getLayers();
+
         if (value) {
-            this.model.getLayers();
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
             this.setMaxHeight();

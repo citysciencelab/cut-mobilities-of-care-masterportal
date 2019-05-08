@@ -45,6 +45,44 @@ const PrintModel = Tool.extend({
         glyphicon: "glyphicon-print",
         eventListener: {}
     }),
+
+    /**
+     * @class PrintModel
+     * @extends Tool
+     * @memberof print_
+     * @constructs
+     * @property {String} filename="report" - Output filename
+     * @property {undefined} mapfishServiceId=undefined - id from rest service json for mapfish app
+     * @property {String} printAppId="master" - identifier of one of available mapfish print configurations
+     * @property {Array} layoutList=[] - Array of available layouts of the specified print configuration
+     * @property {undefined} currentLayout=undefined - Holder for the current selected layout
+     * @property {Array} formatList=[] - Array of available formats of the specified print configuration
+     * @property {String} currentFormat="pdf" - The current Format
+     * @property {undefined} currentScale=undefined - Holder for the current rpint scale
+     * @property {String} title="PrintResult" - Initial title for the print page
+     * @property {Boolean} isScaleSelectedManually=false - Flag if the scale was selected by the user over the view
+     * @property {Boolean} isMetaDataAvailable=false - Flag if the current layout supports meta data
+     * @property {Boolean} isGfiAvailable=false - Flag if the current layout supports gfi
+     * @property {Boolean} isGfiActive=false - Flag if gfi is active
+     * @property {Boolean} isLegendAvailable=false - Flag if the current layout supports legend
+     * @property {Boolean} isLegendSelected=true - Flag if the legend is to be printed
+     * @property {Boolean} isScaleAvailable=false - Flag if the current layout supports scale
+     * @property {undefined} plotServiceId=undefined - id from the rest services json for the plot app
+     * @property {Boolean} deactivateGFI=false - Flag if gfi is deactivated
+     * @property {Boolean} renderToWindow=true - todo
+     * @property {Number} DOTS_PER_INCH=72 - todo
+     * @property {Number} INCHES_PER_METER=39.37 - todo
+     * @property {String} glyphicon="glyphicon-print" - Icon for the print button
+     * @property {Object} eventListener={} - todo
+     * @listens Print#ChangeIsActive
+     * @description todo
+     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @description todo
+     * @listens GFI#RadioTriggerGFIIsVisible
+     * @description todo
+     * @listens Print#CreatePrintJob
+     * @description todo
+     */
     initialize: function () {
         var channel = Radio.channel("Print");
 
@@ -73,12 +111,20 @@ const PrintModel = Tool.extend({
                 this.setIsGfiActive(isGfiActive);
             }
         });
+
         channel.on({
             "createPrintJob": this.createPrintJob
         }, this);
         this.createMapFishServiceUrl(this.get("mapfishServiceId"));
     },
 
+    /**
+     * todo
+     * @param {*} id - todo
+     * @fires todo
+     * @description todo
+     * @returns {void}
+     */
     createMapFishServiceUrl: function (id) {
         var service = Radio.request("RestReader", "getServiceById", id),
             serviceUrl = _.isUndefined(service) ? "" : service.get("url");
@@ -89,6 +135,8 @@ const PrintModel = Tool.extend({
      * Gets the capabilities for a specific print configuration
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
+     * @fires todo
+     * @description todo
      * @returns {void}
      */
     getCapabilites: function (model, value) {
@@ -107,6 +155,13 @@ const PrintModel = Tool.extend({
         }
     },
 
+    /**
+     * todo
+     * @param {*} response - todo
+     * @fires todo
+     * @description todo
+     * @returns {void}
+     */
     parseMapfishCapabilities: function (response) {
         this.setLayoutList(response.layouts);
         this.setCurrentLayout(response.layouts[0]);
@@ -119,6 +174,22 @@ const PrintModel = Tool.extend({
         this.togglePostcomposeListener(this, true);
     },
 
+    /**
+     * todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @returns {void}
+     */
     print: function () {
         var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                 return layer.getVisible() === true;
@@ -187,6 +258,8 @@ const PrintModel = Tool.extend({
      * @param {string} printAppId - id of the print configuration
      * @param {string} payload - POST body
      * @param {string} format - print job output format
+     * @fires todo
+     * @description todo
      * @returns {void}
      */
     createPrintJob: function (printAppId, payload, format) {
@@ -198,7 +271,9 @@ const PrintModel = Tool.extend({
 
     /**
      * sends a request to get the status for a print job until it is finished
-     * @param {JSON} response -
+     * @param {JSON} response - todo
+     * @fires todo
+     * @description todo
      * @returns {void}
      */
     waitForPrintJob: function (response) {
@@ -221,6 +296,12 @@ const PrintModel = Tool.extend({
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
+     * @fires todo
+     * @description todo
      * @returns {void}
      */
     togglePostcomposeListener: function (model, value) {
@@ -404,6 +485,8 @@ const PrintModel = Tool.extend({
      * @param {string} requestType - GET || POST
      * @param {function} successCallback - called if the request succeeds
      * @param {JSON} data - payload
+     * @fires todo
+     * @description todo
      * @returns {void}
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
@@ -532,6 +615,12 @@ const PrintModel = Tool.extend({
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
     },
+
+    /**
+     * todo
+     * @param {*} value  - todo
+     * @returns {void}
+     */
     setEventListener: function (value) {
         this.set("eventListener", value);
     }

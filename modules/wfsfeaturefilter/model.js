@@ -7,6 +7,10 @@ const WfsFeatureFilter = Tool.extend({
         glyphicon: "glyphicon-filter"
     }),
     initialize: function () {
+        this.listenTo(Radio.channel("ModelList"), {
+            "updateVisibleInMapList": this.getLayers
+        });
+
         this.superInitialize();
     },
     getLayers: function () {

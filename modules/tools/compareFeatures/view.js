@@ -63,9 +63,8 @@ const CompareFeaturesView = Backbone.View.extend({
     renderListModal: function (model) {
         // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
         var realLayerId = model.get("layerId").split("_")[0],
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": realLayerId});
-
-        var attr = {
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": realLayerId}),
+            attr = {
                 list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                 rowsToShow: model.get("numberOfAttributesToShow"),
                 featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),

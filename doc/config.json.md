@@ -306,11 +306,11 @@ Konfiguration der Suche über die sichtbaren WFS
 |orientation|nein|[orientation](#markdown-header-portalconfigcontrolsorientation)||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers.|
 |zoom|nein|Boolean|false|Legt fest, ob die Zoombuttons angezeigt werden sollen.|
 |overviewmap|nein|[overviewmap](#markdown-header-portalconfigcontrolsoverviewmap)|false|Übersichtskarte|
-|totalview|nein|Boolean|false|Zeigt einen Button an, mit dem die Startansicht mit den initialen Einstellungen wiederhergestellt werden kann.|
+|totalview|nein|[totalview](#markdown-header-portalconfigcontrolstotalview)|false|Zeigt einen Button an, mit dem die Startansicht mit den initialen Einstellungen wiederhergestellt werden kann.|
 |button3d|nein|Boolean|false|Legt fest, ob ein Button für die Umschaltung in den 3D Modus angezeigt werden soll.|
 |orientation3d|nein|Boolean|false|Legt fest, ob im 3D Modus eine Navigationsrose angezeigt werden soll.|
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|
-|backforward|nein|Boolean|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
+|backforwardview|nein|[backforward](#markdown-header-portalconfigcontrolsbackforward)|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|
 
 
 ***
@@ -413,6 +413,57 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
     "link": "http://geoinfo.hamburg.de",
     "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
+```
+***
+
+#### Portalconfig.controls.totalview
+
+Das Attribut totalview kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt es den Butten an, der in den Defaulteinsellungen gesetzt ist. Ist es vom Typ Object, so gelten folgende Attribute
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphicon|nein|String||Über den Parameter glyphicon kann ein anderes Glyphicon für das Zurückschalten zur Startansicht verwendet werden.|
+|tableGlyphicon|nein|String||Über den Parameter tableGlyphicon kann bei einem TABLE Style ein anderes Glyphicon für das Zurückschalten zur Startansicht verwendet werden.|
+
+**Beispiel totalview als Object:**
+```
+#!json
+"totalview" : {
+    "glyphicon": "glyphicon-step-forward",
+    "tableGlyphicon": "glyphicon-step-forward"
+},
+```
+
+**Beispiel totalview als Boolean:**
+```
+#!json
+"totalview": true
+```
+
+***
+
+#### Portalconfig.controls.backforward
+
+Das Attribut backforward kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Buttons zur Steuerung der letzten und nächsten Kartenansichten mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|glyphiconFor|nein|String||Über den Parameter glyphiconFor kann ein anderes Glyphicon für das Vorschalten der Kartenansicht verwendet werden.|
+|glyphiconBack|nein|String||Über den Parameter glyphiconBack kann ein anderes Glyphicon für das Zurückschalten der Kartenansicht verwendet werden.|
+
+**Beispiel backforward als Object:**
+```
+#!json
+"backforward" : {
+    "glyphiconFor": "glyphicon-fast-forward",
+    "glyphiconBack": "glyphicon-fast-backward"
+}
+```
+
+**Beispiel backforward als Boolean:**
+```
+#!json
+"backforward": true
 ```
 
 ***
@@ -944,7 +995,7 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdienst über MapfishPrint 2 oder der moderne Druckdienst, der MapfishPrint 3 verwendet.
+Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 oder MapfishPrint 3.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -952,13 +1003,13 @@ Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdiens
 |printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat|
 |filename|nein|String|"report"|Dateiname des Druckergebnisses|
 |title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|
-|version|nein|String||@deprecated in 3.0.0. Flag ob das alte oder neue Druckmodul verwendet werden soll. Bei "mapfsih_print_3" wird das neue modul verwendet, sonst das alte.|
-|printID|nein|String|"9999"|@deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|version|nein|String|| Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 2 verwendet, sonst wird MapfishPrint 3 verwendet.|
+|printID|nein|String||@deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
 |outputFilename|nein|String|"report"|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
 |gfi|nein|Boolean|false|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
 |configYAML|nein|String|"/master"|@deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|
 
-**Beispiel alte Konfiguration mit MapfishPrint2**
+**Beispiel Konfiguration mit MapfishPrint2**
 ```
 #!json
 "print": {
@@ -972,7 +1023,20 @@ Druckmodul. Liegt zur Zeit noch in 2 varianten vor. Entweder der alte Druckdiens
 }
 ```
 
-**Beispiel neue Konfiguration mit MapfishPrint3**
+**Beispiel Konfiguration mit High Resolution PlotService**
+```
+#!json
+"print": {
+    "name": "Karte drucken",
+    "glyphicon": "glyphicon-print",
+    "mapfishServiceId": "123456", 
+    "filename": "Ausdruck",
+    "title": "Mein Titel",
+    "version" : "HighResolutionPlotService"
+}
+```
+
+**Beispiel Konfiguration mit MapfishPrint3**
 ```
 #!json
 "print": {

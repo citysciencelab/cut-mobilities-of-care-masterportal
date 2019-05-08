@@ -218,13 +218,17 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
-            elements = data.getElementsByTagName(typeName),
-            element, identifier, geom;
+            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
+            identifier,
+            geom;
 
-        for (element of elements) {
-            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
-                identifier = element.getElementsByTagName(propertyNames)[0].textContent;
-                geom = element.getElementsByTagName(geometryName)[0].textContent;
+        _.each(elements, function (element) {
+            var elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
+                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]);
+
+            if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
+                identifier = elementPropertyNames[0].textContent;
+                geom = elementGeometryNames[0].textContent;
 
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
@@ -238,8 +242,23 @@ const SpecialWFSModel = Backbone.Model.extend({
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
-        }
+        }, this);
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+     * removes the namespace from propertynames in array
+     * @param {String[]} propertyNames array with property names
+     * @returns {String[]} propertynamesWithoutNamespace
+     */
+    removeNameSpaceFromArray: function (propertyNames) {
+        var propertynamesWithoutNamespace = [];
+
+        _.each(propertyNames, function (propertyname) {
+            propertynamesWithoutNamespace.push(propertyname.split(":")[1]);
+        });
+
+        return propertynamesWithoutNamespace;
     },
 
     /**
