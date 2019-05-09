@@ -95,6 +95,15 @@ const Item = Backbone.Model.extend(/** @lends Item.prototype */{
      */
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
+    },
+
+    /**
+     * Setter for setIsVisibleInMenu
+     * @param {Boolean} value Flag if item is visible in menu
+     * @returns {void}
+     */
+    setIsVisibleInMenu: function (value) {
+        this.set("isVisibleInMenu", value);
     }
 });
 
