@@ -209,7 +209,12 @@ const CockpitView = Backbone.View.extend({
         tooltipDiv.style("top", "0px");
     },
     insertStringAtIndex: function (string, index, stringToAdd) {
-        return string.substr(0, index) + stringToAdd + string.substr(index);
+        const insertedString = string;
+
+        if (insertedString.length > index) {
+            insertedString = insertedString.substr(0, index) + stringToAdd + insertedString.substr(index);
+        }
+        return insertedString;
     }
 });
 
