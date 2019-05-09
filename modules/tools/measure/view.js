@@ -4,8 +4,9 @@ import TableTemplate from "text-loader!./table/template.html";
 const MeasureView = Backbone.View.extend({
     events: {
         "change select#geomField": "setGeometryType",
-        "change .styledSelect": "setGeometryType",
+        // "change select.styledSelect": "setGeometryTypeTable",
         "change select#unitField": "setUnit",
+        // "DOMSubtreeModified select#unitField": "setUnitTable",
         "click button": "deleteFeatures",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
@@ -20,7 +21,7 @@ const MeasureView = Backbone.View.extend({
         }
     },
     render: function (model, value) {
-        var template, i;
+        var template;
 
         if (value) {
             template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
@@ -33,7 +34,9 @@ const MeasureView = Backbone.View.extend({
 
                     // Cache the number of options
                     var $this = $(this),
-                        numberOfOptions = $(this).children("option").length;
+                        numberOfOptions = $(this).children("option").length,
+                        $styledSelect,
+                        $list, i, $listItems, geometry;
 
                     // Hides the select element
                     $this.addClass("s-hidden");
@@ -45,13 +48,13 @@ const MeasureView = Backbone.View.extend({
                     $this.after("<div class='styledSelect'></div>");
 
                     // Cache the styled select
-                    var $styledSelect = $this.next(".styledSelect");
+                    $styledSelect = $this.next(".styledSelect");
 
                     // Show the first select option in the styled select
                     $styledSelect.text($this.children("option").eq(0).text());
 
                     // Insert an unordered list after the styled div and also cache the list
-                    var $list = $("<ul />", {
+                    $list = $("<ul />", {
                         "class": "options"
                     }).insertAfter($styledSelect);
 
@@ -64,7 +67,7 @@ const MeasureView = Backbone.View.extend({
                     }
 
                     // Cache the list items
-                    var $listItems = $list.children("li");
+                    $listItems = $list.children("li");
 
                     // Show the unordered list when the styled div is clicked (also hides it if the div is clicked again)
                     $styledSelect.click(function (e) {
@@ -84,6 +87,7 @@ const MeasureView = Backbone.View.extend({
                         $list.hide();
                         /* alert($this.val()); Uncomment this for demonstration! */
                     });
+
                     // Hides the unordered list when clicking outside of it
                     $(document).click(function () {
                         $styledSelect.removeClass("active");
@@ -91,12 +95,17 @@ const MeasureView = Backbone.View.extend({
                     });
 
                     $(".styledSelect").bind("DOMSubtreeModified", function () {
-                        if (document.getElementsByClassName("styledSelect")[0].innerHTML === "Fläche") {
+                        geometry = document.getElementsByClassName("styledSelect")[0].innerHTML;
+                        if (geometry === "Fläche") {
                             $("#geomField").html("<option value='Polygon' selected = ''>Fläche</option>");
+                            // this.model.setGeometryType("Polygon");
                         }
-                        else {
+                        else if (geometry === "Strecke") {
                             $("#geomField").html("<option value='LineString' selected = ''>Strecke</option>");
+                            // this.model.setGeometryType("LineString");
                         }
+                        console.log(geometry);
+                        this.model.setGeometryType(geometry);
                     });
                 });
             }
@@ -109,13 +118,30 @@ const MeasureView = Backbone.View.extend({
         return this;
     },
     setGeometryType: function (evt) {
+        // console.log(evt.target.value);
         this.model.setGeometryType(evt.target.value);
+        if (evt.target.innerHTML === "Fläche") {
+            this.model.setGeometryType("Polygon");
+            // console.log("ich bin ein Polygon");
+        }
+        else if (evt.target.innerHTML === "Strecke") {
+            this.model.setGeometryType("LineString");
+            // console.log("ich bin eine Linie");
+        }
     },
-
+    /*    setGeometryTypeTable: function (evt) {
+        if (evt.target.innerHTML === "Fläche") {
+            this.model.setGeometryType("Polygon");
+            console.log("ich bin ein Polygon");
+        }
+        else if (evt.target.innerHTML === "Strecke") {
+            this.model.setGeometryType("LineString");
+            console.log("ich bin eine Linie");
+        }
+    },    */
     setUnit: function (evt) {
         this.model.setUnit(evt.target.value);
     },
-
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },
