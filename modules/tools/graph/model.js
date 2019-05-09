@@ -4,9 +4,17 @@ import {line} from "d3-shape";
 import {select, event} from "d3-selection";
 import "d3-transition";
 
-const GraphModel = Backbone.Model.extend({
+const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     defaults: {},
 
+    /**
+     * @class GraphModel
+     * @memberOf Tools.Graph
+     * @constructs
+     * @extends Backbone.Model
+     * @listens Tools.Graph#RadioTriggerGraphCreateGraph
+     * @listens Tools.Graph#RadioRequestGraphGetGraphParams
+     */
     initialize: function () {
         var channel = Radio.channel("Graph");
 
@@ -21,8 +29,10 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Startet die Erzeugung der Grafik
-     * @param   {objekt} graphConfig Konfigurationsobjekt nach graphType
+     * Creates the graph. Distinguishes betweeen
+     * graphConfig.graphType === "Linegraph" and
+     * graphConfig.graphType === "BarGraph".
+     * @param   {Object} graphConfig Graph configuration.
      * @returns {void}
      */
     createGraph: function (graphConfig) {
@@ -35,10 +45,10 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * searches the max value from data
-     * @param {array} data - contains data to be draw
-     * @param {array} attrToShowArray - attribute to be draw
-     * @return {number} maxData
+     * Iterates over all objects and all attributes to find the max value.
+     * @param {Object[]} data Data for graph.
+     * @param {String[]} attrToShowArray Attribute array.
+     * @return {number}  - maxData
      */
     createMaxValue: function (data, attrToShowArray) {
         var maxValue = 0;
@@ -57,11 +67,11 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * creates an object with min- and max-value
-     * @param {array} data - contains data to be draw
-     * @param {array} attrToShowArray - attribute to be draw
-     * @param {object} axisTicks - number of ticks
-     * @return {object} valueObj
+     * Creates an object with min- and max-value.
+     * @param {Object[]} data Data for graph.
+     * @param {String[]} attrToShowArray Attribute array.
+     * @param {Object} axisTicks Ticks object.
+     * @return {object} - Object with attribute "minValue" and "maxValue".
      */
     createValues: function (data, attrToShowArray, axisTicks) {
         var valueObj = {};
@@ -78,8 +88,17 @@ const GraphModel = Backbone.Model.extend({
         return valueObj;
     },
 
-    createScaleX: function (data, size, scaletype, attr, xAxisTicks) {
-        var rangeArray = [0, size],
+    /**
+     * Creates a d3 scale for x axis
+     * @param {Object[]} data Data for graph.
+     * @param {Number} width Width for scale.
+     * @param {String} scaletype Enum of scaletype. Possible values are "ordinal" or "linear".
+     * @param {String} attr Attribute name for x axis.
+     * @param {Object} xAxisTicks Ticks object.
+     * @returns {Object} - scaleX
+     */
+    createScaleX: function (data, width, scaletype, attr, xAxisTicks) {
+        var rangeArray = [0, width],
             scale,
             valueObj;
 
@@ -95,9 +114,17 @@ const GraphModel = Backbone.Model.extend({
         }
         return scale;
     },
-
-    createScaleY: function (data, size, scaletype, attrToShowArray, yAxisTicks) {
-        var rangeArray = [size, 0],
+    /**
+     * Creates a d3 scale for y axis.
+     * @param {Object[]} data Data for graph.
+     * @param {Number} height Height for scale.
+     * @param {String} scaletype Enum of scaletype. Possible values are "ordinal" or "linear".
+     * @param {String[]} attrToShowArray Array of attributes to be shown in graph.
+     * @param {Object} yAxisTicks Ticks object.
+     * @returns {Object} - scaleY
+     */
+    createScaleY: function (data, height, scaletype, attrToShowArray, yAxisTicks) {
+        var rangeArray = [height, 0],
             scale,
             valueObj;
 
@@ -115,6 +142,13 @@ const GraphModel = Backbone.Model.extend({
         return scale;
     },
 
+    /**
+     * Creates an ordinal scale.
+     * @param {Object[]} data Data for graph.
+     * @param {Number[]} rangeArray Array of 2 numbers defining the range of the scale.
+     * @param {String[]} attrArray Array of attributes to be shown in graph.
+     * @returns {Object} - ordinalScale
+     */
     createOrdinalScale: function (data, rangeArray, attrArray) {
         var values = [];
 
@@ -124,12 +158,18 @@ const GraphModel = Backbone.Model.extend({
             });
         });
         values = _.uniq(values);
-        // values.sort(); Sortierung nach String funktioniert nicht für timestamp, daher auskommentiert und Daten vorsortiert
         return scaleBand()
             .range(rangeArray)
             .domain(values);
     },
 
+    /**
+     * Creates an linear scale.
+     * @param {String/Number} minValue Min value for linear scale.
+     * @param {String/Number} maxValue Max value for linear scale.
+     * @param {Number[]} rangeArray Array of 2 numbers defining the range of the scale.
+     * @returns {Object} - linearScale
+     */
     createLinearScale: function (minValue, maxValue, rangeArray) {
         return scaleLinear()
             .range(rangeArray)
@@ -137,7 +177,12 @@ const GraphModel = Backbone.Model.extend({
             .nice();
     },
 
-
+    /**
+     * Creates the bottom axis of the graph.
+     * @param {Object} scale Scale of bottom axis.
+     * @param {Object} xAxisTicks Ticks for bottom axis.
+     * @returns {Object} - axisBottom
+     */
     createAxisBottom: function (scale, xAxisTicks) {
         var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
             d3Object;
@@ -163,7 +208,12 @@ const GraphModel = Backbone.Model.extend({
         return d3Object;
     },
 
-    // create leftAxis. if separator === true (for yAxis), then set thousands-separator "."
+    /**
+     * Creates the axis on the left.
+     * @param {Object} scale Scale of left axis.
+     * @param {Object} yAxisTicks Ticks for left axis.
+     * @returns {Object} - axisLeft
+     */
     createAxisLeft: function (scale, yAxisTicks) {
         var d3Object;
 
@@ -182,12 +232,12 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Erzeugt ein D3 - Linienobjekt
-     * @param   {object} scaleX      D3 - Scale der xAchse
-     * @param   {object} scaleY      D3 - Scale der yAchse
-     * @param   {string} xAttr       Attributname für xAchse
-     * @param   {string} yAttrToShow Attributname für yAchse
-     * @returns {void}
+     * Creates a d3 line object.
+     * @param   {Object} scaleX Scale of x-axis.
+     * @param   {Object} scaleY Scale of y-axis.
+     * @param   {String} xAttr  Attribute name for x-axis.
+     * @param   {string} yAttrToShow Attribut name for y-axis.
+     * @returns {Object} - valueLine.
      */
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
         return line()
@@ -203,11 +253,11 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Erzeugt die Struktur eines Liniengraphen
-     * @param   {object}    svg         das SVG-Objekt
-     * @param   {object[]}  data        Array der Daten
-     * @param   {string}    className   Classes der Punkte
-     * @param   {object}    d3line        D3 - Linienobjekt
+     * Creates the basic structure of a graph.
+     * @param   {SVG} svg The svg.
+     * @param   {Object[]} data Data for graph.
+     * @param   {String} className Class name of point.
+     * @param   {Object} d3line D3 line object.
      * @returns {void}
      */
     appendDataToSvg: function (svg, data, className, d3line) {
@@ -236,15 +286,15 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Fügt die X-Achse .graph-data hinzu
-     * @param   {object} svg                                SVG
-     * @param   {object} xAxis                              axis-left d3-Object
-     * @param   {object} xAxisLabel                         Definitionsobjekt der x-Achse
-     * @param   {string} [xAxisLabel.label]                 Text
-     * @param   {string} [xAxisLabel.offset=0]              Abstand zwischen Achse und Text
-     * @param   {string} [xAxisLabel.textAnchor=middle]     Positionierungsart
-     * @param   {string} [xAxisLabel.fill=#000]             Füllfarbe
-     * @param   {string} [xAxisLabel.fontSize=10]           FontSize
+     * Appends the x-axis to the svg.
+     * @param   {SVG} svg SVG.
+     * @param   {Object} xAxis x-axis.
+     * @param   {Object} xAxisLabel Definition of x-axis.
+     * @param   {String} [xAxisLabel.label] Text of label.
+     * @param   {String} [xAxisLabel.offset=0] Offset between x-axis and text.
+     * @param   {String} [xAxisLabel.textAnchor=middle] Text anchor of x-axis label.
+     * @param   {String} [xAxisLabel.fill=#000] Text fill color.
+     * @param   {String} [xAxisLabel.fontSize=10] Text font size.
      * @returns {void}
      */
     appendXAxisToSvg: function (svg, xAxis, xAxisLabel) {
@@ -285,15 +335,15 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Fügt die Y-Achse .graph-data hinzu
-     * @param   {object} svg                                SVG
-     * @param   {object} yAxis                              axis-left d3-Object
-     * @param   {object} yAxisLabel                         Definitionsobjekt der y-Achse
-     * @param   {string} [yAxisLabel.label]                 Text
-     * @param   {string} [yAxisLabel.offset=0]              Abstand zwischen Achse und Text
-     * @param   {string} [yAxisLabel.textAnchor=middle]     Positionierungsart
-     * @param   {string} [yAxisLabel.fill=#000]             Füllfarbe
-     * @param   {string} [yAxisLabel.fontSize=10]           FontSize
+     * Appends the y-axis to the svg
+     * @param   {SVG} svg SVG.
+     * @param   {Object} yAxis y-axis.
+     * @param   {Object} yAxisLabel Definition of y-axis.
+     * @param   {String} [yAxisLabel.label] Text of label.
+     * @param   {String} [yAxisLabel.offset=0] Offset between y-axis and text.
+     * @param   {String} [yAxisLabel.textAnchor=middle] Text anchor of y-axis label.
+     * @param   {String} [yAxisLabel.fill=#000] Text fill color.
+     * @param   {String} [yAxisLabel.fontSize=10] Text font size.
      * @returns {void}
      */
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel) {
@@ -326,6 +376,18 @@ const GraphModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Appends line points to created line.
+     * @param {SVG} svg Svg.
+     * @param {Object[]} data Data for graph.
+     * @param {Object} scaleX Scale for x-axis.
+     * @param {Object} scaleY Scale for y-axis.
+     * @param {String} xAttr Attribute name for x-axis.
+     * @param {String} yAttrToShow Attribute name for line point on y-axis.
+     * @param {Selection} tooltipDiv Selection of the tooltip-div.
+     * @param {Number} dotSize The size of the dots.
+     * @returns {void}
+     */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
         var dat = data.filter(function (obj) {
                 return obj[yAttrToShow] !== "-";
@@ -393,14 +455,14 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Erzeugt das SVG
-     * @param   {string} selector Class unter der das SVG erzeugt wird
-     * @param   {number} left     Linker Rand vom SVG
-     * @param   {number} top      Oberer Rand vom SVG
-     * @param   {number} width    Breite
-     * @param   {number} height   Höhe
-     * @param   {string} svgClass Class des SVG
-     * @returns {void}
+     * Creates the SVG.
+     * @param {String} selector Class of DOM element where svg gets appended.
+     * @param {Number} left Left border of SVG.
+     * @param {Number} top Right border of SVG.
+     * @param {Number} width Width of SVG.
+     * @param {Number} height Height of SVG.
+     * @param {String} svgClass Class of SVG.
+     * @returns {SVG} - SVG
      */
     createSvg: function (selector, left, top, width, height, svgClass) {
         return select(selector).append("svg")
@@ -413,12 +475,12 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * Erzeugt eine Legende und fügt sie oben in SVG ein
-     * @param   {object}    svg                 SVG
-     * @param   {object[]}  legendData          Legendenobjekt
-     * @param   {string}    legendData.style    Art des Legendeneintrags <rect> oder <circle>
-     * @param   {string}    legendData.class    Class des Eintrags
-     * @param   {string}    legendData.text     Textliche Beschreibung
+     * Creates a legend and adds it on the top left.
+     * @param   {SVG} svg SVG.
+     * @param   {Object[]} legendData Legend object.
+     * @param   {String} legendData.style Type of legend item "rect" for "<rect>" or "circle" for "<circle>".
+     * @param   {String} legendData.class Class of legend item.
+     * @param   {String} legendData.text Text of legend item.
      * @returns {void}
      */
     appendLegend: function (svg, legendData) {
@@ -457,6 +519,11 @@ const GraphModel = Backbone.Model.extend({
                 return d.text;
             });
     },
+    /**
+     * Flattens the attributeToShowArray and only returns an array of the attrNames.
+     * @param {Object/String[]} attrToShowArray Array of objects or strings.
+     * @returns {String[]} - Flattened Array.
+     */
     flattenAttrToShowArray: function (attrToShowArray) {
         const flatAttrToShowArray = [];
 
@@ -471,25 +538,41 @@ const GraphModel = Backbone.Model.extend({
         return flatAttrToShowArray;
     },
     /**
-     * Erzeugt die d3 Grafik für ein Liniendiagramm
-     * @param   {object}    graphConfig                     Konfigurationsobjekt
-     * @param   {string}    graphConfig.selector            Class unter der das SVG erzeugt wird
-     * @param   {string}    graphConfig.scaleTypeX          Typ der xAchse
-     * @param   {string}    graphConfig.scaleTypeY          Typ der yAchse
-     * @param   {object[]}  graphConfig.data                darzustellende Daten
-     * @param   {string}    graphConfig.xAttr               Attributname der xAchse
-     * @param   {object}    graphConfig.xAxisLabel          Definitionsobjekt der x-Achse
-     * @param   {object}    graphConfig.yAxisLabel          Definitionsobjekt der y-Achse
-     * @param   {string[]}  graphConfig.attrToShowArray     Array der Attributnamen der yAchse
-     * @param   {object}    graphConfig.margin              Margin der .graph-data in .graph
-     * @param   {number}    graphConfig.width               Breite des SVG
-     * @param   {number}    graphConfig.height              Höhe des SVG
-     * @param   {object}    [graphConfig.xAxisTicks]        Tick Beschreibung der xAchse
-     * @param   {object}    [graphConfig.yAxisTicks]        Tick Beschreibung der yAchse
-     * @param   {number}    [graphConfig.xThinning=1]       Tick Thinning Value
-     * @param   {string}    graphConfig.svgClass            Class der SVG
-     * @param   {string}    [graphConfig.selectorTooltip]   DIV für Tooltip
-     * @param   {object}    [graphConfig.legendData]        Legendeninformationen
+     * Creates the linegraph.
+     * @param {Object} graphConfig Graph config.
+     * @param {String} graphConfig.selector Class for SVG to be appended to.
+     * @param {String} graphConfig.scaleTypeX Type of x-axis.
+     * @param {String} graphConfig.scaleTypeY Type of y-axis.
+     * @param {Object[]} graphConfig.data Data for graph.
+     * @param {String} graphConfig.xAttr Attribute name for x-axis.
+     * @param {Object} graphConfig.xAxisLabel Object to define the label for x-axis.
+     * @param {String} graphConfig.xAxisLabel.label Label for x-axis.
+     * @param {Number} graphConfig.xAxisLabel.translate Translation offset for label for x-axis.
+     * @param {Object} graphConfig.yAxisLabel Object to define the label for y-axis.
+     * @param {String} graphConfig.yAxisLabel.label Label for y-axis.
+     * @param {Number} graphConfig.yAxisLabel.offset Offset for label for y-axis.
+     * @param {Object/String[]} graphConfig.attrToShowArray Array of attribute names or objects to be shown on y-axis.
+     * @param {Object/String[]} graphConfig.attrToShowArray.attrName Name of attribute to be shown.
+     * @param {Object/String[]} graphConfig.attrToShowArray.attrClass Class for line in graph.
+     * @param {Object} graphConfig.margin Margin object for graph.
+     * @param {Number} graphConfig.margin.top Top margin.
+     * @param {Number} graphConfig.margin.right Right margin.
+     * @param {Number} graphConfig.margin.bottom Bottom margin.
+     * @param {Number} graphConfig.margin.left left margin.
+     * @param {Number} graphConfig.width Width of SVG.
+     * @param {Number} graphConfig.height Height of SVG.
+     * @param {Object} graphConfig.xAxisTicks Ticks for x-axis.
+     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks.
+     * @param {Number/String[]} graphConfig.xAxisTicks.values Values for x-axis-ticks.
+     * @param {Number} graphConfig.xAxisTicks.factor Factor for x-axis-ticks.
+     * @param {Object} graphConfig.yAxisTicks Ticks for y-axis.
+     * @param {Object} graphConfig.yAxisTicks.ticks Values for y-axis-ticks.
+     * @param {Object} graphConfig.yAxisTicks.factor Factor for y-axis-ticks.
+     * @param {String} graphConfig.svgClass Class of SVG.
+     * @param {String} graphConfig.selectorTooltip Selector for tooltip div.
+     * @param {Object[]} graphConfig.legendData Data for legend.
+     * @param {String} graphConfig.legendData.class CSS class for legend object.
+     * @param {String} graphConfig.legendData.text Text for legen object.
      * @returns {void}
      */
     createLineGraph: function (graphConfig) {
@@ -556,8 +639,8 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * rotates the label on the x-axis by 45 degrees
-     * @param {String} svg - svg with d3 object
+     * Rotates the label on the x-axis by 45 degrees
+     * @param {SVG} svg SVG.
      * @return {void}
      */
     rotateXAxisTexts: function (svg) {
@@ -566,34 +649,19 @@ const GraphModel = Backbone.Model.extend({
     },
 
     /**
-     * moves the label of the X-axis downwards
-     * @param {String} svg - svg with d3 object
-     * @param {number} xAxisLableTranslate - translationon on the x-axis
+     * Moves the label of the x-axis downwards
+     * @param {SVG} svg SVG.
+     * @param {Number} xAxisLabelTranslate Translation on the x-axis.
      * @return {void}
      */
-    translateXAxislabelText: function (svg, xAxisLableTranslate) {
+    translateXAxislabelText: function (svg, xAxisLabelTranslate) {
         svg.select(".xAxisDraw").selectAll(".xAxisLabelText")
-            .attr("transform", "translate(0, " + xAxisLableTranslate + ")");
+            .attr("transform", "translate(0, " + xAxisLabelTranslate + ")");
     },
 
     /**
-     * Erzeugt die d3 Grafik für ein Balkendiagramm
-     * @param   {object}    graphConfig                     Konfigurationsobjekt
-     * @param   {string}    graphConfig.selector            Class unter der das SVG erzeugt wird
-     * @param   {string}    graphConfig.scaleTypeX          Typ der xAchse
-     * @param   {string}    graphConfig.scaleTypeY          Typ der yAchse
-     * @param   {object[]}  graphConfig.data                darzustellende Daten
-     * @param   {string}    graphConfig.xAttr               Attributname der xAchse
-     * @param   {object}    graphConfig.xAxisLabel          Definitionsobjekt der x-Achse
-     * @param   {object}    graphConfig.yAxisLabel          Definitionsobjekt der y-Achse
-     * @param   {string[]}  graphConfig.attrToShowArray     Array der Attributnamen der yAchse
-     * @param   {object}    graphConfig.margin              Margin der .graph-data in .graph
-     * @param   {number}    graphConfig.width               Breite des SVG
-     * @param   {number}    graphConfig.height              Höhe des SVG
-     * @param   {object}    [graphConfig.xAxisTicks]        Tick Beschreibung der xAchse
-     * @param   {object}    [graphConfig.yAxisTicks]        Tick Beschreibung der yAchse
-     * @param   {string}    graphConfig.svgClass            Class der SVG
-     * @param   {object}    [graphConfig.legendData]        Legendeninformationen
+     * ToDo.
+     * @param {object} graphConfig ToDo.
      * @returns {void}
      */
     createBarGraph: function (graphConfig) {
@@ -627,6 +695,19 @@ const GraphModel = Backbone.Model.extend({
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
     },
 
+    /**
+     * ToDo.
+     * @param {*} svg ToDo.
+     * @param {*} dataToAdd ToDo.
+     * @param {*} x ToDo.
+     * @param {*} y ToDo.
+     * @param {*} height ToDo.
+     * @param {*} selector ToDo.
+     * @param {*} barWidth ToDo.
+     * @param {*} xAttr ToDo.
+     * @param {*} attrToShowArray ToDo.
+     * @returns {void}
+     */
     drawBars: function (svg, dataToAdd, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
         svg.append("g")
             .attr("class", "graph-data")
@@ -667,7 +748,11 @@ const GraphModel = Backbone.Model.extend({
             });
     },
 
-    // setter for graphParams
+    /**
+     * Setter for attribute "graphParams".
+     * @param {Object} value Graph params.
+     * @returns {void}
+     */
     setGraphParams: function (value) {
         this.set("graphParams", value);
     }

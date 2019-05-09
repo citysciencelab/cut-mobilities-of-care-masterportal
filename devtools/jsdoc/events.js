@@ -942,10 +942,16 @@
 /** -------------------- GRAPH -------------------- */
 
 /**
- * @event Graph#RadioTriggerGraphCreateGraph
+ * @event Tools.Graph#RadioTriggerGraphCreateGraph
  * @description starts the generating of a graphic
  * @param {Object} graphConfig contains the options for the graphic
- * @example Radio.trigger("Graph", "createGraph", );
+ * @example Radio.trigger("Graph", "createGraph", graphconfig);
+ */
+
+/**
+ * @event Tools.Graph#RadioRequestGraphGetGraphParams
+ * @description Returns the current graph params.
+ * @example Radio.request("Graph", "getGraphParams");
  */
 
 /** -------------------- GFILIST -------------------- */

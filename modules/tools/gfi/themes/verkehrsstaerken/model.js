@@ -27,7 +27,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @property {String[]} rowNames=[] Array of row names.
      * @property {Object[]} dataset=[] Parsed dataset with all the information needed for table and diagram.
      * @listens Theme#changeIsReady
-     * @fires Graph#RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     initialize: function () {
         this.listenTo(this, {
@@ -284,7 +284,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * Generates the graph config and triggers the Graph-functionality to create the graph
      * @param {String} key Name of category
      * @returns {void}
-     * @fires Graph#RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createD3Document: function (key) {
         var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),

@@ -22,7 +22,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @property {String} activeTab="info" Contains the name of the active tab
      * @property {String} downloadLink="" Link for the download data
      * @fires Util#RadioRequestUtilPunctuate
-     * @fires Graph#RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      * @listens Theme#changeIsReady
      */
     initialize: function () {
@@ -395,7 +395,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * createD3Document creates an object for the graph model to create the graphic
      * via radio trigger, the graphConfig object is transferred to the graph module
      * @param  {String} activeTab contains the value of the active tab
-     * @fires Graph#event:RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#event:RadioTriggerGraphCreateGraph
      * @return {void}
      */
     createD3Document: function (activeTab) {
