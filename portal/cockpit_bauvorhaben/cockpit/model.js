@@ -45,9 +45,13 @@ function initializeCockpitModel () {
         },
         /**
          * Prepares data for creating the graphs for Cockpit
+         * @param {Boolean} drawBaugenehmigungen Flag if graph should be drawn
+         * @param {Boolean} drawWohneinheiten Flag if graph should be drawn
+         * @param {Boolean} drawWohneinheitenNochNichtImBau Flag if graph should be drawn
+         * @param {Boolean} drawWohneinheitenImBau Flag if graph should be drawn
          * @returns {void}
          */
-        prepareDataForGraph: function () {
+        prepareDataForGraph: function (drawBaugenehmigungen, drawWohneinheiten, drawWohneinheitenNochNichtImBau, drawWohneinheitenImBau) {
             const years = this.get("filterObject").years.sort(),
                 districts = this.get("filterObject").districts,
                 suburbs = this.get("filterObject").suburbs,
@@ -59,11 +63,11 @@ function initializeCockpitModel () {
                 isOnlyFlatSelected = this.get("filterObject").flatMode,
                 data = this.get("data"),
                 filteredData = this.filterData(data, administrativeUnits, years, isOnlyFlatSelected),
-                dataBaugenehmigungen = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheiten = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]}),
-                dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]}),
-                dataWohneinheitenImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]}),
                 attributesToShow = [];
+            let dataBaugenehmigungen = [],
+                dataWohneinheiten = [],
+                dataWohneinheitenNochNichtImBau = [],
+                dataWohneinheitenImBau = [];
 
             if (filteredData.length > 0) {
                 administrativeUnits.values.forEach(function (adminUnit, i) {
@@ -74,11 +78,22 @@ function initializeCockpitModel () {
                         attributesToShow.push({attrName: adminUnit, attrClass: "graph-line-other"});
                     }
                 });
-
-                this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
-                this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
-                this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
-                this.createGraph(dataWohneinheitenImBau, ".graph-wohneinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
+                if (drawBaugenehmigungen) {
+                    dataBaugenehmigungen = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "building_project_count", {attributeName: "constructionStarted", values: [true, false]});
+                    this.createGraph(dataBaugenehmigungen, ".graph-baugenehmigungen", ".graph-tooltip-div-1", attributesToShow, "date", isMonthsSelected);
+                }
+                if (drawWohneinheiten) {
+                    dataWohneinheiten = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true, false]});
+                    this.createGraph(dataWohneinheiten, ".graph-wohneinheiten", ".graph-tooltip-div-2", attributesToShow, "date", isMonthsSelected);
+                }
+                if (drawWohneinheitenNochNichtImBau) {
+                    dataWohneinheitenNochNichtImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [false]});
+                    this.createGraph(dataWohneinheitenNochNichtImBau, ".graph-wohneinheiten-noch-nicht-im-bau", ".graph-tooltip-div-3", attributesToShow, "date", isMonthsSelected);
+                }
+                if (drawWohneinheitenImBau) {
+                    dataWohneinheitenImBau = this.prepareData(filteredData, administrativeUnits, years, isMonthsSelected, "living_unit_count", {attributeName: "constructionStarted", values: [true]});
+                    this.createGraph(dataWohneinheitenImBau, ".graph-wohneinheiten-im-bau", ".graph-tooltip-div-4", attributesToShow, "date", isMonthsSelected);
+                }
                 if (isMonthsSelected) {
                     this.postprocessGraphs(years.length);
                 }
