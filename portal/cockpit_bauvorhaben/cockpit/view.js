@@ -110,7 +110,7 @@ const CockpitView = Backbone.View.extend({
     },
 
     /**
-     * maps the selected values from multiple drop-down list
+     * Maps the selected values from multiple drop-down list.
      * @param {jQuery.Event} evt - changed event
      * @param {string} key - districts or years
      * @returns {void}
@@ -136,6 +136,11 @@ const CockpitView = Backbone.View.extend({
         }
     },
 
+    /**
+     * Sets the checkbox for months to "true" and disables it if only one year is selcted.
+     * @param {Number[]} years Selected years.
+     * @returns {void}
+     */
     disableMonthCheckboxByYearsLength: function (years) {
         if (years.length === 1) {
             document.getElementsByClassName("month")[0].checked = true;
@@ -147,6 +152,10 @@ const CockpitView = Backbone.View.extend({
         }
     },
 
+    /**
+     * Redraws the graphs if their panel is not collapsed.
+     * @returns {void}
+     */
     redrawGraphs: function () {
         const drawBaugenehmigungen = this.$el.find("#panel-baugenehmigungen").hasClass("in"),
             drawWohneinheiten = this.$el.find("#panel-wohneinheiten").hasClass("in"),
@@ -159,6 +168,10 @@ const CockpitView = Backbone.View.extend({
         this.overwriteGraphTooltip();
     },
 
+    /**
+     * Overwrites the Graphs default tooltips-
+     * @returns {void}
+     */
     overwriteGraphTooltip: function () {
         const svgBaugenehmigungen = select(".graph-baugenehmigungen svg"),
             svgWohneinheiten = select(".graph-wohneinheiten svg"),
@@ -198,6 +211,15 @@ const CockpitView = Backbone.View.extend({
             that.tooltipMouseout(select(".graph-tooltip-div-4"));
         });
     },
+
+    /**
+     * Overwrites the default style and content of the tooltip on mouseover.
+     * @param {Object} data Data object for node that was "mouseovered".
+     * @param {Number} index Index of dataset in Nodelist.
+     * @param {XML[]} nodeList Nodelist array of all the nodes.
+     * @param {Selection} tooltipDiv Selected tooltip.
+     * @returns {void}
+     */
     tooltipMouseover: function (data, index, nodeList, tooltipDiv) {
         const node = $(nodeList[index])[0],
             nodeAttributes = node.attributes,
@@ -213,11 +235,24 @@ const CockpitView = Backbone.View.extend({
                 "left: " + (event.layerX - 25) + "px;" +
                 "top: " + (event.layerY - 50) + "px;");
     },
+    /**
+     * Overwrites the default style and content of the tooltip on mouseout.
+     * @param {Selection} tooltipDiv Selected tooltip.
+     * @returns {void}
+     */
     tooltipMouseout: function (tooltipDiv) {
         tooltipDiv.style("opacity", 0);
         tooltipDiv.style("left", "0px");
         tooltipDiv.style("top", "0px");
     },
+
+    /**
+     * Inserts a string in an other string at given index.
+     * @param {String} string String.
+     * @param {Number} index Index to add the stringToAdd.
+     * @param {String} stringToAdd String to be added.
+     * @returns {String} - The complete String.
+     */
     insertStringAtIndex: function (string, index, stringToAdd) {
         let insertedString = string;
 

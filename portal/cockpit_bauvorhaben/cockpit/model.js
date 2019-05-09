@@ -444,6 +444,12 @@ function initializeCockpitModel () {
 
             return xAxisTicks;
         },
+
+        /**
+         * Filters all distinct years from data json.
+         * @param {Object[]} data All data.
+         * @returns {void}
+         */
         filterYears: function (data) {
             const t = _.pluck(data, "year");
 
@@ -452,24 +458,44 @@ function initializeCockpitModel () {
             }));
         },
 
+        /**
+         * Filters all distinct districts from data json.
+         * @param {Object[]} data All data.
+         * @returns {void}
+         */
         filterDistricts: function (data) {
             const t = _.pluck(data, "district");
 
             this.setDistricts([...new Set(t)].sort());
         },
 
+        /**
+         * Filters all distinct suburbs from data json.
+         * @param {Object[]} data All data.
+         * @returns {void}
+         */
         filterSuburbs: function (data) {
             const t = _.pluck(data, "suburb");
 
             this.setSuburbs([...new Set(t)].sort());
         },
 
+        /**
+         * Filters all distinct suburbs that match the selected districts.
+         * @param {Object[]} data All data.
+         * @returns {void}
+         */
         filterSuburbsByDistricts: function () {
             const districts = this.filterByAttribute(this.get("data"), this.get("filterObject").districts, "district");
 
             this.filterSuburbs(districts);
         },
 
+        /**
+         * Updates the layer based on the given selection. Either layer is set visible/invisible or the layer gets filtered via SLD-BODY
+         * @param {Object} filterObject Object containing the filter properties.
+         * @returns {void}
+         */
         updateLayer: function (filterObject) {
             const layer = Radio.request("ModelList", "getModelByAttributes", {id: "13802"});
 
@@ -497,6 +523,14 @@ function initializeCockpitModel () {
             Radio.trigger("Map", "render");
         },
 
+        /**
+         * Creates an SLD-BODY, based on the users selection.
+         * @param {ol/layer} layer The openlayers layer that gets the SLD-BODY.
+         * @param {String[]} administrativeUnits The values of the administrative units to be filtered by.
+         * @param {String} attr  The attribute name of the administrative unit in the dataset.
+         * @param {String} year Layername containing the year.
+         * @returns {void}
+         */
         updateLayerByAdministrativeUnit: function (layer, administrativeUnits, attr, year) {
             let orFilter = "",
                 sldBody;
@@ -514,22 +548,48 @@ function initializeCockpitModel () {
             layer.getSource().updateParams({SLD_BODY: sldBody.replace(/\n/g, ""), STYLES: "style"});
         },
 
+        /**
+         * Setter for attribute "years"
+         * @param {Number[]} value Years.
+         * @returns {void}
+         */
         setYears: function (value) {
             this.set("years", value);
         },
 
+        /**
+         * Setter for attribute "districts"
+         * @param {String[]} value Districts.
+         * @returns {void}
+         */
         setDistricts: function (value) {
             this.set("districts", value);
         },
 
+        /**
+         * Setter for attribute "suburbs"
+         * @param {String[]} value Suburbs.
+         * @returns {void}
+         */
         setSuburbs: function (value) {
             this.set("suburbs", value);
         },
 
+        /**
+         * Setter for attribute "data"
+         * @param {String[]} value Data.
+         * @returns {void}
+         */
         setData: function (value) {
             this.set("data", value);
         },
 
+        /**
+         * Sets the given values to filterObject by given key
+         * @param {String} key Key for values to be set.
+         * @param {String/Number[]} value Values to be set.
+         * @returns {void}
+         */
         setFilterObjectByKey: function (key, value) {
             this.get("filterObject")[key] = value;
             this.updateLayer(this.get("filterObject"));
