@@ -1,5 +1,5 @@
 import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
-import {select} from "d3-selection";
+import {selectAll} from "d3-selection";
 /**
  * @returns {void}
  */
@@ -110,17 +110,9 @@ function initializeCockpitModel () {
                 xAxisWidth = xAxisDraw.getBoundingClientRect().width,
                 widthPerSegment = Math.round(xAxisWidth / segments);
 
-            select(".xAxisDraw").selectAll(".tick > text")
+            selectAll(".xAxisDraw").selectAll(".tick > text")
                 .html(function (d) {
-                    let returnValue;
-
-                    if (typeof d === "string") {
-                        returnValue = d.substring(0, 4);
-                    }
-                    else {
-                        returnValue = d;
-                    }
-                    return returnValue;
+                    return String(d).substring(0, 4);
                 })
                 .attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
         },
