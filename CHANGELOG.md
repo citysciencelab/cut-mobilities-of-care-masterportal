@@ -1,3 +1,16 @@
+# Changelog LGV Master-Portal 2.3.1
+
+NEU:
+
+  (none)
+
+FIXES:
+
+  - GFI: lässt sich nun bei geöffnetem Filter nutzen
+  - GFI: Klick auf Features von externen Diensten funktioniert wieder
+  - Suche: Bei Verwendung des Parameters query; bei eindeutigem Suchtreffer direkter Zoom auf Ergebnis
+  - Themenbaum: Richtige Reihenfolge der Layer wird beim Ein- und Ausblenden nun beibehalten
+
 # Changelog LGV Master-Portal 2.3.0
 
 NEU:
