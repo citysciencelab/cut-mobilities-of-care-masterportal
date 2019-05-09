@@ -35,13 +35,15 @@
 				"name": "Werkzeuge",
 				"children": {
 					"gfi": {
-            "name": "Informationen abfragen"
+            "name": "Informationen abfragen",
+            "isVisibleInMenu": false
 					},
 					"cockpit": {
 						"name": "Filter für genehmigte Bauvorhaben",
 						"glyphicon": "glyphicon-pencil",
 						"isActive": true,
-						"renderToWindow": false
+            "renderToWindow": false,
+            "isVisibleInMenu": false
 					}
 				}
 			},

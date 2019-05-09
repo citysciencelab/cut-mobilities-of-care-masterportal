@@ -2,6 +2,7 @@ import Item from "../item";
 
 const Folder = Item.extend(/** @lends Folder.prototype */{
     defaults: _.extend({}, Item.prototype.defaults, {
+        isVisibleInMenu: true,
         isRoot: false,
         isExpanded: false,
         isInitiallyExpanded: false,
@@ -20,6 +21,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @extends Item
      * @memberof Core.ModelList.Folder
      * @constructs
+     * @property {Boolean} isVisibleInMenu=true Flag if folder is visible in menu.
      * @property {Boolean} isRoot=false Flag if folder belongs to first level.
      * @property {Boolean} isExpanded=false Flag if folder is expanded.
      * @property {Boolean} isInitiallyExpanded=false Flag if folder is expanded initially.
@@ -45,6 +47,17 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
 
             if (isEveryLayerSelected === true) {
                 this.setIsSelected(true);
+            }
+        }
+        // console.info(this);
+        if (this.get("id") === "tools") {
+            items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
+            const isEveryToolInvisible = _.every(items, function (item) {
+                return item.isVisibleInMenu === false;
+            });
+            // console.info(isEveryToolInvisible);
+            if (isEveryToolInvisible === true) {
+                this.setIsVisibleInMenu(false);
             }
         }
     },
