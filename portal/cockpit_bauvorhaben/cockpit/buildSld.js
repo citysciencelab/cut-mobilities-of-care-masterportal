@@ -1,7 +1,7 @@
 export function getPropertyIsLike (property, literal) {
     return `<ogc:PropertyIsLike wildCard="*" singleChar="#" escapeChar="!">
 <ogc:PropertyName>${property}</ogc:PropertyName>
-<ogc:Literal>*${literal}/*</ogc:Literal>
+<ogc:Literal>${literal}</ogc:Literal>
 </ogc:PropertyIsLike>`;
 }
 
