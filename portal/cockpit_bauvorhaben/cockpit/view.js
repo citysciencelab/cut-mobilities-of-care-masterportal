@@ -33,9 +33,6 @@ const CockpitView = Backbone.View.extend({
         "click input.flat": function (e) {
             this.model.setFilterObjectByKey("flatMode", e.target.checked);
             this.redrawGraphs();
-        },
-        "shown.bs.collapse": function () {
-            this.redrawGraphs();
         }
     },
     /**
@@ -153,18 +150,12 @@ const CockpitView = Backbone.View.extend({
     },
 
     /**
-     * Redraws the graphs if their panel is not collapsed.
+     * Redraws the graphs.
      * @returns {void}
      */
     redrawGraphs: function () {
-        const drawBaugenehmigungen = this.$el.find("#panel-baugenehmigungen").hasClass("in"),
-            drawWohneinheiten = this.$el.find("#panel-wohneinheiten").hasClass("in"),
-            drawWohneinheitenNochNichtImBau = this.$el.find("#panel-wohneinheiten-noch-nicht-im-bau").hasClass("in"),
-            drawWohneinheitenImBau = this.$el.find("#panel-wohneinheiten-im-bau").hasClass("in");
-
         this.$el.find(".graph-svg").remove();
-
-        this.model.prepareDataForGraph(drawBaugenehmigungen, drawWohneinheiten, drawWohneinheitenNochNichtImBau, drawWohneinheitenImBau);
+        this.model.prepareDataForGraph();
         this.overwriteGraphTooltip();
     },
 
