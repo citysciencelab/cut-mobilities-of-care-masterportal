@@ -32,7 +32,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * Creates the graph. Distinguishes betweeen
      * graphConfig.graphType === "Linegraph" and
      * graphConfig.graphType === "BarGraph".
-     * @param   {Object} graphConfig Graph configuration.
+     * @param {Object} graphConfig Graph configuration.
      * @returns {void}
      */
     createGraph: function (graphConfig) {
@@ -233,10 +233,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * Creates a d3 line object.
-     * @param   {Object} scaleX Scale of x-axis.
-     * @param   {Object} scaleY Scale of y-axis.
-     * @param   {String} xAttr  Attribute name for x-axis.
-     * @param   {string} yAttrToShow Attribut name for y-axis.
+     * @param {Object} scaleX Scale of x-axis.
+     * @param {Object} scaleY Scale of y-axis.
+     * @param {String} xAttr  Attribute name for x-axis.
+     * @param {string} yAttrToShow Attribut name for y-axis.
      * @returns {Object} - valueLine.
      */
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
@@ -254,10 +254,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * Creates the basic structure of a graph.
-     * @param   {SVG} svg The svg.
-     * @param   {Object[]} data Data for graph.
-     * @param   {String} className Class name of point.
-     * @param   {Object} d3line D3 line object.
+     * @param {SVG} svg The svg.
+     * @param {Object[]} data Data for graph.
+     * @param {String} className Class name of point.
+     * @param {Object} d3line D3 line object.
      * @returns {void}
      */
     appendDataToSvg: function (svg, data, className, d3line) {
@@ -287,24 +287,24 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * Appends the x-axis to the svg.
-     * @param   {SVG} svg SVG.
-     * @param   {Object} xAxis x-axis.
-     * @param   {Object} xAxisLabel Definition of x-axis.
-     * @param   {String} [xAxisLabel.label] Text of label.
-     * @param   {String} [xAxisLabel.offset=0] Offset between x-axis and text.
-     * @param   {String} [xAxisLabel.textAnchor=middle] Text anchor of x-axis label.
-     * @param   {String} [xAxisLabel.fill=#000] Text fill color.
-     * @param   {String} [xAxisLabel.fontSize=10] Text font size.
+     * @param {SVG} svg SVG.
+     * @param {Object} xAxis x-axis.
+     * @param {Object} xAxisLabel Definition of x-axis.
+     * @param {String} [xAxisLabel.label] Text of label.
+     * @param {String} [xAxisLabel.offset=0] Offset between x-axis and text.
+     * @param {String} [xAxisLabel.textAnchor=middle] Text anchor of x-axis label.
+     * @param {String} [xAxisLabel.fill=#000] Text fill color.
+     * @param {String} [xAxisLabel.fontSize=10] Text font size.
+     * @param {Number} width Width of SVG.
      * @returns {void}
      */
-    appendXAxisToSvg: function (svg, xAxis, xAxisLabel) {
+    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, width) {
         var textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
             textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
             fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
             fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
             label = _.isUndefined(xAxisLabel.label) ? null : [xAxisLabel.label],
-            xAxisDraw = xAxis,
-            xAxisBBox;
+            xAxisDraw = xAxis;
 
         xAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
             .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
@@ -321,10 +321,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .call(xAxisDraw);
 
         if (label) {
-            xAxisBBox = svg.selectAll(".xAxisDraw").node().getBBox();
             xAxisDraw.append("text")
-                .attr("x", xAxisBBox.width / 2)
-                .attr("y", xAxisBBox.height + textOffset)
+                .attr("x", width / 2)
+                .attr("y", 18 + textOffset)
                 .attr("dy", "1em")
                 .style("text-anchor", textAnchor)
                 .style("fill", fill)
@@ -336,24 +335,24 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * Appends the y-axis to the svg
-     * @param   {SVG} svg SVG.
-     * @param   {Object} yAxis y-axis.
-     * @param   {Object} yAxisLabel Definition of y-axis.
-     * @param   {String} [yAxisLabel.label] Text of label.
-     * @param   {String} [yAxisLabel.offset=0] Offset between y-axis and text.
-     * @param   {String} [yAxisLabel.textAnchor=middle] Text anchor of y-axis label.
-     * @param   {String} [yAxisLabel.fill=#000] Text fill color.
-     * @param   {String} [yAxisLabel.fontSize=10] Text font size.
+     * @param {SVG} svg SVG.
+     * @param {Object} yAxis y-axis.
+     * @param {Object} yAxisLabel Definition of y-axis.
+     * @param {String} [yAxisLabel.label] Text of label.
+     * @param {String} [yAxisLabel.offset=0] Offset between y-axis and text.
+     * @param {String} [yAxisLabel.textAnchor=middle] Text anchor of y-axis label.
+     * @param {String} [yAxisLabel.fill=#000] Text fill color.
+     * @param {String} [yAxisLabel.fontSize=10] Text font size.
+     * @param {Number} height Height of SVG.
      * @returns {void}
      */
-    appendYAxisToSvg: function (svg, yAxis, yAxisLabel) {
+    appendYAxisToSvg: function (svg, yAxis, yAxisLabel, height) {
         var textOffset = _.isUndefined(yAxisLabel.offset) ? 0 : yAxisLabel.offset,
             textAnchor = _.isUndefined(yAxisLabel.textAnchor) ? "middle" : yAxisLabel.textAnchor,
             fill = _.isUndefined(yAxisLabel.fill) ? "#000" : yAxisLabel.fill,
             fontSize = _.isUndefined(yAxisLabel.fontSize) ? 10 : yAxisLabel.fontSize,
             label = _.isUndefined(yAxisLabel.label) ? null : [yAxisLabel.label],
-            yAxisDraw = yAxis,
-            yAxisBBox;
+            yAxisDraw = yAxis;
 
         yAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
             .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
@@ -363,11 +362,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .call(yAxisDraw);
 
         if (label) {
-            yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
             yAxisDraw.append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("x", 0 - (yAxisBBox.height / 2))
-                .attr("y", 0 - yAxisBBox.width - (2 * textOffset))
+                .attr("x", 0 - (height / 2))
+                .attr("y", 0 - textOffset)
                 .attr("dy", "1em")
                 .style("text-anchor", textAnchor)
                 .style("fill", fill)
@@ -476,11 +474,11 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * Creates a legend and adds it on the top left.
-     * @param   {SVG} svg SVG.
-     * @param   {Object[]} legendData Legend object.
-     * @param   {String} legendData.style Type of legend item "rect" for "<rect>" or "circle" for "<circle>".
-     * @param   {String} legendData.class Class of legend item.
-     * @param   {String} legendData.text Text of legend item.
+     * @param {SVG} svg SVG.
+     * @param {Object[]} legendData Legend object.
+     * @param {String} legendData.style Type of legend item "rect" for "<rect>" or "circle" for "<circle>".
+     * @param {String} legendData.class Class of legend item.
+     * @param {String} legendData.text Text of legend item.
      * @returns {void}
      */
     appendLegend: function (svg, legendData) {
@@ -621,8 +619,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             }
         }, this);
         // Add the Axis
-        this.appendYAxisToSvg(svg, yAxis, yAxisLabel);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel);
+        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width);
 
         if (isMobile) {
             this.rotateXAxisTexts(svg);

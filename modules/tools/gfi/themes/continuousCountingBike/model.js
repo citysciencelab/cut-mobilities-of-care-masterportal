@@ -273,7 +273,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "Tagesverlauf am " + date,
             yLabel: {
                 label: "Anzahl Fahrräder/Stunde",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
             xAxisTicks: {
@@ -304,7 +304,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "Woche vom " + startDate + " bis " + endDate,
             yLabel: {
                 label: "Anzahl Fahrräder/Tag",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
             xAxisTicks: {
@@ -333,7 +333,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "KW im Jahr " + year,
             yLabel: {
                 label: "Anzahl Fahrräder/Woche",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
             xAxisTicks: {
