@@ -374,7 +374,7 @@ function initializeCockpitModel () {
                     },
                     yAxisLabel: {
                         label: "Anzahl",
-                        offset: 40
+                        offset: 50
                     },
                     attrToShowArray: attributesToShow,
                     legendData: [],
