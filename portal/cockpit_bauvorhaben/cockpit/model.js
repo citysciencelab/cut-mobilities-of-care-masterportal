@@ -1,5 +1,4 @@
 import {getOrFilter, getFilter, getPropertyIsLike} from "./buildSld";
-import {selectAll} from "d3-selection";
 /**
  * @returns {void}
  */
@@ -99,11 +98,13 @@ function initializeCockpitModel () {
                 xAxisWidth = xAxisDraw.getBoundingClientRect().width,
                 widthPerSegment = Math.round(xAxisWidth / segments);
 
-            selectAll(".xAxisDraw").selectAll(".tick > text")
-                .html(function (d) {
-                    return String(d).substring(0, 4);
-                })
-                .attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
+            $.find(".xAxisDraw .tick > text").forEach(function (text) {
+                $(text)
+                    .prop("textContent", function (index, data) {
+                        return String(data).substring(0, 4);
+                    })
+                    .attr("transform", "translate(" + widthPerSegment / 2 + ", 0)");
+            });
         },
         /**
          * Filters data by selected administrative units, years and isOnlyFlatSelected
@@ -359,7 +360,7 @@ function initializeCockpitModel () {
                     selector: selector,
                     margin: {top: 10, right: 40, bottom: 30, left: 70},
                     width: this.getGraphWidth(),
-                    height: this.getGraphHeight(10, 30),
+                    height: 200,
                     svgClass: "graph-svg",
                     selectorTooltip: selectorTooltip,
                     scaleTypeX: "ordinal",
@@ -390,22 +391,6 @@ function initializeCockpitModel () {
             const element = $.find(".graphs")[0];
 
             return $(element).width();
-        },
-        /**
-         * Returns the height from the cockpit-tool. This height is used to be set as graph-height
-         * @param {Number} marginTop marginTop of graph
-         * @param {Number} marginBottom marginBottom of graph
-         * @returns {Number} - Height for graph in px
-         */
-        getGraphHeight: function (marginTop, marginBottom) {
-            const sidebarHeight = $($.find(".sidebar")[0]).height(),
-                headerHeight = $($.find("#cockpit_bauvorhaben > .header")[0]).height() + 20,
-                filterHeight = $($.find("#cockpit_bauvorhaben > .filter")[0]).height() + 10,
-                offsets = 4 * (marginTop + marginBottom),
-                diff = sidebarHeight - headerHeight - filterHeight - offsets,
-                diffPerGraph = diff / 4;
-
-            return diffPerGraph;
         },
         /**
          * Creates ticks if monthsMode is selected.
