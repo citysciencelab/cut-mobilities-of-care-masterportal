@@ -197,6 +197,9 @@ function initializeCockpitModel () {
                         let filteredObjs = data.filter(obj => obj[adminUnitsAttrName] === adminUnit && obj.year === year && obj.month_short === month_short);
                         const fakeObj = {};
 
+                        if (filteredObjs.length === 1) {
+                            filteredObjs = this.filterByAttribute(filteredObjs, condition.values, condition.attrName);
+                        }
                         if (filteredObjs.length > 1) {
                             filteredObjs = this.aggregateByValues(filteredObjs, condition, attrName);
                         }
@@ -208,9 +211,7 @@ function initializeCockpitModel () {
                             fakeObj[attrName] = 0;
                             filteredObjs.push(fakeObj);
                         }
-                        if (filteredObjs.length === 1) {
-                            preparedData.push(filteredObjs[0]);
-                        }
+                        preparedData.push(filteredObjs[0]);
                     }, this);
                 }, this);
             }, this);
