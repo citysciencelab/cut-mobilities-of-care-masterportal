@@ -127,11 +127,15 @@ const DrawTool = Tool.extend({
             // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
             this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
 
-            if (initJson) {
+            if (para_object.initialJSON) {
                 try {
 
-                    if (initJson.features[0].properties.epsg !== "WGS84") {
-                        featJSON = format.readFeatures(initJson);
+                    if (initJson.features === undefined) {
+
+                        featJSON = format.readFeatures(para_object.initialJSON);
+                    }
+                    else if (initJson.features[0].properties.epsg !== "WGS84") {
+                        featJSON = format.readFeatures(para_object.initialJSON);
                     }
                     else {
                         format = new GeoJSON({
@@ -143,6 +147,7 @@ const DrawTool = Tool.extend({
                             featureProjection: "EPSG:25832"
                         });
                     }
+
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
