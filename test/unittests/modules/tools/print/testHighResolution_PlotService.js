@@ -586,7 +586,6 @@ describe("tools/print_/HighResolutionPlotService", function () {
         it("should return the pixels of the page bound with a passed mapSize", function () {
             var mapSize = [1920, 887],
                 result = [623.99981856, 16.833102933333294, 1296.00018144, 870.1668970666667];
-console.log(print2Model.calculatePageBoundsPixels(mapSize));
 
             expect(print2Model.calculatePageBoundsPixels(mapSize)).to.deep.equal(result);
         });
