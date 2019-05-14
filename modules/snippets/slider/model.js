@@ -8,9 +8,8 @@ const SliderModel = SnippetModel.extend({
         // parent (SnippetModel) initialize
         this.superInitialize();
         parsedValues = this.parseValues(attributes.values);
-
         this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-        if (this.has("PreselectedValues")) {
+        if (this.has("preselectedValues")) {
             this.updateValues(this.get("preselectedValues"));
         }
         this.listenTo(this.get("valuesCollection"), {
@@ -60,7 +59,7 @@ const SliderModel = SnippetModel.extend({
         }
         // slider
         else {
-            this.get("valuesCollection").at(0).set("value", snippetValues);
+            this.get("valuesCollection").at(0).setValue(snippetValues);
         }
     },
 
