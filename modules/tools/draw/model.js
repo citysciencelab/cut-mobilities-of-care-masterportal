@@ -102,7 +102,8 @@ const DrawTool = Tool.extend({
         var featJSON,
             newColor,
             format = new GeoJSON(),
-            initJson = para_object.initialJSON;
+            initJson = para_object.initialJSON,
+            zoomToExtent = false;
 
         if (this.collection) {
             this.collection.setActiveToolsToFalse(this);
@@ -151,6 +152,15 @@ const DrawTool = Tool.extend({
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
+
+                        if (initJson.features !== undefined) {
+                            zoomToExtent = initJson.features[0].properties.zoomToExtent;
+                        }
+
+                        if (zoomToExtent !== undefined || zoomToExtent === true) {
+
+                            Radio.trigger("Map", "zoomToExtent", this.get("layer").getSource().getExtent());
+                        }
                     }
                 }
                 catch (e) {
