@@ -101,7 +101,8 @@ const DrawTool = Tool.extend({
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
             newColor,
-            format = new GeoJSON();
+            format = new GeoJSON(),
+            initJson = para_object.initialJSON;
 
         if (this.collection) {
             this.collection.setActiveToolsToFalse(this);
@@ -126,9 +127,22 @@ const DrawTool = Tool.extend({
             // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
             this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
 
-            if (para_object.initialJSON) {
+            if (initJson) {
                 try {
-                    featJSON = format.readFeatures(para_object.initialJSON);
+
+                    if (initJson.features[0].properties.epsg !== "WGS84") {
+                        featJSON = format.readFeatures(initJson);
+                    }
+                    else {
+                        format = new GeoJSON({
+                            defaultDataProjection: "EPSG:4326"
+                        });
+                        // read GeoJson and transfrom the coordiantes from WGS84 to UTM
+                        featJSON = format.readFeatures(initJson, {
+                            dataProjection: "EPSG:4326",
+                            featureProjection: "EPSG:25832"
+                        });
+                    }
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
