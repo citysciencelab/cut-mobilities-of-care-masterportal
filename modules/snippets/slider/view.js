@@ -37,7 +37,7 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     initSlider: function () {
-        var valueModel = this.model.get("valueCollection").models[0];
+        var valueModel = this.model.get("valuesCollection").models[0];
 
         this.$el.find("input.slider").slider({
             min: valueModel.get("min"),

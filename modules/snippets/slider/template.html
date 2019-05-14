@@ -4,7 +4,7 @@
         <label><%= displayName %></label>
     </div>
     <div class="form-group form-group-sm pull-right">
-        <input type="text" class="form-control" value="<%= minValue %>" readonly>
+        <input type="text" class="form-control" value="<%= valuesCollection.at(0).get('value') %>" readonly>
     </div>
 </form>
 <input class="slider" type="text" data-slider-tooltip="hide"/>
