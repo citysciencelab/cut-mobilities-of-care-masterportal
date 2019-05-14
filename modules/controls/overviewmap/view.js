@@ -8,7 +8,8 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
     },
     /**
      * @class OverviewMapView
-     * @memberof Controls.Overviewmap
+     * @memberOf Controls.Overviewmap
+     * @description View to represent Overviewmap
      * @extends Backbone.View
      * @param {Object} el Jquery element to be rendered into.
      *   @param {String} id Id of control.
@@ -85,6 +86,12 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @memberof Controls.Overviewmap
      */
     template: _.template(template),
+    /**
+     * @member OverviewMapTemplate
+     * @description tableTemplate used for the OverviewMap in Table View Tools
+     * @memberof Controls.Overviewmap
+     */
+    tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),
 
     /**
      * Toggles the title of the DOM element
