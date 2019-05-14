@@ -300,7 +300,7 @@ const Gfi = Tool.extend({
             }
             else if (typ === "GROUP") {
                 _.each(layer.get("layerSource"), function (layerSource) {
-                    if (layerSource.get("typ") === "WMS") {
+                    if (layerSource.get("typ") === "WMS" && layerSource.get("layer").getVisible() === true) {
                         wmsLayerList.push(layerSource);
                     }
                     else {
