@@ -8,7 +8,8 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
     },
     /**
      * @class OverviewMapView
-     * @memberof Controls.Overviewmap
+     * @memberOf Controls.Overviewmap
+     * @description View to represent Overviewmap
      * @extends Backbone.View
      * @constructs
      */
@@ -33,11 +34,8 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
             this.setElement("#table-tools-menu");
             this.renderToToolbar();
         }
-        // this.render();
         this.model = new OverviewMapModel();
     },
-    tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),
-
     /**
      * Render function
      * @returns {OverviewMapView} - Returns itself.
@@ -62,6 +60,12 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @memberof Controls.Overviewmap
      */
     template: _.template(template),
+    /**
+     * @member OverviewMapTemplate
+     * @description tableTemplate used for the OverviewMap in Table View Tools
+     * @memberof Controls.Overviewmap
+     */
+    tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),
 
     /**
      * Toggles the title of the DOM element
