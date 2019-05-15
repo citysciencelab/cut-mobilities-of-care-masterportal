@@ -220,7 +220,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         if (_.isUndefined(yAxisTicks) && !_.has(yAxisTicks, "ticks")) {
             d3Object = axisLeft(scale)
                 .tickFormat(function (d) {
-                    return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    if (d % 1 === 0) {
+                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    }
                 });
         }
         else {
