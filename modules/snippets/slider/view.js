@@ -15,11 +15,6 @@ const SliderView = Backbone.View.extend({
         // This event fires if key up
         "keyup .form-control": "setValues"
     },
-    initialize: function () {
-        this.listenTo(this.model, {
-            "render": this.render
-        });
-    },
     className: "slider-container",
     template: _.template(Template),
 
