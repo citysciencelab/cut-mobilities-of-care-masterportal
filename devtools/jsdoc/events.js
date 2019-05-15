@@ -1156,6 +1156,13 @@
  * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
  * @example Radio.request("Util", "isAny");
  */
+
+/**
+ * @event Util#RadioRequestUtilSort
+ * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
+ * @returns {string[]} - Sorted Array
+ * @example Radio.request("Util", "sort", values);
+ */
 /** -------------------- GRAPH -------------------- */
 
 /**
