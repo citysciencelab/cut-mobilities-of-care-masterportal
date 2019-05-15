@@ -1,8 +1,4 @@
-<<<<<<< HEAD:test/unittests/modules/core/modelList/layer/testGeoJson.test.js
-import {expect} from "chai";
 import {assert} from "chai";
-=======
->>>>>>> update test for geojson and preparser in console:test/unittests/modules/core/modelList/layer/geojson.test.js
 import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
 import MapView from "@modules/core/mapView.js";
 import Util from "@testUtil";
@@ -24,17 +20,17 @@ describe("core/modelList/layer/geojson", function () {
         it("should createLayerSource", function () {
             geojsonLayer.createLayerSource();
 
-            expect(geojsonLayer.attributes).to.have.property('layerSource');
+            expect(geojsonLayer.attributes).to.have.property("layerSource");
             assert.typeOf(geojsonLayer.attributes.layerSource, "Object");
-            expect(geojsonLayer.attributes).not.to.have.property('clusterLayerSource');
+            expect(geojsonLayer.attributes).not.to.have.property("clusterLayerSource");
         });
         it("should createClusterLayerSource", function () {
             geojsonLayer.set("clusterDistance", 20);
             geojsonLayer.createLayerSource();
 
-            expect(geojsonLayer.attributes).to.have.property('layerSource');
+            expect(geojsonLayer.attributes).to.have.property("layerSource");
             assert.typeOf(geojsonLayer.attributes.layerSource, "Object");
-            expect(geojsonLayer.attributes).to.have.property('clusterLayerSource');
+            expect(geojsonLayer.attributes).to.have.property("clusterLayerSource");
             assert.typeOf(geojsonLayer.attributes.clusterLayerSource, "Object");
         });
     });
