@@ -1,7 +1,16 @@
 import SnippetModel from "../model";
 import ValueModel from "./valuemodel";
 
-const SliderModel = SnippetModel.extend({
+const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
+    /**
+     * @class SliderModel
+     * @extends SnippetModel
+     * @memberof Snippets.Slider
+     * @constructs
+     * @param {object} attributes Model to be used in this view
+     * @fires Util#RadioRequestUtilSort
+     * @listens Alerting#RadioTriggerAlertAlert
+     */
     initialize: function (attributes) {
         var parsedValues;
 
@@ -21,7 +30,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * add minValueModel and maxValueModel to valuesCollection
+     * Add minValueModel and maxValueModel to valuesCollection
      * @param {number} min min
      * @param {number} max max
      * @returns {void}
@@ -46,7 +55,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * call the updateValueModel function and/or the updateMaxValueModel
+     * Call the updateValueModel function and/or the updateMaxValueModel
      * trigger the valueChanged event on snippetCollection in queryModel
      * @param  {number | array} snippetValues - depending on slider type
      * @returns {void}
@@ -64,7 +73,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * returns an object with the slider name and its values
+     * Returns an object with the slider name and its values
      * @return {object} - contains the selected values
      */
     getSelectedValues: function () {
@@ -76,7 +85,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * parse strings into numbers if necessary
+     * Parse strings into numbers if necessary
      * @param  {array} valueList valueList
      * @return {number[]} parsedValueList
      */
@@ -97,8 +106,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * change the values by input from inputfields
-     * render change if enter is pressed
+     * Change the values by input from inputfields. Render change if enter is pressed
+     * @fires Util#RadioRequestUtilSort
      * @param {number} minValue - input value min
      * @param {number} maxValue - input value max
      * @returns {void}
@@ -136,7 +145,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * converts number to integer or decimal by type
+     * Converts number to integer or decimal by type
      * @param {number} inputValue - input value
      * @param {String} type - input type
      * @returns {void} value
@@ -158,7 +167,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-    * check if value is valid parameter or set value to initValue
+    * Check if value is valid parameter or set value to initValue
     * @param {number} value - input value
     * @param {number} otherValue - value that be set if param value NaN
     * @returns {number} val
@@ -175,7 +184,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * returns an error message for invalid inputs
+     * Returns an error message for invalid inputs
+     * @listens Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     errorMessage: function () {
@@ -186,6 +196,11 @@ const SliderModel = SnippetModel.extend({
         });
     },
 
+    /**
+     * Setter for defaultWidth
+     * @param {integer} value defaultWidth
+     * @returns {void}
+     */
     setDefaultWidth: function (value) {
         this.set("defaultWidth", value);
     }

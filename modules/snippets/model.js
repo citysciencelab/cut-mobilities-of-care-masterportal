@@ -1,24 +1,38 @@
 import ValueModel from "./value/model";
 
-const SnippetModel = Backbone.Model.extend({
+const SnippetModel = Backbone.Model.extend(/** @lends SnippetModel.prototype */{
+    /**
+     * @class SnippetModel
+     * @extends Backbone.Model
+     * @memberof Snippets
+     * @constructs
+     * @property {object} infoText ToDo
+     * @property {string} name="" ToDo
+     * @property {object} attr ToDo
+     * @property {object} valuesCollection ValuesCollection der children
+     * @fires Parser#RadioRequestParserGetSnippetInfos
+     */
     defaults: {
-        // snippet info text
         infoText: undefined,
         name: "",
         attr: {},
         valuesCollection: {}
     },
 
+    /**
+     * Initialize after Child-Initialize
+     * @returns {void}
+     */
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
-        if (typeof(Config) !== "undefined" && _.has(Config, "infoJson")) {
+        if (typeof Config !== "undefined" && _.has(Config, "infoJson")) {
             this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
         }
     },
 
     /**
-     * checks if info text is available and sets it
+     * Checks if info text is available and sets it
      * @param {object} snippetInfos [description]
      * @param {string} name [description]
      * @returns {void}
@@ -29,46 +43,16 @@ const SnippetModel = Backbone.Model.extend({
         }
     },
 
-    // setter for id
-    setId: function (value) {
-        this.set("id", value);
-    },
-
-    // setter for name
-    setName: function (value) {
-        this.set("name", value);
-    },
-
-    // setter for attr
-    setAttr: function (value) {
-        this.set("attr", value);
-    },
+    /**
+     * Trigger removeView
+     * @returns {void}
+     */
     removeView: function () {
         this.trigger("removeView");
     },
 
-    // setter for initPreectedValues
-    setPreselectedValues: function (value) {
-        this.set("preselectedValues", value);
-    },
-
-    // setter for type
-    setType: function (value) {
-        this.set("type", value);
-    },
-
-    // setter for displayName
-    setDisplayName: function (value) {
-        this.set("displayName", value);
-    },
-
-    // setter for valuesCollection
-    setValuesCollection: function (value) {
-        this.set("valuesCollection", value);
-    },
-
     /**
-     * returns true if any of the value models is selected
+     * Returns true if any of the value models is selected
      * @returns {boolean} isSelected
      */
     hasSelectedValues: function () {
@@ -77,13 +61,8 @@ const SnippetModel = Backbone.Model.extend({
         });
     },
 
-    // setter for values
-    setValues: function (value) {
-        this.set("values", value);
-    },
-
     /**
-     * deselects all value models in the values collection
+     * Deselects all value models in the values collection
      * @returns {void}
      */
     deselectValueModels: function () {
@@ -91,11 +70,97 @@ const SnippetModel = Backbone.Model.extend({
             model.setIsSelected(false);
         });
     },
+
+    /**
+     * Extent Object with new ValueModel
+     * @param   {object} obj Object to be extended
+     * @returns {object} object extended Object
+     */
     extentBaseModel: function (obj) {
         return _.extend({}, new ValueModel(), obj);
     },
+
+    /**
+     * Trigger valuesChanged to children
+     * @param   {object} model Model to be transmitted
+     * @param   {string} value Value to be transmitted
+     * @returns {void}
+     */
     triggerValuesChanged: function (model, value) {
         this.trigger("valuesChanged", model, value);
+    },
+
+    /**
+     * Setter for id
+     * @param {string} value id
+     * @returns {void}
+     */
+    setId: function (value) {
+        this.set("id", value);
+    },
+
+    /**
+     * Setter for name
+     * @param {string} value name
+     * @returns {void}
+     */
+    setName: function (value) {
+        this.set("name", value);
+    },
+
+    /**
+     * Setter for attr
+     * @param {string} value attr
+     * @returns {void}
+     */
+    setAttr: function (value) {
+        this.set("attr", value);
+    },
+
+
+    /**
+     * Setter for preselectedValues
+     * @param {string} value preselectedValues
+     * @returns {void}
+     */
+    setPreselectedValues: function (value) {
+        this.set("preselectedValues", value);
+    },
+
+    /**
+     * Setter for type
+     * @param {string} value type
+     * @returns {void}
+     */
+    setType: function (value) {
+        this.set("type", value);
+    },
+
+    /**
+     * Setter for displayName
+     * @param {string} value displayName
+     * @returns {void}
+     */
+    setDisplayName: function (value) {
+        this.set("displayName", value);
+    },
+
+    /**
+     * Setter for valuesCollection
+     * @param {string} value valuesCollection
+     * @returns {void}
+     */
+    setValuesCollection: function (value) {
+        this.set("valuesCollection", value);
+    },
+
+    /**
+     * Setter for values
+     * @param {string} value values
+     * @returns {void}
+     */
+    setValues: function (value) {
+        this.set("values", value);
     }
 });
 
