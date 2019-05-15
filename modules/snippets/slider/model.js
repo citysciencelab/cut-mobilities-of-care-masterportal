@@ -7,10 +7,15 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @extends SnippetModel
      * @memberof Snippets.Slider
      * @constructs
+     * @property {boolean} showValueBox=true Flag to show or to hide Textbox
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
      * @listens Alerting#RadioTriggerAlertAlert
      */
+    defaults: _.extend({}, SnippetModel.prototype.defaults, {
+        showValueBox: true
+    }),
+
     initialize: function (attributes) {
         var parsedValues;
 
