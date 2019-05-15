@@ -230,7 +230,7 @@ const map = Backbone.Model.extend({
             map: this.get("map"),
             time: shadowTimeFunction,
             sceneOptions: {
-                shadows: true
+                shadows: false
             },
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (olMap, scene) {
@@ -301,6 +301,9 @@ const map = Backbone.Model.extend({
 
             scene.globe.tileCacheSize = _.has(params, "tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
             scene.globe.maximumScreenSpaceError = _.has(params, "maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
+            scene.shadowMap.maximumDistance = 5000.0;
+            scene.shadowMap.darkness = 0.6;
+            scene.shadowMap.size = 2048; // this is default
             scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
             scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
         }
