@@ -163,19 +163,51 @@
  * @example Radio.request("Legend", "getLegend", layer)
 */
 
+/**
+ * @event Legend#RadioRequestLegendGetLegendParams
+ * @returns {Object} legendParams legendParams
+*/
+
+/**
+ * @event Legend#RadioTriggerLegendSetLayerList
+ * @description todo
+*/
+
+/**
+ * @event Legend#hide
+ * @description todo
+*/
+
+/**
+ * @event Legend#changeLegendParams
+ * @description todo
+*/
+
+/**
+ * @event Legend#changeParamsStyleWMSArray
+ * @description todo
+*/
+
+
 /** -------------------- PARSER -------------------- */
 
 /**
- * @event Parser#RadioRequestParserGetItemByAttributes
- * @param {object} attributes The Object that contains the attributes
- * @returns {Item} - Layer/Tool/Folder/control
- * @example Radio.request("Parser", "getItemByAttributes", attributes)
+ * @event Parser#RadioTriggerRemoveItem
+ * @example Radio.trigger("Parser", "removeItem")
+ * @description Event that removes an item from the layertree
  */
+
 /**
  * @event Parser#RadioRequestParserGetItemsByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item[]} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemsByAttributes", attributes)
+ */
+/**
+ * @event Parser#RadioRequestParserGetItemByAttributes
+ * @param {object} attributes The Object that contains the attributes
+ * @returns {Item[]} - Layer/Tool/Folder/control
+ * @example Radio.request("Parser", "getItemByAttributes", attributes)
  */
 /**
  * @event Parser#RadioRequestParserGetTreeType
@@ -192,6 +224,12 @@
  * @returns {*} todo
  * @example Radio.request("Parser", "getCategories")
  */
+
+/**
+* @event Parser#RadioRequestParserSetCategory
+* @returns {*} todo
+* @example Radio.request("Parser", "setCategory")
+*/
 
 /**
  * @event Parser#RadioRequestParserGetPortalConfig
@@ -408,13 +446,6 @@
  */
 
 /**
- * @event Map#RadioTriggerMapAddLayerToIndex
- * @description Adds layer to given index
- * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
- * @example Radio.trigger("Map", "addLayerToIndex", array)
- */
-
-/**
  * @event Map#RadioTriggerMapAddLayer
  * @description Adds layer to map
  * @param {Object} layer Layer to add to map
@@ -422,10 +453,25 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddLayerToIndex
+ * @description Adds layer to given index
+ * @param {Array} array Array consisting of the ol/layer and the given index. [layer, index]
+ * @example Radio.trigger("Map", "addLayerToIndex", array)
+ */
+
+
+/**
  * @event Map#RadioRequestMapGetMapMode
  * @description Adds layer to given index
  * @returns {string} - The mode of the map. Value can be "2D" or "3D"
  * @example Radio.request("Map", "getMapMode")
+ */
+
+/**
+ * @event Map#RadioRequestMapCreateLayerIfNotExists
+ * @description Creates a layer if it does not exist
+ * @returns {Object} - The newly created layer
+ * @example Radio.request("Map", "createLayerIfNotExists", "newLayerName");
  */
 
 /**
@@ -447,6 +493,20 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapAddOverlay
+ * @param {ol/overlay} overlay Overlay to be added to map.
+ * @example Radio.trigger("Map", "addOverlay", overlay)
+ */
+
+/**
+ * @event Map#RadioTriggerMapRegisterListener
+ * @param {String | Object} event Event to be registered
+ * @param {Function} callback - The Callback Function
+ * @param {Object} context -
+ * @example Radio.trigger("Map", "RegisterListener", event, callback, context)
+ */
+
+/**
  * @event Map#RadioTriggerMapAddInteraction
  * @description Adds an interaction to the map (e.g. draw)
  * @param {Object} interaction Interaction to be added to map.
@@ -460,6 +520,40 @@
  * @example Radio.trigger("Map", "removeInteraction", interaction)
  */
 
+/**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description Event fires if map size is updated
+ * @param {Object} caller todo!
+ * @example Radio.trigger("Map", "updateSize")
+ */
+
+/**
+  * @event Map#RadioTriggerMapRegisterListenerMovenend
+  * @example Radio.trigger("Map", "registerListener", "moveend")
+  */
+
+/**
+ * @event Map#RadioRequestMapIsMap3d
+ * @description Event that gets fired when the map is in "3D" mode
+ * @example Radio.request("Map", "isMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapActivateMap3d
+ * @description Event that gets fired when the map is activated to "3D" mode
+ * @example Radio.trigger("Map", "activateMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapDeactivateMap3d
+ * @description Event that gets fired when the map is deactivated from "3D" mode
+ * @example Radio.trigger("Map", "deactivateMap3d")
+ */
+
+/**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description todo
+ */
 
 /** -------------------- MAP VIEW -------------------- */
 
@@ -468,6 +562,18 @@
  * @param {Object} options Options of mapview status
  * @description Event that gets fired when the map view options have changed. The options are scale, center, zoomLevel
  * @example Radio.trigger("MapView", "changedOptions", options)
+ */
+
+/**
+ * @event MapView#RadioRequestMapViewGetOptions
+ * @description Event that gets the map view options. The options are scale, center, zoomLevel
+ * @example Radio.Request("MapView", "getOptions")
+ */
+
+/**
+ * @event MapView#RadioRequestMapViewGetCenter
+ * @description Event that gets the center of the map view
+ * @example Radio.Request("MapView", "getCenter")
  */
 
 /**
@@ -482,6 +588,18 @@
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
+ */
+
+/**
+ * @event MapView#RadioTriggerMapViewSetScale
+ * @description Event that sets the scale of the map view
+ * @example Radio.trigger("MapView", "setScale", model)
+ */
+
+/**
+ * @event MapView#RadioTriggerMapViewSetCenter
+ * @description Event that sets the center of the map view
+ * @example Radio.trigger("MapView", "setCenter", model)
  */
 
 /**
@@ -508,6 +626,11 @@
  * @example Radio.trigger("MapView", "getResolutions");
  */
 
+/**
+ * @event MapView#RadioTriggerMapViewToggleBackground
+ * @description todo
+ */
+
 /** -------------------- LAYER INFORMATION -------------------- */
 
 /**
@@ -515,6 +638,22 @@
  * @param {Object} options Options of mapview status
  * @example Radio.trigger("LayerInformation", "add", options)
  */
+
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationSync
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationRemoveView
+ * @description todo
+ */
+
+/**
+ * @event LayerInformation#RadioTriggerSetIsVisibleToFalse
+ * @description todo
+ */
+
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
@@ -536,7 +675,17 @@
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
  */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapDeactivate
+ * @param {Boolean} - Flag if ObliqueMap is Deactivated
+ * @example Radio.trigger("ObliqueMap", "deactivate")
+ */
 
+/**
+ * @event ObliqueMap#RadioTriggerObliqueMapActivate
+ * @param {Boolean} - Flag if ObliqueMap is activated
+ * @example Radio.trigger("ObliqueMap", "activate")
+ */
 /** -------------------- MODEL LIST -------------------- */
 
 /**
@@ -662,7 +811,7 @@
  */
 
 /**
- * @event ModelList#ChangeIsVisibleInMap
+ * @event ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @description Triggered when one item has a change in the attribute isVisibleInMap
  * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
@@ -869,6 +1018,74 @@
  * @example Radio.trigger("TableMenu", "deactivateCloseClickFrame");
  */
 
+/** -------------------- FOLDER VIEW TREE -------------------- */
+/**
+ * @event FolderViewTree#changeIsSelected
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#isVisibleInTree
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#changeIsSelected
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#changeIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#toggleIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderViewTree#toggleIsSelected
+ * @description todo
+ */
+
+/** -------------------- FOLDER CATALOG VIEW -------------------- */
+
+/**
+ * @event FolderCatalogView#changeIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#isVisibleInTree
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#toggleIsExpanded
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#setSelection
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#toggleBackground
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#unfixTree
+ * @description todo
+ */
+
+/**
+ * @event FolderCatalogView#fixTree
+ * @description todo
+ */
+
 
 /** -------------------- UTIL -------------------- */
 
@@ -971,6 +1188,17 @@
  * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
  */
 
+/**
+ * @event Quickhelp#RadioRequestQuickhelpIsSet
+ * @description Returns isSet value
+ * @example Radio.request("Quickhelp", "isSet");
+ */
+
+/**
+ * @event Quickhelp#render
+ * @description Triggered when the Quickhelp View has to render.
+ * @example this.trigger("render")
+ */
 /** -------------------- WINDOW -------------------- */
 
 /**
@@ -978,6 +1206,14 @@
  * @description is triggered by tool
  * @param {Backbone.Model} model toolModel that is shown in toolwindow
  * @example Radio.trigger("Window", "collapseWin", model);
+ */
+
+/** -------------------- WINDOWVIEW -------------------- */
+
+/**
+ * @event WindowView#RadioTriggerWindowHide
+ * @description is triggered by tool
+ * @example Radio.trigger("WindowView", "hide");
  */
 
 
@@ -1056,6 +1292,18 @@
  * @event MouseHover#RadioTriggerMouseHoverHide
  * @description hides the mouse hover div
  * @example Radio.trigger("MouseHover", "hide");
+ */
+
+/**
+ * @event MouseHover#render
+ * @description Triggered when View has to render the popup.
+ * @example this.trigger("render")
+ */
+
+/**
+ * @event MouseHover#destroy
+ * @description Triggered when the popup needs to be closed.
+ * @example this.trigger("destroy")
  */
 
 /** -------------------- STYLELIST -------------------- */
@@ -1280,4 +1528,63 @@
  * @param {GrenznachweisModel} model Model which holds the attributes to render
  * @param {Boolean} value Empty the formular or render it
  * @description Renders the formular
+ */
+
+
+/** ------------------------ Filter ----------------------------- */
+
+/**
+ * @event Filter#RadioTriggerFilterEnable
+ * @description Enables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "enable")
+ */
+
+/**
+ * @event Filter#RadioTriggerFilterDisable
+ * @description Diables the filter funtionality in the map
+ * @example Radio.trigger("Filter", "disable")
+ *
+ */
+
+
+/** -------------------- HighlightFeature -------------------- */
+
+/**
+ * @event HighlightFeature#RadioTriggerHighlightfeatureHighlightFeature
+ * @param {String} featureToAdd String with comma seperated information about the feature to add "layerId, featureId"
+ * @description Hightlights a specific feature
+ */
+
+/**
+ * @event HighlightFeature#RadioTriggerHighlightfeatureHighlightPolygon
+ * @param {ol.Feature} feature the feature to be highlighted
+ * @description Hightlights a specific polygon
+ */
+
+
+/** -------------------- ParametricURL -------------------- */
+
+/**
+ * @event ParametricURL#RadioRequestParametricURLGetHighlightFeature
+ * @returns {Object} featureToHighlight Feature to highlight
+ */
+
+
+/** -------------------- Tool -------------------- */
+
+/**
+ * @event Tool#changeIsActive
+ * @description Fired when param isActive changes
+ */
+
+/** -------------------- Autostart -------------------- */
+
+/**
+ * @event Autostart#RadioTriggerAutostartInitializedModul
+ * @description To do
+ */
+
+/**
+ * @event Autostart#RadioTriggerAutostartStartModul
+ * @description Start the List View Modul
  */

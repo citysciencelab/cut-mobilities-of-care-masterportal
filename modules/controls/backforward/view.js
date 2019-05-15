@@ -1,15 +1,37 @@
 import BackForwardTemplate from "text-loader!./template.html";
 import BackForwardModel from "./model";
-
-const BackForwardView = Backbone.View.extend({
+/**
+ * @member BackForwardTemplate
+ * @description Template used for backward and forward functionality
+ * @memberof Controls.BackForward
+ */
+const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototype */{
     events: {
-        "click .forward": "setNextView",
-        "click .backward": "setLastView"
+        "click .forward": function () {
+            this.setNextLastView("for");
+        },
+        "click .backward": function () {
+            this.setNextLastView("back");
+        }
     },
+    /**
+     * @class BackForwardView
+     * @memberof Controls.BackForward
+     * @extends Backbone.View
+     * @constructs
+     * @fires Map#RadioTriggerMapRegisterListenerMovenend
+     * @fires MapView#RadioRequestMapViewGetOptions
+     * @fires MapView#RadioRequestMapViewGetCenter
+     * @fires MapView#RadioTriggerMapViewSetScale
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     */
     initialize: function () {
-        var channel = Radio.channel("BackForwardView");
+        var channel = Radio.channel("BackForwardView"),
+            template;
 
         this.model = new BackForwardModel();
+        template = this.modifyTemplate(BackForwardTemplate);
+        this.template = _.template(template);
 
         channel.reply({
             "getView": this
@@ -18,12 +40,67 @@ const BackForwardView = Backbone.View.extend({
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
     },
-    template: _.template(BackForwardTemplate),
     id: "backforward",
 
+    /**
+     * render the control backforward
+     * @return {Backbone.View} BackForwardView
+     */
+    render: function () {
+        this.$el.html(this.template());
+        return this;
+    },
+
+    /**
+     * modifies the template with the configured backforward glyphicons
+     * @param {Backbone.Template} tpl BackForwardTemplate
+     * @return {Backbone.Template} modified template
+     */
+    modifyTemplate: function (tpl) {
+        var result,
+            configData = this.model.get("config"),
+            forwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconFor : configData,
+            backwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconBack : configData,
+            buttons,
+            re;
+
+        if (!forwardGlyph && !backwardGlyph) {
+            result = tpl;
+            return result;
+        }
+        else if (!forwardGlyph && Boolean(backwardGlyph)) {
+            buttons = {
+                "glyphicon-step-backward": backwardGlyph
+            };
+        }
+        else if (Boolean(forwardGlyph) && !backwardGlyph) {
+            buttons = {
+                "glyphicon-step-forward": forwardGlyph
+            };
+        }
+        else if (Boolean(forwardGlyph) && Boolean(backwardGlyph)) {
+            buttons = {
+                "glyphicon-step-forward": forwardGlyph,
+                "glyphicon-step-backward": backwardGlyph
+            };
+        }
+
+        re = new RegExp(Object.keys(buttons).join("|"), "gi");
+        result = tpl.replace(re, function (matched) {
+            return buttons[matched];
+        });
+
+        return result;
+    },
+    /**
+     * Updates the permanent link in the map when backward or forward button is clicked.
+     * @fires MapView#RadioRequestMapViewGetOptions
+     * @fires MapView#RadioRequestMapViewGetCenter
+     * @returns {void}
+     */
     updatePermalink: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
+        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+            backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales"),
             currentPos = this.model.get("currentPos"),
             that = this,
@@ -63,36 +140,38 @@ const BackForwardView = Backbone.View.extend({
         }
         this.model.setWentFor(false);
     },
-    render: function () {
-        this.$el.html(this.template());
-        return this;
-    },
-    setNextView: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
+
+    /**
+     * Setter for next and last view
+     * @param {String} direction - indicates if backward or forward button was clicked
+     * @fires MapView#RadioTriggerMapViewSetScale
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     * @returns {void}
+     */
+    setNextLastView: function (direction) {
+        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+            backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
         this.model.setWentFor(true);
-        $(backButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.get("currentPos") + 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
-        if (this.model.get("currentPos") === centerScales.length - 1) {
-            $(forButton).css("pointer-events", "none");
+
+        if (direction === "for") {
+            $(backButton).css("pointer-events", "auto");
+            this.model.setCurrentPos(this.model.get("currentPos") + 1);
+            Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+            Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+            if (this.model.get("currentPos") === centerScales.length - 1) {
+                $(forButton).css("pointer-events", "none");
+            }
         }
-    },
-    setLastView: function () {
-        var backButton = document.getElementsByClassName("backward glyphicon glyphicon-step-backward")[0],
-            forButton = document.getElementsByClassName("forward glyphicon glyphicon-step-forward")[0],
-            centerScales = this.model.get("CenterScales");
-
-        this.model.setWentFor(true);
-        $(forButton).css("pointer-events", "auto");
-        this.model.setCurrentPos(this.model.get("currentPos") - 1);
-        Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
-        Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
-        if (this.model.get("currentPos") === 0) {
-            $(backButton).css("pointer-events", "none");
+        else if (direction === "back") {
+            $(forButton).css("pointer-events", "auto");
+            this.model.setCurrentPos(this.model.get("currentPos") - 1);
+            Radio.trigger("MapView", "setScale", centerScales[this.model.get("currentPos")][1]);
+            Radio.trigger("MapView", "setCenter", centerScales[this.model.get("currentPos")][0]);
+            if (this.model.get("currentPos") === 0) {
+                $(backButton).css("pointer-events", "none");
+            }
         }
     }
 });
