@@ -26,10 +26,18 @@ const SliderRangeView = SliderView.extend({
      * @returns {void}
      */
     setInputControlValue: function (evt) {
-        var inputControls = this.$el.find("input.form-control");
+        let inputControls;
 
-        this.$(inputControls[0]).val(evt.value[0]);
-        this.$(inputControls[1]).val(evt.value[1]);
+        if (this.model.get("editableValueBox") === true) {
+            inputControls = this.$el.find("input.form-control");
+            this.$(inputControls[0]).val(evt.value[0]);
+            this.$(inputControls[1]).val(evt.value[1]);
+        }
+        else {
+            inputControls = this.$el.find("label.valueBox");
+            this.$(inputControls[0]).text(evt.value[0]);
+            this.$(inputControls[1]).text(evt.value[1]);
+        }
     }
 });
 
