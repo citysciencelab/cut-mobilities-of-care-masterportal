@@ -4,10 +4,7 @@ import "bootstrap-slider";
 const SliderView = Backbone.View.extend({
     events: {
         // This event fires when the dragging stops or has been clicked on
-        "slideStop input.slider": function (evt) {
-            this.model.updateValues(evt.value);
-            this.setInputControlValue(evt);
-        },
+        "slideStop input.slider": "saveNewValue",
         // This event fires when the slider is dragged
         "slide input.slider": "setInputControlValue",
         // This event is fired when the info button is clicked
@@ -59,6 +56,15 @@ const SliderView = Backbone.View.extend({
             inputControls = this.$el.find("label.valueBox");
             this.$(inputControls[0]).text(evt.value);
         }
+    },
+
+    /**
+     * Save data to model
+     * @param {Event} evt - slide
+     * @returns {void}
+     */
+    saveNewValue: function (evt) {
+        this.model.updateValues(evt.value);
     },
 
     /**
