@@ -96,6 +96,8 @@ const DrawTool = Tool.extend({
      *                 {Float} opacity - transparency (default: 1.0)
      *                 {Integer} maxFeatures - maximum number of Features allowed to be drawn (default: unlimeted)
      *                 {String} initialJSON - GeoJSON containing the Features to be drawn on the Layer, i.e. for editing
+     *                 {Boolean} transformWGS - The GeoJSON will be transformed from WGS84 to UTM if set to true
+     *                 {Boolean} zoomToExtent - The map will be zoomed to the extent of the GeoJson if set to true
      * @returns {String} GeoJSON of all Features as a String
      */
     inititalizeWithoutGUI: function (para_object) {
@@ -103,7 +105,8 @@ const DrawTool = Tool.extend({
             newColor,
             format = new GeoJSON(),
             initJson = para_object.initialJSON,
-            zoomToExtent = false;
+            zoomToExtent = para_object.zoomToExtent,
+            transformWGS = para_object.transformWGS;
 
         if (this.collection) {
             this.collection.setActiveToolsToFalse(this);
@@ -128,17 +131,10 @@ const DrawTool = Tool.extend({
             // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
             this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
 
-            if (para_object.initialJSON) {
+            if (initJson) {
                 try {
 
-                    if (initJson.features === undefined) {
-
-                        featJSON = format.readFeatures(para_object.initialJSON);
-                    }
-                    else if (initJson.features[0].properties.epsg !== "WGS84") {
-                        featJSON = format.readFeatures(para_object.initialJSON);
-                    }
-                    else {
+                    if (transformWGS === true) {
                         format = new GeoJSON({
                             defaultDataProjection: "EPSG:4326"
                         });
@@ -148,19 +144,17 @@ const DrawTool = Tool.extend({
                             featureProjection: "EPSG:25832"
                         });
                     }
+                    else {
+                        featJSON = format.readFeatures(initJson);
+                    }
 
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
+                    }
 
-                        if (initJson.features !== undefined) {
-                            zoomToExtent = initJson.features[0].properties.zoomToExtent;
-                        }
-
-                        if (zoomToExtent !== undefined || zoomToExtent === true) {
-
-                            Radio.trigger("Map", "zoomToExtent", this.get("layer").getSource().getExtent());
-                        }
+                    if (featJSON.length > 0 && zoomToExtent === true) {
+                        Radio.trigger("Map", "zoomToExtent", this.get("layer").getSource().getExtent());
                     }
                 }
                 catch (e) {
