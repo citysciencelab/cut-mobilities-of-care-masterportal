@@ -54,9 +54,16 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     setInputControlValue: function (evt) {
-        var inputControls = this.$el.find("input.form-control");
+        let inputControls;
 
-        this.$(inputControls[0]).val(evt.value);
+        if (this.model.get("editableValueBox") === true) {
+            inputControls = this.$el.find("input.form-control");
+            this.$(inputControls[0]).val(evt.value);
+        }
+        else {
+            inputControls = this.$el.find("label.valueBox");
+            this.$(inputControls[0]).text(evt.value);
+        }
     },
 
     /**
