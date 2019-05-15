@@ -6,6 +6,7 @@ import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
+import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
@@ -191,6 +192,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.typ === "Terrain3D") {
                 return new TerrainLayer(attrs, options);
+            }
+            else if (attrs.typ === "Entities3D") {
+                return new EntitiesLayer(attrs, options);
             }
             else if (attrs.typ === "TileSet3D") {
                 return new TileSetLayer(attrs, options);

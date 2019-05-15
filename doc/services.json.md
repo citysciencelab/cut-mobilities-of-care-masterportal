@@ -205,8 +205,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 ```
 #!json
 
-{
-<<<<<<< HEAD
+    {
       "id" : "11111",
       "name" : "lokale GeoJSON",
       "url" : "myJsons/test.json",
@@ -316,7 +315,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       ]
    }
 ```
-## Oblique Layer##
+## Oblique Layer ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -361,6 +360,83 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
             "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
          }
       ]
+   }
+```
+
+## Entities Layer 3D ##
+
+Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|id|ja|String||Frei wählbare Layer-ID|`"44"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|typ|ja|String||Diensttyp, in diesem Fall Entities3D |`"Entities3D"`|
+|entities|ja|Array||Modelle, die angezeigt werden sollen |`[]`|
+
+Entity Optionen
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|url|ja|String|`""`|Url zu dem Modell|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
+|attributes|nein|Object|{}|Attribute für das Modell|`{"name": "test"}`|
+|latitude|ja|Number| |Breitengrad des Modell-Origins in Grad|`53.541831`|
+|longitude|ja|Number| |Längengrad des Modell-Origins in Grad|`9.917963`|
+|height|nein|Number|0|Höhe des Modell-Origins|`10`|
+|heading|nein|Number|0|Rotation des Modells, in Grad|`0`|
+|pitch|nein|Number|0|Neigung des Modells in Grad |`0`|
+|roll|nein|Number|0|Roll des Modells in Grad|`0`|
+|scale|nein|Number|1|Skalierung des Modells|`1`|
+|allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI)|`true`|
+|show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein)|`true`|
+
+
+
+**Beispiel Entities3D Ebene:**
+
+```
+#!json
+   {
+     "id": "gltfLayer",
+     "name": "GltfLayer",
+     "typ": "Entities3D",
+     "layerAttribution": "nicht vorhanden",
+     "legendURL": "ignore",
+     "entities": [
+       {
+         "url": "https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb",
+         "attributes": {
+           "name": "Fernsehturm.kmz"
+         },
+         "latitude": 53.541831,
+         "longitude": 9.917963,
+         "height": 10,
+         "heading": -1.2502079000000208,
+         "pitch": 0,
+         "roll": 0,
+         "scale": 5,
+         "allowPicking": true,
+         "show": true
+       }
+     ],
+     "datasets": [
+       {
+         "md_id": "A39B4E86-15E2-4BF7-BA82-66F9913D5640",
+         "rs_id": "https://registry.gdi-de.org/id/de.hh/6D10BE89-636D-4359-8B27-4AB4DCA02F3A",
+         "md_name": "Digitales Höhenmodell Hamburg DGM 1",
+         "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+         "kategorie_opendata": [
+           "Geographie, Geologie und Geobasisdaten"
+         ],
+         "kategorie_inspire": [
+           "Höhe"
+         ],
+         "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+       }
+     ]
    }
 ```
 >Zurück zur [Dokumentation Masterportal](doc.md).
