@@ -37,11 +37,12 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     initSlider: function () {
-        var valueModel = this.model.get("valuesCollection").models[0];
+        var valueModel = this.model.get("valuesCollection").models[0],
+            valuesList = this.model.get("values");
 
         this.$el.find("input.slider").slider({
-            min: valueModel.get("min"),
-            max: valueModel.get("max"),
+            min: valuesList[0],
+            max: valuesList[valuesList.length - 1],
             step: 1,
             value: valueModel.value
         });
@@ -53,7 +54,9 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     setInputControlValue: function (evt) {
-        this.$el.find("input.form-control").val(evt.value);
+        var inputControls = this.$el.find("input.form-control");
+
+        this.$(inputControls[0]).val(evt.value);
     },
 
     /**
