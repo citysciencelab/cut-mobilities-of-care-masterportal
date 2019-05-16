@@ -449,7 +449,6 @@ const Measure = Tool.extend({
      * @return {undefined}
      */
     setGeometryType: function (value) {
-        console.log(this.set("geomtype", value));
         this.set("geomtype", value);
         if (this.get("geomtype") === "LineString") {
             this.setUnit("m");
