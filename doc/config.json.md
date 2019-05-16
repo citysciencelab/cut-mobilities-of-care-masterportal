@@ -277,7 +277,7 @@ Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwende
 ***
 
 #### Portalconfig.searchBar.visibleVector
-Konfiguration der Suche über die sichtbaren WFS
+Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinition unter "Fachdaten" muss für jeden VectorLayer, der durchsucht werden soll das attribut "searchField" gesetzt sein. siehe [searchField](#markdown-header-themenconfiglayervector)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1755,6 +1755,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|
 |routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug [routing](#markdown-header-portalconfigmenutoolrouting) konfiguriert sein.|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|
+|additionalInfoField|nein|String|name|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden wird der Layername angegeben.|
 |styleId|nein|String||Id die den Style definiert. Id wird in der [style.json](style.json.md) aufgelöst.|
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|
 
