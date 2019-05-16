@@ -9,12 +9,16 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @memberof Snippets.Slider
      * @constructs
      * @property {boolean} editableValueBox=true Flag to show input or label
+     * @property {float} step=1 Increment step of the slider
+     * @property {float,array} preselectedValues Initial value. Use array to have a range slider.
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
      * @listens Alerting#RadioTriggerAlertAlert
      */
     defaults: _.extend({}, SnippetModel.prototype.defaults, {
-        editableValueBox: true
+        editableValueBox: true,
+        step: 1,
+        preselectedValues: null
     }),
 
     initialize: function (attributes) {
@@ -24,7 +28,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         this.superInitialize();
         parsedValues = this.parseValues(attributes.values);
         this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-        if (this.has("preselectedValues")) {
+        if (this.get("preselectedValues") !== null) {
             this.updateValues(this.get("preselectedValues"));
         }
         this.listenTo(this.get("valuesCollection"), {
@@ -211,7 +215,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         const type = this.get("type");
 
         if (type === "time") {
-            return moment(value).format("HH:MM") + " Uhr";
+            return moment(value).format("HH:mm") + " Uhr";
         }
         else if (type === "date") {
             return moment(value).format("DD.MM.YYYY");

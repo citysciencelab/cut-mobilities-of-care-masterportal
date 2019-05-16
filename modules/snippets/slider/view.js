@@ -14,7 +14,6 @@ const SliderView = Backbone.View.extend({
     },
     className: "slider-container",
     template: _.template(Template),
-
     render: function () {
         var attr = this.model.toJSON();
 
@@ -29,14 +28,16 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     initSlider: function () {
-        var valueModel = this.model.get("valuesCollection").models[0],
-            valuesList = this.model.get("values");
+        var valueModels = this.model.get("valuesCollection").models,
+            valuesList = this.model.get("values"),
+            step = this.model.get("step");
 
         this.$el.find("input.slider").slider({
-            min: valuesList[0],
-            max: valuesList[valuesList.length - 1],
-            step: 1,
-            value: valueModel.value
+            min: valueModels[0].get("initValue"),
+            max: valueModels[1].get("initValue"),
+            step: step,
+            precision: 3,
+            value: valuesList[5]
         });
     },
 
