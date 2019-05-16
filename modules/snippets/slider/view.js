@@ -41,7 +41,7 @@ const SliderView = Backbone.View.extend({
     },
 
     /**
-     * set the input value
+     * Sets the slider value to the DOM elements according to editableValueBox.
      * @param {Event} evt - slide
      * @returns {void}
      */
@@ -54,7 +54,7 @@ const SliderView = Backbone.View.extend({
         }
         else {
             inputControls = this.$el.find("label.valueBox");
-            this.$(inputControls[0]).text(evt.value);
+            this.$(inputControls[0]).text(this.model.getValueText(evt.value));
         }
     },
 

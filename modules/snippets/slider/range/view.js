@@ -21,8 +21,8 @@ const SliderRangeView = SliderView.extend({
     },
 
     /**
-     * set the inputs value
-     * @param  {Event} evt - slide
+     * Sets the slider value to the DOM elements according to editableValueBox.
+     * @param {Event} evt - slide
      * @returns {void}
      */
     setInputControlValue: function (evt) {
@@ -35,8 +35,8 @@ const SliderRangeView = SliderView.extend({
         }
         else {
             inputControls = this.$el.find("label.valueBox");
-            this.$(inputControls[0]).text(evt.value[0]);
-            this.$(inputControls[1]).text(evt.value[1]);
+            this.$(inputControls[0]).text(this.model.getValueText(evt.value[0]));
+            this.$(inputControls[1]).text(this.model.getValueText(evt.value[1]));
         }
     }
 });

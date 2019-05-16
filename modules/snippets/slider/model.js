@@ -1,5 +1,6 @@
 import SnippetModel from "../model";
 import ValueModel from "./valuemodel";
+import moment from "moment";
 
 const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     /**
@@ -200,6 +201,23 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         });
     },
 
+    /**
+     * Returns a parsed string of the given value according to the slider type. 
+     * Only used with editableValueBox=true.
+     * @param   {number} value Value to be parsed
+     * @returns {string}
+     */
+    getValueText: function (value) {
+        const type = this.get("type");
+
+        if (type === "time") {
+            return moment(value).format("HH:MM") + " Uhr";
+        }
+        else if (type === "date") {
+            return moment(value).format("DD.MM.YYYY");
+        }
+        return value.toString();
+    },
     /**
      * Setter for defaultWidth
      * @param {integer} value defaultWidth
