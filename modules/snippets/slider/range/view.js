@@ -1,9 +1,18 @@
 import Template from "text-loader!./template.html";
 import SliderView from "../view";
-
-const SliderRangeView = SliderView.extend({
+/**
+ * @member SliderRangeViewTemplate
+ * @description Template used to create the SliderRange
+ * @memberof Snippets.Slider
+ */
+const SliderRangeView = SliderView.extend(/** @lends SliderRangeView.prototype */{
+    /**
+     * @class SliderRangeView
+     * @extends SliderView
+     * @memberof Snippets.Slider
+     * @constructs
+     */
     template: _.template(Template),
-
     /**
      * init the slider
      * @returns {void}
