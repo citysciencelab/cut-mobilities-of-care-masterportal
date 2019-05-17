@@ -10,7 +10,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @constructs
      * @property {boolean} editableValueBox=true Flag to show input or label
      * @property {float} step=1 Increment step of the slider
-     * @property {float,array} preselectedValues Initial value. Use array to have a range slider.
+     * @property {float | array} preselectedValues Initial value. Use array to have a range slider.
      * @property {float} precision=3 The number of digits shown after the decimal.
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
@@ -97,7 +97,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Parse strings into numbers if necessary
-     * @param  {array} valueList valueList
+     * @param  {string[]} valueList valueList
      * @return {number[]} parsedValueList
      */
     parseValues: function (valueList) {
@@ -105,7 +105,6 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
         _.each(valueList, function (value) {
             var val = value;
-
 
             if (_.isString(val)) {
                 val = parseInt(val, 10);
@@ -208,19 +207,19 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     },
 
     /**
-     * Returns a parsed string of the given value according to the slider type. 
+     * Returns a parsed string of the given value according to the slider type.
      * Only used with editableValueBox=true.
      * @param   {number} value Value to be parsed
-     * @returns {string}
+     * @returns {string} text Beautified text of the value according to it's type.
      */
     getValueText: function (value) {
         const type = this.get("type");
 
         if (type === "time") {
-            return moment(value).format("HH:mm") + " Uhr";
+            return moment(value).format("HH:mm");
         }
         else if (type === "date") {
-            return moment(value).format("DD.MM.YYYY");
+            return moment(value).locale("de").format("D. MMMM YYYY");
         }
         return value.toString();
     },

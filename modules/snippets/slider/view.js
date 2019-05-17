@@ -1,7 +1,17 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-slider";
-
-const SliderView = Backbone.View.extend({
+/**
+ * @member SliderViewTemplate
+ * @description Template used to create the simple slider
+ * @memberof Snippets.Slider
+ */
+const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
+    /**
+     * @class SliderView
+     * @extends Backbone.View
+     * @memberof Snippets.Slider
+     * @constructs
+     */
     events: {
         // This event fires when the dragging stops or has been clicked on
         "slideStop input.slider": "saveNewValue",
@@ -14,8 +24,13 @@ const SliderView = Backbone.View.extend({
     },
     className: "slider-container",
     template: _.template(Template),
+
+    /**
+     * render methode
+     * @returns {this}
+     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         this.initSlider();
@@ -84,7 +99,7 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     toggleInfoText: function () {
-        var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+        const isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
         this.model.trigger("hideAllInfoText");
         if (!isInfoTextVisible) {
