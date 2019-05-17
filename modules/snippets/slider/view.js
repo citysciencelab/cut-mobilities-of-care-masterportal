@@ -28,16 +28,17 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     initSlider: function () {
-        var valueModels = this.model.get("valuesCollection").models,
-            valuesList = this.model.get("values"),
-            step = this.model.get("step");
+        const valueModels = this.model.get("valuesCollection").models,
+            step = this.model.get("step"),
+            preselectedValue = this.model.get("preselectedValues"),
+            precision = this.model.get("precision");
 
         this.$el.find("input.slider").slider({
             min: valueModels[0].get("initValue"),
             max: valueModels[1].get("initValue"),
             step: step,
-            precision: 3,
-            value: valuesList[5]
+            precision: precision,
+            value: preselectedValue
         });
     },
 
