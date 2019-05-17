@@ -50,12 +50,13 @@ const EntitiesLayer = Layer.extend({
      */
     toggleLayerOnMap: function () {
         if (Radio.request("Map", "isMap3d") === true) {
-            const map3d = Radio.request("Map", "getMap3d"),
-                datasource = this.get("customDatasource");
+            const map3d = Radio.request("Map", "getMap3d");
 
             if (!this.has("customDatasource")) {
                 this.createCustomDatasource();
             }
+
+            const datasource = this.get("customDatasource");
 
             if (!map3d.getDataSources().contains(datasource)) {
                 map3d.getDataSources().add(datasource);
