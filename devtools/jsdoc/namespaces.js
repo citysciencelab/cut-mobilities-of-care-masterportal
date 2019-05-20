@@ -334,6 +334,12 @@
  */
 
 /**
+ * @namespace Datepicker
+ * @memberOf Snippets
+ * @description Datepicker Snippet using bootstrap-datepicker
+ */
+
+/**
  * @namespace Tools
  * @description Tools available in the application
  */
