@@ -14,8 +14,7 @@ const Shadow = Tool.extend({
     }),
     initialize: function () {
         this.superInitialize();
-        const date = Cesium.JulianDate.now(),
-            minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
+        const minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
             nearestTime = this.getNearestTime(),
             timesliderStep = 1000 * 60 * 30,
             timeslider = this.getNewSlider(minMaxTimes, nearestTime, timesliderStep, 1, "Uhrzeit", "time"),
@@ -26,10 +25,6 @@ const Shadow = Tool.extend({
             isMap3d = this.checkIsMap3d(),
             isShadowEnabled = this.checkIsShadowEnabled(),
             button = this.getNewButton("Schattendarstellung", isShadowEnabled);
-
-        Cesium.JulianDate.addDays(date, 200, date);
-        Cesium.JulianDate.addHours(date, 12, date);
-        this.time = date;
 
         this.setToggleButton(button);
         this.setTimeslider(timeslider);
@@ -91,6 +86,10 @@ const Shadow = Tool.extend({
         this.setCesiumTime(timedate);
     },
 
+    /**
+     * Trigger new date to map3D
+     * @param {timestamp} datetime new Time
+     */
     setCesiumTime: function (datetime) {
         const julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
 
@@ -183,15 +182,6 @@ const Shadow = Tool.extend({
     getToday: function () {
         return moment().startOf("day").valueOf();
     },
-
-    // forwardTime: function () {
-    //     Cesium.JulianDate.addHours(this.time, 1, this.time);
-    //     Radio.trigger("Map", "setTime", this.time);
-    // },
-    // backwardTime: function () {
-    //     Cesium.JulianDate.addHours(this.time, -1, this.time);
-    //     Radio.trigger("Map", "setTime", this.time);
-    // },
 
     /**
      * Returns the cesiumScene if defined
