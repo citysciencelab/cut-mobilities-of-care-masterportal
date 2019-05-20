@@ -1,19 +1,31 @@
 const fs = require("fs-extra"),
-    path = require("path"),
-    _ = require("underscore"),
+    //path = require("path"),
+    //_ = require("underscore"),
+
     replaceInFile = require("replace-in-file"),
-    stableVersion = require("../../package.json").version.replace(/\./g, "_"),
+
+    // replace URLs in regular module files, based on replace-in-file
     portalsForStableReplace = require("./portalsForStableReplace2"),
+    // replace URLs in custom module files, based on replace-in-file
+    replaceUrlsForCustomModules = require("./replace2"),
+
+    // execute shell commands
     execute = require("child-process-promise").exec,
-    replaceStrings = require("./replace2"),
+
+    // portal version parsed from package.json file
+    stableVersion = require("../../package.json").version.replace(/\./g, "_"),
 
     conf = {
         sourceFolder: "portalconfigs",
-        sourceFiles: ["config.js", "config.json", "index.html"],
         targetFolder: "stablePortale",
         masterCodeFolder: "stablePortale/Mastercode/"+stableVersion,
+        environment: "Internet",
+
+        // folder where custom modules creation script saves its result
         tempPortalFolder: "dist/build",
         basicPortalFolder: "dist/Basic",
+
+        // true for those modules to build
         modulesToBuild: {
             "activeCityMaps": true,
             "artenkataster": true,
@@ -121,13 +133,16 @@ const fs = require("fs-extra"),
             "wohnungsbau": true,
             "zkf_intern": true,
         },
+
+        // relative paths to custom modules entry js files
+        // although custom modules creation script does not expect the .js suffix, it is redundantly added
+        // for the sake of readability
         customModules: {
-            boris: "bodenrichtwertabfrage/view",
-            flaecheninfo: "showParcelGFI",
-            sga: "gfionaddress/view",
-            verkehrsportal: "customModule"
-        },
-        environment: "Internet"
+            boris: "bodenrichtwertabfrage/view.js",
+            flaecheninfo: "showParcelGFI.js",
+            sga: "gfionaddress/view.js",
+            verkehrsportal: "customModule.js"
+        }
     };
 
 function deleteStablePortalsFolder () {
@@ -184,7 +199,7 @@ function copyPortal (portalName) {
 }
 
 function buildCustomModulesPortal (portalName) {
-    var command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../"+conf.sourceFolder+"/"+portalName+"/"+conf.customModules[portalName],
+    var command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../"+conf.sourceFolder+"/"+portalName+"/"+conf.customModules[portalName].replace(/\.js$/, ""),
         redundantCustomModuleDataPath = conf.customModules[portalName].split("/")[0];
 
     console.log("Executing script "+command);
@@ -193,7 +208,7 @@ function buildCustomModulesPortal (portalName) {
         fs.copy(conf.tempPortalFolder, conf.targetFolder+"/"+portalName).then(() => {
             fs.copy(conf.sourceFolder+"/"+portalName+"/", conf.targetFolder+"/"+portalName).then(() => {
                 fs.remove(conf.targetFolder+"/"+portalName+"/"+redundantCustomModuleDataPath).then(() => {
-                    replaceStrings(conf.environment, conf.targetFolder+"/"+portalName, portalName === "geo-online" ? 3 : 2);
+                    replaceUrlsForCustomModules(conf.environment, conf.targetFolder+"/"+portalName, portalName === "geo-online" ? 3 : 2);
                     console.log("Finished building portal \""+portalName+"\"");
                 });
             });
