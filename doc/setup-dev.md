@@ -71,6 +71,8 @@ Unittests durchführen
 // npm test
 # npm test
 ```
+**Wichtig**: Falls nicht vorhanden muss der Ordner `portalconfigs/test` angelegt werden. Der Testrunner führt auch alle Tests in diesem Ordner aus. 
+
 
 - bündelt alle Tests
 - Unter http://localhost:9009/test/unittests/TestRunner.html werden alle Tests durchgeführt
