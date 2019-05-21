@@ -1,6 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 import SnippetSliderModel from "../../snippets/slider/model";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";
+import SnippetDatepickerModel from "../../snippets/datepicker/model";
 import moment from "moment";
 
 const Shadow = Tool.extend({
@@ -9,6 +10,7 @@ const Shadow = Tool.extend({
         timeslider: null,
         dateslider: null,
         toggleButton: null,
+        datepicker: null,
         isMap3d: false, // gets checked on initialize
         isShadowEnabled: false // gets checked on initialize
     }),
@@ -24,11 +26,13 @@ const Shadow = Tool.extend({
             dateslider = this.getNewSlider(minMaxDays, nearestDay, datesliderStep, 1, "Datum", "date"),
             isMap3d = this.checkIsMap3d(),
             isShadowEnabled = this.checkIsShadowEnabled(),
-            button = this.getNewButton("Schattendarstellung", isShadowEnabled);
+            button = this.getNewButton("Schattendarstellung", isShadowEnabled),
+            datepicker = this.getNewDatepicker(nearestDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
 
         this.setToggleButton(button);
         this.setTimeslider(timeslider);
         this.setDateslider(dateslider);
+        this.setDatepicker(datepicker);
         this.setIsMap3d(isMap3d);
         this.setIsShadowEnabled(isShadowEnabled);
         this.registerListener();
@@ -47,7 +51,10 @@ const Shadow = Tool.extend({
             "valuesChanged": this.timeOrDateChanged
         });
         this.listenTo(this.get("dateslider"), {
-            "valuesChanged": this.timeOrDateChanged
+            "valuesChanged": this.sychronizePicker
+        });
+        this.listenTo(this.get("datepicker"), {
+            "valuesChanged": this.sychronizeSlider
         });
         this.listenTo(this, {
             "change:isShadowEnabled": this.switchShadowEnabledButton
@@ -87,8 +94,32 @@ const Shadow = Tool.extend({
     },
 
     /**
+     * Gets called when the datepicker has changed and synchronizes the slider with the same values
+     * @returns {void}
+     */
+    sychronizeSlider: function () {
+        const date = this.get("datepicker").getSelectedValues().values[0];
+
+        this.get("dateslider").updateValuesSilently(moment(date).valueOf());
+        this.timeOrDateChanged();
+
+    },
+
+    /**
+     * Gets called when the slider has changed and synchronizes the datepicker with the same values
+     * @returns {void}
+     */
+    sychronizePicker: function () {
+        const date = this.get("dateslider").getSelectedValues().values[0];
+
+        this.get("datepicker").updateValuesSilently(moment(date).toDate());
+        this.timeOrDateChanged();
+    },
+
+    /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
+     * @returns {void}
      */
     setCesiumTime: function (datetime) {
         const julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
@@ -219,6 +250,25 @@ const Shadow = Tool.extend({
     },
 
     /**
+     * Creator for Datepicker
+     * @param {Date} preselectedValue preselected date
+     * @param {Date} startDate earliest selectable date
+     * @param {Date} endDate latest selectable date
+     * @param {string} displayName The name to be displayed near to the datepicker.
+     * @param {string} type The slider type
+     * @returns {object} SnippetSliderModel Slider-Object
+     */
+    getNewDatepicker: function (preselectedValue, startDate, endDate, displayName, type) {
+        return new SnippetDatepickerModel({
+            displayName: displayName,
+            preselectedValue: moment(preselectedValue).toDate(),
+            startDate: moment(startDate).toDate(),
+            endDate: moment(endDate).toDate(),
+            type: type
+        });
+    },
+
+    /**
      * Creator for Sliders
      * @param {integer[]} values Array of min and max times
      * @param {integer} preselectedValue preselcted value in slider
@@ -278,6 +328,15 @@ const Shadow = Tool.extend({
      */
     setDateslider: function (value) {
         this.set("dateslider", value);
+    },
+
+    /**
+     * Setter for datepicker
+     * @param {object} value datepicker
+     * @returns {void}
+     */
+    setDatepicker: function (value) {
+        this.set("datepicker", value);
     },
 
     /**

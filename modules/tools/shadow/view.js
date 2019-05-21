@@ -1,6 +1,7 @@
 import ShadowTemplate from "text-loader!./template.html";
 import SnippetSliderView from "../../snippets/slider/view";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
+import SnippetDatepickerView from "../../snippets/datepicker/view";
 /**
  * @member ShadowTemplate
  * @description Template used to style the shadow tool
@@ -36,6 +37,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template({}));
         this.$el.append(new SnippetCheckBoxView({model: this.model.get("toggleButton")}).render().el);
+        this.$el.append(new SnippetDatepickerView({model: this.model.get("datepicker")}).render().$el);
         this.$el.append(new SnippetSliderView({model: this.model.get("timeslider")}).render().$el);
         this.$el.append(new SnippetSliderView({model: this.model.get("dateslider")}).render().$el);
         this.toggleElements(this.model.get("isShadowEnabled"));
