@@ -4,7 +4,18 @@ import SnippetCheckboxModel from "../../snippets/checkbox/model";
 import SnippetDatepickerModel from "../../snippets/datepicker/model";
 import moment from "moment";
 
-const Shadow = Tool.extend({
+const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
+    /**
+     * @class ShadowModel
+     * @extends Item.Tool
+     * @memberof Shadow
+     * @property {String} glyphicon="glyphicon-screenshot" Glyphicon that is shown before the tool name
+     * @constructs
+     * @listens Map#RadioTriggerMapChange
+     * @fires Map#RadioTriggerSetShadowTime
+     * @fires Map#RadioRequestIsMap3d
+     * @fires Map#RadioRequestGetMap3d
+     */
     defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-screenshot",
         timeslider: null,
@@ -14,6 +25,11 @@ const Shadow = Tool.extend({
         isMap3d: false, // gets checked on initialize
         isShadowEnabled: false // gets checked on initialize
     }),
+
+    /**
+     * Loads default values and external tools
+     * @returns {void}
+     */
     initialize: function () {
         this.superInitialize();
         const minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
@@ -42,6 +58,7 @@ const Shadow = Tool.extend({
     /**
      * Register Listener to act on
      * @returns {void}
+     * @listens Map#RadioTriggerMapChange
      */
     registerListener: function () {
         this.listenTo(this.get("toggleButton"), {
@@ -119,6 +136,7 @@ const Shadow = Tool.extend({
     /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
+     * @fires Map#RadioTriggerSetShadowTime
      * @returns {void}
      */
     setCesiumTime: function (datetime) {
@@ -142,6 +160,7 @@ const Shadow = Tool.extend({
 
     /**
      * Checks if the map is in 3d-mode
+     * @fires Map#RadioRequestIsMap3d
      * @returns {boolean} is3D Value is map in 3d
      */
     checkIsMap3d: function () {
@@ -216,6 +235,7 @@ const Shadow = Tool.extend({
 
     /**
      * Returns the cesiumScene if defined
+     * @fires Map#RadioRequestGetMap3d
      * @returns {object | undefined} cesiumScene cesiumScene of map3D
      */
     getCesiumScene: function () {
@@ -367,4 +387,4 @@ const Shadow = Tool.extend({
     }
 });
 
-export default Shadow;
+export default ShadowModel;
