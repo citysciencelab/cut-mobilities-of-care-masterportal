@@ -84,6 +84,24 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     },
 
     /**
+     * Update the internal valuesCollection silently and triggers event to adjust the DOM element
+     * @param  {number | array} snippetValues - depending on slider type
+     * @returns {void}
+     */
+    updateValuesSilently: function (snippetValues) {
+        // range slider
+        if (_.isArray(snippetValues) === true) {
+            this.get("valuesCollection").at(0).set("value", snippetValues[0], {silent: true});
+            this.get("valuesCollection").at(1).set("value", snippetValues[1], {silent: true});
+        }
+        // slider
+        else {
+            this.get("valuesCollection").at(0).set("value", snippetValues, {silent: true});
+        }
+        this.trigger("updateDOMSlider", snippetValues);
+    },
+
+    /**
      * Returns an object with the slider name and its values
      * @return {object} - contains the selected values
      */
