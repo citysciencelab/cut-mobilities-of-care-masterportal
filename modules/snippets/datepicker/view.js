@@ -64,7 +64,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     },
 
     /**
-     * Sets the datepickers value after the model has changed
+     * Sets the slider value after the external model change
      * @param   {Date} value new Date value
      * @returns {void}
      */
