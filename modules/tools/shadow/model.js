@@ -11,8 +11,8 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      * @memberof Tools.Shadow
      * @property {String} glyphicon="glyphicon-screenshot" Glyphicon that is shown before the tool name
      * @constructs
-     * @fires Map#RadioTriggerMapSetShadowTime
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioTriggerSetShadowTime
+     * @fires Core#RadioRequestGetMap3d
      */
     defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-screenshot",
@@ -113,7 +113,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
-     * @fires Map#RadioTriggerMapSetShadowTime
+     * @fires Core#RadioTriggerSetShadowTime
      * @returns {void}
      */
     setCesiumTime: function (datetime) {
@@ -181,7 +181,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
 
     /**
      * Returns the cesiumScene if defined
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioRequestGetMap3d
      * @returns {object | undefined} cesiumScene cesiumScene of map3D
      */
     getCesiumScene: function () {
