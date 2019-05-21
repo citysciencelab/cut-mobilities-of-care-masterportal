@@ -203,6 +203,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      */
     updateDOMSlider: function (value) {
         this.$el.find("input.slider").slider("setValue", value);
+        this.setInputControlValue({value: value});
     }
 });
 
