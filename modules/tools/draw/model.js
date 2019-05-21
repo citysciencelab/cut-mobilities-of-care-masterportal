@@ -70,7 +70,7 @@ const DrawTool = Tool.extend({
                 }
             }
         });
-
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
     },
 
     /**
@@ -96,12 +96,17 @@ const DrawTool = Tool.extend({
      *                 {Float} opacity - transparency (default: 1.0)
      *                 {Integer} maxFeatures - maximum number of Features allowed to be drawn (default: unlimeted)
      *                 {String} initialJSON - GeoJSON containing the Features to be drawn on the Layer, i.e. for editing
+     *                 {Boolean} transformWGS - The GeoJSON will be transformed from WGS84 to UTM if set to true
+     *                 {Boolean} zoomToExtent - The map will be zoomed to the extent of the GeoJson if set to true
      * @returns {String} GeoJSON of all Features as a String
      */
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
             newColor,
-            format = new GeoJSON();
+            format = new GeoJSON(),
+            initJson = para_object.initialJSON,
+            zoomToExtent = para_object.zoomToExtent,
+            transformWGS = para_object.transformWGS;
 
         if (this.collection) {
             this.collection.setActiveToolsToFalse(this);
@@ -126,12 +131,30 @@ const DrawTool = Tool.extend({
             // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
             this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
 
-            if (para_object.initialJSON) {
+            if (initJson) {
                 try {
-                    featJSON = format.readFeatures(para_object.initialJSON);
+
+                    if (transformWGS === true) {
+                        format = new GeoJSON({
+                            defaultDataProjection: "EPSG:4326"
+                        });
+                        // read GeoJson and transfrom the coordiantes from WGS84 to UTM
+                        featJSON = format.readFeatures(initJson, {
+                            dataProjection: "EPSG:4326",
+                            featureProjection: "EPSG:25832"
+                        });
+                    }
+                    else {
+                        featJSON = format.readFeatures(initJson);
+                    }
+
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
+                    }
+
+                    if (featJSON.length > 0 && zoomToExtent === true) {
+                        Radio.trigger("Map", "zoomToExtent", this.get("layer").getSource().getExtent());
                     }
                 }
                 catch (e) {
