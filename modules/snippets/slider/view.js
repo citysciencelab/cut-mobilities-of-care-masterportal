@@ -22,12 +22,25 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
         // This event fires if key up
         "keyup .form-control": "setValues"
     },
+
     className: "slider-container",
+
+    /**
+     * Setting listener
+     * @returns {void}
+     */
+    initialize: function () {
+        this.listenTo(this.model, {
+            "updateDOMSlider": this.updateDOMSlider,
+            "removeView": this.remove
+        }, this);
+    },
+
     template: _.template(Template),
 
     /**
      * render methode
-     * @returns {this}
+     * @returns {this} this
      */
     render: function () {
         const attr = this.model.toJSON();
@@ -181,6 +194,15 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
         }
 
         return targetClass;
+    },
+
+    /**
+     * Sets the slider value after the external model change
+     * @param   {Date} value new Date value
+     * @returns {void}
+     */
+    updateDOMSlider: function (value) {
+        this.$el.find("input.slider").slider("setValue", value);
     }
 });
 
