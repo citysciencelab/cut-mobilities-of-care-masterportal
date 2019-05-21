@@ -5,6 +5,17 @@ const EntitiesLayer = Layer.extend({
         supported: ["3D"],
         showSettings: false
     }),
+    /**
+     * @description Class to render Cesium Entities
+     * @class EntitiesLayer
+     * @extends Core.ModelList.Layer.Layer
+     * @memberof Core.ModelList.Layer
+     * @constructs
+     * @property {Object} entities
+     * @listens Layer#changeIsSelected
+     * @listens Layer#changeIsVisibleInMap
+     * @listens Map#change
+     */
     initialize: function () {
         this.listenToOnce(this, {
             "change:isSelected": function () {
@@ -46,17 +57,12 @@ const EntitiesLayer = Layer.extend({
 
     /**
      * toggles the layer and creates the necessary resources and adds it to the 3d map
-     * @returns {void}
+     * @returns {void} -
      */
     toggleLayerOnMap: function () {
         if (Radio.request("Map", "isMap3d") === true) {
-            const map3d = Radio.request("Map", "getMap3d");
-
-            if (!this.has("customDatasource")) {
-                this.createCustomDatasource();
-            }
-
-            const datasource = this.get("customDatasource");
+            const map3d = Radio.request("Map", "getMap3d"),
+                datasource = this.getCustomDatasource();
 
             if (!map3d.getDataSources().contains(datasource)) {
                 map3d.getDataSources().add(datasource);
@@ -72,11 +78,11 @@ const EntitiesLayer = Layer.extend({
     },
 
     /**
-     * creates the datasource collection for this layer
-     * @returns {void} -
+     * returns the customDatasource, if if does not exists, it will be created
+     * @returns {Cesium.CustomDataSource} -
      */
-    createCustomDatasource: function () {
-        if (this.has("customDatasource") === false) {
+    getCustomDatasource: function () {
+        if (!this.has("customDatasource")) {
             this.set("customDatasource", new Cesium.CustomDataSource());
             if (this.has("entities")) {
                 const entities = this.get("entities");
@@ -84,6 +90,7 @@ const EntitiesLayer = Layer.extend({
                 entities.forEach(this.addEntityFromOptions, this);
             }
         }
+        return this.get("customDatasource");
     },
 
     /**
@@ -110,18 +117,25 @@ const EntitiesLayer = Layer.extend({
      * @returns {Cesium.Entity} cesium entity
      */
     addEntityFromOptions (model) {
+        var position,
+            headingPitchRoll,
+            orientation,
+            modelOptions,
+            entityOptions,
+            entity;
+
+        const allowPicking = _.isBoolean(model.allowPicking) ? model.allowPicking : true,
+            attributes = model.attributes ? model.attributes : {};
 
         if (!_.isString(model.url)) {
             return null;
         }
 
-        const areNumeric = [model.longitude, model.latitude, model.height].every(num => _.isNumber(num));
-
-        if (!areNumeric) {
+        if (![model.longitude, model.latitude, model.height].every(num => _.isNumber(num))) {
             return null;
         }
 
-        const position = Cesium.Cartesian3.fromDegrees(model.longitude, model.latitude, model.height);
+        position = Cesium.Cartesian3.fromDegrees(model.longitude, model.latitude, model.height);
 
         let heading = 0,
             pitch = 0,
@@ -138,16 +152,16 @@ const EntitiesLayer = Layer.extend({
         if (_.isNumber(model.roll)) {
             roll = model.roll / 180 * Math.PI;
         }
-        const headingPitchRoll = new Cesium.HeadingPitchRoll(heading, pitch, roll);
-        const orientation = Cesium.Transforms.headingPitchRollQuaternion(position, headingPitchRoll);
+        headingPitchRoll = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+        orientation = Cesium.Transforms.headingPitchRollQuaternion(position, headingPitchRoll);
 
-        const modelOptions = Object.assign(model.modelOptions || {}, {
+        modelOptions = Object.assign(model.modelOptions || {}, {
             uri: model.url,
             scale: _.isNumber(model.scale) ? model.scale : 1,
             show: true
         });
 
-        const entityOptions = {
+        entityOptions = {
             name: model.url,
             position,
             orientation,
@@ -155,12 +169,10 @@ const EntitiesLayer = Layer.extend({
             model: modelOptions
         };
 
-        const allowPicking = _.isBoolean(model.allowPicking) ? model.allowPicking : true;
-        const attributes = model.attributes ? model.attributes : {};
-
-        const entity = this.get("customDatasource").entities.add(entityOptions);
+        entity = this.getCustomDatasource().entities.add(entityOptions);
         entity.attributes = attributes;
         entity.allowPicking = allowPicking;
+        entity.layerReferenceId = this.get("id");
         return entity;
     },
 
