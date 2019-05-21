@@ -64,6 +64,16 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
     },
 
     /**
+     * Update the internal valuesCollection silently and triggers event to adjust the DOM element
+     * @param  {Date} value new selected date
+     * @returns {void}
+     */
+    updateValuesSilently: function (value) {
+        this.get("valuesCollection").at(0).set("date", value, {silent:true});
+        this.trigger("updateDOMSlider", value);
+    },
+
+    /**
      * Returns an object with the datepicker name and its date
      * @return {object} - contains the selected values
      */

@@ -15,6 +15,17 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     className: "datepicker-container",
 
     /**
+     * Setting listener
+     * @returns {void}
+     */
+    initialize: function () {
+        this.listenTo(this.model, {
+            "updateDOMSlider": this.updateDOMSlider,
+            "removeView": this.remove
+        }, this);
+    },
+
+    /**
      * render methode
      * @returns {this} this
      */
@@ -50,6 +61,15 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
         const newDate = evt.date;
 
         this.model.updateValues(newDate);
+    },
+
+    /**
+     * Sets the datepickers value after the model has changed
+     * @param   {Date} value new Date value
+     * @returns {void}
+     */
+    updateDOMSlider: function (value) {
+        this.$el.datepicker("update", value);
     }
 });
 
