@@ -20,7 +20,7 @@ module.exports = function (environment, destination, deepness = 2) {
     replacements.push(
     {
         "files": destination + "/index.html",
-        "from": /\/*(\.+\/)*build/,
+        "from": /\/*(\.+\/)*build/g,
         "to": "."
     },
     {
