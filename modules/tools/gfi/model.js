@@ -211,6 +211,8 @@ const Gfi = Tool.extend({
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
+            // use pickedPosition in 3D Mode, to get the 3d position directly at the 3d object
+            this.setCoordinate(evt.pickedPosition);
         }
 
         // für detached MapMarker
@@ -245,7 +247,7 @@ const Gfi = Tool.extend({
             this.setIsVisible(false);
         }
         else {
-            this.get("overlay").setPosition(evt.coordinate);
+            this.get("overlay").setPosition(this.get("coordinate"));
             this.get("themeList").reset(unionParams);
         }
     },

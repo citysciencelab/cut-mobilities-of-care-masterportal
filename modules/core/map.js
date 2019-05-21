@@ -304,6 +304,8 @@ const map = Backbone.Model.extend({
             scene.shadowMap.size = 2048; // this is default
             scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
             scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
+            scene.globe.depthTestAgainstTerrain = true;
+
         }
         return scene;
     },
