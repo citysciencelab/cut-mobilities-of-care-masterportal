@@ -52,7 +52,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
      * @returns {void}
      */
     toggleElements: function (chkBoxValue) {
-        this.$el.find(".slider-container").each(function (index, slider) {
+        this.$el.find(".slider-container, .datepicker-container").each(function (index, slider) {
             if (chkBoxValue) {
                 slider.style.display = "block";
             }
