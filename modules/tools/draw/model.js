@@ -316,13 +316,16 @@ const DrawTool = Tool.extend({
      * finishes the draw interaction via Radio
      * @returns {void}
      */
-    cancelDrawWithoutGUI: function () {
+    cancelDrawWithoutGUI: function (cursor) {
         this.deactivateDrawInteraction();
         this.deactivateSelectInteraction();
         this.deactivateModifyInteraction();
         this.resetModule();
         // GFI wieder einschalten nach dem Zeichnen
         this.setIsActive(false);
+        if (cursor !== undefined && cursor.cursor) {
+            $("#map").removeClass("no-cursor");
+        }
     },
 
     /**
