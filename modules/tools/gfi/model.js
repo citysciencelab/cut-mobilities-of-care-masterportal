@@ -301,6 +301,20 @@ const Gfi = Tool.extend({
                 if (olFeature && layer) {
                     gfiParams3d.push(this.getVectorGfiParams3d(olFeature, layer));
                 }
+                else if (feature.primitive.id instanceof Cesium.Entity) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.primitive.id.layerReferenceId});
+                    if (layerModel) {
+                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                    }
+                    if (modelAttributes) {
+                        if (feature.primitive.id.attributes) {
+                            modelAttributes.attributes = feature.primitive.id.attributes;
+                        }
+                    }
+                    if (layerModel) {
+                        gfiParams3d.push(modelAttributes);
+                    }
+                }
             }
         }, this);
         return gfiParams3d;
