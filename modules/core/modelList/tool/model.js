@@ -18,7 +18,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @class Tool
      * @description Abstract Class used for generating Tool models
      * @extends Item
-     * @memberof Item
+     * @memberof Core.ModelList.Tool
      * @constructs
      * @property {Boolean} isVisibleInMenu=true Flag of Tool is visible in menu
      * @property {Boolean} is isRoot=false Flag if Tool button is shown on first level in menu
@@ -31,6 +31,8 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {String[]} supportedIn3d=["coord", "shadow", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"] Array of tool ids that are supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
      * @property {String[]} toolsToRenderInSidebar=["filter", "schulwegrouting"] Array of tool ids that are rendered in sidebar
+     * @listens Tool#changeIsActive
+     * @fires Tool#changeIsActive
      */
     superInitialize: function () {
         this.listenTo(this, {

@@ -36,9 +36,9 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
     },
 
     /**
-     * Rendert den Bootstrap-Toolip ins mousehoverpopup.
-     * html: true - Damit <br> ausgewertet wird
-     * trigger: manual - lösst Bug mit verschwindendem Tooltip
+     * Renders the Bootstrap-Tooltip into the mousehoverpopup
+     * html: true - So that html br will be integrated
+     * trigger: manual - solves bug with hiding tooltip
      * @param {string} text -
      * @returns {void}
      */

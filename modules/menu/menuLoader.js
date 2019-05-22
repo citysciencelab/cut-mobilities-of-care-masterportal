@@ -3,11 +3,18 @@ import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";
 import TableMenu from "./table/view";
 
-const MenuLoader = Backbone.Model.extend({
+const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     defaults: {
         treeType: "light",
         currentMenu: ""
     },
+    /**
+     * @class MenuLoader
+     * @extends Backbone.Model
+     * @memberof Menu
+     * @constructs
+     * @description This Loader gives you ...
+     */
     initialize: function () {
         this.treeType = Radio.request("Parser", "getTreeType");
 
@@ -27,6 +34,7 @@ const MenuLoader = Backbone.Model.extend({
      * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
      * @param  {Object} caller this MenuLoader
      * @return {Object}        this
+     * @fires Map#RadioTriggerMapUpdateSize
      */
     loadMenu: function () {
         var isMobile = Radio.request("Util", "isViewMobile"),

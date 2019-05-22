@@ -278,6 +278,22 @@ CSS-Code gehört nur in LESS-Dateien und in keine HTML-Dokumente oder CSS-Dateie
 * Der Changelog liest nur Merge-Commits mit prefix "add" oder "fix" (intern auch "hotfix") aus. Daher Merge-Commits entsprechend benennen.
 * Sprache der Commits: Deutsch oder Englisch
 
+
+###Unit-Testing
+* Es ist für jede JavaScript-Datei eine TestDatei unter ./test/unittests/ anzulegen. Die Struktur im unittests-Ordner enstpricht der Struktur im Projekt.
+* Der Dateiname der Test-datei ist identisch zu der Datei die zu testen ist.
+* Die Dateiendung lautet ".test.js" (Es werden nur Dateien für die tests herangezogen die auf ".test.js" enden)
+* Per import-statement wird der/die/das Model/View/Collection/... importiert und instanziiert. Danach werden die Unittest definiert.
+* Jede Funktion soll getestet werden. (Ausnahme: Setter-Funktionen).
+* Orientiert werden soll sich an der Datei "./test/unittests/example.test.js"
+
+Gestestet werden kann per npm script "npm run test" oder beim committen.
+
+Per Console wird der normale commit ausgeführt.
+Der pre-commit-hook von [husky](https://www.npmjs.com/package/husky) startet das Unit-Testing.
+Erst wenn das Unit-Testing erfolgreich durchgelaufen ist, wird der commit durchgeführt. 
+
+
 ### Konfigurations-Änderungen
 Werden Änderungen im Code durchgeführt wodurch sich Konfigurationsparameter ändern, so ist sicherzustellen, dass der Code auch abwärts kompatibel ist.
 An den entsprechenden Funktionen im Code werden immer deprecated tags ("*@deprecated in version [nextMajorVersion]") mit sprechender Beschreibung versehen.

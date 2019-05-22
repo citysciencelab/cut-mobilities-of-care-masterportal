@@ -13,8 +13,8 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
-import PrintV2 from "../../tools/print_/model";
-import Print from "../../tools/print/model";
+import PrintV2 from "../../tools/print_/Mapfish3_PlotServicel";
+import Print from "../../tools/print_/HighResolution_PlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -76,6 +76,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#ChangeSelectionIDX
      * @fires ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @fires ModelList#updateOverlayerView
      * @fires Map#RadioRequestMapGetMapMode
      * @fires ModelList#UpdateOverlayerView
      * @fires ModelList#UpdateSelection
@@ -192,7 +193,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                if (attrs.version === undefined) {
+                if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
                     return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new PrintV2(attrs, options);

@@ -1,7 +1,7 @@
 import Feature from "ol/Feature.js";
 import Tool from "../core/modelList/tool/model";
 
-const Legend = Tool.extend({
+const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         legendParams: [],
         paramsStyleWMS: [],
@@ -10,6 +10,29 @@ const Legend = Tool.extend({
         renderToSidebar: false,
         glyphicon: "glyphicon-book"
     }),
+    /**
+     * @class LegendModel
+     * @extends Core.ModelList.Tool
+     * @memberof Legend
+     * @constructs
+     * @property {Array} legendParams Array of legend parameters,
+     * @property {Array} paramsStyleWMS todo
+     * @property {Array} paramsStyleWMSArray todo
+     * @property {Boolean} renderToWindow=false Flag, if the legend shall render to a window
+     * @property {Boolean} renderToSidebar=false Flag, if the legend shall render to the sidebar
+     * @property {String} glyphicon="glyphicon-book" Icon to user for Legend-Menu-Entry
+     * @listens Legend#RadioRequestLegendGetLegend
+     * @listens Legend#RadioRequestLegendGetLegendParams
+     * @listens Legend#RadioTriggerLegendSetLayerList
+     * @listens Legend#changeParamsStyleWMSArray
+     * @listens ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @listens StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
+     * @listens StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires StyleList#RadioRequestReturnModelById
+     * @fires Legend#changeLegendParams
+     * @fires Legend#changeParamsStyleWMSArray
+     */
     initialize: function () {
         var channel = Radio.channel("Legend");
 
@@ -36,16 +59,20 @@ const Legend = Tool.extend({
     },
 
     /**
-     * Erstellt die Legendeninformation zu einem Layer und liefert diese zurück
-     * @param  {object} layer gesuchter Layer
-     * @return {object}       Legendeninformation
+     * Creates the legend information for one layer and returns it
+     * @param  {Object} layer requested layer
+     * @return {Object} returns legend information
      */
     getLegend: function (layer) {
         var layerSources = layer.get("layerSource"); // Array oder undefined
 
         return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
     },
-
+    /**
+    * todo
+    * @param {*} params todo
+    * @returns {void}
+    */
     updateParamsStyleWMSArray: function (params) {
 
         var paramsStyleWMSArray2 = this.copyOtherParamsStyleWMS(params.styleWMSName);
@@ -54,7 +81,11 @@ const Legend = Tool.extend({
         this.set("paramsStyleWMS", params);
         this.set("paramsStyleWMSArray", paramsStyleWMSArray2);
     },
-
+    /**
+    * todo
+    * @param {*} nameOfLayerToExclude todo
+    * @returns {Array} returns paramsStyleWMS
+    */
     copyOtherParamsStyleWMS: function (nameOfLayerToExclude) {
         var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMSArray2 = [];
@@ -67,7 +98,11 @@ const Legend = Tool.extend({
 
         return paramsStyleWMSArray2;
     },
-
+    /**
+    * todo
+    * @param {*} layer todo
+    * @returns {void}
+    */
     resetParamsStyleWMSArray: function (layer) {
 
         var legendParams;
@@ -94,7 +129,10 @@ const Legend = Tool.extend({
         this.set("legendParams", legendParams);
         this.setLayerList();
     },
-
+    /**
+    * todo
+    * @returns {void}
+    */
     updateLegendFromStyleWMSArray: function () {
         var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             legendParams = this.get("legendParams");
@@ -119,12 +157,11 @@ const Legend = Tool.extend({
         this.set("legendParams", legendParams);
         this.setLayerList();
     },
-
     /**
-     * Setzt die Legendeninformationen aller sichtbaren Layer
-     * @fires this#change:legendParams
-     * @returns {void}
-     */
+    * Sets the legend information for all visible layers
+    * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+    * @returns {void}
+    */
     setLayerList: function () {
         var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
             sortedModelList = _.sortBy(modelList, function (layer) {
@@ -146,14 +183,14 @@ const Legend = Tool.extend({
     },
 
     /**
-     * Wertet den Layer aus und gibt dessen Legendendefinition zurück
-     * @param  {string} layername         Name des Layers
-     * @param  {string} typ               Typ des Layers
-     * @param  {string[]} [legendURL]     Nur bei typ !== GROUP
-     * @param  {string} [styleId]         Nur bei typ === WFS
-     * @param  {object[]} [layerSources]  Nur bei typ === GROUP
-     * @return {object}                   Legendendefinition
-     */
+    * Checks the layer and returns the layer definition
+    * @param {String} layername         name of the layer
+    * @param {String} typ               type of the layer
+    * @param {String[]} [legendURL]     only if typ !== GROUP
+    * @param {String} [styleId]         only if typ === WFS
+    * @param {Object[]} [layerSources]  only if typ === GROUP
+    * @returns {Object} returns legend definition
+    */
     getLegendDefinition: function (layername, typ, legendURL, styleId, layerSources) {
         var defs = [];
 
@@ -198,7 +235,12 @@ const Legend = Tool.extend({
             legend: null
         };
     },
-
+    /**
+    * todo
+    * @param {*} layername todo
+    * @param {*} legendURL todo
+    * @returns {Object} returns todo
+    */
     getLegendParamsFromWMS: function (layername, legendURL) {
         var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMS = "";
@@ -229,7 +271,15 @@ const Legend = Tool.extend({
             }]
         };
     },
-
+    /**
+    * todo
+    * @param {*} layername todo
+    * @param {*} legendURL todo
+    * @param {*} typ todo
+    * @param {*} styleId todo
+    * @fires StyleList#RadioRequestReturnModelById
+    * @returns {*} returns todo
+    */
     getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
         var image,
             name,
@@ -333,6 +383,11 @@ const Legend = Tool.extend({
             }]
         };
     },
+    /**
+    * todo
+    * @param {*} style todo
+    * @returns {*} returns todo
+    */
     createCircleSVG: function (style) {
         var svg = "",
             circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
@@ -357,6 +412,11 @@ const Legend = Tool.extend({
 
         return svg;
     },
+    /**
+    * todo
+    * @param {*} style todo
+    * @returns {*} returns todo
+    */
     createLineSVG: function (style) {
         var svg = "",
             strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
@@ -375,6 +435,12 @@ const Legend = Tool.extend({
 
         return svg;
     },
+    /**
+    * todo
+    * @param {*} style todo
+    * @param {*} styleFieldValue todo
+    * @returns {*} returns todo
+    */
     createPolygonSVG: function (style, styleFieldValue) {
         var svg = "",
             fillColor = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonFillColor ? style.returnColor(styleFieldValue.polygonFillColor, "hex") : style.returnColor(style.get("polygonFillColor"), "hex"),
@@ -399,15 +465,14 @@ const Legend = Tool.extend({
 
         return svg;
     },
-
     /**
-     * draw advanced styles in legend
-     * @param {ol.style} style - style from features
-     * @param {string} layername - Name des Layers
-     * @param {array} image - should contains the image source for legend elements
-     * @param {array} name - should contains the names for legend elements
-     * @returns {array} allItems
-     */
+     * Draw advanced styles in legend
+     * @param {ol.style} style style from features
+     * @param {String} layername Name of layer
+     * @param {Array} image should contain the image source for legend elements
+     * @param {Array} name should contain the names for legend elements
+     * @returns {Array} returns allItems
+    */
     drawAdvancedStyle: function (style, layername, image, name) {
         var scalingShape = style.get("scalingShape"),
             scalingAttribute = style.get("scalingAttribute"),
@@ -439,14 +504,14 @@ const Legend = Tool.extend({
     },
 
     /**
-     * draw advanced styles for nominal circle segments in legend
-     * @param {object} styleScalingValues - contains values to be draw in legend
-     * @param {array} scalingValueDefaultColor - color for default value
-     * @param {String} scalingAttribute - attribute that contains the values of a feature
-     * @param {ol.style} advancedStyle - copy of style
-     * @param {array} image - should contains the image source for legend elements
-     * @param {array} name - should contains the names for legend elements
-     * @returns {array} allItems
+     * Draw advanced styles for nominal circle segments in legend
+     * @param {Object} styleScalingValues contains values to be draw in legend
+     * @param {Array} scalingValueDefaultColor color for default value
+     * @param {String} scalingAttribute attribute that contains the values of a feature
+     * @param {ol.style} advancedStyle copy of style
+     * @param {Array} image should contain the image source for legend elements
+     * @param {Array} name should contain the names for legend elements
+     * @returns {Array} allItems
      */
     drawNominalCircleSegmentsStyle: function (styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name) {
         // add defaultColor
@@ -471,15 +536,14 @@ const Legend = Tool.extend({
 
         return [image, name];
     },
-
     /**
-     * draw advanced styles for interval circle bars in legend
-     * @param {String} scalingAttribute - attribute that contains the values of a feature
-     * @param {ol.style} advancedStyle - copy of style
-     * @param {string} layername - Name des Layers
-     * @param {array} image - should contains the image source for legend elements
-     * @param {array} name - should contains the names for legend elements
-     * @returns {array} allItems
+     * Draw advanced styles for interval circle bars in legend
+     * @param {String} scalingAttribute attribute that contains the values of a feature
+     * @param {ol.style} advancedStyle copy of style
+     * @param {String} layername Name des Layers
+     * @param {Array} image should contain the image source for legend elements
+     * @param {Array} name should contain the names for legend elements
+     * @returns {Array} allItems
      */
     drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layername, image, name) {
         var olFeature = new Feature({}),
@@ -497,4 +561,4 @@ const Legend = Tool.extend({
     }
 });
 
-export default Legend;
+export default LegendModel;
