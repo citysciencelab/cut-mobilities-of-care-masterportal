@@ -1488,7 +1488,7 @@ Hier werden die Fachdaten definiert
     "name": "Meine Fachdaten",
     "Layer": [
         {
-            "id": "123
+            "id": "123"
         }
     ]
 },
