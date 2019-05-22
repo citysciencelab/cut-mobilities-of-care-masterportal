@@ -1269,7 +1269,7 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 
 ***
 
-#### Portalconfig.menu.tool.layerslider
+#### Portalconfig.menu.tool.layerSlider
 
 [inherits]: # (Portalconfig.menu.tool)
 
@@ -1284,7 +1284,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 **Beispiel**
 ```
 #!json
-"layerslider": {
+"layerSlider": {
     "name": "Zeitreihe",
     "glyphicon": "glyphicon-film",
     "title": "Simulation von Beispiel-WMS",
