@@ -2,7 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 import BuildSpecModel from "./buildSpec";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
-const PrintModel = Tool.extend({
+const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         // output filename
         filename: "report",
