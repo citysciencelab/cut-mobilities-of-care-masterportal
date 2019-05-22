@@ -39,7 +39,7 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayersliderView from "../modules/tools/layerslider/view";
+import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlimport/view";
@@ -250,8 +250,16 @@ function loadApp () {
                 new StyleWMSView({model: tool});
                 break;
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             case "layerslider": {
-                new LayersliderView({model: tool});
+                new LayerSliderView({model: tool});
+                break;
+            }
+            case "layerSlider": {
+                new LayerSliderView({model: tool});
                 break;
             }
             default: {

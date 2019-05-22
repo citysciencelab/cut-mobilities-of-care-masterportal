@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 
-const LayersliderModel = Tool.extend({
+const LayerSliderModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         layerIds: [],
         timeInterval: 2000,
@@ -13,15 +13,13 @@ const LayersliderModel = Tool.extend({
     }),
 
     initialize: function () {
-        var invalidLayer;
+        const invalidLayerIds = this.checkIfAllLayersAvailable(this.get("layerIds"));
 
         this.superInitialize();
         this.setProgressBarWidth(this.get("layerIds"));
 
-        // Prüfe Konfiguration
-        invalidLayer = this.checkAllLayerOk(this.get("layerIds"));
-        if (invalidLayer) {
-            console.error("Konfiguration des layersliders fehlerhaft. Prüfen Sie layerId: " + invalidLayer.layerId);
+        if (invalidLayerIds.length > 0) {
+            Radio.trigger("Alert", "alert", "Konfiguration des Werkzeuges: " + this.get("name") + " fehlerhaft. <br>Bitte prüfen Sie folgende LayerIds: " + invalidLayerIds + "!");
         }
 
         this.listenTo(this, {
@@ -36,7 +34,6 @@ const LayersliderModel = Tool.extend({
     reset: function () {
         this.stopInterval();
         this.set("activeLayer", {layerId: ""});
-        // this.set("title", null);
     },
 
     /**
@@ -180,22 +177,22 @@ const LayersliderModel = Tool.extend({
 
     /**
      * Prüft, ob alle Layer, die der Layerslider nutzen soll, auch definiert sind und ein title Attribut haben
-     * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
+     * @param   {object[]}  layers Konfiguration der Layer aus config.json
      * @returns {object}   Invalid Layer oder undefined
      */
-    checkAllLayerOk: function (layerIds) {
-        var invalidLayer;
+    checkIfAllLayersAvailable: function (layers) {
+        var invalidLayers = [];
 
-        invalidLayer = _.find(layerIds, function (layer) {
-            if (_.isNull(Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layer.layerId})) ||
-                _.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: layer.layerId})) ||
-                _.isUndefined(layer.title)) {
-                return layer;
+        layers.forEach(function (layerObject) {
+            if (
+                !Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerObject.layerId}) ||
+                !Radio.request("Parser", "getItemByAttributes", {id: layerObject.layerId})
+            ) {
+                invalidLayers.push(layerObject.layerId);
             }
-            return undefined;
         });
 
-        return invalidLayer;
+        return invalidLayers;
     },
 
     /**
@@ -268,4 +265,4 @@ const LayersliderModel = Tool.extend({
     }
 });
 
-export default LayersliderModel;
+export default LayerSliderModel;
