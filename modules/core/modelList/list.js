@@ -497,7 +497,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             iResultIndex = 0,
             iMaxIndex = 0;
 
-        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
+        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") >= 0) {
             return model.get("selectionIDX");
         }
 
