@@ -398,7 +398,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |----|-------------|---|-------|------------|
 |title|nein|String|"Master"|Name des Portals.|
 |logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
-|link|nein|String|"http://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
+|link|nein|String|"https://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
 |tooltip|nein|String||Deprecated in 3.0.0 Tooltip beim Hovern über das PortalLogo angezeigt wird.|
 |toolTip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über das PortalLogo angezeigt wird.|
 
@@ -407,8 +407,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 #!json
 "portalTitle": {
     "title": "Master",
-    "logo": "../../img/hh-logo.png",
-    "link": "http://geoinfo.hamburg.de",
+    "logo": "../../lgv-config/img/hh-logo.png",
+    "link": "https://geoinfo.hamburg.de",
     "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
 ```
