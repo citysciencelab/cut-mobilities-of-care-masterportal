@@ -169,18 +169,19 @@
               "poiDistances": [500, 1000, 2000]
               },
           "freeze": true,
-          "totalview": true,
+          "totalView": true,
           "attributions":
               {
               "isInitOpenDesktop": true,
               "isInitOpenMobile": false
               },
-          "overviewmap":
+          "overviewMap":
               {
               "resolution": 611.4974492763076,
-              "baselayer": "452"
+              "layerId": "452"
               },
-          "mousePosition": true
+          "mousePosition": true,
+          "backforward": true
         },
     "scaleLine": true
   },

@@ -72,6 +72,7 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
+import { log } from "util";
 
 var sbconfig, controls, controlsView;
 
@@ -309,9 +310,20 @@ function loadApp () {
                     }
                     break;
                 }
+                /**
+                 * totalView
+                 * @deprecated in 3.0.0
+                 */
                 case "totalview": {
                     if (control.attr === true || _.isObject(control.attr)) {
-                        new TotalView();
+                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
+                        new TotalView(control.id);
+                    }
+                    break;
+                }
+                case "totalView": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        new TotalView(control.id);
                     }
                     break;
                 }
@@ -322,17 +334,41 @@ function loadApp () {
                     }
                     break;
                 }
-                case "backforward": {
+                /**
+                 * backforward
+                 * @deprecated in 3.0.0
+                 */
+                case "backforward" : {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
+                    }
+                    break;
+                }
+                case "backForward" : {
                     if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
+                /**
+                 * overviewmap
+                 * @deprecated in 3.0.0
+                 */
                 case "overviewmap": {
                     if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView({el: element});
+                        new OverviewmapView(element, control.id, control.attr);
+                    }
+                    break;
+                }
+                case "overviewMap": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowBR(control.id, false);
+                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }

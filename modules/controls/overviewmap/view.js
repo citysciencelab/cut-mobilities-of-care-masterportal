@@ -1,7 +1,7 @@
 import OverviewMapModel from "./model";
 import template from "text-loader!./template.html";
 
-const OverviewMapView = Backbone.View.extend(/**@lends OverviewMapView.prototype */{
+const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototype */{
     events: {
         "click .glyphicon": "toggle"
     },
@@ -9,11 +9,32 @@ const OverviewMapView = Backbone.View.extend(/**@lends OverviewMapView.prototype
      * @class OverviewMapView
      * @memberof Controls.Overviewmap
      * @extends Backbone.View
+     * @param {Object} el Jquery element to be rendered into.
+     * @param {String} id Id of control.
+     * @param {Object} attr Attributes of overviewmap.
+     * @param {String} attr.baseLayer Id of baseLayer
+     * @param {String} attr.resolution Resolution of baseLayer.
      * @constructs
      */
-    initialize: function () {
+    initialize: function (el, id, attr) {
+        let layerId;
+
+        this.setElement(el);
+        this.id = id;
+
+        /**
+         * baselayer
+         * @deprecated in 3.0.0
+         */
+        if (attr.hasOwnProperty("baselayer")) {
+            console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
+            layerId = attr.baselayer;
+        }
+        if (attr.hasOwnProperty("layerId")) {
+            layerId = attr.layerId;
+        }
         this.render();
-        this.model = new OverviewMapModel();
+        this.model = new OverviewMapModel({id: this.id, layerId: layerId, resolution: attr.resolution});
     },
 
     /**
@@ -24,7 +45,6 @@ const OverviewMapView = Backbone.View.extend(/**@lends OverviewMapView.prototype
         this.$el.html(this.template());
         return this;
     },
-    id: "overviewmap",
     /**
      * @member OverviewMapTemplate
      * @description Template used for the OverviewMap
