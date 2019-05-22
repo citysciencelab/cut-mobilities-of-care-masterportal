@@ -686,7 +686,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:animation]: # (Portalconfig.menu.tool.animation)
 
-[type:layerslider]: # (Portalconfig.menu.tool.layerslider)
+[type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 
 [type:contact]: # (Portalconfig.menu.tool.contact)
 
@@ -716,7 +716,8 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |lines|nein|[lines](#markdown-header-portalconfigmenutoollines)||Pendlerdarstellung als linenhafte Objekte.|
 |animation|nein|[animation](#markdown-header-portalconfigmenutoolanimation)||Pendleranimation als punkthafte Objekte.|
 |saveSelection|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|
-|layerslider|nein|[layerslider](#markdown-header-portalconfigmenutoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
+|layerslider|nein|[layerSlider](#markdown-header-portalconfigmenutoollayerslider)||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|
+|layerSlider|nein|[layerSlider](#markdown-header-portalconfigmenutoollayerslider)||Werkzeug zum Abspielen einer Reihendfolge von Layers.|
 |legend|nein|[tool](#markdown-header-portalconfigmenutool)||Legende. Stellt die Legende aller sichtbaren Layer dar.|
 |contact|nein|[contact](#markdown-header-portalconfigmenutoolcontact)||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|
 |schulwegrouting|nein|[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)||Schulwegrouting.|
