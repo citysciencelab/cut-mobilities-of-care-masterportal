@@ -602,16 +602,13 @@ Informations-Ordner in dem Werkzeuge oder staticlinks eingetragen werden können
 ***
 
 ### Portalconfig.menu.info.children
-
-[type:tools]: # (Portalconfig.menu.tools)
-
 [type:staticlinks]: # (Portalconfig.menu.staticlinks)
 
 Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|children|nein|[tools](#markdown-header-portalconfigmenutoolschildren)/[staticlinks](#markdown-header-portalconfigmenustaticlinks)||Konfiguration der Kindelemente des Informations Ordners.|
+|children|nein|[staticlinks](#markdown-header-portalconfigmenustaticlinks)||Konfiguration der Kindelemente des Informations Ordners.|
 
 ***
 
@@ -1029,7 +1026,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 "print": {
     "name": "Karte drucken",
     "glyphicon": "glyphicon-print",
-    "mapfishServiceId": "123456", 
+    "mapfishServiceId": "123456",
     "filename": "Ausdruck",
     "title": "Mein Titel",
     "version" : "HighResolutionPlotService"
