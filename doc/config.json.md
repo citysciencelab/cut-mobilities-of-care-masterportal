@@ -654,7 +654,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 ***
 
-#### Portalconfig.menu.tools
+### Portalconfig.menu.tools
 
 [inherits]: # (Portalconfig.menu.folder)
 
