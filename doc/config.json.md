@@ -31,12 +31,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|
 |Baumtyp|ja|enum["light", "default", "custom"]||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|
 |controls|nein|[controls](#markdown-header-portalconfigcontrols)||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|
-|LogoLink|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalitle).|
-|LogoToolTip|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportalitle).|
 |mapView|nein|[mapView](#markdown-header-portalconfigmapview)||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|
 |menu|nein|[menu](#markdown-header-portalconfigmenu)||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
-|PortalLogo|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
-|PortalTitle|nein|String||@deprecated. Nicht mehr nutzen. Siehe [portalTitle](#markdown-header-portalconfigportaltitle).|
 |portalTitle|nein|[portalTitle](#markdown-header-portalconfigportaltitle)||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
 |searchBar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
@@ -226,7 +222,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|
-|data|nein|String||@deprecated in 3.0.0 Filterparameter für den WFS request.|
+|data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|
 
 **Beispiel**
 ```
@@ -260,7 +256,7 @@ Konfiguration der SpecialWFS Suche
 ***
 
 #### Portalconfig.searchBar.visibleWFS
-Konfiguration der Suche über die sichtbaren WFS. @deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
+Konfiguration der Suche über die sichtbaren WFS. Deprecated in 3.0.0. Verwenden Sie [visibleVector](#markdown-header-portalconfigsearchbarvisiblevector).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -402,7 +398,8 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 |title|nein|String|"Master"|Name des Portals.|
 |logo|nein|String||URL zur externen Bilddatei. Wird kein logo gesetzt, so wird nur der Titel ohne Bild dargestellt.|
 |link|nein|String|"http://geoinfo.hamburg.de"|URL der externen Seite, auf die verlinkt wird.|
-|tooltip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über dem Portaltitel angezeigt wird.|
+|tooltip|nein|String||Deprecated in 3.0.0 Tooltip beim Hovern über das PortalLogo angezeigt wird.|
+|toolTip|nein|String|"Landesbetrieb Geoinformation und Vermessung"|Tooltip beim Hovern über das PortalLogo angezeigt wird.|
 
 **Beispiel portalTitle:**
 ```
@@ -1001,10 +998,10 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |filename|nein|String|"report"|Dateiname des Druckergebnisses|
 |title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|
 |version|nein|String|| Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 2 verwendet, sonst wird MapfishPrint 3 verwendet.|
-|printID|nein|String||@deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
-|outputFilename|nein|String|"report"|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
-|gfi|nein|Boolean|false|@deprecated in 3.0.0. Dateiname des Druckergebnisses.|
-|configYAML|nein|String|"/master"|@deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|
+|printID|nein|String||Deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|
+|outputFilename|nein|String|"report"|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|
+|gfi|nein|Boolean|false|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|
+|configYAML|nein|String|"/master"|Deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|
 
 **Beispiel Konfiguration mit MapfishPrint2**
 ```
