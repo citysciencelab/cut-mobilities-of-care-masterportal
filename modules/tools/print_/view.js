@@ -6,7 +6,7 @@ import PrintTemplate from "text-loader!./template.html";
  * @memberof print_
  */
 
-const PrintView = Backbone.View.extend({
+const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
     events: {
         "change #printLayout": "setCurrentLayout",
         "change #printFormat": "setCurrentFormat",
@@ -84,11 +84,7 @@ const PrintView = Backbone.View.extend({
      * sets the current scale of the map
      * @param {*} evt - event that triggers this function
      * @fires Map#RadioRequestMapGetSize
-     * @description  requests the size of the map
-     * @returns {Array} - Array with the map size
      * @fires MapView#RadioTriggerMapViewSetConstrainedResolutionWithOptimalResolution
-     * @description sets the constrained resolution of the MapView
-     * @param {Number} optimalResolution - the optimal resolution for the print
      * @returns {void}
      */
     setCurrentScale: function (evt) {
