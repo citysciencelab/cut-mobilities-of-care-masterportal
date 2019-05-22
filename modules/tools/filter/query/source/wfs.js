@@ -1,10 +1,10 @@
 import SourceModel from "./model";
 
-const WfsQueryModel = SourceModel.extend({
+const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
     /**
      * @class WfsQueryModel
-     * @extends Tools.Filter.Query.SourceModel
+     * @extends SourceModel
      * @memberof Tools.Filter.Query.Source
      * @constructs
      * @fires Util#getProxyURL
