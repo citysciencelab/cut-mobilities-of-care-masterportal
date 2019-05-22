@@ -3,7 +3,7 @@ import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
-const PrintModel = Tool.extend({
+const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         // available layouts of the specified print configuration
         layoutList: [],
@@ -66,7 +66,7 @@ const PrintModel = Tool.extend({
     }),
 
     /**
-     * @class PrintModel
+     * @class HighResolutionPrintModel
      * @extends Tool
      * @memberof print_
      * @constructs
@@ -1379,4 +1379,4 @@ const PrintModel = Tool.extend({
     }
 });
 
-export default PrintModel;
+export default HighResolutionPrintModel;
