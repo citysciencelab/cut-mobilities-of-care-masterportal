@@ -38,6 +38,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |scaleLine|nein|Boolean||Ist die Maßstabsleiste = true , dann wird sie unten rechts dargestellt, sofern kein footer vorhanden ist! Ist ein footer vorhanden, wird die Maßstabsleiste unten links angezeigt.|
 |searchBar|nein|[searchBar](#markdown-header-portalconfigsearchbar)||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|
+
 ***
 
 ### Portalconfig.searchBar
@@ -390,7 +391,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 **Beispiel overviewmap als Boolean:**
 ```
 #!json
-"overviewmap": true
+"overviewMap": true
 ```
 
 ***
@@ -1242,7 +1243,7 @@ Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen ka
     "cc": [],
     "bcc": [],
     "ccTouser": true,
-    "textPlaceholder": "Hier Text eingeben."
+    "textPlaceholder": "Hier Text eingeben.",
     "includeSystemInfo": true,
     "deleteAfterSend": true,
     "withTicketNo": false
@@ -1456,7 +1457,7 @@ Hier werden die Hintergrundkarten definiert
     "name": "Meine Hintergrundkarten",
     "Layer": [
         {
-            "id": "123
+            "id": "123"
         }
     ]
 },
@@ -1545,10 +1546,10 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 "Fachdaten": {
     "Ordner": [
         {
-            "Titel": "Mein Ordner"
+            "Titel": "Mein Ordner",
             "Layer": [
                 {
-                    "id": "123
+                    "id": "123"
                 }
             ]
         }
@@ -1562,13 +1563,13 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 "Fachdaten": {
     "Ordner": [
         {
-            "Titel": "Mein erster Ordner"
+            "Titel": "Mein erster Ordner",
             "Ordner": [
                 {
-                    "Titel": "Mein zweiter Ordner"
+                    "Titel": "Mein zweiter Ordner",
                     "Layer": [
                         {
-                            "id": "123
+                            "id": "123"
                         }
                     ]
                 }
@@ -1584,20 +1585,20 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 "Fachdaten": {
     "Ordner": [
         {
-            "Titel": "Mein erster Ordner"
+            "Titel": "Mein erster Ordner",
             "Ordner": [
                 {
-                    "Titel": "Mein zweiter Ordner"
+                    "Titel": "Mein zweiter Ordner",
                     "Layer": [
                         {
-                            "id": "123
+                            "id": "123"
                         }
                     ]
                 }
             ],
             "Layer": [
                 {
-                    "id": "456
+                    "id": "456"
                 }
             ]
         }
