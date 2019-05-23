@@ -25,7 +25,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
 
     /**
      * Creates the class name.
-     * @returns {string} - ClassName
+     * @returns {string} ClassName
      */
     getClassName: function () {
         if (this.model.get("isMobile")) {
@@ -35,7 +35,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
     },
     /**
      * Add HTML content to this sidebar
-     * @param {HTML} element - from a tool view
+     * @param {HTML} element Element from a tool view
      * @returns {void}
      */
     addContent: function (element) {
@@ -64,8 +64,8 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
 
     /**
      * Toggles the css class for this view
-     * @param {Backbone.Model} model - this.model
-     * @param {boolean} isMobile -
+     * @param {SidebarModel} model The sidebar model.
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
      * @return {void}
      */
     toggleClass: function (model, isMobile) {
@@ -76,8 +76,8 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
 
     /**
      * Sets the width of the map
-     * @param {boolean} isMobile -
-     * @param {boolean} isVisible - is the sidebar visible
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
+     * @param {boolean} isVisible Flag if the sidebar is visible.
      * @param {String} width The width of the sidebar in percent. e.g. "30%"
      * @return {void}
      */
@@ -94,8 +94,8 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
 
     /**
      * Toggles the backdrop. Needed for the mobile mode
-     * @param {boolean} isMobile -
-     * @param {boolean} isVisible - is the sidebar visible
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
+     * @param {boolean} isVisible Flag if the sidebar is visible.
      * @return {void}
      */
     toggleBackdrop: function (isMobile, isVisible) {

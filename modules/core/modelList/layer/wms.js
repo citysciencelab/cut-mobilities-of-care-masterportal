@@ -273,6 +273,10 @@ const WMSLayer = Layer.extend({
         return this.get("layers");
     },
 
+    /**
+     * Gets the gfi url from the layers source.
+     * @returns {String} - The created getFeature info url.
+     */
     getGfiUrl: function () {
         var resolution = Radio.request("MapView", "getOptions").resolution,
             projection = Radio.request("MapView", "getProjection"),

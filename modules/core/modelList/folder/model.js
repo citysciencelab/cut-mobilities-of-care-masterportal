@@ -32,7 +32,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String} id="" Unique id for folder.
      * @property {String} selectAllGlyphicon="glyphicon-unchecked" Glyphicon class of folder to select all children.
      * @property {String} glyphicon="glyphicon-folder-open" Glyphicon class of folder
-     * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schrägluftbilder").
+     * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schrï¿½gluftbilder").
      */
     initialize: function () {
         var items,
@@ -49,7 +49,6 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
                 this.setIsSelected(true);
             }
         }
-        // console.info(this);
         if (this.get("id") === "tools") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
             const isEveryToolInvisible = _.every(items, function (item) {
