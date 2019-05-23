@@ -4,7 +4,7 @@ import View from "./view";
 const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationModel.prototype */{
     defaults: {
         // konfiguriert in der rest-services.json
-        cswId: "3",
+        metaDataCatalogueId: "2",
         // true wenn die Layerinformation sichtbar ist
         isVisible: false,
         uniqueIdList: [],
@@ -13,20 +13,6 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         periodicity: null
     },
 
-    /**
-     * Returns the url from rest-services.json, corresponding to property cswId
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
-     * @return {String} returns CSW GetRecordById Request-String
-     */
-    url: function () {
-        var cswService = Radio.request("RestReader", "getServiceById", this.get("cswId")),
-            url = "undefined";
-
-        if (_.isUndefined(cswService) === false) {
-            url = Radio.request("Util", "getProxyURL", cswService.get("url"));
-        }
-        return url;
-    },
     /**
      * @class LayerInformationModel
      * @extends Backbone.Model
@@ -182,18 +168,21 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      */
     setMetadataURL: function () {
         var metaURLs = [],
-            metaURL = "";
+            metaURL = "",
+            service;
 
         _.each(this.get("metaID"), function (metaID) {
-            if (this.url().search("metaver") !== -1) {
-                metaURL = "http://metaver.de/trefferanzeige?docuuid=" + metaID;
-            }
-            else if (this.url().search("geodatenmv.de") !== -1) {
-                metaURL = "http://www.geodaten-mv.de/geomis/Query/ShowCSWInfo.do?fileIdentifier=" + metaID;
+            if (Config.metaDataCatalogueId !== undefined && _.isString(Config.metaDataCatalogueId)) {
+                service = Radio.request("RestReader", "getServiceById", Config.metaDataCatalogueId);
+                if (service === undefined) {
+                    Radio.trigger("Alert", "alert", "Rest Service mit der ID " + Config.metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
+                }
+                metaURL = Radio.request("RestReader", "getServiceById", Config.metaDataCatalogueId).get("url") + metaID;
             }
             else {
-                metaURL = "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=" + metaID;
+                Radio.trigger("Alert", "alert", "Kein Rest Service in config.json unter dem Key \"metaDataCatalogueId\" definiert!");
             }
+
             if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
                 metaURLs.push(metaURL);
             }
