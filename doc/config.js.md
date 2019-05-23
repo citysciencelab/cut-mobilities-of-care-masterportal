@@ -9,7 +9,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |[clickCounter](#markdown-header-clickcounter)|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
-|cswId|nein|String|"1"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"1"`|
+|cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"meine CSW-ID"`|
+|metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über [rest-services.json](rest-services.json.md) aufgelöst.|`"MetadatenkatalogURL"`|
 |[footer](#markdown-header-footer)|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]||Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
@@ -91,7 +92,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |[urls](#markdown-header-footerurls)|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|version|nein|Array[Object]||Array von Versionsnummerobjekten. Erstes Objekt im Array ist ein Boolean, der angibt ob die Versionsnummern angezeigt werden sollen oder nicht. Bei allen anderen Objekten wird der Wert beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen.|
+|version|nein|Array[Object]||Array von Versionsnummerobjekten. Erstes Objekt im Array ist ein Boolean, der angibt ob die Versionsnummern angezeigt werden sollen oder nicht. Bei allen anderen Objekten wird der Wert beim build-Prozess aus der package.json in die config.js geschrieben und vom Footer aus der config.js ausgelesen. Bei einem bereist gebauten Portal, kann die Vserionsnummer direkt angegben werden.|
 
 ******
 ### footer.urls ###
