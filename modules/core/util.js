@@ -4,7 +4,9 @@ const Util = Backbone.Model.extend({
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
-        proxyHost: ""
+        proxyHost: "",
+        loaderOverlayTimeoutReference: null,
+        loaderOverlayTimeout: 10,
     },
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -231,6 +233,10 @@ const Util = Backbone.Model.extend({
         return ie;
     },
     showLoader: function () {
+        clearTimeout(this.loaderOverlayTimeoutReference);
+        this.loaderOverlayTimeoutReference = setTimeout(function () {
+            Radio.trigger("Util", "hideLoader");
+        }, 1000*this.loaderOverlayTimeout);
         $("#loader").show();
     },
     hideLoader: function () {
