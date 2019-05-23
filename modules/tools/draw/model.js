@@ -180,9 +180,10 @@ const DrawTool = Tool.extend({
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
      * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
+     * @param {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (geomType) {
+    downloadFeaturesWithoutGUI: function (geomType, transformWGS) {
         var features = null,
             format = new GeoJSON(),
             multiPolygon = new MultiPolygon([]),
@@ -204,19 +205,40 @@ const DrawTool = Tool.extend({
                     featureType = item.getGeometry().getType();
 
                     if (featureType === "Polygon") {
-                        multiPolygon.appendPolygon(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiPolygon.appendPolygon(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiPolygon.appendPolygon(item.getGeometry());
+                        }
                     }
                     else if (featureType === "Point") {
-                        multiPoint.appendPoint(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiPoint.appendPoint(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiPoint.appendPoint(item.getGeometry());
+                        }
                     }
                     else if (featureType === "LineString") {
-                        multiLine.appendLineString(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiLine.appendLineString(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiLine.appendLineString(item.getGeometry());
+                        }
                     }
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
-                        circularPoly = circPoly(item.getGeometry(), 64);
-                        multiPolygon.appendPolygon(circularPoly);
+                        if (transformWGS === true) {
+                            circularPoly = circPoly(item.getGeometry().transform("EPSG:25832", "EPSG:4326"), 64);
+                            multiPolygon.appendPolygon(circularPoly);
+                        }
+                        else {
+                            circularPoly = circPoly(item.getGeometry(), 64);
+                            multiPolygon.appendPolygon(circularPoly);
+                        }
                     }
                 });
 
@@ -238,10 +260,15 @@ const DrawTool = Tool.extend({
                 // properties the feature collection needs to be created in a different way. The text content can be
                 // retrieved by item.getStyle().getText().getText().
                 featuresConverted = format.writeFeaturesObject(featureArray);
+
             }
             else {
                 _.each(features, function (item) {
                     featureType = item.getGeometry().getType();
+
+                    if (transformWGS === true) {
+                        item.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                    }
 
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
