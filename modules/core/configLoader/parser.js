@@ -488,7 +488,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers3d = this.get("overlayer_3d"),
             baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
             overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
-            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "Fachdaten 3D";
+            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten";
 
         this.addItem({
             type: "folder",

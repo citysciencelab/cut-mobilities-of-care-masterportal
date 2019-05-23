@@ -1499,11 +1499,11 @@ Hier werden die Fachdaten definiert
 
 [type:Layer]: # (Themenconfig.Layer)
 
-Hier werden die Fachdaten für die 3D-Ansicht definiert. Im custom tree und default tree. Wird nur im 3D-Modus eingeblendet.
+Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und default tree. Wird nur im 3D-Modus eingeblendet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|name|nein|String|"Fachdaten 3D"| Name der Schaltfläche für Fachdaten.|
+|name|nein|String|"3D Daten"| Name der Schaltfläche für 3D-Daten.|
 |Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der 3DLayer.|
 
 **Beispiel**
