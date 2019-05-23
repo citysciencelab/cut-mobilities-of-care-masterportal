@@ -3,7 +3,7 @@
 		"portalTitle": {
 			"title": "Basic - Portal",
 			"logo": "/lgv-config/img/hh-logo.png",
-			"link": "http://geoinfo.hamburg.de",
+			"link": "https://geoinfo.hamburg.de",
 			"tooltip": "Landesbetrieb Geoinformation und Vermessung"
 		},
 		"Baumtyp": "light",
@@ -15,7 +15,7 @@
 				"states": "Hamburg",
 				"classes": "place,highway,building,shop,historic,leisure,city,county"
 			},
-      "visibleWFS": {},
+      "visibleVector": {},
       "tree": {},
 			"zoomLevel": 9,
 			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
@@ -86,23 +86,16 @@
 		"Hintergrundkarten": {
 			"Layer": [
 				{
-					"id": "453",
+          "id": "453",
+          "name": "Stadtplan",
 					"visibility": true
 				},
 				{
-					"id": "452"
+          "id": "452",
+          "name": "Luftbilder DOP 20"
 				},
 				{
-					"id": [
-						"717",
-						"718",
-						"719",
-						"720",
-						"13712",
-						"13709",
-						"13714",
-						"13716"
-					],
+					"id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
 					"name": "Geobasiskarten (farbig)"
 				}
 			]
@@ -110,80 +103,21 @@
 		"Fachdaten": {
 			"Layer": [
 				{
-					"id": "2426"
+          "id": "2426",
+          "name": "Bezirke",
+          "layerAttribution": "<span>Hier Text angeben, der angezeigt wird sobald der Layer sichtbar ist.</span>"
 				},
 				{
           "id": "4561",
-          "infoFormat": "text/html"
+          "name": "Eventflächen",
+          "infoFormat": "text/html",
+          "maxScale": "100000",
+					"minScale": "40000"
 				},
 				{
-					"id": "6046"
-				},
-				{
-					"id": "1562",
-					"layerAttribution": "<span>Hier Attribute für Fachlayer konfigurieren</span>"
-				},
-				{
-					"id": [
-						"412",
-						"413",
-						"414",
-						"415",
-						"416",
-						"417",
-						"418",
-						"419",
-						"420",
-						"421",
-						"423",
-						"424",
-						"425",
-						"426",
-						"427",
-						"428",
-						"429",
-						"430",
-						"431"
-					],
-					"maxScale": 100000,
-					"minScale": 40000,
-					"name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-					"legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
-				},
-				{
-					"id": "3302",
-					"gfiTheme": "trinkwasser",
-					"featureCount": 5
-				},
-				{
-					"id": "5708",
-					"geomType": "Polygon",
-					"attributesToStyle": [
-						"Pkw_AP30"
-					],
-					"transparency": "50"
-				},
-				{
-					"id": "2407",
-					"infoFormat": "text/html"
-				},
-				{
-					"id": "myId",
-					"children": [
-						{
-							"id": "946"
-						},
-						{
-							"id": "947"
-						}
-					],
-					"name": "Verkehrslage auf Autobahnen",
-					"layerAttribution": {
-						"text": "",
-						"channel": "Verkehrsfunctions",
-						"eventname": "aktualisiereverkehrsnetz",
-						"timeout": 60000
-					}
+          "id": "3302",
+          "name": "Trinkwasser",
+					"gfiTheme": "trinkwasser"
 				},
 				{
 					"id": "myId2",
@@ -198,102 +132,42 @@
 					"name": "Kita und Krankenhäuser"
 				},
 				{
-					"id": "2003",
+          "id": "2003",
+          "name": "WFS Schutzgebiete",
 					"styleId": "2003",
 					"mouseHoverField": "gebietsname"
 				},
 				{
-					"id": "2714",
-					"gfiTheme": "reisezeiten",
-					"styleId": "2119"
-				},
-				{
-					"id": "2404",
+          "id": "2404",
+          "name": "WFS Bike and Ride Parkplätze",
 					"styleId": "45",
 					"clusterDistance": 40
 				},
 				{
-					"id": [
-						"4537",
-						"4538"
-					],
-					"name": "Eignungsflächen",
-					"legendURL": [
-						"http://www.geoportal-hamburg.de/legende/legende_solar.png"
-					],
-					"gfiTheme": "solaratlas",
-					"attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 --Hier Attribute für Fachlayer konfigurieren </span>"
-				},
-				{
-					"id": "1711",
+          "id": "1711",
+          "name": "WFS Krankenhäuser",
 					"styleId": "1711",
-					"layerAttribution": "<span>Hier Attribute für Fachlayer konfigurieren</span>",
-					"mouseHoverField": [
-						"name",
-						"strasse"
-					],
-					"searchField": "name"
+					"mouseHoverField": "name",
+					"searchField":  "name"
 				},
 				{
 					"id": "8712",
-					"name": "Schulen",
+					"name": "WFS Schulen",
 					"styleId": "8712",
-					"mouseHoverField": [
-						"schulname",
-						"kapitelbezeichnung"
-					],
-					"searchField": "schulname"
-				},
-				{
-					"id": "753",
-					"styleId": "753",
-					"mouseHoverField": "Name",
-					"searchField": "Name",
-					"extendedFilter": true
-				},
-				{
-					"id": "8145",
-					"styleId": "8145",
-					"mouseHoverField": "kategorie",
-					"searchField": "name"
+					"mouseHoverField": ["schulname", "kapitelbezeichnung"],
+					"searchField": ["schulname", "fremdsprache"]
 				},
 				{
 					"id": "4560",
-					"name": "Convention",
-					"mouseHoverField": "flaechenname"
+					"name": "WFS Polygon (Default Style)"
 				},
 				{
 					"id": "1132",
-					"name": "Aktivitäten im Volkspark/Stadtpark",
-					"mouseHoverField": [
-						"kategorie",
-						"titel"
-					]
+					"name": "WFS Point (Default Style)"
 				},
 				{
 					"id": "1133",
-					"name": "Laufstrecken-Volkspark",
-					"mouseHoverField": "Name"
-				},
-				{
-					"id": "4560_",
-					"styleId": "polygon",
-					"name": "Convention"
-				},
-				{
-					"id": "1132_",
-					"styleId": "point",
-					"name": "Aktivitäten im Volkspark/Stadtpark",
-					"mouseHoverField": [
-						"kategorie",
-						"titel"
-					]
-				},
-				{
-					"id": "1133_",
-					"styleId": "line",
-					"name": "Laufstrecken-Volkspark",
-					"mouseHoverField": "Name"
+					"name": "WFS Line (Default Style)"
 				}
 			]
 		}
