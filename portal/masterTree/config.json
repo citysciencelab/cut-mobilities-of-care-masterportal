@@ -325,7 +325,7 @@
       "button3d": true
     },
     "scaleLine": true,
-    "Baumtyp": "custom",
+    "treeType": "custom",
     "layersRemovable": false
   },
   "Themenconfig":
