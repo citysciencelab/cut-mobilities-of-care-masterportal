@@ -6,7 +6,7 @@ const Util = Backbone.Model.extend({
         uiStyle: "DEFAULT",
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 10,
+        loaderOverlayTimeout: 10
     },
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -210,7 +210,7 @@ const Util = Backbone.Model.extend({
     isChrome: function () {
         var isChrome = false;
 
-        if (/Chrome/i.test(navigator.userAgent)) {
+        if ((/Chrome/i).test(navigator.userAgent)) {
             isChrome = true;
         }
         return isChrome;
@@ -221,13 +221,13 @@ const Util = Backbone.Model.extend({
     isInternetExplorer: function () {
         var ie = false;
 
-        if (/MSIE 9/i.test(navigator.userAgent)) {
+        if ((/MSIE 9/i).test(navigator.userAgent)) {
             ie = "IE9";
         }
-        else if (/MSIE 10/i.test(navigator.userAgent)) {
+        else if ((/MSIE 10/i).test(navigator.userAgent)) {
             ie = "IE10";
         }
-        else if (/rv:11.0/i.test(navigator.userAgent)) {
+        else if ((/rv:11.0/i).test(navigator.userAgent)) {
             ie = "IE11";
         }
         return ie;
@@ -236,7 +236,7 @@ const Util = Backbone.Model.extend({
         clearTimeout(this.loaderOverlayTimeoutReference);
         this.loaderOverlayTimeoutReference = setTimeout(function () {
             Radio.trigger("Util", "hideLoader");
-        }, 1000*this.loaderOverlayTimeout);
+        }, 1000 * this.loaderOverlayTimeout);
         $("#loader").show();
     },
     hideLoader: function () {
