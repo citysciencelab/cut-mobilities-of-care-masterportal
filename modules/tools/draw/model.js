@@ -70,7 +70,7 @@ const DrawTool = Tool.extend({
                 }
             }
         });
-        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
     },
 
     /**
