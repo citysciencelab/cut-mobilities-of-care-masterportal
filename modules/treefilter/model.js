@@ -23,6 +23,15 @@ const TreeFilter = Tool.extend({
         return this.get("treeConf");
     },
     initialize: function () {
+        var channel = Radio.channel("Map");
+
+        channel.on({
+            isReady: function () {
+                this.initSetup();
+            }
+        }, this);
+    },
+    initSetup: function () {
         var model = Radio.request("ModelList", "getModelByAttributes", {id: "182"});
 
         this.superInitialize();
