@@ -28,7 +28,8 @@ const RawLayerList = Backbone.Collection.extend({
                         position,
                         snippet;
 
-                    if (statusText === "Not Found") {
+                    // SyntaxError for consoletesting, propably because of older version.
+                    if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
                         Radio.trigger("Alert", "alert", {
                             text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
                             kategorie: "alert-warning"
@@ -45,7 +46,8 @@ const RawLayerList = Backbone.Collection.extend({
                             kategorie: "alert-warning"
                         });
                     }
-                }});
+                }
+            });
         }
         else {
             Radio.trigger("Alert", "alert", {

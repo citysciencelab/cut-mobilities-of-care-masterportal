@@ -23,7 +23,8 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                     position,
                     snippet;
 
-                if (statusText === "Not Found") {
+                // SyntaxError for consoletesting, propably because of older version.
+                if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
                     Radio.trigger("Alert", "alert", {
                         text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
                         kategorie: "alert-warning"
