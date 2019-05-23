@@ -6,7 +6,10 @@ const MeasureView = Backbone.View.extend({
     events: {
         "change select#geomField": "setGeometryType",
         "change select#unitField": "setUnit",
-        "click button": "deleteFeatures",
+        "click button.table-tool-measure-delete": "deleteFeatures",
+        "click button.measure-delete": "deleteFeatures",
+        "changed.bs.select[data-id='geomField']": "setGeometryType",
+        "changed.bs.select[data-id='unitField']": "setUnit",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
         }
@@ -55,11 +58,9 @@ const MeasureView = Backbone.View.extend({
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },
-
     removeIncompleteDrawing: function () {
         this.model.removeIncompleteDrawing();
     },
-
     unregisterListener: function () {
         this.model.unregisterPointerMoveListener(this.model);
         this.model.unregisterClickListener(this.model);
