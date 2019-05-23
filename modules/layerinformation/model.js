@@ -118,16 +118,11 @@ const LayerInformationModel = Backbone.Model.extend({
             service;
 
         _.each(this.get("metaID"), function (metaID) {
-            if (Config.metaDataCatalogueId !== undefined && _.isString(Config.metaDataCatalogueId)) {
-                service = Radio.request("RestReader", "getServiceById", Config.metaDataCatalogueId);
-                if (service === undefined) {
-                    Radio.trigger("Alert", "alert", "Rest Service mit der ID " + Config.metaDataCatalogueId + " ist rest-services.json nicht konfiguriert!");
-                }
-                metaURL = Radio.request("RestReader", "getServiceById", Config.metaDataCatalogueId).get("url") + metaID;
+            service = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId"));
+            if (service === undefined) {
+                console.warn("Alert", "alert", "Rest Service mit der ID " + this.get("metaDataCatalogueId") + " ist rest-services.json nicht konfiguriert!");
             }
-            else {
-                Radio.trigger("Alert", "alert", "Kein Rest Service in config.json unter dem Key \"metaDataCatalogueId\" definiert!");
-            }
+            metaURL = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId")).get("url") + metaID;
 
             if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
                 metaURLs.push(metaURL);
