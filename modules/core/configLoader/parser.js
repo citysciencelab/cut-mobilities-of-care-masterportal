@@ -479,15 +479,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
-        var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
+        const menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
             tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
             isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
-            overLayer3d = this.get("overlayer_3d");
+            baseLayers = this.get("baselayer"),
+            overLayers = this.get("overlayer"),
+            overLayers3d = this.get("overlayer_3d"),
+            baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
+            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
+            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten";
 
         this.addItem({
             type: "folder",
-            name: "Hintergrundkarten",
+            name: baseLayersName,
             glyphicon: "glyphicon-plus-sign",
             id: "Baselayer",
             parentId: "tree",
@@ -497,11 +502,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             level: 0
         });
 
-        this.addOrRemove3DFolder(treeType, isMobile, overLayer3d);
+        this.addOrRemove3DFolder(treeType, isMobile, overLayers3d, overLayers3DName);
 
         this.addItem({
             type: "folder",
-            name: "Fachdaten",
+            name: overLayersName,
             glyphicon: "glyphicon-plus-sign",
             id: "Overlayer",
             parentId: "tree",
@@ -526,19 +531,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * adds or removes a folder for 3d data to topic tree considering the map mode
-     * @param {String} treeType - type of tree
-     * @param {boolean} isMobile - vsible map mode from portal
-     * @param {object} overLayer3d - contains layer fro 3d mode
+     * @param {String} treeType type of tree
+     * @param {boolean} isMobile vsible map mode from portal
+     * @param {object} overLayer3d contains layer fro 3d mode
+     * @param {String} overLayers3DName Name of folder.
      * @fires Parser#RadioTriggerModelListRemoveModelsById
      * @returns {void}
      */
-    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d) {
+    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
         var id3d = "3d_daten";
 
         if (!isMobile && (treeType === "default" || !_.isUndefined(overLayer3d))) {
             this.addItemByPosition({
                 type: "folder",
-                name: "3D Daten",
+                name: overLayers3DName,
                 id: id3d,
                 parentId: "tree",
                 isInThemen: true,
