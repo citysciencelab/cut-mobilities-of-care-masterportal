@@ -558,7 +558,7 @@ Das Attribut backforward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 #### Portalconfig.mapView.option
 
-Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das zoomLevel ist, desto kleiner ist die scale. und desto näher hat man gezoomt.
+Eine option definiert eine Zoomstufe. Diese muss definiert werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das ZoomLevel ist, desto kleiner ist die Scale. und desto näher hat man gezoomt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -964,14 +964,19 @@ Hier können Vector Features miteinander verglichen werden.
 #### Portalconfig.menu.tool.parcelSearch
 
 [inherits]: # (Portalconfig.menu.tool)
+Flurstückssuche.
 
-Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WFS abgefragt.
+**ACHTUNG: Backend notwendig!**
+
+**Je nach Konfiguration werden spezielle Stored Queries eines WFS mit vorgegebenen Parametern abgefragt.**
+
+Beispiel: https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|
-|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält.|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. [Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)|
 |parcelDenominator|nein|Boolean|false|Flag ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|
 
@@ -996,6 +1001,10 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 [inherits]: # (Portalconfig.menu.tool)
 
 Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 oder MapfishPrint 3.
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird mit einem [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1056,7 +1065,11 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).
+Routing Modul.
+
+**ACHTUNG: Backend notwendig!**
+
+**Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1106,7 +1119,7 @@ Modul, das Vektor Features darstellt. Durch hovern über ein feature in der List
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 **Beispiel**
 ```
@@ -1135,7 +1148,7 @@ Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metr
 
 [inherits]: # (Portalconfig.menu.tool.pendlerCore)
 
-Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+Die Pendleranimation wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1206,6 +1219,10 @@ Parameter die für die Anfrage des Dienstes relevant sind.
 [inherits]: # (Portalconfig.menu.tool)
 
 Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
+
+**ACHTUNG: Backend notwendig!**
+
+**Das Contact kommuniziert mit einem SMTP-Server und ruft dort die sendmail.php auf.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
