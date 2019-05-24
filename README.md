@@ -6,9 +6,9 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://geowerkstatt
 
 ## für Anwender (Stable-Version)
 * [Download](https://bitbucket.org/lgv-g12/lgv/downloads/)
-* [Quickstart für Anwender](stable/doc/setup.md)
-* [Remote Interface](stable/doc/remoteInterface.md)
-* [Dokumentation für Anwender](stable/doc/doc.md)
+* [Quickstart für Anwender](https://bitbucket.org/lgv-g12/lgv/src/stable/doc/setup.md)
+* [Remote Interface](https://bitbucket.org/lgv-g12/lgv/src/stable/doc/remoteInterface.md)
+* [Dokumentation für Anwender](https://bitbucket.org/lgv-g12/lgv/src/stable/doc/doc.md)
 * [Community Board (Anwender-Forum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
 ## für Entwickler (Dev-Version)
