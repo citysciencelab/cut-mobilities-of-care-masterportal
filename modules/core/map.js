@@ -305,6 +305,8 @@ const map = Backbone.Model.extend({
             scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
             scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
             scene.globe.depthTestAgainstTerrain = true;
+            scene.highDynamicRange = false;
+            scene.pickTranslucentDepth = true;
 
         }
         return scene;
