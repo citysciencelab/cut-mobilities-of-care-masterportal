@@ -194,6 +194,7 @@ const DrawTool = Tool.extend({
             circularPoly = null,
             featureType = null,
             featureArray = [],
+            singleGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
@@ -206,7 +207,7 @@ const DrawTool = Tool.extend({
 
                     if (featureType === "Polygon") {
                         if (transformWGS === true) {
-                            multiPolygon.appendPolygon(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                            multiPolygon.appendPolygon(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
                         }
                         else {
                             multiPolygon.appendPolygon(item.getGeometry());
@@ -214,7 +215,7 @@ const DrawTool = Tool.extend({
                     }
                     else if (featureType === "Point") {
                         if (transformWGS === true) {
-                            multiPoint.appendPoint(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                            multiPoint.appendPoint(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
                         }
                         else {
                             multiPoint.appendPoint(item.getGeometry());
@@ -222,7 +223,7 @@ const DrawTool = Tool.extend({
                     }
                     else if (featureType === "LineString") {
                         if (transformWGS === true) {
-                            multiLine.appendLineString(item.getGeometry().transform("EPSG:25832", "EPSG:4326"));
+                            multiLine.appendLineString(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
                         }
                         else {
                             multiLine.appendLineString(item.getGeometry());
@@ -232,7 +233,7 @@ const DrawTool = Tool.extend({
                     // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
                         if (transformWGS === true) {
-                            circularPoly = circPoly(item.getGeometry().transform("EPSG:25832", "EPSG:4326"), 64);
+                            circularPoly = circPoly(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"), 64);
                             multiPolygon.appendPolygon(circularPoly);
                         }
                         else {
@@ -267,18 +268,22 @@ const DrawTool = Tool.extend({
                     featureType = item.getGeometry().getType();
 
                     if (transformWGS === true) {
-                        item.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                        singleGeom = item.clone();
+                        singleGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                    }
+                    else {
+                        singleGeom = item;
                     }
 
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     if (featureType === "Circle") {
-                        circularPoly = circPoly(item.getGeometry(), 64);
+                        circularPoly = circPoly(singleGeom.getGeometry(), 64);
                         circleFeature = new Feature(circularPoly);
                         featureArray.push(circleFeature);
                     }
                     else {
-                        featureArray.push(item);
+                        featureArray.push(singleGeom);
                     }
                 });
                 // The features in the featureArray are converted into a feature collection.
