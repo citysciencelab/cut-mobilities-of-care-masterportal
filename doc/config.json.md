@@ -129,7 +129,12 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer; wird durch Klick au
 ***
 
 #### Portalconfig.searchBar.gazetteer
+
 Konfiguration des Gazetteer Suchdienstes
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird eine Stored Query eines WFS mit vorgegebenen Parametern abgefragt.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -673,6 +678,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 
+[type:einwohnerabfrage]: # (Portalconfig.menu.tool.einwohnerabfrage)
+
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
@@ -699,7 +706,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|einwohnerabfrage|nein|[tool](#markdown-header-portalconfigmenutool)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
+|einwohnerabfrage|nein|[einwohnerabfrage](#markdown-header-portalconfigmenutooleinwohnerabfrage)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
 |compareFeatures|nein|[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)|| Vergleichsmöglichkeit von Vector-Features.|
 |parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)||Flurstückssuche.|
 |measure|nein|[tool](#markdown-header-portalconfigmenutool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|
@@ -740,6 +747,34 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 "legend":{
     "name": "Legende",
     "glyphicon": "glyphicon-book"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.einwohnerabfrage
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird über einen WPS wird eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Werkzeuges im Menu.|
+|glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|
+|onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|
+
+**Beispiel Einwohnerabfrage**
+```
+#!json
+"einwohnerabfrage": {
+    "name": "Einwohneranzahl abfragen",
+    "glyphicon": "glyphicon-wrench",
+    "onlyDesktop": false
 }
 ```
 
@@ -920,6 +955,10 @@ Er kann aber auch ein Objekt sein.
 [inherits]: # (Portalconfig.menu.tool)
 
 Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird über einen WPS wird eine FME-Workbench angesprochen, welche das Routing berechnet.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
