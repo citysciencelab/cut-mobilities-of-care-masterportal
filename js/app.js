@@ -39,7 +39,7 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayersliderView from "../modules/tools/layerslider/view";
+import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlimport/view";
@@ -72,13 +72,17 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
+import { log } from "util";
 
 var sbconfig, controls, controlsView;
 
 function loadApp () {
 
     // Prepare config for Utils
-    var utilConfig = {};
+    var utilConfig = {},
+        layerInformationModelSettings = {},
+        cswParserSettings = {};
+
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
@@ -108,7 +112,12 @@ function loadApp () {
     new Map();
     new WPS();
     new AddGeoJSON();
-    new CswParserModel();
+
+    if (_.has(Config, "cswId")) {
+        cswParserSettings.cswId = Config.cswId;
+    }
+
+    new CswParserModel(cswParserSettings);
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
@@ -123,7 +132,10 @@ function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
+    if (_.has(Config, "metaDataCatalogueId")) {
+        layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
+    }
+    new LayerinformationModel(layerInformationModelSettings);
 
     if (_.has(Config, "footer")) {
         new FooterView(Config.footer);
@@ -249,8 +261,16 @@ function loadApp () {
                 new StyleWMSView({model: tool});
                 break;
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             case "layerslider": {
-                new LayersliderView({model: tool});
+                new LayerSliderView({model: tool});
+                break;
+            }
+            case "layerSlider": {
+                new LayerSliderView({model: tool});
                 break;
             }
             default: {
@@ -298,9 +318,20 @@ function loadApp () {
                     }
                     break;
                 }
+                /**
+                 * totalView
+                 * @deprecated in 3.0.0
+                 */
                 case "totalview": {
                     if (control.attr === true || _.isObject(control.attr)) {
-                        new TotalView();
+                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
+                        new TotalView(control.id);
+                    }
+                    break;
+                }
+                case "totalView": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        new TotalView(control.id);
                     }
                     break;
                 }
@@ -311,17 +342,41 @@ function loadApp () {
                     }
                     break;
                 }
-                case "backforward": {
+                /**
+                 * backforward
+                 * @deprecated in 3.0.0
+                 */
+                case "backforward" : {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
+                    }
+                    break;
+                }
+                case "backForward" : {
                     if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
+                /**
+                 * overviewmap
+                 * @deprecated in 3.0.0
+                 */
                 case "overviewmap": {
                     if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView({el: element});
+                        new OverviewmapView(element, control.id, control.attr);
+                    }
+                    break;
+                }
+                case "overviewMap": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowBR(control.id, false);
+                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }

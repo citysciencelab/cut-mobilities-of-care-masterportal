@@ -1,7 +1,14 @@
 import Template from "text-loader!./template.html";
 import Model from "./model";
 
-const TitleView = Backbone.View.extend({
+const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
+    /**
+     * @class TitleView
+     * @extends Backbone.View
+     * @memberof Title
+     * @constructs
+     * @listens Title#RadioTriggerTitleSetSize
+     */
     initialize: function () {
         this.model = new Model();
 
@@ -24,6 +31,10 @@ const TitleView = Backbone.View.extend({
     className: "portal-title",
     id: "portalTitle",
     template: _.template(Template),
+    /**
+     * Render function for title.
+     * @returns {void}
+     */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -33,6 +44,10 @@ const TitleView = Backbone.View.extend({
         return this;
     },
 
+    /**
+     * Sets the size of the title.
+     * @returns {void}
+     */
     setSize: function () {
         var rootWidth,
             searchbarWidth,

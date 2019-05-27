@@ -323,7 +323,7 @@
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
           },
-          "layerslider": {
+          "layerSlider": {
             "name": "Zeitreihe",
             "glyphicon": "glyphicon-film",
             "title": "Simulation von Beispiel-WMS",
@@ -386,25 +386,24 @@
         "zoomMode": "once",
         "poiDistances": [500, 1000, 2000]
       },
-      "totalview": true,
+      "totalView": true,
       "attributions":
       {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": true
       },
-      "overviewmap":
+      "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "baselayer": "452"
+        "baseLayer": "452"
       },
       "mousePosition": true,
       "button3d": true,
       "buttonOblique": true,
       "freeze": true,
-      "backforward" : true
+      "backForward" : true
     },
     "scaleLine": true,
-    "Baumtyp": "light",
     "layersRemovable": true
   },
   "Themenconfig":

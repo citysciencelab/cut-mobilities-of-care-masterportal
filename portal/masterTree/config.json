@@ -309,23 +309,23 @@
         "zoomMode": "once",
         "poiDistances": [500, 1000, 2000]
       },
-      "totalview": true,
+      "totalView": true,
       "attributions":
       {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": false
       },
-      "overviewmap":
+      "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "baselayer": "452"
+        "baseLayer": "452"
       },
       "mousePosition": true,
       "buttonOblique": true,
       "button3d": true
     },
     "scaleLine": true,
-    "Baumtyp": "custom",
+    "treeType": "custom",
     "layersRemovable": false
   },
   "Themenconfig":

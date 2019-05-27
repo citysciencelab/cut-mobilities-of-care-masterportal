@@ -36,6 +36,8 @@ const Config = {
     quickHelp: {
         imgPath: "/lgv-config/img/"
     },
+    cswId: "3",
+    metaDataCatalogueId: "2",
     portalConf: "./",
     layerConf: "/lgv-config/services-fhhnet-ALL.json",
     restConf: "/lgv-config/rest-services-fhhnet.json",
