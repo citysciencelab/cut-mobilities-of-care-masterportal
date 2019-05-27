@@ -179,8 +179,9 @@ const DrawTool = Tool.extend({
      * returns an empty Object if no init happened previously (= no layer set)
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
-     * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
-     * @param {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
+     * @param {String} para_object - an Object which includes the parameters
+     *                 {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
+     *                 {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @returns {String} GeoJSON all Features as String
      */
     downloadFeaturesWithoutGUI: function (para_object) {

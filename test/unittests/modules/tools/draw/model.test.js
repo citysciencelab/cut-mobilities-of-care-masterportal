@@ -294,7 +294,7 @@ describe("drawModel", function () {
         });
 
         it("should return multiPolygon in FeatureCollection", function () {
-            downloadedFeatures = model.downloadFeaturesWithoutGUI("multiGeometry");
+            downloadedFeatures = model.downloadFeaturesWithoutGUI({"geomType": "multiGeometry"});
             expect(downloadedFeatures).to.deep.equal(JSON.stringify(multiPolygonfeatColFromJson));
         });
 
