@@ -4,11 +4,16 @@ import Collection from "@modules/core/rawLayerList.js";
 
 describe("core/configLoader/parserDefaultTree", function () {
     before(function () {
-        new Collection(null, {url: "resources/testServices.json"});
+        new Collection(null, {url: "../../../resources/testServices.json"});
         // the test data has to consist of at least two layers of with the same "md_name" to trigger the creation of a folder
     });
 
     // Create a model and parse the test data. Take care that the model is clean (empty) before parsing the data.
+    /**
+     * Helper function to getb the default model.
+     * @param {Object} options Options.
+     * @returns {Backbone.Model} - Model.
+     */
     function getDefaultModel (options) {
         var model = new DefaultTreeParser(options);
 

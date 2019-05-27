@@ -6,7 +6,7 @@
 			"link": "https://geoinfo.hamburg.de",
 			"tooltip": "Landesbetrieb Geoinformation und Vermessung"
 		},
-		"Baumtyp": "light",
+		"treeType": "light",
 		"searchBar": {
 			"osm": {
 				"minChars": 3,

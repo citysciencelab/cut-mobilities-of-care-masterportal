@@ -29,7 +29,8 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|Baumtyp|ja|enum["light", "default", "custom"]||Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|
+|treeType|nein|enum["light", "default", "custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|
+|Baumtyp|nein|enum["light", "default", "custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|
 |controls|nein|[controls](#markdown-header-portalconfigcontrols)||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|
 |mapView|nein|[mapView](#markdown-header-portalconfigmapview)||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|
 |menu|nein|[menu](#markdown-header-portalconfigmenu)||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe [Tools](#markdown-header-portalconfigmenutools)).|
@@ -1415,19 +1416,21 @@ Ein Staticlink-Objekt enthält folgende attribute.
 ***
 
 ## Themenconfig
-Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkommen. Je nach vonfiguration des Baumtyps können auch Ordner Strukturen in den [Fachdaten](#markdown-header-themenconfigfachdaten) angegeben werden.
+Die Themenconfig definiert welche Inhalte an welche Stelle im Themenbaum vorkommen. Je nach vonfiguration des treeType können auch Ordner Strukturen in den [Fachdaten](#markdown-header-themenconfigfachdaten) angegeben werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |Hintergrundkarten|ja|[Hintergrundkarten](#markdown-header-themenconfighintergrundkarten)||Definition der Hintergrundkarten|
-|Fachdaten|ja|[Fachdaten](#markdown-header-themenconfigfachdaten)||Definition der Fachdaten.|
+|Fachdaten|nein|[Fachdaten](#markdown-header-themenconfigfachdaten)||Definition der Fachdaten.|
+|Fachdaten_3D|nein|[Fachdaten_3D](#markdown-header-themenconfigfachdaten_3d)||Definition der Fachdaten für den 3D-Modus.|
 
 **Beispiel**
 ```
 #!json
 "Themenconfig": {
     "Hintergrundkarten": {},
-    "Fachdaten": {}
+    "Fachdaten": {},
+    "Fachdaten_3D": {}
 }
 ```
 
@@ -1443,12 +1446,14 @@ Hier werden die Hintergrundkarten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
+|name|nein|String|"Hintergrundkarten"| Name der Schaltfläche für Hintergrundkarten im custom tree und default tree.|
 |Layer|ja|[Layer](#markdown-header-themenconfiglayer)/[GroupLayer](#markdown-header-themenconfiggrouplayer)[]||Definition der Layer.|
 
 **Beispiel**
 ```
 #!json
 "Hintergrundkarten": {
+    "name": "Meine Hintergrundkarten",
     "Layer": [
         {
             "id": "123"
@@ -1471,6 +1476,7 @@ Hier werden die Fachdaten definiert
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
+|name|nein|String|"Fachdaten"| Name der Schaltfläche für Fachdaten im custom tree und default tree.|
 |Layer|ja|[Layer](#markdown-header-themenconfiglayer)/[GroupLayer](#markdown-header-themenconfiggrouplayer)[]||Definition der Layer.|
 |Ordner|nein|[Ordner](#markdown-header-themenconfigordner)[]||Definition der Ordner.|
 
@@ -1478,12 +1484,41 @@ Hier werden die Fachdaten definiert
 ```
 #!json
 "Fachdaten": {
+    "name": "Meine Fachdaten",
     "Layer": [
         {
             "id": "123"
         }
     ]
 },
+```
+
+***
+
+### Themenconfig.Fachdaten_3D
+
+[type:Layer]: # (Themenconfig.Layer)
+
+Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und default tree. Wird nur im 3D-Modus eingeblendet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|nein|String|"3D Daten"| Name der Schaltfläche für 3D-Daten.|
+|Layer|ja|[Layer](#markdown-header-themenconfiglayer)[]||Definition der 3DLayer.|
+
+**Beispiel**
+```
+#!json
+"Fachdaten_3D":
+    {
+      "name": "Meine Fachdaten 3D",
+      "Layer":
+        [
+        {
+          "id": "12883"
+        }
+       ]
+    }
 ```
 
 ***

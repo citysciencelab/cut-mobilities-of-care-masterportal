@@ -79,7 +79,10 @@ var sbconfig, controls, controlsView;
 function loadApp () {
 
     // Prepare config for Utils
-    var utilConfig = {};
+    var utilConfig = {},
+        layerInformationModelSettings = {},
+        cswParserSettings = {};
+
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
@@ -109,7 +112,12 @@ function loadApp () {
     new Map();
     new WPS();
     new AddGeoJSON();
-    new CswParserModel();
+
+    if (_.has(Config, "cswId")) {
+        cswParserSettings.cswId = Config.cswId;
+    }
+
+    new CswParserModel(cswParserSettings);
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
@@ -124,7 +132,10 @@ function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
+    if (_.has(Config, "metaDataCatalogueId")) {
+        layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
+    }
+    new LayerinformationModel(layerInformationModelSettings);
 
     if (_.has(Config, "footer")) {
         new FooterView(Config.footer);
