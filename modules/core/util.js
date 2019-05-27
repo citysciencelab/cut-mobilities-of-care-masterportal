@@ -234,13 +234,16 @@ const Util = Backbone.Model.extend({
     },
     showLoader: function () {
         clearTimeout(this.get("loaderOverlayTimeoutReference"));
-        this.set("loaderOverlayTimeoutReference", setTimeout(function () {
+        this.setLoaderOverlayTimeoutReference(setTimeout(function () {
             Radio.trigger("Util", "hideLoader");
         }, 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
     hideLoader: function () {
         $("#loader").hide();
+    },
+    setLoaderOverlayTimeoutReference: function (timeoutReference) {
+        this.set("loaderOverlayTimeoutReference", timeoutReference);
     },
     getProxyURL: function (url) {
         var parser = document.createElement("a"),
