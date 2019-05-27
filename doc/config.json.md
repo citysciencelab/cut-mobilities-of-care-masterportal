@@ -777,7 +777,7 @@ Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
 
 **ACHTUNG: Backend notwendig!**
 
-**Es wird über einen WPS wird eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
+**Es wird über einen WPS eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -975,7 +975,7 @@ Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jed
 
 **ACHTUNG: Backend notwendig!**
 
-**Es wird über einen WPS wird eine FME-Workbench angesprochen, welche das Routing berechnet.**
+**Es wird über einen WPS eine FME-Workbench angesprochen, welche das Routing berechnet.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1125,7 +1125,7 @@ Routing Modul.
 
 **ACHTUNG: Backend notwendig!**
 
-**Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
+**Das Routing findet auf externen Daten statt und ist nur in wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
