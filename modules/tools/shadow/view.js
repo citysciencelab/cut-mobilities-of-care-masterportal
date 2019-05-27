@@ -84,6 +84,16 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     },
 
     /**
+     * Render Function for template in table-tool
+     * @returns {this} this
+     */
+    renderToToolbar: function () {
+        this.$el.append(this.tabletemplate(this.model.toJSON()));
+
+        return this;
+    },
+
+    /**
      * Toggles slider elements according to the checkbox state
      * @param   {boolean} chkBoxValue Value of the checkbox
      * @returns {void}
