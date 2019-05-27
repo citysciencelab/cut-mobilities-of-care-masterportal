@@ -183,9 +183,11 @@ const DrawTool = Tool.extend({
      * @param {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (geomType, transformWGS) {
+    downloadFeaturesWithoutGUI: function (para_object) {
         var features = null,
             format = new GeoJSON(),
+            geomType = null,
+            transformWGS = null,
             multiPolygon = new MultiPolygon([]),
             multiPoint = new MultiPoint([]),
             multiLine = new MultiLine([]),
@@ -196,6 +198,13 @@ const DrawTool = Tool.extend({
             featureArray = [],
             singleGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
+
+        if (!_.isUndefined(para_object) && para_object.geomType === "multiGeometry") {
+            geomType = "multiGeometry";
+        }
+        if (!_.isUndefined(para_object) && para_object.transformWGS === true) {
+            transformWGS = true;
+        }
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
