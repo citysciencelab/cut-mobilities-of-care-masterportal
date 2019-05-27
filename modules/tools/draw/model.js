@@ -314,15 +314,19 @@ const DrawTool = Tool.extend({
     },
     /**
      * finishes the draw interaction via Radio
+     * @param {String} cursor check and receive the parameter from Cockpit
      * @returns {void}
      */
-    cancelDrawWithoutGUI: function () {
+    cancelDrawWithoutGUI: function (cursor) {
         this.deactivateDrawInteraction();
         this.deactivateSelectInteraction();
         this.deactivateModifyInteraction();
         this.resetModule();
-        // GFI wieder einschalten nach dem Zeichnen
+        // Turn GFI on again after drawing
         this.setIsActive(false);
+        if (cursor !== undefined && cursor.cursor) {
+            $("#map").removeClass("no-cursor");
+        }
     },
 
     /**
