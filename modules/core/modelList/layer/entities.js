@@ -1,6 +1,6 @@
 import Layer from "./model";
 
-const EntitiesLayer = Layer.extend({
+const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false
@@ -12,9 +12,11 @@ const EntitiesLayer = Layer.extend({
      * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Object} entities
-     * @listens Layer#changeIsSelected
-     * @listens Layer#changeIsVisibleInMap
-     * @listens Map#change
+     * @listens Map#RadioTriggerMapChange
+     * @fires ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
+     * @fires Parser#RadioRequestParserGetTreeType
+     * @fires Map#RadioRequestIsMap3d
+     * @fires Map#RadioRequestGetMap3d
      */
     initialize: function () {
         this.listenToOnce(this, {
