@@ -1,7 +1,56 @@
-.datepicker {
+@color1: rgba(8, 88, 158, 1);
+@color2: rgba(85, 85, 85, 1);
+
+.datepicker-inline {
+	background-color: white;
+	border-radius: 12px;
 	.datepicker-days {
 		.table-condensed {
 			width: 100%;
+			thead {
+				tr {
+					border-radius: 0;
+					background: none;
+					.datepicker-switch {
+						cursor: default;
+						&:hover {
+							background: none;							
+						}
+					}
+					color: @color1;
+					.next, .prev {
+						color: @color2;
+						&:hover {
+							opacity: 0.8;
+							background-color: @color1;
+							color: white;
+							border-radius: 0;
+						}
+					}
+				}
+			}
+			tbody {
+				tr {
+					td {
+						border-radius: 0;
+						background: none;
+						color: @color2;
+						&:hover {
+							opacity: 0.8;
+							background-color: @color1;
+							color: white;
+						}
+						&.today {
+							border: 2px solid @color1;;
+						}
+						&.active {
+							border-radius: 0;
+							background-color: @color1;;
+							color: white;
+						}
+					}
+				}
+			}
 		}
 	}
 }
