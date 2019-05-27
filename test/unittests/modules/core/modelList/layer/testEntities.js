@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import EntitiesLayerModel from "@modules/core/modelList/layer/entities.js";
 
-describe.only("core/modelList/layer/entities", function () {
+describe("core/modelList/layer/entities", function () {
     var entitiesLayer,
         entityOptions = [
             {
