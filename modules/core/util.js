@@ -234,9 +234,9 @@ const Util = Backbone.Model.extend({
     },
     showLoader: function () {
         clearTimeout(this.get("loaderOverlayTimeoutReference"));
-        this.loaderOverlayTimeoutReference = setTimeout(function () {
+        this.set("loaderOverlayTimeoutReference", setTimeout(function () {
             Radio.trigger("Util", "hideLoader");
-        }, 1000 * this.get("loaderOverlayTimeout"));
+        }, 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
     hideLoader: function () {
