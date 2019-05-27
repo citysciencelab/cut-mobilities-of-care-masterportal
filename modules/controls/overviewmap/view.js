@@ -12,7 +12,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @description View to represent Overviewmap
      * @extends Backbone.View
      * @param {Object} el Jquery element to be rendered into.
-     *   @param {String} id Id of control.
+     * @param {String} id Id of control.
      * @param {Object} attr Attributes of overviewmap.
      * @param {String} attr.baseLayer Id of baseLayer
      * @param {String} attr.resolution Resolution of baseLayer.
