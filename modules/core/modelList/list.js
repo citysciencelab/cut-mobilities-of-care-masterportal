@@ -13,8 +13,8 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
-import PrintV2 from "../../tools/print_/model";
-import Print from "../../tools/print/model";
+import Print from "../../tools/print_/Mapfish3_PlotServicel";
+import HighResolutionPrint from "../../tools/print_/HighResolution_PlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -38,7 +38,7 @@ import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayersliderModel from "../../tools/layerslider/model";
+import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 
@@ -124,6 +124,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                this.sortLayersVisually();
             },
             "change:isExpanded": function (model) {
                 this.trigger("updateOverlayerView", model.get("id"));
@@ -192,10 +193,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                if (attrs.version === undefined) {
-                    return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
+                    return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
-                return new PrintV2(attrs, options);
+                return new Print(attrs, options);
             }
             else if (attrs.id === "gfi") {
                 return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
@@ -275,8 +276,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "formular") {
                 return new Formular(attrs, options);
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             else if (attrs.id === "layerslider") {
-                return new LayersliderModel(attrs, options);
+                console.warn("Tool: 'layerslider' is deprecated. Please use 'layerSlider' instead.");
+                return new LayerSliderModel(attrs, options);
+            }
+            else if (attrs.id === "layerSlider") {
+                return new LayerSliderModel(attrs, options);
             }
             return new Tool(attrs, options);
         }
@@ -497,7 +506,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             iResultIndex = 0,
             iMaxIndex = 0;
 
-        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
+        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") >= 0) {
             return model.get("selectionIDX");
         }
 

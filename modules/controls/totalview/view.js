@@ -7,24 +7,26 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      * @extends Backbone.View
      * @memberof Controls.TotalView
      * @constructs
+     * @param {String} id Id of control.
      * @fires Util#RadioRequestUtilGetUiStyle
      * @fires Controls#RadioRequestControlsViewAddRowTr
      * @fires MapView#RadioTriggerMapViewResetView
      * @listens Menu#RadioTriggerMenuLoaderReady
      */
-    initialize: function () {
+    initialize: function (id) {
         var style = Radio.request("Util", "getUiStyle"),
             element,
             template,
             tableTemplate;
 
+        this.id = id;
         template = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>", false);
         tableTemplate = this.modifyTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>", true);
         this.template = _.template(template);
         this.tableTemplate = _.template(tableTemplate);
-
         if (style === "DEFAULT") {
-            element = Radio.request("ControlsView", "addRowTR", "totalview");
+            // element = Radio.request("ControlsView", "addRowTR", "totalview");
+            element = Radio.request("ControlsView", "addRowTR", id);
             this.setElement(element[0]);
             this.render();
         }
@@ -46,7 +48,6 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
             this.renderToToolbar();
         }
     },
-    id: "totalview",
 
     /**
      * Render-Function
@@ -81,7 +82,7 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      */
     modifyTemplate: function (tpl, isMobile) {
         var result,
-            config = Radio.request("Parser", "getItemByAttributes", {id: "totalview"});
+            config = Radio.request("Parser", "getItemByAttributes", {id: this.id});
 
         if (config.attr === true) {
             result = tpl;

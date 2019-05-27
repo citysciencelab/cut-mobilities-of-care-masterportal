@@ -109,6 +109,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         url = url.replace(/SLD_BODY=.*?&/, "");
         $.ajax({
             url: url,
+            method: "GET",
             context: this,
             success: successFunction,
             error: this.gfiErrorHandler
@@ -259,7 +260,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         var clone;
 
         _.each(pgfi, function (singlePgfi, index) {
-            if (index > 0) {
+            if (index > 0 && !_.isUndefined(this.collection)) {
                 clone = this.clone();
 
                 clone.set("gfiContent", [singlePgfi]);

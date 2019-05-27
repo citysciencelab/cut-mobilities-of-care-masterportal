@@ -70,7 +70,7 @@ const DrawTool = Tool.extend({
                 }
             }
         });
-
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
     },
 
     /**
@@ -96,12 +96,17 @@ const DrawTool = Tool.extend({
      *                 {Float} opacity - transparency (default: 1.0)
      *                 {Integer} maxFeatures - maximum number of Features allowed to be drawn (default: unlimeted)
      *                 {String} initialJSON - GeoJSON containing the Features to be drawn on the Layer, i.e. for editing
+     *                 {Boolean} transformWGS - The GeoJSON will be transformed from WGS84 to UTM if set to true
+     *                 {Boolean} zoomToExtent - The map will be zoomed to the extent of the GeoJson if set to true
      * @returns {String} GeoJSON of all Features as a String
      */
     inititalizeWithoutGUI: function (para_object) {
         var featJSON,
             newColor,
-            format = new GeoJSON();
+            format = new GeoJSON(),
+            initJson = para_object.initialJSON,
+            zoomToExtent = para_object.zoomToExtent,
+            transformWGS = para_object.transformWGS;
 
         if (this.collection) {
             this.collection.setActiveToolsToFalse(this);
@@ -126,12 +131,30 @@ const DrawTool = Tool.extend({
             // this.createDrawInteraction(this.get("drawType"), this.get("layer"), para_object.maxFeatures);
             this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true, para_object.maxFeatures);
 
-            if (para_object.initialJSON) {
+            if (initJson) {
                 try {
-                    featJSON = format.readFeatures(para_object.initialJSON);
+
+                    if (transformWGS === true) {
+                        format = new GeoJSON({
+                            defaultDataProjection: "EPSG:4326"
+                        });
+                        // read GeoJson and transfrom the coordiantes from WGS84 to UTM
+                        featJSON = format.readFeatures(initJson, {
+                            dataProjection: "EPSG:4326",
+                            featureProjection: "EPSG:25832"
+                        });
+                    }
+                    else {
+                        featJSON = format.readFeatures(initJson);
+                    }
+
                     if (featJSON.length > 0) {
                         this.get("layer").setStyle(this.getStyle(para_object.drawType));
                         this.get("layer").getSource().addFeatures(featJSON);
+                    }
+
+                    if (featJSON.length > 0 && zoomToExtent === true) {
+                        Radio.trigger("Map", "zoomToExtent", this.get("layer").getSource().getExtent());
                     }
                 }
                 catch (e) {
@@ -157,9 +180,10 @@ const DrawTool = Tool.extend({
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
      * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
+     * @param {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (geomType) {
+    downloadFeaturesWithoutGUI: function (geomType, transformWGS) {
         var features = null,
             format = new GeoJSON(),
             multiPolygon = new MultiPolygon([]),
@@ -170,6 +194,7 @@ const DrawTool = Tool.extend({
             circularPoly = null,
             featureType = null,
             featureArray = [],
+            singleGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
@@ -181,19 +206,40 @@ const DrawTool = Tool.extend({
                     featureType = item.getGeometry().getType();
 
                     if (featureType === "Polygon") {
-                        multiPolygon.appendPolygon(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiPolygon.appendPolygon(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiPolygon.appendPolygon(item.getGeometry());
+                        }
                     }
                     else if (featureType === "Point") {
-                        multiPoint.appendPoint(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiPoint.appendPoint(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiPoint.appendPoint(item.getGeometry());
+                        }
                     }
                     else if (featureType === "LineString") {
-                        multiLine.appendLineString(item.getGeometry());
+                        if (transformWGS === true) {
+                            multiLine.appendLineString(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        }
+                        else {
+                            multiLine.appendLineString(item.getGeometry());
+                        }
                     }
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
-                        circularPoly = circPoly(item.getGeometry(), 64);
-                        multiPolygon.appendPolygon(circularPoly);
+                        if (transformWGS === true) {
+                            circularPoly = circPoly(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"), 64);
+                            multiPolygon.appendPolygon(circularPoly);
+                        }
+                        else {
+                            circularPoly = circPoly(item.getGeometry(), 64);
+                            multiPolygon.appendPolygon(circularPoly);
+                        }
                     }
                 });
 
@@ -215,20 +261,29 @@ const DrawTool = Tool.extend({
                 // properties the feature collection needs to be created in a different way. The text content can be
                 // retrieved by item.getStyle().getText().getText().
                 featuresConverted = format.writeFeaturesObject(featureArray);
+
             }
             else {
                 _.each(features, function (item) {
                     featureType = item.getGeometry().getType();
 
+                    if (transformWGS === true) {
+                        singleGeom = item.clone();
+                        singleGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                    }
+                    else {
+                        singleGeom = item;
+                    }
+
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     if (featureType === "Circle") {
-                        circularPoly = circPoly(item.getGeometry(), 64);
+                        circularPoly = circPoly(singleGeom.getGeometry(), 64);
                         circleFeature = new Feature(circularPoly);
                         featureArray.push(circleFeature);
                     }
                     else {
-                        featureArray.push(item);
+                        featureArray.push(singleGeom);
                     }
                 });
                 // The features in the featureArray are converted into a feature collection.
@@ -259,15 +314,19 @@ const DrawTool = Tool.extend({
     },
     /**
      * finishes the draw interaction via Radio
+     * @param {String} cursor check and receive the parameter from Cockpit
      * @returns {void}
      */
-    cancelDrawWithoutGUI: function () {
+    cancelDrawWithoutGUI: function (cursor) {
         this.deactivateDrawInteraction();
         this.deactivateSelectInteraction();
         this.deactivateModifyInteraction();
         this.resetModule();
-        // GFI wieder einschalten nach dem Zeichnen
+        // Turn GFI on again after drawing
         this.setIsActive(false);
+        if (cursor !== undefined && cursor.cursor) {
+            $("#map").removeClass("no-cursor");
+        }
     },
 
     /**

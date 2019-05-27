@@ -39,7 +39,7 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayersliderView from "../modules/tools/layerslider/view";
+import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlimport/view";
@@ -53,11 +53,6 @@ import TreeFilterView from "../modules/treefilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featurelister/view";
 import PrintView from "../modules/tools/print_/view";
-// @deprecated in version 3.0.0
-// remove "version" in doc and config.
-// rename "print_" to "print"
-// only load PrintView
-import PrintView2 from "../modules/tools/print/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -77,13 +72,17 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
+import { log } from "util";
 
 var sbconfig, controls, controlsView;
 
 function loadApp () {
 
     // Prepare config for Utils
-    var utilConfig = {};
+    var utilConfig = {},
+        layerInformationModelSettings = {},
+        cswParserSettings = {};
+
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
@@ -113,7 +112,12 @@ function loadApp () {
     new Map();
     new WPS();
     new AddGeoJSON();
-    new CswParserModel();
+
+    if (_.has(Config, "cswId")) {
+        cswParserSettings.cswId = Config.cswId;
+    }
+
+    new CswParserModel(cswParserSettings);
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
@@ -128,7 +132,10 @@ function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    new LayerinformationModel(_.has(Config, "cswId") ? {cswId: Config.cswId} : {});
+    if (_.has(Config, "metaDataCatalogueId")) {
+        layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
+    }
+    new LayerinformationModel(layerInformationModelSettings);
 
     if (_.has(Config, "footer")) {
         new FooterView(Config.footer);
@@ -195,16 +202,7 @@ function loadApp () {
                 break;
             }
             case "print": {
-                // @deprecated in version 3.0.0
-                // remove "version" in doc and config.
-                // rename "print_" to "print"
-                // only load correct view
-                if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
-                    new PrintView({model: tool});
-                }
-                else {
-                    new PrintView2({model: tool});
-                }
+                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {
@@ -263,8 +261,16 @@ function loadApp () {
                 new StyleWMSView({model: tool});
                 break;
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             case "layerslider": {
-                new LayersliderView({model: tool});
+                new LayerSliderView({model: tool});
+                break;
+            }
+            case "layerSlider": {
+                new LayerSliderView({model: tool});
                 break;
             }
             default: {
@@ -312,30 +318,65 @@ function loadApp () {
                     }
                     break;
                 }
+                /**
+                 * totalView
+                 * @deprecated in 3.0.0
+                 */
                 case "totalview": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        new TotalView();
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
+                        new TotalView(control.id);
+                    }
+                    break;
+                }
+                case "totalView": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        new TotalView(control.id);
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
                 }
-                case "backforward": {
-                    if (control.attr === true) {
+                /**
+                 * backforward
+                 * @deprecated in 3.0.0
+                 */
+                case "backforward" : {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
+                case "backForward" : {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
+                    }
+                    break;
+                }
+                /**
+                 * overviewmap
+                 * @deprecated in 3.0.0
+                 */
                 case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView({el: element});
+                        new OverviewmapView(element, control.id, control.attr);
+                    }
+                    break;
+                }
+                case "overviewMap": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowBR(control.id, false);
+                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }

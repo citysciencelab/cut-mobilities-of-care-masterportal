@@ -11,17 +11,32 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @memberOf Controls.Overviewmap
      * @description View to represent Overviewmap
      * @extends Backbone.View
+     * @param {Object} el Jquery element to be rendered into.
+     * @param {String} id Id of control.
+     * @param {Object} attr Attributes of overviewmap.
+     * @param {String} attr.baseLayer Id of baseLayer
+     * @param {String} attr.resolution Resolution of baseLayer.
      * @constructs
      */
-    initialize: function () {
-        var channel = Radio.channel("Map"),
-            style = Radio.request("Util", "getUiStyle");
+    initialize: function (el, id, attr) {
+        let layerId;
+        var style = Radio.request("Util", "getUiStyle");
 
-        channel.on({
-            "change": this.change
-        }, this);
+        this.setElement(el);
+        this.id = id;
+
+        /**
+         * baselayer
+         * @deprecated in 3.0.0
+         */
+        if (attr.hasOwnProperty("baselayer")) {
+            console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
+            layerId = attr.baselayer;
+        }
+        if (attr.hasOwnProperty("layerId")) {
+            layerId = attr.layerId;
+        }
         if (style === "DEFAULT") {
-            this.template = _.template(template);
             this.render();
         }
         else if (style === "TABLE") {
@@ -34,7 +49,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
             this.setElement("#table-tools-menu");
             this.renderToToolbar();
         }
-        this.model = new OverviewMapModel();
+        this.model = new OverviewMapModel({id: this.id, layerId: layerId, resolution: attr.resolution});
     },
     /**
      * Render function
