@@ -3,7 +3,6 @@ import template from "text-loader!./template.html";
 
 const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototype */{
     events: {
-        "click .glyphicon": "toggle",
         "click div#mini-map": "toggle"
     },
     /**
@@ -89,13 +88,16 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         this.$el.append(this.tabletemplate({ansicht: "Mini-Map ausschalten"}));
         return this;
     },
+
     id: "overviewmap",
+
     /**
      * @member OverviewMapTemplate
      * @description Template used for the OverviewMap
      * @memberof Controls.Overviewmap
      */
     template: _.template(template),
+
     /**
      * @member OverviewMapTemplate
      * @description tableTemplate used for the OverviewMap in Table View Tools
