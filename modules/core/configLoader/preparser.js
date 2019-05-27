@@ -17,12 +17,30 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     initialize: function (attributes, options) {
         this.url = this.getUrlPath(options.url);
         this.fetch({async: false,
-            error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: Das Portal kann \"config.json\" unter dem angegebenen Pfad nicht finden.</small>",
-                    kategorie: "alert-warning"
-                });
+            error: function (model, xhr, error) {
+                const statusText = xhr.statusText;
+                let message,
+                    position,
+                    snippet;
+
+                // SyntaxError for consoletesting, propably because of older version.
+                if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
+                        kategorie: "alert-warning"
+                    });
+                }
+                else {
+                    message = error.errorThrown.message;
+                    position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
+                    snippet = xhr.responseText.substring(position - 30, position + 30);
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Die Datei '" + model.url + "' konnte leider nicht geladen werden!</strong> <br> " +
+                        "<small>Details: " + error.textStatus + " - " + error.errorThrown.message + ".</small><br>" +
+                        "<small>Auszug:" + snippet + "</small>",
+                        kategorie: "alert-warning"
+                    });
+                }
             }
         });
     },
