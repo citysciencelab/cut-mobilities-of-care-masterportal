@@ -1,30 +1,31 @@
-@color1: rgba(8, 88, 158, 1);
-@color2: rgba(85, 85, 85, 1);
+@import "../style.less";
 
 .datepicker-inline {
-	background-color: white;
-	border-radius: 12px;
+	background-color: @whiteColor;
+	border-radius: @borderRadius12;
 	.datepicker-days {
 		.table-condensed {
 			width: 100%;
+			font-size: @fontSizeSmall;
 			thead {
 				tr {
-					border-radius: 0;
+					border-radius: @borderRadius0;
 					background: none;
 					.datepicker-switch {
 						cursor: default;
+						font-size: @fontSizeBig;
 						&:hover {
 							background: none;							
 						}
 					}
-					color: @color1;
+					color: @darkblueColor;
 					.next, .prev {
-						color: @color2;
+						color: @darkgreyColor;
 						&:hover {
-							opacity: 0.8;
-							background-color: @color1;
-							color: white;
-							border-radius: 0;
+							opacity: @hoverOpacity;
+							background-color: @darkblueColor;
+							color: @whiteColor;
+							border-radius: @borderRadius0;
 						}
 					}
 				}
@@ -32,21 +33,21 @@
 			tbody {
 				tr {
 					td {
-						border-radius: 0;
+						border-radius: @borderRadius0;
 						background: none;
-						color: @color2;
+						color: @darkgreyColor;
 						&:hover {
-							opacity: 0.8;
-							background-color: @color1;
-							color: white;
+							opacity: @hoverOpacity;
+							background-color: @darkblueColor;
+							color: @whiteColor;
 						}
 						&.today {
-							border: 2px solid @color1;;
+							border: 2px solid @darkblueColor;;
 						}
 						&.active {
-							border-radius: 0;
-							background-color: @color1;;
-							color: white;
+							border-radius: @borderRadius0;
+							background-color: @darkblueColor;;
+							color: @whiteColor;
 						}
 					}
 				}
