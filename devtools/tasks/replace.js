@@ -1,6 +1,7 @@
 var replace = require("replace-in-file"),
     replacements = [];
 
+<<<<<<< HEAD
 module.exports = function (destination) {
     replacements.push({
         "files": destination + "/index.html",
