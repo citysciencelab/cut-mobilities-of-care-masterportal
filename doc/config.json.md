@@ -68,6 +68,23 @@ Konfiguration der Searchbar
 
 Konfiguration des BKG Suchdienstes
 
+**ACHTUNG: Backend notwendig!**
+
+**Um die eigene UUID für den BKG nicht öffentlich zu machen, sollten die URLS (hier "bkg_geosearch" und "bkg_suggest") der restServices im Proxy abgefangen und umgeleitet werden.**
+**Beispielhafte Proxy Einstellung**
+```
+ProxyPass /bkg_geosearch http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/geosearch
+<Location /bkg_geosearch>
+  ProxyPassReverse http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/geosearch
+</Location>
+
+ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/suggest
+<Location /bkg_suggest>
+  ProxyPassReverse http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/suggest
+</Location>
+```
+
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|
@@ -126,7 +143,12 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 ***
 
 #### Portalconfig.searchBar.gazetteer
+
 Konfiguration des Gazetteer Suchdienstes
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird eine Stored Query eines WFS mit vorgegebenen Parametern abgefragt.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -560,7 +582,7 @@ Das Attribut backForward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 #### Portalconfig.mapView.option
 
-Eine option definiert eine Zoomstufe. Diese muss defineirt werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das zoomLevel ist, desto kleiner ist die scale. und desto näher hat man gezoomt.
+Eine option definiert eine Zoomstufe. Diese muss definiert werden über die Auflösung, die Maßstabszahl und das ZoomLevel. Je höher das ZoomLevel ist, desto kleiner ist die Scale. und desto näher hat man gezoomt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -672,6 +694,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 
+[type:einwohnerabfrage]: # (Portalconfig.menu.tool.einwohnerabfrage)
+
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
@@ -698,7 +722,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|einwohnerabfrage|nein|[tool](#markdown-header-portalconfigmenutool)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
+|einwohnerabfrage|nein|[einwohnerabfrage](#markdown-header-portalconfigmenutooleinwohnerabfrage)||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|
 |compareFeatures|nein|[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)|| Vergleichsmöglichkeit von Vector-Features.|
 |parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)||Flurstückssuche.|
 |measure|nein|[tool](#markdown-header-portalconfigmenutool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|
@@ -740,6 +764,34 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 "legend":{
     "name": "Legende",
     "glyphicon": "glyphicon-book"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.einwohnerabfrage
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird über einen WPS eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des Werkzeuges im Menu.|
+|glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|
+|onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|
+
+**Beispiel Einwohnerabfrage**
+```
+#!json
+"einwohnerabfrage": {
+    "name": "Einwohneranzahl abfragen",
+    "glyphicon": "glyphicon-wrench",
+    "onlyDesktop": false
 }
 ```
 
@@ -921,6 +973,10 @@ Er kann aber auch ein Objekt sein.
 
 Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
 
+**ACHTUNG: Backend notwendig!**
+
+**Es wird über einen WPS eine FME-Workbench angesprochen, welche das Routing berechnet.**
+
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |layerId|ja|String||Id des Layers der de Schulen enthält. Dieser Layer muss auch in den [Themenconfig](#markdown-header-themenconfig) konfiguriert sein.|
@@ -964,14 +1020,19 @@ Hier können Vector Features miteinander verglichen werden.
 #### Portalconfig.menu.tool.parcelSearch
 
 [inherits]: # (Portalconfig.menu.tool)
+Flurstückssuche.
 
-Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WFS abgefragt.
+**ACHTUNG: Backend notwendig!**
+
+**Je nach Konfiguration werden spezielle Stored Queries eines WFS mit vorgegebenen Parametern abgefragt.**
+
+Beispiel: https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0&&StoredQuery_ID=Flurstueck&gemarkung=0601&flurstuecksnummer=00011
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|
-|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält.|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. [Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)|
 |parcelDenominator|nein|Boolean|false|Flag ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|
 
@@ -996,6 +1057,10 @@ Flurstückssuche. Je nach konfiguration werden spezielle Stored Queries eines WF
 [inherits]: # (Portalconfig.menu.tool)
 
 Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 oder MapfishPrint 3.
+
+**ACHTUNG: Backend notwendig!**
+
+**Es wird mit einem [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1056,7 +1121,11 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Routing Modul. Das Routing findet auf externen Daten statt und ist nur wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).
+Routing Modul.
+
+**ACHTUNG: Backend notwendig!**
+
+**Das Routing findet auf externen Daten statt und ist nur in wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1106,7 +1175,7 @@ Modul, das Vektor Features darstellt. Durch hovern über ein feature in der List
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 **Beispiel**
 ```
@@ -1135,7 +1204,7 @@ Die Linienhafte Darstellung der Pendler wird für das Pendlerportal der MRh(Metr
 
 [inherits]: # (Portalconfig.menu.tool.pendlerCore)
 
-Die Pendleranimation wird für das Pendlerportal der MRh(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
+Die Pendleranimation wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den [pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -1206,6 +1275,10 @@ Parameter die für die Anfrage des Dienstes relevant sind.
 [inherits]: # (Portalconfig.menu.tool)
 
 Werkzeug, wodurch der Nutzer mit einem definierten Postfach Kontakt aufnehmen kann.
+
+**ACHTUNG: Backend notwendig!**
+
+**Das Contact kommuniziert mit einem SMTP-Server und ruft dort die sendmail.php auf.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|

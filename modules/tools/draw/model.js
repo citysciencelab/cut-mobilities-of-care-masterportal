@@ -179,13 +179,16 @@ const DrawTool = Tool.extend({
      * returns an empty Object if no init happened previously (= no layer set)
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
-     * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
-     * @param {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
+     * @param {String} para_object - an Object which includes the parameters
+     *                 {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
+     *                 {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (geomType, transformWGS) {
+    downloadFeaturesWithoutGUI: function (para_object) {
         var features = null,
             format = new GeoJSON(),
+            geomType = null,
+            transformWGS = null,
             multiPolygon = new MultiPolygon([]),
             multiPoint = new MultiPoint([]),
             multiLine = new MultiLine([]),
@@ -196,6 +199,13 @@ const DrawTool = Tool.extend({
             featureArray = [],
             singleGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
+
+        if (!_.isUndefined(para_object) && para_object.geomType === "multiGeometry") {
+            geomType = "multiGeometry";
+        }
+        if (!_.isUndefined(para_object) && para_object.transformWGS === true) {
+            transformWGS = true;
+        }
 
         if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
             features = this.get("layer").getSource().getFeatures();
