@@ -5,13 +5,13 @@ import SnippetDatepickerView from "../../snippets/datepicker/view";
 /**
  * @member ShadowTemplate
  * @description Template used to style the shadow tool
- * @memberof Shadow
+ * @memberof Tools.Shadow
  */
 const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     /**
      * @class ShadowView
      * @extends Backbone.View
-     * @memberof Shadow
+     * @memberof Tools.Shadow
      * @constructs
      */
 

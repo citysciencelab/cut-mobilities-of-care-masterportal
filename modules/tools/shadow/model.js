@@ -7,8 +7,8 @@ import moment from "moment";
 const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     /**
      * @class ShadowModel
-     * @extends Item.Tool
-     * @memberof Shadow
+     * @extends Tool
+     * @memberof Tools.Shadow
      * @property {String} glyphicon="glyphicon-screenshot" Glyphicon that is shown before the tool name
      * @constructs
      * @listens Map#RadioTriggerMapChange
