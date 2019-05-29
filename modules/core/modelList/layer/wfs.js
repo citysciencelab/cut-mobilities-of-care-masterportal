@@ -157,12 +157,15 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let isClusterfeature;
 
         if (!_.isUndefined(stylelistmodel)) {
             this.setStyle(function (feature) {
-                return stylelistmodel.createStyle(feature, this.get("isClustered"));
-            }.bind(this));
+                isClusterfeature = _.isObject(feature.get("features")) === true;
+
+                return stylelistmodel.createStyle(feature, isClusterfeature);
+            });
         }
 
         this.get("layer").setStyle(this.get("style"));
