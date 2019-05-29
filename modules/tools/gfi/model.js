@@ -265,7 +265,7 @@ const Gfi = Tool.extend({
                 olFeature,
                 layer;
 
-            if (feature instanceof Cesium.Cesium3DTileFeature) {
+            if (feature instanceof Cesium.Cesium3DTileFeature || feature instanceof Cesium.Cesium3DTilePointFeature) {
                 propertyNames = feature.getPropertyNames();
                 _.each(propertyNames, function (propertyName) {
                     properties[propertyName] = feature.getProperty(propertyName);

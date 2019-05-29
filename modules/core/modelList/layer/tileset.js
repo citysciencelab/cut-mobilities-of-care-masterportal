@@ -1,4 +1,5 @@
 import Layer from "./model";
+import {getTilesetStyle} from "./tilesetHelper";
 
 const TileSetLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {
@@ -79,6 +80,10 @@ const TileSetLayer = Layer.extend({
             if (this.get("isVisibleInMap") === true) {
                 if (!map3d.getCesiumScene().primitives.contains(tileset)) {
                     map3d.getCesiumScene().primitives.add(tileset);
+
+                    if (this.get("vectorStyle")) {
+                        this.setVectorStyle(this.get("vectorStyle"));
+                    }
                 }
                 else {
                     tileset.show = true;
@@ -122,6 +127,18 @@ const TileSetLayer = Layer.extend({
             value.layerReferenceId = this.get("id");
         }
         this.set("tileSet", value);
+    },
+
+    /**
+     * sets a vcsStyle Object to the tileset
+     * @param {Object} vcsStyle -
+     * @return {void} -
+     */
+    setVectorStyle: function (vcsStyle) {
+        const style = getTilesetStyle(vcsStyle),
+            tileSet = this.get("tileSet");
+
+        tileSet.style = style;
     }
 });
 
