@@ -6,6 +6,7 @@ import {Polygon, LineString, Point, MultiPoint} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
+import SnippetDropdownModel from "../../snippets/dropdown/model";
 
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -46,6 +47,7 @@ const Measure = Tool.extend({
                 geometry: function (feature) {
                     var geom = feature.getGeometry(),
                         coords = [];
+                    // console.log(feature);
 
                     coords.push(geom.getFirstCoordinate());
                     coords.push(geom.getLastCoordinate());
@@ -87,6 +89,20 @@ const Measure = Tool.extend({
                 }
             })
         ],
+        snippetDropdownModelGeometry: {},
+        snippetDropdownModelUnit: {},
+        values: {
+            "Strecke": "LineString",
+            "Fläche": "Polygon"
+        },
+        values_unit: {   // getNewDatepicker+
+            "m": "m",
+            "km": "km"
+        },
+        // values_unit: {   // getNewDatepicker+
+        //     "m": "m",
+        //     "km": "km"
+        // },
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
@@ -104,12 +120,14 @@ const Measure = Tool.extend({
     }),
 
     initialize: function () {
+        //var selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+
         this.superInitialize();
 
         this.listenTo(Radio.channel("Map"), {
             "change": this.changeMap
         });
-
+        //wird nicht gebraucht
         this.listenTo(this, {
             "change:geomtype": function () {
                 if (this.get("isActive")) {
@@ -123,18 +141,51 @@ const Measure = Tool.extend({
                 this.setScale(options.scale);
             }
         }, this);
-
         this.set("layer", new VectorLayer({
             source: this.get("source"),
             style: this.get("styles"),
             name: "measure_layer",
             alwaysOnTop: true
         }));
+        // console.log(_.allKeys(this.get("values")));
+        this.setDropDownSnippetGeometry(new SnippetDropdownModel({
+            name: "Geometrie",
+            type: "string",
+            displayName: "Geometrie auswählen",
+            values: _.allKeys(this.get("values")),
+            snippetType: "dropdown",
+            isMultiple: false,
+            preselectedValues: _.allKeys(this.get("values"))[0]
+        }));
+        this.setDropDownSnippetUnit(new SnippetDropdownModel({
+            name: "Einheit",
+            type: "string",
+            displayName: "Einheit auswählen",
+            values: _.allKeys(this.get("values_unit")),
+            snippetType: "dropdown",
+            isMultiple: false,
+            preselectedValues: _.allKeys(this.get("values_unit"))[0]
+        }));
+        this.listenTo(this.get("snippetDropdownModelGeometry"), {
+            //"change:isActive": this.setStatus,
+            "valuesChanged": function () {
+                var selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+                this.get("snippetDropdownModelUnit").updateValues();
+                this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+            }
+        });
+        this.listenTo(this.snippetDropdownModelUnit, {
+            // selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+            //
+            // "valuesChanged": this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0])
+            "valuesChanged": this.createInteraction
+        });
     },
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
             quickHelpSet = Radio.request("Quickhelp", "isSet"),
-            measureLayer;
+            measureLayer,
+            selectedValues;
 
         if (value) {
             this.setQuickHelp(quickHelpSet);
@@ -146,7 +197,8 @@ const Measure = Tool.extend({
             if (measureLayer === undefined) {
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
             }
-            this.createInteraction();
+            selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+            this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
 
         }
         else {
@@ -246,9 +298,10 @@ const Measure = Tool.extend({
 
         return feature;
     },
-    createInteraction: function () {
+    createInteraction: function (drawType) {
         var that = this,
-            textPoint;
+            textPoint,
+            value = this.get("values")[drawType];
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
@@ -259,8 +312,10 @@ const Measure = Tool.extend({
         else {
             this.setDraw(new Draw({
                 source: this.get("source"),
-                type: this.get("geomtype"),
+                //type: this.get("snippetDropdownModelGeometry").getSelectedValues().values[0],    //this.get("geomtype")
+                type: value,
                 style: this.get("styles")
+                // geometryFunction ??
             }));
             this.get("draw").on("drawstart", function (evt) {
                 that.setIsDrawn(true);
@@ -277,6 +332,7 @@ const Measure = Tool.extend({
                 that.unregisterClickListener(that);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
+            console.log(value);
         }
     },
     registerPointerMoveListener: function (context) {
@@ -448,14 +504,16 @@ const Measure = Tool.extend({
      * @param {String} value - Typ der Geometrie
      * @return {undefined}
      */
-    setGeometryType: function (value) {
-        this.set("geomtype", value);
-        if (this.get("geomtype") === "LineString") {
-            this.setUnit("m");
-        }
-        else {
-            this.setUnit("m²");
-        }
+    setGeometryType: function (evt) {
+        // this.set("geomtype", value);
+        // if (this.get("geomtype") === "LineString") {
+        //     this.setUnit("m");
+        // }
+        // else {
+        //     this.setUnit("m²");
+        // }
+
+        this.model.createInteraction(evt.target.value);
     },
 
     setUnit: function (value) {
@@ -636,6 +694,12 @@ const Measure = Tool.extend({
     */
     setQuickHelp: function (value) {
         this.set("quickHelp", value);
+    },
+    setDropDownSnippetGeometry: function (value) {
+        this.set("snippetDropdownModelGeometry", value);
+    },
+    setDropDownSnippetUnit: function (value) {
+        this.set("snippetDropdownModelUnit", value);
     }
 });
 

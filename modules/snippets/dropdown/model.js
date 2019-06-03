@@ -79,7 +79,19 @@ const DropdownModel = SnippetModel.extend({
             model.set("isSelectable", true);
         }, this);
     },
+    /**
+     * updateCollection
+     * @param  {string} value - value
+     * @return {void}
+     */
+    updateValues: function (value) {
+        var collection = this.get("valuesCollection").models;
 
+        _.each(collection.models, function (model, index) {
+            model.set("value", value[index]);
+        }, this);
+        // trigger.render;
+    },
     /**
      * checks the value models if they are selected or not
      * @param {string|string[]} values - selected value(s) in the dropdown list
