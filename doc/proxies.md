@@ -5,7 +5,7 @@ Viele Funktionen des Masterportals stellen XHR-Anfragen an andere Domains, z.B. 
 **Beispiel:**
 
 Lautet die URL eines WMS Server z.B.:   
-*http://geodienste.hamburg.de/HH-WMS-Gruenes-Netz*
+*https://geodienste.hamburg.de/HH-WMS-Gruenes-Netz*
 
 dann wird sie vom Portal übersetzt in:  
 */geodienste_hamburg_de/HH-WMS-Gruenes-Netz*
