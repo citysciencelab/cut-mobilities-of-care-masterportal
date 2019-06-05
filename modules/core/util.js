@@ -4,7 +4,9 @@ const Util = Backbone.Model.extend({
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
-        proxyHost: ""
+        proxyHost: "",
+        loaderOverlayTimeoutReference: null,
+        loaderOverlayTimeout: 10
     },
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -208,7 +210,7 @@ const Util = Backbone.Model.extend({
     isChrome: function () {
         var isChrome = false;
 
-        if (/Chrome/i.test(navigator.userAgent)) {
+        if ((/Chrome/i).test(navigator.userAgent)) {
             isChrome = true;
         }
         return isChrome;
@@ -219,22 +221,29 @@ const Util = Backbone.Model.extend({
     isInternetExplorer: function () {
         var ie = false;
 
-        if (/MSIE 9/i.test(navigator.userAgent)) {
+        if ((/MSIE 9/i).test(navigator.userAgent)) {
             ie = "IE9";
         }
-        else if (/MSIE 10/i.test(navigator.userAgent)) {
+        else if ((/MSIE 10/i).test(navigator.userAgent)) {
             ie = "IE10";
         }
-        else if (/rv:11.0/i.test(navigator.userAgent)) {
+        else if ((/rv:11.0/i).test(navigator.userAgent)) {
             ie = "IE11";
         }
         return ie;
     },
     showLoader: function () {
+        clearTimeout(this.get("loaderOverlayTimeoutReference"));
+        this.setLoaderOverlayTimeoutReference(setTimeout(function () {
+            Radio.trigger("Util", "hideLoader");
+        }, 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
     hideLoader: function () {
         $("#loader").hide();
+    },
+    setLoaderOverlayTimeoutReference: function (timeoutReference) {
+        this.set("loaderOverlayTimeoutReference", timeoutReference);
     },
     getProxyURL: function (url) {
         var parser = document.createElement("a"),

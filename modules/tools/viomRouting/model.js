@@ -189,7 +189,7 @@ const RoutingModel = Tool.extend({
 
             request = request + "&STARTTIME=" + this.get("routingdate") + "T" + utcHour + ":" + utcMinute + ":00.000Z";
         }
-        $("#loader").show();
+        Radio.trigger("Util", "showLoader");
         $.ajax({
             url: this.get("viomRoutingURL"),
             data: request,
@@ -210,7 +210,7 @@ const RoutingModel = Tool.extend({
                         })
                     });
 
-                $("#loader").hide();
+                Radio.trigger("Util", "hideLoader");
                 vectorlayer.id = "routenplanerroute";
                 this.set("routelayer", vectorlayer);
                 Radio.trigger("Map", "addLayer", vectorlayer);
@@ -222,7 +222,7 @@ const RoutingModel = Tool.extend({
                 this.addOverlay(olFeature);
             },
             error: function () {
-                $("#loader").hide();
+                Radio.trigger("Util", "hideLoader");
                 this.set("description", "");
                 this.set("endDescription", "");
                 Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
