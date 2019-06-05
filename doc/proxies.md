@@ -18,7 +18,7 @@ Hierfür muss ein ReverseProxy eingerichtet werden.
 
 Ein Apache Proxy, für das Beispiel oben:  
 
-`ProxyPass geodienste_hamburg_de/ https://geodienste.hamburg.de/`  
-`ProxyPassReverse geodienste_hamburg_de/ https://geodienste.hamburg.de/`
+`ProxyPass /geodienste_hamburg_de https://geodienste.hamburg.de`  
+`ProxyPassReverse /geodienste_hamburg_de https://geodienste.hamburg.de`
 
 Diese Anweisung muss in *„Apache24\conf\httpd.conf“*  stehen und bedeutet: “Leite alle Anfragen an */geodienste_hamburg_de* weiter an  [http://geodienste-hamburg.de/](http://geodienste-hamburg.de/), nehme die Antwort entgegen und gebe sie als /geodienste_hamburg_de zurück“.
