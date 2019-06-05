@@ -51,7 +51,7 @@ Konfiguration der Searchbar
 |osm|nein|[osm](#markdown-header-portalconfigsearchbarosm)||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|
-|recommendedListlenth|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
+|recommendedListLength|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|
 |quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|
 |specialWFS|nein|[specialWFS](#markdown-header-portalconfigsearchbarspecialwfs)||Konfiguration des specialWFS Suchdienstes.|
 |tree|nein|[tree](#markdown-header-portalconfigsearchbartree)||Konfiguration der Suche im Themenbaum.|
