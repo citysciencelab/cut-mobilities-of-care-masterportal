@@ -143,8 +143,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     },
 
     /**
-     * todo
-     * @param {*} layerList - todo
+     * Creates the base layer items. "newLayer" may be undefined if its id gets removed by function deleteLayersIncludeCache.
+     * Then the configured id is not found.
+     * @param {Object[]} layerList Layers
      * @returns {void}
      */
     createBaselayer: function (layerList) {
@@ -157,7 +158,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             else {
                 newLayer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
             }
-            this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, newLayer));
+
+            if (_.isUndefined(newLayer)) {
+                console.error("Layer with id: " + layer.id + " cannot be found in layerlist. Possible error: layer got removed in function 'deleteLayersIncludeCache'.");
+            }
+            else {
+                this.addItem(_.extend({type: "layer", parentId: "Baselayer", level: 0, isVisibleInTree: "true"}, newLayer));
+            }
         }, this);
     },
 
