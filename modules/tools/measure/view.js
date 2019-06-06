@@ -53,14 +53,14 @@ const MeasureView = Backbone.View.extend({
     // initDropdown: function () {
     //     this.$el.find(".form-control").selectpicker();
     // },
-    setGeometryType: function (evt) {
+    // setGeometryType: function (evt) {
         // this.model.get("drawInteraction").setActive(false);
-        this.model.setGeometryType(evt.target.value);
+        // this.model.setGeometryType(evt.target.value);
         // this.model.createInteraction(evt.target.value);  // im Model rein?
-    },
-    setUnit: function (evt) {
-        this.model.setUnit(evt.target.value);
-    },
+    // },
+    // setUnit: function (evt) {
+    //     this.model.setUnit(evt.target.value);
+    // },
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },

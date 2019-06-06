@@ -47,7 +47,6 @@ const Measure = Tool.extend({
                 geometry: function (feature) {
                     var geom = feature.getGeometry(),
                         coords = [];
-                    // console.log(feature);
 
                     coords.push(geom.getFirstCoordinate());
                     coords.push(geom.getLastCoordinate());
@@ -95,14 +94,17 @@ const Measure = Tool.extend({
             "Strecke": "LineString",
             "Fläche": "Polygon"
         },
-        values_unit: {   // getNewDatepicker+
+        values_unit: {
             "m": "m",
             "km": "km"
         },
-        // values_unit: {   // getNewDatepicker+
-        //     "m": "m",
-        //     "km": "km"
-        // },
+        values_unit_polygon: {
+            "m²": "m²",
+            "km²": "km²"
+        },
+        values_3d: {
+            "3D Messen": "3d"
+        },
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
@@ -120,20 +122,15 @@ const Measure = Tool.extend({
     }),
 
     initialize: function () {
-        //var selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+        var selectedValues,
+            selectedUnit;
 
         this.superInitialize();
 
         this.listenTo(Radio.channel("Map"), {
             "change": this.changeMap
         });
-        //wird nicht gebraucht
         this.listenTo(this, {
-            "change:geomtype": function () {
-                if (this.get("isActive")) {
-                    this.createInteraction();
-                }
-            },
             "change:isActive": this.setStatus
         });
         this.listenTo(Radio.channel("MapView"), {
@@ -147,7 +144,6 @@ const Measure = Tool.extend({
             name: "measure_layer",
             alwaysOnTop: true
         }));
-        // console.log(_.allKeys(this.get("values")));
         this.setDropDownSnippetGeometry(new SnippetDropdownModel({
             name: "Geometrie",
             type: "string",
@@ -167,18 +163,29 @@ const Measure = Tool.extend({
             preselectedValues: _.allKeys(this.get("values_unit"))[0]
         }));
         this.listenTo(this.get("snippetDropdownModelGeometry"), {
-            //"change:isActive": this.setStatus,
             "valuesChanged": function () {
-                var selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
-                this.get("snippetDropdownModelUnit").updateValues();
+                selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+                if (selectedValues.values[0] === "Fläche") {
+                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit_polygon")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
+                    //this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("preselectedValues")));
+                    console.log(this.get("snippetDropdownModelUnit"));
+                }
+                else {
+                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit")));
+                }
                 this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+                // this.setStatus;
+                // this.setGeometryType;
             }
         });
-        this.listenTo(this.snippetDropdownModelUnit, {
-            // selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
-            //
-            // "valuesChanged": this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0])
-            "valuesChanged": this.createInteraction
+        this.listenTo(this.get("snippetDropdownModelUnit"), {
+            "valuesChanged": function () {
+                selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+                selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
+                this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+                this.setUnit(selectedUnit.values[0]);
+            }
         });
     },
     setStatus: function (model, value) {
@@ -210,11 +217,14 @@ const Measure = Tool.extend({
         this.deleteFeatures();
         if (map === "3D") {
             this.set("isMap3d", true);
-            this.set("geomtype", "3d");
+            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values_3d")));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values_3d")));
+            //this.get("snippetDropdownModelGeometry").updateSelectedValues(_.allKeys(this.get("values_3d")));
+
         }
         else {
             this.set("isMap3d", false);
-            this.set("geomtype", "LineString");
+            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values")));
         }
         if (this.get("isActive")) {
             this.createInteraction();
@@ -312,10 +322,8 @@ const Measure = Tool.extend({
         else {
             this.setDraw(new Draw({
                 source: this.get("source"),
-                //type: this.get("snippetDropdownModelGeometry").getSelectedValues().values[0],    //this.get("geomtype")
                 type: value,
                 style: this.get("styles")
-                // geometryFunction ??
             }));
             this.get("draw").on("drawstart", function (evt) {
                 that.setIsDrawn(true);
@@ -332,7 +340,6 @@ const Measure = Tool.extend({
                 that.unregisterClickListener(that);
             }, this);
             Radio.trigger("Map", "addInteraction", this.get("draw"));
-            console.log(value);
         }
     },
     registerPointerMoveListener: function (context) {
@@ -504,17 +511,9 @@ const Measure = Tool.extend({
      * @param {String} value - Typ der Geometrie
      * @return {undefined}
      */
-    setGeometryType: function (evt) {
-        // this.set("geomtype", value);
-        // if (this.get("geomtype") === "LineString") {
-        //     this.setUnit("m");
-        // }
-        // else {
-        //     this.setUnit("m²");
-        // }
-
-        this.model.createInteraction(evt.target.value);
-    },
+    // setGeometryType: function (evt) {
+    //     this.model.createInteraction(evt.target.value);
+    // },
 
     setUnit: function (value) {
         this.set("unit", value);
