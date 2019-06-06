@@ -5,20 +5,14 @@ import SnippetDropdownView from "../../snippets/dropdown/view";
 
 const MeasureView = Backbone.View.extend({
     events: {
-        // "change select#geomField": "setGeometryType",
-        // "change select#unitField": "setUnit",
         "click button.table-tool-measure-delete": "deleteFeatures",
         "click button.measure-delete": "deleteFeatures",
-        // "changed.bs.select[data-id='geomField']": "setGeometryType",
-        // "changed.bs.select[data-id='unitField']": "setUnit",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
         }
-        //"change select": "setGeometryType" //muss in model rein "listenTo....in Listener"
     },
     initialize: function () {
         this.listenTo(this.model, {
-            // "change:isActive change:geomtype": this.render
             "change:isActive": this.render
         });
         this.snippetDropdownViewGeometry = new SnippetDropdownView({model: this.model.get("snippetDropdownModelGeometry")});
@@ -45,22 +39,6 @@ const MeasureView = Backbone.View.extend({
         }
         return this;
     },
-    /**
-     * inits the dropdown list
-     * @see {@link http://silviomoreto.github.io/bootstrap-select/options/|Bootstrap-Select}
-     * @returns {void}
-     */
-    // initDropdown: function () {
-    //     this.$el.find(".form-control").selectpicker();
-    // },
-    // setGeometryType: function (evt) {
-        // this.model.get("drawInteraction").setActive(false);
-        // this.model.setGeometryType(evt.target.value);
-        // this.model.createInteraction(evt.target.value);  // im Model rein?
-    // },
-    // setUnit: function (evt) {
-    //     this.model.setUnit(evt.target.value);
-    // },
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },

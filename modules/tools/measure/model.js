@@ -167,7 +167,8 @@ const Measure = Tool.extend({
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 if (selectedValues.values[0] === "Fläche") {
                     this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit_polygon")));
-                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
+                    //this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
+                    //this.get("snippetDropdownModelUnit").updateSelectableValues(this.get("preselectedValues"));
                     //this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("preselectedValues")));
                     console.log(this.get("snippetDropdownModelUnit"));
                 }
@@ -175,8 +176,6 @@ const Measure = Tool.extend({
                     this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit")));
                 }
                 this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
-                // this.setStatus;
-                // this.setGeometryType;
             }
         });
         this.listenTo(this.get("snippetDropdownModelUnit"), {
@@ -214,20 +213,22 @@ const Measure = Tool.extend({
         }
     },
     changeMap: function (map) {
+        var selectedValues;
+
         this.deleteFeatures();
         if (map === "3D") {
             this.set("isMap3d", true);
             this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values_3d")));
             this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values_3d")));
-            //this.get("snippetDropdownModelGeometry").updateSelectedValues(_.allKeys(this.get("values_3d")));
-
         }
         else {
             this.set("isMap3d", false);
             this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values")));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values")));
         }
         if (this.get("isActive")) {
-            this.createInteraction();
+            selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+            this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values_3d"))[0]);
         }
     },
     handle3DClicked: function (obj) {
@@ -505,16 +506,6 @@ const Measure = Tool.extend({
         this.get("measureTooltipElement").innerHTML = output;
         this.get("measureTooltip").setPosition(position);
     },
-
-    /**
-     * Setzt den Typ der Geometrie (LineString oder Polygon).
-     * @param {String} value - Typ der Geometrie
-     * @return {undefined}
-     */
-    // setGeometryType: function (evt) {
-    //     this.model.createInteraction(evt.target.value);
-    // },
-
     setUnit: function (value) {
         this.set("unit", value);
     },
