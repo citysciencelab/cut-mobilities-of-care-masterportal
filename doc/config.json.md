@@ -301,7 +301,7 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|
-|layerTypes|nein|String[]|["WFS"]|Vector Typen die verwendet werden sollen.|
+|layerTypes|nein|enum["WFS", "GeoJSON"]|["WFS"]|Vector Typen die verwendet werden sollen.|
 |gfiOnClick|nein|Boolean|false|Öffnet das GetFeatureInfo (gfi) bei Klick auf das Suchergebnis.|
 
 **Beispiel**
