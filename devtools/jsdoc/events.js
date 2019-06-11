@@ -52,6 +52,42 @@
  */
 
 
+/** -------------------- SIDEBAR -------------------- */
+
+/**
+ * @event Sidebar#changeIsVisible
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Triggered when Model attribute "isVisible" has changed.
+ */
+
+/**
+ * @event Sidebar#changeIsMobile
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Triggered when Model attribute "isMobile" has changed.
+ */
+
+/**
+ * @event Sidebar#addContent
+ * @param {DOM} element The dom element that has to be added to the sidebar.
+ * @description Triggered by Model when new content is available.
+ */
+
+/**
+ * @event Sidebar#RadioTriggerSidebarToggle
+ * @param {Boolean} isVisible Flag if sidebar is now visible or not.
+ * @param {String} [width="30%"] The width of the sidebar.
+ * @description Triggered by ToolModel that renders in sidebar.
+ * @example Radio.trigger("Sidebar", "toggle", isVisible, width)
+ */
+/**
+ * @event Sidebar#RadioTriggerSidebarAppend
+ * @param {HTML} element The Element that has to be rendered in sidebar.
+ * @description Triggered by ToolModel that renders in sidebar.
+ * @example Radio.trigger("Sidebar", "append", element)
+ */
+
 /** -------------------- ALERTING -------------------- */
 
 /**
@@ -401,6 +437,12 @@
  * @param {String} mode Mode of the map.
  * @description Event that gets fired when the map mode ("2D" / "3D") has changed.
  * @example Radio.trigger("Map", "change", mode)
+ */
+
+/**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description Event that forces the map to update its size.
+ * @example Radio.trigger("Map", "updateSize")
  */
 
 /**
@@ -1117,10 +1159,16 @@
 /** -------------------- GRAPH -------------------- */
 
 /**
- * @event Graph#RadioTriggerGraphCreateGraph
+ * @event Tools.Graph#RadioTriggerGraphCreateGraph
  * @description starts the generating of a graphic
  * @param {Object} graphConfig contains the options for the graphic
- * @example Radio.trigger("Graph", "createGraph", );
+ * @example Radio.trigger("Graph", "createGraph", graphconfig);
+ */
+
+/**
+ * @event Tools.Graph#RadioRequestGraphGetGraphParams
+ * @description Returns the current graph params.
+ * @example Radio.request("Graph", "getGraphParams");
  */
 
 /** -------------------- GFILIST -------------------- */

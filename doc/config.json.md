@@ -757,6 +757,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |name|ja|String||Name des Werkzeuges im Menu.|
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|
+|isVisibleInMenu|nein|Boolean|true|Flag ob das Tool unter Werkzeuge angezeigt wird.|
 
 **Beispiel eines Tools**
 ```

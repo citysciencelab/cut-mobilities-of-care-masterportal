@@ -38,7 +38,9 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
     render: function () {
         var attr = this.model.toJSON();
 
-        $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        if (this.model.get("isVisibleInMenu")) {
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        }
         return this;
     },
 

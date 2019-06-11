@@ -56,7 +56,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
                         Radio.trigger("Window", "setIsVisible", false);
                     }
                     activeTools = model.collection.where({isActive: true});
-                    
+
                     if (activeTools.length === 0) {
                         model.collection.toggleDefaultTool();
                     }
