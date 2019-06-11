@@ -1,81 +1,159 @@
 const fs = require("fs-extra"),
-    _ = require("underscore"),
+    // portal version parsed from package.json file
     stableVersion = require("../../package.json").version.replace(/\./g, "_"),
-    portalsForStableReplace = require("./portalsForStableReplace");
 
-function copyFiles (portals, mainFolder, folder, folderStructure) {
-    var sourceFiles = ["config.js", "config.json", "index.html"];
+    replaceInFile = require("replace-in-file"),
+    // replace URLs in regular module files, based on replace-in-file
+    portalsForStableReplace = require("./portalsForStableReplace"),
+    // replace URLs in custom module files, based on replace-in-file
+    replaceUrlsForCustomModules = require("./replace"),
+    // execute shell commands
+    execute = require("child-process-promise").exec,
 
-    sourceFiles.forEach(function (sourceFile) {
-        var sourceFolderPath = portals + "/" + folder + "/" + sourceFile,
-            mainFolderPath = mainFolder + "/" + folder + "/" + sourceFile;
+    conf = {
+        confPortalConfigsFolder: "portalconfigs",
+        sourceFolder: "portalconfigs",
+        targetFolder: "stablePortale",
+        stableVersion: stableVersion,
+        masterCodeFolder: "stablePortale/Mastercode/" + stableVersion,
+        environment: "Internet",
 
-        fs.exists(sourceFolderPath, function (exists) {
-            if (exists) {
-                fs.copy(sourceFolderPath, mainFolderPath)
-                    .then(() => {
-                        portalsForStableReplace(mainFolderPath, folderStructure.name, stableVersion);
-                    })
-                    .catch(err => console.error(err));
-            }
-        });
-    });
-}
+        // folder where custom modules creation script saves its result
+        tempPortalFolder: "dist/build",
+        basicPortalFolder: "dist/Basic"
+    };
 
-function createPortals (portals, mainFolder, folderStructure) {
-    console.warn("Portals are copied from " + portals + "!");
-    fs.readdir(portals, function (err, folders) {
-        if (err) {
-            console.error(portals + " was not found!", err);
+var confPortalConfigs = {};
+
+function copyPortal (portalName) {
+    fs.readdir(conf.sourceFolder + "/" + portalName, (error, fileNames) => {
+        if (!fileNames.length) {
+            console.error("Source folder " + conf.sourceFolder + "/" + portalName + " was empty");
+            return;
         }
-        folders.forEach(function (folder) {
-            fs.mkdir(mainFolder + "/" + folder).then(() => {
-                copyFiles(portals, mainFolder, folder, folderStructure);
-            }).catch(error => console.error(error));
-        });
-    });
-}
-
-function createFolders (mainFolder, folder) {
-    fs.mkdir(mainFolder + "/" + folder.name).then(() => {
-        if (_.has(folder, "subFolder")) {
-            fs.mkdir(mainFolder + "/" + folder.name + "/" + folder.subFolder.name).then(() => {
-                if (_.has(folder.subFolder, "files")) {
-                    folder.subFolder.files.forEach(function (file) {
-                        fs.copy(folder.subFolder.source + "/" + file, mainFolder + "/" + folder.name + "/" + folder.subFolder.name + "/" + file);
-                    });
+        fileNames.forEach((sourceFile, index) => {
+            fs.copy(conf.sourceFolder + "/" + portalName + "/" + sourceFile, conf.targetFolder + "/" + portalName + "/" + sourceFile).then(() => {
+                portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersion);
+                if (index === fileNames.length - 1) {
+                    console.log("Finished building portal \"" + portalName + "\"");
                 }
-            }).catch(err => console.error(err));
-        }
-    }).catch(err => console.error(err));
-}
-
-function buildFolderStructure (mainFolder, folderStructure) {
-    fs.remove(mainFolder).then(() => {
-        fs.mkdir(mainFolder).then(() => {
-            createFolders(mainFolder, folderStructure);
-            createPortals("./portalconfigs", mainFolder, folderStructure);
-            createPortals("./portal", mainFolder, folderStructure);
+            }).catch((copyError) => {
+                console.error(copyError);
+            });
         });
-    }).catch(err => console.error(err));
+    });
 }
 
+function buildCustomModulesPortal (portalName) {
+    var command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + conf.sourceFolder + "/" + portalName + "/" + confPortalConfigs.customModules[portalName].replace(/\.js$/, ""),
+        redundantCustomModuleDataPath = confPortalConfigs.customModules[portalName].split("/")[0];
 
-function creatDataStructure () {
-    var mainFolder = "stablePortale",
-        folderStructure = {
-            name: "Mastercode",
-            subFolder: {
-                name: stableVersion,
-                source: "./dist/Basic",
-                files: [
-                    "css",
-                    "js"
-                ]
+    console.log("Executing script " + command);
+    execute(command).then(function () {
+        console.log("Finished script " + command);
+        fs.copy(conf.tempPortalFolder, conf.targetFolder + "/" + portalName).then(() => {
+            fs.copy(conf.sourceFolder + "/" + portalName + "/", conf.targetFolder + "/" + portalName).then(() => {
+                fs.remove(conf.targetFolder + "/" + portalName + "/" + redundantCustomModuleDataPath).then(() => {
+                    replaceUrlsForCustomModules(conf.environment, conf.targetFolder + "/" + portalName, portalName === "geo-online" ? 3 : 2);
+                    console.log("Finished building portal \"" + portalName + "\"");
+                });
+            });
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+function createStablePortalsFolder () {
+    console.log("Started building portals");
+    fs.readdir(conf.sourceFolder, (error, portalNames) => {
+        if (!portalNames.length) {
+            console.error("No source folders available in folder " + conf.sourceFolder);
+        }
+        portalNames.forEach((portalName) => {
+            if (confPortalConfigs.modulesBlackList.indexOf(portalName) !== -1) {
+                console.log("Ignored portal \"" + portalName + "\" (blacklisted)");
+                return;
             }
-        };
-
-    buildFolderStructure(mainFolder, folderStructure);
+            if (portalName === ".git" || portalName.match(/^\./) !== null) {
+                console.log("Ignored hidden folder " + conf.targetFolder + "/" + portalName);
+                return;
+            }
+            if (fs.statSync(conf.sourceFolder + "/" + portalName).isDirectory() === false) {
+                console.log("Ignored file " + conf.targetFolder + "/" + portalName);
+                return;
+            }
+            fs.mkdirs(conf.targetFolder + "/" + portalName).then(() => {
+                if (confPortalConfigs.customModules[portalName] === undefined) {
+                    copyPortal(portalName);
+                }
+                else {
+                    buildCustomModulesPortal(portalName);
+                }
+            }).catch((mkdirError) => {
+                console.error(mkdirError);
+            });
+        });
+    });
 }
 
-creatDataStructure();
+function createMasterCodeFolder () {
+    var foldersToCopy = ["js", "css"];
+
+    console.log("Started creating MasterCode folder");
+    fs.mkdirs(conf.masterCodeFolder).then(() => {
+        foldersToCopy.forEach((folderToCopy, index) => {
+            fs.mkdirs(conf.masterCodeFolder + "/" + folderToCopy).then(() => {
+                console.log("Created folder " + conf.masterCodeFolder + "/" + folderToCopy);
+                fs.copy(conf.basicPortalFolder + "/" + folderToCopy, conf.masterCodeFolder + "/" + folderToCopy).then(() => {
+                    replaceInFile.sync({
+                        "files": conf.masterCodeFolder + "/css/style.css",
+                        "from": /\/*(\.+\/)*lgv-config/g,
+                        "to": "../../../lgv-config"
+                    });
+                    if (index === foldersToCopy.length - 1) {
+                        console.log("Finished creating MasterCode folder");
+                        createStablePortalsFolder();
+                    }
+                });
+            }).catch((error) => {
+                console.error(error);
+            });
+        });
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
+function deleteStablePortalsFolder () {
+    fs.remove(conf.targetFolder).then(() => {
+        console.log("Deleted folder " + process.cwd() + "/" + conf.targetFolder);
+        createMasterCodeFolder();
+    });
+}
+
+const inquirer = require("inquirer"),
+    questions = [{
+        type: "input",
+        name: "confPortalConfigsFolder",
+        message: "Please locate the folder containing the \"buildStablePortalsConfig.js\" file.",
+        default: conf.confPortalConfigsFolder
+    }, {
+        type: "input",
+        name: "checkDelete",
+        message: "This script will DELETE the following folder:\n" + process.cwd() + "/" + conf.targetFolder + "\nContinue? (Y/N)",
+        default: "N"
+    }];
+
+inquirer.prompt(questions).then(function (answers) {
+    if (fs.statSync(answers.confPortalConfigsFolder).isDirectory() === false) {
+        console.log("Folder \"" + answers.confPortalConfigsFolder + "\" is not a directory.");
+        return;
+    }
+    confPortalConfigs = require(process.cwd() + "/" + answers.confPortalConfigsFolder + "/buildStablePortalsConfig.js");
+
+    if (answers.checkDelete.toUpperCase() === "Y") {
+        console.log("\n----------------------------------------------\n");
+        deleteStablePortalsFolder();
+    }
+});
