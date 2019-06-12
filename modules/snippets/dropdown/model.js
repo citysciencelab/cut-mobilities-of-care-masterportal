@@ -81,7 +81,7 @@ const DropdownModel = SnippetModel.extend({
     },
     /**
      * updateCollection
-     * @param  {string} value - value
+     * @param  {string} value - selected value
      * @return {void}
      */
     updateValues: function (value) {
@@ -90,12 +90,10 @@ const DropdownModel = SnippetModel.extend({
         _.each(collection, function (model, index) {
             model.set("value", value[index]);
             model.set("displayName", value[index]);
-            model.set("isSelectable", false);
         }, this);
         if (this.get("preselectedValues").length > 0) {
             this.updateSelectedValues(this.get("preselectedValues"));
         }
-        //this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: false}));
         this.trigger("render");
     },
     /**

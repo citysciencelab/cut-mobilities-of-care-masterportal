@@ -66,7 +66,6 @@ const DropdownView = Backbone.View.extend({
         _.each(models, function (model) {
             values.push(model.get("value"));
         });
-
         this.$el.find(".selectpicker").selectpicker("val", values);
     },
 

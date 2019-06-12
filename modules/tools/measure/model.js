@@ -166,14 +166,14 @@ const Measure = Tool.extend({
             "valuesChanged": function () {
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 if (selectedValues.values[0] === "Fläche") {
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit_polygon"))[0]);
                     this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit_polygon")));
-                    //this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
-                    //this.get("snippetDropdownModelUnit").updateSelectableValues(this.get("preselectedValues"));
-                    //this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("preselectedValues")));
-                    console.log(this.get("snippetDropdownModelUnit"));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
                 }
                 else {
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit"))[0]);
                     this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit")));
                 }
                 this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
             }
@@ -218,11 +218,13 @@ const Measure = Tool.extend({
         this.deleteFeatures();
         if (map === "3D") {
             this.set("isMap3d", true);
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.get("values_3d"))[0]);
             this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values_3d")));
             this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values_3d")));
         }
         else {
             this.set("isMap3d", false);
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.get("values"))[0]);
             this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values")));
             this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values")));
         }

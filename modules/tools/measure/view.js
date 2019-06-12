@@ -1,7 +1,6 @@
 import DefaultTemplate from "text-loader!./default/template.html";
 import TableTemplate from "text-loader!./table/template.html";
 import SnippetDropdownView from "../../snippets/dropdown/view";
-// import "bootstrap-select";
 
 const MeasureView = Backbone.View.extend({
     events: {
