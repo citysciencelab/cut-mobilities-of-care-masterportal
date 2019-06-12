@@ -43,7 +43,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
-        eventListener: {}
+        eventListener: {},
+        printLegend: false,
+        legendText: "Mit Legende"
     }),
 
     /**
