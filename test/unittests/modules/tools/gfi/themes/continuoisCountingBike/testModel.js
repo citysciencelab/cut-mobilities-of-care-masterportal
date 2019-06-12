@@ -96,14 +96,17 @@ describe("tools/gfi/themes/continuousCountingBike", function () {
 
     describe("prepareDayDataset", function () {
         it("should return object that have all keys", function () {
-            expect(model.prepareDayDataset(dayDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTickValues", "legendArray"]);
+            expect(model.prepareDayDataset(dayDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTicks", "legendArray"]);
         });
         it("should return object that has empty keys", function () {
             expect(model.prepareDayDataset(undefined)).to.be.an("object").to.deep.include({
                 data: "",
                 xLabel: "Tagesverlauf am ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    unit: "Uhr",
+                    values: []
+                },
                 legendArray: ""
             });
         });
@@ -112,22 +115,27 @@ describe("tools/gfi/themes/continuousCountingBike", function () {
                 data: "",
                 xLabel: "Tagesverlauf am ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    unit: "Uhr",
+                    values: []
+                },
                 legendArray: ""
             });
         });
     });
 
-    describe("prepareDayDataset", function () {
+    describe("prepareLastSevenDaysDataset", function () {
         it("should return object that have all keys", function () {
-            expect(model.prepareLastSevenDaysDataset(lastSevenDaysDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTickValues", "legendArray"]);
+            expect(model.prepareLastSevenDaysDataset(lastSevenDaysDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTicks", "legendArray"]);
         });
         it("should return object that has empty keys", function () {
             expect(model.prepareLastSevenDaysDataset(undefined)).to.be.an("object").to.deep.include({
                 data: "",
                 xLabel: "Woche vom  bis ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    values: []
+                },
                 legendArray: ""
             });
         });
@@ -136,7 +144,9 @@ describe("tools/gfi/themes/continuousCountingBike", function () {
                 data: "",
                 xLabel: "Woche vom  bis ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    values: []
+                },
                 legendArray: ""
             });
         });
@@ -144,14 +154,17 @@ describe("tools/gfi/themes/continuousCountingBike", function () {
 
     describe("prepareYearDataset", function () {
         it("should return object that have all keys", function () {
-            expect(model.prepareYearDataset(yearDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTickValues", "legendArray"]);
+            expect(model.prepareYearDataset(yearDataset)).to.be.an("object").that.have.all.keys(["data", "xLabel", "yLabel", "graphArray", "xAxisTicks", "legendArray"]);
         });
         it("should return object that has empty keys", function () {
             expect(model.prepareYearDataset(undefined)).to.be.an("object").to.deep.include({
                 data: "",
                 xLabel: "KW im Jahr ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    unit: "Kw",
+                    values: []
+                },
                 legendArray: ""
             });
         });
@@ -160,7 +173,10 @@ describe("tools/gfi/themes/continuousCountingBike", function () {
                 data: "",
                 xLabel: "KW im Jahr ",
                 graphArray: "",
-                xAxisTickValues: [],
+                xAxisTicks: {
+                    unit: "Kw",
+                    values: []
+                },
                 legendArray: ""
             });
         });
