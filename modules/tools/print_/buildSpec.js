@@ -407,10 +407,48 @@ const BuildSpecModel = Backbone.Model.extend({
     buildFillStyle: function (style, obj) {
         var fillColor = style.getColor();
 
+        if (typeof fillColor === "string") {
+            fillColor = this.colorStringToRgbArray(fillColor);
+        }
+
         obj.fillColor = this.rgbArrayToHex(fillColor);
         obj.fillOpacity = fillColor[3];
 
         return obj;
+    },
+    colorStringToRgbArray: function (colorString) {
+        let parsedString = colorString;
+
+        if (parsedString.match(/^(rgba\()/)) {
+            parsedString = this.rgbaStringToRgbaArray(parsedString);
+        }
+        else if (parsedString.match(/^(rgb\()/)) {
+            parsedString = this.rgbStringToRgbArray(parsedString);
+        }
+        return parsedString;
+    },
+
+    rgbaStringToRgbaArray: function (colorString) {
+        const indexOpenBracket = colorString.indexOf("(") + 1,
+            indexCloseBracket = colorString.indexOf(")"),
+            length = indexCloseBracket - indexOpenBracket,
+            valuesString = colorString.substr(indexOpenBracket, length),
+            rgbaStringArray = valuesString.split(","),
+            rgbaArray = [];
+
+        rgbaStringArray.forEach(function (colorValue) {
+            colorValue.trim();
+            rgbaArray.push(parseFloat(colorValue));
+        });
+        console.log(rgbaArray);
+
+        return rgbaArray;
+    },
+    rgbStringToRgbArray: function(colorString) {
+        console.log("match rgb");
+        let matches = colorString.match(/(\d{1,3}),(\d{1,3}),(\d{1,3})/);
+
+        console.log(matches);
     },
 
     buildStrokeStyle: function (style, obj) {
@@ -539,14 +577,17 @@ const BuildSpecModel = Backbone.Model.extend({
      */
     getStyleAttribute: function (layer) {
         var layerId = layer.get("id"),
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            styleField = "styleId";
 
         if (layerModel !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-
-            return Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+            if (layerModel.get("styleId")) {
+                styleField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+            }
         }
-        return "styleId";
+
+        return styleField;
     },
 
     /**
