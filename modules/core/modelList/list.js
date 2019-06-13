@@ -666,7 +666,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             currentIDX = 1,
             aLayerModels = this.where({type: "layer"});
 
-        _.each(aLayerModels, function (oLayerModel, iIndex) {
+        _.each(aLayerModels, function (oLayerModel) {
             if (_.isUndefined(oLayerModel.get("layer")) === false) {
                 oLayerModel.setSelectionIDX(currentIDX++);
             }
