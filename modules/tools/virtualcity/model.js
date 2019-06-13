@@ -1,6 +1,7 @@
 import axios from "axios";
 import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
+import {getInstance as getFlightPlayerInstance} from "./flight/flightPlayer";
 
 const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -25,6 +26,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     initialize () {
         this.superInitialize();
         this.addRadio();
+        getFlightPlayerInstance();
     },
 
     /**
@@ -35,6 +37,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
      * @listens VirtualCity#RadioRequestVirtualCityDeactivatePlanning
      * @listens VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCitygetFlightsForPlanning
      * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
      */
     addRadio: function () {
@@ -46,6 +49,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
             "activatePlanning": this.activatePlanning,
             "deactivatePlanning": this.deactivatePlanning,
             "getViewpointsForPlanning": this.getViewpointsForPlanning,
+            "getFlightsForPlanning": this.getFlightsForPlanning,
             "gotoViewPoint": this.gotoViewPoint
         }, this);
     },
@@ -126,6 +130,17 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
             return planning.getViewpoints().map((value) => {
                 return value.name;
             });
+        });
+    },
+
+    /**
+     * returns flightInstances by the given planningId
+     * @param {string} planningId id of the planningInstance
+     * @return {Promise<Array<FlightInstance>>} Promise which resolves with the list of viewpoints
+     */
+    getFlightsForPlanning (planningId) {
+        return this.getPlanningById(planningId).then((planning) => {
+            return planning.getFlights();
         });
     },
 

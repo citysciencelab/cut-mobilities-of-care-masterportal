@@ -1,7 +1,7 @@
 import axios from "axios";
 import EntitiesLayer from "../../core/modelList/layer/entities";
 import Tileset from "../../core/modelList/layer/tileset";
-
+import {parseFlightOptions} from "./flight/flightInstance";
 
 const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     defaults: _.extend({}, Backbone.Model.defaults, {
@@ -9,7 +9,8 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
         url: null,
         hiddenObjects: [],
         planningObjects: [],
-        viewpoints: []
+        viewpoints: [],
+        flights: []
     }),
 
     /**
@@ -23,12 +24,14 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * @property {Array} hiddenObjects - list of ids to hide in the base datasets
      * @property {Array} planningObjects - list of planningObjects
      * @property {Array} viewpoints - list of planning viewpoints
+     * @property {Array} flights - list of planning flights
      */
     initialize () {
         this.readyPromise = null;
         this.entitiesLayer = null;
         this.defaultViewpoint = null;
         this.planningTilesetInstances = [];
+        this.flightInstances = [];
     },
 
     /**
@@ -86,6 +89,14 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
             this.get("viewpoints").forEach((vp)=>{
                 if (vp.default === true) {
                     this.defaultViewpoint = vp;
+                }
+            });
+
+            this.get("flights").forEach((flightOption)=>{
+                const flightInstance = parseFlightOptions(flightOption);
+
+                if (flightInstance.isValid()) {
+                    this.flightInstances.push(flightInstance);
                 }
             });
             this.readyPromise = Promise.all(promises);
@@ -178,6 +189,14 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      */
     getViewpoints () {
         return this.get("viewpoints");
+    },
+
+    /**
+     * returns the flightInstances of this planning
+     * @returns {Array<FlightInstance>} list of flightInstances
+     */
+    getFlights () {
+        return this.flightInstances;
     }
 });
 
