@@ -536,7 +536,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var oldIDX = model.get("selectionIDX"),
             visibleLayerModels = this.where({type: "layer"}),
             newIDX = false,
-            iMin = 0,
+            iMin = 1,
             affectedModel;
 
         // find next index and layer to swap with
@@ -663,7 +663,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     initModelIndeces: function () {
         var
-            currentIDX = 0,
+            currentIDX = 1,
             aLayerModels = this.where({type: "layer"});
 
         _.each(aLayerModels, function (oLayerModel, iIndex) {
