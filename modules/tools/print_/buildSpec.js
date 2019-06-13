@@ -416,19 +416,27 @@ const BuildSpecModel = Backbone.Model.extend({
 
         return obj;
     },
+    /**
+     * Checks if colorString starts with "rgb" then calls a parsing function.
+     * @param {String} colorString
+     * @returny {Number[] | String} - parsed rgb-string as number array
+     */
     colorStringToRgbArray: function (colorString) {
-        let parsedString = colorString;
+        let parsedString = colorString,
+            parsedArray;
 
-        if (parsedString.match(/^(rgba\()/)) {
-            parsedString = this.rgbaStringToRgbaArray(parsedString);
+        if (parsedString.match(/^(rgb)/)) {
+            parsedArray = this.rgbStringToRgbArray(parsedString);
         }
-        else if (parsedString.match(/^(rgb\()/)) {
-            parsedString = this.rgbStringToRgbArray(parsedString);
-        }
-        return parsedString;
+        return parsedArray;
     },
 
-    rgbaStringToRgbaArray: function (colorString) {
+    /**
+     * Parses a given rgb- or rgba-string to an numbers array.
+     * @param {String} colorString
+     * @returny {Number[]} - parsed rgb-string as number array
+     */
+    rgbStringToRgbArray: function (colorString) {
         const indexOpenBracket = colorString.indexOf("(") + 1,
             indexCloseBracket = colorString.indexOf(")"),
             length = indexCloseBracket - indexOpenBracket,
@@ -440,15 +448,8 @@ const BuildSpecModel = Backbone.Model.extend({
             colorValue.trim();
             rgbaArray.push(parseFloat(colorValue));
         });
-        console.log(rgbaArray);
 
         return rgbaArray;
-    },
-    rgbStringToRgbArray: function(colorString) {
-        console.log("match rgb");
-        let matches = colorString.match(/(\d{1,3}),(\d{1,3}),(\d{1,3})/);
-
-        console.log(matches);
     },
 
     buildStrokeStyle: function (style, obj) {
