@@ -497,7 +497,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             iResultIndex = 0,
             iMaxIndex = 0;
 
-        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") >= 0) {
+        if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
             return model.get("selectionIDX");
         }
 
@@ -653,11 +653,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     initModelIndeces: function () {
-        var aLayerModels = this.where({type: "layer"});
+        var
+            currentIDX = 0,
+            aLayerModels = this.where({type: "layer"});
 
         _.each(aLayerModels, function (oLayerModel, iIndex) {
             if (_.isUndefined(oLayerModel.get("layer")) === false) {
-                oLayerModel.setSelectionIDX(iIndex);
+                oLayerModel.setSelectionIDX(currentIDX++);
             }
         }, this);
         this.sortLayersVisually();
