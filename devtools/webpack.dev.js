@@ -2,7 +2,7 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    proxies = require("lgv-config/proxyconf.json"),
+    proxies = require("./proxyconf.json"),
     _ = require("underscore");
 
 module.exports = function (env, args) {
@@ -31,13 +31,12 @@ module.exports = function (env, args) {
                         publicPath: "../../node_modules/bootstrap/fonts"
                     }
                 },
-                // alle anderen Schriftarten werden von lgv-config gelesen
+                // alle anderen Schriftarten
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
-                        name: "[name].[ext]",
-                        publicPath: "../../node_modules/lgv-config/css/woffs"
+                        name: "[name].[ext]"
                     }
                 }
             ]
