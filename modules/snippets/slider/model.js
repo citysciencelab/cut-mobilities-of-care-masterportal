@@ -36,6 +36,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         this.listenTo(this.get("valuesCollection"), {
             "change:value": function (model, value) {
                 this.triggerValuesChanged(model, value);
+            },
+            "updateDOMSlider": function () {
+                this.trigger("updateDOMSlider", this.getSelectedValues().values);
             }
         });
     },
