@@ -66,8 +66,8 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     },
 
     /**
-     * Call the updateValueModel function and/or the updateMaxValueModel
-     * trigger the valueChanged event on snippetCollection in queryModel
+     * Update the internal valuesCollection and triggers event to adjust the DOM element
+     * triggers also the valueChanged event on snippetCollection in queryModel
      * @param  {number | array} snippetValues - depending on slider type
      * @returns {void}
      */
@@ -81,6 +81,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         else {
             this.get("valuesCollection").at(0).setValue(snippetValues);
         }
+        this.trigger("updateDOMSlider", snippetValues);
     },
 
     /**
