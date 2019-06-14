@@ -142,8 +142,8 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     setCesiumTime: function (datetime) {
         let julianDate;
 
-        if (typeof(Cesium) != "undefined") {
-            julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());   
+        if (typeof Cesium !== "undefined") {
+            julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
             Radio.trigger("Map", "setShadowTime", julianDate);
         }
     },
