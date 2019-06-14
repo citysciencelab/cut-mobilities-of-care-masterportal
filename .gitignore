@@ -29,4 +29,8 @@ npm-debug.log
 .vscode
 build
 /jsdoc
+<<<<<<< HEAD
 lintfixed.html
+=======
+devtools/proxyconf.json
+>>>>>>> add proxyconf to gitignore
