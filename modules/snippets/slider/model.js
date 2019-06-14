@@ -10,7 +10,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @constructs
      * @property {boolean} editableValueBox=true Flag to show input or label
      * @property {float} step=1 Increment step of the slider
-     * @property {float | array} preselectedValues Initial value. Use array to have a range slider.
+     * @property {float | array} [preselectedValues] Initial value. Use array to have a range slider.
      * @property {float} precision=3 The number of digits shown after the decimal.
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
