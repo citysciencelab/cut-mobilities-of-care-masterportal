@@ -2,7 +2,7 @@
 	"Portalconfig": {
 		"portalTitle": {
 			"title": "Basic - Portal",
-			"logo": "/lgv-config/img/hh-logo.png",
+			"logo": "./ressources/img/hh-logo.png",
 			"link": "https://geoinfo.hamburg.de",
 			"tooltip": "Landesbetrieb Geoinformation und Vermessung"
 		},
@@ -21,7 +21,7 @@
 			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
 		},
 		"mapView": {
-			"backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+			"backgroundImage": "./ressources/img/backgroundCanvas.jpeg",
 			"startCenter": [561210, 5932600],
 			"extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
 			"zoomLevel": 1
