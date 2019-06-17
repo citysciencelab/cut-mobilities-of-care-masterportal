@@ -30,12 +30,17 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
                 this.updateOverlayer(parentModel);
                 this.setMaxHeightForSelectedLayer();
             },
-            "updateSelection": function (model) {
+            "updateSelection": function () {
                 this.trigger("updateLightTree");
-                this.renderSelectedList(model);
+                this.renderSelectedList();
             },
             "renderTree": function () {
                 this.render();
+            }
+        });
+        this.listenTo(Radio.channel("Map"), {
+            "change": function () {
+                this.renderSelectedList();
             }
         });
         this.renderMain();
@@ -78,6 +83,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
     renderSelectedList: function () {
 
         var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
+            currentMap = Radio.request("Map", "getMapMode"),
             selectedModels;
 
         $("#SelectedLayer").html("");
@@ -85,6 +91,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
             selectedModels = this.collection.where({isSelected: true, type: "layer"});
             selectedModels = selectedModels.filter(model => model.get("name") !== "Oblique");
 
+            selectedModels = _.filter(selectedModels, function (model) {
+                return model.get("supported").includes(currentMap);
+            });
             selectedModels = _.sortBy(selectedModels, function (model) {
                 return model.get("selectionIDX");
             });
