@@ -144,11 +144,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "change": function (mode) {
                 if (this.get("supported").indexOf(mode) >= 0) {
                     if (this.get("isVisibleInMap")) {
-                        this.get("layer").setVisible(true);
+                        this.setVisible(true);
                     }
                 }
-                else if (this.get("layer") !== undefined) {
-                    this.get("layer").setVisible(false);
+                else if (this.isLayerValid()) {
+                    this.setVisible(false);
                 }
             }
         });
@@ -293,7 +293,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
     },
     /**
-     * Adds or removes layer from map, depending on attribte isSelected
+     * Adds or removes layer from map, depending on attribute isSelected
      * @returns {void}
      */
     toggleLayerOnMap: function () {
@@ -373,6 +373,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Checks if the layer has been setup and a layer object exist
+     * @returns {Boolean} -
+     */
+    isLayerValid: function () {
+        return this.get("layer") !== undefined;
+    },
+
+    /**
      * Calls Collection function moveModelDown
      * @return {void}
      */
@@ -440,7 +448,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setIsVisibleInMap: function (value) {
         this.set("isVisibleInMap", value);
-        this.get("layer").setVisible(value);
+        this.setVisible(value);
     },
 
     /**
@@ -553,6 +561,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
         this.setIsVisibleInMap(false);
         this.collection.removeLayerById(layer);
+    },
+
+    /**
+     * Setter for the layer visiblity
+     * @param {Boolean} value new visibility value
+     * @returns {void} -
+     */
+    setVisible: function (value) {
+        this.get("layer").setVisible(value);
     }
 });
 
