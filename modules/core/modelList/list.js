@@ -1041,6 +1041,20 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     refreshLightTree: function () {
         this.trigger("updateLightTree");
+    },
+
+    /**
+     * returns all layers of this collection, which can be sorted like WMS, usw.
+     * @returns {Array<Layer>} list of layers which can be sorted visibly
+     */
+    getIndexedLayers: function () {
+        return this.filter(function (model) {
+            return model.get("type") === "layer" &&
+                model.get("typ") !== "Terrain3D" &&
+                model.get("typ") !== "TileSet3D" &&
+                model.get("typ") !== "Entities3D" &&
+                model.get("typ") !== "Oblique";
+        });
     }
 });
 

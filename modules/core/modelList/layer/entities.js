@@ -3,7 +3,8 @@ import Layer from "./model";
 const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
-        showSettings: false
+        showSettings: false,
+        selectionIDX: -1
     }),
     /**
      * @description Class to render Cesium Entities

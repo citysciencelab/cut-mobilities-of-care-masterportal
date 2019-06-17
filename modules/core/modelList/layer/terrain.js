@@ -3,7 +3,8 @@ import Layer from "./model";
 const TerrainLayer = Layer.extend({
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
-        showSettings: false
+        showSettings: false,
+        selectionIDX: -1
     }),
     initialize: function () {
         this.listenToOnce(this, {
