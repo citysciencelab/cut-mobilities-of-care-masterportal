@@ -182,7 +182,9 @@ const Measure = Tool.extend({
             "valuesChanged": function () {
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
-                this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+                if (!this.getIsDrawn()) {
+                    this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+                }
                 this.setUnit(selectedUnit.values[0]);
             }
         });
@@ -677,6 +679,10 @@ const Measure = Tool.extend({
 
     setIsDrawn: function (value) {
         this.set("isDrawn", value);
+    },
+
+    getIsDrawn: function () {
+        return this.get("isDrawn");
     },
 
     /*
