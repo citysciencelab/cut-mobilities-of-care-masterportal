@@ -123,7 +123,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.listenToOnce(this, {
                 // LayerSource is created on first select
                 "change:isSelected": function () {
-                    if (_.isUndefined(this.get("layerSource"))) {
+                    if (!this.isLayerSourceValid()) {
                         this.prepareLayerObject();
                     }
                 }
@@ -381,6 +381,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Checks if the layerSource has been setup and a layersource object exist
+     * @returns {Boolean} -
+     */
+    isLayerSourceValid: function () {
+        return !_.isUndefined(this.get("layerSource"));
+    },
+
+    /**
      * Calls Collection function moveModelDown
      * @return {void}
      */
@@ -564,7 +572,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for the layer visiblity
+     * Setter for the layer visibility
      * @param {Boolean} value new visibility value
      * @returns {void} -
      */
