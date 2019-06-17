@@ -485,6 +485,10 @@ const map = Backbone.Model.extend({
             channel = Radio.channel("Map"),
             layersCollection = this.get("map").getLayers();
 
+        // if the layer is already at the correct position, do nothing
+        if (layersCollection.item(index) === layer) {
+            return;
+        }
         layersCollection.remove(layer);
         layersCollection.insertAt(index, layer);
         this.setImportDrawMeasureLayersOnTop(layersCollection);
