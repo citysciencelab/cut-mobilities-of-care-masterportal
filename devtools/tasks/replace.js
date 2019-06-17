@@ -11,7 +11,8 @@ module.exports = function (destination) {
         "files": destination + "/index.html",
         "from": /\/*(\.+\/)*build/g,
         "to": "."
-    }, {
+    },
+    {
         "files": destination + "/css/style.css",
         "from": /css\/woffs/g,
         "to": "./woffs"
@@ -33,7 +34,7 @@ module.exports = function (destination) {
     });
 
     replacements.forEach(function (replacement) {
-        replace.sync({
+        var rep = replace.sync({
             files: replacement.files,
             from: replacement.from,
             to: replacement.to
