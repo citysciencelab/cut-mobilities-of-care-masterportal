@@ -1,9 +1,22 @@
+/* eslint-disable no-sync */
+/* eslint-disable global-require */
 const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    proxies = require("./proxyconf.json"),
+    fs = require("fs"),
     _ = require("underscore");
+
+
+var proxies;
+
+if (fs.existsSync("./proxyconf.json")) {
+    proxies = require("./proxyconf.json");
+}
+else {
+    proxies = require("./proxyconf_example.json")
+}
+
 
 module.exports = function (env, args) {
     const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
