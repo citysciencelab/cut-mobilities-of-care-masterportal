@@ -1,0 +1,8 @@
+{
+  "/geodienste_hamburg_de": {
+    "target": "http://geodienste.hamburg.de",
+    "pathRewrite": {
+      "^/geodienste_hamburg_de": ""
+    }
+  }
+}
