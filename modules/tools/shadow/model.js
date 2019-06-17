@@ -77,13 +77,13 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
             "change:isShadowEnabled": this.switchShadowEnabledButton
         });
         Radio.on("Map", "change", function (map) {
-            if (map === "2D") {
-                this.setIsMap3d(false);
-                this.setIsShadowEnabled(false);
-            }
-            else {
+            if (map === "3D") {
                 this.setIsMap3d(true);
                 this.setIsShadowEnabled(this.checkIsShadowEnabled());
+            }
+            else {
+                this.setIsMap3d(false);
+                this.setIsShadowEnabled(false);
             }
         }.bind(this));
     },
