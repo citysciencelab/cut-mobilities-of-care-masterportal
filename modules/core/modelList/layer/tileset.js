@@ -1,102 +1,56 @@
 import Layer from "./model";
 import {getTilesetStyle} from "./tilesetHelper";
 
-const TileSetLayer = Layer.extend({
+const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
+    /**
+     * @class TileSetLayer
+     * @description Class to represent a cesium TileSet Layer
+     * @extends Layer
+     * @constructs
+     * @memberOf Core.ModelList.Layer
+     * @property {Object} [vectorStyle="undefined"] vectorStyle
+     */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
-        showSettings: false
         showSettings: false,
         selectionIDX: -1
     }),
     initialize: function () {
-        this.listenToOnce(this, {
-            // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-            "change:isSelected": function () {
-                if (this.has("tileSet") === false) {
-                    this.createTileSet();
+        Layer.prototype.initialize.apply(this);
+
+        this.listenToOnce(Radio.channel("Map"), {
+            "change": function (map) {
+                if (map === "3D") {
+                    this.toggleLayerOnMap();
                 }
             }
         });
-        this.listenTo(Radio.channel("Layer"), {
-            "updateLayerInfo": function (name) {
-                if (this.get("name") === name && this.get("layerInfoChecked") === true) {
-                    this.showLayerInformation();
+    },
+
+    /**
+     * adds the tileset to the cesiumScene
+     * @returns {void} -
+     * @override
+     */
+    toggleLayerOnMap: function () {
+        if (Radio.request("Map", "isMap3d") === true) {
+            const map3d = Radio.request("Map", "getMap3d"),
+                tileset = this.get("tileSet");
+
+            if (this.get("isSelected") === true) {
+                if (!map3d.getCesiumScene().primitives.contains(tileset)) {
+                    map3d.getCesiumScene().primitives.add(tileset);
                 }
-            },
-            "setLayerInfoChecked": function (layerInfoChecked) {
-                this.setLayerInfoChecked(layerInfoChecked);
-            }
-        });
-
-        this.listenTo(this, {
-            "change:isVisibleInMap": function () {
-                // triggert das Ein- und Ausschalten von Layern
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
-                this.toggleLayerOnMap();
-                this.toggleAttributionsInterval();
-            }
-        });
-
-        this.listenTo(Radio.channel("Map"), {
-            "change": function (mode) {
-                if (mode === "3D") {
-                    this.setIsSelected(true);
-                }
-                else {
-                    this.setIsSelected(false);
-                }
-            }
-        });
-        //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
-        //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
-        //  selectionIDX benötigen, um verschoben werden zu können
-        if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-
-            this.createTileSet();
-
-            if (this.get("isSelected")) {
-                this.listenToOnce(Radio.channel("Map"), {
-                    // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                    "activateMap3d": function () {
-                        this.toggleLayerOnMap(this.get("isSelected"));
-                    }
-                });
             }
         }
     },
 
     /**
-     * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-     * Abhängig vom Attribut "isSelected"
-     * @returns {void}
+     * prepares the layer Object for the rendering, in this case creates the cesium Tileset
+     * @returns {void} -
+     * @override
      */
-    toggleLayerOnMap: function () {
-        var map3d,
-            tileset;
-
-        if (Radio.request("Map", "isMap3d") === true) {
-            map3d = Radio.request("Map", "getMap3d");
-            tileset = this.get("tileSet");
-
-            if (this.get("isVisibleInMap") === true) {
-                if (!map3d.getCesiumScene().primitives.contains(tileset)) {
-                    map3d.getCesiumScene().primitives.add(tileset);
-
-                    if (this.get("vectorStyle")) {
-                        this.setVectorStyle(this.get("vectorStyle"));
-                    }
-                }
-                else {
-                    tileset.show = true;
-                }
-            }
-            else {
-                tileset.show = false;
-            }
-        }
-    },
-
-    createTileSet: function () {
+    prepareLayerObject: function () {
         var options;
 
         if (this.has("tileSet") === false) {
@@ -106,17 +60,48 @@ const TileSetLayer = Layer.extend({
             }
             options.url = this.get("url") + "/tileset.json";
             this.setTileSet(new Cesium.Cesium3DTileset(options));
+
+            if (this.get("vectorStyle")) {
+                this.setVectorStyle(this.get("vectorStyle"));
+            }
         }
     },
 
     /**
-     * Setter für Attribut "isVisibleInMap"
-     * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
-     * @param {boolean} value -
+     * Register interaction with map view. (For Tileset Layer this is not necessary)
      * @returns {void}
+     * @override
      */
-    setIsVisibleInMap: function (value) {
-        this.set("isVisibleInMap", value);
+    // eslint-disable-next-line no-empty-function
+    registerInteractionMapViewListeners: function () {
+    },
+
+    /**
+     * Is not yet supported
+     * @return {void} -
+     * @override
+     */
+    // eslint-disable-next-line no-empty-function
+    updateLayerTransparency: function () {
+    },
+
+
+    /**
+     * overrides original, checks for the tileset
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerValid: function () {
+        return this.get("tileset") !== undefined;
+    },
+
+    /**
+     * overrides original, checks for the tileset
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerSourceValid: function () {
+        return !_.isUndefined(this.get("tileset"));
     },
 
     /**
@@ -140,6 +125,16 @@ const TileSetLayer = Layer.extend({
             tileSet = this.get("tileSet");
 
         tileSet.style = style;
+    },
+
+    /**
+     * Setter for the layer visibility
+     * @param {Boolean} value new visibility value
+     * @returns {void} -
+     * @override
+     */
+    setVisible: function (value) {
+        this.get("tileSet").show = value;
     }
 });
 

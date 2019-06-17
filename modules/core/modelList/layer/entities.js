@@ -9,82 +9,47 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     /**
      * @description Class to render Cesium Entities
      * @class EntitiesLayer
-     * @extends Core.ModelList.Layer.Layer
+     * @extends Layer
      * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Object} entities
-     * @listens Map#RadioTriggerMapChange
-     * @fires ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
-     * @fires Parser#RadioRequestParserGetTreeType
-     * @fires Map#RadioRequestIsMap3d
-     * @fires Map#RadioRequestGetMap3d
      */
     initialize: function () {
-        this.listenToOnce(this, {
-            "change:isSelected": function () {
-                this.toggleLayerOnMap();
-            }
-        });
-        this.listenTo(this, {
-            "change:isVisibleInMap": function () {
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
-                this.toggleLayerOnMap();
-            }
-        });
+        Layer.prototype.initialize.apply(this);
 
-        this.listenTo(Radio.channel("Map"), {
-            "change": function (mode) {
-                if (mode === "3D") {
-                    this.setIsSelected(true);
-                }
-                else {
-                    this.setIsSelected(false);
+        this.listenToOnce(Radio.channel("Map"), {
+            "change": function (map) {
+                if (map === "3D") {
+                    this.toggleLayerOnMap();
                 }
             }
         });
-        if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-            if (Radio.request("Map", "isMap3d") === true) {
-                this.toggleLayerOnMap();
-            }
-            else {
-                this.listenToOnce(Radio.channel("Map"), {
-                    "change": function (value) {
-                        if (value === "3D") {
-                            this.toggleLayerOnMap();
-                        }
-                    }
-                });
-            }
-        }
     },
 
     /**
      * toggles the layer and creates the necessary resources and adds it to the 3d map
      * @returns {void} -
+     * @override
      */
     toggleLayerOnMap: function () {
         if (Radio.request("Map", "isMap3d") === true) {
             const map3d = Radio.request("Map", "getMap3d"),
-                datasource = this.getCustomDatasource();
+                datasource = this.get("customDatasource");
 
-            if (!map3d.getDataSources().contains(datasource)) {
-                map3d.getDataSources().add(datasource);
-            }
-
-            if (this.get("isVisibleInMap") === true) {
-                datasource.show = true;
-            }
-            else {
-                datasource.show = false;
+            if (this.get("isSelected") === true) {
+                if (!map3d.getDataSources().contains(datasource)) {
+                    map3d.getDataSources().add(datasource);
+                }
             }
         }
     },
 
     /**
-     * returns the customDatasource, if if does not exists, it will be created
-     * @returns {Cesium.CustomDataSource} -
+     * prepares the layer Object for the rendering, in this case creates the cesium CustomDatasource
+     * @returns {void} -
+     * @override
      */
-    getCustomDatasource: function () {
+    prepareLayerObject: function () {
         if (!this.has("customDatasource")) {
             this.set("customDatasource", new Cesium.CustomDataSource());
             if (this.has("entities")) {
@@ -93,7 +58,6 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
                 entities.forEach(this.addEntityFromOptions, this);
             }
         }
-        return this.get("customDatasource");
     },
 
     /**
@@ -172,7 +136,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
             model: modelOptions
         };
 
-        entity = this.getCustomDatasource().entities.add(entityOptions);
+        entity = this.get("customDatasource").entities.add(entityOptions);
         entity.attributes = attributes;
         entity.allowPicking = allowPicking;
         entity.layerReferenceId = this.get("id");
@@ -180,13 +144,50 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     },
 
     /**
-     * Overrides setter from Parent Class
-     * Setter for isVisibleInMap and setter for layer.setVisible
-     * @param {Boolean} value Flag if layer is visible in Map
+     * Register interaction with map view. (For Tileset Layer this is not necessary)
      * @returns {void}
+     * @override
      */
-    setIsVisibleInMap: function (value) {
-        this.set("isVisibleInMap", value);
+    // eslint-disable-next-line no-empty-function
+    registerInteractionMapViewListeners: function () {
+    },
+
+    /**
+     * Is not yet supported
+     * @return {void} -
+     * @override
+     */
+    // eslint-disable-next-line no-empty-function
+    updateLayerTransparency: function () {
+    },
+
+
+    /**
+     * overrides original, checks for the customDatasource
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerValid: function () {
+        return this.get("customDatasource") !== undefined;
+    },
+
+    /**
+     * overrides original, checks for the customDatasource
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerSourceValid: function () {
+        return !_.isUndefined(this.get("customDatasource"));
+    },
+
+    /**
+     * Setter for the layer visibility
+     * @param {Boolean} value new visibility value
+     * @returns {void} -
+     * @override
+     */
+    setVisible: function (value) {
+        this.get("customDatasource").show = value;
     }
 });
 
