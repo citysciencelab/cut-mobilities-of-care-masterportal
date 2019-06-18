@@ -2,11 +2,26 @@ var replace = require("replace-in-file"),
     sourceFile = require("../../package.json"),
     replacements = [];
 
-module.exports = function (environment, destination) {
-    replacements.push({
+module.exports = function (environment, destination, deepness = 2) {
+    var lgvConfigRegex = /\/*(\.+\/)*lgv-config/g,
+        lgvConfigReplacement = "lgv-config";
+
+    while (deepness--) {
+        lgvConfigReplacement = "../"+lgvConfigReplacement;
+    }
+
+    ["index.html", "css/style.css", "config.js", "config.json"].forEach((file) => {
+        replacements.push({
+            "files": destination+"/"+file,
+            "from": lgvConfigRegex,
+            "to": lgvConfigReplacement
+        });
+    });
+    replacements.push(
+    {
         "files": destination + "/index.html",
-        "from": /..\/..\/build\//g,
-        "to": "./"
+        "from": /\/*(\.+\/)*build/g,
+        "to": "."
     },
     {
         "files": destination + "/css/style.css",
@@ -14,29 +29,9 @@ module.exports = function (environment, destination) {
         "to": "./woffs"
     },
     {
-        "files": destination + "/css/style.css",
-        "from": /\/lgv-config/g,
-        "to": "../../lgv-config"
-    },
-    {
         "files": destination + "/config.js",
         "from": "$Version",
         "to": sourceFile.version
-    },
-    {
-        "files": destination + "/config.js",
-        "from": /\/lgv-config/g,
-        "to": "../../lgv-config"
-    },
-    {
-        "files": destination + "/config.json",
-        "from": /\/lgv-config/g,
-        "to": "../../lgv-config"
-    },
-    {
-        "files": destination + "/index.html",
-        "from": /\/lgv-config/g,
-        "to": "../../lgv-config"
     });
 
     if (environment === "Internet") {
@@ -74,12 +69,5 @@ module.exports = function (environment, destination) {
             from: replacement.from,
             to: replacement.to
         });
-
-        if (rep.length > 0) {
-            console.warn("Successfully replaced '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
-        }
-        else {
-            console.warn("Could not replace '" + replacement.from + "' in Files '" + replacement.files + "' to '" + replacement.to + "!");
-        }
     });
 };
