@@ -118,6 +118,7 @@ const Measure = Tool.extend({
         clickListener: {},
         textPoint: {},
         scale: -1,
+        style: "DEFAULT",
         "glyphicon": "glyphicon-resize-full"
     }),
 
@@ -125,6 +126,9 @@ const Measure = Tool.extend({
         var selectedValues,
             selectedUnit;
 
+        if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
+            this.setStyle("TABLE");
+        }
         this.superInitialize();
 
         this.listenTo(Radio.channel("Map"), {
@@ -683,6 +687,10 @@ const Measure = Tool.extend({
 
     getIsDrawn: function () {
         return this.get("isDrawn");
+    },
+
+    setStyle: function (value) {
+        this.set("style", value);
     },
 
     /*

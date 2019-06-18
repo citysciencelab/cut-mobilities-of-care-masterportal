@@ -1,5 +1,4 @@
-import DefaultTemplate from "text-loader!./default/template.html";
-import TableTemplate from "text-loader!./table/template.html";
+import Template from "text-loader!./template.html";
 import SnippetDropdownView from "../../snippets/dropdown/view";
 
 const MeasureView = Backbone.View.extend({
@@ -20,13 +19,13 @@ const MeasureView = Backbone.View.extend({
             this.render(this.model, true);
         }
     },
+    template: _.template(Template),
     render: function (model, value) {
-        var template;
+        var attr = this.model.toJSON();
 
         if (value) {
-            template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
             this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(template(model.toJSON()));
+            this.$el.html(this.template(attr));
             this.$el.find(".dropdown_geometry").append(this.snippetDropdownViewGeometry.render().el);
             this.$el.find(".dropdown_unit").append(this.snippetDropdownViewUnit.render().el);
             this.delegateEvents();
