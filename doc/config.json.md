@@ -1835,7 +1835,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werde WMS typische Attribute aufgelistet.
+Hier werden WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1873,6 +1873,117 @@ Hier werde WMS typische Attribute aufgelistet.
 ```
 
 ***
+
+#### Themenconfig.Layer.Tileset
+
+[inherits]: # (Themenconfig.Layer)
+
+Hier werden Tileset typische Attribute aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|[cesium3DTilesetOptions]|nein|Object||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
+
+[cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
+
+**Beispiel**
+```
+#!json
+{
+    "id": "123456",
+    "name": "TilesetLayerName",
+    "visibility": true,
+    "cesium3DTilesetOptions" : {
+        maximumScreenSpaceError : 6
+    },
+}
+```
+
+***
+
+#### Themenconfig.Layer.Terrain
+
+[inherits]: # (Themenconfig.Layer)
+
+Hier werden Terrain typische Attribute aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|[cesiumTerrainProviderOptions]|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+
+[cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
+
+**Beispiel**
+```
+#!json
+{
+    "id": "123456",
+    "name": "TerrainLayerName",
+    "visibility": true,
+    "cesiumTerrainProviderOptions": {
+        "requestVertexNormals" : true
+    },
+}
+```
+
+***
+
+#### Themenconfig.Layer.Entitites3D
+
+[inherits]: # (Themenconfig.Layer)
+
+Hier werden Entities3D typische Attribute aufgelistet.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|entities|ja|Array||Modelle, die angezeigt werden sollen |`[]`|
+
+Entity Optionen
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|url|ja|String|`""`|Url zu dem Modell|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
+|attributes|nein|Object|{}|Attribute für das Modell|`{"name": "test"}`|
+|latitude|ja|Number| |Breitengrad des Modell-Origins in Grad|`53.541831`|
+|longitude|ja|Number| |Längengrad des Modell-Origins in Grad|`9.917963`|
+|height|nein|Number|0|Höhe des Modell-Origins|`10`|
+|heading|nein|Number|0|Rotation des Modells, in Grad|`0`|
+|pitch|nein|Number|0|Neigung des Modells in Grad |`0`|
+|roll|nein|Number|0|Roll des Modells in Grad|`0`|
+|scale|nein|Number|1|Skalierung des Modells|`1`|
+|allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI)|`true`|
+|show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein)|`true`|
+
+
+**Beispiel**
+```
+#!json
+{
+    "id": "123456",
+    "name": "EntitiesLayerName",
+    "visibility": true,
+    "entities": [
+       {
+         "url": "https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb",
+         "attributes": {
+           "name": "Fernsehturm.kmz"
+         },
+         "latitude": 53.541831,
+         "longitude": 9.917963,
+         "height": 10,
+         "heading": -1.2502079000000208,
+         "pitch": 0,
+         "roll": 0,
+         "scale": 5,
+         "allowPicking": true,
+         "show": true
+       }
+     ]
+}
+```
+
+***
+
 #### Themenconfig.Layer.StaticImage
 
 [inherits]: # (Themenconfig.Layer)

@@ -226,7 +226,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall TileSet |`"TileSet"`|
+|typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
 |vectorStyle|nein|Objekt||Vektor Style Definition für 3D Tiles Vektor Datensatz||
 |[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
@@ -272,7 +272,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       "id" : "buildings",
       "name" : "Gebäude",
       "url" : "https://geodienste.hamburg.de/b3dm_hamburg_lod2",
-      "typ" : "Tileset",
+      "typ" : "Tileset3D",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "ignore",
@@ -297,7 +297,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
    }
 ```
 
-## Terrain Quantized Mesh Dataset ##
+## Terrain3D Quantized Mesh Dataset ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -306,7 +306,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall Terrain |`"Terrain"`|
+|typ|ja|String||Diensttyp, in diesem Fall Terrain3D |`"Terrain3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/terrain"`|
 |[cesiumTerrainProviderOptions]|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
 
@@ -321,7 +321,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       "id" : "buildings",
       "name" : "Terrain",
       "url" : "https://geodienste.hamburg.de/terrain",
-      "typ" : "Tileset",
+      "typ" : "Terrain3D",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "ignore",
