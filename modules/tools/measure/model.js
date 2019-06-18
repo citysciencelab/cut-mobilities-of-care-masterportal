@@ -682,7 +682,18 @@ const Measure = Tool.extend({
     },
 
     setIsDrawn: function (value) {
+        var dropdownmenu,
+            button;
+
+        dropdownmenu = document.querySelector(".dropdown_geometry");
+        button = dropdownmenu.querySelector("button");
         this.set("isDrawn", value);
+        if (value) {
+            button.setAttribute("disabled", "disabled");
+        }
+        else {
+            button.removeAttribute("disabled");
+        }
     },
 
     getIsDrawn: function () {
