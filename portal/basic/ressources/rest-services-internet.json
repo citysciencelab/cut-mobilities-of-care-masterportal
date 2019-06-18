@@ -18,60 +18,10 @@
     "typ" : "URL"
   },
   {
-    "id" : "7",
-    "name" : "Routing Service VIOM",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
-  },
-  {
-    "id" : "4",
-    "name" : "BKG Geokodierungsdienst Suggest",
-    "url" : "/bkg_suggest",
-    "typ" : "GDZ"
-  },
-  {
-    "id" : "5",
-    "name" : "BKG Geokodierungsdienst Geosearch",
-    "url" : "/bkg_geosearch",
-    "typ" : "GDZ"
-  },
-  {
-    "id" : "6",
-    "name" : "Hamburg Gazetteer",
-    "url" : "/geodienste_hamburg_de/HH_WFS_DOG?service=WFS&request=GetFeature&version=2.0.0",
-    "typ" : "WFS"
-  },
-  {
-    "id" : "8",
-    "name" : "Hamburg Gazetteer",
-    "url" : "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
-    "typ" : "WFS"
-  },
-  {
     "id" : "10",
     "name" : "OSM Suche",
     "url" : "https://nominatim.openstreetmap.org/search?",
     "typ" : "WFS"
-  },
-  {
-    "id" : "1001",
-    "name" : "Deegree WPS RZ2 Produktion",
-    "url" : "https://geodienste.hamburg.de/HH_WPS",
-    "version": "1.1.0",
-    "typ" : "WPS"
-  },
-  {
-    "id" : "1002",
-    "name" : "Deegree WPS RZ2 Test",
-    "url" : "https://geodienste.hamburg.de/HH_WPS_Test",
-    "typ" : "WPS"
-  },
-  {
-    "id" : "80001",
-    "name" : "Email Service by PHP",
-    "url" : "https://test.geoportal-hamburg.de/smtp/sendmail.php",
-    "typ" : "EmailService"
   },
   {
     "id" : "80002",
@@ -86,27 +36,9 @@
     "typ" : "PrintService"
   },
   {
-    "id" : "99998",
-    "name" : "Print Service Test",
-    "url" : "https://geoportaltest.metropolregion.hamburg.de/mapfish_print_2.0",
-    "typ" : "PrintService"
-  },
-  {
-    "id": "mapfish_qs",
-    "name": "Print Service QS",
-    "url": "https://geoportaltest.metropolregion.hamburg.de/mapfish_print/print/",
-    "typ": "Print"
-  },
-  {
     "id": "mapfish",
     "name": "Print Service Prod",
     "url": "https://geoportal.metropolregion.hamburg.de/mapfish_print/print/",
     "typ": "Print"
-  },
-  {
-    "id": "elastic",
-    "name": "Elastic Prod",
-    "url": "https://geodienste.hamburg.de/layers-internet/_search",
-    "typ": "Search"
   }
 ]
