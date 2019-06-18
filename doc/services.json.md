@@ -228,39 +228,9 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
 |typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
-|vectorStyle|nein|Objekt||Vektor Style Definition für 3D Tiles Vektor Datensatz||
 |[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
-
-**Beispiel VectorStyle Object:**
-```
-{
-     "image": {
-         "src": "badminton.png",
-         "fill": {
-             "color": [255, 0, 255, 0.4]
-         },
-         "stroke": {
-             "width": 2
-         },
-         "radius": 15
-     },
-     "stroke": {
-         "color": [255, 0, 0, 1],
-         "width": 1.25
-     },
-     "fill": {
-         "color": [0, 255, 255, 1]
-     },
-     "text": {
-         "font": "bold 18px sans-serif",
-         "textBaseline": "top",
-         "offsetY": -15,
-         "offsetX": 0
-     }
- }
-```
 
 **Beispiel Tileset:**
 
