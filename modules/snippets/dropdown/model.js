@@ -1,7 +1,13 @@
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
-const DropdownModel = SnippetModel.extend({
+const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
+    /**
+     * @class DropdownModel
+     * @extends SnippetModel
+     * @memberof Snippets.DropDown
+     * @constructs
+     */
     defaults: {
         // true if the dropdown is open
         isOpen: false,

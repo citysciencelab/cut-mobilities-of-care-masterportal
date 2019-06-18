@@ -1,7 +1,13 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-select";
 
-const DropdownView = Backbone.View.extend({
+const DropdownView = Backbone.View.extend((/** @lends DropdownView.prototype */{
+    /**
+     * @class DropdownView
+     * @extends Backbone.View
+     * @memberof Snippets.Dropdown
+     * @constructs
+     */
     events: {
         // This event fires after the select's value has been changed
         "changed.bs.select": "updateSelectedValues",
