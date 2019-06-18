@@ -297,10 +297,10 @@ describe("tools/print_/buildSpec", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
         });
         it("should create default hex string from empty rgbArray", function () {
-            expect(buildSpecModel.rgbArrayToHex([])).to.deep.include("#000000");
+            expect(buildSpecModel.rgbArrayToHex([])).to.deep.include("#3399CC");
         });
         it("should create default hex string from undefined rgbArray", function () {
-            expect(buildSpecModel.rgbArrayToHex(undefined)).to.deep.include("#000000");
+            expect(buildSpecModel.rgbArrayToHex(undefined)).to.deep.include("#3399CC");
         });
         it("should create hex string from rgbArray with transparency", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
