@@ -50,7 +50,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * @class PrintModel
      * @extends Tool
-     * @memberof print_
+     * @memberof Tools.Print
      * @constructs
      * @property {String} filename="report" - Output filename
      * @property {undefined} mapfishServiceId=undefined - id from rest service json for mapfish app

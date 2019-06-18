@@ -68,7 +68,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * @class HighResolutionPrintModel
      * @extends Tool
-     * @memberof print_
+     * @memberof Tools.Print
      * @constructs
      * @property {Array} layoutList=[] - Array for all available layouts from plot service
      * @property {undefined} currentLayout=undefined - Holder for the current selected layout
