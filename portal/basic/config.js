@@ -14,11 +14,11 @@ const Config = {
         ]
     },
     quickHelp: {
-        imgPath: "/lgv-config/img/"
+        imgPath: "./ressources/img/"
     },
     layerConf: "./ressources/services-internet.json",
-    restConf: "./ressources//rest-services-internet.json",
-    styleConf: "./ressources//style_v2.json",
+    restConf: "./ressources/rest-services-internet.json",
+    styleConf: "./ressources/style_v2.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
