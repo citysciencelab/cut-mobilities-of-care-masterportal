@@ -145,9 +145,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 // triggert das Ein- und Ausschalten von Layern
                 Radio.trigger("ClickCounter", "layerVisibleChanged");
                 Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
-                this.toggleLayerOnMap();
                 this.toggleWindowsInterval();
                 this.toggleAttributionsInterval();
+            },
+            "change:isSelected": function () {
+                this.collection.initModelIndex(this);
+                this.toggleLayerOnMap();
             },
             "change:transparency": this.updateLayerTransparency
         });
@@ -241,6 +244,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.setIsVisibleInMap(false);
         }
         else {
+            this.setIsSelected(true);
             this.setIsVisibleInMap(true);
         }
     },

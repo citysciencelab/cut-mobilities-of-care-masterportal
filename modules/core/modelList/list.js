@@ -123,7 +123,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
-                this.sortLayersVisually();
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isExpanded": function (model) {
@@ -570,26 +569,50 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // Trigger for mobile
         this.trigger("changeSelectedList");
 
-        this.sortLayersVisually();
+        this.sortLayersAndSetIndex();
     },
 
     /**
-     * Sorts map layers (in map) according to their selectionIDX property values. Actually this should be
-     * done using open layers layer zIndex property.
-     * @todo use open layers zIndex prop instead
+     * Sorts the given layers by selectionIDX
+     * @param   {ol.Collection} layers layers collection
+     * @returns {ol.Collection} layers sorted layers
+     */
+    sortLayersBySelectionIDX: function (layers) {
+        return layers.slice().sort(function (layer1, layer2) {
+            return layer1.get("selectionIDX") > layer2.get("selectionIDX") ? 1 : -1;
+        });
+    },
+
+    /**
+     * Sorts map layers according to their selectionIDX property values and sets their zIndex. All layers must already be inserted to the layer collection.
+     * @fires Map#RadioTriggerMapSetLayerToIndex
      * @return {void}
      */
-    sortLayersVisually: function () {
-        var layers = this.where({type: "layer"}),
-            layersCopy = layers.slice().sort(function (layer1, layer2) {
-                return layer1.get("selectionIDX") > layer2.get("selectionIDX") ? 1 : -1;
-            });
+    sortLayersAndSetIndex: function () {
+        const layers = this.where({type: "layer"}),
+            layersCopy = this.sortLayersBySelectionIDX(layers);
+
+        _.each(layersCopy, function (layer) {
+            if (_.isUndefined(layer.get("layer")) === false) {
+                Radio.trigger("Map", "setLayerToIndex", layer.get("layer"), layer.get("selectionIDX"));
+            }
+        }, this);
+    },
+
+    /**
+     * Sorts map layers according to their selectionIDX property values and adds them to the layer collection of ol.map
+     * @fires Map#RadioTriggerMapAddLayerToIndex
+     * @return {void}
+     */
+    sortLayersAndAddToCollection: function () {
+        const layers = this.where({type: "layer"}),
+            layersCopy = this.sortLayersBySelectionIDX(layers);
 
         _.each(layersCopy, function (layer) {
             if (_.isUndefined(layer.get("layer")) === false) {
                 Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
             }
-        }, this);
+        }, this);        
     },
 
     /**
@@ -631,7 +654,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // Trigger for mobile
         this.trigger("changeSelectedList");
 
-        this.sortLayersVisually();
+        this.sortLayersAndSetIndex();
     },
 
     /**
@@ -649,8 +672,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
             oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
-
-        this.sortLayersVisually();
+        this.sortLayersAndAddToCollection();
     },
 
     /**
