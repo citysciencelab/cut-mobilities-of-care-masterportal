@@ -437,13 +437,23 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {void}
      */
     addFeatureToGeoJsonList: function (feature, geojsonList) {
+        let convertedFeature;
+
         if (feature.get("features") !== undefined) {
             feature.get("features").forEach(function (clusteredFeature) {
-                geojsonList.push(this.convertFeatureToGeoJson(clusteredFeature));
+                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
+
+                if (convertedFeature) {
+                    geojsonList.push(convertedFeature);
+                }
             }, this);
         }
         else {
-            geojsonList.push(this.convertFeatureToGeoJson(feature));
+            convertedFeature = this.convertFeatureToGeoJson(feature);
+
+            if (convertedFeature) {
+                geojsonList.push(convertedFeature);
+            }
         }
     },
 
@@ -453,13 +463,19 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {object} GeoJSON object
      */
     convertFeatureToGeoJson: function (feature) {
-        var geojsonFormat = new GeoJSON();
+        var geojsonFormat = new GeoJSON(),
+            convertedFeature;
 
         // circle is not suppported by geojson
         if (feature.getGeometry().getType() === "Circle") {
             feature.setGeometry(fromCircle(feature.getGeometry()));
         }
-        return geojsonFormat.writeFeatureObject(feature);
+        convertedFeature = geojsonFormat.writeFeatureObject(feature);
+
+        if (feature.getGeometry().getCoordinates().length === 0) {
+            convertedFeature = undefined;
+        }
+        return convertedFeature;
     },
 
     /**
