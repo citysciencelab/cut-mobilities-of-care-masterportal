@@ -542,7 +542,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelDown: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
             iMin = 1,
             affectedModel;
@@ -564,21 +564,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // swap layers
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
-
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelDown(model);
-            return;
-        }
 
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
@@ -618,7 +603,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelUp: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
             iMin = 0,
             affectedModel;
@@ -641,21 +626,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
 
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelUp(model);
-            return;
-        }
-
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
         // Trigger for mobile
@@ -669,7 +639,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     initModelIndeces: function () {
-        var allLayerModels = this.where({type: "layer", isSelected: true}),
+        var allLayerModels = this.where({type: "layer"}),
             baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
             layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
             combinedLayers = [];
