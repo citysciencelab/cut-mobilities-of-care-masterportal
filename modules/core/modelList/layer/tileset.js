@@ -9,6 +9,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @constructs
      * @memberOf Core.ModelList.Layer
      * @property {Object} [vectorStyle="undefined"] vectorStyle
+     * @listens Map#event:RadioTriggerMapChange
      */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
@@ -18,7 +19,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     initialize: function () {
         Layer.prototype.initialize.apply(this);
 
-        this.listenToOnce(Radio.channel("Map"), {
+        this.listenTo(Radio.channel("Map"), {
             "change": function (map) {
                 if (map === "3D") {
                     this.toggleLayerOnMap();
