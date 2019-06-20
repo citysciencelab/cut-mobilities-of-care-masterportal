@@ -138,7 +138,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     model.setIsVisibleInMap(value);
                     this.sortLayersVisually();
                     if (value === false) {
-                        model.setSelectionIDX(0);
+                        model.setSelectionIDX(false);
                     }
                 }
                 this.trigger("updateSelection");
@@ -496,32 +496,29 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {integer} the index number, which has been associated to the model
      */
     initModelIndex: function (model) {
-        var aLayerModels = this.where({type: "layer"}),
-            iResultIndex = 0,
-            iMaxIndex = 0;
+        var allLayerModels = this.where({type: "layer", isSelected: true}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
         if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
-            return model.get("selectionIDX");
+            return;
         }
 
-        _.each(aLayerModels, function (oLayerModel) {
-            if (oLayerModel === model) {
-                return;
-            }
-            if (oLayerModel.get("selectionIDX") > iMaxIndex) {
-                iMaxIndex = oLayerModel.get("selectionIDX");
-            }
+        if (baseLayerModels.includes(model)) {
+            baseLayerModels.splice(baseLayerModels.indexOf(model), 1);
+            baseLayerModels.push(model);
+        }
+        else {
+            layerModels.splice(layerModels.indexOf(model), 1);
+            layerModels.push(model);
+        }
+
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
-
-        iResultIndex = iMaxIndex + 1;
-
-        model.setSelectionIDX(iResultIndex);
-
-        console.log(model);
-        console.log(iResultIndex);
-
-
-        return iResultIndex;
     },
 
     /**
