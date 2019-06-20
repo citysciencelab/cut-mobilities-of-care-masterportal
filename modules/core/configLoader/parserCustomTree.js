@@ -23,6 +23,9 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @returns {void}
      */
     parseTree: function (object, parentId, level) {
+        // TODO: This value is NOT reliable when using simple tree!
+        var isBaseLayer = (parentId === "Baselayer" || "tree") ? true : false;
+
         if (_.has(object, "Layer")) {
             _.each(object.Layer, function (layer) {
                 var objFromRawList,
@@ -83,27 +86,30 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 }
 
                 // HVV :(
+
                 if (_.has(layerExtended, "styles") && layerExtended.styles.length >= 1) {
                     _.each(layerExtended.styles, function (style, index) {
                         this.addItem(_.extend({
-                            type: "layer",
-                            parentId: parentId,
-                            name: layerExtended.name[index],
                             id: layerExtended.id + style,
-                            styles: layerExtended.styles[index],
+                            isBaseLayer: isBaseLayer,
+                            isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
                             legendURL: layerExtended.legendURL[index],
                             level: level,
-                            isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                            name: layerExtended.name[index],
+                            parentId: parentId,
+                            styles: layerExtended.styles[index],
+                            type: "layer"
                         }, _.omit(layerExtended, "id", "name", "styles", "legendURL")));
                     }, this);
                 }
                 else {
                     this.addItem(_.extend({
-                        type: "layer",
-                        parentId: parentId,
-                        level: level,
                         format: "image/png",
-                        isVisibleInTree: this.getIsVisibleInTree(level, "folder", true)
+                        isBaseLayer: isBaseLayer,
+                        isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
+                        level: level,
+                        parentId: parentId,
+                        type: "layer"
                     }, layerExtended));
                 }
             }, this);
