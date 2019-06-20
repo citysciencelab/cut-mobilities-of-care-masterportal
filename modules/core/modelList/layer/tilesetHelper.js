@@ -1,6 +1,11 @@
 var default3DTileStyleValues;
 
 /**
+ * @module tilesetHelper
+ * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
+ */
+
+/**
  * @type {ol.Color}
  */
 const whiteColor = [255, 255, 255, 1],
@@ -9,7 +14,7 @@ const whiteColor = [255, 255, 255, 1],
      */
     blackColor = [0, 0, 0, 1],
     /**
-     * @type {vcs.vcm.util.style.VectorStyleItem.Options}
+     * @type {Object}
      */
     defaultVectorStyleItemOptions = {
         image: {
@@ -41,7 +46,6 @@ const whiteColor = [255, 255, 255, 1],
      * @property {number} POLYGON
      * @property {number} POLYLINE
      * @property {number} POINT
-     * @memberOf vcs.vcm.util.style.VectorStyleItem.olcsGeometryType
      */
     olcsGeometryType = {
         POLYGON: 1,
@@ -72,9 +76,9 @@ export function hexToOlColor (h, opacity) {
 }
 
 /**
+ * parse Color method
  * @param {ol.Color|ol.ColorLike|Array<number>} color -
- * @return {ol.Color} -
- * @export
+ * @returns {ol.Color} -
  */
 export function parseColor (color) {
     if (Array.isArray(color)) {
@@ -106,6 +110,7 @@ export function parseColor (color) {
 }
 
 /**
+ * returns a color string in the form rgba(255,255,255,0)
  * @param {ol.Color|Array<number>|ol.ColorLike} color -
  * @return {string} -
  * @export
@@ -151,7 +156,13 @@ export function getDefaultCondition (attribute, isColor) {
     ];
 }
 
-
+/**
+ * sets the color condition for the Cesium3DTileStyle
+ * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
+ * @param {Object} vcsStyle vcs Styling Object
+ * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @returns {void} -
+ */
 export function setCesiumStyleColor (vcsStyle, style) {
     const colorConditions = getDefaultCondition("olcs_color", true);
     let strokeColor = defaultVectorStyleItemOptions.stroke.color,
@@ -178,6 +189,13 @@ export function setCesiumStyleColor (vcsStyle, style) {
     };
 }
 
+/**
+ * sets the scale, pointOutlineWidth, pointOutlineColor, pointSize, image, verticalOrigin, horizontalOrigin conditions for the Cesium3DTileStyle
+ * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
+ * @param {Object} vcsStyle vcs Styling Object
+ * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @returns {void} -
+ */
 export function setCesiumStyleImage (vcsStyle, style) {
     const scaleConditions = getDefaultCondition("olcs_scale"),
         pointOutlineWidthConditions = getDefaultCondition("olcs_outlineWidth"),
@@ -222,6 +240,13 @@ export function setCesiumStyleImage (vcsStyle, style) {
     style.horizontalOrigin = "0";
 }
 
+/**
+ * sets font conditions for the Cesium3DTileStyle
+ * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
+ * @param {Object} vcsStyle vcs Styling Object
+ * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @returns {void} -
+ */
 export function setCesiumStyleText (vcsStyle, style) {
     const fontConditions = getDefaultCondition("olcs_font"),
         labelTextConditions = getDefaultCondition("olcs_labelText"),
