@@ -73,18 +73,19 @@ const BuildSpecModel = Backbone.Model.extend({
      */
     buildLayers: function (layerList) {
         var layers = [],
-            attributes = this.get("attributes");
+            attributes = this.get("attributes"),
+            currentResolution = Radio.request("MapView", "getOptions").resolution;
 
         layerList.forEach(function (layer) {
             var printLayers = [];
 
             if (layer instanceof Group) {
                 _.each(layer.getLayers().getArray(), function (childLayer) {
-                    printLayers.push(this.buildLayerType(childLayer));
+                    printLayers.push(this.buildLayerType(childLayer, currentResolution));
                 }, this);
             }
             else {
-                printLayers.push(this.buildLayerType(layer));
+                printLayers.push(this.buildLayerType(layer, currentResolution));
             }
             _.each(printLayers, function (printLayer) {
                 if (!_.isUndefined(printLayer)) {
@@ -118,30 +119,52 @@ const BuildSpecModel = Backbone.Model.extend({
     /**
      * Rückgabe der Layerinformation nach Layertyp oder undefined
      * @param   {ol.layer}  layer   ol.Layer mit Features
+     * @param {Number} currentResolution Current map resolution
      * @returns {object}            Layerinfos zum drucken
      */
-    buildLayerType: function (layer) {
+    buildLayerType: function (layer, currentResolution) {
         var features = [],
             extent = Radio.request("MapView", "getCurrentExtent"),
-            returnLayer;
+            returnLayer,
+            layerMinRes = layer.get("minResolution"),
+            layerMaxRes = layer.get("maxResolution"),
+            isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
 
-        if (layer instanceof Image) {
-            returnLayer = this.buildImageWms(layer);
-        }
-        else if (layer instanceof Tile) {
-            returnLayer = this.buildTileWms(layer);
-        }
-        else if (layer.get("name") === "import_draw_layer") {
-            returnLayer = this.getDrawLayerInfo(layer, extent);
-        }
-        else if (layer instanceof Vector) {
-            features = layer.getSource().getFeaturesInExtent(extent);
-            if (features.length > 0) {
-                returnLayer = this.buildVector(layer, features);
+        if (isInScaleRange) {
+            if (layer instanceof Image) {
+                returnLayer = this.buildImageWms(layer);
             }
+            else if (layer instanceof Tile) {
+                returnLayer = this.buildTileWms(layer);
+            }
+            else if (layer.get("name") === "import_draw_layer") {
+                returnLayer = this.getDrawLayerInfo(layer, extent);
+            }
+            else if (layer instanceof Vector) {
+                features = layer.getSource().getFeaturesInExtent(extent);
+                if (features.length > 0) {
+                    returnLayer = this.buildVector(layer, features);
+                }
+            }
+            return returnLayer;
+        }
+    },
+
+    /**
+     * Checks if layer is in the visible resolution range.
+     * @param {Number} layerMinRes Maximum resolution of layer.
+     * @param {Number} layerMaxRes Minimum resolution of layer.
+     * @param {Number} currentResolution Current map resolution.
+     * @returns {Boolean} - Flag if layer is in visible resolution.
+     */
+    isInScaleRange: function (layerMinRes, layerMaxRes, currentResolution) {
+        let isInScale = false;
+
+        if (layerMinRes <= currentResolution && layerMaxRes >= currentResolution) {
+            isInScale = true;
         }
 
-        return returnLayer;
+        return isInScale;
     },
 
     /**

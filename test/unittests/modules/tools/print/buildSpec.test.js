@@ -263,6 +263,27 @@ describe("tools/print_/buildSpec", function () {
         });
 
     });
+    describe("inInScaleRange", function () {
+        it("Should return false if current resolution is higher than layer max resolution", function () {
+            expect(buildSpecModel.isInScaleRange(1000, 5000, 10000)).to.be.false;
+        });
+        it("Should return false if current resolution is lower than layer min resolution", function () {
+            expect(buildSpecModel.isInScaleRange(2500, 5000, 1000)).to.be.false;
+        });
+        it("Should return true if current resolution is lower than layer max resolution and higher than layer min resolution", function () {
+            expect(buildSpecModel.isInScaleRange(0, Infinity, 10000)).to.be.true;
+        });
+        it("Should return true if current resolution is lower than layer max resolution and higher than layer min resolution", function () {
+            expect(buildSpecModel.isInScaleRange(0, 10000, 5000)).to.be.true;
+        });
+        it("Should return true if current resolution the layer max resolution", function () {
+            expect(buildSpecModel.isInScaleRange(0, 5000, 5000)).to.be.true;
+        });
+        it("Should return true if current resolution the layer min resolution", function () {
+            expect(buildSpecModel.isInScaleRange(1000, 5000, 1000)).to.be.true;
+        });
+
+    });
     describe("addZero", function () {
         it("should create hex string part with leading 0 if input length === 1", function () {
             expect(buildSpecModel.addZero("A")).to.deep.include("0A");
