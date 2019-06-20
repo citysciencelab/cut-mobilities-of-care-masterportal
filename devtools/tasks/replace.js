@@ -34,6 +34,8 @@ module.exports = function (environment, destination, deepness = 2) {
         "to": sourceFile.version
     });
 
+    // WARUM?
+    /*
     if (environment === "Internet") {
         replacements.push({
             "files": destination + "/config.js",
@@ -42,7 +44,7 @@ module.exports = function (environment, destination, deepness = 2) {
         },
         {
             "files": destination + "/config.js",
-            "from": /services-fhhnet-ALL/g,
+            "from": /services-fhhnet-ALL/gi,
             "to": "services-internet"
         },
         {
@@ -63,6 +65,7 @@ module.exports = function (environment, destination, deepness = 2) {
             "to": "services-fhhnet"
         });
     }
+    */
     replacements.forEach(function (replacement) {
         var rep = replace.sync({
             files: replacement.files,

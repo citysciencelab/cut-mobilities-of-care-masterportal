@@ -4,10 +4,10 @@ const fs = require("fs-extra"),
 
 function copyFiles (source, destination, environment) {
     fs.copy(source, destination).then(() => {
-        console.warn("Successfully Copied '" + source + "' to '" + destination + "' !");
+        console.warn("NOTICE: Successfully Copied '" + source + "' to '" + destination + "' !");
         fs.copy("./dist/build", destination).then(() => {
             fs.remove("./dist/build").catch(err => console.error(err));
-            console.warn("Successfully moved './dist/build' to '" + destination + "' !");
+            console.warn("NOTICE: Successfully moved './dist/build' to '" + destination + "' !");
             replaceStrings(environment, destination);
         }).catch(err => console.error(err));
     }).catch(err => console.error(err));
@@ -18,7 +18,7 @@ function removeFiles (answers) {
         source = "./" + answers.portalPath;
 
     fs.remove(destination).then(() => {
-        console.warn("Successfully deleted '" + destination + "' directory");
+        console.warn("NOTICE: Successfully deleted '" + destination + "' directory");
         copyFiles(source, destination, answers.environment);
     });
 }
@@ -33,7 +33,9 @@ module.exports = function buildWebpack (answers) {
     else {
         command = "webpack --config devtools/webpack.prod.js";
     }
-    console.warn("webpack startet...");
+    console.warn("NOTICE: webpack startet...");
+    console.log("NOTICE: executing command " + command);
+
     execute(command)
         .then(function (result) {
             console.warn(result.stdout);
