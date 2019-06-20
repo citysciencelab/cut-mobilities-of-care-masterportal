@@ -26,17 +26,16 @@ describe("core/modelList/layer/entities", function () {
         entitiesLayer = new EntitiesLayerModel({
             entities: entityOptions
         });
+        entitiesLayer.prepareLayerObject();
     });
 
-    describe("getCustomDatasource", function () {
+    describe("prepareLayerObject", function () {
         it("should create Datasource", function () {
-            const datasource = entitiesLayer.getCustomDatasource();
-
-            expect(datasource).to.be.an.instanceof(Cesium.CustomDataSource);
+            expect(entitiesLayer.get("customDatasource")).to.be.an.instanceof(Cesium.CustomDataSource);
         });
 
         it("should add the provided entities to the datasource", function () {
-            const datasource = entitiesLayer.getCustomDatasource();
+            const datasource = entitiesLayer.get("customDatasource");
 
             expect(datasource).to.be.an.instanceof(Cesium.CustomDataSource);
             expect(datasource.entities.values).to.have.length(1);
@@ -46,7 +45,7 @@ describe("core/modelList/layer/entities", function () {
     describe("addEntityFromOptions", function () {
         it("should return a Cesium Entity", function () {
             const entity = entitiesLayer.addEntityFromOptions(entityOptions[0]),
-                datasource = entitiesLayer.getCustomDatasource();
+                datasource = entitiesLayer.get("customDatasource");
 
             expect(entity).to.be.an.instanceof(Cesium.Entity);
             expect(datasource.entities.values).to.have.length(2);
@@ -54,7 +53,7 @@ describe("core/modelList/layer/entities", function () {
 
         it("should add the entity to the datasource collection", function () {
             const entity = entitiesLayer.addEntityFromOptions(entityOptions[0]),
-                datasource = entitiesLayer.getCustomDatasource(),
+                datasource = entitiesLayer.get("customDatasource"),
                 contains = datasource.entities.contains(entity);
 
             expect(datasource.entities.values).to.have.length(2);
