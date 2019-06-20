@@ -336,7 +336,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             layerAttribution: "nicht vorhanden",
             supported: ["2D", "3D"],
             legendURL: "",
-            isbaselayer: false,
+            isBaseLayer: false,
             cache: false,
             datasets: []
         };
@@ -364,7 +364,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             gfiAttributes: "showAll",
             layerAttribution: "nicht vorhanden",
             legendURL: "",
-            isbaselayer: false,
+            isBaseLayer: false,
             isSelected: true,
             isVisibleInTree: true,
             cache: false,
