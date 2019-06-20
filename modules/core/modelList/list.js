@@ -123,8 +123,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
-                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
                 this.sortLayersVisually();
+                channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isExpanded": function (model) {
                 this.trigger("updateOverlayerView", model.get("id"));
@@ -135,9 +135,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
-            "change:isSelected": function (model) {
+            "change:isSelected": function (model, value) {
                 if (model.get("type") === "layer") {
-                    model.setIsVisibleInMap(model.get("isSelected"));
+                    model.setIsVisibleInMap(value);
+                    this.sortLayersVisually();
+                    if (value === false) {
+                        model.setSelectionIDX(false);
+                    }
                 }
                 this.trigger("updateSelection");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -502,25 +506,29 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {integer} the index number, which has been associated to the model
      */
     initModelIndex: function (model) {
-        var aLayerModels = this.where({type: "layer"}),
-            iResultIndex = 0,
-            iMaxIndex = 0;
+        var allLayerModels = this.where({type: "layer", isSelected: true}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
         if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
-            return model.get("selectionIDX");
+            return;
         }
 
-        _.each(aLayerModels, function (oLayerModel) {
-            if (oLayerModel.get("selectionIDX") > iMaxIndex) {
-                iMaxIndex = oLayerModel.get("selectionIDX");
-            }
+        if (baseLayerModels.includes(model)) {
+            baseLayerModels.splice(baseLayerModels.indexOf(model), 1);
+            baseLayerModels.push(model);
+        }
+        else {
+            layerModels.splice(layerModels.indexOf(model), 1);
+            layerModels.push(model);
+        }
+
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
-
-        iResultIndex = iMaxIndex + 1;
-
-        model.setSelectionIDX(iResultIndex);
-
-        return iResultIndex;
     },
 
     /**
@@ -534,7 +542,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelDown: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
             iMin = 1,
             affectedModel;
@@ -556,21 +564,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // swap layers
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
-
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelDown(model);
-            return;
-        }
 
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
@@ -610,7 +603,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelUp: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
             iMin = 0,
             affectedModel;
@@ -633,21 +626,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
 
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelUp(model);
-            return;
-        }
-
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
         // Trigger for mobile
@@ -657,20 +635,21 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Iterates over the models in the selection index and sets the attribute selectionIDX
-     * for each model based on their index in the array
+     * sets the attribute selectionIDX for each model based on their index in the array
      * @return {void}
      */
     initModelIndeces: function () {
-        var
-            currentIDX = 1,
-            aLayerModels = this.where({type: "layer"});
+        var allLayerModels = this.where({type: "layer"}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
-        _.each(aLayerModels, function (oLayerModel) {
-            if (_.isUndefined(oLayerModel.get("layer")) === false) {
-                oLayerModel.setSelectionIDX(currentIDX++);
-            }
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
+
         this.sortLayersVisually();
     },
 
