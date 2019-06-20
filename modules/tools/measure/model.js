@@ -688,6 +688,7 @@ const Measure = Tool.extend({
         dropdownmenu = document.querySelector(".dropdown_geometry");
         button = dropdownmenu.querySelector("button");
         this.set("isDrawn", value);
+        /* wird geprüft, ob es gemessen wird, falls ja, wird dropdown menu für Geometry ausgegraut*/
         if (value) {
             button.setAttribute("disabled", "disabled");
         }

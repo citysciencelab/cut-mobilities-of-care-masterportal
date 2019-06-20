@@ -87,7 +87,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     },
     /**
      * updateCollection
-     * @param  {string} value - selected value
+     * @param  {array} value - selected value
      * @return {void}
      */
     updateValues: function (value) {
