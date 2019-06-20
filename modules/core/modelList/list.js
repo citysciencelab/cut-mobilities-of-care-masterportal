@@ -123,7 +123,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
-                this.sortLayersVisually();
             },
             "change:isExpanded": function (model) {
                 this.trigger("updateOverlayerView", model.get("id"));
@@ -134,9 +133,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
-            "change:isSelected": function (model) {
+            "change:isSelected": function (model, value) {
                 if (model.get("type") === "layer") {
-                    model.setIsVisibleInMap(model.get("isSelected"));
+                    model.setIsVisibleInMap(value);
+                    this.sortLayersVisually();
+                    if (value === false) {
+                        model.setSelectionIDX(0);
+                    }
                 }
                 this.trigger("updateSelection");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -502,6 +505,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
 
         _.each(aLayerModels, function (oLayerModel) {
+            if (oLayerModel === model) {
+                return;
+            }
             if (oLayerModel.get("selectionIDX") > iMaxIndex) {
                 iMaxIndex = oLayerModel.get("selectionIDX");
             }
@@ -510,6 +516,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         iResultIndex = iMaxIndex + 1;
 
         model.setSelectionIDX(iResultIndex);
+
+        console.log(model);
+        console.log(iResultIndex);
+
 
         return iResultIndex;
     },
