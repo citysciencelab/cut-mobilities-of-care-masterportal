@@ -123,6 +123,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
+                this.sortLayersVisually();
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isExpanded": function (model) {
@@ -664,20 +665,21 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Iterates over the models in the selection index and sets the attribute selectionIDX
-     * for each model based on their index in the array
+     * sets the attribute selectionIDX for each model based on their index in the array
      * @return {void}
      */
     initModelIndeces: function () {
-        var
-            currentIDX = 1,
-            aLayerModels = this.where({type: "layer"});
+        var allLayerModels = this.where({type: "layer", isSelected: true}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
-        _.each(aLayerModels, function (oLayerModel) {
-            if (_.isUndefined(oLayerModel.get("layer")) === false) {
-                oLayerModel.setSelectionIDX(currentIDX++);
-            }
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
+
         this.sortLayersVisually();
     },
 
