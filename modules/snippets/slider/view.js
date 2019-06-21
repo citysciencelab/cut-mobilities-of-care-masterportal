@@ -58,7 +58,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
     initSlider: function () {
         const valueModels = this.model.get("valuesCollection").models,
             step = this.model.get("step"),
-            preselectedValue = this.model.get("preselectedValues") ? this.model.get("preselectedValues") : valueModels[0].get("initValue"),
+            selectedValue = valueModels[0].get("value") ? valueModels[0].get("value") : valueModels[0].get("initValue"),
             precision = this.model.get("precision");
 
         this.$el.find("input.slider").slider({
@@ -66,7 +66,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
             max: valueModels[1].get("initValue"),
             step: step,
             precision: precision,
-            value: preselectedValue
+            value: selectedValue
         });
     },
 
