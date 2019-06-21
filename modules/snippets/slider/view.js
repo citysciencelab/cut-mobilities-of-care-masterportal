@@ -67,7 +67,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
             max: valueModels[1].get("initValue"),
             step: step,
             precision: precision,
-            value: selectedValue
+            value: selectedValue,
             selection: selection
         });
     },
