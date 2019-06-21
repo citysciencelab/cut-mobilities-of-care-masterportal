@@ -1,6 +1,13 @@
 import Layer from "./model";
 import {getTilesetStyle} from "./tilesetHelper";
 
+/**
+ * @type {symbol}
+ */
+var lastUpdatedSymbol = Symbol("_lastUpdated");
+
+export {lastUpdatedSymbol};
+
 const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     /**
      * @class TileSetLayer
@@ -26,6 +33,19 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 }
             }
         });
+
+        /** @type {Object<string, Set<(Cesium.Cesium3DTileFeature|ol.Feature)>>} */
+        this.hiddenObjects = {};
+
+        /** @type {number} */
+        this.featureVisibilityLastUpdated = Date.now();
+
+        /** @type {number} */
+        this.styleLastUpdated = Date.now();
+
+        if (this.has("hiddenFeatures")) {
+            this.hideObjects(this.get("hiddenFeatures"));
+        }
     },
 
     /**
@@ -52,7 +72,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        var options;
+        var options, tileset;
 
         if (this.has("tileSet") === false) {
             options = {};
@@ -60,11 +80,17 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 _.extend(options, this.get("cesium3DTilesetOptions"));
             }
             options.url = this.get("url") + "/tileset.json";
-            this.setTileSet(new Cesium.Cesium3DTileset(options));
+            tileset = new Cesium.Cesium3DTileset(options);
+            this.setTileSet(tileset);
 
             if (this.get("vectorStyle")) {
                 this.setVectorStyle(this.get("vectorStyle"));
             }
+
+            tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
+            tileset.tileUnload.addEventListener((tile) => {
+                delete tile[lastUpdatedSymbol];
+            });
         }
     },
 
@@ -116,6 +142,116 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         this.set("tileSet", value);
     },
 
+
+    /**
+     * is called if a tile visibility event is called from the cesium tileset. Checks for Content Type and calls
+     * styleContent
+     * @param {tile} tile CesiumTile
+     * @returns {void} -
+     */
+    applyStyle: function (tile) {
+        if (tile.content instanceof Cesium.Composite3DTileContent) {
+            for (let i = 0; i < tile.content.innerContents.length; i++) {
+                this.styleContent(tile.content.innerContents[i]);
+            }
+        }
+        else {
+            this.styleContent(tile.content);
+        }
+    },
+
+    /**
+     * sets the current LayerStyle on the CesiumTilesetFeatures in the Tile.
+     * @param {Cesium.Cesium3DTileContent} content -
+     * @return {void} -
+     */
+    styleContent: function (content) {
+        if (
+            !content[lastUpdatedSymbol] ||
+            content[lastUpdatedSymbol] < this.featureVisibilityLastUpdated ||
+            content[lastUpdatedSymbol] < this.styleLastUpdated
+        ) {
+            const batchSize = content.featuresLength;
+
+            for (let batchId = 0; batchId < batchSize; batchId++) {
+                const feature = content.getFeature(batchId);
+
+                if (feature) {
+                    let id = feature.getProperty("id");
+
+                    if (!id) {
+                        id = `${content.url}${batchId}`;
+                    }
+
+                    if (this.hiddenObjects[id]) {
+                        this.hiddenObjects[id].add(feature);
+                        feature.show = false;
+                    }
+                }
+            }
+            content[lastUpdatedSymbol] = Date.now();
+        }
+    },
+
+    /**
+     * checks if a feature is still valid and not already destroyed
+     * @param {Cesium.Cesium3DTileFeature|Cesium.Cesium3DTilePointFeature} feature -
+     * @return {boolean} -
+     */
+    featureExists (feature) {
+        return feature &&
+            feature.content &&
+            !feature.content.isDestroyed() &&
+            !feature.content.batchTable.isDestroyed();
+    },
+
+    /**
+     * hides a number of objects
+     * @param {Array<string>} toHide A list of Object Ids which will be hidden
+     * @return {void} -
+     */
+    hideObjects (toHide) {
+        let dirty = false;
+
+        toHide.forEach((id) => {
+            if (!this.hiddenObjects[id]) {
+                this.hiddenObjects[id] = new Set();
+                dirty = true;
+            }
+        });
+        if (dirty) {
+            this.featureVisibilityLastUpdated = Date.now();
+        }
+    },
+
+    /**
+     * unHides a number of objects
+     * @param {Array<string>} unHide A list of Object Ids which will be unHidden
+     * @return {void} -
+     */
+    showObjects (unHide) {
+        unHide.forEach((id) => {
+            if (this.hiddenObjects[id]) {
+                this.hiddenObjects[id].forEach((f) => {
+                    if (f instanceof Cesium.Cesium3DTileFeature || f instanceof Cesium.Cesium3DTilePointFeature) {
+                        if (this.featureExists(f)) {
+                            f.show = true;
+                        }
+                    }
+                });
+                delete this.hiddenObjects[id];
+            }
+        });
+    },
+
+    /**
+     * clears all the hidden objects
+     * @return {void} -
+     */
+    clearHiddenObjects () {
+        this.showObjects(Object.keys(this.hiddenObjects));
+    },
+
     /**
      * sets a vcsStyle Object to the tileset
      * @param {Object} vcsStyle -
@@ -126,6 +262,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             tileSet = this.get("tileSet");
 
         tileSet.style = style;
+        this.styleLastUpdated = Date.now();
+        this.featureVisibilityLastUpdated = Date.now();
     },
 
     /**

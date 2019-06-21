@@ -226,6 +226,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|hiddenFeatures|nein|Array||Liste mit IDs, die in der Ebene versteckt werden sollen|`["id_1", "id_2"]`|
 |typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
 |[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
@@ -246,6 +247,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "ignore",
+      "hiddenFeatures": ["id1", "id2"],
       "cesium3DTilesetOptions" : {
         maximumScreenSpaceError : 6
       },

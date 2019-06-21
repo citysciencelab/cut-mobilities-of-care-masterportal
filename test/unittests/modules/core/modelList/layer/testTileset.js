@@ -1,11 +1,13 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import TilesetLayerModel from "@modules/core/modelList/layer/tileset.js";
 import List from "@modules/core/modelList/list.js";
+import TilesetLayerModel, {lastUpdatedSymbol} from "@modules/core/modelList/layer/tileset.js";
+import {createDummyCesium3DTileContent} from "./getDummyCesiumClasses";
 
 describe("core/modelList/layer/tileset", function () {
     var tilesetLayer,
-        scene;
+        scene,
+        clock;
 
     beforeEach(function () {
         tilesetLayer = new TilesetLayerModel({});
@@ -26,6 +28,7 @@ describe("core/modelList/layer/tileset", function () {
             }
             return null;
         });
+        clock = sinon.useFakeTimers(Date.now());
     });
 
     afterEach(function () {
@@ -56,6 +59,45 @@ describe("core/modelList/layer/tileset", function () {
             tilesetLayer.prepareLayerObject();
             tilesetLayer.set("isSelected", true);
             expect(scene.primitives.contains(tilesetLayer.get("tileSet"))).to.be.true;
+        });
+    });
+
+    describe("styleContent", function () {
+        it("should set lastUpdatedSymbol on the content on first call", function () {
+            const content = createDummyCesium3DTileContent({"id": "test"});
+
+            expect(content[lastUpdatedSymbol]).to.be.undefined;
+            tilesetLayer.styleContent(content);
+            expect(content[lastUpdatedSymbol]).to.not.be.undefined;
+        });
+
+        it("should set the feature visibility to false if the feature id is in the hiddenObjects List", function () {
+            const content = createDummyCesium3DTileContent({"id": "test"});
+
+            tilesetLayer.styleContent(content);
+            expect(content.getFeature().show).to.be.true;
+            clock.tick(1);
+            tilesetLayer.hideObjects(["test"]);
+            clock.tick(1);
+            tilesetLayer.styleContent(content);
+            expect(content.getFeature().show).to.be.false;
+        });
+    });
+
+    describe("hideObjects", function () {
+        it("add the id to the hiddenObjects and create an empty Set", function () {
+            tilesetLayer.hideObjects(["id"]);
+            expect(tilesetLayer.hiddenObjects.id).to.be.an.instanceOf(Set);
+
+        });
+    });
+
+    describe("showObjects", function () {
+        it("should remove the id from the hiddenObjects List", function () {
+            tilesetLayer.hideObjects(["id"]);
+            expect(tilesetLayer.hiddenObjects.id).to.be.an.instanceOf(Set);
+            tilesetLayer.showObjects(["id"]);
+            expect(tilesetLayer.hiddenObjects.id).to.be.undefined;
         });
     });
 });

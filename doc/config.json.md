@@ -1882,7 +1882,8 @@ Hier werden Tileset typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[cesium3DTilesetOptions]|nein|Object||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
+|hiddenFeatures|nein|Array|[]|Liste mit IDs, die in der Ebene versteckt werden sollen|
+|[cesium3DTilesetOptions]|nein|Object|{}|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
 
@@ -1893,6 +1894,7 @@ Hier werden Tileset typische Attribute aufgelistet.
     "id": "123456",
     "name": "TilesetLayerName",
     "visibility": true,
+    "hiddenFeatures": ["id1", "id2"],
     "cesium3DTilesetOptions" : {
         maximumScreenSpaceError : 6
     },
