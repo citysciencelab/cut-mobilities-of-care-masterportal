@@ -193,7 +193,12 @@ const ParametricURL = Backbone.Model.extend({
             layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
 
             if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                layerToPush = _.extend({type: "layer", parentId: "tree", isVisibleInTree: "true"}, layerExisting);
+                layerToPush = _.extend({
+                    isBaseLayer: false,
+                    isVisibleInTree: "true",
+                    parentId: "tree",
+                    type: "layer"
+                }, layerExisting);
                 Radio.trigger("Parser", "addItemAtTop", layerToPush);
             }
             else if (_.isUndefined(layerConfigured)) {
