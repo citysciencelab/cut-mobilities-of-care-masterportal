@@ -1,3 +1,16 @@
+# Changelog LGV Master-Portal 2.3.2
+
+NEU:
+  - Config: Neuer Config-Parameter "metaDataCatalogueId" in config.js; Metadatenkatalog-URL kann nun gepflegt werden
+  - Themenbaum: Neue Datenlayer werden initial immer über allen anderen Datenlayern platziert
+  - Themenbaum: Neue Hintergrundlayer werden initial immer über allen anderen Hintergrundlayern platziert
+  - Build-Script für Portale verbessert
+
+FIXES:
+  - Reihenfolge von Layern: Render-Reihenfolge von Layern im Themenbaum sowie auf der Karte war nicht immer korrekt
+  - Flurstücksuche: Bug der Zoomfunktionalität bei der Flächeninfo behoben
+
+
 # Changelog LGV Master-Portal 2.3.1
 
 NEU:
