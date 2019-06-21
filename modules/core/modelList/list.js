@@ -137,7 +137,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isSelected": function (model, value) {
                 if (model.get("type") === "layer") {
                     model.setIsVisibleInMap(value);
-                    this.sortLayersVisually();
+                    this.sortLayersAndSetIndex();
                     if (value === false) {
                         model.setSelectionIDX(false);
                     }
