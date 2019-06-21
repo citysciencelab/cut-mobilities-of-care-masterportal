@@ -47,10 +47,10 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
 
         this.$el.html(this.template(attr));
         this.initSlider();
+        this.delegateEvents();
 
         return this;
     },
-
     /**
      * init the slider
      * @returns {void}

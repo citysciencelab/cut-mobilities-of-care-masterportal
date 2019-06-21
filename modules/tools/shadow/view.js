@@ -20,6 +20,10 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     },
 
     initialize: function () {
+        this.toggleButtonView = new SnippetCheckBoxView({model: this.model.get("toggleButton")});
+        this.datepickerView = new SnippetDatepickerView({model: this.model.get("datepicker")});
+        this.timesliderView = new SnippetSliderView({model: this.model.get("timeslider")});
+        this.datesliderView = new SnippetSliderView({model: this.model.get("dateslider")});
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "toggleButtonValueChanged": this.toggleElements,
@@ -34,14 +38,19 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
      * @returns {this} this
      */
     render: function () {
-        this.setElement(document.getElementsByClassName("win-body")[0]);
-        this.$el.html(this.template({}));
-        this.$el.append(new SnippetCheckBoxView({model: this.model.get("toggleButton")}).render().el);
-        this.$el.append(new SnippetDatepickerView({model: this.model.get("datepicker")}).render().$el);
-        this.$el.append(new SnippetSliderView({model: this.model.get("timeslider")}).render().$el);
-        this.$el.append(new SnippetSliderView({model: this.model.get("dateslider")}).render().$el);
-        this.toggleElements(this.model.get("isShadowEnabled"));
-        this.delegateEvents();
+        if (this.model.get("isActive")) {
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template({}));
+            this.$el.append(this.toggleButtonView.render().el);
+            this.$el.append(this.datepickerView.render().el);
+            this.$el.append(this.timesliderView.render().el);
+            this.$el.append(this.datesliderView.render().el);
+            this.toggleElements(this.model.get("isShadowEnabled"));
+            this.delegateEvents();
+        }
+        else {
+            this.undelegateEvents();
+        }
 
         return this;
     },

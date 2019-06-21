@@ -1,3 +1,4 @@
+import Template from "text-loader!./template.html";
 import "bootstrap-datepicker";
 import "bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min";
 
@@ -12,8 +13,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
         "changeDate": "changeDate"
     },
 
-    className: "datepicker-container",
-
+    template: _.template(Template),
     /**
      * Setting listener
      * @returns {void}
@@ -30,7 +30,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
      * @returns {this} this
      */
     render: function () {
-        this.$el.html();
+        this.$el.html(this.template());
         this.initDatepicker();
         this.delegateEvents();
         return this;
@@ -43,7 +43,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     initDatepicker: function () {
         const date = this.model.get("valuesCollection").models[0];
 
-        this.$el.datepicker({
+        this.$el.find(".datepicker-container").datepicker({
             todayHighlight: true,
             language: "de",
             defaultViewDate: date.get("date"),
@@ -69,7 +69,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
      * @returns {void}
      */
     updateDOMSlider: function (value) {
-        this.$el.datepicker("update", value);
+        this.$el.find(".datepicker-container").datepicker("update", value);
     }
 });
 
