@@ -1,11 +1,6 @@
 var default3DTileStyleValues;
 
 /**
- * @module tilesetHelper
- * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
- */
-
-/**
  * @type {ol.Color}
  */
 const whiteColor = [255, 255, 255, 1],
@@ -58,6 +53,7 @@ const whiteColor = [255, 255, 255, 1],
  * @param {string} h -
  * @param {number=} opacity -
  * @return {ol.Color} -
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  * @export
  */
 export function hexToOlColor (h, opacity) {
@@ -79,6 +75,7 @@ export function hexToOlColor (h, opacity) {
  * parse Color method
  * @param {ol.Color|ol.ColorLike|Array<number>} color -
  * @returns {ol.Color} -
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  */
 export function parseColor (color) {
     if (Array.isArray(color)) {
@@ -113,6 +110,7 @@ export function parseColor (color) {
  * returns a color string in the form rgba(255,255,255,0)
  * @param {ol.Color|Array<number>|ol.ColorLike} color -
  * @return {string} -
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  * @export
  */
 export function getStringColor (color) {
@@ -145,6 +143,7 @@ default3DTileStyleValues = {
  * @param {string} attribute -
  * @param {boolean=} isColor -
  * @return {Array<Array<string>>} -
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  */
 export function getDefaultCondition (attribute, isColor) {
     const condition = `Boolean(\${${attribute}})===true`,
@@ -161,6 +160,7 @@ export function getDefaultCondition (attribute, isColor) {
  * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
  * @param {Object} vcsStyle vcs Styling Object
  * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  * @returns {void} -
  */
 export function setCesiumStyleColor (vcsStyle, style) {
@@ -194,6 +194,7 @@ export function setCesiumStyleColor (vcsStyle, style) {
  * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
  * @param {Object} vcsStyle vcs Styling Object
  * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  * @returns {void} -
  */
 export function setCesiumStyleImage (vcsStyle, style) {
@@ -245,6 +246,7 @@ export function setCesiumStyleImage (vcsStyle, style) {
  * @see https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileStyle.html
  * @param {Object} vcsStyle vcs Styling Object
  * @param {Cesium.Cesium3DTileStyle} style Cesium Style Instance
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  * @returns {void} -
  */
 export function setCesiumStyleText (vcsStyle, style) {
@@ -287,6 +289,7 @@ export function setCesiumStyleText (vcsStyle, style) {
  * is used for vector 3D Tiles Datasets.
  * @param {Object} vcsStyle -
  * @return {Cesium.cesium3DTilesetStyle} -
+ * @memberOf Core.ModelList.Layer.TilesetHelper
  */
 export function getTilesetStyle (vcsStyle) {
     const style = new Cesium.Cesium3DTileStyle({show: true});

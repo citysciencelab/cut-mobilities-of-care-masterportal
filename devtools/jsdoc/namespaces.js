@@ -842,3 +842,9 @@
  * @memberOf Backbone
  * @description {@link http://backbonejs.org/#Collection}
  */
+
+/**
+ * @namespace TilesetHelper
+ * @memberOf Core.ModelList.Layer
+ * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
+ */
