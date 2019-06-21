@@ -1,6 +1,10 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-select";
-
+/**
+ * @member Template
+ * @description Template for Dropdown Snippet
+ * @memberof Snippets.Dropdown
+ */
 const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
     /**
      * @class DropdownView
