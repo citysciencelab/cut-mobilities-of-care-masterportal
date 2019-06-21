@@ -844,7 +844,7 @@
  */
 
 /**
- * @namespace TilesetHelper
+ * @namespace Tileset
  * @memberOf Core.ModelList.Layer
  * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
  */

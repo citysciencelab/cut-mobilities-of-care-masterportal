@@ -7,7 +7,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @description Class to represent a cesium TileSet Layer
      * @extends Layer
      * @constructs
-     * @memberOf Core.ModelList.Layer
+     * @memberOf Core.ModelList.Layer.Tileset
      * @property {Object} [vectorStyle="undefined"] vectorStyle
      * @listens Map#event:RadioTriggerMapChange
      */
