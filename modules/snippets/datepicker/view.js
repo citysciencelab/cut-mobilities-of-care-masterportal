@@ -50,6 +50,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             startDate: date.get("startDate"),
             endDate: date.get("endDate")
         });
+        this.$el.find(".datepicker-container").datepicker("setDate", date.get("date"));
     },
 
     /**
