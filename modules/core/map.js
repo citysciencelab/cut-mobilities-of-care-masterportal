@@ -542,7 +542,7 @@ const map = Backbone.Model.extend({
             });
         }
         else {
-            layer.setZIndex(index);
+            layer.setZIndex(parseInt(index, 10) || 0);
         }
     },
 
