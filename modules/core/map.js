@@ -534,6 +534,7 @@ const map = Backbone.Model.extend({
      * Sets an already inserted ol.layer to the defined index using openlayers setZIndex method
      * @param {ol.Layer} layer Layer to set
      * @param {integer} [index=0] new Index
+     * @returns {void}
      */
     setLayerToIndex: function (layer, index) {
         if (layer instanceof LayerGroup) {
@@ -549,6 +550,7 @@ const map = Backbone.Model.extend({
     /**
      * Pushes 'alwaysOnTop' layers to the top of the collection
      * @param {ol.Collection} layers Layer Collection
+     * @returns {void}
      */
     setImportDrawMeasureLayersOnTop: function (layers) {
         const newIndex = layers.getLength(),

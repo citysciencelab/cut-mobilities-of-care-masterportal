@@ -612,7 +612,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             if (_.isUndefined(layer.get("layer")) === false) {
                 Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
             }
-        }, this);        
+        }, this);
     },
 
     /**
