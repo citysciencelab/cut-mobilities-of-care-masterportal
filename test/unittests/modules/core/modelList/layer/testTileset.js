@@ -43,7 +43,7 @@ describe("core/modelList/layer/tileset", function () {
     });
 
     describe("prepareLayerObject", function () {
-        it("should create Tileset", function () {            
+        it("should create Tileset", function () {
             tilesetLayer.prepareLayerObject();
 
             expect(tilesetLayer.get("tileSet")).to.be.an.instanceof(Cesium.Cesium3DTileset);
