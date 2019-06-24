@@ -4,7 +4,7 @@
     "portalTitle":
     {
       "title": "Master",
-      "logo": "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
+      "logo": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -94,7 +94,7 @@
     },
     "mapView":
     {
-      "backgroundImage": "https://geoportal-hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [561210, 5932600]
     },
     "menu":
@@ -215,7 +215,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
