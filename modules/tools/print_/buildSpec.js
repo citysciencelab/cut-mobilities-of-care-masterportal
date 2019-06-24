@@ -621,6 +621,9 @@ const BuildSpecModel = Backbone.Model.extend({
                 }, this);
             }
         }
+        console.log(isLegendSelected);
+        console.log(legendObject);
+
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
         if (isMetaDataAvailable) {

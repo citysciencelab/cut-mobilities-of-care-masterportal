@@ -33,7 +33,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         // true if the current layout supports legend
         isLegendAvailable: false,
         // true if the legend is to be printed
-        isLegendSelected: true,
+        isLegendSelected: false,
         // true if the current layout supports scale
         isScaleAvailable: false,
         // the id from the rest services json for the plot app
@@ -44,7 +44,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
         eventListener: {},
-        printLegend: false,
         legendText: "Mit Legende"
     }),
 

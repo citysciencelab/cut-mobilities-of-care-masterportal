@@ -1074,7 +1074,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |outputFilename|nein|String|"report"|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
 |gfi|nein|Boolean|false|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
 |configYAML|nein|String|"/master"|Deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|false|
-|printLegend|nein|Boolean|false|Gibt an ob die Checkbox zum Legende mitdrucken aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
+|isLegendSelected|nein|Boolean|false|Gibt an ob die Checkbox zum Legende mitdrucken aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
 **Beispiel Konfiguration mit MapfishPrint2**
 ```
