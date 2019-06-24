@@ -8,6 +8,10 @@ import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
 
+/**
+ * @class Measure
+ * @extends Tool
+ */
 const Measure = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
@@ -193,6 +197,13 @@ const Measure = Tool.extend({
             }
         });
     },
+
+    /**
+     * Setter for Status
+     * @param {object} model - Measure Model
+     * @param {boolean} value - Rückgabe eines Boolean
+     * @returns {this} this
+     */
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
             quickHelpSet = Radio.request("Quickhelp", "isSet"),
@@ -218,6 +229,12 @@ const Measure = Tool.extend({
             this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
     },
+
+    /**
+     * changes map (3D or 2D View)
+     * @param {string} map - 3D or 2D
+     * @returns {this} this
+     */
     changeMap: function (map) {
         var selectedValues;
 
@@ -239,6 +256,12 @@ const Measure = Tool.extend({
             this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values_3d"))[0]);
         }
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} obj - point with coordinates
+     * @returns {this} this
+     */
     handle3DClicked: function (obj) {
         var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             object = scene.pick(obj.position),
@@ -298,6 +321,12 @@ const Measure = Tool.extend({
             source.removeFeature(firstPoint);
         }
     },
+    /**
+     * create point feauture
+     * @param {object} coords - coordinates of point in 3D
+     * @param {void} id - undefined
+     * @returns {object} feature
+     */
     createPointFeature: function (coords, id) {
         var feature = new Feature({
             geometry: new Point(coords)
@@ -307,6 +336,13 @@ const Measure = Tool.extend({
 
         return feature;
     },
+
+    /**
+     * create line feature
+     * @param {object} firstCoord - first coordinate of the line feature
+     * @param {object} lastCoord - last coordinate of the line feature
+     * @returns {object} feature - line feature
+     */
     createLineFeature: function (firstCoord, lastCoord) {
         var feature = new Feature({
             geometry: new LineString([
@@ -317,6 +353,12 @@ const Measure = Tool.extend({
 
         return feature;
     },
+
+    /**
+     * draws the feature.
+     * @param {string} drawType - type of drawing feature (polygon or line)
+     * @returns {this} this
+     */
     createInteraction: function (drawType) {
         var that = this,
             textPoint,
@@ -351,19 +393,46 @@ const Measure = Tool.extend({
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         }
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     registerPointerMoveListener: function (context) {
         context.setPointerMoveListener(Radio.request("Map", "registerListener", "pointermove", context.moveTextPoint.bind(context)));
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     registerClickListener: function (context) {
         // "click" needed for touch devices
         context.setClickListener(Radio.request("Map", "registerListener", "click", context.moveTextPoint.bind(context)));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     unregisterPointerMoveListener: function (context) {
         Radio.trigger("Map", "unregisterListener", context.get("pointerMoveListener"));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     unregisterClickListener: function (context) {
         Radio.trigger("Map", "unregisterListener", context.get("clickListener"));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} evt - Map Browser Pointer Event
+     * @returns {this} this
+     */
     moveTextPoint: function (evt) {
         var point = this.get("textPoint"),
             geom = point.getGeometry(),
@@ -373,6 +442,13 @@ const Measure = Tool.extend({
         geom.setCoordinates(evt.coordinate);
         point.setStyle(styles);
     },
+
+    /**
+     * generates style for text in 3D view
+     * @param {number} distance - distance between two points
+     * @param {number} heightDiff - height (for 3D measure)
+     * @returns {object} styles
+     */
     generate3dTextStyles: function (distance, heightDiff) {
         var output = {},
             fill = new Fill({
@@ -418,6 +494,12 @@ const Measure = Tool.extend({
         ];
         return styles;
     },
+
+    /**
+     * generates style for text in 2D view
+     * @param {object} feature - geometry feature
+     * @returns {object} styles
+     */
     generateTextStyles: function (feature) {
         var geom = feature.getGeometry(),
             output = {},
@@ -470,6 +552,15 @@ const Measure = Tool.extend({
         ];
         return styles;
     },
+
+    /**
+     * generates text for points
+     * @param {object} feature - geometry feature
+     * @param {number} distance - distance for 3D
+     * @param {number} heightDiff - height for 3D
+     * @param {number} coords - coordinates for 3D
+     * @returns {this} pointFeature
+     */
     generateTextPoint: function (feature, distance, heightDiff, coords) {
         var geom = feature.getGeometry(),
             coord,
@@ -496,7 +587,6 @@ const Measure = Tool.extend({
         pointFeature.set("styleId", _.uniqueId());
         return pointFeature;
     },
-
     place3dMeasureTooltip: function (distance, heightDiff, position) {
         var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
 
@@ -514,14 +604,24 @@ const Measure = Tool.extend({
         this.get("measureTooltipElement").innerHTML = output;
         this.get("measureTooltip").setPosition(position);
     },
+
+    /**
+     * Setter for unit
+     * @param {string} value - m/km, m²/km²
+     * @returns {void}
+     */
     setUnit: function (value) {
         this.set("unit", value);
     },
 
+    /**
+     * Setter for Style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
     },
-
     setDecimal: function (value) {
         this.set("decimal", parseInt(value, 10));
     },
@@ -661,26 +761,56 @@ const Measure = Tool.extend({
         }
     },
 
+    /**
+     * setter for draw
+     * @param {object} value - Draw
+     * @returns {this} this
+     */
     setDraw: function (value) {
         this.set("draw", value);
     },
 
+    /**
+     * @todo Write the documentation.
+     * @param {object} value -
+     * @returns {this} this
+     */
     setPointerMoveListener: function (value) {
         this.set("pointerMoveListener", value);
     },
 
+    /**
+     * setter for click listener
+     * @param {object}value -
+     * @returns {this} this
+     */
     setClickListener: function (value) {
         this.set("clickListener", value);
     },
 
+    /**
+     * setter for text point
+     * @param {object} value -
+     * @returns {this} this
+     */
     setTextPoint: function (value) {
         this.set("textPoint", value);
     },
 
+    /**
+     * setter for scale
+     * @param {number} value -
+     * @returns {this} this
+     */
     setScale: function (value) {
         this.set("scale", value);
     },
 
+    /**
+     * setter for drawn function
+     * @param {boolean} value - true or false
+     * @returns {this} this
+     */
     setIsDrawn: function (value) {
         var dropdownmenu,
             button;
@@ -697,25 +827,46 @@ const Measure = Tool.extend({
         }
     },
 
+    /**
+     * getter for drawn function
+     * @returns {void}
+     */
     getIsDrawn: function () {
         return this.get("isDrawn");
     },
 
+    /**
+     * setter for style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
     setStyle: function (value) {
         this.set("style", value);
     },
 
-    /*
-    * setter for quickHelp
-    * @param {[type]} value quickHelp
-    * @returns {void}
-    */
+    /**
+     * setter for quickHelp
+     * @param {[type]} value quickHelp
+     * @returns {void}
+     */
     setQuickHelp: function (value) {
         this.set("quickHelp", value);
     },
+
+    /**
+     * setter for dropdown snippet geometry
+     * @param {object} value - snippet dropdown model for geometry
+     * @returns {this} this
+     */
     setDropDownSnippetGeometry: function (value) {
         this.set("snippetDropdownModelGeometry", value);
     },
+
+    /**
+     * setter for dropdown snippet unit
+     * @param {object} value - snippet dropdown model for unit
+     * @returns {this} this
+     */
     setDropDownSnippetUnit: function (value) {
         this.set("snippetDropdownModelUnit", value);
     }

@@ -2,6 +2,11 @@ import Template from "text-loader!./template.html";
 import SnippetDropdownView from "../../snippets/dropdown/view";
 
 const MeasureView = Backbone.View.extend({
+    /**
+     * @class MeasureView
+     * @extends Backbone.View
+     * @constructs
+     */
     events: {
         "click button.table-tool-measure-delete": "deleteFeatures",
         "click button.measure-delete": "deleteFeatures",
@@ -20,6 +25,13 @@ const MeasureView = Backbone.View.extend({
         }
     },
     template: _.template(Template),
+
+    /**
+     * renders the view
+     * @param {object} model - Measure Model
+     * @param {boolean} value - Rückgabe eines Boolean
+     * @returns {this} this
+     */
     render: function (model, value) {
         var attr = this.model.toJSON();
 
@@ -37,12 +49,27 @@ const MeasureView = Backbone.View.extend({
         }
         return this;
     },
+
+    /**
+     * deletes all geometries from the layer
+     * @return {void}
+     */
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },
+
+    /**
+     * removes the last drawing if it has not been completed
+     * @return {void}
+     */
     removeIncompleteDrawing: function () {
         this.model.removeIncompleteDrawing();
     },
+
+    /**
+     * logs listeners to specific events
+     * @returns {void}
+     */
     unregisterListener: function () {
         this.model.unregisterPointerMoveListener(this.model);
         this.model.unregisterClickListener(this.model);

@@ -51,7 +51,7 @@ const Config = {
     obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
-        enableLighting: false,
+        enableLighting: true,
         fog: {
             enabled: true,
             density: 0.0002,

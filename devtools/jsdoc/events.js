@@ -551,8 +551,22 @@
  */
 
 /**
- * @event Map#RadioTriggerMapUpdateSize
- * @description todo
+ * @event Map#RadioTriggerSetShadowTime
+ * @description Sets the time of the shadows in 3D mode
+ * @param {Cesium.JulianDate} Date to set
+ * @example Radio.trigger("Map", "setShadowTime", julianDate);
+ */
+
+/**
+ * @event Map#RadioRequestIsMap3d
+ * @description Event that gets the state of map mode (2D or 3D)
+ * @example Radio.request("Map", "isMap3d");
+ */
+
+/**
+ * @event Map#RadioRequestGetMap3d
+ * @description Event that gets the map3D as an object
+ * @example Radio.request("Map", "getMap3d");
  */
 
 /** -------------------- MAP VIEW -------------------- */
@@ -1155,6 +1169,13 @@
  * @description returns if the device type is mobile
  * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
  * @example Radio.request("Util", "isAny");
+ */
+
+/**
+ * @event Util#RadioRequestUtilSort
+ * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
+ * @returns {string[]} - Sorted Array
+ * @example Radio.request("Util", "sort", values);
  */
 /** -------------------- GRAPH -------------------- */
 
