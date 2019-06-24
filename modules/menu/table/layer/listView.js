@@ -9,7 +9,8 @@ const LayerView = Backbone.View.extend({
         });
         this.listenTo(this.collection, {
             "updateLightTree": function () {
-                this.render();
+                this.$el.find("ul.layers").html("");
+                this.renderList();
             }
         });
 
