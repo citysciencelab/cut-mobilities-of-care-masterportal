@@ -13,7 +13,7 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
-import Print from "../../tools/print_/Mapfish3_PlotServicel";
+import Print from "../../tools/print_/Mapfish3_PlotService";
 import HighResolutionPrint from "../../tools/print_/HighResolution_PlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";

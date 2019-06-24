@@ -50,14 +50,10 @@
     </div>
     <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
-        <% if(isMetaDataAvailable) { %>
-            <label class="col-sm-5 control-label">Mit Legende / Metadaten</label>
-        <% } else { %>
-            <label class="col-sm-5 control-label">Mit Legende</label>
-        <% } %>
+        <label class="col-sm-5 control-label"><%= legendText %></label>
         <div class="col-sm-7">
             <div class="checkbox">
-                <input id="printLegend" type="checkbox" checked>
+                <input id="printLegend" type="checkbox" <% if (printLegend) print('checked') %>>
             </div>
         </div>
     </div>

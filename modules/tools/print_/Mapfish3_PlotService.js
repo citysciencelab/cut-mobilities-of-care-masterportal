@@ -43,7 +43,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         DOTS_PER_INCH: 72,
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
-        eventListener: {}
+        eventListener: {},
+        printLegend: false,
+        legendText: "Mit Legende"
     }),
 
     /**
@@ -74,14 +76,12 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {Number} INCHES_PER_METER=39.37 - todo
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} eventListener={} - todo
+     * @property {Boolean} printLegend=false Flag if checkbox to print legend should be activated.
+     * @property {String} legendText="Mit legende" Label text for print legend checkbox
      * @listens Print#ChangeIsActive
-     * @description todo
      * @listens MapView#RadioTriggerMapViewChangedOptions
-     * @description todo
      * @listens GFI#RadioTriggerGFIIsVisible
-     * @description todo
      * @listens Print#CreatePrintJob
-     * @description todo
      */
     initialize: function () {
         var channel = Radio.channel("Print");
