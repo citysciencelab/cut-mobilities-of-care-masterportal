@@ -247,7 +247,6 @@
             "printAppId": "mrh",
             "filename": "Ausdruck",
             "title": "Mein Titel",
-            "printLegend": false,
             "legendText": "Mit Legende",
             "version" : "mapfish_print_3"
           },
