@@ -179,6 +179,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 opacity: layer.getOpacity(),
                 type: "WMS",
                 layers: source.getParams().LAYERS.split(","),
+                styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT
@@ -204,6 +205,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 opacity: layer.getOpacity(),
                 type: "WMS",
                 layers: source.getParams().LAYERS.split(","),
+                styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT
