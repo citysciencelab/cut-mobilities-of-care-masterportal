@@ -2,7 +2,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/",
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
@@ -34,14 +34,14 @@ const Config = {
         }
     },
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "https://geoportal-hamburg.de/lgv-config/services-internet.json",
-    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
+    restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
+    styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,
     scaleLine: true,
