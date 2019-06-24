@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import TilesetLayerModel from "@modules/core/modelList/layer/tileset.js";
+import List from "@modules/core/modelList/list.js";
 
 describe("core/modelList/layer/tileset", function () {
     var tilesetLayer,
@@ -42,7 +43,7 @@ describe("core/modelList/layer/tileset", function () {
     });
 
     describe("prepareLayerObject", function () {
-        it("should create Tileset", function () {
+        it("should create Tileset", function () {            
             tilesetLayer.prepareLayerObject();
 
             expect(tilesetLayer.get("tileSet")).to.be.an.instanceof(Cesium.Cesium3DTileset);
@@ -51,9 +52,9 @@ describe("core/modelList/layer/tileset", function () {
 
     describe("toggleLayerOnMap", function () {
         it("should add tileset to cesium primitiveCollection if isSelected is true", function () {
+            tilesetLayer.collection = new List();
             tilesetLayer.prepareLayerObject();
             tilesetLayer.set("isSelected", true);
-            tilesetLayer.toggleLayerOnMap();
             expect(scene.primitives.contains(tilesetLayer.get("tileSet"))).to.be.true;
         });
     });
