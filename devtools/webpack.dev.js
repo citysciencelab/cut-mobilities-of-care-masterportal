@@ -8,7 +8,7 @@ const merge = require("webpack-merge"),
     _ = require("underscore");
 
 
-var proxies;
+let proxies;
 
 if (fs.existsSync("./proxyconf.json")) {
     proxies = require("./proxyconf.json");
