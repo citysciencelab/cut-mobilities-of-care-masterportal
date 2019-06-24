@@ -4,8 +4,8 @@ import ValueModel from "../value/model";
 const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     /**
      * @class DropdownModel
-     * @extends SnippetModel
-     * @memberof Snippets.DropDown
+     * @extends Snippets
+     * @memberof Snippets.Dropdown
      * @constructs
      */
     defaults: {
@@ -60,18 +60,20 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         }));
     },
 
+    /**
+     * Returns a string ja or nein
+     * @param {string} value true or false
+     * @returns {string} ja or nein
+    */
     getDisplayName: function (value) {
         if (this.get("type") === "boolean") {
             if (value === "true") {
                 return "Ja";
             }
-
             return "Nein";
-
         }
 
         return value;
-
     },
 
     /**
@@ -85,6 +87,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
             model.set("isSelectable", true);
         }, this);
     },
+
     /**
      * updateCollection
      * @param  {array} value - selected value
@@ -102,6 +105,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         }
         this.trigger("render");
     },
+
     /**
      * checks the value models if they are selected or not
      * @param {string|string[]} values - selected value(s) in the dropdown list
@@ -164,6 +168,10 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         this.set("valueModelsToShow", value);
     },
 
+    /**
+     * Returns an object with all values of the values collection
+     * @returns {object} value object
+    */
     getSelectedValues: function () {
         var selectedModels = this.get("valuesCollection").where({isSelected: true}),
             obj = {
@@ -179,9 +187,21 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         }
         return obj;
     },
+
+    /**
+     * Setter for isMultiple
+     * @param {boolean} value isMultiple
+     * @returns {void}
+     */
     setIsMultiple: function (value) {
         this.set("isMultiple", value);
     },
+
+    /**
+     * Setter for displayName
+     * @param {string} value displayName
+     * @returns {void}
+     */
     setDisplayName: function (value) {
         this.set("displayName", value);
     }
