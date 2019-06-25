@@ -193,8 +193,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     returnLayer = this.buildVector(layer, features);
                 }
             }
-            return returnLayer;
         }
+        return returnLayer;
     },
 
     /**
@@ -828,6 +828,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         return _.flatten(valuesArray);
     },
+<<<<<<< HEAD
 
     /**
      * Creates the wms legend list for mapfish print
@@ -838,6 +839,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         var wmsLegendList = [];
 
         _.each(urls, function (url) {
+=======
+    createWmsLegendList: function (legendObjects) {
+        var wmsLegendList = [],
+            legendArray = legendObjects;
+
+        if (typeof legendArray === "string") {
+            legendArray = [legendObjects];
+        }
+
+        _.each(legendArray, function (url) {
+>>>>>>> fix linter and check type of legendObjects
             var wmsLegendObject = {
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
