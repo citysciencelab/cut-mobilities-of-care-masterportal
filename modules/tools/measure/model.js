@@ -593,6 +593,14 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         pointFeature.set("styleId", _.uniqueId());
         return pointFeature;
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {number} distance - distance for 3D
+     * @param {number} heightDiff - height for 3D
+     * @param {number} position -
+     * @returns {this} this
+     */
     place3dMeasureTooltip: function (distance, heightDiff, position) {
         var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
 
@@ -628,6 +636,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     setUiStyle: function (value) {
         this.set("uiStyle", value);
     },
+    /**
+     * Setter for Decimal
+     * @param {string} value - value
+     * @returns {this} this
+     */
     setDecimal: function (value) {
         this.set("decimal", parseInt(value, 10));
     },

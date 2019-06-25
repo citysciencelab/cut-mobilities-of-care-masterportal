@@ -4,7 +4,6 @@ import SnippetDropdownView from "../../snippets/dropdown/view";
  * @member Template
  * @description Template used to create the measure tool
  * @memberof Measure
- * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
  */
 const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
     events: {
@@ -19,7 +18,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
      * @extends Backbone.View
      * @memberof Tools.Measure
      * @constructs
-     * @fires Measure#RadioTriggerQuickhelpshowWindowHelp
+     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
      * @fires Measure#RadioTriggerMapremoveInteraction
      */
     initialize: function () {
