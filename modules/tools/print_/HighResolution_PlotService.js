@@ -594,7 +594,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 layers: layer.get("layers").split(),
                 baseURL: layerURL,
                 format: "image/png",
-                opacity: (100 - layer.get("transparency")) / 100,
+                opacity: layer.get("transparency"),
                 customParams: params,
                 styles: style
             });
