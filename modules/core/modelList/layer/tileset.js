@@ -79,7 +79,13 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             if (this.has("cesium3DTilesetOptions")) {
                 _.extend(options, this.get("cesium3DTilesetOptions"));
             }
-            options.url = this.get("url") + "/tileset.json";
+
+            if (this.get("url") && this.get("url").endsWith("tileset.json")) {
+                options.url = this.get("url");
+            }
+            else {
+                options.url = this.get("url") + "/tileset.json";
+            }
             tileset = new Cesium.Cesium3DTileset(options);
             this.setTileSet(tileset);
 
