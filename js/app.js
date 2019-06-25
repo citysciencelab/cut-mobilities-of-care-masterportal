@@ -78,6 +78,7 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
+import {getInstance as getVirtualcityPLANNERInstance} from "../modules/virtualcityPLANNER/virtualcityPLANNER"
 
 var sbconfig, controls, controlsView;
 
@@ -137,6 +138,7 @@ function loadApp () {
     new MenuLoader();
     new ZoomToGeometry();
 
+    getVirtualcityPLANNERInstance();
 
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
