@@ -603,18 +603,6 @@
  */
 
 /**
- * @namespace Default
- * @memberOf Tools.Measure
- * @description Default representation of Measure-Tool.
- */
-
-/**
- * @namespace Table
- * @memberOf Tools.Measure
- * @description Touch table specific representation of Measure-Tool.
- */
-
-/**
  * @namespace ParcelSearch
  * @memberOf Tools
  * @description Parcel search.
