@@ -779,7 +779,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                             "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
                             "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
                     });
-                    
                 }
             }, this);
         }
@@ -826,7 +825,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             typ = layerParam.legend[0].typ;
 
         if (typ === "WMS") {
-            console.log(2);
             valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
         }
         else if (typ === "WFS") {
