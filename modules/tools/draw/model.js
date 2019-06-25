@@ -198,6 +198,7 @@ const DrawTool = Tool.extend({
             featureType = null,
             featureArray = [],
             singleGeom = null,
+            multiGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
 
         if (!_.isUndefined(para_object) && para_object.geomType === "multiGeometry") {
@@ -251,6 +252,17 @@ const DrawTool = Tool.extend({
                             multiPolygon.appendPolygon(circularPoly);
                         }
                     }
+                    else if (featureType === "MultiPolygon" || featureType === "MultiPoint" || featureType === "MultiLineString") {
+                        if (transformWGS === true) {
+                            multiGeom = item.clone();
+                            multiGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                        }
+                        else {
+                            multiGeom = item;
+                        }
+                        featureArray.push(multiGeom);
+                    }
+
                 });
 
                 if (multiPolygon.getCoordinates().length > 0) {
