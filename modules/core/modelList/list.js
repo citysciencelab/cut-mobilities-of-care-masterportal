@@ -58,6 +58,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioRequestModelListGetCollection
      * @listens ModelList#RadioRequestModelListGetModelsByAttributes
      * @listens ModelList#RadioRequestModelListGetModelByAttributes
+     * @listens ModelList#RadioRequestModelListGetLayersByTypes
      * @listens ModelList#RadioTriggerModelListSetModelAttributesById
      * @listens ModelList#RadioTriggerModelListShowAllFeatures
      * @listens ModelList#RadioTriggerModelListHideAllFeatures
@@ -100,6 +101,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             },
             "getModelByAttributes": function (attributes) {
                 return !_.isUndefined(this.findWhere(attributes)) ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
+            },
+            "getLayersByTypes": function (types) {
+                return this.filter((model) => {
+                    return model.get("type") === "layer" && types.includes(model.get("typ"));
+                });
             }
         }, this);
 
