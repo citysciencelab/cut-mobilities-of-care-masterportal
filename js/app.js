@@ -72,7 +72,6 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
-import { log } from "util";
 
 var sbconfig, controls, controlsView;
 
@@ -88,6 +87,9 @@ function loadApp () {
     }
     if (_.has(Config, "proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
+    }
+    if (_.has(Config, "proxy")) {
+        utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden

@@ -4,6 +4,7 @@ const Util = Backbone.Model.extend({
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
+        proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 10
@@ -248,28 +249,30 @@ const Util = Backbone.Model.extend({
     getProxyURL: function (url) {
         var parser = document.createElement("a"),
             protocol = "",
-            result = "",
+            result = url,
             hostname = "",
             port = "";
 
-        parser.href = url;
-        protocol = parser.protocol;
+        if (this.get("proxy")) {
+            parser.href = url;
+            protocol = parser.protocol;
 
-        if (protocol.indexOf("//") === -1) {
-            protocol += "//";
+            if (protocol.indexOf("//") === -1) {
+                protocol += "//";
+            }
+
+            port = parser.port;
+
+            result = url.replace(protocol, "").replace(":" + port, "");
+            // www und www2 usw. raus
+            // hostname = result.replace(/www\d?\./, "");
+            if (!parser.hostname) {
+                parser.hostname = window.location.hostname;
+            }
+            hostname = parser.hostname.split(".").join("_");
+            result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
+
         }
-
-        port = parser.port;
-
-        result = url.replace(protocol, "").replace(":" + port, "");
-        // www und www2 usw. raus
-        // hostname = result.replace(/www\d?\./, "");
-        if (!parser.hostname) {
-            parser.hostname = window.location.hostname;
-        }
-        hostname = parser.hostname.split(".").join("_");
-        result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
-
         return result;
     },
 
