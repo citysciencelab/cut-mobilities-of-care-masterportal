@@ -270,9 +270,26 @@ const map = Backbone.Model.extend({
     },
     setCameraParameter: function (params) {
         var map3d = this.getMap3d(),
-            camera;
+            camera,
+            destination,
+            orientation;
 
-        if (_.isUndefined(map3d) === false && _.isNull(params) === false) {
+        // if the cameraPosition is given, directly set the cesium camera position, otherwise use olcesium Camera
+        if (map3d && params.cameraPosition) {
+            camera = this.getMap3d().getCesiumScene().camera;
+            destination = Cesium.Cartesian3.fromDegrees(params.cameraPosition[0], params.cameraPosition[1], params.cameraPosition[2]);
+            orientation = {
+                heading: Cesium.Math.toRadians(parseFloat(params.heading)),
+                pitch: Cesium.Math.toRadians(parseFloat(params.pitch)),
+                roll: Cesium.Math.toRadians(parseFloat(params.roll))
+            };
+
+            camera.setView({
+                destination,
+                orientation
+            });
+        }
+        else if (_.isUndefined(map3d) === false && _.isNull(params) === false) {
             camera = map3d.getCamera();
             if (_.has(params, "tilt")) {
                 camera.setTilt(parseFloat(params.tilt));
