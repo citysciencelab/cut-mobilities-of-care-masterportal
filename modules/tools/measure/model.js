@@ -7,12 +7,7 @@ import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
-
-/**
- * @class Measure
- * @extends Tool
- */
-const Measure = Tool.extend({
+const Measure = Tool.extend(/** @lends Measure.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
         styles: [
@@ -125,7 +120,18 @@ const Measure = Tool.extend({
         style: "DEFAULT",
         "glyphicon": "glyphicon-resize-full"
     }),
-
+    /**
+     * @class Measure
+     * @extends Backbone.Model
+     * @memberof Tools
+     * @constructs
+     * @property {String} unit="m" unit of measure
+     * @property {Boolean} quickHelp=false
+     * @property {Boolean} isMap3d=false Flag if measure has 3D view
+     * @property {String} uiStyle="DEFAULT" style for master portal
+     * @property {Number} scale=-1
+     * @property {String} style="DEFAULT" style for master portal
+     */
     initialize: function () {
         var selectedValues,
             selectedUnit;
@@ -846,7 +852,7 @@ const Measure = Tool.extend({
 
     /**
      * setter for quickHelp
-     * @param {[type]} value quickHelp
+     * @param {boolean} value quickHelp
      * @returns {void}
      */
     setQuickHelp: function (value) {

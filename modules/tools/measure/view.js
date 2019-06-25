@@ -1,12 +1,12 @@
 import Template from "text-loader!./template.html";
 import SnippetDropdownView from "../../snippets/dropdown/view";
-
-const MeasureView = Backbone.View.extend({
-    /**
-     * @class MeasureView
-     * @extends Backbone.View
-     * @constructs
-     */
+/**
+ * @member Template
+ * @description Template used to create the measure tool
+ * @memberof Measure
+ * @fires Measure#RadioTriggerQuickhelpshowWindowHelp
+ */
+const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
     events: {
         "click button.table-tool-measure-delete": "deleteFeatures",
         "click button.measure-delete": "deleteFeatures",
@@ -14,6 +14,14 @@ const MeasureView = Backbone.View.extend({
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
         }
     },
+    /**
+     * @class MeasureView
+     * @extends Backbone.View
+     * @memberof Tools
+     * @constructs
+     * @fires Measure#RadioTriggerQuickhelpshowWindowHelp
+     * @fires Measure#RadioTriggerMapremoveInteraction
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render
@@ -68,6 +76,7 @@ const MeasureView = Backbone.View.extend({
 
     /**
      * logs listeners to specific events
+     * @fires Measure#RadioTriggerMapremoveInteraction
      * @returns {void}
      */
     unregisterListener: function () {
