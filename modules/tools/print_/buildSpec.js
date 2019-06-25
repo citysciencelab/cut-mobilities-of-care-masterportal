@@ -760,19 +760,28 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         var legendObject = {},
             metaDataLayerList = [];
 
-        if (isLegendSelected) {
-            if (legendParams.length > 0) {
-                legendObject.layers = [];
-                _.each(legendParams, function (layerParam) {
-                    if (isMetaDataAvailable) {
-                        metaDataLayerList.push(layerParam.layername);
-                    }
+        if (isLegendSelected && legendParams.length > 0) {
+            legendObject.layers = [];
+            _.each(legendParams, function (layerParam) {
+                if (isMetaDataAvailable) {
+                    metaDataLayerList.push(layerParam.layername);
+                }
+                if (layerParam.legend[0].img.indexOf(".pdf") === -1) {
                     legendObject.layers.push({
                         layerName: layerParam.layername,
                         values: this.prepareLegendAttributes(layerParam)
                     });
-                }, this);
-            }
+                }
+                else {
+                    Radio.trigger("Alert", "alert", {
+                        kategorie: "alert-info",
+                        text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
+                            "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
+                            "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
+                    });
+                    
+                }
+            }, this);
         }
 
         this.setShowLegend(isLegendSelected);
@@ -817,6 +826,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             typ = layerParam.legend[0].typ;
 
         if (typ === "WMS") {
+            console.log(2);
             valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
         }
         else if (typ === "WFS") {
