@@ -54,11 +54,12 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
 
     /**
      * returns a planning either from the cache or from the server request
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves with the requested Planning
      */
-    getPlanningById (serviceId, planningId) {
+    getPlanningById (planningId) {
+        const serviceId = this.get("serviceId");
+
         return this.getPlannings(serviceId).then(()=>{
             if (this.get("planningCache")[serviceId] && this.get("planningCache")[serviceId][planningId]) {
                 return this.get("planningCache")[serviceId][planningId];
@@ -68,7 +69,6 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     },
     /**
      * returns a list of plannings from a virtualcityPLANNER Service
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @fires RestReader#RadioRequestRestReaderGetServicebyId
      * @return {Promise} Promise which resolves with an array of the public Plannings
      */
@@ -105,36 +105,39 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
 
     /**
      * activates a Planning identified by the given serviceId and planningId
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves when the planning has been loaded and activated
      */
-    activatePlanning (serviceId, planningId) {
-        return this.getPlanningById(serviceId, planningId).then((planning) => {
+    activatePlanning (planningId) {
+        const serviceId = this.get("serviceId");
+
+        return this.getPlanningById(planningId).then((planning) => {
             return planning.activate();
         });
     },
 
     /**
      * deactivates a Planning identified by the given serviceId and planningId
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves when the planning has been loaded and deactivate
      */
-    deactivatePlanning (serviceId, planningId) {
-        return this.getPlanningById(serviceId, planningId).then((planning) => {
+    deactivatePlanning (planningId) {
+        const serviceId = this.get("serviceId");
+
+        return this.getPlanningById(planningId).then((planning) => {
             return planning.deactivate();
         });
     },
 
     /**
      * returns view points by the given serviceId and planningId
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves with the list of viewpoints
      */
-    getViewpointsForPlanning (serviceId, planningId) {
-        return this.getPlanningById(serviceId, planningId).then((planning) => {
+    getViewpointsForPlanning (planningId) {
+        const serviceId = this.get("serviceId");
+
+        return this.getPlanningById(planningId).then((planning) => {
             return planning.flights.map((value) => {
                 return value.name;
             });
@@ -143,13 +146,14 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
 
     /**
      * sets the camera to the specific viewpoint
-     * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @param {string} viewpointId id of the viewpoint
      * @return {Promise} Promise which resolves with the list of viewpoints
      */
-    gotoViewPoint (serviceId, planningId, viewpointId) {
-        return this.getPlanningById(serviceId, planningId).then((planning) => {
+    gotoViewPoint (planningId, viewpointId) {
+        const serviceId = this.get("serviceId");
+
+        return this.getPlanningById(planningId).then((planning) => {
             return planning.gotoViewpoint(viewpointId);
         });
     }
