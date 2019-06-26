@@ -3,7 +3,7 @@ import SnippetDropdownView from "../../snippets/dropdown/view";
 /**
  * @member Template
  * @description Template used to create the measure tool
- * @memberof Measure
+ * @memberof Toolos.Measure
  */
 const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
     events: {
