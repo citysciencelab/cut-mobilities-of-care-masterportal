@@ -127,13 +127,13 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     },
 
     /**
-     * returns view points by the given serviceId and planningId
+     * returns viewpoints by the given serviceId and planningId
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves with the list of viewpoints
      */
     getViewpointsForPlanning (planningId) {
         return this.getPlanningById(planningId).then((planning) => {
-            return planning.flights.map((value) => {
+            return planning.viewpoints.map((value) => {
                 return value.name;
             });
         });
@@ -143,7 +143,7 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
      * sets the camera to the specific viewpoint
      * @param {string} planningId id of the planningInstance
      * @param {string} viewpointId id of the viewpoint
-     * @return {Promise} Promise which resolves with the list of viewpoints
+     * @return {Promise} Promise which resolves when the planning is loaded and the 3D Camera is set to the viewpoint
      */
     gotoViewPoint (planningId, viewpointId) {
         return this.getPlanningById(planningId).then((planning) => {
