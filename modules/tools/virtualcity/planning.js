@@ -1,6 +1,6 @@
 import axios from "axios";
-import EntitiesLayer from "../core/modelList/layer/entities";
-import Tileset from "../core/modelList/layer/tileset";
+import EntitiesLayer from "../../core/modelList/layer/entities";
+import Tileset from "../../core/modelList/layer/tileset";
 
 
 /**
@@ -125,7 +125,7 @@ export default class Planning {
     }
 
     setHiddenObjects () {
-        const layers = Radio.request("ModelList", "getLayersByTypes", ["TileSet3D"]);
+        const layers = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "TileSet3D"});
 
         layers.forEach((layer) =>{
             layer.hideObjects(this.hiddenObjects);
@@ -133,7 +133,7 @@ export default class Planning {
     }
 
     clearHiddenObjects () {
-        const layers = Radio.request("ModelList", "getLayersByTypes", ["TileSet3D"]);
+        const layers = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "TileSet3D"});
 
         layers.forEach((layer) =>{
             layer.showObjects(this.hiddenObjects);

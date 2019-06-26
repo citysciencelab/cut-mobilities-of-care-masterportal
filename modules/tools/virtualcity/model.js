@@ -1,39 +1,30 @@
 import axios from "axios";
 import Planning from "./planning";
+import Tool from "../../core/modelList/tool/model";
 /**
  * @class
  * @description
  *
  */
-class VirtualcityPLANNER {
-    constructor () {
 
-        /** cached Planning Instances
-         * @type {Object<Object>}
-         */
-        this.planningCache = {};
-
-        /**
-         * cached request promises for serviceIds
-         * @type {Object}
-         */
-        this.readyPromise = {};
-
-        this.initialize();
-    }
+const Virtualcity = Tool.extend({
+    defaults: _.extend({}, Tool.prototype.defaults, {
+        planningCache: {},
+        readyPromise: {}
+    }),
 
     initialize () {
         var channel = Radio.channel("virtualcityPLANNER");
 
         channel.reply({
-            getPlanningById: this.getPlanningById,
-            getPlannings: this.getPlannings,
-            activatePlanning: this.activatePlanning,
-            deactivatePlanning: this.deactivatePlanning,
-            getViewpointsForPlanning: this.getViewpointsForPlanning,
-            gotoViewPoint: this.gotoViewPoint
+            "getPlanningById": this.getPlanningById,
+            "getPlannings": this.getPlannings,
+            "activatePlanning": this.activatePlanning,
+            "deactivatePlanning": this.deactivatePlanning,
+            "getViewpointsForPlanning": this.getViewpointsForPlanning,
+            "gotoViewPoint": this.gotoViewPoint
         }, this);
-    }
+    },
 
     /**
      * returns a planning either from the cache or from the server request
@@ -43,28 +34,28 @@ class VirtualcityPLANNER {
      */
     getPlanningById (serviceId, planningId) {
         return this.getPlannings(serviceId).then(()=>{
-            if (this.planningCache[serviceId] && this.planningCache[serviceId][planningId]) {
-                return this.planningCache[serviceId][planningId];
+            if (this.get("planningCache")[serviceId] && this.get("planningCache")[serviceId][planningId]) {
+                return this.get("planningCache")[serviceId][planningId];
             }
             throw new Error("Could not find Planning");
         });
-    }
+    },
     /**
      * returns a list of plannings from a virtualcityPLANNER Service
      * @param {string} serviceId id of the virtualcityPLANNER Service
      * @return {Promise} Promise which resolves with an array of the public Plannings
      */
     getPlannings (serviceId) {
-        if (this.planningCache[serviceId]) {
-            return Promise.resolve(Object.values(this.planningCache[serviceId]));
+        if (this.get("planningCache")[serviceId]) {
+            return Promise.resolve(Object.values(this.get("planningCache")[serviceId]));
         }
-        if (!this.readyPromise[serviceId]) {
+        if (!this.get("readyPromise")[serviceId]) {
             const service = Radio.request("RestReader", "getServiceById", serviceId);
 
             if (!service) {
                 return Promise.reject(new Error("Could not find service"));
             }
-            this.readyPromise[serviceId] = axios.post(`${service.get("url")}/planning/list`, {mapId: service.get("scenarioId")})
+            this.get("readyPromise")[serviceId] = axios.post(`${service.get("url")}/planning/list`, {mapId: service.get("scenarioId")})
                 .then((response) => {
                     const data = response.data;
 
@@ -72,18 +63,18 @@ class VirtualcityPLANNER {
                         data.forEach((planningData)=> {
                             const planning = new Planning(Object.assign(planningData, {url: service.get("url")}));
 
-                            if (!this.planningCache[serviceId]) {
-                                this.planningCache[serviceId] = {};
+                            if (!this.get("planningCache")[serviceId]) {
+                                this.get("planningCache")[serviceId] = {};
                             }
-                            this.planningCache[serviceId][planning.id] = planning;
+                            this.get("planningCache")[serviceId][planning.id] = planning;
                         }, this);
                     }
                 });
         }
-        return this.readyPromise[serviceId].then(() => {
-            return Object.values(this.planningCache[serviceId]);
+        return this.get("readyPromise")[serviceId].then(() => {
+            return Object.values(this.get("planningCache")[serviceId]);
         });
-    }
+    },
 
     /**
      * activates a Planning identified by the given serviceId and planningId
@@ -95,7 +86,7 @@ class VirtualcityPLANNER {
         return this.getPlanningById(serviceId, planningId).then((planning) => {
             return planning.activate();
         });
-    }
+    },
 
     /**
      * deactivates a Planning identified by the given serviceId and planningId
@@ -107,7 +98,7 @@ class VirtualcityPLANNER {
         return this.getPlanningById(serviceId, planningId).then((planning) => {
             return planning.deactivate();
         });
-    }
+    },
 
     /**
      * deactivates a Planning identified by the given serviceId and planningId
@@ -121,7 +112,7 @@ class VirtualcityPLANNER {
                 return value.name;
             });
         });
-    }
+    },
 
     /**
      * sets the camera to the specific viewpoint
@@ -135,22 +126,6 @@ class VirtualcityPLANNER {
             return planning.gotoViewpoint(viewpointId);
         });
     }
-}
+});
 
-/**
- * only exported for testing purposes, use getInstance
- */
-export default VirtualcityPLANNER;
-
-let instance;
-
-/**
- * @param {Object} config -
- * @return {VirtualcityPLANNER} -
- */
-export function getInstance (config) {
-    if (!instance) {
-        instance = new VirtualcityPLANNER(config);
-    }
-    return instance;
-}
+export default Virtualcity;

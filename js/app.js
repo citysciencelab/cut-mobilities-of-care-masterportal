@@ -78,7 +78,7 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
-import {getInstance as getVirtualcityPLANNERInstance} from "../modules/virtualcityPLANNER/virtualcityPLANNER"
+import Virtualcity from "../modules/tools/virtualcity/model";
 
 var sbconfig, controls, controlsView;
 
@@ -136,9 +136,7 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
-    new ZoomToGeometry();
-
-    getVirtualcityPLANNERInstance();
+    new ZoomToGeometry();    
 
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
@@ -297,6 +295,10 @@ function loadApp () {
             case "layerSlider": {
                 new LayerSliderView({model: tool});
                 break;
+            }
+            case "virtualCity": {
+                console.log(tool);
+                new Virtualcity({model: tool});
             }
             default: {
                 break;
