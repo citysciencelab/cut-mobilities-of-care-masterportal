@@ -1076,6 +1076,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |configYAML|nein|String|"/master"|Deprecated in 3.0.0. Configuration des Templates das verwendet werden soll.|false|
 |isLegendSelected|nein|Boolean|false|Gibt an ob die Checkbox zum Legende mitdrucken aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
+|dpiForPdf|nein|Number|200|Auflösung der Karte im PDF.|false|
 **Beispiel Konfiguration mit MapfishPrint2**
 ```
 #!json

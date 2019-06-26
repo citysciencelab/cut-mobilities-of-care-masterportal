@@ -44,7 +44,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
         eventListener: {},
-        legendText: "Mit Legende"
+        legendText: "Mit Legende",
+        dpiForPdf: 200
     }),
 
     /**
@@ -120,8 +121,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * todo
      * @param {*} id - todo
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     createMapFishServiceUrl: function (id) {
@@ -134,8 +133,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * Gets the capabilities for a specific print configuration
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     getCapabilites: function (model, value) {
@@ -147,10 +144,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 this.setMapfishServiceUrl(serviceUrl);
                 this.sendRequest(serviceUrl + this.get("printAppId") + "/capabilities.json", "GET", this.parseMapfishCapabilities);
             }
-            // if (this.get("plotServiceId") !== undefined) {
-            //     serviceUrl = Radio.request("RestReader", "getServiceById", this.get("plotServiceId")).get("url");
-            //     this.sendRequest();
-            // }
         }
     },
 
@@ -175,18 +168,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     print: function () {
@@ -200,7 +181,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 "attributes": {
                     "title": this.get("title"),
                     "map": {
-                        "dpi": 96,
+                        "dpi": this.get("dpiForPdf"),
                         "projection": Radio.request("MapView", "getProjection").getCode(),
                         "center": Radio.request("MapView", "getCenter"),
                         "scale": this.get("currentScale")
@@ -257,8 +238,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @param {string} printAppId - id of the print configuration
      * @param {string} payload - POST body
      * @param {string} format - print job output format
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     createPrintJob: function (printAppId, payload, format) {
@@ -271,8 +250,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * sends a request to get the status for a print job until it is finished
      * @param {JSON} response - todo
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     waitForPrintJob: function (response) {
@@ -295,12 +272,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     togglePostcomposeListener: function (model, value) {
@@ -484,8 +455,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @param {string} requestType - GET || POST
      * @param {function} successCallback - called if the request succeeds
      * @param {JSON} data - payload
-     * @fires todo
-     * @description todo
      * @returns {void}
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
