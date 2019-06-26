@@ -843,13 +843,18 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object[]} - prepared wms legens for mapfish print.
      */
     createWmsLegendList: function (urls) {
-        var wmsLegendList = [];
+        var wmsLegendList = [],
+            legendUrls = urls;
 
-        _.each(urls, function (url) {
+        if (typeof urls === "string") {
+            legendUrls = [legendUrls];
+        }
+
+        _.each(legendUrls, function (url) {
             var wmsLegendObject = {
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
-                imageUrl: this.createLegendImageUrl(url),
+                imageUrl: url,
                 color: "",
                 label: ""
             };
