@@ -46,6 +46,7 @@ import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
+import VirtualCityModel from "../../tools/virtualcity/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -307,6 +308,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "layerSlider") {
                 return new LayerSliderModel(attrs, options);
+            }
+            else if (attrs.id === "virtualcity") {
+                return new VirtualCityModel(attrs, options);
             }
             return new Tool(attrs, options);
         }

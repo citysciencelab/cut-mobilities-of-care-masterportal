@@ -670,6 +670,12 @@
  */
 
 /**
+ * @namespace VirtualCity
+ * @memberOf Tools
+ * @description Tool to show virtual city data
+ */
+
+/**
  * @namespace TreeFilter
  * @description foobar
  */

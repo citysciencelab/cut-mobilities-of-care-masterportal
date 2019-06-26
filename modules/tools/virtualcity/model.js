@@ -1,20 +1,46 @@
 import axios from "axios";
 import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
-/**
- * @class
- * @description
- *
- */
 
-const Virtualcity = Tool.extend({
+const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         planningCache: {},
         readyPromise: {}
     }),
 
+    /**
+     * @class VirtualCityModel
+     * @extends Tool
+     * @memberof Tool.VirtualCity
+     * @constructs
+     * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
+     * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
+     * @fires ContactModel#changeInvalid
+     * @listens VirtualCity#RadioRequestVirtualCityGetPlanningById
+     * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
+     * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
+     * @listens VirtualCity#RadioRequestVirtualCityDeactivatePlanning
+     * @listens VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     */
     initialize () {
-        var channel = Radio.channel("virtualcityPLANNER");
+        this.superInitialize();
+        this.addRadio();
+    },
+
+    /**
+     * Register channel for virtual city representation
+     * @returns {void}
+     * @listens VirtualCity#RadioRequestVirtualCityGetPlanningById
+     * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
+     * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
+     * @listens VirtualCity#RadioRequestVirtualCityDeactivatePlanning
+     * @listens VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
+     */
+    addRadio: function () {
+        const channel = Radio.channel("VirtualCity");
 
         channel.reply({
             "getPlanningById": this.getPlanningById,
@@ -43,6 +69,7 @@ const Virtualcity = Tool.extend({
     /**
      * returns a list of plannings from a virtualcityPLANNER Service
      * @param {string} serviceId id of the virtualcityPLANNER Service
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
      * @return {Promise} Promise which resolves with an array of the public Plannings
      */
     getPlannings (serviceId) {
@@ -101,7 +128,7 @@ const Virtualcity = Tool.extend({
     },
 
     /**
-     * deactivates a Planning identified by the given serviceId and planningId
+     * returns view points by the given serviceId and planningId
      * @param {string} serviceId id of the virtualcityPLANNER Service
      * @param {string} planningId id of the planningInstance
      * @return {Promise} Promise which resolves with the list of viewpoints
@@ -128,4 +155,4 @@ const Virtualcity = Tool.extend({
     }
 });
 
-export default Virtualcity;
+export default VirtualCityModel;

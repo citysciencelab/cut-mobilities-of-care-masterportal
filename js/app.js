@@ -78,7 +78,7 @@ import ButtonObliqueView from "../modules/controls/buttonoblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
-import Virtualcity from "../modules/tools/virtualcity/model";
+import VirtualcityModel from "../modules/tools/virtualcity/model";
 
 var sbconfig, controls, controlsView;
 
@@ -297,8 +297,7 @@ function loadApp () {
                 break;
             }
             case "virtualCity": {
-                console.log(tool);
-                new Virtualcity({model: tool});
+                new VirtualcityModel(tool.attributes);
             }
             default: {
                 break;
