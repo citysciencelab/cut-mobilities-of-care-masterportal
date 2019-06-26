@@ -1,31 +1,52 @@
-import DefaultTemplate from "text-loader!./default/template.html";
-import TableTemplate from "text-loader!./table/template.html";
-
-const MeasureView = Backbone.View.extend({
+import Template from "text-loader!./template.html";
+import SnippetDropdownView from "../../snippets/dropdown/view";
+/**
+ * @member Template
+ * @description Template used to create the measure tool
+ * @memberof Tools.Measure
+ */
+const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
     events: {
-        "change select#geomField": "setGeometryType",
-        "change select#unitField": "setUnit",
-        "click button": "deleteFeatures",
+        "click button.table-tool-measure-delete": "deleteFeatures",
+        "click button.measure-delete": "deleteFeatures",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
             Radio.trigger("Quickhelp", "showWindowHelp", "measure");
         }
     },
+    /**
+     * @class MeasureView
+     * @extends Backbone.View
+     * @memberof Tools.Measure
+     * @constructs
+     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @fires Map#RadioTriggerMapRemoveInteraction
+     */
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive change:geomtype": this.render
+            "change:isActive": this.render
         });
+        this.snippetDropdownViewGeometry = new SnippetDropdownView({model: this.model.get("snippetDropdownModelGeometry")});
+        this.snippetDropdownViewUnit = new SnippetDropdownView({model: this.model.get("snippetDropdownModelUnit")});
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
     },
+    template: _.template(Template),
+
+    /**
+     * renders the view
+     * @param {object} model - Measure Model
+     * @param {boolean} value - Rückgabe eines Boolean
+     * @returns {this} this
+     */
     render: function (model, value) {
-        var template;
+        var attr = this.model.toJSON();
 
         if (value) {
-            template = Radio.request("Util", "getUiStyle") === "TABLE" ? _.template(TableTemplate) : _.template(DefaultTemplate);
-
             this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(template(model.toJSON()));
+            this.$el.html(this.template(attr));
+            this.$el.find(".dropdown_geometry").append(this.snippetDropdownViewGeometry.render().el);
+            this.$el.find(".dropdown_unit").append(this.snippetDropdownViewUnit.render().el);
             this.delegateEvents();
         }
         else {
@@ -36,22 +57,27 @@ const MeasureView = Backbone.View.extend({
         return this;
     },
 
-    setGeometryType: function (evt) {
-        this.model.setGeometryType(evt.target.value);
-    },
-
-    setUnit: function (evt) {
-        this.model.setUnit(evt.target.value);
-    },
-
+    /**
+     * deletes all geometries from the layer
+     * @return {void}
+     */
     deleteFeatures: function () {
         this.model.deleteFeatures();
     },
 
+    /**
+     * removes the last drawing if it has not been completed
+     * @return {void}
+     */
     removeIncompleteDrawing: function () {
         this.model.removeIncompleteDrawing();
     },
 
+    /**
+     * logs listeners to specific events
+     * @fires Map#RadioTriggerMapRemoveInteraction
+     * @returns {void}
+     */
     unregisterListener: function () {
         this.model.unregisterPointerMoveListener(this.model);
         this.model.unregisterClickListener(this.model);

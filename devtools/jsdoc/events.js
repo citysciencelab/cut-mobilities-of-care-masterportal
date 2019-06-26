@@ -132,27 +132,27 @@
 /**
  * @event ClickCounter#RadioTriggerClickCounterToolChanged
  * @example Radio.trigger("ClickCounter", "toolChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterCalcRoute
  * @example Radio.trigger("ClickCounter", "calcRoute")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterZoomChanged
  * @example Radio.trigger("ClickCounter", "zoomChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
  * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterGfi
  * @example Radio.trigger("ClickCounter", "gfi")
-*/
+ */
 
 
 /** -------------------- LEGEND -------------------- */
@@ -161,32 +161,32 @@
  * @event Legend#RadioRequestLegendGetLegend
  * @param {layer} layer The layer, to which the legend should be returned.
  * @example Radio.request("Legend", "getLegend", layer)
-*/
+ */
 
 /**
  * @event Legend#RadioRequestLegendGetLegendParams
  * @returns {Object} legendParams legendParams
-*/
+ */
 
 /**
  * @event Legend#RadioTriggerLegendSetLayerList
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#hide
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#changeLegendParams
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#changeParamsStyleWMSArray
  * @description todo
-*/
+ */
 
 
 /** -------------------- PARSER -------------------- */
@@ -226,10 +226,10 @@
  */
 
 /**
-* @event Parser#RadioRequestParserSetCategory
-* @returns {*} todo
-* @example Radio.request("Parser", "setCategory")
-*/
+ * @event Parser#RadioRequestParserSetCategory
+ * @returns {*} todo
+ * @example Radio.request("Parser", "setCategory")
+ */
 
 /**
  * @event Parser#RadioRequestParserGetPortalConfig
@@ -528,9 +528,9 @@
  */
 
 /**
-  * @event Map#RadioTriggerMapRegisterListenerMovenend
-  * @example Radio.trigger("Map", "registerListener", "moveend")
-  */
+ * @event Map#RadioTriggerMapRegisterListenerMovenend
+ * @example Radio.trigger("Map", "registerListener", "moveend")
+ */
 
 /**
  * @event Map#RadioRequestMapIsMap3d
@@ -1394,7 +1394,7 @@
  * @example Radio.request("RawLayerList", "getLayerAttributesList");
 
 
-/** -------------------- CswParser -------------------- */
+ /** -------------------- CswParser -------------------- */
 
 /**
  * @event CswParser#RadioTriggerGetMetaData

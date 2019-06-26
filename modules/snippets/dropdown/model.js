@@ -1,7 +1,13 @@
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
-const DropdownModel = SnippetModel.extend({
+const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
+    /**
+     * @class DropdownModel
+     * @extends Snippets
+     * @memberof Snippets.Dropdown
+     * @constructs
+     */
     defaults: {
         // true if the dropdown is open
         isOpen: false,
@@ -54,18 +60,20 @@ const DropdownModel = SnippetModel.extend({
         }));
     },
 
+    /**
+     * Returns a string ja or nein
+     * @param {string} value true or false
+     * @returns {string} ja or nein
+    */
     getDisplayName: function (value) {
         if (this.get("type") === "boolean") {
             if (value === "true") {
                 return "Ja";
             }
-
             return "Nein";
-
         }
 
         return value;
-
     },
 
     /**
@@ -78,6 +86,24 @@ const DropdownModel = SnippetModel.extend({
         _.each(collection.models, function (model) {
             model.set("isSelectable", true);
         }, this);
+    },
+
+    /**
+     * updateCollection
+     * @param  {array} value - selected value
+     * @return {void}
+     */
+    updateValues: function (value) {
+        var collection = this.get("valuesCollection").models;
+
+        _.each(collection, function (model, index) {
+            model.set("value", value[index]);
+            model.set("displayName", value[index]);
+        }, this);
+        if (this.get("preselectedValues").length > 0) {
+            this.updateSelectedValues(this.get("preselectedValues"));
+        }
+        this.trigger("render");
     },
 
     /**
@@ -142,6 +168,10 @@ const DropdownModel = SnippetModel.extend({
         this.set("valueModelsToShow", value);
     },
 
+    /**
+     * Returns an object with all values of the values collection
+     * @returns {object} value object
+    */
     getSelectedValues: function () {
         var selectedModels = this.get("valuesCollection").where({isSelected: true}),
             obj = {
@@ -157,9 +187,21 @@ const DropdownModel = SnippetModel.extend({
         }
         return obj;
     },
+
+    /**
+     * Setter for isMultiple
+     * @param {boolean} value isMultiple
+     * @returns {void}
+     */
     setIsMultiple: function (value) {
         this.set("isMultiple", value);
     },
+
+    /**
+     * Setter for displayName
+     * @param {string} value displayName
+     * @returns {void}
+     */
     setDisplayName: function (value) {
         this.set("displayName", value);
     }
