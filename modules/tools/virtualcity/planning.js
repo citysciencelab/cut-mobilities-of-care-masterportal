@@ -110,13 +110,16 @@ export default class Planning {
         return this.initialize().then(() => {
             this.entitiesLayer.setVisible(false);
             this.clearHiddenObjects();
+            this.planningObjects.forEach((layer)=> {
+                layer.setVisible(false);
+            });
         });
     }
 
     /**
      * goto the specific viewpoint
      * @param {string} viewpointId viewpointId
-     * @returns {Promise} promise which returns when the planning has been loaded and jumped to the viewpoint
+     * @returns {void} -
      */
     gotoViewpoint (viewpointId) {
         if (this.viewpoints[viewpointId]) {
