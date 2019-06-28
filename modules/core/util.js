@@ -7,7 +7,7 @@ const Util = Backbone.Model.extend({
         proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 10
+        loaderOverlayTimeout: 20
     },
     initialize: function () {
         var channel = Radio.channel("Util");
