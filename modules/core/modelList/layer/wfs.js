@@ -8,7 +8,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true,
-        isClustered: false
+        isClustered: false,
+        allowedVersions: ["1.1.0"]
     }),
     /**
      * @class WFSLayer
@@ -30,14 +31,45 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     },
 
     /**
-     * creates layer source.
+     * Creates layer source for wfs-layer.
      * @return {void}
      */
     createLayerSource: function () {
+        const allowedVersions = this.get("allowedVersions"),
+            isVersionValid = this.checkVersion(this.get("name"), this.get("id"), this.get("version"), allowedVersions);
+
+        if (!isVersionValid) {
+            this.set("version", allowedVersions[0]);
+        }
+
         this.setLayerSource(new VectorSource());
         if (this.has("clusterDistance")) {
             this.createClusterLayerSource();
         }
+    },
+
+    /**
+     * Checks the version of the wfs, since openlayers only accepts version 1.1.0.
+     * @param {String} name name from layer
+     * @param {String} id id from layer
+     * @param {String} version version from wfs
+     * @param {String[]} allowedVersions contains the allowed versions
+     * @return {Boolean} is version valid
+     */
+    checkVersion: function (name, id, version, allowedVersions) {
+        let isVersionValid = true;
+
+        if (!allowedVersions.includes(version)) {
+            isVersionValid = false;
+
+            console.error("Please use for wfs only the versions: " + allowedVersions + ", because only these are accepted by openlayers!");
+            Radio.trigger("Alert", "alert", {
+                text: "Die Version: <b>'" + version + "'</b> des WFS-Layers '" + name + "' mit der Id: '" + id + "' ist ungültig."
+                    + "Der Layer wird versucht mit der Version: <b>'" + allowedVersions[0] + "'</b> geladen zu werden!",
+                kategorie: "alert-warning"
+            });
+        }
+        return isVersionValid;
     },
 
     /**
