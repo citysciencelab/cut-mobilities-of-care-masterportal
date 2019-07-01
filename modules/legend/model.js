@@ -8,6 +8,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         paramsStyleWMSArray: [],
         renderToWindow: false,
         renderToSidebar: false,
+        keepOtherToolsOpened: true,
         glyphicon: "glyphicon-book"
     }),
     /**

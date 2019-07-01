@@ -45,13 +45,16 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
                         Radio.trigger("Window", "showTool", model);
                         Radio.trigger("Window", "setIsVisible", true);
                     }
-                    this.collection.setActiveToolsToFalse(model);
+                    if (model.get("keepOtherToolsOpened") !== true) {
+                        this.collection.setActiveToolsToFalse(model);
+                    }
 
                     if (gfiModel) {
                         gfiModel.setIsActive(!model.get("deactivateGFI"));
                     }
                 }
                 else {
+
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
