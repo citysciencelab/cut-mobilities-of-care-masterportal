@@ -53,7 +53,7 @@ Einen lokalen Entwicklungsserver starten.
 
 Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration des Masterportals.
 
-Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort dort der lgv-config Ordner angegeben. Bei Verwendung eines eigenen Ordners mit anderer Bezeichnung für die Dienste-json-Dateien müsste der Pfad entsprechend angepasst werden. Beispiele für die Weiterleitung sind in der proxyconf.json des lgv-config-public Repositories zu finden.
+Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten. 
 
 
 ### npm start mit customModule
