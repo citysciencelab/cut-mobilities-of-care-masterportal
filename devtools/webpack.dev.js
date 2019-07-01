@@ -10,7 +10,7 @@ const merge = require("webpack-merge"),
 
 let proxies;
 
-if (fs.existsSync("./proxyconf.json")) {
+if (fs.existsSync("./devtools/proxyconf.json")) {
     proxies = require("./proxyconf.json");
 }
 else {
