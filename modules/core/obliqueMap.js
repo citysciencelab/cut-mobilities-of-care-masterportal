@@ -105,8 +105,11 @@ const ObliqueMap = Backbone.Model.extend({
         this.layers.push(layer);
     },
     deactivate: function () {
-        var interactions, map2D;
+        var interactions,
+            map2D,
+            gfi = Radio.request("ModelList", "getModelByAttributes", {id: "gfi"});
 
+        gfi.setIsActive(true);
         map2D = Radio.request("Map", "getMap");
 
         if (this.isActive() && this.currentCollection && _.has(this.currentDirection, "currentImage")) {
@@ -131,7 +134,6 @@ const ObliqueMap = Backbone.Model.extend({
                 Radio.trigger("MapView", "setConstrainedResolution", resolution, 0);
                 Radio.trigger("Map", "change", "2D");
             }.bind(this));
-
         }
     },
 

@@ -99,29 +99,29 @@ const POIModel = Backbone.Model.extend({
     getImgPath: function (feat) {
         var imagePath = "",
             style = Radio.request("StyleList", "returnModelById", feat.styleId),
-            styleClass = style.get("class"),
-            styleSubClass = style.get("subClass");
+            styleClass,
+            styleSubClass;
 
-        if (styleClass === "POINT") {
-            // Custom Point Styles
-            if (styleSubClass === "CUSTOM") {
-                imagePath = style.get("imagePath") + this.createStyleFieldImageName(feat, style);
+        if (style) {
+            styleClass = style.get("class");
+            styleSubClass = style.get("subClass");
+            if (styleClass === "POINT") {
+                if (styleSubClass === "CUSTOM") {
+                    imagePath = style.get("imagePath") + this.createStyleFieldImageName(feat, style);
+                }
+                if (styleSubClass === "CIRCLE") {
+                    imagePath = this.createCircleSVG(style);
+                }
+                else if (style.get("imageName") !== "blank.png") {
+                    imagePath = style.get("imagePath") + style.get("imageName");
+                }
             }
-            // Circle Point Style
-            if (styleSubClass === "CIRCLE") {
-                imagePath = this.createCircleSVG(style);
+            if (styleClass === "LINE") {
+                imagePath = this.createLineSVG(style);
             }
-            else if (style.get("imageName") !== "blank.png") {
-                imagePath = style.get("imagePath") + style.get("imageName");
+            if (styleClass === "POLYGON") {
+                imagePath = this.createPolygonSVG(style);
             }
-        }
-        // Simple Line Style
-        if (styleClass === "LINE") {
-            imagePath = this.createLineSVG(style);
-        }
-        // Simple Polygon Style
-        if (styleClass === "POLYGON") {
-            imagePath = this.createPolygonSVG(style);
         }
 
         return imagePath;

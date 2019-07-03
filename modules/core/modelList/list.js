@@ -13,8 +13,8 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
-import PrintV2 from "../../tools/print_/model";
-import Print from "../../tools/print/model";
+import Print from "../../tools/print_/Mapfish3_PlotService";
+import HighResolutionPrint from "../../tools/print_/HighResolution_PlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -38,7 +38,7 @@ import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayersliderModel from "../../tools/layerslider/model";
+import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 
@@ -123,6 +123,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         this.listenTo(this, {
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
+                this.sortLayersVisually();
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
             "change:isExpanded": function (model) {
@@ -134,9 +135,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 this.trigger("traverseTree", model);
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
             },
-            "change:isSelected": function (model) {
+            "change:isSelected": function (model, value) {
                 if (model.get("type") === "layer") {
-                    model.setIsVisibleInMap(model.get("isSelected"));
+                    model.setIsVisibleInMap(value);
+                    this.sortLayersVisually();
+                    if (value === false) {
+                        model.setSelectionIDX(false);
+                    }
                 }
                 this.trigger("updateSelection");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
@@ -192,10 +197,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                if (attrs.version === undefined) {
-                    return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
+                    return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
-                return new PrintV2(attrs, options);
+                return new Print(attrs, options);
             }
             else if (attrs.id === "gfi") {
                 return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
@@ -275,8 +280,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "formular") {
                 return new Formular(attrs, options);
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             else if (attrs.id === "layerslider") {
-                return new LayersliderModel(attrs, options);
+                console.warn("Tool: 'layerslider' is deprecated. Please use 'layerSlider' instead.");
+                return new LayerSliderModel(attrs, options);
+            }
+            else if (attrs.id === "layerSlider") {
+                return new LayerSliderModel(attrs, options);
             }
             return new Tool(attrs, options);
         }
@@ -493,25 +506,29 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {integer} the index number, which has been associated to the model
      */
     initModelIndex: function (model) {
-        var aLayerModels = this.where({type: "layer"}),
-            iResultIndex = 0,
-            iMaxIndex = 0;
+        var allLayerModels = this.where({type: "layer", isSelected: true}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
         if (_.isNumber(model.get("selectionIDX")) && model.get("selectionIDX") > 0) {
-            return model.get("selectionIDX");
+            return;
         }
 
-        _.each(aLayerModels, function (oLayerModel) {
-            if (oLayerModel.get("selectionIDX") > iMaxIndex) {
-                iMaxIndex = oLayerModel.get("selectionIDX");
-            }
+        if (baseLayerModels.includes(model)) {
+            baseLayerModels.splice(baseLayerModels.indexOf(model), 1);
+            baseLayerModels.push(model);
+        }
+        else {
+            layerModels.splice(layerModels.indexOf(model), 1);
+            layerModels.push(model);
+        }
+
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
-
-        iResultIndex = iMaxIndex + 1;
-
-        model.setSelectionIDX(iResultIndex);
-
-        return iResultIndex;
     },
 
     /**
@@ -525,9 +542,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelDown: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
-            iMin = 0,
+            iMin = 1,
             affectedModel;
 
         // find next index and layer to swap with
@@ -547,21 +564,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // swap layers
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
-
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelDown(model);
-            return;
-        }
 
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
@@ -601,7 +603,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelUp: function (model) {
         var oldIDX = model.get("selectionIDX"),
-            visibleLayerModels = this.where({type: "layer"}),
+            visibleLayerModels = this.where({type: "layer", isSelected: true}),
             newIDX = false,
             iMin = 0,
             affectedModel;
@@ -624,21 +626,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         affectedModel.setSelectionIDX(oldIDX);
         model.setSelectionIDX(newIDX);
 
-        // in case the other layer is one of the following special ones (in 2D mode), skip it
-        if (Radio.request("Map", "getMapMode") === "2D"
-            &&
-            (
-                affectedModel.get("typ") === "Terrain3D"
-                ||
-                affectedModel.get("typ") === "Oblique"
-                ||
-                affectedModel.get("typ") === "TileSet3D"
-            )
-        ) {
-            this.moveModelUp(model);
-            return;
-        }
-
         this.trigger("updateSelection");
         this.trigger("updateLightTree");
         // Trigger for mobile
@@ -648,18 +635,21 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Iterates over the models in the selection index and sets the attribute selectionIDX
-     * for each model based on their index in the array
+     * sets the attribute selectionIDX for each model based on their index in the array
      * @return {void}
      */
     initModelIndeces: function () {
-        var aLayerModels = this.where({type: "layer"});
+        var allLayerModels = this.where({type: "layer"}),
+            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
+            combinedLayers = [];
 
-        _.each(aLayerModels, function (oLayerModel, iIndex) {
-            if (_.isUndefined(oLayerModel.get("layer")) === false) {
-                oLayerModel.setSelectionIDX(iIndex);
-            }
+        combinedLayers = baseLayerModels.concat(layerModels);
+
+        _.each(combinedLayers, function (oLayerModel, newSelectionIndex) {
+            oLayerModel.setSelectionIDX(newSelectionIndex + 1);
         }, this);
+
         this.sortLayersVisually();
     },
 

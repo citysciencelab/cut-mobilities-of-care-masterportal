@@ -52,6 +52,42 @@
  */
 
 
+/** -------------------- SIDEBAR -------------------- */
+
+/**
+ * @event Sidebar#changeIsVisible
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Triggered when Model attribute "isVisible" has changed.
+ */
+
+/**
+ * @event Sidebar#changeIsMobile
+ * @param {Backbone/Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Triggered when Model attribute "isMobile" has changed.
+ */
+
+/**
+ * @event Sidebar#addContent
+ * @param {DOM} element The dom element that has to be added to the sidebar.
+ * @description Triggered by Model when new content is available.
+ */
+
+/**
+ * @event Sidebar#RadioTriggerSidebarToggle
+ * @param {Boolean} isVisible Flag if sidebar is now visible or not.
+ * @param {String} [width="30%"] The width of the sidebar.
+ * @description Triggered by ToolModel that renders in sidebar.
+ * @example Radio.trigger("Sidebar", "toggle", isVisible, width)
+ */
+/**
+ * @event Sidebar#RadioTriggerSidebarAppend
+ * @param {HTML} element The Element that has to be rendered in sidebar.
+ * @description Triggered by ToolModel that renders in sidebar.
+ * @example Radio.trigger("Sidebar", "append", element)
+ */
+
 /** -------------------- ALERTING -------------------- */
 
 /**
@@ -96,27 +132,27 @@
 /**
  * @event ClickCounter#RadioTriggerClickCounterToolChanged
  * @example Radio.trigger("ClickCounter", "toolChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterCalcRoute
  * @example Radio.trigger("ClickCounter", "calcRoute")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterZoomChanged
  * @example Radio.trigger("ClickCounter", "zoomChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
  * @example Radio.trigger("ClickCounter", "layerVisibleChanged")
-*/
+ */
 
 /**
  * @event ClickCounter#RadioTriggerClickCounterGfi
  * @example Radio.trigger("ClickCounter", "gfi")
-*/
+ */
 
 
 /** -------------------- LEGEND -------------------- */
@@ -125,32 +161,32 @@
  * @event Legend#RadioRequestLegendGetLegend
  * @param {layer} layer The layer, to which the legend should be returned.
  * @example Radio.request("Legend", "getLegend", layer)
-*/
+ */
 
 /**
  * @event Legend#RadioRequestLegendGetLegendParams
  * @returns {Object} legendParams legendParams
-*/
+ */
 
 /**
  * @event Legend#RadioTriggerLegendSetLayerList
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#hide
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#changeLegendParams
  * @description todo
-*/
+ */
 
 /**
  * @event Legend#changeParamsStyleWMSArray
  * @description todo
-*/
+ */
 
 
 /** -------------------- PARSER -------------------- */
@@ -190,10 +226,10 @@
  */
 
 /**
-* @event Parser#RadioRequestParserSetCategory
-* @returns {*} todo
-* @example Radio.request("Parser", "setCategory")
-*/
+ * @event Parser#RadioRequestParserSetCategory
+ * @returns {*} todo
+ * @example Radio.request("Parser", "setCategory")
+ */
 
 /**
  * @event Parser#RadioRequestParserGetPortalConfig
@@ -404,6 +440,12 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapUpdateSize
+ * @description Event that forces the map to update its size.
+ * @example Radio.trigger("Map", "updateSize")
+ */
+
+/**
  * @event Map#RadioTriggerMapAddLayer
  * @description Adds layer to map
  * @param {Object} layer Layer to add to map
@@ -486,9 +528,9 @@
  */
 
 /**
-  * @event Map#RadioTriggerMapRegisterListenerMovenend
-  * @example Radio.trigger("Map", "registerListener", "moveend")
-  */
+ * @event Map#RadioTriggerMapRegisterListenerMovenend
+ * @example Radio.trigger("Map", "registerListener", "moveend")
+ */
 
 /**
  * @event Map#RadioRequestMapIsMap3d
@@ -509,8 +551,22 @@
  */
 
 /**
- * @event Map#RadioTriggerMapUpdateSize
- * @description todo
+ * @event Map#RadioTriggerSetShadowTime
+ * @description Sets the time of the shadows in 3D mode
+ * @param {Cesium.JulianDate} Date to set
+ * @example Radio.trigger("Map", "setShadowTime", julianDate);
+ */
+
+/**
+ * @event Map#RadioRequestIsMap3d
+ * @description Event that gets the state of map mode (2D or 3D)
+ * @example Radio.request("Map", "isMap3d");
+ */
+
+/**
+ * @event Map#RadioRequestGetMap3d
+ * @description Event that gets the map3D as an object
+ * @example Radio.request("Map", "getMap3d");
  */
 
 /** -------------------- MAP VIEW -------------------- */
@@ -1114,13 +1170,26 @@
  * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
  * @example Radio.request("Util", "isAny");
  */
+
+/**
+ * @event Util#RadioRequestUtilSort
+ * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
+ * @returns {string[]} - Sorted Array
+ * @example Radio.request("Util", "sort", values);
+ */
 /** -------------------- GRAPH -------------------- */
 
 /**
- * @event Graph#RadioTriggerGraphCreateGraph
+ * @event Tools.Graph#RadioTriggerGraphCreateGraph
  * @description starts the generating of a graphic
  * @param {Object} graphConfig contains the options for the graphic
- * @example Radio.trigger("Graph", "createGraph", );
+ * @example Radio.trigger("Graph", "createGraph", graphconfig);
+ */
+
+/**
+ * @event Tools.Graph#RadioRequestGraphGetGraphParams
+ * @description Returns the current graph params.
+ * @example Radio.request("Graph", "getGraphParams");
  */
 
 /** -------------------- GFILIST -------------------- */
@@ -1325,7 +1394,7 @@
  * @example Radio.request("RawLayerList", "getLayerAttributesList");
 
 
-/** -------------------- CswParser -------------------- */
+ /** -------------------- CswParser -------------------- */
 
 /**
  * @event CswParser#RadioTriggerGetMetaData

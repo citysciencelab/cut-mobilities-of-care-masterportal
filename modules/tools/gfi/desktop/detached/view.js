@@ -32,6 +32,9 @@ const GFIDetachedView = DesktopView.extend({
         }
         else {
             this.$el.hide();
+            if (this.$el.hasClass("gfi-text-html")) {
+                this.$el.removeClass("gfi-text-html");
+            }
             Radio.trigger("MapMarker", "hideMarker");
             Radio.trigger("GFI", "hideGFI");
         }

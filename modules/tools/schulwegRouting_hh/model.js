@@ -278,10 +278,10 @@ const SchulwegRouting = Tool.extend({
     },
     toggleLoader: function (show) {
         if (show) {
-            $("#loader").show();
+            Radio.trigger("Util", "showLoader");
         }
         else {
-            $("#loader").hide();
+            Radio.trigger("Util", "hideLoader");
         }
     },
     setObjectAttribute: function (object, attrName, dataType, value) {

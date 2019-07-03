@@ -47,16 +47,39 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
     * @returns {void}
     */
     getMouseHoverInfosFromConfig: function () {
-        var wfsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"}),
-            geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"}),
-            sensorThingsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "SensorThings"}),
-            vectorLayers = _.union(wfsLayers, geoJsonLayers, sensorThingsLayers),
-            mouseHoverLayers = vectorLayers.filter(function (layer) {
-                return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
-            }),
-            mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {
-                return _.pick(layer, "id", "mouseHoverField");
+        var groupLayers = [],
+            layerGroups = [],
+            wfsLayers = [],
+            geoJsonLayers = [],
+            sensorThingsLayers = [],
+            vectorLayers = [],
+            mouseHoverLayers = [],
+            mouseHoverInfos = [];
+
+        // Extract relevant layer from grouped layers
+        layerGroups = Radio.request("Parser", "getItemsByAttributes", {type: "layer", typ: "GROUP"});
+        layerGroups.forEach(layerGroup => {
+            layerGroup.children.forEach(layer => {
+                if (["WFS", "GeoJSON", "SensorThings"].indexOf(layer.typ) !== -1) {
+                    groupLayers.push(layer);
+                }
             });
+        });
+
+        wfsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "WFS"});
+        geoJsonLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "GeoJSON"});
+        sensorThingsLayers = Radio.request("Parser", "getItemsByAttributes", {typ: "SensorThings"});
+
+        // union all found layers
+        vectorLayers = _.union(wfsLayers, geoJsonLayers, sensorThingsLayers, groupLayers);
+
+        // now filter all layers with mouse hover functionality
+        mouseHoverLayers = vectorLayers.filter(function (layer) {
+            return _.has(layer, "mouseHoverField") && layer.mouseHoverField !== "";
+        });
+        mouseHoverInfos = _.map(mouseHoverLayers, function (layer) {
+            return _.pick(layer, "id", "mouseHoverField");
+        });
 
         this.setMouseHoverInfos(mouseHoverInfos);
     },
@@ -263,12 +286,20 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
         }
         else if (mouseHoverField && _.isArray(mouseHoverField)) {
             _.each(mouseHoverField, function (element, index) {
-                var cssClass = "";
+                var pickedString = "",
+                    cssClass = "";
 
                 if (index === 0) {
                     cssClass = "title";
                 }
-                value = value + "<span class='" + cssClass + "'>" + _.values(_.pick(featureProperties, element)) + "</span></br>";
+
+                pickedString = featureProperties[element];
+                if (!_.isString(pickedString)) {
+                    console.error("Parameter \"mouseHoverField\" in config.json mit Wert \"" + element + "\" gibt keinen String zurück!");
+                    return;
+                }
+
+                value = value + "<span class='" + cssClass + "'>" + pickedString + "</span></br>";
             });
         }
         return value;
@@ -277,13 +308,13 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
     /**
      * This function examines the pFeatureArray and extracts the text to show
      * @param  {Array} featureArray Array of features at MousePosition
-     * @returns {Array} textArrayBreaked Array containing text to show
+     * @returns {Array} textArrayBroken Array containing text to show
      */
     checkTextArray: function (featureArray) {
         var mouseHoverInfos = this.get("mouseHoverInfos"),
             textArray = [],
             textArrayCheckedLength,
-            textArrayBreaked;
+            textArrayBroken;
 
         // for each hovered over Feature...
         _.each(featureArray, function (element) {
@@ -297,9 +328,9 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
             }
         }, this);
         textArrayCheckedLength = this.checkMaxFeaturesToShow(textArray);
-        textArrayBreaked = this.addBreak(textArrayCheckedLength);
+        textArrayBroken = this.addBreak(textArrayCheckedLength);
 
-        return textArrayBreaked;
+        return textArrayBroken;
     },
 
     /**
@@ -325,19 +356,19 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
     /**
      * add html br between every element in values
      * @param  {Array} textArray Array without html br
-     * @return {Array} textArrayBreaked Array with html br
+     * @return {Array} textArrayBroken Array with html br
      */
     addBreak: function (textArray) {
-        var textArrayBreaked = [];
+        var textArrayBroken = [];
 
         _.each(textArray, function (value, index) {
-            textArrayBreaked.push(value);
+            textArrayBroken.push(value);
             if (index !== textArray.length - 1) {
-                textArrayBreaked.push("<br>");
+                textArrayBroken.push("<br>");
             }
         });
 
-        return textArrayBreaked;
+        return textArrayBroken;
     },
 
     /**

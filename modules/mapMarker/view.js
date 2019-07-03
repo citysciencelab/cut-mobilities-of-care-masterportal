@@ -134,10 +134,10 @@ const MapMarkerView = Backbone.View.extend({
                 Radio.trigger("MapView", "setCenter", coord, 6);
                 break;
             }
-            // gfiTheme für Flächeninformation soll nur dargestellt und nicht gezommt werden.
             case "flaecheninfo": {
                 this.model.setWkt("POLYGON", coord);
                 this.showPolygon();
+                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                 break;
             }
             // Features

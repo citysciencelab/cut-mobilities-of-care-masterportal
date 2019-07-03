@@ -1,7 +1,17 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-select";
-
-const DropdownView = Backbone.View.extend({
+/**
+ * @member Template
+ * @description Template for Dropdown Snippet
+ * @memberof Snippets.Dropdown
+ */
+const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
+    /**
+     * @class DropdownView
+     * @extends Backbone.View
+     * @memberof Snippets.Dropdown
+     * @constructs
+     */
     events: {
         // This event fires after the select's value has been changed
         "changed.bs.select": "updateSelectedValues",
@@ -66,7 +76,6 @@ const DropdownView = Backbone.View.extend({
         _.each(models, function (model) {
             values.push(model.get("value"));
         });
-
         this.$el.find(".selectpicker").selectpicker("val", values);
     },
 

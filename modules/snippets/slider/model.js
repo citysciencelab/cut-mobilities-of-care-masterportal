@@ -1,28 +1,50 @@
 import SnippetModel from "../model";
 import ValueModel from "./valuemodel";
+import moment from "moment";
 
-const SliderModel = SnippetModel.extend({
+const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
+    /**
+     * @class SliderModel
+     * @extends SnippetModel
+     * @memberof Snippets.Slider
+     * @constructs
+     * @property {boolean} editableValueBox=true Flag to show input or label
+     * @property {float} step=1 Increment step of the slider
+     * @property {float | array} [preselectedValues] Initial value. Use array to have a range slider.
+     * @property {float} precision=3 The number of digits shown after the decimal.
+     * @param {object} attributes Model to be used in this view
+     * @fires Util#RadioRequestUtilSort
+     * @listens Alerting#RadioTriggerAlertAlert
+     */
+    defaults: _.extend({}, SnippetModel.prototype.defaults, {
+        editableValueBox: true,
+        step: 1,
+        preselectedValues: null,
+        precision: 3
+    }),
+
     initialize: function (attributes) {
         var parsedValues;
 
         // parent (SnippetModel) initialize
         this.superInitialize();
         parsedValues = this.parseValues(attributes.values);
-
         this.addValueModels(_.min(parsedValues), _.max(parsedValues));
-        if (this.has("PreselectedValues")) {
+        if (this.get("preselectedValues") !== null) {
             this.updateValues(this.get("preselectedValues"));
         }
         this.listenTo(this.get("valuesCollection"), {
             "change:value": function (model, value) {
                 this.triggerValuesChanged(model, value);
-                this.trigger("render");
+            },
+            "updateDOMSlider": function () {
+                this.trigger("updateDOMSlider", this.getSelectedValues().values);
             }
         });
     },
 
     /**
-     * add minValueModel and maxValueModel to valuesCollection
+     * Add minValueModel and maxValueModel to valuesCollection
      * @param {number} min min
      * @param {number} max max
      * @returns {void}
@@ -47,8 +69,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * call the updateValueModel function and/or the updateMaxValueModel
-     * trigger the valueChanged event on snippetCollection in queryModel
+     * Update the internal valuesCollection and triggers event to adjust the DOM element
+     * triggers also the valueChanged event on snippetCollection in queryModel
      * @param  {number | array} snippetValues - depending on slider type
      * @returns {void}
      */
@@ -60,12 +82,31 @@ const SliderModel = SnippetModel.extend({
         }
         // slider
         else {
-            this.get("valuesCollection").at(0).set("value", snippetValues);
+            this.get("valuesCollection").at(0).setValue(snippetValues);
         }
+        this.trigger("updateDOMSlider", snippetValues);
     },
 
     /**
-     * returns an object with the slider name and its values
+     * Update the internal valuesCollection silently and triggers event to adjust the DOM element
+     * @param  {number | array} snippetValues - depending on slider type
+     * @returns {void}
+     */
+    updateValuesSilently: function (snippetValues) {
+        // range slider
+        if (_.isArray(snippetValues) === true) {
+            this.get("valuesCollection").at(0).set("value", snippetValues[0], {silent: true});
+            this.get("valuesCollection").at(1).set("value", snippetValues[1], {silent: true});
+        }
+        // slider
+        else {
+            this.get("valuesCollection").at(0).set("value", snippetValues, {silent: true});
+        }
+        this.trigger("updateDOMSlider", snippetValues);
+    },
+
+    /**
+     * Returns an object with the slider name and its values
      * @return {object} - contains the selected values
      */
     getSelectedValues: function () {
@@ -77,8 +118,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * parse strings into numbers if necessary
-     * @param  {array} valueList valueList
+     * Parse strings into numbers if necessary
+     * @param  {string[]} valueList valueList
      * @return {number[]} parsedValueList
      */
     parseValues: function (valueList) {
@@ -86,7 +127,6 @@ const SliderModel = SnippetModel.extend({
 
         _.each(valueList, function (value) {
             var val = value;
-
 
             if (_.isString(val)) {
                 val = parseInt(val, 10);
@@ -98,8 +138,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * change the values by input from inputfields
-     * render change if enter is pressed
+     * Change the values by input from inputfields. Render change if enter is pressed
+     * @fires Util#RadioRequestUtilSort
      * @param {number} minValue - input value min
      * @param {number} maxValue - input value max
      * @returns {void}
@@ -137,7 +177,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * converts number to integer or decimal by type
+     * Converts number to integer or decimal by type
      * @param {number} inputValue - input value
      * @param {String} type - input type
      * @returns {void} value
@@ -159,7 +199,7 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-    * check if value is valid parameter or set value to initValue
+    * Check if value is valid parameter or set value to initValue
     * @param {number} value - input value
     * @param {number} otherValue - value that be set if param value NaN
     * @returns {number} val
@@ -176,7 +216,8 @@ const SliderModel = SnippetModel.extend({
     },
 
     /**
-     * returns an error message for invalid inputs
+     * Returns an error message for invalid inputs
+     * @listens Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     errorMessage: function () {
@@ -187,6 +228,28 @@ const SliderModel = SnippetModel.extend({
         });
     },
 
+    /**
+     * Returns a parsed string of the given value according to the slider type.
+     * Only used with editableValueBox=true.
+     * @param   {number} value Value to be parsed
+     * @returns {string} text Beautified text of the value according to it's type.
+     */
+    getValueText: function (value) {
+        const type = this.get("type");
+
+        if (type === "time") {
+            return moment(value).format("HH:mm");
+        }
+        else if (type === "date") {
+            return moment(value).locale("de").format("D. MMMM YYYY");
+        }
+        return value.toString();
+    },
+    /**
+     * Setter for defaultWidth
+     * @param {integer} value defaultWidth
+     * @returns {void}
+     */
     setDefaultWidth: function (value) {
         this.set("defaultWidth", value);
     }

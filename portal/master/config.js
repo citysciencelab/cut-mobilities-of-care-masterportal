@@ -36,6 +36,8 @@ const Config = {
     quickHelp: {
         imgPath: "/lgv-config/img/"
     },
+    cswId: "3",
+    metaDataCatalogueId: "2",
     portalConf: "./",
     layerConf: "/lgv-config/services-fhhnet-ALL.json",
     restConf: "/lgv-config/rest-services-fhhnet.json",
@@ -63,7 +65,7 @@ const Config = {
     },
     cesiumParameter: {
         tileCacheSize: 20,
-        enableLighting: false,
+        enableLighting: true,
         fog: {
             enabled: true,
             density: 0.0002,

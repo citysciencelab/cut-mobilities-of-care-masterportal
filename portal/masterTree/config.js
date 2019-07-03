@@ -30,7 +30,7 @@ const Config = {
     ],
     portalConf: "../../portal/master/",
     remoteInterface: {
-        postMessageUrl: "http://localhost:8080"
+        postMessageUrl: "https://localhost:9001"
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
@@ -51,7 +51,7 @@ const Config = {
     obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
-        enableLighting: false,
+        enableLighting: true,
         fog: {
             enabled: true,
             density: 0.0002,
