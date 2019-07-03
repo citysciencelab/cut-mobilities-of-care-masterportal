@@ -33,15 +33,13 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
 
 Dann in der Admin-cmd ausführen:
 ```
 # npm install
 ```
 
-
-Installiert das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
+Es werden alle Abhängigkeiten installiert.
 
 
 ### npm start
@@ -53,7 +51,7 @@ Einen lokalen Entwicklungsserver starten.
 
 Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration des Masterportals.
 
-Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten. 
+Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten.
 
 
 ### npm start mit customModule
