@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts",
     "build": "node devtools/tasks/build.js",
-    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js && node devtools/tasks/exampleZip.js",
+    "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildPortalsForStable": "node devtools/tasks/exampleBuild.js && node devtools/tasks/portalsForStableCopy.js",
     "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
   },
