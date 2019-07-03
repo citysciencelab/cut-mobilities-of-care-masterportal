@@ -35,15 +35,6 @@ module.exports = function (env, args) {
         },
         module: {
             rules: [
-                // Glyphicons werden von bootstrap gelesen
-                {
-                    test: /glyphicons-halflings-regular\.(eot|svg|ttf|woff|woff2)$/,
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        publicPath: "../../node_modules/bootstrap/fonts"
-                    }
-                },
                 // alle anderen Schriftarten
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
