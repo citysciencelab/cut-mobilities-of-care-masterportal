@@ -1,6 +1,12 @@
 const fs = require("fs-extra"),
     execute = require("child-process-promise").exec;
 
+/**
+ * copy files to the given destination
+ * @param {String} source source of the built portal
+ * @param {String} destination destination folder for the built portal
+ * @returns {void}
+ */
 function copyFiles (source, destination) {
     fs.copy(source, destination).then(() => {
 <<<<<<< HEAD
@@ -21,9 +27,13 @@ function copyFiles (source, destination) {
 >>>>>>> refactor: step 1
 }
 
+/**
+ * remove files if if they already exist.
+ * @param {Object} answers contains the attributes for the portal to be build
+ * @returns {void}
+ */
 function removeFiles (answers) {
-    var
-        portalName = answers.portalPath.split("/").pop(),
+    const portalName = answers.portalPath.split("/").pop(),
         destination = "dist/" + portalName,
         source = "./" + answers.portalPath;
 
@@ -38,9 +48,13 @@ function removeFiles (answers) {
     });
 }
 
-
+/**
+ * start the process to build a portal with webpack
+ * @param {Object} answers contains the attributes for the portal to be build
+ * @returns {void}
+ */
 module.exports = function buildWebpack (answers) {
-    var command;
+    let command;
 
     if (answers.customModule !== "") {
         command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
