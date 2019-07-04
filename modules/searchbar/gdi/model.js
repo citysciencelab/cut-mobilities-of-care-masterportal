@@ -1,7 +1,7 @@
 import "../model";
 import ElasticSearch from "../../core/elasticsearch";
 
-const GdiModel = Backbone.Model.extend({
+const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     defaults: {
         minChars: 3,
         serviceId: "",
@@ -29,7 +29,11 @@ const GdiModel = Backbone.Model.extend({
             "search": this.search
         });
     },
-
+    /**
+     * Searchs layer if enough characters have been typed (if >="minChars")
+     * @param {String} searchString - what is searched
+     * @returns {void}
+     */
     search: function (searchString) {
         var query = this.createQuery(searchString),
             response = null;
@@ -55,6 +59,11 @@ const GdiModel = Backbone.Model.extend({
             Radio.trigger("Searchbar", "createRecommendedList");
         }
     },
+    /**
+     * todo
+     * @param {String} searchString todo
+     * @returns {Oject} query
+     */
     createQuery: function (searchString) {
         /* Zur Zeit noch nicht fuzzy */
         var query = {
@@ -78,6 +87,11 @@ const GdiModel = Backbone.Model.extend({
 
         return query;
     },
+    /**
+     * Adds found layer to layer tree
+     * @param {*} hit todo
+     * @returns {void}
+     */
     addLayer: function (hit) {
         var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
@@ -134,17 +148,38 @@ const GdiModel = Backbone.Model.extend({
             console.error("Es konnte kein Eintrag für Layer " + hit.id + " in ElasticSearch gefunden werden.");
         }
     },
+    /**
+     * Setter for MinChars
+     * @param {Number} value - value for minChars
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
+    /**
+     * Setter for ServiceId
+     * @param {Number} value for serviceId
+     * @returns {void}
+     */
     setServiceId: function (value) {
         this.set("serviceId", value);
     },
+    /**
+     * Setter for Sorting
+     * @param {*} key todo
+     * @param {*} value - value
+     * @returns {void}
+     */
     setSorting: function (key, value) {
         if (key && value) {
             this.get("sorting")[key] = value;
         }
     },
+    /**
+     * Setter for Size
+     * @param {String} value todo
+     * @returns {void}
+     */
     setSize: function (value) {
         if (typeof value === "number") {
             this.set("size", value);

@@ -1,5 +1,5 @@
 
-const ElasticSearchModel = Backbone.Model.extend({
+const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
         ajaxRequests: {}
     },
@@ -16,7 +16,11 @@ const ElasticSearchModel = Backbone.Model.extend({
 
         return JSON.stringify(searchBody);
     },
-
+    /**
+     * Deletes the information of the successful or canceled Ajax request from the object of the running Ajax requests.
+     * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
+     * @returns {void}
+     */
     polishAjax: function (serviceId) {
         var ajax = this.get("ajaxRequests"),
             cleanedAjax = _.omit(ajax, serviceId);
@@ -25,7 +29,7 @@ const ElasticSearchModel = Backbone.Model.extend({
     },
 
     /**
-     * @description Fuehrt einen HTTP-GET-Request aus
+     * @description Executes an HTTP GET request.
      * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
      * @param {object} searchBody - body of ElasticQuery
      * @param {object} searchUrl - url of ElasticSearchService
