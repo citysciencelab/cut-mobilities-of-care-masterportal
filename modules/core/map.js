@@ -44,6 +44,7 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "setLayerToIndex": this.setLayerToIndex,
             "addLayerOnTop": this.addLayerOnTop,
             "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
@@ -529,16 +530,37 @@ const map = Backbone.Model.extend({
         }
     },
 
-    // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
+    /**
+     * Sets an already inserted ol.layer to the defined index using openlayers setZIndex method
+     * @param {ol.Layer} layer Layer to set
+     * @param {integer} [index=0] new Index
+     * @returns {void}
+     */
+    setLayerToIndex: function (layer, index) {
+        if (layer instanceof LayerGroup) {
+            layer.getLayers().forEach(function (singleLayer) {
+                singleLayer.setZIndex(parseInt(index, 10) || 0);
+            });
+        }
+        else {
+            layer.setZIndex(parseInt(index, 10) || 0);
+        }
+    },
+
+    /**
+     * Pushes 'alwaysOnTop' layers to the top of the collection
+     * @param {ol.Collection} layers Layer Collection
+     * @returns {void}
+     */
     setImportDrawMeasureLayersOnTop: function (layers) {
-        var layersOnTop = layers.getArray().filter(function (layer) {
-            return layer.get("alwaysOnTop") === true;
-        });
+        const newIndex = layers.getLength(),
+            layersOnTop = layers.getArray().filter(function (layer) {
+                return layer.get("alwaysOnTop") === true;
+            });
 
         _.each(layersOnTop, function (layer) {
-            layers.remove(layer);
-            layers.push(layer);
-        });
+            this.setLayerToIndex(layer, newIndex);
+        }, this);
     },
 
     zoomToExtent: function (extent, options) {

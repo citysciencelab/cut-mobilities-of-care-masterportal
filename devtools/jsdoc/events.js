@@ -446,6 +446,14 @@
  */
 
 /**
+ * @event Map#RadioTriggerMapSetLayerToIndex
+ * @description Sets layer to given index
+ * @param {ol.Layer} layer Layer to set to new index
+ * @param {integer} [index=0] new index
+ * @example Radio.trigger("Map", "setLayerToIndex", layer, index)
+ */
+
+/**
  * @event Map#RadioTriggerMapAddLayer
  * @description Adds layer to map
  * @param {Object} layer Layer to add to map

@@ -2,6 +2,8 @@ import Model from "@modules/core/map.js";
 import Util from "@testUtil";
 import Preparser from "@modules/core/configLoader/preparser";
 import ParametricURL from "@modules/core/parametricURL";
+import ImageWMS from "ol/source/ImageWMS.js";
+import {Image} from "ol/layer.js";
 
 describe("core/map", function () {
     var model,
@@ -37,6 +39,22 @@ describe("core/map", function () {
             it("should return 2D", function () {
                 expect(model.getMapMode()).to.equal("2D");
             });
+        });
+    });
+
+    describe("setLayerToIndex", function () {
+        const layer = new Image({
+            source: new ImageWMS()
+        });
+
+        it("should set layer to zIndex 10", function () {
+            model.setLayerToIndex(layer, 10);
+            expect(layer.getZIndex()).to.equal(10);
+        });
+
+        it("should set layer to zIndex 0 if no index is given", function () {
+            model.setLayerToIndex(layer);
+            expect(layer.getZIndex()).to.equal(0);
         });
     });
 });
