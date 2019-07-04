@@ -1,6 +1,6 @@
 const fs = require("fs-extra"),
     stableVersion = require("../../package.json").version.replace(/\./g, "_"),
-    portalsForStableReplace = require("./portalsForStableReplace"),
+    portalsForStableReplace = require("./buildPortalconfigsReplace"),
     execute = require("child-process-promise").exec,
     replaceStrings = require("./replace"),
 
