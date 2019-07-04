@@ -28,6 +28,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
+        this.listenTo(Radio.channel("Elastic"), {
+            "triggerHitList": this.triggerHitList
+        });
     },
     /**
      * Searchs layer if enough characters have been typed (if >="minChars")
@@ -35,29 +38,35 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-        var query = this.createQuery(searchString),
-            response = null;
+        var query = this.createQuery(searchString);
 
         if (searchString.length >= this.get("minChars")) {
-            response = this.get("elasticSearch").search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
-            if (response && response.hits) {
-                _.each(response.hits, function (hit) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        name: hit.name,
-                        type: "Fachthema",
-                        glyphicon: "glyphicon-list",
-                        id: hit.id,
-                        triggerEvent: {
-                            channel: "GDI-Search",
-                            event: "addLayer"
-                        },
-                        source: hit
-                    });
-                }, this);
-            }
-
-            Radio.trigger("Searchbar", "createRecommendedList");
+            this.get("elasticSearch").search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
         }
+    },
+    /**
+     * todo
+     * @param {String} datasources - todo
+     * @returns {void}
+     */
+    triggerHitList: function (datasources) {
+        if (datasources) {
+            _.each(datasources, function (hit) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    name: hit.name,
+                    type: "Fachthema",
+                    glyphicon: "glyphicon-list",
+                    id: hit.id,
+                    triggerEvent: {
+                        channel: "GDI-Search",
+                        event: "addLayer"
+                    },
+                    source: hit
+                });
+            }, this);
+        }
+
+        Radio.trigger("Searchbar", "createRecommendedList");
     },
     /**
      * todo
