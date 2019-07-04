@@ -14,7 +14,7 @@ const fs = require("fs-extra"),
         tempPortalFolder: "dist/build",
         basicPortalFolder: "dist/Basic"
     },
-    confPortalConfigs = require("../../" + conf.sourceFolder + "/buildStablePortalsConfig.js");
+    confPortalConfigs = require("../../" + conf.sourceFolder + "/conf-buildPortalconfigs.js");
 
 /**
  * copy a portal without custom module
