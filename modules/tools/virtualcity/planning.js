@@ -66,6 +66,12 @@ export default class Planning {
                 }
             });
 
+            Radio.channel("Map").on("change", (map) => {
+                if (map !== "3D") {
+                    this.deactivate();
+                }
+            });
+
             this.viewpoints = [];
             this.config.viewpoints.forEach(this.addViewpoint.bind(this));
             this.readyPromise = Promise.all(promises);
@@ -87,6 +93,9 @@ export default class Planning {
      */
     activate () {
         return this.initialize().then(() => {
+            if (!Radio.request("Map", "isMap3d")) {
+                Radio.trigger("Map", "activateMap3d");
+            }
             if (this.defaultViewpoint) {
                 Radio.trigger("Map", "setCameraParameter", this.defaultViewpoint);
             }
@@ -109,8 +118,10 @@ export default class Planning {
     deactivate () {
         return this.initialize().then(() => {
             this.entitiesLayer.setVisible(false);
+            this.entitiesLayer.set("isSelected", false, {silent: true});
             this.clearHiddenObjects();
             this.planningObjects.forEach((layer)=> {
+                layer.set("isSelected", false, {silent: true});
                 layer.setVisible(false);
             });
         });
