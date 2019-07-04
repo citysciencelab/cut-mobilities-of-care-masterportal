@@ -1,4 +1,5 @@
 const fs = require("fs-extra"),
+    replaceStrings = require("./replace"),
     execute = require("child-process-promise").exec;
 
 /**
@@ -12,6 +13,7 @@ function copyFiles (source, destination) {
         console.warn("NOTE: Successfully Copied \"" + source + "\" to \"" + destination + "\".");
         fs.copy("./dist/build", destination).then(() => {
             fs.remove("./dist/build").catch(error => console.error(error));
+            replaceStrings(destination);
             console.warn("NOTE: Successfully moved \"./dist/build\" to \"" + destination + "\".");
         }).catch(error => console.error(error));
     }).catch(error => console.error(error));
@@ -48,7 +50,7 @@ module.exports = function buildWebpack (answers) {
         command = "webpack --config devtools/webpack.prod.js";
     }
     console.warn("NOTICE: webpack startet...");
-    console.log("NOTICE: executing command " + command);
+    console.warn("NOTICE: executing command " + command);
 
     execute(command)
         .then(function (result) {
