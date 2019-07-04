@@ -54,6 +54,8 @@ const ElasticSearchModel = Backbone.Model.extend({
                     });
                 }
                 result.hits = datasources;
+
+                Radio.trigger("Elastic", "triggerHitList", datasources);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 result.status = "error";
