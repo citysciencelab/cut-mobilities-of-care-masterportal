@@ -101,8 +101,53 @@ Ein Beispielportal erzeugen.
 # npm run buildExamples
 ```
 
-- erzeugt zwei Ordner examples und examples-x.x.x (Version), in denen jeweils eine lauffähige Portal-Instanz (Basic) enthalten ist inkl. dem Ordner lgv-config
-- erzeugt zusätzlich examples.zip und examples-x.x.x.zip
+- erzeugt examples.zip und examples-x.x.x.zip (Version), in denen jeweils eine lauffähige Portal-Instanz (Basic) enthalten ist inkl. einem Ordner Ressources
+
+
+### npm run buildPortalsFromPortalconfigs
+Mit diesem Kommando lassen sich mehrere Portale auf einemal bauen. Die Konfigurationen der Portale müssen in einem Ordner "portalconfigs" abgelegt werden. In portalconfigs kann eine Datei conf-buildPortalconfigs.js abgelegt werden zur Angabe von Portalen die nicht gebaut werden sollen oder ein Custommoudl enthalten 
+
+```
+// npm run buildPortalsFromPortalconfigs
+# npm run buildPortalsFromPortalconfigs
+```
+
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|modulesBlackList|String[]|Portale die nicht gebaut werden sollen.|
+|customModules|Object|Portale die mit einem Custommodul gebaut werdne sollen.|
+|portalname|Object|Name des Portals.|
+|initFile|String|Pfad zu dem Custommodul.|
+|ignoreList|String[]|Dateien die nicht im gebauten Portal enthalten sein sollen.|
+
+
+**Beispiel**
+```
+#!json
+const
+    conf = {
+        modulesBlackList: [
+            "artenkataster",
+            "badegewaesser"
+        ],
+
+        // relative paths to custom modules entry js files
+        // although custom modules creation script does not expect the .js suffix, it is redundantly added
+        // for the sake of readability
+        customModules: {
+            "portalname": {
+                "initFile": "../portalconfigs/boris/bodenrichtwertabfrage/view.js",
+                "ignoreList": ["bodenrichtwertabfrage"]
+            }
+        }
+    };
+```
+***
+
+- Die Portale werden in den Ordner dist/ gebaut
+- Portale ohne Custommodul verweisen auf eine zentral gebaute Instanz des Masterportals im Ordner Mastercode, unter der gebauten Version
+- Portale mit Custommodul werden separat gebaut und erhalten eine eigene Instanz des Masterportals, mit dem angegebenen Custommodul
+- Pfade in index.html werden automatisch ersetzt
 
 
 ## Aktualisieren der Abhängigkeiten
