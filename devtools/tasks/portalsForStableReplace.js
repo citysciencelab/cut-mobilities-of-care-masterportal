@@ -1,18 +1,11 @@
 var replace = require("replace-in-file");
 
 module.exports = function (destination, stableVersion) {
-    var replacements = [{
-        "files": destination,
-        "from": /\/*(\.+\/)*lgv-config/g,
-        "to": "../../lgv-config"
-    },
-    {
+    var replacement = {
         "files": destination,
         "from": /\/*(\.+\/)*build/g,
-        "to": "../Mastercode/"+stableVersion
-    }];
+        "to": "../Mastercode/" + stableVersion
+    };
 
-    replacements.forEach(function (replacement) {
-        replace.sync(replacement);
-    });
+    replace.sync(replacement);
 };
