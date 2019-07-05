@@ -5,36 +5,24 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
 const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
-        // available layouts of the specified print configuration
         layoutList: [],
         currentLayout: undefined,
-        // available scales of the specified print configuration
         scaleList: [],
-        // current print scale
         currentScale: undefined,
-        // available formats of the specified print configuration
         formatList: [],
         currentFormat: "pdf",
-        // true if the current layout supports legend
         isLegendAvailable: false,
-        // true if the current layout supports gfi
         isGfiAvailable: false,
-        // true if gfi is active
         isGfiActive: false,
-        // true if gfi is to be printed
         isGfiSelected: false,
-        // is scale selected by the user over the view
         isScaleSelectedManually: false,
-        // true if the current layout supports meta data
         isMetaDataAvailable: false,
-        // true if the current layout supports scale
         isScaleAvailable: false,
         eventListener: {},
         printID: "99999",
         title: "PrintResult",
         outputFilename: "Ausdruck",
         outputFormat: "pdf",
-        // gfiToPrint: [], //  visible GFIs
         center: [],
         scale: {},
         layerToPrint: [],
@@ -103,16 +91,11 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {Number} DOTS_PER_INCH=72 - Dots per inch
      * @property {Number} INCHES_PER_METER=39.37 - Inches per meter
      * @listens Print#ChangeIsAvtive
-     * @description sets initial values and activates / deactivates the print mask when the print modul is activated or deactivated
      * @listens Print#ChangeSpecification
-     * @description triggered when the specifications for the ajax request change
      * @listens MapView#RadioTriggerMapViewChangedOptions
      * @listens MapView#RadioTriggerMapViewChangedCenter
-     * @description process new zomm level or map center when they change
      * @listens GFI#RadioTriggerGFIIsVisible
-     * @description triggered when the GFI visibility changed
      * @listens Print#CreatePrintJob
-     * @description creates a Print Job when triggered
      */
     initialize: function () {
         var channel = Radio.channel("Print");
@@ -155,9 +138,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * Gets the capabilities for a specific print configuration
      * @fires RestReader#RadioRequestRestReaderGetServiceByIdWithPrintID
-     * @description gets the service via printID
      * @param {String} printID - Service Id to be send with the event
-     * @returns {*} - Service get with the service id
      * @returns {void}
      */
     getCapabilities: function () {
@@ -191,10 +172,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Parses all capabilites
      * @param {*} response - response from print service
      * @fires MapView#RadioRequestMapViewGetOptions
-     * @description - gets the current scale from the map
-     * @returns {*} - the current scale of the map
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @return {String} - shows if the function succeeds or fails
      */
     updateParameter: function (response) {
@@ -232,14 +210,8 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * Print! Is called from View by clicking the print button
      * @fires Draw#RadioRequestDrawGetLayer
-     * @description gets the layer from the Draw modul
-     * @returns {*} - layer from the Draw modul
      * @fires ModelList#RadioRequestModelListGetModelsByAttributesWithisVisibleInMapAndTyp
      * @fires ModelList#RadioRequestModelListGetModelsByAttributesWithisVisibleInMapAndTyp
-     * @description gets the layer form the Modellist that is visible in map and is from typ WMS / GROUP
-     * @returns {*} - layer
-     * @param {Boolean} isVisibleInMap - Flag if the layer is visible in the map
-     * @param {String} typ - typ of the layer
      * @returns {void}
      */
     print: function () {
@@ -268,27 +240,15 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * Gets the scales that are available for printing
-     * @return {Array} - All available Scales of Print service
-     */
-    getPrintMapScales: function () {
-        return this.get("scaleList");
-    },
-
-    /**
      * If the tool is activated and there is a layout,
      * a callback function is registered to the postcompose event of the map
      * @param {Backbone.Model} model - this
      * @param {boolean} value - is this tool activated or not
-     * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
-     * @description register a postcomposeListener
-     * @returns {*} - eventListener Postcompose
      * @param {String} postcompose - postcomposeListener
-     * @fires Map#RadioTriggerMapUnregisterListenerWithEventListener
-     * @description unregister the listener in the eventListener holder from the map
      * @param {String} - eventlistener
+     * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
+     * @fires Map#RadioTriggerMapUnregisterListenerWithEventListener
      * @fires Map#RadioTriggerMapRender
-     * @description renders the map
      * @returns {void}
      */
     togglePostcomposeListener: function (model, value) {
@@ -316,7 +276,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             scale = this.get("currentScale");
         }
         else {
-            scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
+            scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.get("scaleList"));
             this.setCurrentScale(scale);
         }
         this.drawMask(frameState.size, context);
@@ -416,8 +376,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * Sets scale for print with the zoom of the map.
      * @fires MapView#RadioRequestMapViewGetOptions
-     * @description gets the current scale from the map
-     * @returns {*} - current scale from the map
      * @returns {void}
      */
     setScaleByMapView: function () {
@@ -432,7 +390,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Sets center coordinate.
      * @param {array} value - coordinates of the map center
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @returns {void}
      */
     setCenter: function (value) {
@@ -450,21 +407,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * Updates the Print Page
      * @fires Map#RadioRequestMapRegisterListenerWithPrecompose
-     * @description register a precomposeListener
-     * @param {String} precompose - Listener of type precompose
-     * @returns {*} - precomposeListener
      * @fires Map#RadioRequestMapRegisterListenerWithPostcompose
-     * @description register a postcomposeListener
-     * @param {String} postcompose - Listener of type postcompose
-     * @returns {*} - postcomposeListener
      * @fires Map#RadioTriggerMapUnregisterListenerWithPrecomposeListener
-     * @description unregister the precomposeListener from the map
-     * @param {*} precomposeListener - precomposeListener
      * @fires Map#RadioTriggerMapUnregisterListenerWithPostcomposeListener
-     * @description unregister the postcomposeListener from the map
-     * @param {*} postcomposeListener - postcomposeListener
      * @fires Map#RadioTriggerMapRender
-     * @description renders the map
      * @returns {void}
      */
     updatePrintPage: function () {
@@ -605,13 +551,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Sets layer properties
      * @param {*} layer - layer
      * @fires ModelList#RadioRequestModelListGetModelsByAttributesWithId
-     * @description gets the layer form the Modellist that has the passed id
-     * @param {String} layerId - id for the layer
-     * @returns {*} - layer
      * @fires StyleList#RadioRequestStyleListReturnModelByIdWithStyleId
-     * @description gets the style from the Stylelist that has the passed styleId
-     * @param {String} styleId - id for the style
-     * @returns {*} - style
      * @returns {void}
      */
     setLayer: function (layer) {
@@ -748,14 +688,8 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * GFI Managing
      * @param {*} gfiPosition - Position of GFI
      * @fires Map#RadioRequestMapGetLayers
-     * @description gets all layers from the map
-     * @returns {List} - List of Layers
      * @fires MapView#RadioRequestMapViewGetProjection
-     * @description get the coordinateSystem of the map
-     * @returns {*} coordinateSystem code of the map
      * @fires MapView#RadioRequestMapViewGetCenter
-     * @description gets the center of the map
-     * @returns {Array} - center coordinates of the map
      * @returns {void}
      */
     setSpecification: function (gfiPosition) {
@@ -850,11 +784,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     /**
      * Sets createURL in dependence of GFI
      * @fires GFI#RadioRequestGFIGetIsVisible
-     * @description requests if the GFI is visible
-     * @returns {Boolean} - flag if GFI is visible
      * @fires GFI#RadioRequestGFIGetGfiForPrint
-     * @description gets the gfi for the print
-     * @returns {*} - gfi for print
      * @returns {void}
     */
     getGfiForPrint: function () {
@@ -879,13 +809,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * @desc Conducts an HTTP-Post-Request.
+     * Conducts an HTTP-Post-Request.
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @fires Util#RadioTriggerUtilHideLoader
-     * @description hides the loader
      * @fires Util#RadioTriggerUtilShowLoader
-     * @description showes the loader
      * @returns {void}
      */
     getPDFURL: function () {
@@ -914,7 +841,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * @desc Opens the generated PDF in the browser.
+     * Opens the generated PDF in the browser.
      * @param {Object} data - Answer from print service. Contains the URL for the generated PDF.
      * @returns {void}
      */
@@ -923,7 +850,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
-     * @desc Helper method to set an attribute of type array.
+     * Helper method to set an attribute of type array.
      * @param {String} attribute - The attribute to set.
      * @param {whatever} value - The value of the attribute.
      * @returns {void}
@@ -1019,8 +946,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * create print bounding box
      * @param {*} evt - event
      * @fires Map#RadioRequestMapGetSize
-     * @description requests the size of the map
-     * @returns {Array} - Array with the size of the map
      * @returns {void}
      */
     handlePostCompose: function (evt) {
@@ -1058,8 +983,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * calculate the pixels of page bounds
      * @param {Array} mapSize - size of the map
      * @fires MapView#RadioRequestMapViewGetOptions
-     * @description gets all MapView Options
-     * @returns {Object} - MapView options
      * @return {Array | String} - page bounds in pixels or an Error String
      */
     calculatePageBoundsPixels: function (mapSize) {
@@ -1172,9 +1095,8 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
 
     /**
      * Sets the title for the print page
-     * @param {String} value  - Title
+     * @param {String} value - Title
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @returns {void}
      */
     setTitle: function (value) {
@@ -1193,7 +1115,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Sets a value for the current Layout
      * @param {object[]} value - current print layout
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @returns {void}
      */
     setCurrentLayout: function (value) {
@@ -1212,7 +1133,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Sets a value for the current format
      * @param {string} value - current print format
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @returns {void}
      */
     setCurrentFormat: function (value) {
@@ -1301,7 +1221,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * Sets a value for the current scale of the map
      * @param {number} value - current print scale
      * @fires Alert#RadioTriggerAlertalert
-     * @description creates an alert with error message
      * @returns {void}
      */
     setCurrentScale: function (value) {
