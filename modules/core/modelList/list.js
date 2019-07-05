@@ -172,7 +172,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     return new GeoJSONLayer(attrs, options);
                 }
                 return new WFSLayer(attrs, options);
-
             }
             else if (attrs.typ === "StaticImage") {
                 return new StaticImageLayer(attrs, options);
@@ -207,12 +206,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 // @deprecated in version 3.0.0
                 // do not use the attribute "version"
                 if (attrs.version === undefined) {
-                    return new PrintV2(attrs, options);
+                    return new PrintV2(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 else if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
-                return new Print(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                return new Print(attrs, options);
             }
             else if (attrs.id === "gfi") {
                 return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
