@@ -29,3 +29,4 @@ npm-debug.log
 .vscode
 build
 /jsdoc
+lintfixed.html
