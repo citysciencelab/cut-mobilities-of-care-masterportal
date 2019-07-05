@@ -14,6 +14,8 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {Object} config - gdi-ConfigObject
      * @param {integer} [config.minChars=3] - minimal number of searchcharacters
      * @param {string} config.serviceId - rest-services Id
+     * @listens
+     * @listens
      * @returns {void}
      */
     initialize: function () {
@@ -33,7 +35,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         });
     },
     /**
-     * Searchs layer if enough characters have been typed (if >="minChars")
+     * Searchs layer if enough characters have been touched (if >="minChars")
      * @param {String} searchString - what is searched
      * @returns {void}
      */
@@ -45,8 +47,8 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         }
     },
     /**
-     * todo
-     * @param {String} datasources - todo
+     * function for the layers that are being searched for
+     * @param {String} datasources - layers that have been found
      * @returns {void}
      */
     triggerHitList: function (datasources) {
@@ -69,8 +71,8 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         Radio.trigger("Searchbar", "createRecommendedList");
     },
     /**
-     * todo
-     * @param {String} searchString todo
+     * creates query for searched string (layer)
+     * @param {String} searchString - string that will be touched
      * @returns {Oject} query
      */
     createQuery: function (searchString) {
@@ -98,10 +100,11 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     },
     /**
      * Adds found layer to layer tree
-     * @param {*} hit todo
+     * @param {Object} hit layer to be added
      * @returns {void}
      */
     addLayer: function (hit) {
+        console.log(hit);
         var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
             level = 0,
@@ -175,8 +178,8 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     },
     /**
      * Setter for Sorting
-     * @param {*} key todo
-     * @param {*} value - value
+     * @param {String} key todo
+     * @param {String} value - value for type of sorting
      * @returns {void}
      */
     setSorting: function (key, value) {
@@ -186,7 +189,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     },
     /**
      * Setter for Size
-     * @param {String} value todo
+     * @param {String} value for size
      * @returns {void}
      */
     setSize: function (value) {
