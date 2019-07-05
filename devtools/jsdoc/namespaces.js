@@ -404,7 +404,7 @@
  * @description foobar
  */
 
- /**
+/**
  * @namespace Source
  * @memberOf Tools.Filter.Query
  * @description foobar

@@ -87,7 +87,7 @@ const ImportTool = Tool.extend({
             pointStyleCounter = 0,
             textFonts = [];
 
-            // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
+        // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
         $(kml).find("Point").each(function (i, point) {
             var placemark = point.parentNode,
                 pointStyle,

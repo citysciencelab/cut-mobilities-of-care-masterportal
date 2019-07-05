@@ -128,10 +128,10 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
 
         // the provider is always non-null if we got this far
         const layerOptions = {
-            "show": false
-        };
+                "show": false
+            },
 
-        const cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
+            cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
 
         return cesiumLayer ? [cesiumLayer] : null;
     }
@@ -286,9 +286,7 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
             }
         }
 
-        stableSort(layers, (layer1, layer2) =>
-            zIndices[getUid(layer1)] - zIndices[getUid(layer2)]
-        );
+        stableSort(layers, (layer1, layer2) => zIndices[getUid(layer1)] - zIndices[getUid(layer2)]);
 
         layers.forEach(function (olLayer) {
             const olLayerId = getUid(olLayer).toString(),

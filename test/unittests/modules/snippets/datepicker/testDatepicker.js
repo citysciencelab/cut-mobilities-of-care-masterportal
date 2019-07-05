@@ -5,9 +5,9 @@ describe("snippets/slider/model", function () {
     let model;
 
     beforeEach(function () {
-        const today = new Date ("2019, 06, 15"),
-            startDate = new Date ("2019, 01, 01"),
-            endDate = new Date ("2019, 12, 31");
+        const today = new Date("2019, 06, 15"),
+            startDate = new Date("2019, 01, 01"),
+            endDate = new Date("2019, 12, 31");
 
         model = new Model({
             displayName: "irgendwas",
@@ -30,7 +30,7 @@ describe("snippets/slider/model", function () {
 
     describe("update values works correctly", function () {
         it("input values are set like they should", function () {
-            const today = new Date ("2019, 06, 16");
+            const today = new Date("2019, 06, 16");
             let values;
 
             model.updateValues(today);
@@ -43,7 +43,7 @@ describe("snippets/slider/model", function () {
 
     describe("update values silently works also", function () {
         it("input values are set like they should", function () {
-            const today = new Date ("2019, 06, 17");
+            const today = new Date("2019, 06, 17");
             let values;
 
             model.updateValuesSilently(today);

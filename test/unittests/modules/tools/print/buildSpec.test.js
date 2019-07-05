@@ -928,16 +928,16 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("rgbStringToRgbArray", function () {
         it("should turn \"rgb(0,12,345)\" into [0,12,345]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345)")).to.deep.equal([0,12,345]);
+            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345)")).to.deep.equal([0, 12, 345]);
         });
         it("should turn \"rgba(0,12,345,1)\" into [0,12,345,1]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,1)")).to.deep.equal([0,12,345,1]);
+            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,1)")).to.deep.equal([0, 12, 345, 1]);
         });
         it("should turn \"rgba(0,12,345,.1)\" into [0,12,345,.1]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,.1)")).to.deep.equal([0,12,345,0.1]);
+            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,.1)")).to.deep.equal([0, 12, 345, 0.1]);
         });
         it("should turn \"rgba(0,12,345,0.1)\" into [0,12,345,01]", function () {
-            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,0.1)")).to.deep.equal([0,12,345,0.1]);
+            expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,0.1)")).to.deep.equal([0, 12, 345, 0.1]);
         });
     });
 });
