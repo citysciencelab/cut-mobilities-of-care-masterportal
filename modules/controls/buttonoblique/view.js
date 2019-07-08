@@ -7,7 +7,8 @@ import ButtonObliqueTemplate from "text-loader!./template.html";
 
 const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prototype */{
     events: {
-        "click .buttonOblique": "mapChange"
+        "click .buttonOblique": "mapChange",
+        "click div#ObliqueTable": "mapChange"
     },
     /**
      * @class ButtonObliqueView
@@ -25,15 +26,33 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @listens Map#RadioTriggerMapChange
      */
     initialize: function () {
-        var channel = Radio.channel("Map");
+        var channel = Radio.channel("Map"),
+            style = Radio.request("Util", "getUiStyle");
 
         channel.on({
             "change": this.change
         }, this);
-
-        this.template = _.template(ButtonObliqueTemplate);
-        this.render();
+        if (style === "DEFAULT") {
+            this.template = _.template(ButtonObliqueTemplate);
+            this.render();
+        }
+        else if (style === "TABLE") {
+            this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
+                    this.setElement("#table-tools-menu");
+                    this.renderToToolbar();
+                }
+            });
+            this.setElement("#table-tools-menu");
+            this.renderToToolbar();
+        }
     },
+    /**
+     * @member ButtonObliqueTemplate
+     * @description tableTemplate used for the ObliqueMap in Table View Tools
+     * @memberof Controls.ButtonOblique
+     */
+    tabletemplate: _.template("<div id='ObliqueTable' class='table-tool'><a href='#'><span class='glyphicon glyphicon-picture'></span><span id='ObliqueTable_title'><%=ansicht %></span></a> </div>"),
     /**
      * Shows the "Schrägluftbilder" button as selected.
      * Shows the "Schrägluftbilder" button as not selected.
@@ -62,6 +81,18 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
         return this;
     },
     /**
+     * Render Function
+     * @fires Map#RadioRequestObliqueMapIsActive
+     * @returns {ButtonObliqueView} - Returns itself
+     */
+    renderToToolbar: function () {
+        this.$el.append(this.tabletemplate({ansicht: " Schrägluftbilder aus"}));
+        if (Radio.trigger("ObliqueMap", "activate")) {
+            this.$("#ObliqueTable").addClass("toggleButtonPressed");
+        }
+        return this;
+    },
+    /**
      * Shows the oblique aerial picture if the "Schräglüftbilder" button is activated.
      * Shows the map if the "Schräglüftbilder" button is deactivated.
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
@@ -78,6 +109,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
         if (Radio.request("ObliqueMap", "isActive")) {
             Radio.trigger("ObliqueMap", "deactivate");
             Radio.trigger("Alert", "alert:remove");
+            this.$("#ObliqueTable_title").text(" Schrägluftbilder an");
         }
         else {
             if (Radio.request("Map", "isMap3d")) {
@@ -89,6 +121,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
                 Radio.trigger("Map", "deactivateMap3d");
                 return;
             }
+            this.$("#ObliqueTable_title").text(" Schrägluftbilder aus");
             Radio.trigger("ObliqueMap", "activate");
             Radio.trigger("Alert", "alert", "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!");
         }
