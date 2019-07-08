@@ -86,8 +86,8 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @returns {ButtonObliqueView} - Returns itself
      */
     renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: " Schrägluftbilder aus"}));
-        if (Radio.trigger("ObliqueMap", "activate")) {
+        this.$el.append(this.tabletemplate({ansicht: " Schrägluftbilder an"}));
+        if (Radio.request("ObliqueMap", "isActive")) {
             this.$("#ObliqueTable").addClass("toggleButtonPressed");
         }
         return this;
