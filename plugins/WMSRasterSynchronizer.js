@@ -11,6 +11,9 @@ import {stableSort} from "ol/array.js";
 import {getBottomLeft, getBottomRight, getTopRight, getTopLeft} from "ol/extent.js";
 import {transformExtent} from "ol/proj.js";
 
+/**
+ * Represents a WMSRasterSynchronizer.
+ */
 class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
     /**
      * This object takes care of one-directional synchronization of
@@ -127,10 +130,12 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
         }
 
         // the provider is always non-null if we got this far
+        /* eslint-disable one-var */
+
         const layerOptions = {
                 "show": false
             },
-
+            /* eslint-enable one-var */
             cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
 
         return cesiumLayer ? [cesiumLayer] : null;
@@ -178,8 +183,11 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
             maxLevel = 20;
 
         while (minLevel < maxLevel) {
+            /* eslint-disable no-loop-func */
+
             const tileCoords = extentCoords.map(position => tilingScheme.positionToTileXY(position, minLevel)),
                 distances = [];
+            /* eslint-enable  no-loop-func */
 
             distances.push(Math.abs(tileCoords[0].x - tileCoords[1].x));
             distances.push(Math.abs(tileCoords[0].y - tileCoords[3].y));
@@ -190,8 +198,11 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
             minLevel++;
         }
         while (maxLevel > minLevel) {
+            /* eslint-disable no-loop-func */
+
             const tileCoords = extentCoords.map(position => tilingScheme.positionToTileXY(position, maxLevel)),
                 distances = [];
+            /* eslint-enable  no-loop-func */
 
             distances.push(Math.abs(tileCoords[0].x - tileCoords[1].x));
             distances.push(Math.abs(tileCoords[0].y - tileCoords[3].y));
@@ -219,7 +230,10 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
             [olLayerWithParents.layer].concat(olLayerWithParents.parents).forEach((olLayerItem) => {
                 listenKeyArray.push(olLayerItem.on(["change:opacity", "change:visible"], () => {
                 // the compiler does not seem to be able to infer this
+                    /* eslint-disable no-console */
+
                     console.assert(cesiumObjects);
+                    /* eslint-enable no-console */
                     for (let i = 0; i < cesiumObjects.length; ++i) {
                         olcsCore.updateCesiumLayerProperties(olLayerWithParents, cesiumObjects[i]);
                     }
