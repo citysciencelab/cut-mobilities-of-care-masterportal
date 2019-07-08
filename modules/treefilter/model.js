@@ -184,6 +184,7 @@ const TreeFilter = Tool.extend({
         if (_.isEmpty(errors) === false) {
             return errors;
         }
+        return false;
     },
     setCategory: function (value) {
         this.set("treeCategory", value);
