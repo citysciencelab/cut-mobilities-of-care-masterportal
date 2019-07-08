@@ -38,6 +38,8 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
      * @extends Tools.GFI
      * @memberof Tools.GFI.Themes
      * @constructs
+     * @param {attrs} attrs -
+     * @param {options} options -
      * @listens gfiList#RadioTriggerRedraw
      * @fires MouseHover#RadioTriggerMouseHoverHide
      */

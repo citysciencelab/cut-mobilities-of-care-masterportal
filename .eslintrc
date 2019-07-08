@@ -5,7 +5,8 @@
         // adds all of the Mocha testing global variables.
         "mocha": true,
         "node": true,
-        "es6": true
+        "es6": true,
+        "amd": true
     },
     "globals": {
         "$": true,
