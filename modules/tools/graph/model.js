@@ -223,6 +223,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     if (d % 1 === 0) {
                         return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     }
+                    return false;
+
                 });
         }
         else {
