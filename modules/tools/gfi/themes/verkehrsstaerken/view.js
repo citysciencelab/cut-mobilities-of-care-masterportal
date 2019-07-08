@@ -53,6 +53,7 @@ const VerkehrsStaerkenThemeView = ThemeView.extend(/** @lends VerkehrsStaerkenTh
     /**
      * Toggles the tabs between the table and the diagram
      * @param {Event} evt Click event
+     * @returns {void}
      */
     toggleTab: function (evt) {
         var contentId = this.$(evt.currentTarget).attr("value");
