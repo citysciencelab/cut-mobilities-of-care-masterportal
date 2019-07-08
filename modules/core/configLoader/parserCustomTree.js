@@ -24,7 +24,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      */
     parseTree: function (object, parentId, level) {
         // TODO: This value is NOT reliable when using simple tree!
-        var isBaseLayer = (parentId === "Baselayer" || parentId === "tree") ? true : false;
+        var isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree");
 
         if (_.has(object, "Layer")) {
             _.each(object.Layer, function (layer) {

@@ -1,5 +1,5 @@
 describe("Examples", function () {
-    describe("Types", function () { 
+    describe("Types", function () {
         it("Null", function () {
             expect(null).to.be.null;
         });
@@ -15,7 +15,7 @@ describe("Examples", function () {
         it("Number", function () {
             expect(0.5).to.be.a("number");
         });
-    
+
         it("String", function () {
             expect("FooBar").to.be.a("string");
         });

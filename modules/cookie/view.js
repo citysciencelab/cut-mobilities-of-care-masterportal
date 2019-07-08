@@ -1,7 +1,7 @@
 import CookieModel from "./model";
 import CookieTemplate from "text-loader!./template.html";
 
-const CookieView = Backbone.View.extend(/**@lends  CookieView.prototype*/{
+const CookieView = Backbone.View.extend(/** @lends  CookieView.prototype*/{
     events: {
         "click .close": "buttonclick"
     },

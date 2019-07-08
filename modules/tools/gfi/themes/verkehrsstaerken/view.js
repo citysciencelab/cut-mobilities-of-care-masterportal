@@ -1,7 +1,7 @@
 import ThemeView from "../view";
 import VerkehrsStaerkenThemeTemplate from "text-loader!./template.html";
 
-const VerkehrsStaerkenThemeView = ThemeView.extend(/**@lends VerkehrsStaerkenThemeView.prototype*/{
+const VerkehrsStaerkenThemeView = ThemeView.extend(/** @lends VerkehrsStaerkenThemeView.prototype*/{
     tagName: "div",
     className: "verkehrsstaerken",
     /**

@@ -2,7 +2,7 @@ import Layer from "./model";
 import VectorSource from "ol/source/Vector.js";
 import {Heatmap} from "ol/layer.js";
 
-const HeatmapLayer = Layer.extend(/**@lends HeatmapLayer.prototype */{
+const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
 
     defaults: _.extend({}, Layer.prototype.defaults, {
         radius: 10,
