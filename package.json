@@ -89,7 +89,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx eslint --ignore-pattern '/node_modules/*' --ignore-pattern '/test/*' --ignore-pattern '/dist/*' --ignore-pattern '/portalconfigs/*' --ignore-pattern '/scripte/*' --ignore-pattern '/jsdoc/*' --ignore-pattern '/lib/*' -f html -o ./lintfixed.html \"./**/*.js\" --fix",
+      "pre-commit": "eslint --ignore-pattern '/node_modules/*' --ignore-pattern '/test/*' --ignore-pattern '/dist/*' --ignore-pattern '/portalconfigs/*' --ignore-pattern '/scripte/*' --ignore-pattern '/jsdoc/*' --ignore-pattern '/lib/*' -f html -o ./lintfixed.html \"./**/*.js\" --fix",
       "pre-push": "npm run test"
     }
   }
