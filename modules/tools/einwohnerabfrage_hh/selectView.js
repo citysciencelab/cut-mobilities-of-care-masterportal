@@ -19,6 +19,8 @@ const SelectView = Backbone.View.extend({
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
+
+        this.model.set("loaderPath", Radio.request("Util", "getPathFromLoader"));
     },
     id: "einwohnerabfrage-tool",
     template: _.template(Template),
@@ -30,13 +32,12 @@ const SelectView = Backbone.View.extend({
             this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
             this.$el.find(".checkbox").append(this.checkBoxRaster.render().el);
             this.$el.find(".checkbox").append(this.checkBoxAddress.render().el);
-
-            this.delegateEvents();
         }
         else {
             this.model.reset();
             this.undelegateEvents();
         }
+
         return this;
     },
     renderResult: function () {

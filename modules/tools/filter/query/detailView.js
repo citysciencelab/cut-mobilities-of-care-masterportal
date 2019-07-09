@@ -26,10 +26,13 @@ const QueryDetailView = Backbone.View.extend({
     className: "detail-view",
     template: _.template(Template),
     render: function () {
-        var attr;
+        let attr,
+            loaderPath
 
         if (!this.model.get("features")) {
-            this.$el.html("<div id='filter-loader'><img src='/lgv-config/img/ajax-loader.gif'></div>");
+            loaderPath = Radio.request("Util", "getPathFromLoader");
+            this.$el.html("<div id='filter-loader'><img src='" + loaderPath + "'></div>");
+            
             return this;
         }
         attr = this.model.toJSON();
