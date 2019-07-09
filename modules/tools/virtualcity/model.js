@@ -11,7 +11,7 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     /**
      * @class VirtualCityModel
      * @extends Tool
-     * @memberof Tool.VirtualCity
+     * @memberof Tools.VirtualCity
      * @constructs
      * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
@@ -83,7 +83,8 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
 
                     if (_.isArray(data)) {
                         data.forEach((planningData)=> {
-                            const planning = new Planning(Object.assign(planningData, {url: service.get("url")}));
+                            // eslint-disable-next-line no-underscore-dangle
+                            const planning = new Planning(Object.assign(planningData, {url: service.get("url"), id: planningData._id}));
 
                             this.get("planningCache")[planning.id] = planning;
                         }, this);
@@ -124,7 +125,7 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
      */
     getViewpointsForPlanning (planningId) {
         return this.getPlanningById(planningId).then((planning) => {
-            return planning.viewpoints.map((value) => {
+            return planning.getViewpoints().map((value) => {
                 return value.name;
             });
         });
