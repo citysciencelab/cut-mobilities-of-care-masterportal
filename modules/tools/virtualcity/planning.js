@@ -28,7 +28,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
         this.readyPromise = null;
         this.entitiesLayer = null;
         this.defaultViewpoint = null;
-        this.planningInstances = [];
+        this.planningTilesetInstances = [];
     },
 
     /**
@@ -66,7 +66,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                                     tileset.initialize();
                                     tileset.prepareLayerObject();
                                     tileset.setVectorStyle(data.vcsMeta.style || {});
-                                    this.planningInstances.push(tileset);
+                                    this.planningTilesetInstances.push(tileset);
                                 }
                             })
                             .catch((err) => {
@@ -75,7 +75,6 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                     }
                 }
             });
-
             this.listenTo(Radio.channel("Map"), {
                 "change": (map) => {
                     if (map === "3D") {
@@ -112,7 +111,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
             this.entitiesLayer.set("isSelected", true, {silent: true});
             this.entitiesLayer.toggleLayerOnMap();
             this.setHiddenObjects();
-            this.planningInstances.forEach((layer)=> {
+            this.planningTilesetInstances.forEach((layer)=> {
                 layer.setVisible(true);
                 layer.set("isSelected", true, {silent: true});
                 layer.toggleLayerOnMap();
@@ -128,7 +127,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
             this.entitiesLayer.setVisible(false);
             this.entitiesLayer.set("isSelected", false, {silent: true});
             this.clearHiddenObjects();
-            this.planningInstances.forEach((layer)=> {
+            this.planningTilesetInstances.forEach((layer)=> {
                 layer.set("isSelected", false, {silent: true});
                 layer.setVisible(false);
             });
