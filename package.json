@@ -89,7 +89,6 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint -f html -o ./lintfixed.html \"./portal/*/*.js\" ",
       "pre-push": "npm run test"
     }
   }
