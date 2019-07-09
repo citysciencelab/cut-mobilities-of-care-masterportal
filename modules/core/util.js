@@ -1,6 +1,5 @@
-const Util = Backbone.Model.extend({
+const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
-        // isViewMobile: false,
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
@@ -9,6 +8,44 @@ const Util = Backbone.Model.extend({
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 20
     },
+    /**
+     * @class Util
+     * @extends Backbone.Model
+     * @memberof Core
+     * @constructs
+     * @property {String} config="" todo
+     * @property {String[]} ignoredKeys=["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"] List of ignored attribute names when displaying attribute information of all layer types.
+     * @property {String} uiStyle="DEFAULT" Controls the layout of the controls.
+     * @property {String} proxy=true Specifies whether points should be replaced by underscores in URLs. This prevents CORS errors. Attention: A reverse proxy must be set up on the server side.
+     * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
+     * @property {String} loaderOverlayTimeoutReference=null todo
+     * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
+     * @listens Util#RadioRequestUtilIsViewMobile
+     * @listens Util#RadioRequestUtilGetProxyURL
+     * @listens Util#RadioRequestUtilIsApple
+     * @listens Util#RadioRequestUtilIsAndroid
+     * @listens Util#RadioRequestUtilIsOpera
+     * @listens Util#RadioRequestUtilIsWindows
+     * @listens Util#RadioRequestUtilIsChrome
+     * @listens Util#RadioRequestUtilIsInternetExplorer
+     * @listens Util#RadioRequestUtilIsAny
+     * @listens Util#RadioRequestUtilGetConfig
+     * @listens Util#RadioRequestUtilGetUiStyle
+     * @listens Util#RadioRequestUtilGetIgnoredKeys
+     * @listens Util#RadioRequestUtilPunctuate
+     * @listens Util#RadioRequestUtilSort
+     * @listens Util#RadioRequestUtilConvertArrayOfObjectsToCsv
+     * @listens Util#RadioRequestUtilGetPathFromLoader
+     * @listens Util#RadioTriggerUtilHideLoader
+     * @listens Util#RadioTriggerUtilShowLoader
+     * @listens Util#RadioTriggerUtilSetUiStyle
+     * @listens Util#RadioTriggerUtilCopyToClipboard
+     * @listens Util#event:changeIsViewMobile
+     * @fires Util#RadioTriggerIsViewMobileChanged
+     * @fires Alert#RadioTriggerAlertAlert
+     * @fires Alert#RadioTriggerAlertAlert
+     * @fires Util#RadioTriggerUtilHideLoader
+     */
     initialize: function () {
         var channel = Radio.channel("Util");
 
@@ -58,6 +95,7 @@ const Util = Backbone.Model.extend({
         $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
         this.parseConfigFromURL();
     },
+
     /**
      * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
      * @param  {String} value - feature attribute values
@@ -81,6 +119,7 @@ const Util = Backbone.Model.extend({
         }
         return predecimals;
     },
+
     /**
      * Sorting alorithm that distinguishes between array[objects] and other arrays.
      * arrays[objects] can be sorted by up to 2 object attributes
@@ -107,9 +146,22 @@ const Util = Backbone.Model.extend({
 
         return sorted;
     },
+
+    /**
+     * Sorts an array.
+     * @param {Array} input array to sort.
+     * @returns sorted array
+     */
     sortArray: function (input) {
         return input.sort(this.sortAlphaNum);
     },
+
+    /**
+     * todo
+     * @param {*} a todo
+     * @param {*} b todo
+     * @returns {*}
+     */
     sortAlphaNum: function (a, b) {
         var regExAlpha = /[^a-zA-Z]/g,
             regExNum = /[^0-9]/g,
@@ -134,11 +186,17 @@ const Util = Backbone.Model.extend({
         }
         return returnVal;
     },
+
+    /**
+     * todo
+     * @param {*} input todo
+     * @param {*} first todo
+     * @param {*} second todo
+     * @returns {*}
+     */
     sortObjects: function (input, first, second) {
         var sortedObj = input;
 
-        // sort last property first in _.chain()
-        // https://stackoverflow.com/questions/16426774/underscore-sortby-based-on-multiple-attributes
         sortedObj = _.chain(input)
             .sortBy(function (element) {
                 return element[second];
@@ -150,11 +208,14 @@ const Util = Backbone.Model.extend({
 
         return sortedObj;
     },
+
     /**
      * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
      * behaviour of ios strange used solution from :
      * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
      * @param  {el} el element to copy
+     * @fires Alert#RadioTriggerAlertAlert
+     * @fires Alert#RadioTriggerAlertAlert
      * @returns {void}
      */
     copyToClipboard: function (el) {
@@ -193,22 +254,43 @@ const Util = Backbone.Model.extend({
             });
         }
     },
+
+    /**
+     * Searches the userAgent for the string android.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
+     */
     isAndroid: function () {
         return navigator.userAgent.match(/Android/i);
     },
+
     /**
-     * Sucht im userAgent nach dem String iPhone, iPod oder iPad.
-     * @return {Array|null} - Liefert ein Array mit den Ergebnissen. Gibt null zurück, wenn nichts gefunden wird.
+     * Searches the userAgent for the string iPhone, iPod or iPad.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
     isApple: function () {
         return navigator.userAgent.match(/iPhone|iPod|iPad/i);
     },
+
+    /**
+     * Searches the userAgent for the string opera.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
+     */
     isOpera: function () {
         return navigator.userAgent.match(/Opera Mini/i);
     },
+
+    /**
+     * Searches the userAgent for the string windows.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
+     */
     isWindows: function () {
         return navigator.userAgent.match(/IEMobile/i);
     },
+
+    /**
+     * Searches the userAgent for the string chrome.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
+     */
     isChrome: function () {
         var isChrome = false;
 
@@ -217,9 +299,19 @@ const Util = Backbone.Model.extend({
         }
         return isChrome;
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     isAny: function () {
         return this.isAndroid() || this.isApple() || this.isOpera() || this.isWindows();
     },
+
+    /**
+     * Searches the userAgent for the string internet explorer.
+     * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
+     */
     isInternetExplorer: function () {
         var ie = false;
 
@@ -234,6 +326,12 @@ const Util = Backbone.Model.extend({
         }
         return ie;
     },
+
+    /**
+     * shows the loader gif
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @returns {void}
+     */
     showLoader: function () {
         clearTimeout(this.get("loaderOverlayTimeoutReference"));
         this.setLoaderOverlayTimeoutReference(setTimeout(function () {
@@ -241,17 +339,37 @@ const Util = Backbone.Model.extend({
         }, 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
+
+    /**
+     * hides the loder gif until the timeout has expired
+     * @returns {void}
+     */
     hideLoader: function () {
         $("#loader").hide();
     },
+
+    /**
+     * Setter for loaderOverlayTimeoutReference
+     * @param {*} timeoutReference todo
+     * @returns {Void}
+     */
     setLoaderOverlayTimeoutReference: function (timeoutReference) {
         this.set("loaderOverlayTimeoutReference", timeoutReference);
     },
 
+    /**
+     * search the path from the loader gif
+     * @returns {String} path to loader gif
+     */
     getPathFromLoader: function () {
         return $("#loader").children("img").first().attr("src");
     },
-    
+
+    /**
+     * rewrites the URL by replacing the dots with underlined
+     * @param {Stirng} url url to rewrite
+     * @returns {String} proxy URL
+     */
     getProxyURL: function (url) {
         var parser = document.createElement("a"),
             protocol = "",
@@ -283,8 +401,8 @@ const Util = Backbone.Model.extend({
     },
 
     /**
-     * Setter für Attribut isViewMobile
-     * @param {boolean} value sichtbar
+     * Setter for attribute isViewMobile
+     * @param {boolean} value visibility
      * @return {void}
      */
     setIsViewMobile: function (value) {
@@ -292,8 +410,8 @@ const Util = Backbone.Model.extend({
     },
 
     /**
-     * Toggled das Attribut isViewMobile bei über- oder unterschreiten einer Fensterbreite von 768px
-     * @return {void}
+     * Toggled the isViewMobile attribute when the window width exceeds or falls below 768px
+     * @return {Void}
      */
     toggleIsViewMobile: function () {
         if (window.innerWidth >= 768) {
@@ -304,6 +422,11 @@ const Util = Backbone.Model.extend({
         }
     },
 
+    /**
+     * todo
+     * @fires Alert#RadioTriggerAlertAlert
+     * @returns {Void}
+     */
     parseConfigFromURL: function () {
         var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
             result = {},
@@ -361,12 +484,20 @@ const Util = Backbone.Model.extend({
         return result;
     },
 
-    // setter for config
+    /**
+     * Setter for config
+     * @param {*} value todo
+     * @returns {Void}
+     */
     setConfig: function (value) {
         this.set("config", value);
     },
 
-    // setter for UiStyle
+    /**
+     * Setter for uiStyle
+     * @param {*} value todo
+     * @returns {Void}
+     */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
     }
