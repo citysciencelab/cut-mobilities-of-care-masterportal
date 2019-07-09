@@ -89,7 +89,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint -v",
+      "pre-commit": "eslint -f html -o ./lintfixed.html",
       "pre-push": "npm run test"
     }
   }
