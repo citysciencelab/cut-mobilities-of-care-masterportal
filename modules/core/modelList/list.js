@@ -770,6 +770,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
         this.add(lightModels);
+        this.updateLayerView();
     },
 
     /**
@@ -893,6 +894,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var model = this.get(id);
 
         this.remove(model);
+        this.updateLayerView();
     },
 
     /**
