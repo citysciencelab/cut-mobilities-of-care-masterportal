@@ -1,7 +1,16 @@
+/* eslint-disable no-console */
+
 const fs = require("fs-extra"),
     replaceStrings = require("./replace"),
     execute = require("child-process-promise").exec;
 
+/**
+ *
+ * @param {String} source parameter
+ * @param {String} destination parameter
+ * @param {String} environment parameter
+ * @returns {void}
+ */
 function copyFiles (source, destination, environment) {
     fs.copy(source, destination).then(() => {
         console.warn("NOTICE: Successfully Copied '" + source + "' to '" + destination + "' !");
@@ -13,6 +22,11 @@ function copyFiles (source, destination, environment) {
     }).catch(err => console.error(err));
 }
 
+/**
+ *
+ * @param {Object} answers parameter
+ * @returns {void}
+ */
 function removeFiles (answers) {
     var destination = "dist/" + answers.portalName,
         source = "./" + answers.portalPath;
@@ -23,7 +37,11 @@ function removeFiles (answers) {
     });
 }
 
-
+/**
+ *
+ * @param {Object} answers parameter
+ * @returns {void}
+ */
 module.exports = function buildWebpack (answers) {
     var command;
 

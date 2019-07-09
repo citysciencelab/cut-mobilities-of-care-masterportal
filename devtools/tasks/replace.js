@@ -4,9 +4,10 @@ var replace = require("replace-in-file"),
 
 module.exports = function (environment, destination, deepness = 2) {
     var lgvConfigRegex = /\/*(\.+\/)*lgv-config/g,
-        lgvConfigReplacement = "lgv-config";
+        lgvConfigReplacement = "lgv-config",
+        deepnessTmp = deepness;
 
-    while (deepness--) {
+    while (deepnessTmp--) {
         lgvConfigReplacement = "../" + lgvConfigReplacement;
     }
 

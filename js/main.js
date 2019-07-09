@@ -41,6 +41,13 @@ if (!("Config" in window)) {
 
         // Polyfills DOM4 MouseEvent
 
+        /**
+         * MouseEvent
+         * @param {String} eventType parameter
+         * @param {Object} params parameter
+         * @returns {*} desc
+         * @constructor
+         */
         function MouseEvent (eventType, params) {
             var paramsObj = params || {bubbles: false, cancelable: false},
                 mouseEvent = document.createEvent("MouseEvent");

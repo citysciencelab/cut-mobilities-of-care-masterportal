@@ -3,6 +3,12 @@ const fs = require("fs-extra"),
     exampleReplace = require("./exampleReplace"),
     packageJSON = require("../../package.json");
 
+/**
+ * createFolders
+ * @param {Object} folder parameter
+ * @param {String} name parameter
+ * @returns {Void} desc
+ */
 function createFolders (folder, name) {
     fs.mkdir(name).then(() => {
         if (_.has(folder, "subFolders")) {
@@ -24,6 +30,11 @@ function createFolders (folder, name) {
     });
 }
 
+/**
+ * buildFolderStructure
+ * @param {Array} structure parameter
+ * @returns {Void} desc
+ */
 function buildFolderStructure (structure) {
     structure.forEach(function (folder) {
         fs.remove(folder.name).then(() => {
@@ -32,6 +43,10 @@ function buildFolderStructure (structure) {
     });
 }
 
+/**
+ * createDataStructure
+ * @returns {Void} desc
+ */
 function createDataStructure () {
     var structure = [],
         folder = {

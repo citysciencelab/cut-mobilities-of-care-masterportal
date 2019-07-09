@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const fs = require("fs-extra"),
     // portal version parsed from package.json file
     stableVersion = require("../../package.json").version.replace(/\./g, "_"),
@@ -26,6 +28,35 @@ const fs = require("fs-extra"),
 var aPortalQueue = [],
     confPortalConfigs = {};
 
+/**
+ * copyPortal
+ * @param {String} portalName parameter
+ * @returns {Void} desc
+ */
+function copyPortal (portalName) {
+    fs.readdir(conf.sourceFolder + "/" + portalName, (error, fileNames) => {
+        if (!fileNames.length) {
+            console.error("ERROR: Source folder " + conf.sourceFolder + "/" + portalName + " was empty");
+            return;
+        }
+        fileNames.forEach((sourceFile, index) => {
+            fs.copy(conf.sourceFolder + "/" + portalName + "/" + sourceFile, conf.targetFolder + "/" + portalName + "/" + sourceFile).then(() => {
+                portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersion);
+                if (index === fileNames.length - 1) {
+                    console.log("NOTICE: Portal finished building: \"" + portalName + "\"");
+                    createPortalsRec();
+                }
+            }).catch((copyError) => {
+                console.error("ERROR: " + copyError);
+            });
+        });
+    });
+}
+
+/**
+ * createPortalsRec
+ * @returns {Void} desc
+ */
 function createPortalsRec () {
     var portalName,
         command;
@@ -64,26 +95,11 @@ function createPortalsRec () {
     }
 }
 
-function copyPortal (portalName) {
-    fs.readdir(conf.sourceFolder + "/" + portalName, (error, fileNames) => {
-        if (!fileNames.length) {
-            console.error("ERROR: Source folder " + conf.sourceFolder + "/" + portalName + " was empty");
-            return;
-        }
-        fileNames.forEach((sourceFile, index) => {
-            fs.copy(conf.sourceFolder + "/" + portalName + "/" + sourceFile, conf.targetFolder + "/" + portalName + "/" + sourceFile).then(() => {
-                portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersion);
-                if (index === fileNames.length - 1) {
-                    console.log("NOTICE: Portal finished building: \"" + portalName + "\"");
-                    createPortalsRec();
-                }
-            }).catch((copyError) => {
-                console.error("ERROR: " + copyError);
-            });
-        });
-    });
-}
 
+/**
+ * createStablePortalsFolder
+ * @returns {Void} desc
+ */
 function createStablePortalsFolder () {
     fs.readdir(conf.sourceFolder, (error, portalNames) => {
         if (!portalNames.length) {
@@ -113,6 +129,10 @@ function createStablePortalsFolder () {
     });
 }
 
+/**
+ * createMasterCodeFolder
+ * @returns {Void} desc
+ */
 function createMasterCodeFolder () {
     var foldersToCopy = ["js", "css"];
 
@@ -141,6 +161,10 @@ function createMasterCodeFolder () {
     });
 }
 
+/**
+ * deleteStablePortalsFolder
+ * @returns {Void} desc
+ */
 function deleteStablePortalsFolder () {
     fs.remove(conf.targetFolder).then(() => {
         console.log("NOTICE: Deleted folder " + process.cwd() + "/" + conf.targetFolder);
