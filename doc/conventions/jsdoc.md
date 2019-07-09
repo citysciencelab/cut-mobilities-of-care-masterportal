@@ -104,6 +104,16 @@ Beispiel: this.listenTo(this, {
  */
 ```
 
+Beispiel: Innerhalb von verschachtelten Namespaces;
+ ```javascript
+/**
+ * @event Core.ModelList.Layer#changeIsSelected
+ * @param {Backbone.Model} model The model whose attribute hat changed.
+ * @param {Boolean} value The attribute value that has changed.
+ * @description Fired if attribute isSelected has changed
+ */
+```
+
 6.6. Jedes Event ist in folgender Schreibweise dem Namespace des entsprechenden Moduls zuzuordnen:
 
 [Namespace]#[Eventname]
