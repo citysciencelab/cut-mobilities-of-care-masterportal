@@ -35,7 +35,8 @@ const Util = Backbone.Model.extend({
             },
             "punctuate": this.punctuate,
             "sort": this.sort,
-            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv
+            "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
+            "getPathFromLoader": this.getPathFromLoader
         }, this);
 
         channel.on({
@@ -246,6 +247,11 @@ const Util = Backbone.Model.extend({
     setLoaderOverlayTimeoutReference: function (timeoutReference) {
         this.set("loaderOverlayTimeoutReference", timeoutReference);
     },
+
+    getPathFromLoader: function () {
+        return $("#loader").children("img").first().attr("src");
+    },
+    
     getProxyURL: function (url) {
         var parser = document.createElement("a"),
             protocol = "",
