@@ -5,6 +5,7 @@ import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
 
 const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
+
     /**
      * @class ListView
      * @extends ListViewMain
@@ -25,8 +26,8 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
         Radio.on("Autostart", "startModul", this.startModul, this);
         this.listenTo(this.collection, {
-            "updateOverlayerView": function (parentId) {
-                this.updateOverlayer(parentId);
+            "updateOverlayerView": function (parentModel) {
+                this.updateOverlayer(parentModel);
             },
             "updateSelection": function (model) {
                 this.trigger("updateLightTree");
@@ -65,7 +66,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         $("#SelectedLayer").html("");
         if (selectedLayerModel.get("isExpanded")) {
             selectedModels = this.collection.where({isSelected: true, type: "layer"});
-
+            selectedModels = selectedModels.filter(model => model.get("name") !== "Oblique");
             selectedModels = _.sortBy(selectedModels, function (model) {
                 return model.get("selectionIDX");
             });
@@ -148,11 +149,11 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
     /**
      * Updates Overlayer
-     * @param {number} parentId - ID of the parent item
+     * @param {number} parentModel - parent item
      * @return {void}
      */
-    updateOverlayer: function (parentId) {
-        this.renderSubTree(parentId, 0, 10, false);
+    updateOverlayer: function (parentModel) {
+        this.renderSubTree(parentModel.get("id"), 0, 10, false);
     },
 
     /**
