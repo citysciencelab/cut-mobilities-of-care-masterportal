@@ -89,6 +89,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npx eslint -f html -o ./lintfixed.html",
       "pre-push": "npm run test"
     }
   }
