@@ -89,6 +89,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "node -v",
       "pre-push": "npm run test"
     }
   }
