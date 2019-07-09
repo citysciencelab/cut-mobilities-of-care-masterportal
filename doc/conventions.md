@@ -10,6 +10,6 @@ Konventionen für das Master-Portal
 4. Beachte den [Linter](conventions/linter.md).
 5. Schreibe [testbare Funktionen](conventions/unitTests.md) und die entsprechenden [UnitTests](conventions/unitTests.md) dazu.
 6. Schreibe valides [JSDoc](conventions/jsdoc.md).
-7. Verwende [sprechende Fehlermeldungen](link).
+7. Verwende [sprechende Fehlermeldungen](conventions/errorMessages.md).
 8. Beachte die [Abwärts-Kompatibilität](link) der Konfigurationsdateien.
 9. Beachte die [Pre-Push-Hooks](link).
