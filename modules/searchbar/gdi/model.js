@@ -14,8 +14,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {Object} config - gdi-ConfigObject
      * @param {integer} [config.minChars=3] - minimal number of searchcharacters
      * @param {string} config.serviceId - rest-services Id
-     * @listens
-     * @listens
      * @returns {void}
      */
     initialize: function () {
@@ -104,7 +102,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     addLayer: function (hit) {
-        console.log(hit);
         var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
             level = 0,
@@ -178,8 +175,8 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     },
     /**
      * Setter for Sorting
-     * @param {String} key todo
-     * @param {String} value - value for type of sorting
+     * @param {String} key - type of sorting
+     * @param {String} value - descending or ascending
      * @returns {void}
      */
     setSorting: function (key, value) {

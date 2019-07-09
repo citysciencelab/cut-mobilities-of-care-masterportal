@@ -3,6 +3,15 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
     defaults: {
         ajaxRequests: {}
     },
+    /**
+     * @class ElasticSearchModel
+     * @extends Backbone.Model
+     * @memberof Searchbar.Gdi
+     * @constructs
+     * @param {object} query - json-notated Query to post to
+     * @param {object} sorting - object used for sorting the query
+     * @param {number} size - size of the query
+     */
     prepareSearchBody (query, sorting, size) {
         var searchBody = {};
 
