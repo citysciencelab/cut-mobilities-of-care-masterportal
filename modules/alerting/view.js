@@ -1,10 +1,6 @@
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
-/**
- * @member AlertingTemplate
- * @description Template used to create the alert message
- * @memberof Alerting
- */
+
 const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     events: {
         "click .close": "alertClosed",
@@ -34,6 +30,12 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     },
     id: "messages",
     className: "top-center",
+    model: new AlertingModel(),
+    /**
+     * @member AlertingTemplate
+     * @description Template used to create the alert message
+     * @memberof Alerting
+     */
     template: _.template(AlertingTemplate),
 
     /**

@@ -9,68 +9,45 @@
 /** @lends [Kindklasse].prototype */
 ```
 
+Beispiel:
+```javascript
+    const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
+```
+
 6.4. Die Namespaces sind in der [namespaces.js](../../devtools/jsdoc/namespaces.js) zu definieren. Sie repräsentieren die Ordnerstruktur/Module des Codes.
+
+Beispiel des Namespaces Alerting im Root:
+```javascript
+/**
+ * @namespace Alerting
+ * @description Alerting system that responds to given events.
+ * Used to have same alert all over the portal.
+ */
+```
+
+Beispiel des Namespaces Modellist als Unterordner des Core
+```javascript
+/**
+ * @namespace ModelList
+ * @memberOf Core
+ * @description List module to gather all item models
+ */
+```
+
 
 6.5. Die Events sind in der [events.js](../../devtools/jsdoc/events.js) zu definieren.
 
-6.6. Jedes Event ist ein *@memberof* des entsprechendes Namespaces/Moduls.
-
-6.5. Alle Event-Listener, -Trigger und -Requests, die in der Klasse vorkommen, werden in der Klassendefinition dokumentiert.
-
-6.4. Die Klassendefinition kommt über die *initialize*-Funktion mit Angabe der Default-Werte.
-
-6.6. Für jede Funktion ist ein JSDoc zu erzeugen mit einer Beschreibung, *param*, *returns* und ggf. *listens* und *fires*.
-
-6.7.
-
-
-namespace analog zu ordner
-namespaces definieren und angeben
-events in event.js dokumentieren
-events am modul definieren (member of [namespace]).
-template in view.js dokumentieren.
-JSDOC muss im gebauten zustand (npm run buildJsDoc) an der richtigen Stelle sein.
-
-
-#### Kommentare / JSDOC: Bei Refactorings/Erweiterungen ist pro Datei mindestens folgendes auszuführen:
-* Klasse und Namespace im JSDoc beschreiben, falls noch nciht vorhanden
-* Die refactorten/erweiterten Funktionen per JSDoc beschreiben
-* Übrige Funktionen beschreiben oder mit einem JSDoc-Todo markieren, damit alle Funktionen schonmal im JSDoc sind!
-
+Beispiel: Radio.trigger("Channel", "Event")
 ```javascript
-/**
-* todo
-* @returns {*} todo
-*/
-functionWithoutParams: function () {...}
-```
-
-```javascript
-/**
-* todo
-* @param {*} param1 todo
-* @returns {*} todo
-*/
-functionWithParams: function (param1) {...}
-```
-### Kommentare / JSDOC: Events
-Folgende Code-Convention gilt für das Dokumentieren von Events
-
-* Events werden in CamelCase geschrieben.
-* Events sollten nach Möglichkeit im Namespace (Modulname) definiert werden.
-* Ist dies nicht möglich, so ist das Event an die Klasse zu hängen
-* Alle Events werden in der devtool/jsdoc/events.js beschrieben
-
-Event Radio.Trigger
-```javascript
-Radio.trigger("Channel", "Event")
 /**
  * @event Namespace#RadioTriggerChannelEvent
  * @description FooBar.
  * @example Radio.trigger("Channel", "Event")
  */
+```
 
-Radio.trigger("Channel", "EventWithData", data)
+Beispiel: Radio.trigger("Channel", "EventWithData", data)
+```javascript
 /**
  * @event Namespace#RadioTriggerChannelEventWithData
  * @description FooBar.
@@ -79,17 +56,18 @@ Radio.trigger("Channel", "EventWithData", data)
  */
 ```
 
-Event Radio.Request
+Beispiel: Radio.request("Channel", "Event");
 ```javascript
-Radio.request("Channel", "Event");
 /**
  * @event Namespace#RadioRequestChannelEvent
  * @description FooBar.
  * @returns {*} - Response of this event
  * @example Radio.request("Channel", "Event")
  */
+```
 
-Radio.request("Channel", "EventWithData", data);
+Beispiel: Radio.request("Channel", "EventWithData", data);
+```javascript
 /**
  * @event Namespace#RadioRequestChannelEventWithData
  * @description FooBar.
@@ -99,15 +77,16 @@ Radio.request("Channel", "EventWithData", data);
  */
 ```
 
-Event Model.trigger
+Beispiel: Model.trigger("myTrigger");
 ```javascript
-Model.trigger("myTrigger");
 /**
  * @event Namespace#MyTrigger
  * @description FooBar.
  */
+ ```
 
-Model.trigger("myTriggerWithData", data);
+ Beispiel: Model.trigger("myTriggerWithData", data);
+ ```javascript
 /**
  * @event Namespace#MyTriggerWithData
  * @param {*} data Data to be sent with the event
@@ -115,13 +94,103 @@ Model.trigger("myTriggerWithData", data);
  */
 ```
 
-Event Model.change
-```javascript
-this.listenTo(this, {
+Beispiel: this.listenTo(this, {
     "change:attributeOne": this.doSomething
 })
+```javascript
 /**
  * @event Namespace#changeAttributeOne
  * @description FooBar.
  */
 ```
+
+6.6. Jedes Event ist in folgender Schreibweise dem Namespace des entsprechenden Moduls zuzuordnen:
+
+[Namespace]#[Eventname]
+
+Beispiel eines Events, das zum Namespace "Alerting" gehört:
+```js
+/**
+ * @event Alerting#RadioTriggerAlertAlert
+ * @param {String/Object} alert The alert object or string needed to create the alert.
+ * @example Radio.trigger("Alert", "alert", alert)
+ */
+```
+
+
+6.7. Die Klassendefinition kommt über die *initialize*-Funktion mit Angabe der Default-Werte. Alle Event-Listener, -Trigger und -Requests, die in der Klasse vorkommen, werden ebenfalls in der Klassendefinition dokumentiert.
+
+Beispiel:
+
+```javascript
+defaults: {
+        channel: Radio.channel("Alert"),
+        category: "alert-info",
+        isDismissable: true,
+        isConfirmable: false,
+        position: "top-center",
+        message: "",
+        animation: false
+    },
+
+/**
+ * @class AlertingModel
+ * @extends Backbone.Model
+ * @memberof Alerting
+ * @constructs
+ * @property {Radio.channel} channel=Radio.channel("Alert") Radio channel for communication
+ * @property {String} category="alert-info" Category of alert. bootstrap css class
+ * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
+ * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
+ * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
+ * @property {String} message="" The message of the alert
+ * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
+ * @fires Alerting#render
+ * @fires Alerting#changePosition
+ * @listens Alerting#RadioTriggerAlertAlert
+ */
+initialize: function () {
+    this.listenTo(this.get("channel"), {
+        "alert": this.setParams
+    }, this);
+},
+```
+
+6.8. Für jede Funktion ist ein JSDoc zu erzeugen mit einer Beschreibung, Übergabeparametern, Rückgabewert und ggf. Events.
+
+Beispiel:
+
+```javascript
+/**
+* FooBar
+* @returns {Void}
+*/
+functionWithoutParamsAndNoReturn: function () {
+    ...
+}
+```
+
+```javascript
+/**
+* BarFoo
+* @param {String} param1 InputString.
+* @returns {String}  - ConcatenatedString
+*/
+functionWithParamsAndReturn: function (param1) {
+    return param1 + "foobar";
+}
+```
+
+6.9. Werden Templates verwendet, sind diese im View an der Stelle zu definieren, wo das Template instanziiert wird.
+
+Beispiel:
+```javascript
+/**
+ * @member AlertingTemplate
+ * @description Template used to create the alert message
+ * @memberof Alerting
+ */
+template: _.template(AlertingTemplate),
+```
+
+6.10. Der Bauprozess zur Generierung des JSDoc (npm run buildJsDoc) muss fehlerfrei durchlaufen.
