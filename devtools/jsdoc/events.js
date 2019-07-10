@@ -1112,28 +1112,34 @@
 /** -------------------- UTIL -------------------- */
 
 /**
- * @event Util#RadioTriggerUtilIsViewMobileChanged
+ * @event Core#RadioTriggerUtilIsViewMobileChanged
  * @description is triggered by Util if mobil is changed
  * @param {boolean} isViewMobile flag if current view is in mobile mode
  * @example Radio.trigger("Util", "isViewMobileChangend", isViewMobile)
  */
 
 /**
- * @event Util#RadioRequestUtilPunctuate
+ * @event Core#RadioTriggerIsViewMobileChanged
+ * @description todod
+ * @example Radio.request("Util", "isViewMobileChanged", this.get("isViewMobile"));
+ */
+
+/**
+ * @event Core#RadioRequestUtilPunctuate
  * @description converts value to string and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
  * @param {String} value contains the string wich will be converted
  * @example Radio.request("Util", "punctuate", "3000.50");
  */
 
 /**
- * @event Util#RadioRequestUtilIsViewMobile
+ * @event Core#RadioRequestUtilIsViewMobile
  * @description checks if device is mobile
  * @returns {Boolean} device is mobile
  * @example Radio.request("Util", "isViewMobile");
  */
 
 /**
- * @event Util#RadioRequestUtilGetProxyURL
+ * @event Core#RadioRequestUtilGetProxyURL
  * @description returns the proxyURL
  * @param {String} url to be proxied
  * @returns {string} proxyURL
@@ -1141,50 +1147,145 @@
  */
 
 /**
- * @event Util#RadioRequestUtilGetIgnoredKeys
+ * @event Core#RadioRequestUtilGetIgnoredKeys
  * @description returns the ignoredKeys
  * @returns {string[]} ignoredKeys
  * @example Radio.request("Util", "getIgnoredKeys");
  */
 
 /**
- * @event Util#RadioTriggerUtilShowLoader
+ * @event Core#RadioTriggerUtilShowLoader
  * @example Radio.trigger("Util", "showLoader")
  * @description Shows loading gif
  */
 
 /**
- * @event Util#RadioTriggerUtilHideLoader
+ * @event Core#RadioTriggerUtilHideLoader
  * @example Radio.trigger("Util", "hideLoader")
  * @description Shows loading gif
  */
 
 /**
- * @event Util#RadioRequestGetConfig
+ * @event Core#RadioRequestGetConfig
  * @example Radio.request("Util", "getConfig")
  * @description Request config path
  */
 
 /**
- * @event Util#RadioRequestUtilGetUiStyle
+ * @event Core#RadioRequestUtilGetUiStyle
  * @description returns the ignoredKeys
  * @returns {string} - Style of the ui. Possible values are "DEFAULT" or "TABLE"
  * @example Radio.request("Util", "getUiStyle");
  */
 
 /**
- * @event Util#RadioRequestUtilIsAny
+ * @event Core#RadioRequestUtilIsAny
  * @description returns if the device type is mobile
  * @returns {string} - Mobile Device. Possible values are "true", "false" or "null"
  * @example Radio.request("Util", "isAny");
  */
 
 /**
- * @event Util#RadioRequestUtilSort
+ * @event Core#RadioRequestUtilIsApple
+ * @description returns if the device type is an iphone, ipod or ipad
+ * @returns {string} - Apple Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isApple");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsAndroid
+ * @description returns if the device type is android
+ * @returns {string} - Android Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isAndroid");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsOpera
+ * @description returns if the browser type is opera
+ * @returns {string} - Opera Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isOpera");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsOpera
+ * @description returns if the browser type is opera
+ * @returns {string} - Opera Device. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isOpera");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsOpera
+ * @description returns if the browser type is opera
+ * @returns {string} - Opera Browser. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isOpera");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsWindows
+ * @description returns if the browser type is Windows
+ * @returns {string} - Opera Browser. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isWindows");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsChrome
+ * @description returns if the browser type is chrome
+ * @returns {string} - Chrome Browser. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isChrome");
+ */
+
+/**
+ * @event Core#RadioRequestUtilIsInternetExplorer
+ * @description returns if the browser type is Internet Explorer
+ * @returns {string} - Internet Explorer Browser. Possible values are "true", "false" or "null"
+ * @example Radio.request("Util", "isInternetExplorer");
+ */
+
+/**
+ * @event Core#RadioRequestUtilSort
  * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
  * @returns {string[]} - Sorted Array
  * @example Radio.request("Util", "sort", values);
  */
+
+/**
+ * @event Core#RadioRequestUtilGetConfig
+ * @description Retrives the config data
+ * @returns {Object} - config data
+ * @example Radio.request("Util", "getConfig");
+ */
+
+/**
+ * @event Core#RadioRequestUtilConvertArrayOfObjectsToCsv
+ * @description todo
+ * @returns {*} - todod
+ * @example Radio.request("Util", "convertArrayOfObjectsToCsv");
+ */
+
+/**
+ * @event Core#RadioRequestUtilGetPathFromLoader
+ * @description returns the path to the loader gif
+ * @returns {String} - path to loader gif
+ * @example Radio.request("Util", "getPathFromLoader");
+ */
+
+/**
+ * @event Core#RadioTriggerUtilSetUiStyle
+ * @description sets the ui style
+ * @example Radio.request("Util", "setUiStyle");
+ */
+
+/**
+ * @event Core#RadioTriggerUtilCopyToClipboard
+ * @description todo
+ * @example Radio.request("Util", "copyToClipboard");
+ */
+
+/**
+ * @event Core#changeIsViewMobile
+ * @description todo
+ */
+
 /** -------------------- GRAPH -------------------- */
 
 /**
@@ -1616,4 +1717,38 @@
 /**
  * @event Autostart#RadioTriggerAutostartStartModul
  * @description Start the List View Modul
+ */
+
+ /** -------------------- Tools.Filter.Query -------------------- */
+
+/**
+ * @event Tools.Filter.Query#renderSnippets
+ * @description render the snippets
+ */
+
+/**
+ * @event Tools.Filter.Query#changeIsSelected
+ * @description trigger if isSelected is changend
+ */
+
+/**
+ * @event Tools.Filter.Query#changeFeatureIds
+ * @description trigger if featureIds is changend
+ */
+
+/**
+ * @event Tools.Filter.Query#changeIsLayerVisible
+ * @description trigger if isLayerVisible is changend
+ */
+
+ /** -------------------- Tools.Einwohnerabfrage_hh -------------------- */
+
+/**
+ * @event Tools.Einwohnerabfrage_hh#changeIsActive
+ * @description starts render function if this change is active
+ */
+
+/**
+ * @event Tools.Einwohnerabfrage_hh#renderResult
+ * @description render the resultView
  */

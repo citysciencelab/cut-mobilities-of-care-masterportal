@@ -20,31 +20,31 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
      * @property {String} loaderOverlayTimeoutReference=null todo
      * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
-     * @listens Util#RadioRequestUtilIsViewMobile
-     * @listens Util#RadioRequestUtilGetProxyURL
-     * @listens Util#RadioRequestUtilIsApple
-     * @listens Util#RadioRequestUtilIsAndroid
-     * @listens Util#RadioRequestUtilIsOpera
-     * @listens Util#RadioRequestUtilIsWindows
-     * @listens Util#RadioRequestUtilIsChrome
-     * @listens Util#RadioRequestUtilIsInternetExplorer
-     * @listens Util#RadioRequestUtilIsAny
-     * @listens Util#RadioRequestUtilGetConfig
-     * @listens Util#RadioRequestUtilGetUiStyle
-     * @listens Util#RadioRequestUtilGetIgnoredKeys
-     * @listens Util#RadioRequestUtilPunctuate
-     * @listens Util#RadioRequestUtilSort
-     * @listens Util#RadioRequestUtilConvertArrayOfObjectsToCsv
-     * @listens Util#RadioRequestUtilGetPathFromLoader
-     * @listens Util#RadioTriggerUtilHideLoader
-     * @listens Util#RadioTriggerUtilShowLoader
-     * @listens Util#RadioTriggerUtilSetUiStyle
-     * @listens Util#RadioTriggerUtilCopyToClipboard
-     * @listens Util#event:changeIsViewMobile
-     * @fires Util#RadioTriggerIsViewMobileChanged
-     * @fires Alert#RadioTriggerAlertAlert
-     * @fires Alert#RadioTriggerAlertAlert
-     * @fires Util#RadioTriggerUtilHideLoader
+     * @listens Core#RadioRequestUtilIsViewMobile
+     * @listens Core#RadioRequestUtilGetProxyURL
+     * @listens Core#RadioRequestUtilIsApple
+     * @listens Core#RadioRequestUtilIsAndroid
+     * @listens Core#RadioRequestUtilIsOpera
+     * @listens Core#RadioRequestUtilIsWindows
+     * @listens Core#RadioRequestUtilIsChrome
+     * @listens Core#RadioRequestUtilIsInternetExplorer
+     * @listens Core#RadioRequestUtilIsAny
+     * @listens Core#RadioRequestUtilGetConfig
+     * @listens Core#RadioRequestUtilGetUiStyle
+     * @listens Core#RadioRequestUtilGetIgnoredKeys
+     * @listens Core#RadioRequestUtilPunctuate
+     * @listens Core#RadioRequestUtilSort
+     * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
+     * @listens Core#RadioRequestUtilGetPathFromLoader
+     * @listens Core#RadioTriggerUtilHideLoader
+     * @listens Core#RadioTriggerUtilShowLoader
+     * @listens Core#RadioTriggerUtilSetUiStyle
+     * @listens Core#RadioTriggerUtilCopyToClipboard
+     * @listens Core#event:changeIsViewMobile
+     * @fires Core#RadioTriggerIsViewMobileChanged
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioTriggerUtilHideLoader
      */
     initialize: function () {
         var channel = Radio.channel("Util");
@@ -214,8 +214,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * behaviour of ios strange used solution from :
      * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
      * @param  {el} el element to copy
-     * @fires Alert#RadioTriggerAlertAlert
-     * @fires Alert#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     copyToClipboard: function (el) {
@@ -329,7 +329,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * shows the loader gif
-     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires Core#RadioTriggerUtilHideLoader
      * @returns {void}
      */
     showLoader: function () {
@@ -424,7 +424,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * todo
-     * @fires Alert#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {Void}
      */
     parseConfigFromURL: function () {

@@ -123,11 +123,6 @@
  */
 
 /**
- * @namespace Util
- * @description fooBar
- */
-
-/**
  * @namespace Menu
  * @description Definition of menu
  */
@@ -381,7 +376,7 @@
  */
 
 /**
- * @namespace EinwohnerAbfrage_HH
+ * @namespace Einwohnerabfrage_hh
  * @memberOf Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
