@@ -1,4 +1,10 @@
-
+/**
+ * prepareSearchBody
+ * @param {String} query parameter
+ * @param {String} sorting parameter
+ * @param {Number} size parameter
+ * @returns {string} search body
+ */
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
 

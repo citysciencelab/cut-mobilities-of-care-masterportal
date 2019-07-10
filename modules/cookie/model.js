@@ -54,6 +54,7 @@ const CookieModel = Backbone.Model.extend(/** @lends CookieModel.prototype */{
      * @param {*} sPath todo.
      * @param {*} sDomain todo.
      * @param {*} bSecure todo.
+     * @returns {Boolean} true
      */
     setItem: function (sValue, vEnd, sPath, sDomain, bSecure) {
         var sKey = this.get("sKey"),

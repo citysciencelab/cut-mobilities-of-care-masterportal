@@ -78,7 +78,7 @@ function appendToLocalProxies (proxyName, domain, port, isLast, proxyForFHHNet) 
  * @param {String} port parameter
  * @param {String} proxyName parameter
  * @param {Object} proxyForFHHNet ProxyRemote erstellen für Proxies, die aus dem FHHnet auf das Internet zugreifen
- * @returns {Void} desc
+ * @returns {void}
  */
 function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNet) {
     let path,
@@ -114,7 +114,7 @@ function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNe
  * @param {Array} entry parameter
  * @param {Array} isLast parameter
  * @param {Array} proxyForFHHNet parameter
- * @returns {Void} desc
+ * @returns {void}
  */
 function writeEntry (entry, isLast, proxyForFHHNet) {
     var protocol = entry[0],
@@ -146,7 +146,7 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
  *
  * @param {Object} allDomains parameter
  * @param {Object} proxyForFHHNet parameter
- * @returns {Void} desc
+ * @returns {void}
  */
 function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
 
@@ -181,7 +181,7 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
 }
 
 /**
- * @returns {Void} desc
+ * @returns {void}
  */
 function printHelpText () {
     console.log("### @Params: name of targetfile");
@@ -191,7 +191,7 @@ function printHelpText () {
 }
 
 /**
- * @returns {Void} desc
+ * @returns {void}
  */
 function main () {
     printHelpText();

@@ -7,7 +7,7 @@ const fs = require("fs-extra"),
  * createFolders
  * @param {Object} folder parameter
  * @param {String} name parameter
- * @returns {Void} desc
+ * @returns {void}
  */
 function createFolders (folder, name) {
     fs.mkdir(name).then(() => {
@@ -33,7 +33,7 @@ function createFolders (folder, name) {
 /**
  * buildFolderStructure
  * @param {Array} structure parameter
- * @returns {Void} desc
+ * @returns {void}
  */
 function buildFolderStructure (structure) {
     structure.forEach(function (folder) {
@@ -45,7 +45,7 @@ function buildFolderStructure (structure) {
 
 /**
  * createDataStructure
- * @returns {Void} desc
+ * @returns {void}
  */
 function createDataStructure () {
     var structure = [],

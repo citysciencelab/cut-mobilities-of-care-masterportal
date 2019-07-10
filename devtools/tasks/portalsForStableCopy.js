@@ -31,7 +31,7 @@ var aPortalQueue = [],
 /**
  * copyPortal
  * @param {String} portalName parameter
- * @returns {Void} desc
+ * @returns {void}
  */
 function copyPortal (portalName) {
     fs.readdir(conf.sourceFolder + "/" + portalName, (error, fileNames) => {
@@ -55,7 +55,7 @@ function copyPortal (portalName) {
 
 /**
  * createPortalsRec
- * @returns {Void} desc
+ * @returns {void}
  */
 function createPortalsRec () {
     var portalName,
@@ -98,7 +98,7 @@ function createPortalsRec () {
 
 /**
  * createStablePortalsFolder
- * @returns {Void} desc
+ * @returns {void}
  */
 function createStablePortalsFolder () {
     fs.readdir(conf.sourceFolder, (error, portalNames) => {
@@ -131,7 +131,7 @@ function createStablePortalsFolder () {
 
 /**
  * createMasterCodeFolder
- * @returns {Void} desc
+ * @returns {void}
  */
 function createMasterCodeFolder () {
     var foldersToCopy = ["js", "css"];
@@ -163,7 +163,7 @@ function createMasterCodeFolder () {
 
 /**
  * deleteStablePortalsFolder
- * @returns {Void} desc
+ * @returns {void}
  */
 function deleteStablePortalsFolder () {
     fs.remove(conf.targetFolder).then(() => {

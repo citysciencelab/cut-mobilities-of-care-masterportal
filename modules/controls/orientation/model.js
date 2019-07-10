@@ -84,7 +84,7 @@ const OrientationModel = Backbone.Model.extend({
 
     /**
      * Triggert die Standpunktkoordinate auf Radio
-     * @returns {Void} desc
+     * @returns {void}
     */
     sendPosition: function () {
         if (this.get("zoomMode") === "once") {
