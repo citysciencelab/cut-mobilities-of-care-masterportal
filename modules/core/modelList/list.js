@@ -524,8 +524,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     moveModelInTree: function (model, movement) {
-        var allLayers = this.getSortedTreeLayers(),
-            currentSelectionIdx = model.get("selectionIDX"),
+        var currentSelectionIdx = model.get("selectionIDX"),
             modelToSwap = this.where({selectionIDX: currentSelectionIdx + movement});
 
         if (!modelToSwap || modelToSwap.length === 0) {
