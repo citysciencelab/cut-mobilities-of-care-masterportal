@@ -417,9 +417,20 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSelectedOnChildLayers: function (model) {
-        var childModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")})).reverse();
+        var descendantModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
 
-        _.each(childModels, function (childModel) {
+        // Layers in default tree are always sorted alphabetically while in other tree types, layers are
+        // displayed in the order taken from config.json.
+        if (Radio.request("Parser", "getTreeType") === "default") {
+            descendantModels = this.sortLayers(descendantModels, "name");
+        }
+
+        // Since each layer will be put into selected layers list seperately, their order changes because we
+        // shift the layers from one stack to another. So just revert the stack order first.
+        descendantModels = descendantModels.reverse();
+
+        // Setting each layer as selected will trigger rerender of OL canvas and displayed selected layers.
+        _.each(descendantModels, function (childModel) {
             childModel.setIsSelected(model.get("isSelected"));
         });
     },

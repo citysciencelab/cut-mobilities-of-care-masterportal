@@ -60,6 +60,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     renderSelectedList: function () {
+
         var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
             selectedModels;
 
@@ -67,6 +68,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         if (selectedLayerModel.get("isExpanded")) {
             selectedModels = this.collection.where({isSelected: true, type: "layer"});
             selectedModels = selectedModels.filter(model => model.get("name") !== "Oblique");
+
             selectedModels = _.sortBy(selectedModels, function (model) {
                 return model.get("selectionIDX");
             });
