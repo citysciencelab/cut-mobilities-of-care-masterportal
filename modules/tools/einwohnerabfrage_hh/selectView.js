@@ -13,8 +13,8 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
      * @extends Backbone.View
      * @memberof Tools.Einwohnerabfrage_hh
      * @constructs
-     * @listens Tools.Einwohnerabfrage_hh#changeIsActive
-     * @listens Tools.Einwohnerabfrage_hh#renderResult
+     * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
+     * @listens Tools.Einwohnerabfrage_hh#RenderResult
      * @fires Core#RadioRequestUtilGetPathFromLoader
      */
     initialize: function () {
@@ -66,7 +66,7 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
 
     /**
      * render the resultView
-     * @returns {Void}
+     * @returns {void}
      */
     renderResult: function () {
         this.$el.find(".result").html("");
@@ -74,8 +74,9 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
     },
 
     /**
-     * create draw interaction 
-     * @returns {Void}
+     * create draw interaction
+     * @param {*} evt todo
+     * @returns {void}
      */
     createDrawInteraction: function (evt) {
         this.model.get("drawInteraction").setActive(false);

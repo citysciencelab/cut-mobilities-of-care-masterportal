@@ -77,8 +77,24 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {String} glyphicon="glyphicon-wrench" glyphicon to show
      * @property {String} rasterLayerId="13023" layerId for layer with raster
      * @property {String} alkisAdressLayerId="9726" layerId for the alkis adresses
-     * @listens Tool.Einwohnerabfrage_hh#changeIsActive
+     * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
+     * @listens Snippets.Dropdown#ValuesChanged
+     * @listens Snippets.Checkbox#ValuesChanged
+     * @listens Core#RadioTriggerModelListUpdateVisibleInMapList
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
+     * @fires Tools.Einwohnerabfrage_hh#RenderResult
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioRequestUtilPunctuate
+     * @fires Core#RadioRequestMapCreateLayerIfNotExists
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapRemoveOverlay
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires Core#RadioTriggerMapAddInteraction
+     * @fires Core#RadioTriggerWPSRequest
+     * @fires Core#RadioRequestModelListGetModelByAttributes
+     * @fires Core#RadioTriggerModelListAddModelByAttributes
+     * @fires Core#RadioTriggerModelListSetModelAttributesById
      */
     initialize: function () {
         this.superInitialize();
@@ -131,7 +147,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * todo
      * @param {*} cswObj todo
-     * @returns {Void}
+     * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
@@ -154,7 +170,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * todo
      * @param {*} uniqueIdList todo
      * @param {*} uniqueId todo
-     * @returns {Void}
+     * @returns {void}
      */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
@@ -164,7 +180,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * todo
      * @param {*} attr todo
      * @param {*} parsedData todo
-     * @returns {Void}
+     * @returns {void}
      */
     updateMetaData: function (attr, parsedData) {
         if (attr === "fhhDate") {
@@ -186,6 +202,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * Called when the wps modules returns a request
      * @param  {string} response - the response xml of the wps
      * @param  {number} status - the HTTPStatusCode
+     * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @returns {void}
      */
     handleResponse: function (response, status) {
@@ -211,6 +228,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * Displays Errortext if the WPS returns an Error
      * @param  {String} response received by wps
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     handleWPSError: function (response) {
@@ -220,6 +238,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * Used when statuscode is 200 and wps did not return an error
      * @param  {String} response received by wps
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     handleSuccess: function (response) {
@@ -241,6 +260,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * Iterates ofer response properties
      * @param  {object} response - todo
+     * @fires Core#RadioRequestUtilPunctuate
      * @returns {void}
      */
     prepareDataForRendering: function (response) {
@@ -267,6 +287,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * Chooses unit based on value, calls panctuate and converts to unit and appends unit
      * @param  {number} value -
      * @param  {number} maxDecimals - decimals are cut after maxlength chars
+     * @fires Core#RadioRequestUtilPunctuate
      * @returns {string} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
@@ -287,6 +308,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
+     * @fires Core#RadioRequestMapCreateLayerIfNotExists
+     * @fires Core#RadioTriggerMapRemoveOverlay
      * @returns {void}
      */
     resetView: function () {
@@ -302,6 +325,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * Handles (de-)activation of this Tool
      * @param {object} model - tool model
      * @param {boolean} value flag is tool is ctive
+     * @fires Core#RadioTriggerMapRemoveOverlay
      * @returns {void}
      */
     setStatus: function (model, value) {
@@ -356,6 +380,10 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * creates a draw interaction and adds it to the map.
      * @param {string} drawType - drawing type (Box | Circle | Polygon)
+     * @fires Core#RadioRequestMapCreateLayerIfNotExists
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires Core#RadioTriggerMapAddInteraction
      * @returns {void}
      */
     createDrawInteraction: function (drawType) {
@@ -393,7 +421,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * todo
      * @param {*} coordinates todo
      * @param {*} opt_geom todo
-     * @returns {*}
+     * @returns {*} todo
      */
     snapRadiusToInterval: function (coordinates, opt_geom) {
         var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2)),
@@ -436,6 +464,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * @param  {object} geoJson - todo
+     * @fires Tools.Einwohnerabfrage_hh#RenderResult
+     * @fires Core#RadioTriggerWPSRequest
      * @returns {void}
      */
     makeRequest: function (geoJson) {
@@ -451,7 +481,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * todo
      * @param {*} geoJson todo
-     * @returns {Void}
+     * @returns {void}
      */
     prepareData: function (geoJson) {
         var prepared = {};
@@ -476,7 +506,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * todo
      * @param {*} evt todo
-     * @returns {Void}
+     * @returns {void}
      */
     showTooltipOverlay: function (evt) {
         var coords = evt.coordinate,
@@ -496,7 +526,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * todo
      * @param {Number} number todo
      * @param {*} precision todo
-     * @returns {Number}
+     * @returns {Number} todo
      */
     precisionRound: function (number, precision) {
         var factor = Math.pow(10, precision);
@@ -524,6 +554,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * adds or removes the circle overlay from the map
      * @param {string} type - geometry type
      * @param {ol.Overlay} overlay - circleOverlay
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapRemoveOverlay
      * @returns {void}
      */
     toggleOverlay: function (type, overlay) {
@@ -565,6 +597,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * checks if snippetCheckboxLayer is loaded and toggles the button accordingly
      * @param {String} layerId - id of the addressLayer
      * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
+     * @fires Core#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
     checksSnippetCheckboxLayerIsLoaded: function (layerId, snippetCheckboxModel) {
@@ -612,6 +645,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * if the model does not exist, add Model from Parser to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
+     * @fires Core#RadioRequestModelListGetModelByAttributes
+     * @fires Core#RadioTriggerModelListAddModelByAttributes
      * @returns {void}
      */
     addModelsByAttributesToModelList: function (layerId) {
@@ -624,7 +659,9 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * checks whether the model has been loaded.
      * If it is not loaded, a corresponding error message is displayed and switches snippetCheckbox off
      * @param {String} layerId id of the layer to be toggled
-     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
+     * @param {SnippetCheckboxModel} snippetCheckboxModel - snippet checkbox model for a layer
+     * @fires Core#RadioRequestModelListGetModelByAttributes
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     checkIsModelLoaded: function (layerId, snippetCheckboxModel) {
@@ -638,6 +675,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * sets selected and visibility to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
      * @param {boolean} value - true | false
+     * @fires Core#RadioTriggerModelListSetModelAttributesById
      * @returns {void}
      */
     setModelAttributesByIdToModelList: function (layerId, value) {
@@ -649,7 +687,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxAddress
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setCheckBoxAddress: function (value) {
         this.set("checkBoxAddress", value);
@@ -657,7 +696,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxRaster
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setCheckBoxRaster: function (value) {
         this.set("checkBoxRaster", value);
@@ -665,7 +705,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the data
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setData: function (value) {
         this.set("data", value);
@@ -673,7 +714,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the dataReceived
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setDataReceived: function (value) {
         this.set("dataReceived", value);
@@ -681,7 +723,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the requesting
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setRequesting: function (value) {
         this.set("requesting", value);
@@ -689,7 +732,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the snippetDropdownModel
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setDropDownSnippet: function (value) {
         this.set("snippetDropdownModel", value);
@@ -697,7 +741,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the fhhDate
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setFhhDate: function (value) {
         this.set("fhhDate", value);
@@ -705,7 +750,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the drawInteraction
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setDrawInteraction: function (value) {
         this.set("drawInteraction", value);
@@ -713,7 +759,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the isCollapsed
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setIsCollapsed: function (value) {
         this.set("isCollapsed", value);
@@ -721,7 +768,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the isCurrentWin
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setIsCurrentWin: function (value) {
         this.set("isCurrentWin", value);
@@ -729,7 +777,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the currentValue
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setCurrentValue: function (value) {
         this.set("currentValue", value);
@@ -737,7 +786,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the uniqueIdList
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
@@ -745,15 +795,17 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the metaDataLink
-     * @returns {Void} 
+     * @param {*} value todo
+     * @returns {void}
      */
     setMetaDataLink: function (value) {
         this.set("metaDataLink", value);
     },
-    
+
     /**
      * Sets the loaderPath
-     * @returns {Void} 
+     * @param {String} value path to the loader gif
+     * @returns {void}
      */
     setLoaderPath: function (value) {
         this.set("loaderPath", value);

@@ -23,8 +23,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @listens Tools.Filter.Query#changeIsLayerVisible
      * @fires Core#RadioRequestUtilGetPathFromLoader
      * @fires Core#RadioRequestUtilIsViewMobile
-     * @fires SnippetCollection#valuesChanged
-     * @fires SnippetCollection#hideAllInfoText
+     * @fires Tools.Filter.Query#valuesChanged
+     * @fires Tools.Filter.Query#SnippetCollectionHideAllInfoText
      */
     initialize: function () {
         this.listenTo(this.model, {
@@ -52,8 +52,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {*} todo
      */
     render: function () {
-        let attr,
-            loaderPath;
+        const attr = this.model.toJSON();
+        let loaderPath;
 
         if (!this.model.get("features")) {
             loaderPath = Radio.request("Util", "getPathFromLoader");
@@ -61,7 +61,6 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
             return this;
         }
-        attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         this.renderSnippets();
@@ -73,7 +72,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     /**
      * todo
      * @param {*} changedValue todo
-     * @returns {Void}
+     * @returns {void}
      */
     rerenderSnippets: function (changedValue) {
         _.each(this.model.get("snippetCollection").models, function (snippet) {
@@ -98,8 +97,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
     /**
      * todo
-     * @returns {Void}
      * @fires Core#RadioRequestUtilIsViewMobile
+     * @returns {void}
      */
     zoomToSelectedFeatures: function () {
         this.model.sendFeaturesToRemote();
@@ -110,7 +109,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
     /**
      * reder the configured snippets
-     * @returns {Void}
+     * @returns {void}
      */
     renderSnippets: function () {
         var view;
@@ -182,7 +181,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
     /**
      * todo
-     * @returns {Void}
+     * @returns {void}
      */
     renderSnippetCheckBoxView: function () {
         // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
@@ -198,7 +197,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
     /**
      * todo
      * @param {*} evt todo
-     * @returns {Void}
+     * @returns {void}
      */
     toggleIsActive: function (evt) {
         this.model.setIsActive(this.$(evt.target).prop("checked"));
@@ -209,7 +208,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * todo
      * @param {*} model todo
      * @param {*} value todo
-     * @returns {Void}
+     * @returns {void}
      */
     removeView: function (model, value) {
         if (value === false) {

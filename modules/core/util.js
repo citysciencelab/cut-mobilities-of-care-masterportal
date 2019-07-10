@@ -150,7 +150,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Sorts an array.
      * @param {Array} input array to sort.
-     * @returns sorted array
+     * @returns {Array} sorted array
      */
     sortArray: function (input) {
         return input.sort(this.sortAlphaNum);
@@ -160,7 +160,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * todo
      * @param {*} a todo
      * @param {*} b todo
-     * @returns {*}
+     * @returns {*} todo
      */
     sortAlphaNum: function (a, b) {
         var regExAlpha = /[^a-zA-Z]/g,
@@ -192,7 +192,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @param {*} input todo
      * @param {*} first todo
      * @param {*} second todo
-     * @returns {*}
+     * @returns {*} todo
      */
     sortObjects: function (input, first, second) {
         var sortedObj = input;
@@ -351,7 +351,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Setter for loaderOverlayTimeoutReference
      * @param {*} timeoutReference todo
-     * @returns {Void}
+     * @returns {void}
      */
     setLoaderOverlayTimeoutReference: function (timeoutReference) {
         this.set("loaderOverlayTimeoutReference", timeoutReference);
@@ -411,7 +411,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Toggled the isViewMobile attribute when the window width exceeds or falls below 768px
-     * @return {Void}
+     * @return {void}
      */
     toggleIsViewMobile: function () {
         if (window.innerWidth >= 768) {
@@ -425,7 +425,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * todo
      * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {Void}
+     * @returns {void}
      */
     parseConfigFromURL: function () {
         var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
@@ -487,7 +487,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Setter for config
      * @param {*} value todo
-     * @returns {Void}
+     * @returns {void}
      */
     setConfig: function (value) {
         this.set("config", value);
@@ -496,7 +496,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Setter for uiStyle
      * @param {*} value todo
-     * @returns {Void}
+     * @returns {void}
      */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
