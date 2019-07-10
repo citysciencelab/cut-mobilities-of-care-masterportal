@@ -1,12 +1,13 @@
 import "../model";
-import * as ElasticSearch from "../../core/elasticsearch";
+import ElasticSearch from "../../core/elasticsearch";
 
-const GdiModel = Backbone.Model.extend({
+const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     defaults: {
         minChars: 3,
         serviceId: "",
         sorting: {},
-        size: 10000
+        size: 10000,
+        elasticSearch: new ElasticSearch()
     },
     /**
      * @description Initialise GDI-Search via ElasticSearch
@@ -27,33 +28,51 @@ const GdiModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
+        this.listenTo(Radio.channel("Elastic"), {
+            "triggerHitList": this.triggerHitList
+        });
     },
-
+    /**
+     * Searchs layer if enough characters have been touched (if >="minChars")
+     * @param {String} searchString - what is searched
+     * @returns {void}
+     */
     search: function (searchString) {
-        var query = this.createQuery(searchString),
-            response = null;
+        var query = this.createQuery(searchString);
 
         if (searchString.length >= this.get("minChars")) {
-            response = ElasticSearch.search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
-            if (response && response.hits) {
-                _.each(response.hits, function (hit) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        name: hit.name,
-                        type: "Fachthema",
-                        glyphicon: "glyphicon-list",
-                        id: hit.id,
-                        triggerEvent: {
-                            channel: "GDI-Search",
-                            event: "addLayer"
-                        },
-                        source: hit
-                    });
-                }, this);
-            }
-
-            Radio.trigger("Searchbar", "createRecommendedList");
+            this.get("elasticSearch").search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
         }
     },
+    /**
+     * function for the layers that are being searched for
+     * @param {String} datasources - layers that have been found
+     * @returns {void}
+     */
+    triggerHitList: function (datasources) {
+        if (datasources) {
+            _.each(datasources, function (hit) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    name: hit.name,
+                    type: "Fachthema",
+                    glyphicon: "glyphicon-list",
+                    id: hit.id,
+                    triggerEvent: {
+                        channel: "GDI-Search",
+                        event: "addLayer"
+                    },
+                    source: hit
+                });
+            }, this);
+        }
+
+        Radio.trigger("Searchbar", "createRecommendedList");
+    },
+    /**
+     * creates query for searched string (layer)
+     * @param {String} searchString - string that will be touched
+     * @returns {Oject} query
+     */
     createQuery: function (searchString) {
         /* Zur Zeit noch nicht fuzzy */
         var query = {
@@ -77,6 +96,11 @@ const GdiModel = Backbone.Model.extend({
 
         return query;
     },
+    /**
+     * Adds found layer to layer tree
+     * @param {Object} hit layer to be added
+     * @returns {void}
+     */
     addLayer: function (hit) {
         var treeType = Radio.request("Parser", "getTreeType"),
             parentId = "tree",
@@ -133,23 +157,43 @@ const GdiModel = Backbone.Model.extend({
             console.error("Es konnte kein Eintrag für Layer " + hit.id + " in ElasticSearch gefunden werden.");
         }
     },
+    /**
+     * Setter for MinChars
+     * @param {Number} value - value for minChars
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
+    /**
+     * Setter for ServiceId
+     * @param {Number} value for serviceId
+     * @returns {void}
+     */
     setServiceId: function (value) {
         this.set("serviceId", value);
     },
+    /**
+     * Setter for Sorting
+     * @param {String} key - type of sorting
+     * @param {String} value - descending or ascending
+     * @returns {void}
+     */
     setSorting: function (key, value) {
         if (key && value) {
             this.get("sorting")[key] = value;
         }
     },
+    /**
+     * Setter for Size
+     * @param {String} value for size
+     * @returns {void}
+     */
     setSize: function (value) {
         if (typeof value === "number") {
             this.set("size", value);
         }
     }
-
 });
 
 export default GdiModel;
