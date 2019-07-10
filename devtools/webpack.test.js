@@ -16,14 +16,14 @@ module.exports = {
     },
     module: {
         rules: [
-          {
-            test: /\.node$/,
-            use: 'node-loader'
-          },
-          {
-            test: /\.js$/,
-            use: 'babel-loader'
-          }
+            {
+                test: /\.node$/,
+                use: "node-loader"
+            },
+            {
+                test: /\.js$/,
+                use: "babel-loader"
+            }
         ]
     },
     plugins: [

@@ -2,7 +2,7 @@ import Layer from "./model";
 import Collection from "vcs-oblique/src/vcs/oblique/collection";
 import {get} from "ol/proj.js";
 
-const ObliqueLayer = Layer.extend(/**@lends  ObliqueLayer.prototype*/{
+const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["none"],
         showSettings: false,

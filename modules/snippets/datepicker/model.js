@@ -69,7 +69,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @returns {void}
      */
     updateValuesSilently: function (value) {
-        this.get("valuesCollection").at(0).set("date", value, {silent:true});
+        this.get("valuesCollection").at(0).set("date", value, {silent: true});
         this.trigger("updateDOMSlider", value);
     },
 

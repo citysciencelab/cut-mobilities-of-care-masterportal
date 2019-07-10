@@ -2,49 +2,49 @@ import Model from "@modules/searchbar/specialWFS/model.js";
 
 describe("modules/searchbar/specialWFS", function () {
     var model = {},
-    config = {
-        "minChars": 5,
-        "maxFeatures": 1,
-        "timeout": 10000,
-        "definitions": [
-        {
-            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
-            "typeName": "app:mrh_row_bplan",
-            "propertyNames": ["app:name"],
-            "name": "B-Plan"
-        },
-        {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_festgestellt",
-            "propertyNames": ["app:planrecht"],
-            "geometryName": "app:geom",
-            "name": "festgestellt"
-        },
-        {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_imverfahren",
-            "propertyNames": ["app:plan"],
-            "geometryName": "app:the_geom",
-            "name": "im Verfahren"
-        },
-        {
-            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
-            "typeName": "app:KitaEinrichtungen",
-            "propertyNames": ["app:Name"],
-            "name": "Kita"
-        },
-        {
-            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
-            "typeName": "app:stoerfallbetrieb",
-            "propertyNames": ["app:standort"],
-            "name": "Störfallbetrieb"
-        },
-        {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
-            "name": "festgestellt"
-        }]
-    };
+        config = {
+            "minChars": 5,
+            "maxFeatures": 1,
+            "timeout": 10000,
+            "definitions": [
+                {
+                    "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+                    "typeName": "app:mrh_row_bplan",
+                    "propertyNames": ["app:name"],
+                    "name": "B-Plan"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                    "typeName": "app:prosin_festgestellt",
+                    "propertyNames": ["app:planrecht"],
+                    "geometryName": "app:geom",
+                    "name": "festgestellt"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                    "typeName": "app:prosin_imverfahren",
+                    "propertyNames": ["app:plan"],
+                    "geometryName": "app:the_geom",
+                    "name": "im Verfahren"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+                    "typeName": "app:KitaEinrichtungen",
+                    "propertyNames": ["app:Name"],
+                    "name": "Kita"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+                    "typeName": "app:stoerfallbetrieb",
+                    "propertyNames": ["app:standort"],
+                    "name": "Störfallbetrieb"
+                },
+                {
+                    "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                    "data": "service=WFS&request=GetFeature&version=2.0.0&typeNames=prosin_festgestellt&propertyName=planrecht",
+                    "name": "festgestellt"
+                }]
+        };
 
     before(function () {
         model = new Model(config);
@@ -82,8 +82,8 @@ describe("modules/searchbar/specialWFS", function () {
             expect(model.get("definitions")[5].typeName).to.equal("prosin_festgestellt");
         });
         it("should set geometryName", function () {
-           expect(model.get("definitions")[2].geometryName).to.equal("app:the_geom");
-           expect(model.get("definitions")[1].geometryName).to.equal("app:geom");
+            expect(model.get("definitions")[2].geometryName).to.equal("app:the_geom");
+            expect(model.get("definitions")[1].geometryName).to.equal("app:geom");
         });
         it("should have set deprecated typeName", function () {
             expect(model.get("definitions")[5].typeName).to.equal("prosin_festgestellt");

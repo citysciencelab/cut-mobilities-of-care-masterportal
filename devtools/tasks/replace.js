@@ -7,18 +7,17 @@ module.exports = function (environment, destination, deepness = 2) {
         lgvConfigReplacement = "lgv-config";
 
     while (deepness--) {
-        lgvConfigReplacement = "../"+lgvConfigReplacement;
+        lgvConfigReplacement = "../" + lgvConfigReplacement;
     }
 
     ["index.html", "css/style.css", "config.js", "config.json"].forEach((file) => {
         replacements.push({
-            "files": destination+"/"+file,
+            "files": destination + "/" + file,
             "from": lgvConfigRegex,
             "to": lgvConfigReplacement
         });
     });
-    replacements.push(
-    {
+    replacements.push({
         "files": destination + "/index.html",
         "from": /\/*(\.+\/)*build/g,
         "to": "."
