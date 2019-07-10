@@ -1,9 +1,9 @@
 /**
- * prepareSearchBody
- * @param {String} query parameter
- * @param {String} sorting parameter
- * @param {Number} size parameter
- * @returns {string} search body
+ * prepare the searched contents
+ * @param {query} query - id of ElasticSearch Element in rest-services.json
+ * @param {sorting} sorting - json-notated Query to post to
+ * @param {size} size - object used for sorting the query
+ * @return {object} result - searched results
  */
 export function prepareSearchBody (query, sorting, size) {
     var searchBody = {};
