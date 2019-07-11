@@ -1,6 +1,7 @@
 import Model from "@modules/controls/orientation/poi/model.js";
 import Style from "@modules/vectorStyle/model.js";
 import Feature from "ol/Feature.js";
+import {expect} from "chai";
 
 describe("POI (In meiner Nähe)", function () {
     var model,
@@ -34,13 +35,13 @@ describe("POI (In meiner Nähe)", function () {
         var style = new Style();
 
         it("createPolygonSVG should return an SVG", function () {
-            expect(model.createPolygonSVG(style)).to.be.an("string").to.equal("<svg height=\'35\' width=\'35\'><polygon points=\'5,5 30,5 30,30 5,30\' style=\'fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;\'/></svg>");
+            expect(model.createPolygonSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;'/></svg>");
         });
         it("createLineSVG should return an SVG", function () {
-            expect(model.createLineSVG(style)).to.be.an("string").to.equal("<svg height=\'35\' width=\'35\'><path d=\'M 05 30 L 30 05\' stroke=\'#000000\' stroke-opacity=\'1\' stroke-width=\'2\' fill=\'none\'/></svg>");
+            expect(model.createLineSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><path d='M 05 30 L 30 05' stroke='#000000' stroke-opacity='1' stroke-width='2' fill='none'/></svg>");
         });
         it("createCircleSVG should return an SVG", function () {
-            expect(model.createCircleSVG(style)).to.be.an("string").to.equal("<svg height=\'35\' width=\'35\'><circle cx=\'17.5\' cy=\'17.5\' r=\'15\' stroke=\'#000000\' stroke-opacity=\'1\' stroke-width=\'2\' fill=\'#0099ff\' fill-opacity=\'1\'/></svg>");
+            expect(model.createCircleSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><circle cx='17.5' cy='17.5' r='15' stroke='#000000' stroke-opacity='1' stroke-width='2' fill='#0099ff' fill-opacity='1'/></svg>");
         });
     });
 
