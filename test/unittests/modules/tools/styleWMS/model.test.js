@@ -164,6 +164,8 @@ describe("tools/styleWMS/model", function () {
             _.each(styleClassAttributes, function (styleClassAttribute) {
 
                 // Select rule with expected attributes by removing the rules with other attributes. Expect one rule to remain.
+                /* eslint max-nested-callbacks: ["error", 5]*/
+
                 var rule = $sld.find("sld\\:NamedLayer")
                     .children("sld\\:UserStyle")
                     .children("sld\\:FeatureTypeStyle")
