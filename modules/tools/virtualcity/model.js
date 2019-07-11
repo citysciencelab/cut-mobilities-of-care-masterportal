@@ -2,20 +2,18 @@ import axios from "axios";
 import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
 
-const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
+const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         planningCache: {},
         readyPromise: null
     }),
 
     /**
-     * @class VirtualCityModel
+     * @class VirtualCity
      * @extends Tool
      * @memberof Tools.VirtualCity
      * @constructs
-     * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
-     * @fires ContactModel#changeInvalid
      * @listens VirtualCity#RadioRequestVirtualCityGetPlanningById
      * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
      * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
@@ -110,7 +108,7 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     /**
      * deactivates a Planning identified by the given planningId
      * @param {string} planningId id of the planningInstance
-     * @return {Promise} Promise which resolves when the planning has been loaded and deactivate
+     * @return {Promise} Promise which resolves when the planning has been loaded and deactivated
      */
     deactivatePlanning (planningId) {
         return this.getPlanningById(planningId).then((planning) => {
@@ -144,4 +142,4 @@ const VirtualCityModel = Tool.extend(/** @lends VirtualCityModel.prototype */{
     }
 });
 
-export default VirtualCityModel;
+export default VirtualCity;

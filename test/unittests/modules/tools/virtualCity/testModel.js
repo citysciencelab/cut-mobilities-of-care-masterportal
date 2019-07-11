@@ -4,7 +4,7 @@ import Planning from "@modules/tools/virtualcity/planning.js";
 import {expect} from "chai";
 import sinon from "sinon";
 
-describe.only("tools/virtualcity/VirtualcityModel", function () {
+describe("tools/virtualcity/VirtualcityModel", function () {
     var virtualcity,
         server,
         serviceResponse = [

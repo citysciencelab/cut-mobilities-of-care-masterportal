@@ -96,6 +96,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     /**
      * activates the planning project and jumps to the default Viewpoint
      * @returns {Promise} promise which returns when the planning has been loaded and activated
+     * @fires Planning#RadioRequestMapIsMap3d
      * @fires Planning#RadioTriggerMapActivateMap3d
      * @fires Planning#RadioTriggerMapSetCameraParameter
      */
@@ -119,7 +120,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
         });
     },
     /**
-     * deactivates the planning project and jumps to the default Viewpoint
+     * deactivates the planning project
      * @returns {Promise} promise which returns when the planning has been loaded and deactivated
      */
     deactivate () {
@@ -146,7 +147,8 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     },
 
     /**
-     * sets the ids of the hiddenObjects to the existing compatible layers
+     * sets the ids of the hiddenObjects on the existing compatible layers
+     * @fires Planning#RadioRequestModelListGetModelsByAttributes
      * @returns {void} -
      */
     setHiddenObjects () {
@@ -158,7 +160,8 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     },
 
     /**
-     * clears the ids of the hiddenObjects to the existing compatible layers
+     * clears the ids of the hiddenObjects on the existing compatible layers
+     * @fires Planning#RadioRequestModelListGetModelsByAttributes
      * @returns {void} -
      */
     clearHiddenObjects () {

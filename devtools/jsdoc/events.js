@@ -1825,9 +1825,19 @@
  * @description Delivers an array with toll which supported only in 3d-Mode
  */
 
- /**
+/**
  * @event Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
  * @description Delivers an array with toll which supported in 3d-Mode
+/** -------------------- TOOLS.VIRTUALCITY -------------------- */
+
+/**
+ * @event VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
+ * @description returns view points by the given serviceId and planningId
+ */
+
+/**
+ * @event VirtualCity#RadioRequestVirtualCityGotoViewPoint
+ * @description activates a Viewpoint identified by the given ID
  */
 
  /**
