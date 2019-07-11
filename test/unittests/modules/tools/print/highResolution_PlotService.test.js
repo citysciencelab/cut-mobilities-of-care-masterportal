@@ -1,12 +1,14 @@
 import {expect} from "chai";
 import Print2Model from "@modules/tools/print_/HighResolution_PlotService.js";
+const chai = require("chai");
 
 describe("tools/print_/HighResolutionPlotService", function () {
     var print2Model,
         response,
         responseEmpty,
         responseUndef,
-        responseNull;
+        responseNull,
+        expect = chai.expect;
 
     before(function () {
         print2Model = new Print2Model();
