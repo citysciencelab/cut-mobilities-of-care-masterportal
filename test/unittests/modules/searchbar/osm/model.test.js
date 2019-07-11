@@ -1,4 +1,5 @@
 import Model from "@modules/searchbar/OSM/model.js";
+import {expect} from "chai";
 
 describe("modules/searchbar/osm", function () {
     var model = {},
@@ -27,7 +28,7 @@ describe("modules/searchbar/osm", function () {
     describe("isSearched", function () {
         var searched = {
                 "place_id": "83615484",
-                "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https:\/\/osm.org\/copyright",
+                "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
                 "osm_type": "way",
                 "osm_id": "30996321",
                 "boundingbox": ["53.4962341", "53.4964279", "10.0088294", "10.0098278"],
