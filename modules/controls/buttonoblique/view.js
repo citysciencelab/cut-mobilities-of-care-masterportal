@@ -86,7 +86,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @returns {ButtonObliqueView} - Returns itself
      */
     renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: " Schrägluftbilder einschalten"}));
+        this.$el.append(this.tabletemplate({ansicht: "Schrägluftbilder einschalten"}));
         if (Radio.request("ObliqueMap", "isActive")) {
             this.$("#ObliqueTable").addClass("toggleButtonPressed");
         }
@@ -109,7 +109,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
         if (Radio.request("ObliqueMap", "isActive")) {
             Radio.trigger("ObliqueMap", "deactivate");
             Radio.trigger("Alert", "alert:remove");
-            this.$("#ObliqueTable_title").text(" Schrägluftbilder einschalten");
+            this.$("#ObliqueTable_title").text("Schrägluftbilder einschalten");
         }
         else {
             if (Radio.request("Map", "isMap3d")) {
@@ -121,7 +121,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
                 Radio.trigger("Map", "deactivateMap3d");
                 return;
             }
-            this.$("#ObliqueTable_title").text(" Schrägluftbilder ausschalten");
+            this.$("#ObliqueTable_title").text("Schrägluftbilder ausschalten");
             Radio.trigger("ObliqueMap", "activate");
             Radio.trigger("Alert", "alert", "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!");
         }
