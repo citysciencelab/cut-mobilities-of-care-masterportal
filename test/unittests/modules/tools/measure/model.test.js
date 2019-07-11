@@ -1,8 +1,8 @@
 import MeasureModel from "@modules/tools/measure/model.js";
 import {Polygon, LineString} from "ol/geom.js";
 import Feature from "ol/Feature.js";
-var model;
 import {expect} from "chai";
+var model;
 
 before(function () {
     model = new MeasureModel();
