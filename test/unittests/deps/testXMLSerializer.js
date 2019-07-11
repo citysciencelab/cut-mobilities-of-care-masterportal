@@ -1,5 +1,3 @@
-/* eslint func-style: ["error", "declaration", { "allowArrowFunctions": true }]*/
-
 var xmlserializer = require("xmlserializer"),
     XMLSerializer;
 
