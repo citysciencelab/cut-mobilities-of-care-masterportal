@@ -1,5 +1,5 @@
 import Model from "@modules/tools/contact/model.js";
-
+import {expect} from "chai";
 
 describe("contact/model", function () {
     var model,
