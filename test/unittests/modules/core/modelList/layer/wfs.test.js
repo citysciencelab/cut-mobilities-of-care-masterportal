@@ -1,5 +1,5 @@
 import WFSModel from "@modules/core/modelList/layer/wfs.js";
-
+import {expect} from "chai";
 
 describe("core/modelList/layer/wfs", function () {
     let WFSLayer;

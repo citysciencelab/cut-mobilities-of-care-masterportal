@@ -32,6 +32,12 @@ describe("core/rawLayerList", function () {
             expect(collection.deleteLayersByIds(testServices, undefined)).to.be.an("array").that.is.not.empty;
         });
         it("should return an array without id 1711", function () {
+            /**
+             *
+             * check the id
+             * @param {object} obj - the test object
+             * @returns {string} result
+             */
             function eachArrayObject (obj) {
                 return expect(obj).to.not.have.all.property("id", "1711");
             }
@@ -46,6 +52,12 @@ describe("core/rawLayerList", function () {
             expect(collection.deleteLayersByMetaIds(testServices, Config.tree.metaIDsToIgnore)).to.be.an("array").that.is.not.empty;
         });
         it("should return an array without Layer with Dataset md_id 9329C2CB-4552-4780-B343-0CC847538896", function () {
+            /**
+             *
+             * check the property
+             * @param {object} obj - the test object
+             * @returns {string} result
+             */
             function eachArrayObject (obj) {
                 _.find(obj.datasets, function (dataset) {
                     return expect(dataset).to.not.have.property("9329C2CB-4552-4780-B343-0CC847538896");
@@ -105,6 +117,12 @@ describe("core/rawLayerList", function () {
             expect(collection.cloneByStyle(testServices)).to.be.an("array").that.is.not.empty;
         });
         it("should return array with layerobject which includes the style geofox_stations", function () {
+            /**
+             *
+             * check the style
+             * @param {object} obj - the test object
+             * @returns {string} result
+             */
             function eachArrayObject (obj) {
                 return _.isUndefined(obj.styles) || obj.styles === "geofox_stations";
             }
