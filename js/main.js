@@ -45,7 +45,7 @@ if (!("Config" in window)) {
          * MouseEvent
          * @param {String} eventType parameter
          * @param {Object} params parameter
-         * @returns {*} desc
+         * @returns {Event} mouseEvent
          * @constructor
          */
         function MouseEvent (eventType, params) {
