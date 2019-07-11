@@ -1,5 +1,6 @@
 import Collection from "@modules/restReader/collection.js";
 import testRestServices from "../../resources/testRestServices.json";
+import {expect} from "chai";
 
 describe("core/RestReader", function () {
     let collection;

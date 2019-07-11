@@ -1,4 +1,5 @@
 import Model from "@modules/tools/parcelSearch/model.js";
+import {expect} from "chai";
 
 describe("tools/Flurstückssuche", function () {
     var model;
@@ -9,7 +10,7 @@ describe("tools/Flurstückssuche", function () {
 
     describe("buildUrl", function () {
         it("should create url if params is an empty object", function () {
-            expect(model.buildUrl("www.url.de?", {})).to.have.string("www.url.de\?");
+            expect(model.buildUrl("www.url.de?", {})).to.have.string("www.url.de");
         });
         it("should return url if params is an object with number as val", function () {
             expect(model.buildUrl("www.url.de?", {test: 1})).to.have.string("www.url.de?test=1");

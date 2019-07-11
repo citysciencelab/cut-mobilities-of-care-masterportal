@@ -1,8 +1,10 @@
 import Model from "@modules/zoomtofeature/model";
 import Feature from "ol/Feature";
+const chai = require("chai");
 
 describe("zoomToFeature", function () {
-    var model;
+    var model,
+        expect = chai.expect;
 
     before(function () {
         model = new Model();

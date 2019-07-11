@@ -1,6 +1,7 @@
 import DefaultTreeParser from "@modules/core/configLoader/parserDefaultTree.js";
 import testServices from "../../../resources/testServices.json";
 import Collection from "@modules/core/rawLayerList.js";
+import {expect} from "chai";
 
 describe("core/configLoader/parserDefaultTree", function () {
     before(function () {

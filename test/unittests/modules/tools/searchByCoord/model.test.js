@@ -1,4 +1,5 @@
 import Model from "@modules/tools/searchByCoord/model.js";
+const chai = require("chai");
 
 var etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "564459.13", "key": "Wert der Breite"}],
     etrs89ErrCoordNorthing = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "qwertz", "key": "Wert der Breite"}],
@@ -17,6 +18,8 @@ before(function () {
 });
 
 describe("function for validate input", function () {
+    var expect = chai.expect;
+
     describe("validate for etrs89", function () {
         it("should return true if valid", function () {
             model.set("coordSystem", "WGS84");

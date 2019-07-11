@@ -1,3 +1,5 @@
+import {expect} from "chai";
+
 describe("Examples", function () {
     describe("Types", function () {
         it("Null", function () {

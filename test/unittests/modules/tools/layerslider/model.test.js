@@ -1,4 +1,5 @@
 import Model from "@modules/tools/layerslider/model.js";
+import {expect} from "chai";
 
 describe("modules/layerslider", function () {
     var model,
@@ -59,6 +60,11 @@ describe("modules/layerslider", function () {
     });
 
     describe("creates and removes windows interval", function () {
+        /**
+         *
+         * check the console information
+         * @returns {void}
+         */
         function hello () {
             console.warn("hello world");
         }

@@ -31,7 +31,7 @@ describe("snippets/slider/model", function () {
     describe("update values works correctly", function () {
         it("input values are set like they should", function () {
             const today = new Date("2019, 06, 16");
-            let values;
+            var values;
 
             model.updateValues(today);
             values = model.getSelectedValues();
@@ -44,7 +44,7 @@ describe("snippets/slider/model", function () {
     describe("update values silently works also", function () {
         it("input values are set like they should", function () {
             const today = new Date("2019, 06, 17");
-            let values;
+            var values;
 
             model.updateValuesSilently(today);
             values = model.getSelectedValues();

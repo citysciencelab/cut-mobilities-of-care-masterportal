@@ -1,4 +1,5 @@
 import Model from "@modules/tools/download/model.js";
+import {expect} from "chai";
 
 describe("downloadModel", function () {
     var model;

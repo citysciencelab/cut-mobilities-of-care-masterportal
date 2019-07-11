@@ -1,4 +1,5 @@
 import Model from "@modules/searchbar/model.js";
+import {expect} from "chai";
 
 describe("modules/searchbar", function () {
     var model = {};

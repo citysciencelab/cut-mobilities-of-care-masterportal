@@ -4,6 +4,7 @@ import Preparser from "@modules/core/configLoader/preparser";
 import ParametricURL from "@modules/core/parametricURL";
 import ImageWMS from "ol/source/ImageWMS.js";
 import {Image} from "ol/layer.js";
+import {expect} from "chai";
 
 describe("core/map", function () {
     var model,

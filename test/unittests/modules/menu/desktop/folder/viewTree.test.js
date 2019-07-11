@@ -1,4 +1,5 @@
 import ViewTree from "@modules/menu/desktop/folder/viewTree.js";
+import {expect} from "chai";
 
 describe("menu/desktop/folder/viewTree", function () {
     var viewTree;

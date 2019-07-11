@@ -5,6 +5,7 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
 import ModelList from "@modules/core/modelList/list.js";
+import {expect} from "chai";
 
 describe("drawModel", function () {
     var model;

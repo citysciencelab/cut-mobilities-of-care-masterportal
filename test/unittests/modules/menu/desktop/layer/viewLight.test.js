@@ -1,4 +1,5 @@
 import LayerView from "@modules/menu/desktop/layer/viewLight.js";
+import {expect} from "chai";
 
 describe("menu/desktop/layer/viewLight", function () {
     var fakeModel,

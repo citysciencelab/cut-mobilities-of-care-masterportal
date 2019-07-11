@@ -1,4 +1,5 @@
 import Model from "@modules/core/crs.js";
+import {expect} from "chai";
 
 describe("core/CRS", function () {
     var model;
