@@ -8,6 +8,7 @@ describe("testModul", function () {
 
         before(function () {
             /* runs before the first it() is executed */
+            // eslint-disable-next-line no-console
             console.log("before getEmployeesByName");
             model = new Model();
             model.setEmployees([{name: "Robin", coffeeCount: 0}, {name: "Jonas", coffeeCount: 1}]);
@@ -33,11 +34,13 @@ describe("testModul", function () {
 
         before(function () {
             /* runs before the first it() is executed */
+            // eslint-disable-next-line no-console
             console.log("before givecoffee");
             model = new Model();
         });
         beforeEach(function () {
             /* runs before each it() is executed */
+            // eslint-disable-next-line no-console
             console.log("beforeEach giveCoffee");
             // reset Employees before each test
             model.setEmployees([{name: "Robin", coffeeCount: 0}, {name: "Jonas", coffeeCount: 1}]);
@@ -54,6 +57,7 @@ describe("testModul", function () {
 
         before(function () {
             /* runs before the first it() is executed */
+            // eslint-disable-next-line no-console
             console.log("before getAlertness");
             model = new Model();
         });
@@ -75,11 +79,13 @@ describe("testModul", function () {
 
         before(function () {
             /* runs before the first it() is executed */
+            // eslint-disable-next-line no-console
             console.log("before getAlertness");
             model = new Model();
         });
         beforeEach(function () {
             /* runs before each it() is executed */
+            // eslint-disable-next-line no-console
             console.log("beforeEach getSleepingEmployeeNames");
             model.setEmployees([{name: "Robin", coffeeCount: 0}, {name: "Jonas", coffeeCount: 1}, {name: "Sebastian", coffeeCount: 2}, {name: "Michael", coffeeCount: 3}]);
         });
