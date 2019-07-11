@@ -1,5 +1,6 @@
 import * as ElasticSearch from "@modules/core/elasticsearch.js";
 import Model from "@modules/searchbar/gdi/model.js";
+import {expect} from "chai";
 
 describe("check Elastic Search Helper Functions", function () {
 
