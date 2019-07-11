@@ -3,6 +3,7 @@ import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
 import MapView from "@modules/core/mapView.js";
 import Util from "@testUtil";
 import Feature from "ol/Feature.js";
+import {expect} from "chai";
 
 describe("core/modelList/layer/geojson", function () {
     var geojsonLayer,
