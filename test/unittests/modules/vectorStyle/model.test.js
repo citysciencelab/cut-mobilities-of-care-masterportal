@@ -48,6 +48,8 @@ describe("vectorStyle", function () {
                 },
                 defaultStyle,
                 defaultStyleObj = {},
+                /* eslint-disable no-unused-vars */
+
                 defaultValues = {
                     circleRadius: 5,
                     circleFillColor: "rgba(255,255,255,0.4)",
@@ -57,6 +59,7 @@ describe("vectorStyle", function () {
                     strokeColor: "#3399CC",
                     strokeWidth: 1.25
                 };
+                /* eslint-enable no-unused-vars */
 
             model = new Model(style);
             defaultStyle = model.createStyle(features[0], false);
