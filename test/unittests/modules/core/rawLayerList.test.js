@@ -1,5 +1,6 @@
 import Collection from "@modules/core/rawLayerList.js";
 import testServices from "../../resources/testServices.json";
+import {expect} from "chai";
 
 describe("core/rawLayerList", function () {
     var collection;
