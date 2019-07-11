@@ -1,4 +1,5 @@
 import LayerInfoModel from "@modules/layerinformation/model.js";
+import {expect} from "chai";
 
 describe("Layerinformation", function () {
     var model;
