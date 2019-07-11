@@ -1,4 +1,5 @@
 import SingleLayerView from "@modules/menu/table/layer/singleLayerView.js";
+import {expect} from "chai";
 
 describe("menu/table/layer/singleLayerView", function () {
     var layerCollection,
