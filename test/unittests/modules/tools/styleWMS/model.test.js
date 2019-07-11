@@ -1,7 +1,9 @@
 import StyleWMS from "@modules/tools/styleWMS/model.js";
+const chai = require("chai");
 
 describe("tools/styleWMS/model", function () {
-    var errors;
+    var errors,
+        expect = chai.expect;
 
     describe("Validation of user input", function () {
 
