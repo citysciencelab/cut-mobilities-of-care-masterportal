@@ -1,4 +1,5 @@
 import CustomTreeParser from "@modules/core/configLoader/parserCustomTree.js";
+import {expect} from "chai";
 
 describe("core/configLoader/parserCustomTree", function () {
     var testData;
@@ -29,6 +30,12 @@ describe("core/configLoader/parserCustomTree", function () {
     });
 
     // Create a model and parse the test data. Take care that the model is clean (empty) before parsing the data.
+    /**
+     *
+     * get the custome model
+     * @param {array} options - the model options
+     * @returns {object} the model
+     */
     function getCustomModel (options) {
         var model = new CustomTreeParser(options);
 
