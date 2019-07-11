@@ -1,4 +1,5 @@
 import Model from "@modules/core/util.js";
+import {expect} from "chai";
 
 describe("core/Util", function () {
     var model;
