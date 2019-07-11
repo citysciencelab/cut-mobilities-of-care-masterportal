@@ -1,8 +1,10 @@
 import StyleWMS from "@modules/tools/styleWMS/view.js";
 import StyleWMSModel from "@modules/tools/styleWMS/model.js";
+const chai = require("chai");
 
 describe("tools/styleWMS/view", function () {
-    var styleWMS;
+    var styleWMS,
+        expect = chai.expect;
 
     before(function () {
         var errors,
