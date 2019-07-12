@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/lgv-g12/lgv.git"
+    "url": "https://bitbucket.org/geowerkstatt-hamburg/masterportal.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",

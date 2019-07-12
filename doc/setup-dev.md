@@ -29,7 +29,7 @@ Test in cmd:
 Mit der Git-Bash (als Admin ausführen) in den Ordner navigieren, in den das Repo geklont werden soll.
 Repository klonen und in das erstellte Verzeichnis wechseln:
 ```
-# git clone https://bitbucket.org/lgv-g12/lgv.git
+# git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
 # cd lgv
 ```
 
