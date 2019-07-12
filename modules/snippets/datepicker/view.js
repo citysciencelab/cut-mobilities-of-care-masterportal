@@ -12,8 +12,6 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     events: {
         "changeDate": "changeDate"
     },
-
-    template: _.template(Template),
     /**
      * Setting listener
      * @returns {void}
@@ -24,6 +22,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             "removeView": this.remove
         }, this);
     },
+    template: _.template(Template),
 
     /**
      * render methode
