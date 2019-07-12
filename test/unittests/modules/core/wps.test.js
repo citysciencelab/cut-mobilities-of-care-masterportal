@@ -43,7 +43,6 @@ describe("core/WPS", function () {
         });
     });
     describe("buildUrl", function () {
-        // eslint-disable-next-line no-unused-vars
         var restModel = new Backbone.Model({
             "id": "1001",
             "name": "Deegree WPS RZ2 Produktion",

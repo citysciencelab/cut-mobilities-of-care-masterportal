@@ -23,8 +23,6 @@ Util = Backbone.Model.extend({
     initialize: function () {
         return null;
     },
-    /* eslint-disable no-sync */
-
     createTestFeatures: function (path) {
         var format = new WFS({
                 featureNS: "http://www.deegree.org/app"
@@ -44,7 +42,6 @@ Util = Backbone.Model.extend({
 
         return xml;
     }
-    /* eslint-enable no-sync */
 });
 
 export default Util;
