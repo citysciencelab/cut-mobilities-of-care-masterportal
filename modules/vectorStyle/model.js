@@ -1109,6 +1109,7 @@ const WFSStyle = Backbone.Model.extend({
      * @param  {number} circleBarRadius - radius from point
      * @return {String} svg
      */
+    /* eslint max-params: ["error", 8]*/
     createSvgIntervalCircleBar: function (size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius) {
         var svg = "<svg width='" + size + "'" +
                 " height='" + size + "'" +
