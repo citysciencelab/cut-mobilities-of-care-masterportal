@@ -14,7 +14,7 @@ if (fs.existsSync("./devtools/proxyconf.json")) {
     proxies = require("./proxyconf.json");
 }
 else {
-    proxies = require("./proxyconf_example.json")
+    proxies = require("./proxyconf_example.json");
 }
 
 
