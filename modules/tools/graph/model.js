@@ -390,6 +390,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Number} dotSize The size of the dots.
      * @returns {void}
      */
+    /* eslint max-params: ["error", 8]*/
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
         var dat = data.filter(function (obj) {
                 return obj[yAttrToShow] !== "-";
@@ -710,6 +711,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {*} attrToShowArray ToDo.
      * @returns {void}
      */
+    /* eslint max-params: ["error", 9]*/
     drawBars: function (svg, dataToAdd, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
         svg.append("g")
             .attr("class", "graph-data")
