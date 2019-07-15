@@ -5,10 +5,10 @@ Das Masterportal ist ein Baukasten für Geo-Anwendungen im Web auf Basis von [Op
 Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://www.hamburg.de/geowerkstatt/).
 
 ## für Anwender (Stable-Version)
-* [Download](https://bitbucket.org/geowerkstatt-hamburg/lgv/downloads/)
-* [Quickstart für Anwender](https://bitbucket.org/geowerkstatt-hamburg/lgv/src/stable/doc/setup.md)
-* [Remote Interface](https://bitbucket.org/geowerkstatt-hamburg/lgv/src/stable/doc/remoteInterface.md)
-* [Dokumentation für Anwender](https://bitbucket.org/geowerkstatt-hamburg/lgv/src/stable/doc/doc.md)
+* [Download](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/)
+* [Quickstart für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/setup.md)
+* [Remote Interface](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/remoteInterface.md)
+* [Dokumentation für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/doc.md)
 * [Community Board (Anwender-Forum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
 ## für Entwickler
