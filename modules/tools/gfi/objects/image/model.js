@@ -49,7 +49,10 @@ const ImgModel = Backbone.Model.extend({
     },
     destroy: function () {
         this.unbind();
-        this.clear({silent: true});
+        // this ist changed because of eslint-warning.
+        // this line can be deleted after test
+        // this.clear({silent: true});
+        this.clear();
         window.clearInterval(this.get("checkInterval"));
         window.clearInterval(this.get("reloadInterval"));
     }
