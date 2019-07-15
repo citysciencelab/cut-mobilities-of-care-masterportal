@@ -47,6 +47,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^10.0.2",
     "babel-loader": "^8.0.0",
     "canvas": "^2.4.1",
     "chai": "4.1.1",
