@@ -19,6 +19,7 @@
     "plugins": [
         "chai-friendly"
     ],
+    "parser": "babel-eslint",
     "parserOptions": {
         "sourceType": "module",
         "allowImportExportEverywhere": true
