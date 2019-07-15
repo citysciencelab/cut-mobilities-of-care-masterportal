@@ -432,7 +432,8 @@ function loadApp () {
 
     // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
     if (CUSTOMMODULE !== "") {
-        return import(/* webpackMode: "eager" */ CUSTOMMODULE)
+        /* webpackMode: "eager" */
+        import(CUSTOMMODULE)
         .then(module => {
             new module.default;
         })

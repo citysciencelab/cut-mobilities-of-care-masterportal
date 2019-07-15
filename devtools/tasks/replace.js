@@ -67,7 +67,7 @@ module.exports = function (environment, destination, deepness = 2) {
     }
     */
     replacements.forEach(function (replacement) {
-        var rep = replace.sync({
+        replace.sync({
             files: replacement.files,
             from: replacement.from,
             to: replacement.to

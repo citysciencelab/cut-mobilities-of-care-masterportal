@@ -20,7 +20,8 @@
         "chai-friendly"
     ],
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
     },
     "extends": "plugin:backbone/recommended",
     "rules": {
@@ -121,10 +122,9 @@
         "no-undef": "error",
         "no-undef-init": "error",
         "no-unused-vars": "error",
-        "no-use-before-define": "error",
+        //"no-use-before-define": "error",
         // Node.js and CommonJS - These rules relate to code running in Node.js, or in browsers with CommonJS
         "callback-return": "error",
-        "global-require": "error",
         "handle-callback-err": "error",
         "no-buffer-constructor": "error",
         "no-new-require": "error",

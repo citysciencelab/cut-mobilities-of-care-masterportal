@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 
 const fs = require("fs-extra"),
     // portal version parsed from package.json file
