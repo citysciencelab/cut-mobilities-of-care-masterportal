@@ -127,6 +127,7 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |----|-------------|---|-------|------------|
 |styleFieldValue|ja|String||Attributwert.|
 |imageName|ja|String||Name des Images.|
+|legendValue|nein|String||Name zur Beschreibung des Attributes in der Legende|
 |imageWidth|nein|String||Breite des Images.|
 |imageHeight|nein|String||Höhe des Images.|
 |imageScale|nein|String||Skalierung des Bildes.|
