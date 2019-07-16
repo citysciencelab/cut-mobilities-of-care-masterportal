@@ -8,7 +8,7 @@ import {createBox} from "ol/interaction/Draw.js";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
-const EinwohnerabfrageModel = Tool.extend({
+const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         renderToWindow: true,
@@ -52,7 +52,14 @@ const EinwohnerabfrageModel = Tool.extend({
         rasterLayerId: "13023",
         alkisAdressLayerId: "9726"
     }),
-
+    /**
+     * @class EinwohnerabfrageModel
+     * @extends Backbone.Model
+     * @memberof Tools.EinwohnerAbfrage_HH
+     * @constructs
+     * @property {*} todo
+     * @property {String} style - Master Portal or Table
+     */
     initialize: function () {
         if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
             this.setStyle("TABLE");
@@ -103,18 +110,41 @@ const EinwohnerabfrageModel = Tool.extend({
         }));
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", "2").get("url"));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} cswObj - todo
+     * @returns {void}
+     */
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.attr, cswObj.parsedData);
         }
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} uniqueIdList - todo
+     * @param {*} uniqueId - todo
+     * @returns {void}
+     */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} uniqueIdList - todo
+     * @param {*} uniqueId - todo
+     * @returns {void}
+     */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} attr - todo
+     * @param {*} parsedData - todo
+     * @returns {void}
+     */
     updateMetaData: function (attr, parsedData) {
         if (attr === "fhhDate") {
             this.setFhhDate(parsedData.date);
@@ -330,6 +360,12 @@ const EinwohnerabfrageModel = Tool.extend({
         Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} coordinates - todo
+     * @param {*} opt_geom - todo
+     * @returns {void}
+     */
     snapRadiusToInterval: function (coordinates, opt_geom) {
         var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2)),
             geometry;
@@ -380,6 +416,11 @@ const EinwohnerabfrageModel = Tool.extend({
             "such_flaeche": JSON.stringify(geoJson)
         }, this.handleResponse.bind(this));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} geoJson - todo
+     * @returns {void}
+     */
     prepareData: function (geoJson) {
         var prepared = {};
 
@@ -398,6 +439,11 @@ const EinwohnerabfrageModel = Tool.extend({
         circleOverlay.getElement().innerHTML = this.roundRadius(radius);
         circleOverlay.setPosition(coords);
     },
+    /**
+     * @todo Write the documentation.
+     * @param {*} evt - todo
+     * @returns {void}
+     */
     showTooltipOverlay: function (evt) {
         var coords = evt.coordinate,
             tooltipOverlay = this.get("tooltipOverlay"),
@@ -411,7 +457,12 @@ const EinwohnerabfrageModel = Tool.extend({
         }
         tooltipOverlay.setPosition(coords);
     },
-
+    /**
+     * @todo Write the documentation.
+     * @param {*} number - todo
+     * @param {*} precision - todo
+     * @returns {void}
+     */
     precisionRound: function (number, precision) {
         var factor = Math.pow(10, precision);
 
@@ -567,54 +618,107 @@ const EinwohnerabfrageModel = Tool.extend({
     setStyle: function (value) {
         this.set("style", value);
     },
+    /**
+     * setter for Box Address
+     * @param {Object} value - todo
+     * @returns {this} this
+     */
     setCheckBoxAddress: function (value) {
         this.set("checkBoxAddress", value);
     },
-
+    /**
+     * setter for Box Raster
+     * @param {Object} value - todo
+     * @returns {this} this
+     */
     setCheckBoxRaster: function (value) {
         this.set("checkBoxRaster", value);
     },
-
+    /**
+     * setter for Data
+     * @param {Object} value - todo
+     * @returns {this} this
+     */
     setData: function (value) {
         this.set("data", value);
     },
-
+    /**
+     * setter for Data received
+     * @param {Boolean} value - todo
+     * @returns {this} this
+     */
     setDataReceived: function (value) {
         this.set("dataReceived", value);
     },
-
+    /**
+     * setter for Requesting
+     * @param {Boolean} value - todo
+     * @returns {this} this
+     */
     setRequesting: function (value) {
         this.set("requesting", value);
     },
-
+    /**
+     * setter for Drop Down
+     * @param {Object} value - todo
+     * @returns {this} this
+     */
     setDropDownSnippet: function (value) {
         this.set("snippetDropdownModel", value);
     },
-
+    /**
+     * setter for FHH Date
+     * @param {*} value - todo
+     * @returns {this} this
+     */
     setFhhDate: function (value) {
         this.set("fhhDate", value);
     },
-
+    /**
+     * setter for draw interection
+     * @param {Object} value - todo
+     * @returns {this} this
+     */
     setDrawInteraction: function (value) {
         this.set("drawInteraction", value);
     },
-
+    /**
+     * setter for is collapsed
+     * @param {*} value - todo
+     * @returns {this} this
+     */
     setIsCollapsed: function (value) {
         this.set("isCollapsed", value);
     },
-
+    /**
+     * setter for is CurrentWin
+     * @param {*} value - todo
+     * @returns {this} this
+     */
     setIsCurrentWin: function (value) {
         this.set("isCurrentWin", value);
     },
-
+    /**
+     * setter for is Current Value
+     * @param {String} value - todo
+     * @returns {this} this
+     */
     setCurrentValue: function (value) {
         this.set("currentValue", value);
     },
-
+    /**
+     * setter for Unique Id List
+     * @param {*} value - todo
+     * @returns {this} this
+     */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
     },
-
+    /**
+     * setter for Meta Data Link
+     * @param {String} value - todo
+     * @returns {this} this
+     */
     setMetaDataLink: function (value) {
         this.set("metaDataLink", value);
     }

@@ -2,11 +2,21 @@ import SnippetDropdownView from "../../snippets/dropdown/view";
 import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
-
-const SelectView = Backbone.View.extend({
+/**
+ * @member Template
+ * @description Template used to create the population tool
+ * @memberof Tools.EinwohnerAbfrage_HH
+ */
+const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
     events: {
         "change select": "createDrawInteraction"
     },
+    /**
+     * @class SelectView
+     * @extends Backbone.View
+     * @memberof Tools.EinwohnerAbfrage_HH
+     * @constructs
+     */
     initialize: function () {
         this.listenTo(this.model, {
             // ändert sich der Fensterstatus wird neu gezeichnet
@@ -23,6 +33,12 @@ const SelectView = Backbone.View.extend({
     id: "einwohnerabfrage-tool",
     template: _.template(Template),
     snippetDropdownView: {},
+    /**
+     * renders the view
+     * @param {object} model - EinwohnerAbfrage_HH Model
+     * @param {boolean} value - Rückgabe eines Boolean
+     * @returns {this} this
+     */
     render: function (model, value) {
         var attr = this.model.toJSON();
 
@@ -41,10 +57,19 @@ const SelectView = Backbone.View.extend({
         }
         return this;
     },
+    /**
+     * returns Results of population tool
+     * @returns {void}
+     */
     renderResult: function () {
         this.$el.find(".result").html("");
         this.$el.find(".result").append(new ResultView({model: this.model}).render().el);
     },
+    /**
+     * creates the draw interaction to draw in the map
+     * @param {object} evt - Object of Event which has been fired
+     * @returns {void}
+     */
     createDrawInteraction: function (evt) {
         this.model.get("drawInteraction").setActive(false);
         this.model.createDrawInteraction(evt.target.value);
