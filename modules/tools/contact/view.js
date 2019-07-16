@@ -52,7 +52,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      * @returns {void}
      */
     setMaxHeight: function () {
-        var height = document.getElementsByClassName("lgv-container")[0].offsetHeight - 130;
+        var height = document.getElementsByClassName("masterportal-container")[0].offsetHeight - 130;
 
         this.$el.css("max-height", height);
         this.$el.css("max-width", 400);

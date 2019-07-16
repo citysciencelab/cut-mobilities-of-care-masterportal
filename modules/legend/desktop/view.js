@@ -65,7 +65,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
 
         this.$el.html(this.template(attr));
         $("body").append(this.$el.html(this.template(attr)));
-        $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
+        $(".legend-win-content").css("max-height", $(".masterportal-container").height() * 0.7);
         this.$el.draggable({
             containment: "#map",
             handle: ".legend-win-header"
@@ -126,12 +126,12 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
         this.remove();
     },
     /**
-    * Fits the legend height according to the class lgv-container
+    * Fits the legend height according to the class masterportal-container
     * currently this function is executed when map sends updateSize
     * @returns {void}
     */
     updateLegendSize: function () {
-        $(".legend-win-content").css("max-height", $(".lgv-container").height() * 0.7);
+        $(".legend-win-content").css("max-height", $(".masterportal-container").height() * 0.7);
     }
 });
 
