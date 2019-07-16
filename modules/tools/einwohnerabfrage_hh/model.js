@@ -31,6 +31,7 @@ const EinwohnerabfrageModel = Tool.extend({
         data: {},
         dataReceived: false,
         requesting: false,
+        style: "DEFAULT",
         snippetDropdownModel: {},
         values: {
             "Rechteck aufziehen": "Box",
@@ -53,6 +54,9 @@ const EinwohnerabfrageModel = Tool.extend({
     }),
 
     initialize: function () {
+        if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
+            this.setStyle("TABLE");
+        }
         this.superInitialize();
 
         this.setCheckBoxAddress(new SnippetCheckboxModel({
@@ -555,7 +559,14 @@ const EinwohnerabfrageModel = Tool.extend({
             isVisibleInMap: value
         });
     },
-
+    /**
+     * setter for style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
+    setStyle: function (value) {
+        this.set("style", value);
+    },
     setCheckBoxAddress: function (value) {
         this.set("checkBoxAddress", value);
     },

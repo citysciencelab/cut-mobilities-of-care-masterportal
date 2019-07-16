@@ -24,9 +24,11 @@ const SelectView = Backbone.View.extend({
     template: _.template(Template),
     snippetDropdownView: {},
     render: function (model, value) {
+        var attr = this.model.toJSON();
+
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(this.template());
+            this.$el.html(this.template(attr));
             this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
             this.$el.find(".checkbox").append(this.checkBoxRaster.render().el);
             this.$el.find(".checkbox").append(this.checkBoxAddress.render().el);
