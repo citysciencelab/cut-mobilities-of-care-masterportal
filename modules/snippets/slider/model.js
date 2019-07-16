@@ -12,7 +12,8 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @property {float} step=1 Increment step of the slider
      * @property {float | array} [preselectedValues] Initial value. Use array to have a range slider.
      * @property {float} precision=3 The number of digits shown after the decimal.
-     * @property {object} attributes Model to be used in this view
+     * @property {string} selection=before Selection placement. Accepts: 'before', 'after' or 'none'. In case of a range slider, the selection will be placed between the handles
+     * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
      * @listens Alerting#RadioTriggerAlertAlert
      */
@@ -20,7 +21,8 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         editableValueBox: true,
         step: 1,
         preselectedValues: null,
-        precision: 3
+        precision: 3,
+        selection: "before"
     }),
 
     initialize: function (attributes) {

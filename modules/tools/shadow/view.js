@@ -13,12 +13,20 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
      * @extends Backbone.View
      * @memberof Tools.Shadow
      * @constructs
+     * @fires Util#RadioRequestUtilGetUiStyle
+     * @listens Menu#RadioTriggerMenuLoaderReady
      */
 
     events: {
         "click .glyphicon-remove": "destroy"
     },
 
+    /**
+     * Initializing module
+     * @fires Util#RadioRequestUtilGetUiStyle
+     * @listens Menu#RadioTriggerMenuLoaderReady
+     * @returns {void}
+     */
     initialize: function () {
         this.toggleButtonView = new SnippetCheckBoxView({model: this.model.get("toggleButton")});
         this.datepickerView = new SnippetDatepickerView({model: this.model.get("datepicker")});
@@ -29,9 +37,19 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             "toggleButtonValueChanged": this.toggleElements,
             "shadowUnavailable": this.toggleUnavailableText
         });
+
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            this.listenTo(Radio.channel("MenuLoader"), {
+                "ready": function () {
+                    this.setElement("#table-tools-menu");
+                    this.renderToToolbar();
+                }
+            });
+        }
     },
 
     template: _.template(ShadowTemplate),
+    tabletemplate: _.template("<div id='shadow-tool' class='table-tool'><a href='#'><span class='glyphicon <%= glyphicon %>'></span><span id='shadow-tool_title'><%= name %></span></a> </div>"),
 
     /**
      * render method
@@ -51,6 +69,16 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
         else {
             this.undelegateEvents();
         }
+
+        return this;
+    },
+
+    /**
+     * Render Function for template in table-tool
+     * @returns {this} this
+     */
+    renderToToolbar: function () {
+        this.$el.append(this.tabletemplate(this.model.toJSON()));
 
         return this;
     },
