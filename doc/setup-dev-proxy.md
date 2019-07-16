@@ -88,7 +88,7 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 **Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config"  ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/)) inkl. credentials einbinden, z.B.
 
 ```
-# https://<user>:<pw>@bitbucket.org/lgv-g12/lgv-config.git#master
+# https://<user>:<pw>@bitbucket.org/geowerkstatt-hamburg/lgv-config.git#master
 ```
 
 
