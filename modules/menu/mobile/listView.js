@@ -115,6 +115,7 @@ const MobileMenu = Backbone.View.extend({
         var slideIn,
             slideOut,
             groupedModels,
+            modelsToShowSelection,
             that = this;
 
         if (direction === "descent") {
@@ -130,12 +131,10 @@ const MobileMenu = Backbone.View.extend({
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
             if (currentList === "Selection") {
-                /* eslint-disable no-param-reassign */
-                modelsToShow = _.sortBy(modelsToShow, function (layer) {
+                modelsToShowSelection = _.sortBy(modelsToShow, function (layer) {
                     return layer.get("selectionIDX");
                 }).reverse();
-                /* eslint-enable no-param-reassign */
-                that.addViews(modelsToShow);
+                that.addViews(modelsToShowSelection);
             }
             else {
                 // Gruppieren nach Folder und Rest

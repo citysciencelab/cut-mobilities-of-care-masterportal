@@ -4,9 +4,6 @@ testModul = Backbone.Model.extend({
     defaults: {
         employees: []
     },
-    initialize: function () {
-        return null;
-    },
     giveCoffee: function (employee) {
         employee.coffeeCount++;
     },
