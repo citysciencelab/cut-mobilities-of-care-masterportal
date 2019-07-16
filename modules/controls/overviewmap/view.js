@@ -55,7 +55,6 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         }
         this.model = new OverviewMapModel({id: this.id, layerId: layerId, resolution: attr.resolution});
     },
-
     /**
      * Render function
      * @returns {OverviewMapView} - Returns itself.
@@ -76,7 +75,6 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
     },
 
     id: "overviewmap",
-
     /**
      * @member OverviewMapTemplate
      * @description Template used for the OverviewMap

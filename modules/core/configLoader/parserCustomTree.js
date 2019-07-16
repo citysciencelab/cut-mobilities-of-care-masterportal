@@ -33,7 +33,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     layerExtended = layer,
                     mergedObjsFromRawList;
 
-                // Für Singel-Layer (ol.layer.Layer)
+                // Für Single-Layer (ol.layer.Layer)
                 // z.B.: {id: "5181", visible: false}
 
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
@@ -92,7 +92,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                         this.addItem(_.extend({
                             id: layerExtended.id + style,
                             isBaseLayer: isBaseLayer,
-                            isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
+                            isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility),
                             legendURL: layerExtended.legendURL[index],
                             level: level,
                             name: layerExtended.name[index],
@@ -106,7 +106,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     this.addItem(_.extend({
                         format: "image/png",
                         isBaseLayer: isBaseLayer,
-                        isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
+                        isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility),
                         level: level,
                         parentId: parentId,
                         type: "layer"
@@ -157,9 +157,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @returns {Boolean} - Flag if layer is visible in layertree
      */
     getIsVisibleInTree: function (level, type, isInThemen) {
-        var isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
+        var treeType = Radio.request("Parser", "getTreeType"),
+            isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
 
-        return level === 0 && ((type === "layer") || (type === "folder" && isInThemenBool));
+        return (type === "layer" && (isInThemenBool || treeType === "light"))
+            ||
+            (level === 0 && type === "folder" && isInThemenBool);
     }
 });
 
