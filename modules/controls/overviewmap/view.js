@@ -55,9 +55,6 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         }
         this.model = new OverviewMapModel({id: this.id, layerId: layerId, resolution: attr.resolution});
     },
-
-    tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),
-
     /**
      * Render function
      * @returns {OverviewMapView} - Returns itself.
@@ -78,19 +75,6 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
     },
 
     id: "overviewmap",
-
-    /**
-     * Render Function
-     * @fires Map#RadioRequestMap
-     * @returns {ButtonMapView} - Returns itself
-     */
-    renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: "Mini-Map ausschalten"}));
-        return this;
-    },
-
-    id: "overviewmap",
-
     /**
      * @member OverviewMapTemplate
      * @description Template used for the OverviewMap

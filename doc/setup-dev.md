@@ -29,19 +29,17 @@ Test in cmd:
 Mit der Git-Bash (als Admin ausführen) in den Ordner navigieren, in den das Repo geklont werden soll.
 Repository klonen und in das erstellte Verzeichnis wechseln:
 ```
-# git clone https://bitbucket.org/lgv-g12/lgv.git
+# git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei den *dev-dependencies* "lgv-config" mit "lgv-config-public" ersetzen.
 
 Dann in der Admin-cmd ausführen:
 ```
 # npm install
 ```
 
-
-Installiert das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
+Es werden alle Abhängigkeiten installiert.
 
 
 ### npm start

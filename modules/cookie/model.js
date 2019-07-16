@@ -1,4 +1,4 @@
-const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
+const CookieModel = Backbone.Model.extend(/** @lends CookieModel.prototype */{
     defaults: {
         approved: false
     },
@@ -63,7 +63,7 @@ const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
             return false;
         }
 
-        if (/^(?:expires|max-age|path|domain|secure)$/i.test(sKey)) {
+        if ((/^(?:expires|max-age|path|domain|secure)$/i).test(sKey)) {
             return false;
         }
 

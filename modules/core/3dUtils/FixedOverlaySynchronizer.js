@@ -8,8 +8,10 @@ class FixedOverlaySynchronizer extends OverlaySynchronizer {
     /**
      * @api
      */
-    addOverlays() {
-        this.overlays_.forEach((overlay) => { this.addOverlay(overlay); });
+    addOverlays () {
+        this.overlays_.forEach((overlay) => {
+            this.addOverlay(overlay);
+        });
     }
 }
 

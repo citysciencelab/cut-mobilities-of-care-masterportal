@@ -1115,7 +1115,7 @@ const WFSStyle = Backbone.Model.extend({
                 " xmlns='http://www.w3.org/2000/svg'" +
                 " xmlns:xlink='http://www.w3.org/1999/xlink'>";
 
-            // draw bar
+        // draw bar
         svg = svg + "<line x1='" + (size / 2) + "'" +
             " y1='" + (size / 2) + "'" +
             " x2='" + (size / 2) + "'" +
