@@ -15,8 +15,6 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @param {Object} attr Attributes of overviewmap.
      * @param {String} attr.baseLayer Id of baseLayer
      * @param {String} attr.resolution Resolution of baseLayer.
-     * @listens Core#RadioTriggerMapChange
-     * @listens Menu#RadioTriggerMenuLoaderReady
      * @constructs
      */
     initialize: function (el, id, attr) {
@@ -55,13 +53,8 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
             this.setElement("#table-tools-menu");
             this.renderToToolbar();
         }
-        this.model = new OverviewMapModel({
-            id: this.id,
-            layerId: layerId,
-            resolution: attr.resolution
-        });
+        this.model = new OverviewMapModel({id: this.id, layerId: layerId, resolution: attr.resolution});
     },
-
     /**
      * Render function
      * @returns {OverviewMapView} - Returns itself.
@@ -91,7 +84,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
 
     /**
      * @member OverviewMapTemplate
-     * @tableTemplate used for the OverviewMap in Table View Tools
+     * @description tableTemplate used for the OverviewMap in Table View Tools
      * @memberof Controls.Overviewmap
      */
     tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),

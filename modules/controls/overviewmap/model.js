@@ -33,7 +33,9 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
 
         newOlView = new View({
             center: mapView.getCenter(),
-            projection: mapView.getProjection()
+            projection: mapView.getProjection(),
+            resolution: mapView.getResolution(),
+            resolutions: [this.get("resolution") ? this.get("resolution") : maxResolution]
         });
         this.setNewOvmView(newOlView);
         this.setBaseLayer(this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));

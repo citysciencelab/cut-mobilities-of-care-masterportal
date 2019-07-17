@@ -136,7 +136,7 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
-    new ZoomToGeometry();    
+    new ZoomToGeometry();
 
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
