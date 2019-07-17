@@ -156,7 +156,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
     /**
      * Changing the lgv-container to masterportal-container
-     * @returns {Object} - no returned value
+     * @returns {void} - no returned value
      * @deprecated in 3.0.0. Remove whole function and call!
      */
     changeLgvContainer: function () {
@@ -166,7 +166,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             container.removeClass("lgv-container").addClass("masterportal-container");
             console.warn("Div container 'lgv-container' is deprecated. Please use 'masterportal-container' instead.");
         }
-        return null;
+        return false;
     },
     /**
     * todo
