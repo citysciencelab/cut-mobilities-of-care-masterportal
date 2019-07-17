@@ -141,7 +141,10 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             isMultiple: false,
             preselectedValues: _.allKeys(this.get("values"))[0]
         }));
-        this.setMetaDataLink(Radio.request("RestReader", "getServiceById", "2").get("url"));
+
+        const populationReqServiceId = Config.hasOwnProperty("populationReqServiceId") ? Config.populationReqServiceId : "2";
+
+        this.setMetaDataLink(Radio.request("RestReader", "getServiceById", populationReqServiceId).get("url"));
     },
 
     /**
