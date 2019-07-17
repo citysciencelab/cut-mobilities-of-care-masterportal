@@ -7,7 +7,7 @@
 So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf und passen es nach Ihren Wünschen an.
 
 #### Beispiel-Anwendungen auf Ihren Server legen
-1. Um ein eigenes Portal aufzusetzen, laden Sie bitte zunächst mit einem Klick auf den nachfolgenden Link die [letzte stabile Version aus Bitbucket](https://bitbucket.org/lgv-g12/lgv/downloads/examples.zip) herunter.
+1. Um ein eigenes Portal aufzusetzen, laden Sie bitte zunächst mit einem Klick auf den nachfolgenden Link die [letzte stabile Version aus Bitbucket](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/examples.zip) herunter.
 
 2. Um das Portal öffentlich zugänglich zu machen (zum Beispiel im Internet), ist es notwendig, das Portal auf einem Webserver bereitzustellen. Dazu verschieben Sie die ZIP-Datei auf Ihren Webserver (z.B. in das htdocs-Verzeichnis eines Apache-Servers) und entpacken Sie dort.
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const Config = {
-    wfsImgPath: "/lgv-config/img/",
+    wfsImgPath: "./ressources/img/",
     namedProjections: [
         ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
     ],
@@ -16,11 +16,11 @@ const Config = {
         ]
     },
     quickHelp: {
-        imgPath: "/lgv-config/img/"
+        imgPath: "./ressources/img/"
     },
-    layerConf: "/lgv-config/services-internet.json",
-    restConf: "/lgv-config/rest-services-internet.json",
-    styleConf: "/lgv-config/style_v2.json",
+    layerConf: "./ressources/services-internet.json",
+    restConf: "./ressources/rest-services-internet.json",
+    styleConf: "./ressources/style_v2.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,

@@ -15,7 +15,7 @@ const Config = {
     },
     gfiWindow: "attached",
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    layerConf: "/lgv-config/services-fhhnet-ALL.json",
+    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
@@ -36,17 +36,16 @@ const Config = {
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
-        imgPath: "/lgv-config/img/"
+        imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
     },
-    restConf: "/lgv-config/rest-services-fhhnet.json",
+    restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
     scaleLine: true,
     simpleMap: false,
-    styleConf: "/lgv-config/style_v2.json",
-    wfsImgPath: "/lgv-config/img/",
+    styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
+    wfsImgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
-        imgLink: "/lgv-config/img/location_eventlotse.svg",
-        layerId: "4561",
+        styleId: "location_eventlotse",
         wfsId: "4560"
     },
     startingMap3D: false,

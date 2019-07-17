@@ -1,9 +1,22 @@
+/* eslint-disable no-sync */
+/* eslint-disable global-require */
 const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    proxies = require("lgv-config/proxyconf.json"),
+    fs = require("fs"),
     _ = require("underscore");
+
+
+let proxies;
+
+if (fs.existsSync("./devtools/proxyconf.json")) {
+    proxies = require("./proxyconf.json");
+}
+else {
+    proxies = require("./proxyconf_example.json");
+}
+
 
 module.exports = function (env, args) {
     const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
@@ -31,13 +44,12 @@ module.exports = function (env, args) {
                         publicPath: "../../node_modules/bootstrap/fonts"
                     }
                 },
-                // alle anderen Schriftarten werden von lgv-config gelesen
+                // alle anderen Schriftarten
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
-                        name: "[name].[ext]",
-                        publicPath: "../../node_modules/lgv-config/css/woffs"
+                        name: "[name].[ext]"
                     }
                 }
             ]

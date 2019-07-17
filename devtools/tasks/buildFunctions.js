@@ -1,49 +1,47 @@
-/* eslint-disable no-console */
-
 const fs = require("fs-extra"),
     replaceStrings = require("./replace"),
     execute = require("child-process-promise").exec;
 
 /**
- *
- * @param {String} source parameter
- * @param {String} destination parameter
- * @param {String} environment parameter
+ * copy files to the given destination
+ * @param {String} source source of the built portal
+ * @param {String} destination destination folder for the built portal
  * @returns {void}
  */
-function copyFiles (source, destination, environment) {
+function copyFiles (source, destination) {
     fs.copy(source, destination).then(() => {
-        console.warn("NOTICE: Successfully Copied '" + source + "' to '" + destination + "' !");
+        console.warn("NOTE: Successfully Copied \"" + source + "\" to \"" + destination + "\".");
         fs.copy("./dist/build", destination).then(() => {
-            fs.remove("./dist/build").catch(err => console.error(err));
-            console.warn("NOTICE: Successfully moved './dist/build' to '" + destination + "' !");
-            replaceStrings(environment, destination);
-        }).catch(err => console.error(err));
-    }).catch(err => console.error(err));
+            fs.remove("./dist/build").catch(error => console.error(error));
+            replaceStrings(destination);
+            console.warn("NOTE: Successfully moved \"./dist/build\" to \"" + destination + "\".");
+        }).catch(error => console.error(error));
+    }).catch(error => console.error(error));
 }
 
 /**
- *
- * @param {Object} answers parameter
+ * remove files if if they already exist.
+ * @param {Object} answers contains the attributes for the portal to be build
  * @returns {void}
  */
 function removeFiles (answers) {
-    var destination = "dist/" + answers.portalName,
+    const portalName = answers.portalPath.split("/").pop(),
+        destination = "dist/" + portalName,
         source = "./" + answers.portalPath;
 
     fs.remove(destination).then(() => {
-        console.warn("NOTICE: Successfully deleted '" + destination + "' directory");
-        copyFiles(source, destination, answers.environment);
+        console.warn("NOTE: Successfully deleted \"" + destination + "\" directory.");
+        copyFiles(source, destination);
     });
 }
 
 /**
- *
- * @param {Object} answers parameter
+ * start the process to build a portal with webpack
+ * @param {Object} answers contains the attributes for the portal to be build
  * @returns {void}
  */
 module.exports = function buildWebpack (answers) {
-    var command;
+    let command;
 
     if (answers.customModule !== "") {
         command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
@@ -52,7 +50,7 @@ module.exports = function buildWebpack (answers) {
         command = "webpack --config devtools/webpack.prod.js";
     }
     console.warn("NOTICE: webpack startet...");
-    console.log("NOTICE: executing command " + command);
+    console.warn("NOTICE: executing command " + command);
 
     execute(command)
         .then(function (result) {
