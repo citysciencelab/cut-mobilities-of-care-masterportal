@@ -8,8 +8,8 @@ import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import FixedOverlaySynchronizer from "../../plugins/FixedOverlaySynchronizer.js";
-import WMSRasterSynchronizer from "../../plugins/WmsRasterSynchronizer.js";
+import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
+import WMSRasterSynchronizer from "./3dUtils/WmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 
 const map = Backbone.Model.extend({

@@ -2,7 +2,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
-    wfsImgPath: "/lgv-config/img/",
+    wfsImgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/",
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
@@ -34,14 +34,14 @@ const Config = {
         }
     },
     quickHelp: {
-        imgPath: "/lgv-config/img/"
+        imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "/lgv-config/services-fhhnet-ALL.json",
-    restConf: "/lgv-config/rest-services-fhhnet.json",
-    styleConf: "/lgv-config/style_v2.json",
+    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
+    restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
+    styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,
     scaleLine: true,
