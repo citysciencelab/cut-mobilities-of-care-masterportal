@@ -47,7 +47,12 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             language: "de",
             defaultViewDate: date.get("date"),
             startDate: date.get("startDate"),
-            endDate: date.get("endDate")
+            endDate: date.get("endDate"),
+            maxViewMode: "days",
+            templates: {
+                leftArrow: '<i class="glyphicon glyphicon-triangle-left"></i>',
+                rightArrow: '<i class="glyphicon glyphicon-triangle-right"></i>'
+            }
         });
         this.$el.find(".datepicker-container").datepicker("setDate", date.get("date"));
     },
