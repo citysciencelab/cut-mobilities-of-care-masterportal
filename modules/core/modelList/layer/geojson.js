@@ -113,7 +113,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         let paramUrl;
 
         if (typ === "WFS") {
-            paramUrl = encodeURI(url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType") + "&OUTPUTFORMAT=application/geo+json&VERSION=" + this.get("version"));
+            paramUrl = url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType") + "&OUTPUTFORMAT=application/geo%2Bjson&VERSION=" + this.get("version");
         }
         else if (typ === "GeoJSON") {
             paramUrl = url;
