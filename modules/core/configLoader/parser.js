@@ -313,7 +313,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} version - todo
      * @returns {void}
      */
-    /* eslint max-params: ["error", 7]*/
     addLayer: function (name, id, parentId, level, layers, url, version) {
         var layer = {
             cache: false,
