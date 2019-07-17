@@ -7,7 +7,7 @@
     "imageName" : "krankenhaus.png",
     "imageScale" : "0.7"
   },
- {
+  {
     "layerId": "45",
     "class": "POINT",
     "subClass" : "SIMPLE",
