@@ -100,7 +100,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      */
     toggleBackdrop: function (isMobile, isVisible) {
         if (isMobile && isVisible) {
-            $(".lgv-container").append("<div class='backdrop'></div>");
+            $(".masterportal-container").append("<div class='backdrop'></div>");
         }
         else {
             $(".backdrop").remove();

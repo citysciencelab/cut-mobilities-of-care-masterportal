@@ -3,7 +3,7 @@ html, body {
     width: 100%;
 }
 
-.lgv-container {
+.masterportal-container {
     height: 100%;
 }
 
@@ -12,7 +12,7 @@ label {
 }
 
 
-.lgv-container #cursorGlyph {
+.masterportal-container #cursorGlyph {
     position: absolute;
     z-index: 1000;
     cursor: none;
