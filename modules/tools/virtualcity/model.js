@@ -19,7 +19,8 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
      * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
      * @listens VirtualCity#RadioRequestVirtualCityDeactivatePlanning
-     * @listens VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGetFlightsForPlanning
      * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
      * @fires RestReader#RadioRequestRestReaderGetServicebyId
      */
@@ -36,8 +37,8 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
      * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
      * @listens VirtualCity#RadioRequestVirtualCityDeactivatePlanning
-     * @listens VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
-     * @listens VirtualCity#RadioRequestVirtualCitygetFlightsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGetViewpointsForPlanning
+     * @listens VirtualCity#RadioRequestVirtualCityGetFlightsForPlanning
      * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
      */
     addRadio: function () {

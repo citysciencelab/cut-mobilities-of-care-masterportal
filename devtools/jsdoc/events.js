@@ -1831,8 +1831,23 @@
 /** -------------------- TOOLS.VIRTUALCITY -------------------- */
 
 /**
- * @event VirtualCity#RadioRequestVirtualCitygetViewpointsForPlanning
- * @description returns view points by the given serviceId and planningId
+ * @event VirtualCity#RadioRequestVirtualCityActivatePlanning
+ * @description activates a Planning identified by the planningId
+ */
+
+/**
+ * @event VirtualCity#RadioRequestVirtualCityDeactivatePlanning
+ * @description deactivates a Planning identified by the planningId
+ */
+
+/**
+ * @event VirtualCity#RadioRequestVirtualCityGetViewpointsForPlanning
+ * @description returns view points by the given planningId
+ */
+
+/**
+ * @event VirtualCity#RadioRequestVirtualCityGetFlightsForPlanning
+ * @description returns the flights for the given planningId
  */
 
 /**
@@ -1853,4 +1868,20 @@
  /**
  * @event Core.ModelList.Tool#changeIsActive
  * @description Fired when param isActive changes
+ */
+/** -------------------- VirtualCity.FlightPlayer -------------------- */
+
+/**
+ * @event FlightPlayer#RadioRequestFlightPlayerStop
+ * @description stops the active Flight
+ */
+
+/**
+ * @event FlightPlayer#RadioRequestFlightPlayerPlay
+ * @description starts playing the given flight
+ */
+
+/**
+ * @event FlightPlayer#RadioRequestFlightPlayerGetValues
+ * @description returns the state values of the flightplayer
  */
