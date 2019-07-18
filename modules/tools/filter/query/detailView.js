@@ -5,12 +5,27 @@ import Template from "text-loader!./templateDetailView.html";
 import SnippetSliderView from "../../../snippets/slider/range/view";
 import SnippetMultiCheckboxView from "../../../snippets/multicheckbox/view";
 
-const QueryDetailView = Backbone.View.extend({
+const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototype */{
     events: {
         "change .checkbox-toggle": "toggleIsActive",
         "click .zoom-btn": "zoomToSelectedFeatures",
         "click .remove-all": "deselectAllValueModels"
     },
+
+    /**
+     * @class QueryDetailView
+     * @extends Backbone.View
+     * @memberof Tools.Filter.Query
+     * @constructs
+     * @listens Tools.Filter.Query#renderSnippets
+     * @listens Tools.Filter.Query#changeIsSelected
+     * @listens Tools.Filter.Query#changeFeatureIds
+     * @listens Tools.Filter.Query#changeIsLayerVisible
+     * @fires Core#RadioRequestUtilGetPathFromLoader
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires Tools.Filter.Query#valuesChanged
+     * @fires Tools.Filter.Query#SnippetCollectionHideAllInfoText
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "rerenderSnippets": this.rerenderSnippets,
@@ -24,15 +39,28 @@ const QueryDetailView = Backbone.View.extend({
         }, this);
     },
     className: "detail-view",
+    /**
+     * @member Template
+     * @description Template used to create QueryDetailView
+     * @memberof Filter/Source
+     */
     template: _.template(Template),
+
+    /**
+     * render the query detail view
+     * @fires Core#RadioRequestUtilGetPathFromLoader
+     * @returns {*} todo
+     */
     render: function () {
-        var attr;
+        const attr = this.model.toJSON();
+        let loaderPath;
 
         if (!this.model.get("features")) {
-            this.$el.html("<div id='filter-loader'><img src='/lgv-config/img/ajax-loader.gif'></div>");
+            loaderPath = Radio.request("Util", "getPathFromLoader");
+            this.$el.html("<div id='filter-loader'><img src='" + loaderPath + "'></div>");
+
             return this;
         }
-        attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         this.renderSnippets();
@@ -40,6 +68,12 @@ const QueryDetailView = Backbone.View.extend({
         this.renderSnippetCheckBoxView();
         return this;
     },
+
+    /**
+     * todo
+     * @param {*} changedValue todo
+     * @returns {void}
+     */
     rerenderSnippets: function (changedValue) {
         _.each(this.model.get("snippetCollection").models, function (snippet) {
             if (_.isUndefined(changedValue) || snippet.get("name") !== changedValue.get("attr")) {
@@ -47,6 +81,7 @@ const QueryDetailView = Backbone.View.extend({
             }
         });
     },
+
     /**
      * updates the display of the feature hits
      * @param  {Backbone.Model} model - QueryModel
@@ -60,12 +95,22 @@ const QueryDetailView = Backbone.View.extend({
             .animate({opacity: 1.0}, 500);
     },
 
+    /**
+     * todo
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @returns {void}
+     */
     zoomToSelectedFeatures: function () {
         this.model.sendFeaturesToRemote();
         if (Radio.request("Util", "isViewMobile") === true) {
             this.model.trigger("closeFilter");
         }
     },
+
+    /**
+     * reder the configured snippets
+     * @returns {void}
+     */
     renderSnippets: function () {
         var view;
 
@@ -96,9 +141,10 @@ const QueryDetailView = Backbone.View.extend({
             this.removeView();
         }
     },
+
     /**
-     * Rendert die View in der die ausgewählten Werte stehen, nach denen derzeit gefiltert wird.
-     * Die Werte werden in den Snippets gespeichert.
+     * Renders the view containing the selected values that are currently being filtered.
+     * The values are stored in the snippets.
      * @returns {void}
      */
     renderValueViews: function () {
@@ -132,6 +178,11 @@ const QueryDetailView = Backbone.View.extend({
             this.$el.find(".remove-all").hide();
         }
     },
+
+    /**
+     * todo
+     * @returns {void}
+     */
     renderSnippetCheckBoxView: function () {
         // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
         var view;
@@ -142,10 +193,23 @@ const QueryDetailView = Backbone.View.extend({
             this.$el.find(".detailview-head").after(view.render());
         }
     },
+
+    /**
+     * todo
+     * @param {*} evt todo
+     * @returns {void}
+     */
     toggleIsActive: function (evt) {
         this.model.setIsActive(this.$(evt.target).prop("checked"));
         this.model.runFilter();
     },
+
+    /**
+     * todo
+     * @param {*} model todo
+     * @param {*} value todo
+     * @returns {void}
+     */
     removeView: function (model, value) {
         if (value === false) {
             model.get("snippetCollection").forEach(function (mod) {

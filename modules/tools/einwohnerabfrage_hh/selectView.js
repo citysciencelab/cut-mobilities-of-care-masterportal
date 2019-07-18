@@ -2,20 +2,26 @@ import SnippetDropdownView from "../../snippets/dropdown/view";
 import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
+
 /**
  * @member Template
  * @description Template used to create the population tool
  * @memberof Tools.EinwohnerAbfrage_HH
  */
+
 const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
     events: {
         "change select": "createDrawInteraction"
     },
+
     /**
      * @class SelectView
      * @extends Backbone.View
-     * @memberof Tools.EinwohnerAbfrage_HH
+     * @memberof Tools.Einwohnerabfrage_hh
      * @constructs
+     * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
+     * @listens Tools.Einwohnerabfrage_hh#RenderResult
+     * @fires Core#RadioRequestUtilGetPathFromLoader
      */
     initialize: function () {
         this.listenTo(this.model, {
@@ -29,15 +35,24 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
+
+        this.model.setLoaderPath(Radio.request("Util", "getPathFromLoader"));
     },
     id: "einwohnerabfrage-tool",
+
+    /**
+     * @member Template
+     * @description Template used to create SelectView for Einwohnerabfrage_hh
+     * @memberof Filter/Source
+     */
     template: _.template(Template),
     snippetDropdownView: {},
+
     /**
-     * renders the view
-     * @param {object} model - EinwohnerAbfrage_HH Model
-     * @param {boolean} value - Rückgabe eines Boolean
-     * @returns {this} this
+     * render the temlpate
+     * @param {*} model todo
+     * @param {Boolean} value this view is active
+     * @returns {*} todo
      */
     render: function (model, value) {
         var attr = this.model.toJSON();
@@ -48,26 +63,27 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
             this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
             this.$el.find(".checkbox").append(this.checkBoxRaster.render().el);
             this.$el.find(".checkbox").append(this.checkBoxAddress.render().el);
-
-            this.delegateEvents();
         }
         else {
             this.model.reset();
             this.undelegateEvents();
         }
+
         return this;
     },
+
     /**
-     * returns Results of population tool
+     * render the resultView
      * @returns {void}
      */
     renderResult: function () {
         this.$el.find(".result").html("");
         this.$el.find(".result").append(new ResultView({model: this.model}).render().el);
     },
+
     /**
-     * creates the draw interaction to draw in the map
-     * @param {object} evt - Object of Event which has been fired
+     * create draw interaction
+     * @param {*} evt todo
      * @returns {void}
      */
     createDrawInteraction: function (evt) {

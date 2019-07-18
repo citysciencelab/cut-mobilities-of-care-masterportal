@@ -125,6 +125,12 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         else {
             new CustomTreeParser(attributes);
         }
+
+        /**
+         * changeLgvContainer
+         * @deprecated in 3.0.0
+         */
+        this.changeLgvContainer();
     },
 
     /**
@@ -148,6 +154,20 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         return attributes;
     },
 
+    /**
+     * Changing the lgv-container to masterportal-container
+     * @returns {void} - no returned value
+     * @deprecated in 3.0.0. Remove whole function and call!
+     */
+    changeLgvContainer: function () {
+        var container = $("div.lgv-container");
+
+        if (container.length) {
+            container.removeClass("lgv-container").addClass("masterportal-container");
+            console.warn("Div container 'lgv-container' is deprecated. Please use 'masterportal-container' instead.");
+        }
+        return false;
+    },
     /**
     * todo
     * @param {*} globalFlag todo

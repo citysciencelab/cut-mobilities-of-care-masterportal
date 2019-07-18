@@ -74,6 +74,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function (config) {
+        var style = Radio.request("Util", "getUiStyle");
+
         this.model = new Searchbar(config);
 
         if (config.renderToDOM) {
@@ -156,12 +158,14 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                 $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
             }
             $(".dropdown-menu-search").css({
-                "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
-                "overflow": "auto"
+                "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
             });
+            if (style !== "TABLE") {
+                $(".dropdown-menu-search").css({
+                    "overflow": "auto"
+                });
+            }
         });
-
-
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
@@ -294,8 +298,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {integer} div height
      */
     getDropdownHeight: function () {
-        if (document.getElementsByClassName("lgv-container").length > 0) {
-            return document.getElementsByClassName("lgv-container")[0].offsetHeight - 130;
+        if (document.getElementsByClassName("masterportal-container").length > 0) {
+            return document.getElementsByClassName("masterportal-container")[0].offsetHeight - 130;
         }
         return 100;
     },

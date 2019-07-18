@@ -13,7 +13,7 @@ const FreezeView = Backbone.View.extend({
     template: _.template(FreezeTemplate),
     render: function () {
         $(this.$el).html(this.template());
-        $(".lgv-container").append(this.$el);
+        $(".masterportal-container").append(this.$el);
 
         return this;
     },

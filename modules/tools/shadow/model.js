@@ -309,7 +309,8 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
             step: step,
             precision: precision,
             editableValueBox: false,
-            values: values
+            values: values,
+            selection: "none"
         });
     },
 
