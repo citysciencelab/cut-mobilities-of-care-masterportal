@@ -1,10 +1,36 @@
 import MapHandlerModel from "./model";
 
-const MapMarkerView = Backbone.View.extend({
+const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */{
     /**
-    * @description View des Map Handlers
-    * @returns {void}
-    */
+     * @class MapMarkerView
+     * @description todo
+     * @extends Backbone.View
+     * @memberOf Core.MapMarker
+     * @constructs
+     *
+     * @listens MapMarker#RadioTriggerMapMarkerZoomTo
+     * @listens MapMarker#RadioTriggerMapMarkerHideMarker
+     * @listens MapMarker#RadioTriggerMapMarkerShowMarker
+     * @listens MapMarker#RadioTriggerMapMarkerHidePolygon
+     * @listens MapMarker#RadioTriggerMapMarkerShowPolygon
+     * @listens MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
+     *
+     * @fires CustomModule#RadioRequestCustomModuleGetMarkerPosition
+     * @fires MapView#RadioRequestMapViewGetResolutions
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     * @fires Map#RadioTriggerMapZoomToExtent
+     * @fires ModelList#RadioTriggerModelListShowModelInTree
+     * @fires ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires ModelList#RadioTriggerModelListRefreshLightTree
+     * @fires Filter#RadioTriggerFilterResetFilter
+     * @fires Map#RadioTriggerMapRender
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @fires Util#RadioTriggerUtilIsViewMobile
+     * @fires CRS#RadioRequestCRSTransformToMapProjection
+     *
+     * @returns {void}
+     */
     initialize: function () {
         var markerPosition,
             channel = Radio.channel("MapMarker");
@@ -38,6 +64,11 @@ const MapMarkerView = Backbone.View.extend({
             this.showStartMarker();
         }
     },
+
+    /**
+     * @description renders
+     * @returns {self}
+     */
     render: function () {
         this.model.get("marker").setElement(this.$el[0]);
         return this;
@@ -46,10 +77,21 @@ const MapMarkerView = Backbone.View.extend({
     className: "glyphicon glyphicon-map-marker",
 
     /**
-    * @description Zoom auf Treffer
-    * @param {Object} hit - Treffer der Searchbar
-    * @returns {void}
-    */
+     * @description Zoom auf Treffer
+     * @param {Object} hit - Treffer der Searchbar
+     *
+     * @fires MapView#RadioRequestMapViewGetResolutions
+     * @fires Map#RadioTriggerMapZoomToExtent
+     * @fires MapView#RadioTriggerMapViewSetCenter
+     * @fires Util#RadioTriggerUtilIsViewMobile
+     * @fires ModelList#RadioTriggerModelListShowModelInTree
+     * @fires ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires ModelList#RadioTriggerModelListRefreshLightTree
+     * @fires Filter#RadioTriggerFilterResetFilter
+     *
+     * @returns {void}
+     */
     zoomTo: function (hit) {
         // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
         var resolutions = Radio.request("MapView", "getResolutions"),
@@ -169,6 +211,8 @@ const MapMarkerView = Backbone.View.extend({
 
     /*
     * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
+    * @fires Map#RadioTriggerMapZoomToExtent
+    * @fires MapView#RadioTriggerMapViewSetCenter
     * @param {string} data - Die Data-Object des request.
     */
     zoomToBKGSearchResult: function (data) {
@@ -182,7 +226,11 @@ const MapMarkerView = Backbone.View.extend({
             Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
         }
     },
-
+    /**
+     * @description Todo
+     * @fires Map#RadioTriggerMapRender
+     * @returns {void}
+     */
     showMarker: function (coordinate) {
         this.hideMarker();
         if (coordinate.length === 2) {
@@ -196,18 +244,33 @@ const MapMarkerView = Backbone.View.extend({
         Radio.trigger("Map", "render");
     },
 
+    /**
+     * @description Hide Map marker
+     * @returns {void}
+     */
     hideMarker: function () {
         this.$el.hide();
     },
-
+    /**
+     * @description Shows Polygon
+     * @returns {void}
+     */
     showPolygon: function () {
         this.model.showFeature();
     },
-
+    /**
+     * @description Hides Polygon
+     * @returns {void}
+     */
     hidePolygon: function () {
         this.model.hideFeature();
     },
-
+    /**
+     * @description todo
+     * @returns {void}
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @fires CRS#RadioRequestCRSTransformToMapProjection
+     */
     showStartMarker: function () {
         var startMarker = this.model.get("startMarker"),
             projectionFromParamUrl = this.model.get("projectionFromParamUrl");
