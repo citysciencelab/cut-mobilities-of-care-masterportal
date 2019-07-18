@@ -272,12 +272,18 @@ const MapView = Backbone.Model.extend({
     },
 
     setCenter: function (coords, zoomLevel) {
-        if (coords.length === 2) {
-            this.get("view").setCenter(coords);
+        var first2Coords = [coords[0], coords[1]];
+
+        // Coordinates need to be integers, otherwise open layers will go nuts when you attempt to pan the
+        // map. Please fix this at the origin of those stringified numbers. However, this is to adress
+        // possible future issues:
+        if (typeof first2Coords[0] !== "number" || typeof first2Coords[1] !== "number") {
+            console.warn("Given coordinates must be of type integer! Although it might not break, something went wrong and needs to be checked!");
+            first2Coords = first2Coords.map(singleCoord => parseInt(singleCoord, 10));
         }
-        else {
-            this.get("view").setCenter([coords[0], coords[1]]);
-        }
+
+        this.get("view").setCenter(first2Coords);
+
         if (!_.isUndefined(zoomLevel)) {
             this.get("view").setZoom(zoomLevel);
         }

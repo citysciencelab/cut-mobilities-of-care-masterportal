@@ -64,6 +64,9 @@ const MapMarkerView = Backbone.View.extend({
             coord = hit.coordinate.split(" ");
         }
 
+        // Open layers does not like coordinates of type string!
+        coord = coord.map(coordString => parseInt(coordString, 10));
+
         this.hideMarker();
         this.hidePolygon();
         switch (hit.type) {
