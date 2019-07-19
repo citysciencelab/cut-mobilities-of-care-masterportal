@@ -64,9 +64,11 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     change: function (map) {
         if (map === "3D") {
             this.$("#button3D").addClass("toggleButtonPressed");
+            this.$("#3d_titel").text("Ansicht ausschalten");
         }
         else {
             this.$("#button3D").removeClass("toggleButtonPressed");
+            this.$("#3d_titel").text("Ansicht einschalten");
         }
     },
     /**
@@ -91,9 +93,9 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         if (Radio.request("Map", "isMap3d")) {
             this.$("#3d-ansicht").addClass("toggleButtonPressed");
         }
-
         return this;
     },
+
     /**
      * Shows the map in 3D-mode if 3d button is activated.
      * Shows the map in 2D-mode if the 3d button is deactivated.
