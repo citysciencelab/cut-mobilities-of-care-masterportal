@@ -3,6 +3,12 @@ import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
 
+/**
+ * @member Template
+ * @description Template used to create the population tool
+ * @memberof Tools.EinwohnerAbfrage_HH
+ */
+
 const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
     events: {
         "change select": "createDrawInteraction"
@@ -49,9 +55,11 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
      * @returns {*} todo
      */
     render: function (model, value) {
+        var attr = this.model.toJSON();
+
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(this.template());
+            this.$el.html(this.template(attr));
             this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
             this.$el.find(".checkbox").append(this.checkBoxRaster.render().el);
             this.$el.find(".checkbox").append(this.checkBoxAddress.render().el);

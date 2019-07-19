@@ -28,6 +28,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         data: {},
         dataReceived: false,
         requesting: false,
+        style: "DEFAULT",
         snippetDropdownModel: {},
         values: {
             "Rechteck aufziehen": "Box",
@@ -46,7 +47,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         rasterLayerId: "13023",
         alkisAdressLayerId: "9726"
     }),
-
     /**
      * @class EinwohnerabfrageModel
      * @extends Tool
@@ -64,9 +64,9 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {Object} data={} todo
      * @property {Boolean} dataReceived=false todo
      * @property {Boolean} requesting=false todo
+     * @property {String} style = "default" - style for MasterPortal ("table" - for table View)
      * @property {Object} snippetDropdownModel={}
      * @property {Obeject} values={"Rechteck aufziehen": "Box", "Kreis aufziehen": "Circle", "Fläche zeichnen": "Polygon"} possible values
-     * @property {String} currentValue="" todo
      * @property {*} metaDataLink=undefined todo
      * @property {String} mrhId="46969C7D-FAA8-420A-81A0-8352ECCFF526" mrh meta data id
      * @property {String} fhhId="B3FD9BD5-F614-433F-A762-E14003C300BF" fhh meta data id
@@ -97,6 +97,9 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @fires Core#RadioTriggerModelListSetModelAttributesById
      */
     initialize: function () {
+        if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
+            this.setStyle("TABLE");
+        }
         this.superInitialize();
 
         this.setCheckBoxAddress(new SnippetCheckboxModel({
@@ -143,7 +146,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }));
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", "2").get("url"));
     },
-
     /**
      * todo
      * @param {*} cswObj todo
@@ -155,7 +157,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             this.updateMetaData(cswObj.attr, cswObj.parsedData);
         }
     },
-
     /**
      * todo
      * @param {*} uniqueIdList todo
@@ -165,7 +166,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
-
     /**
      * todo
      * @param {*} uniqueIdList todo
@@ -175,7 +175,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
-
     /**
      * todo
      * @param {*} attr todo
@@ -416,7 +415,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
-
     /**
      * todo
      * @param {*} coordinates todo
@@ -477,7 +475,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             "such_flaeche": JSON.stringify(geoJson)
         }, this.handleResponse.bind(this));
     },
-
     /**
      * todo
      * @param {*} geoJson todo
@@ -684,6 +681,14 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             isVisibleInMap: value
         });
     },
+    /**
+     * setter for style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
+    setStyle: function (value) {
+        this.set("style", value);
+    },
 
     /**
      * Sets the checkBoxAddress
@@ -761,6 +766,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * Sets the isCollapsed
      * @param {*} value todo
      * @returns {void}
+
      */
     setIsCollapsed: function (value) {
         this.set("isCollapsed", value);
