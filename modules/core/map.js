@@ -334,6 +334,7 @@ const map = Backbone.Model.extend({
      * @listens Map#RadioTriggerMapChange
      * @fires Map#RadioTriggerObliqueMapDeactivate
      * @fires Map#RadioTriggerMapChange
+     * @fires Map#RadioTriggerMapBeforeChange
      * @return {void} -
      */
     activateMap3d: function () {
@@ -352,7 +353,7 @@ const map = Backbone.Model.extend({
             Radio.trigger("ObliqueMap", "deactivate");
             return;
         }
-
+        Radio.trigger("Map", "beforeChange", "3D");
         if (!this.getMap3d()) {
             this.setMap3d(this.createMap3d());
             this.handle3DEvents();
@@ -419,6 +420,7 @@ const map = Backbone.Model.extend({
     /**
      * deactivates the 3D map and changes to the 2D Map Mode.
      * @fires Map#RadioTriggerMapChange
+     * @fires Map#RadioTriggerMapBeforeChange
      * @return {void} -
      */
     deactivateMap3d: function () {
@@ -426,6 +428,7 @@ const map = Backbone.Model.extend({
             resolutions;
 
         if (this.getMap3d()) {
+            Radio.trigger("Map", "beforeChange", "2D");
             this.get("view").animate({rotation: 0}, function () {
                 this.getMap3d().setEnabled(false);
                 this.get("view").setRotation(0);

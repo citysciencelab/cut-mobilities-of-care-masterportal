@@ -163,7 +163,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         });
 
         this.listenTo(Radio.channel("Map"), {
-            "change": function (mapMode) {
+            "beforeChange": function (mapMode) {
                 if (mapMode === "3D" || mapMode === "Oblique") {
                     this.toggleWfsCluster(false);
                 }
