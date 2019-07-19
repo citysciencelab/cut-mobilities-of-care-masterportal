@@ -72,7 +72,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioTriggerModelListShowModelInTree
      * @listens ModelList#RadioTriggerModelListCloseAllExpandedFolder
      * @listens ModelList#RadioTriggerModelListSetAllDescendantsInvisible
-     * @listens ModelList#RadioTriggerModelListToggleWfsCluster
      * @listens ModelList#RadioTriggerModelListRenderTree
      * @listens ModelList#RadioTriggerModelListToggleDefaultTool
      * @listens ModelList#ChangeIsVisibleInMap
@@ -80,7 +79,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#ChangeIsSelected
      * @listens ModelList#ChangeTransparency
      * @listens ModelList#ChangeSelectionIDX
-     *
      * @fires Map#RadioRequestMapGetMapMode
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
@@ -123,7 +121,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "renderTree": function () {
                 this.trigger("renderTree");
             },
-            "toggleWfsCluster": this.toggleWfsCluster,
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree
         }, this);
@@ -162,6 +159,17 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             },
             "change:selectionIDX": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+            }
+        });
+
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mapMode) {
+                if (mapMode === "3D" || mapMode === "Oblique") {
+                    this.toggleWfsCluster(false);
+                }
+                else if (mapMode === "2D") {
+                    this.toggleWfsCluster(true);
+                }
             }
         });
         this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
