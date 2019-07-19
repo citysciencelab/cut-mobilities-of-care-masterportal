@@ -37,7 +37,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     /**
      * initializes the Planning, fetches the data from the server and creates all the layer elements
      * @return {Promise} Promise which resolves when the planning is loaded.
-     * @listens VirtualCity#RadioTriggerMapChange
+     * @listens Map#RadioTriggerMapChange
      */
     initializePlanning: function () {
         if (!this.readyPromise) {
@@ -107,9 +107,9 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     /**
      * activates the planning project and jumps to the default Viewpoint
      * @returns {Promise} promise which returns when the planning has been loaded and activated
-     * @fires Planning#RadioRequestMapIsMap3d
-     * @fires Planning#RadioTriggerMapActivateMap3d
-     * @fires Planning#RadioTriggerMapSetCameraParameter
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Map#RadioTriggerMapActivateMap3d
+     * @fires Map#RadioTriggerMapSetCameraParameter
      */
     activate () {
         if (!Radio.request("Map", "isMap3d")) {
@@ -149,7 +149,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * goto the specific viewpoint
      * @param {string} viewpointId viewpointId
      * @returns {void} -
-     * @fires Planning#RadioTriggerMapSetCameraParameter
+     * @fires Map#RadioTriggerMapSetCameraParameter
      */
     gotoViewpoint (viewpointId) {
         if (this.get("viewpoints")[viewpointId]) {
@@ -159,7 +159,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
 
     /**
      * sets the ids of the hiddenObjects on the existing compatible layers
-     * @fires Planning#RadioRequestModelListGetModelsByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void} -
      */
     setHiddenObjects () {
@@ -172,7 +172,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
 
     /**
      * clears the ids of the hiddenObjects on the existing compatible layers
-     * @fires Planning#RadioRequestModelListGetModelsByAttributes
+     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void} -
      */
     clearHiddenObjects () {

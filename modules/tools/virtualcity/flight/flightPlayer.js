@@ -25,7 +25,7 @@ class FlightPlayer {
      * @name FlightPlayer
      * @description FlightPlayer to control the 3D Map to fly on a predefined path. This is a singleton, use getInstance method to get the instance
      *
-     * @listens FlightPlayer#RadioTriggerMapChange
+     * @listens Map#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
      * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
@@ -122,8 +122,8 @@ class FlightPlayer {
      * starts playing either the given flightInstance or the activeInstance
      * @param {FlightInstance|undefined} flightInstance -
      * @return {void} -
-     * @fires FlightPlayer#RadioRequestMapIsMap3d
-     * @fires FlightPlayer#RadioRequestMapGetMap3d
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Map#RadioRequestMapGetMap3d
      */
     play (flightInstance) {
         if (!Radio.request("Map", "isMap3d")) {

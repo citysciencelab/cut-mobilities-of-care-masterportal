@@ -5,7 +5,7 @@ const CategoryView = Backbone.View.extend({
         "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
     /**
-     * @listens CategoryView#RadioTriggerMapChange
+     * @listens Map#RadioTriggerMapChange
      * @return {void} -
      */
     initialize: function () {

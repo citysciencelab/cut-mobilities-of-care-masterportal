@@ -73,6 +73,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     },
     /**
      * Render Function
+     * @fires Core#RadioRequestMapIsMap3d
      * @returns {Button3dView} - Returns itself
      */
     render: function () {
@@ -103,6 +104,8 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires Core#RadioRequestMapIsMap3d
      * @return {void}
      */
     mapChange: function () {
