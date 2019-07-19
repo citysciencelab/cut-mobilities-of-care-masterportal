@@ -329,9 +329,29 @@ const map = Backbone.Model.extend({
         return scene;
     },
 
+    /**
+     * activates the 3d Map, if oblique is still active, the obliquemap will be deactivated before.
+     * @listens Map#RadioTriggerMapChange
+     * @fires Map#RadioTriggerObliqueMapDeactivate
+     * @fires Map#RadioTriggerMapChange
+     * @return {void} -
+     */
     activateMap3d: function () {
         var camera,
             cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
+
+        if (this.isMap3d()) {
+            return;
+        }
+        if (this.getMapMode() === "Oblique") {
+            Radio.once("Map", "change", function (mapMode) {
+                if (mapMode === "2D") {
+                    this.activateMap3d();
+                }
+            }.bind(this));
+            Radio.trigger("ObliqueMap", "deactivate");
+            return;
+        }
 
         if (!this.getMap3d()) {
             this.setMap3d(this.createMap3d());
@@ -396,6 +416,11 @@ const map = Backbone.Model.extend({
             Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
+    /**
+     * deactivates the 3D map and changes to the 2D Map Mode.
+     * @fires Map#RadioTriggerMapChange
+     * @return {void} -
+     */
     deactivateMap3d: function () {
         var resolution,
             resolutions;
