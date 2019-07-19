@@ -4,21 +4,28 @@ const CategoryView = Backbone.View.extend({
     events: {
         "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
+    /**
+     * @listens CategoryView#RadioTriggerMapChange
+     * @return {void} -
+     */
     initialize: function () {
-        var channel = Radio.channel("Filter");
-
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementCategory": this.hideCategoryMenu
         });
 
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mapMode) {
+                if (mapMode === "3D" || mapMode === "Oblique") {
+                    this.disableCategoryButton();
+                }
+                else if (mapMode === "2D") {
+                    this.enableCategoryButton();
+                }
+            }
+        });
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Category");
         });
-
-        channel.on({
-            "disable": this.disableCategoryButton,
-            "enable": this.enableCategoryButton
-        }, this);
 
         this.render();
     },
