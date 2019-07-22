@@ -585,6 +585,19 @@
  * @example Radio.request("Map", "getMap3d");
  */
 
+/**
+ * @event Map#RadioTriggerMapActivateMap3d
+ * @description Triggers the activation of the 3D Mode
+ * @example Radio.trigger("Map", "activateMap3d");
+ */
+
+/**
+ * @event Map#RadioTriggerMapDeActivateMap3d
+ * @description Triggers the deactivation of the 3D Mode and switches to 2D
+ * @example Radio.trigger("Map", "deactivateMap3d");
+ */
+
+
 /** -------------------- MAP VIEW -------------------- */
 
 /**
