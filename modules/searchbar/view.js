@@ -352,8 +352,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                     hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
                 }
             }
-            // IE 11 svg bug -> png
-            hit.imageSrc = this.model.changeFileExtension(hit.imageSrc, ".png");
         }, this);
     },
 
