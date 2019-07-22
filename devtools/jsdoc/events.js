@@ -437,7 +437,7 @@
 /**
  * @event Core#RadioTriggerMapChange
  * @param {String} mode Mode of the map.
- * @description Event that gets fired when the map mode ("2D" / "3D") has changed.
+ * @description Event that gets fired when the map mode ("2D" / "3D", /"Oblique") has changed.
  * @example Radio.trigger("Map", "change", mode)
  */
 
