@@ -72,6 +72,8 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @memberOf Core.ModelList
      * @constructs
      *
+     * @param {object} attributes Class attributes
+     *
      * @listensMapView#RadioRequestMapViewGetCenter
      * @listens MapView#RadioRequestMapViewGetCurrentExtent
      * @listens MapView#RadioRequestMapViewGetOptions
@@ -253,10 +255,8 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @param todo
-     *
+     * @param {int} value todo
      * @fires CRS#RadioRequestCRSTransformToMapProjection
-     *
      * @return {void}
      */
     prepareStartCenter: function (value) {
@@ -362,7 +362,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @param  {object} view
+     * @param {object} view todo
      * @return {void}
      */
     setView: function (view) {
@@ -443,7 +443,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @params {float} Scale
+     * @param {float} scale todo
      * @return {float} Resolution
      */
     getResolution: function (scale) {
@@ -475,6 +475,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description Sets projection from param url
+     * @param {string} projection todo
      * @return {float} current Zoom of MapView
      */
     setProjectionFromParamUrl: function (projection) {
@@ -483,6 +484,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description Sets start center
+     * @param {boolean} value todo
      * @return {float} current Zoom of MapView
      */
     setStartCenter: function (value) {

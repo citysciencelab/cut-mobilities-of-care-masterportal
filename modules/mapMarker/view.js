@@ -67,7 +67,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
 
     /**
      * @description renders
-     * @returns {self}
+     * @return {object} self
      */
     render: function () {
         this.model.get("marker").setElement(this.$el[0]);
@@ -228,6 +228,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     },
     /**
      * @description Todo
+     * @param {array} coordinate Array of coordinates
      * @fires Map#RadioTriggerMapRender
      * @returns {void}
      */
