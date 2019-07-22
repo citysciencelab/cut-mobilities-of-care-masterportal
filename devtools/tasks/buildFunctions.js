@@ -11,10 +11,13 @@ const fs = require("fs-extra"),
 function copyFiles (source, destination) {
     fs.copy(source, destination).then(() => {
         console.warn("NOTE: Successfully Copied \"" + source + "\" to \"" + destination + "\".");
-        fs.copy("./dist/build", destination).then(() => {
-            fs.remove("./dist/build").catch(error => console.error(error));
-            replaceStrings(destination);
-            console.warn("NOTE: Successfully moved \"./dist/build\" to \"" + destination + "\".");
+        fs.copy("./img", destination + "/img").then(() => {
+            console.warn("NOTE: Successfully copied \"./img\" to \"" + destination + "\".");
+            fs.copy("./dist/build", destination).then(() => {
+                fs.remove("./dist/build").catch(error => console.error(error));
+                replaceStrings(destination);
+                console.warn("NOTE: Successfully copied \"./dist/build\" to \"" + destination + "\".");
+            }).catch(error => console.error(error));
         }).catch(error => console.error(error));
     }).catch(error => console.error(error));
 }
@@ -29,6 +32,11 @@ function removeFiles (answers) {
         destination = "dist/" + portalName,
         source = "./" + answers.portalPath;
 
+    if (portalName === "") {
+        console.warn("ERROR: Portal \"" + source + "\" not found.")
+        return;
+    }
+
     fs.remove(destination).then(() => {
         console.warn("NOTE: Successfully deleted \"" + destination + "\" directory.");
         copyFiles(source, destination);
@@ -42,6 +50,12 @@ function removeFiles (answers) {
  */
 module.exports = function buildWebpack (answers) {
     let command;
+
+     answers.portalPath = answers.portalPath.replace(/\/$/, "");
+    if (!fs.existsSync(answers.portalPath)) {
+        console.warn("ERROR: Module path \"" + answers.portalPath + "\" not found!");
+        return;
+    }
 
     if (answers.customModule !== "") {
         command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
