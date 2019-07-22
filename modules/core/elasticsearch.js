@@ -1,4 +1,3 @@
-
 const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
         ajaxRequests: {}

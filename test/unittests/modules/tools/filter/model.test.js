@@ -1,4 +1,5 @@
 import Model from "@modules/tools/filter/model.js";
+import {expect} from "chai";
 
 describe("modules/tools/filter/model", function () {
     var model;

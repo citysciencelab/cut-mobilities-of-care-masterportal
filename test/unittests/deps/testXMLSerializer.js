@@ -1,5 +1,9 @@
 var xmlserializer = require("xmlserializer"),
-    XMLSerializer = function XMLSerializer () {};
+    XMLSerializer;
+
+XMLSerializer = function () {
+    return true;
+};
 
 XMLSerializer.prototype.serializeToString = function (node) {
     return xmlserializer.serializeToString(node);

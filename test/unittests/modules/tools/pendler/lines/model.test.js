@@ -1,4 +1,5 @@
 import Model from "@modules/tools/pendler/lines/model.js";
+import {expect} from "chai";
 
 var model, createTestFeature;
 

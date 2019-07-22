@@ -4,11 +4,10 @@ testModul = Backbone.Model.extend({
     defaults: {
         employees: []
     },
-    initialize: function () {},
     giveCoffee: function (employee) {
         employee.coffeeCount++;
     },
-    makeWork: function (emplyoee) {
+    makeWork: function (employee) {
         employee.coffeeCount--;
     },
     getIsAwake: function (employee) {

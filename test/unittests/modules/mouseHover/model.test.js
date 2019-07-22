@@ -1,4 +1,5 @@
 import Model from "@modules/mouseHover/model.js";
+import {expect} from "chai";
 
 describe("mouseHover", function () {
     var model;
@@ -49,7 +50,7 @@ describe("mouseHover", function () {
                     nummer: "10"
                 };
 
-            expect(model.pickValue(mouseHoverField, featureProperties)).to.equal("<span class=\'title\'>Schwimmbäder</span></br><span class=\'\'>10</span></br>");
+            expect(model.pickValue(mouseHoverField, featureProperties)).to.equal("<span class='title'>Schwimmbäder</span></br><span class=''>10</span></br>");
         });
     });
     describe("reduces array to numFeaturesToShow", function () {
@@ -64,7 +65,7 @@ describe("mouseHover", function () {
 
             model.set("numFeaturesToShow", 2);
             expect(model.checkMaxFeaturesToShow(textArray)).to.have.lengthOf(3);
-            expect(model.checkMaxFeaturesToShow(textArray)[2]).to.equal("<span class=\'info\'>(weitere Objekte. Bitte zoomen.)</span>");
+            expect(model.checkMaxFeaturesToShow(textArray)[2]).to.equal("<span class='info'>(weitere Objekte. Bitte zoomen.)</span>");
         });
     });
     describe("adds break", function () {

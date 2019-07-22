@@ -1,4 +1,5 @@
 import LegendModel from "@modules/legend/model.js";
+import {expect} from "chai";
 
 describe("modules/legend", function () {
     var model;

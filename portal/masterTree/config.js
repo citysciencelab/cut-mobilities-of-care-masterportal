@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const Config = {
     clickCounter: {},
     footer: {
@@ -60,3 +62,5 @@ const Config = {
         fxaa: true
     }
 };
+
+/* eslint-enable no-unused-vars */

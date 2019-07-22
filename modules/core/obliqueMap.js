@@ -230,8 +230,8 @@ const ObliqueMap = Backbone.Model.extend({
                     controls: [],
                     interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
                 }));
-                this.get("map").on("postrender", this.postRenderHandler.bind(this));
-                this.get("map").on("click", this.reactToClickEvent.bind(this));
+                this.get("map").on("postrender", this.postRenderHandler.bind(this), this);
+                this.get("map").on("click", this.reactToClickEvent.bind(this), this);
             }
             interactions = map2D.getInteractions();
             interactions.forEach((el) => {
@@ -242,7 +242,7 @@ const ObliqueMap = Backbone.Model.extend({
                 this.listenerKeys.push(interactions.on("add", function (event) {
                     this.pausedInteractions.push(event.element);
                     interactions.clear();
-                }.bind(this)));
+                }.bind(this), this));
                 map2D.getViewport().querySelector(".ol-overlaycontainer").classList.add("olcs-hideoverlay");
                 map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                 this.set("active", true);
@@ -272,7 +272,7 @@ const ObliqueMap = Backbone.Model.extend({
                     this.listenerKeys.push(interactions.on("add", function (event) {
                         this.pausedInteractions.push(event.element);
                         interactions.clear();
-                    }.bind(this)));
+                    }.bind(this), this));
                     map2D.getViewport().querySelector(".ol-overlaycontainer").classList.add("olcs-hideoverlay");
                     map2D.getViewport().querySelector(".ol-overlaycontainer-stopevent").classList.add("olcs-hideoverlay");
                     this.set("active", true);

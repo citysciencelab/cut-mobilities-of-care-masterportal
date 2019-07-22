@@ -10,6 +10,7 @@ const ControlsView = Backbone.View.extend(/** @lends ControlsView.prototype */{
      * @listens Controls#RadioRequestControlsViewAddRowTr
      * @listens Controls#RadioRequestControlsViewAddRowBr
      * @listens Controls#RadioRequestControlsViewAddRowBl
+     * @returns {void}
      */
     initialize: function () {
         var channel = Radio.channel("ControlsView");

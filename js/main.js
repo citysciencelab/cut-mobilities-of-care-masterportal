@@ -41,8 +41,15 @@ if (!("Config" in window)) {
 
         // Polyfills DOM4 MouseEvent
 
+        /**
+         * MouseEvent
+         * @param {String} eventType parameter
+         * @param {Object} params parameter
+         * @returns {Event} mouseEvent
+         * @constructor
+         */
         function MouseEvent (eventType, params) {
-            var paramsObj = params || {bubbles: false, cancelable: false},
+            const paramsObj = params || {bubbles: false, cancelable: false},
                 mouseEvent = document.createEvent("MouseEvent");
 
             mouseEvent.initMouseEvent(eventType, paramsObj.bubbles, paramsObj.cancelable, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -53,6 +60,7 @@ if (!("Config" in window)) {
         MouseEvent.prototype = Event.prototype;
 
         window.MouseEvent = MouseEvent;
+        return true;
     })(window);
     // Pfad zur Config.js über data-lgv-config
     scriptTagsArray.forEach(function (scriptTag) {

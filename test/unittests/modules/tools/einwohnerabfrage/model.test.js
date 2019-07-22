@@ -1,5 +1,6 @@
 import Model from "@modules/tools/einwohnerabfrage_hh/model.js";
 import Util from "@modules/core/util.js";
+import {expect} from "chai";
 
 describe("tools/einwohnerabfrageModel", function () {
     var model;

@@ -1,4 +1,5 @@
 import LayerView from "@modules/menu/desktop/layer/viewSelection.js";
+import {expect} from "chai";
 
 describe("menu/desktop/layer/viewSelection", function () {
     var fakeModel,

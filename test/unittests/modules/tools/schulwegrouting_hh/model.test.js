@@ -1,11 +1,13 @@
 import Model from "@modules/tools/schulwegRouting_hh/model.js";
 import Util from "@testUtil";
 import {MultiLineString, Point} from "ol/geom.js";
+const chai = require("chai");
 
 describe("tools/schulwegrouting_hh", function () {
     var model,
         utilModel,
         schoolFeatures,
+        expect = chai.expect,
         routeParts = [
             {id: "513087", wkt: "LINESTRING(566318.249463363 5928187.98622225,566329.228 5928182.69)", length: "0.012"},
             {id: "500163", wkt: "LINESTRING(566329.228 5928182.69,566340.464 5928177.176,566350.576 5928172.392)", length: "0.024"},

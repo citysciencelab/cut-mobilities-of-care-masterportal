@@ -1,4 +1,5 @@
 import Model from "@modules/tools/graph/model.js";
+import {expect} from "chai";
 
 var model;
 

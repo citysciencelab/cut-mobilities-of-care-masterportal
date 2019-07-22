@@ -2,7 +2,7 @@ import SensorLayerModel from "@modules/core/modelList/layer/sensor.js";
 import * as moment from "moment";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
-
+import {expect} from "chai";
 
 describe("core/modelList/layer/sensor", function () {
     var sensorLayer;

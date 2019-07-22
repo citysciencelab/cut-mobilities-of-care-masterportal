@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const Config = {
     wfsImgPath: "./ressources/img/",
     namedProjections: [
@@ -25,3 +27,5 @@ const Config = {
         infoText: "(weitere Objekte. Bitte zoomen.)"
     }
 };
+
+/* eslint-enable no-unused-vars */

@@ -1,4 +1,5 @@
 import Model from "@modules/searchbar/gdi/model.js";
+import {expect} from "chai";
 
 describe("modules/searchbar/gdi", function () {
     var model = {},

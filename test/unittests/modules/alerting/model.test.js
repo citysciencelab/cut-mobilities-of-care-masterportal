@@ -1,4 +1,5 @@
 import Model from "@modules/alerting/model.js";
+import {expect} from "chai";
 
 describe("alerting/model", function () {
     var model,

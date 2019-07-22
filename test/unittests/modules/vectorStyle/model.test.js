@@ -47,16 +47,7 @@ describe("vectorStyle", function () {
                     class: "POINT_WRONG"
                 },
                 defaultStyle,
-                defaultStyleObj = {},
-                defaultValues = {
-                    circleRadius: 5,
-                    circleFillColor: "rgba(255,255,255,0.4)",
-                    circleStrokeColor: "#3399CC",
-                    circleStrokeWidth: 1.25,
-                    fillColor: "rgba(255,255,255,0.4)",
-                    strokeColor: "#3399CC",
-                    strokeWidth: 1.25
-                };
+                defaultStyleObj = {};
 
             model = new Model(style);
             defaultStyle = model.createStyle(features[0], false);

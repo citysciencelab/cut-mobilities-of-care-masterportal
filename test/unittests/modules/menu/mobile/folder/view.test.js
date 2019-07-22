@@ -1,4 +1,5 @@
 import ListView from "@modules/menu/mobile/listView.js";
+import {expect} from "chai";
 
 describe("menu/mobile/folder/view", function () {
     var fakeModel,
