@@ -1,82 +1,61 @@
-/**
- * @typedef {Object} FlightPlayer.Values
- * @property {boolean} [playing=false]
- * @property {boolean} [paused=false]
- * @property {number} [multiplier=1]
- * @property {boolean} [repeat=false]
- * @property {boolean} [valid=false]
- * @property {FlightInstance|null} activeInstance
- */
-
-/**
- * @typedef {Object} FlightPlayer.Clock
- * @property {number} startTime
- * @property {number} endTime
- * @property {number} currentTime
- * @property {number|null} currentSystemTime
- * @property {Array<number>} times
- */
-
-class FlightPlayer {
+const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ {
     /**
      * @class FlightPlayer
-     * @constructs
-     * @memberof Tools.VirtualCity
-     * @name FlightPlayer
+     * @extends Backbone.Model
      * @description FlightPlayer to control the 3D Map to fly on a predefined path. This is a singleton, use getInstance method to get the instance
-     *
+     * @memberof Tools.VirtualCity
+     * @constructs
+     * @property {boolean} [playing=false]
+     * @property {boolean} [paused=false]
+     * @property {number} [multiplier=1]
+     * @property {boolean} [repeat=false]
+     * @property {boolean} [valid=false]
+     * @property {FlightInstance|null} activeInstance
+     * @property {number} startTime
+     * @property {number} endTime
+     * @property {number} currentTime
+     * @property {number|null} currentSystemTime
+     * @property {Array<number>} times
      * @listens Map#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
-     * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
+     * @listens FlightPlayer#RadioRequestFlightPlayerGetValue
      */
-    constructor () {
+    defaults: _.extend({}, Backbone.Model.defaults, {
         /**
          * @type {Cesium.LinearSpline|Cesium.CatmullRomSpline}
          * @private
          */
-        this.destinationSpline = null;
+        destinationSpline: null,
         /**
          * @type {Cesium.QuaternionSpline}
          * @private
          */
-        this.quaternionSpline = null;
-        /**
-         * @type {FlightPlayer.Values}
-         */
-        this.values = {
-            playing: false,
-            paused: false,
-            multiplier: 1,
-            activeInstance: null,
-            repeat: false,
-            valid: false
-        };
-
-        /**
-         * @type {FlightPlayer.Clock}
-         */
-        this.clock = {
-            startTime: 0,
-            endTime: 0,
-            currentTime: 0,
-            times: [],
-            currentSystemTime: null
-        };
-
+        quaternionSpline: null,
+        playing: false,
+        paused: false,
+        multiplier: 1,
+        activeInstance: null,
+        repeat: false,
+        valid: false,
+        startTime: 0,
+        endTime: 0,
+        currentTime: 0,
+        times: [],
+        currentSystemTime: null,
         /**
          * @type {Function}
          * @private
          */
-        this.postRenderHandler = null;
-
-
+        postRenderHandler: null,
         /**
          * @type {Cesium.ScreenSpaceCameraController|null}
          * @private
          */
-        this.screenSpaceCameraController = null;
+        screenSpaceCameraController: null
+    }),
 
+    initialize () {
         // stop player if the map is changed to 2D or oblique
         Radio.on("Map", "change", (map) => {
             if (map !== "3D") {
@@ -90,33 +69,40 @@ class FlightPlayer {
             "stop": this.stop,
             "play": this.play,
             "getValues": () => {
-                return this.values;
+                return {
+                    playing: this.get("playing"),
+                    paused: this.get("paused"),
+                    multiplier: this.get("multiplier"),
+                    activeInstance: this.get("activeInstance"),
+                    repeat: this.get("repeat"),
+                    valid: this.get("valid")
+                };
             }
         }, this);
-    }
+    },
 
     /**
      * @param {FlightInstance} flightInstance -
      * @return {void} -
      */
     setActiveFlightInstance (flightInstance) {
-        if (this.values.playing) {
+        if (this.get("playing")) {
             this.stop();
         }
-        this.values.activeInstance = flightInstance;
+        this.setActiveInstance(flightInstance);
         this.updateSplines();
-    }
+    },
 
     /**
      * @return {void} -
      */
     clearActiveFlight () {
-        if (this.values.playing) {
+        if (this.get("playing")) {
             this.stop();
         }
 
-        this.values.activeInstance = null;
-    }
+        this.setActiveInstance(null);
+    },
 
     /**
      * starts playing either the given flightInstance or the activeInstance
@@ -126,53 +112,53 @@ class FlightPlayer {
      * @fires Map#RadioRequestMapGetMap3d
      */
     play (flightInstance) {
+        const scene = Radio.request("Map", "getMap3d").getCesiumScene();
+
         if (!Radio.request("Map", "isMap3d")) {
             return;
         }
 
-        if (!flightInstance && !this.values.activeInstance) {
+        if (!flightInstance && !this.get("activeInstance")) {
             const message = "Player cannot play without activeInstance, provide a flightInstance or call setActiveInstance";
 
             throw new Error(message);
         }
-        if (this.postRenderHandler) {
-            this.postRenderHandler();
-            this.postRenderHandler = null;
+        if (this.get("postRenderHandler")) {
+            this.get("postRenderHandler")();
+            this.setPostRenderHandler(null);
         }
 
-        if (flightInstance && this.values.activeInstance !== flightInstance) {
+        if (flightInstance && this.get("activeInstance") !== flightInstance) {
             this.setActiveFlightInstance(flightInstance);
         }
 
-        const scene = Radio.request("Map", "getMap3d").getCesiumScene();
+        this.setScreenSpaceCameraController(scene.screenSpaceCameraController);
+        this.setPostRenderHandler(scene.postRender.addEventListener(this.cesiumPostRender.bind(this)));
 
-        this.screenSpaceCameraController = scene.screenSpaceCameraController;
-        this.postRenderHandler = scene.postRender.addEventListener(this.cesiumPostRender.bind(this));
-
-        this.clock.currentSystemTime = null;
-        this.values.playing = true;
-    }
+        this.setCurrentSystemTime(null);
+        this.setPlaying(true);
+    },
 
     /**
      * stops the active flight and sets the currentTime to 0
      * @return {void} -
      */
     stop () {
-        if (this.postRenderHandler) {
-            this.postRenderHandler();
-            this.postRenderHandler = null;
+        if (this.get("postRenderHandler")) {
+            this.get("postRenderHandler")();
+            this.setPostRenderHandler(null);
         }
 
-        if (this.screenSpaceCameraController) {
-            this.screenSpaceCameraController.enableInputs = true;
+        if (this.get("screenSpaceCameraController")) {
+            this.get("screenSpaceCameraController").enableInputs = true;
         }
 
-        this.values.playing = false;
-        this.values.paused = false;
+        this.setPlaying(false);
+        this.setPaused(false);
 
-        this.clock.currentTime = 0;
-        this.clock.currentSystemTime = null;
-    }
+        this.setCurrentTime(0);
+        this.setCurrentSystemTime(null);
+    },
 
     /**
      * @param {Cesium.Scene} scene -
@@ -183,55 +169,55 @@ class FlightPlayer {
         const time = Date.now() / 1000;
         var seconds, view;
 
-        if (!this.clock.currentSystemTime) {
-            this.clock.currentSystemTime = time;
+        if (!this.get("currentSystemTime")) {
+            this.setCurrentSystemTime(time);
         }
-        seconds = time - this.clock.currentSystemTime;
-        this.clock.currentSystemTime = time;
-        if (this.values.paused) {
-            if (this.screenSpaceCameraController) {
-                this.screenSpaceCameraController.enableInputs = true;
+        seconds = time - this.get("currentSystemTime");
+        this.setCurrentSystemTime(time);
+        if (this.get("paused")) {
+            if (this.get("screenSpaceCameraController")) {
+                this.get("screenSpaceCameraController").enableInputs = true;
             }
             return;
         }
 
-        this.clock.currentTime += seconds * this.values.multiplier;
-        if (this.clock.currentTime > this.clock.endTime) {
-            if (this.values.repeat) {
-                this.clock.currentTime = this.clock.currentTime - this.clock.endTime;
+        this.setCurrentTime(this.get("currentTime") + seconds * this.get("multiplier"));
+        if (this.get("currentTime") > this.get("endTime")) {
+            if (this.get("repeat")) {
+                this.setCurrentTime(this.get("currentTime") - this.get("endTime"));
             }
             else {
                 this.stop();
                 return;
             }
         }
-        else if (this.clock.currentTime < this.clock.startTime) {
-            if (this.values.repeat) {
-                this.clock.currentTime = this.clock.endTime + this.clock.currentTime;
+        else if (this.get("currentTime") < this.get("startTime")) {
+            if (this.get("repeat")) {
+                this.setCurrentTime(this.get("endTime") + this.get("currentTime"));
             }
             else {
-                this.clock.currentTime = this.clock.startTime;
+                this.setCurrentTime(this.get("startTime"));
                 return;
             }
         }
 
         view = {
-            destination: this.destinationSpline.evaluate(this.clock.currentTime),
-            orientation: Cesium.HeadingPitchRoll.fromQuaternion(this.quaternionSpline.evaluate(this.clock.currentTime))
+            destination: this.get("destinationSpline").evaluate(this.get("currentTime")),
+            orientation: Cesium.HeadingPitchRoll.fromQuaternion(this.get("quaternionSpline").evaluate(this.get("currentTime")))
         };
         scene.camera.setView(view);
-        if (this.screenSpaceCameraController) {
-            this.screenSpaceCameraController.enableInputs = false;
+        if (this.get("screenSpaceCameraController")) {
+            this.get("screenSpaceCameraController").enableInputs = false;
         }
-    }
+    },
 
     /**
      * @private
      * @return {void} -
      */
     updateSplines () {
-        const viewpoints = this.values.activeInstance.get("viewpoints"),
-            loop = this.values.activeInstance.get("loop"),
+        const viewpoints = this.get("activeInstance").get("viewpoints"),
+            loop = this.get("activeInstance").get("loop"),
             length = loop ? viewpoints.length + 1 : viewpoints.length,
             points = new Array(length),
             quaternions = new Array(length),
@@ -264,16 +250,63 @@ class FlightPlayer {
             times[length - 1] = times[length - 2] + viewpoints[length - 2].duration;
         }
 
-        this.destinationSpline = this.values.activeInstance.get("interpolation") === "spline" ?
-            new Cesium.CatmullRomSpline({times, points}) :
-            new Cesium.LinearSpline({times, points});
-        this.quaternionSpline = new Cesium.QuaternionSpline({times, points: quaternions});
+        this.setDestinationSpline(this.get("activeInstance").get("interpolation") === "spline" ? new Cesium.CatmullRomSpline({times, points}) : new Cesium.LinearSpline({times, points}));
+        this.setQuaternionSpline(new Cesium.QuaternionSpline({times, points: quaternions}));
 
-        this.clock.endTime = times[length - 1];
-        this.clock.times = times;
-        this.values.repeat = loop;
+        this.setEndTime(times[length - 1]);
+        this.setTimes(times);
+        this.setRepeat(loop);
+    },
+
+    setDestinationSpline: function (value) {
+        this.set("destinationSpline", value);
+    },
+
+    setQuaternionSpline: function (value) {
+        this.set("quaternionSpline", value);
+    },
+
+    setPlaying: function (value) {
+        this.set("playing", value);
+    },
+
+    setPaused: function (value) {
+        this.set("paused", value);
+    },
+
+    setActiveInstance: function (value) {
+        this.set("activeInstance", value);
+    },
+
+    setRepeat: function (value) {
+        this.set("repeat", value);
+    },
+
+    setEndTime: function (value) {
+        this.set("endTime", value);
+    },
+
+    setCurrentTime: function (value) {
+        this.set("currentTime", value);
+    },
+
+    setTimes: function (value) {
+        this.set("times", value);
+    },
+
+    setCurrentSystemTime: function (value) {
+        this.set("currentSystemTime", value);
+    },
+
+    setPostRenderHandler: function (value) {
+        this.set("postRenderHandler", value);
+    },
+
+    setScreenSpaceCameraController: function (value) {
+        this.set("screenSpaceCameraController", value);
     }
-}
+
+});
 
 /**
  * only exported for testing purposes, use getInstance
