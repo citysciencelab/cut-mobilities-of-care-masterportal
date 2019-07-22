@@ -5,14 +5,13 @@
 @background_color_1: rgb(255, 255, 255);
 @background_color_2: rgb(182, 0, 0);
 @background_color_3: #F2F2F2;
+@background_color_4: #646262;
 
 .tool-window {
     background-color: @background_color_1;
     display: none;
     position: absolute !important;
-    margin: 10px;
-    margin-top: 10px;
-    margin-bottom: 30px;
+    margin: 10px 10px 30px 0px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
     max-width: 500px;
@@ -33,6 +32,7 @@
             color: @color_1;
             width: calc(100% - 50px);
             margin: 0;
+            height: 34px;
         }
         >.buttons {
             color: @color_1;
@@ -80,10 +80,16 @@
 .table-tool-win-all{
     font-family: @font_family_2;
     border-radius: 12px;
-    background-color: @background_color_3;
+    background-color: @background_color_4;
     margin-bottom: 30px;
     .header {
         font-family: @font_family_2;
+        >.title {
+            color: @color_2;
+        }
+        >.buttons {
+            color: @color_2;
+        }
     }
     .win-body {
         border-bottom-left-radius: 12px;
@@ -95,7 +101,7 @@
     }
 }
 .table-tool-window {
-    bottom: 20px;
+    bottom: 10px;
     right: 246px;
     transform: rotate(0deg);
 
