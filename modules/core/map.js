@@ -335,6 +335,7 @@ const map = Backbone.Model.extend({
      * @fires Map#RadioTriggerObliqueMapDeactivate
      * @fires Map#RadioTriggerMapChange
      * @fires Map#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlert
      * @return {void} -
      */
     activateMap3d: function () {
@@ -363,6 +364,7 @@ const map = Backbone.Model.extend({
             camera.changed.addEventListener(this.reactToCameraChanged, this);
         }
         this.getMap3d().setEnabled(true);
+        Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
         Radio.trigger("Map", "change", "3D");
     },
 
@@ -421,6 +423,7 @@ const map = Backbone.Model.extend({
      * deactivates the 3D map and changes to the 2D Map Mode.
      * @fires Map#RadioTriggerMapChange
      * @fires Map#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlertRemove
      * @return {void} -
      */
     deactivateMap3d: function () {
@@ -440,6 +443,7 @@ const map = Backbone.Model.extend({
                 if (resolution < resolutions[resolutions.length - 1]) {
                     this.get("view").setResolution(resolutions[resolutions.length - 1]);
                 }
+                Radio.trigger("Alert", "alert:remove");
                 Radio.trigger("Map", "change", "2D");
             }.bind(this));
         }
