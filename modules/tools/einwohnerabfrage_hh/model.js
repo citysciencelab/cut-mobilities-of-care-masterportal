@@ -44,7 +44,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         uniqueIdList: [],
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
-        alkisAdressLayerId: "9726"
+        alkisAdressLayerId: "9726",
+        populationReqServiceId: "2"
     }),
 
     /**
@@ -77,6 +78,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {String} glyphicon="glyphicon-wrench" glyphicon to show
      * @property {String} rasterLayerId="13023" layerId for layer with raster
      * @property {String} alkisAdressLayerId="9726" layerId for the alkis adresses
+     * @property {String} populationReqServiceId="2" serviceid
      * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
      * @listens Snippets.Dropdown#ValuesChanged
@@ -141,10 +143,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             isMultiple: false,
             preselectedValues: _.allKeys(this.get("values"))[0]
         }));
-
-        const populationReqServiceId = Config.hasOwnProperty("populationReqServiceId") ? Config.populationReqServiceId : "2";
-
-        this.setMetaDataLink(Radio.request("RestReader", "getServiceById", populationReqServiceId).get("url"));
+console.log(this.get("populationReqServiceId"));
+        this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
     },
 
     /**

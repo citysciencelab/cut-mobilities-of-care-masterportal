@@ -74,6 +74,5 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: true
     },
-    defaultToolId: "gfi",
-    populationReqServiceId: 2
+    defaultToolId: "gfi"
 };
