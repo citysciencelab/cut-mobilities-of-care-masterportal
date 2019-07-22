@@ -143,7 +143,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             isMultiple: false,
             preselectedValues: _.allKeys(this.get("values"))[0]
         }));
-console.log(this.get("populationReqServiceId"));
+
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
     },
 
