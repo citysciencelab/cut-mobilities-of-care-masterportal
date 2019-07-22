@@ -1,7 +1,6 @@
 import axios from "axios";
 import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
-import {getInstance as getFlightPlayerInstance} from "./flight/flightPlayer";
 
 const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -27,7 +26,6 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     initialize () {
         this.superInitialize();
         this.addRadio();
-        getFlightPlayerInstance();
     },
 
     /**

@@ -1,7 +1,7 @@
 import axios from "axios";
 import EntitiesLayer from "../../core/modelList/layer/entities";
 import Tileset from "../../core/modelList/layer/tileset";
-import {parseFlightOptions} from "./flight/flightInstance";
+import {parseFlightOptions} from "./flight";
 
 const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     defaults: _.extend({}, Backbone.Model.defaults, {

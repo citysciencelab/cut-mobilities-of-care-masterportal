@@ -56,13 +56,6 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
     }),
 
     initialize () {
-        // stop player if the map is changed to 2D or oblique
-        Radio.on("Map", "change", (map) => {
-            if (map !== "3D") {
-                this.stop();
-            }
-        });
-
         const channel = Radio.channel("FlightPlayer");
 
         channel.reply({
@@ -79,6 +72,13 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
                 };
             }
         }, this);
+        
+        // stop player if the map is changed to 2D or oblique
+        Radio.on("Map", "change", (map) => {
+            if (map !== "3D") {
+                this.stop();
+            }
+        });
     },
 
     /**

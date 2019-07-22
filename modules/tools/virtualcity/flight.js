@@ -1,3 +1,5 @@
+import {getInstance as getFlightPlayerInstance} from "./flightPlayer";
+
 /**
  * @typedef {Object} FlightInstance.Anchor
  * @property {ol.Coordinate} cameraPosition - ol3 coordinate array with xyz coordinates (z value is mandatory)
@@ -40,7 +42,6 @@ const FlightInstance = Backbone.Model.extend(/** @lends FlightInstance.prototype
     }
 });
 
-
 export default FlightInstance;
 
 /**
@@ -57,6 +58,8 @@ export function parseFlightOptions (source) {
             loop = source.vcsMeta.flightOptions.loop,
             interpolation = source.vcsMeta.flightOptions.interpolation,
             name = source.vcsMeta.flightOptions.name;
+
+        getFlightPlayerInstance();
 
         return new FlightInstance({name, viewpoints, loop, interpolation});
     }
