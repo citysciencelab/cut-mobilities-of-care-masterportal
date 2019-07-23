@@ -1,5 +1,6 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-slider";
+import "jquery-ui/ui/widgets/draggable";
 /**
  * @member SliderViewTemplate
  * @description Template used to create the simple slider
@@ -70,6 +71,8 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
             value: selectedValue,
             selection: selection
         });
+
+        this.$el.find("input.slider").draggable();
     },
 
     /**
@@ -96,21 +99,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      * @returns {void}
      */
     saveNewValue: function (evt) {
-        let newValue = evt.value;
-
-        if (this.model.get("moveStepwise") && !_.isNull(this.model.get("lastSelectedValue"))) {
-
-            if (newValue > this.model.get("lastSelectedValue")) {
-                newValue = this.model.get("lastSelectedValue") + this.model.get("step");
-            }
-            else if (newValue < this.model.get("lastSelectedValue")) {
-                newValue = this.model.get("lastSelectedValue") - this.model.get("step");
-            }
-
-            this.updateDOMSlider(newValue);
-        }
-        this.model.updateValues(newValue);
-        this.model.set("lastSelectedValue", newValue);
+        this.model.updateValues(evt.value);
     },
 
     /**

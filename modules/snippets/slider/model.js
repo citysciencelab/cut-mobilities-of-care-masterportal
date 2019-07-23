@@ -22,9 +22,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         step: 1,
         preselectedValues: null,
         precision: 3,
-        selection: "before",
-        moveStepwise: true,
-        lastSelectedValue: null
+        selection: "before"
     }),
 
     initialize: function (attributes) {
