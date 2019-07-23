@@ -116,26 +116,46 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {void}
      */
     updateAttributions: function updateAttributions () {
-
-        var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredModelList = modelList.filter(function (model) {
-                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
-            }),
-            bAttributionsAvailable = filteredModelList.length > 0;
+        const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+            filteredModelList = this.filterModelsWithLayerAttrinbution(modelList),
+            attributionsAvailable = filteredModelList.length > 0;
 
         this.removeAllLayerAttributions();
         this.generateAttributions(filteredModelList);
 
-        this.setIsVisibleInMap(bAttributionsAvailable);
+        this.setIsVisibleInMap(attributionsAvailable);
 
         // Upon change of visible layers, attribution pane must be opened.
-        // This is a requested ferature.
-        if (bAttributionsAvailable) {
+        // This is a requested feature.
+        if (attributionsAvailable) {
             this.setIsContentVisible(true);
         }
 
         this.trigger("renderAttributions");
     },
+
+    /**
+     * filters the models from the modellist that have the layerAttribution parameters.
+     * Childlayers of GroupLayer are also considered.
+     * @param {Array} modelList list with all models
+     * @returns {Array} models with configured layer attributions
+     */
+    filterModelsWithLayerAttrinbution: function (modelList) {
+        const childModelsWithLayerAttributions = [],
+            filteredModelList = modelList.filter(function (model) {
+                if (model.get("typ") === "GROUP") {
+                    model.get("layerSource").forEach(childLayerSource => {
+                        if (childLayerSource.has("layerAttribution") && childLayerSource.get("layerAttribution") !== "nicht vorhanden") {
+                            childModelsWithLayerAttributions.push(childLayerSource);
+                        }
+                    });
+                }
+                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
+            });
+
+        return filteredModelList.concat(childModelsWithLayerAttributions);
+    },
+
     /**
      * Removes all attributions of type "layer" from attributions array.
      * Renders module.
