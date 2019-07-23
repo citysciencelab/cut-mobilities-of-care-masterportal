@@ -16,13 +16,13 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @memberof Controls.Overviewmap
      * @extends Backbone.Model
      * @constructs
-     * @fires Map#RadioRequestMapGetMap
-     * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires Parser#RadioRequestParserGetItemByAttributes
-     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
-     * @fires Map#RadioTriggerMapAddControl
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Core#RadioRequestMapGetMap
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @fires Core#RadioTriggerMapAddControl
+     * @fires Core#RadioRequestRawLayerListGetLayerWhere
+     * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
         var map = Radio.request("Map", "getMap"),
@@ -67,11 +67,11 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
 
     /**
-     * @description Derives the baselayer from the given layer collection
+     * Derives the baselayer from the given layer collection
      * @param {Layer[]} layers The Array of layers
      * @param {string} baselayer The id of the baselayer
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Core#RadioRequestRawLayerListGetLayerWhere
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
@@ -122,12 +122,20 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         return imageLayer;
     },
 
-    // setter for baselayer
+    /**
+     * setter for baselayer
+     * @param {*} value todo
+     * @returns {void}
+     */
     setBaseLayer: function (value) {
         this.set("baseLayer", value);
     },
 
-    // setter for newOvmView
+    /**
+     * setter for newOvmView
+     * @param {*} value todo
+     * @returns {void}
+     */
     setNewOvmView: function (value) {
         this.set("newOvmView", value);
     }

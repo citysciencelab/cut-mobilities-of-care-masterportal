@@ -587,76 +587,76 @@
 /** -------------------- MAP VIEW -------------------- */
 
 /**
- * @event MapView#RadioTriggerMapViewChangedOptions
+ * @event Core#RadioTriggerMapViewChangedOptions
  * @param {Object} options Options of mapview status
  * @description Event that gets fired when the map view options have changed. The options are scale, center, zoomLevel
  * @example Radio.trigger("MapView", "changedOptions", options)
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetOptions
+ * @event Core#RadioRequestMapViewGetOptions
  * @description Event that gets the map view options. The options are scale, center, zoomLevel
  * @example Radio.Request("MapView", "getOptions")
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetCenter
+ * @event Core#RadioRequestMapViewGetCenter
  * @description Event that gets the center of the map view
  * @example Radio.Request("MapView", "getCenter")
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetResoByScale
+ * @event Core#RadioRequestMapViewGetResoByScale
  * @param {String} scale Options of mapview status
  * @description Event that gets the resolution depending on the map scale
  * @example Radio.trigger("MapView", "getResoByScale", scale)
  */
 
 /**
- * @event MapView#RadioRequestGetProjection
+ * @event Core#RadioRequestGetProjection
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetScale
+ * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetCenter
+ * @event Core#RadioTriggerMapViewSetCenter
  * @description Event that sets the center of the map view
  * @example Radio.trigger("MapView", "setCenter", model)
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetZoomLevelUp
+ * @event Core#RadioTriggerMapViewSetZoomLevelUp
  * @description Event that sets the zoom-level one counter up
  * @example Radio.trigger("MapView", "setZoomLevelUp");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetZoomLevelDown
+ * @event Core#RadioTriggerMapViewSetZoomLevelDown
  * @description Event that sets the zoom-level one counter down
  * @example Radio.trigger("MapView", "setZoomLevelDown");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewResetView
+ * @event Core#RadioTriggerMapViewResetView
  * @description Resets the map view
  * @example Radio.trigger("MapView", "resetVIew");
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetResolutions
+ * @event Core#RadioRequestMapViewGetResolutions
  * @returns {object[]} - Returns the resolutions of the map
  * @example Radio.trigger("MapView", "getResolutions");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewToggleBackground
+ * @event Core#RadioTriggerMapViewToggleBackground
  * @description todo
  */
 
@@ -1487,17 +1487,16 @@
  * @example Radio.request("ControlsView", "addRowBL", id);
  */
 
-
 /** -------------------- RAWLAYERLIST -------------------- */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
+ * @event Core#RadioRequestRawLayerListGetLayerWhere
  * @param {String} params Object of Params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
  */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @event Core#RadioRequestRawLayerListGetLayerAttributesWhere
  * @description Returns the object of the layer that matches the given params.
  * @param {Object} params Object of Params.
  * @returns {Object} - Layer attributes.
@@ -1505,7 +1504,7 @@
  */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+ * @event Core#RadioRequestRawLayerListGetLayerAttributesList
  * @description Returns the rawlayerList as json.
  * @returns {RawLayerList} - The rawLayerlist.
  * @example Radio.request("RawLayerList", "getLayerAttributesList");
