@@ -5,6 +5,11 @@ var replace = require("replace-in-file"),
 module.exports = function (destination) {
     replacements.push({
         "files": destination + "/index.html",
+        "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
+        "to": "./img/ajax-loader.gif"
+    },
+    {
+        "files": destination + "/index.html",
         "from": /\/*(\.+\/)*build/g,
         "to": "."
     },
@@ -18,7 +23,6 @@ module.exports = function (destination) {
         "from": "$Version",
         "to": sourceFile.version
     });
-
 
     replacements.forEach(function (replacement) {
         replace.sync({

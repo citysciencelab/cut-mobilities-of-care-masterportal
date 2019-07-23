@@ -2,7 +2,7 @@ const fs = require("fs-extra"),
     stableVersion = require("../../package.json").version.replace(/\./g, "_"),
     portalsForStableReplace = require("./buildPortalconfigsReplace"),
     execute = require("child-process-promise").exec,
-    replaceStrings = require("./replace"),
+    customPortalsForStableReplace = require("./customBuildPortalconfigsReplace"),
 
     conf = {
         sourceFolder: "portalconfigs",
@@ -61,13 +61,7 @@ function createPortalsRec (aPortalQueue) {
 
     if (confPortalConfigs.customModules[portalName] === undefined || confPortalConfigs.customModules[portalName].initFile === undefined) {
         copyPortal(portalName, aPortalQueue);
-        fs.copy("./img", conf.targetFolder + "/" + portalName + "/img").then(() => {
-            console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.targetFolder + "/" + portalName + "\".");
-            createPortalsRec(aPortalQueue);
-            console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
-        }).catch((error) => {
-             console.warn("EEROR: " + error);
-        });
+        createPortalsRec(aPortalQueue);
     }
     else {
         command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE " + confPortalConfigs.customModules[portalName].initFile;
@@ -77,20 +71,15 @@ function createPortalsRec (aPortalQueue) {
             console.warn("NOTE: Finished script execution");
             fs.copy(conf.tempPortalFolder, conf.targetFolder + "/" + portalName).then(() => {
                 fs.copy(conf.sourceFolder + "/" + portalName + "/", conf.targetFolder + "/" + portalName).then(() => {
-                    replaceStrings(conf.targetFolder + "/" + portalName);
                     if (Array.isArray(confPortalConfigs.customModules[portalName].ignoreList) && confPortalConfigs.customModules[portalName].ignoreList.length > 0) {
                         confPortalConfigs.customModules[portalName].ignoreList.forEach(fileOrFolder => {
                             fs.remove(conf.targetFolder + "/" + portalName + "/" + fileOrFolder);
                         });
                     }
 
-                    fs.copy("./img", conf.targetFolder + "/" + portalName + "/img").then(() => {
-                        console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.targetFolder + "/" + portalName + "\".");
-                        createPortalsRec(aPortalQueue);
-                        console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
-                    }).catch((error) => {
-                         console.warn("EEROR: " + error);
-                    });
+                    customPortalsForStableReplace(conf.targetFolder + "/" + portalName, conf.stableVersion);
+                    console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
+                    createPortalsRec(aPortalQueue);
                 });
             });
         }).catch((error) => {
@@ -150,7 +139,13 @@ function createMasterCodeFolder () {
                 fs.copy(conf.basicPortalFolder + "/" + folderToCopy, conf.masterCodeFolder + "/" + folderToCopy).then(() => {
                     if (index === foldersToCopy.length - 1) {
                         console.warn("NOTE: Finished creating MasterCode folder");
-                        createPortalsFolder();
+                        fs.copy("./img", conf.masterCodeFolder + "/img").then(() => {
+                            console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.masterCodeFolder + "\".");
+                            createPortalsFolder();
+                        }).catch((error) => {
+                             console.warn("EEROR: " + error);
+                        });
+
                     }
                 });
             }).catch((error) => {
