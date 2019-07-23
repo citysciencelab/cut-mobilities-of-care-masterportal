@@ -10,6 +10,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         baseLayer: {},
         newOvmView: ""
     },
+
     /**
      * @class OverviewMapModel
      * @memberof Controls.Overviewmap
@@ -25,18 +26,17 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      */
     initialize: function () {
         var map = Radio.request("Map", "getMap"),
-            maxResolution = _.first(Radio.request("MapView", "getResolutions")),
             mapView = map.getView(),
             layers = map.getLayers().getArray(),
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
             initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
             newOlView;
 
+            console.log(this.get("resolution"));
+            
         newOlView = new View({
             center: mapView.getCenter(),
-            projection: mapView.getProjection(),
-            resolution: mapView.getResolution(),
-            resolutions: [this.get("resolution") ? this.get("resolution") : maxResolution]
+            projection: mapView.getProjection()
         });
         this.setNewOvmView(newOlView);
         this.setBaseLayer(this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
