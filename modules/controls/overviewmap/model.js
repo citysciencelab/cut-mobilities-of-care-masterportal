@@ -10,19 +10,18 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         baseLayer: {},
         newOvmView: ""
     },
-
     /**
      * @class OverviewMapModel
      * @memberof Controls.Overviewmap
      * @extends Backbone.Model
      * @constructs
-     * @fires Core#RadioRequestMapGetMap
-     * @fires Core#RadioRequestMapViewGetResolutions
-     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
-     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
-     * @fires Core#RadioTriggerMapAddControl
-     * @fires Core#RadioRequestRawLayerListGetLayerWhere
-     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Map#RadioRequestMapGetMap
+     * @fires MapView#RadioRequestMapViewGetResolutions
+     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
+     * @fires Map#RadioTriggerMapAddControl
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
+     * @fires AlertingModel#RadioTriggerAlertAlert
      */
     initialize: function () {
         var map = Radio.request("Map", "getMap"),
@@ -32,8 +31,6 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
             newOlView;
 
-            console.log(this.get("resolution"));
-            
         newOlView = new View({
             center: mapView.getCenter(),
             projection: mapView.getProjection()
@@ -67,11 +64,11 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
 
     /**
-     * Derives the baselayer from the given layer collection
+     * @description Derives the baselayer from the given layer collection
      * @param {Layer[]} layers The Array of layers
      * @param {string} baselayer The id of the baselayer
-     * @fires Core#RadioRequestRawLayerListGetLayerWhere
-     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
+     * @fires AlertingModel#RadioTriggerAlertAlert
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
@@ -122,20 +119,12 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         return imageLayer;
     },
 
-    /**
-     * setter for baselayer
-     * @param {*} value todo
-     * @returns {void}
-     */
+    // setter for baselayer
     setBaseLayer: function (value) {
         this.set("baseLayer", value);
     },
 
-    /**
-     * setter for newOvmView
-     * @param {*} value todo
-     * @returns {void}
-     */
+    // setter for newOvmView
     setNewOvmView: function (value) {
         this.set("newOvmView", value);
     }
