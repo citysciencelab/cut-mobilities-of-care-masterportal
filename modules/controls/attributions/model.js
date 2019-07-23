@@ -114,7 +114,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      */
     updateAttributions: function updateAttributions () {
         const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredModelList = this.filterModelsWithLayerAttrinbution(modelList),
+            filteredModelList = this.filterModelsWithLayerAttribution(modelList),
             attributionsAvailable = filteredModelList.length > 0;
 
         this.removeAllLayerAttributions();
@@ -137,7 +137,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @param {Array} modelList list with all models
      * @returns {Array} models with configured layer attributions
      */
-    filterModelsWithLayerAttrinbution: function (modelList) {
+    filterModelsWithLayerAttribution: function (modelList) {
         const childModelsWithLayerAttributions = [],
             filteredModelList = modelList.filter(function (model) {
                 if (model.get("typ") === "GROUP") {
