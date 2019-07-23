@@ -324,7 +324,7 @@ const map = Backbone.Model.extend({
             scene.globe.depthTestAgainstTerrain = true;
             scene.highDynamicRange = false;
             scene.pickTranslucentDepth = true;
-
+            scene.camera.enableTerrainAdjustmentWhenLoading = true;
         }
         return scene;
     },
