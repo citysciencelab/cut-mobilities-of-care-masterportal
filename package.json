@@ -24,7 +24,7 @@
     "bootstrap-colorpicker": "2.x",
     "bootstrap-datepicker": "1.8.x",
     "bootstrap-select": "1.12.x",
-    "bootstrap-slider": "9.x",
+    "bootstrap-slider": "^10.x",
     "bootstrap-toggle": "2.x.x",
     "cesium": "1.50.0",
     "d3": "4.9.x",
