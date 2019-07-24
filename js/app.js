@@ -435,12 +435,13 @@ function loadApp () {
 
     // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
     /* eslint-disable no-undef */
-
     if (CUSTOMMODULE !== "") {
-        /* webpackMode: "eager" */
-        import(CUSTOMMODULE)
+        // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
+        import(/* webpackMode: "eager" */CUSTOMMODULE)
+        // ---
             .then(module => {
-                new module.Default();
+                /* eslint-disable new-cap */
+                new module.default();
             })
             .catch(error => {
                 console.error(error);
