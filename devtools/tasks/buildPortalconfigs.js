@@ -143,7 +143,7 @@ function createMasterCodeFolder () {
                             console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.masterCodeFolder + "\".");
                             createPortalsFolder();
                         }).catch((error) => {
-                             console.warn("EEROR: " + error);
+                            console.warn("EEROR: " + error);
                         });
 
                     }
