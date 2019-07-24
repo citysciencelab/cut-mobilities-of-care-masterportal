@@ -33,7 +33,7 @@ function removeFiles (answers) {
         source = "./" + answers.portalPath;
 
     if (portalName === "") {
-        console.warn("ERROR: Portal \"" + source + "\" not found.")
+        console.warn("ERROR: Portal \"" + source + "\" not found.");
         return;
     }
 
@@ -51,7 +51,7 @@ function removeFiles (answers) {
 module.exports = function buildWebpack (answers) {
     let command;
 
-     answers.portalPath = answers.portalPath.replace(/\/$/, "");
+    answers.portalPath = answers.portalPath.replace(/\/$/, "");
     if (!fs.existsSync(answers.portalPath)) {
         console.warn("ERROR: Module path \"" + answers.portalPath + "\" not found!");
         return;

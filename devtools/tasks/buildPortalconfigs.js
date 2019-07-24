@@ -145,7 +145,6 @@ function createMasterCodeFolder () {
                         }).catch((error) => {
                             console.warn("EEROR: " + error);
                         });
-
                     }
                 });
             }).catch((error) => {
