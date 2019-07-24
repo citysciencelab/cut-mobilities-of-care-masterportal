@@ -64,7 +64,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
         var attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        $("body").append(this.$el.html(this.template(attr)));
+        $(".masterportal-container").append(this.$el.html(this.template(attr)));
         $(".legend-win-content").css("max-height", $(".masterportal-container").height() * 0.7);
         this.$el.draggable({
             containment: "#map",
