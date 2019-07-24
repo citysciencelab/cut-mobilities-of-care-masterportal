@@ -44,7 +44,7 @@ module.exports = function buildWebpack (answers) {
     let command;
 
     if (answers.customModule !== "") {
-        command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
+        command = "webpack --config devtools/webpack.prod.js --env.CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
     }
     else {
         command = "webpack --config devtools/webpack.prod.js";
