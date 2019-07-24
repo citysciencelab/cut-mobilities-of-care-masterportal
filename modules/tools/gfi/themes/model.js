@@ -243,10 +243,16 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         if (gfiList.length > 0) {
             pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"));
             pgfi = this.getManipulateDate(pgfi);
-            if (this.get("gfiTheme") !== "table") {
+            if (
+                this.get("gfiTheme") !== "table"
+                &&
+                // GFI is not supposed to display multiple nodes, since there can only be one area at a spot.
+                // However, sometimes the server returns multiple areas for or one spot, which is not correct
+                // and would result in displaying multiple GFI nodes, which is suppressed right here.
+                this.get("gfiTheme") !== "flaecheninfo"
+            ) {
                 this.cloneCollModels(pgfi);
             }
-
             this.setGfiContent(pgfi);
         }
         this.setIsReady(true);
