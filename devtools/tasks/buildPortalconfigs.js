@@ -63,7 +63,7 @@ function createPortalsRec (aPortalQueue) {
         copyPortal(portalName, aPortalQueue);
     }
     else {
-        command = "webpack --config devtools/webpack.prod.js --env.CUSTOMMODULE " + confPortalConfigs.customModules[portalName].initFile;
+        command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE " + confPortalConfigs.customModules[portalName].initFile;
 
         console.warn("NOTICE: Executing script: " + command);
         execute(command).then(function () {
