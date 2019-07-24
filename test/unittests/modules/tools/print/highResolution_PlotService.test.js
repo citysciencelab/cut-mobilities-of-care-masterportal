@@ -493,14 +493,6 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
     });
 
-    describe("getPrintMapScale", function () {
-        it("should return the scaleList ", function () {
-            var scaleList = print2Model.get("scaleList");
-
-            expect(print2Model.getPrintMapScales()).to.deep.equal(scaleList);
-        });
-    });
-
     describe("getPrintMapSize", function () {
         it("should return the size of the map", function () {
             var size = [504, 640];

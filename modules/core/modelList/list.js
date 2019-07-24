@@ -13,6 +13,10 @@ import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
+/**
+ * @deprecated in 3.0.0
+ */
+import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/Mapfish3_PlotService";
 import HighResolutionPrint from "../../tools/print_/HighResolution_PlotService";
 import Measure from "../../tools/measure/model";
@@ -168,7 +172,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     return new GeoJSONLayer(attrs, options);
                 }
                 return new WFSLayer(attrs, options);
-
             }
             else if (attrs.typ === "StaticImage") {
                 return new StaticImageLayer(attrs, options);
@@ -200,7 +203,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                if (attrs.version === undefined || attrs.version === "HighResolutionPlotService") {
+                // @deprecated in version 3.0.0
+                // do not use the attribute "version"
+                if (attrs.version === undefined) {
+                    return new PrintV2(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                }
+                else if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);

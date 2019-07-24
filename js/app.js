@@ -53,6 +53,11 @@ import TreeFilterView from "../modules/treefilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featurelister/view";
 import PrintView from "../modules/tools/print_/view";
+// @deprecated in version 3.0.0
+// remove "version" in doc and config.
+// rename "print_" to "print"
+// only load PrintView
+import PrintView2 from "../modules/tools/print/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -208,7 +213,16 @@ function loadApp () {
                 break;
             }
             case "print": {
-                new PrintView({model: tool});
+                // @deprecated in version 3.0.0
+                // remove "version" in doc and config.
+                // rename "print_" to "print"
+                // only load correct view
+                if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
+                    new PrintView({model: tool});
+                }
+                else {
+                    new PrintView2({model: tool});
+                }
                 break;
             }
             case "parcelSearch": {
