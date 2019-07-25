@@ -1,5 +1,4 @@
 var replace = require("replace-in-file"),
-    sourceFile = require("../../package.json"),
     replacements = [];
 
 module.exports = function (destination) {

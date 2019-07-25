@@ -1,5 +1,4 @@
 const fs = require("fs-extra"),
-    stableVersion = require("../../package.json").version.replace(/\./g, "_"),
     replaceStrings = require("./replace"),
     prependVersionNumber = require("./prependVersionNumber"),
     execute = require("child-process-promise").exec;
