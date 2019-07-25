@@ -1,5 +1,4 @@
 import "jquery-ui/ui/widgets/resizable";
-import "jquery-ui/themes/base/resizable.css";
 
 const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     /**
