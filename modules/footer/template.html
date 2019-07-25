@@ -4,7 +4,7 @@
     <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
 <%}); %>
 
-<% if (showVersion) { %>
+<% if (!_.isUndefined(showVersion)) { %>
     <div class="hidden-xs pull-left"> Version: <%=masterPortalVersionNumber %></div>
     <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
 <% } %>
