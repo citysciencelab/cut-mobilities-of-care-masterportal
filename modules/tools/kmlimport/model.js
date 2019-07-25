@@ -1,6 +1,6 @@
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
-import {Circle, Fill, Style, Text} from "ol/style.js";
+import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {KML} from "ol/format.js";
 
 const ImportTool = Tool.extend({
@@ -27,32 +27,15 @@ const ImportTool = Tool.extend({
         });
     },
 
-    setText: function (value) {
-        this.set("text", value);
-    },
-
-    setFeatures: function (value) {
-        this.set("features", value);
-    },
-
-    setSource: function (value) {
-        this.set("source", value);
-    },
-    setLayer: function (value) {
-        this.set("layer", value);
-    },
-    setFormat: function (value) {
-        this.set("format", value);
-    },
-
     importKML: function () {
         this.getFeaturesFromKML();
         this.transformFeatures();
-        this.setStyle();
+        this.styleFeatures(this.get("features"));
         this.featuresToMap();
         this.emptyInput();
 
     },
+
     // nach import:kml input leeren und button-style zurücksetzen
     emptyInput: function () {
         $("#fakebutton").html("Datei auswählen (keine ausgewählt)");
@@ -62,6 +45,7 @@ const ImportTool = Tool.extend({
             $("#btn_import").prop("disabled", true);
         }
     },
+
     // features von KML (in "text" gespeichert) einlesen
     getFeaturesFromKML: function () {
         var features;
@@ -77,102 +61,100 @@ const ImportTool = Tool.extend({
         }
     },
 
-    // Workaround der Styles für Punkte und Text
-    setStyle: function () {
-        var features = this.get("features"),
-            kml = $.parseXML(this.get("text")),
-            pointStyleColors = [],
-            pointStyleTransparencies = [],
-            pointStyleRadiuses = [],
-            pointStyleCounter = 0,
-            textFonts = [];
+    styleFeatures: function (features) {
+        const styleObjects = this.parseStyleFromKML(features, this.get("text"));
 
-        // kml parsen und eigenen pointStyle auf Punkt-Features anwenden
-        $(kml).find("Point").each(function (i, point) {
-            var placemark = point.parentNode,
-                pointStyle,
-                color,
-                transparency,
-                radius,
-                textFont;
+        features.forEach((feature, index) => {
+            const drawGeometryType = feature.getGeometry().getType(),
+                fontText = feature.get("name");
+            let style,
+                colorAsArray;
 
-            if ($(placemark).find("name")[0]) {
-                textFont = $(placemark).find("font")[0];
-                textFont = this.parseStringBetween(textFont, ">", "<");
-                textFonts.push(textFont);
-                pointStyleColors.push(undefined);
-                pointStyleTransparencies.push(undefined);
-                pointStyleRadiuses.push(undefined);
+            if (drawGeometryType === "Point" && fontText !== undefined) {
+                colorAsArray = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
+                style = this.getTextStyle(fontText, styleObjects[index], colorAsArray);
             }
-            // kein Text
             else {
-                pointStyle = $(placemark).find("pointstyle")[0];
-                color = $(pointStyle).find("color")[0];
-                transparency = $(pointStyle).find("transparency")[0];
-                radius = $(pointStyle).find("radius")[0];
-
-                // rgb in array schreiben
-                color = this.parseStringBetween(color, ">", "<");
-                pointStyleColors.push(color);
-                // transparenz in array schreiben
-                transparency = this.parseStringBetween(transparency, ">", "<");
-                pointStyleTransparencies.push(transparency);
-                // punktradius in array schreiben
-                radius = this.parseStringBetween(radius, ">", "<");
-                radius = parseInt(radius, 10);
-                pointStyleRadiuses.push(radius);
-                textFonts.push(undefined);
+                colorAsArray = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
+                style = this.createDrawStyle(drawGeometryType, styleObjects[index], index, colorAsArray);
             }
-        }.bind(this));
-
-        _.each(features, function (feature) {
-            var type = feature.getGeometry().getType(),
-                featureStyleFunction = feature.getStyleFunction(),
-                styles = featureStyleFunction(feature),
-                style = styles[0];
-
-            // wenn Punkt-Geometrie
-            if (type === "Point") {
-                // wenn Text
-                if (feature.get("name") !== undefined) {
-                    feature.setStyle(this.getTextStyle(feature.get("name"), style, textFonts[pointStyleCounter]));
-                }
-                // wenn Punkt
-                else {
-                    style = new Style({
-                        image: new Circle({
-                            radius: pointStyleRadiuses[pointStyleCounter],
-                            fill: new Fill({
-                                color: "rgba(" + pointStyleColors[pointStyleCounter] + ", " + pointStyleTransparencies[pointStyleCounter] + ")"
-                            })
-                        })
-                    });
-
-                    feature.setStyle(style);
-                }
-                pointStyleCounter++;
-            }
-        }, this);
-
-
-    },
-    parseStringBetween: function (string, startChar, endChar) {
-        var parsedString = "";
-
-        parsedString = new XMLSerializer().serializeToString(string);
-        parsedString = parsedString.split(startChar)[1].split(endChar)[0];
-        return parsedString;
+            feature.setStyle(style);
+        });
     },
 
-    getTextStyle: function (name, style, font) {
+    parseStyleFromKML: function (features, kmlText) {
+        const kml = $.parseXML(kmlText),
+            placemarks = $("Placemark", kml),
+            styleObjects = [];
+
+        Array.from(placemarks).forEach(node => {
+            const style = $("Style", node),
+                lineStyle = $("LineStyle", style),
+                // polyStyle = $("PolyStyle", style),
+                pointStyle = $("pointstyle", style),
+                labelStyle = $("LabelStyle", style),
+                styleObject = {
+                    name: $(node).find("name").text(),
+                    style: style,
+                    lineStyle: {
+                        color: $(lineStyle).find("color").text(),
+                        width: $(lineStyle).find("width").text()
+                    },
+                    pointStyle: {
+                        radius: $(pointStyle).find("radius").text()
+                    },
+                    labelStyle: {
+                        color: $(labelStyle).find("color").text(),
+                        font: $(labelStyle).find("font").text()
+                    }
+                };
+
+            styleObjects.push(styleObject);
+        });
+
+        return styleObjects;
+    },
+
+    convertHexColorToRgbArray: function (hexColor) {
+        let colorRgbArray = [];
+
+        colorRgbArray = hexColor.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
+        colorRgbArray = colorRgbArray.splice(1, 4);
+        colorRgbArray = colorRgbArray.map(hexValue => parseInt(hexValue, 16));
+        colorRgbArray[0] = Math.round(colorRgbArray[0] / 255 * 100) / 100;
+
+        return colorRgbArray.reverse();
+    },
+
+    getTextStyle: function (fontText, styleObject, color) {
         return new Style({
             text: new Text({
-                text: name,
+                text: fontText,
                 textAlign: "left",
-                font: font,
-                fill: style.getText().getFill(),
-                scale: style.getText().getScale()
+                font: styleObject.labelStyle.font,
+                fill: new Fill({
+                    color: color
+                })
             })
+        });
+    },
+
+    createDrawStyle: function (drawGeometryType, styleObject, zIndex, colorAsArray) {
+        return new Style({
+            fill: new Fill({
+                color: colorAsArray
+            }),
+            stroke: new Stroke({
+                color: colorAsArray,
+                width: styleObject.lineStyle.width
+            }),
+            image: new Circle({
+                radius: drawGeometryType === "Point" ? styleObject.pointStyle.radius : 6,
+                fill: new Fill({
+                    color: colorAsArray
+                })
+            }),
+            zIndex: zIndex
         });
     },
 
@@ -189,13 +171,12 @@ const ImportTool = Tool.extend({
     },
 
     getProjections: function (sourceProj, destProj) {
-        //            proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
-
         return {
             sourceProj: proj4(sourceProj),
             destProj: proj4(destProj)
         };
     },
+
     transformCoords: function (geometry, projections) {
         var transCoord = [];
 
@@ -218,6 +199,7 @@ const ImportTool = Tool.extend({
         }
         return transCoord;
     },
+
     transformPolygon: function (coords, projections, context) {
         var transCoord = [];
 
@@ -229,6 +211,7 @@ const ImportTool = Tool.extend({
         }, this);
         return [transCoord];
     },
+
     transformLine: function (coords, projections, context) {
         var transCoord = [];
 
@@ -238,18 +221,39 @@ const ImportTool = Tool.extend({
         }, this);
         return transCoord;
     },
+
     transformPoint: function (point, projections) {
         point.pop();
         return proj4(projections.sourceProj, projections.destProj, point);
     },
+
     // Features in die Karte laden
     featuresToMap: function () {
         var features = this.get("features"),
             source = this.get("source");
 
         source.addFeatures(features);
-    }
+    },
 
+    setText: function (value) {
+        this.set("text", value);
+    },
+
+    setFeatures: function (value) {
+        this.set("features", value);
+    },
+
+    setSource: function (value) {
+        this.set("source", value);
+    },
+
+    setLayer: function (value) {
+        this.set("layer", value);
+    },
+
+    setFormat: function (value) {
+        this.set("format", value);
+    }
 });
 
 export default ImportTool;
