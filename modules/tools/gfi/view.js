@@ -89,6 +89,9 @@ const GFIView = Backbone.View.extend({
      */
     hideGFI: function () {
         this.model.setIsVisible(false);
+        this.$el.css("width", "auto");
+        this.$el.css("height", "auto");
+        this.$el.resizable("destroy");
     }
 });
 
