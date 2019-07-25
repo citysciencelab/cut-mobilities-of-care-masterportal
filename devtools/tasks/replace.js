@@ -17,11 +17,6 @@ module.exports = function (destination) {
         "files": destination + "/css/style.css",
         "from": /css\/woffs/g,
         "to": "./woffs"
-    },
-    {
-        "files": destination + "/config.js",
-        "from": "$Version",
-        "to": sourceFile.version
     });
 
     replacements.forEach(function (replacement) {

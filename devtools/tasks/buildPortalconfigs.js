@@ -12,7 +12,7 @@ const fs = require("fs-extra"),
 
         // folder where custom modules creation script saves its result
         tempPortalFolder: "dist/build",
-        basicPortalFolder: "dist/Basic"
+        basicPortalFolder: "dist/basic"
     },
     confPortalConfigs = require("../../" + conf.sourceFolder + "/conf-buildPortalconfigs.js");
 
@@ -138,9 +138,9 @@ function createMasterCodeFolder () {
                 console.warn("NOTE: Created folder " + conf.masterCodeFolder + "/" + folderToCopy);
                 fs.copy(conf.basicPortalFolder + "/" + folderToCopy, conf.masterCodeFolder + "/" + folderToCopy).then(() => {
                     if (index === foldersToCopy.length - 1) {
-                        console.warn("NOTE: Finished creating MasterCode folder");
                         fs.copy("./img", conf.masterCodeFolder + "/img").then(() => {
                             console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.masterCodeFolder + "\".");
+                            console.warn("NOTE: Finished creating MasterCode folder");
                             createPortalsFolder();
                         }).catch((error) => {
                             console.warn("EEROR: " + error);

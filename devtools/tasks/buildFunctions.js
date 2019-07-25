@@ -1,5 +1,7 @@
 const fs = require("fs-extra"),
+    stableVersion = require("../../package.json").version.replace(/\./g, "_"),
     replaceStrings = require("./replace"),
+    prependVersionNumber = require("./prependVersionNumber"),
     execute = require("child-process-promise").exec;
 
 /**
@@ -69,9 +71,12 @@ module.exports = function buildWebpack (answers) {
     execute(command)
         .then(function (result) {
             console.warn(result.stdout);
+            prependVersionNumber("./dist/build/js/masterportal.js");
             removeFiles(answers);
         })
         .catch(function (err) {
             console.error("ERROR: ", err);
         });
 };
+
+
