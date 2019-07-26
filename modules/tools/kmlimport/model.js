@@ -98,16 +98,16 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         features.forEach((feature, index) => {
             const drawGeometryType = feature.getGeometry().getType(),
                 fontText = feature.get("name");
-            let style,
-                colorAsArray;
+            let style;
 
             if (drawGeometryType === "Point" && fontText !== undefined) {
-                colorAsArray = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
-                style = this.getTextStyle(fontText, styleObjects[index], colorAsArray, index);
+                styleObjects[index].labelStyle.color = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
+                style = this.getTextStyle(fontText, styleObjects[index], index);
             }
             else {
-                colorAsArray = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
-                style = this.createDrawStyle(drawGeometryType, styleObjects[index], index, colorAsArray);
+                styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
+                styleObjects[index].polyStyle.color = this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
+                style = this.createDrawStyle(drawGeometryType, styleObjects[index], index);
             }
             feature.setStyle(style);
         });
@@ -127,7 +127,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         Array.from(placemarks).forEach(node => {
             const style = $("Style", node),
                 lineStyle = $("LineStyle", style),
-                // polyStyle = $("PolyStyle", style),
+                polyStyle = $("PolyStyle", style),
                 pointStyle = $("pointstyle", style),
                 labelStyle = $("LabelStyle", style),
                 styleObject = {
@@ -136,6 +136,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                     lineStyle: {
                         color: $(lineStyle).find("color").text(),
                         width: $(lineStyle).find("width").text()
+                    },
+                    polyStyle: {
+                        color: $(polyStyle).find("color").text()
                     },
                     pointStyle: {
                         radius: $(pointStyle).find("radius").text()
@@ -172,18 +175,17 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * Creates a style for text.
      * @param {String} fontText font for the text
      * @param {Object} styleObject parsed Styles
-     * @param {Number[]} color color for the text
      * @param {number} zIndex position of the layer on the z-axis
      * @returns {ol/style} style for text
      */
-    getTextStyle: function (fontText, styleObject, color, zIndex) {
+    getTextStyle: function (fontText, styleObject, zIndex) {
         return new Style({
             text: new Text({
                 text: fontText,
                 textAlign: "left",
                 font: styleObject.labelStyle.font,
                 fill: new Fill({
-                    color: color
+                    color: styleObject.labelStyle.color
                 })
             }),
             zIndex: zIndex
@@ -195,22 +197,21 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @param {String} drawGeometryType geometrie of feature
      * @param {Object} styleObject parsed Styles
      * @param {Number} zIndex position of the layer on the z-axis
-     * @param {String[]} colorAsArray color for the feature
      * @returns {ol/style} style for a feature with geometry
      */
-    createDrawStyle: function (drawGeometryType, styleObject, zIndex, colorAsArray) {
+    createDrawStyle: function (drawGeometryType, styleObject, zIndex) {
         return new Style({
             fill: new Fill({
-                color: colorAsArray
+                color: styleObject.polyStyle.color
             }),
             stroke: new Stroke({
-                color: colorAsArray,
+                color: styleObject.lineStyle.color,
                 width: styleObject.lineStyle.width
             }),
             image: new Circle({
                 radius: drawGeometryType === "Point" ? styleObject.pointStyle.radius : 6,
                 fill: new Fill({
-                    color: colorAsArray
+                    color: styleObject.polyStyle.color
                 })
             }),
             zIndex: zIndex
