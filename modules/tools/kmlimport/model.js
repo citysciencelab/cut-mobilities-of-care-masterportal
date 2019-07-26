@@ -135,13 +135,13 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                     style: style,
                     lineStyle: {
                         color: $(lineStyle).find("color").text(),
-                        width: $(lineStyle).find("width").text()
+                        width: parseInt($(lineStyle).find("width").text(), 10)
                     },
                     polyStyle: {
                         color: $(polyStyle).find("color").text()
                     },
                     pointStyle: {
-                        radius: $(pointStyle).find("radius").text()
+                        radius: parseInt($(pointStyle).find("radius").text(), 10)
                     },
                     labelStyle: {
                         color: $(labelStyle).find("color").text(),
