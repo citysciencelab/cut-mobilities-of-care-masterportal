@@ -138,7 +138,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {Array} models with configured layer attributions
      */
     filterModelsWithLayerAttribution: function (modelList) {
-        const childModelsWithLayerAttributions = [],
+        let childModelsWithLayerAttributions = [],
             filteredModelList = modelList.filter(function (model) {
                 if (model.get("typ") === "GROUP") {
                     model.get("layerSource").forEach(childLayerSource => {
