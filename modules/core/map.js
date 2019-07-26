@@ -20,7 +20,7 @@ const map = Backbone.Model.extend({
          * defaultTime for 3D rendering even with disabled shadows
          * @type {Cesium.JulianDate}
          */
-        shadowTime: Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate())
+        shadowTime: null
     },
 
     initialize: function () {
@@ -89,6 +89,9 @@ const map = Backbone.Model.extend({
             controls: [],
             interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
         }));
+        if (window.Cesium) {
+            this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
+        }
         if (Config.obliqueMap) {
             this.set("obliqueMap", new ObliqueMap({}));
         }
