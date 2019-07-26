@@ -1,9 +1,13 @@
 var replace = require("replace-in-file"),
-    sourceFile = require("../../package.json"),
     replacements = [];
 
 module.exports = function (destination) {
     replacements.push({
+        "files": destination + "/index.html",
+        "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
+        "to": "./img/ajax-loader.gif"
+    },
+    {
         "files": destination + "/index.html",
         "from": /\/*(\.+\/)*build/g,
         "to": "."
@@ -14,11 +18,20 @@ module.exports = function (destination) {
         "to": "./woffs"
     },
     {
-        "files": destination + "/config.js",
-        "from": "$Version",
-        "to": sourceFile.version
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?"\/img\//g,
+        "to": "url(\"../img/"
+    },
+    {
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?'\/img\//g,
+        "to": "url('../img/"
+    },
+    {
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?\/img\//g,
+        "to": "url(../img/"
     });
-
 
     replacements.forEach(function (replacement) {
         replace.sync({

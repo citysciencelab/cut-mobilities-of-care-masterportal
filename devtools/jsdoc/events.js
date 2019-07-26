@@ -1279,6 +1279,13 @@
  */
 
 /**
+ * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
+ * @description returns the masterportal version number
+ * @returns {String} - masterportal version number
+ * @example Radio.request("Util", "getMasterPortalVersionNumber");
+ */
+
+/**
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");

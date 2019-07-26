@@ -2,7 +2,7 @@ const fs = require("fs-extra"),
     stableVersion = require("../../package.json").version.replace(/\./g, "_"),
     portalsForStableReplace = require("./buildPortalconfigsReplace"),
     execute = require("child-process-promise").exec,
-    replaceStrings = require("./replace"),
+    customPortalsForStableReplace = require("./customBuildPortalconfigsReplace"),
 
     conf = {
         sourceFolder: "portalconfigs",
@@ -12,7 +12,7 @@ const fs = require("fs-extra"),
 
         // folder where custom modules creation script saves its result
         tempPortalFolder: "dist/build",
-        basicPortalFolder: "dist/Basic"
+        basicPortalFolder: "dist/basic"
     },
     confPortalConfigs = require("../../" + conf.sourceFolder + "/conf-buildPortalconfigs.js");
 
@@ -32,7 +32,7 @@ function copyPortal (portalName, aPortalQueue) {
             fs.copy(conf.sourceFolder + "/" + portalName + "/" + sourceFile, conf.targetFolder + "/" + portalName + "/" + sourceFile).then(() => {
                 portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersion);
                 if (index === fileNames.length - 1) {
-                    console.warn("NOTICE: Portal finished building: \"" + portalName + "\"");
+                    console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
                     // eslint-disable-next-line no-use-before-define
                     createPortalsRec(aPortalQueue);
                 }
@@ -61,23 +61,24 @@ function createPortalsRec (aPortalQueue) {
 
     if (confPortalConfigs.customModules[portalName] === undefined || confPortalConfigs.customModules[portalName].initFile === undefined) {
         copyPortal(portalName, aPortalQueue);
+        createPortalsRec(aPortalQueue);
     }
     else {
         command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE " + confPortalConfigs.customModules[portalName].initFile;
 
-        console.warn("NOTICE: Executing script: " + command);
+        console.warn("NOTE: Executing script: " + command);
         execute(command).then(function () {
-            console.warn("NOTICE: Finished script execution");
+            console.warn("NOTE: Finished script execution");
             fs.copy(conf.tempPortalFolder, conf.targetFolder + "/" + portalName).then(() => {
                 fs.copy(conf.sourceFolder + "/" + portalName + "/", conf.targetFolder + "/" + portalName).then(() => {
-                    replaceStrings(conf.targetFolder + "/" + portalName);
                     if (Array.isArray(confPortalConfigs.customModules[portalName].ignoreList) && confPortalConfigs.customModules[portalName].ignoreList.length > 0) {
                         confPortalConfigs.customModules[portalName].ignoreList.forEach(fileOrFolder => {
                             fs.remove(conf.targetFolder + "/" + portalName + "/" + fileOrFolder);
                         });
                     }
 
-                    console.warn("NOTICE: Portal finished building: \"" + portalName + "\"");
+                    customPortalsForStableReplace(conf.targetFolder + "/" + portalName, conf.stableVersion);
+                    console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
                     createPortalsRec(aPortalQueue);
                 });
             });
@@ -100,16 +101,16 @@ function createPortalsFolder () {
         }
         portalNames.forEach((portalName) => {
             if (confPortalConfigs.modulesBlackList.indexOf(portalName) !== -1) {
-                console.warn("NOTICE: Ignored portal \"" + portalName + "\" (blacklisted)");
+                console.warn("NOTE: Ignored portal \"" + portalName + "\" (blacklisted)");
                 return;
             }
             if (portalName === ".git" || portalName.match(/^\./) !== null) {
-                console.warn("NOTICE: Ignored hidden folder " + conf.sourceFolder + "/" + portalName);
+                console.warn("NOTE: Ignored hidden folder " + conf.sourceFolder + "/" + portalName);
                 return;
             }
             // eslint-disable-next-line no-sync
             if (fs.statSync(conf.sourceFolder + "/" + portalName).isDirectory() === false) {
-                console.warn("NOTICE: Ignored file " + conf.sourceFolder + "/" + portalName);
+                console.warn("NOTE: Ignored file " + conf.sourceFolder + "/" + portalName);
                 return;
             }
             fs.mkdirs(conf.targetFolder + "/" + portalName).catch((mkdirError) => {
@@ -130,15 +131,20 @@ function createPortalsFolder () {
 function createMasterCodeFolder () {
     var foldersToCopy = ["js", "css"];
 
-    console.warn("NOTICE: Started creating MasterCode folder");
+    console.warn("NOTE: Started creating MasterCode folder");
     fs.mkdirs(conf.masterCodeFolder).then(() => {
         foldersToCopy.forEach((folderToCopy, index) => {
             fs.mkdirs(conf.masterCodeFolder + "/" + folderToCopy).then(() => {
-                console.warn("NOTICE: Created folder " + conf.masterCodeFolder + "/" + folderToCopy);
+                console.warn("NOTE: Created folder " + conf.masterCodeFolder + "/" + folderToCopy);
                 fs.copy(conf.basicPortalFolder + "/" + folderToCopy, conf.masterCodeFolder + "/" + folderToCopy).then(() => {
                     if (index === foldersToCopy.length - 1) {
-                        console.warn("NOTICE: Finished creating MasterCode folder");
-                        createPortalsFolder();
+                        fs.copy("./img", conf.masterCodeFolder + "/img").then(() => {
+                            console.warn("NOTE: Successfully copied \"./img\" to \"" + conf.masterCodeFolder + "\".");
+                            console.warn("NOTE: Finished creating MasterCode folder");
+                            createPortalsFolder();
+                        }).catch((error) => {
+                            console.warn("EEROR: " + error);
+                        });
                     }
                 });
             }).catch((error) => {
@@ -156,7 +162,7 @@ function createMasterCodeFolder () {
  */
 function deleteStablePortalsFolder () {
     fs.remove(conf.targetFolder).then(() => {
-        console.warn("NOTICE: Deleted folder " + process.cwd() + "/" + conf.targetFolder);
+        console.warn("NOTE: Deleted folder " + process.cwd() + "/" + conf.targetFolder);
         createMasterCodeFolder();
     });
 }
