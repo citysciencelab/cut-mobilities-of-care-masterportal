@@ -397,7 +397,7 @@
       "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "baseLayer": "452"
+        "layerId": "452"
       },
       "mousePosition": true,
       "button3d": true,

@@ -192,96 +192,96 @@
 /** -------------------- PARSER -------------------- */
 
 /**
- * @event Parser#RadioTriggerRemoveItem
+ * @event Core.ConfigLoader#RadioTriggerRemoveItem
  * @example Radio.trigger("Parser", "removeItem")
  * @description Event that removes an item from the layertree
  */
 
 /**
- * @event Parser#RadioRequestParserGetItemsByAttributes
+ * @event Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item[]} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemsByAttributes", attributes)
  */
 /**
- * @event Parser#RadioRequestParserGetItemByAttributes
+ * @event Core.ConfigLoader#RadioRequestParserGetItemByAttributes
  * @param {object} attributes The Object that contains the attributes
  * @returns {Item[]} - Layer/Tool/Folder/control
  * @example Radio.request("Parser", "getItemByAttributes", attributes)
  */
 /**
- * @event Parser#RadioRequestParserGetTreeType
+ * @event Core.ConfigLoader#RadioRequestParserGetTreeType
  * @returns {*} todo
  * @example Radio.request("Parser", "getTreeType")
  */
 /**
- * @event Parser#RadioRequestParserGetCategory
+ * @event Core.ConfigLoader#RadioRequestParserGetCategory
  * @returns {*} todo
  * @example Radio.request("Parser", "getCategory")
  */
 /**
- * @event Parser#RadioRequestParserGetCategories
+ * @event Core.ConfigLoader#RadioRequestParserGetCategories
  * @returns {*} todo
  * @example Radio.request("Parser", "getCategories")
  */
 
 /**
- * @event Parser#RadioRequestParserSetCategory
+ * @event Core.ConfigLoader#RadioRequestParserSetCategory
  * @returns {*} todo
  * @example Radio.request("Parser", "setCategory")
  */
 
 /**
- * @event Parser#RadioRequestParserGetPortalConfig
+ * @event Core.ConfigLoader#RadioRequestParserGetPortalConfig
  * @returns {*} todo
  * @example Radio.request("Parser", "getPortalConfig")
  */
 
 /**
- * @event Parser#RadioRequestParserGetItemsByMetaID
+ * @event Core.ConfigLoader#RadioRequestParserGetItemsByMetaID
  * @param {*} metaID - todo
  * @returns {*} todo
  * @example Radio.request("Parser", "getItemsByMetaID", metaID)
  */
 
 /**
- * @event Parser#RadioRequestParserGetSnippetInfos
+ * @event Core.ConfigLoader#RadioRequestParserGetSnippetInfos
  * @returns {*} todo
  * @example Radio.request("Parser", "getSnippetInfos")
  */
 
 /**
- * @event Parser#RadioRequestParserGetInitVisibBaselayer
+ * @event Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
  * @returns {*} todo
  * @example Radio.request("Parser", "getInitVisibBaselayer")
  */
 
 /**
- * @event Parser#RadioTriggerParsersetCategory
+ * @event Core.ConfigLoader#RadioTriggerParsersetCategory
  * @param {*} value -todo
  * @example Radio.trigger("Parser", "setCategory", value)
  */
 
 /**
- * @event Parser#RadioTriggerParserAddItem
+ * @event Core.ConfigLoader#RadioTriggerParserAddItem
  * @param {Object} obj - Item
  * @example Radio.trigger("Parser", "addItem", obj)
  */
 /**
- * @event Parser#RadioTriggerParserAddItemAtTop
+ * @event Core.ConfigLoader#RadioTriggerParserAddItemAtTop
  * @param {Object} obj - Item
  * @example Radio.trigger("Parser", "addItemAtTop", obj)
  */
 
 /**
- * @event Parser#RadioTriggerParserAddItems
+ * @event Core.ConfigLoader#RadioTriggerParserAddItems
  * @param {array} objs Array of related objects, e.g. categories in Themenbaum
  * @param {object} attr Layerobject
  * @example Radio.trigger("Parser", "addItems", objs, attr)
  */
 
 /**
- * @event Parser#RadioTriggerParserAddFolder
+ * @event Core.ConfigLoader#RadioTriggerParserAddFolder
  * @param {*} name - todo
  * @param {*} id - todo
  * @param {*} parentId - todo
@@ -291,7 +291,7 @@
  */
 
 /**
- * @event Parser#RadioTriggerParserAddLayer
+ * @event Core.ConfigLoader#RadioTriggerParserAddLayer
  * @param {*} name - todo
  * @param {*} id - todo
  * @param {*} parentId - todo
@@ -304,27 +304,29 @@
  */
 
 /**
- * @event Parser#RadioTriggerParserAddGDILayer
+ * @event Core.ConfigLoader#RadioTriggerParserAddGDILayer
  * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
  * @example Radio.trigger("Parser", "addGDILayer", values)
  */
+
 /**
- * @event Parser#RadioTriggerParserAddGeoJSONLayer
- * @param {*} name - todo
- * @param {*} id - todo
- * @param {*} geojson - todo
+ * @event Core.ConfigLoader#RadioTriggerParserAddGeoJSONLayer
+ * @param {String} layerName - The name of the layer (can be selected alphanumerically)
+ * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
+ * @param {String} geojson - A valid GeoJson. If no crs is defined in the Json, EPSG:4326 is assumed..
  * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
  */
 
 /**
- * @event Parser#RadioTriggerParserRemoveItem
+ * @event Core.ConfigLoader#RadioTriggerParserRemoveItem
  * @description Event that removes an item from the layertree
  * @param {String} id - id from item that be removed
  * @example Radio.trigger("Parser", "removeItem", id)
  */
 
 /**
- * @event Parser#ChangeCategory
+ * @event Core.ConfigLoader#ChangeCategory
+ * @description todo
  */
 
 
@@ -586,76 +588,76 @@
 /** -------------------- MAP VIEW -------------------- */
 
 /**
- * @event MapView#RadioTriggerMapViewChangedOptions
+ * @event Core#RadioTriggerMapViewChangedOptions
  * @param {Object} options Options of mapview status
  * @description Event that gets fired when the map view options have changed. The options are scale, center, zoomLevel
  * @example Radio.trigger("MapView", "changedOptions", options)
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetOptions
+ * @event Core#RadioRequestMapViewGetOptions
  * @description Event that gets the map view options. The options are scale, center, zoomLevel
  * @example Radio.Request("MapView", "getOptions")
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetCenter
+ * @event Core#RadioRequestMapViewGetCenter
  * @description Event that gets the center of the map view
  * @example Radio.Request("MapView", "getCenter")
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetResoByScale
+ * @event Core#RadioRequestMapViewGetResoByScale
  * @param {String} scale Options of mapview status
  * @description Event that gets the resolution depending on the map scale
  * @example Radio.trigger("MapView", "getResoByScale", scale)
  */
 
 /**
- * @event MapView#RadioRequestGetProjection
+ * @event Core#RadioRequestGetProjection
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetScale
+ * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetCenter
+ * @event Core#RadioTriggerMapViewSetCenter
  * @description Event that sets the center of the map view
  * @example Radio.trigger("MapView", "setCenter", model)
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetZoomLevelUp
+ * @event Core#RadioTriggerMapViewSetZoomLevelUp
  * @description Event that sets the zoom-level one counter up
  * @example Radio.trigger("MapView", "setZoomLevelUp");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewSetZoomLevelDown
+ * @event Core#RadioTriggerMapViewSetZoomLevelDown
  * @description Event that sets the zoom-level one counter down
  * @example Radio.trigger("MapView", "setZoomLevelDown");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewResetView
+ * @event Core#RadioTriggerMapViewResetView
  * @description Resets the map view
  * @example Radio.trigger("MapView", "resetVIew");
  */
 
 /**
- * @event MapView#RadioRequestMapViewGetResolutions
+ * @event Core#RadioRequestMapViewGetResolutions
  * @returns {object[]} - Returns the resolutions of the map
  * @example Radio.trigger("MapView", "getResolutions");
  */
 
 /**
- * @event MapView#RadioTriggerMapViewToggleBackground
+ * @event Core#RadioTriggerMapViewToggleBackground
  * @description todo
  */
 
@@ -717,254 +719,243 @@
 /** -------------------- MODEL LIST -------------------- */
 
 /**
- * @event Core#RadioRequestModelListGetCollection
+ * @event Core.ModelList#RadioRequestModelListGetCollection
  * @description Returns itself
  * @example Radio.request("ModelList", "getCollection")
  */
 
 /**
- * @event Core#RadioRequestModelListGetModelsByAttributes
+ * @event Core.ModelList#RadioRequestModelListGetModelsByAttributes
  * @param {Object} attributes Attributes used to find models to be returned
  * @description Returns the models that match the given attributes
  * @example Radio.request("ModelList", "getModelsByAttributes", attributes)
  */
 
 /**
- * @event Core#RadioRequestModelListGetModelByAttributes
+ * @event Core.ModelList#RadioRequestModelListGetModelByAttributes
  * @param {Object} attributes Attributes used to find model to be returned
  * @description Returns the first model that matches the given attributes. If model cannot be found, the function look for a group layer model containing the attributes
  * @example Radio.request("ModelList", "getModelByAttributes", attributes)
  */
 
 /**
- * @event Core#RadioTriggerModelListSetModelAttributesById
+ * @event Core.ModelList#RadioTriggerModelListSetModelAttributesById
  * @description See {@link List#setModelAttributesById}
  * @example Radio.trigger("ModelList", "setModelAttributesById", id, attrs)
  */
 
 /**
- * @event Core#RadioTriggerModelListShowAllFeatures
+ * @event Core.ModelList#RadioTriggerModelListShowAllFeatures
  * @description See {@link List#showAllFeatures}
  * @example Radio.trigger("ModelList", "showAllFeatures", id)
  */
 
 /**
- * @event Core#RadioTriggerModelListHideAllFeatures
+ * @event Core.ModelList#RadioTriggerModelListHideAllFeatures
  * @description See {@link List#hideAllFeatures}
  * @example Radio.trigger("ModelList", "hideAllFeatures", id)
  */
 
 /**
- * @event Core#RadioTriggerModelListShowFeaturesById
+ * @event Core.ModelList#RadioTriggerModelListShowFeaturesById
  * @description See {@link List#showFeaturesById}
  * @example Radio.trigger("ModelList", "showFeaturesById", id, featureIds)
  */
 
 /**
- * @event Core#RadioTriggerModelListRemoveModelsByParentId
+ * @event Core.ModelList#RadioTriggerModelListRemoveModelsByParentId
  * @description See {@link List#removeModelsByParentId}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", parentId)
  */
 
 /**
- * @event Core#RadioTriggerModelListRemoveModelsById
+ * @event Core.ModelList#RadioTriggerModelListRemoveModelsById
  * @description See {@link List#removeModelsById}
  * @example Radio.trigger("ModelList", "removeModelsByParentId", id)
  */
 
 /**
- * @event Core#RadioTriggerModelListAddInitialyNeededModels
+ * @event Core.ModelList#RadioTriggerModelListAddInitialyNeededModels
  * @description See {@link List#addInitialyNeededModels}
  * @example Radio.trigger("ModelList", "addInitialyNeededModels")
  */
 
 /**
- * @event Core#RadioTriggerModelListAddModelsByAttributes
+ * @event Core.ModelList#RadioTriggerModelListAddModelsByAttributes
  * @description See {@link List#addModelsByAttributes}
  * @example Radio.trigger("ModelList", "addModelsByAttributes", attrs)
  */
 
 /**
- * @event Core#RadioTriggerModelListAddModelByAttributes
+ * @event Core.ModelList#RadioTriggerModelListAddModelByAttributes
  * @description See {@link List#getModelsByAttributes}
  * @example Radio.trigger("ModelList", "getModelsByAttributes", attrs)
  */
 
 /**
- * @event Core#RadioTriggerModelListGetModelsByAttributes
+ * @event Core.ModelList#RadioTriggerModelListGetModelsByAttributes
  * @description See {@link List#getModelsByAttributes}
  * @example Radio.trigger("ModelList", "getModelsByAttributes", attrs)
  */
 
 /**
- * @event Core#RadioTriggerModelListSetIsSelectedOnChildLayers
+ * @event Core.ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
  * @description See {@link List#setIsSelectedOnChildLayers}
  * @example Radio.trigger("ModelList", "setIsSelectedOnChildLayers", model)
  */
 
 /**
- * @event Core#RadioTriggerModelListSetIsSelectedOnParent
+ * @event Core.ModelList#RadioTriggerModelListSetIsSelectedOnParent
  * @description See {@link List#setIsSelectedOnParent}
  * @example Radio.trigger("ModelList", "setIsSelectedOnParent", model)
  */
 
 /**
- * @event Core#RadioTriggerModelListShowModelInTree
+ * @event Core.ModelList#RadioTriggerModelListShowModelInTree
  * @description See {@link List#showModelInTree}
  * @example Radio.trigger("ModelList", "showModelInTree", modelId)
  */
 
 /**
- * @event Core#RadioTriggerModelListCloseAllExpandedFolder
+ * @event Core.ModelList#RadioTriggerModelListCloseAllExpandedFolder
  * @description See {@link List#closeAllExpandedFolder}
  * @example Radio.trigger("ModelList", "closeAllExpandedFolder")
  */
 
 /**
- * @event Core#RadioTriggerModelListSetAllDescendantsInvisible
+ * @event Core.ModelList#RadioTriggerModelListSetAllDescendantsInvisible
  * @description See {@link List#setAllDescendantsInvisible}
  * @example Radio.trigger("ModelList", "setAllDescendantsInvisible", parentId, isMobile)
  */
 
 /**
- * @event Core#RadioTriggerModelListRenderTree
- * @fires Core#RenderTree
+ * @event Core.ModelList#RadioTriggerModelListRenderTree
  * @example Radio.trigger("ModelList", "renderTree")
  */
 
 /**
- * @event Core#RenderTree
+ * @event Core.ModelList#RenderTree
  * @description Triggers "renderTree"
  * @example this.trigger("renderTree")
  */
 
 /**
- * @event Core#RadioTriggerModelListToggleWfsCluster
+ * @event Core.ModelList#RadioTriggerModelListToggleWfsCluster
  * @description See {@link List#toggleWfsCluster}
  * @example Radio.trigger("ModelList", "toggleWfsCluster", value)
  */
 
 /**
- * @event Core#RadioTriggerModelListToggleDefaultTool
+ * @event Core.ModelList#RadioTriggerModelListToggleDefaultTool
  * @description See {@link List#toggleDefaultTool}
  * @example Radio.trigger("ModelList", "toggleDefaultTool")
  */
 
 /**
- * @event Core#RadioTriggerModelListUpdateVisibleInMapList
+ * @event Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @description Triggered when one item has a change in the attribute isVisibleInMap
- * @fires Core#RadioTriggerModelListUpdateVisibleInMapList
- * @fires Core#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event Core#ChangeIsExpanded
+ * @event Core.ModelList#ChangeIsExpanded
  * @description Triggered when one item has a change in the attribute isExpaned
- * @fires Core#UpdateOverlayerView
- * @fires Core#UpdateSelection
- * @fires Core#TraverseTree
- * @fires Core#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event Core#ChangeIsSelected
+ * @event Core.ModelList#ChangeIsSelected
  * @description Triggered when one item has a change in the attribute IsSelected
- * @fires Core#UpdateSelection
- * @fires Core#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event Core#ChangeTransparency
+ * @event Core.ModelList#ChangeTransparency
  * @description Triggered when one item has a change in the attribute transparency
- * @fires Core#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event Core#ChangeSelectionIDX
+ * @event Core.ModelList#ChangeSelectionIDX
  * @description Triggered when one item has a change in the attribute selectionIDX
- * @fires Core#RadioTriggerModelListUpdatedSelectedLayerList
  */
 
 /**
- * @event Core#UpdateSelection
+ * @event Core.ModelList#UpdateSelection
  * @description Triggered when selection was updated
  * @example this.trigger("updateSelection", model)
  */
 
 /**
- * @event Core#UpdateLightTree
+ * @event Core.ModelList#UpdateLightTree
  * @description Triggered when light tree was updated
  * @example this.trigger("updateLightTree")
  */
 
 /**
- * @event Core#ChangeSelectedList
+ * @event Core.ModelList#ChangeSelectedList
  * @description Triggered when selected list has changed
  */
 
 /**
- * @event Core#TraverseTree
+ * @event Core.ModelList#TraverseTree
  * @description Used for mobile
  * @example this.trigger("traverseTree")
  */
 
 /**
- * @event Core#RadioTriggerModelListUpdateVisibleInMapList
+ * @event Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @example Radio.trigger("ModelList", "updateVisibleInMapList")
  */
 
 /**
- * @event ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+ * @event Core.ModelList#RadioTriggerModelListUpdatedSelectedLayerList
  * @example Radio.trigger("ModelList", "updatedSelectedLayerList")
  */
 
 /**
- * @event ModelList#UpdateOverlayerView
+ * @event Core.ModelList#UpdateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
 
 /** -------------------- ATTRIBUTIONS ----------------- */
 
 /**
- * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
  * @description Triggers rerender of attributions module
  * @example this.trigger("Attributions", "renderAttributions");
  */
 
 /**
- * @event Attributions#RadioTriggerAttributionsRenderAttributions
+ * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
  * @description Triggers rerender of attributions module
  * @example this.trigger("Attributions", "renderAttributions");
  */
 
 /**
- * @event Attributions#RadioTriggerAttributionsCreateAttribution
+ * @event Controls.Attributions#RadioTriggerAttributionsCreateAttribution
  * @description todo
  * @example this.trigger("Attributions", "createAttribution");
  */
 /**
- * @event Attributions#RadioTriggerAttributionsRemoveAttribution
+ * @event Controls.Attributions#RadioTriggerAttributionsRemoveAttribution
  * @description todo
  * @example this.trigger("Attributions", "removeAttribution");
  */
 
 /**
- * @event Attributions#changeIsContentVisible
+ * @event Controls.Attributions#changeIsContentVisible
  * @description Event for a changing property
  */
 
 /**
- * @event Attributions#changeAttributionList
+ * @event Controls.Attributions#changeAttributionList
  * @description Event for a changing property
  */
 
 /**
- * @event Attributions#changeIsVisibleInMap
+ * @event Controls.Attributions#changeIsVisibleInMap
  * @description Event for a changing property
  */
 
 /**
- * @event Attributions#renderAttributions
+ * @event Controls.Attributions#renderAttributions
  * @description Event for a changing property
  */
 
@@ -1288,6 +1279,13 @@
  */
 
 /**
+ * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
+ * @description returns the masterportal version number
+ * @returns {String} - masterportal version number
+ * @example Radio.request("Util", "getMasterPortalVersionNumber");
+ */
+
+/**
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
@@ -1497,17 +1495,16 @@
  * @example Radio.request("ControlsView", "addRowBL", id);
  */
 
-
 /** -------------------- RAWLAYERLIST -------------------- */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerWhere
+ * @event Core#RadioRequestRawLayerListGetLayerWhere
  * @param {String} params Object of Params.
  * @example Radio.request("RawLayerList", "getLayerWhere", params);
  */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @event Core#RadioRequestRawLayerListGetLayerAttributesWhere
  * @description Returns the object of the layer that matches the given params.
  * @param {Object} params Object of Params.
  * @returns {Object} - Layer attributes.
@@ -1515,7 +1512,7 @@
  */
 
 /**
- * @event RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+ * @event Core#RadioRequestRawLayerListGetLayerAttributesList
  * @description Returns the rawlayerList as json.
  * @returns {RawLayerList} - The rawLayerlist.
  * @example Radio.request("RawLayerList", "getLayerAttributesList");
@@ -1799,4 +1796,23 @@
 /**
  * @event Snippets.Checkbox#ValuesChanged
  * @description todo
+ */
+
+/** -------------------- TOOLS.ADDGEOJSON -------------------- */
+
+/**
+ * @event Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
+ * @description todo
+ * @param {String} layerName - The name of the layer (can be selected alphanumerically)
+ * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
+ * @param {String} geojson - A valid GeoJson. If no crs is defined in the Json, EPSG:4326 is assumed..
+ * @example Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layerName, layerId, geojson)
+ */
+
+/** -------------------- TOOLS.KMLIMPORT -------------------- */
+
+/**
+ * @event Tools.Kmlimport#ChangeIsActive
+ * @description Fired when param isActive changes
+
  */

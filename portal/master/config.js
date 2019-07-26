@@ -30,10 +30,7 @@ const Config = {
                 "alias_mobil": "LGV"
             }
         ],
-        version: {
-            "showVersion": true,
-            "MasterportalVersion": "$Version"
-        }
+        showVersion: true
     },
     quickHelp: {
         imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"

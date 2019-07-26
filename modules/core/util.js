@@ -36,6 +36,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetPathFromLoader
+     * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
@@ -53,6 +54,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "isViewMobile": function () {
                 return this.get("isViewMobile");
             },
+            "getMasterPortalVersionNumber": this.getMasterPortalVersionNumber,
             "getProxyURL": this.getProxyURL,
             "isApple": this.isApple,
             "isAndroid": this.isAndroid,
@@ -94,6 +96,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
         $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
         this.parseConfigFromURL();
+    },
+
+    /**
+     * Returns current Master Portal Version Number
+     * @returns {string} Masterportal version number
+     */
+    getMasterPortalVersionNumber: function () {
+        return require("../../package.json").version;
     },
 
     /**
