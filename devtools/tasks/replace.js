@@ -16,6 +16,21 @@ module.exports = function (destination) {
         "files": destination + "/css/style.css",
         "from": /css\/woffs/g,
         "to": "./woffs"
+    },
+    {
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?"\/img\//g,
+        "to": "url(\"../img/"
+    },
+    {
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?'\/img\//g,
+        "to": "url('../img/"
+    },
+    {
+        "files": destination + "/css/style.css",
+        "from": /url\s?\(\s?\/img\//g,
+        "to": "url(../img/"
     });
 
     replacements.forEach(function (replacement) {
