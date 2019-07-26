@@ -11,10 +11,8 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      * @memberof Tools.Shadow
      * @property {String} glyphicon="glyphicon-screenshot" Glyphicon that is shown before the tool name
      * @constructs
-     * @listens Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerSetShadowTime
-     * @fires Map#RadioRequestIsMap3d
-     * @fires Map#RadioRequestGetMap3d
+     * @fires Map#RadioTriggerMapSetShadowTime
+     * @fires Map#RadioRequestMapGetMap3d
      */
     defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-screenshot",
@@ -22,8 +20,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         dateslider: null,
         toggleButton: null,
         datepicker: null,
-        isMap3d: false, // gets checked on initialize
-        isShadowEnabled: false // gets checked on initialize
+        isShadowEnabled: false
     }),
 
     /**
@@ -33,32 +30,26 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     initialize: function () {
         this.superInitialize();
         const minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
-            nearestTime = this.getNearestTime(),
+            defaultTime = this.getTime(this.get("shadowTime")),
             timesliderStep = 1000 * 60 * 30,
-            timeslider = this.getNewSlider(minMaxTimes, nearestTime, timesliderStep, 1, "Uhrzeit", "time"),
+            timeslider = this.getNewSlider(minMaxTimes, defaultTime, timesliderStep, 1, "Uhrzeit", "time"),
             minMaxDays = this.getMinMaxDatesOfCurrentYear(),
-            nearestDay = this.getToday(),
+            defaultDay = this.getDate(this.get("shadowTime")),
             datesliderStep = 1000 * 60 * 60 * 24,
-            dateslider = this.getNewSlider(minMaxDays, nearestDay, datesliderStep, 1, "Datum", "date"),
-            isMap3d = this.checkIsMap3d(),
-            isShadowEnabled = this.checkIsShadowEnabled(),
-            button = this.getNewButton("Schattendarstellung", isShadowEnabled),
-            datepicker = this.getNewDatepicker(nearestDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
+            dateslider = this.getNewSlider(minMaxDays, defaultDay, datesliderStep, 1, "Datum", "date"),
+            button = this.getNewButton("Schattendarstellung", this.get("isShadowEnabled")),
+            datepicker = this.getNewDatepicker(defaultDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
 
         this.setToggleButton(button);
         this.setTimeslider(timeslider);
         this.setDateslider(dateslider);
         this.setDatepicker(datepicker);
-        this.setIsMap3d(isMap3d);
-        this.setIsShadowEnabled(isShadowEnabled);
         this.registerListener();
-        this.timeOrDateChanged();
     },
 
     /**
      * Register Listener to act on
      * @returns {void}
-     * @listens Map#RadioTriggerMapChange
      */
     registerListener: function () {
         this.listenTo(this.get("toggleButton"), {
@@ -73,19 +64,6 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         this.listenTo(this.get("datepicker"), {
             "valuesChanged": this.sychronizeSlider
         });
-        this.listenTo(this, {
-            "change:isShadowEnabled": this.switchShadowEnabledButton
-        });
-        Radio.on("Map", "change", function (map) {
-            if (map === "3D") {
-                this.setIsMap3d(true);
-                this.setIsShadowEnabled(this.checkIsShadowEnabled());
-            }
-            else {
-                this.setIsMap3d(false);
-                this.setIsShadowEnabled(false);
-            }
-        }.bind(this));
     },
 
     /**
@@ -119,7 +97,6 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
 
         this.get("dateslider").updateValuesSilently(moment(date).valueOf());
         this.timeOrDateChanged();
-
     },
 
     /**
@@ -136,7 +113,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
-     * @fires Map#RadioTriggerSetShadowTime
+     * @fires Map#RadioTriggerMapSetShadowTime
      * @returns {void}
      */
     setCesiumTime: function (datetime) {
@@ -149,56 +126,16 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     },
 
     /**
-     * Checks if shadow is enabled or not using cesiumScene
-     * @returns {boolean} enabled shadow is enabled
-     */
-    checkIsShadowEnabled: function () {
-        const scene = this.getCesiumScene();
-
-        if (scene) {
-            return scene.shadowMap.enabled;
-        }
-        return false;
-    },
-
-    /**
-     * Checks if the map is in 3d-mode
-     * @fires Map#RadioRequestIsMap3d
-     * @returns {boolean} is3D Value is map in 3d
-     */
-    checkIsMap3d: function () {
-        if (Radio.request("Map", "isMap3d") === true) {
-            return true;
-        }
-        return false;
-    },
-
-    /**
      * Proceduere what has to be done when the toggleButton gets pressed
      * @param   {boolean} chkbox state of the checkbox
      * @returns {void}
      */
     toggleButtonValueChanged: function (chkbox) {
-        let value = chkbox;
+        const value = chkbox;
 
-        if (this.get("isMap3d") === false) {
-            value = false;
-            this.switchShadowEnabledButton(false);
-            this.trigger("shadowUnavailable", false);
-        }
         this.toggleShadow(value);
+        this.setIsShadowEnabled(value);
         this.trigger("toggleButtonValueChanged", value);
-    },
-
-    /**
-     * Checks or unchecks the checkbox using it's API
-     * @returns {void}
-     */
-    switchShadowEnabledButton: function () {
-        const isShadowEnabled = this.get("isShadowEnabled"),
-            button = this.get("toggleButton");
-
-        button.setIsSelected(isShadowEnabled);
     },
 
     /**
@@ -218,36 +155,39 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     },
 
     /**
-     * Returns the nearest past full half hour from now
+     * Returns the nearest past full half hour from now or from config
+     * @param {object} [defaultTime] default time from config
      * @returns {timestamp} timestamp
      */
-    getNearestTime: function () {
-        const minutes = moment().minutes(),
+    getTime: function (defaultTime) {
+        const hours = defaultTime ? defaultTime.hour : moment().get("hours"),
+            minutes = defaultTime ? defaultTime.minute : moment().get("minutes"),
             setminutes = minutes < 30 ? 0 : 30;
 
-        return moment().minutes(setminutes).seconds(0).millisecond(0).valueOf();
+        return moment().hours(hours).minutes(setminutes).seconds(0).millisecond(0).valueOf();
     },
 
     /**
      * Returns the start of today
+     * @param {object} [defaultTime] default time from config
      * @returns {timestamp} timestamp
      */
-    getToday: function () {
-        return moment().startOf("day").valueOf();
+    getDate: function (defaultTime) {
+        const month = defaultTime ? defaultTime.month : moment().get("month"),
+            day = defaultTime ? defaultTime.day : moment().get("date");
+
+        return moment().month(month).date(day).valueOf();
     },
 
     /**
      * Returns the cesiumScene if defined
-     * @fires Map#RadioRequestGetMap3d
+     * @fires Map#RadioRequestMapGetMap3d
      * @returns {object | undefined} cesiumScene cesiumScene of map3D
      */
     getCesiumScene: function () {
-        const isMap3d = this.get("isMap3d");
-        let map3D;
+        const map3D = Radio.request("Map", "getMap3d");
 
-        if (isMap3d) {
-            map3D = Radio.request("Map", "getMap3d");
-
+        if (map3D) {
             return map3D.getCesiumScene();
         }
 
@@ -379,15 +319,6 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      */
     setIsShadowEnabled: function (value) {
         this.set("isShadowEnabled", value);
-    },
-
-    /**
-     * Setter for isMap3d
-     * @param {boolean} value isMap3d
-     * @returns {void}
-     */
-    setIsMap3d: function (value) {
-        this.set("isMap3d", value);
     }
 });
 

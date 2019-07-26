@@ -52,16 +52,7 @@ const Config = {
     geoAPI: false,
     clickCounter: {},
     startingMap3D: false,
-    obliqueMap: true,
-    shadowTime: {
-        year: "2014",
-        month: "6",
-        day: "20",
-        hour: "13",
-        minute: "0",
-        second: "0",
-        millisecond: "0"
-    },
+    obliqueMap: true,    
     cesiumParameter: {
         tileCacheSize: 20,
         enableLighting: true,
