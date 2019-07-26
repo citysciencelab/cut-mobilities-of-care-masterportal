@@ -785,6 +785,7 @@ Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
 |name|ja|String||Name des Werkzeuges im Menu.|false|
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
+|populationReqServiceId|ja|String|"2"|In rest-services.[...].js konfigurierte Service-ID|false|
 
 **Beispiel Einwohnerabfrage**
 ```
