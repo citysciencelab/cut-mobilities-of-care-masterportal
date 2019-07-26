@@ -102,12 +102,12 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
 
             if (drawGeometryType === "Point" && fontText !== undefined) {
                 styleObjects[index].labelStyle.color = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
-                style = this.getTextStyle(fontText, styleObjects[index], index);
+                style = this.getTextStyle(fontText, styleObjects[index]);
             }
             else {
                 styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
                 styleObjects[index].polyStyle.color = this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
-                style = this.createDrawStyle(drawGeometryType, styleObjects[index], index);
+                style = this.createDrawStyle(drawGeometryType, styleObjects[index]);
             }
             feature.setStyle(style);
         });
@@ -175,10 +175,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * Creates a style for text.
      * @param {String} fontText font for the text
      * @param {Object} styleObject parsed Styles
-     * @param {number} zIndex position of the layer on the z-axis
      * @returns {ol/style} style for text
      */
-    getTextStyle: function (fontText, styleObject, zIndex) {
+    getTextStyle: function (fontText, styleObject) {
         return new Style({
             text: new Text({
                 text: fontText,
@@ -187,8 +186,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                 fill: new Fill({
                     color: styleObject.labelStyle.color
                 })
-            }),
-            zIndex: zIndex
+            })
         });
     },
 
@@ -196,10 +194,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * Creates a style for a feature with a given gemetry.
      * @param {String} drawGeometryType geometrie of feature
      * @param {Object} styleObject parsed Styles
-     * @param {Number} zIndex position of the layer on the z-axis
      * @returns {ol/style} style for a feature with geometry
      */
-    createDrawStyle: function (drawGeometryType, styleObject, zIndex) {
+    createDrawStyle: function (drawGeometryType, styleObject) {
         return new Style({
             fill: new Fill({
                 color: styleObject.polyStyle.color
@@ -213,8 +210,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                 fill: new Fill({
                     color: styleObject.polyStyle.color
                 })
-            }),
-            zIndex: zIndex
+            })
         });
     },
 
