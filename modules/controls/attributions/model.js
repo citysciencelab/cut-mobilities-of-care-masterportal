@@ -1,12 +1,9 @@
 const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.prototype */{
     defaults: {
-        // true wenn der Inhalt (Attributions) angezeigt wird
         isContentVisible: true,
-        // true wenn das Control auf der Karte angezeigt wird
         isVisibleInMap: false,
         isInitOpenDesktop: true,
         isInitOpenMobile: false,
-        // Modellist mit Attributions
         attributionList: [],
         isOverviewmap: Boolean(Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}))
     },
@@ -17,17 +14,17 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @memberof Controls.Attributions
      * @constructs
      * @property {Boolean} isContentVisible=true Flag if attributions copy is visible
-     * @property {Boolean} isVisibleInMap=false Flag if whole module is visible
+     * @property {Boolean} isVisibleInMap=false true when the control is displayed on the map
      * @property {Boolean} isInitOpenDesktop=true Flag if module is initially activated upon load in desktop environment
      * @property {Boolean} isInitOpenMobile=false Flag if module is initially activated upon load in mobile environment
      * @property {Array} attributionList=[] Array of attributions of all layers
      * @property {Boolean} isOverviewmap=? todo
-     * @listens ModelList#RadioTriggerModelListUpdateVisibleInMapList
-     * @listens Attributions#RadioTriggerAttributionsCreateAttribution
-     * @listens Attributions#RadioTriggerAttributionsRemoveAttribution
-     * @fires Parser#RadioRequestParserGetItemByAttributes
-     * @fires Util#RadioRequestUtilIsViewMobile
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @listens Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
+     * @listens Controls.Attributions#RadioTriggerAttributionsCreateAttribution
+     * @listens Controls.Attributions#RadioTriggerAttributionsRemoveAttribution
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      */
     initialize: function () {
         this.listenTo(Radio.channel("ModelList"), {
@@ -95,7 +92,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
-     * @fires  Attributions#AttributionsRenderAttributions
+     * @fires  Controls.Attributions#AttributionsRenderAttributions
      * @returns {void}
      */
     removeAttribution: function (name, text, type) {
@@ -112,34 +109,54 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     },
     /**
      * Updates attributions functionality data. Usually called upon layer visibility change.
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
     updateAttributions: function updateAttributions () {
-
-        var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredModelList = modelList.filter(function (model) {
-                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
-            }),
-            bAttributionsAvailable = filteredModelList.length > 0;
+        const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+            filteredModelList = this.filterModelsWithLayerAttribution(modelList),
+            attributionsAvailable = filteredModelList.length > 0;
 
         this.removeAllLayerAttributions();
         this.generateAttributions(filteredModelList);
 
-        this.setIsVisibleInMap(bAttributionsAvailable);
+        this.setIsVisibleInMap(attributionsAvailable);
 
         // Upon change of visible layers, attribution pane must be opened.
-        // This is a requested ferature.
-        if (bAttributionsAvailable) {
+        // This is a requested feature.
+        if (attributionsAvailable) {
             this.setIsContentVisible(true);
         }
 
         this.trigger("renderAttributions");
     },
+
+    /**
+     * filters the models from the modellist that have the layerAttribution parameters.
+     * Childlayers of GroupLayer are also considered.
+     * @param {Array} modelList list with all models
+     * @returns {Array} models with configured layer attributions
+     */
+    filterModelsWithLayerAttribution: function (modelList) {
+        let childModelsWithLayerAttributions = [],
+            filteredModelList = modelList.filter(function (model) {
+                if (model.get("typ") === "GROUP") {
+                    model.get("layerSource").forEach(childLayerSource => {
+                        if (childLayerSource.has("layerAttribution") && childLayerSource.get("layerAttribution") !== "nicht vorhanden") {
+                            childModelsWithLayerAttributions.push(childLayerSource);
+                        }
+                    });
+                }
+                return model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden";
+            });
+
+        return filteredModelList.concat(childModelsWithLayerAttributions);
+    },
+
     /**
      * Removes all attributions of type "layer" from attributions array.
      * Renders module.
-     * @fires  Attributions#AttributionsRenderAttributions
+     * @fires  Controls.Attributions#AttributionsRenderAttributions
      * @returns {void}
      */
     removeAllLayerAttributions: function () {

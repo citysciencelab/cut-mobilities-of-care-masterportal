@@ -452,7 +452,6 @@ function loadApp () {
     if (CUSTOMMODULE !== "") {
         // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
         import(/* webpackMode: "eager" */CUSTOMMODULE)
-        // ---
             .then(module => {
                 /* eslint-disable new-cap */
                 new module.default();
