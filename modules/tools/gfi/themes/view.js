@@ -71,7 +71,8 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
                     currentView.$el.addClass("gfi-text-html ui-widget-content");
                     currentView.$el.css("maxWidth", "inherit");
                     currentView.$el.resizable({
-                        stop: function (e, ui) {
+                        minHeight: 440,
+                        resize: function (e, ui) {
                             currentView.$el.find("iframe").css("height", ui.size.height - 60);
                         }
                     });
