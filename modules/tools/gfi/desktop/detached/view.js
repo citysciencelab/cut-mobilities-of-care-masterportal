@@ -34,7 +34,7 @@ const GFIDetachedView = DesktopView.extend({
             this.$el.hide();
             if (this.$el.hasClass("gfi-text-html")) {
                 this.$el.removeClass("gfi-text-html");
-                $( ".selector" ).resizable({ disabled: true });
+                this.$el.resizable({disabled: true});
                 this.$el.css("width", "auto");
                 this.$el.css("height", "auto");
                 this.$el.resizable("destroy");
