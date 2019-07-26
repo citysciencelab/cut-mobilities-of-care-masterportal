@@ -113,16 +113,13 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
-     * @fires Core#RadioTriggerSetShadowTime
+     * @fires Map#RadioTriggerMapSetShadowTime
      * @returns {void}
      */
     setCesiumTime: function (datetime) {
-        let julianDate;
+        const julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
 
-        if (typeof Cesium !== "undefined") {
-            julianDate = Cesium.JulianDate.fromDate(moment(datetime).toDate());
-            Radio.trigger("Map", "setShadowTime", julianDate);
-        }
+        Radio.trigger("Map", "setShadowTime", julianDate);
     },
 
     /**
@@ -176,7 +173,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         const month = defaultTime ? defaultTime.month : moment().get("month"),
             day = defaultTime ? defaultTime.day : moment().get("date");
 
-        return moment().month(month).date(day).hours(0).minutes(0).seconds(0).millisecond(0).valueOf();
+        return moment().month(month).date(day).valueOf();
     },
 
     /**
