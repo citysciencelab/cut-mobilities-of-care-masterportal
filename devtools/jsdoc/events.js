@@ -311,15 +311,9 @@
 
 /**
  * @event Core.ConfigLoader#RadioTriggerParserAddGeoJSONLayer
-<<<<<<< HEAD
- * @param {*} name - todo
- * @param {*} id - todo
- * @param {*} geojson - todo
-=======
  * @param {String} layerName - The name of the layer (can be selected alphanumerically)
  * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
  * @param {String} geojson - A valid GeoJson. If no crs is defined in the Json, EPSG:4326 is assumed..
->>>>>>> add jsdoc
  * @example Radio.trigger("Parser", "addGeoJSONLayer", name, id, geojson)
  */
 
