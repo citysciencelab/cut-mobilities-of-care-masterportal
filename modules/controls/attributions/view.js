@@ -11,12 +11,12 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
      * @extends Backbone.View
      * @memberof Controls.Attributions
      * @constructs
-     * @listens Attributions#RadioTriggerAttributionsRenderAttributions
-     * @listens Attributions#changeIsContentVisible
-     * @listens Attributions#changeAttributionList
-     * @listens Attributions#changeIsVisibleInMap
-     * @listens Attributions#renderAttributions
-     * @fires Parser#RadioRequestParserGetPortalConfig
+     * @listens Controls.Attributions#RadioTriggerAttributionsRenderAttributions
+     * @listens Controls.Attributions#changeIsContentVisible
+     * @listens Controls.Attributions#changeAttributionList
+     * @listens Controls.Attributions#changeIsVisibleInMap
+     * @listens Controls.Attributions#renderAttributions
+     * @fires Core.ConfigLoader#RadioRequestParserGetPortalConfig
      */
     initialize: function () {
         var channel = Radio.channel("Attributions"),
