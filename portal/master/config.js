@@ -52,7 +52,7 @@ const Config = {
     geoAPI: false,
     clickCounter: {},
     startingMap3D: false,
-    obliqueMap: true,    
+    obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
         enableLighting: true,
