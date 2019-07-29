@@ -1,3 +1,5 @@
+import "jquery-ui/ui/widgets/resizable";
+
 const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     /**
      * @class ThemeView
@@ -66,7 +68,14 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
             this.appendRoutableButton();
             if (this.gfiWindow === "detached" && !isViewMobile) {
                 if (this.model.get("infoFormat") === "text/html") {
-                    currentView.$el.addClass("gfi-text-html");
+                    currentView.$el.addClass("gfi-text-html ui-widget-content");
+                    currentView.$el.css("maxWidth", "inherit");
+                    currentView.$el.resizable({
+                        minHeight: 440,
+                        resize: function (e, ui) {
+                            currentView.$el.find("iframe").css("height", ui.size.height - 60);
+                        }
+                    });
                 }
                 else if (currentView.$el.hasClass("gfi-text-html")) {
                     currentView.$el.removeClass("gfi-text-html");
