@@ -201,6 +201,15 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             pgfi = [],
             gfiFeatures,
             dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
+//             data = $(data).find("app\\:verkehrsstaerken, verkehrsstaerken").length > 0 ? '<?xml version="1.0" encoding="UTF-8"?>'
+//             + '<msGMLOutput '
+//                  +'xmlns:gml="http://www.opengis.net/gml"'
+//                  +'xmlns:xlink="http://www.w3.org/1999/xlink"'
+//                  +'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+//             +'</msGMLOutput>'
+//             +'" : dat;' : dat;
+
+// console.log(dat);
 
         this.parseMultiElementNodes(dat);
         // parse result, try built-in Ol-format first

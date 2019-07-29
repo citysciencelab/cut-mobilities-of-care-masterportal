@@ -448,6 +448,28 @@
         "id": "8194"
       },
       {
+        "id": "888888888",
+        "name": "Stadtplan",
+        "url": "https://geodienste.hamburg.de/HH_WMS_Cache_Stadtplan",
+        "typ": "WMS",
+        "layers": "stadtplan",
+        "format": "image/png",
+        "version": "1.1.1",
+        "singleTile": false,
+        "transparent": true,
+        "transparency": 0,
+        "tilesize": "512",
+        "gutter": "0",
+        "minScale": "0",
+        "maxScale": "2500000",
+        "gfiAttributes": "ignore",
+        "gfiTheme": "default",
+        "layerAttribution": "nicht vorhanden",
+        "legendURL": "ignore",
+        "cache": true,
+        "featureCount": "1"
+      },
+      {
         "id": "2128",
         "styleId": "2128"
       },
