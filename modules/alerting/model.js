@@ -6,7 +6,7 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
         isConfirmable: false,
         position: "top-center",
         message: "",
-        animation: false
+        animation: null
     },
     /**
      * @class AlertingModel
@@ -14,12 +14,12 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
      * @memberof Alerting
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("Alert") Radio channel for communication
-     * @property {String} category="alert-info" Category of alert. bootstrap css class
-     * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
-     * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
-     * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
+     * @property {String} [category="alert-info"] Category of alert. bootstrap css class
+     * @property {Boolean} [isDismissable=true] Flag if alert has a dismissable button
+     * @property {Boolean} [isConfirmable=false] Flag if alert has to be confirmed to close
+     * @property {String} [position="top-center"] The positioning of the alert. Possible values "top-center", "center-center"
+     * @property {Boolean} [animation=null] Milliseconds before fading out alert
      * @property {String} message="" The message of the alert
-     * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
      * @fires Alerting#render
      * @fires Alerting#changePosition
      * @listens Alerting#RadioTriggerAlertAlert
@@ -67,7 +67,7 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
                 this.setAnimation(false);
             }
         }
-        this.trigger("render");
+        this.trigger("addMessage", this.get("message"));
     },
 
     /**

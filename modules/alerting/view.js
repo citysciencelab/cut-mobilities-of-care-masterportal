@@ -27,7 +27,7 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
             "alert:remove": this.removeAll
         }, this);
         this.listenTo(this.model, {
-            "render": this.render,
+            "addMessage": this.addMessage,
             "change:position": this.positionAlerts
         }, this);
 
@@ -37,20 +37,50 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     className: "top-center",
     model: new AlertingModel(),
     template: _.template(AlertingTemplate),
+
     /**
      * Renders the data to DOM.
      * @return {AlertingView} returns this
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.append(this.template(attr));
-        if (_.has(attr, "animation") && attr.animation !== false) {
+        if (attr.animation) {
             this.$el.find(".alert").last().fadeOut(attr.animation, function () {
                 $(this).remove();
             });
         }
+
         return this;
+    },
+
+    /**
+     * Called when new messages have to be added
+     * @param {string} message message to add
+     * @returns {void}
+     */
+    addMessage: function (message) {
+        if (!this.checkDuplicates(message)) {
+            this.render();
+        }
+    },
+
+    /**
+     * Checks if text has already been popped up.
+     * @param   {string} text text to check
+     * @returns {Boolean} isDuplicate
+     */
+    checkDuplicates: function (text) {
+        let isDuplicate = false;
+
+        _.each(this.el.getElementsByTagName("p"), function (p) {
+            if (p.textContent.trim() === text.trim()) {
+                isDuplicate = true;
+            }
+        }, this);
+
+        return isDuplicate;
     },
 
     /**
