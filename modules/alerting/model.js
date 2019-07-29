@@ -65,14 +65,13 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
             if (_.has(val, "position") === true) {
                 this.setPosition(val.position);
             }
-            if (_.has(val, "animation")) {
-                this.setAnimation(val.animation);
-            }
-            if (!_.has(val, "animation")) {
-                this.setAnimation(false);
+            if (_.has(val, "fadeOut") === true) {
+                this.setFadeOut(val.fadeOut);
             }
         }
-        this.trigger("addMessage", this.get("message"));
+        if (_.isString(this.get("message"))) {
+            this.trigger("addMessage", this.get("message"));
+        }
     },
 
     /**
@@ -129,12 +128,12 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
     },
 
     /**
-     * Setter for animation
-     * @param {Boolean/Number} value False if no animation is wanted. Number for fade-out in millis
+     * Setter for fadeOut
+     * @param {Boolean/Number} value null if no fadeOut is wanted. Number for fade-out in millis
      * @returns {void}
      */
-    setAnimation: function (value) {
-        this.set("animation", value);
+    setFadeOut: function (fadeOut) {
+        this.set("fadeOut", value);
     },
 
     /**
