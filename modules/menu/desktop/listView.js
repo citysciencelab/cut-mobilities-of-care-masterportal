@@ -62,8 +62,8 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @returns {void}
      */
     setMaxHeightForSelectedLayer: function () {
-        const overLayerHeight = parseInt($("#Overlayer").css("height"), 10),
-            baseLayerHeight = parseInt($("#Baselayer").css("height"), 10),
+        const overLayerHeight = $("#Overlayer").outerHeight(),
+            baseLayerHeight = $("#Baselayer").outerHeight(),
             maxUsedHeight = 0.75,
             maxHeight = Math.ceil($(window).height() * maxUsedHeight),
             availableHeight = (maxHeight - overLayerHeight - baseLayerHeight) * 100 / maxHeight * maxUsedHeight;
