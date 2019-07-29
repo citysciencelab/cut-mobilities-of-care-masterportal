@@ -53,10 +53,10 @@ describe("tools/shadow/model", function () {
             day = moment().get("date");
 
         it("should return the timestamp without defaults", function () {
-            expect(model.getDate()).to.equal(moment().month(month).date(day).valueOf());
+            expect(model.getDate()).to.equal(moment().month(month).date(day).hours(0).minutes(0).seconds(0).millisecond(0).valueOf());
         });
         it("should return the timestamp with defaults", function () {
-            expect(model.getDate({month: 6, day: 12})).to.equal(moment().month(6).date(12).valueOf());
+            expect(model.getDate({month: 6, day: 12})).to.equal(moment().month(6).date(12).hours(0).minutes(0).seconds(0).millisecond(0).valueOf());
         });
     });
 

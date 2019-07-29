@@ -176,7 +176,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         const month = defaultTime ? defaultTime.month : moment().get("month"),
             day = defaultTime ? defaultTime.day : moment().get("date");
 
-        return moment().month(month).date(day).valueOf();
+        return moment().month(month).date(day).hours(0).minutes(0).seconds(0).millisecond(0).valueOf();
     },
 
     /**
