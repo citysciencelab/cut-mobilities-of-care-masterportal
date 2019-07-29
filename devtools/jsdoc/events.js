@@ -597,6 +597,12 @@
  * @example Radio.trigger("Map", "deactivateMap3d");
  */
 
+/**
+ * @event Map#RadioTriggerMapSetCameraParameter
+ * @description Triggers to set the cesium camera position
+ * @param {object} cameraParameter viewpoint for ol.cesium
+ * @example Radio.trigger("Map", "setCameraParameter", cameraParameter);
+ */
 
 /** -------------------- MAP VIEW -------------------- */
 

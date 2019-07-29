@@ -16,10 +16,12 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @property {number} currentTime
      * @property {number|null} currentSystemTime
      * @property {Array<number>} times
+     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Map#RadioRequestMapGetMap3d
      * @listens Map#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
-     * @listens FlightPlayer#RadioRequestFlightPlayerGetValue
+     * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
      */
     defaults: _.extend({}, Backbone.Model.defaults, {
         /**
@@ -55,6 +57,13 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
         screenSpaceCameraController: null
     }),
 
+    /**
+     * @listens Map#RadioTriggerMapChange
+     * @listens FlightPlayer#RadioRequestFlightPlayerStop
+     * @listens FlightPlayer#RadioRequestFlightPlayerPlay
+     * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
+     * @returns {void}
+     */
     initialize () {
         const channel = Radio.channel("FlightPlayer");
 
