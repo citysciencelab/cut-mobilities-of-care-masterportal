@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import FlightInstance, {parseFlightOptions} from "@modules/tools/virtualCity/flight/flightInstance";
+import FlightInstance, {parseFlightOptions} from "@modules/tools/virtualcity/flight";
 
 
 describe("flightInstance", function () {

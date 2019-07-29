@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {parseFlightOptions} from "@modules/tools/virtualCity/flight/flightInstance";
-import FlightPlayer from "@modules/tools/virtualCity/flight/flightPlayer";
+import {parseFlightOptions} from "@modules/tools/virtualcity/flight";
+import FlightPlayer from "@modules/tools/virtualcity/flightPlayer";
 
 describe("flightPlayer", function () {
     var flightInstance,
@@ -151,10 +151,10 @@ describe("flightPlayer", function () {
 
             flightPlayer.setActiveFlightInstance(flightInstance);
             // 4 viewpoints
-            expect(flightPlayer.destinationSpline.times).to.be.length(4);
-            expect(flightPlayer.destinationSpline.points).to.be.length(4);
+            expect(flightPlayer.get("destinationSpline").times).to.be.length(4);
+            expect(flightPlayer.get("destinationSpline").points).to.be.length(4);
             // summed up duration between viewpoints = 1+2+3
-            expect(flightPlayer.destinationSpline.times[flightPlayer.destinationSpline.times.length - 1]).to.be.equal(6);
+            expect(flightPlayer.get("destinationSpline").times[flightPlayer.get("destinationSpline").times.length - 1]).to.be.equal(6);
         });
 
         it("should set take look into account for DestinationSpline", function () {
@@ -164,10 +164,10 @@ describe("flightPlayer", function () {
             flightInstance.set("loop", true);
             flightPlayer.setActiveFlightInstance(flightInstance);
             // 4 viewpoints + Loop
-            expect(flightPlayer.destinationSpline.times).to.be.length(5);
-            expect(flightPlayer.destinationSpline.points).to.be.length(5);
+            expect(flightPlayer.get("destinationSpline").times).to.be.length(5);
+            expect(flightPlayer.get("destinationSpline").points).to.be.length(5);
             // summed up duration between viewpoints = 1+2+3+6
-            expect(flightPlayer.destinationSpline.times[flightPlayer.destinationSpline.times.length - 1]).to.be.equal(12);
+            expect(flightPlayer.get("destinationSpline").times[flightPlayer.get("destinationSpline").times.length - 1]).to.be.equal(12);
         });
 
         it("should set QuaternionSpline", function () {
@@ -176,10 +176,10 @@ describe("flightPlayer", function () {
 
             flightPlayer.setActiveFlightInstance(flightInstance);
             // 4 viewpoints
-            expect(flightPlayer.quaternionSpline.times).to.be.length(4);
-            expect(flightPlayer.quaternionSpline.points).to.be.length(4);
+            expect(flightPlayer.get("quaternionSpline").times).to.be.length(4);
+            expect(flightPlayer.get("quaternionSpline").points).to.be.length(4);
             // summed up duration between viewpoints = 1+2+3
-            expect(flightPlayer.quaternionSpline.times[flightPlayer.destinationSpline.times.length - 1]).to.be.equal(6);
+            expect(flightPlayer.get("quaternionSpline").times[flightPlayer.get("destinationSpline").times.length - 1]).to.be.equal(6);
         });
 
         it("should set endTime to summed up duration", function () {
@@ -188,7 +188,7 @@ describe("flightPlayer", function () {
 
             flightPlayer.setActiveFlightInstance(flightInstance);
             // 4 viewpoints
-            expect(flightPlayer.clock.endTime).to.be.equal(6);
+            expect(flightPlayer.get("endTime")).to.be.equal(6);
         });
 
         it("should set clock Times", function () {
@@ -197,7 +197,7 @@ describe("flightPlayer", function () {
 
             flightPlayer.setActiveFlightInstance(flightInstance);
             // 4 viewpoints
-            expect(flightPlayer.clock.times).to.be.length(4);
+            expect(flightPlayer.get("times")).to.be.length(4);
         });
     });
 
@@ -228,14 +228,14 @@ describe("flightPlayer", function () {
             flightInstance = parseFlightOptions(flightOptions);
 
             flightPlayer.play(flightInstance);
-            expect(flightPlayer.values.playing).to.be.true;
+            expect(flightPlayer.get("playing")).to.be.true;
         });
         it("should setup postRenderHandler", function () {
             flightPlayer = new FlightPlayer({});
             flightInstance = parseFlightOptions(flightOptions);
 
             flightPlayer.play(flightInstance);
-            expect(flightPlayer.postRenderHandler).to.be.not.null;
+            expect(flightPlayer.get("postRenderHandler")).to.be.not.null;
             expect(scene.postRender.numberOfListeners).to.be.equal(1);
         });
         it("should remove postRenderHandler on stop", function () {
@@ -243,10 +243,10 @@ describe("flightPlayer", function () {
             flightInstance = parseFlightOptions(flightOptions);
 
             flightPlayer.play(flightInstance);
-            expect(flightPlayer.postRenderHandler).to.be.not.null;
+            expect(flightPlayer.get("postRenderHandler")).to.be.not.null;
             expect(scene.postRender.numberOfListeners).to.be.equal(1);
             flightPlayer.stop(flightInstance);
-            expect(flightPlayer.postRenderHandler).to.be.null;
+            expect(flightPlayer.get("postRenderHandler")).to.be.null;
             expect(scene.postRender.numberOfListeners).to.be.equal(0);
         });
         it("should set playing to false on stop", function () {
@@ -254,9 +254,9 @@ describe("flightPlayer", function () {
             flightInstance = parseFlightOptions(flightOptions);
 
             flightPlayer.play(flightInstance);
-            expect(flightPlayer.values.playing).to.be.true;
+            expect(flightPlayer.get("playing")).to.be.true;
             flightPlayer.stop(flightInstance);
-            expect(flightPlayer.values.playing).to.be.false;
+            expect(flightPlayer.get("playing")).to.be.false;
         });
     });
 
@@ -290,10 +290,10 @@ describe("flightPlayer", function () {
 
             flightPlayer.play(flightInstance);
             flightPlayer.cesiumPostRender(scene);
-            expect(flightPlayer.clock.currentSystemTime).to.be.equal(1 / 1000);
+            expect(flightPlayer.get("currentSystemTime")).to.be.equal(1 / 1000);
             clock.tick(1);
             flightPlayer.cesiumPostRender(scene);
-            expect(flightPlayer.clock.currentSystemTime).to.be.equal(2 / 1000);
+            expect(flightPlayer.get("currentSystemTime")).to.be.equal(2 / 1000);
         });
         it("should forward internal clock time", function () {
             flightPlayer = new FlightPlayer({});
@@ -303,7 +303,7 @@ describe("flightPlayer", function () {
             flightPlayer.cesiumPostRender(scene);
             clock.tick(1);
             flightPlayer.cesiumPostRender(scene);
-            expect(flightPlayer.clock.currentTime).to.be.equal(1 / 1000);
+            expect(flightPlayer.get("currentTime")).to.be.equal(1 / 1000);
         });
         it("should call stop if the end of the flight has been reached", function () {
             flightPlayer = new FlightPlayer({});
