@@ -42,6 +42,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[cesiumParameter](#markdown-header-cesiumParameter)|nein|Object||Cesium Flags||
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
+|shadowTime|nein|Object||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|"{ year: "2014", month: "6", day: "20", hour: "13", minute: "0", second: "0", millisecond: "0" }"|
+|[alerting](#markdown-header-alerting)|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 
 ******
 ## mouseHover ##
@@ -215,5 +217,15 @@ zoomtofeature: {
 
 
 [fog]: https://cesiumjs.org/Cesium/Build/Documentation/Fog.html
+
+********
+## alerting ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|category|nein|String|"alert-info"|Bootstrap Class for layout|
+|isDismissable|Nein|Boolean|true|Flag if alert has a dismissable button|
+|isConfirmable|Nein|Boolean|false|Flag if alert has to be confirmed to close|
+|position|Nein|String|"top-center"|Position des Alerts (Bootstrap-Class)|
+|fadeOut|Nein|Integer|null|Milliseconds to wait before fade out alert|
 
 >Zurück zur [Dokumentation Masterportal](doc.md).

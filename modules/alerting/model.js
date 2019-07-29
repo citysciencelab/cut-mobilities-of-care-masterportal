@@ -1,3 +1,5 @@
+import AlertingView from "./view";
+
 const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
     defaults: {
         channel: Radio.channel("Alert"),
@@ -6,7 +8,7 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
         isConfirmable: false,
         position: "top-center",
         message: "",
-        animation: null
+        fadeOut: null
     },
     /**
      * @class AlertingModel
@@ -18,17 +20,20 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
      * @property {Boolean} [isDismissable=true] Flag if alert has a dismissable button
      * @property {Boolean} [isConfirmable=false] Flag if alert has to be confirmed to close
      * @property {String} [position="top-center"] The positioning of the alert. Possible values "top-center", "center-center"
-     * @property {Boolean} [animation=null] Milliseconds before fading out alert
+     * @property {Boolean} [fadeOut=null] Milliseconds before fading out alert
      * @property {String} message="" The message of the alert
      * @fires Alerting#render
      * @fires Alerting#changePosition
      * @listens Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        this.setView(new AlertingView({model: this}));
+
         this.listenTo(this.get("channel"), {
             "alert": this.setParams
         }, this);
     },
+
     /**
      * Sets given parameters on model.
      * @param {String|Object} val Value string or object with information about the alert
@@ -130,6 +135,15 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
      */
     setAnimation: function (value) {
         this.set("animation", value);
+    },
+
+    /**
+     * Sets the view to this model
+     * @param {Backbone.View} val this view
+     * @returns {void}
+     */
+    setView: function (val) {
+        this.set("view", val);
     }
 });
 

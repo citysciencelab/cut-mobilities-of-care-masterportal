@@ -1,4 +1,3 @@
-import AlertingModel from "./model";
 import AlertingTemplate from "text-loader!./template.html";
 import "bootstrap/js/alert";
 /**
@@ -35,7 +34,6 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     },
     id: "messages",
     className: "top-center",
-    model: new AlertingModel(),
     template: _.template(AlertingTemplate),
 
     /**
@@ -46,8 +44,8 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
         const attr = this.model.toJSON();
 
         this.$el.append(this.template(attr));
-        if (attr.animation) {
-            this.$el.find(".alert").last().fadeOut(attr.animation, function () {
+        if (attr.fadeOut) {
+            this.$el.find(".alert").last().fadeOut(attr.fadeOut, function () {
                 $(this).remove();
             });
         }
