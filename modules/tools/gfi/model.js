@@ -531,11 +531,11 @@ const Gfi = Tool.extend({
     },
 
     /**
-    * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-    * @param  {integer} top Pixelwert
-    * @param  {integer} left Pixelwert
-    * @return {undefined}
-    */
+     * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
+     * @param  {integer} top Pixelwert
+     * @param  {integer} left Pixelwert
+     * @return {undefined}
+     */
     checkInsideSearchMarker: function (top, left) {
         var button = Radio.request("MapMarker", "getCloseButtonCorners"),
             bottomSM = button.bottom,

@@ -40,7 +40,6 @@ const MobileMenu = Backbone.View.extend({
         this.addViews(rootModels);
         return this;
     },
-
     traverseTree: function (model) {
         if (model.get("isExpanded")) {
             if (model.get("id") === "SelectedLayer") {
