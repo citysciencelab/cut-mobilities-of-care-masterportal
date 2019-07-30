@@ -5,7 +5,6 @@ import TableView from "./table/view";
 import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
-import ScaleLineModel from "../../scaleline/model";
 
 const Gfi = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -157,12 +156,10 @@ const Gfi = Tool.extend({
         this.listenTo(Radio.channel("Map"), {
             "clickedWindowPosition": this.setGfiParams
         }, this);
-        this.listenTo(new ScaleLineModel(), "change:scaleLineValue", this.setGfiCordinates);
     },
     unlisten: function () {
         Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
-        this.stopListening(new ScaleLineModel(), "change:scaleLineValue");
     },
 
     /**
@@ -199,7 +196,6 @@ const Gfi = Tool.extend({
      * @return {undefined}
      */
     setGfiParams: function (evt) {
-        console.log(evt);
         var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
@@ -231,9 +227,7 @@ const Gfi = Tool.extend({
             this.get("themeList").reset(unionParams);
         }
     },
-    setGfiCordinates: function () {
-        this.setClickEventKey(Radio.trigger("Map", "MapBrowserPointerEvent", this.setGfiParams.bind(this)));
-    },
+
     setGfiParams3d: function (evt) {
         var features,
             gfiParams3d = [];
@@ -537,11 +531,11 @@ const Gfi = Tool.extend({
     },
 
     /**
-    * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
-    * @param  {integer} top Pixelwert
-    * @param  {integer} left Pixelwert
-    * @return {undefined}
-    */
+     * Prüft, ob clickpunkt in RemoveIcon und liefert true/false zurück.
+     * @param  {integer} top Pixelwert
+     * @param  {integer} left Pixelwert
+     * @return {undefined}
+     */
     checkInsideSearchMarker: function (top, left) {
         var button = Radio.request("MapMarker", "getCloseButtonCorners"),
             bottomSM = button.bottom,
