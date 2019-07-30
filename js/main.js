@@ -85,8 +85,10 @@ if (!("Config" in window)) {
         loadApp();
     });
 
+    // Show error message without Alerting
     loadConfigJs.catch(() => {
-        alert("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator.");
+        document.getElementById("loader").style.visibility = "hidden";
+        document.getElementById("map").appendChild(document.createTextNode("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator."));
     });
 }
 else {

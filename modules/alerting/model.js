@@ -129,11 +129,11 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
 
     /**
      * Setter for fadeOut
-     * @param {Boolean/Number} value null if no fadeOut is wanted. Number for fade-out in millis
+     * @param {Number} fadeOut null if no fadeOut is wanted. Number for fade-out in millis
      * @returns {void}
      */
     setFadeOut: function (fadeOut) {
-        this.set("fadeOut", value);
+        this.set("fadeOut", fadeOut);
     },
 
     /**
