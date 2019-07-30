@@ -5,6 +5,7 @@ import TableView from "./table/view";
 import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
+import ScaleLineModel from "../../scaleline/model";
 
 const Gfi = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -156,10 +157,12 @@ const Gfi = Tool.extend({
         this.listenTo(Radio.channel("Map"), {
             "clickedWindowPosition": this.setGfiParams
         }, this);
+        this.listenTo(new ScaleLineModel(), "change:scaleLineValue", this.setGfiCordinates);
     },
     unlisten: function () {
         Radio.trigger("Map", "unregisterListener", this.get("clickEventKey"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
+        this.stopListening(new ScaleLineModel(), "change:scaleLineValue");
     },
 
     /**
@@ -226,6 +229,10 @@ const Gfi = Tool.extend({
             this.get("overlay").setPosition(evt.coordinate);
             this.get("themeList").reset(unionParams);
         }
+    },
+
+    setGfiCordinates: function () {
+        this.setClickEventKey(Radio.trigger("Map", "MapBrowserPointerEvent", this.setGfiParams.bind(this)));
     },
 
     setGfiParams3d: function (evt) {
