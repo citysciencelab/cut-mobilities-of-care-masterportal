@@ -24,10 +24,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
      */
     initialize: function () {
+        var channel = Radio.channel("HeatmapLayer");
 
         this.checkForScale(Radio.request("MapView", "getOptions"));
-
-        var channel = Radio.channel("HeatmapLayer");
 
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
