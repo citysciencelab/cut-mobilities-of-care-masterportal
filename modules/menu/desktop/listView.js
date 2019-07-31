@@ -11,15 +11,15 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @extends ListViewMain
      * @memberof Menu.Desktop
      * @constructs
-     * @fires ModelList#RadioRequestModelListGetCollection
-     * @fires ModelList#UpdateLightTree
-     * @fires Autostart#RadioTriggerAutostartInitializedModul
-     * @fires Parser#RadioRequestParserGetItemsByAttributes
-     * @fires Parser#RadioRequestParserGetTreeType
-     * @listens Autostart#RadioTriggerAutostartStartModul
-     * @listens ModelList#UpdateOverlayerView
-     * @listens ModelList#UpdateSelection
-     * @listens ModelList#RenderTree
+     * @fires Core.ModelList#RadioRequestModelListGetCollection
+     * @fires Core.ModelList#UpdateLightTree
+     * @fires Core#RadioTriggerAutostartInitializedModul
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @listens Core#RadioTriggerAutostartStartModul
+     * @listens Core.ModelList#UpdateOverlayerView
+     * @listens Core.ModelList#UpdateSelection
+     * @listens Core.ModelList#RenderTree
      */
     initialize: function () {
         this.collection = Radio.request("ModelList", "getCollection");
@@ -28,6 +28,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         this.listenTo(this.collection, {
             "updateOverlayerView": function (parentModel) {
                 this.updateOverlayer(parentModel);
+                this.setMaxHeightForSelectedLayer();
             },
             "updateSelection": function (model) {
                 this.trigger("updateLightTree");
@@ -42,6 +43,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         this.renderSelectedList();
         Radio.trigger("Autostart", "initializedModul", "tree");
     },
+
     /**
      * Renders the data to DOM.
      * @return {void}
@@ -53,6 +55,20 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
+    },
+
+    /**
+     * sets the max-height for the selectedLayer
+     * @returns {void}
+     */
+    setMaxHeightForSelectedLayer: function () {
+        const overLayerHeight = $("#Overlayer").outerHeight(),
+            baseLayerHeight = $("#Baselayer").outerHeight(),
+            maxUsedHeight = 0.75,
+            maxHeight = Math.ceil($(window).height() * maxUsedHeight),
+            availableHeight = (maxHeight - overLayerHeight - baseLayerHeight) * 100 / maxHeight * maxUsedHeight;
+
+        $("#SelectedLayer").css("max-height", availableHeight + "vH");
     },
 
     /**

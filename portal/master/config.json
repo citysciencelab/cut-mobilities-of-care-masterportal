@@ -231,7 +231,8 @@
           "shadow":
           {
             "name": "Schatten",
-            "glyphicon": "glyphicon-screenshot"
+            "glyphicon": "glyphicon-lamp",
+            "isShadowEnabled": true
           },
           "gfi":
           {

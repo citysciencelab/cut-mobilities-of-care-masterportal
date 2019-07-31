@@ -15,25 +15,6 @@ describe("tools/shadow/model", function () {
         });
     });
 
-    describe("function for checkIsShadowEnabled", function () {
-        it("should return the maps default = false", function () {
-            expect(model.checkIsShadowEnabled()).to.equal(false);
-        });
-    });
-
-    describe("function for checkIsMap3d", function () {
-        it("should return the maps default = false", function () {
-            expect(model.checkIsMap3d()).to.equal(false);
-        });
-    });
-
-    describe("function for toggleButtonValueChanged", function () {
-        it("should still return false because the map is still 2D", function () {
-            model.toggleButtonValueChanged(true);
-            expect(model.checkIsShadowEnabled()).to.equal(false);
-        });
-    });
-
     describe("function for getMinMaxDatesOfCurrentYear", function () {
         const min = moment().startOf("year").valueOf(),
             max = moment().endOf("year").valueOf();
@@ -52,18 +33,30 @@ describe("tools/shadow/model", function () {
         });
     });
 
-    describe("function for getNearestTime", function () {
+    describe("function for getTime", function () {
         const minutes = moment().minutes(),
             setminutes = minutes < 30 ? 0 : 30;
 
-        it("should return the timestamp", function () {
-            expect(model.getNearestTime()).to.equal(moment().minutes(setminutes).seconds(0).millisecond(0).valueOf());
+        it("should return the timestamp without defaults", function () {
+            expect(model.getTime()).to.equal(moment().minutes(setminutes).seconds(0).millisecond(0).valueOf());
+        });
+        it("should return the lower timestamp with defaults", function () {
+            expect(model.getTime({hour: 4, minute: 23})).to.equal(moment().hours(4).minutes(0).seconds(0).millisecond(0).valueOf());
+        });
+        it("should return the upper timestamp with defaults", function () {
+            expect(model.getTime({hour: 4, minute: 33})).to.equal(moment().hours(4).minutes(30).seconds(0).millisecond(0).valueOf());
         });
     });
 
-    describe("function for getToday", function () {
-        it("should return the timestamp", function () {
-            expect(model.getToday()).to.equal(moment().startOf("day").valueOf());
+    describe("function for getDate", function () {
+        const month = moment().get("month"),
+            day = moment().get("date");
+
+        it("should return the timestamp without defaults", function () {
+            expect(model.getDate()).to.equal(moment().month(month).date(day).hours(0).minutes(0).seconds(0).millisecond(0).valueOf());
+        });
+        it("should return the timestamp with defaults", function () {
+            expect(model.getDate({month: 6, day: 12})).to.equal(moment().month(6).date(12).hours(0).minutes(0).seconds(0).millisecond(0).valueOf());
         });
     });
 

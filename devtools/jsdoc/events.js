@@ -1725,12 +1725,12 @@
 /** -------------------- Autostart -------------------- */
 
 /**
- * @event Autostart#RadioTriggerAutostartInitializedModul
+ * @event Core#RadioTriggerAutostartInitializedModul
  * @description To do
  */
 
 /**
- * @event Autostart#RadioTriggerAutostartStartModul
+ * @event Core#RadioTriggerAutostartStartModul
  * @description Start the List View Modul
  */
 

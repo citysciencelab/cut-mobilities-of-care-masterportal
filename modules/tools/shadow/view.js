@@ -34,8 +34,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
         this.datesliderView = new SnippetSliderView({model: this.model.get("dateslider")});
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "toggleButtonValueChanged": this.toggleElements,
-            "shadowUnavailable": this.toggleUnavailableText
+            "toggleButtonValueChanged": this.toggleElements
         });
 
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
@@ -64,6 +63,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             this.$el.append(this.timesliderView.render().el);
             this.$el.append(this.datesliderView.render().el);
             this.toggleElements(this.model.get("isShadowEnabled"));
+            this.model.toggleShadow(this.model.get("isShadowEnabled"));
             this.delegateEvents();
         }
         else {
@@ -97,20 +97,6 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
                 slider.style.display = "none";
             }
         });
-    },
-
-    /**
-     * Toggles info text
-     * @param   {boolean} chkBoxValue Value of the checkbox
-     * @returns {void}
-     */
-    toggleUnavailableText: function (chkBoxValue) {
-        if (chkBoxValue === true) {
-            this.$el.find(".not3d").hide();
-        }
-        else {
-            this.$el.find(".not3d").show();
-        }
     }
 });
 
