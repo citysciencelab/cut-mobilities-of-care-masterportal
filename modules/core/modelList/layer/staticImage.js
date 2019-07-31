@@ -37,9 +37,6 @@ const StaticImageLayer = Layer.extend({
     },
     createLegendURL: function () {
         // this is a comment
-    },
-    checkForScale: function () {
-        // this is a comment
     }
 });
 

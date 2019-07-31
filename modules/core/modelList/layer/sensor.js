@@ -16,6 +16,9 @@ const SensorLayer = Layer.extend({
         }),
 
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -625,20 +628,6 @@ const SensorLayer = Layer.extend({
             if (!_.isUndefined(style)) {
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
-        }
-    },
-
-    /**
-    * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-    * @param {object} options -
-    * @returns {void}
-    **/
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
         }
     },
 

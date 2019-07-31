@@ -19,6 +19,9 @@ const WMSLayer = Layer.extend({
     },
 
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -249,20 +252,6 @@ const WMSLayer = Layer.extend({
 
     setInfoFormat: function (value) {
         this.set("infoFormat", value);
-    },
-
-    /**
-    * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-    * @param {object} options -
-    * @returns {void}
-    **/
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
-        }
     },
 
     /**

@@ -24,6 +24,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
      */
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         var channel = Radio.channel("HeatmapLayer");
 
         if (!this.get("isChildLayer")) {
@@ -222,20 +225,6 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }).length;
 
         return count;
-    },
-
-    /**
-    * Checks by scale if layer is visible or not.
-    * @param {object} options Options from mapView
-    * @returns {void}
-    **/
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
-        }
     },
 
     /**

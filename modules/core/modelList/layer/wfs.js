@@ -21,6 +21,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {Boolean} isClustered=false Flag if layer is clustered.
      */
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -279,20 +282,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             return style;
         };
 
-    },
-
-    /**
-    * Checks on scale if layer is out of range.
-    * @param {Object} options Option from MapView.
-    * @returns {void}
-    **/
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
-        }
     },
 
     /**
