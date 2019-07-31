@@ -59,6 +59,12 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
+        this.listenToOnce(this.get("queryCollection"), {
+            "add": function (model) {
+                model.setIsSelected(true);
+            }
+        }, this);
+
         this.listenTo(Radio.channel("Layer"), {
             "featuresLoaded": function (layerId) {
                 var predefinedQueries = this.get("predefinedQueries"),

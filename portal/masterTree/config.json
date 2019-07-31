@@ -136,8 +136,8 @@
             },
             {
               "layerId": "1711",
-              "isActive": true,
-              "isSelected": true,
+              "isActive": false,
+              "isSelected": false,
               "name": "Krankenhäuser",
               "predefinedRules": [],
               "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
@@ -687,7 +687,46 @@
             }
          ]
       },
-
+      {
+      "Titel": "Krankenhäuser und Schulen",
+      "Layer":
+        [
+          {
+            "id": "1711",
+            "styleId": "1711",
+            "visibility": false,
+            "layerAttribution": "<span>Attributierung für Fachlayer</span>",
+            "mouseHoverField": ["name", "strasse"],
+            "searchField": "name",
+            "filterOptions":
+              [
+                  {
+                    "fieldName": "teilnahme_geburtsklinik",
+                    "filterType": "combo",
+                    "filterName": "Geburtshilfe",
+                    "filterString": ["*", "Ja", "Nein"]
+                  },
+                  {
+                    "fieldName": "teilnahme_notversorgung",
+                    "filterType": "combo",
+                    "filterName": "Not- und Unfallversorgung",
+                    "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
+                  }
+            ],
+            "extendedFilter": true
+          },
+          {
+            "id": "8712",
+            "visibility": false,
+            "name": "Schulinfosystem",
+            "styleId": "8712",
+            "searchField": "schulname",
+            "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+            "gfiTheme": "schulinfo",
+            "additionalInfoField": "adresse_strasse_hausnr"
+          }
+        ]
+      },
       {
         "Titel": "Gruppenlayer",
         "Layer":
