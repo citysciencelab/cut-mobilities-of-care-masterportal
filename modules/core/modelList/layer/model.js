@@ -70,6 +70,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
+     * @param {object} options -
+     * @returns {void}
+     **/
+    checkForScale: function (options) {
+        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
+            this.setIsOutOfRange(false);
+        }
+        else {
+            this.setIsOutOfRange(true);
+        }
+    },
+
+    /**
      * Triggers event if vector features are loaded
      * @param {ol.Feature[]} features Loaded vector features
      * @fires Layer#event:RadioTriggerLayerFeaturesLoaded

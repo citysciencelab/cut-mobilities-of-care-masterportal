@@ -22,6 +22,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @fires Legend#RadioRequestLegendGetLegend
      */
     initialize: function () {
+        this.checkForScaleGroup(Radio.request("MapView", "getOptions"));
         Layer.prototype.initialize.apply(this);
     },
 
@@ -136,7 +137,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     * @param {object} options   Object mit zu prüfender .scale
     * @returns {void}
     **/
-    checkForScale: function (options) {
+    checkForScaleGroup: function (options) {
         var isOutOfRange = true;
 
         _.each(this.get("layerSource"), function (layerSource) {
