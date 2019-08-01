@@ -138,7 +138,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             tagNameList,
             tagNameListSorted,
             multiTags;
-console.log(node);
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
             tagNameList = _.map(node.firstElementChild.children, function (element) {
