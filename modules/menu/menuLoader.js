@@ -24,7 +24,8 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         if (this.menuStyle === "DEFAULT") {
             Radio.on("Util", {
                 "isViewMobileChanged": function () {
-                    this.currentMenu.removeView();
+                    $("div.collapse.navbar-collapse ul.nav-menu").empty();
+                    $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
                     this.loadMenu();
                 }
             }, this);
@@ -54,19 +55,15 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
 
             if (isMobile) {
                 this.currentMenu = new MobileMenu();
-                channel.trigger("ready", this.currentMenu.id);
             }
             else if (this.treeType === "light") {
                 this.currentMenu = new LightMenu();
-                channel.trigger("ready");
-                Radio.trigger("Map", "updateSize");
             }
             else {
                 this.currentMenu = new Menu();
-                channel.trigger("ready");
-                Radio.trigger("Map", "updateSize");
             }
             // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
+            channel.trigger("ready", this.currentMenu.id);
             Radio.trigger("Map", "updateSize");
         }
     }
