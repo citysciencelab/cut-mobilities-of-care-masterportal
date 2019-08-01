@@ -1,4 +1,5 @@
 import Parser from "./parser";
+import {getLayerWhere, getLayerList} from "masterportalAPI/src/rawLayerList";
 
 const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
     /**
@@ -43,7 +44,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // z.B.: {id: "5181", visible: false}
 
                 if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
-                    objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerExtended.id});
+                    objFromRawList = getLayerWhere({id: layerExtended.id});
                     // DIPAS -> Steht ein Objekt nicht in der ServicesJSON, hat aber eine url dann wird der Layer ohne Services Eintrag trotzdemübergeben
 
                     // DIPAS -> wenn der Layertyp "StaticImage" übergeben wird brechen wur nicht ab sondern arbeiten mit der neuen ImageURL weiter.
@@ -61,7 +62,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
                 // z.B.: {id: ["550,551,552,...,559"], visible: false}
                 else if (_.isArray(layerExtended.id) && _.isString(layerExtended.id[0])) {
-                    objsFromRawList = Radio.request("RawLayerList", "getLayerAttributesList");
+                    objsFromRawList = getLayerList();
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
 
                     if (_.isNull(mergedObjsFromRawList)) { // Wenn Layer nicht definiert, dann Abbruch
@@ -73,7 +74,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
                 else if (_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
                     layerExtended.children = _.map(layerExtended.children, function (childLayer) {
-                        objFromRawList = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: childLayer.id});
+                        objFromRawList = getLayerWhere({id: childLayer.id});
 
                         if (!_.isNull(objFromRawList)) {
                             return _.extend(objFromRawList, childLayer, {"isChildLayer": true});

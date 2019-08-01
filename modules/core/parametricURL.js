@@ -1,3 +1,5 @@
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+
 const ParametricURL = Backbone.Model.extend({
     defaults: {
         layerParams: [],
@@ -186,7 +188,7 @@ const ParametricURL = Backbone.Model.extend({
 
         _.each(layerIdList, function (val, index) {
             var layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
-                layerExisting = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: val}),
+                layerExisting = getLayerWhere({id: val}),
                 treeType = Radio.request("Parser", "getTreeType"),
                 layerToPush;
 

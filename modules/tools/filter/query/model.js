@@ -2,6 +2,7 @@ import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
 import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
+import {getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
 
 const QueryModel = Backbone.Model.extend({
 
@@ -201,7 +202,7 @@ const QueryModel = Backbone.Model.extend({
      * @return {object} featureAttributesMap - gefiltertes Mapobject
      */
     mapDisplayNames: function (featureAttributesMap) {
-        var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
+        var displayNames = getDisplayNamesOfFeatureAttributes(this.get("layerId"));
 
         _.each(featureAttributesMap, function (featureAttribute) {
             if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
