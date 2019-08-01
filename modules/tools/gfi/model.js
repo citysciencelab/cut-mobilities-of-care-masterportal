@@ -203,7 +203,8 @@ const Gfi = Tool.extend({
             vectorGFIParams = [],
             wmsGFIParams = [],
             GFIParams3d = [],
-            unionParams = [];
+            unionParams = [],
+            coordinate = [];
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
@@ -211,10 +212,15 @@ const Gfi = Tool.extend({
         }
         // für detached MapMarker
         const feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-                return feat;
-            }),
+            return feat;
+        });
 
+        if (feature === null || feature === undefined) {
+            coordinate = evt.coordinate;
+        }
+        else {
             coordinate = feature.getGeometry().getCoordinates();
+        }
 
         this.setCoordinate(coordinate);
 
