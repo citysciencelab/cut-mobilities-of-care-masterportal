@@ -140,15 +140,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             multiTags;
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
-            tagNameList = _.map(node.firstElementChild.children, function (element) {
-                return element.tagName;
-            });
-            tagNameListSorted = _.sortBy(tagNameList, function (name) {
-                return name;
-            });
-            multiTags = tagNameListSorted.filter(function (tagName, index, list) {
-                return tagName === list[index + 1];
-            });
+            tagNameList = _.map(node.firstElementChild.children, element => element.tagName);
+            tagNameListSorted = _.sortBy(tagNameList, name => name);
+            multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
             multiTagsUnique = _.uniq(multiTags);
         }
         else {
