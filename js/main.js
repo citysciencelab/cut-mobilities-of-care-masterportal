@@ -3,7 +3,7 @@
  * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
  */
 import "@babel/polyfill";
-import {loadApp} from "./app";
+import {fetch} from "./layerList";
 import "../css/bootstrap.less";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
 import "../css/style.css";
@@ -80,9 +80,9 @@ if (!("Config" in window)) {
         script.src = configPath;
     });
 
-    // Abwarten bis Config.js geladen ist, dann app laden
+    // Abwarten bis Config.js geladen ist, dann layer list laden
     loadConfigJs.then(() => {
-        loadApp();
+        fetch(Config.layerConf);
     });
 
     // Show error message without Alerting
@@ -92,7 +92,7 @@ if (!("Config" in window)) {
     });
 }
 else {
-    loadApp();
+    fetch(Config.layerConf);
 }
 
 // Less-Handling: Importieren von allen less-Files im modules-Ordner

@@ -2,6 +2,7 @@ import ImageWMS from "ol/source/ImageWMS.js";
 import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {OverviewMap} from "ol/control.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.prototype */{
     defaults: {
@@ -130,17 +131,17 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         var modelFromCollection,
             baseLayerParams;
 
-        modelFromCollection = Radio.request("RawLayerList", "getLayerWhere", {id: baselayer});
+        modelFromCollection = getLayerWhere({id: baselayer});
         if (_.isUndefined(modelFromCollection) === false) {
             baseLayerParams = {
-                layerUrl: modelFromCollection.get("url"),
+                layerUrl: modelFromCollection.url,
                 params: {
                     t: new Date().getMilliseconds(),
                     zufall: Math.random(),
-                    LAYERS: modelFromCollection.get("layers"),
-                    FORMAT: modelFromCollection.get("format") === "nicht vorhanden" ? "image/png" : modelFromCollection.get("format"),
-                    VERSION: modelFromCollection.get("version"),
-                    TRANSPARENT: modelFromCollection.get("transparent").toString()
+                    LAYERS: modelFromCollection.layers,
+                    FORMAT: modelFromCollection.format === "nicht vorhanden" ? "image/png" : modelFromCollection.format,
+                    VERSION: modelFromCollection.version,
+                    TRANSPARENT: modelFromCollection.transparent.toString()
                 }
             };
         }

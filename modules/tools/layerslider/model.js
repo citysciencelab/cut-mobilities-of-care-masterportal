@@ -1,4 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const LayerSliderModel = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -185,7 +186,7 @@ const LayerSliderModel = Tool.extend({
 
         layers.forEach(function (layerObject) {
             if (
-                !Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerObject.layerId}) ||
+                !getLayerWhere({id: layerObject.layerId}) ||
                 !Radio.request("Parser", "getItemByAttributes", {id: layerObject.layerId})
             ) {
                 invalidLayers.push(layerObject.layerId);

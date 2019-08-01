@@ -4,6 +4,7 @@ import Point from "ol/geom/Point.js";
 import {Icon, Style} from "ol/style.js";
 import {Vector as VectorLayer} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
@@ -161,7 +162,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
     // baut sich aus den Config-prefs die URL zusammen
     requestFeaturesFromWFS: function (wfsId) {
-        var LayerPrefs = Radio.request("RawLayerList", "getLayerAttributesWhere", {id: wfsId}),
+        var LayerPrefs = getLayerWhere({id: wfsId}),
             url = LayerPrefs && LayerPrefs.hasOwnProperty("url") ? LayerPrefs.url : "",
             version = LayerPrefs && LayerPrefs.hasOwnProperty("version") ? LayerPrefs.version : "",
             typename = LayerPrefs && LayerPrefs.hasOwnProperty("featureType") ? LayerPrefs.featureType : "",
