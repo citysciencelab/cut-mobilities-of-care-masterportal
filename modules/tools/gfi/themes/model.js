@@ -138,6 +138,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             tagNameList,
             tagNameListSorted,
             multiTags;
+console.log(node);
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
             tagNameList = _.map(node.firstElementChild.children, function (element) {
@@ -150,6 +151,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                 return tagName === list[index + 1];
             });
             multiTagsUnique = _.uniq(multiTags);
+        }
+        else {
+            console.warn("Incorrect return for GFI!");
         }
 
         return multiTagsUnique;
