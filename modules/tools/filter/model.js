@@ -256,7 +256,7 @@ const FilterModel = Tool.extend({
         var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
             query;
 
-        if (!_.isUndefined(layer)) {
+        if (!_.isUndefined(layer) && layer.has("layer")) {
             query = this.getQueryByTyp(layer.get("typ"), model);
             if (!_.isNull(query)) {
                 if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
