@@ -1,3 +1,4 @@
+import Alert from "../modules/alerting/model";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -89,7 +90,8 @@ function loadApp () {
     // Prepare config for Utils
     var utilConfig = {},
         layerInformationModelSettings = {},
-        cswParserSettings = {};
+        cswParserSettings = {},
+        alertingConfig = Config.alerting ? Config.alerting : {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -111,6 +113,7 @@ function loadApp () {
     }
 
     // Core laden
+    new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options

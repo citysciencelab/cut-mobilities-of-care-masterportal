@@ -9,7 +9,6 @@ import "../css/bootstrap.less";
 import "../css/style.css";
 // polyfill für Promises im IE
 import "es6-promise/auto";
-import Alert from "../modules/alerting/view";
 
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
@@ -18,8 +17,6 @@ var scriptTags = document.getElementsByTagName("script"),
     strippedLocation,
     loadConfigJs,
     context;
-
-new Alert();
 
 // wenn Config.js nicht in der index.html als Script-Tag eingebunden ist, muss sie zunächst zugefügt und geladen werden
 if (!("Config" in window)) {
@@ -88,14 +85,15 @@ if (!("Config" in window)) {
         loadApp();
     });
 
+    // Show error message without Alerting
     loadConfigJs.catch(() => {
-        Radio.trigger("Alert", "alert", "Entschuldigung, die Konfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator.");
+        document.getElementById("loader").style.visibility = "hidden";
+        document.getElementById("map").appendChild(document.createTextNode("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator."));
     });
 }
 else {
     loadApp();
 }
-
 
 // Less-Handling: Importieren von allen less-Files im modules-Ordner
 context = require.context("../modules/", true, /.+\.less?$/);

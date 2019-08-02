@@ -1,3 +1,5 @@
+import AlertingView from "./view";
+
 const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
     defaults: {
         channel: Radio.channel("Alert"),
@@ -6,7 +8,7 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
         isConfirmable: false,
         position: "top-center",
         message: "",
-        animation: false
+        fadeOut: null
     },
     /**
      * @class AlertingModel
@@ -14,21 +16,24 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
      * @memberof Alerting
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("Alert") Radio channel for communication
-     * @property {String} category="alert-info" Category of alert. bootstrap css class
-     * @property {Boolean} isDismissable=true Flag if alert has a dismissable button
-     * @property {Boolean} isConfirmable=false Flag if alert has to be confirmed to close
-     * @property {String} position="top-center" The positioning of the alert. Possible values "top-center", "center-center"
+     * @property {String} [category="alert-info"] Category of alert. bootstrap css class
+     * @property {Boolean} [isDismissable=true] Flag if alert has a dismissable button
+     * @property {Boolean} [isConfirmable=false] Flag if alert has to be confirmed to close
+     * @property {String} [position="top-center"] The positioning of the alert. Possible values "top-center", "center-center"
+     * @property {Boolean} [fadeOut=null] Milliseconds before fading out alert
      * @property {String} message="" The message of the alert
-     * @property {Boolean} animation=false Flag if Alert is animated by means of fading out
      * @fires Alerting#render
      * @fires Alerting#changePosition
      * @listens Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        this.setView(new AlertingView({model: this}));
+
         this.listenTo(this.get("channel"), {
             "alert": this.setParams
         }, this);
     },
+
     /**
      * Sets given parameters on model.
      * @param {String|Object} val Value string or object with information about the alert
@@ -60,14 +65,13 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
             if (_.has(val, "position") === true) {
                 this.setPosition(val.position);
             }
-            if (_.has(val, "animation")) {
-                this.setAnimation(val.animation);
-            }
-            if (!_.has(val, "animation")) {
-                this.setAnimation(false);
+            if (_.has(val, "fadeOut") === true) {
+                this.setFadeOut(val.fadeOut);
             }
         }
-        this.trigger("render");
+        if (_.isString(this.get("message"))) {
+            this.trigger("addMessage", this.get("message"));
+        }
     },
 
     /**
@@ -124,12 +128,21 @@ const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype *
     },
 
     /**
-     * Setter for animation
-     * @param {Boolean/Number} value False if no animation is wanted. Number for fade-out in millis
+     * Setter for fadeOut
+     * @param {Number} fadeOut null if no fadeOut is wanted. Number for fade-out in millis
      * @returns {void}
      */
-    setAnimation: function (value) {
-        this.set("animation", value);
+    setFadeOut: function (fadeOut) {
+        this.set("fadeOut", fadeOut);
+    },
+
+    /**
+     * Sets the view to this model
+     * @param {Backbone.View} val this view
+     * @returns {void}
+     */
+    setView: function (val) {
+        this.set("view", val);
     }
 });
 
