@@ -59,6 +59,12 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
+        this.listenToOnce(this.get("queryCollection"), {
+            "add": function (model) {
+                model.setIsSelected(true);
+            }
+        }, this);
+
         this.listenTo(Radio.channel("Layer"), {
             "featuresLoaded": function (layerId) {
                 var predefinedQueries = this.get("predefinedQueries"),
@@ -250,7 +256,7 @@ const FilterModel = Tool.extend({
         var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
             query;
 
-        if (!_.isUndefined(layer)) {
+        if (!_.isUndefined(layer) && layer.has("layer")) {
             query = this.getQueryByTyp(layer.get("typ"), model);
             if (!_.isNull(query)) {
                 if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {

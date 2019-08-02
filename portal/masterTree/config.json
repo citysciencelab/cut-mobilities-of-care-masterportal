@@ -136,8 +136,8 @@
             },
             {
               "layerId": "1711",
-              "isActive": true,
-              "isSelected": true,
+              "isActive": false,
+              "isSelected": false,
               "name": "Krankenhäuser",
               "predefinedRules": [],
               "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
@@ -687,7 +687,6 @@
             }
          ]
       },
-
       {
         "Titel": "Gruppenlayer",
         "Layer":
