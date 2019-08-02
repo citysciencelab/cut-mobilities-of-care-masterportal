@@ -30,7 +30,6 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
     },
     id: "messages",
     className: "top-center",
-    model: new AlertingModel(),
     /**
      * @member AlertingTemplate
      * @description Template used to create the alert message
