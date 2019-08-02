@@ -221,10 +221,10 @@ zoomtofeature: {
 ## alerting ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|category|nein|String|"alert-info"|Bootstrap Class for layout|
-|isDismissable|Nein|Boolean|true|Flag if alert has a dismissable button|
-|isConfirmable|Nein|Boolean|false|Flag if alert has to be confirmed to close|
-|position|Nein|String|"top-center"|Position des Alerts (Bootstrap-Class)|
-|fadeOut|Nein|Integer|null|Milliseconds to wait before fade out alert|
+|category|nein|String|"alert-info"|Bestimmt das Layout des Bootstrap-Alerts. Siehe [Bootstrap](https://getbootstrap.com/docs/3.3/components/#alerts)|
+|isDismissable|nein|Boolean|true|Legt fest, ob der Alarm weggeklickt werden kann, indem eine weitere Bootstrap-Class am alert gesetzt wird .|
+|isConfirmable|nein|Boolean|false|Flag ob alert bestätigt werden muss.|
+|position|nein|String|"top-center"|Position des Alerts (Bootstrap-Class)|
+|fadeOut|nein|Integer|null|Milliseconds bis zum automatischen fade-out des alerts|
 
 >Zurück zur [Dokumentation Masterportal](doc.md).
