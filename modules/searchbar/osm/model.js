@@ -1,4 +1,5 @@
 import "../model";
+import { transformToMapProjection } from "masterportalAPI/src/crs";
 
 const OsmModel = Backbone.Model.extend({
     defaults: {
@@ -145,11 +146,11 @@ const OsmModel = Backbone.Model.extend({
                         // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
                         north = (parseFloat(bbox[0]) + parseFloat(bbox[1])) / 2.0;
                         east = (parseFloat(bbox[2]) + parseFloat(bbox[3])) / 2.0;
-                        center = Radio.request("CRS", "transformToMapProjection", "WGS84", [east, north]);
+                        center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [east, north]);
                     }
                     else {
-                        upper = Radio.request("CRS", "transformToMapProjection", "WGS84", [parseFloat(bbox[3]), parseFloat(bbox[1])]);
-                        lower = Radio.request("CRS", "transformToMapProjection", "WGS84", [parseFloat(bbox[2]), parseFloat(bbox[0])]);
+                        upper = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(bbox[3]), parseFloat(bbox[1])]);
+                        lower = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(bbox[2]), parseFloat(bbox[0])]);
                         center = [
                             lower[0],
                             lower[1],

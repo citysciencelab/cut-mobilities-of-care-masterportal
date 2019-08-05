@@ -1,6 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
+import { getProjections, transformFromMapProjection } from "masterportalAPI/src/crs";
 
 
 const CoordPopup = Tool.extend({
@@ -37,7 +38,7 @@ const CoordPopup = Tool.extend({
     },
 
     createInteraction: function () {
-        this.setProjections(Radio.request("CRS", "getProjections"));
+        this.setProjections(getProjections());
         this.setMapProjection(Radio.request("MapView", "getProjection"));
         this.setSelectPointerMove(new Pointer({
             handleMoveEvent: function (evt) {
@@ -77,7 +78,7 @@ const CoordPopup = Tool.extend({
             positionTargetProjection = [0, 0];
 
         if (positionMapProjection.length > 0) {
-            positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
+            positionTargetProjection = transformFromMapProjection(Radio.request("Map", "getMap"), targetProjection, positionMapProjection);
         }
 
         return positionTargetProjection;
