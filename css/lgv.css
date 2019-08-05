@@ -5,6 +5,7 @@ html, body {
 
 .masterportal-container {
     height: 100%;
+    font-family: MasterPortalFont, Arial, sans-serif;
 }
 
 label {
