@@ -6,7 +6,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     defaults: {
         inUse: false,
         minChars: 3,
-        layerTypes: ["WFS"],
+        layerTypes: ["WFS", "GROUP"],
         gfiOnClick: false
     },
     /**
@@ -67,6 +67,13 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             aFilteredModels = _.union(aVectorLayerModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
+
+            // if there is group layer, the new model will be generated
+            if (aFilteredModels.length === 0) {
+                _.each(aVectorLayerModels, function (aVectorLayerModel) {
+                    aFilteredModels = aFilteredModels.concat(aVectorLayerModel.get("layerSource"));
+                }, this);
+            }
 
             aFoundMatchingFeatures = this.findMatchingFeatures(aFilteredModels, sPrepSearchString);
             Radio.trigger("Searchbar", "pushHits", "hitList", aFoundMatchingFeatures);
