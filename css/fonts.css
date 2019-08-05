@@ -1,35 +1,35 @@
 /* open-sans-regular - latin */
 @font-face {
     font-family: 'MasterPortalFont';
-    src: url('open-sans-regular.eot'); /* IE9 Compat Modes */
+    src: url('fonts/open-sans-regular.eot'); /* IE9 Compat Modes */
     src: local('Open Sans Regular'), local('OpenSans-Regular'),
-         url('open-sans-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('open-sans-regular.woff2') format('woff2'), /* Super Modern Browsers */
-         url('open-sans-regular.woff') format('woff'), /* Modern Browsers */
-         url('open-sans-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-         url('open-sans-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
+         url('fonts/open-sans-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('fonts/open-sans-regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('fonts/open-sans-regular.woff') format('woff'), /* Modern Browsers */
+         url('fonts/open-sans-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('fonts/open-sans-regular.svg#OpenSans') format('svg'); /* Legacy iOS */
   }
 
   /* open-sans-italic - latin */
   @font-face {
     font-family: 'MasterPortalFont Italic';
-    src: url('open-sans-italic.eot'); /* IE9 Compat Modes */
+    src: url('fonts/open-sans-italic.eot'); /* IE9 Compat Modes */
     src: local('Open Sans Italic'), local('OpenSans-Italic'),
-         url('open-sans-italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('open-sans-italic.woff2') format('woff2'), /* Super Modern Browsers */
-         url('open-sans-italic.woff') format('woff'), /* Modern Browsers */
-         url('open-sans-italic.ttf') format('truetype'), /* Safari, Android, iOS */
-         url('open-sans-italic.svg#OpenSans') format('svg'); /* Legacy iOS */
+         url('fonts/open-sans-italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('fonts/open-sans-italic.woff2') format('woff2'), /* Super Modern Browsers */
+         url('fonts/open-sans-italic.woff') format('woff'), /* Modern Browsers */
+         url('fonts/open-sans-italic.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('fonts/open-sans-italic.svg#OpenSans') format('svg'); /* Legacy iOS */
   }
 
   /* open-sans-700 - latin */
   @font-face {
     font-family: 'MasterPortalFont Bold';
-    src: url('open-sans-700.eot'); /* IE9 Compat Modes */
+    src: url('fonts/open-sans-700.eot'); /* IE9 Compat Modes */
     src: local('MasterPortalFont Bold'), local('OpenSans-Bold'),
-         url('open-sans-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-         url('open-sans-700.woff2') format('woff2'), /* Super Modern Browsers */
-         url('open-sans-700.woff') format('woff'), /* Modern Browsers */
-         url('open-sans-700.ttf') format('truetype'), /* Safari, Android, iOS */
-         url('open-sans-700.svg#OpenSans') format('svg'); /* Legacy iOS */
+         url('fonts/open-sans-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('fonts/open-sans-700.woff2') format('woff2'), /* Super Modern Browsers */
+         url('fonts/open-sans-700.woff') format('woff'), /* Modern Browsers */
+         url('fonts/open-sans-700.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('fonts/open-sans-700.svg#OpenSans') format('svg'); /* Legacy iOS */
   }
