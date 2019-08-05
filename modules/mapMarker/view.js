@@ -1,4 +1,5 @@
 import MapHandlerModel from "./model";
+import { transformToMapProjection } from "masterportalAPI/src/crs";
 
 const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */{
     /**
@@ -273,7 +274,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
 
         if (!_.isUndefined(startMarker)) {
             if (!_.isUndefined(projectionFromParamUrl)) {
-                startMarker = Radio.request("CRS", "transformToMapProjection", projectionFromParamUrl, startMarker);
+                startMarker = transformToMapProjection(Radio.request("Map", "getMap"), this.get("projectionFromParamUrl"), startCenter);
             }
             Radio.trigger("MapMarker", "showMarker", startMarker);
         }

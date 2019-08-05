@@ -1,5 +1,6 @@
 import {Projection, addProjection} from "ol/proj.js";
 import View from "ol/View.js";
+import { transformToMapProjection, getProjection } from "masterportalAPI/src/crs";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
@@ -265,7 +266,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
         if (!_.isUndefined(startCenter)) {
             if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
-                startCenter = Radio.request("CRS", "transformToMapProjection", this.get("projectionFromParamUrl"), startCenter);
+                startCenter = transformToMapProjection(Radio.request("Map", "getMap"), this.get("projectionFromParamUrl"), startCenter);
             }
             this.setStartCenter(startCenter);
         }
@@ -321,7 +322,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      */
     setProjection: function () {
         var epsgCode = this.get("epsg"),
-            proj = Radio.request("CRS", "getProjection", epsgCode);
+            proj = getProjection(epsgCode);
 
         if (!proj) {
             Radio.trigger("Alert", "alert", "Unknown CRS " + epsgCode + ". Can't set projection.");

@@ -5,7 +5,6 @@ import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
 import ParametricURL from "../modules/core/parametricURL";
-import CRS from "../modules/core/crs";
 import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
@@ -121,7 +120,6 @@ function loadApp () {
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
-    new CRS();
     new Map();
     new WPS();
     new AddGeoJSON();

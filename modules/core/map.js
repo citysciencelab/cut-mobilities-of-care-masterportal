@@ -12,6 +12,9 @@ import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/WMSRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 import moment from "moment";
+import {createMap} from "masterportalAPI/src/map";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import {transform as transformCoord, transformFromMapProjection} from "masterportalAPI/src/crs";
 
 const map = Backbone.Model.extend({
     defaults: {
@@ -26,7 +29,7 @@ const map = Backbone.Model.extend({
     initialize: function () {
         var channel = Radio.channel("Map"),
             mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
-            mapView = new MapView(mapViewSettings);
+            mapView;
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -81,16 +84,12 @@ const map = Backbone.Model.extend({
             }
         });
 
-        this.set("view", mapView.get("view"));
-        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
-
-        this.set("map", new Map({
-            logo: null,
-            target: "map",
-            view: this.get("view"),
-            controls: [],
-            interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
+        this.set("map", createMap({
+            ...Config,
+            layerConf: getLayerList()
         }));
+        mapView = new MapView(mapViewSettings);
+        this.set("view", mapView.get("view"));
         if (window.Cesium) {
             this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
         }
@@ -135,7 +134,7 @@ const map = Backbone.Model.extend({
 
         // Should the coordinates get transformed to another coordinate system for broadcast?
         if (!_.isUndefined(Config.inputMap.targetProjection)) {
-            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
+            coords = transformFromMapProjection(this.get("map"), Config.inputMap.targetProjection, coords);
         }
 
         // Broadcast the coordinates clicked in the desired coordinate system.
@@ -181,8 +180,8 @@ const map = Backbone.Model.extend({
         var bbox = this.get("view").calculateExtent(this.get("map").getSize()),
             firstCoord = [bbox[0], bbox[1]],
             secondCoord = [bbox[2], bbox[3]],
-            firstCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: firstCoord}),
-            secondCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: secondCoord});
+            firstCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", firstCoord),
+            secondCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", secondCoord);
 
         return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
     },
