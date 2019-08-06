@@ -22,7 +22,18 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                use: "babel-loader"
+                loader: "babel-loader",
+                options: {
+                    presets: ["@babel/preset-env"],
+                    plugins: ["@babel/plugin-syntax-dynamic-import"]
+                }
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)$/,
+                loader: "file-loader",
+                options: {
+                    name: "[name].[ext]"
+                }
             }
         ]
     },

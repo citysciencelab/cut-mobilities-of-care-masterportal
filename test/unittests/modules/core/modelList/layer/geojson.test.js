@@ -1,6 +1,5 @@
 import {assert} from "chai";
 import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
-import MapView from "@modules/core/mapView.js";
 import Util from "@testUtil";
 import Feature from "ol/Feature.js";
 import {expect} from "chai";
@@ -12,7 +11,6 @@ describe("core/modelList/layer/geojson", function () {
 
     before(function () {
         utilModel = new Util();
-        new MapView();
         geojson = utilModel.getGeoJsonTestFeatures();
         geojsonLayer = new GeoJsonLayerModel();
     });

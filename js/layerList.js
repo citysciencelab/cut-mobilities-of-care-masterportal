@@ -65,7 +65,7 @@ function modifyLayerList (layerList) {
  * @param  {string[]} ids - Ids von Objekten die entfernt werden
  * @return {Object[]} response - Objekte aus der services.json
  */
-function deleteLayersByIds (response, ids) {
+export function deleteLayersByIds (response, ids) {
     return _.reject(response, function (element) {
         return _.contains(ids, element.id);
     });
@@ -77,7 +77,7 @@ function deleteLayersByIds (response, ids) {
  * @param  {string[]} metaIds - Metadaten-Ids von Objekten die entfernt werden
  * @return {Object[]} response - Objekte aus der services.json
  */
-function deleteLayersByMetaIds (response, metaIds) {
+export function deleteLayersByMetaIds (response, metaIds) {
     return response.filter(function (element) {
         return element.datasets.length === 0 || _.contains(metaIds, element.datasets[0].md_id) === false;
     });
@@ -89,7 +89,7 @@ function deleteLayersByMetaIds (response, metaIds) {
  * @param  {string[]} metaIds - Metadaten-Ids von Objekten die gruppiert werden
  * @return {Object[]} response - Objekte aus der services.json
  */
-function mergeLayersByMetaIds (response, metaIds) {
+export function mergeLayersByMetaIds (response, metaIds) {
     var rawLayerArray = response,
         objectsById,
         newObject;
@@ -151,7 +151,7 @@ function setStyleForHVVLayer (response) {
  * @param {Object[]} response - Objekte aus der services.json
  * @return {Object[]} response - Objekte aus der services.json
  */
-function cloneByStyle (response) {
+export function cloneByStyle (response) {
     var rawLayerArray = response,
         objectsByStyle = response.filter(function (model) { // Layer die mehrere Styles haben
             return typeof model.styles === "object" && model.typ === "WMS";
