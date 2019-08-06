@@ -1,6 +1,6 @@
-import {Projection, addProjection} from "ol/proj.js";
+import {Projection} from "ol/proj.js";
 import defaults from "masterportalAPI/src/defaults";
-import { transformToMapProjection, getProjection } from "masterportalAPI/src/crs";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {

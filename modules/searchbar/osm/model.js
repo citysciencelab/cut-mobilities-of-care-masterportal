@@ -1,5 +1,5 @@
 import "../model";
-import { transformToMapProjection } from "masterportalAPI/src/crs";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 
 const OsmModel = Backbone.Model.extend({
     defaults: {

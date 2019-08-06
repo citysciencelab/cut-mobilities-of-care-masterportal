@@ -18,8 +18,7 @@ export function fetch (layerConfUrl) {
             else {
                 modifyLayerList(layerList);
             }
-        }
-    );
+        });
 }
 
 /**
@@ -55,8 +54,7 @@ function modifyLayerList (layerList) {
         () => {
             // Abwarten bis die layer list geladen ist, dann die app laden
             loadApp();
-        }
-    );
+        });
 }
 
 /**

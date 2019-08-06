@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
-import { getProjections, transformFromMapProjection } from "masterportalAPI/src/crs";
+import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
 
 
 const CoordPopup = Tool.extend({

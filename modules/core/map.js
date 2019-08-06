@@ -1,9 +1,7 @@
-import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
-import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
@@ -27,8 +25,7 @@ const map = Backbone.Model.extend({
     },
 
     initialize: function (mapViewSettings) {
-        var channel = Radio.channel("Map"),
-            mapView;
+        var channel = Radio.channel("Map");
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -88,7 +85,7 @@ const map = Backbone.Model.extend({
             ...mapViewSettings,
             layerConf: getLayerList()
         }));
-        mapView = new MapView({view: this.get("map").getView(), settings: mapViewSettings});
+        new MapView({view: this.get("map").getView(), settings: mapViewSettings});
         this.set("view", this.get("map").getView());
 
         if (window.Cesium) {
