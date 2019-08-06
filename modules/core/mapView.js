@@ -54,6 +54,21 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     initialize: function (attributes) {
         var channel = Radio.channel("MapView");
 
+        if (!_.isUndefined(this.get("settings")) && !_.isUndefined(this.get("settings").options)) {
+            this.set("options", this.get("settings").options);
+        }
+        else {
+            this.set("options", defaults.options);
+        }
+
+        // overwrite the resolution if zoomLevel is configured and resolution is not
+        if (attributes && attributes.resolution && attributes.zoomLevel !== undefined) {
+            const resolution = this.get("options")[attributes.zoomLevel].resolution;
+
+            this.get("settings").resolution = resolution;
+            this.get("view").setResolution(resolution);
+        }
+
         channel.reply({
             "getProjection": function () {
                 return this.get("view").getProjection();
@@ -97,17 +112,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
                 }
             }
         });
-
-        this.set("options", this.get("settings").options || defaults.options);
-
-        // overwrite the resolution if zoomLevel is configured and resolution is not
-        if (attributes && _.isUndefined(attributes.resolution) && Number.isInteger(attributes.zoomLevel)) {
-
-            const resolution = this.get("options")[attributes.zoomLevel].resolution;
-
-            this.get("settings").resolution = resolution;
-            this.get("view").setResolution(resolution);
-        }
 
         this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
@@ -245,14 +249,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @return {void}
-     */
-    setResolutions: function () {
-        this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    /**
-     * @description todo
      * @param {object} view todo
      * @return {void}
      */
@@ -316,10 +312,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         });
         index = _.indexOf(unionScales, parseInt(scale, 10));
         if (unionScales.length === scales.length || scaleType === "max") {
-            return this.get("resolutions")[index];
+            return this.get("view").getResolutions()[index];
         }
         else if (scaleType === "min") {
-            return this.get("resolutions")[index - 1];
+            return this.get("view").getResolutions()[index - 1];
         }
         return null;
     },

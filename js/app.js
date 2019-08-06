@@ -120,7 +120,7 @@ function loadApp () {
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
-    new Map();
+    new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
 
