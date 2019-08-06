@@ -57,7 +57,7 @@ const FilterView = Backbone.View.extend({
         }
         else {
             Radio.trigger("Sidebar", "append", this.el);
-            Radio.trigger("Sidebar", "toggle", true);
+            Radio.trigger("Sidebar", "toggle", true, Radio.request("Util", "isViewMobile") ? "80%" : undefined);
         }
         this.renderSimpleViews();
         this.delegateEvents();
