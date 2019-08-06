@@ -1904,3 +1904,10 @@
  * @event FlightPlayer#RadioRequestFlightPlayerGetValues
  * @description returns the state values of the flightplayer
  */
+
+/**
+ * @event FlightPlayer#RadioTriggerFlightPlayerStateChange
+ * @param {string} state "play" or "stop"
+ * @param {FlightInstance} flightInstance
+ * @description fires if the flightplayer state changes. If the player starts playing or stop is called
+ */

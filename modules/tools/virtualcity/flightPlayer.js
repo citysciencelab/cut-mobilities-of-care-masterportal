@@ -18,6 +18,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @property {Array<number>} times
      * @fires Map#RadioRequestMapIsMap3d
      * @fires Map#RadioRequestMapGetMap3d
+     * @fires FlightPlayer#RadioTriggerFlightPlayerStateChange
      * @listens Map#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
@@ -119,6 +120,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @return {void} -
      * @fires Map#RadioRequestMapIsMap3d
      * @fires Map#RadioRequestMapGetMap3d
+     * @fires FlightPlayer#RadioTriggerFlightPlayerStateChange
      */
     play (flightInstance) {
         const scene = Radio.request("Map", "getMap3d").getCesiumScene();
@@ -146,11 +148,13 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
 
         this.setCurrentSystemTime(null);
         this.setPlaying(true);
+        Radio.trigger("FlightPlayer", "stateChange", "play", this.get("activeInstance"));
     },
 
     /**
      * stops the active flight and sets the currentTime to 0
      * @return {void} -
+     * @fires FlightPlayer#RadioTriggerFlightPlayerStateChange
      */
     stop () {
         if (this.get("postRenderHandler")) {
@@ -167,6 +171,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
 
         this.setCurrentTime(0);
         this.setCurrentSystemTime(null);
+        Radio.trigger("FlightPlayer", "stateChange", "stop", this.get("activeInstance"));
     },
 
     /**
