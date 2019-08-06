@@ -86,10 +86,12 @@ const map = Backbone.Model.extend({
 
         this.set("map", createMap({
             ...Config,
+            ...mapViewSettings,
             layerConf: getLayerList()
         }));
-        mapView = new MapView(mapViewSettings);
-        this.set("view", mapView.get("view"));
+        mapView = new MapView({view: this.get("map").getView(), settings: mapViewSettings});
+        this.set("view", this.get("map").getView());
+
         if (window.Cesium) {
             this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
         }
