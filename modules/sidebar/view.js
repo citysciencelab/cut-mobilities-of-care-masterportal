@@ -51,14 +51,13 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      */
     toggle: function (model, isVisible) {
         if (isVisible) {
-            this.$el.css("width", this.model.get("width"));
             this.$el.show();
         }
         else {
             this.$el.hide();
         }
         this.toggleBackdrop(this.model.get("isMobile"), isVisible);
-        this.setMapWidth(this.model.get("isMobile"), isVisible, model.get("width"));
+        this.setMapWidth(this.model.get("isMobile"), isVisible);
         Radio.trigger("Map", "updateSize");
     },
 
@@ -78,17 +77,19 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * Sets the width of the map
      * @param {boolean} isMobile Flag if the portal is in mobile mode.
      * @param {boolean} isVisible Flag if the sidebar is visible.
-     * @param {String} width The width of the sidebar in percent. e.g. "30%"
      * @return {void}
      */
-    setMapWidth: function (isMobile, isVisible, width) {
-        if (!isMobile && isVisible) {
-            const diffToHundret = 100 - parseInt(width.substring(0, width.length - 1), 10);
+    setMapWidth: function (isMobile, isVisible) {
+        const $map = $("#map"),
+            $sidebar = $(".sidebar"),
+            parentWidth = $map.parent().width(),
+            relativeWidth = Math.floor((parentWidth - $sidebar.width()) / parentWidth * 100);
 
-            $("#map").css("width", diffToHundret + "%");
+        if (!isMobile && isVisible) {
+            $map.css("width", relativeWidth + "%");
         }
         else {
-            $("#map").css("width", "100%");
+            $map.css("width", "100%");
         }
     },
 
