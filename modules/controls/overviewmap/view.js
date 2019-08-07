@@ -3,7 +3,7 @@ import template from "text-loader!./template.html";
 
 const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototype */{
     events: {
-        "click div#mini-map": "toggle"
+        "click div.overviewmap-button": "toggle"
     },
     /**
      * @class OverviewMapView
