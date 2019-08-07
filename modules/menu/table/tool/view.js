@@ -12,7 +12,7 @@ const ToolView = Backbone.View.extend({
         });
     },
     id: "table-tools",
-    className: "table-nav table-tools",
+    className: "table-nav table-tools col-md-2",
     template: _.template(MenuTemplate),
     render: function () {
         var collection = Radio.request("ModelList", "getCollection"),

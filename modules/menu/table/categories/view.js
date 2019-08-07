@@ -30,14 +30,14 @@ const CategoryView = Backbone.View.extend({
         this.render();
     },
     render: function () {
-        this.$el.html(this.template());
+        $("#table-nav").append(this.$el.html(this.template()));
         if (Radio.request("TableMenu", "getActiveElement") === "Category") {
             this.$(".table-nav-cat-panel").collapse("show");
         }
         return this;
     },
     id: "table-category-list",
-    className: "table-category-list table-nav",
+    className: "table-category-list table-nav col-md-2",
     template: _.template(Template),
     toggleCategoryMenu: function () {
         if (this.$(".table-nav-cat-panel").hasClass("in")) {
