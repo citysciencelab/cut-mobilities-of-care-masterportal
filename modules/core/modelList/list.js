@@ -533,15 +533,19 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelInTree: function (model, movement) {
         var currentSelectionIdx = model.get("selectionIDX"),
-            modelToSwap = this.where({selectionIDX: currentSelectionIdx + movement});
+            newSelectionIndex = currentSelectionIdx + movement,
+            modelToSwap = this.where({selectionIDX: newSelectionIndex});
 
-        if (!modelToSwap || modelToSwap.length === 0) {
+        // Do not move models when no model to swap is found.
+        // There are hidden models such as "oblique" at selectionIDX 0, causing modelToSwap array to be not
+        // empty although it should be. That's why currentSelectionIdx <= 1 is also checked.
+        if (newSelectionIndex <= 1 || !modelToSwap || modelToSwap.length === 0) {
             return;
         }
 
         modelToSwap = modelToSwap[0];
 
-        model.setSelectionIDX(modelToSwap.get("selectionIDX"));
+        model.setSelectionIDX(newSelectionIndex);
         modelToSwap.setSelectionIDX(currentSelectionIdx);
 
         this.updateLayerView();
