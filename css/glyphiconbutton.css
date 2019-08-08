@@ -13,3 +13,7 @@
     vertical-align: middle;
     white-space: nowrap;
 }
+
+.glyphicon-question-sign {
+    cursor: pointer;
+}
