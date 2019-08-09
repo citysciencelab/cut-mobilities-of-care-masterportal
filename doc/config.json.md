@@ -394,18 +394,31 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean, zeigt es die Overviewmap mit den Defaulteinsellungen an. Ist es vom Typ Object, so gelten folgende Attribute
 
+<<<<<<< HEAD
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|false|
 |baselayer|nein|String||Deprecated in 3.0.0 Bitte "layerId" verwenden.|false|
 |layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden.|false|
+=======
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
+|baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
+|isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
+>>>>>>> add parameter isInitOpen to overviewmap
 
 **Beispiel overviewmap als Object:**
 ```
 #!json
 "overviewMap": {
     "resolution": 305.7487246381551,
+<<<<<<< HEAD
     "layerId": "452"
+=======
+    "baselayer": "452",
+    "isInitOpen": false
+>>>>>>> add parameter isInitOpen to overviewmap
 }
 ```
 

@@ -55,6 +55,7 @@ const map = Backbone.Model.extend({
             "addOverlay": this.addOverlay,
             "addInteraction": this.addInteraction,
             "addControl": this.addControl,
+            "removeControl": this.removeControl,
             "removeLayer": this.removeLayer,
             "removeLoadingLayer": this.removeLoadingLayer,
             "removeOverlay": this.removeOverlay,
