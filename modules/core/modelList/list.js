@@ -380,6 +380,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         var children = this.where({parentId: parentId}),
             additionalChildren = this.where({type: "layer", typ: "GROUP", isVisibleInTree: true});
 
+        children = children.concat(additionalChildren);
+
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
