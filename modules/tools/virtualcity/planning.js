@@ -2,6 +2,7 @@ import axios from "axios";
 import EntitiesLayer from "../../core/modelList/layer/entities";
 import Tileset from "../../core/modelList/layer/tileset";
 import {parseFlightOptions} from "./flight";
+import StaticImageLayer from "../../core/modelList/layer/staticImage";
 
 const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     defaults: _.extend({}, Backbone.Model.defaults, {
@@ -54,6 +55,18 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                         this.entitiesLayer.addEntityFromOptions(Object.assign(entityOptions, {
                             url: `${this.get("url")}${planningObjectData.url}`
                         }));
+                    }
+                    else if (planningObjectData.type === "image") {
+                        const imageLayer = new StaticImageLayer({
+                            url: `${this.get("url")}${planningObjectData.url}`,
+                            extent: planningObjectData.imageMeta.extent
+                        });
+
+                        imageLayer.initialize();
+                        imageLayer.prepareLayerObject();
+                        imageLayer.setVisible(true);
+
+                        Radio.trigger("Map", "addLayerOnTop", imageLayer.get("layer"));
                     }
                     else if (planningObjectData.type === "featureStore") {
                         // eslint-disable-next-line no-underscore-dangle
