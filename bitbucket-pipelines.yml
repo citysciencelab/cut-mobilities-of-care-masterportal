@@ -12,6 +12,6 @@ pipelines:
           - node
         script: # Modify the commands below to build your repository.
             - pwd
-            - ls -al
+            - ls -R
             - npm install
             - npm test
