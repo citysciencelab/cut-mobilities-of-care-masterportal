@@ -6,10 +6,12 @@ import {getUid} from "olcs/util.js";
 import TileWMS from "ol/source/TileWMS.js";
 import olcsAbstractSynchronizer from "olcs/AbstractSynchronizer.js";
 import olcsCore from "olcs/core.js";
-import {Tile} from "ol/layer.js";
+import {Tile, Image as ImageLayer} from "ol/layer.js";
 import {stableSort} from "ol/array.js";
 import {getBottomLeft, getBottomRight, getTopRight, getTopLeft} from "ol/extent.js";
 import {transformExtent} from "ol/proj.js";
+import StaticImageSource from "ol/source/ImageStatic";
+import proj4 from "proj4";
 
 /**
  * Represents a WMSRasterSynchronizer.
@@ -91,7 +93,7 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
      * @protected
      */
     convertLayerToCesiumImageries (olLayer, viewProj) {
-        if (!(olLayer instanceof Tile)) {
+        if (!(olLayer instanceof Tile) && !(olLayer instanceof ImageLayer)) {
             return null;
         }
 
@@ -123,6 +125,19 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
             }
 
             provider = new Cesium.WebMapServiceImageryProvider(options);
+        }
+        else if (source instanceof StaticImageSource) {
+            const extent = source.getImageExtent(),
+                options = {
+                    "url": source.getUrl(),
+                    "show": false
+                },
+                bottomLeftCorner = proj4("EPSG:25832", "EPSG:4326", getBottomLeft(extent)),
+                topRightCorner = proj4("EPSG:25832", "EPSG:4326", getTopRight(extent));
+
+            options.rectangle = Cesium.Rectangle.fromDegrees(bottomLeftCorner[0], bottomLeftCorner[1], topRightCorner[0], topRightCorner[1]);
+            provider = new Cesium.SingleTileImageryProvider(options);
+
         }
         else {
         // sources other than TileImage are currently not supported
