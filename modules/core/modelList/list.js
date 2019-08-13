@@ -33,7 +33,7 @@ import WfsFeatureFilter from "../../wfsfeaturefilter/model";
 import TreeFilter from "../../treefilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
-import FeatureLister from "../../featureLister/model";
+import FeatureLister from "../../featurelister/model";
 import AddWms from "../../tools/addwms/model";
 import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
@@ -42,7 +42,7 @@ import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayerSliderModel from "../../tools/layerSlider/model";
+import LayerSliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 

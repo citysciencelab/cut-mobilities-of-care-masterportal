@@ -34,7 +34,7 @@ module.exports = {
             Radio: "backbone.radio",
             _: "underscore",
             Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
-            XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
+            XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXMLSerializer"),
             fs: "fs",
             requestAnimationFrame: "raf"
         }),

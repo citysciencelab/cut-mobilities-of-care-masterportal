@@ -1,4 +1,4 @@
-import Model from "@modules/searchbar/OSM/model.js";
+import Model from "@modules/searchbar/osm/model.js";
 import {expect} from "chai";
 
 describe("modules/searchbar/osm", function () {
