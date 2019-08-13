@@ -273,6 +273,9 @@ const QueryModel = Backbone.Model.extend({
                 }
             }
         }
+        else {
+            this.setIsSelected(false);
+        }
     },
 
     setIsSelected: function (value) {
