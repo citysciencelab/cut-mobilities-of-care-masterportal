@@ -32,6 +32,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
         this.entitiesLayer = null;
         this.defaultViewpoint = null;
         this.planningTilesetInstances = [];
+        this.staticImageLayers = [];
         this.flightInstances = [];
     },
 
@@ -64,8 +65,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
 
                         imageLayer.initialize();
                         imageLayer.prepareLayerObject();
-                        imageLayer.setVisible(true);
-
+                        this.staticImageLayers.push(imageLayer);
                         Radio.trigger("Map", "addLayerOnTop", imageLayer.get("layer"));
                     }
                     else if (planningObjectData.type === "featureStore") {
@@ -141,6 +141,9 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                 layer.set("isSelected", true, {silent: true});
                 layer.toggleLayerOnMap();
             });
+            this.staticImageLayers.forEach((layer)=> {
+                layer.setVisible(true);
+            });
         });
     },
     /**
@@ -154,6 +157,9 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
             this.clearHiddenObjects();
             this.planningTilesetInstances.forEach((layer)=> {
                 layer.set("isSelected", false, {silent: true});
+                layer.setVisible(false);
+            });
+            this.staticImageLayers.forEach((layer)=> {
                 layer.setVisible(false);
             });
         });

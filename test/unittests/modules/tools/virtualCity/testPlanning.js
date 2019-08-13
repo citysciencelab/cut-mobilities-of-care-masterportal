@@ -99,6 +99,23 @@ describe("tools/virtualcity/planning", function () {
                     "status": "ready",
                     "layerId": "nQgP6fhAxsvHtppds",
                     "visibility": true
+                },
+                {
+                    "_id": "AjX4Fhii6wHE45LSv",
+                    "type": "image",
+                    "name": "Laerm-Test.png",
+                    "status": "ready",
+                    "visibility": true,
+                    "imageMeta": {
+                        "extent": [
+                            568426.237,
+                            5931985.674,
+                            569614.713,
+                            5933174.15
+                        ],
+                        "opacity": 1
+                    },
+                    "url": "/models/pQ34QDp3pxCiS4Kn.png"
                 }
             ],
             "hiddenObjects": [
@@ -232,6 +249,11 @@ describe("tools/virtualcity/planning", function () {
                 expect(planning.planningTilesetInstances).to.have.length(1);
             });
         });
+        it("should setup staticImage Layers", function () {
+            return planning.initializePlanning().then(()=> {
+                expect(planning.staticImageLayers).to.have.length(1);
+            });
+        });
         it("should add gltf entities to EntitiesLayer", function () {
             return planning.initializePlanning().then(()=> {
                 expect(planning.entitiesLayer.get("customDatasource").entities.values).to.have.length(2);
@@ -252,7 +274,7 @@ describe("tools/virtualcity/planning", function () {
                 expect(planning.entitiesLayer.get("isSelected")).to.be.true;
             });
         });
-        it("should set isSelected of the planningeTilesetInstance to true", function () {
+        it("should set isSelected of the planningTilesetInstance to true", function () {
             return planning.activate().then(() => {
                 expect(planning.planningTilesetInstances[0].get("isSelected")).to.be.true;
             });
