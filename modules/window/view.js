@@ -94,7 +94,6 @@ const WindowView = Backbone.View.extend({
             else {
                 this.$el.html(this.templateMax(attr));
                 document.body.appendChild(this.el);
-                this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
             }
             this.$el.show("slow");
         }
