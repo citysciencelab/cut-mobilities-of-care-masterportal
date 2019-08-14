@@ -77,7 +77,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         }
         else if (activeTab === "info") {
             this.$("#gfiList").addClass("in active");
-            this.rePositionGFIWindow(this.$el.parent().width());
+            this.rePositionGFIWindow();
         }
     },
 
@@ -106,7 +106,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         this.$el.find("#chart").width(width);
         this.$(".graph svg").remove();
         this.model.setSize({height: height, width: width});
-        this.rePositionGFIWindow(width);
+        this.rePositionGFIWindow();
         this.model.createD3Document(activeTab);
     },
 
@@ -174,10 +174,12 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     rePositionGFIWindow: function (width) {
-        var mapWidth = this.$el.parent().parent().parent().width();
+        var mapWidth = $("#map").width(),
+            posLeft = this.$el.closest(".ui-draggable").position().left,
+            outerWidth = this.$el.closest(".ui-draggable").outerWidth(true);
 
-        if (mapWidth - this.$el.parent().parent().css("left").slice(0, -2) < width + 20) {
-            this.$el.parent().parent().css("left", mapWidth - width - 20);
+        if (posLeft + outerWidth > mapWidth) {
+            this.$el.closest(".ui-draggable").css("left", mapWidth - outerWidth - 10);
         }
     }
 });

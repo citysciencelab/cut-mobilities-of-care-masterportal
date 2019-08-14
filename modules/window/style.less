@@ -7,19 +7,19 @@
 @background_color_3: #F2F2F2;
 @background_color_4: #646262;
 
-@media (min-width: 767px) {
+@media (max-width: 766px) {
     .tool-window {
-        margin: 10px 10px 30px 10px;
+        right:0;
     }
 }
 
 .tool-window {
     background-color: @background_color_1;
+    margin: 10px 10px 30px 10px;
     display: none;
     position: absolute !important;
     top:60px;
-    left:10px;
-    right:10px;
+    left:0;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
     max-width: 500px;
