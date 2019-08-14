@@ -3,17 +3,15 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
         // true if sidebar is visible
         isVisible: false,
         // true if viewport width < 768px
-        isMobile: false,
-        width: "30%"
+        isMobile: false
     },
 
     /**
      * @class SidebarModel
      * @extends Backbone.Model
      * @memberof Sidebar
-     * @param {Boolean} isVisible=false Flag if sidebar is visible
-     * @param {Boolean} isMobile=false Flag if sidebar is mobile
-     * @param {String} width="30%" Shows the width of the sidebar
+     * @property {Boolean} isVisible=false Flag if sidebar is visible
+     * @property {Boolean} isMobile=false Flag if sidebar is mobile
      * @listens Sidebar#RadioTriggerSidebarToggle
      * @listens Sidebar#RadioTriggerSidebarAppend
      * @listens Util#RadioTriggerUtilIsViewMobileChanged
@@ -54,13 +52,9 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
     /**
      * Toggles the visibility of the sidebar. Sets the width if not undefined
      * @param {Boolean} isVisible Flag if sidebar is visible.
-     * @param {String} width The width of the sidebar in percent. e.g. "30%".
      * @returns {void}
      */
-    toggle: function (isVisible, width) {
-        if (width !== undefined) {
-            this.setWidth(width);
-        }
+    toggle: function (isVisible) {
         this.setIsVisible(isVisible);
     },
     /**
@@ -70,14 +64,6 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      */
     setIsVisible: function (value) {
         this.set("isVisible", value);
-    },
-    /**
-     * Setter for "width".
-     * @param {String} value The width of the sidebar in percent. e.g. "30%".
-     * @returns{void}
-     */
-    setWidth: function (value) {
-        this.set("width", value);
     }
 });
 
