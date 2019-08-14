@@ -6,7 +6,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 30
+        loaderOverlayTimeout: 40
     },
     /**
      * @class Util
