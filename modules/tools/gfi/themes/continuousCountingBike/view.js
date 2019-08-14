@@ -170,10 +170,9 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
 
     /**
      * rePositionGFIWindow gets the width of the gfi window and positions it depending on the map width
-     * @param  {integer} width the value of the gfi window
      * @return {void}
      */
-    rePositionGFIWindow: function (width) {
+    rePositionGFIWindow: function () {
         var mapWidth = $("#map").width(),
             posLeft = this.$el.closest(".ui-draggable").position().left,
             outerWidth = this.$el.closest(".ui-draggable").outerWidth(true);
