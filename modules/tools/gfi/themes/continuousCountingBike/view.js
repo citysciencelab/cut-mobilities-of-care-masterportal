@@ -77,7 +77,9 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         }
         else if (activeTab === "info") {
             this.$("#gfiList").addClass("in active");
-            this.rePositionGFIWindow();
+            if (!Radio.request("Util", "isViewMobile")) {
+                this.rePositionGFIWindow();
+            }
         }
     },
 
@@ -106,7 +108,9 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         this.$el.find("#chart").width(width);
         this.$(".graph svg").remove();
         this.model.setSize({height: height, width: width});
-        this.rePositionGFIWindow();
+        if (!Radio.request("Util", "isViewMobile")) {
+            this.rePositionGFIWindow();
+        }
         this.model.createD3Document(activeTab);
     },
 
