@@ -766,18 +766,18 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 if (isMetaDataAvailable) {
                     metaDataLayerList.push(layerParam.layername);
                 }
-                if (layerParam.legend[0].img.indexOf(".pdf") === -1) {
-                    legendObject.layers.push({
-                        layerName: layerParam.layername,
-                        values: this.prepareLegendAttributes(layerParam)
-                    });
-                }
-                else {
+                if (layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
                         text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
                             "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
                             "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
+                    });
+                }
+                else {
+                    legendObject.layers.push({
+                        layerName: layerParam.layername,
+                        values: this.prepareLegendAttributes(layerParam)
                     });
                 }
             }, this);
