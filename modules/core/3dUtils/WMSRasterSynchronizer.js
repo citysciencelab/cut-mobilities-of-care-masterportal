@@ -93,12 +93,18 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
      * @protected
      */
     convertLayerToCesiumImageries (olLayer, viewProj) {
+        let layerOptions = {
+            "show": false
+        };
+        var source,
+            provider = null,
+            cesiumLayer;
+
         if (!(olLayer instanceof Tile) && !(olLayer instanceof ImageLayer)) {
             return null;
         }
 
-        let provider = null;
-        const source = olLayer.getSource();
+        source = olLayer.getSource();
 
         if (source instanceof TileWMS) {
             const params = source.getParams(),
@@ -147,11 +153,11 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
         // the provider is always non-null if we got this far
         /* eslint-disable one-var */
 
-        const layerOptions = {
-                "show": false
-            },
-            /* eslint-enable one-var */
-            cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
+        layerOptions = {
+            "show": false
+        };
+        /* eslint-enable one-var */
+        cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
 
         return cesiumLayer ? [cesiumLayer] : null;
     }
