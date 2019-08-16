@@ -77,15 +77,20 @@ const FilterView = Backbone.View.extend({
     },
 
     renderSimpleViews: function () {
-        var view;
+        var view,
+            queryCollectionModels = this.model.get("queryCollection").models,
+            predefinedQueriesModels = this.model.get("predefinedQueries");
 
-        if (this.model.get("queryCollection").models.length > 1) {
-            _.each(this.model.get("queryCollection").models, function (query) {
+        if (queryCollectionModels.length > 1) {
+            _.each(queryCollectionModels, function (queryCollectionModel) {
+                const query = this.model.regulateInitialActivating(queryCollectionModel, predefinedQueriesModels);
+
                 view = new QuerySimpleView({model: query});
                 this.$el.find(".simple-views-container").append(view.render().$el);
             }, this);
         }
         else {
+            this.model.activateLayer(queryCollectionModels);
             this.$el.find(".simple-views-container").remove();
         }
     },

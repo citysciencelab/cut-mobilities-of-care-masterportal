@@ -140,6 +140,17 @@
         margin: 0;
     }
 }
+
+@media (hover: none) {
+    .gfi-detached {
+        &.gfi-text-html {
+            max-height:75vh;
+            -webkit-overflow-scrolling: touch;
+            overflow:auto;
+        }
+    }
+}
+
 .gfi-detached {
     position: absolute;
     min-width: 250px;
@@ -153,6 +164,7 @@
         }
     }
 }
+
 .gfi-footer {
     padding: 0;
     color: @color_2;

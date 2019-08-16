@@ -59,12 +59,6 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        this.listenToOnce(this.get("queryCollection"), {
-            "add": function (model) {
-                model.setIsSelected(true);
-            }
-        }, this);
-
         this.listenTo(Radio.channel("Layer"), {
             "featuresLoaded": function (layerId) {
                 var predefinedQueries = this.get("predefinedQueries"),
@@ -321,6 +315,35 @@ const FilterModel = Tool.extend({
         var searchQuery = queryCollection.findWhere({layerId: layerId.toString()});
 
         return !_.isUndefined(searchQuery);
+    },
+
+    /**
+     * Sets the parameters isActive and isSelected for each model to the configured values.
+     * @param {Object} queryCollectionModel - configured model in filter
+     * @param {Object[]} predefinedQueriesModels - configured values
+     * @returns {Object} queryCollectionModel with default values
+     */
+    regulateInitialActivating: function (queryCollectionModel, predefinedQueriesModels) {
+        const predefinedQueriesModel = predefinedQueriesModels.find(function (element) {
+            return element.layerId === queryCollectionModel.attributes.layerId && element.name === queryCollectionModel.attributes.name;
+        });
+
+        queryCollectionModel.attributes.isActive = predefinedQueriesModel.isActive;
+        queryCollectionModel.attributes.isSelected = predefinedQueriesModel.isSelected;
+
+        return queryCollectionModel;
+    },
+
+    /**
+     * Sets the attributes isActive and isVisible to true for the first model of the passed array.
+     * @param {Object[]} queryCollectionModels - configured models in filter
+     * @returns {void}
+     */
+    activateLayer: function (queryCollectionModels) {
+        if (queryCollectionModels.length) {
+            queryCollectionModels[0].attributes.isActive = true;
+            queryCollectionModels[0].attributes.isSelected = true;
+        }
     },
 
     // setter for isInitOpen
