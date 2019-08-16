@@ -11,6 +11,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         keepOtherToolsOpened: true,
         glyphicon: "glyphicon-book"
     }),
+
     /**
      * @class LegendModel
      * @extends Core.ModelList.Tool
@@ -206,11 +207,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (typ === "SensorThings") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
         }
-        else if (typ === "StaticImage") {
-            return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
-        }
         else if (typ === "GeoJSON") {
             return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+        }
+        else if (typ === "StaticImage") {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
         else if (typ === "GROUP") {
             _.each(layerSources, function (layerSource) {
@@ -232,12 +233,30 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             legend: null
         };
     },
+
     /**
-    * todo
-    * @param {*} layername todo
-    * @param {*} legendURL todo
-    * @returns {Object} returns todo
-    */
+     * Creates legend object by url
+     * @param   {string} layername Name of layer to use in legend view
+     * @param   {string[]} [legendURL] URL of image
+     * @param   {string} typ type layertype
+     * @returns {object} legendObject legend item
+     */
+    getLegendParamsFromURL: function (layername, legendURL, typ) {
+        return {
+            layername: layername,
+            legend: [{
+                img: legendURL,
+                typ: typ
+            }]
+        };
+    },
+
+    /**
+     * Creates legend object for WMS
+     * @param   {string} layername Name of layer to use in legend view
+     * @param   {string[]} [legendURL] URL of image
+     * @returns {object} legendObject legend item
+     */
     getLegendParamsFromWMS: function (layername, legendURL) {
         var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMS = "";
@@ -260,23 +279,17 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                 }]
             };
         }
-        return {
-            layername: layername,
-            legend: [{
-                img: legendURL,
-                typ: "WMS"
-            }]
-        };
+        return this.getLegendParamsFromURL(layername, legendURL, "WMS");
     },
+
     /**
-    * todo
-    * @param {*} layername todo
-    * @param {*} legendURL todo
-    * @param {*} typ todo
-    * @param {*} styleId todo
-    * @fires StyleList#RadioRequestReturnModelById
-    * @returns {*} returns todo
-    */
+     * Creates legend object for WMS
+     * @param   {string} layername Name of layer to use in legend view
+     * @param   {string[]} [legendURL] URL of image
+     * @param   {string} typ layertype
+     * @param   {integer} styleId styleId
+     * @returns {object} legendObject legend item
+     */
     getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
         var image,
             name,
@@ -286,14 +299,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             styleFieldValues,
             allItems;
 
-        if (typeof legendURL === "string" && legendURL !== "") {
-            return {
-                layername: layername,
-                legend: [{
-                    img: legendURL,
-                    typ: typ
-                }]
-            };
+        if (Array.isArray(legendURL) && legendURL.length > 0) {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
 
         image = [];
