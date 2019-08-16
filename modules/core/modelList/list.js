@@ -538,8 +538,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         // Do not move models when no model to swap is found.
         // There are hidden models such as "oblique" at selectionIDX 0, causing modelToSwap array to be not
-        // empty although it should be. That's why currentSelectionIdx <= 1 is also checked.
-        if (newSelectionIndex <= 1 || !modelToSwap || modelToSwap.length === 0) {
+        // empty although it should be. That's why newSelectionIndex <= 0 is also checked.
+        if (newSelectionIndex <= 0 || !modelToSwap || modelToSwap.length === 0) {
             return;
         }
 
