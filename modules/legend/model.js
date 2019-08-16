@@ -213,6 +213,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (typ === "StaticImage") {
             return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
+        else if (typ === "StaticImage") {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
+        }
         else if (typ === "GROUP") {
             _.each(layerSources, function (layerSource) {
                 var childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
@@ -283,21 +286,44 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
 
     /**
+<<<<<<< HEAD
      * Creates legend object for vector layer using it's style
      * @param   {string} layername Name of layer to use in legend view
+=======
+     * Creates legend object for WMS
+     * @param   {string} layername Name of layer to use in legend view
+     * @param   {string[]} [legendURL] URL of image
+>>>>>>> fix legendUrl for staticImages was ignored
      * @param   {string} typ layertype
      * @param   {integer} styleId styleId
      * @returns {object} legendObject legend item
      */
+<<<<<<< HEAD
     getLegendParamsFromVector: function (layername, typ, styleId) {
         let image = [],
             name = [],
+=======
+    getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
+        var image,
+            name,
+            style,
+>>>>>>> fix legendUrl for staticImages was ignored
             styleClass,
             styleSubClass,
             styleFieldValues,
             allItems;
 
+<<<<<<< HEAD
         const style = Radio.request("StyleList", "returnModelById", styleId);
+=======
+        if (Array.isArray(legendURL) && legendURL.length > 0) {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
+        }
+
+        image = [];
+        name = [];
+        style = Radio.request("StyleList", "returnModelById", styleId);
+>>>>>>> fix legendUrl for staticImages was ignored
 
         if (!_.isUndefined(style)) {
             styleClass = style.get("class");
