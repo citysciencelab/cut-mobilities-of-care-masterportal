@@ -377,7 +377,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     setAllDescendantsInvisible: function (parentId, isMobile) {
-        var children = this.where({parentId: parentId});
+        var children = this.where({parentId: parentId}),
+            additionalChildren = this.where({type: "layer", typ: "GROUP", isVisibleInTree: true});
+
+        children = children.concat(additionalChildren);
 
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
