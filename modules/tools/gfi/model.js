@@ -204,16 +204,20 @@ const Gfi = Tool.extend({
             wmsGFIParams = [],
             GFIParams3d = [],
             unionParams = [],
-            coordinate = [];
+            coordinate = [],
+            feature;
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
+
         // für detached MapMarker
-        const feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-            return feat;
-        });
+        if (evt.hasOwnProperty("pixel")) {
+            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                return feat;
+            });
+        }
 
         if (feature === null || feature === undefined) {
             coordinate = evt.coordinate;
