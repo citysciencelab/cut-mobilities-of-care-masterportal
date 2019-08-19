@@ -54,12 +54,13 @@ describe("modules/legend", function () {
                 }]
             });
         });
-        it("should return legend from vector by single url", function () {
-            expect(model.getLegendParamsFromVector("Fake", ["FakeURL1"], "WFS", 123)).to.deep.equal({
+        it("should return empty legend if no vector style is properly set up", function () {
+            expect(model.getLegendParamsFromVector("Fake", "WFS", "123")).to.deep.equal({
                 layername: "Fake",
                 legend: [{
-                    img: ["FakeURL1"],
-                    typ: "WFS"
+                    img: [],
+                    typ: "WFS",
+                    legendname: []
                 }]
             });
         });
