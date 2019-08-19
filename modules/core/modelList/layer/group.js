@@ -138,13 +138,15 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     * @returns {void}
     **/
     checkForScaleGroup: function (options) {
-        var isOutOfRange = true;
+        var currentScale = parseFloat(options.scale, 10),
+            isOutOfRange = false;
 
-        _.each(this.get("layerSource"), function (layerSource) {
-            if (parseFloat(options.scale, 10) <= layerSource.get("maxScale") && parseFloat(options.scale, 10) >= layerSource.get("minScale")) {
-                isOutOfRange = false;
+        _.each(this.get("children"), function (layerSource) {
+            if (currentScale > layerSource.maxScale || currentScale < layerSource.minScale) {
+                isOutOfRange = true;
             }
         });
+
         this.setIsOutOfRange(isOutOfRange);
     }
 });
