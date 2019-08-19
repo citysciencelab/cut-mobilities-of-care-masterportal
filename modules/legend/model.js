@@ -202,13 +202,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             return this.getLegendParamsFromWMS(layername, legendURL);
         }
         else if (typ === "WFS") {
-            return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            return this.getLegendParamsFromVector(layername, typ, styleId);
         }
         else if (typ === "SensorThings") {
-            return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            return this.getLegendParamsFromVector(layername, typ, styleId);
         }
         else if (typ === "GeoJSON") {
-            return this.getLegendParamsFromVector(layername, legendURL, typ, styleId);
+            return this.getLegendParamsFromVector(layername, typ, styleId);
         }
         else if (typ === "StaticImage") {
             return this.getLegendParamsFromURL(layername, legendURL, typ);
@@ -283,29 +283,21 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
 
     /**
-     * Creates legend object for WMS
+     * Creates legend object for vector layer using it's style
      * @param   {string} layername Name of layer to use in legend view
-     * @param   {string[]} [legendURL] URL of image
      * @param   {string} typ layertype
      * @param   {integer} styleId styleId
      * @returns {object} legendObject legend item
      */
-    getLegendParamsFromVector: function (layername, legendURL, typ, styleId) {
-        var image,
-            name,
-            style,
+    getLegendParamsFromVector: function (layername, typ, styleId) {
+        let image = [],
+            name = [],
             styleClass,
             styleSubClass,
             styleFieldValues,
             allItems;
 
-        if (Array.isArray(legendURL) && legendURL.length > 0) {
-            return this.getLegendParamsFromURL(layername, legendURL, typ);
-        }
-
-        image = [];
-        name = [];
-        style = Radio.request("StyleList", "returnModelById", styleId);
+        const style = Radio.request("StyleList", "returnModelById", styleId);
 
         if (!_.isUndefined(style)) {
             styleClass = style.get("class");
