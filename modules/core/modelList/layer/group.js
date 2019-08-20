@@ -131,28 +131,30 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     },
 
     /**
-    * Checks all layer sources by scale.
-    * If at least one source's min-and-max-scale is within the given scale, the attribute isOutofRange is set to false.
-    * Otherwise it is set to true.
+    * Checks all layer sources by scale and sets attribute isOutOfRange to true to disable the layer in tree
+    * 1: Check if parent min- and max scale is met, else disable group layer
+    * 2: If group layer's min- and max scales are met, check out single child layers
+    * 3: If one single child layer is in range, set isOutOfRange to false
     * @param {object} options   Object mit zu prüfender .scale
     * @returns {void}
     **/
     checkForScale: function (options) {
         var currentScale = parseFloat(options.scale, 10),
-            isOutOfRange = false;
+            childLayersAreOutOfRange = true,
+            groupLayerIsOutOfRange = false;
 
         if (currentScale > this.get("maxScale") || currentScale < this.get("minScale")) {
-            isOutOfRange = true;
+            groupLayerIsOutOfRange = true;
         }
         else {
-            _.each(this.get("children"), function (layerSource) {
-                if (currentScale > layerSource.maxScale || currentScale < layerSource.minScale) {
-                    isOutOfRange = true;
+            this.get("children").forEach(layerSource => {
+                if (currentScale <= layerSource.maxScale && currentScale >= layerSource.minScale) {
+                    childLayersAreOutOfRange = false;
                 }
             });
         }
 
-        this.setIsOutOfRange(isOutOfRange);
+        this.setIsOutOfRange(groupLayerIsOutOfRange || childLayersAreOutOfRange);
     }
 });
 
