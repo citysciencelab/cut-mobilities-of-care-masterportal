@@ -14,6 +14,13 @@ import tableTemplate from "text-loader!./tableTemplate.html";
  */
 const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototype */{
     events: {
+        /**
+         * used in menu
+         */
+        "click div#mini-map": "toggle",
+        /**
+         * used in control
+         */
         "click div.overviewmap-button": "toggle"
     },
 
