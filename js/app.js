@@ -298,6 +298,7 @@ function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
+                break;
             }
             default: {
                 break;

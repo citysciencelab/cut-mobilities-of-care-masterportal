@@ -34,7 +34,7 @@ module.exports = function (destination) {
     });
 
     replacements.forEach(function (replacement) {
-        var rep = replace.sync({
+        replace.sync({
             files: replacement.files,
             from: replacement.from,
             to: replacement.to

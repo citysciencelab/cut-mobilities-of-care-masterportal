@@ -86,10 +86,10 @@ export function parseColor (color) {
     }
 
     if (typeof color === "string") {
-        if (/^#/.test(color)) {
+        if ((/^#/).test(color)) {
             return hexToOlColor(color);
         }
-        if (/^rgba?\((\d+(,\s?)?){3}((0|1)(\.\d+)?)?\)/.test(color)) {
+        if ((/^rgba?\((\d+(,\s?)?){3}((0|1)(\.\d+)?)?\)/).test(color)) {
             const output = color
                 .replace(/^rgba?\(([\s\S]+?)\)/, "$1")
                 .replace(/\s/, "")

@@ -9,7 +9,7 @@ module.exports = function (destination, stableVersion) {
     {
         "files": destination,
         "from": /\/*(\.+\/)*build/g,
-        "to": "../Mastercode/"+stableVersion
+        "to": "../Mastercode/" + stableVersion
     }];
 
     replacements.forEach(function (replacement) {
