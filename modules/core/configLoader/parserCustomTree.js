@@ -6,10 +6,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @extends Parser
      * @memberof Core.ConfigLoader
      * @constructs
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+     * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
+     * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
+     * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      */
     defaults: _.extend({}, Parser.prototype.defaults, {}),
+
     /**
      * Recursive function.
      * Parses the config.json. response.Themenconfig.
@@ -18,20 +20,22 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @param  {Object} object - Baselayer | Overlayer | Folder
      * @param  {string} parentId Id of parent item.
      * @param  {Number} level Level of recursion. Equals to level in layertree.
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesWhere
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerAttributesList
+     * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
+     * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
+     * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @returns {void}
      */
     parseTree: function (object, parentId, level) {
-        // TODO: This value is NOT reliable when using simple tree!
-        var isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree");
+        var isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
+            treeType = Radio.request("Parser", "getTreeType");
 
         if (_.has(object, "Layer")) {
             _.each(object.Layer, function (layer) {
                 var objFromRawList,
                     objsFromRawList,
                     layerExtended = layer,
-                    mergedObjsFromRawList;
+                    mergedObjsFromRawList,
+                    item;
 
                 // Für Single-Layer (ol.layer.Layer)
                 // z.B.: {id: "5181", visible: false}
@@ -89,28 +93,34 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 if (_.has(layerExtended, "styles") && layerExtended.styles.length >= 1) {
                     _.each(layerExtended.styles, function (style, index) {
-                        this.addItem(_.extend({
+                        var subItem = _.extend({
                             id: layerExtended.id + style,
                             isBaseLayer: isBaseLayer,
-                            isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility),
                             legendURL: layerExtended.legendURL[index],
                             level: level,
                             name: layerExtended.name[index],
                             parentId: parentId,
                             styles: layerExtended.styles[index],
                             type: "layer"
-                        }, _.omit(layerExtended, "id", "name", "styles", "legendURL")));
+                        }, _.omit(layerExtended, "id", "name", "styles", "legendURL"));
+
+                        subItem = this.controlsVisibilityInTree(item, treeType, level, layerExtended);
+
+                        this.addItem(subItem);
                     }, this);
                 }
                 else {
-                    this.addItem(_.extend({
+                    item = _.extend({
                         format: "image/png",
                         isBaseLayer: isBaseLayer,
-                        isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility),
                         level: level,
                         parentId: parentId,
                         type: "layer"
-                    }, layerExtended));
+                    }, layerExtended);
+
+                    item = this.controlsVisibilityInTree(item, treeType, level, layerExtended);
+
+                    this.addItem(item);
                 }
             }, this);
         }
@@ -140,7 +150,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     isFolderSelectable: isFolderSelectable,
                     level: level,
                     glyphicon: "glyphicon-plus-sign",
-                    isVisibleInTree: this.getIsVisibleInTree(level, "folder", true),
+                    isVisibleInTree: this.getIsVisibleInTree(level, "folder", true, treeType),
                     isInThemen: true
                 });
                 // rekursiver Aufruf
@@ -150,15 +160,40 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
     },
 
     /**
+     * checks which treeType is used and sets the correct attribute to control the visibility in the layerTree
+     * @param {Object} item item for layer
+     * @param {Object} treeType type of layerTree
+     * @param {Number} level Level of recursion. Equals to level in layertree
+     * @param {Object} layerExtended extended layer
+     * @returns {Object} extended item
+     */
+    controlsVisibilityInTree: function (item, treeType, level, layerExtended) {
+        let extendedItem = item;
+
+        if (treeType === "light") {
+            extendedItem = _.extend({
+                isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility, treeType)
+            }, extendedItem);
+        }
+        else {
+            extendedItem = _.extend({
+                isSelected: this.getIsVisibleInTree(level, "layer", layerExtended.visibility, treeType)
+            }, extendedItem);
+        }
+
+        return extendedItem;
+    },
+
+    /**
      * Returns a flag if layer has to be displayed.
      * @param {Number} level The layers level in the layertree.
      * @param {String} type Type of Item.
      * @param {Boolean} isInThemen  Flag if layer or folder is in layertree
+     * @param {Object} treeType type of layerTree
      * @returns {Boolean} - Flag if layer is visible in layertree
      */
-    getIsVisibleInTree: function (level, type, isInThemen) {
-        var treeType = Radio.request("Parser", "getTreeType"),
-            isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
+    getIsVisibleInTree: function (level, type, isInThemen, treeType) {
+        var isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
 
         return (type === "layer" && (isInThemenBool || treeType === "light"))
             ||
