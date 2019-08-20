@@ -21,6 +21,7 @@ const CoordPopup = Tool.extend({
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 Radio.trigger("MapMarker", "hideMarker");
+                Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
                 if (value) {
                     this.listenTo(Radio.channel("Map"), {
                         "clickedWindowPosition": function (evt) {
@@ -33,7 +34,6 @@ const CoordPopup = Tool.extend({
                 }
             }
         });
-
     },
 
     createInteraction: function () {
@@ -126,6 +126,15 @@ const CoordPopup = Tool.extend({
     // setter for currentProjection
     setCurrentProjectionName: function (value) {
         this.set("currentProjectionName", value);
+    },
+
+    // setter for coordinates
+    setCoordinates: function (evt) {
+        var position = evt.coordinate;
+
+        if (this.get("updatePosition")) {
+            this.setPositionMapProjection(position);
+        }
     }
 });
 
