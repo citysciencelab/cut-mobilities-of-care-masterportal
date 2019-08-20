@@ -22,7 +22,6 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @fires Legend#RadioRequestLegendGetLegend
      */
     initialize: function () {
-        this.checkForScale(Radio.request("MapView", "getOptions"));
         Layer.prototype.initialize.apply(this);
     },
 
@@ -143,12 +142,16 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             childLayersAreOutOfRange = true,
             groupLayerIsOutOfRange = false;
 
-        if (currentScale > this.get("maxScale") || currentScale < this.get("minScale")) {
+        if (currentScale > parseInt(this.get("maxScale"), 10) || currentScale < parseInt(this.get("minScale"), 10)) {
             groupLayerIsOutOfRange = true;
         }
         else {
             this.get("children").forEach(layerSource => {
-                if (currentScale <= layerSource.maxScale && currentScale >= layerSource.minScale) {
+                if (
+                    currentScale <= parseInt(layerSource.maxScale || this.defaults.maxScale, 10)
+                    &&
+                    currentScale >= parseInt(layerSource.minScale || this.defaults.minScale, 10)
+                ) {
                     childLayersAreOutOfRange = false;
                 }
             });
