@@ -100,4 +100,10 @@ describe("core/modelList/layer/tileset", function () {
             expect(tilesetLayer.hiddenObjects.id).to.be.undefined;
         });
     });
+
+    describe("combineOptions", function () {
+        it("should combine config options with default options", function () {
+            expect(tilesetLayer.combineOptions({a: 1, b: 2}, "url")).to.deep.equal({a: 1, b: 2, maximumScreenSpaceError: "6", url: "url/tileset.json"});
+        });
+    });
 });

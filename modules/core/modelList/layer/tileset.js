@@ -16,13 +16,44 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @constructs
      * @memberOf Core.ModelList.Layer.Tileset
      * @property {Object} [vectorStyle="undefined"] vectorStyle
-     * @listens Map#event:RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioRequestIsMap3d
+     * @fires Core#RadioRequestGetMap3d
      */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        selectionIDX: -1
+        selectionIDX: -1,
+        /**
+         * [cesium3DTilesetDefaults description]
+         * @link https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
+         * @type {Object<string, Set<(Cesium.Cesium3DTileset.options)>>}
+         */
+        cesium3DTilesetDefaults: {
+            maximumScreenSpaceError: "6"
+        },
+        /**
+         * [hiddenObjects description]
+         * @type {Object<string, Set<(Cesium.Cesium3DTileFeature|ol.Feature)>>}
+         */
+        hiddenObjects: {},
+        /**
+         * [featureVisibilityLastUpdated description]
+         * @type {number}
+         */
+        featureVisibilityLastUpdated: Date.now(),
+        /**
+         * [styleLastUpdated description]
+         * @type {number}
+         */
+        styleLastUpdated: Date.now()
     }),
+
+    /**
+     * [initialize description]
+     * @listens Core#RadioTriggerMapChange
+     * @returns {void}
+     */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
 
@@ -33,23 +64,12 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 }
             }
         });
-
-        /** @type {Object<string, Set<(Cesium.Cesium3DTileFeature|ol.Feature)>>} */
-        this.hiddenObjects = {};
-
-        /** @type {number} */
-        this.featureVisibilityLastUpdated = Date.now();
-
-        /** @type {number} */
-        this.styleLastUpdated = Date.now();
-
-        if (this.has("hiddenFeatures")) {
-            this.hideObjects(this.get("hiddenFeatures"));
-        }
     },
 
     /**
      * adds the tileset to the cesiumScene
+     * @fires Core#RadioRequestIsMap3d
+     * @fires Core#RadioRequestGetMap3d
      * @returns {void} -
      * @override
      */
@@ -72,32 +92,38 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        var options, tileset;
-
-        if (this.has("tileSet") === false) {
-            options = {};
-            if (this.has("cesium3DTilesetOptions")) {
-                _.extend(options, this.get("cesium3DTilesetOptions"));
-            }
-
-            if (this.get("url") && this.get("url").endsWith("tileset.json")) {
-                options.url = this.get("url");
-            }
-            else {
-                options.url = this.get("url") + "/tileset.json";
-            }
+        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
             tileset = new Cesium.Cesium3DTileset(options);
-            this.setTileSet(tileset);
 
-            if (this.get("vectorStyle")) {
-                this.setVectorStyle(this.get("vectorStyle"));
-            }
+        this.setTileSet(tileset);
 
-            tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
-            tileset.tileUnload.addEventListener((tile) => {
-                delete tile[lastUpdatedSymbol];
-            });
+        if (this.get("vectorStyle")) {
+            this.setVectorStyle(this.get("vectorStyle"));
         }
+
+        tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
+        tileset.tileUnload.addEventListener((tile) => {
+            delete tile[lastUpdatedSymbol];
+        });
+    },
+
+    /**
+     * Combines default and config settings
+     * @param   {object} cesium3DTilesetOptions config settings
+     * @param   {string} url                    url
+     * @returns {object} combinedOptions
+     */
+    combineOptions: function (cesium3DTilesetOptions, url) {
+        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions);
+
+        if (url && url.endsWith("tileset.json")) {
+            options.url = url;
+        }
+        else {
+            options.url = url + "/tileset.json";
+        }
+
+        return options;
     },
 
     /**
@@ -174,8 +200,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     styleContent: function (content) {
         if (
             !content[lastUpdatedSymbol] ||
-            content[lastUpdatedSymbol] < this.featureVisibilityLastUpdated ||
-            content[lastUpdatedSymbol] < this.styleLastUpdated
+            content[lastUpdatedSymbol] < this.get("featureVisibilityLastUpdated") ||
+            content[lastUpdatedSymbol] < this.get("styleLastUpdated")
         ) {
             const batchSize = content.featuresLength;
 
@@ -189,8 +215,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                         id = `${content.url}${batchId}`;
                     }
 
-                    if (this.hiddenObjects[id]) {
-                        this.hiddenObjects[id].add(feature);
+                    if (this.get("hiddenObjects")[id]) {
+                        this.get("hiddenObjects")[id].add(feature);
                         feature.show = false;
                     }
                 }
@@ -212,21 +238,23 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     },
 
     /**
-     * hides a number of objects
+     * hides a number of objects called in planing.js
      * @param {Array<string>} toHide A list of Object Ids which will be hidden
      * @return {void} -
      */
     hideObjects (toHide) {
         let dirty = false;
+        const hiddenObjects = this.get("hiddenObjects");
 
         toHide.forEach((id) => {
-            if (!this.hiddenObjects[id]) {
-                this.hiddenObjects[id] = new Set();
+            if (!hiddenObjects[id]) {
+                hiddenObjects[id] = new Set();
                 dirty = true;
             }
         });
+        this.setHiddenObjects(hiddenObjects);
         if (dirty) {
-            this.featureVisibilityLastUpdated = Date.now();
+            this.setFeatureVisibilityLastUpdated(Date.now());
         }
     },
 
@@ -236,18 +264,21 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @return {void} -
      */
     showObjects (unHide) {
+        const hiddenObjects = this.get("hiddenObjects");
+
         unHide.forEach((id) => {
-            if (this.hiddenObjects[id]) {
-                this.hiddenObjects[id].forEach((f) => {
+            if (hiddenObjects[id]) {
+                hiddenObjects[id].forEach((f) => {
                     if (f instanceof Cesium.Cesium3DTileFeature || f instanceof Cesium.Cesium3DTilePointFeature) {
                         if (this.featureExists(f)) {
                             f.show = true;
                         }
                     }
                 });
-                delete this.hiddenObjects[id];
+                delete hiddenObjects[id];
             }
         });
+        this.setHiddenObjects(hiddenObjects);
     },
 
     /**
@@ -255,7 +286,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @return {void} -
      */
     clearHiddenObjects () {
-        this.showObjects(Object.keys(this.hiddenObjects));
+        this.showObjects(Object.keys(this.get("hiddenObjects")));
     },
 
     /**
@@ -268,8 +299,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             tileSet = this.get("tileSet");
 
         tileSet.style = style;
-        this.styleLastUpdated = Date.now();
-        this.featureVisibilityLastUpdated = Date.now();
+        this.setStyleLastUpdated(Date.now());
+        this.setFeatureVisibilityLastUpdated(Date.now());
     },
 
     /**
@@ -280,6 +311,33 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      */
     setVisible: function (value) {
         this.get("tileSet").show = value;
+    },
+
+    /**
+     * Setter for hiddenObjects
+     * @param {object} value hiddenObjects
+     * @returns {void}
+     */
+    setHiddenObjects: function (value) {
+        this.set("hiddenObjects", value);
+    },
+
+    /**
+     * Setter for featureVisibilityLastUpdated
+     * @param {Date} value featureVisibilityLastUpdated
+     * @returns {void}
+     */
+    setFeatureVisibilityLastUpdated: function (value) {
+        this.set("featureVisibilityLastUpdated", value);
+    },
+
+    /**
+     * Setter for styleLastUpdated
+     * @param {Date} value styleLastUpdated
+     * @returns {void}
+     */
+    setStyleLastUpdated: function (value) {
+        this.set("styleLastUpdated", value);
     }
 });
 
