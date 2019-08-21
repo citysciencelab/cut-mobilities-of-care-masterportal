@@ -112,6 +112,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             // Initial sichtbare Layer etc.
             "addInitialyNeededModels": this.addInitialyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
+            "addModel": this.addModel,
             "setIsSelectedOnChildLayers": this.setIsSelectedOnChildLayers,
             "setIsSelectedOnParent": this.setIsSelectedOnParent,
             "showModelInTree": this.showModelInTree,
@@ -788,6 +789,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (_.isUndefined(model) === false) {
             model.set(attrs);
         }
+    },
+
+    /**
+     * Adds an existing model to the collection ignoring the Parser
+     * @param {Backbone.Model} model model to add
+     * @returns {void}
+     */
+    addModel: function (model) {
+        this.add(model);
     },
 
     /**
