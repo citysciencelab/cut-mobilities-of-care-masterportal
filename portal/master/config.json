@@ -52,33 +52,33 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste.hamburg.de/MRH.WFS.Rotenburg",
+            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
             "name": "B-Plan"
           },
           {
-            "url": "/geodienste.hamburg.de/HH.WFS.Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
           {
-            "url": "/geodienste.hamburg.de/HH.WFS.Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
             "name": "im Verfahren"
           },
           {
-            "url": "/geodienste.hamburg.de/HH.WFS.KitaEinrichtung",
+            "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
             "typeName": "app:KitaEinrichtungen",
             "propertyNames": ["app:Name"],
             "name": "Kita"
           },
           {
-            "url": "/geodienste.hamburg.de/HH.WFS.Stoerfallbetriebe",
+            "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
             "typeName": "app:stoerfallbetrieb",
             "propertyNames": ["app:standort"],
             "name": "Störfallbetrieb"
