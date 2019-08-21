@@ -18,6 +18,7 @@ const FilterView = Backbone.View.extend({
                     this.renderDetailView();
                 }
                 else {
+                    this.model.get("detailView").$el[0].remove();
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
@@ -72,6 +73,7 @@ const FilterView = Backbone.View.extend({
         if (!_.isUndefined(selectedModel)) {
             view = new QueryDetailView({model: selectedModel});
 
+            this.model.setDetailView(view);
             this.$el.find(".detail-view-container").html(view.render().$el);
         }
     },
