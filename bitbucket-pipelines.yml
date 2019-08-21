@@ -14,4 +14,4 @@ pipelines:
             - pwd
             - ls -R
             - npm install
-            - npm test
+            - browser=bs url=http://geoportal-hamburg.de/Geoportal/geo-online ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
