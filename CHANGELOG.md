@@ -1,6 +1,7 @@
 # Changelog LGV Master-Portal 2.4.0
 
 NEU:
+
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
   - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
@@ -10,6 +11,7 @@ NEU:
   - Buildprozess: Es gibt nun einen Buildprozess, der es ermöglicht mehrerer Portale zu bauen
 
 REFACTOR:
+
   - HTML-Container: Id "lgv-container" wurde in "masterportal-container" umbenannt (index.html)
   - config.json: Das Attribut "Baumtyp" wurde in "treeType" umbenannt
   - config.json: Das Attribut "totalview" wurde in "totalView" umbenannt
@@ -20,6 +22,7 @@ REFACTOR:
   - config.json: Das Attribut "layerslider" wurde in "layerSlider" umbenannt
 
 FIXES:
+
   - GFI: Beim Klick auf mehrere Features werden nun alle nicht fehlerhaften GFI angezeigt
   - Print: Das Druckmodul wurde verbessert
   - Diverse Bugfixes
