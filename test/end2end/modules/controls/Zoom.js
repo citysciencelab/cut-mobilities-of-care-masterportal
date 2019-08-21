@@ -7,22 +7,20 @@ var expect = require("chai").expect,
 function ZoomTests (driver) {
     loader = driver.findElement(webdriver.By.id("loader"));
     test.describe("ZoomFunctions", function () {
-        test.it("should have plusbutton", function () {
-            var plus;
+        var minus,
+            plus;
 
-            driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
+        test.it("should have plusbutton", function () {
+
+
             driver.wait(webdriver.until.elementLocated(webdriver.By.css("span.glyphicon.glyphicon-plus")), 9000);
-            plus = driver.findElement(webdriver.By.css("span.glyphicon.glyphicon-plus"));
+            plus = driver.findElement(webdriver.By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-plus']"));
 
             expect(plus).to.exist;
         });
 
         test.it("should zoom in after click plusbutton", function () {
-            var plus,
-                resolution;
-
-            driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            plus = driver.findElement(webdriver.By.css("span.glyphicon.glyphicon-plus"));
+            var  resolution;
 
             driver.executeScript(getResolution).then(function (res) {
                 resolution = res;
@@ -36,20 +34,16 @@ function ZoomTests (driver) {
         });
 
         test.it("should have minusbutton", function () {
-            var minus;
 
             driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            minus = driver.findElement(webdriver.By.css("span.glyphicon.glyphicon-minus"));
+            minus = driver.findElement(webdriver.By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
+
 
             expect(minus).to.exist;
         });
 
         test.it("should zoom out after click minusbutton", function () {
-            var minus,
-                resolution;
-
-            driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            minus = driver.findElement(webdriver.By.css("span.glyphicon.glyphicon-minus"));
+            var resolution;
 
             driver.executeScript(getResolution).then(function (res) {
                 resolution = res;
