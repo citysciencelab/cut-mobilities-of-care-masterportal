@@ -7,22 +7,23 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @extends Tools.GFI
      * @memberof Tools.GFI.Themes
      * @constructs
-     * @fires AlertingModel#RadioTriggerAlertAlert
-     * @fires Util#RadioRequestUtilGetProxyURL
-     * @fires Util#RadioRequestUtilGetIgnoredKeys
+     * @property {Boolean} isVisible=false the theme is visible
+     * @property {String} name=undefined Layer name = Theme Title
+     * @property {Boolean} isReady= Theme has queried and edited GFI attributes
+     * @property {*} infoFormat=undefined Info Format for WMS-GFI
+     * @property {*} gfiContent=undefined GFI-Attributs
+     * @property {String} uiStyle="default" uiStyle Setting
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioRequestUtilGetProxyURL
+     * @fires Core#RadioRequestUtilGetIgnoredKeys
+     * @fires Core#RadioRequestUtilGetUiStyle
      */
     defaults: {
-        // ist das Theme sichtbar
         isVisible: false,
-        // Layername = Theme Titel
         name: undefined,
-        // Theme hat GFI-Attribute abgefragt und bearbeitet
         isReady: false,
-        // Info-Format für WMS-GFI
         infoFormat: undefined,
-        // GFI Attribute
         gfiContent: undefined,
-        // uiStyle Setting
         uiStyle: "default"
     },
 
@@ -55,7 +56,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Requestor function for GFI of WMS layers with infoFormat "text/html"
-     * @fires Util#RadioRequestUtilGetProxyURL
+     * @fires Core#RadioRequestUtilGetProxyURL
      * @param   {function} successFunction function to be called after successfull request
      * @returns {void}
      */
@@ -99,7 +100,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Requestor function for GFI of WMS layers
-     * @fires Util#RadioRequestUtilGetProxyURL
+     * @fires Core#RadioRequestUtilGetProxyURL
      * @param   {function} successFunction function to be called after successfull request
      * @returns {void}
      */
@@ -118,7 +119,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Error handler for unanswered GFI requests
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      * @param   {object} jqXHR error object
      * @returns {void}
      */
@@ -128,28 +129,29 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * Gibt mehrfach belegte Attributnamen in XML-Features zurück.
-     * @param   {xml}       node    Feature-Node
-     * @returns {string[]}          Attributnamen
+     * Returns multiple attribute names in XML features.
+     * @param   {xml} node Feature-Node
+     * @returns {string[]} Attributnamen
      */
     getMultiTags: function (node) {
-        var tagNameList = _.map(node.firstElementChild.children, function (element) {
-                return element.tagName;
-            }),
-            tagNameListSorted = _.sortBy(tagNameList, function (name) {
-                return name;
-            }),
-            multiTags = tagNameListSorted.filter(function (tagName, index, list) {
-                return tagName === list[index + 1];
-            }),
+        let multiTagsUnique = [],
+            tagNameList,
+            tagNameListSorted,
+            multiTags;
+
+        if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
+            tagNameList = _.map(node.firstElementChild.children, element => element.tagName);
+            tagNameListSorted = _.sortBy(tagNameList, name => name);
+            multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
             multiTagsUnique = _.uniq(multiTags);
+        }
 
         return multiTagsUnique;
     },
 
     /**
-     * Ersetzt die multiTags eines Features durch einen Tag mit akkumuliertem Value
-     * @param   {string[]} multiTags mehrfache Tags in einem Feature
+     * Replaces the multiTags of a feature with a tag with accumulated value.
+     * @param   {string[]} multiTags multiple tags in one feature
      * @param   {xml} childNode Feature-Node
      * @returns {void}
      */
@@ -173,18 +175,15 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Replace multi attributes of a feature
-     * @param   {xml}   xml GFI
+     * @param   {xml} xml GFI
      * @returns {void}
      */
     parseMultiElementNodes: function (xml) {
         var childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
 
-        // Schleife über alle Features des GFI
         _.each(childNodes, function (childNode) {
-            // Suche nach doppelten Attributnamen
             var multiTags = this.getMultiTags(childNode);
 
-            // Ersetze die betroffenen Attribute pro Feature
             this.replaceMultiNodes(multiTags, childNode);
         }, this);
 
@@ -192,7 +191,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
     /**
      * Parse feature info response of a WMS
-     * @param {(string|xml)}    data   response to parse
+     * @param {(string|xml)} data response to parse
      * @returns {void}
      */
     parseWmsGfi: function (data) {
@@ -243,16 +242,22 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         if (gfiList.length > 0) {
             pgfi = this.translateGFI(gfiList, this.get("gfiAttributes"));
             pgfi = this.getManipulateDate(pgfi);
-            if (this.get("gfiTheme") !== "table") {
+            if (
+                this.get("gfiTheme") !== "table"
+                &&
+                // GFI is not supposed to display multiple nodes, since there can only be one area at a spot.
+                // However, sometimes the server returns multiple areas for or one spot, which is not correct
+                // and would result in displaying multiple GFI nodes, which is suppressed right here.
+                this.get("gfiTheme") !== "flaecheninfo"
+            ) {
                 this.cloneCollModels(pgfi);
             }
-
             this.setGfiContent(pgfi);
         }
         this.setIsReady(true);
     },
     /**
-     * Klont die Models in der Collection, wenn ein Dienst mehr als ein Feature bei der GFI-Abfrage zurückliefert.
+     * Clones the models in the collection when a service returns more than one GFI query feature..
      * @param {object} pgfi - pgfi
      * @returns {void}
      */
@@ -275,7 +280,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * @todo add jsdoc info about this function
+     * todo add jsdoc info about this function
      * @returns {void}
      */
     getCesium3DTileFeatureGfi: function () {
@@ -288,7 +293,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * @todo add jsdoc info about this function
+     * todo add jsdoc info about this function
      * @returns {void}
      */
     getVectorGfi: function () {
@@ -307,37 +312,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * Setter for isVisible
-     * @param {boolean} value Value for isVsible
-     * @returns {void}
-     */
-    setIsVisible: function (value) {
-        this.set("isVisible", value);
-    },
-
-    /**
-     * Setter for gfiContent
-     * @param {object} value Value for gfiContent
-     * @returns {void}
-     */
-    setGfiContent: function (value) {
-        this.setUiStyle(Radio.request("Util", "getUiStyle"));
-        this.set("gfiContent", value);
-    },
-
-    /**
-     * Setter for isReady
-     * @param {boolean} value Value for isReady
-     * @returns {void}
-     */
-    setIsReady: function (value) {
-        this.set("isReady", value);
-    },
-
-    /**
      * Checks validity of a key according to configured list of ignored keys
-     * @fires Util#RadioRequestUtilGetIgnoredKeys
      * @param {string}      key         Name of the key
+     * @fires Core#RadioRequestUtilGetIgnoredKeys
      * @returns {boolean}   isValidKey  returns the validita of a key
      */
     isValidKey: function (key) {
@@ -476,9 +453,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * Guckt alle Werte durch und prüft, ob es sich dabei um ein "DD-MM-YYYY"-konformes Datum handelt.
-     * Falls ja, wird es in das Format DD.MM.YYYY umgewandelt.
-     * @param  {object} content - GFI Attribute
+     * Checks all values and checks if it is a "DD-MM-YYYY"-compliant date.
+     * If yes, it will be converted to DD.MM.YYYY format.
+     * @param  {object} content - GFI Attributes
      * @return {object} content
      */
     getManipulateDate: function (content) {
@@ -499,6 +476,35 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
+    },
+
+    /**
+     * Setter for isVisible
+     * @param {boolean} value Value for isVsible
+     * @returns {void}
+     */
+    setIsVisible: function (value) {
+        this.set("isVisible", value);
+    },
+
+    /**
+     * Setter for gfiContent
+     * @param {object} value Value for gfiContent
+     * @fires Core#RadioRequestUtilGetUiStyle
+     * @returns {void}
+     */
+    setGfiContent: function (value) {
+        this.setUiStyle(Radio.request("Util", "getUiStyle"));
+        this.set("gfiContent", value);
+    },
+
+    /**
+     * Setter for isReady
+     * @param {boolean} value Value for isReady
+     * @returns {void}
+     */
+    setIsReady: function (value) {
+        this.set("isReady", value);
     }
 });
 

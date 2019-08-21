@@ -1,0 +1,57 @@
+@import "../style.less";
+
+.datepicker-inline {
+	background-color: @whiteColor;
+	border-radius: @borderRadius12;
+	.datepicker-days {
+		.table-condensed {
+			width: 100%;
+			font-size: @fontSizeSmall;
+			thead {
+				tr {
+					border-radius: @borderRadius0;
+					background: none;
+					.datepicker-switch {
+						cursor: default;
+						font-size: @fontSizeBig;
+						&:hover {
+							background: none;							
+						}
+					}
+					color: @darkblueColor;
+					.next, .prev {
+						color: @darkgreyColor;
+						&:hover {
+							opacity: @hoverOpacity;
+							background-color: @darkblueColor;
+							color: @whiteColor;
+							border-radius: @borderRadius0;
+						}
+					}
+				}
+			}
+			tbody {
+				tr {
+					td {
+						border-radius: @borderRadius0;
+						background: none;
+						color: @darkgreyColor;
+						&:hover {
+							opacity: @hoverOpacity;
+							background-color: @darkblueColor;
+							color: @whiteColor;
+						}
+						&.today {
+							border: 2px solid @darkblueColor;;
+						}
+						&.active {
+							border-radius: @borderRadius0;
+							background-color: @darkblueColor;;
+							color: @whiteColor;
+						}
+					}
+				}
+			}
+		}
+	}
+}

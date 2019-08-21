@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+
 const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
-    wfsImgPath: "/lgv-config/img/",
+    wfsImgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/",
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
@@ -28,20 +30,17 @@ const Config = {
                 "alias_mobil": "LGV"
             }
         ],
-        version: {
-            "showVersion": true,
-            "MasterportalVersion": "$Version"
-        }
+        showVersion: true
     },
     quickHelp: {
-        imgPath: "/lgv-config/img/"
+        imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "/lgv-config/services-fhhnet-ALL.json",
-    restConf: "/lgv-config/rest-services-fhhnet.json",
-    styleConf: "/lgv-config/style_v2.json",
+    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
+    restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
+    styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,
     scaleLine: true,
@@ -54,18 +53,9 @@ const Config = {
     clickCounter: {},
     startingMap3D: false,
     obliqueMap: true,
-    shadowTime: {
-        year: "2014",
-        month: "6",
-        day: "20",
-        hour: "13",
-        minute: "0",
-        second: "0",
-        millisecond: "0"
-    },
     cesiumParameter: {
         tileCacheSize: 20,
-        enableLighting: false,
+        enableLighting: true,
         fog: {
             enabled: true,
             density: 0.0002,
@@ -76,3 +66,5 @@ const Config = {
     },
     defaultToolId: "gfi"
 };
+
+/* eslint-enable no-unused-vars */

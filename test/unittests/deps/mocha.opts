@@ -1,0 +1,4 @@
+./test/unittests/**/*.test.js
+--bail
+--require jsdom-global/register
+--require chai/register-expect

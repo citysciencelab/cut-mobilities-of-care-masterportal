@@ -1,10 +1,16 @@
 import Template from "text-loader!./templateMenu.html";
 
-const FolderView = Backbone.View.extend(/** @lends FolderView.prototype */{
+/**
+ * @member Template
+ * @description Template used to create the Folder View Menu
+ * @memberof Menu.Desktop.Folder
+ */
+
+const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype */{
     /**
-     * @class FolderView
+     * @class FolderViewMenu
      * @extends Backbone.View
-     * @memberOf Menu.Desktop.Folder
+     * @memberof Menu.Desktop.Folder
      * @constructs
      * @listens Map#RadioTriggerMapChange
      * @listens Util#RadioTriggerUtilIsViewMobileChanged
@@ -24,10 +30,17 @@ const FolderView = Backbone.View.extend(/** @lends FolderView.prototype */{
     tagName: "li",
     className: "dropdown dropdown-folder",
     template: _.template(Template),
+
+    /**
+     * Renders the data to DOM.
+     * @return {void}
+     */
     render: function () {
         var attr = this.model.toJSON();
 
-        $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        if (this.model.get("isVisibleInMenu")) {
+            $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        }
         return this;
     },
 
@@ -50,4 +63,4 @@ const FolderView = Backbone.View.extend(/** @lends FolderView.prototype */{
     }
 });
 
-export default FolderView;
+export default FolderViewMenu;

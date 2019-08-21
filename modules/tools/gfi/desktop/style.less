@@ -1,3 +1,82 @@
+/*!
+ * jQuery UI Resizable 1.12.1
+ * http://jqueryui.com
+ *
+ * Copyright jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+.ui-resizable {
+    position: relative;
+}
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+.ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+}
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+.ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+.ui-resizable-sw {
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
+}
+.ui-resizable-nw {
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+.ui-resizable-ne {
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
+}
+
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(119, 119, 119);
 @font_family_1: "UniversNextW01-Regular",sans-serif;
@@ -42,7 +121,6 @@
         }
     }
     >.gfi-content {
-        max-height: 50vh;
         font-size: 13px;
         overflow: auto;
     }
@@ -62,12 +140,22 @@
         margin: 0;
     }
 }
+
+@media (hover: none) {
+    .gfi-detached {
+        &.gfi-text-html {
+            max-height:75vh;
+            -webkit-overflow-scrolling: touch;
+            overflow:auto;
+        }
+    }
+}
+
 .gfi-detached {
     position: absolute;
     min-width: 250px;
     top: 50px;
     margin: 10px 10px 30px 10px;
-    display: hide;
     background-color: @background_color_2;
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.300);
     >.gfi-header {
@@ -76,6 +164,7 @@
         }
     }
 }
+
 .gfi-footer {
     padding: 0;
     color: @color_2;
@@ -102,4 +191,9 @@
 }
 .gfi-iFrame {
     width: 100%;
+    min-height: 40vh;
+}
+
+.gfi-text-html {
+    min-width: 45vw;
 }

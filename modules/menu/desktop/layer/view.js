@@ -26,6 +26,7 @@ const LayerView = Backbone.View.extend({
                 }
             }
         });
+
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },

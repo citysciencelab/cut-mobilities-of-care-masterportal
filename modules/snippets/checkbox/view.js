@@ -35,15 +35,16 @@ const CheckboxSnippetView = Backbone.View.extend({
 
     initCheckbox: function () {
         this.$el.find("input").bootstrapToggle({
-            on: this.model.get("textOn"),
-            off: this.model.get("textOff"),
-            size: this.model.get("size")
+            "on": this.model.get("textOn"),
+            "off": this.model.get("textOff"),
+            "size": this.model.get("size")
         });
     },
 
     /**
      * calls the function setIsSelected in the model
-     * @param {ChangeEvent} evt
+     * @param {evt} evt -
+     * @return {void}
      */
     setIsSelected: function (evt) {
         this.model.setIsSelected($(evt.target).prop("checked"));

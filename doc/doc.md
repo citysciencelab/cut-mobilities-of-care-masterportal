@@ -5,7 +5,7 @@
 # Konfigurationsdateien #
 Das Masterportal baut auf globalen und portalspezifischen Konfigurationsdateien auf.
 
-Globale Konfigurationsdateien. (Es macht Sinn, dass diese von allen Portalen gemeinsam genutzt werden):
+Globale Konfigurationsdateien. (Es ergibt Sinn, dass diese von allen Portalen gemeinsam genutzt werden):
 
 * [services.json](services.json.md):  alle verfügbaren WMS-Layer und WFS-FeatureTypes
 * [rest-services.json](rest-services.json.md): URLs zu verschiedenen Diensten

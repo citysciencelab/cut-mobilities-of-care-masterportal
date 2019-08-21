@@ -1,4 +1,4 @@
-const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
+const CookieModel = Backbone.Model.extend(/** @lends CookieModel.prototype */{
     defaults: {
         approved: false
     },
@@ -54,6 +54,7 @@ const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
      * @param {*} sPath todo.
      * @param {*} sDomain todo.
      * @param {*} bSecure todo.
+     * @returns {Boolean} true
      */
     setItem: function (sValue, vEnd, sPath, sDomain, bSecure) {
         var sKey = this.get("sKey"),
@@ -63,7 +64,7 @@ const CookieModel = Backbone.Model.extend(/**@lends CookieModel.prototype */{
             return false;
         }
 
-        if (/^(?:expires|max-age|path|domain|secure)$/i.test(sKey)) {
+        if ((/^(?:expires|max-age|path|domain|secure)$/i).test(sKey)) {
             return false;
         }
 

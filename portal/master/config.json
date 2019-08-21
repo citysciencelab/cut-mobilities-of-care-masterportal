@@ -4,7 +4,7 @@
     "portalTitle":
     {
       "title": "Master",
-      "logo": "/lgv-config/img/hh-logo.png",
+      "logo": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
       "tooltip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -52,33 +52,33 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
             "name": "B-Plan"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
             "name": "im Verfahren"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+            "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
             "typeName": "app:KitaEinrichtungen",
             "propertyNames": ["app:Name"],
             "name": "Kita"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+            "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
             "typeName": "app:stoerfallbetrieb",
             "propertyNames": ["app:standort"],
             "name": "Störfallbetrieb"
@@ -94,7 +94,7 @@
     },
     "mapView":
     {
-      "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [561210, 5932600]
     },
     "menu":
@@ -215,7 +215,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -231,7 +231,8 @@
           "shadow":
           {
             "name": "Schatten",
-            "glyphicon": "glyphicon-screenshot"
+            "glyphicon": "glyphicon-lamp",
+            "isShadowEnabled": true
           },
           "gfi":
           {
@@ -247,7 +248,9 @@
             "printAppId": "mrh",
             "filename": "Ausdruck",
             "title": "Mein Titel",
-            "version" : "mapfish_print_3"
+            "legendText": "Mit Legende",
+            "version" : "mapfish_print_3",
+            "dpiForPdf": 120
           },
           "searchByCoord":
           {
@@ -323,7 +326,7 @@
             "name": "Auswahl speichern",
             "glyphicon": "glyphicon-share"
           },
-          "layerslider": {
+          "layerSlider": {
             "name": "Zeitreihe",
             "glyphicon": "glyphicon-film",
             "title": "Simulation von Beispiel-WMS",
@@ -386,25 +389,24 @@
         "zoomMode": "once",
         "poiDistances": [500, 1000, 2000]
       },
-      "totalview": true,
+      "totalView": true,
       "attributions":
       {
         "isInitOpenDesktop": true,
         "isInitOpenMobile": true
       },
-      "overviewmap":
+      "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "baselayer": "452"
+        "layerId": "452"
       },
       "mousePosition": true,
       "button3d": true,
       "buttonOblique": true,
       "freeze": true,
-      "backforward" : true
+      "backForward" : true
     },
     "scaleLine": true,
-    "Baumtyp": "light",
     "layersRemovable": true
   },
   "Themenconfig":
@@ -454,9 +456,7 @@
         "id": "8730"
       },
       {
-        "id": "10220",
-        "visibility": false,
-        "gfiTheme": "continuousCountingBike"
+        "id": "10220"
       },
       {
         "id": "2426"

@@ -18,6 +18,7 @@ const FilterView = Backbone.View.extend({
                     this.renderDetailView();
                 }
                 else {
+                    this.model.get("detailView").$el[0].remove();
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
@@ -72,20 +73,26 @@ const FilterView = Backbone.View.extend({
         if (!_.isUndefined(selectedModel)) {
             view = new QueryDetailView({model: selectedModel});
 
+            this.model.setDetailView(view);
             this.$el.find(".detail-view-container").html(view.render().$el);
         }
     },
 
     renderSimpleViews: function () {
-        var view;
+        var view,
+            queryCollectionModels = this.model.get("queryCollection").models,
+            predefinedQueriesModels = this.model.get("predefinedQueries");
 
-        if (this.model.get("queryCollection").models.length > 1) {
-            _.each(this.model.get("queryCollection").models, function (query) {
+        if (queryCollectionModels.length > 1) {
+            _.each(queryCollectionModels, function (queryCollectionModel) {
+                const query = this.model.regulateInitialActivating(queryCollectionModel, predefinedQueriesModels);
+
                 view = new QuerySimpleView({model: query});
                 this.$el.find(".simple-views-container").append(view.render().$el);
             }, this);
         }
         else {
+            this.model.activateLayer(queryCollectionModels);
             this.$el.find(".simple-views-container").remove();
         }
     },

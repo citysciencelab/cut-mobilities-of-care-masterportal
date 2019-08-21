@@ -1,0 +1,38 @@
+{
+  "/bkg_geosearch": {
+    "target": "http://wfalgqw001"
+  },
+  "/bkg_suggest": {
+    "target": "http://wfalgqw001"
+  },
+  "/cgi-bin": {
+    "target": "http://wfalgqw001.fhhnet.stadt.hamburg.de"
+  },
+  "/geodienste_hamburg_de": {
+    "target": "http://geodienste.hamburg.de",
+    "pathRewrite": {
+      "^/geodienste_hamburg_de": ""
+    }
+  },
+  "/geofos_fhhnet_stadt_hamburg_de": {
+    "target": "http://geofos.fhhnet.stadt.hamburg.de",
+    "pathRewrite": {
+      "^/geofos_fhhnet_stadt_hamburg_de": ""
+    }
+  },
+  "/test-geofos_fhhnet_stadt_hamburg_de": {
+    "target": "http://test-geofos.fhhnet.stadt.hamburg.de",
+    "pathRewrite": {
+      "^/test-geofos_fhhnet_stadt_hamburg_de": ""
+    }
+  },
+  "/geoportal_metropolregion_hamburg_de": {
+    "target": "http://geoportal.metropolregion.hamburg.de",
+    "pathRewrite": {
+      "^/geoportal_metropolregion_hamburg_de": ""
+    }
+  },
+  "/hmdk_fhhnet_stadt_hamburg_de": {
+    "target": "http://wfalgqw001"
+  }
+}

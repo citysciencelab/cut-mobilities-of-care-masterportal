@@ -3,9 +3,11 @@ import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {OverviewMap} from "ol/control.js";
 
-const OverviewMapModel = Backbone.Model.extend(/**@lends OverviewMapModel.prototype */{
+const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.prototype */{
     defaults: {
-        baselayer: "",
+        id: "",
+        layerId: "",
+        baseLayer: {},
         newOvmView: ""
     },
     /**
@@ -23,24 +25,19 @@ const OverviewMapModel = Backbone.Model.extend(/**@lends OverviewMapModel.protot
      */
     initialize: function () {
         var map = Radio.request("Map", "getMap"),
-            maxResolution = _.first(Radio.request("MapView", "getResolutions")),
             mapView = map.getView(),
             layers = map.getLayers().getArray(),
-            ovmConfig = Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}),
-            ovmConfigRes = _.isUndefined(ovmConfig) === false ? ovmConfig.attr : ovmConfig,
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
             initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
             newOlView;
 
         newOlView = new View({
             center: mapView.getCenter(),
-            projection: mapView.getProjection(),
-            resolution: mapView.getResolution(),
-            resolutions: [ovmConfigRes.resolution ? ovmConfigRes.resolution : maxResolution]
+            projection: mapView.getProjection()
         });
         this.setNewOvmView(newOlView);
-        this.setBaselayer(ovmConfigRes.baselayer ? this.getBaseLayerFromCollection(layers, ovmConfigRes.baselayer) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
-        if (_.isUndefined(this.get("baselayer")) === false) {
+        this.setBaseLayer(this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
+        if (_.isUndefined(this.get("baseLayer")) === false) {
             Radio.trigger("Map", "addControl", this.newOverviewmap());
         }
         else {
@@ -56,9 +53,9 @@ const OverviewMapModel = Backbone.Model.extend(/**@lends OverviewMapModel.protot
         var overviewmap = new OverviewMap({
             collapsible: false,
             className: "ol-overviewmap ol-custom-overviewmap",
-            target: "overviewmap",
+            target: this.get("id"),
             layers: [
-                this.getOvmLayer(this.get("baselayer"))
+                this.getOvmLayer(this.get("baseLayer"))
             ],
             view: this.get("newOvmView")
         });
@@ -123,8 +120,8 @@ const OverviewMapModel = Backbone.Model.extend(/**@lends OverviewMapModel.protot
     },
 
     // setter for baselayer
-    setBaselayer: function (value) {
-        this.set("baselayer", value);
+    setBaseLayer: function (value) {
+        this.set("baseLayer", value);
     },
 
     // setter for newOvmView

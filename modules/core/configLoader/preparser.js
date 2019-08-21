@@ -17,12 +17,30 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     initialize: function (attributes, options) {
         this.url = this.getUrlPath(options.url);
         this.fetch({async: false,
-            error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Das Portal konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: Das Portal kann \"config.json\" unter dem angegebenen Pfad nicht finden.</small>",
-                    kategorie: "alert-warning"
-                });
+            error: function (model, xhr, error) {
+                const statusText = xhr.statusText;
+                let message,
+                    position,
+                    snippet;
+
+                // SyntaxError for consoletesting, propably because of older version.
+                if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
+                        kategorie: "alert-warning"
+                    });
+                }
+                else {
+                    message = error.errorThrown.message;
+                    position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
+                    snippet = xhr.responseText.substring(position - 30, position + 30);
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Die Datei '" + model.url + "' konnte leider nicht geladen werden!</strong> <br> " +
+                        "<small>Details: " + error.textStatus + " - " + error.errorThrown.message + ".</small><br>" +
+                        "<small>Auszug:" + snippet + "</small>",
+                        kategorie: "alert-warning"
+                    });
+                }
             }
         });
     },
@@ -90,10 +108,16 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
             overlayer_3d: response.Themenconfig.Fachdaten_3D,
-            treeType: response.Portalconfig.Baumtyp,
+            treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
             isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
             snippetInfos: this.requestSnippetInfos()
         };
+
+        /**
+         * this.updateTreeType
+         * @deprecated in 3.0.0
+         */
+        attributes = this.updateTreeType(attributes, response);
 
         if (attributes.treeType === "default") {
             new DefaultTreeParser(attributes);
@@ -101,8 +125,49 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         else {
             new CustomTreeParser(attributes);
         }
+
+        /**
+         * changeLgvContainer
+         * @deprecated in 3.0.0
+         */
+        this.changeLgvContainer();
     },
 
+    /**
+     * Update the preparsed treeType from attributes to be downward compatible.
+     * @param {Object} attributes Preparased portalconfig attributes.
+     * @param {Object} response  Config from config.json.
+     * @returns {Object} - Attributes with mapped treeType
+     * @deprecated in 3.0.0. Remove whole function and call!
+     */
+    updateTreeType: function (attributes, response) {
+        if (_.has(response.Portalconfig, "treeType")) {
+            attributes.treeType = response.Portalconfig.treeType;
+        }
+        else if (_.has(response.Portalconfig, "Baumtyp")) {
+            attributes.treeType = response.Portalconfig.Baumtyp;
+            console.warn("Attribute 'Baumtyp' is deprecated. Please use 'treeType' instead.");
+        }
+        else {
+            attributes.treeType = "light";
+        }
+        return attributes;
+    },
+
+    /**
+     * Changing the lgv-container to masterportal-container
+     * @returns {void} - no returned value
+     * @deprecated in 3.0.0. Remove whole function and call!
+     */
+    changeLgvContainer: function () {
+        var container = $("div.lgv-container");
+
+        if (container.length) {
+            container.removeClass("lgv-container").addClass("masterportal-container");
+            console.warn("Div container 'lgv-container' is deprecated. Please use 'masterportal-container' instead.");
+        }
+        return false;
+    },
     /**
     * todo
     * @param {*} globalFlag todo

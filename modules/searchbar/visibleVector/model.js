@@ -1,5 +1,6 @@
 
 import "../model";
+import {Icon} from "ol/style.js";
 
 const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.prototype */{
     defaults: {
@@ -208,40 +209,76 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @return {ol.Coordinate} centroid coordinate
      */
     getCentroidPoint: function (geometry) {
-        if (geometry.getType() === "MultiPolygon") {
-            return geometry.getExtent();
+        let coordinates;
+
+
+        if (geometry.getType() === "Point") {
+            coordinates = geometry.getCoordinates();
+        }
+        else {
+            coordinates = this.getCenterFromExtent(geometry.getExtent());
         }
 
-        return geometry.getCoordinates();
+        return coordinates;
+    },
 
+    /**
+     * Creates the center coordinate from a given extent.
+     * @param {Number[]} extent - extent
+     * @returns {Number[]} center coordinate
+     */
+    getCenterFromExtent: function (extent) {
+        var deltaY = extent[2] - extent[0],
+            deltaX = extent[3] - extent[1],
+            centerY = extent[0] + deltaY / 2,
+            centerX = extent[1] + deltaX / 2;
+
+        return [centerY, centerX];
     },
 
     /**
      * Returns an image source of a feature style.
      * @param  {ol.Feature} feature openlayers feature
      * @param  {Backbone.Model} model model to get layer to get style from
-     * @return {string} imagesource
+     * @return {String|undefined} imagesource
      */
     getImageSource: function (feature, model) {
         var layerStyle,
-            style;
+            imageSource;
 
         if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
             layerStyle = model.get("layer").getStyle(feature);
 
-            // layerStyle returns style
-            if (typeof layerStyle === "object") {
-                return layerStyle[0].getImage().getSrc();
+            if (_.isFunction(layerStyle)) {
+                layerStyle = layerStyle(feature);
             }
-            // layerStyle returns stylefunction
 
-            style = layerStyle(feature);
-
-            return style.getImage().getSrc();
+            if (_.isArray(layerStyle)) {
+                imageSource = this.getImageSourceFromStyle(layerStyle[0]);
+            }
+            else {
+                imageSource = this.getImageSourceFromStyle(layerStyle);
+            }
         }
 
-        return undefined;
+        return imageSource;
+    },
 
+    /**
+     * Checks if style is an image and then returns its image source.
+     * @param {Style} layerStyle Style of layer.
+     * @returns {undefined|String} - Image source of image style.
+     */
+    getImageSourceFromStyle: function (layerStyle) {
+        let imageSource;
+
+        if (layerStyle.getImage() instanceof Icon) {
+            imageSource = layerStyle.getImage().getSrc();
+        }
+        else {
+            console.warn("Point Style is not an image. returning undefined.");
+        }
+        return imageSource;
     },
 
     /**

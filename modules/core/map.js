@@ -8,13 +8,19 @@ import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import FixedOverlaySynchronizer from "../../plugins/FixedOverlaySynchronizer.js";
-import WMSRasterSynchronizer from "../../plugins/WmsRasterSynchronizer.js";
+import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
+import WMSRasterSynchronizer from "./3dUtils/WmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
+import moment from "moment";
 
 const map = Backbone.Model.extend({
     defaults: {
-        initalLoading: 0
+        initalLoading: 0,
+        /**
+         * defaultTime for 3D rendering even with disabled shadows
+         * @type {Cesium.JulianDate}
+         */
+        shadowTime: null
     },
 
     initialize: function () {
@@ -43,6 +49,7 @@ const map = Backbone.Model.extend({
         channel.on({
             "addLayer": this.addLayer,
             "addLayerToIndex": this.addLayerToIndex,
+            "setLayerToIndex": this.setLayerToIndex,
             "addLayerOnTop": this.addLayerOnTop,
             "addLoadingLayer": this.addLoadingLayer,
             "addOverlay": this.addOverlay,
@@ -61,7 +68,7 @@ const map = Backbone.Model.extend({
             "updateSize": function () {
                 this.get("map").updateSize();
             },
-            "setTime": this.setTime,
+            "setShadowTime": this.setShadowTime,
             "activateMap3d": this.activateMap3d,
             "deactivateMap3d": this.deactivateMap3d,
             "setCameraParameter": this.setCameraParameter
@@ -82,6 +89,9 @@ const map = Backbone.Model.extend({
             controls: [],
             interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
         }));
+        if (window.Cesium) {
+            this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
+        }
         if (Config.obliqueMap) {
             this.set("obliqueMap", new ObliqueMap({}));
         }
@@ -225,12 +235,21 @@ const map = Backbone.Model.extend({
     isMap3d: function () {
         return this.getMap3d() && this.getMap3d().getEnabled();
     },
-    createMap3d: function (shadowTimeFunction) {
+
+    /**
+     * Getter for shadowTime used in OLCesium
+     * @returns {Cesium.JulianDate} shadowTime shadowTime
+     */
+    getShadowTime: function () {
+        return this.get("shadowTime");
+    },
+
+    createMap3d: function () {
         var map3d = new OLCesium({
             map: this.get("map"),
-            time: shadowTimeFunction,
+            time: this.getShadowTime.bind(this),
             sceneOptions: {
-                shadows: true
+                shadows: false
             },
             stopOpenLayersEventsPropagation: true,
             createSynchronizers: function (olMap, scene) {
@@ -240,28 +259,7 @@ const map = Backbone.Model.extend({
 
         return map3d;
     },
-    returnTodaysCesiumDate: function () {
-        if (this.time) {
-            return this.time;
-        }
-        const date = Cesium.JulianDate.now(),
-            timeStamp = Cesium.JulianDate.toGregorianDate(date);
 
-        timeStamp.hour = 13; // UTC Standardtime +1
-        timeStamp.minute = 0;
-        timeStamp.second = 0;
-        timeStamp.millisecond = 0;
-
-        return Cesium.JulianDate.fromDate(new Date(timeStamp.year, timeStamp.month - 1, timeStamp.day, timeStamp.hour, timeStamp.minute, timeStamp.second, timeStamp.millisecond));
-    },
-    returnConfigCesiumDate: function () {
-        const modifiedTime = Cesium.JulianDate.fromDate(new Date(Config.shadowTime.year, Config.shadowTime.month - 1, Config.shadowTime.day, Config.shadowTime.hour, Config.shadowTime.minute, Config.shadowTime.second, Config.shadowTime.millisecond));
-
-        return modifiedTime;
-    },
-    setTime: function (time) {
-        this.time = time;
-    },
     handle3DEvents: function () {
         var eventHandler;
 
@@ -301,18 +299,21 @@ const map = Backbone.Model.extend({
 
             scene.globe.tileCacheSize = _.has(params, "tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
             scene.globe.maximumScreenSpaceError = _.has(params, "maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
+            scene.shadowMap.maximumDistance = 5000.0;
+            scene.shadowMap.darkness = 0.6;
+            scene.shadowMap.size = 2048; // this is default
             scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
             scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
         }
         return scene;
     },
+
     activateMap3d: function () {
         var camera,
-            shadowTimeFunction = _.has(Config, "shadowTime") ? this.returnConfigCesiumDate : this.returnTodaysCesiumDate,
             cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
 
         if (!this.getMap3d()) {
-            this.setMap3d(this.createMap3d(shadowTimeFunction));
+            this.setMap3d(this.createMap3d());
             this.handle3DEvents();
             this.setCesiumSceneDefaults();
             this.setCameraParameter(cameraParameter);
@@ -497,16 +498,37 @@ const map = Backbone.Model.extend({
         }
     },
 
-    // verschiebt die layer nach oben, die alwaysOnTop=true haben (measure, import/draw)
+    /**
+     * Sets an already inserted ol.layer to the defined index using openlayers setZIndex method
+     * @param {ol.Layer} layer Layer to set
+     * @param {integer} [index=0] new Index
+     * @returns {void}
+     */
+    setLayerToIndex: function (layer, index) {
+        if (layer instanceof LayerGroup) {
+            layer.getLayers().forEach(function (singleLayer) {
+                singleLayer.setZIndex(parseInt(index, 10) || 0);
+            });
+        }
+        else {
+            layer.setZIndex(parseInt(index, 10) || 0);
+        }
+    },
+
+    /**
+     * Pushes 'alwaysOnTop' layers to the top of the collection
+     * @param {ol.Collection} layers Layer Collection
+     * @returns {void}
+     */
     setImportDrawMeasureLayersOnTop: function (layers) {
-        var layersOnTop = layers.getArray().filter(function (layer) {
-            return layer.get("alwaysOnTop") === true;
-        });
+        const newIndex = layers.getLength(),
+            layersOnTop = layers.getArray().filter(function (layer) {
+                return layer.get("alwaysOnTop") === true;
+            });
 
         _.each(layersOnTop, function (layer) {
-            layers.remove(layer);
-            layers.push(layer);
-        });
+            this.setLayerToIndex(layer, newIndex);
+        }, this);
     },
 
     zoomToExtent: function (extent, options) {
@@ -629,6 +651,10 @@ const map = Backbone.Model.extend({
         $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
             evt.stopPropagation();
         });
+    },
+
+    setShadowTime: function (value) {
+        this.set("shadowTime", value);
     }
 });
 

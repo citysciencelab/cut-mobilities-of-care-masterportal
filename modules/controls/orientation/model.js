@@ -22,11 +22,12 @@ const OrientationModel = Backbone.Model.extend({
         epsg: "EPSG:25832"
     },
     initialize: function (config) {
+        var channel;
+
         if (_.has(config, "attr") && _.has(config.attr, "poiDistances") && _.isArray(config.attr.poiDistances)) {
             this.setPoiDistances(config.attr.poiDistances);
         }
-
-        var channel = Radio.channel("geolocation");
+        channel = Radio.channel("geolocation");
 
         channel.on({
             "removeOverlay": this.removeOverlay,
@@ -81,8 +82,9 @@ const OrientationModel = Backbone.Model.extend({
         }
     },
 
-    /*
-    * Triggert die Standpunktkoordinate auf Radio
+    /**
+     * Triggert die Standpunktkoordinate auf Radio
+     * @returns {void}
     */
     sendPosition: function () {
         if (this.get("zoomMode") === "once") {

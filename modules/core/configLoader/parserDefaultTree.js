@@ -138,13 +138,19 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             isVisibleInTree = isMobile ? "false" : "true";
 
         _.each(layerList, function (layer) {
-            this.addItem(_.extend({type: "layer", parentId: "3d_daten", level: 0, isVisibleInTree: isVisibleInTree}, layer));
+            this.addItem(_.extend({
+                type: "layer",
+                parentId: "3d_daten",
+                level: 0,
+                isVisibleInTree: isVisibleInTree
+            }, layer));
         }, this);
     },
 
     /**
-     * todo
-     * @param {*} layerList - todo
+     * Creates the base layer items. "newLayer" may be undefined if its id gets removed by function deleteLayersIncludeCache.
+     * Then the configured id is not found.
+     * @param {Object[]} layerList Layers
      * @returns {void}
      */
     createBaselayer: function (layerList) {
@@ -164,7 +170,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             else {
                 this.addItem(_.extend({
                     isBaseLayer: true,
-                    isVisibleInTree: "true",
+                    isVisibleInTree: true,
                     level: 0,
                     parentId: "Baselayer",
                     type: "layer"
@@ -258,7 +264,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             parentId: "Overlayer",
             level: 0,
             isInThemen: true,
-            isVisibleInTree: "true",
+            isVisibleInTree: true,
             glyphicon: "glyphicon-plus-sign"
         });
         _.each(tree, function (category) {

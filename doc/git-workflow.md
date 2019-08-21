@@ -31,13 +31,13 @@
         - [Entwickler-Dokumentation](doc/remoteinterface.md)
     - Testfälle/Tests liegen vor
         - bei neuen Funktionen: kurze Beschreibung eines Testfalls zur Aufnahme ins Testprotokoll (sollte sich aus dem Ticket ergeben)
-        - Unit Tests sind erstellt
+        - Unit Tests sind erstellt: [Test-Dokumentation](doc/Testing.md)
     - funktionaler Test in gebauter Version
         - gemäß der Beschreibung im Ticket
         - Cross-Browser (Chrome, IE 11, FF) - mobiles Verhalten im Browser emuliert
 
 ## Forks
-* **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen [Fork](https://bitbucket.org/lgv-g12/lgv/fork) ausgehend vom **dev-Branch**.
+* **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen [Fork](https://bitbucket.org/geowerkstatt-hamburg/masterportal/fork) ausgehend vom **dev-Branch**.
 * In diesem werden die Commits vorgenommen und von diesem können Pull Requests in den **dev-Branch** gestellt werden.
 * Auch Bugs werden bitte im **dev-Branch** gefixt.
     - Im Pull Request soll bitte ein entsprechender Hinweis kenntlich machen, wenn der Hotix in den aktuellen **stable-Branch** überführt werden sollte. Siehe auch [Hinweise zur Versionierung](doc/Versionierung.md).

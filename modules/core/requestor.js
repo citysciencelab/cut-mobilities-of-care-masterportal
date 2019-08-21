@@ -149,7 +149,7 @@ const Requestor = Backbone.Model.extend({
         else {
             url = obj.model.getGfiUrl();
         }
-        url = url.replace(/SLD_BODY\=.*?\&/, "");
+        url = url.replace(/SLD_BODY=.*?&/, "");
         ++this.requestCount;
         $.ajax({
             url: url,
@@ -157,15 +157,16 @@ const Requestor = Backbone.Model.extend({
             async: true,
             type: "GET",
             context: this, // das model
-            success: function (responsedata) {
+            success: function () {
                 var gfiList = [],
                     gfiFormat,
                     gfiFeatures;
 
                 // handle non text/xml responses arriving as string
-                if (_.isString(responsedata)) {
+                // unused responsedata deleted
+                /* if (_.isString(responsedata)) {
                     responsedata = $.parseXML(data);
-                }
+                }*/
 
                 // parse result, try built-in ol-format first
                 gfiFormat = new WMSGetFeatureInfo();
@@ -210,7 +211,7 @@ const Requestor = Backbone.Model.extend({
                 this.pushGFIContent(pgfi, obj.model);
             },
             error: function (jqXHR, textStatus) {
-                alert("Ajax-Request " + textStatus);
+                console.warn("Ajax-Request " + textStatus);
             },
             complete: function () {
                 --this.requestCount;
@@ -248,7 +249,12 @@ const Requestor = Backbone.Model.extend({
         }
         return true;
     },
-    /** helper function: check, if str has a valid value */
+
+    /**
+     * helper function: check, if str has a valid value
+     * @param {string} str parameter
+     * @returns {boolean} desc
+     */
     isValidValue: function (str) {
         if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
             return true;
@@ -256,7 +262,11 @@ const Requestor = Backbone.Model.extend({
         return false;
     },
 
-    /** helper function: first letter upperCase, _ becomes " " */
+    /**
+     * helper function: first letter upperCase, _ becomes
+     * @param {string} str parameter
+     * @returns {string} desc
+     */
     beautifyString: function (str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
@@ -265,7 +275,9 @@ const Requestor = Backbone.Model.extend({
 
         _.each(gfiList, function (element) {
             var preGfi = {},
-                gfi = {};
+                gfi = {},
+                keys = [],
+                values = [];
 
             // get rid of invalid keys and keys with invalid values; trim values
             _.each(element, function (value, key) {
@@ -281,16 +293,10 @@ const Requestor = Backbone.Model.extend({
             if (gfiAttributes === "showAll") {
                 // beautify keys
                 _.each(preGfi, function (value, key) {
-                    var key;
-
-                    key = this.beautifyString(key);
-                    gfi[key] = value;
+                    gfi[this.beautifyString(key)] = value;
                 }, this);
                 // im IE müssen die Attribute für WMS umgedreht werden
                 if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
-                    var keys = [],
-                        values = [];
-
                     _.each(gfi, function (value, key) {
                         keys.push(key);
                         values.push(value);
@@ -310,9 +316,8 @@ const Requestor = Backbone.Model.extend({
                 //                        }
                 //                    });
                 _.each(gfiAttributes, function (value, key) {
-                    key = preGfi[key];
-                    if (key) {
-                        gfi[value] = key;
+                    if (preGfi[key]) {
+                        gfi[value] = preGfi[key];
                     }
                 });
             }

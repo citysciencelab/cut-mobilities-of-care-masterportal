@@ -12,10 +12,14 @@ const SensorLayer = Layer.extend({
         {
             epsg: "EPSG:4326",
             utc: "+1",
-            version: "1.0"
+            version: "1.0",
+            useProxyURL: false
         }),
 
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -75,7 +79,7 @@ const SensorLayer = Layer.extend({
         var sensorData,
             features,
             isClustered = this.has("clusterDistance"),
-            url = Radio.request("Util", "getProxyURL", this.get("url")),
+            url = this.get("useProxyURL") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
             epsg = this.get("epsg");
@@ -625,20 +629,6 @@ const SensorLayer = Layer.extend({
             if (!_.isUndefined(style)) {
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
-        }
-    },
-
-    /**
-    * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
-    * @param {object} options -
-    * @returns {void}
-    **/
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
         }
     },
 

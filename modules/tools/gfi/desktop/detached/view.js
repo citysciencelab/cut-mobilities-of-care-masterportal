@@ -9,7 +9,7 @@ const GFIDetachedView = DesktopView.extend({
         var attr = this.model.toJSON();
 
         $("#map").append(this.$el.html(this.template(attr)));
-        this.$el.css("maxWidth", $("#map").width() / 2.2);
+        this.$el.css("maxWidth", Math.round($("#map").width() / 2.2));
         this.$el.draggable({
             containment: "#map",
             handle: ".gfi-header",
@@ -32,6 +32,13 @@ const GFIDetachedView = DesktopView.extend({
         }
         else {
             this.$el.hide();
+            if (this.$el.hasClass("gfi-text-html")) {
+                this.$el.removeClass("gfi-text-html");
+                this.$el.resizable({disabled: true});
+                this.$el.css("width", "auto");
+                this.$el.css("height", "auto");
+                this.$el.resizable("destroy");
+            }
             Radio.trigger("MapMarker", "hideMarker");
             Radio.trigger("GFI", "hideGFI");
         }

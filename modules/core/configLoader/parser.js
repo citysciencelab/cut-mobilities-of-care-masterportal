@@ -315,30 +315,30 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     addLayer: function (name, id, parentId, level, layers, url, version) {
         var layer = {
-            type: "layer",
-            name: name,
-            id: id,
-            parentId: parentId,
-            level: level,
-            url: url,
-            typ: "WMS",
-            layers: layers,
-            format: "image/png",
-            version: version,
-            singleTile: false,
-            transparent: true,
-            tilesize: "512",
-            gutter: "0",
-            featureCount: 3,
-            minScale: "0",
-            maxScale: "2500000",
-            gfiAttributes: "showAll",
-            layerAttribution: "nicht vorhanden",
-            supported: ["2D", "3D"],
-            legendURL: "",
-            isBaseLayer: false,
             cache: false,
-            datasets: []
+            datasets: [],
+            featureCount: 3,
+            format: "image/png",
+            gfiAttributes: "showAll",
+            gutter: "0",
+            id: id,
+            isBaseLayer: false,
+            layerAttribution: "nicht vorhanden",
+            layers: layers,
+            legendURL: "",
+            level: level,
+            maxScale: "2500000",
+            minScale: "0",
+            name: name,
+            parentId: parentId,
+            singleTile: false,
+            supported: ["2D", "3D"],
+            tilesize: "512",
+            transparent: true,
+            typ: "WMS",
+            type: "layer",
+            url: url,
+            version: version
         };
 
         this.addItem(layer);
@@ -381,33 +381,33 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     addGDILayer: function (values) {
         var layer = {
-            type: "layer",
-            name: values.name,
-            id: values.id,
-            parentId: values.parentId,
-            level: values.level,
-            url: values.url,
-            typ: "WMS",
-            layers: values.layers,
-            format: "image/png",
-            version: values.version,
-            singleTile: false,
-            transparent: true,
-            transparency: 0,
-            tilesize: "512",
-            gutter: "0",
-            featureCount: "3",
-            minScale: "0",
-            maxScale: "2500000",
-            gfiAttributes: values.gfiAttributes,
-            layerAttribution: "nicht vorhanden",
-            legendURL: "",
             cache: false,
+            datasets: values.datasets,
+            featureCount: "3",
+            format: "image/png",
+            gfiAttributes: values.gfiAttributes,
+            gutter: "0",
+            id: values.id,
+            isChildLayer: false,
+            isJustAdded: values.isJustAdded,
             isSelected: true,
             isVisibleInTree: true,
-            isChildLayer: false,
-            datasets: values.datasets,
-            isJustAdded: values.isJustAdded
+            layerAttribution: "nicht vorhanden",
+            layers: values.layers,
+            legendURL: "",
+            level: values.level,
+            maxScale: "2500000",
+            minScale: "0",
+            name: values.name,
+            parentId: values.parentId,
+            singleTile: false,
+            tilesize: "512",
+            transparency: 0,
+            transparent: true,
+            typ: "WMS",
+            type: "layer",
+            url: values.url,
+            version: values.version
         };
 
         this.addItemAtTop(layer);
@@ -479,15 +479,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
-        var menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
+        const menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
             tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
             isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
-            overLayer3d = this.get("overlayer_3d");
+            baseLayers = this.get("baselayer"),
+            overLayers = this.get("overlayer"),
+            overLayers3d = this.get("overlayer_3d"),
+            baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
+            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
+            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten";
 
         this.addItem({
             type: "folder",
-            name: "Hintergrundkarten",
+            name: baseLayersName,
             glyphicon: "glyphicon-plus-sign",
             id: "Baselayer",
             parentId: "tree",
@@ -497,11 +502,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             level: 0
         });
 
-        this.addOrRemove3DFolder(treeType, isMobile, overLayer3d);
+        this.addOrRemove3DFolder(treeType, isMobile, overLayers3d, overLayers3DName);
 
         this.addItem({
             type: "folder",
-            name: "Fachdaten",
+            name: overLayersName,
             glyphicon: "glyphicon-plus-sign",
             id: "Overlayer",
             parentId: "tree",
@@ -526,19 +531,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * adds or removes a folder for 3d data to topic tree considering the map mode
-     * @param {String} treeType - type of tree
-     * @param {boolean} isMobile - vsible map mode from portal
-     * @param {object} overLayer3d - contains layer fro 3d mode
+     * @param {String} treeType type of tree
+     * @param {boolean} isMobile vsible map mode from portal
+     * @param {object} overLayer3d contains layer fro 3d mode
+     * @param {String} overLayers3DName Name of folder.
      * @fires Parser#RadioTriggerModelListRemoveModelsById
      * @returns {void}
      */
-    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d) {
+    addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
         var id3d = "3d_daten";
 
         if (!isMobile && (treeType === "default" || !_.isUndefined(overLayer3d))) {
             this.addItemByPosition({
                 type: "folder",
-                name: "3D Daten",
+                name: overLayers3DName,
                 id: id3d,
                 parentId: "tree",
                 isInThemen: true,

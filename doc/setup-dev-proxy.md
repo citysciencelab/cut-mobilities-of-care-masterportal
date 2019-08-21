@@ -81,18 +81,18 @@ In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku
 ## Installation des Masterportals
 Repository klonen und in das erstellte Verzeichnis wechseln:
 ```
-# git clone https://bitbucket.org/lgv-g12/lgv.git
+# git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
 # cd lgv
 ```
 
-**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config"  ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/lgv-g12/lgv-config-public/)) inkl. credentials einbinden, z.B.
+**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config"  ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/)) inkl. credentials einbinden, z.B.
 
 ```
-# https://<user>:<pw>@bitbucket.org/lgv-g12/lgv-config.git#master
+# https://<user>:<pw>@bitbucket.org/geowerkstatt-hamburg/lgv-config.git#master
 ```
 
 
-Installiert das Repository [lgv-config](https://bitbucket.org/lgv-g12/lgv-config) mit services.json und style.json.
+Installiert das Repository [lgv-config](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config) mit services.json und style.json.
 
 
 

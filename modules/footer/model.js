@@ -16,7 +16,7 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
                 "alias_mobil": "LGV Hamburg"
             }
         ],
-        version: {}
+        showVersion: false
     }
 });
 

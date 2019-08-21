@@ -5,7 +5,7 @@ Viele Funktionen des Masterportals stellen XHR-Anfragen an andere Domains, z.B. 
 **Beispiel:**
 
 Lautet die URL eines WMS Server z.B.:   
-*http://geodienste.hamburg.de/HH-WMS-Gruenes-Netz*
+*https://geodienste.hamburg.de/HH-WMS-Gruenes-Netz*
 
 dann wird sie vom Portal übersetzt in:  
 */geodienste_hamburg_de/HH-WMS-Gruenes-Netz*
@@ -18,7 +18,7 @@ Hierfür muss ein ReverseProxy eingerichtet werden.
 
 Ein Apache Proxy, für das Beispiel oben:  
 
-`ProxyPass geodienste_hamburg_de/ https://geodienste.hamburg.de/`  
-`ProxyPassReverse geodienste_hamburg_de/ https://geodienste.hamburg.de/`
+`ProxyPass /geodienste_hamburg_de https://geodienste.hamburg.de`  
+`ProxyPassReverse /geodienste_hamburg_de https://geodienste.hamburg.de`
 
-Diese Anweisung muss in *„Apache24\conf\httpd.conf“*  stehen und bedeutet: “Leite alle Anfragen an */geodienste_hamburg_de* weiter an  [http://geodienste-hamburg.de/](http://geodienste-hamburg.de/), nehme die Antwort entgegen und gebe sie als /geodienste_hamburg_de zurück“.
+Diese Anweisung muss in *„Apache24\conf\httpd.conf“*  stehen und bedeutet: “Leite alle Anfragen an */geodienste_hamburg_de* weiter an  [https://geodienste-hamburg.de](https://geodienste-hamburg.de), nehme die Antwort entgegen und gebe sie als /geodienste_hamburg_de zurück“.

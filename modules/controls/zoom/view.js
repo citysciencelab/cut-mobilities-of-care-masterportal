@@ -68,6 +68,7 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
      * Shows zoom buttons if map is in 2d-mode.
      * Hides zoom buttons if map is in 3d-mode.
      * @param {String} map Mode of the map. Possible values are "2D" or "3D".
+     * @returns {void}
      */
     mapChange: function (map) {
         if (map === "2D") {

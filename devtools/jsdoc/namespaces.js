@@ -123,11 +123,6 @@
  */
 
 /**
- * @namespace Util
- * @description fooBar
- */
-
-/**
  * @namespace Menu
  * @description Definition of menu
  */
@@ -334,6 +329,12 @@
  */
 
 /**
+ * @namespace Datepicker
+ * @memberOf Snippets
+ * @description Datepicker Snippet using bootstrap-datepicker
+ */
+
+/**
  * @namespace Tools
  * @description Tools available in the application
  */
@@ -375,7 +376,7 @@
  */
 
 /**
- * @namespace EinwohnerAbfrage_HH
+ * @namespace Einwohnerabfrage_hh
  * @memberOf Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
@@ -395,6 +396,12 @@
 /**
  * @namespace Query
  * @memberOf Tools.Filter
+ * @description foobar
+ */
+
+/**
+ * @namespace Source
+ * @memberOf Tools.Filter.Query
  * @description foobar
  */
 
@@ -588,18 +595,6 @@
  * @namespace Measure
  * @memberOf Tools
  * @description Measure distances and areas.
- */
-
-/**
- * @namespace Default
- * @memberOf Tools.Measure
- * @description Default representation of Measure-Tool.
- */
-
-/**
- * @namespace Table
- * @memberOf Tools.Measure
- * @description Touch table specific representation of Measure-Tool.
  */
 
 /**

@@ -136,8 +136,8 @@
             },
             {
               "layerId": "1711",
-              "isActive": true,
-              "isSelected": true,
+              "isActive": false,
+              "isSelected": false,
               "name": "Krankenhäuser",
               "predefinedRules": [],
               "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
@@ -156,7 +156,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
@@ -235,7 +235,7 @@
             "name": "Pendler (Animation)",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
                 "REQUEST": "GetFeature",
                 "SERVICE": "WFS",
@@ -309,23 +309,23 @@
         "zoomMode": "once",
         "poiDistances": [500, 1000, 2000]
       },
-      "totalview": true,
+      "totalView": true,
       "attributions":
       {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false
+        "isInitOpenMobile": true
       },
-      "overviewmap":
+      "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "baselayer": "452"
+        "layerId": "452"
       },
       "mousePosition": true,
       "buttonOblique": true,
       "button3d": true
     },
     "scaleLine": true,
-    "Baumtyp": "custom",
+    "treeType": "custom",
     "layersRemovable": false
   },
   "Themenconfig":
@@ -687,7 +687,6 @@
             }
          ]
       },
-
       {
         "Titel": "Gruppenlayer",
         "Layer":
@@ -703,11 +702,12 @@
                       "id": "1731"
                     }
                ],
-              "visibility": true,
+              "visibility": false,
               "name": "Kita und Krankenhäuser"
             },
             {
               "id": "schUk",
+              "layerAttribution": "<span>Attributierung für Gruppenlayer</span>",
               "children":
                 [
                     {
@@ -745,7 +745,8 @@
                       "additionalInfoField": "adresse_strasse_hausnr"
                     }
               ],
-              "name": "Krankenhäuser und Schulen"
+              "name": "Krankenhäuser und Schulen",
+              "visibility": true
             }
           ]
         }

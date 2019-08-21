@@ -27,6 +27,7 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
     render: function () {
         var attr = this.model.toJSON();
 
+        attr.masterPortalVersionNumber = Radio.request("Util", "getMasterPortalVersionNumber");
         $(".ol-viewport").append(this.$el.html(this.template(attr)));
         return this;
     }

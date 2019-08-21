@@ -30,6 +30,9 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     initialize: function () {
+
+        this.checkForScale(Radio.request("MapView", "getOptions"));
+
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -113,7 +116,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         let paramUrl;
 
         if (typ === "WFS") {
-            paramUrl = url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType") + "&OUTPUTFORMAT=application/geo+json&VERSION=" + this.get("version");
+            paramUrl = url + "?REQUEST=GetFeature&SERVICE=WFS&TYPENAME=" + this.get("featureType") + "&OUTPUTFORMAT=application/geo%2Bjson&VERSION=" + this.get("version");
         }
         else if (typ === "GeoJSON") {
             paramUrl = url;
@@ -299,20 +302,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                 return null;
             });
         }, this);
-    },
-
-    /**
-     * Sets inside or outside of scale range
-     * @param {object} options scale options
-     * @returns {void}
-     */
-    checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= this.get("maxScale") && parseFloat(options.scale, 10) >= this.get("minScale")) {
-            this.setIsOutOfRange(false);
-        }
-        else {
-            this.setIsOutOfRange(true);
-        }
     },
 
     /**

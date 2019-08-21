@@ -5,27 +5,64 @@ import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 
-const BuildSpecModel = Backbone.Model.extend({
+const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
         uniqueIdList: []
     },
+    /**
+     * Model to generate the buildSpec JSON that is send to the mapfish-print-3 service.
+     * @class BuildSpecModel.
+     * @memberof Tools.Print
+     * @extends Backbone.Model
+     * @constructs
+     * @fires CswParser#RadioTriggerGetMetaData
+     * @listens CswParser#RadioTriggerFetchedMetaData
+     */
     initialize: function () {
         this.listenTo(Radio.channel("CswParser"), {
             "fetchedMetaData": this.fetchedMetaData
         });
     },
+
+    /**
+     * Fetches the metadata object and checks if object is from own request.
+     * If so it removes the unique id from the unique id list.
+     * @param {Object} cswObj Object from csw parser.
+     * @returns {void}
+     */
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
         }
     },
+
+    /**
+     * Checks if csw request belongs to this model.
+     * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
+     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @returns {Boolean} - Flag if csw response is from own metaRequest.
+     */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
+
+    /**
+     * Removes the uniqueId from the uniqueIdList, because the request returned something.
+     * @param {String[]} uniqueIdList List of all metaRequest-ids belonging to this model.
+     * @param {String} uniqueId Response unique-id from Cswparser.
+     * @returns {void}
+     */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
+
+    /**
+     * Updates the metadata from the metadata response.
+     * @param {String} layerName name of layer.
+     * @param {Object} parsedData parsedCswData.
+     * @returns {void}
+     */
     updateMetaData: function (layerName, parsedData) {
         var layers = _.has(this.get("attributes"), "legend") && _.has(this.get("attributes").legend, "layers") ? this.get("attributes").legend.layers : undefined,
             layer = _.findWhere(layers, {layerName: layerName});
@@ -39,6 +76,16 @@ const BuildSpecModel = Backbone.Model.extend({
             layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "n.N.";
         }
     },
+
+    /**
+     * Parses the address object to a string.
+     * @param {Object} addressObj Address Object
+     * @param {String} addressObj.street Street name.
+     * @param {String} addressObj.housenr House number.
+     * @param {String} addressObj.postalCode Postal Code.
+     * @param {String} addressObj.city City.
+     * @returns {String} - The parsed String.
+     */
     parseAddressToString: function (addressObj) {
         var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
             housenr = _.isUndefined(addressObj) ? undefined : addressObj.housenr,
@@ -67,24 +114,25 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
-     * defines the layers attribute of the map spec
-     * @param {ol.layer.Layer[]} layerList - all visible layers on the map
+     * Defines the layers attribute of the map spec
+     * @param {ol.layer.Layer[]} layerList All visible layers on the map.
      * @returns {void}
      */
     buildLayers: function (layerList) {
         var layers = [],
-            attributes = this.get("attributes");
+            attributes = this.get("attributes"),
+            currentResolution = Radio.request("MapView", "getOptions").resolution;
 
         layerList.forEach(function (layer) {
             var printLayers = [];
 
             if (layer instanceof Group) {
                 _.each(layer.getLayers().getArray(), function (childLayer) {
-                    printLayers.push(this.buildLayerType(childLayer));
+                    printLayers.push(this.buildLayerType(childLayer, currentResolution));
                 }, this);
             }
             else {
-                printLayers.push(this.buildLayerType(layer));
+                printLayers.push(this.buildLayerType(layer, currentResolution));
             }
             _.each(printLayers, function (printLayer) {
                 if (!_.isUndefined(printLayer)) {
@@ -97,10 +145,10 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
-     * Gibt die nach zIndex sortierten Features des Draw-layers zurück oder undefined
-     * @param   {ol.layer}  layer   ol.Layer mit Features
-     * @param   {ol.extent} extent  sichtbarer Extent zum filtern der Features
-     * @returns {object}            Layerinfos zum drucken
+     * Sorts the features of the draw layer by z-index and returns the vector object for mapfish-print-3
+     * @param {ol.layer}  layer   ol.Layer with features.
+     * @param {ol.extent} extent  Extent uses to filter the feature by extent.
+     * @returns {Object|undefined} - VectorObject for mapfish print.
      */
     getDrawLayerInfo: function (layer, extent) {
         var featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
@@ -116,38 +164,60 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
-     * Rückgabe der Layerinformation nach Layertyp oder undefined
-     * @param   {ol.layer}  layer   ol.Layer mit Features
-     * @returns {object}            Layerinfos zum drucken
+     * returns layerinfoy by layer type
+     * @param  {ol.layer} layer ol.Layer with deatures
+     * @param {Number} currentResolution Current map resolution
+     * @returns {Object} - LayerObject for mapfish print.
      */
-    buildLayerType: function (layer) {
+    buildLayerType: function (layer, currentResolution) {
         var features = [],
             extent = Radio.request("MapView", "getCurrentExtent"),
-            returnLayer;
+            returnLayer,
+            layerMinRes = layer.get("minResolution"),
+            layerMaxRes = layer.get("maxResolution"),
+            isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
 
-        if (layer instanceof Image) {
-            returnLayer = this.buildImageWms(layer);
-        }
-        else if (layer instanceof Tile) {
-            returnLayer = this.buildTileWms(layer);
-        }
-        else if (layer.get("name") === "import_draw_layer") {
-            returnLayer = this.getDrawLayerInfo(layer, extent);
-        }
-        else if (layer instanceof Vector) {
-            features = layer.getSource().getFeaturesInExtent(extent);
-            if (features.length > 0) {
-                returnLayer = this.buildVector(layer, features);
+        if (isInScaleRange) {
+            if (layer instanceof Image) {
+                returnLayer = this.buildImageWms(layer);
+            }
+            else if (layer instanceof Tile) {
+                returnLayer = this.buildTileWms(layer);
+            }
+            else if (layer.get("name") === "import_draw_layer") {
+                returnLayer = this.getDrawLayerInfo(layer, extent);
+            }
+            else if (layer instanceof Vector) {
+                features = layer.getSource().getFeaturesInExtent(extent);
+                if (features.length > 0) {
+                    returnLayer = this.buildVector(layer, features);
+                }
             }
         }
-
         return returnLayer;
     },
 
     /**
+     * Checks if layer is in the visible resolution range.
+     * @param {Number} layerMinRes Maximum resolution of layer.
+     * @param {Number} layerMaxRes Minimum resolution of layer.
+     * @param {Number} currentResolution Current map resolution.
+     * @returns {Boolean} - Flag if layer is in visible resolution.
+     */
+    isInScaleRange: function (layerMinRes, layerMaxRes, currentResolution) {
+        let isInScale = false;
+
+        if (layerMinRes <= currentResolution && layerMaxRes >= currentResolution) {
+            isInScale = true;
+        }
+
+        return isInScale;
+    },
+
+    /**
      * returns tile wms layer information
-     * @param {ol.layer.Tile} layer - tile layer with tile wms source
-     * @returns {object} wms layer spec
+     * @param {ol.layer.Tile} layer tile layer with tile wms source
+     * @returns {Object} - wms layer spec
      */
     buildTileWms: function (layer) {
         var source = layer.getSource(),
@@ -156,6 +226,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 opacity: layer.getOpacity(),
                 type: "WMS",
                 layers: source.getParams().LAYERS.split(","),
+                styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT
@@ -170,9 +241,9 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
-     * returns image wms layer information
+     * Returns image wms layer information
      * @param {ol.layer.Image} layer - image layer with image wms source
-     * @returns {object} wms layer spec
+     * @returns {Object} - wms layer spec
      */
     buildImageWms: function (layer) {
         var source = layer.getSource(),
@@ -181,6 +252,7 @@ const BuildSpecModel = Backbone.Model.extend({
                 opacity: layer.getOpacity(),
                 type: "WMS",
                 layers: source.getParams().LAYERS.split(","),
+                styles: source.getParams().STYLES ? source.getParams().STYLES.split(",") : undefined,
                 imageFormat: source.getParams().FORMAT,
                 customParams: {
                     "TRANSPARENT": source.getParams().TRANSPARENT
@@ -192,9 +264,9 @@ const BuildSpecModel = Backbone.Model.extend({
 
     /**
      * returns vector layer information
-     * @param {ol.layer.Vector} layer - vector layer with vector source
+     * @param {ol.layer.Vector} layer vector layer with vector source
      * @param {ol.feature[]} features vectorfeatures
-     * @returns {object} geojson layer spec
+     * @returns {object} - geojson layer spec
     */
     buildVector: function (layer, features) {
         var geojsonList = [];
@@ -206,6 +278,13 @@ const BuildSpecModel = Backbone.Model.extend({
         };
     },
 
+    /**
+     * Generates the style for mapfish print.
+     * @param {ol.layer} layer ol-Layer with features.
+     * @param {ol.feature[]} features Array of features.
+     * @param {Object[]} geojsonList Array of geojsons.
+     * @returns {Object} - style for mapfish print.
+     */
     buildStyle: function (layer, features, geojsonList) {
         var mapfishStyleObject = {
                 "version": "2"
@@ -265,6 +344,12 @@ const BuildSpecModel = Backbone.Model.extend({
         return mapfishStyleObject;
     },
 
+    /**
+     * Generates the point Style
+     * @param {ol.style} style Style of layer.
+     * @param {ol.layer} layer Ol-layer.
+     * @returns {Object} - Point Style for mapfish print.
+     */
     buildPointStyle: function (style, layer) {
         if (style.getImage() instanceof CircleStyle) {
             return this.buildPointStyleCircle(style.getImage());
@@ -275,6 +360,11 @@ const BuildSpecModel = Backbone.Model.extend({
         return this.buildTextStyle(style.getText());
     },
 
+    /**
+     * Generates the point Style for circle style
+     * @param {ol.style} style Style of layer.
+     * @returns {Object} - Circle Style for mapfish print.
+     */
     buildPointStyleCircle: function (style) {
         var fillStyle = style.getFill(),
             strokeStyle = style.getStroke(),
@@ -293,6 +383,12 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
+    /**
+     * Generates the point Style for icons
+     * @param {ol.style} style Style of layer.
+     * @param {ol.layer} layer Ol-layer.
+     * @returns {Object} - Icon Style for mapfish print.
+     */
     buildPointStyleIcon: function (style, layer) {
         return {
             type: "point",
@@ -302,6 +398,7 @@ const BuildSpecModel = Backbone.Model.extend({
             graphicOpacity: layer.getOpacity()
         };
     },
+
     /**
      * derives the url of the image from the server the app is running on
      * if the app is running on localhost the images from test-geofos are used
@@ -317,12 +414,17 @@ const BuildSpecModel = Backbone.Model.extend({
         return url;
     },
 
+    /**
+     * Generates the text Style
+     * @param {ol.style} style Style of layer.
+     * @returns {Object} - Text Style for mapfish print.
+     */
     buildTextStyle: function (style) {
         return {
             type: "text",
             label: !_.isUndefined(style.getText()) ? style.getText() : "",
             fontColor: this.rgbArrayToHex(style.getFill().getColor()),
-            labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : "white",
+            labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
             fontSize: style.getFont().split(" ")[0],
@@ -333,9 +435,9 @@ const BuildSpecModel = Backbone.Model.extend({
 
     /**
      * gets the indicator of how to align the text with respect to the geometry.
-     * this property must have 2 characters, the x-align and the y-align
-     * @param {ol.style} style -
-     * @returns {string} placement indicator
+     * this property must have 2 characters, the x-align and the y-align.
+     * @param {ol.style} style Style of layer.
+     * @returns {String} - placement indicator
      */
     getLabelAlign: function (style) {
         var textAlign = style.getTextAlign();
@@ -352,6 +454,12 @@ const BuildSpecModel = Backbone.Model.extend({
         return "cb";
     },
 
+    /**
+     * Generates the polygon Style
+     * @param {ol.style} style Style of layer.
+     * @param {ol.layer} layer Ol-layer.
+     * @returns {Object} - Polygon Style for mapfish print.
+     */
     buildPolygonStyle: function (style, layer) {
         var fillStyle = style.getFill(),
             strokeStyle = style.getStroke(),
@@ -368,6 +476,13 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
+
+    /**
+     * Generates the LineString Style
+     * @param {ol.style} style Style of layer.
+     * @param {ol.layer} layer Ol-layer.
+     * @returns {Object} - LineString Style for mapfish print.
+     */
     buildLineStringStyle: function (style, layer) {
         var strokeStyle = style.getStroke(),
             obj = {
@@ -379,8 +494,19 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
+
+    /**
+     * Generates the Fill Style
+     * @param {ol.style} style Style of layer.
+     * @param {Object} obj current style object .
+     * @returns {Object} - Fill Style for mapfish print.
+     */
     buildFillStyle: function (style, obj) {
         var fillColor = style.getColor();
+
+        if (typeof fillColor === "string") {
+            fillColor = this.colorStringToRgbArray(fillColor);
+        }
 
         obj.fillColor = this.rgbArrayToHex(fillColor);
         obj.fillOpacity = fillColor[3];
@@ -388,6 +514,48 @@ const BuildSpecModel = Backbone.Model.extend({
         return obj;
     },
 
+    /**
+     * Checks if colorString starts with "rgb" then calls a parsing function.
+     * @param {String} colorString rgb or rgba string
+     * @returns {Number[] | String} - parsed rgb-string as number array
+     */
+    colorStringToRgbArray: function (colorString) {
+        const parsedString = colorString;
+        let parsedArray;
+
+        if (parsedString.match(/^(rgb)/)) {
+            parsedArray = this.rgbStringToRgbArray(parsedString);
+        }
+        return parsedArray;
+    },
+
+    /**
+     * Parses a given rgb- or rgba-string to an numbers array.
+     * @param {String} colorString rgb or rgba string
+     * @returns {Number[]} - parsed rgb-string as number array
+     */
+    rgbStringToRgbArray: function (colorString) {
+        const indexOpenBracket = colorString.indexOf("(") + 1,
+            indexCloseBracket = colorString.indexOf(")"),
+            length = indexCloseBracket - indexOpenBracket,
+            valuesString = colorString.substr(indexOpenBracket, length),
+            rgbaStringArray = valuesString.split(","),
+            rgbaArray = [];
+
+        rgbaStringArray.forEach(function (colorValue) {
+            colorValue.trim();
+            rgbaArray.push(parseFloat(colorValue));
+        });
+
+        return rgbaArray;
+    },
+
+    /**
+     * Generates the Stroke Style
+     * @param {ol.style} style Style of layer.
+     * @param {Object} obj Style object for mapfish print.
+     * @returns {Object} - LineString Style for mapfish print.
+     */
     buildStrokeStyle: function (style, obj) {
         var strokeColor;
 
@@ -401,6 +569,12 @@ const BuildSpecModel = Backbone.Model.extend({
         }
         return obj;
     },
+
+    /**
+     * Returns the image name of the src url.
+     * @param {String} imageSrc Url of image source
+     * @returns {String} - Image name.
+     */
     getImageName: function (imageSrc) {
         var start = imageSrc.lastIndexOf("/");
 
@@ -414,13 +588,23 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {void}
      */
     addFeatureToGeoJsonList: function (feature, geojsonList) {
+        let convertedFeature;
+
         if (feature.get("features") !== undefined) {
             feature.get("features").forEach(function (clusteredFeature) {
-                geojsonList.push(this.convertFeatureToGeoJson(clusteredFeature));
+                convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
+
+                if (convertedFeature) {
+                    geojsonList.push(convertedFeature);
+                }
             }, this);
         }
         else {
-            geojsonList.push(this.convertFeatureToGeoJson(feature));
+            convertedFeature = this.convertFeatureToGeoJson(feature);
+
+            if (convertedFeature) {
+                geojsonList.push(convertedFeature);
+            }
         }
     },
 
@@ -430,13 +614,19 @@ const BuildSpecModel = Backbone.Model.extend({
      * @returns {object} GeoJSON object
      */
     convertFeatureToGeoJson: function (feature) {
-        var geojsonFormat = new GeoJSON();
+        var geojsonFormat = new GeoJSON(),
+            convertedFeature;
 
         // circle is not suppported by geojson
         if (feature.getGeometry().getType() === "Circle") {
             feature.setGeometry(fromCircle(feature.getGeometry()));
         }
-        return geojsonFormat.writeFeatureObject(feature);
+        convertedFeature = geojsonFormat.writeFeatureObject(feature);
+
+        if (feature.getGeometry().getCoordinates().length === 0) {
+            convertedFeature = undefined;
+        }
+        return convertedFeature;
     },
 
     /**
@@ -498,14 +688,17 @@ const BuildSpecModel = Backbone.Model.extend({
      */
     getStyleAttribute: function (layer) {
         var layerId = layer.get("id"),
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            styleField = "styleId";
 
         if (layerModel !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-
-            return Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+            if (layerModel.get("styleId")) {
+                styleField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+            }
         }
-        return "styleId";
+
+        return styleField;
     },
 
     /**
@@ -528,14 +721,15 @@ const BuildSpecModel = Backbone.Model.extend({
     },
 
     /**
+     * Converts an rgb array to hexcode. Default is the open layers default color.
      * @param {number[]} rgb - a rgb color represented as an array
-     * @returns {string} hex color
+     * @returns {string} - hex color
      */
     rgbArrayToHex: function (rgb) {
         var hexR,
             hexG,
             hexB,
-            hexString = "#000000";
+            hexString = "#3399CC";
 
         if (_.isArray(rgb) && rgb.length >= 3) {
             hexR = this.addZero(rgb[0].toString(16));
@@ -566,20 +760,29 @@ const BuildSpecModel = Backbone.Model.extend({
         var legendObject = {},
             metaDataLayerList = [];
 
-        if (isLegendSelected) {
-            if (legendParams.length > 0) {
-                legendObject.layers = [];
-                _.each(legendParams, function (layerParam) {
-                    if (isMetaDataAvailable) {
-                        metaDataLayerList.push(layerParam.layername);
-                    }
+        if (isLegendSelected && legendParams.length > 0) {
+            legendObject.layers = [];
+            _.each(legendParams, function (layerParam) {
+                if (isMetaDataAvailable) {
+                    metaDataLayerList.push(layerParam.layername);
+                }
+                if (layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+                    Radio.trigger("Alert", "alert", {
+                        kategorie: "alert-info",
+                        text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
+                            "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
+                            "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
+                    });
+                }
+                else {
                     legendObject.layers.push({
                         layerName: layerParam.layername,
                         values: this.prepareLegendAttributes(layerParam)
                     });
-                }, this);
-            }
+                }
+            }, this);
         }
+
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
         if (isMetaDataAvailable) {
@@ -588,6 +791,13 @@ const BuildSpecModel = Backbone.Model.extend({
             }, this);
         }
     },
+
+    /**
+     * Requests the metadata for given layer name
+     * @param {String} layerName name of current layer
+     * @fires CswParser#RadioTriggerGetMetaData
+     * @returns {void}
+     */
     getMetaData: function (layerName) {
         var layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
@@ -604,6 +814,12 @@ const BuildSpecModel = Backbone.Model.extend({
             Radio.trigger("CswParser", "getMetaData", cswObj);
         }
     },
+
+    /**
+     * Prepares Attributes for legend in mapfish-print template
+     * @param {Object} layerParam Params of layer.
+     * @returns {Object[]} - prepared legend attributes.
+     */
     prepareLegendAttributes: function (layerParam) {
         var valuesArray = [],
             typ = layerParam.legend[0].typ;
@@ -620,14 +836,25 @@ const BuildSpecModel = Backbone.Model.extend({
 
         return _.flatten(valuesArray);
     },
-    createWmsLegendList: function (legendObjects) {
-        var wmsLegendList = [];
 
-        _.each(legendObjects, function (url) {
+    /**
+     * Creates the wms legend list for mapfish print
+     * @param {String[]} urls params for wms legend cration.
+     * @returns {Object[]} - prepared wms legens for mapfish print.
+     */
+    createWmsLegendList: function (urls) {
+        var wmsLegendList = [],
+            legendUrls = urls;
+
+        if (typeof urls === "string") {
+            legendUrls = [legendUrls];
+        }
+
+        _.each(legendUrls, function (url) {
             var wmsLegendObject = {
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
-                imageUrl: this.createLegendImageUrl(url),
+                imageUrl: url,
                 color: "",
                 label: ""
             };
@@ -636,22 +863,37 @@ const BuildSpecModel = Backbone.Model.extend({
         }, this);
         return wmsLegendList;
     },
-    createWfsLegendList: function (legendObjects, legendNames, layerName) {
+
+    /**
+     * Creates wfs legend list for mapfish print
+     * @param {String|String[]} urls Urls of legends.
+     * @param {String[]} legendNames Names of legend.
+     * @param {String} layerName Name of layer.
+     * @returns {Object[]} - List of wfs legends to mapfish print template.
+     */
+    createWfsLegendList: function (urls, legendNames, layerName) {
         var wfsLegendList = [],
             wfsLegendObject;
 
-        if (_.isString(legendObjects)) {
-            wfsLegendObject = this.createWfsLegendObject(legendObjects, layerName);
+        if (_.isString(urls)) {
+            wfsLegendObject = this.createWfsLegendObject(urls, layerName);
             wfsLegendList.push(wfsLegendObject);
         }
         else {
-            _.each(legendObjects, function (url, index) {
+            _.each(urls, function (url, index) {
                 wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
                 wfsLegendList.push(wfsLegendObject);
             }, this);
         }
         return wfsLegendList;
     },
+
+    /**
+     * Creates legend object for wfs layer for mapfish print
+     * @param {String} url Url of image.
+     * @param {String} label Label.
+     * @returns {Object} - wfs legend object
+     */
     createWfsLegendObject: function (url, label) {
         var wfsLegendObject = {
             legendType: "",
@@ -676,6 +918,12 @@ const BuildSpecModel = Backbone.Model.extend({
         }
         return wfsLegendObject;
     },
+
+    /**
+     * Creates a legend list for all style wms styyled layers.
+     * @param {Object[]} legendObjects Special styleWMS params
+     * @returns {Object[]} - legend list from stlyed wms layer for mapfish print.
+     */
     createStyleWmsLegendList: function (legendObjects) {
         var styleWmsLegendList = [];
 
@@ -690,6 +938,11 @@ const BuildSpecModel = Backbone.Model.extend({
         });
         return styleWmsLegendList;
     },
+    /**
+     * Returns Fill color from SVG as hex.
+     * @param {String} svgString String of SVG.
+     * @returns {String} - Fill color as hex.
+     */
     getFillFromSVG: function (svgString) {
         var indexOfFill = svgString.indexOf("fill:") + 5,
             hexLength = 6 + 1,
@@ -700,6 +953,12 @@ const BuildSpecModel = Backbone.Model.extend({
         }
         return hexColor;
     },
+
+    /**
+     * Creates the legend image url.
+     * @param {String} path Path.
+     * @returns {String} - Url for legend path.
+     */
     createLegendImageUrl: function (path) {
         var url = path,
             image;
@@ -712,6 +971,7 @@ const BuildSpecModel = Backbone.Model.extend({
 
         return url;
     },
+
     /**
      * gets array with [GfiContent, layername, coordinates] of actual gfi
      * empty array if gfi is not active.
@@ -778,6 +1038,7 @@ const BuildSpecModel = Backbone.Model.extend({
             }
         });
     },
+
     /**
      * parses gfiAttributes object with key value pairs into array[objects] with attributes key and value
      * @param  {Object} gfiAttributes gfi Mapping attributes
@@ -795,29 +1056,77 @@ const BuildSpecModel = Backbone.Model.extend({
 
         return valuesArray;
     },
+
+    /**
+     * Creates the scale string.
+     * @param {String} scale Scale of map.
+     * @returns {void}
+     */
     buildScale: function (scale) {
         var scaleText = "1:" + scale;
 
         this.setScale(scaleText);
     },
+
+    /**
+     * Setter for Metadata
+     * @param {String} value Value
+     * @returns {void}
+     */
     setMetadata: function (value) {
         this.get("attributes").metadata = value;
     },
+
+    /**
+     * Setter for showLegend
+     * @param {Boolean} value Value
+     * @returns {void}
+     */
     setShowLegend: function (value) {
         this.get("attributes").showLegend = value;
     },
+
+    /**
+     * Setter for Legend
+     * @param {String} value Value
+     * @returns {void}
+     */
     setLegend: function (value) {
         this.get("attributes").legend = value;
     },
+
+    /**
+     * Setter for showGfi
+     * @param {Boolean} value Value
+     * @returns {void}
+     */
     setShowGfi: function (value) {
         this.get("attributes").showGfi = value;
     },
+
+    /**
+     * Setter for gfi
+     * @param {String} value Value
+     * @returns {void}
+     */
     setGfi: function (value) {
         this.get("attributes").gfi = value;
     },
+
+    /**
+     * Setter for scale
+     * @param {String} value Value
+     * @returns {void}
+     */
     setScale: function (value) {
         this.get("attributes").scale = value;
     },
+
+    /**
+     * Setter for uniqueIdList
+     * @param {String} value Value
+     * @returns {void}
+     */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
     }

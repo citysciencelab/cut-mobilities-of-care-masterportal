@@ -1,6 +1,16 @@
 import SidebarModel from "./model";
 
-const SidebarView = Backbone.View.extend({
+const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
+    /**
+     * @class SidebarView
+     * @extends Backbone.View
+     * @memberof Sidebar
+     * @constructs
+     * @fires Map#RadioTriggerMapUpdateSize
+     * @listens Sidebar#changeIsVisible
+     * @listens Sidebar#changeIsMobile
+     * @listens Sidebar#addContent
+     */
     initialize: function () {
         this.model = new SidebarModel();
         this.$el.addClass(this.getClassName());
@@ -14,8 +24,8 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * Ermittelt den ClassName dieser View
-     * @returns {string}    ClassName
+     * Creates the class name.
+     * @returns {string} ClassName
      */
     getClassName: function () {
         if (this.model.get("isMobile")) {
@@ -24,8 +34,8 @@ const SidebarView = Backbone.View.extend({
         return "sidebar";
     },
     /**
-     * add HTML content to this sidebar
-     * @param {DOM} element - from a tool view
+     * Add HTML content to this sidebar
+     * @param {HTML} element Element from a tool view
      * @returns {void}
      */
     addContent: function (element) {
@@ -33,10 +43,11 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * shows or hides this view
-     * @param {Backbone.Model} model - this.model
-     * @param {boolean} isVisible - is the sidebar visible
+     * Shows or hides this view.
+     * @param {SidebarModel} model The sidebar model.
+     * @param {boolean} isVisible Flag if sidebar is visible.
      * @return {void}
+     * @fires Map#RadioTriggerMapUpdateSize
      */
     toggle: function (model, isVisible) {
         if (isVisible) {
@@ -51,9 +62,9 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * toggles the css class for this view
-     * @param {Backbone.Model} model - this.model
-     * @param {boolean} isMobile -
+     * Toggles the css class for this view
+     * @param {SidebarModel} model The sidebar model.
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
      * @return {void}
      */
     toggleClass: function (model, isMobile) {
@@ -63,30 +74,34 @@ const SidebarView = Backbone.View.extend({
     },
 
     /**
-     * sets the width of the map
-     * @param {boolean} isMobile -
-     * @param {boolean} isVisible - is the sidebar visible
+     * Sets the width of the map
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
+     * @param {boolean} isVisible Flag if the sidebar is visible.
      * @return {void}
      */
     setMapWidth: function (isMobile, isVisible) {
+        const $map = $("#map"),
+            $sidebar = $(".sidebar"),
+            parentWidth = $map.parent().width(),
+            relativeWidth = Math.floor((parentWidth - $sidebar.width()) / parentWidth * 100);
+
         if (!isMobile && isVisible) {
-            $("#map").css("width", "70%");
+            $map.css("width", relativeWidth + "%");
         }
         else {
-            $("#map").css("width", "100%");
+            $map.css("width", "100%");
         }
     },
 
     /**
-     * toggles the backdrop
-     * needed for the mobile mode
-     * @param {boolean} isMobile -
-     * @param {boolean} isVisible - is the sidebar visible
+     * Toggles the backdrop. Needed for the mobile mode
+     * @param {boolean} isMobile Flag if the portal is in mobile mode.
+     * @param {boolean} isVisible Flag if the sidebar is visible.
      * @return {void}
      */
     toggleBackdrop: function (isMobile, isVisible) {
         if (isMobile && isVisible) {
-            $(".lgv-container").append("<div class='backdrop'></div>");
+            $(".masterportal-container").append("<div class='backdrop'></div>");
         }
         else {
             $(".backdrop").remove();

@@ -1,7 +1,7 @@
 import ThemeView from "../view";
 import VerkehrsStaerkenThemeTemplate from "text-loader!./template.html";
 
-const VerkehrsStaerkenThemeView = ThemeView.extend(/**@lends VerkehrsStaerkenThemeView.prototype*/{
+const VerkehrsStaerkenThemeView = ThemeView.extend(/** @lends VerkehrsStaerkenThemeView.prototype*/{
     tagName: "div",
     className: "verkehrsstaerken",
     /**
@@ -53,6 +53,7 @@ const VerkehrsStaerkenThemeView = ThemeView.extend(/**@lends VerkehrsStaerkenThe
     /**
      * Toggles the tabs between the table and the diagram
      * @param {Event} evt Click event
+     * @returns {void}
      */
     toggleTab: function (evt) {
         var contentId = this.$(evt.currentTarget).attr("value");

@@ -5,7 +5,8 @@
         // adds all of the Mocha testing global variables.
         "mocha": true,
         "node": true,
-        "es6": true
+        "es6": true,
+        "amd": true
     },
     "globals": {
         "$": true,
@@ -18,8 +19,10 @@
     "plugins": [
         "chai-friendly"
     ],
+    "parser": "babel-eslint",
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
     },
     "extends": "plugin:backbone/recommended",
     "rules": {
@@ -121,17 +124,15 @@
         "no-undef": "error",
         "no-undef-init": "error",
         "no-unused-vars": "error",
-        "no-use-before-define": "error",
+        //"no-use-before-define": "error",
         // Node.js and CommonJS - These rules relate to code running in Node.js, or in browsers with CommonJS
         "callback-return": "error",
-        "global-require": "error",
         "handle-callback-err": "error",
         "no-buffer-constructor": "error",
         "no-new-require": "error",
         "no-path-concat": "error",
         "no-process-env": "error",
         "no-process-exit": "error",
-        "no-sync": "error",
         "array-bracket-spacing": "error",
         "block-spacing": "error",
         "brace-style": ["error", "stroustrup"],
@@ -149,8 +150,8 @@
         "key-spacing": "error",
         "keyword-spacing": "error",
         "max-depth": "error",
-        "max-nested-callbacks": ["error", 4],
-        "max-params": ["warn", 6],
+        "max-nested-callbacks": ["error", 10],
+        "max-params": ["warn", 9],
         "max-statements-per-line": "error",
         "new-cap": "error",
         "new-parens": "error",
@@ -171,7 +172,15 @@
         "one-var": "error",
         "one-var-declaration-per-line": "error",
         "quotes": "error",
-        "require-jsdoc": 0,
+        "require-jsdoc": ["error", {
+            "require": {
+                "FunctionDeclaration": true,
+                "MethodDefinition": true,
+                "ClassDeclaration": true,
+                "ArrowFunctionExpression": true,
+                "FunctionExpression": false
+            }
+        }],
         "semi": "error",
         "semi-spacing": "error",
         "semi-style": "error",
@@ -193,6 +202,8 @@
             "error",
             {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
             {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
-        ]
+        ],
+        "backbone/no-native-jquery": [0, "selector"],
+        "backbone/no-silent": 0
     }
 }

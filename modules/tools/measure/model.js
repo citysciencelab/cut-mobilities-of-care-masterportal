@@ -6,8 +6,8 @@ import {Polygon, LineString, Point, MultiPoint} from "ol/geom.js";
 import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
-
-const Measure = Tool.extend({
+import SnippetDropdownModel from "../../snippets/dropdown/model";
+const Measure = Tool.extend(/** @lends Measure.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         source: new VectorSource(),
         styles: [
@@ -87,6 +87,23 @@ const Measure = Tool.extend({
                 }
             })
         ],
+        snippetDropdownModelGeometry: {},
+        snippetDropdownModelUnit: {},
+        values: {
+            "Strecke": "LineString",
+            "Fläche": "Polygon"
+        },
+        values_unit: {
+            "m": "m",
+            "km": "km"
+        },
+        values_unit_polygon: {
+            "m²": "m²",
+            "km²": "km²"
+        },
+        values_3d: {
+            "3D Messen": "3d"
+        },
         geomtype: "LineString",
         unit: "m",
         decimal: 1,
@@ -100,22 +117,34 @@ const Measure = Tool.extend({
         clickListener: {},
         textPoint: {},
         scale: -1,
+        style: "DEFAULT",
         "glyphicon": "glyphicon-resize-full"
     }),
-
+    /**
+     * @class Measure
+     * @extends Backbone.Model
+     * @memberof Tools.Measure
+     * @constructs
+     * @property {String} unit="m" unit of measure
+     * @property {Boolean} quickHelp=false
+     * @property {Boolean} isMap3d=false Flag if measure has 3D view
+     * @property {String} uiStyle="DEFAULT" style for master portal
+     * @property {Number} scale=-1
+     * @property {String} style="DEFAULT" style for master portal
+     */
     initialize: function () {
+        var selectedValues,
+            selectedUnit;
+
+        if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
+            this.setStyle("TABLE");
+        }
         this.superInitialize();
 
         this.listenTo(Radio.channel("Map"), {
             "change": this.changeMap
         });
-
         this.listenTo(this, {
-            "change:geomtype": function () {
-                if (this.get("isActive")) {
-                    this.createInteraction();
-                }
-            },
             "change:isActive": this.setStatus
         });
         this.listenTo(Radio.channel("MapView"), {
@@ -123,18 +152,69 @@ const Measure = Tool.extend({
                 this.setScale(options.scale);
             }
         }, this);
-
         this.set("layer", new VectorLayer({
             source: this.get("source"),
             style: this.get("styles"),
             name: "measure_layer",
             alwaysOnTop: true
         }));
+        this.setDropDownSnippetGeometry(new SnippetDropdownModel({
+            name: "Geometrie",
+            type: "string",
+            displayName: "Geometrie auswählen",
+            values: _.allKeys(this.get("values")),
+            snippetType: "dropdown",
+            isMultiple: false,
+            preselectedValues: _.allKeys(this.get("values"))[0]
+        }));
+        this.setDropDownSnippetUnit(new SnippetDropdownModel({
+            name: "Einheit",
+            type: "string",
+            displayName: "Einheit auswählen",
+            values: _.allKeys(this.get("values_unit")),
+            snippetType: "dropdown",
+            isMultiple: false,
+            preselectedValues: _.allKeys(this.get("values_unit"))[0]
+        }));
+        this.listenTo(this.get("snippetDropdownModelGeometry"), {
+            "valuesChanged": function () {
+                selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+                if (selectedValues.values[0] === "Fläche") {
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit_polygon"))[0]);
+                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit_polygon")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
+                }
+                else {
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit"))[0]);
+                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit")));
+                }
+                this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+            }
+        });
+        this.listenTo(this.get("snippetDropdownModelUnit"), {
+            "valuesChanged": function () {
+                selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+                selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
+                if (!this.getIsDrawn()) {
+                    this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
+                }
+                this.setUnit(selectedUnit.values[0]);
+            }
+        });
     },
+
+    /**
+     * Setter for Status
+     * @param {object} model - Measure Model
+     * @param {boolean} value - Rückgabe eines Boolean
+     * @returns {this} this
+     */
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
             quickHelpSet = Radio.request("Quickhelp", "isSet"),
-            measureLayer;
+            measureLayer,
+            selectedValues;
 
         if (value) {
             this.setQuickHelp(quickHelpSet);
@@ -146,7 +226,8 @@ const Measure = Tool.extend({
             if (measureLayer === undefined) {
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
             }
-            this.createInteraction();
+            selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+            this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
 
         }
         else {
@@ -154,20 +235,39 @@ const Measure = Tool.extend({
             this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
         }
     },
+
+    /**
+     * changes map (3D or 2D View)
+     * @param {string} map - 3D or 2D
+     * @returns {this} this
+     */
     changeMap: function (map) {
+        var selectedValues;
+
         this.deleteFeatures();
         if (map === "3D") {
             this.set("isMap3d", true);
-            this.set("geomtype", "3d");
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.get("values_3d"))[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values_3d")));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values_3d")));
         }
         else {
             this.set("isMap3d", false);
-            this.set("geomtype", "LineString");
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.get("values"))[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values")));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values")));
         }
         if (this.get("isActive")) {
-            this.createInteraction();
+            selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
+            this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values_3d"))[0]);
         }
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} obj - point with coordinates
+     * @returns {this} this
+     */
     handle3DClicked: function (obj) {
         var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             object = scene.pick(obj.position),
@@ -227,6 +327,12 @@ const Measure = Tool.extend({
             source.removeFeature(firstPoint);
         }
     },
+    /**
+     * create point feauture
+     * @param {object} coords - coordinates of point in 3D
+     * @param {void} id - undefined
+     * @returns {object} feature
+     */
     createPointFeature: function (coords, id) {
         var feature = new Feature({
             geometry: new Point(coords)
@@ -236,6 +342,13 @@ const Measure = Tool.extend({
 
         return feature;
     },
+
+    /**
+     * create line feature
+     * @param {object} firstCoord - first coordinate of the line feature
+     * @param {object} lastCoord - last coordinate of the line feature
+     * @returns {object} feature - line feature
+     */
     createLineFeature: function (firstCoord, lastCoord) {
         var feature = new Feature({
             geometry: new LineString([
@@ -246,9 +359,16 @@ const Measure = Tool.extend({
 
         return feature;
     },
-    createInteraction: function () {
+
+    /**
+     * draws the feature.
+     * @param {string} drawType - type of drawing feature (polygon or line)
+     * @returns {this} this
+     */
+    createInteraction: function (drawType) {
         var that = this,
-            textPoint;
+            textPoint,
+            value = this.get("values")[drawType];
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
@@ -259,7 +379,7 @@ const Measure = Tool.extend({
         else {
             this.setDraw(new Draw({
                 source: this.get("source"),
-                type: this.get("geomtype"),
+                type: value,
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
@@ -279,19 +399,46 @@ const Measure = Tool.extend({
             Radio.trigger("Map", "addInteraction", this.get("draw"));
         }
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     registerPointerMoveListener: function (context) {
         context.setPointerMoveListener(Radio.request("Map", "registerListener", "pointermove", context.moveTextPoint.bind(context)));
     },
+
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     registerClickListener: function (context) {
         // "click" needed for touch devices
         context.setClickListener(Radio.request("Map", "registerListener", "click", context.moveTextPoint.bind(context)));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     unregisterPointerMoveListener: function (context) {
         Radio.trigger("Map", "unregisterListener", context.get("pointerMoveListener"));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} context - Object
+     * @returns {this} this
+     */
     unregisterClickListener: function (context) {
         Radio.trigger("Map", "unregisterListener", context.get("clickListener"));
     },
+    /**
+     * @todo Write the documentation.
+     * @param {object} evt - Map Browser Pointer Event
+     * @returns {this} this
+     */
     moveTextPoint: function (evt) {
         var point = this.get("textPoint"),
             geom = point.getGeometry(),
@@ -301,6 +448,13 @@ const Measure = Tool.extend({
         geom.setCoordinates(evt.coordinate);
         point.setStyle(styles);
     },
+
+    /**
+     * generates style for text in 3D view
+     * @param {number} distance - distance between two points
+     * @param {number} heightDiff - height (for 3D measure)
+     * @returns {object} styles
+     */
     generate3dTextStyles: function (distance, heightDiff) {
         var output = {},
             fill = new Fill({
@@ -346,6 +500,12 @@ const Measure = Tool.extend({
         ];
         return styles;
     },
+
+    /**
+     * generates style for text in 2D view
+     * @param {object} feature - geometry feature
+     * @returns {object} styles
+     */
     generateTextStyles: function (feature) {
         var geom = feature.getGeometry(),
             output = {},
@@ -398,6 +558,15 @@ const Measure = Tool.extend({
         ];
         return styles;
     },
+
+    /**
+     * generates text for points
+     * @param {object} feature - geometry feature
+     * @param {number} distance - distance for 3D
+     * @param {number} heightDiff - height for 3D
+     * @param {number} coords - coordinates for 3D
+     * @returns {this} pointFeature
+     */
     generateTextPoint: function (feature, distance, heightDiff, coords) {
         var geom = feature.getGeometry(),
             coord,
@@ -425,6 +594,13 @@ const Measure = Tool.extend({
         return pointFeature;
     },
 
+    /**
+     * @todo Write the documentation.
+     * @param {number} distance - distance for 3D
+     * @param {number} heightDiff - height for 3D
+     * @param {number} position -
+     * @returns {this} this
+     */
     place3dMeasureTooltip: function (distance, heightDiff, position) {
         var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
 
@@ -444,28 +620,27 @@ const Measure = Tool.extend({
     },
 
     /**
-     * Setzt den Typ der Geometrie (LineString oder Polygon).
-     * @param {String} value - Typ der Geometrie
-     * @return {undefined}
+     * Setter for unit
+     * @param {string} value - m/km, m²/km²
+     * @returns {void}
      */
-    setGeometryType: function (value) {
-        this.set("geomtype", value);
-        if (this.get("geomtype") === "LineString") {
-            this.setUnit("m");
-        }
-        else {
-            this.setUnit("m²");
-        }
-    },
-
     setUnit: function (value) {
         this.set("unit", value);
     },
 
+    /**
+     * Setter for Style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
     },
-
+    /**
+     * Setter for Decimal
+     * @param {string} value - value
+     * @returns {this} this
+     */
     setDecimal: function (value) {
         this.set("decimal", parseInt(value, 10));
     },
@@ -605,37 +780,114 @@ const Measure = Tool.extend({
         }
     },
 
+    /**
+     * setter for draw
+     * @param {object} value - Draw
+     * @returns {this} this
+     */
     setDraw: function (value) {
         this.set("draw", value);
     },
 
+    /**
+     * @todo Write the documentation.
+     * @param {object} value -
+     * @returns {this} this
+     */
     setPointerMoveListener: function (value) {
         this.set("pointerMoveListener", value);
     },
 
+    /**
+     * setter for click listener
+     * @param {object}value -
+     * @returns {this} this
+     */
     setClickListener: function (value) {
         this.set("clickListener", value);
     },
 
+    /**
+     * setter for text point
+     * @param {object} value -
+     * @returns {this} this
+     */
     setTextPoint: function (value) {
         this.set("textPoint", value);
     },
 
+    /**
+     * setter for scale
+     * @param {number} value -
+     * @returns {this} this
+     */
     setScale: function (value) {
         this.set("scale", value);
     },
 
+    /**
+     * setter for drawn function
+     * @param {boolean} value - true or false
+     * @returns {this} this
+     */
     setIsDrawn: function (value) {
+        var dropdownmenu,
+            button;
+
+        dropdownmenu = document.querySelector(".dropdown_geometry");
+        button = dropdownmenu.querySelector("button");
         this.set("isDrawn", value);
+        /* wird geprüft, ob es gemessen wird, falls ja, wird dropdown menu für Geometry ausgegraut*/
+        if (value) {
+            button.setAttribute("disabled", "disabled");
+        }
+        else {
+            button.removeAttribute("disabled");
+        }
     },
 
-    /*
-    * setter for quickHelp
-    * @param {[type]} value quickHelp
-    * @returns {void}
-    */
+    /**
+     * getter for drawn function
+     * @returns {void}
+     */
+    getIsDrawn: function () {
+        return this.get("isDrawn");
+    },
+
+    /**
+     * setter for style
+     * @param {string} value - table or default (for master portal)
+     * @returns {this} this
+     */
+    setStyle: function (value) {
+        this.set("style", value);
+    },
+
+    /**
+     * setter for quickHelp
+     * @param {boolean} value quickHelp
+     * @returns {void}
+     */
     setQuickHelp: function (value) {
         this.set("quickHelp", value);
+    },
+
+    /**
+     * setter for dropdown snippet geometry
+     * @param {object} value - snippet dropdown model for geometry
+     * @returns {this} this
+     */
+    setDropDownSnippetGeometry: function (value) {
+        this.set("snippetDropdownModelGeometry", value);
+    },
+
+    /**
+     * setter for dropdown snippet unit
+     * @param {object} value - snippet dropdown model for unit
+     * @returns {this} this
+     */
+    setDropDownSnippetUnit: function (value) {
+        this.set("snippetDropdownModelUnit", value);
     }
 });
 

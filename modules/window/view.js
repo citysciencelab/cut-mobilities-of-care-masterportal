@@ -10,6 +10,8 @@ const WindowView = Backbone.View.extend({
         "click .glyphicon-remove": "hide"
     },
     initialize: function () {
+        var channel = Radio.channel("WindowView");
+
         this.listenTo(this.model, {
             "change:isVisible change:winType": this.render
         });
@@ -40,6 +42,11 @@ const WindowView = Backbone.View.extend({
                 "overflow": "auto"
             });
         }, this));
+
+        channel.on({
+            "hide": this.hide
+        }, this);
+
         this.render();
     },
     id: "window",
@@ -55,7 +62,7 @@ const WindowView = Backbone.View.extend({
         if (this.model.get("isVisible") === true) {
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
                 this.$el.html(this.templateTable(attr));
-                document.getElementsByClassName("lgv-container")[0].appendChild(this.el);
+                document.getElementsByClassName("masterportal-container")[0].appendChild(this.el);
                 currentClass = $("#window").attr("class").split(" ");
 
                 this.$el.addClass("table-tool-win-all");
@@ -87,7 +94,6 @@ const WindowView = Backbone.View.extend({
             else {
                 this.$el.html(this.templateMax(attr));
                 document.body.appendChild(this.el);
-                this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
             }
             this.$el.show("slow");
         }

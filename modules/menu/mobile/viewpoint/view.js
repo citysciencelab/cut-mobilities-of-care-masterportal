@@ -4,9 +4,6 @@ define(function (require) {
         ItemView;
 
     ItemView = Backbone.View.extend({
-        tagName: "li",
-        className: "list-group-item",
-        template: _.template(ItemTemplate),
         events: {
             "click": "click"
         },
@@ -15,6 +12,9 @@ define(function (require) {
                 "change:isVisibleInTree": this.removeIfNotVisible
             });
         },
+        tagName: "li",
+        className: "list-group-item",
+        template: _.template(ItemTemplate),
         render: function () {
             var attr = this.model.toJSON();
 

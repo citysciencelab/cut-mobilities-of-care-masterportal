@@ -22,7 +22,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @property {String} activeTab="info" Contains the name of the active tab
      * @property {String} downloadLink="" Link for the download data
      * @fires Util#RadioRequestUtilPunctuate
-     * @fires Graph#RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      * @listens Theme#changeIsReady
      */
     initialize: function () {
@@ -263,7 +263,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         var date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? _.map(data, function (val) {
-                val.timestamp = moment(val.timestamp).format("HH:mm") + " Uhr";
+                val.timestamp = moment(val.timestamp).format("HH:mm");
                 return val;
             }) : "",
             legendArray = data ? this.getLegendAttributes(data[0]) : "";
@@ -273,10 +273,13 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "Tagesverlauf am " + date,
             yLabel: {
                 label: "Anzahl Fahrräder/Stunde",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 6),
+            xAxisTicks: {
+                unit: "Uhr",
+                values: this.createxAxisTickValues(data, 6)
+            },
             legendArray: legendArray
         };
     },
@@ -301,10 +304,12 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "Woche vom " + startDate + " bis " + endDate,
             yLabel: {
                 label: "Anzahl Fahrräder/Tag",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 1),
+            xAxisTicks: {
+                values: this.createxAxisTickValues(data, 1)
+            },
             legendArray: legendArray
         };
     },
@@ -328,10 +333,13 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             xLabel: "KW im Jahr " + year,
             yLabel: {
                 label: "Anzahl Fahrräder/Woche",
-                offset: 10
+                offset: 60
             },
             graphArray: graphArray,
-            xAxisTickValues: this.createxAxisTickValues(data, 5),
+            xAxisTicks: {
+                unit: "Kw",
+                values: this.createxAxisTickValues(data, 5)
+            },
             legendArray: legendArray
         };
     },
@@ -387,7 +395,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * createD3Document creates an object for the graph model to create the graphic
      * via radio trigger, the graphConfig object is transferred to the graph module
      * @param  {String} activeTab contains the value of the active tab
-     * @fires Graph#event:RadioTriggerGraphCreateGraph
+     * @fires Tools.Graph#event:RadioTriggerGraphCreateGraph
      * @return {void}
      */
     createD3Document: function (activeTab) {
@@ -404,7 +412,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 scaleTypeY: "linear",
                 data: dataset.data,
                 xAttr: "timestamp",
-                xAxisTickValues: dataset.xAxisTickValues,
+                xAxisTicks: dataset.xAxisTicks,
                 xAxisLabel: {
                     label: dataset.xLabel,
                     translate: 20

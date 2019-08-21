@@ -1,13 +1,20 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-slider";
-
-const SliderView = Backbone.View.extend({
+/**
+ * @member SliderViewTemplate
+ * @description Template used to create the simple slider
+ * @memberof Snippets.Slider
+ */
+const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
+    /**
+     * @class SliderView
+     * @extends Backbone.View
+     * @memberof Snippets.Slider
+     * @constructs
+     */
     events: {
         // This event fires when the dragging stops or has been clicked on
-        "slideStop input.slider": function (evt) {
-            this.model.updateValues(evt.value);
-            this.setInputControlValue(evt);
-        },
+        "slideStop input.slider": "saveNewValue",
         // This event fires when the slider is dragged
         "slide input.slider": "setInputControlValue",
         // This event is fired when the info button is clicked
@@ -15,45 +22,81 @@ const SliderView = Backbone.View.extend({
         // This event fires if key up
         "keyup .form-control": "setValues"
     },
+
+    className: "slider-container",
+
+    /**
+     * Setting listener
+     * @returns {void}
+     */
     initialize: function () {
         this.listenTo(this.model, {
-            "render": this.render
-        });
+            "updateDOMSlider": this.updateDOMSlider,
+            "removeView": this.remove
+        }, this);
     },
-    className: "slider-container",
+
     template: _.template(Template),
 
+    /**
+     * render methode
+     * @returns {this} this
+     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         this.initSlider();
+        this.delegateEvents();
 
         return this;
     },
-
     /**
      * init the slider
      * @returns {void}
      */
     initSlider: function () {
-        var valueModel = this.model.get("valueCollection").models[0];
+        const valueModels = this.model.get("valuesCollection").models,
+            step = this.model.get("step"),
+            selectedValue = valueModels[0].get("value") ? valueModels[0].get("value") : valueModels[0].get("initValue"),
+            precision = this.model.get("precision"),
+            selection = this.model.get("selection");
 
         this.$el.find("input.slider").slider({
-            min: valueModel.get("min"),
-            max: valueModel.get("max"),
-            step: 1,
-            value: valueModel.value
+            min: valueModels[0].get("initValue"),
+            max: valueModels[1].get("initValue"),
+            step: step,
+            precision: precision,
+            value: selectedValue,
+            selection: selection
         });
     },
 
     /**
-     * set the input value
+     * Sets the slider value to the DOM elements according to editableValueBox.
      * @param {Event} evt - slide
      * @returns {void}
      */
     setInputControlValue: function (evt) {
-        this.$el.find("input.form-control").val(evt.value);
+        let inputControls;
+
+        if (this.model.get("editableValueBox") === true) {
+            inputControls = this.$el.find("input.form-control");
+            this.$(inputControls[0]).val(evt.value);
+        }
+        else {
+            inputControls = this.$el.find("label.valueBox");
+            this.$(inputControls[0]).text(this.model.getValueText(evt.value));
+        }
+    },
+
+    /**
+     * Save data to model
+     * @param {Event} evt - slide
+     * @returns {void}
+     */
+    saveNewValue: function (evt) {
+        this.model.updateValues(evt.value);
     },
 
     /**
@@ -71,7 +114,7 @@ const SliderView = Backbone.View.extend({
      * @returns {void}
      */
     toggleInfoText: function () {
-        var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+        const isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
         this.model.trigger("hideAllInfoText");
         if (!isInfoTextVisible) {
@@ -153,6 +196,16 @@ const SliderView = Backbone.View.extend({
         }
 
         return targetClass;
+    },
+
+    /**
+     * Sets the slider value after the external model change
+     * @param   {Date} value new Date value
+     * @returns {void}
+     */
+    updateDOMSlider: function (value) {
+        this.$el.find("input.slider").slider("setValue", value);
+        this.setInputControlValue({value: value});
     }
 });
 

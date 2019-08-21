@@ -36,13 +36,24 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     parseGfiContent: function () {
-        var textContent = _.omit(this.get("gfiContent")[0], this.get("geometryKey")),
-            umring = _.find(this.get("gfiContent")[0], function (val, key) {
-                if (key === this.get("geometryKey")) {
-                    return val;
-                }
-                return null;
-            }, this);
+        var requestedParcelId = Radio.request("GFI", "getRequestedParcelId"),
+            textContent,
+            umring,
+            gfiContent = this.get("gfiContent");
+
+        // Sometimes parcel service returns multiple results as center points parcels may be inside another
+        // parcel. Because this, results are sorted this way.
+        gfiContent = gfiContent.sort(foundGfiContent => {
+            return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
+        });
+
+        textContent = _.omit(gfiContent[0], this.get("geometryKey"));
+        umring = _.find(gfiContent[0], function (val, key) {
+            if (key === this.get("geometryKey")) {
+                return val;
+            }
+            return null;
+        }, this);
 
         this.setGfiContent([textContent]);
         this.setGeometry(umring);

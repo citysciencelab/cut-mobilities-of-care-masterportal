@@ -1,3 +1,4 @@
+import Alert from "../modules/alerting/model";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -39,7 +40,7 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import LayersliderView from "../modules/tools/layerslider/view";
+import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlimport/view";
@@ -80,18 +81,26 @@ import "es6-promise/auto";
 
 var sbconfig, controls, controlsView;
 
+/**
+ * load the configuration of master portal
+ * @return {void}.
+ */
 function loadApp () {
 
     // Prepare config for Utils
     var utilConfig = {},
         layerInformationModelSettings = {},
-        cswParserSettings = {};
+        cswParserSettings = {},
+        alertingConfig = Config.alerting ? Config.alerting : {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
     if (_.has(Config, "proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
+    }
+    if (_.has(Config, "proxy")) {
+        utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden
@@ -103,7 +112,8 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-   // Core laden
+    // Core laden
+    new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -210,7 +220,7 @@ function loadApp () {
                 // remove "version" in doc and config.
                 // rename "print_" to "print"
                 // only load correct view
-                if (tool.has("version") && tool.get("version") === "mapfish_print_3") {
+                if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
                     new PrintView({model: tool});
                 }
                 else {
@@ -274,8 +284,16 @@ function loadApp () {
                 new StyleWMSView({model: tool});
                 break;
             }
+            /**
+             * layerslider
+             * @deprecated in 3.0.0
+             */
             case "layerslider": {
-                new LayersliderView({model: tool});
+                new LayerSliderView({model: tool});
+                break;
+            }
+            case "layerSlider": {
+                new LayerSliderView({model: tool});
                 break;
             }
             default: {
@@ -291,7 +309,8 @@ function loadApp () {
         controlsView = new ControlsView();
 
         _.each(controls, function (control) {
-            var element;
+            var element,
+                orientationConfigAttr = _.isString(control.attr) ? {zoomMode: control.attr} : control;
 
             switch (control.id) {
                 case "zoom": {
@@ -302,8 +321,6 @@ function loadApp () {
                     break;
                 }
                 case "orientation": {
-                    var orientationConfigAttr =_.isString(control.attr) ? {zoomMode: control.attr} : control;
-
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
@@ -323,30 +340,65 @@ function loadApp () {
                     }
                     break;
                 }
+                /**
+                 * totalView
+                 * @deprecated in 3.0.0
+                 */
                 case "totalview": {
-                    if (control.attr === true) {
-                        new TotalView();
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
+                        new TotalView(control.id);
+                    }
+                    break;
+                }
+                case "totalView": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        new TotalView(control.id);
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
                     break;
                 }
+                /**
+                 * backforward
+                 * @deprecated in 3.0.0
+                 */
                 case "backforward": {
-                    if (control.attr === true) {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
                     break;
                 }
+                case "backForward": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowTR(control.id, false);
+                        new BackForwardView({el: element});
+                    }
+                    break;
+                }
+                /**
+                 * overviewmap
+                 * @deprecated in 3.0.0
+                 */
                 case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView({el: element});
+                        new OverviewmapView(element, control.id, control.attr);
+                    }
+                    break;
+                }
+                case "overviewMap": {
+                    if (control.attr === true || _.isObject(control.attr)) {
+                        element = controlsView.addRowBR(control.id, false);
+                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }
@@ -399,16 +451,20 @@ function loadApp () {
     new HighlightFeature();
 
     // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
+    /* eslint-disable no-undef */
     if (CUSTOMMODULE !== "") {
-        return import(/* webpackMode: "eager" */ CUSTOMMODULE)
-        .then(module => {
-            new module.default;
-        })
-        .catch(error => {
-            console.error(error);
-            Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-        });
+        // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
+        import(/* webpackMode: "eager" */CUSTOMMODULE)
+            .then(module => {
+                /* eslint-disable new-cap */
+                new module.default();
+            })
+            .catch(error => {
+                console.error(error);
+                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+            });
     }
+    /* eslint-enable no-undef */
 
     Radio.trigger("Util", "hideLoader");
 }

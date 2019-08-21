@@ -3,7 +3,7 @@
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem [Beispiel](https://bitbucket.org/lgv-g12/lgv-config-public/raw/master/services-internet.json).
+Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem [Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json).
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ## WMS-Layer ##
@@ -141,6 +141,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
+|useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
 **Beispiel Sensor:**
@@ -344,7 +345,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
       "typ" : "Oblique",
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
-      "legendURL" : "ignore",      
+      "legendURL" : "ignore",
       "datasets" : [
          {
             "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",

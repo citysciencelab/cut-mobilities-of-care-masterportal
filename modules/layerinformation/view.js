@@ -2,11 +2,30 @@ import Template from "text-loader!./template.html";
 import ContentTemplate from "text-loader!../legend/content.html";
 import "jquery-ui/ui/widgets/draggable";
 import "bootstrap/js/tab";
-
-const LayerInformationView = Backbone.View.extend({
+/**
+ * @member LayerInformationTemplate
+ * @description Template used to create the layer information
+ * @memberof LayerInformation
+ */
+/**
+ * @member LayerInformationContentTemplate
+ * @description Template used to create content of the layer information template
+ * @memberof LayerInformation
+ */
+const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationView.prototype */{
     events: {
         "click .glyphicon-remove": "hide"
     },
+    /**
+     * @class LayerInformationView
+     * @extends Backbone.View
+     * @memberof LayerInformation
+     * @constructs
+     * @fires LayerInformation#RadioTriggerHide
+     * @fires Layer#RadioTriggerLayerSetLayerInfoChecked
+     * @listens LayerInformation#RadioTriggerLayerInformationSync
+     * @listens LayerInformation#RadioTriggerLayerInformationRemoveView
+     */
     initialize: function () {
         this.listenTo(this.model, {
             // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
@@ -18,6 +37,10 @@ const LayerInformationView = Backbone.View.extend({
     className: "layerinformation",
     template: _.template(Template),
     contentTemplate: _.template(ContentTemplate),
+    /**
+    * todo
+    * @returns {*} returns this
+    */
     render: function () {
         var attr = this.model.toJSON();
 
@@ -30,10 +53,8 @@ const LayerInformationView = Backbone.View.extend({
         this.$el.show();
         return this;
     },
-
     /**
-     * Fügt den Legendendefinitionen das gerenderte HTML hinzu.
-     * Dieses wird im template benötigt.
+     * Adds the legend definition to the rendered HTML, this is needed by the template
      * @returns {void}
      */
     addContentHTML: function () {
@@ -43,7 +64,11 @@ const LayerInformationView = Backbone.View.extend({
             legend.html = this.contentTemplate(legend);
         }, this);
     },
-
+    /**
+    * todo
+    * @fires Layer#RadioTriggerLayerSetLayerInfoChecked
+    * @returns {void}
+    */
     hide: function () {
         Radio.trigger("Layer", "setLayerInfoChecked", false);
         this.$el.hide();

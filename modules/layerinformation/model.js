@@ -1,7 +1,7 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
 
-const LayerInformationModel = Backbone.Model.extend({
+const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationModel.prototype */{
     defaults: {
         // konfiguriert in der rest-services.json
         metaDataCatalogueId: "2",
@@ -13,6 +13,26 @@ const LayerInformationModel = Backbone.Model.extend({
         periodicity: null
     },
 
+    /**
+     * @class LayerInformationModel
+     * @extends Backbone.Model
+     * @memberof LayerInformation
+     * @constructs
+     * @property {String} cswId="3" configures service from rest-services.json
+     * @property {Boolean} isVisible=false Flag, if the layerinformation is visible
+     * @property {Array} uniqueIdList todo
+     * @property {String} datePublication=null Date of publication
+     * @property {String} dateRevision=null Date of revision
+     * @property {String} periodicity=null Periodicity
+     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires Util#RadioRequestUtilIsViewMobile
+     * @fires CswParser#RadioTriggerGetMetaData
+     * @fires LayerInformation#RadioTriggerLayerInformationSync
+     * @fires LayerInformation#RadioTriggerLayerInformationRemoveView
+     * @listens LayerInformation#RadioTriggerLayerInformationAdd
+     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens CswParser#RadioTriggerFetchedMetaData
+     */
     initialize: function () {
         var channel = Radio.channel("LayerInformation");
 
@@ -40,21 +60,50 @@ const LayerInformationModel = Backbone.Model.extend({
         });
         this.bindView(Radio.request("Util", "isViewMobile"));
     },
+    /**
+    * todo
+    * @param {*} cswObj todo
+    * @returns {void}
+    */
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
         }
     },
+    /**
+    * todo
+    * @param {*} uniqueIdList todo
+    * @param {*} uniqueId todo
+    * @returns {*} todo
+    */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
+    /**
+    * todo
+    * @param {*} uniqueIdList todo
+    * @param {*} uniqueId todo
+    * @returns {void}
+    */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
+    /**
+    * todo
+    * @param {*} layerName todo
+    * @param {*} parsedData todo
+    * @returns {void}
+    */
     updateMetaData: function (layerName, parsedData) {
         this.set(parsedData);
     },
+    /**
+    * todo
+    * @param {*} attrs todo
+    * @fires CswParser#RadioTriggerGetMetaData
+    * @returns {void}
+    */
     requestMetaData: function (attrs) {
         var metaId = !_.isNull(attrs.metaID) ? attrs.metaID[0] : null,
             uniqueId = _.uniqueId(),
@@ -69,6 +118,11 @@ const LayerInformationModel = Backbone.Model.extend({
             Radio.trigger("CswParser", "getMetaData", cswObj);
         }
     },
+    /**
+    * todo
+    * @param {*} isMobile todo
+    * @returns {void}
+    */
     bindView: function (isMobile) {
         var currentView;
 
@@ -84,9 +138,9 @@ const LayerInformationModel = Backbone.Model.extend({
     },
 
     /**
-     * Wird über Trigger vom Layer gestartet und übernimmt die Attribute zur Darstellung
-     * @param {object} attrs Objekt mit Attributen zur Darstellung
-     * @fires sync#render-Funktion
+     * Is started with a trigger from the layer and takes the attributes for presentation
+     * @param {Object} attrs Objekt mit Attributen zur Darstellung
+     * @fires LayerInformation#RadioTriggerLayerInformationSync
      * @returns {void}
      */
     setAttributes: function (attrs) {
@@ -132,10 +186,19 @@ const LayerInformationModel = Backbone.Model.extend({
         }, this);
         this.set("metaURL", metaURLs);
     },
-
+    /**
+    * Setter function for isVisible
+    * @param {Boolean} value todo
+    * @returns {void}
+    */
     setIsVisible: function (value) {
         this.set("isVisible", value);
     },
+    /**
+    * Setter function for uniqueIdList
+    * @param {*} value todo
+    * @returns {void}
+    */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
     }
