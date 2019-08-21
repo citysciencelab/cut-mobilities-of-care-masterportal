@@ -73,7 +73,7 @@ const FilterView = Backbone.View.extend({
         if (!_.isUndefined(selectedModel)) {
             view = new QueryDetailView({model: selectedModel});
 
-            this.model.set("detailView", view);
+            this.model.setDetailView(view);
             this.$el.find(".detail-view-container").html(view.render().$el);
         }
     },

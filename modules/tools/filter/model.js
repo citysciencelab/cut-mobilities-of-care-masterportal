@@ -349,6 +349,11 @@ const FilterModel = Tool.extend({
     // setter for isInitOpen
     setIsInitOpen: function (value) {
         this.set("isInitOpen", value);
+    },
+
+    // setter for deatailview
+    setDetailView: function (value) {
+        this.set("detailView", value);
     }
 });
 
