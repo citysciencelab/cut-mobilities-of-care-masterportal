@@ -104,7 +104,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                             type: "layer"
                         }, _.omit(layerExtended, "id", "name", "styles", "legendURL"));
 
-                        subItem = this.controlsVisibilityInTree(item, treeType, level, layerExtended);
+                        subItem = this.controlsVisibilityInTree(subItem, treeType, level, layerExtended);
 
                         this.addItem(subItem);
                     }, this);
