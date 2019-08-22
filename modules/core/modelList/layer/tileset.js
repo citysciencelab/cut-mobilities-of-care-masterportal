@@ -64,6 +64,11 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 }
             }
         });
+
+        // Hides features by id if config param has "hiddenFeatures"
+        if (this.has("hiddenFeatures")) {
+            this.hideObjects(this.get("hiddenFeatures"));
+        }
     },
 
     /**
@@ -96,10 +101,6 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             tileset = new Cesium.Cesium3DTileset(options);
 
         this.setTileSet(tileset);
-
-        if (this.get("vectorStyle")) {
-            this.setVectorStyle(this.get("vectorStyle"));
-        }
 
         tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
         tileset.tileUnload.addEventListener((tile) => {
@@ -291,6 +292,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
 
     /**
      * sets a vcsStyle Object to the tileset
+     * @see tools/virtualcity/planning.js
      * @param {Object} vcsStyle -
      * @return {void} -
      */

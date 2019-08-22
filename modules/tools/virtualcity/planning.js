@@ -26,6 +26,10 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * @property {Array} planningObjects - list of planningObjects
      * @property {Array} viewpoints - list of planning viewpoints
      * @property {Array} flights - list of planning flights
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioTriggerMapActivateMap3d
+     * @fires Core#RadioTriggerMapSetCameraParameter
      */
     initialize () {
         this.readyPromise = null;
@@ -39,7 +43,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     /**
      * initializes the Planning, fetches the data from the server and creates all the layer elements
      * @return {Promise} Promise which resolves when the planning is loaded.
-     * @listens Map#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      */
     initializePlanning: function () {
         if (!this.readyPromise) {
@@ -120,9 +124,9 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
     /**
      * activates the planning project and jumps to the default Viewpoint
      * @returns {Promise} promise which returns when the planning has been loaded and activated
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires Map#RadioTriggerMapActivateMap3d
-     * @fires Map#RadioTriggerMapSetCameraParameter
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioTriggerMapActivateMap3d
+     * @fires Core#RadioTriggerMapSetCameraParameter
      */
     activate () {
         if (!Radio.request("Map", "isMap3d")) {
@@ -168,7 +172,7 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
      * goto the specific viewpoint
      * @param {string} viewpointId viewpointId
      * @returns {void} -
-     * @fires Map#RadioTriggerMapSetCameraParameter
+     * @fires Core#RadioTriggerMapSetCameraParameter
      */
     gotoViewpoint (viewpointId) {
         if (this.get("viewpoints")[viewpointId]) {

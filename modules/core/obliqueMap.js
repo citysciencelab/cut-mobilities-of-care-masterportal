@@ -105,8 +105,8 @@ const ObliqueMap = Backbone.Model.extend({
         this.layers.push(layer);
     },
     /**
-     * @fires Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerMapBeforeChange
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapBeforeChange
      * @return {void} -
      */
     deactivate: function () {
@@ -206,8 +206,8 @@ const ObliqueMap = Backbone.Model.extend({
     },
 
     /**
-     * @fires Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerMapBeforeChange
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapBeforeChange
      * @return {void} -
      */
     activate: function () {

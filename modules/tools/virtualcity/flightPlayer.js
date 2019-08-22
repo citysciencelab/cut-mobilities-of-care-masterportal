@@ -16,10 +16,10 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @property {number} currentTime
      * @property {number|null} currentSystemTime
      * @property {Array<number>} times
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioRequestMapGetMap3d
      * @fires FlightPlayer#RadioTriggerFlightPlayerStateChange
-     * @listens Map#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
      * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
@@ -59,7 +59,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
     }),
 
     /**
-     * @listens Map#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @listens FlightPlayer#RadioRequestFlightPlayerStop
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
      * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
@@ -118,8 +118,8 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * starts playing either the given flightInstance or the activeInstance
      * @param {FlightInstance|undefined} flightInstance -
      * @return {void} -
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioRequestMapGetMap3d
      * @fires FlightPlayer#RadioTriggerFlightPlayerStateChange
      */
     play (flightInstance) {

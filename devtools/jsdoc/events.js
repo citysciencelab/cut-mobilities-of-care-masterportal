@@ -586,19 +586,7 @@
  */
 
 /**
- * @event Map#RadioTriggerMapActivateMap3d
- * @description Triggers the activation of the 3D Mode
- * @example Radio.trigger("Map", "activateMap3d");
- */
-
-/**
- * @event Map#RadioTriggerMapDeActivateMap3d
- * @description Triggers the deactivation of the 3D Mode and switches to 2D
- * @example Radio.trigger("Map", "deactivateMap3d");
- */
-
-/**
- * @event Map#RadioTriggerMapSetCameraParameter
+ * @event Core#RadioTriggerMapSetCameraParameter
  * @description Triggers to set the cesium camera position
  * @param {object} cameraParameter viewpoint for ol.cesium
  * @example Radio.trigger("Map", "setCameraParameter", cameraParameter);
