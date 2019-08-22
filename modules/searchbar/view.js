@@ -7,7 +7,7 @@ import SpecialWFSModel from "./specialWFS/model";
 import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
-import OSMModel from "./OSM/model";
+import OSMModel from "./osm/model";
 import GdiModel from "./gdi/model";
 import Searchbar from "./model";
 
