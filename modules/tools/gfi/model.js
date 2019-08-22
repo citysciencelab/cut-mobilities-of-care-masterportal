@@ -1,4 +1,5 @@
 import Overlay from "ol/Overlay.js";
+import {getCenter} from "ol/extent.js";
 import ThemeList from "./themes/list";
 import DesktopDetachedView from "./desktop/detached/view";
 import TableView from "./table/view";
@@ -219,11 +220,15 @@ const Gfi = Tool.extend({
             });
         }
 
+        // Derive (center) coordinate with respect to the feature type
         if (feature === null || feature === undefined) {
             coordinate = evt.coordinate;
         }
+        else if ((/polygon/i).test(feature.getGeometry().getType())) {
+            coordinate = getCenter(feature.getGeometry().getExtent());
+        }
         else {
-            coordinate = feature.getGeometry().getCoordinates();
+            coordinate = feature.getGeometry().getFirstCoordinate();
         }
 
         this.setCoordinate(coordinate);
