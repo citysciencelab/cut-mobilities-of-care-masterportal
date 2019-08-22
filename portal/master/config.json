@@ -6,7 +6,7 @@
       "title": "Master",
       "logo": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
-      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+      "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
     "searchBar":
     {
