@@ -28,14 +28,25 @@ const ItemView = Backbone.View.extend({
             this.remove();
         }
     },
+
+    /**
+     * Controls which tools are available in 2D, 3D and Oblique modes.
+     * @param {String} mode Flag of the view mode
+     * @returns {void}
+     */
     toggleSupportedVisibility: function (mode) {
-        if (mode === "2D") {
+        const modelId = this.model.get("id"),
+            supportedIn3d = this.model.get("supportedIn3d"),
+            supportedOnlyIn3d = this.model.get("supportedOnlyIn3d"),
+            supportedInOblique = this.model.get("supportedInOblique");
+
+        if (mode === "2D" && !supportedOnlyIn3d.includes(modelId)) {
             this.$el.show();
         }
-        else if (mode === "3D" && this.model.get("supportedIn3d").indexOf(this.model.getId()) >= 0) {
+        else if (mode === "3D" && (supportedIn3d.includes(modelId) || supportedOnlyIn3d.includes(modelId))) {
             this.$el.show();
         }
-        else if (mode === "Oblique" && this.model.get("supportedInOblique").indexOf(this.model.getId()) >= 0) {
+        else if (mode === "Oblique" && supportedInOblique.includes(modelId)) {
             this.$el.show();
         }
         else {
