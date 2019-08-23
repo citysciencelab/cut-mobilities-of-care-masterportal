@@ -908,10 +908,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             wfsLegendObject.legendType = "geometry";
             wfsLegendObject.geometryType = "polygon";
         }
-        else if (url.indexOf("http") === 0) {
-            wfsLegendObject.legendType = "wmsGetLegendGraphic";
-            wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
-        }
         else {
             wfsLegendObject.legendType = "wfsImage";
             wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
