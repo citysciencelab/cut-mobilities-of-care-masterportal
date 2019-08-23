@@ -13,6 +13,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
+        supportedOnlyInOblique: [],
         toolsToRenderInSidebar: ["filter", "schulwegrouting"]
     },
     /**
@@ -32,11 +33,21 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {String[]} supportedIn3d=["coord", "shadow", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"] Array of tool ids that are supported in 3d
      * @property {String[]} supportedOnlyIn3d=["shadow"] Array of tool ids that are only supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
+     * @property {String[]} supportedInOblique=[] Array of tool ids that are only supported in oblique mode
      * @property {String[]} toolsToRenderInSidebar=["filter", "schulwegrouting"] Array of tool ids that are rendered in sidebar
-     * @listens Tool#changeIsActive
-     * @fires Tool#changeIsActive
+     * @fires Core.ModelList.Tool#changeIsActive
+     * @fires Window#RadioTriggerWindowShowTool
+     * @fires Window#RadioTriggerWindowSetIsVisible
+     * @fires Core#RadioTriggerAutostartInitializedModul
+     * @listens Core.ModelList.Tool#changeIsActive
+     * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyIn3d
+     * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
+     * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
+     * @listens Core.ModelList.Tool#RadioRequestToolGetCollection
      */
     superInitialize: function () {
+        const channel = Radio.channel("Tool");
+
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 var gfiModel = model.collection.findWhere({id: "gfi"}),
@@ -67,6 +78,13 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
                     }
                 }
             }
+        });
+
+        channel.reply({
+            getSupportedIn3d: this.get("supportedIn3d"),
+            getSupportedOnlyIn3d: this.get("supportedOnlyIn3d"),
+            getSupportedOnlyInOblique: this.get("supportedOnlyInOblique"),
+            getCollection: this.collection
         });
 
         Radio.trigger("Autostart", "initializedModul", this.get("id"));
