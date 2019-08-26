@@ -2,6 +2,24 @@
 
 NEU:
 
+  (none)
+
+REFACTOR:
+
+  (none)
+
+FIXES:
+
+  - Shadow-Tool: Das Schattentool ist nun nur noch im 3D-Modus verfügbar
+  - Print: Ein Fehler wurde behoben der dazu führte, dass die Beschreibungen der WFS-Features nicht gedruckt wurden
+  - LayerTree: Layer mit dem Attribut "styles" werden nun wieder im Themenbaum dargestellt
+  - PortalTitle: Attribute zur Konfiguration des Portaltitels sind nun Abwärtskompatibel
+
+
+# Changelog LGV Master-Portal 2.4.0
+
+NEU:
+
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
   - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
