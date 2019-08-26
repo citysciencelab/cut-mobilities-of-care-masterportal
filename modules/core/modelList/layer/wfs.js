@@ -65,12 +65,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (!allowedVersions.includes(version)) {
             isVersionValid = false;
 
-            console.error("Please use for wfs only the versions: " + allowedVersions + ", because only these are accepted by openlayers!");
-            Radio.trigger("Alert", "alert", {
-                text: "Die Version: <b>'" + version + "'</b> des WFS-Layers '" + name + "' mit der Id: '" + id + "' ist ungültig. "
-                    + "Es wird versucht, den Layer mit der Version: <b>'" + allowedVersions[0] + "'</b> zu laden!",
-                kategorie: "alert-warning"
-            });
+            console.error("An attempt is made to load WFS-Layer: \"" + name + "\" with version: \"" + allowedVersions[0] + "\"!"
+                + " Please use for wfs only the versions: " + allowedVersions + ", because only these are accepted by openlayers!");
         }
         return isVersionValid;
     },

@@ -25,4 +25,44 @@ describe("modules/legend", function () {
             });
         });
     });
+
+    describe("returns correct legend objects", function () {
+        it("should return legend by single url", function () {
+            expect(model.getLegendParamsFromURL("Fake", ["FakeURL1"], "WMS")).to.deep.equal({
+                layername: "Fake",
+                legend: [{
+                    img: ["FakeURL1"],
+                    typ: "WMS"
+                }]
+            });
+        });
+        it("should return legend by multiple urls", function () {
+            expect(model.getLegendParamsFromURL("Fake", ["FakeURL1", "FakeURL2"], "WMS")).to.deep.equal({
+                layername: "Fake",
+                legend: [{
+                    img: ["FakeURL1", "FakeURL2"],
+                    typ: "WMS"
+                }]
+            });
+        });
+        it("should return legend from WMS by single url", function () {
+            expect(model.getLegendParamsFromWMS("Fake", ["FakeURL1"])).to.deep.equal({
+                layername: "Fake",
+                legend: [{
+                    img: ["FakeURL1"],
+                    typ: "WMS"
+                }]
+            });
+        });
+        it("should return empty legend if no vector style is properly set up", function () {
+            expect(model.getLegendParamsFromVector("Fake", "WFS", "123")).to.deep.equal({
+                layername: "Fake",
+                legend: [{
+                    img: [],
+                    typ: "WFS",
+                    legendname: []
+                }]
+            });
+        });
+    });
 });

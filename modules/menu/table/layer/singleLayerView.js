@@ -1,5 +1,5 @@
-import TemplateSettings from "text-loader!./templates/templateSettings.html";
-import Template from "text-loader!./templates/templateSingleLayer.html";
+import TemplateSettings from "text-loader!./Templates/templateSettings.html";
+import Template from "text-loader!./Templates/templateSingleLayer.html";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {

@@ -26,7 +26,7 @@ const LayerView = Backbone.View.extend({
                 }
             }
         });
-        this.model.collection.setVisibleByParentIsExpanded(this.model.get("parentId"));
+
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },

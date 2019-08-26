@@ -32,6 +32,7 @@ const StaticImageLayer = Layer.extend({
             source: this.get("layerSource"),
             name: this.get("name"),
             typ: "StaticImage",
+            legendURL: this.get("legendURL"),
             transparency: this.get("transparency")
         }));
     },

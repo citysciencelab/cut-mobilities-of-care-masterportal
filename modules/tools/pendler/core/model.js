@@ -8,7 +8,7 @@ const PendlerCoreModel = Tool.extend({
         pendlerLegend: [],
         renderToWindow: true,
         zoomLevel: 1,
-        url: "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        url: "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
         params: {
             REQUEST: "GetFeature",
             SERVICE: "WFS",

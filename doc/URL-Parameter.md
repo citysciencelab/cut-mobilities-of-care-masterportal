@@ -5,7 +5,7 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 
 **Beispiel:**
 
-*http://geoportal-hamburg.de/Geoportal/geo-online/?layerIDs=453,1731,2426&visibility=true,true,false&transparency=0,40,0&center=565874,5934140&zoomlevel=2*
+*https://geoportal-hamburg.de/Geoportal/geo-online/?layerIDs=453,1731,2426&visibility=true,true,false&transparency=0,40,0&center=565874,5934140&zoomlevel=2*
 
 **Folgende Parameter existieren:**
 

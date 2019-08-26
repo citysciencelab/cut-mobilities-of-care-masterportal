@@ -63,7 +63,9 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
         // Filtern von this.unset("legendParams")
         if (!_.isUndefined(legendParams) && legendParams.length > 0) {
             this.addContentHTML(legendParams);
-            this.render();
+            if (this.model.get("isActive")) {
+                this.render();
+            }
         }
     },
     /**

@@ -141,6 +141,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
+|useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
 **Beispiel Sensor:**
