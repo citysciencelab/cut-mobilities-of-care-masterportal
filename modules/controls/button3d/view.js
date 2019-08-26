@@ -16,18 +16,21 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @memberof Controls.Button3D
      * @constructs
      * @description This control gives a user the 3D interface in the map.
-     * @fires Util#RadioRequestUtilGetUiStyle
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Map#RadioTriggerMapDeactivateMap3d
+     * @fires Core#RadioRequestUtilGetUiStyle
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
+     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Filter#RadioTriggerFilterEnable
-     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
-     * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
-     * @fires Filter#RadioTriggerFilterDisable
-     * @fires Map#RadioTriggerMapActivateMap3d
+     * @fires Tools.Filter#RadioTriggerFilterEnable
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @fires Tools.Filter#RadioTriggerFilterDisable
+     * @fires Core#RadioTriggerMapActivateMap3d
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioTriggerMapChange
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyIn3d
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
+     * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @listens Core#RadioTriggerMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map"),
@@ -80,7 +83,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     },
     /**
      * Render Function
-     * @fires Map#RadioRequestMapIsMap3d
+     * @fires Core#RadioRequestMapIsMap3d
      * @returns {Button3dView} - Returns itself
      */
     renderToToolbar: function () {
@@ -94,47 +97,97 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     /**
      * Shows the map in 3D-mode if 3d button is activated.
      * Shows the map in 2D-mode if the 3d button is deactivated.
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires ModelList#RadioTriggerModelListToggleWfsCluster
-     * @fires Map#RadioTriggerMapDeactivateMap3d
-     * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Filter#RadioTriggerFilterEnable
-     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
-     * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
-     * @fires Filter#RadioTriggerFilterDisable
-     * @fires Map#RadioTriggerMapActivateMap3d
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioTriggerMapChange
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyIn3d
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
+     * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
+     * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
      * @return {void}
      */
     mapChange: function () {
+        const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
+            supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
+            supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
+            activeTools = Radio.request("Tool", "getCollection").where({"type": "tool", "isActive": true});
 
         if (Radio.request("Map", "isMap3d")) {
-            Radio.trigger("ModelList", "toggleWfsCluster", true);
-            Radio.trigger("Map", "deactivateMap3d");
-            Radio.trigger("Alert", "alert:remove");
-            Radio.trigger("Filter", "enable");
-            this.$("#3d_titel").text("Ansicht einschalten");
+            this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
+        }
+        else if (Radio.request("ObliqueMap", "isActive")) {
+            this.controlsMapChangeCloseOblique(activeTools, supportedOnlyInOblique);
         }
         else {
-            if (Radio.request("ObliqueMap", "isActive")) {
-                Radio.once("Map", "change", function (map) {
-                    if (map === "2D") {
-                        this.mapChange();
-                    }
-                }.bind(this));
-                Radio.trigger("ObliqueMap", "deactivate");
-                return;
-            }
-            this.$("#3d_titel").text("Ansicht ausschalten");
-            Radio.trigger("Filter", "disable");
-            Radio.trigger("ModelList", "toggleWfsCluster", false);
-            Radio.trigger("Map", "activateMap3d");
-            // Radio.trigger("ModelList", "setModelAttributesById", "3d_daten", {isExpanded: true});
-            // Radio.trigger("ModelList", "setModelAttributesById", "terrain", {isSelected: true});
-            Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
+            this.controlsMapChangeClose2D(activeTools, supportedIn3d);
         }
+    },
 
+    /**
+     * Controls the surface of the portal when leaving the 3D mode.
+     * @param {Backbone.Collection} activeTools contains all activated tools
+     * @param {String[]} supportedOnlyIn3d contains all tools that are only supported in 3D-Modues
+     * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
+     * @fires Core#RadioTriggerMapDeactivateMap3d
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Tools.Filter#RadioTriggerFilterEnable
+     * @returns {void}
+     */
+    controlsMapChangeClose3D: function (activeTools, supportedOnlyIn3d) {
+        Radio.trigger("ModelList", "toggleWfsCluster", true);
+        Radio.trigger("Map", "deactivateMap3d");
+        Radio.trigger("Alert", "alert:remove");
+        Radio.trigger("Filter", "enable");
+        this.$("#3d_titel").text("Ansicht einschalten");
+
+        activeTools.forEach(tool => {
+            if (supportedOnlyIn3d.includes(tool.get("id"))) {
+                tool.setIsActive(false);
+            }
+        });
+    },
+
+    /**
+     * Controls the surface of the portal when leaving the Oblique mode.
+     * @param {Backbone.Collection} activeTools contains all activated tools
+     * @param {String[]} supportedOnlyInOblique contains all tools that are only supported in Oblique-Modues
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @returns {void}
+     */
+    controlsMapChangeCloseOblique: function (activeTools, supportedOnlyInOblique) {
+        Radio.once("Map", "change", function (map) {
+            if (map === "2D") {
+                this.mapChange();
+            }
+        }.bind(this));
+        Radio.trigger("ObliqueMap", "deactivate");
+        activeTools.forEach(tool => {
+            if (!supportedOnlyInOblique.includes(tool.get("id"))) {
+                tool.setIsActive(false);
+            }
+        });
+    },
+
+    /**
+     * Controls the surface of the portal when leaving the 2D mode.
+     * @param {Backbone.Collection} activeTools contains all activated tools
+     * @param {String[]} supportedIn3d contains all tools that are supported in 3D-Modues
+     * @fires Tools.Filter#RadioTriggerFilterDisable
+     * @fires Core.ModelList#RadioTriggerModelListToggleWfsCluster
+     * @fires Core#RadioTriggerMapActivateMap3d
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
+    controlsMapChangeClose2D: function (activeTools, supportedIn3d) {
+        this.$("#3d_titel").text("Ansicht ausschalten");
+        Radio.trigger("Filter", "disable");
+        Radio.trigger("ModelList", "toggleWfsCluster", false);
+        Radio.trigger("Map", "activateMap3d");
+        Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
+
+        activeTools.forEach(tool => {
+            if (!supportedIn3d.includes(tool.get("id"))) {
+                tool.setIsActive(false);
+            }
+        });
     }
 });
 

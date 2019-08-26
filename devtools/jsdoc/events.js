@@ -688,31 +688,31 @@
 /** -------------------- OBLIQUE MAP-------------------- */
 
 /**
- * @event ObliqueMap#RadioTriggerObliqueMapRegisterLayer
+ * @event Core#RadioTriggerObliqueMapRegisterLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "registerLayer", layer)
  */
 
 /**
- * @event ObliqueMap#RadioRequestObliqueMapIsActive
+ * @event Core#RadioRequestObliqueMapIsActive
  * @returns {Boolean} - Flag if ObliqueMap is active.
  * @example Radio.request("ObliqueMap", "isActive")
  */
 
 /**
- * @event ObliqueMap#RadioTriggerObliqueMapActivateLayer
+ * @event Core#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
  */
 
 /**
- * @event ObliqueMap#RadioTriggerObliqueMapDeactivate
+ * @event Core#RadioTriggerObliqueMapDeactivate
  * @param {Boolean} - Flag if ObliqueMap is Deactivated
  * @example Radio.trigger("ObliqueMap", "deactivate")
  */
 
 /**
- * @event ObliqueMap#RadioTriggerObliqueMapActivate
+ * @event Core#RadioTriggerObliqueMapActivate
  * @param {Boolean} - Flag if ObliqueMap is activated
  * @example Radio.trigger("ObliqueMap", "activate")
  */
@@ -1354,6 +1354,16 @@
  * @example Radio.trigger("Window", "collapseWin", model);
  */
 
+/**
+ * @event Window#RadioTriggerWindowShowTool
+ * @description todo
+ */
+
+/**
+ * @event Window#RadioTriggerWindowSetIsVisible
+ * @description controls whether the window should be opened or closed
+ */
+
 /** -------------------- WINDOWVIEW -------------------- */
 
 /**
@@ -1679,13 +1689,13 @@
 /** ------------------------ Filter ----------------------------- */
 
 /**
- * @event Filter#RadioTriggerFilterEnable
+ * @event Tools.Filter#RadioTriggerFilterEnable
  * @description Enables the filter funtionality in the map
  * @example Radio.trigger("Filter", "enable")
  */
 
 /**
- * @event Filter#RadioTriggerFilterDisable
+ * @event Tools.Filter#RadioTriggerFilterDisable
  * @description Diables the filter funtionality in the map
  * @example Radio.trigger("Filter", "disable")
  *
@@ -1712,14 +1722,6 @@
 /**
  * @event ParametricURL#RadioRequestParametricURLGetHighlightFeature
  * @returns {Object} featureToHighlight Feature to highlight
- */
-
-
-/** -------------------- Tool -------------------- */
-
-/**
- * @event Tool#changeIsActive
- * @description Fired when param isActive changes
  */
 
 /** -------------------- Autostart -------------------- */
@@ -1814,5 +1816,31 @@
 /**
  * @event Tools.Kmlimport#ChangeIsActive
  * @description Fired when param isActive changes
+ */
 
+/** -------------------- CORE.MODELLIST.TOOL -------------------- */
+
+/**
+ * @event Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyIn3d
+ * @description Delivers an array with toll which supported only in 3d-Mode
+ */
+
+ /**
+ * @event Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
+ * @description Delivers an array with toll which supported in 3d-Mode
+ */
+
+ /**
+ * @event Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
+ * @description Delivers an array with toll which supported only in Oblique-Mode
+ */
+
+ /**
+ * @event Core.ModelList.Tool#RadioRequestToolGetCollection
+ * @description Delivers an array with configured tools
+ */
+
+ /**
+ * @event Core.ModelList.Tool#changeIsActive
+ * @description Fired when param isActive changes
  */
