@@ -183,13 +183,19 @@ Konfiguration des GDI Suchdienstes
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der [rest-services.json](rest-services.json.md).|false|
+|queryObject|ja|Object||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false| 
 
 **Beispiel**
 ```
 #!json
 "gdi": {
     "minChars": 3,
-    "serviceId": "elastic"
+    "serviceId": "elastic",
+    "queryObject": {
+                        "id": "query",
+                        "params": {
+                            "query_string": "%%searchString%%"
+                        }
 }
 ```
 

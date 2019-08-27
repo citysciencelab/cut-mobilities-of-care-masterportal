@@ -41,7 +41,13 @@
       },
       "gdi":{
 		"minChars": 3,
-		"serviceId": "elastic"
+		"serviceId": "elastic",
+        "queryObject": {
+          "id": "query",
+          "params": {
+            "query_string": "%%searchString%%"
+          }
+        }
 	  },
      "visibleVector": {
         "gfiOnClick": false
@@ -215,7 +221,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geportal-hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":

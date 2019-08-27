@@ -11,15 +11,10 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @param {object} sorting - object used for sorting the query
      * @param {number} size - size of the query
      */
-    prepareSearchBody (query, sorting, size) {
+   prepareSearchBody (query) {
         var searchBody = {};
 
-        if (!_.isEmpty(sorting)) {
-            searchBody.sort = sorting;
-        }
-
         searchBody.from = 0;
-        searchBody.size = size;
         searchBody.query = query;
 
         return JSON.stringify(searchBody);
@@ -92,7 +87,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @param {number} size - size of the query
      * @return {object} result - Resultobject of ElasticQuery
      */
-    search (serviceId, query, sorting, size) {
+    search (serviceId, query) {
         var result = {},
             searchUrl,
             searchBody,
@@ -103,9 +98,9 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
         if (!_.isUndefined(serviceUrlCheck)) {
-            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
+            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url") + "/template";
             searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
-            searchBody = this.prepareSearchBody(query, sorting, size);
+            searchBody = JSON.stringify(query);
         }
         else if (_.isUndefined(serviceUrlCheck)) {
             result.status = "error";
