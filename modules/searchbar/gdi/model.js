@@ -81,6 +81,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
                 replace_object = string_query.replace("%%searchString%%",searchString);
                 result = JSON.parse(replace_object);
         }
+        console.log(typeof(result));
         return result;
     },
     /**
