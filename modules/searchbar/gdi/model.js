@@ -75,13 +75,13 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             string_query,
             replace_object,
             result;
+
         if (Radio.request("Parser", "getPortalConfig")) {
-                query_object = (Radio.request("Parser", "getPortalConfig")).searchBar.gdi.queryObject;
-                string_query = JSON.stringify(query_object);
-                replace_object = string_query.replace("%%searchString%%",searchString);
-                result = JSON.parse(replace_object);
+            query_object = Radio.request("Parser", "getPortalConfig").searchBar.gdi.queryObject;
+            string_query = JSON.stringify(query_object);
+            replace_object = string_query.replace("%%searchString%%", searchString);
+            result = JSON.parse(replace_object);
         }
-        console.log(typeof(result));
         return result;
     },
     /**
