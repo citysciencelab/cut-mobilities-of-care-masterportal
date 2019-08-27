@@ -1,4 +1,4 @@
-# Changelog LGV Master-Portal 2.4.0
+# Changelog LGV Master-Portal 2.4.1
 
 NEU:
 
