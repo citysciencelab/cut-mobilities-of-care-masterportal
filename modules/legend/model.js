@@ -213,9 +213,6 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (typ === "StaticImage") {
             return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
-        else if (typ === "StaticImage") {
-            return this.getLegendParamsFromURL(layername, legendURL, typ);
-        }
         else if (typ === "GROUP") {
             _.each(layerSources, function (layerSource) {
                 var childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
