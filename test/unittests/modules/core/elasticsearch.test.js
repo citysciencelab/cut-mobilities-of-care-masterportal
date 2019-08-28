@@ -4,21 +4,21 @@ import {expect} from "chai";
 
 describe("check Elastic Search Helper Functions", function () {
 
-    var model = {},
-        elasticSearchModel,
-        config = {
-            "minChars": 4,
-            "serviceId": "elastic",
-            "queryObject": {
-                "id": "query",
-                "params": {
-                    "query_string": "%%searchString%%"
-                }
-            }
+    var elasticSearchModel;
+        //model = {},
+        // config = {
+        //     "minChars": 4,
+        //     "serviceId": "elastic",
+        //     "queryObject": {
+        //         "id": "query",
+        //         "params": {
+        //             "query_string": "%%searchString%%"
+        //         }
+        //     }
         };
 
     before(function () {
-        model = new Model(config);
+        // model = new Model(config);
         elasticSearchModel = new ElasticSearch();
     });
     it("search schould return object", function () {
