@@ -30,7 +30,7 @@
                 <% anlagenCounter++; %>
             <% } %>
 
-        <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") { %>
+        <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http" || value.substr(0, 4) === "file") { %>
             <a href="<%= value %>" target="_blank">Link</a>
         <% } else if (value.substr(0, 4) == "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49"
                 || value.substr(0, 5) === "0800 "
