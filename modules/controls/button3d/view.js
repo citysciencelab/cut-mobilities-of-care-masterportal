@@ -112,7 +112,8 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
-            activeTools = Radio.request("Tool", "getCollection").where({"type": "tool", "isActive": true});
+            modelCollection = Radio.request("Tool", "getCollection"),
+            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [];
 
         if (Radio.request("Map", "isMap3d")) {
             this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
