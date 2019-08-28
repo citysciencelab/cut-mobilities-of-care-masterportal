@@ -71,10 +71,13 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             // if there is group layer, the new model will be generated
             if (aFilteredModels.length === 0) {
                 _.each(aVectorLayerModels, function (aVectorLayerModel) {
-                    aFilteredModels = aFilteredModels.concat(aVectorLayerModel.get("layerSource"));
+                    if (aVectorLayerModel.type === "VECTOR") {
+                        aFilteredModels = aFilteredModels.concat(aVectorLayerModel.get("layerSource"));
+                    }
                 }, this);
             }
 
+            console.log(aFilteredModels);
             aFoundMatchingFeatures = this.findMatchingFeatures(aFilteredModels, sPrepSearchString);
             Radio.trigger("Searchbar", "pushHits", "hitList", aFoundMatchingFeatures);
 
