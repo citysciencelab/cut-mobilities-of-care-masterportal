@@ -67,10 +67,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     /**
      * creates query for searched string (layer)
      * @param {String} searchString - string that will be touched
-     * @returns {Oject} query
+     * @returns {Oject} result
      */
     createQuery: function (searchString) {
-        /* Zur Zeit noch nicht fuzzy */
         var query_object,
             string_query,
             replace_object,

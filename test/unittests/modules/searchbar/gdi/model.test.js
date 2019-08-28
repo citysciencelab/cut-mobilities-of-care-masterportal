@@ -5,7 +5,13 @@ describe("modules/searchbar/gdi", function () {
     var model = {},
         config = {
             "minChars": 4,
-            "serviceId": "elastic"
+            "serviceId": "elastic",
+            "queryObject": {
+                "id": "query",
+                "params": {
+                    "query_string": "%%searchString%%"
+                }
+            }
         };
 
     before(function () {
@@ -19,7 +25,6 @@ describe("modules/searchbar/gdi", function () {
             model.setMinChars(5);
             expect(model.get("minChars")).to.equal(5);
         });
-
         it("ServiceID Value should be 'elastic'", function () {
             expect(model.get("serviceId")).to.equal("elastic");
         });
@@ -27,28 +32,17 @@ describe("modules/searchbar/gdi", function () {
             model.setServiceId("4711");
             expect(model.get("serviceId")).to.equal("4711");
         });
-    });
-    describe("createQueryString", function () {
-        var searchString = "festge",
-            query = "";
-
-        it("the created query should be an object", function () {
-            query = model.createQuery(searchString);
-            expect(query).to.be.an("object");
-        });
-        it("the created query should contain the correct query_string", function () {
-            expect(query.bool.must).to.be.an("array").to.deep.include({
-                query_string: {
-                    "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
-                    "query": "*" + searchString + "*",
-                    "lowercase_expanded_terms": false
-                }
-            },
-            {match:
-                {
-                    typ: "WMS"
-                }
-            });
+        it("queryObject should be an object", function () {
+            expect(model.get("queryObject")).to.be.an("object");
         });
     });
+    // describe("createQueryString", function () {
+    //     var searchString = "festge",
+    //         result = "";
+    //
+    //     it("the created query should be an object", function () {
+    //         result = model.createQuery(searchString);
+    //         expect(result).to.be.an("object");
+    //     });
+    // });
 });
