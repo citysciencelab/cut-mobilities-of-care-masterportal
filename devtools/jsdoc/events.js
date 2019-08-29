@@ -1328,21 +1328,21 @@
 /** -------------------- QUICKHELP -------------------- */
 
 /**
- * @event Quickhelp#RadioTriggerQuickhelpShowWindowHelp
- * @description is triggered by Quickhelp
- * @param {String} topic topic for quickhelp to show
- * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
+ * @event QuickHelp#RadioTriggerQuickHelpShowWindowHelp
+ * @description is triggered by QuickHelp
+ * @param {String} topic topic for quickHelp to show
+ * @example Radio.trigger("QuickHelp", "showWindowHelp", topic);
  */
 
 /**
- * @event Quickhelp#RadioRequestQuickhelpIsSet
+ * @event QuickHelp#RadioRequestQuickHelpIsSet
  * @description Returns isSet value
- * @example Radio.request("Quickhelp", "isSet");
+ * @example Radio.request("QuickHelp", "isSet");
  */
 
 /**
- * @event Quickhelp#render
- * @description Triggered when the Quickhelp View has to render.
+ * @event QuickHelp#render
+ * @description Triggered when the QuickHelp View has to render.
  * @example this.trigger("render")
  */
 /** -------------------- WINDOW -------------------- */

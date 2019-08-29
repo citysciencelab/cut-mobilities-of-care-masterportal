@@ -17,7 +17,7 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
     /**
      * @class QuickHelpModel
      * @extends Backbone.Model
-     * @memberof Quickhelp
+     * @memberof QuickHelp
      * @constructs
      * @property {String} imgPath="/" "todo"
      * @property {String} allgemein="allgemein.png" "todo"
@@ -37,6 +37,10 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
         if (_.isObject(attr) && _.has(attr, "imgPath")) {
             this.setImgPath(attr.imgPath);
         }
+
+    console.log(this.get("imgPath"));
+    console.log(this.get("allgemein"));
+    console.log(this.get("statistikFlaecheNiemeier"));
     },
 
     /**

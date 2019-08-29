@@ -6,20 +6,20 @@ import "jquery-ui/ui/widgets/draggable";
 
 /**
  * @member TemplateSearch
- * @description Template used to create the quickhelp for Search
- * @memberof Quickhelp
+ * @description Template used to create the quickHelp for Search
+ * @memberof QuickHelp
  */
 
 /**
  * @member TemplateTree
- * @description Template used to create the quickhelp for Tree Search
- * @memberof Quickhelp
+ * @description Template used to create the quickHelp for Tree Search
+ * @memberof QuickHelp
  */
 
 /**
  * @member TemplateMeasureTool
- * @description Template used to create the quickhelp for the measure tool
- * @memberof Quickhelp
+ * @description Template used to create the quickHelp for the measure tool
+ * @memberof QuickHelp
  */
 const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */{
     events: {
@@ -31,17 +31,17 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      * Initialises the QuickHelp
      * @class QuickHelpView
      * @extends Backbone.View
-     * @memberof Quickhelp
+     * @memberof QuickHelp
      * @constructs
      * @param   {boolean | object} attr Configuration
      * @deprecated Boolean-Examines if true. Deprecated in Version 3.0 due to dedicated path pass
-     * @listens Quickhelp#RadioTriggerQuickhelpShowWindowHelp
-     * @listens Quickhelp#RadioRequestQuickhelpIsSet
-     * @listens Quickhelp#render
+     * @listens QuickHelp#RadioTriggerQuickHelpShowWindowHelp
+     * @listens QuickHelp#RadioRequestQuickHelpIsSet
+     * @listens QuickHelp#render
      * @returns {void}
      */
     initialize: function (attr) {
-        var channel = Radio.channel("Quickhelp");
+        var channel = Radio.channel("QuickHelp");
 
         if (attr === true || _.isObject(attr)) {
             this.model = new QuickHelpModel(attr);
@@ -69,7 +69,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
 
     /**
      * Renders the data to DOM.
-     * @return {Quickhelp} returns this
+     * @return {QuickHelp} returns this
      */
     render: function () {
         $("body").append(this.$el);
