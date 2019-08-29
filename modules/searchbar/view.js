@@ -103,9 +103,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             "ready": this.menuLoaderReady
         });
 
-        if (config.quickHelp) {
-            this.model.setQuickHelp(config.quickHelp);
-        }
+        this.model.setQuickHelp(Radio.request("Quickhelp", "isSet"));
 
         this.initialRender();
 
