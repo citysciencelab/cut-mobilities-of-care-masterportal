@@ -3,23 +3,6 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         ajaxRequests: {}
     },
     /**
-     * @class ElasticSearchModel
-     * @extends Backbone.Model
-     * @memberof Searchbar.Gdi
-     * @constructs
-     * @param {object} query - json-notated Query to post to
-     * @param {object} sorting - object used for sorting the query
-     * @param {number} size - size of the query
-     */
-    // prepareSearchBody (query) {
-    //     var searchBody = {};
-    //
-    //     searchBody.from = 0;
-    //     searchBody.query = query;
-    //
-    //     return JSON.stringify(searchBody);
-    // },
-    /**
      * Deletes the information of the successful or canceled Ajax request from the object of the running Ajax requests.
      * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
      * @returns {void}
