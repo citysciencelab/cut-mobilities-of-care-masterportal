@@ -24,7 +24,7 @@ import LayerinformationModel from "../modules/layerinformation/model";
 import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/ClickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
-import QuickHelpView from "../modules/quickhelp/view";
+import QuickHelpView from "../modules/quickHelp/view";
 import ScaleLineView from "../modules/scaleline/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";

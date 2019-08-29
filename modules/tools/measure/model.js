@@ -212,7 +212,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      */
     setStatus: function (model, value) {
         var layers = Radio.request("Map", "getLayers"),
-            quickHelpSet = Radio.request("Quickhelp", "isSet"),
+            quickHelpSet = Radio.request("QuickHelp", "isSet"),
             measureLayer,
             selectedValues;
 
