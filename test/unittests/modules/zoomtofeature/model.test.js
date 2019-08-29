@@ -7,7 +7,13 @@ describe("zoomToFeature", function () {
         expect = chai.expect;
 
     before(function () {
-        model = new Model();
+        var CustomZoomToFeatureModel = Model.extend({
+            requestFeaturesFromWFS: function () {
+                // This function is mocked since it triggers an ajax request.
+            }
+        });
+
+        model = new CustomZoomToFeatureModel();
     });
 
     describe("createIconFeature", function () {
