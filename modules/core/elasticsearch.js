@@ -98,7 +98,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
         if (!_.isUndefined(serviceUrlCheck)) {
-            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url") + "/template";
+            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");  // + "/template";
             searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
             searchBody = JSON.stringify(query);
         }

@@ -4,12 +4,16 @@ import {expect} from "chai";
 describe("modules/searchbar/gdi", function () {
     var model = {},
         config = {
-            "minChars": 4,
-            "serviceId": "elastic",
-            "queryObject": {
-                "id": "query",
-                "params": {
-                    "query_string": "%%searchString%%"
+            "searchBar": {
+                "gdi": {
+                    "minChars": 4,
+                    "serviceId": "elastic",
+                    "queryObject": {
+                        "id": "query",
+                        "params": {
+                            "query_string": "%%searchString%%"
+                        }
+                    }
                 }
             }
         };
@@ -18,7 +22,9 @@ describe("modules/searchbar/gdi", function () {
         model = new Model(config);
     });
     describe("check Defaults and Settings", function () {
+
         it("minChars Value should be 4", function () {
+            model.setMinChars(4);
             expect(model.get("minChars")).to.equal(4);
         });
         it("change of minChars Value should return 5", function () {
@@ -26,23 +32,29 @@ describe("modules/searchbar/gdi", function () {
             expect(model.get("minChars")).to.equal(5);
         });
         it("ServiceID Value should be 'elastic'", function () {
+            model.setServiceId("elastic");
             expect(model.get("serviceId")).to.equal("elastic");
         });
         it("change of ServiceID Value should return 4711", function () {
             model.setServiceId("4711");
             expect(model.get("serviceId")).to.equal("4711");
         });
-        it("queryObject should be an object", function () {
-            expect(model.get("queryObject")).to.be.an("object");
+    });
+    describe("createQuery", function () {
+        var searchString = "festge",
+            result = ""
+
+        it("the query should be an object", function () {
+            result = model.createQuery(searchString, config.searchBar.gdi);
+            expect(result).to.be.a("object");
+        });
+        it("the query's parameter should be object ", function () {
+            result = model.createQuery(searchString, config.searchBar.gdi);
+            expect(result.params).to.be.a("object");
+        });
+        it("the query should consist searched string", function () {
+            result = model.createQuery(searchString, config.searchBar.gdi);
+            expect(result.params.query_string).to.equal("festge");
         });
     });
-    // describe("createQueryString", function () {
-    //     var searchString = "festge",
-    //         result = "";
-    //
-    //     it("the created query should be an object", function () {
-    //         result = model.createQuery(searchString);
-    //         expect(result).to.be.an("object");
-    //     });
-    // });
 });

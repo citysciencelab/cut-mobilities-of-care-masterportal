@@ -14,7 +14,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {string} config.serviceId - rest-services Id
      * @returns {void}
      */
-    initialize: function () {
+    initialize: function (config) {
         var channel = Radio.channel("GDI-Search");
 
         channel.on({
@@ -27,6 +27,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         this.listenTo(Radio.channel("Elastic"), {
             "triggerHitList": this.triggerHitList
         });
+        if (config.minChars) {
+            this.set("minChars", config.minChars);
+        }
     },
     /**
      * Searchs layer if enough characters have been touched (if >="minChars")
@@ -34,7 +37,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-        var query = this.createQuery(searchString);
+        var query = this.createQuery(searchString, Radio.request("Parser", "getPortalConfig").searchBar.gdi);
 
         if (searchString.length >= this.get("minChars")) {
             this.get("elasticSearch").search(this.get("serviceId"), query);
@@ -67,16 +70,17 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     /**
      * creates query for searched string (layer)
      * @param {String} searchString - string that will be touched
+     * @param {Object} config - config Parameter
      * @returns {Oject} result
      */
-    createQuery: function (searchString) {
+    createQuery: function (searchString, config) {
         var query_object,
             string_query,
             replace_object,
             result;
 
-        if (Radio.request("Parser", "getPortalConfig")) {
-            query_object = Radio.request("Parser", "getPortalConfig").searchBar.gdi.queryObject;
+        if (config) {
+            query_object = config.queryObject;
             string_query = JSON.stringify(query_object);
             replace_object = string_query.replace("%%searchString%%", searchString);
             result = JSON.parse(replace_object);
