@@ -1,12 +1,12 @@
 const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype */{
     defaults: {
         imgPath: "/",
-        allgemein: "allgemein.png",
-        allgemein2: "allgemein_2.png",
-        allgemein3: "allgemein_3.png",
-        allgemein4: "allgemein_4.png",
-        themen: "themen.png",
-        themen2: "themen_2.png",
+        searchbarAllgemeines1: "allgemein.png",
+        searchbarAllgemeines2: "allgemein_2.png",
+        searchbarAllgemeines3: "allgemein_3.png",
+        searchbarFlurstueckssuche: "allgemein_4.png",
+        aufbau1: "themen.png",
+        aufbau2: "themen_2.png",
         statistikFlaecheNiemeier: "Statistik_Flaeche_Niemeier.png",
         statistikStreckeUniErlangen: "Statistik_Strecke_UniErlangen.png",
         utmStreifen: "UTM_Streifen.png",
@@ -33,11 +33,11 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
      * @property {String} utmFormeln="UTM_Formeln.png" "todo"
      * @param {boolean | object} attr Configuration
      */
-    initialize: function (attr) {
-        if (_.isObject(attr) && _.has(attr, "imgPath")) {
-            this.setImgPath(attr.imgPath);
-        }
-    },
+    // initialize: function (attr) {
+    //     if (_.isObject(attr) && _.has(attr, "imgPath")) {
+    //         this.setImgPath(attr.imgPath);
+    //     }
+    // },
 
     /**
     * setter for imgPath
