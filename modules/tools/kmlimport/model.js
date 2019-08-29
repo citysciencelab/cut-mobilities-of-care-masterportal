@@ -163,6 +163,10 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
     convertHexColorToRgbArray: function (hexColor) {
         let colorRgbArray = [];
 
+        if (hexColor.length === 6) {
+            hexColor = "FF" + hexColor;
+        }
+
         colorRgbArray = hexColor.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
         colorRgbArray = colorRgbArray.splice(1, 4);
         colorRgbArray = colorRgbArray.map(hexValue => parseInt(hexValue, 16));
