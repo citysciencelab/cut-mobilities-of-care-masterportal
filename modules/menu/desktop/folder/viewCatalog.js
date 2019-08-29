@@ -10,7 +10,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     events: {
         "change select": "setSelection",
         "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
-        // "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
             Radio.trigger("QuickHelp", "showWindowHelp", "tree");
         },
@@ -34,22 +33,22 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @extends Backbone.View
      * @memberof Menu.Desktop.Folder
      * @constructs
-     * @listens Map#RadioTriggerMapChange
-     * @listens FolderCatalogView#changeIsExpanded
-     * @listens FolderCatalogView#isVisibleInTree
-     * @fires FolderCatalogView#toggleIsExpanded
-     * @fires FolderCatalogView#setSelection
-     * @fires FolderCatalogView#toggleBackground
-     * @fires FolderCatalogView#unfixTree
-     * @fires FolderCatalogView#fixTree
+     * @listens Core#RadioTriggerMapChange
+     * @listens Menu.Desktop.Folder#changeIsExpanded
+     * @listens Menu.Desktop.Folder#isVisibleInTree
+     * @fires Menu.Desktop.Folder#toggleIsExpanded
+     * @fires Menu.Desktop.Folder#setSelection
+     * @fires Menu.Desktop.Folder#toggleBackground
+     * @fires Menu.Desktop.Folder#unfixTree
+     * @fires Menu.Desktop.Folder#fixTree
      * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
-     * @fires MapView#RadioTriggerMapViewToggleBackground
-     * @fires Map#RadioRequestMapGetMapMode
-     * @fires Parser#RadioRequestParserGetTreeType
-     * @fires Parser#RadioRequestParserGetCategory
-     * @fires Parser#RadioRequestParserGetCategories
-     * @fires Parser#RadioRequestParserGetItemByAttributes
-     * @fires Parser#RadioRequestParserSetCategory
+     * @fires Core#RadioTriggerMapViewToggleBackground
+     * @fires Core#RadioRequestMapGetMapMode
+     * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @fires Core.ConfigLoader#RadioRequestParserGetCategory
+     * @fires Core.ConfigLoader#RadioRequestParserGetCategories
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserSetCategory
      */
     initialize: function () {
         this.listenTo(Radio.channel("Map"), {
@@ -77,10 +76,10 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
 
     /**
      * Renders the data to DOM.
-     * @fires Parser#RadioRequestParserGetTreeType
-     * @fires Parser#RadioRequestParserGetCategory
-     * @fires Parser#RadioRequestParserGetCategories
-     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @fires Core.ConfigLoader#RadioRequestParserGetCategory
+     * @fires Core.ConfigLoader#RadioRequestParserGetCategories
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @return {FolderCatalogView} returns this
      */
     render: function () {
@@ -94,6 +93,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         return this;
     },
+
     /**
      * Toogle Expanded
      * @return {void}
@@ -101,6 +101,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     toggleIsExpanded: function () {
         this.model.toggleIsExpanded();
     },
+
     /**
      * Toogle Glyphicon
      * @return {void}
@@ -124,6 +125,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.$el.find(".LayerListMaxHeight").css("overflow", "auto");
         }
     },
+
     /**
      * Toogle Background
      * @return {void}
@@ -133,6 +135,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $(".glyphicon-adjust").toggleClass("rotate-adjust");
         $(".glyphicon-adjust").toggleClass("rotate-adjust-back");
     },
+
     /**
      * Toogle 3dCatalog
      * @param {*} mode todo
@@ -146,6 +149,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
             this.$el.hide();
         }
     },
+
     /**
      * Fix tree
      * @return {void}
@@ -156,6 +160,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $(".glyphicon-pushpin").addClass("rotate-pin");
         $(".glyphicon-pushpin").removeClass("rotate-pin-back");
     },
+
     /**
      * unfix Tree
      * @return {void}
@@ -166,6 +171,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $(".glyphicon-pushpin").removeClass("rotate-pin");
         $(".glyphicon-pushpin").addClass("rotate-pin-back");
     },
+
     /**
      * Help for fixing
      * @param {evt} evt todo
@@ -174,10 +180,11 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
     helpForFixing: function (evt) {
         evt.stopPropagation();
     },
+
     /**
     * Set Selection
     * @param {evt} evt todo
-    * @fires Parser#RadioRequestParserSetCategory
+    * @fires Core.ConfigLoader#RadioRequestParserSetCategory
     * @return {void}
     */
     setSelection: function (evt) {
