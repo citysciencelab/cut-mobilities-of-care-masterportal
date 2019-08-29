@@ -153,14 +153,24 @@ const SpecialWFSModel = Backbone.Model.extend({
         if (searchString.length >= this.get("minChars")) {
             _.each(definitions, function (def) {
                 data = this.getWFS110Xml(def, searchString);
+                def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);
             }, this);
         }
     },
 
     /**
-     * @description Führt immer nur einen HTTP-POST-Request pro specialWFS zur Zeit aus.
-     * @param {String} def Parameter eines WFS
+     * @description replaces all "." with "_" in given URL
+     * @param {String} url The URL to manipulate
+     * @returns {string} the manipulated URL
+     */
+    manipulateUrlForProxy: function (url) {
+        return url.replace(/\./g, "_");
+    },
+
+    /**
+     * @description Executes a special WFS request at a time
+     * @param {String} def Params of WFS
      * @param {String} data Data to be sent to the server
      * @returns {void}
      */

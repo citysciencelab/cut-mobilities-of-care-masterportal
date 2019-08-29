@@ -1,4 +1,4 @@
-import ListTemplate from "text-loader!./templates/template.html";
+import ListTemplate from "text-loader!./Templates/template.html";
 import SingleLayerView from "./singleLayerView";
 
 const LayerView = Backbone.View.extend({

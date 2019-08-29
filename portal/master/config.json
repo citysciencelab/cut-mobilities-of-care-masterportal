@@ -6,7 +6,7 @@
       "title": "Master",
       "logo": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "http://geoinfo.hamburg.de",
-      "tooltip": "Landesbetrieb Geoinformation und Vermessung"
+      "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
     "searchBar":
     {
@@ -58,33 +58,33 @@
         "timeout": 10000,
         "definitions": [
           {
-            "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
+            "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
             "name": "B-Plan"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
             "name": "festgestellt"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+            "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
             "name": "im Verfahren"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_KitaEinrichtung",
+            "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
             "typeName": "app:KitaEinrichtungen",
             "propertyNames": ["app:Name"],
             "name": "Kita"
           },
           {
-            "url": "/geodienste_hamburg_de/HH_WFS_Stoerfallbetriebe",
+            "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
             "typeName": "app:stoerfallbetrieb",
             "propertyNames": ["app:standort"],
             "name": "Störfallbetrieb"
@@ -452,6 +452,10 @@
     {
       "Layer": [
       {
+        "id": "15543",
+        "visibility": true
+      },
+      {
         "id": "8194"
       },
       {
@@ -486,7 +490,7 @@
         "visibility": false
       },
       {
-        "id": "441"
+        "id": "9726"
       },
       {
         "id": "1562",

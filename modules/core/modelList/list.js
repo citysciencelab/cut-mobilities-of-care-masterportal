@@ -33,7 +33,7 @@ import WfsFeatureFilter from "../../wfsfeaturefilter/model";
 import TreeFilter from "../../treefilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
-import FeatureLister from "../../featureLister/model";
+import FeatureLister from "../../featurelister/model";
 import AddWms from "../../tools/addwms/model";
 import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
@@ -42,7 +42,7 @@ import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayerSliderModel from "../../tools/layerSlider/model";
+import LayerSliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 
@@ -112,6 +112,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             // Initial sichtbare Layer etc.
             "addInitialyNeededModels": this.addInitialyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
+            "addModel": this.addModel,
             "setIsSelectedOnChildLayers": this.setIsSelectedOnChildLayers,
             "setIsSelectedOnParent": this.setIsSelectedOnParent,
             "showModelInTree": this.showModelInTree,
@@ -377,7 +378,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     setAllDescendantsInvisible: function (parentId, isMobile) {
-        var children = this.where({parentId: parentId});
+        var children = this.where({parentId: parentId}),
+            additionalChildren = this.where({
+                isVisibleInTree: true,
+                parentId: parentId,
+                typ: "GROUP",
+                type: "layer"
+            });
+
+        children = children.concat(additionalChildren);
 
         _.each(children, function (child) {
             child.setIsVisibleInTree(false);
@@ -533,15 +542,19 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     moveModelInTree: function (model, movement) {
         var currentSelectionIdx = model.get("selectionIDX"),
-            modelToSwap = this.where({selectionIDX: currentSelectionIdx + movement});
+            newSelectionIndex = currentSelectionIdx + movement,
+            modelToSwap = this.where({selectionIDX: newSelectionIndex});
 
-        if (!modelToSwap || modelToSwap.length === 0) {
+        // Do not move models when no model to swap is found.
+        // There are hidden models such as "oblique" at selectionIDX 0, causing modelToSwap array to be not
+        // empty although it should be. That's why newSelectionIndex <= 0 is also checked.
+        if (newSelectionIndex <= 0 || !modelToSwap || modelToSwap.length === 0) {
             return;
         }
 
         modelToSwap = modelToSwap[0];
 
-        model.setSelectionIDX(modelToSwap.get("selectionIDX"));
+        model.setSelectionIDX(newSelectionIndex);
         modelToSwap.setSelectionIDX(currentSelectionIdx);
 
         this.updateLayerView();
@@ -776,6 +789,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (_.isUndefined(model) === false) {
             model.set(attrs);
         }
+    },
+
+    /**
+     * Adds an existing model to the collection ignoring the Parser
+     * @param {Backbone.Model} model model to add
+     * @returns {void}
+     */
+    addModel: function (model) {
+        this.add(model);
     },
 
     /**

@@ -6,7 +6,7 @@
       "title": "GeoViewer",
       "logo": "",
       "link": "",
-      "tooltip": ""
+      "toolTip": ""
     },
     "searchBar":
     {
@@ -235,7 +235,7 @@
             "name": "Pendler (Animation)",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/Test_MRH_WFS_Pendlerverflechtung",
+            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
                 "REQUEST": "GetFeature",
                 "SERVICE": "WFS",
@@ -313,7 +313,7 @@
       "attributions":
       {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false
+        "isInitOpenMobile": true
       },
       "overviewMap":
       {

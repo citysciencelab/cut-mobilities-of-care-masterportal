@@ -13,10 +13,62 @@ const TitleModel = Backbone.Model.extend(/** @lends TitleModel.prototype */ {
      * @param {String} title="Master" Title of portal.
      * @param {String} logo="" Logo of portal.
      * @param {String} link="https://geoinfo.hamburg.de" Link for click on logo.
-     * @param {String} toolTip="Landesbetrieb Geoinformation und Vermessung" Tooltipfor hover over logo.
+     * @param {String} toolTip="Landesbetrieb Geoinformation und Vermessung" Tooltip for hover over logo.
      */
     initialize: function () {
-        var portalTitle = Radio.request("Parser", "getPortalConfig").portalTitle;
+        const portalTitle = Radio.request("Parser", "getPortalConfig").portalTitle,
+            /**
+             * legacyTitle
+             * @deprecated in 3.0.0
+             */
+            legacyTitle = Radio.request("Parser", "getPortalConfig").PortalTitle,
+            /**
+             * portalLogo
+             * @deprecated in 3.0.0
+             */
+            portalLogo = Radio.request("Parser", "getPortalConfig").PortalLogo,
+            /**
+             * logoLink
+             * @deprecated in 3.0.0
+             */
+            logoLink = Radio.request("Parser", "getPortalConfig").LogoLink,
+            /**
+             * logoToolTip
+             * @deprecated in 3.0.0
+             */
+            logoToolTip = Radio.request("Parser", "getPortalConfig").LogoToolTip;
+
+        /**
+         * legacyTitle
+         * @deprecated in 3.0.0
+         */
+        if (legacyTitle !== undefined) {
+            this.setTitle(legacyTitle);
+        }
+        /**
+         * portalLogo
+         * @deprecated in 3.0.0
+         */
+        if (portalLogo !== undefined) {
+            this.setLogo(portalLogo);
+            console.warn("Attribute 'PortalLogo' is deprecated. Please use Object 'portalTitle' and the attribute 'title' instead.");
+        }
+        /**
+         * logoLink
+         * @deprecated in 3.0.0
+         */
+        if (logoLink !== undefined) {
+            this.setLink(logoLink);
+            console.warn("Attribute 'LogoLink' is deprecated. Please use Object 'portalTitle' and the attribute 'link' instead.");
+        }
+        /**
+         * LogoToolTip
+         * @deprecated in 3.0.0
+         */
+        if (logoToolTip !== undefined) {
+            this.setToolTip(logoToolTip);
+            console.warn("Attribute 'LogoToolTip' is deprecated. Please use Object 'portalTitle' and the attribute 'toolTip' instead.");
+        }
 
         if (portalTitle) {
             if (portalTitle.title) {
@@ -32,7 +84,8 @@ const TitleModel = Backbone.Model.extend(/** @lends TitleModel.prototype */ {
              * tooltip
              * @deprecated in 3.0.0
              */
-            if (portalTitle.tooltip) {
+            if (portalTitle.tooltip !== undefined) {
+                console.warn("Attribute 'tooltip' is deprecated. Please use 'toolTip' instead.");
                 this.setToolTip(portalTitle.tooltip);
             }
             if (portalTitle.toolTip) {
