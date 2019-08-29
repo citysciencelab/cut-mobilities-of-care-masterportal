@@ -23,7 +23,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe [print](#markdown-header-print)).|`"/cgi-bin/proxy.cgi"`|
 |proxyHost|nein|String||Hostname eines remote Proxy (dort muss CORS aktiviert sein)|`"https://proxy.example.com"`|
 |proxy|nein|Boolean|true|Gibt an ob bei URLs Punkte durch Unterstriche ersetzt werden sollen. Dadurch werden CORS-Fehler verhindert. Achtung: Es muss serverseitig ein Reverse-Proxy eingerichtet werden.||
-|[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Strecke / Fläche messen (MeasureTool)).||
+|[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Messen (MeasureTool)).||
 |portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
 |restConf|ja|String||Pfad zur [rest-services.json](rest-services.json.md), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten rechts auf der Karte angezeigt wird.|`true`|
@@ -49,6 +49,17 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imgPath|nein|String|`"/"`|Gibt den Pfad (relativ oder absolut) zu einem Dateiordner an, in dem sich die Bilder für die Quickhelp befinden.|
+|searchbarAllgemeines1|nein|String|`"allgemein.png"`|Erstes Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|searchbarAllgemeines2|nein|String|`"allgemein_2.png"`|Zweites Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|searchbarAllgemeines3|nein|String|`"allgemein_3.png"`|Drittes Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|searchbarFlurstueckssuche|nein|String|`"allgemein_4.png"`|Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Flurstückssuche. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|aufbau1|nein|String|`"themen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|aufbau2|nein|String|`"themen_2.png"`|Zweites Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|statistikFlaecheNiemeier|nein|String|`"Statistik_Flaeche_Niemeier.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statsitische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|statistikStreckeUniErlangen|nein|String|`"Statistik_Strecke_UniErlangen.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statsitische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|utmStreifen|nein|String|`"UTM_Streifen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|utmVerzerrung|nein|String|`"UTM_Verzerrung.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|utmFormeln|nein|String|`"UTM_Formeln.png"`|Drittes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 ******
 
 ## mouseHover ##
