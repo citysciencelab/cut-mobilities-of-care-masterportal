@@ -17,15 +17,15 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{targetProjection: "EPSG:4326, setCenter: false}`|
 |inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326`|
 |inputMap.setCenter|nein|Boolean|false|Soll die Karte nach dem setzen eines Markers um den Marker zentriert werden?|`setCenter: true`|
-|layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-fhhnet-ALL.json"`|
+|layerConf|ja|String||Pfad zur [services.json](services.json.md), die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
 |[mouseHover](#markdown-header-mouseHover)|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in [config.json](config.json.md) (*Themenconfig.Fachdaten.Layer*).|`true`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme ([siehe Syntax](http://proj4js.org/#named-projections)).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
 |proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe [print](#markdown-header-print)).|`"/cgi-bin/proxy.cgi"`|
 |proxyHost|nein|String||Hostname eines remote Proxy (dort muss CORS aktiviert sein)|`"https://proxy.example.com"`|
 |proxy|nein|Boolean|true|Gibt an ob bei URLs Punkte durch Unterstriche ersetzt werden sollen. Dadurch werden CORS-Fehler verhindert. Achtung: Es muss serverseitig ein Reverse-Proxy eingerichtet werden.||
-|quickHelp|nein|Boolean|false|Aktiviert das QuickHelp-Modul. Dieses zeigt kontextsensitive Hilfe für die verfügbaren Funktionen an (bisher verfügbar für: Themenbaum und Suche).|`true`|
+|[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Strecke / Fläche messen (MeasureTool)).||
 |portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
-|restConf|ja|String||Pfad zur [rest-services.json](rest-services.json.md), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-fhhnet.json"`|
+|restConf|ja|String||Pfad zur [rest-services.json](rest-services.json.md), die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten rechts auf der Karte angezeigt wird.|`true`|
 |simpleMap|nein|Boolean|false|Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
@@ -45,6 +45,12 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[alerting](#markdown-header-alerting)|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 
 ******
+## quickHelp ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|imgPath|nein|String|`"/"`|Gibt den Pfad (relativ oder absolut) zu einem Dateiordner an, in dem sich die Bilder für die Quickhelp befinden.|
+******
+
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -52,6 +58,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 ******
+
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -183,7 +190,7 @@ tree: {
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|[imgLink(@deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
+|[imgLink(Deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
 |wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben..|
@@ -198,6 +205,7 @@ zoomtofeature: {
 }
 ```
 ********
+
 ## cameraParameter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -205,6 +213,7 @@ zoomtofeature: {
 |tilt|nein|Number||Tilt der Kamera in Radians.|
 |altitude|nein|Number||Höhe der Kamera in m.|
 ********
+
 ## cesiumParameter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -216,8 +225,8 @@ zoomtofeature: {
 
 
 [fog]: https://cesiumjs.org/Cesium/Build/Documentation/Fog.html
-
 ********
+
 ## alerting ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|

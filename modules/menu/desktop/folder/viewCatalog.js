@@ -12,7 +12,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         "click .header > .glyphicon, .header > .control-label": "toggleIsExpanded",
         // "click .header > .glyphicon, .header > .control-label": "toggleCatalogs",
         "click .Baselayer .catalog_buttons .glyphicon-question-sign": function () {
-            Radio.trigger("Quickhelp", "showWindowHelp", "tree");
+            Radio.trigger("QuickHelp", "showWindowHelp", "tree");
         },
         "click .glyphicon-adjust": "toggleBackground",
         "click .rotate-pin": "unfixTree",
@@ -42,7 +42,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @fires FolderCatalogView#toggleBackground
      * @fires FolderCatalogView#unfixTree
      * @fires FolderCatalogView#fixTree
-     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires MapView#RadioTriggerMapViewToggleBackground
      * @fires Map#RadioRequestMapGetMapMode
      * @fires Parser#RadioRequestParserGetTreeType
