@@ -1,19 +1,4 @@
 const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype */{
-    defaults: {
-        imgPath: "/",
-        searchbarAllgemeines1: "allgemein.png",
-        searchbarAllgemeines2: "allgemein_2.png",
-        searchbarAllgemeines3: "allgemein_3.png",
-        searchbarFlurstueckssuche: "allgemein_4.png",
-        aufbau1: "themen.png",
-        aufbau2: "themen_2.png",
-        statistikFlaecheNiemeier: "Statistik_Flaeche_Niemeier.png",
-        statistikStreckeUniErlangen: "Statistik_Strecke_UniErlangen.png",
-        utmStreifen: "UTM_Streifen.png",
-        utmVerzerrung: "UTM_Verzerrung.png",
-        utmFormeln: "UTM_Formeln.png"
-    },
-
     /**
      * @class QuickHelpModel
      * @extends Backbone.Model
@@ -33,11 +18,20 @@ const QuickHelpModel = Backbone.Model.extend(/** @lends QuickHelpModel.prototype
      * @property {String} utmFormeln="UTM_Formeln.png" "todo"
      * @param {boolean | object} attr Configuration
      */
-    // initialize: function (attr) {
-    //     if (_.isObject(attr) && _.has(attr, "imgPath")) {
-    //         this.setImgPath(attr.imgPath);
-    //     }
-    // },
+    defaults: {
+        imgPath: "/",
+        searchbarAllgemeines1: "allgemein.png",
+        searchbarAllgemeines2: "allgemein_2.png",
+        searchbarAllgemeines3: "allgemein_3.png",
+        searchbarFlurstueckssuche: "allgemein_4.png",
+        aufbau1: "themen.png",
+        aufbau2: "themen_2.png",
+        statistikFlaecheNiemeier: "Statistik_Flaeche_Niemeier.png",
+        statistikStreckeUniErlangen: "Statistik_Strecke_UniErlangen.png",
+        utmStreifen: "UTM_Streifen.png",
+        utmVerzerrung: "UTM_Verzerrung.png",
+        utmFormeln: "UTM_Formeln.png"
+    },
 
     /**
     * setter for imgPath
