@@ -42,7 +42,7 @@ describe("modules/searchbar/gdi", function () {
     });
     describe("createQuery", function () {
         var searchString = "festge",
-            result = ""
+            result = "";
 
         it("the query should be an object", function () {
             result = model.createQuery(searchString, config.searchBar.gdi);
