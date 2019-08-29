@@ -49,12 +49,6 @@
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
             "name": "im Verfahren"
-          },
-          {
-            "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
-            "typeName": "app:KitaEinrichtungen",
-            "propertyNames": ["app:Name"],
-            "name": "Kita"
           }
         ]
       },
