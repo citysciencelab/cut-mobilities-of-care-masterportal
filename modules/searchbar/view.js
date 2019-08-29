@@ -7,7 +7,7 @@ import SpecialWFSModel from "./specialWFS/model";
 import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
-import OSMModel from "./OSM/model";
+import OSMModel from "./osm/model";
 import GdiModel from "./gdi/model";
 import Searchbar from "./model";
 
@@ -41,6 +41,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "click .form-control-feedback": "deleteSearchString",
         "click .btn-search": "searchAll",
         "click .list-group-item.hit": "hitSelected",
+        "touchstart .list-group-item.hit": "hitSelected",
         "click .list-group-item.results": "renderHitList",
         "mouseover .list-group-item.hit": "showMarker",
         "mouseleave .list-group-item.hit": "hideMarker",

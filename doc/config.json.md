@@ -1413,7 +1413,7 @@ Definiert einen Layer für den Layerslider.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Das virtualcity Tool bietet die Möglichkeit die Planungen von einem virtualcityPLANNER Dienst im Masterportal anzuzeigen. 
+Das virtualcity Tool bietet die Möglichkeit die Planungen von einem virtualcityPLANNER Dienst im Masterportal anzuzeigen.
 Die Planungen müssen im virtualcityPLANNER auf Öffentlich gesetzt sein, dann können sie über dieses Tool angezeigt werden
 
 
@@ -1765,7 +1765,6 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 |maxScale|nein|String||Wert aus [services.json](services.json.md). Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |minScale|nein|String||Wert aus [services.json](services.json.md). Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
-|isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
 
 **Beispiel**
@@ -1811,7 +1810,6 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für [WMS](#markd
 |maxScale|nein|String||Wert aus [services.json](services.json.md). Maximaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |minScale|nein|String||Wert aus [services.json](services.json.md). Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
-|isVisibleInTree|nein|Boolean|true|Anzeige ob Layer im Themenbaum sichtbar ist.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
 
 **Beispiel mit einer Id**
@@ -1864,7 +1862,6 @@ Hier werde WMS typische Attribute aufgelistet.
     "maxScale": "100000",
     "minScale": "1000",
     "autoRefresh": "10000",
-    "isVisibleInTree": true,
     "isNeverVisibleInTree": false,
     "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
@@ -1939,7 +1936,6 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
     "maxScale": "100000",
     "minScale": "1000",
     "autoRefresh": "10000",
-    "isVisibleInTree": true,
     "isNeverVisibleInTree": false,
     "clusterDistance": 60,
     "extendedFilter": true,

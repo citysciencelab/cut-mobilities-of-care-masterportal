@@ -12,7 +12,8 @@ const SensorLayer = Layer.extend({
         {
             epsg: "EPSG:4326",
             utc: "+1",
-            version: "1.0"
+            version: "1.0",
+            useProxyURL: false
         }),
 
     initialize: function () {
@@ -78,7 +79,7 @@ const SensorLayer = Layer.extend({
         var sensorData,
             features,
             isClustered = this.has("clusterDistance"),
-            url = Radio.request("Util", "getProxyURL", this.get("url")),
+            url = this.get("useProxyURL") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
             epsg = this.get("epsg");

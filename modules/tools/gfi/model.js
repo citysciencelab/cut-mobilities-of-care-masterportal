@@ -1,4 +1,5 @@
 import Overlay from "ol/Overlay.js";
+import {getCenter} from "ol/extent.js";
 import ThemeList from "./themes/list";
 import DesktopDetachedView from "./desktop/detached/view";
 import TableView from "./table/view";
@@ -204,22 +205,30 @@ const Gfi = Tool.extend({
             wmsGFIParams = [],
             GFIParams3d = [],
             unionParams = [],
-            coordinate = [];
+            coordinate = [],
+            feature;
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
-        // für detached MapMarker
-        const feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-            return feat;
-        });
 
+        // für detached MapMarker
+        if (evt.hasOwnProperty("pixel")) {
+            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                return feat;
+            });
+        }
+
+        // Derive (center) coordinate with respect to the feature type
         if (feature === null || feature === undefined) {
             coordinate = evt.coordinate;
         }
+        else if ((/polygon/i).test(feature.getGeometry().getType())) {
+            coordinate = getCenter(feature.getGeometry().getExtent());
+        }
         else {
-            coordinate = feature.getGeometry().getCoordinates();
+            coordinate = feature.getGeometry().getFirstCoordinate();
         }
 
         this.setCoordinate(coordinate);

@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import Model from "@modules/tools/filter/query/source/wfs.js";
 
-describe("filter/query/source/wfs", function () {
+describe("modules/tools/filter/query/source/wfs", function () {
     var model;
 
     beforeEach(function () {
@@ -21,6 +21,11 @@ describe("filter/query/source/wfs", function () {
                                 <extension base="gml:AbstractFeatureType">
                                     <sequence>
                                         <element name="kh_nummer" minOccurs="0" type="string"/>
+                                        <element name="kh_id">
+                                            <simpleType>
+                                                <restriction base="integer" />
+                                            </simpleType>
+                                        </element>
                                         <element name="anzahl_plaetze_teilstationaer" minOccurs="0" type="integer"/>
                                     </sequence>
                                 </extension>
@@ -35,6 +40,10 @@ describe("filter/query/source/wfs", function () {
                     {
                         name: "kh_nummer",
                         type: "string"
+                    },
+                    {
+                        name: "kh_id",
+                        type: "integer"
                     },
                     {
                         name: "anzahl_plaetze_teilstationaer",
@@ -57,6 +66,11 @@ describe("filter/query/source/wfs", function () {
                                 <xsd:extension base="gml:AbstractFeatureType">
                                     <xsd:sequence>
                                         <xsd:element maxOccurs="1" minOccurs="0" name="OBJECTID" nillable="true" type="xsd:long"/>
+                                        <xsd:element maxOccurs="1" minOccurs="0" name="NAME">
+                                            <xsd:simpleType>
+                                                <xsd:restriction base="xsd:string" />
+                                            </xsd:simpleType>
+                                        </xsd:element>
                                         <xsd:element maxOccurs="1" minOccurs="0" name="UUID" nillable="true" type="xsd:string"/>
                                     </xsd:sequence>
                                 </xsd:extension>
@@ -71,6 +85,10 @@ describe("filter/query/source/wfs", function () {
                     {
                         name: "OBJECTID",
                         type: "decimal"
+                    },
+                    {
+                        name: "NAME",
+                        type: "string"
                     },
                     {
                         name: "UUID",
@@ -88,8 +106,9 @@ describe("filter/query/source/wfs", function () {
                 xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:gml=\"http://www.opengis.net/gml\">" +
                     "<xsd:import namespace=\"http://www.opengis.net/gml\" schemaLocation=\"http://localhost:8080/geoserver/schemas/gml/2.1.2/feature.xsd\"/><xsd:complexType " +
                     "name=\"hfpType\"><xsd:complexContent><xsd:extension base=\"gml:AbstractFeatureType\"><xsd:sequence><xsd:element maxOccurs=\"1\" minOccurs=\"0\" " +
-                    "name=\"OBJECTID\" nillable=\"true\" type=\"xsd:short\"/><xsd:element maxOccurs=\"1\" minOccurs=\"0\" name=\"UUID\" nillable=\"true\" type=\"xsd:string\"/>" +
-                    "</xsd:sequence></xsd:extension></xsd:complexContent></xsd:complexType></xsd:schema>",
+                    "name=\"OBJECTID\" nillable=\"true\" type=\"xsd:short\"/><xsd:element maxOccurs=\"1\" minOccurs=\"0\" name=\"NAME\"><xsd:simpleType><xsd:restriction base=\"xml:string\"/>" +
+                    "</xsd:simpleType></xsd:element><xsd:element maxOccurs=\"1\" minOccurs=\"0\" name=\"UUID\" nillable=\"true\" type=\"xsd:string\"/></xsd:sequence></xsd:extension>" +
+                    "</xsd:complexContent></xsd:complexType></xsd:schema>",
                 xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
             model.createSnippets = function (featureAttributesMap) {
@@ -98,6 +117,10 @@ describe("filter/query/source/wfs", function () {
                     {
                         name: "OBJECTID",
                         type: "decimal"
+                    },
+                    {
+                        name: "NAME",
+                        type: "string"
                     },
                     {
                         name: "UUID",

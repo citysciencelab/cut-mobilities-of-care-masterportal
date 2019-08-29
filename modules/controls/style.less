@@ -12,33 +12,30 @@
 /***** Attributions *****/
 /***** OrientationControl *****/
 /***** OrientationControl -> geolocation_marker *****/
+
 .controls-row-right {
     position: relative;
     margin-right: 12px;
+    min-height:40px;
 }
 .controls-row-left {
     position: relative;
     margin-left: 0px;
 }
+
 .controls-view {
     top: 0;
-    >div {
-        >.row {
-            >div {
-                >.glyphicon {
-                    color: @color_1;
-                    background-color: @background_color_1;
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-                    &:hover {
-                        cursor: pointer;
-                        opacity: 0.7;
-                    }
-                }
-                >.toggleButtonPressed {
-                    background-color: @background_color_2;
-                }
-            }
+    .glyphicon {
+        color: @color_1;
+        background-color: @background_color_1;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        &:hover {
+            cursor: pointer;
+            opacity: 0.7;
         }
+    }
+    >.toggleButtonPressed {
+        background-color: @background_color_2;
     }
 }
 .toggleButton {
@@ -75,16 +72,14 @@
 .attributions-div {
     padding: 5px;
     background-color: @background_color_3;
-    margin-right: 34px;
+    margin-right: 40px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     border: 1px solid rgb(229, 229, 229);
-    margin-bottom: 20px;
 }
 .attributions-button {
     position: absolute;
     right: 0;
     bottom: 0;
-    margin-bottom: 20px;
 }
 .attributions-view {
     dt {
@@ -135,19 +130,23 @@
 }
 .control-view-top-right {
     position: absolute;
-    right: 0;
+    right: 16px;
     top: 0;
 }
 .control-view-bottom-right {
     position: absolute;
-    right: 3px;
-    bottom: 0;
+    right: 30px;
+    bottom: 30px;
+    .row.controls-row-right {
+        margin:10px 0 0 0;
+    }
 }
 .control-view-bottom-left {
     position: absolute;
     left: 0;
     bottom: 0;
 }
+
 
 /***** Orienation3D *****/
 .nav-control{
