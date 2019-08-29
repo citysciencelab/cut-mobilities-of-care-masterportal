@@ -84,7 +84,6 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
 
                     if (_.isArray(data)) {
                         data.forEach((planningData)=> {
-                            // eslint-disable-next-line no-underscore-dangle
                             const planning = new Planning(Object.assign(planningData, {url: service.get("url"), id: planningData._id}));
 
                             this.get("planningCache")[planning.id] = planning;

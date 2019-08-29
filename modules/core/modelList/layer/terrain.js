@@ -67,8 +67,8 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @returns {void}
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     registerInteractionMapViewListeners: function () {
+        // do nothing
     },
 
     /**
@@ -76,8 +76,8 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @return {void} -
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     updateLayerTransparency: function () {
+        // do nothing
     },
 
 
@@ -101,12 +101,10 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
 
     /**
      * Setter for the layer visibility
-     * @param {Boolean} value new visibility value
      * @returns {void} -
      * @override
      */
-    // eslint-disable-next-line no-unused-vars
-    setVisible: function (value) {
+    setVisible: function () {
         this.toggleLayerOnMap();
     },
 

@@ -135,7 +135,6 @@ describe("tools/virtualcity/VirtualcityModel", function () {
             return virtualcity.getPlannings().then(()=> {
                 expect(server.requests).to.have.length(1);
             }).then(()=> {
-                // eslint-disable-next-line max-nested-callbacks
                 return virtualcity.getPlannings().then(()=> {
                     expect(server.requests).to.have.length(1);
                 });

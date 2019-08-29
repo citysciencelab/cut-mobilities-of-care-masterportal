@@ -151,12 +151,9 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
         }
 
         // the provider is always non-null if we got this far
-        /* eslint-disable one-var */
-
         layerOptions = {
             "show": false
         };
-        /* eslint-enable one-var */
         cesiumLayer = new Cesium.ImageryLayer(provider, layerOptions);
 
         return cesiumLayer ? [cesiumLayer] : null;
