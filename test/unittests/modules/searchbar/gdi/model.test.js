@@ -48,13 +48,15 @@ describe("modules/searchbar/gdi", function () {
             result = model.createQuery(searchString, config.searchBar.gdi);
             expect(result).to.be.a("object");
         });
-        it("the query's parameter should be object ", function () {
-            result = model.createQuery(searchString, config.searchBar.gdi);
-            expect(result.params).to.be.a("object");
-        });
-        it("the query should consist searched string", function () {
-            result = model.createQuery(searchString, config.searchBar.gdi);
+        it("the query should contain the searched string", function () {
             expect(result.params.query_string).to.equal("festge");
+        });
+        it("the query should contain orrect params", function () {
+            expect(result).to.deep.include({
+                "params": {
+                    "query_string": "festge"
+                }
+            });
         });
     });
 });
