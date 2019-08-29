@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import {expect} from "chai";
 import Planning from "@modules/tools/virtualcity/planning.js";
 import TilesetLayer from "@modules/core/modelList/layer/tileset.js";

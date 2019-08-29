@@ -132,8 +132,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @returns {void}
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     registerInteractionMapViewListeners: function () {
+        // do nothing
     },
 
     /**
@@ -141,8 +141,8 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @return {void} -
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     updateLayerTransparency: function () {
+        // do nothing
     },
 
 

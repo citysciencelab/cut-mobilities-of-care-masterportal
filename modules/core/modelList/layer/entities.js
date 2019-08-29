@@ -148,8 +148,8 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @returns {void}
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     registerInteractionMapViewListeners: function () {
+        // do nothing
     },
 
     /**
@@ -157,8 +157,8 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @return {void} -
      * @override
      */
-    // eslint-disable-next-line no-empty-function
     updateLayerTransparency: function () {
+        // do nothing
     },
 
 

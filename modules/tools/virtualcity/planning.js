@@ -73,7 +73,6 @@ const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
                         Radio.trigger("Map", "addLayerOnTop", imageLayer.get("layer"));
                     }
                     else if (planningObjectData.type === "featureStore") {
-                        // eslint-disable-next-line no-underscore-dangle
                         promises.push(axios.get(`${this.get("url")}/planning/feature-store/get-layer?planningId=${this.get("id")}&planningObjectId=${planningObjectData._id}`)
                             .then((response) => {
                                 const data = response.data;

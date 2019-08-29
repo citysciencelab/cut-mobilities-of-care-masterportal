@@ -93,7 +93,6 @@ export function createDummyCesium3DTileFeature (properties = {}, tileset) {
         content.tileset = tileset;
     }
 
-    // eslint-disable-next-line no-underscore-dangle
     dummy._content = content;
     return dummy;
 }

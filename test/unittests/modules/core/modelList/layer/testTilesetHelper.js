@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import {expect} from "chai";
 import {hexToOlColor, parseColor, getStringColor, getDefaultCondition, setCesiumStyleColor, setCesiumStyleImage, setCesiumStyleText} from "@modules/core/modelList/layer/tilesetHelper.js";
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import VirtualCityModel from "@modules/tools/virtualcity/model.js";
 import Planning from "@modules/tools/virtualcity/planning.js";
 import {expect} from "chai";
