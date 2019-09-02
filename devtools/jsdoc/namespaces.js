@@ -103,7 +103,7 @@
  */
 
 /**
- * @namespace Quickhelp
+ * @namespace QuickHelp
  * @description fooBar
  */
 

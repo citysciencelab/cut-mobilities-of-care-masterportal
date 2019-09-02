@@ -1080,40 +1080,40 @@
  * @description todo
  */
 
-/** -------------------- FOLDER CATALOG VIEW -------------------- */
+/** -------------------- MENU.DESKTOP.FOLDER -------------------- */
 
 /**
- * @event FolderCatalogView#changeIsExpanded
+ * @event Menu.Desktop.Folder#changeIsExpanded
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#isVisibleInTree
+ * @event Menu.Desktop.Folder#isVisibleInTree
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#toggleIsExpanded
+ * @event Menu.Desktop.Folder#toggleIsExpanded
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#setSelection
+ * @event Menu.Desktop.Folder#setSelection
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#toggleBackground
+ * @event Menu.Desktop.Folder#toggleBackground
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#unfixTree
+ * @event Menu.Desktop.Folder#unfixTree
  * @description todo
  */
 
 /**
- * @event FolderCatalogView#fixTree
+ * @event Menu.Desktop.Folder#fixTree
  * @description todo
  */
 
@@ -1328,21 +1328,21 @@
 /** -------------------- QUICKHELP -------------------- */
 
 /**
- * @event Quickhelp#RadioTriggerQuickhelpShowWindowHelp
- * @description is triggered by Quickhelp
- * @param {String} topic topic for quickhelp to show
- * @example Radio.trigger("Quickhelp", "showWindowHelp", topic);
+ * @event QuickHelp#RadioTriggerQuickHelpShowWindowHelp
+ * @description is triggered by QuickHelp
+ * @param {String} topic topic for quickHelp to show
+ * @example Radio.trigger("QuickHelp", "showWindowHelp", topic);
  */
 
 /**
- * @event Quickhelp#RadioRequestQuickhelpIsSet
+ * @event QuickHelp#RadioRequestQuickHelpIsSet
  * @description Returns isSet value
- * @example Radio.request("Quickhelp", "isSet");
+ * @example Radio.request("QuickHelp", "isSet");
  */
 
 /**
- * @event Quickhelp#render
- * @description Triggered when the Quickhelp View has to render.
+ * @event QuickHelp#render
+ * @description Triggered when the QuickHelp View has to render.
  * @example this.trigger("render")
  */
 /** -------------------- WINDOW -------------------- */

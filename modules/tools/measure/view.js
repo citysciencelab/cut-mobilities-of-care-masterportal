@@ -10,7 +10,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
         "click button.table-tool-measure-delete": "deleteFeatures",
         "click button.measure-delete": "deleteFeatures",
         "click .form-horizontal > .form-group-sm > .col-sm-12 > .glyphicon-question-sign": function () {
-            Radio.trigger("Quickhelp", "showWindowHelp", "measure");
+            Radio.trigger("QuickHelp", "showWindowHelp", "measure");
         }
     },
     /**
@@ -18,7 +18,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
      * @extends Backbone.View
      * @memberof Tools.Measure
      * @constructs
-     * @fires Quickhelp#RadioTriggerQuickhelpShowWindowHelp
+     * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires Map#RadioTriggerMapRemoveInteraction
      */
     initialize: function () {

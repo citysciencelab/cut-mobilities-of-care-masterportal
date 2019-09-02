@@ -104,14 +104,11 @@
 a {
     &:visited {
         text-decoration: none;
-        text-decoration: none;
     }
     &:hover {
         text-decoration: none;
-        text-decoration: none;
     }
     &:active {
-        text-decoration: none;
         text-decoration: none;
     }
 }
@@ -201,10 +198,8 @@ a {
     height: 40px;
 }
 .table-nav-layers-panel {
-    background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
-    box-shadow: none;
     background-color: @background_color_1;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -218,10 +213,8 @@ a {
 }
 .table-nav-cat-panel {
     font-size: 17px;
-    background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
-    box-shadow: none;
     background-color: @background_color_1;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -295,9 +288,6 @@ a {
         background-color: @background_color_3;
         border-radius: 12px;
     }
-    &:before {
-        display: none;
-    }
     .icon-cross1 {
         &:before {
             display: block;
@@ -307,6 +297,9 @@ a {
             font-size: 18px;
             }
         }
+}
+.table-layer-list>.icon-burgermenu_alt::before{
+    display: none;
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
@@ -318,7 +311,7 @@ a {
     }
     .icon-cross1 {
         &:before {
-        display: none;
+            display: none;
         }
     }
 }

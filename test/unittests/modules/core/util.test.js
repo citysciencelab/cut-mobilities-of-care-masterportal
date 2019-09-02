@@ -177,6 +177,25 @@ describe("core/Util", function () {
             proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
             expect(proxyURL).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
         });
+        it("shouldn't transform url for local ressources I", function () {
+            var proxyURL;
 
+            model = new Model({
+                proxyHost: "https://test-proxy.example.com"
+            });
+
+            proxyURL = model.getProxyURL("http://localhost/test.json");
+            expect(proxyURL).to.be.equal("http://localhost/test.json");
+        });
+        it("shouldn't transform url for local ressources II", function () {
+            var proxyURL;
+
+            model = new Model({
+                proxyHost: "https://test-proxy.example.com"
+            });
+
+            proxyURL = model.getProxyURL("./test.json");
+            expect(proxyURL).to.be.equal("./test.json");
+        });
     });
 });
