@@ -344,6 +344,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         };
 
         this.set("projection", proj);
+        Radio.trigger("CRS", "addAliasForWFSFromGoeserver", epsgCode);
     },
 
     /**
