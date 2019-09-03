@@ -20,10 +20,27 @@ const CRS = Backbone.Model.extend({
             "transform": this.transform
         }, this);
 
+        channel.on({
+            "addAliasForWFSFromGoeserver": this.addAliasForWFSFromGoeserver
+        }, this);
+
         if (Config.namedProjections) {
             this.setNamedProjections(Config.namedProjections);
         }
         this.assumeProjections();
+    },
+
+    /**
+     * Creates an alias for the srsName.
+     * This is necessary for WFS from geoserver.org
+     * @param {String} epsgCode used epsg code in the mapView
+     * @returns {void}
+     */
+    addAliasForWFSFromGoeserver: function (epsgCode) {
+        const epsgCodeNumber = epsgCode.split(":")[1];
+
+        proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
+        register(proj4);
     },
 
     assumeProjections: function () {
