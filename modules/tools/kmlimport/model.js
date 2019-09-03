@@ -162,8 +162,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      */
     convertHexColorToRgbArray: function (hexColor) {
         let colorRgbArray = [];
+        const hexColor8 = hexColor.length === 6 ? "FF" + hexColor : hexColor;
 
-        colorRgbArray = hexColor.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
+        colorRgbArray = hexColor8.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
         colorRgbArray = colorRgbArray.splice(1, 4);
         colorRgbArray = colorRgbArray.map(hexValue => parseInt(hexValue, 16));
         colorRgbArray[0] = Math.round(colorRgbArray[0] / 255 * 100) / 100;
