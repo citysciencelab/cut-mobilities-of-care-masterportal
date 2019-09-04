@@ -41,7 +41,7 @@
       },
       "gdi":{
 		"minChars": 3,
-		"serviceId": "elastic"
+		"serviceId": "elastic_qs"
 	  },
      "visibleVector": {
         "gfiOnClick": false
