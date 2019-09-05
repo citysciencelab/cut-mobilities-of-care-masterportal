@@ -156,7 +156,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
                     Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
                 }
-                Radio.trigger("ModelList", "refreshLightTree");
+                // Radio.trigger("ModelList", "refreshLightTree");
                 break;
             }
             case "SearchByCoord": {
