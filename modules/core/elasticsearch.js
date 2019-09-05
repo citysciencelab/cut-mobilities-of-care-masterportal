@@ -30,7 +30,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
-            type: "POST",
+            type: "GET",
             data: searchBody,
             success: function (response) {
                 // handling response
@@ -80,8 +80,8 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
         if (!_.isUndefined(serviceUrlCheck)) {
-            searchUrl = serviceUrl;
-            searchBody = JSON.stringify(query);
+            searchUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
+            searchBody = "source=" + JSON.stringify(query) + "&source_content_type=application/json";
         }
         else if (_.isUndefined(serviceUrlCheck)) {
             result.status = "error";
@@ -100,7 +100,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             this.polishAjax(serviceId);
         }
         else {
-            this.ajaxSend(serviceId, searchBody, serviceUrl, result);
+            this.ajaxSend(serviceId, searchBody, searchUrl, result);
         }
         return result;
     }
