@@ -74,15 +74,13 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         var result = {},
             searchUrl,
             searchBody,
-            serviceUrl,
             serviceUrlCheck,
             ajax = this.get("ajaxRequests");
 
         serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
         if (!_.isUndefined(serviceUrlCheck)) {
-            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
-            searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
+            searchUrl = serviceUrl;
             searchBody = JSON.stringify(query);
         }
         else if (_.isUndefined(serviceUrlCheck)) {
@@ -102,7 +100,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             this.polishAjax(serviceId);
         }
         else {
-            this.ajaxSend(serviceId, searchBody, searchUrl, result);
+            this.ajaxSend(serviceId, searchBody, serviceUrl, result);
         }
         return result;
     }
