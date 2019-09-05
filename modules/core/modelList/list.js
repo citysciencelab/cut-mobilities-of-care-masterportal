@@ -837,14 +837,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
     /**
     * Scrolls to layer in layerTree
-    * @param {String} overlayername Name of Layer in "Overlayer" to be scrolled to
+    * @param {String} overlayerName Name of Layer in "Overlayer" to be scrolled to
     * @return {void}
     */
-    scrollToLayer: function (overlayername) {
+    scrollToLayer: function (overlayerName) {
         const $Overlayer = $("#Overlayer"),
             overlayOffsetToTop = $Overlayer.offset().top,
             overlayerHeight = $Overlayer.height(),
-            element = _.findWhere($Overlayer.find("span"), {title: overlayername}),
+            element = _.findWhere($Overlayer.find("span"), {title: overlayerName}),
             elementOffsetFromTop = element ? $(element).offset().top : null,
             targetPosition = overlayOffsetToTop + overlayerHeight / 2,
             offset = elementOffsetFromTop - targetPosition;
