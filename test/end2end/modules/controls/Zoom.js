@@ -37,7 +37,6 @@ function ZoomTests (driver) {
 
         test.it("should have minusbutton", function () {
 
-
             minus = driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
 
 
