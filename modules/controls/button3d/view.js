@@ -64,13 +64,16 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     change: function (map) {
         if (map === "3D") {
             this.$("#button3D").addClass("toggleButtonPressed");
+            this.$("#3d_titel").text("Ansicht ausschalten");
         }
         else {
             this.$("#button3D").removeClass("toggleButtonPressed");
+            this.$("#3d_titel").text("Ansicht einschalten");
         }
     },
     /**
      * Render Function
+     * @fires Core#RadioRequestMapIsMap3d
      * @returns {Button3dView} - Returns itself
      */
     render: function () {
@@ -91,9 +94,9 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         if (Radio.request("Map", "isMap3d")) {
             this.$("#3d-ansicht").addClass("toggleButtonPressed");
         }
-
         return this;
     },
+
     /**
      * Shows the map in 3D-mode if 3d button is activated.
      * Shows the map in 2D-mode if the 3d button is deactivated.
@@ -101,13 +104,16 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires Core#RadioRequestMapIsMap3d
      * @return {void}
      */
     mapChange: function () {
         const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
-            activeTools = Radio.request("Tool", "getCollection").where({"type": "tool", "isActive": true});
+            modelCollection = Radio.request("Tool", "getCollection"),
+            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [];
 
         if (Radio.request("Map", "isMap3d")) {
             this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);

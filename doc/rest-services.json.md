@@ -23,6 +23,7 @@ In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom
 5.	Gazetteer URL
 6.	WPS
 7.	Email Services
+8.  virtualcityPLANNER Service 
 
 Häufig unterscheiden sich die zu verwendenden URLs zwischen Intranet und Internet-Nutzung. Aus diesem Grund erscheint meist das Vorhalten zweier identischer Dateien sinnvoll, die sich nur hinsichtlich der Webservice-URLs unterscheiden.
 Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
@@ -56,4 +57,26 @@ Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
     "typ" : "ID"
   }
 ]
+```
+
+**virtualcityPLANNER Service**
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|id|ja|String||String als eindeutiger Identifikator dieses Eintrags in der rest-services.json.|`"1"`|
+|name|ja|String||Die Bezeichung des Services.|`"virtualcityPLANNER 1"`|
+|typ|ja|String||Der Typ des Services.|`"virtualcityPLANNER"`|
+|url|ja|String||Die URL des Webservices.|`"https://devel.virtualcityplanner.de"`|
+|scenarioId|ja|String||Die ScenarioId.|`"BjtEA4zwBEiZeG2CX"`|
+|projectId|ja|String||Die ProjektId.|`"2wbbuKTSqojZMBooz"`|
+
+```json
+  {
+    "id" : "virtualcityPLANNER",
+    "name" : "virtualcityPLANNER",
+    "url": "https://devel.virtualcityplanner.de",
+    "projectId": "2wbbuKTSqojZMBooz",
+    "typ": "virtualcityPLANNER",
+    "scenarioId": "BjtEA4zwBEiZeG2CX"
+  }
 ```

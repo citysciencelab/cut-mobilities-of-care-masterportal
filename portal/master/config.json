@@ -40,15 +40,15 @@
         "classes": "place,highway,building,shop,historic,leisure,county"
       },
       "gdi":{
-		"minChars": 3,
-		"serviceId": "elastic",
+		    "minChars": 3,
+        "serviceId": "elastic_qs",
         "queryObject": {
           "id": "query",
           "params": {
             "query_string": "%%searchString%%"
           }
         }
-	  },
+	    },
      "visibleVector": {
         "gfiOnClick": false
       },
@@ -404,7 +404,8 @@
       "overviewMap":
       {
         "resolution": 611.4974492763076,
-        "layerId": "452"
+        "layerId": "452",
+        "isInitOpen": false
       },
       "mousePosition": true,
       "button3d": true,

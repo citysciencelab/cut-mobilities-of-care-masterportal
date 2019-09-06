@@ -4,33 +4,40 @@ const CategoryView = Backbone.View.extend({
     events: {
         "click #table-nav-cat-panel-toggler": "toggleCategoryMenu"
     },
+    /**
+     * @listens Map#RadioTriggerMapChange
+     * @return {void} -
+     */
     initialize: function () {
-        var channel = Radio.channel("Filter");
-
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementCategory": this.hideCategoryMenu
         });
 
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mapMode) {
+                if (mapMode === "3D" || mapMode === "Oblique") {
+                    this.disableCategoryButton();
+                }
+                else if (mapMode === "2D") {
+                    this.enableCategoryButton();
+                }
+            }
+        });
         this.$el.on("show.bs.collapse", function () {
             Radio.request("TableMenu", "setActiveElement", "Category");
         });
 
-        channel.on({
-            "disable": this.disableCategoryButton,
-            "enable": this.enableCategoryButton
-        }, this);
-
         this.render();
     },
     render: function () {
-        this.$el.html(this.template());
+        $("#table-nav").append(this.$el.html(this.template()));
         if (Radio.request("TableMenu", "getActiveElement") === "Category") {
             this.$(".table-nav-cat-panel").collapse("show");
         }
         return this;
     },
     id: "table-category-list",
-    className: "table-category-list table-nav",
+    className: "table-category-list table-nav col-md-2",
     template: _.template(Template),
     toggleCategoryMenu: function () {
         if (this.$(".table-nav-cat-panel").hasClass("in")) {

@@ -19,11 +19,11 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires Map#RadioTriggerMapDeactivateMap3d
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      */
     initialize: function () {
         var channel = Radio.channel("Map"),
@@ -82,7 +82,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
     },
     /**
      * Render Function
-     * @fires Map#RadioRequestObliqueMapIsActive
+     * @fires Core#RadioRequestObliqueMapIsActive
      * @returns {ButtonObliqueView} - Returns itself
      */
     renderToToolbar: function () {
@@ -98,11 +98,11 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @fires ObliqueMap#RadioTriggerObliqueMapDeactivate
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Map#RadioRequestMapIsMap3d
-     * @fires Map#RadioTriggerMapDeactivateMap3d
+     * @fires Core#RadioRequestMapIsMap3d
+     * @fires Core#RadioTriggerMapDeactivateMap3d
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
-     * @listens Map#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @returns {void}
      */
     mapChange: function () {

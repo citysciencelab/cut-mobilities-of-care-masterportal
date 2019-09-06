@@ -2,13 +2,14 @@ import {expect} from "chai";
 import Model from "@modules/tools/shadow/model.js";
 import moment from "moment";
 
-let model;
-
-before(function () {
-    model = new Model();
-});
 
 describe("tools/shadow/model", function () {
+    let model;
+
+    before(function () {
+        model = new Model();
+    });
+
     describe("function for combineTimeAndDate", function () {
         it("should return the new timestamp", function () {
             expect(model.combineTimeAndDate(1558692000000, 1558648800000)).to.equal(1558692000000);

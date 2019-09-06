@@ -47,7 +47,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else if (this.get("typ") === "Cesium3DTileFeature") {
-            this.getCesium3DTileFeatureGfi();
+            this.get3DFeatureGfi();
+        }
+        else if (this.get("typ") === "Entities3D") {
+            this.get3DFeatureGfi();
         }
         else {
             this.getVectorGfi();
@@ -280,10 +283,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * todo add jsdoc info about this function
+     * adds the gfiContent for a 3D Cesium TileFeature or a 3d Cesium Entity.
+     * The Attributes are saved directly at the model in the attributes property
      * @returns {void}
      */
-    getCesium3DTileFeatureGfi: function () {
+    get3DFeatureGfi: function () {
         var gfiContent;
 
         gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));

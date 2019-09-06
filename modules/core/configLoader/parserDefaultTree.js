@@ -98,7 +98,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
             // Unterscheidung nach Overlay und Baselayer
             typeGroup = _.groupBy(layerList, function (layer) {
-                if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D") {
+                if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D" || layer.typ === "Entities3D") {
                     return "layer3d";
                 }
                 else if (layer.typ === "Oblique") {

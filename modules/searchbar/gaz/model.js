@@ -88,11 +88,7 @@ const GazetteerModel = Backbone.Model.extend({
                 this.set("onlyOneStreetName", "");
                 this.setTypeOfRequest("searchStreets");
 
-                // Dirty hack, because if user types too fast, GAZ search would attempt to search ONLY for
-                // street names BUT WITH your given number resulting in 0 hits, never executing the second
-                // step of the search
                 searchString = searchString.replace(/\s*$/, "");
-                searchString = searchString.replace(/\s*\d+.*$/, "");
 
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, this.get("typeOfRequest"));
             }

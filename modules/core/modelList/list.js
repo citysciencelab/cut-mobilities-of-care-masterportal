@@ -6,6 +6,7 @@ import GROUPLayer from "./layer/group";
 import SensorLayer from "./layer/sensor";
 import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
+import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
@@ -45,6 +46,7 @@ import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerslider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
+import VirtualCityModel from "../../tools/virtualcity/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -70,7 +72,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioTriggerModelListShowModelInTree
      * @listens ModelList#RadioTriggerModelListCloseAllExpandedFolder
      * @listens ModelList#RadioTriggerModelListSetAllDescendantsInvisible
-     * @listens ModelList#RadioTriggerModelListToggleWfsCluster
      * @listens ModelList#RadioTriggerModelListRenderTree
      * @listens ModelList#RadioTriggerModelListToggleDefaultTool
      * @listens ModelList#ChangeIsVisibleInMap
@@ -78,7 +79,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#ChangeIsSelected
      * @listens ModelList#ChangeTransparency
      * @listens ModelList#ChangeSelectionIDX
-     *
      * @fires Map#RadioRequestMapGetMapMode
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires ModelList#RadioTriggerModelListUpdatedSelectedLayerList
@@ -121,7 +121,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "renderTree": function () {
                 this.trigger("renderTree");
             },
-            "toggleWfsCluster": this.toggleWfsCluster,
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree
         }, this);
@@ -130,6 +129,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "change:isVisibleInMap": function () {
                 channel.trigger("updateVisibleInMapList");
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+                // this.sortLayersAndSetIndex();
             },
             "change:isExpanded": function (model) {
                 this.trigger("updateOverlayerView", model);
@@ -159,6 +159,17 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             },
             "change:selectionIDX": function () {
                 channel.trigger("updatedSelectedLayerList", this.where({isSelected: true, type: "layer"}));
+            }
+        });
+
+        this.listenTo(Radio.channel("Map"), {
+            "beforeChange": function (mapMode) {
+                if (mapMode === "3D" || mapMode === "Oblique") {
+                    this.toggleWfsCluster(false);
+                }
+                else if (mapMode === "2D") {
+                    this.toggleWfsCluster(true);
+                }
             }
         });
         this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
@@ -191,6 +202,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.typ === "Terrain3D") {
                 return new TerrainLayer(attrs, options);
+            }
+            else if (attrs.typ === "Entities3D") {
+                return new EntitiesLayer(attrs, options);
             }
             else if (attrs.typ === "TileSet3D") {
                 return new TileSetLayer(attrs, options);
@@ -302,6 +316,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "layerSlider") {
                 return new LayerSliderModel(attrs, options);
+            }
+            else if (attrs.id === "virtualcity") {
+                return new VirtualCityModel(attrs, options);
             }
             return new Tool(attrs, options);
         }
@@ -1037,6 +1054,20 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     refreshLightTree: function () {
         this.trigger("updateLightTree");
+    },
+
+    /**
+     * returns all layers of this collection, which can be sorted like WMS, usw.
+     * @returns {Array<Layer>} list of layers which can be sorted visibly
+     */
+    getIndexedLayers: function () {
+        return this.filter(function (model) {
+            return model.get("type") === "layer" &&
+                model.get("typ") !== "Terrain3D" &&
+                model.get("typ") !== "TileSet3D" &&
+                model.get("typ") !== "Entities3D" &&
+                model.get("typ") !== "Oblique";
+        });
     }
 });
 

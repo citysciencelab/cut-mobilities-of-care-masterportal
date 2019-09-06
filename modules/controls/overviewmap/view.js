@@ -1,10 +1,29 @@
 import OverviewMapModel from "./model";
-import template from "text-loader!./template.html";
+import controlTemplate from "text-loader!./controlTemplate.html";
+import tableTemplate from "text-loader!./tableTemplate.html";
+/**
+ * @member OverviewMapTemplate
+ * @description Template used for the OverviewMap
+ * @memberof Controls.Overviewmap
+ */
 
+/**
+ * @member OverviewMapTemplate
+ * @description tableTemplate used for the OverviewMap in Table View Tools
+ * @memberof Controls.Overviewmap
+ */
 const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototype */{
     events: {
+        /**
+         * used in menu
+         */
+        "click div#mini-map": "toggle",
+        /**
+         * used in control
+         */
         "click div.overviewmap-button": "toggle"
     },
+
     /**
      * @class OverviewMapView
      * @memberOf Controls.Overviewmap
@@ -12,113 +31,79 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @extends Backbone.View
      * @param {Object} el Jquery element to be rendered into.
      * @param {String} id Id of control.
-     * @param {Object} attr Attributes of overviewmap.
-     * @param {String} attr.baseLayer Id of baseLayer
-     * @param {String} attr.resolution Resolution of baseLayer.
-     * @listens Core#RadioTriggerMapChange
-     * @listens Menu#RadioTriggerMenuLoaderReady
+     * @param {Object} config Attributes of overviewmap.
+     * @param {String} config.baseLayer Id of baseLayer
+     * @param {String} config.resolution Resolution of baseLayer.
+     * @param {Boolean} [config.isInitOpen=true] Flag to open map initially or not
      * @constructs
      */
-    initialize: function (el, id, attr) {
-        let layerId;
-        const channel = Radio.channel("Map"),
-            style = Radio.request("Util", "getUiStyle");
+    initialize: function (el, id, config) {
+        const style = Radio.request("Util", "getUiStyle");
 
-        this.setElement(el);
-        this.id = id;
-
-        /**
-         * baselayer
-         * @deprecated in 3.0.0
-         */
-        if (attr.hasOwnProperty("baselayer")) {
-            console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
-            layerId = attr.baselayer;
+        this.model = new OverviewMapModel(Object.assign(config, {id: id}));
+        this.render(style, el);
+        if (this.model.get("isInitOpen") === true) {
+            this.model.showControl();
         }
-        if (attr.hasOwnProperty("layerId")) {
-            layerId = attr.layerId;
-        }
-        channel.on({
-            "change": this.change
-        }, this);
-        if (style === "DEFAULT") {
-            this.template = _.template(template);
-            this.render();
-        }
-        else if (style === "TABLE") {
-            this.listenTo(Radio.channel("MenuLoader"), {
-                "ready": function () {
-                    this.setElement("#table-tools-menu");
-                    this.renderToToolbar();
-                }
-            });
-            this.setElement("#table-tools-menu");
-            this.renderToToolbar();
-        }
-        this.model = new OverviewMapModel({
-            id: this.id,
-            layerId: layerId,
-            resolution: attr.resolution
-        });
-    },
-
-    /**
-     * Render function
-     * @returns {OverviewMapView} - Returns itself.
-     */
-    render: function () {
-        this.$el.html(this.template());
-        return this;
-    },
-
-    /**
-     * Render Function
-     * @fires Core#RadioRequestMap
-     * @returns {ButtonMapView} - Returns itself
-     */
-    renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: "Mini-Map ausschalten"}));
-        return this;
     },
 
     id: "overviewmap",
-    /**
-     * @member OverviewMapTemplate
-     * @description Template used for the OverviewMap
-     * @memberof Controls.Overviewmap
-     */
-    template: _.template(template),
+    controlTemplate: _.template(controlTemplate),
+    tabletemplate: _.template(tableTemplate),
 
     /**
-     * @member OverviewMapTemplate
-     * @tableTemplate used for the OverviewMap in Table View Tools
-     * @memberof Controls.Overviewmap
+     * Render function renders and sets or the control button or the menu item
+     * @param {string} style uiStyle to define the UI
+     * @param {HTMLElement} control the control UI
+     * @returns {OverviewMapView} - Returns itself.
      */
-    tabletemplate: _.template("<div id='mini-map' class='table-tool'><a href='#'><span class='glyphicon glyphicon-globe'></span><span id='mini-map_title'><%=ansicht %></span></a> </div>"),
+    render: function (style, control) {
+        const attr = this.model.toJSON();
+
+        if (style === "TABLE") {
+            this.setElement("#table-tools-menu");
+            this.$el.append(this.tabletemplate(attr));
+        }
+        else {
+            this.setElement(control);
+            this.$el.html(this.controlTemplate(attr));
+        }
+
+        return this;
+    },
 
     /**
      * Toggles the title of the DOM element
      * @returns {void}
      */
     toggle: function () {
-        var ArrayObj = Array.from(document.getElementsByClassName("ol-custom-overviewmap"));
+        this.toggleControl(this.model.get("isOpen"));
 
         if (this.$(".overviewmap-button > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
-            this.$(".ol-custom-overviewmap").hide("slow");
             this.$(".overviewmap-button > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
         }
         else if (this.$(".overviewmap-button > .glyphicon-globe").attr("title") === "Übersichtskarte einblenden") {
             this.$(".overviewmap-button > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
-            this.$(".ol-custom-overviewmap").show("slow");
         }
         else if (document.getElementById("mini-map_title").innerText === "Mini-Map ausschalten") {
-            ArrayObj.map(element => element.classList.add("hidden"));
             document.getElementById("mini-map_title").innerText = "Mini-Map einschalten";
         }
         else if (document.getElementById("mini-map_title").innerText === "Mini-Map einschalten") {
             document.getElementById("mini-map_title").innerText = "Mini-Map ausschalten";
-            ArrayObj.map(element => element.classList.remove("hidden"));
+        }
+    },
 
+    /**
+     * Toggles the mapControl on or off
+     * @param   {Boolean} state old state
+     * @returns {void}
+     */
+    toggleControl: function (state) {
+        if (state === true) {
+            this.model.removeControl();
+        }
+        else {
+            this.model.showControl();
         }
     }
 });

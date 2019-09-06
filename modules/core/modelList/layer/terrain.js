@@ -1,79 +1,39 @@
 import Layer from "./model";
 
-const TerrainLayer = Layer.extend({
+const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
+    /**
+     * @class TerrainLayer
+     * @description Class to represent a cesium Terrain Dataset
+     * @extends Layer
+     * @constructs
+     * @memberOf Core.ModelList.Layer
+     */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],
-        showSettings: false
+        showSettings: false,
+        selectionIDX: -1
     }),
     initialize: function () {
-        this.listenToOnce(this, {
-            // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-            "change:isSelected": function () {
-                if (this.has("terrainProvider") === false) {
-                    this.createTerrainProvider();
+        Layer.prototype.initialize.apply(this);
+
+        this.listenToOnce(Radio.channel("Map"), {
+            "change": function (map) {
+                if (map === "3D") {
+                    this.toggleLayerOnMap();
                 }
             }
         });
-        this.listenTo(Radio.channel("Layer"), {
-            "updateLayerInfo": function (name) {
-                if (this.get("name") === name && this.get("layerInfoChecked") === true) {
-                    this.showLayerInformation();
-                }
-            },
-            "setLayerInfoChecked": function (layerInfoChecked) {
-                this.setLayerInfoChecked(layerInfoChecked);
-            }
-        });
-
-
-        this.listenTo(this, {
-            "change:isVisibleInMap": function () {
-                // triggert das Ein- und Ausschalten von Layern
-                Radio.trigger("ClickCounter", "layerVisibleChanged");
-                this.toggleLayerOnMap();
-                this.toggleAttributionsInterval();
-            }
-        });
-
-        this.listenTo(Radio.channel("Map"), {
-            "change": function (mode) {
-                if (mode === "3D") {
-                    this.setIsSelected(true);
-                }
-                else {
-                    this.setIsSelected(false);
-                }
-            }
-        });
-        //  Ol Layer anhängen, wenn die Layer initial Sichtbar sein soll
-        //  Im Lighttree auch nicht selektierte, da dort alle Layer von anfang an einen
-        //  selectionIDX benötigen, um verschoben werden zu können
-        if (this.get("isSelected") === true || Radio.request("Parser", "getTreeType") === "light") {
-
-            this.createTerrainProvider();
-
-            if (this.get("isSelected")) {
-                this.listenToOnce(Radio.channel("Map"), {
-                    // Die LayerSource wird beim ersten Selektieren einmalig erstellt
-                    "activateMap3d": function () {
-                        this.toggleLayerOnMap(this.get("isSelected"));
-                    }
-                });
-            }
-        }
-        // this.setAttributes();
     },
 
     /**
-     * Der Layer wird der Karte hinzugefügt, bzw. von der Karte entfernt
-     * Abhängig vom Attribut "isSelected"
+     * adds the cesium terrain provider to the cesiumScene
      * @returns {void}
+     * @override
      */
     toggleLayerOnMap: function () {
-        var map3d;
-
         if (Radio.request("Map", "isMap3d") === true) {
-            map3d = Radio.request("Map", "getMap3d");
+            const map3d = Radio.request("Map", "getMap3d");
+
             if (this.get("isVisibleInMap") === true) {
                 map3d.getCesiumScene().terrainProvider = this.get("terrainProvider");
             }
@@ -83,8 +43,12 @@ const TerrainLayer = Layer.extend({
         }
     },
 
-
-    createTerrainProvider: function () {
+    /**
+     * prepares the layer Object for the rendering, in this case creates the cesium TerrainProvider
+     * @returns {void} -
+     * @override
+     */
+    prepareLayerObject: function () {
         var options;
 
         if (this.has("terrainProvider") === false) {
@@ -97,14 +61,51 @@ const TerrainLayer = Layer.extend({
         }
     },
 
+
     /**
-     * Setter für Attribut "isVisibleInMap"
-     * Zusätzlich wird das "visible-Attribut" vom Layer auf den gleichen Wert gesetzt
-     * @param {boolean} value -
+     * Register interaction with map view. (For Tileset Layer this is not necessary)
      * @returns {void}
+     * @override
      */
-    setIsVisibleInMap: function (value) {
-        this.set("isVisibleInMap", value);
+    registerInteractionMapViewListeners: function () {
+        // do nothing
+    },
+
+    /**
+     * Is not yet supported
+     * @return {void} -
+     * @override
+     */
+    updateLayerTransparency: function () {
+        // do nothing
+    },
+
+
+    /**
+     * overrides original, checks for the terrainProvider
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerValid: function () {
+        return this.get("terrainProvider") !== undefined;
+    },
+
+    /**
+     * overrides original, checks for the terrainProvider
+     * @returns {Boolean} -
+     * @override
+     */
+    isLayerSourceValid: function () {
+        return !_.isUndefined(this.get("terrainProvider"));
+    },
+
+    /**
+     * Setter for the layer visibility
+     * @returns {void} -
+     * @override
+     */
+    setVisible: function () {
+        this.toggleLayerOnMap();
     },
 
     /**

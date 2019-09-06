@@ -7,57 +7,113 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     defaults: {
         id: "",
         layerId: "",
-        baseLayer: {},
-        newOvmView: ""
+        isInitOpen: true,
+        isOpen: false,
+        mapControl: undefined
     },
     /**
      * @class OverviewMapModel
      * @memberof Controls.Overviewmap
      * @extends Backbone.Model
      * @constructs
-     * @fires Map#RadioRequestMapGetMap
+     * @param {Object} [attr] configuration object defined in config.json
+     * @param {String} [attr.layerId=baselayer] layerId to use in map
+     * @param {Boolean} [attr.isInitOpen=true] Flag to open or disable map control on startup
+     * @param {Float} [attr.resolution=maxResolution] Resolution to use in map control
+     * @fires Core#RadioRequestMapGetMap
      * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires Parser#RadioRequestParserGetItemByAttributes
      * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
-     * @fires Map#RadioTriggerMapAddControl
+     * @fires Core#RadioTriggerMapAddControl
+     * @fires Core#RadioTriggerMapRemoveControl
      * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
      * @fires AlertingModel#RadioTriggerAlertAlert
      */
-    initialize: function () {
-        var map = Radio.request("Map", "getMap"),
-            mapView = map.getView(),
-            layers = map.getLayers().getArray(),
-            initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
-            initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
-            newOlView;
-
-        newOlView = new View({
-            center: mapView.getCenter(),
-            projection: mapView.getProjection()
-        });
-        this.setNewOvmView(newOlView);
-        this.setBaseLayer(this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId));
-        if (_.isUndefined(this.get("baseLayer")) === false) {
-            Radio.trigger("Map", "addControl", this.newOverviewmap());
-        }
-        else {
-            $("#overviewmap").remove();
+    initialize: function (attr) {
+        /**
+         * baselayer
+         * @deprecated in 3.0.0
+         */
+        if (attr.hasOwnProperty("baselayer")) {
+            console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
+            this.setLayerId(attr.baselayer);
         }
     },
 
     /**
+     * Creates and sets the mapControl only once and sets it to the map
+     * @fires Core#RadioTriggerMapAddControl
+     * @returns {void}
+     */
+    showControl: function () {
+        let mapControl;
+
+        if (!this.get("mapControl")) {
+            mapControl = this.createOverviewMap();
+            this.setMapControl(mapControl);
+        }
+        this.setIsOpen(true);
+        Radio.trigger("Map", "addControl", this.get("mapControl"));
+    },
+
+    /**
+     * Removes the mapControl from map
+     * @fires Core#RadioTriggerMapRemoveControl
+     * @returns {void}
+     */
+    removeControl: function () {
+        this.setIsOpen(false);
+        Radio.trigger("Map", "removeControl", this.get("mapControl"));
+    },
+
+    /**
+     * Returns an overviewMap
+     * @fires Core#RadioRequestMapGetMap
+     * @fires MapView#RadioRequestMapViewGetResolutions
+     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
+     * @returns {void}
+     */
+    createOverviewMap: function () {
+        const id = this.get("id"),
+            map = Radio.request("Map", "getMap"),
+            maxResolution = _.first(Radio.request("MapView", "getResolutions")),
+            mapView = map.getView(),
+            layers = map.getLayers().getArray(),
+            initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
+            initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
+            baselayer = this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId),
+            newOlView = new View({
+                center: mapView.getCenter(),
+                projection: mapView.getProjection(),
+                resolution: mapView.getResolution(),
+                resolutions: [this.get("resolution") ? this.get("resolution") : maxResolution]
+            });
+
+        if (!baselayer) {
+            console.error("Missing layerID " + baselayer + " for OverviewMap");
+            Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden.");
+
+            return false;
+        }
+
+        return this.newOverviewmap(id, baselayer, newOlView);
+    },
+
+    /**
      * Creates a new overview map.
+     * @param {String} id Element-Id to combine map with HTLMElement
+     * @param {String} baselayer [description] layer to use in map
+     * @param {ol.View} ovmView View to use with overlay
      * @returns {ol/control/OverviewMap} - The generated overview map.
      */
-    newOverviewmap: function () {
-        var overviewmap = new OverviewMap({
+    newOverviewmap: function (id, baselayer, ovmView) {
+        const overviewmap = new OverviewMap({
             collapsible: false,
             className: "ol-overviewmap ol-custom-overviewmap",
-            target: this.get("id"),
+            target: id,
             layers: [
-                this.getOvmLayer(this.get("baseLayer"))
+                this.getOvmLayer(baselayer)
             ],
-            view: this.get("newOvmView")
+            view: ovmView
         });
 
         return overviewmap;
@@ -68,7 +124,6 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @param {Layer[]} layers The Array of layers
      * @param {string} baselayer The id of the baselayer
      * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
-     * @fires AlertingModel#RadioTriggerAlertAlert
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
@@ -88,15 +143,9 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
                     TRANSPARENT: modelFromCollection.get("transparent").toString()
                 }
             };
-
-            return baseLayerParams;
         }
 
-        Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden da kein Layer für die angegebene ID gefunden wurde. (" + baselayer + ")");
-
-        return undefined;
-
-
+        return baseLayerParams;
     },
 
     /**
@@ -119,16 +168,20 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         return imageLayer;
     },
 
-    // setter for baselayer
-    setBaseLayer: function (value) {
-        this.set("baseLayer", value);
+    // setter for MapControl
+    setMapControl: function (value) {
+        this.set("mapControl", value);
     },
 
-    // setter for newOvmView
-    setNewOvmView: function (value) {
-        this.set("newOvmView", value);
-    }
+    // setter for layerId
+    setLayerId: function (value) {
+        this.set("layerId", value);
+    },
 
+    // setter for isOpen
+    setIsOpen: function (value) {
+        this.set("isOpen", value);
+    }
 });
 
 export default OverviewMapModel;

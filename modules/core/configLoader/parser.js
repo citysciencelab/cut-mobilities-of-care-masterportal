@@ -18,7 +18,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "draw",
             "featureLister",
             "animation",
-            "addWMS"
+            "addWMS",
+            "shadow"
         ]
     },
 

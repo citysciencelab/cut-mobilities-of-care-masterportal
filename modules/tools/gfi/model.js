@@ -211,6 +211,8 @@ const Gfi = Tool.extend({
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
+            // use pickedPosition in 3D Mode, to get the 3d position directly at the 3d object
+            this.setCoordinate(evt.pickedPosition);
         }
 
         // für detached MapMarker
@@ -245,7 +247,7 @@ const Gfi = Tool.extend({
             this.setIsVisible(false);
         }
         else {
-            this.get("overlay").setPosition(evt.coordinate);
+            this.get("overlay").setPosition(this.get("coordinate"));
             this.get("themeList").reset(unionParams);
         }
     },
@@ -263,7 +265,7 @@ const Gfi = Tool.extend({
                 olFeature,
                 layer;
 
-            if (feature instanceof Cesium.Cesium3DTileFeature) {
+            if (feature instanceof Cesium.Cesium3DTileFeature || feature instanceof Cesium.Cesium3DTilePointFeature) {
                 propertyNames = feature.getPropertyNames();
                 _.each(propertyNames, function (propertyName) {
                     properties[propertyName] = feature.getProperty(propertyName);
@@ -298,6 +300,20 @@ const Gfi = Tool.extend({
                 layer = feature.primitive.olLayer;
                 if (olFeature && layer) {
                     gfiParams3d.push(this.getVectorGfiParams3d(olFeature, layer));
+                }
+                else if (feature.primitive.id instanceof Cesium.Entity) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.primitive.id.layerReferenceId});
+                    if (layerModel) {
+                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                    }
+                    if (modelAttributes) {
+                        if (feature.primitive.id.attributes) {
+                            modelAttributes.attributes = feature.primitive.id.attributes;
+                        }
+                    }
+                    if (layerModel) {
+                        gfiParams3d.push(modelAttributes);
+                    }
                 }
             }
         }, this);

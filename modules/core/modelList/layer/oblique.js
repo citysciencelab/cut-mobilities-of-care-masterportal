@@ -6,7 +6,8 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["none"],
         showSettings: false,
-        isVisibleInTree: false
+        isVisibleInTree: false,
+        selectionIDX: -1
     }),
     /**
      * @class ObliqueLayer
