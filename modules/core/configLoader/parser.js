@@ -549,7 +549,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {boolean} isMobile vsible map mode from portal
      * @param {object} overLayer3d contains layer fro 3d mode
      * @param {String} overLayers3DName Name of folder.
-     * @fires Core.ConfigLoader#RadioTriggerModelListRemoveModelsById
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
      * @returns {void}
