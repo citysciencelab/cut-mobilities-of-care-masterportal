@@ -1,20 +1,15 @@
-# This is a sample build configuration for JavaScript.
-# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
-# Only use spaces to indent your .yml configuration.
-# -----
-# You can specify a custom docker image from Docker Hub as your build environment.
 image: node:10.15.0
 
 pipelines:
-  default:
-    - step:
-        caches:
-          - node
-        script: # Modify the commands below to build your repository.
-            - pwd
-            - ls -R
-            - npm install
-            - apt-get install unzip
-            - ./devtools/scripts/run_browserstack_local.bash
-            - npm start &
-            - browser=bs ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
+  pull-requests:
+    '**':
+        - step:
+            caches:
+            - node
+            name: build and test in Browser
+            script: # Modify the commands below to build your repository.
+                - npm install
+                - apt-get install unzip
+                - ./devtools/scripts/run_browserstack_local.bash
+                - npm start &
+                - browser=bs ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
