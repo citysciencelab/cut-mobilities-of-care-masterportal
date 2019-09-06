@@ -2,10 +2,12 @@ var expect = require("chai").expect,
     test = require("selenium-webdriver/testing"),
     webdriver = require("selenium-webdriver"),
     until = webdriver.until,
+    By = webdriver.By,
     loader;
 
 function ZoomTests (driver) {
-    loader = driver.findElement(webdriver.By.id("loader"));
+    driver.wait(until.elementLocated(By.id("loader")), 9000);
+    loader = driver.findElement(By.id("loader"));
     test.describe("ZoomFunctions", function () {
         var minus,
             plus;
@@ -13,8 +15,8 @@ function ZoomTests (driver) {
         test.it("should have plusbutton", function () {
 
 
-            driver.wait(webdriver.until.elementLocated(webdriver.By.css("span.glyphicon.glyphicon-plus")), 9000);
-            plus = driver.findElement(webdriver.By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-plus']"));
+            driver.wait(until.elementLocated(By.css("span.glyphicon.glyphicon-plus")), 9000);
+            plus = driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-plus']"));
 
             expect(plus).to.exist;
         });
@@ -36,7 +38,7 @@ function ZoomTests (driver) {
         test.it("should have minusbutton", function () {
 
             driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
-            minus = driver.findElement(webdriver.By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
+            minus = driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
 
 
             expect(minus).to.exist;
