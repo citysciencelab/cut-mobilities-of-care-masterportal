@@ -14,5 +14,6 @@ pipelines:
             - pwd
             - ls -R
             - npm install
+            - apt-get install unzip
             - ./devtools/scripts/run_browserstack_local.bash
             - npm start && browser=bs ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
