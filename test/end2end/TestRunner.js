@@ -27,6 +27,7 @@ switch (browser) {
             'os' : 'Windows',
             'os_version' : '10',
             'resolution' : '1024x768',
+            'browserstack.local' : true,
             'browserstack.user' : browserstackuser,
             'browserstack.key' : browserstackkey
             }
