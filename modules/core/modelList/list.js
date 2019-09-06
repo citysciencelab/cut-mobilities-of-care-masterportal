@@ -42,7 +42,7 @@ import CompareFeatures from "../../tools/compareFeatures/model";
 import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import LayerSliderModel from "../../tools/layerslider/model";
+import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 
