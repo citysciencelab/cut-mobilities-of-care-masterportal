@@ -1,14 +1,25 @@
-Selenium-Webdriver
+## Browsertests mit Selenium-Webdriver
 
-1. npm install --save-dev Selenium-Webdriver
-2. Browser-Treiber installieren:
-npm install --save--dev chromedriver bzw. downloaden und in path angeben. Die exe muss dabei in einem Ordner liegen, in dem exe-Dateien ausgeführt werden können. 'chromedriver' muss dann in der Console ohne Adminrechte aufrufbar sein.
-3. damit der aktuelle selenium-webdriver funktioniert: node updaten auf v6
-4. http://www.seleniumhq.org/download/ ie-treiber downloaden
-5. npm install --global mocha als Admin, dann muss 'mocha' in Umgebungsvariablen und damit in console aufrufbar sein.
+1. Browser-Treiber installieren:
+Um die Browsertests lokal ausführen zu können müssen Driver für den lokalen Browser installiert werden. Es sollte mindestens der Chromedriver installiert sein, optional können auch andere Browser automatisiert werden. Über die Variable "browser" (s.u.) können folgende Browser automatisiert werden:
+ - "chrome": Chrome-Browser
+ - "firefox": Firefox
+ - "ie": InternetExplorer
+ - "bs": beliebige Browser unter browserstack.com
 
-Test starten:
-$ mocha /test/end2end/TestRunner.js
+
+Dazu den Treiber downloaden (siehe https://docs.seleniumhq.org/download/) und in den Umgebungsvariablen verfügbar machen (unter Windows in 'path'). Die exe muss dabei in einem Ordner liegen, in dem exe-Dateien ausgeführt werden können. 'chromedriver' muss dann in der Console ohne Adminrechte aufrufbar sein.
+
+
+2. Test starten:
+$ ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
 
 oder als admin (beim chromedriver kann das zu Problemen führen)
-$ npm test
+$ npm run browsertest
+
+Das Startskript kann mit verschiedenen Parametern aufgerufen werden, in denen z.B. der lokale Proxy, der zu testende Browser oder Browserstackcredentials mitgegeben werden können:
+$ browser=bs bs_user=[browserstackusername] bs_key=[browserstackkey] url=[url] proxy=[proxyurl] ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
+
+Die Parameter können für die lokale Umgebung einmal fest definiert werden und werden dann beim Ausführen der Tests immer benutzt. Dazu eine Datei ".env" im root-Verzeichnis anlegen und dort die Parameter angeben.
+
+
