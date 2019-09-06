@@ -262,7 +262,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 ***
 
 #### Portalconfig.searchBar.tree
-Konfiguration der SpecialWFS Suche
+Alle Layer, die im Themenbaum des Portals sind, werden durchsucht.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
