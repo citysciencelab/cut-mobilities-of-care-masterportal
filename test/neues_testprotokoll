@@ -1,0 +1,430 @@
+Wordings:
+Hier sollen Funktionen, UI-Elemente etc. klar und einfeutig benannt werden. Diese Namen sollen dann
+durchgehend und konsistent genutzt werden, um Verwirrung und Verwechslung zu vermeiden.
+Beispiel: "Total View" - derzeit eine irreführende Bezeichnung
+
+- Button auf rechter Seite / button at right side
+- Fenster / modal pane
+- Karte / Map
+- Karte verschieben / pan map
+- Maßstab / zoom level
+- Standort-Marker / location pin
+- Themenauswahl / layer list
+- Umkreissuche / proximity search
+- Zu eigenem Standort springen / go to client location
+- Zu Ort springen / go to location
+- Zurück zur Startansicht / restore initial view
+- Übersichtskarte / minimap
+- Daten-Layer / data-layer
+- Hintergrund-Layer / background-layer
+-------------------------------------------------------------------------------------------------------------
+
+Klassifizierungen zum Testen:
+Die Testfälle sollen mit "Tags" versehen werden, damit nicht unnötig viele getestet wird
+Anmerkung: Verliert bei vollständig automatisiertem Testen an Relevanz
+
+T1 == Nur auf einem Client testen (UI-irrelevanter Code, beispielsweise erzeugte Links oder Email-Versand)
+T2 == Auf allen Clients testen (UI-relevanter Code, beispielsweise Themenauswahl oder CSS etc.)
+-------------------------------------------------------------------------------------------------------------
+
+Themenkomplexe zum Testen:
+Hier sollen Themengebiete rein, in welche das Testprotokoll unterteilt werden soll
+
+- Themenauswahl
+- Formulare
+- GFI
+- ...
+-------------------------------------------------------------------------------------------------------------
+
+Funktionen zum Testen:
+
+1. Karte verschieben / Pan:
+	1.1. Maustaste auf Karte gedrückt halten und Position ändern und Maustaste loslassen
+		-> Die Karte bewegt sich.
+		@ Programmatisch testbar: Event Core#RadioRequestMapViewGetOptions feuern und Werte vergleichen
+
+2: Karte Maßstab ändern / Zoom
+	2.1. Mit Mauszeiger über Karte hovern und Mausrad nach oben und unten bewegen
+		-> Der Maßstab der Karte wird kleiner und größer.
+		@ Programmatisch testbar: Event Core#RadioRequestMapViewGetOptions feuern und Werte vergleichen
+	2.2. Buttons auf rechter Seite (+, -) drücken
+		-> Der Maßstab der Karte wird kleiner und größer.
+		§ config.json: controls.zoom
+		@ Programmatisch testbar: Event Core#RadioRequestMapViewGetOptions feuern und Werte vergleichen
+
+3. Vollbildmodus / Fullscreen mode
+	3.1. Button auf rechter Seite mit Maximieren-Symbol klicken
+		-> Der Browser wechselt in den Vollbild-Modus.
+		§ config.json: controls.fullScreen
+		@ Programmatisch testbar: Mit JS window und screen width/height überprüfen
+	3.2. Button auf rechter Seite mit X-Symbol klicken
+		-> Der Browser verlässt Vollbild-Modus.
+		§ config.json: controls.fullScreen
+		@ Programmatisch testbar: Mit JS window und screen width/height überprüfen
+
+4. Zu eigenem Standort springen / Go to current location
+	4.1. Button auf rechter Seite mit Stecknadel-Symbol klicken 
+		-> Die Karte springt zum Standort des Clients (Neuenfelder Straße oÄ) und der Standort-Marker erscheint an dieser Stelle.
+		-> ACHTUNG: In manchen Browsern ist diese Funktionalität nicht verfügbar, da eine Standortfreigabe des Users vonnöten ist!
+		§ config.json: controls.orientation
+	4.2. Button auf rechter Seite mit Zielschheiben-Symbol klicken
+		-> Ein Fenster öffnet sich mit Ergebnissen aus dem Umkreis (Umkreissuche). Die Ergebnisse hängen von den aktivierten Layern ab.
+		§ config.json: controls.orientation.poiDistances
+	4.3. Die Reiter 500m, 1000m, 2000m jeweils aktivieren
+		-> Die Ergebnisse werden entsprechend eingegrenzt oder ausgeweitet.
+		§ config.json: controls.orientation.poiDistances
+	4.4. Auf eines dieser Suchergebnisse klicken
+		-> Die Karte springt zum entsprechenden Ort.
+		@ Programmatisch testbar: Event Core#RadioRequestMapViewGetOptions feuern und Werte mit Position des Ziels vergleichen
+
+5. Ein- und Ausblenden eines Layers
+	5.1. Themenauswahl ausklappen, Layer "Krankenhäuser" aktivieren
+		-> Die Krankenhäuser erscheinen auf der Karte.
+		§ config.json: Themenconfig.Fachdaten.Layer: id: 1711
+		@ Programmatisch testbar: Layer Collection nach "isActive" filtern und Ergebnisse vergleichen
+	5.2. Themenauswahl ausklappen, Layer "Krankenhäuser" aktivieren
+		-> Rechts unten erscheint das kleine Attributions-Fenster, falls dieses in der config.json standardmäßig auf aktiv gestellt ist (dies sollte zu Testzwecken immer so sein). 
+		§ config.json: Themenconfig.Fachdaten.Layer: id: 1711, layerAttribution: [...]
+		@ End2End testbar: Vorhandenheit und ggf. Inhalt des Elements überprüfen
+	5.3. Button auf rechter Seite mit i Info-Symbol oder >> Einklappen-Symbol (je nach Sichtbarkeit des Attributions-Fenster) 2 mal klicken
+		-> Attributions-Fenster wird in der jeweiligen Reihenfolge ein- und ausgeklappt.
+		§ config.json: controls.attributions
+		@ End2End testbar: Vorhandenheit und ggf. Inhalt des Elements überprüfen
+	5.4. Mit der Maus über ein Krankenhaus hovern
+		-> Ein entsprechender Tooltip erscheint.
+		§ config.json Themenconfig.Fachdaten.Layer: id: 1711, mouseHoverField: [...]
+		@ End2End testbar: Vorhandenheit und ggf. Inhalt des Elements überprüfen
+
+6. Übersichtskarte / Minimap
+	6.1. Mit der Maus den dargestellten Bildausschnitt in der Übersichtskarte verschieben
+		-> Karte passt sich entsprechend des verschobenen Bildausschnitts an
+		@ End2End testbar: Maus klick triggern und programmatisch Event Core#RadioRequestMapViewGetOptions feuern und Werte mit Position am Anfang vergleichen
+		§ config.json: controls.overviewMap
+	6.2. Mit dem Mausrad innerhalb der Übersichtskarte den Maßstab ändern (Mausrad nach oben und unten bewegen)
+		-> Karte ändert entsprechend ihren Maßstab
+		@ End2End testbar: Mausrad triggern und programmatisch Event Core#RadioRequestMapViewGetOptions feuern und Werte mit Position am Anfang vergleichen		
+
+7. Undo / Redo
+	7.1. Merken, auf welchen Punkt die Karte gerade zentriert ist (1. Punkt), die Karte dann etwas verschieben, wieder merken, wo sie jetzt zentriert ist (2. Punkt), danach den Button auf rechter Seite mit << Undo-Symbol klicken
+		-> Karte springt zum gemerkten 1. Punkt
+		§ config.json: controls.backForward
+	7.1. Button auf rechter Seite mit >> Redo-Symbol klicken
+		-> Karte springt zum gemerkten 2. Punkt
+		§ config.json: controls.backForward
+
+8. Zurück zur Startansicht / restore initial View
+	8.1. Button auf rechter Seite mit |<< Skip-Back-To-Start-Symbol klicken
+		-> Karte sprint zur Ausgangsposition (Startansicht) zurück.
+		§ config.json: controls.totalView
+
+9. Suchfunktionen 1
+	9.1. "Haus" in das Suchfeld oben rechts eingeben
+		-> Ein Dropdown mit Vorschlägen erscheint.
+	9.2. Auf das unterste, rote Feld "alle Ergebnisse anzeigen" klicken
+		-> Das Dropdown zeigt nun sämtliche Gruppierungen der Ergebnisse an, mit deren Treffersummen rechts.
+	9.3a. Auf die Kategorie "festgestellt" (festgestellte Bebauungspläne?) klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4a. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zum geklickten Ort und eine grüne Fläche erscheint.
+	---
+	9.3b. Auf die Kategorie "im Verfahren" (Bebauungspläne im Verfahren?) klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4b. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zum geklickten Ort und eine grüne Fläche erscheint.
+	---
+	9.3c. Auf die Kategorie "Krankenhaus" klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4c. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zum geklickten Ort, der Standort-Marker erscheint am entsprechenden Ort und es ist mindestens das geklickte Krankenhaus zu sehen.
+	---
+	9.3d. Auf die Kategorie "Ort" klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4d. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zum geklickten Ort, der Standort-Marker erscheint am entsprechenden Ort und der Maßstab passt sich entsprechend an.
+	---
+	9.3e. Auf die Kategorie "Straße" klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4e. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zur geklickten Straße und der Maßstab passt sich entsprechend an.
+	---
+	9.3f. Auf die Kategorie "Stadtteil" klicken
+		-> Konkrete, zu dieser Kategorie gehörende Suchergebnisse werden darunter eingeblendet.
+	9.4f. Auf ein beliebiges Suchergebnis der entsprechenden Kategorie klicken
+		-> Karte springt zum geklickten Stadtteil, der Standort-Marker erscheint am entsprechenden Ort und der Maßstab passt sich entsprechend an.
+
+10. Themenauswahl / layer list
+	10.1. Einen nicht aktivierten Daten-Layer aussuchen und dessen Checkbox aktivieren
+		-> Der Daten-Layer wird im Vordergrund aller anderen Layer angezeigt.
+	10.2. Einen nicht aktivierten Hintergrund-Layer aussuchen und dessen Checkbox aktivieren
+		-> Der Hintergrund-Layer wird im Vordergrund aller anderen Hintergrund-Layer angezeigt, jedoch aber weiterhin hinter den Daten-Layern.
+	10.3. Bei einem Layer auf den Info-Button mit dem (i) Symbol klicken
+		-> Ein Fenster mit Infos zum entsprechenden Layer öffnet sich.
+
+-------------------------------------------------------------------------------------------------------------
+
+Alte Testfälle:
+
+Können über das Zahnrad Transparenz und Reihenfolge verändert werden?
+Entspricht die Reihenfolge auf der Karte der Reihenfolge im Baum?
+Lässt sich ein Layer nach oben und unten verschieben?
+Bleibt die Layerreihenfolge im Baum und in der Karte gleich, wenn man die Layer ein- und ausblendet?
+Passiert etwas Unerwartetes, wenn man einen Layer bis ganz nach oben oder unten verschiebt und dann versucht, ihn weiter zu verschieben?
+Verhalten sich Gruppenlayer (Bsp Kita und Krankenhäuser) genauso wie normale Layer?
+Sind die Themen im Baum so angeordnet, wie in der Config? Also nicht alphabetisch?
+
+Legende
+Öffnet sich Legende und stellt sich entsprechend den aktiven Layern dar?
+
+Flurstückssuche
+Allermöhe, 6660: Wird gezoomt und MapMarker gesetzt?
+Kann Fenster minimiert und wieder maximiert werden?
+
+Strecke / Fläche messen
+Digitalisieren einer Strecke: Erscheint Linie und Wert?
+Digitalisieren einer Fläche: Erscheint Linie und Wert?
+Messungen löschen: Werden Mess-Strecken und -Flächen wieder entfernt?
+Erscheinen in der Hilfe alle Bilder?
+
+Koordinaten abfragen
+Ändert sich Koordinate mit der Mausposition?
+Klick in Karte: Wird Koordinate eingefroren und MapMarker gesetzt?
+Erneuter Klick in Karte: Wird Koordinate wieder verändert MapMarker befindet sich am Mauszeiger?
+Klick auf Koordinaten-Textfeld: Wird Inhalt in Zwischenablage kopiert?
+Inhalt der Liste Koordinatensysteme wie namedProjections?
+Ändern des Koordinatensystems ändert die Koordinatenangabe?
+
+Informationen abfragen (GFI)
+Klick auf Krankenhäuser und BPläne liefert Informationen?(WFS)
+Klick auf "Kitas und KH" liefert Informationen? (WMS)
+Klick auf Verkehrskameras läuft Livestream? Dienst ist nur aus dem Internet ansprechbar.
+"Layer ""Durchschn. tägl. Verkehrsstärken"" --> GFI -->
+Wird das Diagramm im GFI unter dem Reiter Diagramm korrekt dargestellt??"
+"Layer Dauerzählstellen (Rad) --> GFI -->
+Werden die Diagramme angezeigt (Liniengraph mit Punkten)"
+Klick auf Fläche Eventlose liefert Informationen als html-window? (infoFormat: text/html)
+Klick auf Haltestelle liefert Informationen? (infoFormat: application/vnd.ogc.gml)
+
+Karte drucken
+Wird PDF erzeugt?
+Geometrien zeichnen (Punkt, Linie, Polygon, Kreis, Text) mit unterschiedlichen Farben und Transparenzen. Wird PDF korrekt erzeugt?
+StyleWms -Klassifizieren, dann drucken (MIT LEGENDE und METADATEN Wird Klassifizierung gedruckt und Legende Korrekt angezeigt?
+Werden Metadaten korrekt angezeigt?
+StyleWms -Klassifizierung zurücksetzen, dann drucken (MIT LEGENDE und METADATEN). Wird originale Klassifizierung wieder gedruckt?
+
+
+Koordinatensuche
+"ETRS89: Rw = 564459, Hw = 5935103
+ - Wird neu zentriert und MapMarker gesetzt?"
+"WGS 84:  Breite = 53 33 50, Länge = 9 59 40
+ - Wird neu zentriert und MapMarker gesetzt?"
+"WGS 84 (Dezimalgrad): Breite = 53.5, Länge = 10.0
+ - Wird neu zentriert und MapMarker gesetzt?"
+
+Zeichnen / Schreiben
+Punkt, Linie, Polygon, Text zeichnen: Wird gezeichnet?
+Download: Wird KML heruntergeladen?
+Klick "Geometrie /Text löschen": Wird angeklickte Geometrie gelöscht?
+Klick "zurück", Klick "Alles löschen": Werden Geometrien wieder entfernt?
+
+KML Import
+Kann zuvor erstellte KML importiert werden?
+
+Filter
+Sind Filterkriterien der Krankenhäuser auswählbar?
+Erfolgt Filterung?
+Wird Filterung beim Schließen des Fensters zurückgesetzt?
+
+Erweiterter Filter
+Krankenhäuser lassen sich mit beliebigen Attributen Filtern?
+
+Routenplaner
+Kann ein Start eingegeben werden? Suche und aktueller Standpunkt?
+Kann Ziel eingegeben werden?
+Route berechnen stellt Route in Karte dar?
+Wird die Routinganweisungen angezeigt?
+Schließen Fenster löscht Route?
+
+Liste
+Klick auf "Liste" öffnet den Feature-Lister und stellt die Krankenhäuser dar?
+Hover über Krankenhaus vergrößert Style in Karte?
+Klick auf Krankenhaus zoomt dorthin?
+Klick auf "Mehr" lädt weitere Features?
+
+Pendler (Animation)
+Wird Attribution aktualisiert wenn Pendler Aktiviert wird?
+Kann Landkreis / Gemeinde ausgewählt werden?
+Kann Anzahl anzuzeigender Beziehungen ausgewählt werden? (TOP 5, 10, 15)
+Wird der MapMarker gesetzt?
+Läuft die Animation durch? Enden die Punkte in den anderen Gemeinden?
+Lässt sich die Animation drucken?
+Lässt sich eine csv-Datei herunterladen (nach Bestätigung)?
+
+Pendler (Lines)
+Wird Attribution aktualisiert wenn Pendler Aktiviert wird?
+Kann Landkreis / Gemeinde ausgewählt werden?
+Kann Anzahl anzuzeigender Beziehungen ausgewählt werden? (TOP 5, 10, 15)
+Wird eine entsprechende Anzahl an Linien angezeigt zu Wohnort / Arbeitsort
+Lässt sich die Darstellung drucken?
+Lässt sich eine csv-Datei herunterladen (nach Bestätigung)?
+
+StyleWMS
+Layer "Mit dem Pkw in 30 Minuten erreichbare..." anschalten, Zahnrad (nur Mobil), "Klasseneinteilung ändern"
+ - Lässt sich der Layer umstylen? Auch in Legende und Druck
+ - Lässt sich der Layer zurücksetzen? Auch in Legende und Druck
+
+Parametrisierter Aufruf
+?style=simple --> Sind alle Bedienelemente ausgeschaltet?
+?center=566499,5942803 --> Setzt Kartenzentrum auf den Flughafen?
+?bezirk=2 --> Zoomt auf Altona (ohne den Rest auszugrauen)?
+?bezirk=bergedorf --> Zoomt auf Bergedorf(ohne den Rest auszugrauen)?
+"?layerids=2426&visibility=true&transparency=0
+ - Bezirke Layer ist aktiv (Baum und Karte)?"
+"?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3
+-->Die Layereinstellungen (Reihenfolge, Transparenz, Sichtbarkeit) im Themenbaum überprüfen"
+"?layerIDs=4736,myId2&visibility=true,true&transparency=0,0
+ - Kita und Krankenhäuser werden angezeigt und gfi funktioniert?
+ - Klick auf Legende: Legende von beiden Layern wird angezeigt?
+ - Klick auf Layerinfo:: Informationen werden angezeigt?"
+"?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6
+ - Eignungsflächen werden angezeigt und sind abfragbar?
+ - Klick auf Legende: Legende wird angezeigt?
+ - Klick auf Layerinfo: Informationen werden angezeigt?"
+"?featureid=18,26 --> 2 Schwarze Marker erscheinen wie bei
+ - http://geoportal-hamburg.de/eventlotse/?featureid=18,26"
+?zoomlevel=8 --> Zoomt stark in Karte rein?
+?startupmodul=routing --> Routenplaner ist initial offen?
+"?query=Neuenfeld
+ - Suche wird automatisch ausgeführt und liefert Vorschläge?"
+"?query=Neuenfelder Straße,19, 21109
+ - Suche wird automatisch ausgeführt und zoomt auf Adresse?"
+"?config=../sc_masterTree/config.json
+ - Portal wird mit config von masterTree geladen?"
+
+Neuer Supa-Dupa Filter
+Schulen und Krankenhäuser aktivieren. Filter öffnen
+Klick auf Grundschulen: Werden nur Grundschulen angezeigt?(223 Grundschulen, Stand 11.04.2019)
+"Bergedorf und Altona auswählen: Werden nur Grundschulen
+ in den ausgewählten Bezirken angezeigt?
+"
+Wird live gezoomt? (Mit jeder Auswahl passt sich die Karte an)
+"Bergedorf und Altona auswählen: Werden in der
+Stadtteilauswahl nur Stadtteil aus diesen Bezirken angezeigt?"
+Ausgewählte Attribute werden in "Ihre Auswahl" angezeigt?
+Sind min. zwei Attribute ausgewählt erscheint der Button "Alle löschen"?
+"Klick auf ""Alle löschen"" setzt den Filter zurück und
+alle Schulen werden angezeigt?"
+"Klick auf Stadtteilschulen; Auswahl Fremdsprache
+Chinesisch ergibt vier Treffer?"
+"Wird in ""Ihre Auswahl"" auf Chinesisch geklickt, wird diese Auswahl
+zurückgenommen und alle Stadtteilschulen werden angezeigt"
+Wird der Slider bewegt, passen sich die Werte in den Inputfelder an?
+Werden am Slider manuell Werte eingetragen und auf ENTER gedrückt, passt sich der Slider an?
+Kommen beim Slider bei falscheingaben entsprechende Fehlermedlungen?
+Werden beim Slider manuell bei min ein größerer wert als bei max eingetragen, korrigiert sich der Slider automatisch?
+GFI einer Schule öffnen. Lässt sich das GFI bei geöffnetem Filter öffnen?
+
+Einwohnerabfrage
+"Rechteck aufziehen innerhalb der FHH
+ --> Einwohnerzahl in Hamburg wird berechnet
+ --> Größe der Fläche mit ausgegeben
+ --> Datenquelle Hamburg ist vorhanden"
+"Rechteck aufziehen sodass es in FHH und MRH liegt
+ --> Einwohnerzahl in Hamburg wird berechnet
+ --> Einwohnerzahl in der MRH wird berechnet
+ --> Größe der Fläche mit ausgegeben
+ --> Datenquelle FHH ist vorhanden
+--> Datenquelle MRH ist vorhanden"
+"Rechteck aufziehen sodass es nur in der MRH liegt
+ --> Einwohnerzahl in der MRH wird berechnet
+ --> Größe der Fläche mit ausgegeben
+--> Datenquelle MRH ist vorhanden"
+"Rechteck aufziehen sodass es außerhalb der MRH liegt (Bsp. Celle)
+ --> Alert mit sprechender Fehlermeldung erscheint"
+Kreis aufziehen funktioniert
+Fläche Zeichnen funktioniert
+
+Schulwegrouting
+"startadresse eingeben
+ --> Adresse wird auf Karte markiert (blauer Kreis) und hingezoomt
+ --> regional zuständige grundschule wird im Tool angezeigt"
+"klick auf die regional zuständige Grundschule
+ --> schule wird gesetzt und routing durchgeführt
+ --> route wird angezeigt
+--> schule bekommt roten Marker
+--> routing Übersicht wird angezeigt (grau)"
+Routenbeschreibung kann ein- und ausgeblendet werden
+Route drucken (nutzt mapfish print 3) erzeugt PDF mit Karte,  Zusammenfassung und Routenbeschreibung
+"Route löschen
+ --> Marker und Route werden von der Karte entfernt
+ --> Adresse wird geleert
+ --> Schule wird geleert
+ --> regional zuständige Grundschule wird geleert"
+
+compareFeatures
+"GFI auf Schule --> ""Auf die Vergleichsliste""
+ --> Modal erscheint ""zur vergleichsliste"" und ""zurück""
+ --> GFI stern wird gelb"
+"weitere 3 Schulen ""Auf die Vergleichsliste""
+ --> sprechende Fehlermeldung dass Vergleichsliste voll ist erschint im Modal"
+"vergleichsliste öffnen 
+ --> Objekte werden spaltenweise dargestellt
+ --> email als mailto-link
+ --> webseiten öffnen sich im neuen tab"
+Klick auf "mehr Infos" --> weitere Attribute werden angezeigt
+Klick auf "weniger Infos" --> weniger Attribute werden angezeigt
+"Klick auf ""Export als PDF""
+ --> sichtbare attribute der Features werden exportiert"
+"Feature von Liste entfernen (x oben rechts)
+ --> feature wird entfernt, Stern im GFI ist nicht mehr gelb"
+"Alle features entfernen
+ --> Modal mit entsprechener meldung öffnet sich"
+
+3d
+"3d aktivieren (klick auf Control)
+ -> 3d Navigation erscheint
+ -> Gelände und Gebäude per default an
+ -> nicht 3d-fähige Tools tauchen nicht mehr im Menü auf 
+ -> ausgewählte 2d Layer bleiben erhalten"
+"3d Navigation
+ -> alle Buttons außer das Auge im Zentrum funktionieren
+ -> bei gedrücktem Mausrad wird die Karte gekippt"
+Gfi funktioniert mit umgerechneten 2d Layern und den Gebäuden
+Suche verhält sich wie im 2d Modus
+Klick auf  "Ansicht 1" neigt die Kamera und zoomt ca. zur U-Bahn Feldstraße
+Auswahl  speichern funktioniert 
+Standort bestimmen funktioniert
+Messfunktion zeigt Entfernung und Höhenunterschied an
+Koordinatenabfrage funktioniert
+Koordinatensuche funktioniert
+"3d deaktivieren
+ -> Ausschnitt bleibt
+ -> 3d Layer werden ausgeschaltet
+ -> 2d Layer bleiben an
+ -> Alle Tools sind wieder da"
+Standort bestimmen funktioniert
+
+Schrägluftbilder (nur FHH-Atlas)
+"Schrägluftbilder aktivieren (klick auf Control)
+ -> Navigation erscheint
+ -> Schrägluftbilder werden angezeigt
+ -> alle anderen Layer werden ausgeblendet 
+ -> Themenbaum, Werkzeuge und Legende werden ausgeblendet"
+"Navigation
+ -> alle Buttons außer das Auge im Zentrum funktionieren"
+Suche verhält sich wie im 2d Modus
+Erneuter klick auf Control wechselt wieder in 2d Modus
+Ansichten funktionieren auch 
+Wechsel von Schrägluftbild zu 3d funktioniert
+
+Kontakt
+Kontakt öffnen, Höhe des Fensters verkleiner. Kontaktfortmular läuft nicht über den Bildschirm hinaus. Absenden Button befindet sich über dem Footer und lässt sich betätigen.
+
+Letzte und nächste Ansicht (Control)
+Suche nach Neuenfelder Straße, klick auf ersten Eintrag, klick auf Letzte Ansicht -> Ansicht springt zur Startposition in der Startzoomstufe zurück
+klick auf Nächste Ansicht -> Ansicht springt und zoomt auf Neuenfelder Straße
+
+-------------------------------------------------------------------------------------------------------------
+
+Neue Testfälle:
+
+[...]
