@@ -43,8 +43,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[remoteInterface](#markdown-header-remoteInterface)|nein|object||Optionale Konfiguration für das remoteInterface.||
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |[alerting](#markdown-header-alerting)|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
+*********
 
-******
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -60,7 +60,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |utmStreifen|nein|String|`"UTM_Streifen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |utmVerzerrung|nein|String|`"UTM_Verzerrung.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |utmFormeln|nein|String|`"UTM_Formeln.png"`|Drittes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-******
+*********
 
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -68,7 +68,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |minShift|nein|Integer|5|Gibt an, wieviele Pixel sich die Position gegenüber vorher verändert haben muss, um ein neues Tooltip zu rendern.|
 |numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
-******
+*********
 
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
