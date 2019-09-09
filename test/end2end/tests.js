@@ -14,18 +14,6 @@ function Tests (driver, url, browsername) {
         // --- Zoom ---
         zoomtests(driver);
 
-        // // --- Search ---
-        // suchtests(driver);
-
-        // // --- Controls ---
-        // controltests(driver);
-
-        // // --- Themenbaum ---
-        // themenbaumlighttests(driver);
-
-        // // --- ParametricUrl ---
-        // parametricUrlTests(driver);
-
         // // --- Browser schlißen ---
         test.after(function () {
             driver.quit();
