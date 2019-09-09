@@ -223,8 +223,8 @@ zoomtofeature: {
 |heading|nein|Number||Heading der Kamera in Radians.|
 |tilt|nein|Number||Tilt der Kamera in Radians.|
 |altitude|nein|Number||Höhe der Kamera in m.|
-********
 
+********
 ## cesiumParameter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
