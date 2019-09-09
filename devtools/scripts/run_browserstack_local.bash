@@ -3,5 +3,5 @@
 
 wget http://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip
 unzip BrowserStackLocal-linux-x64.zip
-./BrowserStackLocal ${BROWSERSTACK_ACCESSKEY} > /dev/null &
+./BrowserStackLocal ${bs_key} > /dev/null &
 sleep 10
