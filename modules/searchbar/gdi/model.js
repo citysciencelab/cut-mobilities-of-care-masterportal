@@ -5,8 +5,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     defaults: {
         minChars: 3,
         serviceId: "",
-        sorting: {},
-        size: 10000,
         elasticSearch: new ElasticSearch()
     },
     /**
@@ -16,14 +14,12 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @param {string} config.serviceId - rest-services Id
      * @returns {void}
      */
-    initialize: function () {
+    initialize: function (config) {
         var channel = Radio.channel("GDI-Search");
 
         channel.on({
             "addLayer": this.addLayer
         }, this);
-
-        this.setSorting("_score", "desc");
 
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
@@ -31,6 +27,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         this.listenTo(Radio.channel("Elastic"), {
             "triggerHitList": this.triggerHitList
         });
+        if (config.minChars) {
+            this.set("minChars", config.minChars);
+        }
     },
     /**
      * Searchs layer if enough characters have been touched (if >="minChars")
@@ -38,10 +37,10 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-        var query = this.createQuery(searchString);
+        var query = this.createQuery(searchString, Radio.request("Parser", "getPortalConfig").searchBar.gdi);
 
         if (searchString.length >= this.get("minChars")) {
-            this.get("elasticSearch").search(this.get("serviceId"), query, this.get("sorting"), this.get("size"));
+            this.get("elasticSearch").search(this.get("serviceId"), query);
         }
     },
     /**
@@ -71,30 +70,22 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     /**
      * creates query for searched string (layer)
      * @param {String} searchString - string that will be touched
-     * @returns {Oject} query
+     * @param {Object} config - config Parameter
+     * @returns {Oject} result
      */
-    createQuery: function (searchString) {
-        /* Zur Zeit noch nicht fuzzy */
-        var query = {
-            bool: {
-                must: [
-                    {
-                        query_string: {
-                            "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
-                            "query": "*" + searchString + "*",
-                            "lowercase_expanded_terms": false
-                        }
-                    },
-                    {match:
-                        {
-                            typ: "WMS"
-                        }
-                    }
-                ]
-            }
-        };
+    createQuery: function (searchString, config) {
+        var query_object,
+            string_query,
+            replace_object,
+            result;
 
-        return query;
+        if (config) {
+            query_object = config.queryObject;
+            string_query = JSON.stringify(query_object);
+            replace_object = string_query.replace("%%searchString%%", searchString);
+            result = JSON.parse(replace_object);
+        }
+        return result;
     },
     /**
      * Adds found layer to layer tree
@@ -172,27 +163,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      */
     setServiceId: function (value) {
         this.set("serviceId", value);
-    },
-    /**
-     * Setter for Sorting
-     * @param {String} key - type of sorting
-     * @param {String} value - descending or ascending
-     * @returns {void}
-     */
-    setSorting: function (key, value) {
-        if (key && value) {
-            this.get("sorting")[key] = value;
-        }
-    },
-    /**
-     * Setter for Size
-     * @param {String} value for size
-     * @returns {void}
-     */
-    setSize: function (value) {
-        if (typeof value === "number") {
-            this.set("size", value);
-        }
     }
 });
 

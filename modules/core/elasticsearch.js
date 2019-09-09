@@ -3,28 +3,6 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         ajaxRequests: {}
     },
     /**
-     * @class ElasticSearchModel
-     * @extends Backbone.Model
-     * @memberof Searchbar.Gdi
-     * @constructs
-     * @param {object} query - json-notated Query to post to
-     * @param {object} sorting - object used for sorting the query
-     * @param {number} size - size of the query
-     */
-    prepareSearchBody (query, sorting, size) {
-        var searchBody = {};
-
-        if (!_.isEmpty(sorting)) {
-            searchBody.sort = sorting;
-        }
-
-        searchBody.from = 0;
-        searchBody.size = size;
-        searchBody.query = query;
-
-        return JSON.stringify(searchBody);
-    },
-    /**
      * Deletes the information of the successful or canceled Ajax request from the object of the running Ajax requests.
      * @param {string} serviceId - id of ElasticSearch Element in rest-services.json
      * @returns {void}
@@ -52,7 +30,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
-            type: "POST",
+            type: "GET",
             data: searchBody,
             success: function (response) {
                 // handling response
@@ -92,20 +70,18 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @param {number} size - size of the query
      * @return {object} result - Resultobject of ElasticQuery
      */
-    search (serviceId, query, sorting, size) {
+    search (serviceId, query) {
         var result = {},
             searchUrl,
             searchBody,
-            serviceUrl,
             serviceUrlCheck,
             ajax = this.get("ajaxRequests");
 
         serviceUrlCheck = Radio.request("RestReader", "getServiceById", serviceId);
 
         if (!_.isUndefined(serviceUrlCheck)) {
-            serviceUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
-            searchUrl = Radio.request("Util", "getProxyURL", serviceUrl);
-            searchBody = this.prepareSearchBody(query, sorting, size);
+            searchUrl = Radio.request("RestReader", "getServiceById", serviceId).get("url");
+            searchBody = "source=" + JSON.stringify(query) + "&source_content_type=application/json";
         }
         else if (_.isUndefined(serviceUrlCheck)) {
             result.status = "error";

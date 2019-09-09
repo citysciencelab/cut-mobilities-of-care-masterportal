@@ -40,9 +40,15 @@
         "classes": "place,highway,building,shop,historic,leisure,county"
       },
       "gdi":{
-		"minChars": 3,
-		"serviceId": "elastic_qs"
-	  },
+		    "minChars": 3,
+        "serviceId": "elastic_qs",
+        "queryObject": {
+          "id": "query",
+          "params": {
+            "query_string": "%%searchString%%"
+          }
+        }
+	    },
      "visibleVector": {
         "gfiOnClick": false
       },
