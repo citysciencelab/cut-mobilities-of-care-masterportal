@@ -19,7 +19,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
      * @memberof Tools.Measure
      * @constructs
      * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
-     * @fires Map#RadioTriggerMapRemoveInteraction
+     * @fires Core#RadioTriggerMapRemoveInteraction
      */
     initialize: function () {
         this.listenTo(this.model, {
@@ -75,7 +75,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
 
     /**
      * logs listeners to specific events
-     * @fires Map#RadioTriggerMapRemoveInteraction
+     * @fires Core#RadioTriggerMapRemoveInteraction
      * @returns {void}
      */
     unregisterListener: function () {
