@@ -45,7 +45,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[alerting](#markdown-header-alerting)|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 
 *********
-
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -63,7 +62,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |utmFormeln|nein|String|`"UTM_Formeln.png"`|Drittes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 
 *********
-
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -72,7 +70,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
 
 *********
-
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
