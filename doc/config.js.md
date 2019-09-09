@@ -44,7 +44,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |[alerting](#markdown-header-alerting)|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 
-******
+*********
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -55,21 +55,21 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |searchbarFlurstueckssuche|nein|String|`"allgemein_4.png"`|Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Flurstückssuche. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |aufbau1|nein|String|`"themen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |aufbau2|nein|String|`"themen_2.png"`|Zweites Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|statistikFlaecheNiemeier|nein|String|`"Statistik_Flaeche_Niemeier.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statsitische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
+|statistikFlaecheNiemeier|nein|String|`"Statistik_Flaeche_Niemeier.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statistische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |statistikStreckeUniErlangen|nein|String|`"Statistik_Strecke_UniErlangen.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statsitische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |utmStreifen|nein|String|`"UTM_Streifen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |utmVerzerrung|nein|String|`"UTM_Verzerrung.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
 |utmFormeln|nein|String|`"UTM_Formeln.png"`|Drittes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-******
 
+*********
 ## mouseHover ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |minShift|nein|Integer|5|Gibt an, wieviele Pixel sich die Position gegenüber vorher verändert haben muss, um ein neues Tooltip zu rendern.|
 |numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
 |infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
-******
 
+*********
 ## remoteInterface ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -223,6 +223,7 @@ zoomtofeature: {
 |heading|nein|Number||Heading der Kamera in Radians.|
 |tilt|nein|Number||Tilt der Kamera in Radians.|
 |altitude|nein|Number||Höhe der Kamera in m.|
+
 ********
 
 ## cesiumParameter ##
