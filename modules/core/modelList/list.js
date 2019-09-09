@@ -340,16 +340,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     getDefaultTool: function () {
         return this.get(this.defaultToolId);
     },
+
     /**
-     * Todo
+     * Closes all expanded folders in layertree.
      * @return {void}
      */
     closeAllExpandedFolder: function () {
-        var folderModel = this.findWhere({isExpanded: true});
+        const folderModels = this.where({isExpanded: true});
 
-        if (!_.isUndefined(folderModel)) {
-            folderModel.setIsExpanded(false);
-        }
+        folderModels.forEach(folderModel => folderModel.setIsExpanded(false));
     },
 
     /**
@@ -834,8 +833,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * Opens the layertree, selects the layer model and adds it to selection
      * Gets called from searchbar
      * @param {String} modelId Id of the layer model
-     * @fires Map#RadioRequestMapGetMapMode
-     * @fires Parser#RadioRequestParserGetItemByAttributes
+     * @fires Core#RadioRequestMapGetMapMode
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @return {void}
     */
     showModelInTree: function (modelId) {
@@ -843,14 +842,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
         this.closeAllExpandedFolder();
-        // öffnet den Themenbaum
+        // open the layerTree
         $("#root li:first-child").addClass("open");
-        // Parent und eventuelle Siblings werden hinzugefÃƒÂ¼gt
+        // Parent and possible siblings are added
         this.addAndExpandModelsRecursive(lightModel.parentId);
         if (this.get(modelId).get("supported").indexOf(mode) >= 0) {
             this.setModelAttributesById(modelId, {isSelected: true});
         }
-        // Nur bei Overlayern wird in Tree gescrollt.
+
         if (lightModel.parentId !== "Baselayer") {
             this.scrollToLayer(lightModel.name);
         }
@@ -864,31 +863,22 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * Scrolls to layer in layer tree
-    * @param {String} overlayername Name of Layer in "Overlayer" to be scrolled to
+    * Scrolls to layer in layerTree
+    * @param {String} overlayerName Name of Layer in "Overlayer" to be scrolled to
     * @return {void}
     */
-    scrollToLayer: function (overlayername) {
-        var liLayer = _.findWhere($("#Overlayer").find("span"), {title: overlayername}),
-            offsetFromTop = liLayer ? $(liLayer).offset().top : null,
-            heightThemen = $("#tree").css("height"),
-            scrollToPx = 0;
+    scrollToLayer: function (overlayerName) {
+        const $Overlayer = $("#Overlayer"),
+            overlayOffsetToTop = $Overlayer.offset().top,
+            overlayerHeight = $Overlayer.height(),
+            element = _.findWhere($Overlayer.find("span"), {title: overlayerName}),
+            elementOffsetFromTop = element ? $(element).offset().top : null,
+            targetPosition = overlayOffsetToTop + overlayerHeight / 2,
+            offset = elementOffsetFromTop - targetPosition;
 
-        if (offsetFromTop) {
-            // die "px" oder "%" vom string lÃƒÂ¶schen und zu int parsen
-            if (heightThemen.slice(-2) === "px") {
-                heightThemen = parseInt(heightThemen.slice(0, -2), 10);
-            }
-            else if (heightThemen.slice(-1) === "%") {
-                heightThemen = parseInt(heightThemen.slice(0, -1), 10);
-            }
-
-            scrollToPx = (offsetFromTop - heightThemen) / 2;
-
-            $("#Overlayer").animate({
-                scrollTop: scrollToPx
-            }, "fast");
-        }
+        $("#Overlayer").animate({
+            scrollTop: offset
+        }, "fast");
     },
 
     /**

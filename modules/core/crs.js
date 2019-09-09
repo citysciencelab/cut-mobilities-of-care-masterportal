@@ -21,7 +21,7 @@ const CRS = Backbone.Model.extend({
         }, this);
 
         channel.on({
-            "addAliasForWFSFromGeoserver": this.addAliasForWFSFromGeoserver
+            "addAliasForWFSFromGoeserver": this.addAliasForWFSFromGoeserver
         }, this);
 
         if (Config.namedProjections) {
@@ -36,7 +36,7 @@ const CRS = Backbone.Model.extend({
      * @param {String} epsgCode used epsg code in the mapView
      * @returns {void}
      */
-    addAliasForWFSFromGeoserver: function (epsgCode) {
+    addAliasForWFSFromGoeserver: function (epsgCode) {
         const epsgCodeNumber = epsgCode.split(":")[1];
 
         proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
