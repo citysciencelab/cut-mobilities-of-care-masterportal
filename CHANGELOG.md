@@ -1,3 +1,22 @@
+# Changelog LGV Master-Portal 2.4.2
+
+NEU:
+
+  (none)
+
+REFACTOR:
+
+  - GFI: Links die mit dem Prefix "file" beginnen sind nun klickbar
+
+FIXES:
+
+  - Shadow-Tool: Das Schattentool ist nun mobil nicht mehr verfügbar
+  - QuickHelp: Ein Bug wurde gefixt, der verhindert hat, dass die Bilder über den angegebenen Dateipfad geladen werden
+  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
+  - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
+  - WFS: Geoserver-WFS werden nun angezeigt
+
+
 # Changelog LGV Master-Portal 2.4.1
 
 NEU:
