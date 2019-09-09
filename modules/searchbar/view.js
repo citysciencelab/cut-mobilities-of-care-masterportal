@@ -213,7 +213,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.model.unset("initSearchString", true);
         }
         if (window.innerWidth >= 768) {
-            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160 + "px");
+            this.$("#searchInput").width(window.innerWidth - ($(".desktop").width() || 0) - 160);
             Radio.trigger("Title", "setSize");
         }
     },
