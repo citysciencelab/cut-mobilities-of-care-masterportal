@@ -1,13 +1,12 @@
 image: node:10.15.0
 
 pipelines:
-  pull-requests:
-    '**':
+    default:
         - step:
             caches:
-            - node
+                - node
             name: build and test in Browser
-            script: # Modify the commands below to build your repository.
+            script:
                 - npm install
                 - apt-get install unzip
                 - ./devtools/scripts/run_browserstack_local.bash
