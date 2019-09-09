@@ -8,7 +8,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @extends Backbone.Model
      * @memberOf Core.ConfigLoader
      * @constructs
-     * @fires Util#RadioRequestGetConfig
+     * @fires Core#RadioRequestUtilGetConfig
      * @fires Alerting#RadioTriggerAlertAlert
      * @description Loading and preperation for parsing (calls parser for default or custom tree) of the configuration file (config.json).
      * @param {*} attributes todo

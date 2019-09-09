@@ -9,6 +9,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     defaults: _.extend({}, Parser.prototype.defaults, {}),
 
@@ -23,6 +24,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesList
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     parseTree: function (object, parentId, level) {
@@ -151,7 +153,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     level: level,
                     glyphicon: "glyphicon-plus-sign",
                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true, treeType),
-                    isInThemen: true
+                    isInThemen: true,
+                    quickHelp: Radio.request("QuickHelp", "isSet")
                 });
                 // rekursiver Aufruf
                 this.parseTree(folder, folder.id, level + 1);

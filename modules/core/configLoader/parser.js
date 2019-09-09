@@ -39,29 +39,32 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @property {String} category="Opendata" selected category for Fachdaten in DefaultTree
      * @property {Number} selectionIDX=-1 Index of the last inserted layers. Required for sorting/moving (only for the treeType lightTree)
      * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
-     * @listens Parser#RadioRequestParserGetItemByAttributes
-     * @listens Parser#RadioRequestParserGetItemsByAttributes
-     * @listens Parser#RadioRequestParserGetTreeType
-     * @listens Parser#RadioRequestParserGetCategory
-     * @listens Parser#RadioRequestParserGetCategories
-     * @listens Parser#RadioRequestParserGetPortalConfig
-     * @listens Parser#RadioRequestParserGetItemsByMetaID
-     * @listens Parser#RadioRequestParserGetSnippetInfos
-     * @listens Parser#RadioRequestParserGetInitVisibBaselayer
-     * @listens Parser#RadioTriggerParsersetCategory
-     * @listens Parser#RadioTriggerParserAddItem
-     * @listens Parser#RadioTriggerParserAddItemAtTop
-     * @listens Parser#RadioTriggerParserAddItems
-     * @listens Parser#RadioTriggerParserAddFolder
-     * @listens Parser#RadioTriggerParserAddLayer
-     * @listens Parser#RadioTriggerParserAddGDILayer
-     * @listens Parser#RadioTriggerParserAddGeoJSONLayer
-     * @listens Parser#RadioTriggerParserRemoveItem
-     * @listens Parser#ChangeCategory
-     * @fires ModelList#RadioTriggerModelListRemoveModelsByParentId
-     * @fires ModelList#RadioTriggerModelListRenderTree
-     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
-     * @fires ModelList#RadioTriggerModelListRemoveModelsById
+     * @listens Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @listens Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @listens Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @listens Core.ConfigLoader#RadioRequestParserGetCategory
+     * @listens Core.ConfigLoader#RadioRequestParserGetCategories
+     * @listens Core.ConfigLoader#RadioRequestParserGetPortalConfig
+     * @listens Core.ConfigLoader#RadioRequestParserGetItemsByMetaID
+     * @listens Core.ConfigLoader#RadioRequestParserGetSnippetInfos
+     * @listens Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @listens Core.ConfigLoader#RadioTriggerParsersetCategory
+     * @listens Core.ConfigLoader#RadioTriggerParserAddItem
+     * @listens Core.ConfigLoader#RadioTriggerParserAddItemAtTop
+     * @listens Core.ConfigLoader#RadioTriggerParserAddItems
+     * @listens Core.ConfigLoader#RadioTriggerParserAddFolder
+     * @listens Core.ConfigLoader#RadioTriggerParserAddLayer
+     * @listens Core.ConfigLoader#RadioTriggerParserAddGDILayer
+     * @listens Core.ConfigLoader#RadioTriggerParserAddGeoJSONLayer
+     * @listens Core.ConfigLoader#RadioTriggerParserRemoveItem
+     * @listens Core.ConfigLoader#ChangeCategory
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
+     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsByParentId
+     * @fires Core.ModelList#RadioTriggerModelListRenderTree
+     * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
         var channel = Radio.channel("Parser");
@@ -152,6 +155,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * Parsed the menu entries (everything except the contents of the tree)
      * @param {Object} items Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @return {void}
      */
     parseMenu: function (items, parentId) {
@@ -166,7 +170,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     type: "folder",
                     parentId: parentId,
                     id: key,
-                    treeType: this.get("treeType")
+                    treeType: this.get("treeType"),
+                    quickHelp: Radio.request("QuickHelp", "isSet")
                 };
 
                 // Attribute aus der config.json werden von item geerbt
@@ -287,6 +292,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} parentId - todo
      * @param {*} level - todo
      * @param {*} isExpanded - todo
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     addFolder: function (name, id, parentId, level, isExpanded) {
@@ -297,7 +303,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             id: id,
             parentId: parentId,
             isExpanded: isExpanded ? isExpanded : false,
-            level: level
+            level: level,
+            quickHelp: Radio.request("QuickHelp", "isSet")
         };
 
         this.addItem(folder);
@@ -477,6 +484,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     /**
      * regulates the folder structure of the theme tree taking into account the map mode
      * @param {String} treeType - type of topic tree
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
@@ -489,7 +498,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers3d = this.get("overlayer_3d"),
             baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
             overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
-            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten";
+            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten",
+            isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 
         this.addItem({
             type: "folder",
@@ -500,7 +510,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isInThemen: true,
             isInitiallyExpanded: false,
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
-            level: 0
+            level: 0,
+            quickHelp: isQuickHelpSet
         });
 
         this.addOrRemove3DFolder(treeType, isMobile, overLayers3d, overLayers3DName);
@@ -514,7 +525,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isInThemen: true,
             isInitiallyExpanded: false,
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Overlayer"),
-            level: 0
+            level: 0,
+            quickHelp: isQuickHelpSet
         });
         this.addItem({
             type: "folder",
@@ -526,7 +538,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isInThemen: true,
             isInitiallyExpanded: true,
             isAlwaysExpanded: _.contains(isAlwaysExpandedList, "SelectedLayer"),
-            level: 0
+            level: 0,
+            quickHelp: isQuickHelpSet
         });
     },
 
@@ -536,7 +549,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {boolean} isMobile vsible map mode from portal
      * @param {object} overLayer3d contains layer fro 3d mode
      * @param {String} overLayers3DName Name of folder.
-     * @fires Parser#RadioTriggerModelListRemoveModelsById
+     * @fires QuickHelp#RadioRequestQuickHelpIsSet
+     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
      * @returns {void}
      */
     addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
@@ -550,7 +564,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 parentId: "tree",
                 isInThemen: true,
                 isInitiallyExpanded: false,
-                level: 0
+                level: 0,
+                quickHelp: Radio.request("QuickHelp", "isSet")
             }, this.postionFor3DFolder(this.get("itemList")));
         }
         else {
