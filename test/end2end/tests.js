@@ -4,12 +4,6 @@ var  test = require("selenium-webdriver/testing"),
     zoomtests = require(path.resolve(__dirname, "./modules/controls/Zoom.js")),
     until = webdriver.until;
 
-    // suchtests = require(path.resolve(__dirname, "./modules/Suche.js")),
-    // zoomtests = require(path.resolve(__dirname, "./modules/controls/Zoom.js")),
-    // controltests = require(path.resolve(__dirname, "./modules/controls/Controls.js")),
-    // parametricUrlTests = require(path.resolve(__dirname, "./modules/core/ParametricUrl.js")),
-    // themenbaumlighttests = require(path.resolve(__dirname, "./modules/ThemenbaumLight.js"));
-
 function Tests (driver, url) {
     test.describe("MasterTests", function () {
         this.timeout(25000);
@@ -19,18 +13,6 @@ function Tests (driver, url) {
 
         // --- Zoom ---
         zoomtests(driver);
-
-        // // --- Search ---
-        // suchtests(driver);
-
-        // // --- Controls ---
-        // controltests(driver);
-
-        // // --- Themenbaum ---
-        // themenbaumlighttests(driver);
-
-        // // --- ParametricUrl ---
-        // parametricUrlTests(driver);
 
         // // --- Browser schlißen ---
         test.after(function () {
