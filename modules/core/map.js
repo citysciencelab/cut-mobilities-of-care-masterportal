@@ -48,7 +48,9 @@ const map = Backbone.Model.extend({
         }, this);
 
         channel.on({
-            "addLayer": this.addLayer,
+            "addLayer": function (layer) {
+                this.get("map").addLayer(layer);
+            },
             "addLayerToIndex": this.addLayerToIndex,
             "setLayerToIndex": this.setLayerToIndex,
             "addLayerOnTop": this.addLayerOnTop,
@@ -499,32 +501,6 @@ const map = Backbone.Model.extend({
     },
     removeControl: function (control) {
         this.get("map").removeControl(control);
-    },
-    /**
-    * Layer-Handling
-    * @param {ol/layer} layer -
-    * @returns {void}
-    */
-    addLayer: function (layer) {
-        var layerList,
-            firstVectorLayer,
-            index;
-
-        // Alle Layer
-        layerList = this.get("map").getLayers().getArray();
-        // der erste Vectorlayer in der Liste
-        firstVectorLayer = _.find(layerList, function (veclayer) {
-            return veclayer instanceof VectorLayer;
-        });
-        // Index vom ersten VectorLayer in der Layerlist
-        index = _.indexOf(layerList, firstVectorLayer);
-        if (index !== -1 && _.has(firstVectorLayer, "id") === false) {
-            // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
-            this.get("map").getLayers().insertAt(index, layer);
-        }
-        else {
-            this.get("map").getLayers().push(layer);
-        }
     },
 
     /**
