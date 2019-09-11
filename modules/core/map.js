@@ -10,11 +10,11 @@ import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/WMSRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 import moment from "moment";
-import proj4 from "proj4";
 import {register} from "ol/proj/proj4.js";
+import proj4 from "proj4";
 import {createMap} from "masterportalAPI/src/map";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
-import {transform as transformCoord, transformFromMapProjection, getMapProjection, getProjections} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 
 const map = Backbone.Model.extend({
     defaults: {
@@ -87,6 +87,7 @@ const map = Backbone.Model.extend({
             ...mapViewSettings,
             layerConf: getLayerList()
         }));
+
         new MapView({view: this.get("map").getView(), settings: mapViewSettings});
         this.set("view", this.get("map").getView());
 
