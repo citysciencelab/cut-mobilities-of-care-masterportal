@@ -75,9 +75,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function (config) {
-        var self = this,
-            style = Radio.request("Util", "getUiStyle");
-
         this.model = new Searchbar(config);
 
         if (config.renderToDOM) {
@@ -153,17 +150,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setHitIsClick(false);
 
         // Hack für flexible Suchleiste
-        $(window).on("resize", function () {
-            self.setSearchInputWidth();
-            $(".dropdown-menu-search").css({
-                "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
-            });
-            if (style !== "TABLE") {
-                $(".dropdown-menu-search").css({
-                    "overflow": "auto"
-                });
-            }
-        });
+        $(window).on("resize", this.onresizeCallback);
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
@@ -198,6 +185,18 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             $("#table-nav-main").prepend(this.$el);
         }
         return this;
+    },
+
+    onresizeCallback: function () {
+        self.setSearchInputWidth();
+        $(".dropdown-menu-search").css({
+            "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+        });
+        if (Radio.request("Util", "getUiStyle") !== "TABLE") {
+            $(".dropdown-menu-search").css({
+                "overflow": "auto"
+            });
+        }
     },
 
     /**
