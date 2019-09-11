@@ -187,6 +187,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         return this;
     },
 
+    /**
+     * Callback for window onresize event
+     * @returns {void}
+     */
     onresizeCallback: function () {
         self.setSearchInputWidth();
         $(".dropdown-menu-search").css({
