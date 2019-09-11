@@ -15,10 +15,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @extends Backbone.Model
      * @memberOf Core.ModelList
      * @constructs
-     *
      * @param {object} attributes Class attributes
-     *
-     * @listensMapView#RadioRequestMapViewGetCenter
      * @listens MapView#RadioRequestMapViewGetCurrentExtent
      * @listens MapView#RadioRequestMapViewGetOptions
      * @listens MapView#RadioRequestMapViewGetProjection
@@ -26,7 +23,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @listens MapView#RadioRequestMapViewGetScales
      * @listens MapView#RadioRequestMapViewGetZoomLevel
      * @listens MapView#RadioRequestMapViewGtResolutions
-
      * @listens MapView#RadioTriggerMapViewResetView
      * @listens MapView#RadioTriggerMapViewSetCenter
      * @listens MapView#RadioTriggerMapViewSetConstrainedResolution
@@ -34,9 +30,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @listens MapView#RadioTriggerMapViewSetZoomLevelDown
      * @listens MapView#RadioTriggerMapViewSetZoomLevelUp
      * @listens MapView#RadioTriggerMapViewToggleBackground
-
-     * @fires CRS#RadioRequestCRSGetProjection
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
      * @fires Map#RadioRequestMapGetSize
      * @fires ParametricURL#RadioRequestParametricURLgetCenter
      * @fires ParametricURL#RadioRequestParametricURLgetProjectionFromUrl

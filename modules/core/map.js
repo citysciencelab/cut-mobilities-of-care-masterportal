@@ -10,9 +10,11 @@ import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/WMSRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 import moment from "moment";
+import proj4 from "proj4";
+import {register} from "ol/proj/proj4.js";
 import {createMap} from "masterportalAPI/src/map";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
-import {transform as transformCoord, transformFromMapProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, getMapProjection, getProjections} from "masterportalAPI/src/crs";
 
 const map = Backbone.Model.extend({
     defaults: {
@@ -80,13 +82,15 @@ const map = Backbone.Model.extend({
             }
         });
 
-        this.set("map", createMap({
+        this.setMap(createMap({
             ...Config,
             ...mapViewSettings,
             layerConf: getLayerList()
         }));
         new MapView({view: this.get("map").getView(), settings: mapViewSettings});
         this.set("view", this.get("map").getView());
+
+        this.addAliasForWFSFromGoeserver(getMapProjection(this.get("map")));
 
         if (window.Cesium) {
             this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
@@ -108,6 +112,19 @@ const map = Backbone.Model.extend({
         if (!_.isUndefined(Config.inputMap)) {
             this.registerListener("click", this.addMarker, this);
         }
+    },
+
+    /**
+     * Creates an alias for the srsName.
+     * This is necessary for WFS from geoserver.org
+     * @param {String} epsgCode used epsg code in the mapView
+     * @returns {void}
+     */
+    addAliasForWFSFromGoeserver: function (epsgCode) {
+        const epsgCodeNumber = epsgCode.split(":")[1];
+
+        proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
+        register(proj4);
     },
 
     /**
@@ -711,6 +728,10 @@ const map = Backbone.Model.extend({
 
     setShadowTime: function (value) {
         this.set("shadowTime", value);
+    },
+
+    setMap: function (value) {
+        this.set("map", value);
     }
 });
 
