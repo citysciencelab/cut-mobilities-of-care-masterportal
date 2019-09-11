@@ -192,7 +192,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     onresizeCallback: function () {
-        self.setSearchInputWidth();
+        this.setSearchInputWidth();
         $(".dropdown-menu-search").css({
             "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
         });
