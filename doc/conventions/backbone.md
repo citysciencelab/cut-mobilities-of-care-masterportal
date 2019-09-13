@@ -1,6 +1,5 @@
 **3. Backbone**
 
-
 1. Ein Modul besteht in der Regel aus einem Model, einer View, einem Template und einer CSS/LESS.
 2. Im **Model** befindet sich die Logik und die Datenhaltung.
 3. Das **Model** soll keine Listener auf seine eigenen Attribute haben.

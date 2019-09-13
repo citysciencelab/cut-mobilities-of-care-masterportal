@@ -12,3 +12,4 @@ Konventionen für das Master-Portal
 6. Schreibe valides [JSDoc](conventions/jsdoc.md).
 7. Verwende [sprechende Fehlermeldungen](conventions/errorMessages.md).
 8. Beachte die [Abwärts-Kompatibilität](conventions/backwardsCompatibility.md) der Konfigurationsdateien.
+9. Schreibe [konfigurierbaren](conventions/configuration.md) Code.
