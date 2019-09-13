@@ -75,8 +75,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function (config) {
-        var style = Radio.request("Util", "getUiStyle");
-
         this.model = new Searchbar(config);
 
         if (config.renderToDOM) {
@@ -152,19 +150,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setHitIsClick(false);
 
         // Hack für flexible Suchleiste
-        $(window).on("resize", function () {
-            if (window.innerWidth >= 768) {
-                $("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
-            }
-            $(".dropdown-menu-search").css({
-                "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
-            });
-            if (style !== "TABLE") {
-                $(".dropdown-menu-search").css({
-                    "overflow": "auto"
-                });
-            }
-        });
+        $(window).on("resize", this.onresizeCallback.bind(this));
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
@@ -202,6 +188,22 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * Callback for window onresize event
+     * @returns {void}
+     */
+    onresizeCallback: function () {
+        this.setSearchInputWidth();
+        $(".dropdown-menu-search").css({
+            "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+        });
+        if (Radio.request("Util", "getUiStyle") !== "TABLE") {
+            $(".dropdown-menu-search").css({
+                "overflow": "auto"
+            });
+        }
+    },
+
+    /**
      * todo
      * @returns {*} todo
      */
@@ -212,10 +214,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.$("#searchInput").val(this.model.get("initSearchString"));
             this.model.unset("initSearchString", true);
         }
-        if (window.innerWidth >= 768) {
-            this.$("#searchInput").width(window.innerWidth - ($(".desktop").width() || 0) - 160);
-            Radio.trigger("Title", "setSize");
-        }
+        this.setSearchInputWidth();
     },
 
     /**
@@ -248,6 +247,17 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * Sets the width of search input via JS
+     * @returns {void}
+     */
+    setSearchInputWidth: function () {
+        if ($("#searchInput").closest(".collapse.navbar-collapse").length > 0 && window.innerWidth >= 768) {
+            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
+            Radio.trigger("Title", "setSize");
+        }
+    },
+
+    /**
      * Handling of menuLoader:ready
      * @param   {String} parentElementId parentElementId
      * @returns {void}
@@ -261,10 +271,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                 this.model.unset("initSearchString", true);
             }
         }
-        if (window.innerWidth >= 768) {
-            this.$("#searchInput").width(window.innerWidth - $(".desktop").width() - 160);
-            Radio.trigger("Title", "setSize");
-        }
+        this.setSearchInputWidth();
     },
 
     /**
