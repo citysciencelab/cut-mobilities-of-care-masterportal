@@ -150,7 +150,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setHitIsClick(false);
 
         // Hack für flexible Suchleiste
-        $(window).on("resize", this.onresizeCallback);
+        $(window).on("resize", this.onresizeCallback.bind(this));
     },
     id: "searchbar", // wird ignoriert, bei renderToDOM
     className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
