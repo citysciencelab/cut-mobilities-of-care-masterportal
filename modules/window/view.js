@@ -74,19 +74,19 @@ const WindowView = Backbone.View.extend({
                     }
                 });
 
-                if ($("#table-nav").attr("class") === "table-nav-0deg ui-draggable" || $("#table-nav").attr("class") === "table-nav-0deg") {
+                if ($("#table-navigation").attr("class") === "table-nav-0deg ui-draggable" || $("#table-navigation").attr("class") === "table-nav-0deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window");
                 }
-                else if ($("#table-nav").attr("class") === "table-nav-90deg") {
+                else if ($("#table-navigation").attr("class") === "table-nav-90deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-90deg");
                 }
-                else if ($("#table-nav").attr("class") === "table-nav-180deg") {
+                else if ($("#table-navigation").attr("class") === "table-nav-180deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-180deg");
                 }
-                else if ($("#table-nav").attr("class") === "table-nav-270deg") {
+                else if ($("#table-navigation").attr("class") === "table-nav-270deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-270deg");
                 }
