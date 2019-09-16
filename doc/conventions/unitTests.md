@@ -37,4 +37,4 @@ Sind innerhalb eines Prozesses Attribute zu setzen oder Events zu feuern, so sol
 
 5.3.4 Jede Funktion soll mindestens einen **Positiv-Test** (Funktionsaufruf mit plausiblen Werten) und einen **Negativ-Test** (Funktionsaufruf mit unplausiblen Werten, z.B. *undefined*, *[]*, *{}*, *""*, ...) enthalten.
 
-
+5.3.5 Alle Unit-Tests müssen fehlerfrei durchlaufen. Dies wird beim pushen durch eine pre-push Hook geprüft.
