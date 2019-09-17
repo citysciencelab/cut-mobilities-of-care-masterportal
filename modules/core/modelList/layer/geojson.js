@@ -171,6 +171,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @param   {string} mapCrs EPSG-Code of ol.map
      * @returns {void}
      */
+    /* eslint-disable no-unused-vars */
     handleData: function (data, mapCrs) {
         var jsonCrs = "EPSG:4326",
             features = this.parseDataToFeatures(data),
@@ -179,10 +180,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         if (!features) {
             return;
         }
-        else if (jsonCrs !== mapCrs) {
-            features = this.transformFeatures(features, jsonCrs, mapCrs);
-        }
-
+        // else if (jsonCrs !== mapCrs) {
+        //     features = this.transformFeatures(features, jsonCrs, mapCrs);
+        // }
+        /* eslint-enable no-unused-vars */
         features.forEach(function (feature) {
             var id = feature.get("id") || _.uniqueId();
 
