@@ -869,16 +869,24 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     */
     scrollToLayer: function (overlayerName) {
         const $Overlayer = $("#Overlayer"),
-            overlayOffsetToTop = $Overlayer.offset().top,
-            overlayerHeight = $Overlayer.height(),
-            element = _.findWhere($Overlayer.find("span"), {title: overlayerName}),
-            elementOffsetFromTop = element ? $(element).offset().top : null,
-            targetPosition = overlayOffsetToTop + overlayerHeight / 2,
+            element = _.findWhere($Overlayer.find("span"), {title: overlayerName});
+        let overlayOffsetToTop,
+            overlayerHeight,
+            elementOffsetFromTop,
+            targetPosition,
+            offset;
+
+        if (element !== undefined) {
+            overlayOffsetToTop = $Overlayer.offset().top;
+            overlayerHeight = $Overlayer.height();
+            elementOffsetFromTop = element ? $(element).offset().top : null;
+            targetPosition = overlayOffsetToTop + overlayerHeight / 2;
             offset = elementOffsetFromTop - targetPosition;
 
-        $("#Overlayer").animate({
-            scrollTop: offset
-        }, "fast");
+            $("#Overlayer").animate({
+                scrollTop: offset
+            }, "fast");
+        }
     },
 
     /**
