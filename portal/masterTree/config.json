@@ -61,9 +61,15 @@
         "minChars": 3
       },
       "gdi":{
-		"minChars": 3,
-		"serviceId": "elastic"
-	  },
+		    "minChars": 3,
+        "serviceId": "elastic_qs",
+        "queryObject": {
+          "id": "query",
+          "params": {
+            "query_string": "%%searchString%%"
+          }
+        }
+	    },
       "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
     },
     "menu":
