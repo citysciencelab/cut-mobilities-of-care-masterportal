@@ -6,7 +6,7 @@ var  test = require("selenium-webdriver/testing"),
 
 function Tests (driver, url) {
     test.describe("MasterTests", function () {
-        this.timeout(25000);
+        this.timeout(50000);
         test.before(function () {
             driver.get(url);
         });
