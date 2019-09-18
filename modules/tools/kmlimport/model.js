@@ -106,9 +106,14 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
             }
             else {
                 styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
-                styleObjects[index].polyStyle.color = this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
+
+                styleObjects[index].lineStyle.width = Number.isNaN(styleObjects[index].lineStyle.width) ? 1 : styleObjects[index].lineStyle.width;
+                styleObjects[index].polyStyle.color = styleObjects[index].polyStyle.color.length < 6
+                    ? styleObjects[index].lineStyle.color : this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
+
                 style = this.createDrawStyle(drawGeometryType, styleObjects[index]);
             }
+
             feature.setStyle(style);
         });
     },
@@ -161,8 +166,8 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {String[]} values in RGBA
      */
     convertHexColorToRgbArray: function (hexColor) {
-        let colorRgbArray = [];
         const hexColor8 = hexColor.length === 6 ? "FF" + hexColor : hexColor;
+        let colorRgbArray = [];
 
         colorRgbArray = hexColor8.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
         colorRgbArray = colorRgbArray.splice(1, 4);
