@@ -31,8 +31,10 @@ const MapMarkerModel = Backbone.Model.extend({
         zoomLevel: 7
     },
     initialize: function () {
-        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr,
+        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"}),
             parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0];
+
+        searchConf = searchConf[0] !== undefined && searchConf[0].hasOwnProperty("attr") ? searchConf[0].attr : {};
 
         Radio.trigger("Map", "addOverlay", this.get("marker"));
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);

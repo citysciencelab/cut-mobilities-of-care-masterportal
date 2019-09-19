@@ -19,14 +19,14 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires MapView#RadioRequestMapViewGetResolutions
      * @fires MapView#RadioTriggerMapViewSetCenter
      * @fires Map#RadioTriggerMapZoomToExtent
-     * @fires ModelList#RadioTriggerModelListShowModelInTree
-     * @fires ModelList#RadioTriggerModelListAddModelsByAttributes
-     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
-     * @fires ModelList#RadioTriggerModelListRefreshLightTree
+     * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
      * @fires Filter#RadioTriggerFilterResetFilter
-     * @fires Map#RadioTriggerMapRender
+     * @fires Core.Map#RadioTriggerMapRender
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @fires Util#RadioTriggerUtilIsViewMobile
+     * @fires Core.Util#RadioTriggerUtilIsViewMobile
      * @fires CRS#RadioRequestCRSTransformToMapProjection
      *
      * @returns {void}
