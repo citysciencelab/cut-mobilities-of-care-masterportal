@@ -620,7 +620,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
-##### Portalconfig.menu.info
+#### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
 
