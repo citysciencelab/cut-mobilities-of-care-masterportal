@@ -1,6 +1,4 @@
 import Theme from "../model";
-import ImgView from "../../objects/image/view";
-import VideoView from "../../objects/video/view";
 import RoutableView from "../../objects/routingButton/view";
 
 const DefaultTheme = Theme.extend({
@@ -44,15 +42,14 @@ const DefaultTheme = Theme.extend({
         var element = this.get("gfiContent"),
             children = [];
 
-        var $self = this;
-        _.each(element, function (ele, idx1) {
-            _.each(ele, function(val, key) {
+        for (var idx1 in element) {
+            for (var key in element[idx1]) {
                 var idx = key.replace(" ", "_");
-                console.log(key, idx, val);
-                $self.set(idx, val);
-            });
-        });
-        
+                console.log(key, idx, element[idx1][key]);
+                this.set(idx, element[idx1][key]);
+            }
+        }
+
         this.set("gfiContent", element);
     }
 });
