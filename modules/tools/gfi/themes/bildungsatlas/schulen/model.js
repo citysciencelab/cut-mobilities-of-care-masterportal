@@ -1,5 +1,5 @@
-import Theme from "../model";
-import RoutableView from "../../objects/routingButton/view";
+import Theme from "../../model";
+import RoutableView from "../../../objects/routingButton/view";
 
 const DefaultTheme = Theme.extend({
     initialize: function () {
