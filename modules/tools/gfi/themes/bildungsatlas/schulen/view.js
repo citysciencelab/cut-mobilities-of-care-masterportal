@@ -1,4 +1,4 @@
-import ThemeView from "../view";
+import ThemeView from "../../view";
 import DefaultTemplate from "text-loader!./template.html";
 
 const SchulenThemeView = ThemeView.extend({

@@ -30,8 +30,8 @@ import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
-import SchulenThemeView from "./schulen/view";
-import SchulenTheme from "./schulen/model";
+import SchulenThemeView from "./bildungsatlas/schulen/view";
+import SchulenTheme from "./bildungsatlas/schulen/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
