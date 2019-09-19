@@ -620,7 +620,7 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
-#### Portalconfig.menu.info
+##### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
 
@@ -632,7 +632,7 @@ Informations-Ordner in dem Werkzeuge oder staticlinks eingetragen werden können
 
 ***
 
-#### Portalconfig.menu.info.children
+##### Portalconfig.menu.info.children
 [type:staticlinks]: # (Portalconfig.menu.staticlinks)
 
 Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
@@ -1468,7 +1468,7 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 ***
 
-#### Portalconfig.menu.staticlinks
+### Portalconfig.menu.staticlinks
 Das Array staticlink beinhaltet Objekte die entweder als link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
