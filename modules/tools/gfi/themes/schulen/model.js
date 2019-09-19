@@ -39,8 +39,7 @@ const DefaultTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent"),
-            children = [];
+        var element = this.get("gfiContent");
 
         for (var idx1 in element) {
             for (var key in element[idx1]) {
