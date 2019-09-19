@@ -30,6 +30,7 @@ import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
+<<<<<<< HEAD
 import SchulenThemeView from "./bildungsatlas/schulen/view";
 import SchulenTheme from "./bildungsatlas/schulen/model";
 
