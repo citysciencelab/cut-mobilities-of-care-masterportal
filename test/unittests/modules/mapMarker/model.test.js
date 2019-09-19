@@ -6,8 +6,6 @@ describe("mapMarker/model", function () {
 
     before(function () {
         mapMarkerModel = new MapMarkerModel();
-        console.log(mapMarkerModel);
-
     });
 
     describe("convertCoordinatesToInteger", function () {

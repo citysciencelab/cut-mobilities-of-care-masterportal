@@ -513,6 +513,13 @@
  * @example Radio.trigger("Map", "removeOverlay", overlay)
  */
 
+/**
+ * @event Core#RadioTriggerMapZoomToExtent
+ */
+
+/**
+ * @event Core#RadioTriggerMapRender
+ */
 
 /**
  * @event Core#RadioTriggerMapRegisterListener
@@ -920,6 +927,7 @@
  * @event Core.ModelList#UpdateOverlayerView
  * @example this.trigger("updateOverlayerView", id)
  */
+
 
 /** -------------------- ATTRIBUTIONS ----------------- */
 
@@ -1441,6 +1449,14 @@
  * @example Radio.trigger("MapMarker", "showMarker", coordinate);
  */
 
+/**
+ * @event MapMarker#RadioTriggerMapMarkerShowPolygon
+ */
+
+/**
+ * @event MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
+ */
+
 /** -------------------- GFIVIEW -------------------- */
 
 /**
@@ -1472,7 +1488,7 @@
 /** -------------------- STYLELIST -------------------- */
 
 /**
- * @event StyleList#RadioRequestReturnModelById
+ * @event VectorStyle#RadioRequestStyleListReturnModelById
  * @description filters styles by id
  * @returns {function} Styling-Function
  * @example Radio.request("StyleList", "returnModelById", "1711");
@@ -1708,6 +1724,14 @@
  *
  */
 
+/**
+ * @event Tools.Filter#RadioTriggerFilterResetFilter
+ * @description todo
+ * @param {*} feature todo
+ * @example Radio.trigger("Filter", "resetFilter", feature);
+ *
+ */
+
 
 /** -------------------- HighlightFeature -------------------- */
 
@@ -1876,6 +1900,7 @@
  * @event Core.ModelList.Tool#changeIsActive
  * @description Fired when param isActive changes
  */
+<<<<<<< HEAD
 /** -------------------- VirtualCity.FlightPlayer -------------------- */
 
 /**
@@ -1899,3 +1924,5 @@
  * @param {FlightInstance} flightInstance
  * @description fires if the flightplayer state changes. If the player starts playing or stop is called
  */
+=======
+>>>>>>> add jsdoc to mapMarker

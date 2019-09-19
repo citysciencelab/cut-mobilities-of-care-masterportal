@@ -16,18 +16,17 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @listens MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
      *
      * @fires CustomModule#RadioRequestCustomModuleGetMarkerPosition
-     * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires MapView#RadioTriggerMapViewSetCenter
-     * @fires Map#RadioTriggerMapZoomToExtent
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @fires Core#RadioTriggerMapZoomToExtent
      * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
-     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
-     * @fires Filter#RadioTriggerFilterResetFilter
-     * @fires Core.Map#RadioTriggerMapRender
+     * @fires Tools.Filter#RadioTriggerFilterResetFilter
+     * @fires Core#RadioTriggerMapRender
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @fires Core.Util#RadioTriggerUtilIsViewMobile
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires Core#RadioRequestCRSTransformToMapProjection
      *
      * @returns {void}
      */
@@ -80,15 +79,14 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @description Zoom auf Treffer
      * @param {Object} hit - Treffer der Searchbar
      *
-     * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires Map#RadioTriggerMapZoomToExtent
-     * @fires MapView#RadioTriggerMapViewSetCenter
-     * @fires Util#RadioTriggerUtilIsViewMobile
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @fires Core#RadioRequestUtilIsViewMobile
      * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
-     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
-     * @fires Filter#RadioTriggerFilterResetFilter
+     * @fires Tools.Filter#RadioTriggerFilterResetFilter
      *
      * @returns {void}
      */
@@ -153,7 +151,6 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
                     Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
                 }
-                // Radio.trigger("ModelList", "refreshLightTree");
                 break;
             }
             case "SearchByCoord": {
@@ -208,11 +205,12 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         }
     },
 
-    /*
+    /**
     * @description Getriggert von bkg empfängt diese Methode die XML der gesuchten Adresse
-    * @fires Map#RadioTriggerMapZoomToExtent
-    * @fires MapView#RadioTriggerMapViewSetCenter
+    * @fires Core#RadioTriggerMapZoomToExtent
+    * @fires Core#RadioTriggerMapViewSetCenter
     * @param {string} data - Die Data-Object des request.
+    * @returns {void}
     */
     zoomToBKGSearchResult: function (data) {
         if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
@@ -228,7 +226,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     /**
      * @description Todo
      * @param {array} coordinate Array of coordinates
-     * @fires Map#RadioTriggerMapRender
+     * @fires Core#RadioTriggerMapRender
      * @returns {void}
      */
     showMarker: function (coordinate) {
@@ -269,7 +267,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @description todo
      * @returns {void}
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
+     * @fires Core#RadioRequestCRSTransformToMapProjection
      */
     showStartMarker: function () {
         var startMarker = this.model.get("startMarker"),
