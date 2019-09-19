@@ -84,10 +84,10 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Map#RadioTriggerMapZoomToExtent
      * @fires MapView#RadioTriggerMapViewSetCenter
      * @fires Util#RadioTriggerUtilIsViewMobile
-     * @fires ModelList#RadioTriggerModelListShowModelInTree
-     * @fires ModelList#RadioTriggerModelListAddModelsByAttributes
-     * @fires ModelList#RadioTriggerModelListSetModelAttributesById
-     * @fires ModelList#RadioTriggerModelListRefreshLightTree
+     * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
+     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
      * @fires Filter#RadioTriggerFilterResetFilter
      *
      * @returns {void}
@@ -106,10 +106,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             coord = hit.coordinate.split(" ");
         }
 
-        // Open layers does not like coordinates of type string!
-        if (coord !== undefined) {
-            coord = coord.map(coordString => parseInt(coordString, 10));
-        }
+        coord = this.model.convertCoordinatesToInteger(coord);
 
         this.hideMarker();
         this.hidePolygon();

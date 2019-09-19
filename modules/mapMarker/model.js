@@ -134,6 +134,29 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
+     * Converts coordinates from goven array to integer values.
+     * The reason is Open layers does not like coordinates of type string!
+     * The brackets are removed from the coordinates,
+     * these are present at some coordinates due to the decomposition from the WKT format.
+     * @param {Array} coord coordinates
+     * @returns {Array} converted Coordinates as array with inetger values
+     */
+    convertCoordinatesToInteger: function (coord) {
+        let convertedCoordinates = [];
+
+        if (coord !== undefined) {
+            convertedCoordinates = coord.map(coordinate => {
+                const regExp = new RegExp(/[()]/g),
+                    coordString = coordinate.toString().replace(regExp, "");
+
+                return parseInt(coordString, 10);
+            });
+        }
+
+        return convertedCoordinates;
+    },
+
+    /**
      * Erstellt ein Polygon um das WKT-Feature
      * @return {void}
      */
@@ -166,7 +189,11 @@ const MapMarkerModel = Backbone.Model.extend({
         }
     },
 
-    // setter for zoomLevel
+    /**
+     * setter for zoomLevel
+     * @param {*} value todo
+     * @returns {void}
+     */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
     },
