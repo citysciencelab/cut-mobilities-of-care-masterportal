@@ -56,7 +56,7 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         if (attrs.gfiTheme === "table") {
             theme = new TableTheme(attrs, options);
         }
-        else if(attrs.gfiTheme === "schulen"){
+        else if (attrs.gfiTheme === "schulen") {
             theme = new SchulenTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
@@ -150,7 +150,7 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                 new TableThemeView({model: model});
                 break;
             }
-            case "schulen":{
+            case "schulen": {
                 new SchulenThemeView({model: model});
                 break;
             }
