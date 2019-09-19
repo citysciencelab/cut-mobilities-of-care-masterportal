@@ -39,11 +39,15 @@ const DefaultTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent");
+        var element = this.get("gfiContent"),
+            idx1,
+            key,
+            idx;
 
-        for (var idx1 in element) {
-            for (var key in element[idx1]) {
-                var idx = key.replace(" ", "_");
+        for (idx1 in element) {
+            for (key in element[idx1]) {
+                idx = key.replace(" ", "_");
+
                 this.set(idx, element[idx1][key]);
             }
         }
