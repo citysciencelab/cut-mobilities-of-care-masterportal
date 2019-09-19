@@ -54,7 +54,6 @@ const DefaultTheme = Theme.extend({
                         imgView,
                         videoView,
                         valString = String(val);
-                    console.log(key);
 
                     if (valString.substr(0, 4) === "http"
                         && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
@@ -106,10 +105,6 @@ const DefaultTheme = Theme.extend({
                             element.video = "#";
                         }
                     }
-                    else if(key === "C S_Name"){
-                        key = "Schulname";
-                    }
-
                     // lösche leere Dummy-Einträge wieder raus.
                     element[index] = _.omit(element[index], function (value) {
                         return value === "#";
