@@ -45,7 +45,6 @@ const DefaultTheme = Theme.extend({
         for (var idx1 in element) {
             for (var key in element[idx1]) {
                 var idx = key.replace(" ", "_");
-                console.log(key, idx, element[idx1][key]);
                 this.set(idx, element[idx1][key]);
             }
         }
