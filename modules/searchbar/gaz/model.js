@@ -54,22 +54,8 @@ const GazetteerModel = Backbone.Model.extend(/** @lends GazetteerModel.prototype
         this.listenTo(Radio.channel("Searchbar"), {
             "search": function (searchString) {
                 this.search(searchString);
-                Radio.trigger("Searchbar", "createRecommendedList");
             }
         });
-
-        // this.listenTo(Radio.channel("Gaz"), {
-        //     "findStreets": function (searchString) {
-        //         this.search(searchString, {searchStreets: true});
-        //     },
-        //     "findHouseNumbers": function (searchString) {
-        //         this.search(searchString, {searchStreets: true});
-        //         Radio.trigger("Gaz", "houseNumbers", "sortedHouseNumbers");
-        //     },
-        //     "adressSearch": function (searchString) {
-        //         this.search(searchString, {searchStreets: true});
-        //     }
-        // });
     },
 
     /**
@@ -83,9 +69,8 @@ const GazetteerModel = Backbone.Model.extend(/** @lends GazetteerModel.prototype
     search: function (searchString, searchAttributes = this.getAttributesForSearchAsObject()) {
         search(searchString, searchAttributes)
             .then(hits => {
-                // hits.forEach(hit => Radio.trigger("Searchbar", "pushHits", "hitList", this.createHitForHitList(hit)));
                 hits.forEach(hit => Radio.trigger("Searchbar", "pushHits", "hitList", this.createHitForHitList(hit)));
-                // Radio.trigger("Searchbar", "createRecommendedList");
+                Radio.trigger("Searchbar", "createRecommendedList");
             }).catch(err => console.error(err));
     },
 
@@ -126,6 +111,23 @@ const GazetteerModel = Backbone.Model.extend(/** @lends GazetteerModel.prototype
     },
 
     /**
+     * Gets all neccessarry attributes for search as Object.
+     * @returns {Object} Parmas for Search
+     */
+    getAttributesForSearchAsObject: function () {
+        return {
+            map: this.get("map"),
+            searchAddress: this.get("searchAddress"),
+            searchStreets: this.get("searchStreets"),
+            searchHouseNumbers: this.get("searchHouseNumbers"),
+            searchDistricts: this.get("searchDistricts"),
+            searchParcels: this.get("searchParcels"),
+            searchStreetKey: this.get("searchStreetKey"),
+            minCharacters: this.get("minCharacters")
+        };
+    },
+
+    /**
      * Setter for map
      * @param {String} value - map
      * @returns {void}
@@ -141,23 +143,6 @@ const GazetteerModel = Backbone.Model.extend(/** @lends GazetteerModel.prototype
      */
     setMinCharacters: function (value) {
         this.set("minCharacters", value);
-    },
-
-    /**
-     * Gets all neccessarry attributes for serach as Object.
-     * @returns {Object} Parmas for Search
-     */
-    getAttributesForSearchAsObject: function () {
-        return {
-            map: this.get("map"),
-            searchAddress: this.get("searchAddress"),
-            searchStreets: this.get("searchStreets"),
-            searchHouseNumbers: this.get("searchHouseNumbers"),
-            searchDistricts: this.get("searchDistricts"),
-            searchParcels: this.get("searchParcels"),
-            searchStreetKey: this.get("searchStreetKey"),
-            minCharacters: this.get("minCharacters")
-        };
     }
 });
 
