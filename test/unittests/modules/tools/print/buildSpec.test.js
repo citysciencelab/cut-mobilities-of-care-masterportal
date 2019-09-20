@@ -6,6 +6,8 @@ import {TileWMS, ImageWMS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
 
+import {EOL} from "os";
+
 describe("tools/print_/buildSpec", function () {
     var buildSpecModel,
         utilModel,
@@ -479,8 +481,8 @@ describe("tools/print_/buildSpec", function () {
                     RoutenName: "1. Grüner Ring",
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
-                    Verlauf: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n",
-                    Routeninformation: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n"
+                    Verlauf: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
+                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`
                 },
                 geometry: {
                     type: "MultiLineString",
@@ -683,8 +685,8 @@ describe("tools/print_/buildSpec", function () {
                     RoutenName: "1. Grüner Ring",
                     Group_: "1. Grüner Ring_Hauptroute_Hinweg",
                     Routennummer: "0",
-                    Verlauf: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n",
-                    Routeninformation: "\r\nLandungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken\r\n"
+                    Verlauf: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`,
+                    Routeninformation: `${EOL}Landungsbrücken - Deichtorhallen - Planten un Blomen - Wallring - Landungsbrücken${EOL}`
                 },
                 geometry: {
                     type: "MultiLineString",
