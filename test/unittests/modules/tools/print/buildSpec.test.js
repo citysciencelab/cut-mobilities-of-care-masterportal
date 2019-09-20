@@ -5,7 +5,6 @@ import {Style as OlStyle} from "ol/style.js";
 import {TileWMS, ImageWMS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
-
 import {EOL} from "os";
 
 describe("tools/print_/buildSpec", function () {
