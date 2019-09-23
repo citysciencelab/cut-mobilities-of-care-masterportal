@@ -6,7 +6,7 @@ let webdriver = require("selenium-webdriver"),
     browserstackuser = process.env.bs_user,
     browserstackkey = process.env.bs_key,
     proxy = process.env.proxy || '',
-    url = process.env.url || "https://localhost:9001/portal/basic",
+    url = process.env.url || "http://localhost:9001/portal/basic",
     driver;
 
 switch (browser) {
