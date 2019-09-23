@@ -31,8 +31,15 @@ const ImportView = Backbone.View.extend({
     },
 
     setText: function (evt) {
-        var file = evt.target.files[0],
-            reader = new FileReader();
+        var file,
+            reader;
+
+        if (evt.target.files.length === 0) {
+            return;
+        }
+
+        file = evt.target.files[0];
+        reader = new FileReader();
 
         this.$("#fakebutton").toggleClass("btn-primary");
 
@@ -44,13 +51,14 @@ const ImportView = Backbone.View.extend({
         }
 
         reader.onload = function () {
-            var fakeBtnTxt = this.$("#kmlinput").val(),
+            const fakeBtnTxt = this.$("#kmlinput").val(),
                 test = fakeBtnTxt.slice(12);
 
             this.model.setText(reader.result);
             this.$("#fakebutton").html("Datei: " +
             test);
         }.bind(this);
+
         reader.readAsText(file);
     }
 });
