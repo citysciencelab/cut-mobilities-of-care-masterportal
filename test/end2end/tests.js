@@ -4,8 +4,8 @@ var  test = require("selenium-webdriver/testing"),
     zoomtests = require(path.resolve(__dirname, "./modules/controls/Zoom.js")),
     until = webdriver.until;
 
-function Tests (driver, url) {
-    test.describe("MasterTests", function () {
+function Tests (driver, url, browsername) {
+    test.describe("MasterTests in " + browsername, function () {
         this.timeout(150000);
         test.before(function () {
             driver.get(url);
