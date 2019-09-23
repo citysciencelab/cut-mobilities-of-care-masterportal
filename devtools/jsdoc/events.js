@@ -1900,7 +1900,6 @@
  * @event Core.ModelList.Tool#changeIsActive
  * @description Fired when param isActive changes
  */
-<<<<<<< HEAD
 /** -------------------- VirtualCity.FlightPlayer -------------------- */
 
 /**
@@ -1924,5 +1923,3 @@
  * @param {FlightInstance} flightInstance
  * @description fires if the flightplayer state changes. If the player starts playing or stop is called
  */
-=======
->>>>>>> add jsdoc to mapMarker
