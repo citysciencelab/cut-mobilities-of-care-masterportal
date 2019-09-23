@@ -1,8 +1,6 @@
 /* eslint-disable no-sync */
 /* eslint-disable global-require */
 const merge = require("webpack-merge"),
-    // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
-    // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
     fs = require("fs"),
     _ = require("underscore");
@@ -28,7 +26,6 @@ module.exports = function (env, args) {
             port: 9001,
             publicPath: "/build/",
             overlay: true,
-            https: true,
             open: true,
             openPage: "portal/master",
             proxy: proxies
@@ -54,11 +51,5 @@ module.exports = function (env, args) {
                 }
             ]
         }
-        // auskommentieren um eine grafische Darstellung vom bundle als html unter "build/statistics.html" zu erzeugen
-        // plugins: [
-        //     new Visualizer({
-        //         filename: "./statistics.html"
-        //     })
-        // ]
     }, new Common(path2CustomModule));
 };
