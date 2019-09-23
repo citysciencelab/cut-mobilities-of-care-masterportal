@@ -1,6 +1,7 @@
 require("dotenv").config();
 let webdriver = require("selenium-webdriver"),
     path = require("path"),
+    http = require('http'),
     tests = require(path.resolve(__dirname, "./tests.js")),
     browser = process.env.browser || "chrome",
     browserstackuser = process.env.bs_user,
@@ -8,6 +9,10 @@ let webdriver = require("selenium-webdriver"),
     proxy = process.env.proxy || '',
     url = process.env.url || "http://localhost:9001/portal/basic",
     driver;
+
+let HttpAgent = new http.Agent({
+    keepAlive: true,
+});
 
 switch (browser) {
     case "firefox":
@@ -32,24 +37,7 @@ switch (browser) {
                 'os' : 'Windows',
                 'os_version' : '10',
                 'resolution' : '1024x768',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            },
-            {
-                'browserName' : 'iPhone',
-                'device' : 'iPhone 8',
-                'realMobile' : 'true',
-                'os_version' : '12',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            },
-            {
-                'browserName' : 'android',
-                'device' : 'Samsung Galaxy S8',
-                'realMobile' : 'true',
-                'os_version' : '7.0',
+                'project': 'MasterPortal',
                 'browserstack.local' : true,
                 'browserstack.user' : browserstackuser,
                 'browserstack.key' : browserstackkey
@@ -60,28 +48,7 @@ switch (browser) {
                 'os' : 'OS X',
                 'os_version' : 'Mojave',
                 'resolution' : '1024x768',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            },
-            {
-                'browserName' : 'IE',
-                'browser_version' : '11',
-                'os' : 'Windows',
-                'os_version' : '10',
-                'resolution' : '1024x768',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            },
-            {
-                'browserName' : 'Firefox',
-                'browser_version' : '69.0',
-                'acceptSslCerts': true,
-                'acceptInsecureCerts': true,
-                'os' : 'Windows',
-                'os_version' : '10',
-                'resolution' : '1024x768',
+                'project': 'MasterPortal',
                 'browserstack.local' : true,
                 'browserstack.user' : browserstackuser,
                 'browserstack.key' : browserstackkey
@@ -90,6 +57,7 @@ switch (browser) {
 
         for (let index in capabilities) {
             driver = new webdriver.Builder().
+            usingHttpAgent(HttpAgent).
             usingServer('http://hub-cloud.browserstack.com/wd/hub').
             withCapabilities(capabilities[index]).
             usingWebDriverProxy(proxy).
