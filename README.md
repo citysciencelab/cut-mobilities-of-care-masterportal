@@ -15,3 +15,6 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://www.hamburg.
 * [Dokumentation für Entwickler](doc/devdoc.md)
 * [Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](doc/02_tutorial_new_module_scale_switcher.md)
 * [Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
+
+
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)](https://automate.browserstack.com/public-build/aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)
