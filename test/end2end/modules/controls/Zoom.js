@@ -6,7 +6,7 @@ var expect = require("chai").expect,
     loader;
 
 function ZoomTests (driver) {
-    driver.wait(until.elementLocated(By.id("loader")), 9000);
+    driver.wait(until.elementLocated(By.id("loader")), 50000);
     loader = driver.findElement(By.id("loader"));
     test.describe("ZoomFunctions", function () {
         var minus,
@@ -15,7 +15,7 @@ function ZoomTests (driver) {
         test.it("should have plusbutton", function () {
 
 
-            driver.wait(until.elementLocated(By.css("span.glyphicon.glyphicon-plus")), 9000);
+            driver.wait(until.elementLocated(By.css("span.glyphicon.glyphicon-plus")), 50000);
             plus = driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-plus']"));
 
             expect(plus).to.exist;
