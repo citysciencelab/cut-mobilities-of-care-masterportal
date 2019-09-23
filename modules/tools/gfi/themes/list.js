@@ -30,7 +30,8 @@ import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
-
+import BalkendiagrammThemeView from "./bildungsatlas/balkendiagramm/view";
+import BalkendiagrammTheme from "./bildungsatlas/balkendiagramm/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -96,6 +97,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "balkendiagramm") {
+            theme = new BalkendiagrammTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -200,6 +204,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "buildings_3d": {
                 new Buildings3dThemeView({model: model});
+                break;
+            }
+            case "balkendiagramm": {
+                new BalkendiagrammThemeView({model: model});
                 break;
             }
             default: {

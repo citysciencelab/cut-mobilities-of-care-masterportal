@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<div class="schulinfo-head row">
+    <div class="btn-group btn-group-sm col-xs-9">
+        <% _.each(featureInfos, function (kategory) { %>
+            <% if (kategory.attributes.length > 0){ %>
+                <button value = "<%=kategory.name%>" class="btn btn-default <%if(kategory.isSelected) {print('btn-select');}%>"><%=kategory.name%></button>
+            <% } %>
+        <% }); %>
+    </div>
+    <div class="col-xs-3">
+        <span class="glyphicon glyphicon-map-marker pull-right" title="Schule als Ziel übernehmen"></span>
+        <% if (feature.get("isOnCompareList")) { %>
+            <span class="glyphicon glyphicon-star pull-right" title="Von der Vergleichsliste entfernen"></span>
+        <% }
+        else { %>
+            <span class="glyphicon glyphicon-star-empty pull-right" title="Auf die Vergleichsliste"></span>
+        <% } %>
+    </div>
+</div>
+<div class="schulinfo-content row">
+    <table class="table table-condensed table-hover">
+        <tbody>
+        <%_.each(selectedContent.attributes, function (attribute) { %>
+            <tr colspan = "2">
+                <td class="bold"><%= attribute.attrName %></td>
+                <td>
+                    <% if (_.isArray(attribute.attrValue)) {
+                        _.each(attribute.attrValue, function (value) {
+                            if (value.search("http") !== -1) { %>
+                                <a href="<%= value %>" target="_blank"><%= value.trim().substring(7) %></a>
+                            <%
+                            }
+                            else {
+                                print (value);
+                            } %>
+                            <br>
+                        <% }); %>
+                    <% }
+                    else {
+                        if (attribute.attrValue.search("http") !== -1) { %>
+                            <a href="<%= attribute.attrValue %>" target="_blank"><%= attribute.attrValue.substring(7) %></a>
+                        <%
+                        }
+                        else {
+                            print (attribute.attrValue)
+                        }
+                    } %>
+                </td>
+            </tr>
+        <%});%>
+        </tbody>
+    </table>
+</div>

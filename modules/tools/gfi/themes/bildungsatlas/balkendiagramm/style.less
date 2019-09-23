@@ -1,0 +1,51 @@
+@color_1: #fff;
+@color_2: #fec44f;
+@background_color_1: rgba(227, 227, 227, 0.5);
+@background_color_2: rgba(0,0,0,.5);
+
+/* .schulinfo .route-container {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid rgb(229, 229, 229);
+} */
+.schulinfo {
+    position: relative;
+    .bold {
+        td {
+            font-weight: bold;
+        }
+    }
+    .schulinfo-head {
+        padding: 8px 0;
+        background-color: @background_color_1;
+    }
+    .btn-group-sm {
+        .btn-default {
+            margin: 4px;
+        }
+    }
+    .btn-select {
+        color: @color_1;
+        background-color: @background_color_2;
+    }
+    table {
+        border-top: 1px solid rgb(229,229,229);
+    }
+    .glyphicon {
+        font-size: 28px;
+        padding: 0 2px;
+        &:hover {
+            cursor: pointer;
+            opacity: 0.5;
+        }
+    }
+    .glyphicon-star {
+        color: @color_2;
+    }
+}
+@media (min-width: 768px) {
+    .schulinfo {
+        width: 100%;
+        height: 40vh;
+    }
+}
