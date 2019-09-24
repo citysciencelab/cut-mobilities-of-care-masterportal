@@ -4,7 +4,7 @@ import Overlay from "ol/Overlay.js";
 import {Stroke, Style, Fill} from "ol/style.js";
 import {WKT} from "ol/format.js";
 
-const MapMarkerModel = Backbone.Model.extend({
+const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype */{
     defaults: {
         marker: new Overlay({
             positioning: "bottom-center",
@@ -30,9 +30,23 @@ const MapMarkerModel = Backbone.Model.extend({
         markers: [],
         zoomLevel: 7
     },
+
+    /**
+     * @class MapMarkerModel
+     * @description Model for MapMarker and Highlighting
+     * @extends Backbone.Model
+     * @memberOf Core.MapMarker
+     * @constructs
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapAddLayerToIndex
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     */
     initialize: function () {
-        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr,
+        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"}),
             parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0];
+
+        searchConf = searchConf[0] !== undefined && searchConf[0].hasOwnProperty("attr") ? searchConf[0].attr : {};
 
         Radio.trigger("Map", "addOverlay", this.get("marker"));
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
@@ -45,6 +59,10 @@ const MapMarkerModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     getFeature: function () {
         var format = new WKT(),
             feature = format.readFeature(this.get("wkt"));
@@ -52,6 +70,10 @@ const MapMarkerModel = Backbone.Model.extend({
         return feature;
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     getExtent: function () {
         var feature = this.getFeature(),
             extent = feature.getGeometry().getExtent();
@@ -74,10 +96,10 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
-     * @param  {string} type Geometrietyp
-     * @param  {number[]} geom Array mit Koordinatenwerten
-     * @return {string} wkt WellKnownText-Geom
+     * Help function for determining a feature with textual description
+     * @param  {string} type Geometrietype
+     * @param  {number[]} geom Array with coordinate values
+     * @returns {string} wkt WellKnownText-Geom
      */
     getWKTGeom: function (type, geom) {
         var wkt,
@@ -134,7 +156,30 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Erstellt ein Polygon um das WKT-Feature
+     * Converts coordinates from goven array to float values.
+     * The reason is Open layers does not like coordinates of type string!
+     * The brackets are removed from the coordinates,
+     * these are present at some coordinates due to the decomposition from the WKT format.
+     * @param {Array} coord coordinates
+     * @returns {Array} converted Coordinates as array with float values
+     */
+    convertCoordinatesToFloat: function (coord) {
+        let convertedCoordinates = [];
+
+        if (coord !== undefined) {
+            convertedCoordinates = coord.map(coordinate => {
+                const regExp = new RegExp(/[()]/g),
+                    coordString = coordinate.toString().replace(regExp, "");
+
+                return parseFloat(coordString);
+            });
+        }
+
+        return convertedCoordinates;
+    },
+
+    /**
+     * Creates a polygon around the WKT feature
      * @return {void}
      */
     showFeature: function () {
@@ -145,7 +190,7 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Löscht das Polygon
+     * Deletes the polygon
      * @return {void}
      */
     hideFeature: function () {
@@ -154,8 +199,9 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * setMapMarkerPolygonStyle styles the mapMArker polygon via the style model from the stylelist
+     * SetMapMarkerPolygonStyle styles the mapMArker polygon via the style model from the stylelist.
      * @param {string} mapMarkerStyleId styleId for the mapMarker polygon to find the style model
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @return {void}
      */
     setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
@@ -166,42 +212,77 @@ const MapMarkerModel = Backbone.Model.extend({
         }
     },
 
-    // setter for zoomLevel
+    /**
+     * setter for zoomLevel
+     * @param {*} value todo
+     * @returns {void}
+     */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
     },
 
-    // setter for wkt
+    /**
+     * setter for wkt
+     * @param {*} type todo
+     * @param {*} geom todo
+     * @returns {void}
+     */
     setWkt: function (type, geom) {
         var value = this.getWKTGeom(type, geom);
 
         this.set("wkt", value);
     },
 
-    // setter for marker
+    /**
+     * setter for marker
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarker: function (value) {
         this.set("marker", value);
     },
 
-    // setter for markers
+    /**
+     * setter for markers
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarkers: function (value) {
         this.set("markers", value);
     },
 
-    // setter for polygon
+    /**
+     * setter for polygon
+     * @param {*} value todo
+     * @returns {void}
+     */
     setPolygon: function (value) {
         this.set("polygon", value);
     },
 
-    // setter for polygonStyle
+    /**
+     * setter for style
+     * @param {*} value todo
+     * @returns {void}
+     */
     setStyle: function (value) {
         this.set("style", value);
     },
 
+    /**
+     * setter for projectionFromParamUrl
+     * @param {*} value todo
+     * @returns {void}
+     */
     setProjectionFromParamUrl: function (value) {
         this.set("projectionFromParamUrl", value);
     },
 
+    /**
+     * setter for startMarker
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarkerFromParamUrl: function (value) {
         this.set("startMarker", value);
     }
