@@ -20,14 +20,14 @@ switch (browser) {
                     withCapabilities({'browserName': 'firefox', acceptSslCerts: true, acceptInsecureCerts: true}).
                     build();
 
-                    tests(driver, url);
+                    tests(driver, url, browser);
         break;
     case "ie":
         driver = new webdriver.Builder().
                     withCapabilities(webdriver.Capabilities.ie()).
                     build();
 
-                    tests(driver, url);
+                    tests(driver, url, browser);
         break;
     case "bs":
         let capabilities = [
@@ -63,7 +63,7 @@ switch (browser) {
             usingWebDriverProxy(proxy).
             build();
 
-            tests(driver, url, capabilities[index].browserName);
+            tests(driver, url, "browserstack / " + capabilities[index].browserName);
             }
 
         break;
@@ -72,7 +72,7 @@ switch (browser) {
                     withCapabilities(webdriver.Capabilities.chrome()).
                     build();
 
-                    tests(driver, url);
+                    tests(driver, url, browser);
         break;
 };
 
