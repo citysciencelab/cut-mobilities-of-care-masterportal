@@ -89,6 +89,7 @@
 
 /**
  * @namespace MapMarker
+ * @memberOf Core
  * @description MapMarker
  */
 
