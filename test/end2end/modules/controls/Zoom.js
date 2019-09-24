@@ -37,7 +37,7 @@ function ZoomTests (driver) {
 
         test.it("should have minusbutton", function () {
 
-            driver.wait(until.elementIsNotVisible(loader), 50000, "Loader nach timeout noch sichtbar");
+
             minus = driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
 
 
