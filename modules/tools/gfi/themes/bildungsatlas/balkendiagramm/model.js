@@ -1,305 +1,123 @@
 import Theme from "../../model";
+import RoutableView from "../../../objects/routingButton/view";
+import ImgView from "../../../objects/image/view";
+import VideoView from "../../../objects/video/view";
 
-const SchulInfoTheme = Theme.extend({
-    defaults: _.extend({}, Theme.prototype.defaults, {
-        themeConfig: [{
-            name: "Grundsätzliche Informationen",
-            isSelected: true,
-            attributes: [
-                "schulname",
-                "schulform",
-                "schultyp",
-                // "Zusatzinformation zur Schulform", ?? SD
-                "schwerpunktschule",
-                "adresse_strasse_hausnr",
-                "adresse_ort",
-                "stadtteil",
-                "bezirk",
-                "schul_telefonnr",
-                "schul_email",
-                "schulportrait",
-                "schul_homepage",
-                "name_schulleiter",
-                "zustaendiges_rebbz",
-                "rebbz_homepage",
-                "schulaufsicht",
-                "offenetuer"]
-        },
-        {
-            name: "Schulgröße",
-            attributes: [
-                "anzahl_schueler_gesamt",
-                "zuegigkeit_kl_1",
-                "standortkl1",
-                "zuegigkeit_kl_5",
-                "standortkl5"
-            ]
-        },
-        {
-            name: "Abschlüsse",
-            attributes: ["abschluss"]
-        },
-        {
-            name: "weitere Informationen",
-            attributes: [
-                "foerderart",
-                "auszeichnung",
-                "schuelerzeitung",
-                "schulische_ausrichtung",
-                "schulpartnerschaft",
-                "schulinspektion_link",
-                "schulportrait",
-                "einzugsgebiet",
-                "schulwahl_wohnort"
-            ]
-        },
-        {
-            name: "Sprachen",
-            attributes: [
-                "fremdsprache_mit_klasse",
-                "bilingual",
-                "sprachzertifikat"
-            ]
-        },
-        {
-            name: "Ganztag",
-            attributes: [
-                "ganztagsform",
-                "kernzeitbetreuung",
-                "ferienbetreuung_anteil",
-                "kernunterricht"
-            ]
-        },
-        {
-            name: "Mittagsversorgung",
-            attributes: [
-                "mittagspause",
-                "kantine_vorh",
-                "wahlmoeglichkeit_essen",
-                "vegetarisch",
-                "nutzung_kantine_anteil",
-                "kiosk_vorh"
-            ]
-        },
-        {
-            name: "Ansprechpartner",
-            attributes: [
-                "name_schulleiter",
-                "name_stellv_schulleiter",
-                "ansprechp_buero",
-                "ansprechp_klasse_1",
-                "ansprechp_klasse_5",
-                "name_oberstufenkoordinator"
-            ]
-        },
-        {
-            name: "Oberstufenprofil",
-            attributes: [
-                "oberstufenprofil",
-                "standortoberstufe"
-            ]
-        }]
-    }),
+const DefaultTheme = Theme.extend({
     initialize: function () {
+        var channel = Radio.channel("defaultTheme");
 
         this.listenTo(this, {
-            "change:isReady": this.parseGfiContent
+            "change:isReady": function () {
+                this.replaceValuesWithChildObjects();
+                this.checkRoutable();
+            }
         });
 
-        this.get("feature").on("propertychange", this.toggleStarGlyphicon.bind(this));
-
-        this.get("feature").set("layerId", this.get("id"));
-        this.get("feature").set("layerName", this.get("name"));
-    },
-    getVectorGfi: function () {
-        var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
-
-        gfiContent = this.getManipulateDate([gfiContent]);
-        this.setGfiContent(gfiContent);
-        this.setIsReady(true);
+        // render gfi new when changing properties of the associated features
+        this.listenTo(channel, {
+            "changeGfi": function () {
+                Radio.trigger("gfiView", "render");
+            }
+        });
     },
 
     /**
-     * Ermittelt alle Namen(=Zeilennamen) der Eigenschaften der Objekte
+     * Prüft, ob der Button zum Routen angezeigt werden soll
      * @returns {void}
      */
-    parseGfiContent: function () {
-        var gfiContent,
-            featureInfos = [];
-
-        if (!_.isUndefined(this.get("gfiContent")[0])) {
-            gfiContent = this.get("gfiContent")[0];
-            featureInfos = [];
-            featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
-            this.setFeatureInfos(featureInfos);
-            this.determineSelectedContent(featureInfos);
+    checkRoutable: function () {
+        if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
+            if (this.get("routable") === true) {
+                this.set("routable", new RoutableView());
+            }
         }
     },
     /**
-     * categorizes gfiContent according to categories in themeConfig
-     * @param  {Object[]} gfiContent  [description]
-     * @param  {Object[]} themeConfig [description]
-     * @return {Object[]}             [description]
+     * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
+     * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
+     * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
+     * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+     * @returns {void}
      */
-    createFeatureInfos: function (gfiContent, themeConfig) {
-        var featureInfos = [];
+    replaceValuesWithChildObjects: function () {
+        var element = this.get("gfiContent"),
+            children = [];
 
-        if (!_.isUndefined(themeConfig)) {
+        if (_.isString(element) && element.match(/content="text\/html/g)) {
+            children.push(element);
+        }
+        else {
+            _.each(element, function (ele, index) {
+                _.each(ele, function (val, key) {
+                    var copyright,
+                        imgView,
+                        videoView,
+                        valString = String(val);
 
-            _.each(themeConfig, function (kategory) {
-                var kategoryObj = {
-                    name: kategory.name,
-                    isSelected: kategory.isSelected ? kategory.isSelected : false,
-                    attributes: []};
+                    if (valString.substr(0, 4) === "http"
+                        && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
+                        // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
+                        copyright = "";
 
-                _.each(kategory.attributes, function (attribute) {
-                    var isAttributeFound = this.checkForAttribute(gfiContent, attribute);
+                        if (element[index].Copyright !== null) {
+                            copyright = element[index].Copyright;
+                            element[index].Copyright = "#";
+                        }
+                        else if (element[index].copyright !== null) {
+                            copyright = element[index].copyright;
+                            element[index].copyright = "#";
+                        }
 
-                    if (isAttributeFound) {
-                        kategoryObj.attributes.push({
-                            attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
-                            attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
+                        imgView = new ImgView(valString, copyright);
+
+                        element[index][key] = "#";
+
+                        children.push({
+                            key: imgView.model.get("id"),
+                            val: imgView,
+                            type: "image"
                         });
                     }
+                    else if (key === "video" && Radio.request("Util", "isAny") === null) {
+                        videoView = new VideoView(valString, "rtmp/mp4", "400px", "300px");
+
+                        element[index][key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView,
+                            type: "video"
+                        });
+                        if (_.has(element, "mobil_video")) {
+                            element.mobil_video = "#";
+                        }
+                    }
+                    else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
+                        videoView = new VideoView(valString, "application/x-mpegURL", "300px", "300px");
+
+                        element[index][key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView,
+                            type: "mobil_video"
+                        });
+                        if (_.has(element, "video")) {
+                            element.video = "#";
+                        }
+                    }
+                    // lösche leere Dummy-Einträge wieder raus.
+                    element[index] = _.omit(element[index], function (value) {
+                        return value === "#";
+                    });
                 }, this);
-                featureInfos.push(kategoryObj);
-            }, this);
-        }
-        return featureInfos;
-    },
-    beautifyAttribute: function (attribute, key) {
-        var newVal,
-            beautifiedAttribute = attribute;
-
-        if (key === "oberstufenprofil" && _.isString(attribute)) {
-            if (beautifiedAttribute.indexOf("|") !== -1) {
-                beautifiedAttribute = [];
-                _.each(attribute.split("|"), function (value) {
-                    newVal = value;
-                    // make part before first ";" bold
-                    newVal = newVal.replace(/^/, "<b>");
-                    newVal = newVal.replace(/;/, "</b>;");
-                    beautifiedAttribute.push(newVal);
-                }, this);
-            }
-            else {
-                newVal = attribute;
-                // make part before first ";" bold
-                newVal = newVal.replace(/^/, "<b>");
-                newVal = newVal.replace(/;/, "</b>;");
-
-                beautifiedAttribute = newVal;
-            }
-            return beautifiedAttribute;
-        }
-        if (attribute.indexOf("|") !== -1) {
-            return attribute.split("|");
-        }
-        if (attribute === "true" || attribute === "ja") {
-            return "Ja";
-        }
-        if (attribute === "false" || attribute === "nein") {
-            return "Nein";
-        }
-        return attribute;
-    },
-    /**
-     * determines Selected Content to show in .gfi-content
-     * @param  {Object[]} featureInfos [description]
-     * @return {void}
-     */
-    determineSelectedContent: function (featureInfos) {
-        var selectedContent = featureInfos.filter(function (featureInfo) {
-            return featureInfo.isSelected;
-        })[0];
-
-        this.setSelectedContent(selectedContent);
-    },
-    /**
-     * checks if attribute is in gfiContent
-     * @param  {Object[]} gfiContent [description]
-     * @param  {String} attribute name
-     * @return {Boolean} Flag if Attribute is found
-     */
-    checkForAttribute: function (gfiContent, attribute) {
-        var isAttributeFound = false;
-
-        if (!_.isUndefined(gfiContent[attribute])) {
-            isAttributeFound = true;
-        }
-
-        return isAttributeFound;
-    },
-    /**
-     * updates featureInfos.
-     * @param  {String} newName new name of Feature Info
-     * @return {void}
-     */
-    updateFeatureInfos: function (newName) {
-        var featureInfos = this.get("featureInfos");
-
-        featureInfos = this.setIsSelected(newName, featureInfos);
-        this.setFeatureInfos(featureInfos);
-        this.determineSelectedContent(featureInfos);
-    },
-    /**
-     * setsFeature selected where feature.name === newName
-     * @param {String} newName - new name of Feature info
-     * @param {Object[]} featureInfos -
-     * @returns {Object[]} featureInfos
-     */
-    setIsSelected: function (newName, featureInfos) {
-        var newNameFound = false;
-
-        newNameFound = this.isNewNameInFeatureInfos(newName, featureInfos);
-        if (newNameFound) {
-            _.each(featureInfos, function (featureInfo) {
-                if (featureInfo.name === newName) {
-                    featureInfo.isSelected = true;
-                }
-                else {
-                    featureInfo.isSelected = false;
-                }
             });
         }
-        return featureInfos;
-    },
-    /**
-     * checks is newName is in featureInfos
-     * @param  {String}  newName to be checked in featureInfos
-     * @param  {Object[]}  featureInfos array of objects
-     * @return {Boolean}  Flag if new name is found
-     */
-    isNewNameInFeatureInfos: function (newName, featureInfos) {
-        var newNameFound = false,
-            filterArray;
-
-        filterArray = featureInfos.filter(function (featureObject) {
-            if (featureObject.name === newName) {
-                return true;
-            }
-            return false;
-        });
-        if (filterArray.length > 0) {
-            newNameFound = true;
+        if (children.length > 0) {
+            this.set("children", children);
         }
-        return newNameFound;
-    },
-
-    toggleStarGlyphicon: function (evt) {
-        if (evt.key === "isOnCompareList") {
-            this.trigger("toggleStarGlyphicon", evt.target);
-        }
-    },
-
-    // setter for selectedContent
-    setSelectedContent: function (value) {
-        this.set("selectedContent", value);
-    },
-    // setter for featureInfos
-    setFeatureInfos: function (value) {
-        this.set("featureInfos", value);
+        console.log(element);
+        this.set("gfiContent", element);
     }
 });
 
-export default SchulInfoTheme;
+export default DefaultTheme;
