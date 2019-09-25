@@ -5,7 +5,8 @@ import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style.js";
 import {MultiLineString, Point} from "ol/geom.js";
 import {WKT} from "ol/format.js";
 import Feature from "ol/Feature.js";
-import {search} from "masterportalAPI/src/searchAddress/search";
+import {search} from "masterportalAPI";
+import {setGazetteerUrl} from "masterportalAPI";
 
 const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
 
@@ -30,7 +31,8 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
         checkBoxHVV: undefined,
         renderToSidebar: true,
         renderToWindow: false,
-        glyphicon: "glyphicon-filter"
+        glyphicon: "glyphicon-filter",
+        serviceId: "88"
     }),
 
     /**
@@ -40,9 +42,14 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
      * @constructs
      */
     initialize: function () {
-        var channel = Radio.channel("SchulwegRouting");
+        const channel = Radio.channel("SchulwegRouting"),
+            gazService = Radio.request("RestReader", "getServiceById", this.get("serviceId"));
 
         this.superInitialize();
+
+        if (gazService) {
+            setGazetteerUrl(gazService.get("url"));
+        }
 
         this.setCheckBoxHVV(new SnippetCheckboxModel({
             isSelected: false,
@@ -71,9 +78,6 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
             }
         });
 
-        this.listenTo(Radio.channel("Gazetter"), {
-            "getAdress": this.parseRegionalSchool
-        });
         this.listenTo(this.get("checkBoxHVV"), {
             "valuesChanged": this.toggleHVVLayer
         });
@@ -222,7 +226,7 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
             search(address, {
                 map: Radio.request("Map", "getMap"),
                 searchAddress: true
-            }).then(hits => Radio.trigger("Gazetter", "getAdress", hits));
+            }).then(hits => this.parseRegionalSchool(hits));
         }
     },
 

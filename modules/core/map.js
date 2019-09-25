@@ -12,7 +12,7 @@ import {transform, get} from "ol/proj.js";
 import moment from "moment";
 import {register} from "ol/proj/proj4.js";
 import proj4 from "proj4";
-import {createMap} from "masterportalAPI/src/map";
+import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 
