@@ -23,6 +23,30 @@
     margin-bottom: 8px;
 }
 
+.gfi-info .title, .gfi-daten .title{
+    background: #eeeeee;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    width: calc(100% + 14px);
+    margin-left: -7px;
+    border-bottom: 2px solid #ddd;
+    cursor: pointer;
+    position: relative;
+}
+
+.gfi-info .title:after, .gfi-daten .title:after {
+    content: " \002B";
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.gfi-info .title.show:after, .gfi-daten .title.show:after {
+    content: " \002D";
+    right: 12px;
+}
+
 .table-condensed > tbody > tr > td:first-child {
     font-style: italic;
 }
@@ -31,4 +55,13 @@
     font-weight: bold;
     text-align: right;
     font-size: 12px;
+}
+
+.gfi-info .details {
+    padding: 10px 0 0;
+}
+
+.gfi-info .details p{
+    padding: 0 5px;
+    margin-bottom: 10px;
 }
