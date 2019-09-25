@@ -147,30 +147,24 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
     * @returns {void}
     */
     setSearchString: function (value, eventType) {
-        // var splitAdress = value.split(" "),
-        //     houseNumber,
-        //     streetName;
+        var splitAdress = value.split(" "),
+            houseNumber,
+            streetName;
 
-        // todo prüfen ob für andere Suchen als Gazetter benötigt (Gazetter braucht dies nicht)
         // für Copy/Paste bei Adressen
-        // if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
-        //     houseNumber = splitAdress[splitAdress.length - 1];
-        //     streetName = value.substr(0, value.length - houseNumber.length - 1);
+        if (splitAdress.length > 1 && splitAdress[splitAdress.length - 1].match(/\d/) && eventType === "paste") {
+            houseNumber = splitAdress[splitAdress.length - 1];
+            streetName = value.substr(0, value.length - houseNumber.length - 1);
 
-        this.setEventType(eventType);
-        //     this.set("searchString", value);
-        //     // Radio.trigger("Searchbar", "setPastedHouseNumber", value);
-        // }
-        // else {
-        this.set("searchString", value);
-        // }
+            this.setEventType(eventType);
+            this.set("searchString", streetName);
+            Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
+        }
+        else {
+            this.set("searchString", value);
+        }
         this.set("hitList", []);
-
-        clearTimeout(this.get("timeOutReference"));
-        this.set("timeOutReference", setTimeout(() => {
-            Radio.trigger("Searchbar", "search", value);
-        }, 500));
-
+        Radio.trigger("Searchbar", "search", this.get("searchString"));
         $(".dropdown-menu-search").show();
     },
 
