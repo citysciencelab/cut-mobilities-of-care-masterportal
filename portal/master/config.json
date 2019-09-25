@@ -12,15 +12,13 @@
     {
       "gazetteer":
       {
-        "minCharacters": 3,
-        "serviceId": "88",
+        "minchars": 3,
+        "serviceId": "8",
         "searchStreets": true,
         "searchHouseNumbers": true,
         "searchDistricts": true,
         "searchParcels": true,
-        "searchStreetKey": true,
-        "searchAddress": true,
-        "searchHouseNumbersThresholdMaxStreets": 4
+        "searchStreetKey": true
       },
       "bkg":
       {
