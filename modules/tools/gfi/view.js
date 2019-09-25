@@ -22,7 +22,7 @@ const GFIView = Backbone.View.extend({
 
         $(window).resize($.proxy(function () {
             $(".gfi-content").css({
-                "max-height": window.innerHeight - 100 - 34 // 100 fixer Wert für navbar &co. 34 für header vom gfi
+                "max-height": window.innerHeight - 100 - 34 - 43 // 100 fixer Wert für navbar &co. 34 für header vom gfi 43 für den footer beim gfi
             });
         }, this));
 
