@@ -1,144 +1,155 @@
 <!DOCTYPE html>
+<div class="gfi-info">
+    <div class="title">Info</div>
+    <div class="details" style="display: none">
+        <p><b>Schulstandorte mit Jahrgängen 1 bis 4:</b></p>
+        <p>Aufgeführt sind alle Grundschulen des allgemeinbildenden Schulsystems* sowie Sonderschulen und Stadtteilschulen mit einer Primarstufe**.</p>
+    </div>
+</div>
+<div class="gfi-daten">
+    <div class="title show">Daten</div>
+    <table class="table table-condensed table-hover details">
+        <thead>
+        <tr>
+            <th colspan="2"><%= C_S_Name %></th>
+        </tr>
+        </thead>
 
-<thead>
-<tr>
-    <th colspan="2"><%= C_S_Name %></th>
-</tr>
-</thead>
+        <tbody>
+        <tr>
+            <td></td>
+            <td>
+                <%= C_S_Str %> <%= C_S_HNr %>
+                <br/>
+                <%= C_S_PLZ  %> <%= C_S_Ort %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Sozialindex:
+            </td>
+            <td>
+                <%= C_S_SI %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Schwerpunktschule:
+            </td>
+            <td>
+                <%= SchPu_PrSt %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Schule mit Zweigstelle:
+            </td>
+            <td>
+                <%= C_S_Zweig %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Schule mit Vorschulklasse:
+            </td>
+            <td>
+                <%= C_S_SuS_ES %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Schule mit Ganztagesangebot:
+            </td>
+            <td>
+                <%= C_S_GTA %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Anzahl Schüler am Standort:
+            </td>
+            <td>
+                <%= Schule_SuS %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Primarstufe:
+            </td>
+            <td>
+                <%= Schule_PS %>
+            </td>
+        </tr>
 
-<tbody>
-<tr>
-    <td></td>
-    <td>
-        <%= C_S_Str %> <%= C_S_HNr %>
-        <br/>
-        <%= C_S_PLZ  %> <%= C_S_Ort %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Sozialindex:
-    </td>
-    <td>
-        <%= C_S_SI %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Schwerpunktschule:
-    </td>
-    <td>
-        <%= SchPu_PrSt %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Schule mit Zweigstelle:
-    </td>
-    <td>
-        <%= C_S_Zweig %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Schule mit Vorschulklasse:
-    </td>
-    <td>
-        <%= C_S_SuS_ES %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Schule mit Ganztagesangebot:
-    </td>
-    <td>
-        <%= C_S_GTA %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Anzahl Schüler am Standort:
-    </td>
-    <td>
-        <%= Schule_SuS %>
-    </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Primarstufe:
-    </td>
-    <td>
-        <%= Schule_PS %>
-    </td>
-</tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Sekundarstufe I:
+            </td>
+            <td>
+                <%= Schule_S1 %>
+            </td>
+        </tr>
 
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Sekundarstufe I:
-    </td>
-    <td>
-        <%= Schule_S1 %>
-    </td>
-</tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Sekundarstufe II:
+            </td>
+            <td>
+                <%= Schule_S2 %>
+            </td>
+        </tr>
 
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Sekundarstufe II:
-    </td>
-    <td>
-        <%= Schule_S2 %>
-    </td>
-</tr>
+        <tr>
+            <td>
+                Website der Schule:
+            </td>
+            <td>
+                <%= C_S_HomP %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Adresse des Hauptstandortes:
+            </td>
+            <td>
+                <%= Str_Haupts  %> <%= HNr_Haupts %>
+                <br/>
+                <%= PLZ_Haupts  %> <%= C_S_Ort %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Gesamtanzahl der Schüler an allen Standorten:
+            </td>
+            <td>
+                <%= C_S_SuS %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Primarstufe:
+            </td>
+            <td>
+                <%= C_S_SuS_PS %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Sekundarstufe I:
+            </td>
+            <td>
+                <%= C_S_SuS_S1 %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;&nbsp;davon in der Sekundarstufe II:
+            </td>
+            <td>
+                <%= C_S_SuS_S2 %>
+            </td>
+        </tr>
 
-<tr>
-    <td>
-        Website der Schule:
-    </td>
-    <td>
-        <%= C_S_HomP %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Adresse des Hauptstandortes:
-    </td>
-    <td>
-        <%= Str_Haupts  %> <%= HNr_Haupts %>
-        <br/>
-        <%= PLZ_Haupts  %> <%= C_S_Ort %>
-    </td>
-</tr>
-<tr>
-    <td>
-        Gesamtanzahl der Schüler an allen Standorten:
-    </td>
-    <td>
-        <%= C_S_SuS %>
-    </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Primarstufe:
-    </td>
-    <td>
-        <%= C_S_SuS_PS %>
-    </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Sekundarstufe I:
-    </td>
-    <td>
-        <%= C_S_SuS_S1 %>
-    </td>
-</tr>
-<tr>
-    <td>
-        &nbsp;&nbsp;davon in der Sekundarstufe II:
-    </td>
-    <td>
-        <%= C_S_SuS_S2 %>
-    </td>
-</tr>
-
-</tbody>
+        </tbody>
+    </table>
+</div>
