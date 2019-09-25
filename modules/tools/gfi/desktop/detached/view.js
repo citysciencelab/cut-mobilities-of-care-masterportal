@@ -21,8 +21,8 @@ const GFIDetachedView = DesktopView.extend({
         });
 
         $(".gfi-content").css({
-            "max-height": window.innerHeight - 100 -34 // 100 fixer Wert für navbar &co. 34 für header vom gfi
-        })
+            "max-height": window.innerHeight - 100 - 34 // 100 fixer Wert für navbar &co. 34 für header vom gfi
+        });
 
     },
 
