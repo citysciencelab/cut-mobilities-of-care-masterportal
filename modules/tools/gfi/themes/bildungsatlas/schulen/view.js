@@ -16,8 +16,20 @@ const SchulenThemeView = ThemeView.extend({
      * @returns {void}
      */
     toggleTab: function (evt) {
-        $(evt.currentTarget).parent().parent().find(".title").toggleClass("show");
-        $(evt.currentTarget).parent().parent().find(".details").slideToggle(300);
+        var contentId = this.$(evt.currentTarget).attr("value");
+
+        // deactivate all tabs and their contents
+        this.$(evt.currentTarget).parent().find("li").each(function (index, li) {
+            var tabContentId = $(li).attr("value");
+
+            $(li).removeClass("active");
+            $("#" + tabContentId).removeClass("active");
+            $("#" + tabContentId).removeClass("in");
+        });
+        // activate selected tab and its content
+        this.$(evt.currentTarget).addClass("active");
+        this.$("#" + contentId).addClass("active");
+        this.$("#" + contentId).addClass("in");
     }
 
 });
