@@ -107,7 +107,7 @@ const WindowView = Backbone.View.extend({
         this.model.set("maxPosLeft", this.$el.css("left"));
         this.$(".win-body").hide();
         this.$(".glyphicon-minus").hide();
-        this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
+        this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
         this.$(".header").addClass("header-min");
         this.$el.draggable("disable");
     },
