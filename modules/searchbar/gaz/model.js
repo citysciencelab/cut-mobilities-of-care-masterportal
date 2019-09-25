@@ -1,6 +1,6 @@
 import "../model";
-import {search} from "masterportalAPI/src/searchAddress/search";
-import {setGazetteerUrl} from "masterportalAPI/src/searchAddress/gazetteerUrl";
+import {search} from "masterportalAPI";
+import {setGazetteerUrl} from "masterportalAPI";
 
 const GazetteerModel = Backbone.Model.extend(/** @lends GazetteerModel.prototype */{
     defaults: {
