@@ -1,45 +1,35 @@
 <!DOCTYPE html>
-<tbody>
-<% let anlagenCounter = 1; %>
-<%  _.each(gfiContent[0], function(value, key) {
-if (infoFormat === "text/html") { %>
-<tr colspan="1" >
-    <td >
-        <iframe src="<%= value%>" class="gfi-iFrame">
-        </iframe>
-    </td>
-</tr>
-<% }
-else { %>
-<%     if (_.isString(key) === false || _.isString(value)=== false) return;
-%>
-<tr colspan="2">
-    <td style="font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;">
-        <%= key + ""%>
-    </td>
-    <td>
-        <% if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") { %>
-        <% if (value.split("|").length > 1) { %>
-        <% _.each(value.split("|"), function (val) { %>
-        <a href="<%= val %>" target="_blank">Anlage <%= anlagenCounter %></a><br>
-        <% anlagenCounter++; %>
-        <% }); %>
-        <% }
-        else { %>
-        <a href="<%= value %>" target="_blank">Anlage <%= anlagenCounter %></a>
-        <% anlagenCounter++; %>
-        <% } %>
+<table class="table table-condensed table-hover details">
+    <thead>
+        <tr>
+            <th colspan="2"><%= Stadtteil %></th>
+        </tr>
+    </thead>
 
-        <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http" || value.substr(0, 4) === "file") { %>
-        <a href="<%= value %>" target="_blank">Link</a>
-        <% } else if (value.substr(0, 4) == "040 " || value.substr(0, 4) === "040-" || value.substr(0, 3) === "+49"
-        || value.substr(0, 5) === "0800 "
-        || value.substr(0, 5) === "0800-") { %>
-        <a href="tel:<%= value.replace(" ", "").replace("-", "")%>"><%= value %></a>
-        <% } else { %>
-        <%= value %>
-        <% } %>
-    </td>
-</tr>
-<% }}); %>
-</tbody>
+    <tbody>
+        <tr>
+            <td>
+                <%= Stadtteil %>
+            </td>
+            <td>
+                <%= 2017 %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Bezirk <%= Bezirk %>
+            </td>
+            <td>
+                <%= Summe_bezirk %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Hamburg
+            </td>
+            <td>
+                <%= Summe_hamburg %>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -2,8 +2,8 @@ import ThemeView from "../../view";
 import BalkendiagrammThemeTemplate from "text-loader!./template.html";
 
 const BalkendiagrammThemeView = ThemeView.extend({
-    tagName: "table",
-    className: "table table-condensed table-hover",
+    tagName: "div",
+    className: "gfi-bakendiagramm",
     template: _.template(BalkendiagrammThemeTemplate)
 });
 

@@ -1,51 +1,34 @@
-@color_1: #fff;
-@color_2: #fec44f;
-@background_color_1: rgba(227, 227, 227, 0.5);
-@background_color_2: rgba(0,0,0,.5);
 
-/* .schulinfo .route-container {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border-top: 1px solid rgb(229, 229, 229);
-} */
-.schulinfo {
-    position: relative;
-    .bold {
-        td {
-            font-weight: bold;
-        }
-    }
-    .schulinfo-head {
-        padding: 8px 0;
-        background-color: @background_color_1;
-    }
-    .btn-group-sm {
-        .btn-default {
-            margin: 4px;
-        }
-    }
-    .btn-select {
-        color: @color_1;
-        background-color: @background_color_2;
-    }
-    table {
-        border-top: 1px solid rgb(229,229,229);
-    }
-    .glyphicon {
-        font-size: 28px;
-        padding: 0 2px;
-        &:hover {
-            cursor: pointer;
-            opacity: 0.5;
-        }
-    }
-    .glyphicon-star {
-        color: @color_2;
-    }
+.gfi-content {
+    z-index: 1000;
+    font-size: 12px;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    max-width: 420px;
+    line-height: 1.3em;
+    color: #646262;
 }
-@media (min-width: 768px) {
-    .schulinfo {
-        width: 100%;
-        height: 40vh;
-    }
+
+.gfi-detached {
+    z-index: 9999;
+}
+.gfi > .gfi-header {
+    font-size: 14px;
+    padding: 8px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.gfi-header {
+    background: #FFF;
+    margin-bottom: 8px;
+}
+
+.table-condensed > tbody > tr > td:first-child {
+    font-style: italic;
+}
+
+.table-condensed > tbody > tr > td:last-child {
+    font-weight: bold;
+    text-align: right;
+    font-size: 12px;
 }
