@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="gfi-daten tab-pane fade in active" id="daten">
-        <table class="table table-condensed table-hover details">
+        <table class="table table-striped details">
             <thead>
             <tr>
                 <th colspan="2"><%= C_S_Name %></th>
@@ -39,9 +39,15 @@
                 <td>
                     Schwerpunktschule:
                 </td>
+                <% if (SchPu_PrSt === 0) {  %>
                 <td>
-                    <%= SchPu_PrSt %>
+                    nein
                 </td>
+                <% } else { %>
+                <td>
+                    ja
+                </td>
+                <% } %>
             </tr>
             <tr>
                 <td>
@@ -55,21 +61,75 @@
                 <td>
                     Schule mit Vorschulklasse:
                 </td>
+                <% if (C_S_SuS_ES === 0) {  %>
                 <td>
-                    <%= C_S_SuS_ES %>
+                    nein
                 </td>
+                <% } else { %>
+                <td>
+                    ja
+                </td>
+                <% } %>
             </tr>
             <tr>
                 <td>
                     Schule mit Ganztagesangebot:
                 </td>
+                <% if (C_S_GTA === 0) {  %>
                 <td>
-                    <%= C_S_GTA %>
+                    nein
                 </td>
+                <% } else { %>
+                <td>
+                    ja
+                </td>
+                <% } %>
             </tr>
             <tr>
                 <td>
                     Anzahl Schüler am Standort:
+                </td>
+                <td>
+                    <%= C_S_SuS %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;&nbsp;davon in der Primarstufe:
+                </td>
+                <td>
+                    <%= C_S_SuS_PS %>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    &nbsp;&nbsp;davon in der Sekundarstufe I:
+                </td>
+                <td>
+                    <%= C_S_SuS_S1 %>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    &nbsp;&nbsp;davon in der Sekundarstufe II:
+                </td>
+                <td>
+                    <%= C_S_SuS_S2 %>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    Website der Schule:<br/>
+                    <a href="<%= C_S_HomP %>" target="_blank"><%= C_S_HomP %></a>
+                </td>
+            </tr>
+            <% if (Schule_SuS !== C_S_SuS) {  %>
+            <tr>
+                <td>
+                    Gesamtanzahl der Schüler an allen Standorten:
                 </td>
                 <td>
                     <%= Schule_SuS %>
@@ -101,58 +161,7 @@
                     <%= Schule_S2 %>
                 </td>
             </tr>
-
-            <tr>
-                <td>
-                    Website der Schule:
-                </td>
-                <td>
-                    <a href="<%= C_S_HomP %>" target="_blank"><%= C_S_HomP %></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Adresse des Hauptstandortes:
-                </td>
-                <td>
-                    <%= Str_Haupts  %> <%= HNr_Haupts %>
-                    <br/>
-                    <%= PLZ_Haupts  %> <%= C_S_Ort %>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Gesamtanzahl der Schüler an allen Standorten:
-                </td>
-                <td>
-                    <%= C_S_SuS %>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;&nbsp;davon in der Primarstufe:
-                </td>
-                <td>
-                    <%= C_S_SuS_PS %>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;&nbsp;davon in der Sekundarstufe I:
-                </td>
-                <td>
-                    <%= C_S_SuS_S1 %>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    &nbsp;&nbsp;davon in der Sekundarstufe II:
-                </td>
-                <td>
-                    <%= C_S_SuS_S2 %>
-                </td>
-            </tr>
-
+            <% } %>
             </tbody>
         </table>
     </div>
