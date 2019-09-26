@@ -11,7 +11,7 @@
 
 .gfi-detached {
     z-index: 9999;
-    max-height: 500px;
+    max-height: 520px;
     overflow-y: scroll;
 }
 .gfi > .gfi-header {
@@ -29,8 +29,13 @@ table {
     &.table {
         tbody {
             tr{
-                td:first-child {
-                    font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+                td {
+                    &:first-child {
+                        font-family: 'UniversNextW04-620CondB', 'Arial Narrow', Arial, sans-serif;
+                    }
+                    &:last-child {
+                        text-align: right;
+                    }
                 }
                 &:first-child {
                     td:last-child {
