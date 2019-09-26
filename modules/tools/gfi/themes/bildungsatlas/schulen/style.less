@@ -11,6 +11,8 @@
 
 .gfi-detached {
     z-index: 9999;
+    max-height: 500px;
+    overflow-y: scroll;
 }
 .gfi > .gfi-header {
     font-size: 14px;
@@ -23,40 +25,15 @@
     margin-bottom: 8px;
 }
 
-.gfi-info .title, .gfi-daten .title{
-    background: #eeeeee;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    width: calc(100% + 11px);
-    margin-left: -6px;
-    border-bottom: 2px solid #ddd;
-    cursor: pointer;
-    position: relative;
+table {
+    &.table {
+        tbody {
+            tr:first-child{
+                font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+            }
+        }
+    }
 }
-
-.gfi-info .title:after, .gfi-daten .title:after {
-    content: " \002B";
-    position: absolute;
-    right: 10px;
-    top: 10px;
-}
-
-.gfi-info .title.show:after, .gfi-daten .title.show:after {
-    content: " \002D";
-    right: 12px;
-}
-
-.table-condensed > tbody > tr > td:first-child {
-    font-style: italic;
-}
-
-.table-condensed > tbody > tr > td:last-child {
-    font-weight: bold;
-    text-align: right;
-    font-size: 12px;
-}
-
 .gfi-info .details, .gfi-daten .details {
    margin-top: 5px;
 }
