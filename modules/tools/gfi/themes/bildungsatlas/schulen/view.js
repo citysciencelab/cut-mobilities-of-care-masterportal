@@ -3,7 +3,7 @@ import DefaultTemplate from "text-loader!./template.html";
 
 const SchulenThemeView = ThemeView.extend({
     tagName: "div",
-    className: "gif-schule",
+    className: "gfi-schule",
     template: _.template(DefaultTemplate),
     events: {
         "click .gfi-daten .title": "toggleTab",
