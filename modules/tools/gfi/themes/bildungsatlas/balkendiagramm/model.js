@@ -1,13 +1,14 @@
 import Theme from "../../model";
 import RoutableView from "../../../objects/routingButton/view";
 
-const DefaultTheme = Theme.extend({
+const BalkendiagrammTheme = Theme.extend({
     initialize: function () {
         var channel = Radio.channel("defaultTheme");
 
         this.listenTo(this, {
             "change:isReady": function () {
                 this.replaceValuesWithChildObjects();
+                this.getDateWithYear();
                 this.checkRoutable();
             }
         });
@@ -45,9 +46,37 @@ const DefaultTheme = Theme.extend({
 
         for (key in element[0]) {
             newKey = key.replace(" ", "_");
+            if (!isNaN(key)) {
+                newKey = "year_" + key;
+            }
             this.set(newKey, element[0][key]);
         }
+    },
+
+    /**
+     * Here we get the data with the year for preparaing the balkendiagram
+     * @returns {void}
+     */
+    getDateWithYear: function () {
+        var element = this.get("gfiContent"),
+            key,
+            dataset = [],
+            datasetlist;
+
+        for (key in element[0]) {
+            if (!isNaN(key)) {
+                datasetlist = element[0][key];
+                dataset.push({key, datasetlist});
+            }
+        }
+        console.log(dataset);
+        this.setDataset(dataset);
+    },
+
+    // setting data for balkendiagramm
+    setDataset: function (value) {
+        this.set("dataset", value);
     }
 });
 
-export default DefaultTheme;
+export default BalkendiagrammTheme;
