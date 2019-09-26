@@ -46,7 +46,6 @@ const DefaultTheme = Theme.extend({
         for (key in element[0]) {
             newKey = key.replace(" ", "_");
             this.set(newKey, element[0][key]);
-            console.log(newKey + " : " + element[0][key]);
         }
     }
 });
