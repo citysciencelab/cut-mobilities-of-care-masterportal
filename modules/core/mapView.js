@@ -6,42 +6,45 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
         background: "",
         units: "m",
-        DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
+        DOTS_PER_INCH: $("#dpidiv").outerWidth()
     },
 
     /**
      * @class MapView
      * @description todo
      * @extends Backbone.Model
-     * @memberOf Core.ModelList
+     * @memberOf Core
      * @constructs
+     * @property {String} background="" todo
+     * @property {String} units="m" todo
+     * @property {number} DOTS_PER_INCH="" Hack to get the screen resolution
      * @param {object} attributes Class attributes
-     * @listens MapView#RadioRequestMapViewGetCurrentExtent
-     * @listens MapView#RadioRequestMapViewGetOptions
-     * @listens MapView#RadioRequestMapViewGetProjection
-     * @listens MapView#RadioRequestMapViewGetResoByScale
-     * @listens MapView#RadioRequestMapViewGetScales
-     * @listens MapView#RadioRequestMapViewGetZoomLevel
-     * @listens MapView#RadioRequestMapViewGtResolutions
-     * @listens MapView#RadioTriggerMapViewResetView
-     * @listens MapView#RadioTriggerMapViewSetCenter
-     * @listens MapView#RadioTriggerMapViewSetConstrainedResolution
-     * @listens MapView#RadioTriggerMapViewSetScale
-     * @listens MapView#RadioTriggerMapViewSetZoomLevelDown
-     * @listens MapView#RadioTriggerMapViewSetZoomLevelUp
-     * @listens MapView#RadioTriggerMapViewToggleBackground
-     * @fires Map#RadioRequestMapGetSize
-     * @fires ParametricURL#RadioRequestParametricURLgetCenter
-     * @fires ParametricURL#RadioRequestParametricURLgetProjectionFromUrl
-     * @fires ParametricURL#RadioRequestParametricURLgetZoomLevel
-     * @fires Alert#RadioTriggerAlertAlert
+     * @listens Core#RadioRequestMapViewGetCurrentExtent
+     * @listens Core#RadioRequestMapViewGetOptions
+     * @listens Core#RadioRequestMapViewGetProjection
+     * @listens Core#RadioRequestMapViewGetResoByScale
+     * @listens Core#RadioRequestMapViewGetScales
+     * @listens Core#RadioRequestMapViewGetZoomLevel
+     * @listens Core#RadioRequestMapViewGetResolutions
+     * @listens Core#RadioTriggerMapViewResetView
+     * @listens Core#RadioTriggerMapViewSetCenter
+     * @listens Core#RadioTriggerMapViewSetConstrainedResolution
+     * @listens Core#RadioTriggerMapViewSetScale
+     * @listens Core#RadioTriggerMapViewSetZoomLevelDown
+     * @listens Core#RadioTriggerMapViewSetZoomLevelUp
+     * @listens Core#RadioTriggerMapViewToggleBackground
+     * @fires Core#RadioRequestMapGetSize
+     * @fires Core#RadioRequestParametricURLGetCenter
+     * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
+     * @fires Core#RadioRequestParametricURLGetZoomLevel
+     * @fires Alerting#RadioTriggerAlertAlert
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     * @fires MapView#RadioTriggerMapViewChangedCenter
-     * @fires MapView#RadioTriggerMapViewChangedOptions
-     * @fires MapView#RadioTriggerMapViewChangedZoomLevel
+     * @fires Core#RadioTriggerMapViewChangedCenter
+     * @fires Core#RadioTriggerMapViewChangedOptions
+     * @fires Core#RadioTriggerMapViewChangedZoomLevel
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
-     *
+     * @fires Core#RadioRequestMapGetMap
      * @returns {void}
      */
     initialize: function (attributes) {
@@ -124,8 +127,8 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @param {string} evt.key - the name of the property whose value is changing
      * @param {ol.View} evt.target - this.get("view")
      *
-     * @fires MapView#RadioTriggerMapViewChangedOptions
-     * @fires MapView#RadioTriggerMapViewChangedZoomLevel
+     * @fires Core#RadioTriggerMapViewChangedOptions
+     * @fires Core#RadioTriggerMapViewChangedZoomLevel
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      *
@@ -167,9 +170,8 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     *
+     * @fires Core#RadioRequestParametricURLGetCenter
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     *
      * @return {void}
      */
     resetView: function () {
@@ -182,7 +184,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
+     * Sets the Background for the Mapview.
      * @param  {string} value Image Url
      * @return {void}
      */
@@ -191,7 +193,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
+     * Sets the Backgroundimage for the Mapview.
      * @param  {string} value BG Image Url
      * @return {void}
      */
@@ -202,7 +204,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description todo
      * @param {int} value todo
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
+     * @fires Core#RadioRequestMapGetMap
      * @return {void}
      */
     prepareStartCenter: function (value) {
@@ -241,7 +243,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
+     * Sets the view.
      * @param {object} view todo
      * @return {void}
      */
@@ -274,7 +276,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Todo
+     * Increases the zoomlevel by one.
      * @return {void}
      */
     setZoomLevelUp: function () {
@@ -282,7 +284,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Todo
+     * Reduces the zoomlevel by one.
      * @return {void}
      */
     setZoomLevelDown: function () {
@@ -290,9 +292,9 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Gibt zur Scale die entsprechende Resolution zurück.
-     * @param  {String|number} scale -
-     * @param  {String} scaleType - min oder max
+     * Returns the corresponding resolution for the scale.
+     * @param  {String|number} scale - todo
+     * @param  {String} scaleType - min or max
      * @return {number} resolution
      */
     getResoByScale: function (scale, scaleType) {
@@ -314,7 +316,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
+     * @description gets the center from the mapView
      * @return {array} Center Coords
      */
     getCenter: function () {
@@ -337,7 +339,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description Return current Zoom of MapView
-     * @return {float} current Zoom of MapView
+     * @return {number} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();
@@ -345,6 +347,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * calculate the extent for the current view state and the passed size
+     * @fires Core#RadioRequestMapGetSize
      * @return {ol.extent} extent
      */
     getCurrentExtent: function () {
@@ -356,7 +359,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description Sets projection from param url
      * @param {string} projection todo
-     * @return {float} current Zoom of MapView
+     * @return {number} current Zoom of MapView
      */
     setProjectionFromParamUrl: function (projection) {
         this.set("projectionFromParamUrl", projection);

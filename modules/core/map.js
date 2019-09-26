@@ -16,16 +16,22 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 
-const map = Backbone.Model.extend({
+const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
         initalLoading: 0,
-        /**
-         * defaultTime for 3D rendering even with disabled shadows
-         * @type {Cesium.JulianDate}
-         */
         shadowTime: null
     },
 
+    /**
+     * @class map
+     * @description todo
+     * @extends Backbone.Model
+     * @memberOf Core
+     * @constructs
+     * @param {Object} mapViewSettings Settings for the map.
+     * @property {Number} initalLoading=0 todo
+     * @property {Cesium.JulianDate} shadowTime=null DefaultTime for 3D rendering even with disabled shadows.
+     */
     initialize: function (mapViewSettings) {
         var channel = Radio.channel("Map");
 
