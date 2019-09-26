@@ -14,6 +14,18 @@ const GFIView = Backbone.View.extend({
             "change:coordinate": this.setMarker
         });
 
+        $(window).resize($.proxy(function () {
+            $(".gfi").css({
+                "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+            });
+        }, this));
+
+        $(window).resize($.proxy(function () {
+            $(".gfi-content").css({
+                "max-height": window.innerHeight - 100 - 34 - 43 // 100 fixer Wert für navbar &co. 34 für header vom gfi 43 für den footer beim gfi
+            });
+        }, this));
+
         // Die attached View braucht für ol.Overlay noch ein Dom-Element
         if (this.model.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
             this.renderDomElementToBody();

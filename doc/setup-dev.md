@@ -4,7 +4,7 @@
 
 # Systemvoraussetzungen
 
-##git
+## git
 [git](http://git-scm.com/) installieren.
 
 ## Node.js
