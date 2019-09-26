@@ -490,6 +490,12 @@
  */
 
 /**
+ * @event Core#RadioRequestMapGetSize
+ * @returns {number} size of the map
+ * @example Radio.request("Map", "getSize")
+ */
+
+/**
  * @event Core#RadioTriggerMapAddControl
  * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
@@ -628,7 +634,7 @@
  */
 
 /**
- * @event Core#RadioRequestGetProjection
+ * @event Core#RadioRequestMapViewGetProjection
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
@@ -638,6 +644,11 @@
  * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
+ */
+
+/**
+ * @event Core#RadioTriggerMapViewSetConstrainedResolution
+ * @description Event that sets the constrained resolution of the map view
  */
 
 /**
@@ -672,6 +683,36 @@
 
 /**
  * @event Core#RadioTriggerMapViewToggleBackground
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetCurrentExtent
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetProjection
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetScales
+ * @description Event gets the scale
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetZoomLevel
+ * @description Event gets the zoom-level
+ */
+
+ /**
+ * @event Core#RadioTriggerMapViewChangedCenter
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapViewChangedZoomLevel
  * @description todo
  */
 
@@ -1497,7 +1538,7 @@
 /** -------------------- REMOTEINTERFACE -------------------- */
 
 /**
- * @event RemoteInterface#RadioTriggerPostMessage
+ * @event RemoteInterface#RadioTriggerRemoteInterfacePostMessage
  * @description Triggers a PostMessage to the RemoteInterface
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
@@ -1751,8 +1792,23 @@
 /** -------------------- ParametricURL -------------------- */
 
 /**
- * @event ParametricURL#RadioRequestParametricURLGetHighlightFeature
+ * @event Core#RadioRequestParametricURLGetHighlightFeature
  * @returns {Object} featureToHighlight Feature to highlight
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetCenter
+ * @description tod
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetProjectionFromUrl
+ * @description tod
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomLevel
+ * @description tod
  */
 
 /** -------------------- Autostart -------------------- */
