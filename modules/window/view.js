@@ -97,6 +97,10 @@ const WindowView = Backbone.View.extend({
             }
             this.$el.show("slow");
         }
+        else if ( this.$(".header").hasClass("header-min")) {
+            this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
+            this.$el.hide();
+        }
         else {
             this.$el.hide("slow");
         }
