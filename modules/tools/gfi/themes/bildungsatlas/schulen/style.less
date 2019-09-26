@@ -28,8 +28,15 @@
 table {
     &.table {
         tbody {
-            tr:first-child{
-                font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+            tr{
+                td:first-child {
+                    font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+                }
+                &:first-child {
+                    td:last-child {
+                        font-family: 'UniversNextW04-620CondB','Arial Narrow',Arial,sans-serif;
+                    }
+                }
             }
         }
     }
