@@ -97,6 +97,10 @@ const WindowView = Backbone.View.extend({
             }
             this.$el.show("slow");
         }
+        else if (this.$(".header").hasClass("header-min")) {
+            this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});
+            this.$el.hide();
+        }
         else {
             this.$el.hide("slow");
         }
@@ -107,7 +111,7 @@ const WindowView = Backbone.View.extend({
         this.model.set("maxPosLeft", this.$el.css("left"));
         this.$(".win-body").hide();
         this.$(".glyphicon-minus").hide();
-        this.$el.css({"top": "", "bottom": "0", "left": "0", "margin-bottom": "60px"});
+        this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
         this.$(".header").addClass("header-min");
         this.$el.draggable("disable");
     },
