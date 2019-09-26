@@ -1979,3 +1979,73 @@
  * @param {FlightInstance} flightInstance
  * @description fires if the flightplayer state changes. If the player starts playing or stop is called
  */
+
+ /** -------------------- CRS -------------------- */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSGetProjection
+ * @param {string} name - projection name as written in [0] position of namedProjections
+ * @description Returns the proj4 projection definition for a registered name.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSGetProjections
+ * @param {ol.Map} map - map to project to
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {number[]} point - point to project
+ * @description Returns all known projections.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransformToMapProjection
+ * @param {ol.Map} map - map to project to
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {number[]} point - point to project
+ * @description Projects a point to the given map.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransformFromMapProjection
+ * @param {ol.Map} map - map to project from, and point must be in map's projection
+ * @param {(string|object)} targetProjection - projection name or projection to project to
+ * @param {number[]} point - point to project
+ * @description Projects a point from the given map.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransform
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {(string|object)} targetProjection - projection name or projection to project point to
+ * @param {number[]} point - point to project
+ * @description Transforms a given point from a source to a target projection.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerWhere
+ * @param {object} searchAttributes - key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ * @description Returns the first entry in layerList matching the given searchAttributes.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @description Returns the first entry in layerList matching the given searchAttributes.
+ * @param {object} searchAttributes - key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerListWhere
+ * @description Returns an array of all models that match the given attributes.
+ * @param  {Object} searchAttributes key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerList
+ * @description Returns complete layerList as initialized.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetDisplayNamesOfFeatureAttributes
+ * @description Returns display names map for a layer, or display name for a specific attribute.
+ * @param {string} layerId - if of layer to fetch display names for
+ * @param {string} [featureAttribute] - if given, only one entry of map is returned
+ */
