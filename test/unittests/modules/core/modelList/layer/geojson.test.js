@@ -42,23 +42,74 @@ describe("core/modelList/layer/geojson", function () {
 
             expect(features).to.have.lengthOf(100);
         });
-        it("should return an array of ol.Feature", function () {
-            var features = geojsonLayer.parseDataToFeatures(geojson);
+        it("should parse geojson in default crs", function () {
+            const features = geojsonLayer.parseDataToFeatures(geojson);
 
             expect(features[0] instanceof Feature).to.be.true;
         });
+        it("should parse geojson in EPSG:25832", function () {
+            const miniJson = {
+                    "type": "FeatureCollection",
+                    "name": "C_Schulen_2017_pr_alle",
+                    "crs": {
+                        "type": "name",
+                        "properties": {
+                            "name": "urn:ogc:def:crs:EPSG::25832"
+                        }
+                    },
+                    "features": [
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "fid": "C_Schulen_2017_pr_alle_neu.0"
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    569881.56,
+                                    5934722.32
+                                ]
+                            }
+                        }
+                    ]
+                },
+                features = geojsonLayer.parseDataToFeatures(miniJson);
+
+            expect(features).to.have.lengthOf(1);
+            expect(features[0] instanceof Feature).to.be.true;
+            expect(features[0].getGeometry().getCoordinates()).to.be.an("array").that.includes(569881.56, 5934722.32);
+        });
     });
 
-    describe("transformFeatures", function () {
-        it("should transform an array of ol.Feature", function () {
-            var features = geojsonLayer.parseDataToFeatures(geojson);
+    describe("getJsonProjection", function () {
+        it("should return default crs", function () {
+            expect(geojsonLayer.getJsonProjection(JSON.stringify(geojson))).to.be.an("string").that.equals("EPSG:4326");
+        });
+        it("should return json crs", function () {
+            geojson.crs = {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:EPSG::25832"
+                }
+            };
+            expect(geojsonLayer.getJsonProjection(JSON.stringify(geojson))).to.be.an("string").that.equals("urn:ogc:def:crs:EPSG::25832");
+        });
+    });
 
-            features = geojsonLayer.transformFeatures(features, "EPSG:4326", "EPSG:3857");
-            expect(features[0].getGeometry().getExtent()).to.be.an("array");
-            expect(features[0].getGeometry().getExtent()[0]).to.equal(1121739.1650062224);
-            expect(features[0].getGeometry().getExtent()[1]).to.equal(7079309.277828476);
-            expect(features[0].getGeometry().getExtent()[2]).to.equal(1122347.5029925175);
-            expect(features[0].getGeometry().getExtent()[3]).to.equal(7079926.307314908);
+    describe("addId", function () {
+        it("should not add an id if already set", function () {
+            const features = geojsonLayer.parseDataToFeatures(geojson);
+
+            geojsonLayer.addId(features);
+            expect(features[0].getId()).to.be.an("string").that.equals("APP_ITGBM_ERHEBUNG_8734");
+        });
+
+        it("should add an id to an array of features", function () {
+            const features = geojsonLayer.parseDataToFeatures(geojson);
+
+            features[0].unset("id", {silent: true});
+            geojsonLayer.addId(features);
+            expect(features[0].getId()).to.be.an("string");
         });
     });
 });
