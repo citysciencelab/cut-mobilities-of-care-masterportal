@@ -1,49 +1,60 @@
 <!DOCTYPE html>
-<table class="table table-striped details">
-    <thead>
-        <tr>
-            <th colspan="2"><%= Stadtteil %></th>
-        </tr>
-        <tr>
-            <th colspan="2"><%= Title %></th>
-        </tr>
-    </thead>
+<ul class="nav nav-pills">
+    <li value= "daten" class="tab-toggle active"><a data-toggle="tab" href="#daten">Daten</a></li>
+    <li value= "info" class="tab-toggle"><a data-toggle="tab" href="#info">Info</a></li>
+</ul>
+<div class="tab-content">
+    <div class="gfi-info tab-pane fade" id="info">
+        <h5><b>Schulstandorte mit Jahrgängen 1 bis 4:</b></h5>
+        <p>Aufgeführt sind alle Grundschulen des allgemeinbildenden Schulsystems* sowie Sonderschulen und Stadtteilschulen mit einer Primarstufe**.</p>
+    </div>
+    <div class="gfi-daten tab-pane fade in active" id="daten">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2"><%= Stadtteil %></th>
+                </tr>
+                <tr>
+                    <th colspan="2"><%= Title %></th>
+                </tr>
+            </thead>
 
-    <tbody>
-        <tr>
-            <td>
-                <%= Stadtteil %>
-            </td>
-            <td>
-                <%= year_2017 %>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Bezirk <%= Bezirk %>
-            </td>
-            <td>
-                <%= Summe_bezirk %>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Hamburg
-            </td>
-            <td>
-                <%= Summe_hamburg %>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<div class="diagram">
-    <h3>
-        Kennzahl im Zeitverlauf
-    </h3>
+            <tbody>
+                <tr>
+                    <td>
+                        <%= Stadtteil %>
+                    </td>
+                    <td>
+                        <%= year_2017 %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Bezirk <%= Bezirk %>
+                    </td>
+                    <td>
+                        <%= Summe_bezirk %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Hamburg
+                    </td>
+                    <td>
+                        <%= Summe_hamburg %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+        <div class="panel bikeLevelHeader">
+            <b>Kennzahl im Zeitverlauf</b>
+        </div>
+        <p>
+            *g.F: geringe Fallzahlen. Die Werte konnten aus datenschutzrechtlichen Gründen nicht ausgewiesen werden oder das Gebiet ist unbewohnt.
+        </p>
+        <p>
+            Sie können die Position des Fensters durch Drag&Drop ändern
+        </p>
+    </div>
 </div>
-<h4>
-    *g.F: geringe Fallzahlen. Die Werte konnten aus datenschutzrechtlichen Gründen nicht ausgewiesen werden oder das Gebiet ist unbewohnt.
-</h4>
-<p>
-    Sie können die Position des Fensters durch Drag&Drop ändern
-</p>
