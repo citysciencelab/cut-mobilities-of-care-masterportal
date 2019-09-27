@@ -60,17 +60,136 @@ const BalkendiagrammTheme = Theme.extend({
     getDateWithYear: function () {
         var element = this.get("gfiContent"),
             key,
-            dataset = [],
-            datasetlist;
+            year,
+            sum,
+            dataset = [];
 
         for (key in element[0]) {
             if (!isNaN(key)) {
-                datasetlist = element[0][key];
-                dataset.push({key, datasetlist});
+                year = key;
+                sum = element[0][key];
+                dataset.push({year, sum});
             }
         }
-        console.log(dataset);
+
         this.setDataset(dataset);
+    },
+
+    /**
+     * Generates the graph config and triggers the Graph-functionality to create the graph
+     * @param {String} key Name of category
+     * @returns {void}
+     * @fires Tools.Graph#RadioTriggerGraphCreateGraph
+     */
+    createD3Document: function (key) {
+        var graphConfig = {
+            graphType: "Linegraph",
+            selector: ".graph",
+            width: 387,
+            height: 196,
+            margin: {top: 20, right: 20, bottom: 75, left: 70},
+            svgClass: "graph-svg",
+            selectorTooltip: ".graph-tooltip-div",
+            scaleTypeX: "ordinal",
+            scaleTypeY: "linear",
+            yAxisTicks: {
+                ticks: 7,
+                factor: ",f"
+            },
+            data: [
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2008,
+                    "DTV": 25000,
+                    "DTVw": 28000,
+                    "Schwerverkehrsanteil am DTVw": 8
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2009,
+                    "DTV": 25000,
+                    "DTVw": 28000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2010,
+                    "DTV": 24000,
+                    "DTVw": 27000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2011,
+                    "DTV": 24000,
+                    "DTVw": 27000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2012,
+                    "DTV": 24000,
+                    "DTVw": 27000,
+                    "Schwerverkehrsanteil am DTVw": 6
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2013,
+                    "DTV": 26000,
+                    "DTVw": 29000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2014,
+                    "DTV": 29000,
+                    "DTVw": 32000,
+                    "Schwerverkehrsanteil am DTVw": 8
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2015,
+                    "DTV": 30000,
+                    "DTVw": 33000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2016,
+                    "DTV": 30000,
+                    "DTVw": 33000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                },
+                {
+                    "class": "dot",
+                    "style": "circle",
+                    "year": 2017,
+                    "DTV": 31000,
+                    "DTVw": 34000,
+                    "Schwerverkehrsanteil am DTVw": 7
+                }
+            ],
+            xAttr: "year",
+            xAxisLabel: {
+                label: "Jahr",
+                translate: 6
+            },
+            yAxisLabel: {
+                offset: 60
+            },
+            attrToShowArray: [key]
+        };
+
+        Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
     // setting data for balkendiagramm
