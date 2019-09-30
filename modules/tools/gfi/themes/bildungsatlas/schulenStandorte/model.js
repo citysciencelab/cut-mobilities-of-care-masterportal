@@ -10,10 +10,8 @@ const SchulenStandorteViewTheme = Theme.extend({
     },
 
     /**
-     * Hier werden bei bestimmten Keywords Objekte anstatt von Texten für das template erzeugt. Damit können Bilder oder Videos als eigenständige Objekte erzeugt und komplex
-     * gesteuert werden. Im Template werden diese Keywords mit # ersetzt und rausgefiltert. Im view.render() werden diese Objekte attached.
-     * Eine leidige Ausnahme bildet z.Z. das Routing, da hier zwei features des Reisezeitenlayers benötigt werden. (1. Ziel(key) mit Dauer (val) und 2. Route mit ol.geom (val).
-     * Das Auswählen der richtigen Werte für die Übergabe erfolgt hier.
+     * here we need to parse the key and value, so that the real value could be shown in the gfi theme and
+     * all the keys will contain underline instead of white space
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
