@@ -18,16 +18,24 @@ const SchulenStandorteViewTheme = Theme.extend({
      */
     replaceValuesWithChildObjects: function () {
         var element = this.get("gfiContent"),
-            idx1,
             key,
-            idx;
+            idx,
+            value;
 
-        for (idx1 in element) {
-            for (key in element[idx1]) {
-                idx = key.replace(" ", "_");
-
-                this.set(idx, element[idx1][key]);
+        for (key in element[0]) {
+            idx = key.replace(" ", "_");
+            value = element[0][key];
+            if (idx === "SchPu_PrSt") {
+                value = value === 0 ? "nein" : "ja";
             }
+            else if (idx === "C_S_SuS_ES") {
+                value = value === 0 ? "nein" : "ja";
+            }
+            else if (idx === "C_S_GTA") {
+                value = value === 0 ? "nein" : "ja";
+            }
+
+            this.set(idx, value);
         }
     }
 });
