@@ -37,15 +37,9 @@
                 <td>
                     Schwerpunktschule:
                 </td>
-                <% if (SchPu_PrSt === 0) {  %>
                 <td>
-                    nein
+                    <%= SchPu_PrSt %>
                 </td>
-                <% } else { %>
-                <td>
-                    ja
-                </td>
-                <% } %>
             </tr>
             <tr colspan="2">
                 <td>
@@ -59,29 +53,17 @@
                 <td>
                     Schule mit Vorschulklasse:
                 </td>
-                <% if (C_S_SuS_ES === 0) {  %>
                 <td>
-                    nein
+                    <%= C_S_SuS_ES %>
                 </td>
-                <% } else { %>
-                <td>
-                    ja
-                </td>
-                <% } %>
             </tr>
             <tr colspan="2">
                 <td>
                     Schule mit Ganztagesangebot:
                 </td>
-                <% if (C_S_GTA === 0) {  %>
                 <td>
-                    nein
+                    <%= C_S_GTA %>
                 </td>
-                <% } else { %>
-                <td>
-                    ja
-                </td>
-                <% } %>
             </tr>
             <tr colspan="2">
                 <td>
@@ -123,7 +105,8 @@
                     Website der Schule:
                 </td>
                 <td>
-                    <a href="<%= C_S_HomP %>" target="_blank"><%= C_S_HomP %></a>
+                    <%  %>
+                    <a href="<%= C_S_HomP %>" target="_blank"><%= C_S_HomP.replace('https://www.','').replace('http://www.','') %></a>
                 </td>
             </tr>
             <% if (Schule_SuS !== C_S_SuS) {  %>
