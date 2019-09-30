@@ -42,14 +42,16 @@ const BalkendiagrammTheme = Theme.extend({
     replaceValuesWithChildObjects: function () {
         var element = this.get("gfiContent"),
             key,
-            newKey;
+            idx,
+            value;
 
         for (key in element[0]) {
-            newKey = key.replace(" ", "_");
+            idx = key.replace(" ", "_");
             if (!isNaN(key)) {
-                newKey = "year_" + key;
+                idx = "year_" + key;
             }
-            this.set(newKey, element[0][key]);
+            value = element[0][key];
+            this.set(idx, value);
         }
     },
 
@@ -71,7 +73,7 @@ const BalkendiagrammTheme = Theme.extend({
                 dataset.push({year, sum});
             }
         }
-
+        console.log(dataset);
         this.setDataset(dataset);
     },
 
@@ -189,7 +191,89 @@ const BalkendiagrammTheme = Theme.extend({
             attrToShowArray: [key]
         };
 
-        Radio.trigger("Graph", "createGraph", graphConfig);
+        const testConfig = {
+            "graphType": "BarGraph",
+            "selector": ".graph",
+            "width": "420",
+            "height": 209,
+            "margin": {
+                "top": 20,
+                "right": 20,
+                "bottom": 50,
+                "left": 50
+            },
+            "svgClass": "graph-tooltip-div",
+            "data": [
+                {
+                    "year": 2008,
+                    "sum": 169
+                },
+                {
+                    "year": 2009,
+                    "sum": 169
+                },
+                {
+                    "year": 2010,
+                    "sum": 169
+                },
+                {
+                    "year": 2011,
+                    "sum": 159
+                },
+                {
+                    "year": 2012,
+                    "sum": 158
+                },
+                {
+                    "year": 2013,
+                    "sum": 162
+                },
+                {
+                    "year": 2014,
+                    "sum": 167
+                },
+                {
+                    "year": 2015,
+                    "sum": 190
+                },
+                {
+                    "year": 2016,
+                    "sum": 262
+                },
+                {
+                    "year": 2017,
+                    "sum": 277
+                }
+            ],
+            "scaleTypeX": "linear",
+            "scaleTypeY": "linear",
+            "yAxisTicks": {
+                "start": 0,
+                "end": 20000,
+                "ticks": 4,
+                "factor": ",f"
+            },
+            "xAxisTicks": {
+                "start": 2008,
+                "end": 2017,
+                "ticks": 10,
+                "unit": "Year"
+            },
+            "xAxisLabel": {
+                "label": "Durchschnittliche Verfügbarkeit Montags",
+                "offset": 10,
+                "textAnchor": "middle",
+                "fill": "#666",
+                "fontSize": 12
+            },
+            "yAxisLabel": {},
+            "xAttr": "Year",
+            "attrToShowArray": [
+                "sum"
+            ]
+        };
+
+        Radio.trigger("Graph", "createGraph", testConfig);
     },
 
     // setting data for balkendiagramm
