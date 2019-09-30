@@ -338,37 +338,46 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                 name.push(subLegend.name);
             }
         }
-        // Simple Line Style
-        if (styleClass === "LINE") {
-            image.push(this.createLineSVG(style));
-            if (style.has("legendValue")) {
-                name.push(style.get("legendValue"));
-            }
-            else {
-                name.push(layername);
-            }
-        }
-        // Simple Polygon Style
-        if (styleClass === "POLYGON") {
+        else if (styleClass === "LINE") {
+            // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
                 _.each(styleFieldValues, function (styleFieldValue) {
-                    image.push(this.createPolygonSVG(style, styleFieldValue));
-                    if (_.has(styleFieldValue, "legendValue")) {
-                        name.push(styleFieldValue.legendValue);
+                    const subStyle = style.clone();
+
+                    // overwrite style with all styleFieldValue settings
+                    for (const key in styleFieldValue) {
+                        subStyle.set(key, styleFieldValue[key]);
                     }
-                    else {
-                        name.push(styleFieldValue.styleFieldValue);
-                    }
+                    subLegend = this.getLegendParamsForLines(layername, subStyle);
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
                 }, this);
             }
             else {
-                image.push(this.createPolygonSVG(style));
-                if (style.has("legendValue")) {
-                    name.push(style.get("legendValue"));
-                }
-                else {
-                    name.push(layername);
-                }
+                subLegend = this.getLegendParamsForLines(layername, style);
+                image.push(subLegend.svg);
+                name.push(subLegend.name);
+            }
+        }
+        else if (styleClass === "POLYGON") {
+            // Custom Point Styles
+            if (styleSubClass === "CUSTOM") {
+                _.each(styleFieldValues, function (styleFieldValue) {
+                    const subStyle = style.clone();
+
+                    // overwrite style with all styleFieldValue settings
+                    for (const key in styleFieldValue) {
+                        subStyle.set(key, styleFieldValue[key]);
+                    }
+                    subLegend = this.getLegendParamsForPolygons(layername, subStyle);
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }, this);
+            }
+            else {
+                subLegend = this.getLegendParamsForPolygons(layername, style);
+                image.push(subLegend.svg);
+                name.push(subLegend.name);
             }
         }
 
@@ -379,6 +388,54 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                 img: image,
                 typ: "svg"
             }]
+        };
+    },
+
+    /**
+     * Creates the legend for a line style
+     * @param   {string} layername     layername defined in config
+     * @param   {VectorStyle} style    style created by vectorStyle
+     * @returns {object}               legend definition for a line
+     */
+    getLegendParamsForLines: function (layername, style) {
+        let name;
+
+        const svg = this.createLineSVG(style);
+
+        if (style.has("legendValue")) {
+            name = style.get("legendValue");
+        }
+        else {
+            name = layername;
+        }
+
+        return {
+            name: name,
+            svg: svg
+        };
+    },
+
+    /**
+     * Creates the legend for a polygon style
+     * @param   {string} layername     layername defined in config
+     * @param   {VectorStyle} style    style created by vectorStyle
+     * @returns {object}               legend definition for a polygon
+     */
+    getLegendParamsForPolygons: function (layername, style) {
+        let name;
+
+        const svg = this.createPolygonSVG(style);
+
+        if (style.has("legendValue")) {
+            name = style.get("legendValue");
+        }
+        else {
+            name = layername;
+        }
+
+        return {
+            name: name,
+            svg: svg
         };
     },
 
@@ -468,11 +525,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return svg;
     },
+
     /**
-    * todo
-    * @param {*} style todo
-    * @returns {*} returns todo
-    */
+     * Creates an SVG for a line
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
     createLineSVG: function (style) {
         var svg = "",
             strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
@@ -491,19 +549,19 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return svg;
     },
+
     /**
-    * todo
-    * @param {*} style todo
-    * @param {*} styleFieldValue todo
-    * @returns {*} returns todo
-    */
-    createPolygonSVG: function (style, styleFieldValue) {
+     * Creates an SVG for a polygon
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createPolygonSVG: function (style) {
         var svg = "",
-            fillColor = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonFillColor ? style.returnColor(styleFieldValue.polygonFillColor, "hex") : style.returnColor(style.get("polygonFillColor"), "hex"),
-            strokeColor = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeColor ? style.returnColor(styleFieldValue.polygonStrokeColor, "hex") : style.returnColor(style.get("polygonStrokeColor"), "hex"),
-            strokeWidth = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeWidth ? parseInt(styleFieldValue.polygonStrokeWidth, 10) : parseInt(style.get("polygonStrokeWidth"), 10),
-            fillOpacity = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonFillColor ? styleFieldValue.polygonFillColor[3].toString() : style.get("polygonFillColor")[3].toString() || 0,
-            strokeOpacity = !_.isUndefined(styleFieldValue) && styleFieldValue.polygonStrokeColor ? styleFieldValue.polygonStrokeColor[3].toString() : style.get("polygonStrokeColor")[3].toString() || 0;
+            fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+            strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
+            strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
+            fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
+            strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
 
         svg += "<svg height='35' width='35'>";
         svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
@@ -521,6 +579,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return svg;
     },
+
     /**
      * Draw advanced styles in legend
      * @param {ol.style} style style from features
