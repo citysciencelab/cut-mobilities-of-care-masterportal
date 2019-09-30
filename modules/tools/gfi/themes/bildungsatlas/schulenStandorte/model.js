@@ -4,7 +4,7 @@ const SchulenStandorteViewTheme = Theme.extend({
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.replaceValuesWithChildObjects();
+                this.replaceValuesWithRealResults();
             }
         });
     },
@@ -14,7 +14,7 @@ const SchulenStandorteViewTheme = Theme.extend({
      * all the keys will contain underline instead of white space
      * @returns {void}
      */
-    replaceValuesWithChildObjects: function () {
+    replaceValuesWithRealResults: function () {
         var element = this.get("gfiContent"),
             key,
             idx,
