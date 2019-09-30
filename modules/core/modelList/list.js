@@ -516,19 +516,23 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-     * Sets all Tools (except the legend, and the given tool) to isActive=false
-     * @param {Tool} model Tool model that has to be activated
+     * Sets all Tools (except the legend, the given tool and the gfi,
+     * if the model attribute deactivateGFI is true) to isActive=false
+     * @param {Tool} activatedToolModel Tool model that has to be activated
      * @returns {void}
      */
-    setActiveToolsToFalse: function (model) {
-        var activeTools = _.without(this.where({isActive: true}), model),
-            legendModel = this.findWhere({id: "legend"});
+    setActiveToolsToFalse: function (activatedToolModel) {
+        const legendModel = this.findWhere({id: "legend"}),
+            activeTools = this.where({isActive: true}),
+            alwaysActiveTools = [activatedToolModel, legendModel];
+        let activeToolsToDeactivate = [];
 
-        activeTools = _.without(activeTools, legendModel);
+        if (!activatedToolModel.get("deactivateGFI")) {
+            alwaysActiveTools.push(this.findWhere({id: "gfi"}));
+        }
 
-        _.each(activeTools, function (tool) {
-            tool.setIsActive(false);
-        });
+        activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
+        activeToolsToDeactivate.forEach(tool => tool.setIsActive(false));
     },
 
     /**
