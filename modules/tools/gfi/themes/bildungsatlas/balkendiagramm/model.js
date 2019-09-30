@@ -83,197 +83,148 @@ const BalkendiagrammTheme = Theme.extend({
      * @returns {void}
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
-    createD3Document: function (key) {
-        var graphConfig = {
-            graphType: "Linegraph",
-            selector: ".graph",
-            width: 387,
-            height: 196,
-            margin: {top: 20, right: 20, bottom: 75, left: 70},
-            svgClass: "graph-svg",
-            selectorTooltip: ".graph-tooltip-div",
-            scaleTypeX: "ordinal",
-            scaleTypeY: "linear",
-            yAxisTicks: {
-                ticks: 7,
-                factor: ",f"
-            },
-            data: [
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2008,
-                    "DTV": 25000,
-                    "DTVw": 28000,
-                    "Schwerverkehrsanteil am DTVw": 8
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2009,
-                    "DTV": 25000,
-                    "DTVw": 28000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2010,
-                    "DTV": 24000,
-                    "DTVw": 27000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2011,
-                    "DTV": 24000,
-                    "DTVw": 27000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2012,
-                    "DTV": 24000,
-                    "DTVw": 27000,
-                    "Schwerverkehrsanteil am DTVw": 6
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2013,
-                    "DTV": 26000,
-                    "DTVw": 29000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2014,
-                    "DTV": 29000,
-                    "DTVw": 32000,
-                    "Schwerverkehrsanteil am DTVw": 8
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2015,
-                    "DTV": 30000,
-                    "DTVw": 33000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2016,
-                    "DTV": 30000,
-                    "DTVw": 33000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                },
-                {
-                    "class": "dot",
-                    "style": "circle",
-                    "year": 2017,
-                    "DTV": 31000,
-                    "DTVw": 34000,
-                    "Schwerverkehrsanteil am DTVw": 7
-                }
-            ],
-            xAttr: "year",
-            xAxisLabel: {
-                label: "Jahr",
-                translate: 6
-            },
-            yAxisLabel: {
-                offset: 60
-            },
-            attrToShowArray: [key]
-        };
-
-        const testConfig = {
+    createD3Document: function () {
+        const graphConfig = {
             "graphType": "BarGraph",
             "selector": ".graph",
-            "width": "420",
-            "height": 209,
+            "width": "375",
+            "height": 225.6667,
             "margin": {
                 "top": 20,
                 "right": 20,
                 "bottom": 50,
                 "left": 50
             },
-            "svgClass": "graph-tooltip-div",
+            "svgClass": "BarGraph-svg",
+            "selectorTooltip": ".graph-tooltip-div",
             "data": [
                 {
-                    "year": 2008,
-                    "sum": 169
+                    "hour": 0,
+                    "sum": 182
                 },
                 {
-                    "year": 2009,
-                    "sum": 169
+                    "hour": 1,
+                    "sum": 182
                 },
                 {
-                    "year": 2010,
-                    "sum": 169
+                    "hour": 2,
+                    "sum": 182
                 },
                 {
-                    "year": 2011,
-                    "sum": 159
+                    "hour": 3,
+                    "sum": 182
                 },
                 {
-                    "year": 2012,
-                    "sum": 158
+                    "hour": 4,
+                    "sum": 182
                 },
                 {
-                    "year": 2013,
-                    "sum": 162
+                    "hour": 5,
+                    "sum": 182
                 },
                 {
-                    "year": 2014,
-                    "sum": 167
+                    "hour": 6,
+                    "sum": 182.732
                 },
                 {
-                    "year": 2015,
-                    "sum": 190
+                    "hour": 7,
+                    "sum": 181.837
                 },
                 {
-                    "year": 2016,
-                    "sum": 262
+                    "hour": 8,
+                    "sum": 176.332
                 },
                 {
-                    "year": 2017,
-                    "sum": 277
+                    "hour": 9,
+                    "sum": 165.02
+                },
+                {
+                    "hour": 10,
+                    "sum": 165.024
+                },
+                {
+                    "hour": 11,
+                    "sum": 164.578
+                },
+                {
+                    "hour": 12,
+                    "sum": 167.545
+                },
+                {
+                    "hour": 13,
+                    "sum": 169.941
+                },
+                {
+                    "hour": 14,
+                    "sum": 170.874
+                },
+                {
+                    "hour": 15,
+                    "sum": 173.68
+                },
+                {
+                    "hour": 16,
+                    "sum": 176.093
+                },
+                {
+                    "hour": 17,
+                    "sum": 168.618
+                },
+                {
+                    "hour": 18,
+                    "sum": 167.623
+                },
+                {
+                    "hour": 19,
+                    "sum": 170.153
+                },
+                {
+                    "hour": 20,
+                    "sum": 171.614
+                },
+                {
+                    "hour": 21,
+                    "sum": 175.416
+                },
+                {
+                    "hour": 22,
+                    "sum": 179.934
+                },
+                {
+                    "hour": 23,
+                    "sum": 181
                 }
             ],
             "scaleTypeX": "linear",
             "scaleTypeY": "linear",
             "yAxisTicks": {
                 "start": 0,
-                "end": 20000,
-                "ticks": 4,
+                "end": 200,
+                "ticks": 10,
                 "factor": ",f"
             },
+            "yAxisLabel": {},
             "xAxisTicks": {
-                "start": 2008,
-                "end": 2017,
-                "ticks": 10,
-                "unit": "Year"
+                "start": 0,
+                "end": 24,
+                "ticks": 12,
+                "unit": "Uhr"
             },
             "xAxisLabel": {
                 "label": "Durchschnittliche Verfügbarkeit Montags",
                 "offset": 10,
                 "textAnchor": "middle",
-                "fill": "#666",
-                "fontSize": 12
+                "fill": "#000",
+                "fontSize": 12,
+                "translate": 6
             },
-            "yAxisLabel": {},
-            "xAttr": "Year",
+            "xAttr": "hour",
             "attrToShowArray": [
                 "sum"
             ]
         };
 
-        Radio.trigger("Graph", "createGraph", testConfig);
+        Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
     // setting data for balkendiagramm

@@ -631,7 +631,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             xAttr: "hour",
             attrToShowArray: ["mean"]
         };
-        console.log(graphConfig);
+
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
