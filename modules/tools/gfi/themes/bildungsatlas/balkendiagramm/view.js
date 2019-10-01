@@ -20,9 +20,9 @@ const BalkendiagrammThemeView = ThemeView.extend({
      * @param {Event} evt Click event
      * @returns {void}
      */
-    changeKat: function (evt) {
+    changeKat: function () {
         this.$(".graph svg").remove();
-        this.model.createD3Document(evt.currentTarget.id);
+        this.model.createD3Document();
     }
 });
 
