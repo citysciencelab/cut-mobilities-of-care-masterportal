@@ -30,7 +30,8 @@ import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
-
+import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
+import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -54,6 +55,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
 
         if (attrs.gfiTheme === "table") {
             theme = new TableTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenStandorte") {
+            theme = new SchulenStandorteTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
             theme = new DipasTheme(attrs, options);
@@ -144,6 +148,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         switch (model.get("gfiTheme")) {
             case "table": {
                 new TableThemeView({model: model});
+                break;
+            }
+            case "schulenStandorte": {
+                new SchulenStandorteThemeView({model: model});
                 break;
             }
             case "reisezeiten": {
