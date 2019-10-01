@@ -6,6 +6,7 @@ const BalkendiagrammTheme = Theme.extend({
             "change:isReady": function () {
                 this.replaceKey();
                 this.getStaticWithYear();
+                this.getLatestStatistic();
             }
         });
     },
@@ -38,6 +39,15 @@ const BalkendiagrammTheme = Theme.extend({
         this.setDataset(dataset);
     },
 
+    /**
+     * Here we get the data with the latest year
+     * @returns {void}
+     */
+    getLatestStatistic: function () {
+        var dataset = this.get("dataset");
+
+        this.set("latestStatistic", dataset[dataset.length - 1].number);
+    },
 
     /**
      * Generates the graph config and triggers the Graph-functionality to create the graph
@@ -63,7 +73,7 @@ const BalkendiagrammTheme = Theme.extend({
             scaleTypeX: "ordinal",
             scaleTypeY: "linear",
             yAxisTicks: {
-                ticks: 10,
+                ticks: 5,
                 factor: ",f"
             },
             data: this.get("dataset"),
