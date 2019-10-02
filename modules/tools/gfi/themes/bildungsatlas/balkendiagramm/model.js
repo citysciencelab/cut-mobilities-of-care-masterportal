@@ -24,6 +24,8 @@ const BalkendiagrammTheme = Theme.extend({
             value = element[0][key];
             this.set(key, value);
         }
+
+        console.log(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm"}));
     },
 
     /**
