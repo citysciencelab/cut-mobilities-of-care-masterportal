@@ -70,7 +70,6 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             Radio.trigger("Map", "updateSize");
         }
     }
-
 });
 
 export default MenuLoader;
