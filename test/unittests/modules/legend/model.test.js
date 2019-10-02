@@ -55,11 +55,11 @@ describe("modules/legend", function () {
             });
         });
         it("should return empty legend if no vector style is properly set up", function () {
-            expect(model.getLegendParamsFromVector("Fake", "WFS", "123")).to.deep.equal({
+            expect(model.getLegendParamsFromVector("Fake", "123")).to.deep.equal({
                 layername: "Fake",
                 legend: [{
                     img: [],
-                    typ: "WFS",
+                    typ: "svg",
                     legendname: []
                 }]
             });
