@@ -6,7 +6,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @class MapMarkerView
      * @description todo
      * @extends Backbone.View
-     * @memberOf Core.MapMarker
+     * @memberof Core.MapMarker
      * @constructs
      *
      * @listens MapMarker#RadioTriggerMapMarkerZoomTo

@@ -18,7 +18,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @description Module to represent HeatmapLayer
      * @extends Layer
      * @constructs
-     * @memberOf Core.ModelList.Layer
+     * @memberof Core.ModelList.Layer
      * @property {String} attribute=[""] Attribute to filter by.
      * @property {String} value=[""] Value to filter by.
      * @property {Number} radius=10 Radius to calculate the heatmap.
