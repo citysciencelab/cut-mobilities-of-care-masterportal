@@ -29,7 +29,7 @@ Beispiel des Namespaces Modellist als Unterordner des Core
 ```javascript
 /**
  * @namespace ModelList
- * @memberOf Core
+ * @memberof Core
  * @description List module to gather all item models
  */
 ```
@@ -83,7 +83,7 @@ Beispiel: Model.trigger("myTrigger");
  * @event Namespace#MyTrigger
  * @description FooBar.
  */
- ```
+```
 
  Beispiel: Model.trigger("myTriggerWithData", data);
  ```javascript
@@ -105,7 +105,7 @@ Beispiel: this.listenTo(this, {
 ```
 
 Beispiel: Innerhalb von verschachtelten Namespaces;
- ```javascript
+```javascript
 /**
  * @event Core.ModelList.Layer#changeIsSelected
  * @param {Backbone.Model} model The model whose attribute hat changed.
