@@ -6,7 +6,7 @@ Konventionen für das Master-Portal
 
 1. Schreibe [Clean Code](conventions/cleanCode.md).
 2. Verwende native [ES6-Funktionalitäten](conventions/es6Functions.md).
-3. Beachte das MV*-Muster von [Backbone](conventions/backbone.md).
+3. Beachte das [MV*](https://www.infragistics.com/community/blogs/b/nanil/posts/exploring-javascript-mv-frameworks-part-1-hello-backbonejs)-Muster von [Backbone](conventions/backbone.md).
 4. Beachte den [Linter](conventions/linter.md).
 5. Schreibe [testbare Funktionen](conventions/unitTests.md) und die entsprechenden [UnitTests](conventions/unitTests.md) dazu.
 6. Schreibe valides [JSDoc](conventions/jsdoc.md).
