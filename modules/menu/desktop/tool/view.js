@@ -58,7 +58,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             supportedIn3d = this.model.get("supportedIn3d"),
             supportedOnlyIn3d = this.model.get("supportedOnlyIn3d"),
             supportedInOblique = this.model.get("supportedInOblique");
-console.log(this.model);
 
         if (mode === "2D" && !supportedOnlyIn3d.includes(modelId)) {
             this.$el.show();
