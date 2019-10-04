@@ -179,6 +179,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             return;
         }
 
+        this.addId(features);
         this.get("layerSource").clear(true);
         this.get("layerSource").addFeatures(features);
         this.get("layer").setStyle(this.get("styleFunction"));

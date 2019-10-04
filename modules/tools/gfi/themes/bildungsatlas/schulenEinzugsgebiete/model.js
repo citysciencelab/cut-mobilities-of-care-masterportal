@@ -25,8 +25,8 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
          */
         schoolKey: "",
         /**
-         * due to events order (isReady -> isVisible) 
-         * but isReady is not fired on gfi toggle 
+         * due to events order (isReady -> isVisible)
+         * but isReady is not fired on gfi toggle
          * and isVisible is fired before the gfi can be rendered
          * this parameter holds the state
          * @type {Boolean}
@@ -74,12 +74,9 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
             this.destroy();
             this.set("isCreated", false);
         }
-        else {
-            if (this.get("isCreated") === false) {
-                console.log("1");
-                this.create();
-                this.set("isCreated", true);
-            }
+        else if (this.get("isCreated") === false) {
+            this.create();
+            this.set("isCreated", true);
         }
     },
 
@@ -110,7 +107,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
             }
             else {
                 console.warn("Missing data for area filter");
-            }            
+            }
         }
     },
 
@@ -129,7 +126,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
         if (layerStatistischeGebiete) {
             this.unfilterFeature([layerStatistischeGebiete]);
             layerStatistischeGebiete.setIsSelected(false);
-        }        
+        }
     },
 
     /**
