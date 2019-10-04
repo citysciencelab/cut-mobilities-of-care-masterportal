@@ -14,6 +14,17 @@
 
 5.1.6. Immer den selben Datentyp zurückgeben.
 
+Beispiel:
+```javascript
+
+    function testbareFunktion(uebergabeParameter) {
+        let rueckgabeParameter = "Hello " +uebergabeParameter;
+
+        return rueckgabeParameter
+    }
+    this.testbareFunktion ("")
+```
+
 ***
 Sind innerhalb eines Prozesses Attribute zu setzen oder Events zu feuern, so sollen Prozessfunktionen verwendet werden.
 ***
@@ -26,6 +37,20 @@ Sind innerhalb eines Prozesses Attribute zu setzen oder Events zu feuern, so sol
 5.2.3. Testbare Funktionen aufrufen und mit deren Rückgabewert weiterarbeiten.
 
 5.2.4. Getter und Setter haben können.
+
+Beispiel:
+```javascript
+    function prozessFunktion() {
+        let belibigeVariable = Radio.request("BelibigerChannel", beliebigeFunktion);
+
+        this.testbareFunktion(beliebigeVariable);
+    }
+    .
+    .
+    .
+
+```
+
 ***
 5.3 **Unit Tests**
 
@@ -38,3 +63,5 @@ Sind innerhalb eines Prozesses Attribute zu setzen oder Events zu feuern, so sol
 5.3.4 Jede Funktion soll mindestens einen **Positiv-Test** (Funktionsaufruf mit plausiblen Werten) und einen **Negativ-Test** (Funktionsaufruf mit unplausiblen Werten, z.B. *undefined*, *[]*, *{}*, *""*, ...) enthalten.
 
 5.3.5 Alle Unit-Tests müssen fehlerfrei durchlaufen. Dies wird beim pushen durch eine pre-push Hook geprüft.
+
+Beispiel unter [**test/unittests/ExampleTest**](../../test/unittests/ExampleTest)
