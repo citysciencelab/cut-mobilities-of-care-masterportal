@@ -4,7 +4,7 @@ const BalkendiagrammTheme = Theme.extend({
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.replaceKey();
+                this.setContent();
                 this.getStaticWithYear();
                 this.getLatestStatistic();
             }
@@ -12,20 +12,22 @@ const BalkendiagrammTheme = Theme.extend({
     },
 
     /**
-     * we need to make the key meaningful to be extracted in template
+     * here the content will be parsed and added for the template
      * @returns {void}
      */
-    replaceKey: function () {
+    setContent: function () {
         var element = this.get("gfiContent"),
             key,
-            value;
+            value,
+            layerList;
 
         for (key in element[0]) {
             value = element[0][key];
             this.set(key, value);
         }
 
-        console.log(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm"}));
+        layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")});
+        this.set("description", layerList[0].get("description"));
     },
 
     /**

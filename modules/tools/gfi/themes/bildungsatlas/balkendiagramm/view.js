@@ -30,7 +30,6 @@ const BalkendiagrammThemeView = ThemeView.extend({
      * @returns {void}
      */
     changeKat: function () {
-        console.log("test");
         this.$(".graph svg").remove();
         this.model.createD3Document();
     }
