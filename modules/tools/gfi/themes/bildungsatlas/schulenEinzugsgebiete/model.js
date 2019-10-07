@@ -205,8 +205,8 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
      * @returns {boolean} valid true if gfiContent could be parsed
      */
     parseGfiContent: function (gfiContent) {
-        if (gfiContent.allProperties) {
-            const attr = this.get("gfiContent").allProperties;
+        if (gfiContent && gfiContent.allProperties) {
+            const attr = gfiContent.allProperties;
 
             if (attr.C_S_Nr) {
                 this.set("id", String(attr.C_S_Nr));
@@ -246,7 +246,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
     getEinzugsgebieteLayer: function () {
         const layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme")});
 
-        if (!layers) {
+        if (!layers || layers.length === 0) {
             console.warn("No layer configuration with gfiTheme: " + this.get("layerTheme"));
 
             return false;
