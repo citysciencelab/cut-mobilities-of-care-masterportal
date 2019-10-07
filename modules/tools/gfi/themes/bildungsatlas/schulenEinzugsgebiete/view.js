@@ -9,7 +9,7 @@ const SchulenEinzugsgebieteThemeView = ThemeView.extend({
     className: "gfi-schule-einzugsgebiete",
     template: _.template(DefaultTemplate),
     destroy: function () {
-        // this.model.onIsVisibleEvent(null, false);
+        this.model.onIsVisibleEvent(null, false);
     }
 });
 
