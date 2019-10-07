@@ -12,7 +12,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th colspan="2"><%= Stadtteil %></th>
+                    <th colspan="2"><%= Title %></th>
                 </tr>
                 <tr>
                     <th colspan="2"><%= description %></th>
@@ -22,12 +22,22 @@
             <tbody>
                 <tr>
                     <td>
-                        <%= Stadtteil %>
+                        <%= Name %>
                     </td>
                     <td>
                         <%= latestStatistic %>
                     </td>
                 </tr>
+                <% if (typeof StadtteilGesamt !== "undefined") { %>
+                <tr>
+                    <td>
+                        <%= Stadtteil %>
+                    </td>
+                    <td>
+                        <%= StadtteilGesamt %>
+                    </td>
+                </tr>
+                <% } %>
                 <tr>
                     <td>
                         Bezirk <%= Bezirk %>

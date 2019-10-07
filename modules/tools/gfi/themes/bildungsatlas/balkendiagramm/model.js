@@ -19,15 +19,35 @@ const BalkendiagrammTheme = Theme.extend({
         var element = this.get("gfiContent"),
             key,
             value,
-            layerList;
+            layerList,
+            layerName;
 
         for (key in element[0]) {
             value = element[0][key];
             this.set(key, value);
         }
 
+        // Get the attributes from config file
         layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")});
+
+        // Get the attributes from list individuelly to show in different layers
+        layerName = layerList[0].get("name");
+        if (layerName === "Stadtteile") {
+            this.set("Title", element[0].Stadtteil);
+            this.set("Name", element[0].Stadtteil);
+        }
+        else if (layerName === "Sozialräume") {
+            this.set("Title", element[0]["SR Name"]);
+            this.set("Name", element[0]["SR Name"]);
+        }
+        else if (layerName === "Statistische Gebiete") {
+            this.set("Title", element[0].Stadtteil + ": " + element[0]["StatGeb Nr"]);
+            this.set("Name", "Statistisches Gebiet");
+        }
+
+        // get the description of this diagram
         this.set("description", layerList[0].get("description"));
+
     },
 
     /**
@@ -70,7 +90,7 @@ const BalkendiagrammTheme = Theme.extend({
                 top: 20,
                 right: 20,
                 bottom: 30,
-                left: 40
+                left: 45
             },
             svgClass: "graph-svg",
             selectorTooltip: ".graph-tooltip-div",

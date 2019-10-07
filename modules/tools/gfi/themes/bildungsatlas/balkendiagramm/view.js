@@ -6,15 +6,6 @@ const BalkendiagrammThemeView = ThemeView.extend({
     className: "gfi-bakendiagramm",
     template: _.template(BalkendiagrammThemeTemplate),
 
-    initialize: function () {
-        // call ThemeView's initialize method explicitly
-        ThemeView.prototype.initialize.apply(this);
-
-        this.listenTo(this.model, {
-            "change:isReady": this.changeKat()
-        });
-    },
-
     /**
      * @extends ThemeView
      * @memberof Tools.GFI.Themes.Balkendiagramm
