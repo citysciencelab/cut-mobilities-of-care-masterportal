@@ -31,10 +31,14 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
          * this parameter holds the state
          * @type {Boolean}
          */
-        isCreated: false
+        isCreated: false,
+        hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
 
     initialize: function () {
+        if (Radio.request("Util", "isViewMobile")) {
+            this.set("hintText", "In der mobilen Ansicht ist keine Abfrage der Schülerzahlen möglich.");
+        }
         this.listenTo(this, {
             "change:isVisible": this.onIsVisibleEvent,
             "change:isReady": this.create
