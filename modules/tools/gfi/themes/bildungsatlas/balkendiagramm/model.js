@@ -2,11 +2,18 @@ import Theme from "../../model";
 
 const BalkendiagrammTheme = Theme.extend({
     initialize: function () {
+        const isMobile = this.checkIsMobile();
+        let timeOut = 10;
+
         this.listenTo(this, {
             "change:isReady": function () {
                 this.setContent();
                 this.getStaticWithYear();
                 this.getLatestStatistic();
+                if (isMobile) {
+                    timeOut = 300;
+                }
+                setTimeout(_.bind(this.createD3Document, this), timeOut);
             }
         });
     },
@@ -59,7 +66,6 @@ const BalkendiagrammTheme = Theme.extend({
             dataset;
 
         dataset = element.allProperties.Statistic;
-
         this.setDataset(dataset);
     },
 
@@ -115,6 +121,14 @@ const BalkendiagrammTheme = Theme.extend({
     // setting data for balkendiagramm
     setDataset: function (value) {
         this.set("dataset", value);
+    },
+
+    /**
+     * requests util if portal is running on mobile device
+     * @returns {Boolean} isMobile
+     */
+    checkIsMobile: function () {
+        return Radio.request("Util", "isViewMobile");
     }
 });
 
