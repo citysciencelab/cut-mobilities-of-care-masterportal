@@ -68,17 +68,18 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
     },
 
     /**
-     * Toggles the visibility of this GFI according to its visibitily
+     * Toggles the visibility of this GFI according to its visibitily.
      * @param   {object}  gfi       gfi object
      * @param   {Boolean} isVisible is gfi visible
      * @returns {void}
      */
     onIsVisibleEvent: function (gfi, isVisible) {
-        if (!isVisible) {
+        // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
+        if (!isVisible && this.get("isCreated") === true) {
             this.destroy();
             this.set("isCreated", false);
         }
-        else if (this.get("isCreated") === false) {
+        else if (isVisible && this.get("isCreated") === false) {
             this.create();
             this.set("isCreated", true);
         }
