@@ -3,7 +3,7 @@ import Theme from "../../model";
 const BalkendiagrammTheme = Theme.extend({
     initialize: function () {
         const isMobile = this.checkIsMobile();
-        let timeOut = 10;
+        let timeOut = 100;
 
         this.listenTo(this, {
             "change:isReady": function () {
