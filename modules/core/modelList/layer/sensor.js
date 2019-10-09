@@ -25,21 +25,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @property {String} version="1.0" Version the SensorThingsAPI is requested.
      * @property {Boolean} useProxyUrl="1.0" Flag if url should be proxied.
      * @fires Core#RadioRequestMapViewGetOptions
-     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
      * @fires Core#RadioRequestUtilGetProxyURL
      * @fires Core#RadioTriggerUtilShowLoader
      * @fires Core#RadioTriggerUtilHideLoader
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
-     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires GFI#RadioTriggerGFIChangeFeature
+     * @listens Layer#RadioRequestVectorLayerGetFeatures
      * @description This layer type requests its data from the SensorThinsgAPI (STA).
      * The layer reacts to changes of the own features triggered by the STA.
      * The technology used therefore is WebSocketSecure (wss) and the MessageQueuingTelemetryTransport(MQTT)-Protocol.
      * This makes it possible to update vector-data in the application without reloading the entire page.
      */
     initialize: function () {
-
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
         if (!this.get("isChildLayer")) {
@@ -48,6 +47,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // change language from moment.js to german
         moment.locale("de");
+        Radio.channel("VectorLayer").reply({
+            "getFeatures": this.returnFeatures
+        }, this);
     },
 
     /**
@@ -62,8 +64,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Creates the layer and trigger to updateData
-     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+     * Creates the layer.
      * @returns {void}
      */
     createLayer: function () {
@@ -78,8 +79,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }));
 
         this.updateData();
-
-        Radio.trigger("HeatmapLayer", "loadInitialData", this.get("id"), this.get("layerSource").getFeatures());
     },
 
     /**
@@ -113,6 +112,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         // Add features to vectorlayer
         if (!_.isEmpty(features)) {
             this.get("layerSource").addFeatures(features);
+            this.featuresLoaded(features);
         }
 
         // connection to live update
@@ -558,7 +558,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {Array} featureArray - contains the and index and feature which should be updates
      * @param  {String} thingResult - the new state
      * @param  {String} thingPhenomenonTime - the new phenomenonTime
-     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
@@ -584,7 +584,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         // trigger the heatmap and gfi to update them
-        Radio.trigger("HeatmapLayer", "loadupdateHeatmap", this.get("id"), feature);
+        this.get("channel").trigger("featureUpdated", this.get("id"), feature);
         Radio.trigger("GFI", "changeFeature", feature);
     },
 

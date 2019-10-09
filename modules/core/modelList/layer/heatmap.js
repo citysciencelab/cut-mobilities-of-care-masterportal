@@ -20,31 +20,38 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @property {Number} radius=10 Radius to calculate the heatmap.
      * @property {Number} blur=15 Blur for heatmap.
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
-     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
-     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
+     * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
      */
     initialize: function () {
-        var channel = Radio.channel("HeatmapLayer");
-
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
-
-        this.listenTo(channel, {
-            "loadInitialData": this.loadInitialData,
-            "loadupdateHeatmap": this.loadupdateHeatmap
-        });
+        this.listenTo(Radio.channel("VectorLayer"), {
+            "featuresLoaded": this.loadInitialData,
+            "featureUpdated": this.updateFeature
+        }, this);
+        this.prepareLayerObject();
+        this.loadInitialData();
     },
 
     /**
      * Loads the initial heatmap features.
      * @param {String} layerId Id of layer whose data has to be loaded.
      * @param {ol/Feature[]} features Features that have to be used for heatmap layer.
+     * @fires Layer#RadioRequestVectorLayerGetFeatures
      * @returns {void}
      */
     loadInitialData: function (layerId, features) {
+        if (!layerId) {
+            const dataLayerFeatures = Radio.request("VectorLayer", "getFeatures", this.get("dataLayerId"));
+
+            if (dataLayerFeatures.length > 0) {
+                this.initializeHeatmap(dataLayerFeatures);
+            }
+        }
         if (this.checkDataLayerId(layerId)) {
             this.initializeHeatmap(features);
         }
@@ -56,7 +63,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @param {ol/feature} feature  Feature that was updated.
      * @returns {void}
      */
-    loadupdateHeatmap: function (layerId, feature) {
+    updateFeature: function (layerId, feature) {
         if (this.checkDataLayerId(layerId)) {
             this.updateHeatmap(feature);
         }

@@ -42,7 +42,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @fires Layer#RadioTriggerLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @listens Layer#changeIsSelected
@@ -69,6 +69,35 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
     },
 
+    returnFeatures: function (requestorLayerName, dataLayerId) {
+        let features = [];
+        const isDataLayer = this.checkIfDataLayer(dataLayerId, this.get("id")),
+            layerSource = this.get("layerSource");
+
+        if (isDataLayer) {
+            if (layerSource.constructor.name === "VectorSource") {
+                features = layerSource.getFeatures();
+            }
+            else {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Fehler: Der Layer mit dem Namen \"" + requestorLayerName + "\" kann nicht erstellt werden.</strong><br>" +
+                    "Möglicherweise wurde der Layer " + this.get("name") + " als Vektordatenquelle konfiguriert, welcher keine Vektordaten beinhaltet.<br>" +
+                    "Bitte wenden Sie sich an den Administrator.",
+                    kategorie: "alert-danger"
+                });
+            }
+        }
+        return features;
+    },
+
+    checkIfDataLayer: function (dataLayerId, layerId) {
+        let isDataLayer = false;
+
+        if (dataLayerId === layerId) {
+            isDataLayer = true;
+        }
+        return isDataLayer;
+    },
     /**
      * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
      * @param {object} options -
@@ -86,11 +115,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     /**
      * Triggers event if vector features are loaded
      * @param {ol.Feature[]} features Loaded vector features
-     * @fires Layer#event:RadioTriggerLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @return {void}
      */
     featuresLoaded: function (features) {
-        this.get("channel").trigger("featuresLoaded", this.get("id"), features);
+        Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
     },
 
     /**
