@@ -114,7 +114,7 @@ const CookieModel = Backbone.Model.extend(/** @lends CookieModel.prototype */{
     hasItem: function () {
         var sKey = this.get("sKey");
 
-        return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+        return new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[-.+*]/g, "\\$&") + "\\s*\\=").test(document.cookie);
     },
 
     /**
