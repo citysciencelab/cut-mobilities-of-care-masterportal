@@ -46,9 +46,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      */
     loadInitialData: function (layerId, features) {
         if (!layerId) {
-            const dataLayerFeatures = Radio.request("VectorLayer", "getFeatures", this.get("dataLayerId"));
+            const dataLayerFeatures = Radio.request("VectorLayer", "getFeatures", this.get("name"), this.get("dataLayerId"));
 
-            if (dataLayerFeatures.length > 0) {
+            if (dataLayerFeatures && dataLayerFeatures.length > 0) {
                 this.initializeHeatmap(dataLayerFeatures);
             }
         }

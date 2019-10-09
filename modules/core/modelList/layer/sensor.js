@@ -30,7 +30,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @fires Core#RadioTriggerUtilHideLoader
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
-     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      * @description This layer type requests its data from the SensorThinsgAPI (STA).
@@ -558,7 +557,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {Array} featureArray - contains the and index and feature which should be updates
      * @param  {String} thingResult - the new state
      * @param  {String} thingPhenomenonTime - the new phenomenonTime
-     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
@@ -583,8 +581,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             feature.set("phenomenonTime", thingPhenomenonTime);
         }
 
-        // trigger the heatmap and gfi to update them
-        this.get("channel").trigger("featureUpdated", this.get("id"), feature);
+        this.featureUpdated(feature);
         Radio.trigger("GFI", "changeFeature", feature);
     },
 

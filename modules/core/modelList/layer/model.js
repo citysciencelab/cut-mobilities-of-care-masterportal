@@ -43,6 +43,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @listens Layer#changeIsSelected
@@ -120,6 +121,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     featuresLoaded: function (features) {
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+    },
+    /**
+     * Triggers event if vector feature is loaded
+     * @param {ol.Feature} feature Updated vector feature
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @return {void}
+     */
+    featureUpdated: function (feature) {
+        Radio.trigger("VectorLayer", "featureUpdated", this.get("id"), feature);
     },
 
     /**
