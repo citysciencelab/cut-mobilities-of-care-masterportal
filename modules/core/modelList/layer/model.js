@@ -46,6 +46,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
      * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Alerting#RadioTriggerAlertAlert
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
@@ -70,6 +71,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
     },
 
+    /**
+     * @param {String} requestorLayerName The name of the requesting layer.
+     * @param {String} dataLayerId The id of the layer to return features.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol.Feature[]} - The features of the layer
+     */
     returnFeatures: function (requestorLayerName, dataLayerId) {
         let features = [];
         const isDataLayer = this.checkIfDataLayer(dataLayerId, this.get("id")),
@@ -91,6 +98,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         return features;
     },
 
+    /**
+     * Checks if dataLayerId matches the given layer id.
+     * @param {String} dataLayerId Id of dataLayer whose features are requested.
+     * @param {String} layerId Id of current layer.
+     * @returns {Boolean} - flag if dataLayerId matches given layer id.
+     */
     checkIfDataLayer: function (dataLayerId, layerId) {
         let isDataLayer = false;
 
