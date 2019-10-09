@@ -7,9 +7,9 @@ const BalkendiagrammTheme = Theme.extend({
 
         this.listenTo(this, {
             "change:isReady": function () {
-                this.setContent();
                 this.getStaticWithYear();
                 this.getLatestStatistic();
+                this.setContent();
                 if (isMobile) {
                     timeOut = 300;
                 }
@@ -25,35 +25,51 @@ const BalkendiagrammTheme = Theme.extend({
     setContent: function () {
         var element = this.get("gfiContent"),
             key,
-            value,
+            content = {},
             layerList,
-            layerName;
-
-        for (key in element[0]) {
-            value = element[0][key];
-            this.set(key, value);
-        }
+            layerName,
+            layerDataFormat;
 
         // Get the attributes from config file
         layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")});
 
         // Get the attributes from list individuelly to show in different layers
         layerName = layerList[0].get("name");
+        layerDataFormat = layerList[0].get("format");
+
         if (layerName === "Stadtteile") {
             this.set("Title", element[0].Stadtteil);
-            this.set("Name", element[0].Stadtteil);
+
+            content[element[0].Stadtteil] = this.get("latestStatistic");
+            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
+            content.hamburg = element[0].HHGesamt;
         }
         else if (layerName === "Sozialräume") {
             this.set("Title", element[0]["SR Name"]);
-            this.set("Name", element[0]["SR Name"]);
+
+            content[element[0]["SR Name"]] = this.get("latestStatistic");
+            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
+            content.hamburg = element[0].HHGesamt;
         }
         else if (layerName === "Statistische Gebiete") {
             this.set("Title", element[0].Stadtteil + ": " + element[0]["StatGeb Nr"]);
-            this.set("Name", "Statistisches Gebiet");
+
+            content["Statistisches Gebiet"] = this.get("latestStatistic");
+            content[element[0].Stadtteil] = element[0].StadtteilGesamt;
+            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
+            content.hamburg = element[0].HHGesamt;
+        }
+
+        if (layerDataFormat === "anteil") {
+            for (key in content) {
+                content[key] = Math.trunc(content[key]) + "%";
+            }
         }
 
         // get the description of this diagram
         this.set("description", layerList[0].get("description"));
+
+        this.set("content", content);
 
     },
 

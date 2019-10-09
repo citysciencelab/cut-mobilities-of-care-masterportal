@@ -20,40 +20,16 @@
             </thead>
 
             <tbody>
+            <%  _.each(content, function(value, key) { %>
                 <tr>
                     <td>
-                        <%= Name %>
+                        <%= key %>
                     </td>
                     <td>
-                        <%= latestStatistic %>
+                        <%= value %>
                     </td>
                 </tr>
-                <% if (typeof StadtteilGesamt !== "undefined") { %>
-                <tr>
-                    <td>
-                        <%= Stadtteil %>
-                    </td>
-                    <td>
-                        <%= StadtteilGesamt %>
-                    </td>
-                </tr>
-                <% } %>
-                <tr>
-                    <td>
-                        Bezirk <%= Bezirk %>
-                    </td>
-                    <td>
-                        <%= BezirkGesamt %>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Hamburg
-                    </td>
-                    <td>
-                        <%= HHGesamt %>
-                    </td>
-                </tr>
+            <% }); %>
             </tbody>
         </table>
         <br/>
