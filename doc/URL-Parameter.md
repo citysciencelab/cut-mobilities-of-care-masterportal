@@ -21,6 +21,7 @@ Es ist möglich, über Parameter in der URL spezielle Einstellungen der Konfigur
 |transparency|nur gemeinsam mit layerids zu verwenden. Transparenz der Layer kommagetrennt von 0-100. Kann für jeden Layer in layerids angegeben werden.|`&layerids=453,2128&transparency=0,40`|
 |visibility|nur gemeinsam mit layerids zu verwenden. Sichtbarkeit der Layer kommagetrennt als Boolean (true, false)|`&layerids=453,2128&visibility=true,false`|
 |zoomlevel|Zoomt auf die Maßstabsstufe, die angegeben wurde (siehe [config.view.options](config.js.md)).|`&zoomlevel=2`|
+|zoomToExtent|Zoomt auf einen in der URL angegebenen Kartenausschnitt|`&zoomToExtent=510000,5850000,625000,6000000`|
 |featureid|Zoomt auf die Features des WFS-Dienstes, der in der config.js konfiguriert ist (siehe [config.zoomtofeature](config.js.md)).|`&featureid=18,26`|
 |config| Legt eine zu verwendende Konfigurationsdatei fest. Die Angabe erfolgt mittels einer absoluten URL (`http://...` bzw. `https://...`) oder eines relativen Pfades. Im zweiten Fall wird der in der config.js([config.portalConf](config.js.md)) angegebene Pfad mit diesem Parameter kombiniert und ergibt den kompletten Pfad zur config.json.|`&config=config.json`|
 |style| Definiert ob eine besondere Variante der Bedienelemente angezeigt werden soll, z.B. komplett ohne Bedienlemente zur Einbindung als Iframe ("simple") |`&style=simple`|
