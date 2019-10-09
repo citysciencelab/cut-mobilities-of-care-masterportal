@@ -81,6 +81,7 @@ const map = Backbone.Model.extend({
         });
 
         this.set("view", mapView.get("view"));
+        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
 
         this.set("map", new Map({
             logo: null,
@@ -532,7 +533,18 @@ const map = Backbone.Model.extend({
     },
 
     zoomToExtent: function (extent, options) {
-        this.get("view").fit(extent, this.get("map").getSize(), options);
+        var extentToUse = extent;
+
+        if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
+            const projectionGiven = this.get("projectionFromParamUrl"),
+                leftBottom = extent.slice(0, 2),
+                topRight = extent.slice(2, 4),
+                transformedLeftBottom = Radio.request("CRS", "transformToMapProjection", projectionGiven, leftBottom),
+                transformedTopRight = Radio.request("CRS", "transformToMapProjection", projectionGiven, topRight);
+
+            extentToUse = transformedLeftBottom.concat(transformedTopRight);
+        }
+        this.get("view").fit(extentToUse, this.get("map").getSize(), options);
     },
 
     zoomToFilteredFeatures: function (ids, layerId) {
@@ -655,7 +667,17 @@ const map = Backbone.Model.extend({
 
     setShadowTime: function (value) {
         this.set("shadowTime", value);
+    },
+
+    /**
+     * @description Sets projection from param url
+     * @param {string} projection todo
+     * @return {float} current Zoom of MapView
+     */
+    setProjectionFromParamUrl: function (projection) {
+        this.set("projectionFromParamUrl", projection);
     }
+
 });
 
 export default map;
