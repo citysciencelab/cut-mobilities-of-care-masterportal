@@ -7,15 +7,37 @@ import {transform} from "ol/proj.js";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
 
-const SensorLayer = Layer.extend({
+const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults,
         {
             epsg: "EPSG:4326",
             utc: "+1",
             version: "1.0",
-            useProxyURL: false
+            useProxyUrl: false
         }),
-
+    /**
+     * @class SensorLayer
+     * @extends Layer
+     * @memberof Core.ModelList.Layer
+     * @constructs
+     * @property {String} epsg="EPSG:4326" EPSG-Code for incoming sensor geometries.
+     * @property {String} utc="+1" UTC-Timezone to calulate correct time.
+     * @property {String} version="1.0" Version the SensorThingsAPI is requested.
+     * @property {Boolean} useProxyUrl="1.0" Flag if url should be proxied.
+     * @fires Core#RadioRequestMapViewGetOptions
+     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
+     * @fires Core#RadioRequestUtilGetProxyURL
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @fires GFI#RadioTriggerGFIChangeFeature
+     * @description This layer type requests its data from the SensorThinsgAPI (STA).
+     * The layer reacts to changes of the own features triggered by the STA.
+     * The technology used therefore is WebSocketSecure (wss) and the MessageQueuingTelemetryTransport(MQTT)-Protocol.
+     * This makes it possible to update vector-data in the application without reloading the entire page.
+     */
     initialize: function () {
 
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -29,7 +51,7 @@ const SensorLayer = Layer.extend({
     },
 
     /**
-     * creates ol.source.Vector as LayerSource
+     * Creates the vectorSource.
      * @returns {void}
      */
     createLayerSource: function () {
@@ -40,7 +62,8 @@ const SensorLayer = Layer.extend({
     },
 
     /**
-     * creates the layer and trigger to updateData
+     * Creates the layer and trigger to updateData
+     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
      * @returns {void}
      */
     createLayer: function () {
@@ -60,7 +83,7 @@ const SensorLayer = Layer.extend({
     },
 
     /**
-     * create ClusterLayerSourc
+     * Creates ClusterLayerSource.
      * @returns {void}
      */
     createClusterLayerSource: function () {
@@ -71,15 +94,15 @@ const SensorLayer = Layer.extend({
     },
 
     /**
-     * initial loading of sensor data function
-     * differences by subtypes
+     * Initial loading of sensor data function
+     * @fires Core#RadioRequestUtilGetProxyURL
      * @returns {void}
      */
     updateData: function () {
         var sensorData,
             features,
             isClustered = this.has("clusterDistance"),
-            url = this.get("useProxyURL") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
+            url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
             epsg = this.get("epsg");
@@ -104,6 +127,9 @@ const SensorLayer = Layer.extend({
     /**
      * get response from a given URL
      * @param  {String} requestURL - to request sensordata
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Alerting#RadioTriggerAlertAlert
      * @return {objects} response with sensorObjects
      */
     getResponseFromRequestURL: function (requestURL) {
@@ -463,6 +489,7 @@ const SensorLayer = Layer.extend({
     /**
      * create style, function triggers to style_v2.json
      * @param  {boolean} isClustered - should
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     styling: function (isClustered) {
@@ -531,6 +558,8 @@ const SensorLayer = Layer.extend({
      * @param  {Array} featureArray - contains the and index and feature which should be updates
      * @param  {String} thingResult - the new state
      * @param  {String} thingPhenomenonTime - the new phenomenonTime
+     * @fires HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
     liveUpdate: function (featureArray, thingResult, thingPhenomenonTime) {
@@ -618,6 +647,7 @@ const SensorLayer = Layer.extend({
 
     /**
      * create legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     createLegendURL: function () {

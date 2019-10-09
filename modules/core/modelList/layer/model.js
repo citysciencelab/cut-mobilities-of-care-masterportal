@@ -43,15 +43,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerLayerFeaturesLoaded
-     * @fires MapView#RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
      * @listens Layer#RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#RadioTriggerMapChange
-     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
         this.registerInteractionTreeListeners(this.get("channel"));
@@ -113,7 +113,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#event:changeTransparency
      * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#event:RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @param {Radio.channel} channel Radio channel of this module
      * @return {void}
      */
@@ -169,7 +169,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Register interaction with map view.
-     * @listens MapView#event:RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapViewChangedOptions
      * @returns {void}
      */
     registerInteractionMapViewListeners: function () {
@@ -202,7 +202,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Sets visible min and max resolution on layer.
-     * @fires MapView#event:RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @returns {void}
      */
     getResolutions: function () {

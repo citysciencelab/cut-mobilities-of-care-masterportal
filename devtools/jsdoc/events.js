@@ -1413,6 +1413,13 @@
  * @example Radio.request("GFI", "getCurrentView");
  */
 
+ /**
+ * @event GFI#RadioTriggerGFIChangeFeature
+ * @description updates the current gfi Feature if it matches.
+ * @param {ol.Feature} feature The feature that has changed.
+ * @example Radio.trigger("GFI", "changeFeature", feature);
+ */
+
 /** -------------------- GFI.THEME -------------------- */
 
 /**
