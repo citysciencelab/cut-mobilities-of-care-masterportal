@@ -5,6 +5,8 @@ import {Heatmap} from "ol/layer.js";
 const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
 
     defaults: _.extend({}, Layer.prototype.defaults, {
+        attribute: "",
+        value: "",
         radius: 10,
         blur: 15,
         gradient: [
@@ -17,11 +19,14 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @extends Layer
      * @constructs
      * @memberOf Core.ModelList.Layer
+     * @property {String} attribute=[""] Attribute to filter by.
+     * @property {String} value=[""] Value to filter by.
      * @property {Number} radius=10 Radius to calculate the heatmap.
      * @property {Number} blur=15 Blur for heatmap.
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
      * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @description This layer is used to generate a heatmap. It uses the features of a already configured vector layer such as WFS oder Sensor.
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
