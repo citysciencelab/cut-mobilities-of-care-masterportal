@@ -34,6 +34,8 @@ import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
 import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
 import BalkendiagrammThemeView from "./bildungsatlas/balkendiagramm/view";
 import BalkendiagrammTheme from "./bildungsatlas/balkendiagramm/model";
+import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
+import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -60,6 +62,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "schulenStandorte") {
             theme = new SchulenStandorteTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenEinzugsgebiete") {
+            theme = new SchulenEinzugsgebieteTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
             theme = new DipasTheme(attrs, options);
@@ -157,6 +162,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "schulenStandorte": {
                 new SchulenStandorteThemeView({model: model});
+                break;
+            }
+            case "schulenEinzugsgebiete": {
+                new SchulenEinzugsgebieteThemeView({model: model});
                 break;
             }
             case "reisezeiten": {
