@@ -43,6 +43,20 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
             "change:isVisible": this.onIsVisibleEvent,
             "change:isReady": this.create
         });
+        this.listenTo(Radio.channel("GFI"), {
+            "isVisible": this.onGFIIsVisibleEvent
+        }, this);
+    },
+
+    /**
+     * Fired when GFI visibility changes
+     * @param   {boolean} visible gfi visibility
+     * @returns {void}
+     */
+    onGFIIsVisibleEvent: function (visible) {
+        if (visible === false) {
+            this.onIsVisibleEvent(null, false);
+        }
     },
 
     /**
