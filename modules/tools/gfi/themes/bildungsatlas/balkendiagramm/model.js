@@ -131,6 +131,7 @@ const BalkendiagrammTheme = Theme.extend({
             ]
         };
 
+        $(".graph svg").remove();
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
