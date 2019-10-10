@@ -26,7 +26,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
      * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
-     * @description This layer is used to generate a heatmap. It uses the features of a already configured vector layer such as WFS oder Sensor.
+     * @description This layer is used to generate a heatmap. It uses the features of a already configured vector layer such as WFS or Sensor.
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
