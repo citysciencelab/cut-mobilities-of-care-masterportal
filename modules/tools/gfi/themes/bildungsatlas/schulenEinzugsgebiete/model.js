@@ -1,6 +1,6 @@
 import Theme from "../../model";
 
-const SchulenEinzugsgebieteTheme = Theme.extend({
+const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults, {
         name: "",
         id: "",
@@ -34,7 +34,29 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
         isCreated: false,
         hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
-
+    /**
+     * @class SchulenEinzugsgebieteThemeModel
+     * @extends Theme
+     * @memberof Tools.GFI.Themes.Bildungsatlas
+     * @constructs
+     * @property {String} C_S_Name="" Schulname
+     * @property {String} C_S_Nr="" SchulId
+     * @property {String} C_S_Str="" Straßenname
+     * @property {String} C_S_HNr="" Hausnummer
+     * @property {String} C_S_PLZ="" Postleitzahl
+     * @property {String} C_S_Ort="" Ort
+     * @property {String} C_S_SuS_PS="" Anzahl Grundschüler
+     * @property {String} C_S_SuS_S1="" Anzahl Sekundarschüler
+     * @property {String} C_S_SI="" Sozialindex
+     * @property {String} schoolKey="" Kategorie zum stylen
+     * @listens GFI#RadioTriggerGFISetIsVisible
+     * @listens Layer#RadioTriggerLayerFeaturesLoaded
+     * @fires Core#RadioTriggerUtilIsViewMobileChanged
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     */
     initialize: function () {
         if (Radio.request("Util", "isViewMobile")) {
             this.set("hintText", "In der mobilen Ansicht ist keine Abfrage der Schülerzahlen möglich.");
@@ -101,6 +123,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
 
     /**
      * Sets this GFI
+     * @listens Layer#RadioTriggerLayerFeaturesLoaded
      * @returns {void}
      */
     create: function () {
@@ -256,6 +279,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
 
     /**
      * requests the Modellist for all layer of einzugsgebiete
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {Layer[]} layers
      */
     getEinzugsgebieteLayer: function () {
@@ -272,6 +296,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
 
     /**
      * Requests the Modellist for layer with layernameAreas. If necessary this function starts its creation.
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {Layer|false} layers
      */
     getStatisticAreasLayer: function () {
@@ -293,6 +318,7 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
 
     /**
      * Requests the Parser for first layer with statistic areas by name
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @returns {object|false} conf
      */
     getStatisticAreasConfig: function () {
@@ -310,6 +336,8 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
     /**
      * Creates new layer by given configuration
      * @param {object} conf layer configuration
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @returns {Layer} Layer
      */
     addStatisticAreasLayer: function (conf) {
@@ -349,4 +377,4 @@ const SchulenEinzugsgebieteTheme = Theme.extend({
     }
 });
 
-export default SchulenEinzugsgebieteTheme;
+export default SchulenEinzugsgebieteThemeModel;
