@@ -41,23 +41,23 @@ const BalkendiagrammTheme = Theme.extend({
             this.set("Title", element[0].Stadtteil);
 
             content[element[0].Stadtteil] = this.get("latestStatistic");
-            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
-            content.hamburg = element[0].HHGesamt;
+            content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
+            content.hamburg = element[0]["Summe hamburg"];
         }
         else if (layerName === "Sozialräume") {
             this.set("Title", element[0]["SR Name"]);
 
             content[element[0]["SR Name"]] = this.get("latestStatistic");
-            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
-            content.hamburg = element[0].HHGesamt;
+            content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
+            content.hamburg = element[0]["Summe hamburg"];
         }
         else if (layerName === "Statistische Gebiete") {
-            this.set("Title", element[0].Stadtteil + ": " + element[0]["StatGeb Nr"]);
+            this.set("Title", element[0].Stadtteil + ": " + element[0].Statgebiet);
 
             content["Statistisches Gebiet"] = this.get("latestStatistic");
-            content[element[0].Stadtteil] = element[0].StadtteilGesamt;
-            content["Bezirk " + element[0].Bezirk] = element[0].BezirkGesamt;
-            content.hamburg = element[0].HHGesamt;
+            content[element[0].Stadtteil] = element[0]["Summe stadtteil"];
+            content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
+            content.hamburg = element[0]["Summe hamburg"];
         }
 
         if (layerDataFormat === "anteil") {
@@ -79,9 +79,15 @@ const BalkendiagrammTheme = Theme.extend({
      */
     getStaticWithYear: function () {
         var element = this.get("gfiContent"),
-            dataset;
+            key,
+            dataset = [];
 
-        dataset = element.allProperties.Statistic;
+        for (key in element.allProperties) {
+            if (key.includes("jahr_")) {
+                dataset.push({"year": key.replace("jahr_", ""), "number": element.allProperties[key]});
+            }
+        }
+
         this.setDataset(dataset);
     },
 
