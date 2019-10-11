@@ -727,6 +727,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
 
+[type:gfi]: # (Portalconfig.menu.tool.gfi)
+
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown-header-portalconfigmenutool) und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -736,7 +738,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
 |parcelSearch|nein|[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)||Flurstückssuche.|false|
 |measure|nein|[tool](#markdown-header-portalconfigmenutool)||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |coord|nein|[tool](#markdown-header-portalconfigmenutool)||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
-|gfi|nein|[tool](#markdown-header-portalconfigmenutool)||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|false|
+|gfi|nein|[gfi](#markdown-header-portalconfigmenutoolgfi)||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|false|
 |print|nein|[print](#markdown-header-portalconfigmenutoolprint)||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |searchByCoord|nein|[tool](#markdown-header-portalconfigmenutool)||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |kmlimport|nein|[tool](#markdown-header-portalconfigmenutool)||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
@@ -779,6 +781,56 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von [tool](#markdown
     "glyphicon": "glyphicon-book"
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.gfi
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Requests oder GetFeature-Requests oder geladene Vektordaten abgefragt werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeuges im Menu.|false|
+|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
+
+**Beispiel einer GFI Konfiguration**
+```
+#!json
+"gfi":{
+    "name":"Informationen abfragen",
+    "highlightVectorRules": {
+        "fill": {
+            "color": [215, 102, 41, 0.9]
+        },
+        "image": {
+            "scale": 1.5
+        },
+        "stroke": {
+            "width": 4
+        },
+        "text": {
+            "scale": 2
+        }
+    }
+}
+```
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules
+
+[inherits]: # (Portalconfig.menu.tool.gfi)
+
+Liste der Einstellungen zum überschreiben von Vektorstyles bei GFI Abfragen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|fill|nein|Objekt|undefined|Mögliche Einstellung: color|false|
+|image|nein|Objekt|undefined|Mögliche Einstellung: scale|false|
+|stroke|nein|Objekt|undefined|Mögliche Einstellung: width|false|
+|text|nein|Objekt|undefined|Mögliche Einstellung: scale|false|
 
 ***
 
