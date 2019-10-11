@@ -225,9 +225,14 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
     },
 
-    appendTheme: function (value) {
+    /**
+     * handling on appendTheme
+     * @param   {integer} themeIndex index of theme in array
+     * @returns {void}
+     */
+    appendTheme: function (themeIndex) {
         this.setAllInVisible();
-        this.at(value).setIsVisible(true);
+        this.at(themeIndex).setIsVisible(true);
         Radio.trigger("MouseHover", "hide");
     },
 

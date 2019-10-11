@@ -6,8 +6,9 @@ import TableView from "./table/view";
 import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
+import HightlightFeature from "./highlightFeature";
 
-const Gfi = Tool.extend({
+const GFI = Tool.extend(/** @lends GFI.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         // detached | attached
         desktopViewType: "detached",
@@ -32,10 +33,22 @@ const Gfi = Tool.extend({
         rotateAngle: 0,
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
-        unlisten: false
+        unlisten: false,
+        highlightFeature: undefined
     }),
+    /**
+     * @class GFI
+     * @extends Tools
+     * @memberof Tools.GFI
+     * @constructs
+     */
     initialize: function () {
         var channel = Radio.channel("GFI");
+
+        // check and initiate module to highlight selected Feature
+        if (this.get("highlightVectorRules")) {
+            this.set("highlightFeature", new HightlightFeature(this.get("highlightVectorRules")));
+        }
 
         // Wegen Ladereihenfolge hier die Default-Attribute setzen, sonst sind die Werte noch nicht aus der Config ausgelesen
         this.set("uiStyle", Radio.request("Util", "getUiStyle"));
@@ -66,6 +79,9 @@ const Gfi = Tool.extend({
 
         this.listenTo(this, {
             "change:isVisible": function (model, value) {
+                if (value === false) {
+                    this.lowlightFeature();
+                }
                 channel.trigger("isVisible", value);
                 if (value === false && this.get("numberOfThemes") > 0) {
                     this.get("themeList").setAllInVisible();
@@ -80,6 +96,7 @@ const Gfi = Tool.extend({
                 }
             },
             "change:themeIndex": function (model, value) {
+                this.highlightFeature(model.get("currentView").model);
                 this.get("themeList").appendTheme(value);
             },
             "change:isActive": function (model, value) {
@@ -129,6 +146,7 @@ const Gfi = Tool.extend({
                 else {
                     this.setIsVisible(false);
                 }
+                this.highlightFeature(this.get("currentView").model);
             }
         });
     },
@@ -373,7 +391,7 @@ const Gfi = Tool.extend({
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),
-                modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable", "layer");
 
             _.each(features, function (featureAtPixel) {
                 // Feature
@@ -587,6 +605,22 @@ const Gfi = Tool.extend({
         return false;
     },
 
+    highlightFeature: function (model) {
+        const hf = this.get("highlightFeature");
+
+        if (hf) {
+            hf.highlight(model.get("currentView").model);
+        }
+    },
+
+    lowlightFeature: function () {
+        const hf = this.get("highlightFeature");
+
+        if (hf) {
+            hf.lowlightFeatures();
+        }
+    },
+
     setClickEventKey: function (value) {
         this.set("clickEventKey", value);
     },
@@ -602,4 +636,4 @@ const Gfi = Tool.extend({
 
 });
 
-export default Gfi;
+export default GFI;
