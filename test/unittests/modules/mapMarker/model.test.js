@@ -1,3 +1,4 @@
+/*
 import MapMarkerModel from "@modules/mapMarker/model.js";
 import {expect} from "chai";
 
@@ -8,3 +9,4 @@ describe("mapMarker/model", function () {
         mapMarkerModel = new MapMarkerModel();
     });
 });
+*/
