@@ -58,7 +58,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      */
     initialize: function () {
-        console.log("test");
         if (Radio.request("Util", "isViewMobile")) {
             this.set("hintText", "In der mobilen Ansicht ist keine Abfrage der Schülerzahlen möglich.");
         }
