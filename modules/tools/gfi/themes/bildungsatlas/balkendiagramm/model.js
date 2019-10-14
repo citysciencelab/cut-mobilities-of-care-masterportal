@@ -37,17 +37,28 @@ const BalkendiagrammTheme = Theme.extend({
         layerName = layerList[0].get("name");
         layerDataFormat = layerList[0].get("format");
 
+        // get the description of this diagram
+        this.set("description", layerList[0].get("description"));
+
         if (layerName === "Stadtteile") {
             this.set("Title", element[0].Stadtteil);
 
             content[element[0].Stadtteil] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.hamburg = element[0]["Summe hamburg"];
+
+            // Check if the layer of wanderungen by the attribute description
+            if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
+                content = {};
+                content["In " + element[0].Stadtteil] = this.get("latestStatistic");
+                content["Anteil der Zuzüge aus dem Umland:"] = element[0]["Zuzuege aus_umland"];
+                content["Anteil der Zuzüge ins Umland:"] = element[0]["Fortzuege aus_dem_umland"];
+            }
         }
         else if (layerName === "Sozialräume") {
-            this.set("Title", element[0]["SR Name"]);
+            this.set("Title", element[0]["Sozialraum name"]);
 
-            content[element[0]["SR Name"]] = this.get("latestStatistic");
+            content[element[0]["Sozialraum name"]] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.hamburg = element[0]["Summe hamburg"];
         }
@@ -58,19 +69,39 @@ const BalkendiagrammTheme = Theme.extend({
             content[element[0].Stadtteil] = element[0]["Summe stadtteil"];
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.hamburg = element[0]["Summe hamburg"];
-        }
 
-        if (layerDataFormat === "anteil") {
-            for (key in content) {
-                content[key] = Math.trunc(content[key]) + "%";
+            // Check if the layer of wanderungen by the attribute description
+            if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
+                content = {};
+                content["In " + element[0].Stadtteil] = this.get("latestStatistic");
+                content["Anteil der Zuzüge aus dem Umland:"] = element[0]["Zuzuege aus umland"];
+                content["Anteil der Zuzüge ins Umland:"] = element[0]["Fortzuege aus dem umland"];
             }
         }
 
-        // get the description of this diagram
-        this.set("description", layerList[0].get("description"));
+        // Check if the percentage should be added
+        if (layerDataFormat === "anteil") {
+            for (key in content) {
+                if (content[key] !== null && _.isUndefined(content[key]) === false) {
+                    content[key] = Math.trunc(content[key]) + "%";
+                }
+                else {
+                    content[key] = "*g.F.";
+                }
+            }
+        }
+        else if (layerDataFormat === "anteilWanderungen") {
+            for (key in content) {
+                if (content[key] !== null && _.isUndefined(content[key]) === false) {
+                    content[key] = Math.round(content[key]) + "%";
+                }
+                else {
+                    content[key] = "*g.F.";
+                }
+            }
+        }
 
         this.set("content", content);
-
     },
 
     /**
