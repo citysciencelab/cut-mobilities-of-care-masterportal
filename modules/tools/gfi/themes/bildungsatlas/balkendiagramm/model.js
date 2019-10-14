@@ -73,9 +73,8 @@ const BalkendiagrammTheme = Theme.extend({
             // Check if the layer of wanderungen by the attribute description
             if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
                 content = {};
-                content["In " + element[0].Stadtteil] = this.get("latestStatistic");
-                content["Anteil der Zuzüge aus dem Umland:"] = element[0]["Zuzuege aus umland"];
-                content["Anteil der Zuzüge ins Umland:"] = element[0]["Fortzuege aus dem umland"];
+
+                content["Im Statistischen Gebiet"] = Math.round(this.get("latestStatistic")) > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
             }
         }
 
