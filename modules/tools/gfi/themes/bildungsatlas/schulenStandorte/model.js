@@ -1,6 +1,12 @@
 import Theme from "../../model";
 
-const SchulenStandorteViewTheme = Theme.extend({
+const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTheme.prototype */{
+    /**
+     * @class SchulenStandorteViewTheme
+     * @extends Theme
+     * @memberof Tools.GFI.Themes.Bildungsatlas
+     * @constructs
+     */
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
@@ -10,8 +16,7 @@ const SchulenStandorteViewTheme = Theme.extend({
     },
 
     /**
-     * here we need to parse the key and value, so that the real value could be shown in the gfi theme and
-     * all the keys will contain underline instead of white space
+     * here we need to parse the key and value, so that the real value could be shown in the gfi theme and all the keys will contain underline instead of white space
      * @returns {void}
      */
     replaceValuesWithRealResults: function () {

@@ -485,6 +485,12 @@
  */
 
 /**
+ * @namespace Bildungsatlas
+ * @memberOf Tools.GFI.Themes
+ * @description GFI Theme for Bildungsatlas
+ */
+
+/**
  * @namespace Buildings3D
  * @memberOf Tools.GFI.Themes
  * @description GFI Theme for Buildings3D
