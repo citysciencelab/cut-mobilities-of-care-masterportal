@@ -447,7 +447,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {object}               legend definition for a point
      */
     getLegendParamsForPoint: function (styleSubClass, layername, style) {
-        let name, svg, allItems;
+        let name = [],
+            svg = [],
+            allItems;
 
         // Circle Point Style
         if (styleSubClass === "CIRCLE") {
