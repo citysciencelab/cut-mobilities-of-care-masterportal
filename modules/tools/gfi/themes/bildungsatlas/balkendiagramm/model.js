@@ -79,25 +79,16 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
-        // Check if the percentage should be added
-        if (layerDataFormat === "anteil") {
-            for (key in content) {
-                if (content[key] !== null && _.isUndefined(content[key]) === false) {
-                    content[key] = Math.trunc(content[key]) + "%";
-                }
-                else {
-                    content[key] = "*g.F.";
-                }
+        // Revert the null or empty value to standard value and also check if the percentage should be added
+        for (key in content) {
+            if (content[key] === null || _.isUndefined(content[key]) === true) {
+                content[key] = "*g.F.";
             }
-        }
-        else if (layerDataFormat === "anteilWanderungen") {
-            for (key in content) {
-                if (content[key] !== null && _.isUndefined(content[key]) === false) {
-                    content[key] = Math.round(content[key]) + "%";
-                }
-                else {
-                    content[key] = "*g.F.";
-                }
+            else if (layerDataFormat === "anteil") {
+                content[key] = Math.trunc(content[key]) + "%";
+            }
+            else if (layerDataFormat === "anteilWanderungen") {
+                content[key] = Math.round(content[key]) + "%";
             }
         }
 
