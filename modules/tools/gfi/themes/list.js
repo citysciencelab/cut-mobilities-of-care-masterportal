@@ -34,6 +34,8 @@ import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
 import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
 import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
 import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
+import SchulenWohnortThemeView from "./bildungsatlas/schulenWohnort/view";
+import SchulenWohnortTheme from "./bildungsatlas/schulenWohnort/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -63,6 +65,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "schulenEinzugsgebiete") {
             theme = new SchulenEinzugsgebieteTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenWohnort") {
+            theme = new SchulenWohnortTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
             theme = new DipasTheme(attrs, options);
@@ -161,6 +166,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "schulenEinzugsgebiete": {
                 new SchulenEinzugsgebieteThemeView({model: model});
+                break;
+            }
+            case "schulenWohnort": {
+                new SchulenWohnortThemeView({model: model});
                 break;
             }
             case "reisezeiten": {
