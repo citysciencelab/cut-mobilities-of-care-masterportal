@@ -744,6 +744,11 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             })
             .attr("width", barConfig.barWidth - 1)
             .attr("height", function (d) {
+                if (height - y(d[attrToShowArray[0]]) < 0) {
+                    // fixed to zero as negative values would cause an error
+                    return 0;
+                }
+
                 return height - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
