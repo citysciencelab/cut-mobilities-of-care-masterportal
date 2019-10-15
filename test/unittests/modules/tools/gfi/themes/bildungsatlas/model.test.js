@@ -1,7 +1,7 @@
 import Model from "@modules/tools/gfi/themes/bildungsatlas/schulenEinzugsgebiete/model.js";
 import {expect} from "chai";
 
-let model, gfiContent, geojsonLayer, geojson, features;
+let model, gfiContent;
 
 before(function () {
     model = new Model();
@@ -22,31 +22,6 @@ before(function () {
             "schoolKey": "primarySchoolsInArea",
             "styling": "grundschule"
         }
-    };
-    geojson = {
-        "type": "FeatureCollection",
-        "name": "C_Schulen_2017_pr_alle",
-        "crs": {
-            "type": "name",
-            "properties": {
-                "name": "urn:ogc:def:crs:EPSG::25832"
-            }
-        },
-        "features": [
-            {
-                "type": "Feature",
-                "properties": {
-                    "id": "test"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        569881.56,
-                        5934722.32
-                    ]
-                }
-            }
-        ]
     };
 });
 
