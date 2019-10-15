@@ -520,11 +520,112 @@
  */
 
 /**
+ * @event Core#RadioTriggerMapRemoveControl
+ * @param {*} mapControl Control to be removed from map.
+ * @example Radio.trigger("Map", "removeControl", mapControl)
+ */
+
+/**
  * @event Core#RadioTriggerMapZoomToExtent
  */
 
 /**
  * @event Core#RadioTriggerMapRender
+ */
+
+ /**
+ * @event Core#RadioTriggerMapIsReady
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetLayers
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetWGS84MapSizeBBOX
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetFeaturesAtPixel
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadiotriggerMapCameraChanged
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapBeforeChange
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetMap3d
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetFeatures3dAtPosition
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapAddLayerOnTop
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapRemoveLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapRemoveLoadingLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapAddLoadingLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapSetBBox
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapZoomToFilteredFeatures
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapUnregisterListener
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapSetShadowTime
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapClickedWindowPosition
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapRegisterListener
+ * @description todo
+ */
+
+ /**
+ * @event Core#MapChangeVectorLayer
+ * @description todo
  */
 
 /**
@@ -1798,17 +1899,22 @@
 
 /**
  * @event Core#RadioRequestParametricURLGetCenter
- * @description tod
+ * @description todo
  */
 
 /**
  * @event Core#RadioRequestParametricURLGetProjectionFromUrl
- * @description tod
+ * @description todo
  */
 
 /**
  * @event Core#RadioRequestParametricURLGetZoomLevel
- * @description tod
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToExtent
+ * @description todo
  */
 
 /** -------------------- Autostart -------------------- */
@@ -1942,6 +2048,7 @@
  * @description activates a Viewpoint identified by the given ID
  */
 
+ /** -------------------- CORE.MODELLIST.TOOL -------------------- */
  /**
  * @event Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
  * @description Delivers an array with toll which supported only in Oblique-Mode

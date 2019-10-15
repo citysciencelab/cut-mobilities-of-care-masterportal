@@ -20,14 +20,13 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @param {Object} [attr] configuration object defined in config.json
      * @param {String} [attr.layerId=baselayer] layerId to use in map
      * @param {Boolean} [attr.isInitOpen=true] Flag to open or disable map control on startup
-     * @param {Float} [attr.resolution=maxResolution] Resolution to use in map control
+     * @param {Number} [attr.resolution=maxResolution] Resolution to use in map control
      * @fires Core#RadioRequestMapGetMap
-     * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
      * @fires Core#RadioTriggerMapAddControl
      * @fires Core#RadioTriggerMapRemoveControl
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
-     * @fires AlertingModel#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function (attr) {
         /**
@@ -41,7 +40,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
 
     /**
-     * Creates and sets the mapControl only once and sets it to the map
+     * Creates and sets the mapControl only once and sets it to the map.
      * @fires Core#RadioTriggerMapAddControl
      * @returns {void}
      */
@@ -57,7 +56,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
 
     /**
-     * Removes the mapControl from map
+     * Removes the mapControl from map.
      * @fires Core#RadioTriggerMapRemoveControl
      * @returns {void}
      */
@@ -67,10 +66,11 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
 
     /**
-     * Returns an overviewMap
+     * Returns an overviewMap.
      * @fires Core#RadioRequestMapGetMap
-     * @fires MapView#RadioRequestMapViewGetResolutions
-     * @fires Parser#RadioRequestParserGetInitVisibBaseLayer
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     createOverviewMap: function () {
@@ -124,7 +124,6 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @description Derives the baselayer from the given layer collection
      * @param {Layer[]} layers The Array of layers
      * @param {string} baselayer The id of the baselayer
-     * @fires RawLayerList#RadioRequestRawLayerListGetLayerWhere
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
@@ -169,17 +168,29 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         return imageLayer;
     },
 
-    // setter for MapControl
+    /**
+     * Setter for MapControl.
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMapControl: function (value) {
         this.set("mapControl", value);
     },
 
-    // setter for layerId
+    /**
+     * Setter for layerId.
+     * @param {*} value todo
+     * @returns {void}
+     */
     setLayerId: function (value) {
         this.set("layerId", value);
     },
 
-    // setter for isOpen
+    /**
+     * Setter for isOpen.
+     * @param {*} value todo
+     * @returns {void}
+     */
     setIsOpen: function (value) {
         this.set("isOpen", value);
     }
