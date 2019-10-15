@@ -41,6 +41,9 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         var isMobile = Radio.request("Util", "isViewMobile"),
             channel = Radio.channel("Menuloader");
 
+        if (this.currentMenu) {
+            this.currentMenu.stopListening();
+        }
         if (!this.menuStyle) {
             this.menuStyle = Radio.request("Util", "getUiStyle");
         }

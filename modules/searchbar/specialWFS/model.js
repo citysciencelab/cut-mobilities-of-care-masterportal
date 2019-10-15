@@ -223,14 +223,16 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     fillHitList: function (data, definition) {
-        var type = definition.name,
+        const type = definition.name,
             typeName = definition.typeName,
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
-            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
-            identifier,
-            geom;
+            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
+
+        let identifier,
+            geom,
+            coordinateArray;
 
         _.each(elements, function (element) {
             var elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
@@ -238,14 +240,21 @@ const SpecialWFSModel = Backbone.Model.extend({
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
                 identifier = elementPropertyNames[0].textContent;
-                geom = elementGeometryNames[0].textContent;
+                geom = elementGeometryNames[0].firstElementChild;
+
+                // searching for first simple geometry avoiding multipolygons
+                while (geom.childElementCount > 0) {
+                    geom = geom.firstElementChild;
+                }
+
+                coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
 
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     id: _.uniqueId(type.toString()),
                     name: identifier.trim(),
                     type: type,
-                    coordinate: geom.trim().split(" "),
+                    coordinate: coordinateArray,
                     glyphicon: glyphicon
                 });
             }

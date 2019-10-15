@@ -104,8 +104,6 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             coord = hit.coordinate.split(" ");
         }
 
-        coord = this.model.convertCoordinatesToFloat(coord);
-
         this.hideMarker();
         this.hidePolygon();
         switch (hit.type) {

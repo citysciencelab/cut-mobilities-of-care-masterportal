@@ -1,38 +1,25 @@
-<% if (typ === "WFS" || typ === "SensorThings") { %>
+<% if (typ === "svg") { %>
     <table>
-        <% 
-            if (typeof img === "string") {
-                if (new RegExp(/(\.pdf)$/i).test(img) === true) { %>
-                    <a href=<%= img %> target="_blank">weitere Informationen</a>
-                <% } 
-                else { %>
-                    <p>
-                        <img src=<%= img %>>
-                    </p>
-                <% }
-            }
-            else {
-                _.each(img, function (image, index2) { %>
-                    <tr>
-                        <td class="tdLegend">
-                            <% if (image.indexOf("<svg") !== -1){%>
-                                <div class="tdLegend-no-image"><%= image %></div>
-                            <% }
-                            else if (_.isArray(image)){%>
-                                <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
-                                    <img src="<%= image[0] %>">
-                                </div>
-                            <%}
-                            else {%>
-                                <img src="<%= image %>">
-                            <%}%>
-                        </td>
-                        <td class="tdLegend">
-                            <span><%= legendname[index2] %></span>
-                        </td>
-                    </tr>
-                <% });
-            } %>
+        <% _.each(img, function (image, index2) { %>
+            <tr>
+                <td class="tdLegend">
+                    <% if (image.indexOf("<svg") !== -1){%>
+                        <div class="tdLegend-no-image"><%= image %></div>
+                    <% }
+                    else if (_.isArray(image)){%>
+                        <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
+                            <img src="<%= image[0] %>">
+                        </div>
+                    <%}
+                    else {%>
+                        <img src="<%= image %>">
+                    <%}%>
+                </td>
+                <td class="tdLegend">
+                    <span><%= legendname[index2] %></span>
+                </td>
+            </tr>
+        <% }); %>
     </table>
 
 <% }
