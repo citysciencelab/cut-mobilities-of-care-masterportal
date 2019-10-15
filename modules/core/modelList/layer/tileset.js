@@ -69,6 +69,22 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         if (this.has("hiddenFeatures")) {
             this.hideObjects(this.get("hiddenFeatures"));
         }
+
+        this.listenTo("Objects3D", {
+            "hide3DObjects": function () {
+                this.hideObjects(this.get("hiddenFeatures"));
+            }
+        });
+
+        this.listenTo(this, {
+            "change:isSelected": function () {
+                if (this.get("isSelected") === true) {
+                    if (!this.has("hiddenFeatures")) {
+                        Radio.trigger("Objects3D", "hide3DObjects");
+                    }
+                }
+            }
+        });
     },
 
     /**
