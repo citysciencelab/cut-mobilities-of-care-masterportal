@@ -156,29 +156,6 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
     },
 
     /**
-     * Converts coordinates from goven array to float values.
-     * The reason is Open layers does not like coordinates of type string!
-     * The brackets are removed from the coordinates,
-     * these are present at some coordinates due to the decomposition from the WKT format.
-     * @param {Array} coord coordinates
-     * @returns {Array} converted Coordinates as array with float values
-     */
-    convertCoordinatesToFloat: function (coord) {
-        let convertedCoordinates = [];
-
-        if (coord !== undefined) {
-            convertedCoordinates = coord.map(coordinate => {
-                const regExp = new RegExp(/[()]/g),
-                    coordString = coordinate.toString().replace(regExp, "");
-
-                return parseFloat(coordString);
-            });
-        }
-
-        return convertedCoordinates;
-    },
-
-    /**
      * Creates a polygon around the WKT feature
      * @return {void}
      */

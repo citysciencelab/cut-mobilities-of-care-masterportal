@@ -13,7 +13,8 @@ const SensorLayer = Layer.extend({
             epsg: "EPSG:4326",
             utc: "+1",
             version: "1.0",
-            useProxyURL: false
+            useProxyURL: false,
+            mqttPath: "/mqtt"
         }),
 
     initialize: function () {
@@ -486,7 +487,7 @@ const SensorLayer = Layer.extend({
             client = mqtt.connect({
                 host: this.get("url").split("/")[2],
                 protocol: "wss",
-                path: "/mqtt",
+                path: this.get("mqttPath"),
                 context: this
             });
 
