@@ -18,7 +18,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @property {String} background="" todo
      * @property {String} units="m" todo
      * @property {number} DOTS_PER_INCH="" Hack to get the screen resolution
-     * @param {object} attributes Class attributes
      * @listens Core#RadioRequestMapViewGetCurrentExtent
      * @listens Core#RadioRequestMapViewGetOptions
      * @listens Core#RadioRequestMapViewGetProjection
@@ -47,22 +46,14 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @fires Core#RadioRequestMapGetMap
      * @returns {void}
      */
-    initialize: function (attributes) {
-        var channel = Radio.channel("MapView");
+    initialize: function () {
+        const channel = Radio.channel("MapView");
 
         if (!_.isUndefined(this.get("settings")) && !_.isUndefined(this.get("settings").options)) {
             this.set("options", this.get("settings").options);
         }
         else {
             this.set("options", defaults.options);
-        }
-
-        // overwrite the resolution if zoomLevel is configured and resolution is not
-        if (attributes && attributes.resolution && attributes.zoomLevel !== undefined) {
-            const resolution = this.get("options")[attributes.zoomLevel].resolution;
-
-            this.get("settings").resolution = resolution;
-            this.get("view").setResolution(resolution);
         }
 
         channel.reply({

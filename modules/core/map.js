@@ -90,6 +90,23 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             }
         });
 
+        /**
+         * resolution
+         * @deprecated in 3.0.0
+         */
+        if (mapViewSettings && mapViewSettings.hasOwnProperty("resolution")) {
+            console.warn("MapView parameter 'resolution' is deprecated. Please use 'startResolution' instead.");
+            mapViewSettings.startResolution = mapViewSettings.resolution;
+        }
+        /**
+         * zoomLevel
+         * @deprecated in 3.0.0
+         */
+        if (mapViewSettings && mapViewSettings.hasOwnProperty("zoomLevel")) {
+            console.warn("MapView parameter 'zoomLevel' is deprecated. Please use 'startZoomLevel' instead.");
+            mapViewSettings.startZoomLevel = mapViewSettings.zoomLevel;
+        }
+
         this.setMap(createMap({
             ...Config,
             ...mapViewSettings,
