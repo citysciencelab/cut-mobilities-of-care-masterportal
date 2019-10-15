@@ -724,15 +724,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         this.set("shadowTime", value);
     },
 
-    /**
-     * @description Sets projection from param url
-     * @param {string} projection todo
-     * @return {float} current Zoom of MapView
-     */
-    setProjectionFromParamUrl: function (projection) {
-        this.set("projectionFromParamUrl", projection);
-    },
-
     setMap: function (value) {
         this.set("map", value);
     }
