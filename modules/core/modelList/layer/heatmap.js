@@ -38,7 +38,6 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             "featuresLoaded": this.loadInitialData,
             "featureUpdated": this.updateFeature
         }, this);
-        this.prepareLayerObject();
         this.loadInitialData();
     },
 
