@@ -50,10 +50,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         const channel = Radio.channel("MapView");
 
         if (!_.isUndefined(this.get("settings")) && !_.isUndefined(this.get("settings").options)) {
-            this.set("options", this.get("settings").options);
+            this.setOptions(this.get("settings").options);
         }
         else {
-            this.set("options", defaults.options);
+            this.setOptions(defaults.options);
         }
 
         channel.reply({
@@ -117,12 +117,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @param {ObjectEvent} evt - openlayers event object
      * @param {string} evt.key - the name of the property whose value is changing
      * @param {ol.View} evt.target - this.get("view")
-     *
      * @fires Core#RadioTriggerMapViewChangedOptions
      * @fires Core#RadioTriggerMapViewChangedZoomLevel
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
-     *
      * @returns {void}
      */
     changedResolutionCallback: function (evt) {
@@ -163,7 +161,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @description todo
      * @fires Core#RadioRequestParametricURLGetCenter
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     * @return {void}
+     * @returns {void}
      */
     resetView: function () {
         const center = Radio.request("ParametricURL", "getCenter") || this.get("settings").startCenter || defaults.startCenter,
@@ -177,7 +175,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * Sets the Background for the Mapview.
      * @param  {string} value Image Url
-     * @return {void}
+     * @returns {void}
      */
     setBackground: function (value) {
         this.set("background", value);
@@ -186,7 +184,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * Sets the Backgroundimage for the Mapview.
      * @param  {string} value BG Image Url
-     * @return {void}
+     * @returns {void}
      */
     setBackgroundImage: function (value) {
         this.set("backgroundImage", value);
@@ -196,7 +194,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @description todo
      * @param {int} value todo
      * @fires Core#RadioRequestMapGetMap
-     * @return {void}
+     * @returns {void}
      */
     prepareStartCenter: function (value) {
         var startCenter = value;
@@ -211,8 +209,8 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @param  {int} value Zoom Level
-     * @return {void}
+     * @param  {number} value Zoom Level
+     * @returns {void}
      */
     setStartZoomLevel: function (value) {
         if (!_.isUndefined(value)) {
@@ -222,7 +220,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     * @return {void}
+     * @returns {void}
      */
     toggleBackground: function () {
         if (this.get("background") === "white") {
@@ -245,7 +243,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description todo
      * @param  {array} coords Coordinates
-     * @param  {int} zoomLevel Zoom Level
+     * @param  {number} zoomLevel Zoom Level
      * @return {void}
      */
     setCenter: function (coords, zoomLevel) {
@@ -350,10 +348,19 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description Sets projection from param url
      * @param {string} projection todo
-     * @return {number} current Zoom of MapView
+     * @returns {void}
      */
     setProjectionFromParamUrl: function (projection) {
         this.set("projectionFromParamUrl", projection);
+    },
+
+    /**
+     * @description Sets projection from param url
+     * @param {Object} value options from mapView
+     * @returns {void}
+     */
+    setOptions: function (value) {
+        this.set("options", value);
     }
 });
 
