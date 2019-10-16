@@ -2,7 +2,7 @@
 
 1.1. Verwende **sprechende Namen** für Variablen, Konstanten und Funktionen.
 
-1.2. Verwende **[camelCase](https://de.wikipedia.org/wiki/Binnenmajuskel#Programmiersprachen)**.
+1.2. Verwende **[camelCase](https://de.wikipedia.org/wiki/Binnenmajuskel#Programmiersprachen)** für Variablen und Funktionsnamen.
 
 1.3. Verwende **[PascalCase](https://de.wikipedia.org/wiki/Binnenmajuskel)** für von außen zugeladene Abhängigkeiten, es sei denn die Schreibweise wird innerhalb der Bibliothek anders verwendet.
 
@@ -15,4 +15,3 @@
 1.7. Vermeide unnötige Inline-Kommentare.
 
 1.8. Verwende **keine [ungarische Notation](https://de.wikipedia.org/wiki/Ungarische_Notation)** (Variablen-Deklaration mit Präfix für den Datentyp, z.B. bFooBar).
-
