@@ -155,7 +155,14 @@ const BalkendiagrammTheme = Theme.extend({
             yAxisLabel: {},
             attrToShowArray: [
                 "number"
-            ]
+            ],
+            setTooltipValue: function (value) {
+                if (!isNaN(value) && value.toString().indexOf(".") !== -1) {
+                    return Math.round(value * 100) / 100 + "%";
+                }
+
+                return value;
+            }
         };
 
         $(".graph svg").remove();
