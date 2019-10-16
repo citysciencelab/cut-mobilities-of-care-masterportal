@@ -62,7 +62,7 @@ const BalkendiagrammTheme = Theme.extend({
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.hamburg = element[0]["Summe hamburg"];
         }
-        else if (layerName.includes("Statistische Gebiete")) {
+        else if (layerName.includes(" Gebiete")) {
             this.set("Title", element[0].Stadtteil + ": " + element[0].Statgebiet);
 
             content["Statistisches Gebiet"] = this.get("latestStatistic");
