@@ -90,12 +90,10 @@ const SdpDownloadView = Backbone.View.extend({
         this.model.requestCompressIslandData('Scharhoern');
     },
     downloadRasterOverview310: function(evt){
-        //todo
-        // this.model.requestCompressIslandData('Scharhoern');
+        this.model.requestCompressRasterOverviewData('LS310');
     },
     downloadRasterOverview320: function(evt){
-        //todo
-        // this.model.requestCompressIslandData('Scharhoern');
+        this.model.requestCompressRasterOverviewData('LS320');
     },
     formatSelected: function(evt){
         this.model.set('selectedFormat', evt.target.value);

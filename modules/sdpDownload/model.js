@@ -1,12 +1,11 @@
 import Tool from "../core/modelList/tool/model";
 import SnippetDropdownModel from "../snippets/dropdown/model";
-import { GeoJSON } from "ol/format.js";
+import { GeoJSON, WFS } from "ol/format.js";
 import Overlay from "ol/Overlay.js";
 import { Draw } from "ol/interaction.js";
 import { createBox } from "ol/interaction/Draw.js";
 import { Circle } from "ol/geom.js";
 import { fromCircle } from "ol/geom/Polygon.js";
-import { WFS } from "ol/format.js";
 import * as turf from '@turf/turf'
 
 const SdpDownloadModel = Tool.extend({
@@ -24,7 +23,6 @@ const SdpDownloadModel = Tool.extend({
         selectedFormat: "NAS",//is preselected
         compressDataUrl: "https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/dateien_zippen.php",
         compressedFileUrl: "https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/datei_herunterladen.php",
-        featureNS: "http://www.deegree.org/app",
         wfsRasterParams: {
             url: "https://geodienste.hamburg.de/HH_WFS_Uebersicht_Kachelbezeichnungen",
             request: "GetFeature",
@@ -53,7 +51,7 @@ const SdpDownloadModel = Tool.extend({
             "Fläche zeichnen": "Polygon"
         },
         currentValue: "",
-        coordinatesFromGeometry: {},
+        selectedAreaGeoJson: {},
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
         selectedRasterLimit: 9
@@ -143,9 +141,7 @@ const SdpDownloadModel = Tool.extend({
     },
 
     readFeatures: function (data) {
-        var format = new WFS({
-            featureNS: this.get("featureNS")
-        });
+        var format = new WFS();
         var features = format.readFeatures(data);
         this.setWfsRaster(features);
 
@@ -169,13 +165,13 @@ const SdpDownloadModel = Tool.extend({
 
     getSelectedRasterNames: function () {
         var rasterLayerFeatures = this.get('wfsRaster');
-        var coordinatesGeoJson = this.get('coordinatesFromGeometry');
+        var selectedAreaGeoJson = this.get('selectedAreaGeoJson');
         var rasterNames = [];
-        var turfGeoSelection = turf.polygon([coordinatesGeoJson.coordinates[0]]);
+        var turfGeoSelection = turf.polygon([selectedAreaGeoJson.coordinates[0]]);
 
         for (var j = 0, size = rasterLayerFeatures.length; j < size; j++) {
             var turfRaster = turf.polygon([this.featureToGeoJson(rasterLayerFeatures[j]).coordinates[0]]);
-            var turfGeoSelection = turf.polygon([coordinatesGeoJson.coordinates[0]]);
+            var turfGeoSelection = turf.polygon([selectedAreaGeoJson.coordinates[0]]);
             if (turf.intersect(turfGeoSelection, turfRaster)) {
                 var intersectedRasterName = rasterLayerFeatures[j].getProperties()['kachel'];
                 var result = rasterNames.find(rasterName => rasterName === intersectedRasterName);
@@ -215,12 +211,11 @@ const SdpDownloadModel = Tool.extend({
         this.doRequest(params);
     },
     //download overview
-    requestCompressRasterOverviewData: function (format) {
-        var url = this.get('compressDataUrl');
-        //todo
-        //params have to look like: "insel=Neuwerk&type=JPG"
-        //   var params = 'insel='+islandName+'&type='+this.get('selectedFormat');
-        //   this.doRequest(params);
+    requestCompressRasterOverviewData: function (state) {
+        //todo Datei nicht mehr lokal ablegen
+        var temp = "C:\\sandbox\\BG-74\\U__Kachel_Uebersichten_UTM_Kachel_1KM_" + state + ".dwg";
+        window.location.href= this.get('compressedFileUrl') +'?no_delete=1&mt=dwg&name=' + temp;
+        
     },
     doRequest: function (params) {
         var url = this.get('compressDataUrl');
@@ -232,7 +227,7 @@ const SdpDownloadModel = Tool.extend({
             type: "POST",
             success: function (resp) {
                 this.resetView();
-                // this.setStatus(this.model, true);
+                this.setStatus(this.model, true);
                 //download zip-file
                 window.location.href = this.get('compressedFileUrl') + '?name=' + resp;
             },
@@ -349,7 +344,7 @@ const SdpDownloadModel = Tool.extend({
             var geoJson = that.featureToGeoJson(evt.feature);
             console.log('drawend evt.feature=', evt.feature);
             console.log('drawend geoJson=', geoJson);
-            that.setCoordinatesFromGeometry(geoJson);
+            that.setSelectedAreaGeoJson(geoJson);
         }, this);
 
         interaction.on("change:active", function (evt) {
@@ -598,12 +593,12 @@ const SdpDownloadModel = Tool.extend({
         this.set("wfsRaster", value);
     },
     /**
-     * Sets the CoordinatesFromGeometry
+     * Sets the selectedAreaGeoJson
      * @param {*} value todo
      * @returns {void}
      */
-    setCoordinatesFromGeometry: function (value) {
-        this.set("coordinatesFromGeometry", value);
+    setSelectedAreaGeoJson: function (value) {
+        this.set("selectedAreaGeoJson", value);
     }
 
 });
