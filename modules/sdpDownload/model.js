@@ -184,6 +184,8 @@ const SdpDownloadModel = Tool.extend({
     },
     //download raster data
     requestCompressedData: function () {
+        this.setRequesting(true);
+        this.trigger("render");
         var url = this.get('compressDataUrl');
         var selectedRasterNames = this.getSelectedRasterNames();
         if (selectedRasterNames.length > this.get('selectedRasterLimit')) {
@@ -191,6 +193,8 @@ const SdpDownloadModel = Tool.extend({
                 text: "Die von Ihnen getroffene Auswahl beinhaltet " + selectedRasterNames.length + " Kacheln.\nSie dürfen maximal " + this.get('selectedRasterLimit') + " Kacheln aufeinmal herunterladen.\n\nBitte reduzieren Sie Ihre Auswahl!",
                 kategorie: "alert-warning"
             });
+            this.setRequesting(false);
+            this.trigger("render");
         }
         else {
             var adaptedNames = [];
@@ -228,16 +232,21 @@ const SdpDownloadModel = Tool.extend({
             success: function (resp) {
                 this.resetView();
                 this.setStatus(this.model, true);
-                //download zip-file
-                window.location.href = this.get('compressedFileUrl') + '?name=' + resp;
+                this.setRequesting(false);
+                this.trigger("render");
+                 //download zip-file
+                 window.location.href = this.get('compressedFileUrl') + '?name=' + resp;
             },
             timeout: 6000,
             error: function () {
                 this.resetView();
+                this.setStatus(this.model, true);
                 Radio.trigger("Alert", "alert", {
                     text: "<strong>Das Herunterladen der Daten ist leider schief gelaufen!</strong> <br> <small>Details: Ein benötigter Dienst antwortet nicht.</small>",
                     kategorie: "alert-warning"
                 });
+                this.setRequesting(false);
+                this.trigger("render");
             }
         });
     },
@@ -363,7 +372,6 @@ const SdpDownloadModel = Tool.extend({
      */
     resetView: function () {
         var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
-
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
@@ -574,6 +582,7 @@ const SdpDownloadModel = Tool.extend({
      * @returns {void}
      */
     setRequesting: function (value) {
+        console.log('requesting:',value);
         this.set("requesting", value);
     },
     /**
@@ -599,6 +608,14 @@ const SdpDownloadModel = Tool.extend({
      */
     setSelectedAreaGeoJson: function (value) {
         this.set("selectedAreaGeoJson", value);
+    },
+    /**
+     * Sets the loaderPath
+     * @param {String} value path to the loader gif
+     * @returns {void}
+     */
+    setLoaderPath: function (value) {
+        this.set("loaderPath", value);
     }
 
 });

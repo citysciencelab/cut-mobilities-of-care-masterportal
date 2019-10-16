@@ -50,4 +50,7 @@
         UTM-Kachel Übersichten LS320
       </button>
   </div>
+  <% if (requesting) { %>
+    <div id="sdp-loader"><img src="<%= this.model.get('loaderPath')%>"></div>
+<% } %>
 </div>

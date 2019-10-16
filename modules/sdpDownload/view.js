@@ -31,6 +31,7 @@ const SdpDownloadView = Backbone.View.extend({
         });
         if (this.model){
             this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
+            this.model.setLoaderPath(Radio.request("Util", "getPathFromLoader"));
         }
         if (this.model && this.model.get("isActive") === true) {
             this.render(this.model, true);
