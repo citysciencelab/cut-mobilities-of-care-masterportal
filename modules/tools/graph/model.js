@@ -392,7 +392,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
         var dat = data.filter(function (obj) {
-                return obj[yAttrToShow] !== "-";
+                return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
             }),
             yAttributeToShow;
 
@@ -686,13 +686,16 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
-            barWidth = width / data.length,
-            offset = 0;
+            offset = 0,
+            barConfig = {
+                barWidth: width / data.length,
+                setTooltipValue: graphConfig.setTooltipValue
+            };
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
         }
-        this.drawBars(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
+        this.drawBars(svg, data, scaleX, scaleY, height, selector, xAttr, attrToShowArray, barConfig);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
     },
@@ -705,12 +708,14 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {*} y ToDo.
      * @param {*} height ToDo.
      * @param {*} selector ToDo.
-     * @param {*} barWidth ToDo.
      * @param {*} xAttr ToDo.
      * @param {*} attrToShowArray ToDo.
+     * @param {Object} barConfig container for values only used by drawBars (to lower parameter count of method call)
+     * @param {Number} barConfig.barWidth the width of a single bar
+     * @param {function} barConfig.setTooltipValue (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {void}
      */
-    drawBars: function (svg, dataToAdd, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
+    drawBars: function (svg, dataToAdd, x, y, height, selector, xAttr, attrToShowArray, barConfig) {
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", function () {
@@ -737,8 +742,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .attr("y", function (d) {
                 return y(d[attrToShowArray[0]]);
             })
-            .attr("width", barWidth - 1)
+            .attr("width", barConfig.barWidth - 1)
             .attr("height", function (d) {
+                if (height - y(d[attrToShowArray[0]]) < 0) {
+                    // fixed to zero as negative values would cause an error
+                    return 0;
+                }
+
                 return height - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
@@ -746,6 +756,11 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             }, this)
             .append("title")
             .text(function (d) {
+                if (_.isFunction(barConfig.setTooltipValue)) {
+                    return barConfig.setTooltipValue(d[attrToShowArray[0]]);
+                }
+
+                // default
                 return (Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %";
             });
     },

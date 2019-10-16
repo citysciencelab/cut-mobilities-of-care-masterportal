@@ -64,19 +64,19 @@ Sofern ein eigenes Skript mit Abhängigkeiten zum Masterportal in die Entwicklun
 Der genutzte Mechanismus wird über [webpackMode: eager](https://webpack.js.org/api/module-methods) gesteuert, indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
 
 
-### npm test
+### npm run test
 Unittests durchführen
 
 ```
-// npm test
-# npm test
+// npm run test
+# npm run test
 ```
 **Wichtig**: Falls nicht vorhanden muss der Ordner `portalconfigs/test` angelegt werden. Der Testrunner führt auch alle Tests in diesem Ordner aus. 
 
 
 - bündelt alle Tests
-- Unter http://localhost:9009/test/unittests/TestRunner.html werden alle Tests durchgeführt
-- bei Änderungen am getesten Code oder den Tests selbst wird die Seite erneut geladen und die Tests werden durchgeführt.
+- die Unit-Tests werden in der Console ausgegeben.
+- bei Änderungen am getesten Code oder den Unit-Tests selbst muss der Befehl `npm run test` erneut ausgeführt werden.
 
 
 ### npm run build
