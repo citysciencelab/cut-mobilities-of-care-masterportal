@@ -392,7 +392,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
         var dat = data.filter(function (obj) {
-                return obj[yAttrToShow] && obj[yAttrToShow] !== "-";
+                return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
             }),
             yAttributeToShow;
 
