@@ -1184,6 +1184,11 @@
  * @example Radio.trigger("Searchbar", "hit", hit);
  */
 
+/**
+ * @event Searchbar#RadioTriggerSearchbarAbortSearch
+ * @description todo
+ */
+
 
 /** -------------------- MENU -------------------- */
 
@@ -1917,6 +1922,76 @@
  * @description todo
  */
 
+/**
+ * @event Core#RadioRequestParametricURLGetResult
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetLayerParams
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetIsInitOpen
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetInitString
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToGeometry
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetStyle
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetFilter
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToFeatureIds
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetBrwId
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetBrwLayerName
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetMarkerFromUrl
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLPushToIsInitOpen
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLReady
+ * @description todo
+ */
+
 /** -------------------- Autostart -------------------- */
 
 /**
@@ -2155,4 +2230,11 @@
  * @description Returns display names map for a layer, or display name for a specific attribute.
  * @param {string} layerId - if of layer to fetch display names for
  * @param {string} [featureAttribute] - if given, only one entry of map is returned
+ */
+
+ /** -------------------- CUSTOMMODULE -------------------- */
+
+ /**
+ * @event CustomModule#RadioRequestCustomModuleGetMarkerPosition
+ * @description todo
  */

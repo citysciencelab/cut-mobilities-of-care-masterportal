@@ -62,7 +62,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @listens Searchbar#RadioTriggerSearchbarDeleteSearchString
      * @listens Searchbar#RadioTriggerSearchbarSetFocus
      * @listens Menu#RadioTriggerMenuLoaderReady
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @listens Searchbar#RadioTriggerViewZoomHitSelected
      * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires Title#RadioTriggerTitleSetSize

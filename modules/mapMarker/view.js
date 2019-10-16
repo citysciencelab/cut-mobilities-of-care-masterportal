@@ -27,7 +27,6 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core#RadioTriggerMapRender
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @fires Core#RadioRequestUtilIsViewMobile
-     * @fires Core#RadioRequestCRSTransformToMapProjection
      *
      * @returns {void}
      */
@@ -266,7 +265,6 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @description todo
      * @returns {void}
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @fires Core#RadioRequestCRSTransformToMapProjection
      */
     showStartMarker: function () {
         var startMarker = this.model.get("startMarker"),

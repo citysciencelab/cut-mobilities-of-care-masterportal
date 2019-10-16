@@ -4,19 +4,27 @@ import SnippetCheckboxModel from "../../../snippets/checkbox/model";
 import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
 import {getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
 
-const QueryModel = Backbone.Model.extend({
+const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
     defaults: {
         featureIds: [],
         isLayerVisible: false,
         activateOnSelection: false,
-        // flag for the search in the current map extent
         searchInMapExtent: true,
         liveZoomToFeatures: false
     },
 
     /**
-     * kann von erbenden Objekten augerufen werden
+     * @class QueryModel
+     * @description todo
+     * @extends Backbone.Model
+     * @memberOf Tools.Filter.Query
+     * @constructs
+     * @property {Array} featureIds=[] todo
+     * @property {boolean} isLayerVisible=false todo
+     * @property {boolean} activateOnSelection=false todo
+     * @property {boolean} searchInMapExtent=true Flag for the search in the current map extent.
+     * @property {boolean} liveZoomToFeatures=false todo
      * @returns {void}
      */
     superInitialize: function () {
