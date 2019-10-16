@@ -486,7 +486,7 @@
 
 /**
  * @namespace Bildungsatlas
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for Bildungsatlas
  */
 
