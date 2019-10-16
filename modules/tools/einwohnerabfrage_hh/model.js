@@ -470,6 +470,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {void}
      */
     makeRequest: function (geoJson) {
+        console.info('einwohner request');
         this.setDataReceived(false);
         this.setRequesting(true);
         this.trigger("renderResult");
