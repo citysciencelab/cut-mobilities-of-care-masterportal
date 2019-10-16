@@ -40,7 +40,7 @@ const BalkendiagrammTheme = Theme.extend({
         // get the description of this diagram
         this.set("description", layerList[0].get("description"));
 
-        if (layerName === "Stadtteile") {
+        if (layerName.includes("Stadtteile")) {
             this.set("Title", element[0].Stadtteil);
 
             content[element[0].Stadtteil] = this.get("latestStatistic");
@@ -55,14 +55,14 @@ const BalkendiagrammTheme = Theme.extend({
                 content["Anteil der Zuzüge ins Umland:"] = element[0]["Fortzuege aus_dem_umland"];
             }
         }
-        else if (layerName === "Sozialräume") {
+        else if (layerName.includes("Sozialräume")) {
             this.set("Title", element[0]["Sozialraum name"]);
 
             content[element[0]["Sozialraum name"]] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.hamburg = element[0]["Summe hamburg"];
         }
-        else if (layerName === "Statistische Gebiete") {
+        else if (layerName.includes("Statistische Gebiete")) {
             this.set("Title", element[0].Stadtteil + ": " + element[0].Statgebiet);
 
             content["Statistisches Gebiet"] = this.get("latestStatistic");
@@ -83,10 +83,10 @@ const BalkendiagrammTheme = Theme.extend({
             if (content[key] === null || _.isUndefined(content[key]) === true) {
                 content[key] = "*g.F.";
             }
-            else if (layerDataFormat === "anteil") {
+            else if (layerDataFormat.includes("anteil")) {
                 content[key] = Math.trunc(content[key]) + "%";
             }
-            else if (layerDataFormat === "anteilWanderungen") {
+            else if (layerDataFormat.includes("anteilWanderungen")) {
                 content[key] = Math.round(content[key]) + "%";
             }
         }
@@ -105,7 +105,7 @@ const BalkendiagrammTheme = Theme.extend({
 
         for (key in element.allProperties) {
             if (key.includes("jahr_")) {
-                dataset.push({"year": key.replace("jahr_", ""), "number": element.allProperties[key]});
+                dataset.push({"year": key.replace("jahr_", ""), "number": Number(element.allProperties[key])});
             }
         }
 
