@@ -37,7 +37,6 @@
     "mqtt": "^2.15.x",
     "olcs": "^2.5.0",
     "rbush": "^2.0.2",
-    "@turf/turf": "^5.1.6",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
