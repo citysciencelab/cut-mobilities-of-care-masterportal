@@ -2238,3 +2238,17 @@
  * @event CustomModule#RadioRequestCustomModuleGetMarkerPosition
  * @description todo
  */
+
+ /** -------------------- TOOLS.LAYERSLIDER -------------------- */
+
+ /**
+ * @event Tools.LayerSliderModel#RadioTriggerChangeIsActive
+ * @description todo
+ */
+
+ /** -------------------- TOOLS.GETCOORD -------------------- */
+
+ /**
+ * @event Tools.GetCoord#RadioTriggerChangeIsActive
+ * @description todo
+ */

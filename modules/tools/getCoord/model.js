@@ -4,7 +4,7 @@ import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
 
 
-const CoordPopup = Tool.extend({
+const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         selectPointerMove: null,
         projections: [],
@@ -17,6 +17,25 @@ const CoordPopup = Tool.extend({
         glyphicon: "glyphicon-screenshot"
     }),
 
+    /**
+     * @class CoordPopup
+     * @extends Tool
+     * @memberof Tools.GetCoord
+     * @property {*} selectPointerMove=null todo
+     * @property {array} projections=[] todo
+     * @property {*} mapProjection=null todo
+     * @property {array} positionMapProjection=[] todo
+     * @property {boolean} updatePosition=true todo
+     * @property {string} currentProjectionName="EPSG:25832" todo
+     * @property {boolean} deactivateGFI=true todo
+     * @property {boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-screenshot" todo
+     * @constructs
+     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
@@ -37,6 +56,12 @@ const CoordPopup = Tool.extend({
         });
     },
 
+    /**
+     * todo
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioTriggerMapAddInteraction
+     * @returns {void}
+     */
     createInteraction: function () {
         this.setProjections(getProjections());
         this.setMapProjection(Radio.request("MapView", "getProjection"));
@@ -64,6 +89,12 @@ const CoordPopup = Tool.extend({
         }
     },
 
+    /**
+     * todo
+     * @param {*} position - todo
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @returns {*} todo
+     */
     positionClicked: function (position) {
         var isViewMobile = Radio.request("Util", "isViewMobile"),
             updatePosition = isViewMobile ? true : this.get("updatePosition");
@@ -73,6 +104,11 @@ const CoordPopup = Tool.extend({
         Radio.trigger("MapMarker", "showMarker", position);
     },
 
+    /**
+     * todo
+     * @param {*} targetProjection - todo
+     * @returns {*} todo
+     */
     returnTransformedPosition: function (targetProjection) {
         var positionMapProjection = this.get("positionMapProjection"),
             positionTargetProjection = [0, 0];
@@ -84,6 +120,11 @@ const CoordPopup = Tool.extend({
         return positionTargetProjection;
     },
 
+    /**
+     * todo
+     * @param {*} name - todo
+     * @returns {*} todo
+     */
     returnProjectionByName: function (name) {
         var projections = this.get("projections");
 
@@ -92,44 +133,83 @@ const CoordPopup = Tool.extend({
         });
     },
 
+    /**
+     * todo
+     * @param {*} coord - todo
+     * @returns {*} todo
+     */
     getHDMS: function (coord) {
         return toStringHDMS(coord);
     },
 
+    /**
+     * Getter for cartesian coordinates.
+     * @param {*} coord - todo
+     * @returns {string} cartesian coordinates
+     */
     getCartesian: function (coord) {
         return toStringXY(coord, 2);
     },
 
-    // setter for selectPointerMove
+    /**
+     * Setter for selectPointerMove.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setSelectPointerMove: function (value) {
         this.set("selectPointerMove", value);
     },
 
-    // setter for mapProjection
+    /**
+     * Setter for mapProjection.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setMapProjection: function (value) {
         this.set("mapProjection", value);
     },
 
-    // setter for projections
+    /**
+     * Setter for projections.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setProjections: function (value) {
         this.set("projections", value);
     },
 
-    // setter for positionMapProjection
+    /**
+     * Setter for positionMapProjection.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setPositionMapProjection: function (value) {
         this.set("positionMapProjection", value);
     },
 
-    // setter for updatePosition
+    /**
+     * Setter for updatePosition.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setUpdatePosition: function (value) {
         this.set("updatePosition", value);
     },
-    // setter for currentProjection
+
+    /**
+     * Setter for currentProjectionName.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setCurrentProjectionName: function (value) {
         this.set("currentProjectionName", value);
     },
 
-    // setter for coordinates
+    /**
+     * Setter for coordinates.
+     * @param {*} evt - todo
+     * @returns {void}
+     */
     setCoordinates: function (evt) {
         var position = evt.coordinate;
 

@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
-const LayerSliderModel = Tool.extend({
+const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         layerIds: [],
         timeInterval: 2000,
@@ -51,6 +51,10 @@ const LayerSliderModel = Tool.extend({
         });
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     reset: function () {
         this.stopInterval();
         this.set("activeLayer", {layerId: ""});
@@ -109,8 +113,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet den index im layerIds-Array zur activeLayerId oder liefert -1
-     * @returns {integer}   index im Array mit activeLayerId
+     * Finds the index in the layerIds array to the activeLayerId or returns -1.
+     * @returns {integer} - Index im Array mit activeLayerId.
      */
     getActiveIndex: function () {
         return _.findIndex(this.get("layerIds"), function (layer) {
@@ -119,8 +123,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet die activeLayerId anhand des index und initiiert Speicherung
-     * @param {integer} index index in layerIds
+     * Finds the activeLayerId based on the index and initiates storage.
+     * @param {integer} index - Index in layerIds.
      * @returns {void}
      */
     setActiveIndex: function (index) {
@@ -129,9 +133,9 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Setter des Windows Intervals. Bindet an this.
-     * @param {function} func                Funktion, die in this ausgeführt werden soll
-     * @param {integer}  autorefreshInterval Intervall in ms
+     * Setter of the Windows interval. Binds to this.
+     * @param {function} func - Function to be executed in this
+     * @param {integer}  autorefreshInterval - Interval in ms
      * @returns {void}
      */
     setWindowsInterval: function (func, autorefreshInterval) {
@@ -139,7 +143,7 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Startet das windows-Interval einmalig.
+     * Starts the Windows interval once.
      * @returns {void}
      */
     startInterval: function () {
