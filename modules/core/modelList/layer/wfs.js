@@ -33,9 +33,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.has("clusterDistance")) {
             this.set("isClustered", true);
         }
-        Radio.channel("VectorLayer").reply({
-            "getFeatures": this.returnFeatures
-        }, this);
     },
 
     /**

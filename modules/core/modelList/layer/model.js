@@ -72,35 +72,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * @param {String} requestorLayerName The name of the requesting layer.
-     * @param {String} dataLayerId The id of the layer to return features.
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {ol.Feature[]} - The features of the layer
-     */
-    returnFeatures: function (requestorLayerName, dataLayerId) {
-        let features = [];
-        const isDataLayer = this.checkIfDataLayer(dataLayerId, this.get("id")),
-            layerSource = this.get("layerSource");
-
-        if (isDataLayer) {
-            if (layerSource) {
-                if (layerSource.constructor.name === "VectorSource") {
-                    features = layerSource.getFeatures();
-                }
-                else {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Fehler: Der Layer mit dem Namen \"" + requestorLayerName + "\" kann nicht erstellt werden.</strong><br>" +
-                        "Möglicherweise wurde der Layer " + this.get("name") + " als Vektordatenquelle konfiguriert, welcher keine Vektordaten beinhaltet.<br>" +
-                        "Bitte wenden Sie sich an den Administrator.",
-                        kategorie: "alert-danger"
-                    });
-                }
-            }
-        }
-        return features;
-    },
-
-    /**
      * Checks if dataLayerId matches the given layer id.
      * @param {String} dataLayerId Id of dataLayer whose features are requested.
      * @param {String} layerId Id of current layer.

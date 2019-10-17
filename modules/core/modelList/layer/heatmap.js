@@ -52,15 +52,15 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             this.prepareLayerObject();
         }
         if (!layerId) {
-            const dataLayerFeatures = Radio.request("VectorLayer", "getFeatures", this.get("name"), this.get("dataLayerId"));
+            const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
+                dataLayerName = dataLayer ? dataLayer.get("name") : undefined,
+                dataLayerSource = dataLayer ? dataLayer.get("layerSource") : undefined,
+                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : [];
 
-            if (dataLayerFeatures && dataLayerFeatures.length > 0) {
+            if (dataLayerFeatures.length > 0) {
                 this.initializeHeatmap(dataLayerFeatures);
             }
             else {
-                const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
-                    dataLayerName = dataLayer.get("name");
-
                 Radio.trigger("Alert", "alert", {
                     text: "<strong>Bitte aktivieren Sie den Layer \"" + dataLayerName + "\"</strong><br>" +
                     "Dieser liefert die Daten für den Heatmap-Layer :<br>" +

@@ -39,9 +39,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
         this.setStyleId(this.get("styleId") || this.get("id"));
         this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
-        Radio.channel("VectorLayer").reply({
-            "getFeatures": this.returnFeatures
-        }, this);
     },
 
     /**

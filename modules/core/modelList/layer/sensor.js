@@ -47,9 +47,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // change language from moment.js to german
         moment.locale("de");
-        Radio.channel("VectorLayer").reply({
-            "getFeatures": this.returnFeatures
-        }, this);
     },
 
     /**
