@@ -1,9 +1,7 @@
 import Model from "@modules/tools/gfi/themes/bildungsatlas/schulenEinzugsgebiete/model.js";
 import {expect} from "chai";
-import GeoJsonLayerModel from "@modules/core/modelList/layer/geojson.js";
-import MapView from "@modules/core/mapView.js";
 
-let model, gfiContent, geojsonLayer, geojson, features;
+let model, gfiContent;
 
 before(function () {
     model = new Model();
@@ -25,37 +23,6 @@ before(function () {
             "styling": "grundschule"
         }
     };
-    new MapView();
-    geojson = {
-        "type": "FeatureCollection",
-        "name": "C_Schulen_2017_pr_alle",
-        "crs": {
-            "type": "name",
-            "properties": {
-                "name": "urn:ogc:def:crs:EPSG::25832"
-            }
-        },
-        "features": [
-            {
-                "type": "Feature",
-                "properties": {
-                    "id": "test"
-                },
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        569881.56,
-                        5934722.32
-                    ]
-                }
-            }
-        ]
-    };
-    geojsonLayer = new GeoJsonLayerModel();
-    geojsonLayer.createLayerSource();
-    features = geojsonLayer.parseDataToFeatures(geojson, "EPSG:25832", "EPSG:25832");
-    geojsonLayer.addId(features);
-    geojsonLayer.get("layerSource").addFeatures(features);
 });
 
 describe("tools/gfi/themes/bildungsatlas/schulenEinzugsgebiete", function () {
@@ -129,25 +96,6 @@ describe("tools/gfi/themes/bildungsatlas/schulenEinzugsgebiete", function () {
     describe("getStatisticAreasConfig", function () {
         it("should return false", function () {
             expect(model.getStatisticAreasConfig()).to.be.false;
-        });
-    });
-
-    describe("filterFeature", function () {
-        it("should not filter features while layer is not selected (style remains null)", function () {
-            model.filterFeature([geojsonLayer], ["test"]);
-            expect(geojsonLayer.get("layerSource").getFeatureById("test").getStyle()).to.be.null;
-        });
-        it("should filter features when layer is selected (style becomes undefined)", function () {
-            geojsonLayer.set("isSelected", true, {silent: true});
-            model.filterFeature([geojsonLayer], ["test"]);
-            expect(geojsonLayer.get("layerSource").getFeatureById("test").getStyle()).to.be.undefined;
-        });
-    });
-
-    describe("unfilterFeature", function () {
-        it("should reset filter when layer is selected (style becomes undefined)", function () {
-            model.unfilterFeature([geojsonLayer], ["test"]);
-            expect(geojsonLayer.get("layerSource").getFeatureById("test").getStyle()).to.be.undefined;
         });
     });
 });

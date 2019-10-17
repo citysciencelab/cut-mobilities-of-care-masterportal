@@ -1,9 +1,7 @@
-import Map from "ol/Map.js";
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
-import {defaults as olDefaultInteractions} from "ol/interaction.js";
 import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
@@ -12,21 +10,85 @@ import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/WMSRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 import moment from "moment";
+import {register} from "ol/proj/proj4.js";
+import proj4 from "proj4";
+import {createMap} from "masterportalAPI";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
+import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
 
-const map = Backbone.Model.extend({
+const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
         initalLoading: 0,
-        /**
-         * defaultTime for 3D rendering even with disabled shadows
-         * @type {Cesium.JulianDate}
-         */
         shadowTime: null
     },
 
-    initialize: function () {
-        var channel = Radio.channel("Map"),
-            mapViewSettings = Radio.request("Parser", "getPortalConfig").mapView,
-            mapView = new MapView(mapViewSettings);
+    /**
+     * @class map
+     * @description todo
+     * @extends Backbone.Model
+     * @memberOf Core
+     * @constructs
+     * @param {Object} mapViewSettings Settings for the map.
+     * @property {Number} initalLoading=0 todo
+     * @property {Cesium.JulianDate} shadowTime=null DefaultTime for 3D rendering even with disabled shadows.
+     * @listens Core#RadioRequestMapGetLayers
+     * @listens Core#RadioRequestMapGetWGS84MapSizeBBOX
+     * @listens Core#RadioRequestMapCreateLayerIfNotExists
+     * @listens Core#RadioRequestMapGetSize
+     * @listens Core#RadioRequestMapGetFeaturesAtPixel
+     * @listens Core#RadioRequestMapRegisterListener
+     * @listens Core#RadioRequestMapGetMap
+     * @listens Core#RadioRequestMapIsMap3d
+     * @listens Core#RadioRequestMapGetMap3d
+     * @listens Core#RadioRequestMapGetMapMode
+     * @listens Core#RadioRequestMapGetFeatures3dAtPosition
+     * @listens Core#RadioTriggerMapAddLayer
+     * @listens Core#RadioTriggerMapAddLayerToIndex
+     * @listens Core#RadioTriggerMapSetLayerToIndex
+     * @listens Core#RadioTriggerMapAddLayerOnTop
+     * @listens Core#RadioTriggerMapAddLoadingLayer
+     * @listens Core#RadioTriggerMapAddOverlay
+     * @listens Core#RadioTriggerMapAddInteraction
+     * @listens Core#RadioTriggerMapAddControl
+     * @listens Core#RadioTriggerMapRemoveLayer
+     * @listens Core#RadioTriggerMapRemoveLoadingLayer
+     * @listens Core#RadioTriggerMapRemoveOverlay
+     * @listens Core#RadioTriggerMapRemoveInteraction
+     * @listens Core#RadioTriggerMapSetBBox
+     * @listens Core#RadioTriggerMapRender
+     * @listens Core#RadioTriggerMapZoomToExtent
+     * @listens Core#RadioTriggerMapZoomToFilteredFeatures
+     * @listens Core#RadioTriggerMapRegisterListener
+     * @listens Core#RadioTriggerMapUnregisterListener
+     * @listens Core#RadioTriggerMapUpdateSize
+     * @listens Core#RadioTriggerMapSetShadowTime
+     * @listens Core#RadioTriggerMapActivateMap3d
+     * @listens Core#RadioTriggerMapDeactivateMap3d
+     * @listens Core#RadioTriggerMapSetCameraParameter
+     * @listens Core#RadioTriggerMapChange
+     * @listens Core#MapChangeVectorLayer
+     * @fires Core.ModelList#RadioTriggerModelListAddInitialyNeededModels
+     * @fires Core#RadioRequestParametricURLGetZoomToExtent
+     * @fires Core#RadioTriggerMapIsReady
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioRequestMapClickedWindowPosition
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Core#RadiotriggerMapCameraChanged
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Core#RadioTriggerMapAddLayerToIndex
+     */
+    initialize: function (mapViewSettings) {
+        const channel = Radio.channel("Map");
 
         this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
 
@@ -47,7 +109,9 @@ const map = Backbone.Model.extend({
         }, this);
 
         channel.on({
-            "addLayer": this.addLayer,
+            "addLayer": function (layer) {
+                this.get("map").addLayer(layer);
+            },
             "addLayerToIndex": this.addLayerToIndex,
             "setLayerToIndex": this.setLayerToIndex,
             "addLayerOnTop": this.addLayerOnTop,
@@ -81,16 +145,34 @@ const map = Backbone.Model.extend({
             }
         });
 
-        this.set("view", mapView.get("view"));
-        this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
+        /**
+         * resolution
+         * @deprecated in 3.0.0
+         */
+        if (mapViewSettings && mapViewSettings.hasOwnProperty("resolution")) {
+            console.warn("MapView parameter 'resolution' is deprecated. Please use 'startResolution' instead.");
+            mapViewSettings.startResolution = mapViewSettings.resolution;
+        }
+        /**
+         * zoomLevel
+         * @deprecated in 3.0.0
+         */
+        if (mapViewSettings && mapViewSettings.hasOwnProperty("zoomLevel")) {
+            console.warn("MapView parameter 'zoomLevel' is deprecated. Please use 'startZoomLevel' instead.");
+            mapViewSettings.startZoomLevel = mapViewSettings.zoomLevel;
+        }
 
-        this.set("map", new Map({
-            logo: null,
-            target: "map",
-            view: this.get("view"),
-            controls: [],
-            interactions: olDefaultInteractions({altShiftDragRotate: false, pinchRotate: false})
+        this.setMap(createMap({
+            ...Config,
+            ...mapViewSettings,
+            layerConf: getLayerList()
         }));
+
+        new MapView({view: this.get("map").getView(), settings: mapViewSettings});
+        this.set("view", this.get("map").getView());
+
+        this.addAliasForWFSFromGoeserver(getMapProjection(this.get("map")));
+
         if (window.Cesium) {
             this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
         }
@@ -114,12 +196,26 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * Funktion wird bei Vorhandensein des Config-Parameters "inputMap"
-     * als Event-Listener registriert und setzt bei Mausklick immer und
-     * ohne Aktivierung einen Map-Marker an die geklickte Stelle. Triggert
-     * darüber hinaus das RemoteInterface mit den Marker-Koordinaten.
-     *
-     * @param  {event} event - Das MapBrowserPointerEvent
+     * Creates an alias for the srsName.
+     * This is necessary for WFS from geoserver.org.
+     * @param {String} epsgCode used epsg code in the mapView
+     * @returns {void}
+     */
+    addAliasForWFSFromGoeserver: function (epsgCode) {
+        const epsgCodeNumber = epsgCode.split(":")[1];
+
+        proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
+        register(proj4);
+    },
+
+    /**
+     * Function is registered as an event listener if the config-parameter "inputMap" is present
+     * and always sets a mapMarker at the clicked position without activating it.
+     * Also triggers the RemoteInterface with the marker coordinates.
+     * @param  {event} event - The MapBrowserPointerEvent
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @returns {void}
      */
     addMarker: function (event) {
@@ -135,7 +231,7 @@ const map = Backbone.Model.extend({
 
         // Should the coordinates get transformed to another coordinate system for broadcast?
         if (!_.isUndefined(Config.inputMap.targetProjection)) {
-            coords = Radio.request("CRS", "transformFromMapProjection", Config.inputMap.targetProjection, coords);
+            coords = transformFromMapProjection(this.get("map"), Config.inputMap.targetProjection, coords);
         }
 
         // Broadcast the coordinates clicked in the desired coordinate system.
@@ -143,8 +239,8 @@ const map = Backbone.Model.extend({
     },
 
     /**
-    * Findet einen Layer über seinen Namen und gibt ihn zurück
-    * @param  {string} layerName - Name des Layers
+    * Finds a layer by its name and returns it.
+    * @param  {string} layerName - Name of the Layers
     * @return {ol.layer} - found layer
     */
     getLayerByName: function (layerName) {
@@ -155,55 +251,83 @@ const map = Backbone.Model.extend({
         });
     },
 
+    /**
+     * Setter for vectorLayer.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setVectorLayer: function (value) {
         this.set("vectorLayer", value);
     },
 
+    /**
+     * Getter for Layers from the map.
+     * @returns {*} layers from the map
+     */
     getLayers: function () {
         return this.get("map").getLayers();
     },
 
+    /**
+     * Render the map
+     * @returns {void}
+     */
     render: function () {
         this.get("map").render();
     },
 
+    /**
+     * Sets the bounding box for the map.
+     * @param {*} bbox - todo
+     * @returns {void}
+     */
     setBBox: function (bbox) {
         this.set("bbox", bbox);
         this.bBoxToMap(this.get("bbox"));
     },
+
+    /**
+     * todo
+     * @param {*} bbox - todo
+     * @returns {void}
+     */
     bBoxToMap: function (bbox) {
         if (bbox) {
             this.get("view").fit(bbox, this.get("map").getSize());
         }
     },
 
+    /**
+     * todo
+     * @returns {*} todo
+     */
     getWGS84MapSizeBBOX: function () {
         var bbox = this.get("view").calculateExtent(this.get("map").getSize()),
             firstCoord = [bbox[0], bbox[1]],
             secondCoord = [bbox[2], bbox[3]],
-            firstCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: firstCoord}),
-            secondCoordTransform = Radio.request("CRS", "transform", {fromCRS: "EPSG:25832", toCRS: "EPSG:4326", point: secondCoord});
+            firstCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", firstCoord),
+            secondCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", secondCoord);
 
         return [firstCoordTransform[0], firstCoordTransform[1], secondCoordTransform[0], secondCoordTransform[1]];
     },
 
     /**
-    * Registriert Listener für bestimmte Events auf der Karte
-    * Siehe http://openlayers.org/en/latest/apidoc/ol.Map.html
-    * @param {String} event - Der Eventtyp
-    * @param {Function} callback - Die Callback Funktion
-    * @param {Object} context -
-    * @returns {void}
+    * Registered listener for certain events on the map.
+    * See http://openlayers.org/en/latest/apidoc/ol.Map.html
+    * @param {String} event - The Eventtype.
+    * @param {Function} callback - The Callback function.
+    * @param {Object} context - todo
+    * @returns {*} todo
     */
     registerListener: function (event, callback, context) {
         return this.get("map").on(event, callback, context);
     },
 
     /**
-    * Meldet Listener auf bestimmte Events ab
-    * @param {String | Object} event - Der Eventtyp oder ein Objekt welches als Key benutzt wird
-    * @param {Function} callback - Die Callback Funktion
-    * @param {Object} context -
+    * Unsubscribes listener to certain events.
+    * @param {String | Object} event - The event type or an object used as a key.
+    * @param {Function} callback - The callback function.
+    * @param {Object} context - todo
     * @returns {void}
     */
     unregisterListener: function (event, callback, context) {
@@ -216,15 +340,19 @@ const map = Backbone.Model.extend({
     },
 
     /**
-    * Rückgabe der Features an einer Pixelkoordinate
-    * @param  {pixel} pixel    Pixelkoordinate
-    * @param  {object} options layerDefinition und pixelTolerance
-    * @return {features[]}     Array der Features
+    * Return features at a pixel coordinate
+    * @param  {pixel} pixel - Pixelcoordinate
+    * @param  {object} options - layerDefinition and pixelTolerance
+    * @returns {features[]} - Array with features
     */
     getFeaturesAtPixel: function (pixel, options) {
         return this.get("map").getFeaturesAtPixel(pixel, options);
     },
 
+    /**
+     * Returns the mapmode. Oblique, 3D and 2D are available for selection.
+     * @returns {String} mapMode
+     */
     getMapMode: function () {
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
@@ -234,6 +362,11 @@ const map = Backbone.Model.extend({
         }
         return "2D";
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     isMap3d: function () {
         return this.getMap3d() && this.getMap3d().getEnabled();
     },
@@ -246,6 +379,10 @@ const map = Backbone.Model.extend({
         return this.get("shadowTime");
     },
 
+    /**
+     * create the map in 3d-mode.
+     * @returns {*} 3D-Map
+     */
     createMap3d: function () {
         var map3d = new OLCesium({
             map: this.get("map"),
@@ -262,6 +399,10 @@ const map = Backbone.Model.extend({
         return map3d;
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     handle3DEvents: function () {
         var eventHandler;
 
@@ -270,6 +411,12 @@ const map = Backbone.Model.extend({
             eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
         }
     },
+
+    /**
+     * todo
+     * @param {*} params - todo
+     * @returns {void}
+     */
     setCameraParameter: function (params) {
         var map3d = this.getMap3d(),
             camera,
@@ -304,6 +451,11 @@ const map = Backbone.Model.extend({
             }
         }
     },
+
+    /**
+     * todo
+     * @returns {*} todo
+     */
     setCesiumSceneDefaults: function () {
         var params,
             scene = this.getMap3d().getCesiumScene();
@@ -332,13 +484,13 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * activates the 3d Map, if oblique is still active, the obliquemap will be deactivated before.
-     * @listens Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerObliqueMapDeactivate
-     * @fires Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerMapBeforeChange
+     * Activates the 3d Map, if oblique is still active, the obliquemap will be deactivated before.
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlert
-     * @return {void} -
+     * @fires Core#RadioTriggerMapChange
+     * @return {void}
      */
     activateMap3d: function () {
         var camera,
@@ -370,6 +522,11 @@ const map = Backbone.Model.extend({
         Radio.trigger("Map", "change", "3D");
     },
 
+    /**
+     * todo
+     * @param {*} position - todo
+     * @returns {*} todo
+     */
     getFeatures3dAtPosition: function (position) {
         var scene,
             objects;
@@ -381,6 +538,13 @@ const map = Backbone.Model.extend({
         return objects;
     },
 
+    /**
+     * todo
+     * @param {*} event - todo
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioRequestMapClickedWindowPosition
+     * @returns {void}
+     */
     reactTo3DClickEvent: function (event) {
         var map3d = this.getMap3d(),
             scene = map3d.getCesiumScene(),
@@ -421,12 +585,13 @@ const map = Backbone.Model.extend({
             Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
         }
     },
+
     /**
-     * deactivates the 3D map and changes to the 2D Map Mode.
-     * @fires Map#RadioTriggerMapChange
-     * @fires Map#RadioTriggerMapBeforeChange
+     * Deactivates the 3D map and changes to the 2D Map Mode.
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapBeforeChange
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @return {void} -
+     * @return {void}
      */
     deactivateMap3d: function () {
         var resolution,
@@ -451,82 +616,108 @@ const map = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Setter for map3d.
+     * @param {*} map3d - todo
+     * @returns {*} todo
+     */
     setMap3d: function (map3d) {
         return this.set("map3d", map3d);
     },
 
+    /**
+     * Getter for map3d.
+     * @returns {*} todo
+     */
     getMap3d: function () {
         return this.get("map3d");
     },
 
+    /**
+     * todo
+     * @fires Core#RadiotriggerMapCameraChanged
+     * @returns {void}
+     */
     reactToCameraChanged: function () {
         var camera = this.getMap3d().getCamera();
 
         Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
     },
+
+    /**
+     * Adds an interaction to the map.
+     * @param {*} interaction - Interaction to be added.
+     * @returns {void}
+     */
     addInteraction: function (interaction) {
         this.get("map").addInteraction(interaction);
     },
+
+    /**
+     * Removes an interaction from the map.
+     * @param {*} interaction - Interaction to be remove.
+     * @returns {void}
+     */
     removeInteraction: function (interaction) {
         this.get("map").removeInteraction(interaction);
     },
 
+    /**
+     * Adds an ovleray to the map.
+     * @param {*} overlay - Overlay to be added.
+     * @returns {void}
+     */
     addOverlay: function (overlay) {
         this.get("map").addOverlay(overlay);
     },
 
+    /**
+     * Removes an overlay from the map.
+     * @param {*} overlay - Overlay to be removed.
+     * @returns {void}
+     */
     removeOverlay: function (overlay) {
         this.get("map").removeOverlay(overlay);
     },
 
+    /**
+     * Adds a control to the map.
+     * @param {*} control - Control to be added.
+     * @returns {void}
+     */
     addControl: function (control) {
         this.get("map").addControl(control);
     },
+
+    /**
+     * Removes a control from the map.
+     * @param {*} control - Control to be removed.
+     * @returns {void}
+     */
     removeControl: function (control) {
         this.get("map").removeControl(control);
     },
-    /**
-    * Layer-Handling
-    * @param {ol/layer} layer -
-    * @returns {void}
-    */
-    addLayer: function (layer) {
-        var layerList,
-            firstVectorLayer,
-            index;
-
-        // Alle Layer
-        layerList = this.get("map").getLayers().getArray();
-        // der erste Vectorlayer in der Liste
-        firstVectorLayer = _.find(layerList, function (veclayer) {
-            return veclayer instanceof VectorLayer;
-        });
-        // Index vom ersten VectorLayer in der Layerlist
-        index = _.indexOf(layerList, firstVectorLayer);
-        if (index !== -1 && _.has(firstVectorLayer, "id") === false) {
-            // Füge den Layer vor dem ersten Vectorlayer hinzu. --> damit bleiben die Vectorlayer(Messen, Zeichnen,...) immer oben auf der Karte
-            this.get("map").getLayers().insertAt(index, layer);
-        }
-        else {
-            this.get("map").getLayers().push(layer);
-        }
-    },
 
     /**
-     * put the layer on top of the map
-     * @param {ol/layer} layer to be placed on top of the map
+     * Put the layer on top of the map.
+     * @param {ol/layer} layer - To be placed on top of the map.
      * @returns {void}
      */
     addLayerOnTop: function (layer) {
         this.get("map").getLayers().push(layer);
     },
 
+    /**
+     * Removes a layler from the map.
+     * @param {*} layer - - Layer to be removed.
+     * @returns {void}
+     */
     removeLayer: function (layer) {
         this.get("map").removeLayer(layer);
     },
 
     /**
-    * Bewegt den Layer auf der Karte an die vorhergesehene Position
+    * Moves the layer on the map to the intended position.
     * @param {Array} args - [0] = Layer, [1] = Index
     * @returns {void}
     */
@@ -559,8 +750,8 @@ const map = Backbone.Model.extend({
 
     /**
      * Sets an already inserted ol.layer to the defined index using openlayers setZIndex method
-     * @param {ol.Layer} layer Layer to set
-     * @param {integer} [index=0] new Index
+     * @param {ol.Layer} layer  - Layer to set.
+     * @param {integer} [index=0] - New Index.
      * @returns {void}
      */
     setLayerToIndex: function (layer, index) {
@@ -575,8 +766,8 @@ const map = Backbone.Model.extend({
     },
 
     /**
-     * Pushes 'alwaysOnTop' layers to the top of the collection
-     * @param {ol.Collection} layers Layer Collection
+     * Pushes 'alwaysOnTop' layers to the top of the collection.
+     * @param {ol.Collection} layers - Layer Collection.
      * @returns {void}
      */
     setImportDrawMeasureLayersOnTop: function (layers) {
@@ -590,6 +781,12 @@ const map = Backbone.Model.extend({
         }, this);
     },
 
+    /**
+     * todo
+     * @param {*} extent - todo
+     * @param {*} options - todo
+     * @returns {void}
+     */
     zoomToExtent: function (extent, options) {
         var extentToUse = extent;
 
@@ -597,14 +794,21 @@ const map = Backbone.Model.extend({
             const projectionGiven = this.get("projectionFromParamUrl"),
                 leftBottom = extent.slice(0, 2),
                 topRight = extent.slice(2, 4),
-                transformedLeftBottom = Radio.request("CRS", "transformToMapProjection", projectionGiven, leftBottom),
-                transformedTopRight = Radio.request("CRS", "transformToMapProjection", projectionGiven, topRight);
+                transformedLeftBottom = transformToMapProjection(this.get("map"), projectionGiven, leftBottom),
+                transformedTopRight = transformToMapProjection(this.get("map"), projectionGiven, topRight);
 
             extentToUse = transformedLeftBottom.concat(transformedTopRight);
         }
         this.get("view").fit(extentToUse, this.get("map").getSize(), options);
     },
 
+    /**
+     * todo
+     * @param {*} ids - todo
+     * @param {*} layerId - todo
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @returns {void}
+     */
     zoomToFilteredFeatures: function (ids, layerId) {
         var extent,
             features,
@@ -629,6 +833,12 @@ const map = Backbone.Model.extend({
             this.zoomToExtent(extent);
         }
     },
+
+    /**
+     * todo
+     * @param {*} features - todo
+     * @returns {*} todo
+     */
     calculateExtent: function (features) {
         // extent = [xMin, yMin, xMax, yMax]
         var extent = [9999999, 9999999, 0, 0];
@@ -646,23 +856,36 @@ const map = Backbone.Model.extend({
         });
         return extent;
     },
+
     /**
-    * Gibt die Größe in Pixel der Karte zurück.
-    * @return {ol.Size} - Ein Array mit zwei Zahlen [width, height]
+    * Returns the size in pixels of the map.
+    * @returns {ol.Size} An array of two numbers [width, height].
     */
     getSize: function () {
         return this.get("map").getSize();
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     addLoadingLayer: function () {
         this.set("initalLoading", this.get("initalLoading") + 1);
     },
+
+    /**
+     * todo
+     * @returns {void}
+     */
     removeLoadingLayer: function () {
         this.set("initalLoading", this.get("initalLoading") - 1);
     },
+
     /**
-    * Initiales Laden. "initalLoading" wird layerübergreifend hochgezählt, wenn mehrere Tiles abgefragt werden und wieder heruntergezählt, wenn die Tiles geladen wurden.
-    * Listener wird anschließend gestoppt, damit nur beim initialen Laden der Loader angezeigt wird - nicht bei zoom/pan
+    * Initial loading. "initalLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
+    * Listener is then stopped so that the loader is only displayed during initial loading - not when zoom/pan is selected. [...]
+    * @fires Core#RadioTriggerUtilShowLoader
+    * @fires Core#RadioTriggerUtilHideLoader
     * @returns {void}
     */
     initalLoadingChanged: function () {
@@ -676,7 +899,13 @@ const map = Backbone.Model.extend({
             this.stopListening(this, "change:initalLoading");
         }
     },
-    // Prüft ob der Layer mit dem Namen "Name" schon existiert und verwendet ihn, wenn nicht, erstellt er neuen Layer
+
+    /**
+     * Checks if the layer with the name "Name" already exists and uses it, if not, creates a new layer.
+     * @param {*} name - todo
+     * @fires Core#RadioTriggerMapAddLayerToIndex
+     * @returns {*} todo
+     */
     createLayerIfNotExists: function (name) {
         var layers = this.getLayers(),
             found = false,
@@ -704,9 +933,10 @@ const map = Backbone.Model.extend({
         }
         return resultLayer;
     },
+
     /**
-    * Der ol-overlaycontainer-stopevent Container stoppt nicht jedes Event.
-    * Unter anderem das Mousemove Event. Das übernimmt diese Methode.
+    * DThe ol-overlaycontainer-stopevent container does not stop every event.
+    * Among other things the Mousemove Event. This method does that.
     * @see {@link https://github.com/openlayers/openlayers/issues/4953}
     * @returns {void}
     */
@@ -723,17 +953,22 @@ const map = Backbone.Model.extend({
         });
     },
 
+    /**
+     * Setter for shadowTime.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setShadowTime: function (value) {
         this.set("shadowTime", value);
     },
 
     /**
-     * @description Sets projection from param url
-     * @param {string} projection todo
-     * @return {float} current Zoom of MapView
+     * Setter for the map.
+     * @param {ol/map} value - The map.
+     * @returns {void}
      */
-    setProjectionFromParamUrl: function (projection) {
-        this.set("projectionFromParamUrl", projection);
+    setMap: function (value) {
+        this.set("map", value);
     }
 
 });

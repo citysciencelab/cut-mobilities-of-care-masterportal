@@ -5,6 +5,7 @@ import ParametricURL from "@modules/core/parametricURL";
 import ImageWMS from "ol/source/ImageWMS.js";
 import {Image} from "ol/layer.js";
 import {expect} from "chai";
+import {registerProjections} from "masterportalAPI/src/crs";
 
 describe("core/map", function () {
     var model,
@@ -14,6 +15,8 @@ describe("core/map", function () {
     before(function () {
         new Preparser(null, {url: Config.portalConf});
         new ParametricURL();
+        registerProjections();
+
         model = new Model();
         utilModel = new Util();
         features = utilModel.createTestFeatures("resources/testFeatures.xml");

@@ -62,7 +62,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @listens Searchbar#RadioTriggerSearchbarDeleteSearchString
      * @listens Searchbar#RadioTriggerSearchbarSetFocus
      * @listens Menu#RadioTriggerMenuLoaderReady
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @listens Searchbar#RadioTriggerViewZoomHitSelected
      * @fires QuickHelp#RadioTriggerQuickHelpShowWindowHelp
      * @fires Title#RadioTriggerTitleSetSize
@@ -870,7 +870,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else if (_.has(hit, "coordinate")) {
             Radio.trigger("MapMarker", "showMarker", hit.coordinate);
         }
-        else if (hit.type !== "Thema") {
+        else if (hit.hasOwnProperty("type") && hit.type !== "Thema") {
             console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
         }
     },
