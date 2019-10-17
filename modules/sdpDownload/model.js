@@ -8,7 +8,7 @@ import { Circle } from "ol/geom.js";
 import { fromCircle } from "ol/geom/Polygon.js";
 import * as turf from '@turf/turf'
 
-const SdpDownloadModel = Tool.extend({
+const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         isActive: false,
@@ -56,6 +56,33 @@ const SdpDownloadModel = Tool.extend({
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
         selectedRasterLimit: 9
     }),
+    /**
+     * @class SdpDownloadModel
+     * @extends Tool
+     * @property {boolean} deactivateGFI=true avoid show DK5-Info if user clicks into Map
+     * @property {boolean} isActive=false state of the tool
+     * @property {boolean} renderToSidebar=true show this tool in sidebar
+     * @property {boolean} renderToWindow=false not show this tool in window
+     * @property {string} wmsRasterLayerId="4707" id of the Layer utm_dk5_1km (WMS Uebersicht Kachelbezeichnungen)
+     * @property {array} formats=[] provided formats of data to download
+     * @property {string} selectedFormat="NAS" is the preselected format
+     * @property {string} compressDataUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/dateien_zippen.php" todo
+     * @property {string} compressedFileUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/datei_herunterladen.php" todo
+     * @property {Object} wfsRasterParams= {
+            url: "https://geodienste.hamburg.de/HH_WFS_Uebersicht_Kachelbezeichnungen",
+            request: "GetFeature",
+            service: "WFS",
+            version: "1.1.0",
+            typename: 'app:lgv_kachel_dk5_1km_utm'
+        } connection parameters
+     * @property {Object} wfsRaster={} contains wfs raster features after loading them
+     * @constructs
+     * @listens SdpDownloadModel#changeIsActive
+     * @listens Core#RadioTriggerMapViewChangedOptions
+     * @listens Core.ModelList#RadioTriggerModelListToggleDefaultTool
+     * @listens Snippets.Dropdown#ValuesChanged
+     * @fires todo
+     */
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
