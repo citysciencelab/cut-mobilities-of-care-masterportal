@@ -18,11 +18,10 @@ Beispiel:
 ```javascript
 
     function testbareFunktion(uebergabeParameter) {
-        let rueckgabeParameter = "Hello " +uebergabeParameter;
+        let rueckgabeParameter = "Hello " + uebergabeParameter;
 
         return rueckgabeParameter
     }
-    this.testbareFunktion ("")
 ```
 
 ***
@@ -40,10 +39,10 @@ Sind innerhalb eines Prozesses Attribute zu setzen oder Events zu feuern, so sol
 
 Beispiel:
 ```javascript
+
     function prozessFunktion() {
         let belibigeVariable = Radio.request("BelibigerChannel", beliebigeFunktion);
-
-        this.testbareFunktion(beliebigeVariable);
+        const rueckgabewert= this.testbarefunktion(belibigeVariable);
     }
     .
     .
@@ -56,12 +55,12 @@ Beispiel:
 
 5.3.1. Zu jeder unittestbaren Funktion sind Unit-Tests zu schreiben.
 
-5.3.2. Zum Testen werden die Bibliotheken [Chai](https://www.chaijs.com/) und [Mocha](https://mochajs.org/) verwendet.
+5.3.2. Zum Testen werden die Bibliotheken **[Chai]**(https://www.chaijs.com/) und **[Mocha]**(https://mochajs.org/) verwendet.
 
-5.3.3. Jedes Model hat eine Test-Datei, die mit **.test.js** endet und unter [**test/unittests/modules**](../../test/unittests/modules) in der selben Ordnerstruktur wie der Code abgelegt wird.
+5.3.3. Jedes Model hat eine Test-Datei, die mit **.test.js** endet und unter **[**test/unittests/modules**]**(../../test/unittests/modules) in der selben Ordnerstruktur wie der Code abgelegt wird.
 
 5.3.4 Jede Funktion soll mindestens einen **Positiv-Test** (Funktionsaufruf mit plausiblen Werten) und einen **Negativ-Test** (Funktionsaufruf mit unplausiblen Werten, z.B. *undefined*, *[]*, *{}*, *""*, ...) enthalten.
 
 5.3.5 Alle Unit-Tests müssen fehlerfrei durchlaufen. Dies wird beim pushen durch eine pre-push Hook geprüft.
 
-Beispiel unter [**test/unittests/ExampleTest**](../../test/unittests/ExampleTest)
+Beispiel unter **[test/unittests/ExampleTest]**(../../test/unittests/ExampleTest)
