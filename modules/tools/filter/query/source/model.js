@@ -1,5 +1,6 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const SourceModel = QueryModel.extend({
     defaults: {
@@ -125,7 +126,7 @@ const SourceModel = QueryModel.extend({
     },
 
     buildQueryDatastructure: function () {
-        var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
+        var layerObject = getLayerWhere({id: this.get("layerId")});
 
         if (this.get("searchInMapExtent") === true) {
             this.addSearchInMapExtentSnippet();

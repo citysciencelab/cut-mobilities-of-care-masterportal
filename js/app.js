@@ -3,10 +3,8 @@ import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
 import StyleList from "../modules/vectorStyle/list";
-import RawLayerList from "../modules/core/rawLayerList";
 import Preparser from "../modules/core/configLoader/preparser";
 import ParametricURL from "../modules/core/parametricURL";
-import CRS from "../modules/core/crs";
 import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
@@ -119,12 +117,10 @@ function loadApp () {
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
-    new RawLayerList(null, {url: Config.layerConf});
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
     new ParametricURL();
-    new CRS();
-    new Map();
+    new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
 

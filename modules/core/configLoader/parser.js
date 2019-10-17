@@ -1,5 +1,6 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     defaults: {
@@ -117,7 +118,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 modelList.remove(modelListToRemove);
                 this.setItemList([]);
                 this.addTreeMenuItems();
-                this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+                this.parseTree(getLayerList());
                 Radio.trigger("ModelList", "removeModelsByParentId", "tree");
                 Radio.trigger("ModelList", "renderTree");
                 Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
@@ -146,7 +147,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         }
         else {
             this.addTreeMenuItems(this.get("treeType"));
-            this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+            this.parseTree(getLayerList());
         }
         this.createModelList();
     },

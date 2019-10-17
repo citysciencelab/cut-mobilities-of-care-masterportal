@@ -1,118 +1,64 @@
-import {Projection, addProjection} from "ol/proj.js";
-import View from "ol/View.js";
+import {Projection} from "ol/proj.js";
+import defaults from "masterportalAPI/src/defaults";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
-        epsg: "EPSG:25832",
         background: "",
-        backgroundImage: "",
-        extent: [510000.0, 5850000.0, 625000.4, 6000000.0],
-        options: [
-            {
-                resolution: 66.14579761460263,
-                scale: 250000,
-                zoomLevel: 0
-            },
-            {
-                resolution: 26.458319045841044,
-                scale: 100000,
-                zoomLevel: 1
-            },
-            {
-                resolution: 15.874991427504629,
-                scale: 60000,
-                zoomLevel: 2
-            },
-            {
-                resolution: 10.583327618336419,
-                scale: 40000,
-                zoomLevel: 3
-            },
-            {
-                resolution: 5.2916638091682096,
-                scale: 20000,
-                zoomLevel: 4
-            },
-            {
-                resolution: 2.6458319045841048,
-                scale: 10000,
-                zoomLevel: 5
-            },
-            {
-                resolution: 1.3229159522920524,
-                scale: 5000,
-                zoomLevel: 6
-            },
-            {
-                resolution: 0.6614579761460262,
-                scale: 2500,
-                zoomLevel: 7
-            },
-            {
-                resolution: 0.2645831904584105,
-                scale: 1000,
-                zoomLevel: 8
-            },
-            {
-                resolution: 0.13229159522920521,
-                scale: 500,
-                zoomLevel: 9
-            }
-        ],
-        resolution: 15.874991427504629,
-        startCenter: [565874, 5934140],
         units: "m",
-        DOTS_PER_INCH: $("#dpidiv").outerWidth() // Hack um die Bildschirmauflösung zu bekommen
+        DOTS_PER_INCH: $("#dpidiv").outerWidth()
     },
 
     /**
      * @class MapView
      * @description todo
      * @extends Backbone.Model
-     * @memberOf Core.ModelList
+     * @memberOf Core
      * @constructs
-     *
-     * @param {object} attributes Class attributes
-     *
-     * @listensMapView#RadioRequestMapViewGetCenter
-     * @listens MapView#RadioRequestMapViewGetCurrentExtent
-     * @listens MapView#RadioRequestMapViewGetOptions
-     * @listens MapView#RadioRequestMapViewGetProjection
-     * @listens MapView#RadioRequestMapViewGetResoByScale
-     * @listens MapView#RadioRequestMapViewGetScales
-     * @listens MapView#RadioRequestMapViewGetZoomLevel
-     * @listens MapView#RadioRequestMapViewGtResolutions
-
-     * @listens MapView#RadioTriggerMapViewResetView
-     * @listens MapView#RadioTriggerMapViewSetCenter
-     * @listens MapView#RadioTriggerMapViewSetConstrainedResolution
-     * @listens MapView#RadioTriggerMapViewSetScale
-     * @listens MapView#RadioTriggerMapViewSetZoomLevelDown
-     * @listens MapView#RadioTriggerMapViewSetZoomLevelUp
-     * @listens MapView#RadioTriggerMapViewToggleBackground
-
-     * @fires CRS#RadioRequestCRSGetProjection
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
-     * @fires Map#RadioRequestMapGetSize
-     * @fires ParametricURL#RadioRequestParametricURLgetCenter
-     * @fires ParametricURL#RadioRequestParametricURLgetProjectionFromUrl
-     * @fires ParametricURL#RadioRequestParametricURLgetZoomLevel
-     * @fires Alert#RadioTriggerAlertAlert
+     * @property {String} background="" todo
+     * @property {String} units="m" todo
+     * @property {number} DOTS_PER_INCH="" Hack to get the screen resolution
+     * @listens Core#RadioRequestMapViewGetCurrentExtent
+     * @listens Core#RadioRequestMapViewGetOptions
+     * @listens Core#RadioRequestMapViewGetProjection
+     * @listens Core#RadioRequestMapViewGetResoByScale
+     * @listens Core#RadioRequestMapViewGetScales
+     * @listens Core#RadioRequestMapViewGetZoomLevel
+     * @listens Core#RadioRequestMapViewGetResolutions
+     * @listens Core#RadioTriggerMapViewResetView
+     * @listens Core#RadioTriggerMapViewSetCenter
+     * @listens Core#RadioTriggerMapViewSetConstrainedResolution
+     * @listens Core#RadioTriggerMapViewSetScale
+     * @listens Core#RadioTriggerMapViewSetZoomLevelDown
+     * @listens Core#RadioTriggerMapViewSetZoomLevelUp
+     * @listens Core#RadioTriggerMapViewToggleBackground
+     * @fires Core#RadioRequestMapGetSize
+     * @fires Core#RadioRequestParametricURLGetCenter
+     * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
+     * @fires Core#RadioRequestParametricURLGetZoomLevel
+     * @fires Alerting#RadioTriggerAlertAlert
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     * @fires MapView#RadioTriggerMapViewChangedCenter
-     * @fires MapView#RadioTriggerMapViewChangedOptions
-     * @fires MapView#RadioTriggerMapViewChangedZoomLevel
+     * @fires Core#RadioTriggerMapViewChangedCenter
+     * @fires Core#RadioTriggerMapViewChangedOptions
+     * @fires Core#RadioTriggerMapViewChangedZoomLevel
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
-     *
+     * @fires Core#RadioRequestMapGetMap
      * @returns {void}
      */
-    initialize: function (attributes) {
-        var channel = Radio.channel("MapView");
+    initialize: function () {
+        const channel = Radio.channel("MapView");
+
+        if (!_.isUndefined(this.get("settings")) && !_.isUndefined(this.get("settings").options)) {
+            this.setOptions(this.get("settings").options);
+        }
+        else {
+            this.setOptions(defaults.options);
+        }
 
         channel.reply({
             "getProjection": function () {
-                return this.get("projection");
+                return this.get("view").getProjection();
             },
             "getOptions": function () {
                 return _.findWhere(this.get("options"), {resolution: this.get("view").constrainResolution(this.get("view").getResolution())});
@@ -124,7 +70,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
                 return this.getZoom();
             },
             "getResolutions": function () {
-                return this.get("resolutions");
+                return this.get("view").getResolutions();
             },
             "getResoByScale": this.getResoByScale,
             "getScales": function () {
@@ -154,19 +100,9 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             }
         });
 
-        // overwrite the resolution if zoomLevel is configured and resolution is not
-        if (attributes && _.isUndefined(attributes.resolution) && Number.isInteger(attributes.zoomLevel)) {
-
-            const resolution = this.get("options")[attributes.zoomLevel].resolution;
-
-            this.setResolution(resolution);
-        }
-        this.setResolutions();
-        this.setProjection();
         this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
         this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
-        this.prepareView();
 
         // Listener für ol.View
         this.get("view").on("change:resolution", this.changedResolutionCallback.bind(this), this);
@@ -181,12 +117,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @param {ObjectEvent} evt - openlayers event object
      * @param {string} evt.key - the name of the property whose value is changing
      * @param {ol.View} evt.target - this.get("view")
-     *
-     * @fires MapView#RadioTriggerMapViewChangedOptions
-     * @fires MapView#RadioTriggerMapViewChangedZoomLevel
+     * @fires Core#RadioTriggerMapViewChangedOptions
+     * @fires Core#RadioTriggerMapViewChangedZoomLevel
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
-     *
      * @returns {void}
      */
     changedResolutionCallback: function (evt) {
@@ -225,30 +159,32 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description todo
-     *
+     * @fires Core#RadioRequestParametricURLGetCenter
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     *
-     * @return {void}
+     * @returns {void}
      */
     resetView: function () {
-        this.get("view").setCenter(this.get("startCenter"));
-        this.get("view").setResolution(this.get("resolution"));
+        const center = Radio.request("ParametricURL", "getCenter") || this.get("settings").startCenter || defaults.startCenter,
+            resolution = this.get("settings").resolution || defaults.startResolution;
+
+        this.get("view").setCenter(center);
+        this.get("view").setResolution(resolution);
         Radio.trigger("MapMarker", "hideMarker");
     },
 
     /**
-     * @description todo
+     * Sets the Background for the Mapview.
      * @param  {string} value Image Url
-     * @return {void}
+     * @returns {void}
      */
     setBackground: function (value) {
         this.set("background", value);
     },
 
     /**
-     * @description todo
+     * Sets the Backgroundimage for the Mapview.
      * @param  {string} value BG Image Url
-     * @return {void}
+     * @returns {void}
      */
     setBackgroundImage: function (value) {
         this.set("backgroundImage", value);
@@ -257,43 +193,34 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description todo
      * @param {int} value todo
-     * @fires CRS#RadioRequestCRSTransformToMapProjection
-     * @return {void}
+     * @fires Core#RadioRequestMapGetMap
+     * @returns {void}
      */
     prepareStartCenter: function (value) {
         var startCenter = value;
 
         if (!_.isUndefined(startCenter)) {
             if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
-                startCenter = Radio.request("CRS", "transformToMapProjection", this.get("projectionFromParamUrl"), startCenter);
+                startCenter = transformToMapProjection(Radio.request("Map", "getMap"), this.get("projectionFromParamUrl"), startCenter);
             }
-            this.setStartCenter(startCenter);
+            this.get("view").setCenter(startCenter);
         }
     },
 
     /**
      * @description todo
-     * @param  {int} value Zoom Level
-     * @return {void}
+     * @param  {number} value Zoom Level
+     * @returns {void}
      */
     setStartZoomLevel: function (value) {
         if (!_.isUndefined(value)) {
-            this.set("resolution", this.get("resolutions")[value]);
+            this.get("view").setResolution(this.get("view").getResolutions()[value]);
         }
     },
 
     /**
      * @description todo
-     * @param  {int} value Resolution
-     * @return {void}
-     */
-    setResolution: function (value) {
-        this.set("resolution", value);
-    },
-
-    /**
-     * @description todo
-     * @return {void}
+     * @returns {void}
      */
     toggleBackground: function () {
         if (this.get("background") === "white") {
@@ -305,65 +232,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
-     * @return {void}
-     */
-    setResolutions: function () {
-        this.set("resolutions", _.pluck(this.get("options"), "resolution"));
-    },
-
-    /**
-     * @description Setzt die ol Projektion anhand des epsg-Codes
-     *
-     * @fires Alert#RadioTriggerAlertAlert
-     *
-     * @returns {void}
-     */
-    setProjection: function () {
-        var epsgCode = this.get("epsg"),
-            proj = Radio.request("CRS", "getProjection", epsgCode);
-
-        if (!proj) {
-            Radio.trigger("Alert", "alert", "Unknown CRS " + epsgCode + ". Can't set projection.");
-            return;
-        }
-
-        proj = new Projection({
-            code: epsgCode,
-            units: this.get("units"),
-            extent: this.get("extent"),
-            axisOrientation: "enu",
-            global: false
-        });
-
-        addProjection(proj);
-
-        // attach epsg and projection object to Config.view for further access by other modules
-        Config.view = {
-            epsg: proj.getCode(),
-            proj: proj
-        };
-
-        this.set("projection", proj);
-        Radio.trigger("CRS", "addAliasForWFSFromGoeserver", epsgCode);
-    },
-
-    /**
-     * @description todo
-     * @return {void}
-     */
-    prepareView: function () {
-        this.setView(new View({
-            projection: this.get("projection"),
-            center: this.get("startCenter"),
-            extent: this.get("extent"),
-            resolution: this.get("resolution"),
-            resolutions: this.get("resolutions")
-        }));
-    },
-
-    /**
-     * @description todo
+     * Sets the view.
      * @param {object} view todo
      * @return {void}
      */
@@ -374,7 +243,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description todo
      * @param  {array} coords Coordinates
-     * @param  {int} zoomLevel Zoom Level
+     * @param  {number} zoomLevel Zoom Level
      * @return {void}
      */
     setCenter: function (coords, zoomLevel) {
@@ -396,7 +265,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Todo
+     * Increases the zoomlevel by one.
      * @return {void}
      */
     setZoomLevelUp: function () {
@@ -404,7 +273,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Todo
+     * Reduces the zoomlevel by one.
      * @return {void}
      */
     setZoomLevelDown: function () {
@@ -412,9 +281,9 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description Gibt zur Scale die entsprechende Resolution zurück.
-     * @param  {String|number} scale -
-     * @param  {String} scaleType - min oder max
+     * Returns the corresponding resolution for the scale.
+     * @param  {String|number} scale - todo
+     * @param  {String} scaleType - min or max
      * @return {number} resolution
      */
     getResoByScale: function (scale, scaleType) {
@@ -427,16 +296,16 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
         });
         index = _.indexOf(unionScales, parseInt(scale, 10));
         if (unionScales.length === scales.length || scaleType === "max") {
-            return this.get("resolutions")[index];
+            return this.get("view").getResolutions()[index];
         }
         else if (scaleType === "min") {
-            return this.get("resolutions")[index - 1];
+            return this.get("view").getResolutions()[index - 1];
         }
         return null;
     },
 
     /**
-     * @description todo
+     * @description gets the center from the mapView
      * @return {array} Center Coords
      */
     getCenter: function () {
@@ -459,7 +328,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * @description Return current Zoom of MapView
-     * @return {float} current Zoom of MapView
+     * @return {number} current Zoom of MapView
      */
     getZoom: function () {
         return this.get("view").getZoom();
@@ -467,6 +336,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
     /**
      * calculate the extent for the current view state and the passed size
+     * @fires Core#RadioRequestMapGetSize
      * @return {ol.extent} extent
      */
     getCurrentExtent: function () {
@@ -478,19 +348,19 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * @description Sets projection from param url
      * @param {string} projection todo
-     * @return {float} current Zoom of MapView
+     * @returns {void}
      */
     setProjectionFromParamUrl: function (projection) {
         this.set("projectionFromParamUrl", projection);
     },
 
     /**
-     * @description Sets start center
-     * @param {boolean} value todo
-     * @return {float} current Zoom of MapView
+     * @description Sets projection from param url
+     * @param {Object} value options from mapView
+     * @returns {void}
      */
-    setStartCenter: function (value) {
-        this.set("startCenter", value);
+    setOptions: function (value) {
+        this.set("options", value);
     }
 });
 

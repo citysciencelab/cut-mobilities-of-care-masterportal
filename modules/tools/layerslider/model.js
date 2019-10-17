@@ -1,6 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
-const LayerSliderModel = Tool.extend({
+const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         layerIds: [],
         timeInterval: 2000,
@@ -12,6 +13,25 @@ const LayerSliderModel = Tool.extend({
         glyphicon: "glyphicon-film"
     }),
 
+    /**
+     * @class LayerSliderModel
+     * @description todo
+     * @extends Tool
+     * @memberOf Tools.LayerSliderModel
+     * @constructs
+     * @property {Array} layerIds=[] todo
+     * @property {number} timeInterval=2000 todo
+     * @property {*} title=null todo
+     * @property {number} progressBarWidth=10 todo
+     * @property {object} activeLayer={layerId: ""} todo
+     * @property {*} windowsInterval=null todo
+     * @property {boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-film" todo
+     * @listens Tools.LayerSliderModel#RadioTriggerChangeIsActive
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     */
     initialize: function () {
         const invalidLayerIds = this.checkIfAllLayersAvailable(this.get("layerIds"));
 
@@ -31,14 +51,19 @@ const LayerSliderModel = Tool.extend({
         });
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     reset: function () {
         this.stopInterval();
         this.set("activeLayer", {layerId: ""});
     },
 
     /**
-     * Prüft ob das Layermodel schon existiert
-     * @param   {object[]}  layerIds Konfiguration der Layer aus config.json
+     * Checks if the layer model already exists.
+     * @param {object[]} layerIds - Configuration of the layers from config.json
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
     checkIfLayermodelExist: function (layerIds) {
@@ -50,8 +75,9 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Fügt das Layermodel kurzzeitig der Modellist hinzu um prepareLayerObject auszuführen und entfernt das Model dann wieder.
-     * @param   {string}  layerId    Id des Layers
+     * Adds the layer model briefly to the model to run prepareLayerObject and then removes the model again.
+     * @param {string} layerId - Id of the layer
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
     addLayerModel: function (layerId) {
@@ -61,8 +87,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Ermittelt die Sichtbarkeit der layerIds
-     * @param   {string} activeLayerId id des activeLayer
+     * Determines the visibility of the layerIds
+     * @param {string} activeLayerId - Id des activeLayer.
      * @returns {void}
      */
     toggleLayerVisibility: function (activeLayerId) {
@@ -74,9 +100,9 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Triggert übers Radio die neue Sichtbarkeit
-     * @param   {string}    layerId layerId
-     * @param   {boolean}   status  Sichtbarkeit true / false
+     * Triggers the new visibility over the radio
+     * @param {string} layerId - layerId
+     * @param {boolean} status - Visibility true / false
      * @returns {void}
      */
     sendModification: function (layerId, status) {
@@ -87,8 +113,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet den index im layerIds-Array zur activeLayerId oder liefert -1
-     * @returns {integer}   index im Array mit activeLayerId
+     * Finds the index in the layerIds array to the activeLayerId or returns -1.
+     * @returns {integer} - Index im Array mit activeLayerId.
      */
     getActiveIndex: function () {
         return _.findIndex(this.get("layerIds"), function (layer) {
@@ -97,8 +123,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet die activeLayerId anhand des index und initiiert Speicherung
-     * @param {integer} index index in layerIds
+     * Finds the activeLayerId based on the index and initiates storage.
+     * @param {integer} index - Index in layerIds.
      * @returns {void}
      */
     setActiveIndex: function (index) {
@@ -107,9 +133,9 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Setter des Windows Intervals. Bindet an this.
-     * @param {function} func                Funktion, die in this ausgeführt werden soll
-     * @param {integer}  autorefreshInterval Intervall in ms
+     * Setter of the Windows interval. Binds to this.
+     * @param {function} func - Function to be executed in this
+     * @param {integer}  autorefreshInterval - Interval in ms
      * @returns {void}
      */
     setWindowsInterval: function (func, autorefreshInterval) {
@@ -117,7 +143,7 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Startet das windows-Interval einmalig.
+     * Starts the Windows interval once.
      * @returns {void}
      */
     startInterval: function () {
@@ -131,7 +157,7 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Stoppt das windows-Interval
+     * Stops the windows interval.
      * @returns {void}
      */
     stopInterval: function () {
@@ -144,7 +170,7 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet den vorherigen index im Array in einer Schleife.
+     * Finds the previous index in the array in a loop.
      * @returns {void}
      */
     backwardLayer: function () {
@@ -160,7 +186,7 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Findet den nächsten index im Array in einer Schleife.
+     * Finds the next index in the array in a loop.
      * @returns {void}
      */
     forwardLayer: function () {
@@ -176,16 +202,17 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * Prüft, ob alle Layer, die der Layerslider nutzen soll, auch definiert sind und ein title Attribut haben
-     * @param   {object[]}  layers Konfiguration der Layer aus config.json
-     * @returns {object}   Invalid Layer oder undefined
+     * Checks if all layers that the layerSlider should use are also defined and have a title attribute.
+     * @param {object[]} layers - Configuration of the layers from config.json
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @returns {object} Invalid Layer oder undefined
      */
     checkIfAllLayersAvailable: function (layers) {
         var invalidLayers = [];
 
         layers.forEach(function (layerObject) {
             if (
-                !Radio.request("RawLayerList", "getLayerAttributesWhere", {id: layerObject.layerId}) ||
+                !getLayerWhere({id: layerObject.layerId}) ||
                 !Radio.request("Parser", "getItemByAttributes", {id: layerObject.layerId})
             ) {
                 invalidLayers.push(layerObject.layerId);
@@ -196,8 +223,8 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * setter for isCollapsed
-     * @param {boolean} value isCollapsed
+     * Setter for isCollapsed.
+     * @param {boolean} value - isCollapsed
      * @returns {void}
      */
     setIsCollapsed: function (value) {
@@ -205,44 +232,44 @@ const LayerSliderModel = Tool.extend({
     },
 
     /**
-     * setter for isCurrentWin
-     * @param {boolean} value isCurrentWin
+     * Setter for isCurrentWin.
+     * @param {boolean} value - isCurrentWin
      * @returns {void}
      */
     setIsCurrentWin: function (value) {
         this.set("isCurrentWin", value);
     },
 
-    /*
-    * setter for layerIds
-    * @param {object[]} value layerIds
+    /**
+    * Setter for layerIds.
+    * @param {object[]} value - layerIds
     * @returns {void}
     */
     setLayerIds: function (value) {
         this.set("layerIds", value);
     },
 
-    /*
-    * setter for title
-    * @param {string} value title
+    /**
+    * Setter for title.
+    * @param {string} value - title
     * @returns {void}
     */
     setTitle: function (value) {
         this.set("title", value);
     },
 
-    /*
-    * setter for timeInterval
-    * @param {integer} value timeInterval
+    /**
+    * Setter for timeInterval.
+    * @param {integer} value - timeInterval
     * @returns {void}
     */
     setTimeInterval: function (value) {
         this.set("timeInterval", value);
     },
 
-    /*
-    * setter for progressBarWidth
-    * @param {object[]} layerIds layerIds zum Ermitteln der width
+    /**
+    * Setter for progressBarWidth.
+    * @param {object[]} layerIds - layerIds zum Ermitteln der width
     * @returns {void}
     */
     setProgressBarWidth: function (layerIds) {
@@ -255,9 +282,9 @@ const LayerSliderModel = Tool.extend({
         }
     },
 
-    /*
-    * setter for activeLayerId
-    * @param {object} value activeLayer
+    /**
+    * Setter for activeLayerId.
+    * @param {object} value - activeLayer
     * @returns {void}
     */
     setActiveLayer: function (value) {
