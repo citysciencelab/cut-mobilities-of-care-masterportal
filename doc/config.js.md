@@ -229,7 +229,7 @@ zoomtofeature: {
 ## cesiumParameter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|fog|nein|Object||Nebel Einstellungen. Optionen siehe [fog]|
+|fog|nein|Object||Nebel Einstellungen. Optionen siehe **[fog]**|
 |enableLighting|nein|Boolean|false|aktiviert Lichteffekte auf dem Terrain von der Sonne aus.|
 |maximumScreenSpaceError|nein|Number|2.0|Gibt an wie detailliert die Terrain/Raster Kacheln geladen werden. 4/3 ist die beste Qualität.|
 |fxaa|nein|Number|true|aktiviert Fast Approximate Anti-alisasing.|
