@@ -78,7 +78,10 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
-        // Revert the null or empty value to standard value and also check if the percentage should be added
+        /**
+         * Revert the null or empty value to standard value
+         * check if the percentage should be added
+         */
         for (key in content) {
             if (content[key] === null || _.isUndefined(content[key]) === true) {
                 content[key] = "*g.F.";
@@ -91,6 +94,7 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
+        this.set("layerDataFormat", layerDataFormat);
         this.set("content", content);
     },
 
