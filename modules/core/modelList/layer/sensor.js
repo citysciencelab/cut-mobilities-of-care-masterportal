@@ -3,7 +3,7 @@ import mqtt from "mqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
-import {transform} from "ol/proj.js";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
 
@@ -168,13 +168,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         var features = [];
 
         _.each(sensorData, function (data, index) {
-            var xyTransfrom,
+            var xyTransform,
                 feature;
 
             if (_.has(data, "location") && !_.isUndefined(epsg)) {
-                xyTransfrom = transform(data.location, epsg, Config.view.epsg);
+                xyTransform = transformToMapProjection(Radio.request("Map", "getMap"), epsg, data.location);
+
                 feature = new Feature({
-                    geometry: new Point(xyTransfrom)
+                    geometry: new Point(xyTransform)
                 });
             }
             else {
