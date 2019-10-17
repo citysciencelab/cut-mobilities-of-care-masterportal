@@ -1,6 +1,6 @@
 import Theme from "../../model";
 
-const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteThemeModel.prototype */{
+const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults, {
         name: "",
         id: "",
@@ -9,28 +9,17 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
         countStudentsPrimary: "",
         countStudentsSecondary: "",
         socialIndex: "",
+        statGebNr: "",
         /**
-         * layer name of internal layer with statistical areas
+         * layer name of internal layer with Schule
          * @type {String}
          */
-        layernameAreas: "internal Layer for Einzugsgebiete",
+        layernameAreas: {"primary": "internal Layer for primary schule am wohnort", "sencondary": "internal Layer for middle schule am wohnort"},
         /**
-         * layer theme to select school layers for Einzugsgebiete
+         * layer theme to select school layers for wohnort
          * @type {String}
          */
-        layerTheme: "schulenEinzugsgebiete",
-        /**
-         * kind of Einzugsgebiet delivired by feature primary || secondary
-         * @type {String}
-         */
-        schoolKey: "",
-        /**
-         * due to events order (isReady -> isVisible)
-         * but isReady is not fired on gfi toggle
-         * and isVisible is fired before the gfi can be rendered
-         * this parameter holds the state
-         * @type {Boolean}
-         */
+        layerTheme: "schulenWohnort",
         isCreated: false,
         hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
@@ -82,28 +71,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
     },
 
     /**
-     * Fired only once when layer of statistical areas is loaded initially to filter areas
-     * @param   {string} layerId  layerId that was loaded
-     * @returns {void}
-     */
-    onFeaturesLoadedEvent: function (layerId) {
-        const conf = this.getStatisticAreasConfig(),
-            layerStatistischeGebiete = this.getStatisticAreasLayer(),
-            id = this.get("id"),
-            schoolKey = this.get("schoolKey"),
-            countStudents = this.get("countStudents");
-
-        if (layerId === conf.id) {
-            if (layerStatistischeGebiete && id !== "" && schoolKey !== "" && countStudents !== "") {
-                this.filterAreasById(layerStatistischeGebiete, id, schoolKey, countStudents);
-            }
-            else {
-                console.warn("Missing data for area filter");
-            }
-        }
-    },
-
-    /**
      * Toggles the visibility of this GFI according to its visibitily.
      * @param   {object}  gfi       gfi object
      * @param   {Boolean} isVisible is gfi visible
@@ -122,30 +89,52 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
     },
 
     /**
+     * Fired only once when layer of statistical areas is loaded initially to filter areas
+     * @param   {string} layerId  layerId that was loaded
+     * @returns {void}
+     */
+    onFeaturesLoadedEvent: function (layerId) {
+        const layerWohnort = this.getWohnortLayer(),
+            layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+            conf = this.getStatisticAreasConfig(layerSchuleLevel),
+            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
+            statGebNr = this.get("statGebNr");
+
+        if (layerId === conf.id) {
+            if (layerStatistischeGebiete && statGebNr !== "") {
+                this.filterAreasById(layerStatistischeGebiete, statGebNr);
+            }
+            else {
+                console.warn("Missing data for area filter");
+            }
+        }
+    },
+
+    /**
      * Sets this GFI
      * @listens Layer#RadioTriggerLayerFeaturesLoaded
      * @returns {void}
      */
     create: function () {
         if (this.parseGfiContent(this.get("gfiContent"))) {
-            const layerEinzugsgebiete = this.getEinzugsgebieteLayer(),
-                layerStatistischeGebiete = this.getStatisticAreasLayer(),
-                id = this.get("id"),
-                schoolKey = this.get("schoolKey"),
-                countStudents = this.get("countStudents");
+            const layerWohnort = this.getWohnortLayer(),
+                layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+                layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
+                statGebNr = this.get("statGebNr");
 
             this.listenToOnce(Radio.channel("Layer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
-            if (layerEinzugsgebiete) {
-                this.filterFeature(layerEinzugsgebiete, [this.get("feature").getId()]);
+
+            if (layerWohnort) {
+                this.filterFeature(layerWohnort, [this.get("feature").getId()]);
             }
             else {
                 console.warn("Missing data for school filter");
             }
 
-            if (layerStatistischeGebiete && id !== "" && schoolKey !== "" && countStudents !== "") {
-                this.filterAreasById(layerStatistischeGebiete, id, schoolKey, countStudents);
+            if (layerStatistischeGebiete && statGebNr !== "") {
+                this.filterAreasById(layerStatistischeGebiete, statGebNr);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -158,11 +147,12 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
      * @returns {void}
      */
     destroy: function () {
-        const layerEinzugsgebiete = this.getEinzugsgebieteLayer(),
-            layerStatistischeGebiete = this.getStatisticAreasLayer();
+        const layerWohnort = this.getWohnortLayer(),
+            layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel);
 
-        if (layerEinzugsgebiete) {
-            this.unfilterFeature(layerEinzugsgebiete);
+        if (layerWohnort) {
+            this.unfilterFeature(layerWohnort);
         }
 
         if (layerStatistischeGebiete) {
@@ -174,67 +164,25 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
     /**
      * Filters the areas by schoolId
      * @param   {Layer} layer Layer with statistical areas
-     * @param   {string} id schoolId
+     * @param   {string} statGebNr statistische Gebiete Number
      * @param   {string} schoolKey schoolKey
      * @param   {string} countStudents countStudents
      * @returns {void}
      */
-    filterAreasById: function (layer, id, schoolKey, countStudents) {
+    filterAreasById: function (layer, statGebNr) {
         const areas = layer.get("layer").getSource().getFeatures(),
             featureIds = [];
 
         areas.forEach(function (area) {
-            const schools = area.get(schoolKey);
+            const statGebFinalNr = area.get("SG_" + statGebNr);
 
-            if (schools) {
-                schools.forEach(function (school) {
-                    if (school.schulId === id) {
-                        // remember ids of areas with influence of school
-                        featureIds.push(area.getId());
-                        // set styling category to those areas
-                        area.set("styling", this.getCategory(school.anteil));
-                        // set mouse hover field with more informations
-                        area.set("text", this.getText(school.anteil, countStudents));
-                    }
-                }.bind(this));
+            if (statGebFinalNr && statGebFinalNr !== null) {
+                featureIds.push(area.getId());
             }
-        }.bind(this));
+        });
 
         layer.setIsSelected(true);
         this.filterFeature([layer], featureIds);
-    },
-
-    /**
-     * returns  the text as hover ionformation
-     * @param   {float} value anteil in %
-     * @param   {float} countStudents count students
-     * @returns {string} text
-     */
-    getText: function (value, countStudents) {
-        const proportion = Math.round(countStudents * value / 100);
-
-        return "Anteil " + String(Math.round(value)) + "% (Anzahl: " + proportion + ")";
-    },
-
-    /**
-     * returns the category to render area features
-     * @param   {float} value anteil in %
-     * @returns {string} styling
-     */
-    getCategory: function (value) {
-        if (value < 5) {
-            return "<5";
-        }
-        else if (value < 10) {
-            return "<10";
-        }
-        else if (value < 15) {
-            return "<15";
-        }
-        else if (value < 30) {
-            return "<30";
-        }
-        return ">=30";
     },
 
     /**
@@ -246,31 +194,15 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
         if (gfiContent && gfiContent.allProperties) {
             const attr = gfiContent.allProperties;
 
-            if (attr.C_S_Nr) {
-                this.set("id", String(attr.C_S_Nr));
+            if (attr.C12_SuS) {
+                this.set("anzahlSchuler", attr.C12_SuS);
             }
-            if (attr.C_S_Name) {
-                this.set("name", attr.C_S_Name);
+            if (attr.StatGeb_Nr && attr.ST_Name) {
+                this.set("statGebiet", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
             }
-            if (attr.C_S_Str && attr.C_S_HNr && attr.C_S_PLZ && attr.C_S_Ort) {
-                this.set("address", attr.C_S_Str + " " + attr.C_S_HNr + ", " + attr.C_S_PLZ + " " + attr.C_S_Ort);
+            if (attr.StatGeb_Nr) {
+                this.set("statGebNr", attr.StatGeb_Nr);
             }
-            if (attr.C_S_SuS_PS && attr.C_S_SuS_S1) {
-                this.set("countStudents", String(parseInt(attr.C_S_SuS_PS, 10) + parseInt(attr.C_S_SuS_S1, 10)));
-            }
-            if (attr.C_S_SuS_PS) {
-                this.set("countStudentsPrimary", attr.C_S_SuS_PS);
-            }
-            if (attr.C_S_SuS_S1) {
-                this.set("countStudentsSecondary", attr.C_S_SuS_S1);
-            }
-            if (attr.C_S_SI) {
-                this.set("socialIndex", attr.C_S_SI);
-            }
-            if (attr.schoolKey) {
-                this.set("schoolKey", attr.schoolKey);
-            }
-
             return true;
         }
 
@@ -278,32 +210,26 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
     },
 
     /**
-     * requests the Modellist for all layer of einzugsgebiete
-     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
-     * @returns {Layer[]} layers
+     * check which from layer primary school or secondary scholl
+     * @returns {LayerList} return if the current layer
      */
-    getEinzugsgebieteLayer: function () {
-        const layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme")});
+    getWohnortLayer: function () {
+        var layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "schulenWohnort", "id": this.get("themeId")});
 
-        if (!layers || layers.length === 0) {
-            console.warn("No layer configuration with gfiTheme: " + this.get("layerTheme"));
-
-            return false;
-        }
-
-        return layers;
+        return layerList;
     },
 
     /**
      * Requests the Modellist for layer with layernameAreas. If necessary this function starts its creation.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @param {object} layerSchuleLevel get the key for the layers
      * @returns {Layer|false} layers
      */
-    getStatisticAreasLayer: function () {
-        let layer = Radio.request("ModelList", "getModelByAttributes", {"name": this.get("layernameAreas")});
+    getStatisticAreasLayer: function (layerSchuleLevel) {
+        let layer = Radio.request("ModelList", "getModelByAttributes", this.get("layernameAreas")[layerSchuleLevel]);
 
         if (!layer) {
-            const conf = this.getStatisticAreasConfig();
+            const conf = this.getStatisticAreasConfig(layerSchuleLevel);
 
             if (!conf) {
                 console.warn("Cannot create layer without config.");
@@ -319,17 +245,17 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteTh
     /**
      * Requests the Parser for first layer with statistic areas by name
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
+     * @param {object} layerSchuleLevel get the key for the layers
      * @returns {object|false} conf
      */
-    getStatisticAreasConfig: function () {
-        const conf = Radio.request("Parser", "getItemByAttributes", {"name": this.get("layernameAreas")});
+    getStatisticAreasConfig: function (layerSchuleLevel) {
+        const conf = Radio.request("Parser", "getItemByAttributes", {"name": this.get("layernameAreas")[layerSchuleLevel]});
 
         if (!conf) {
-            console.warn("No layer configuration with name: " + this.get("layernameAreas"));
+            console.warn("No layer configuration with name: " + this.get("layernameAreas")[layerSchuleLevel]);
 
             return false;
         }
-
         return conf;
     },
 
