@@ -5,10 +5,10 @@
 # Systemvoraussetzungen
 
 ## git
-[git](http://git-scm.com/) installieren.
+**[git](http://git-scm.com/)** installieren.
 
 ## Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: 10.15.3 LTS mit NPM 6.4.1
+**[Node.js](http://nodejs.org)** installieren. Letzte als funktionierend bekannte Version: 10.15.3 LTS mit NPM 6.4.1
 
 Test in cmd:
 
@@ -16,7 +16,7 @@ Test in cmd:
 # node -v
 ```
 
-Mit Node.js wird auch der Node Package Manager [NPM](http://npmjs.org) installiert.
+Mit Node.js wird auch der Node Package Manager **[NPM](http://npmjs.org)** installiert.
 
 Test in cmd:
 
@@ -51,7 +51,7 @@ Einen lokalen Entwicklungsserver starten.
 
 Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfiguration des Masterportals.
 
-Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten. 
+Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen Proxy weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten.
 
 
 ### npm start mit customModule
@@ -61,7 +61,7 @@ Sofern ein eigenes Skript mit Abhängigkeiten zum Masterportal in die Entwicklun
 # npm start -- --CUSTOMMODULE "../portalconfigs/verkehrsportal/custom"
 ```
 
-Der genutzte Mechanismus wird über [webpackMode: eager](https://webpack.js.org/api/module-methods) gesteuert, indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
+Der genutzte Mechanismus wird über **[webpackMode: eager](https://webpack.js.org/api/module-methods)** gesteuert, indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
 
 
 ### npm run test
@@ -71,7 +71,7 @@ Unittests durchführen
 // npm run test
 # npm run test
 ```
-**Wichtig**: Falls nicht vorhanden muss der Ordner `portalconfigs/test` angelegt werden. Der Testrunner führt auch alle Tests in diesem Ordner aus. 
+**Wichtig**: Falls nicht vorhanden muss der Ordner `portalconfigs/test` angelegt werden. Der Testrunner führt auch alle Tests in diesem Ordner aus.
 
 
 - bündelt alle Tests
@@ -105,7 +105,7 @@ Ein Beispielportal erzeugen.
 
 
 ### npm run buildPortalsFromPortalconfigs
-Mit diesem Kommando lassen sich mehrere Portale auf einemal bauen. Die Konfigurationen der Portale müssen in einem Ordner "portalconfigs" abgelegt werden. In portalconfigs kann eine Datei conf-buildPortalconfigs.js abgelegt werden zur Angabe von Portalen die nicht gebaut werden sollen oder ein Custommoudl enthalten 
+Mit diesem Kommando lassen sich mehrere Portale auf einemal bauen. Die Konfigurationen der Portale müssen in einem Ordner "portalconfigs" abgelegt werden. In portalconfigs kann eine Datei conf-buildPortalconfigs.js abgelegt werden zur Angabe von Portalen die nicht gebaut werden sollen oder ein Custommoudl enthalten
 
 ```
 // npm run buildPortalsFromPortalconfigs

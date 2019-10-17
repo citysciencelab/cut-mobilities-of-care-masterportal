@@ -1,17 +1,17 @@
->Zurück zur [Dokumentation Masterportal](doc.md).
+>Zurück zur **[Dokumentation Masterportal](doc.md)**.
 
 [TOC]
 
 # style.json #
-Die *style.json* beinhaltet die Parameter für die Vektor-Features (WFS und Sensor). Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der [config.json](config.json.md) im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
+Die *style.json* beinhaltet die Parameter für die Vektor-Features (WFS und Sensor). Die Verbindung zwischen den Layern und der *style.json* erfolgt über die Angabe der *Layer-ID* in der *style.json* und entsprechendem Verweis in der **[config.json](config.json.md)** im Bereich *Themenconfig --> Fachdaten*. Sollten in der *style.json* nicht alle notwendigen Parameter angegeben sein, wird auf die Default-Werte zurückgegriffen. Bei Farbwerten muss der Parameter entsprechend der Vorgabe von *OpenLayers* für *ol.style* aussehen.
 
 ## Allgemeine Style Parameter ##
 Beim Stylen der Vektor-Features (WFS und Sensor) gibt es verschiedene Klassen nach denen wir den Style in der *style.json* unterscheiden.
-Wird in der [config.json](config.json.md) in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
+Wird in der **[config.json](config.json.md)** in der Layerconfiguration der Parameter "clusterDistance" gesetzt, so wird ein ClusterStyle erzeugt. Der ClusterStyle ist abhängig vom Parameter "clusterClass".
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|layerId|ja|String||ID des Styles, der in der [config.json](config.json.md) angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
+|layerId|ja|String||ID des Styles, der in der **[config.json](config.json.md)** angegeben wird, um entsprechend zugeordnet zu werden. In der Regel gleiche ID, wie die des Layers.|
 |class|ja|String|"POINT"|Angabe der entsprechenden Klasse, entspricht dem Geometrietyp. Mögliche Werte: "POINT", "LINE",  "POLYGON".|
 |subClass|ja|String|"SIMPLE"|Angabe der entsprechenden SubKlasse, nach der die Style-Information verwendet werden soll. Mögliche Werte bei "POINT": "SIMPLE", "CUSTOM", "CIRCLE", "ADVANCED". Mögliche Werte bei "LINE": "SIMPLE". Mögliche Werte bei "POLYGON": "SIMPLE", "CUSTOM"|
 |labelField|nein|String||Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
@@ -34,33 +34,33 @@ Wird in der [config.json](config.json.md) in der Layerconfiguration der Paramete
 |clusterImageScale|nein|Integer|1|Skalierung des Images als Clusterstyle.|
 |clusterImageOffsetX|nein|Float|0.5|Offset des Images als Clusterstyle in X-Richtung.|
 |clusterImageOffsetY|nein|Float|0.5|Offset des Images als Clusterstyle in Y-Richtung.|
-|clusterTextAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right". Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextFont|nein|String|"Courier"|Font des Textes am Feature Bei geclusterten Features siehe [config.json](config.json.md).|
-|clusterTextScale|nein|Integer|1|Skalierung des Textes. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextOffsetX|nein|Integer|0|Offset des Textes in X-Richtung. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextOffsetY|nein|Integer|0|Offset des Textes in Y-Richtung. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe [config.json](config.json.md)|
-|clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe [config.json](config.json.md)|
+|clusterTextAlign|nein|String|"left"|Ausrichtung des Textes am Feature. Mögliche Werte "left", "center", "right". Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextFont|nein|String|"Courier"|Font des Textes am Feature Bei geclusterten Features siehe **[config.json](config.json.md)**.|
+|clusterTextScale|nein|Integer|1|Skalierung des Textes. Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextOffsetX|nein|Integer|0|Offset des Textes in X-Richtung. Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextOffsetY|nein|Integer|0|Offset des Textes in Y-Richtung. Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Textes in rgba. Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Randfarbe des Textes in rgba. Bei geclusterten Features siehe **[config.json](config.json.md)**|
+|clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe **[config.json](config.json.md)**|
 
 
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
 So gibt es folgende Kombinationen:
 
-[POINT SIMPLE](#markdown-header-point-simple)
+**[POINT SIMPLE](#markdown-header-point-simple)**
 
-[POINT CUSTOM](#markdown-header-point-custom)
+**[POINT CUSTOM](#markdown-header-point-custom)**
 
-[POINT CIRCLE](#markdown-header-point-circle)
+**[POINT CIRCLE](#markdown-header-point-circle)**
 
-[POINT ADVANCED](#markdown-header-point-advanced)
+**[POINT ADVANCED](#markdown-header-point-advanced)**
 
-[LINE SIMPLE](#markdown-header-line-simple)
+**[LINE SIMPLE](#markdown-header-line-simple)**
 
-[POLYGON SIMPLE](#markdown-header-polygon-simple)
+**[POLYGON SIMPLE](#markdown-header-polygon-simple)**
 
-[POLYGON CUSTOM](#markdown-header-polygon-custom)
+**[POLYGON CUSTOM](#markdown-header-polygon-custom)**
 
 #### POINT SIMPLE ####
 Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle Features gesetzt.
@@ -75,12 +75,12 @@ Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle 
 |imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
 
 #### POINT CUSTOM ####
-Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig von einem gegebenen Attributwert, das Image gesetzt. Es können alle Attribute aus [POINT SIMPLE](#markdown-header-point-simple) gesetzt werden. Diese dienen dann als defaults, falls styleFieldValues keine entsprechenden Parameter gegeben werden.
+Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig von einem gegebenen Attributwert, das Image gesetzt. Es können alle Attribute aus **[POINT SIMPLE](#markdown-header-point-simple)** gesetzt werden. Diese dienen dann als defaults, falls styleFieldValues keine entsprechenden Parameter gegeben werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |styleField|ja|String||Attribut des Features, nach dessen Wert das Icon gesetzt wird.|
-|styleFieldValues|ja|Array [[styleFieldValue](#markdown-header-styleFieldValue)]||Object für Attributwert, das den Custom Style setzt .|
+|styleFieldValues|ja|Array [**[styleFieldValue](#markdown-header-styleFieldValue)**]||Object für Attributwert, das den Custom Style setzt .|
 
 ```json
 {
@@ -121,7 +121,7 @@ Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig
 ```
 
 #### styleFieldValue ####
-Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werden die optionalen Parameter nicht gesetzt, so werden die Parameter des [Style-Objekts](#markdown-header-point-custom) verwendet oder deren Defaults.
+Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werden die optionalen Parameter nicht gesetzt, so werden die Parameter des **[Style-Objekts](#markdown-header-point-custom)** verwendet oder deren Defaults.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -137,7 +137,7 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |imageOffsetYUnit|nein|String|"fraction"|Einheit des Offsets in Y-Richtung.|
 
 ### POINT CIRCLE ###
-Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
+Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in **[POINT SIMPLE](#markdown-header-point-simple)** zu sehen. Label-Attribute können gesetzt werden wie in **[Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter)** zu sehen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -148,12 +148,12 @@ Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle 
 
 ### POINT ADVANCED ###
 Bei "class"=== "POINT" und "subClass" === "ADVANCED" wird für jedes Feature ein dynamischer Style gesetzt. Diese werden mit den Parametern "scaling" und "scalingShape" in konkrete Styles unterschieden. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features.
-Cluster-Attribute können gesetzt werden wie in [POINT SIMPLE](#markdown-header-point-simple) zu sehen. Label-Attribute können gesetzt werden wie in [Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter) zu sehen.
+Cluster-Attribute können gesetzt werden wie in **[POINT SIMPLE](#markdown-header-point-simple)** zu sehen. Label-Attribute können gesetzt werden wie in **[Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter)** zu sehen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |scaling|ja|String||Angabe welchem Skalenniveau die Daten entsprechen. Mögliche Werte sind "INTERVAL" für Zahlendaten die eine natürliche Reihenfolge haben (z.B. in der Einheit Meter, oder Grad Celsius) oder "NOMINAL" für Daten die sich nicht in eine reihenfolge bringen lassen (z.B. Farben oder Formen)|
-|scalingShape|ja|String||Angabe der Darstellungsart. Möglicher Wert bei "INTERVAL": "[CIRCLE_BAR](#markdown-header-CIRCLE_BAR)". Möglicher Wert bei "NOMINAL": "[CIRCLESEGMENTS](#markdown-header-CIRCLESEGMENTS)".|
+|scalingShape|ja|String||Angabe der Darstellungsart. Möglicher Wert bei "INTERVAL": "**[CIRCLE_BAR](#markdown-header-CIRCLE_BAR)**". Möglicher Wert bei "NOMINAL": "**[CIRCLESEGMENTS](#markdown-header-CIRCLESEGMENTS)**".|
 
 ```json
 {
@@ -191,7 +191,7 @@ Bei "class"=== "POINT", "subClass" === "ADVANCED", "scaling"="INTERVAL" und "sca
 |circleBarLineStrokeColor|nein|Array[Integer]|[0, 0, 0, 1]|Farbe des Balkens.|
 
 ### CIRCLESEGMENTS ###
-Bei "class"=== "POINT", "subClass" === "ADVANCED", "scaling"="NOMINAL" und "scalingShape"="CIRCLESEGMENTS" wird für jedes Feature ein Kreis der aus einem oder mehreren Kreissegmenten besteht gesetzt. Innerhalb der Kreissegmente kann ein Image platziert werden. Dazu können  alle Parameter die mit "image" beginnen aus [styleFieldValue](#markdown-header-styleFieldValue) verwendet werden.
+Bei "class"=== "POINT", "subClass" === "ADVANCED", "scaling"="NOMINAL" und "scalingShape"="CIRCLESEGMENTS" wird für jedes Feature ein Kreis der aus einem oder mehreren Kreissegmenten besteht gesetzt. Innerhalb der Kreissegmente kann ein Image platziert werden. Dazu können  alle Parameter die mit "image" beginnen aus **[styleFieldValue](#markdown-header-styleFieldValue)** verwendet werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -229,7 +229,7 @@ Bei "class"=== "POLYGON" und "subClass" === "CUSTOM" wird ein flächenhafter Sty
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
 |styleField|ja|String||Attribut, nach dem das Polygon eingefärbt wird.|
-|styleFieldValues|ja|Array[[polygonStyleFieldValue](#markdown-header-polygonStyleFieldValue)]||Zuordnung der Farbe zum Attributwert des Features.|
+|styleFieldValues|ja|Array[**[polygonStyleFieldValue](#markdown-header-polygonStyleFieldValue)**]||Zuordnung der Farbe zum Attributwert des Features.|
 
 ### polygonStyleFieldValue ###
 Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier keine Füllfarben oder Strichstärken gesetzt, so werden die Werte des Layerobjektes (wenn angegeben) oder die Defaultwerte verwendet. Dadurch dann bspw. die Strichstärke bei allen styleFieldValues gleich gesetzt werden (siehe Beispiel).
@@ -265,4 +265,4 @@ Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier 
     ]
   }
 ```
->Zurück zur [Dokumentation Masterportal](doc.md).).
+>Zurück zur **[Dokumentation Masterportal](doc.md)**.).

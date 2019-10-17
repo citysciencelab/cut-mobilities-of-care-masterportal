@@ -14,7 +14,7 @@ Beispiel:
     const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
 ```
 
-6.4. Die Namespaces sind in der [namespaces.js](../../devtools/jsdoc/namespaces.js) zu definieren. Sie repräsentieren die Ordnerstruktur/Module des Codes.
+6.4. Die Namespaces sind in der **[namespaces.js](../../devtools/jsdoc/namespaces.js)** zu definieren. Sie repräsentieren die Ordnerstruktur/Module des Codes.
 
 Beispiel des Namespaces Alerting im Root:
 ```javascript
@@ -35,7 +35,7 @@ Beispiel des Namespaces Modellist als Unterordner des Core
 ```
 
 
-6.5. Die Events sind in der [events.js](../../devtools/jsdoc/events.js) zu definieren.
+6.5. Die Events sind in der **[events.js](../../devtools/jsdoc/events.js)** zu definieren.
 
 Beispiel: Radio.trigger("Channel", "Event")
 ```javascript

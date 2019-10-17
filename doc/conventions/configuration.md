@@ -2,13 +2,13 @@
 
 9.1. Schreibe den Code so, dass sich möglichst viel konfigurieren lässt
 
-9.2. Halte dich an die [Vorgabe](../doc.md) für Konfigurationsdateien
+9.2. Halte dich an die **[Vorgabe](../doc.md)** für Konfigurationsdateien
 
 9.3 Erweitere die Dokumentation in den md-Dateien wie im folgenden beschrieben:
 
-9.3.1 Erweitere die [config.js.md](../config.js.md), wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+9.3.1 Erweitere die **[config.js.md](../config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
 
-9.3.2 Erweitere die [config.json.md](../config.json.md), wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+9.3.2 Erweitere die **[config.json.md](../config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
 
 9.3.3 Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -54,4 +54,4 @@ Beispiel:
         "classes": "place,highway,building,shop,historic,leisure,city,county"
     }
 ```
-9.3.8 Erweitere ebenso die Dateien [services.json.md](../services.json.md), [rest-services.json.md](../rest-services.json.md) und [style.json.md](../style.json.md), wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
+9.3.8 Erweitere ebenso die Dateien **[services.json.md](../services.json.md)**, **[rest-services.json.md](../rest-services.json.md)** und **[style.json.md](../style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
