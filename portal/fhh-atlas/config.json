@@ -98,7 +98,7 @@
                     },
                     "sdpDownload": {
                         "name": "SDP Daten-Download",
-                        "glyphicon": "glyphicon-export"
+                        "glyphicon": "glyphicon-download"
                     }
                 }
             },
