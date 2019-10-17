@@ -1,13 +1,10 @@
 import DefaultTreeParser from "@modules/core/configLoader/parserDefaultTree.js";
 import testServices from "../../../resources/testServices.json";
-import Collection from "@modules/core/rawLayerList.js";
+// import Collection from "@modules/core/rawLayerList.js";
+// import {initializeLayerList} from "masterportalAPI/src/rawLayerList";
 import {expect} from "chai";
 
 describe("core/configLoader/parserDefaultTree", function () {
-    before(function () {
-        new Collection(null, {url: "../../../resources/testServices.json"});
-        // the test data has to consist of at least two layers of with the same "md_name" to trigger the creation of a folder
-    });
 
     // Create a model and parse the test data. Take care that the model is clean (empty) before parsing the data.
     /**

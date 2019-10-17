@@ -3,6 +3,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 import {Stroke, Style} from "ol/style.js";
 import {WFS} from "ol/format.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ReisezeitenTheme = Theme.extend({
 
@@ -13,8 +14,8 @@ const ReisezeitenTheme = Theme.extend({
     },
     setDefaults: function () {
         if (_.isUndefined(this.get("gfiContent")) === false) {
-            this.set("routenLayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2713"}));
-            this.set("verkehrslagelayer", Radio.request("RawLayerList", "getLayerWhere", {id: "2715"}));
+            this.set("routenLayer", getLayerWhere({id: "2713"}));
+            this.set("verkehrslagelayer", getLayerWhere({id: "2715"}));
             this.set("standort", this.get("gfiContent")[0].Standort);
             if (this.get("standort") !== "" && this.get("routenLayer") !== "" && this.get("verkehrslagelayer") !== "") {
                 this.requestRouten();
@@ -43,7 +44,7 @@ const ReisezeitenTheme = Theme.extend({
 
         Radio.trigger("Util", "showLoader");
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", layer.get("url")),
+            url: Radio.request("Util", "getProxyURL", layer.url),
             data: request_str,
             headers: {
                 "Content-Type": "text/xml; charset=UTF-8"
@@ -118,7 +119,7 @@ const ReisezeitenTheme = Theme.extend({
 
         Radio.trigger("Util", "showLoader");
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", layer.get("url")),
+            url: Radio.request("Util", "getProxyURL", layer.url),
             data: request_str,
             headers: {
                 "Content-Type": "text/xml; charset=UTF-8"
@@ -136,8 +137,8 @@ const ReisezeitenTheme = Theme.extend({
             },
             success: function (data) {
                 var wfsReader = new WFS({
-                        featureNS: this.get("verkehrslagelayer").get("featureNS"),
-                        featureType: this.get("verkehrslagelayer").get("featureType")
+                        featureNS: this.get("verkehrslagelayer").featureNS,
+                        featureType: this.get("verkehrslagelayer").featureType
                     }),
                     src = new VectorSource({
                         // projection: this.get("projection")

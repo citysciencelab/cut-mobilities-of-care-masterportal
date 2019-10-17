@@ -122,7 +122,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     }),
     /**
      * @class Measure
-     * @extends Backbone.Model
+     * @extends Tool
      * @memberof Tools.Measure
      * @constructs
      * @property {String} unit="m" unit of measure

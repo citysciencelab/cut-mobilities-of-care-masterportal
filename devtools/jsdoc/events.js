@@ -486,6 +486,12 @@
  */
 
 /**
+ * @event Core#RadioRequestMapGetSize
+ * @returns {number} size of the map
+ * @example Radio.request("Map", "getSize")
+ */
+
+/**
  * @event Core#RadioTriggerMapAddControl
  * @param {Object} control Control to be added to map.
  * @example Radio.trigger("Map", "addControl", control)
@@ -510,11 +516,112 @@
  */
 
 /**
+ * @event Core#RadioTriggerMapRemoveControl
+ * @param {*} mapControl Control to be removed from map.
+ * @example Radio.trigger("Map", "removeControl", mapControl)
+ */
+
+/**
  * @event Core#RadioTriggerMapZoomToExtent
  */
 
 /**
  * @event Core#RadioTriggerMapRender
+ */
+
+ /**
+ * @event Core#RadioTriggerMapIsReady
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetLayers
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetWGS84MapSizeBBOX
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetFeaturesAtPixel
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadiotriggerMapCameraChanged
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapBeforeChange
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetMap3d
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapGetFeatures3dAtPosition
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapAddLayerOnTop
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapRemoveLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapRemoveLoadingLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapAddLoadingLayer
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapSetBBox
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapZoomToFilteredFeatures
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapUnregisterListener
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapSetShadowTime
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapClickedWindowPosition
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapRegisterListener
+ * @description todo
+ */
+
+ /**
+ * @event Core#MapChangeVectorLayer
+ * @description todo
  */
 
 /**
@@ -624,7 +731,7 @@
  */
 
 /**
- * @event Core#RadioRequestGetProjection
+ * @event Core#RadioRequestMapViewGetProjection
  * @description Event that returns the map projection
  * @returns {object} Projection of type ol/proj
  * @example Radio.request("MapView", "getProjection");
@@ -634,6 +741,11 @@
  * @event Core#RadioTriggerMapViewSetScale
  * @description Event that sets the scale of the map view
  * @example Radio.trigger("MapView", "setScale", model)
+ */
+
+/**
+ * @event Core#RadioTriggerMapViewSetConstrainedResolution
+ * @description Event that sets the constrained resolution of the map view
  */
 
 /**
@@ -668,6 +780,36 @@
 
 /**
  * @event Core#RadioTriggerMapViewToggleBackground
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetCurrentExtent
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetProjection
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetScales
+ * @description Event gets the scale
+ */
+
+ /**
+ * @event Core#RadioRequestMapViewGetZoomLevel
+ * @description Event gets the zoom-level
+ */
+
+ /**
+ * @event Core#RadioTriggerMapViewChangedCenter
+ * @description todo
+ */
+
+ /**
+ * @event Core#RadioTriggerMapViewChangedZoomLevel
  * @description todo
  */
 
@@ -1036,6 +1178,11 @@
  * @description triggers the hit
  * @param {String} hit contains the hit
  * @example Radio.trigger("Searchbar", "hit", hit);
+ */
+
+/**
+ * @event Searchbar#RadioTriggerSearchbarAbortSearch
+ * @description todo
  */
 
 
@@ -1500,7 +1647,7 @@
 /** -------------------- REMOTEINTERFACE -------------------- */
 
 /**
- * @event RemoteInterface#RadioTriggerPostMessage
+ * @event RemoteInterface#RadioTriggerRemoteInterfacePostMessage
  * @description Triggers a PostMessage to the RemoteInterface
  * @example Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify("..."), "layerId": 1711});
  */
@@ -1754,8 +1901,98 @@
 /** -------------------- ParametricURL -------------------- */
 
 /**
- * @event ParametricURL#RadioRequestParametricURLGetHighlightFeature
+ * @event Core#RadioRequestParametricURLGetHighlightFeature
  * @returns {Object} featureToHighlight Feature to highlight
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetCenter
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetProjectionFromUrl
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomLevel
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToExtent
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetResult
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetLayerParams
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetIsInitOpen
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetInitString
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToGeometry
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetStyle
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetFilter
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetZoomToFeatureIds
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetBrwId
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetBrwLayerName
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioRequestParametricURLGetMarkerFromUrl
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLPushToIsInitOpen
+ * @description todo
+ */
+
+/**
+ * @event Core#RadioTriggerParametricURLReady
+ * @description todo
  */
 
 /** -------------------- Autostart -------------------- */
@@ -1889,6 +2126,7 @@
  * @description activates a Viewpoint identified by the given ID
  */
 
+ /** -------------------- CORE.MODELLIST.TOOL -------------------- */
  /**
  * @event Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
  * @description Delivers an array with toll which supported only in Oblique-Mode
@@ -1925,4 +2163,95 @@
  * @param {string} state "play" or "stop"
  * @param {FlightInstance} flightInstance
  * @description fires if the flightplayer state changes. If the player starts playing or stop is called
+ */
+
+ /** -------------------- CRS -------------------- */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSGetProjection
+ * @param {string} name - projection name as written in [0] position of namedProjections
+ * @description Returns the proj4 projection definition for a registered name.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSGetProjections
+ * @param {ol.Map} map - map to project to
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {number[]} point - point to project
+ * @description Returns all known projections.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransformToMapProjection
+ * @param {ol.Map} map - map to project to
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {number[]} point - point to project
+ * @description Projects a point to the given map.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransformFromMapProjection
+ * @param {ol.Map} map - map to project from, and point must be in map's projection
+ * @param {(string|object)} targetProjection - projection name or projection to project to
+ * @param {number[]} point - point to project
+ * @description Projects a point from the given map.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestCRSTransform
+ * @param {(string|object)} sourceProjection - projection name or projection of point
+ * @param {(string|object)} targetProjection - projection name or projection to project point to
+ * @param {number[]} point - point to project
+ * @description Transforms a given point from a source to a target projection.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerWhere
+ * @param {object} searchAttributes - key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ * @description Returns the first entry in layerList matching the given searchAttributes.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerAttributesWhere
+ * @description Returns the first entry in layerList matching the given searchAttributes.
+ * @param {object} searchAttributes - key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerListWhere
+ * @description Returns an array of all models that match the given attributes.
+ * @param  {Object} searchAttributes key/value-pairs to be searched for, e.g. { typ: "WMS" } to get the first WMS
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetLayerList
+ * @description Returns complete layerList as initialized.
+ */
+
+ /**
+ * @event RemoteInterface#RadioRequestRawLayerListGetDisplayNamesOfFeatureAttributes
+ * @description Returns display names map for a layer, or display name for a specific attribute.
+ * @param {string} layerId - if of layer to fetch display names for
+ * @param {string} [featureAttribute] - if given, only one entry of map is returned
+ */
+
+ /** -------------------- CUSTOMMODULE -------------------- */
+
+ /**
+ * @event CustomModule#RadioRequestCustomModuleGetMarkerPosition
+ * @description todo
+ */
+
+ /** -------------------- TOOLS.LAYERSLIDER -------------------- */
+
+ /**
+ * @event Tools.LayerSliderModel#RadioTriggerChangeIsActive
+ * @description todo
+ */
+
+ /** -------------------- TOOLS.GETCOORD -------------------- */
+
+ /**
+ * @event Tools.GetCoord#RadioTriggerChangeIsActive
+ * @description todo
  */

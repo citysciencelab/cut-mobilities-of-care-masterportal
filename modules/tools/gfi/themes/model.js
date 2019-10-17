@@ -209,7 +209,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         gfiFormat = new WMSGetFeatureInfo();
         // das reverse wird fürs Planportal gebraucht SD 18.01.2016
         gfiFeatures = gfiFormat.readFeatures(dat, {
-            dataProjection: Config.view.proj
+            dataProjection: Radio.request("MapView", "getProjection")
         }).reverse();
 
         // ESRI is not parsed by the Ol-format

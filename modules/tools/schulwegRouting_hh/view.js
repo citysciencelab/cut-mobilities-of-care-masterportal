@@ -6,7 +6,7 @@ import SnippetCheckBoxView from "../../snippets/checkbox/view";
 import "bootstrap-toggle";
 import "bootstrap-select";
 
-const SchulwegRoutingView = Backbone.View.extend({
+const SchulwegRoutingView = Backbone.View.extend(/** @lends SchulwegRoutingView.prototype */{
     events: {
         "keyup .address-search": "searchAddress",
         "click li.street": function (evt) {
@@ -19,7 +19,7 @@ const SchulwegRoutingView = Backbone.View.extend({
 
             this.setAddressSearchValue(evt, false);
             this.model.selectStartAddress(address, this.model.get("addressListFiltered"));
-            this.model.findRegionalSchool(this.model.get("startAddress"));
+            this.model.findRegionalSchool(address);
             this.model.prepareRequest(this.model.get("startAddress"));
         },
         "click .address-search": function (evt) {
@@ -42,6 +42,13 @@ const SchulwegRoutingView = Backbone.View.extend({
             }
         }
     },
+
+    /**
+     * @class SchulwegRoutingView
+     * @extends Backbone.View
+     * @memberof Tools.SchulwegRouting_hh
+     * @constructs
+     */
     initialize: function () {
         this.checkBoxHVV = new SnippetCheckBoxView({model: this.model.get("checkBoxHVV")});
         if (this.model.get("isActive")) {
@@ -52,6 +59,7 @@ const SchulwegRoutingView = Backbone.View.extend({
             "change:routeDescription": this.renderRouteDescription,
             "change:streetNameList": this.renderHitlist,
             "change:addressListFiltered": this.renderHitlist,
+            "renderHitlist": this.renderHitlist,
             "change:isActive": function (model, isActive) {
                 if (isActive) {
                     this.render();
@@ -97,6 +105,7 @@ const SchulwegRoutingView = Backbone.View.extend({
         this.delegateEvents();
         return this;
     },
+
     togglePrintEnabled: function (value) {
         if (value) {
             this.$el.find(".print-route").removeAttr("disabled");
@@ -107,6 +116,7 @@ const SchulwegRoutingView = Backbone.View.extend({
             this.model.setPrintRoute(false);
         }
     },
+
     setPresetValues: function () {
         var schoolID = _.isEmpty(this.model.get("selectedSchool")) ? undefined : this.model.get("selectedSchool").get("schul_id");
 
@@ -115,6 +125,7 @@ const SchulwegRoutingView = Backbone.View.extend({
             this.updateSelectedSchool(schoolID);
         }
     },
+
     setStartAddress: function () {
         var startAddress = this.model.get("startAddress"),
             startStreet = "";
@@ -133,8 +144,12 @@ const SchulwegRoutingView = Backbone.View.extend({
         });
     },
 
+    /**
+     * Renders the list with the hits new.
+     * @returns {void}
+     */
     renderHitlist: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.find(".hit-list").html(this.templateHitlist(attr));
     },
@@ -146,6 +161,7 @@ const SchulwegRoutingView = Backbone.View.extend({
             this.$el.find(".result").html(this.templateRouteResult(attr));
         }
     },
+
     renderRouteDescription: function (model, value) {
         var attr = model.toJSON();
 
@@ -162,6 +178,11 @@ const SchulwegRoutingView = Backbone.View.extend({
         this.$el.find(".hit-list").show();
     },
 
+    /**
+     * Triggers the search for an address based on the entered string.
+     * @param {event} evt key up event contains the entered string
+     * @returns {void}
+     */
     searchAddress: function (evt) {
         var evtValue = evt.target.value,
             targetList;
@@ -195,16 +216,19 @@ const SchulwegRoutingView = Backbone.View.extend({
             this.model.searchAddress(address);
         }
     },
+
     closeView: function () {
         this.model.setIsActive(false);
         Radio.trigger("ModelList", "toggleDefaultTool");
     },
+
     selectSchool: function (evt) {
         var schoolname = evt.target.value;
 
         this.model.selectSchool(this.model.get("schoolList"), schoolname);
         this.model.prepareRequest(this.model.get("startAddress"));
     },
+
     updateSelectedSchool: function (schoolId) {
         this.$el.find(".selectpicker").selectpicker("val", schoolId);
     },
@@ -212,23 +236,27 @@ const SchulwegRoutingView = Backbone.View.extend({
     updateRegionalSchool: function (value) {
         this.$el.find("#regional-school").text(value);
     },
+
     toggleRouteDesc: function (evt) {
         var oldText = evt.target.innerHTML,
             newText = oldText === "Routenbeschreibung einblenden" ? "Routenbeschreibung ausblenden" : "Routenbeschreibung einblenden";
 
         evt.target.innerHTML = newText;
     },
+
     resetRoute: function () {
         this.model.resetRoute();
         this.updateSelectedSchool("");
         this.updateRegionalSchool("");
         this.$el.find(".address-search").val("");
     },
+
     resetRouteResult: function () {
         this.$el.find(".route-result").html("");
         this.$el.find(".result").html("");
         this.$el.find(".description").html("");
     },
+
     /**
      * trigger the model to print the route
      * @return {void}

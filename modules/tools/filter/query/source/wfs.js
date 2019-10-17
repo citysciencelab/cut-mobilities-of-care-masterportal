@@ -23,9 +23,9 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @returns {void}
      */
     buildQueryDatastructureByType: function (layerObject) {
-        var url = Radio.request("Util", "getProxyURL", layerObject.get("url")),
-            featureType = layerObject.get("featureType"),
-            version = layerObject.get("version"),
+        var url = Radio.request("Util", "getProxyURL", layerObject.url),
+            featureType = layerObject.featureType,
+            version = layerObject.version,
             featureAttributesMap = [];
 
         featureAttributesMap = this.requestMetadata(url, featureType, version, this.parseResponse);
