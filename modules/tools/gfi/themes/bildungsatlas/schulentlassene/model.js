@@ -1,15 +1,14 @@
 import Theme from "../../model";
-import RoutableView from "../../../objects/routingButton/view";
 
 const SchulentlasseneTheme = Theme.extend({
     initialize: function () {
-        let timeOut = (this.checkIsMobile()) ? 300 : 100;
+        const timeOut = this.checkIsMobile() ? 300 : 100;
 
         this.listenTo(this, {
             "change:isReady": function () {
                 this.setTemplateValues();
 
-                // as there is no way to write the graph with d3 into the template dom at this point (template is not applied yet), a timeout is used
+                // as there is no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
                 setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
                 setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
             }
@@ -38,23 +37,28 @@ const SchulentlasseneTheme = Theme.extend({
             realKey = "";
 
         // set the themeType "Abi" or "oHS" (oHS are pupils without graduation)
-        if (layerId == "90033" || layerId == "90034") {
+        if (layerId === "90033" || layerId === "90034") {
             this.set("themeType", "Abi");
-        } else if (layerId == "90035" || layerId == "90036") {
+        }
+        else if (layerId === "90035" || layerId === "90036") {
             this.set("themeType", "oHS");
-        } else {
-            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (1)");
+        }
+        else {
             this.set("themeType", false);
+            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (1)");
+
         }
 
         // set the layerType "stadtteil" or "sozialraum"
-        if (layerId == "90033" || layerId === "90035") {
+        if (layerId === "90033" || layerId === "90035") {
             this.set("layerType", "stadtteil");
-        } else if (layerId == "90034" || layerId === "90036") {
+        }
+        else if (layerId === "90034" || layerId === "90036") {
             this.set("layerType", "sozialraum");
-        } else {
-            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (2)");
+        }
+        else {
             this.set("layerType", false);
+            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (2)");
         }
 
         for (idx in element) {
@@ -69,21 +73,20 @@ const SchulentlasseneTheme = Theme.extend({
         // set the value for data_zeitverlauf which is used for the BarGraph zeitverlauf
         if (this.get("themeType") === "Abi") {
             this.set("data_zeitverlauf", this.createDataForZeitverlauf("C41_Abi", "number"));
-        } else {
+        }
+        else {
             this.set("data_zeitverlauf", this.createDataForZeitverlauf("C41_oHS", "number"));
         }
 
         // set the value for data_abschluesse which is used for the Linegraph zeitverlauf
         this.set("data_abschluesse", this.createDataForAbschluesse());
-
-        return;
     },
 
     /**
      * gets the legend for Linegraph abschluesse
      * @return {Array} an Array({class, style, text})
      */
-    getLegendAbschluesse: function(){
+    getLegendAbschluesse: function () {
         return [
             {class: "dotAbi", style: "circle", text: "Abi/FH: Abitur/Fachhochschulreife"},
             {class: "dotMSA", style: "circle", text: "MSA: mittlerer Schulabschluss"},
@@ -94,57 +97,63 @@ const SchulentlasseneTheme = Theme.extend({
     },
 
     /**
+     * creates the data for multi line diagrams
+     * @param {String} className the class name for the dot as defined in GraphConfig and CSS
+     * @param {String} numberName the ref to the x axis name of the group as defined in GraphConfig
+     * @param {Array} verlaufX an array as result from createDataForZeitverlauf
+     * @param {Object} legendObj the result of getLegendAbschluesse but with its class parameter as property
+     * @param {Array} verlaufALL an array to store values for all verlaufX data
+     * @return {Array} the result is an array with objects [{class, style, year}]
+     * @post the array verlaufALL may be larger and/or its values are counted up
+     */
+    helperCreateDataForAbschluesse: function (className, numberName, verlaufX, legendObj, verlaufALL) {
+        var result = [],
+            obj,
+            i;
+
+        for (i in verlaufX) {
+            obj = {
+                "class": className,
+                "style": legendObj[className].style,
+                "year": verlaufX[i].year
+            };
+            obj[numberName] = verlaufX[i][numberName];
+            result.push(obj);
+
+            if (!verlaufALL.hasOwnProperty(verlaufX[i].year)) {
+                verlaufALL[verlaufX[i].year] = {
+                    "numberALL": 0,
+                    "class": "dotALL",
+                    "style": legendObj.dotALL.style,
+                    "year": verlaufX[i].year
+                };
+            }
+            verlaufALL[verlaufX[i].year].numberALL += verlaufX[i][numberName];
+        }
+
+        return result;
+    },
+
+    /**
      * creates the data shaped for Linegraph
      * uses createDataForZeitverlauf to form the different lines
      * @return {Array} an array of objects as Array({year, number, class, style})
      */
-    createDataForAbschluesse: function(){
-        let verlaufAbi = this.createDataForZeitverlauf("C42_Abi", "numberAbi"),
-            verlaufMSA = this.createDataForZeitverlauf("C42_MSA", "numberMSA"),
-            verlaufESA = this.createDataForZeitverlauf("C42_ESA", "numberESA"),
-            verlaufOSA = this.createDataForZeitverlauf("C42_oSA", "numberOSA"),
+    createDataForAbschluesse: function () {
+        const legendArr = this.getLegendAbschluesse(),
             verlaufALL = {},
-            legendeArr = this.getLegendAbschluesse(),
-            legendeAssoc = {},
-            result = [],
-            obj = {},
-            i,
-            x;
+            legendObj = {};
+        let result = [],
+            i;
 
-        for (i in legendeArr) {
-            legendeAssoc[legendeArr[i]["class"]] = legendeArr[i];
+        for (i in legendArr) {
+            legendObj[legendArr[i].class] = legendArr[i];
         }
 
-        var helperAtomDataCreator = function(className, numberName, verlaufX, legendeAssoc, verlaufALL){
-            var result = [],
-            obj,
-            i;
-            for (i in verlaufX) {
-                obj = {
-                    "class": className,
-                    "style": legendeAssoc[className].style,
-                    "year": verlaufX[i].year
-                }
-                obj[numberName] = verlaufX[i][numberName];
-                result.push(obj);
-    
-                if (!verlaufALL.hasOwnProperty(verlaufX[i].year)) {
-                    verlaufALL[verlaufX[i].year] = {
-                        "numberALL": 0,
-                        "class": "dotALL",
-                        "style": legendeAssoc["dotALL"].style,
-                        "year": verlaufX[i].year
-                    };
-                }
-                verlaufALL[verlaufX[i].year].numberALL+= verlaufX[i][numberName];
-            }
-            return result;
-        };
-
-        result = result.concat(helperAtomDataCreator("dotAbi", "numberAbi", verlaufAbi, legendeAssoc, verlaufALL));
-        result = result.concat(helperAtomDataCreator("dotMSA", "numberMSA", verlaufMSA, legendeAssoc, verlaufALL));
-        result = result.concat(helperAtomDataCreator("dotESA", "numberESA", verlaufESA, legendeAssoc, verlaufALL));
-        result = result.concat(helperAtomDataCreator("dotOSA", "numberOSA", verlaufOSA, legendeAssoc, verlaufALL));
+        result = result.concat(this.helperCreateDataForAbschluesse("dotAbi", "numberAbi", this.createDataForZeitverlauf("C42_Abi", "numberAbi"), legendObj, verlaufALL));
+        result = result.concat(this.helperCreateDataForAbschluesse("dotMSA", "numberMSA", this.createDataForZeitverlauf("C42_MSA", "numberMSA"), legendObj, verlaufALL));
+        result = result.concat(this.helperCreateDataForAbschluesse("dotESA", "numberESA", this.createDataForZeitverlauf("C42_ESA", "numberESA"), legendObj, verlaufALL));
+        result = result.concat(this.helperCreateDataForAbschluesse("dotOSA", "numberOSA", this.createDataForZeitverlauf("C42_oSA", "numberOSA"), legendObj, verlaufALL));
 
         for (i in verlaufALL) {
             result.push(verlaufALL[i]);
@@ -159,32 +168,27 @@ const SchulentlasseneTheme = Theme.extend({
      * @param {String} valueTag as used in graphConfig.attrToShowArray: name of the y-value
      * @return {Array} an array of Objects with the structure [{"year", valueTag}] to be used as graph data
      */
-    createDataForZeitverlauf: function( tag, valueTag ){
+    createDataForZeitverlauf: function (tag, valueTag) {
         const depthBarrierYear = 2010,
             thisYear = (new Date()).getFullYear(),
             showMax = 10;
-        let i = 0,
-            n = 0,
-            relevantData = [],
-            result = [],
+        let result = [],
             year,
             obj;
 
         // creates an array [{"year", valueTag}] as result
         year = depthBarrierYear;
-        while(year <= thisYear){
+        while (year <= thisYear) {
             if (typeof this.get(tag + "_" + year) !== "undefined") {
                 obj = {};
-                obj["fullyear"] = year;
-                
+                // sort by a save and sound parameter
+                obj.fullyear = year;
                 // e.g. Schuljahr 2010 := "10/11"
-                obj["year"] = year.toString().substr(2,2) + "/" + (year+1).toString().substr(2,2);
-                
+                obj.year = year.toString().substr(2, 2) + "/" + (year + 1).toString().substr(2, 2);
                 // for the statistic
                 obj[valueTag] = parseFloat(this.get(tag + "_" + year));
-                
                 // for calculation of dotALL
-                obj["value"] = obj[valueTag];
+                obj.value = obj[valueTag];
 
                 result.push(obj);
             }
@@ -192,6 +196,9 @@ const SchulentlasseneTheme = Theme.extend({
         }
 
         result = _.sortBy(result, "fullyear");
+
+        // cut array to have only max. showMax values
+        result = result.slice(Math.max(0, result.length - showMax));
 
         return result;
     },
@@ -228,12 +235,12 @@ const SchulentlasseneTheme = Theme.extend({
             attrToShowArray: [
                 "number"
             ],
-            setTooltipValue: function(value){
+            setTooltipValue: function (value) {
                 return Math.round(value).toString() + "%";
             }
         };
 
-        if(typeof this.get("data_zeitverlauf") === "undefined"){
+        if (_.isUndefined(this.get("data_zeitverlauf"))) {
             return;
         }
 
