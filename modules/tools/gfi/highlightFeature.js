@@ -5,21 +5,21 @@ const HighlightFeaturesModel = Backbone.Model.extend(/** @lends HighlightFeature
      * @extends Backbone.Model
      * @memberof Tools.GFI
      * @constructs
-     * @property {object} fill="undefined" Styling rules for fills
+     * @property {object} fill="null" Styling rules for fills
      * @property {ol/color} fill.color ol color
-     * @property {object} image="undefined" Styling rules for images
+     * @property {object} image="null" Styling rules for images
      * @property {integer} image.scale image scale
-     * @property {object} stroke="undefined" Styling rules strokes
+     * @property {object} stroke="null" Styling rules strokes
      * @property {integer} stroke.width width of stroke
-     * @property {object} text="undefined" Styling rules for text
+     * @property {object} text="null" Styling rules for text
      * @property {integer} text.scale text scale
      */
     defaults: {
-        fill: undefined,
-        image: undefined,
-        stroke: undefined,
-        text: undefined,
-        highlightedFeatures: undefined
+        fill: null,
+        image: null,
+        stroke: null,
+        text: null,
+        highlightedFeatures: null
     },
 
     /**
@@ -119,7 +119,7 @@ const HighlightFeaturesModel = Backbone.Model.extend(/** @lends HighlightFeature
                 feature.setStyle(null);
             });
         }
-        this.setHighlightedFeatures(undefined);
+        this.setHighlightedFeatures(null);
     },
 
     /**

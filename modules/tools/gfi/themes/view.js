@@ -55,7 +55,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
             currentView = Radio.request("GFI", "getCurrentView"),
             oldGfiWidth = currentView.$el.width();
 
-        let oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
+        let oldLeft = currentView.$el.position().left;
 
         if (value === true) {
             if (_.isNaN(oldLeft)) {

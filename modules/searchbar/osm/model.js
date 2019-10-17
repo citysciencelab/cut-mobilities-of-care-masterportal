@@ -1,6 +1,7 @@
 import "../model";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 
-const OsmModel = Backbone.Model.extend({
+const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     defaults: {
         minChars: 3,
         osmServiceUrl: "",
@@ -11,13 +12,33 @@ const OsmModel = Backbone.Model.extend({
         classes: [],
         ajaxRequest: null
     },
+
     /**
+     * @class MapView
      * @description Initialisierung der OSM Suche
-     * @param {Object} config - Das Konfigurationsobjet der OSM Suche.
-     * @param {integer} [config.minChars=3] - Mindestanzahl an Characters, bevor eine Suche initiiert wird.
-     * @param {string} config.osmServiceUrl - ID aus rest-services für URL.
-     * @param {integer} [config.limit=50] - Anzahl der über angefragten Vorschläge.
-     * @param {string}  [osm.states=""] - Liste der Bundesländer für die Trefferauswahl.
+     * @extends Backbone.Model
+     * @memberOf Searchbar.Osm
+     * @constructs
+     * @property {number} minChars=3 - todo
+     * @property {string} osmServiceUrl="" - todo
+     * @property {number} limit=50 - todo
+     * @property {string} street="" - todo
+     * @property {string} states="" - todo
+     * @property {Array} searchParams=[] - todo
+     * @property {Array} classes=[] - todo
+     * @property {*} ajaxRequest=null - todo
+     * @param {Object} config - The configuration object of the OSM search.
+     * @param {number} [config.minChars=3] - Minimum number of characters before a search is initiated.
+     * @param {string} config.osmServiceUrl - ID from rest services for URL.
+     * @param {number} [config.limit=50] - Number of proposals requested.
+     * @param {string}  [osm.states=""] - List of the federal states for the hit selection..
+     * @listens Searchbar#RadioTriggerSearchbarSearchAll
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
+     * @fires Core#RadioRequestParametricURLGetInitString
+     * @fires Searchbar#RadioTriggerSearchbarRemoveHits
+     * @fires Searchbar#RadioTriggerSearchbarAbortSearch
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     initialize: function (config) {
@@ -50,10 +71,13 @@ const OsmModel = Backbone.Model.extend({
             "searchAll": this.search
         });
     },
+
     /**
-     * Einstieg fuer die Suche...
-     * Wird von der Searchbar getriggert.
-     * @param {string} searchString -
+     * Access for the search...
+     * Is triggered by the search bar.
+     * @param {string} searchString - todo
+     * @fires Searchbar#RadioTriggerSearchbarRemoveHits
+     * @fires Searchbar#RadioTriggerSearchbarAbortSearch
      * @returns {void}
      */
     search: function (searchString) {
@@ -66,9 +90,10 @@ const OsmModel = Backbone.Model.extend({
             Radio.trigger("Searchbar", "abortSearch", "osm");
         }
     },
+
     /**
-     * Suchstring (Strasse HsNr) durch Anwender aufgebaut...
-     * @param {string} searchString -
+     * Search string (street HsNr) constructed by user...
+     * @param {string} searchString - todo
      * @returns {void}
      */
     suggestByOSM: function (searchString) {
@@ -98,9 +123,10 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * Treffer der ersten Suche auswerten; Angebotsliste erstellen
-     * [pushSuggestions description]
-     * @param  {Array} data [description]
+     * Evaluate hits of the first search; create offer list.
+     * @param  {Array} data - todo
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     pushSuggestions: function (data) {
@@ -145,11 +171,11 @@ const OsmModel = Backbone.Model.extend({
                         // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
                         north = (parseFloat(bbox[0]) + parseFloat(bbox[1])) / 2.0;
                         east = (parseFloat(bbox[2]) + parseFloat(bbox[3])) / 2.0;
-                        center = Radio.request("CRS", "transformToMapProjection", "WGS84", [east, north]);
+                        center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [east, north]);
                     }
                     else {
-                        upper = Radio.request("CRS", "transformToMapProjection", "WGS84", [parseFloat(bbox[3]), parseFloat(bbox[1])]);
-                        lower = Radio.request("CRS", "transformToMapProjection", "WGS84", [parseFloat(bbox[2]), parseFloat(bbox[0])]);
+                        upper = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(bbox[3]), parseFloat(bbox[1])]);
+                        lower = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(bbox[2]), parseFloat(bbox[0])]);
                         center = [
                             lower[0],
                             lower[1],
@@ -174,9 +200,9 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * stellt fest, ob Das Ergebnis alle eingegebenen Parameter enthält
-     * @param  {object[]} searched Das zu untersuchende Suchergebnis
-     * @param  {array[]} params Das Ergebnis aufgesplittet
+     * Determines whether the result contains all entered parameters.
+     * @param  {object[]} searched - The search result to be examined.
+     * @param  {array[]} params - The split result.
      * @returns {boolean} true | false
      */
     isSearched: function (searched, params) {
@@ -205,8 +231,8 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * stellt fest ob der Treffer von den Parametern angezeigt wird oder nicht
-     * @param  {Object} hit [description] Suchtreffer
+     * Determines whether the hit is displayed by the parameters or not.
+     * @param  {Object} hit - search hits
      * @returns {boolean} true | false
      */
     canShowHit: function (hit) {
@@ -227,7 +253,7 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * @description Abortet ggf. vorhandenen Request und initiiert neuen Request
+     * Abortet ggf. vorhandenen Request und initiiert neuen Request.
      * @param {String} url - URL the request is sent to.
      * @param {String} data - Data to be sent to the server
      * @param {function} successFunction - A function to be called if the request succeeds
@@ -244,10 +270,10 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * @description Fphrt einen HTTP-GET-Request aus und speichert dessen id
-     * @param  {String} url             [description]
-     * @param  {JSON} data            [description]
-     * @param  {function} successFunction [description]
+     * Fires an HTTP GET request and saves its id.
+     * @param  {String} url - todo
+     * @param  {JSON} data - todo
+     * @param  {function} successFunction - todo
      * @return {void}
      */
     ajaxSend: function (url, data, successFunction) {
@@ -272,8 +298,8 @@ const OsmModel = Backbone.Model.extend({
     },
 
     /**
-     * Triggert die Darstellung einer Fehlermeldung
-     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * Triggers the display of an error message.
+     * @param {object} err - Error object from Ajax request.
      * @returns {void}
      */
     showError: function (err) {
@@ -282,43 +308,91 @@ const OsmModel = Backbone.Model.extend({
         Radio.trigger("Alert", "alert", "OpenStreetMap-Suche nicht erreichbar. " + detail);
     },
 
+    /**
+     * todo
+     * @returns {void}
+     */
     polishAjax: function () {
         this.setAjaxRequest(null);
     },
 
+    /**
+     * Setter for inUse.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setInUse: function (value) {
         this.set("inUse", value);
     },
 
+    /**
+     * Setter for osmServiceUrl.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setOsmServiceUrl: function (value) {
         this.set("osmServiceUrl", value);
     },
 
+    /**
+     * Setter for limit.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setLimit: function (value) {
         this.set("limit", value);
     },
 
+    /**
+     * Setter for states.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setStates: function (value) {
         this.set("states", value);
     },
 
+    /**
+     * Setter for street.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setStreet: function (value) {
         this.set("street", value);
     },
 
+    /**
+     * Setter for searchParams.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setSearchParams: function (value) {
         this.set("searchParams", value);
     },
 
+    /**
+     * Setter for classes.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setClasses: function (value) {
         this.set("classes", value.split(","));
     },
 
+    /**
+     * Setter for minChars.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for ajaxRequest
+    /**
+     * Setter for ajaxRequest.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setAjaxRequest: function (value) {
         this.set("ajaxRequest", value);
     }

@@ -5,14 +5,14 @@
     {
       "title": "Master",
       "logo": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/hh-logo.png",
-      "link": "http://geoinfo.hamburg.de",
+      "link": "https://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
     "searchBar":
     {
       "gazetteer":
       {
-        "minChars": 3,
+        "minchars": 3,
         "serviceId": "8",
         "searchStreets": true,
         "searchHouseNumbers": true,

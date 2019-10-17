@@ -18,32 +18,40 @@ describe("tools/schulwegrouting_hh", function () {
         ],
         addressList = [
             {
-                affix: "a",
-                joinAddress: "NeuenfelderStraße13a",
-                number: "13",
-                geometry: new Point([566326.134, 5928222.917]),
-                street: "Neuenfelder Straße"
+                properties: {
+                    hausnummerkomplett: "13a"
+                },
+                houseNumber: "13",
+                houseNumberSupplement: "a",
+                name: "Neuenfelder Straße 13a",
+                geometry: new Point([566326.134, 5928222.917])
             },
             {
-                affix: "a",
-                joinAddress: "NeuenfelderStraße15a",
-                number: "15",
-                geometry: new Point([566376.183, 5928211.680]),
-                street: "Neuenfelder Straße"
+                properties: {
+                    hausnummerkomplett: "15a"
+                },
+                houseNumber: "15",
+                houseNumberSupplement: "a",
+                name: "Neuenfelder Straße 15a",
+                geometry: new Point([566376.183, 5928211.680])
             },
             {
-                affix: "b",
-                joinAddress: "NeuenfelderStraße84b",
-                number: "84",
-                geometry: new Point([567147.825, 5927969.049]),
-                street: "Neuenfelder Straße"
+                properties: {
+                    hausnummerkomplett: "84b"
+                },
+                houseNumber: "84",
+                houseNumberSupplement: "b",
+                name: "Neuenfelder Straße 84b",
+                geometry: new Point([567147.825, 5927969.049])
             },
             {
-                affix: "a",
-                joinAddress: "KielerStraße160a",
-                number: "160",
-                geometry: new Point([562202.187, 5936669.860]),
-                street: "Kieler Straße"
+                properties: {
+                    hausnummerkomplett: "160a"
+                },
+                houseNumber: "160",
+                houseNumberSupplement: "a",
+                name: "Kieler Straße 160a",
+                geometry: new Point([562202.187, 5936669.860])
             }
         ];
 
@@ -67,17 +75,10 @@ describe("tools/schulwegrouting_hh", function () {
 
             expect(filteredAddressList).to.have.lengthOf(1);
         });
-        it("should have the attribute street with the value 'Neuenfelder Straße", function () {
-            var filteredAddressList = model.filterAddressList(addressList, /neuenfelder/i);
-
-            filteredAddressList.forEach(function (address) {
-                expect(address).to.have.property("street", "Neuenfelder Straße");
-            });
-        });
-        it("should have the attribute joinAddress with the value 'KielerStraße160a", function () {
+        it("should have the attribute name with the value 'KielerStraße160a", function () {
             var filteredAddressList = model.filterAddressList(addressList, /kiel/i);
 
-            expect(filteredAddressList[0]).to.have.property("joinAddress", "KielerStraße160a");
+            expect(filteredAddressList[0]).to.have.property("name", "Kieler Straße 160a");
         });
     });
 
@@ -139,18 +140,18 @@ describe("tools/schulwegrouting_hh", function () {
             model.startSearch(["Kieler Straße"], addressList);
             expect(model.get("addressListFiltered")).to.have.lengthOf(1);
         });
-        it("should have one filtered addresses with the search value 'Kielerstraße1' if no streets exists", function () {
-            model.setSearchRegExp("Kielerstraße1");
+        it("should have one filtered addresses with the search value 'Kieler Straße 1' if no streets exists", function () {
+            model.setSearchRegExp("Kieler Straße 1");
             model.startSearch([], addressList);
             expect(model.get("addressListFiltered")).to.have.lengthOf(1);
         });
-        it("should have two filtered addresses with the search value 'neuenfelderstraße1' if no streets exists", function () {
-            model.setSearchRegExp("neuenfelderstraße1");
+        it("should have two filtered addresses with the search value 'Neuenfelder Straße 1' if no streets exists", function () {
+            model.setSearchRegExp("Neuenfelder Straße 1");
             model.startSearch([], addressList);
             expect(model.get("addressListFiltered")).to.have.lengthOf(2);
         });
-        it("should have one filtered addresses with the search value 'neuenfelderstraße13' if no streets exists", function () {
-            model.setSearchRegExp("neuenfelderstraße13");
+        it("should have one filtered addresses with the search value 'Neuenfelder Straße 13' if no streets exists", function () {
+            model.setSearchRegExp("Neuenfelder Straße 13");
             model.startSearch([], addressList);
             expect(model.get("addressListFiltered")).to.have.lengthOf(1);
         });
