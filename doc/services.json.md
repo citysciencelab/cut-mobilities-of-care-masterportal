@@ -270,7 +270,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |hiddenFeatures|nein|Array||Liste mit IDs, die in der Ebene versteckt werden sollen|`["id_1", "id_2"]`|
 |typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
-|[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
+|**[cesium3DTilesetOptions]**|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
 
@@ -321,7 +321,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
 |typ|ja|String||Diensttyp, in diesem Fall Terrain3D |`"Terrain3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/terrain"`|
-|[cesiumTerrainProviderOptions]|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+|**[cesiumTerrainProviderOptions]**|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
 
 [cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
 
