@@ -83,16 +83,18 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             layerSource = this.get("layerSource");
 
         if (isDataLayer) {
-            if (layerSource.constructor.name === "VectorSource") {
-                features = layerSource.getFeatures();
-            }
-            else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Fehler: Der Layer mit dem Namen \"" + requestorLayerName + "\" kann nicht erstellt werden.</strong><br>" +
-                    "Möglicherweise wurde der Layer " + this.get("name") + " als Vektordatenquelle konfiguriert, welcher keine Vektordaten beinhaltet.<br>" +
-                    "Bitte wenden Sie sich an den Administrator.",
-                    kategorie: "alert-danger"
-                });
+            if (layerSource) {
+                if (layerSource.constructor.name === "VectorSource") {
+                    features = layerSource.getFeatures();
+                }
+                else {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Fehler: Der Layer mit dem Namen \"" + requestorLayerName + "\" kann nicht erstellt werden.</strong><br>" +
+                        "Möglicherweise wurde der Layer " + this.get("name") + " als Vektordatenquelle konfiguriert, welcher keine Vektordaten beinhaltet.<br>" +
+                        "Bitte wenden Sie sich an den Administrator.",
+                        kategorie: "alert-danger"
+                    });
+                }
             }
         }
         return features;

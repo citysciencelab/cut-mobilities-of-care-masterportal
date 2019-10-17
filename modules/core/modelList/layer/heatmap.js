@@ -38,7 +38,6 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             "featuresLoaded": this.loadInitialData,
             "featureUpdated": this.updateFeature
         }, this);
-        this.loadInitialData();
     },
 
     /**
@@ -57,6 +56,17 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
 
             if (dataLayerFeatures && dataLayerFeatures.length > 0) {
                 this.initializeHeatmap(dataLayerFeatures);
+            }
+            else {
+                const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
+                    dataLayerName = dataLayer.get("name");
+
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Bitte aktivieren Sie den Layer \"" + dataLayerName + "\"</strong><br>" +
+                    "Dieser liefert die Daten für den Heatmap-Layer :<br>" +
+                    "\"" + this.get("name") + "\".",
+                    kategorie: "alert-info"
+                });
             }
         }
         if (this.checkDataLayerId(layerId)) {
@@ -82,6 +92,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
+        if (Radio.request("Parser", "getTreeType") !== "light") {
+            this.loadInitialData();
+        }
     },
 
     /**
