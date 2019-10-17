@@ -167,13 +167,13 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
             if (regExp.test(element.startRange) === false) {
                 errors.push({
-                    minText: "Bitte tragen Sie eine natürliche Zahl ein.",
+                    minText: "Bitte tragen Sie eine ganze Zahl ein.",
                     minIndex: index
                 });
             }
             if (regExp.test(element.stopRange) === false) {
                 errors.push({
-                    maxText: "Bitte tragen Sie eine natürliche Zahl ein.",
+                    maxText: "Bitte tragen Sie eine ganze Zahl ein.",
                     maxIndex: index
                 });
             }
