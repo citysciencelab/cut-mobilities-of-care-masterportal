@@ -8,9 +8,22 @@
 
 1.4. Verwende **const** und **let** zur Deklaration von Variablen und Konstanten.
 
+1.4.1 **const** und **let** dürfen nur am Anfang eines scopes stehen.
+
+1.4.2 **const** und **let** haben nur eine Variable pro Zeile.
+
+Beispiel:
+```javascript
+
+    const a,
+        b;
+    let c,
+        d;
+```
+
 1.5. Eine Funktion ist nur für eine Sache zuständig.
 
-1.6. Arbeite mit [Prozessfunktionen](unitTests.md) und [Unit-testbaren Funktionen](unitTests.md).
+1.6. Arbeite mit **[Prozessfunktionen](unitTests.md)** und **[Unit-testbaren Funktionen](unitTests.md)**.
 
 1.7. Vermeide unnötige Inline-Kommentare.
 
