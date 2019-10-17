@@ -59,12 +59,12 @@ describe("tools/styleWMS/model", function () {
         describe("Error list should include", function () {
 
             it("NAN value for minimum", function () {
-                expect(errors[0].minText).to.be.equal("Bitte tragen Sie eine natürliche Zahl ein.");
+                expect(errors[0].minText).to.be.equal("Bitte tragen Sie eine ganze Zahl ein.");
                 expect(errors[0].minIndex).to.be.equal(1);
             });
 
             it("NAN value for maximum", function () {
-                expect(errors[1].maxText).to.be.equal("Bitte tragen Sie eine natürliche Zahl ein.");
+                expect(errors[1].maxText).to.be.equal("Bitte tragen Sie eine ganze Zahl ein.");
                 expect(errors[1].maxIndex).to.be.equal(2);
             });
 
