@@ -358,8 +358,6 @@ const SdpDownloadModel = Tool.extend({
 
         interaction.on("drawend", function (evt) {
             var geoJson = that.featureToGeoJson(evt.feature);
-            console.log('drawend evt.feature=', evt.feature);
-            console.log('drawend geoJson=', geoJson);
             that.setSelectedAreaGeoJson(geoJson);
         }, this);
 
@@ -589,7 +587,6 @@ const SdpDownloadModel = Tool.extend({
      * @returns {void}
      */
     setRequesting: function (value) {
-        console.log('requesting:',value);
         this.set("requesting", value);
     },
     /**
