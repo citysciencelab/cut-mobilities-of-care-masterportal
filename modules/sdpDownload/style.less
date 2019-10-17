@@ -11,7 +11,9 @@
         padding: 10px;
     }
     .content {
-        padding-top: 20px;
+        .first{
+            padding-top: 20px;
+        }
         .form-group {
             >label {
                 float: left;
@@ -54,9 +56,16 @@
         padding-bottom: 20px;
     }
     #sdp-loader {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #FFFFFF;
+        height: calc(100% - 40px);
+        position: absolute;
+        width: 100%;
+        z-index: 2000;
         img {
-            position: relative;
-            left: 40%;
+            position: absolute;
+            left: 45%;
+            top: 45%;
         }
     }
 }

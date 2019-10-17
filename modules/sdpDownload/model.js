@@ -184,8 +184,6 @@ const SdpDownloadModel = Tool.extend({
     },
     //download raster data
     requestCompressedData: function () {
-        this.setRequesting(true);
-        this.trigger("render");
         var url = this.get('compressDataUrl');
         var selectedRasterNames = this.getSelectedRasterNames();
         if (selectedRasterNames.length > this.get('selectedRasterLimit')) {
@@ -227,15 +225,18 @@ const SdpDownloadModel = Tool.extend({
             url: Radio.request("Util", "getProxyURL", url),
             data: encodeURI(params),
             context: this,
-            async: false,
             type: "POST",
+            beforeSend: function(){
+                this.showLoader();
+            },
             success: function (resp) {
                 this.resetView();
                 this.setStatus(this.model, true);
-                this.setRequesting(false);
-                this.trigger("render");
                  //download zip-file
                  window.location.href = this.get('compressedFileUrl') + '?name=' + resp;
+            },
+            complete:function(data){
+                this.hideLoader();
             },
             timeout: 6000,
             error: function () {
@@ -245,10 +246,16 @@ const SdpDownloadModel = Tool.extend({
                     text: "<strong>Das Herunterladen der Daten ist leider schief gelaufen!</strong> <br> <small>Details: Ein benötigter Dienst antwortet nicht.</small>",
                     kategorie: "alert-warning"
                 });
-                this.setRequesting(false);
-                this.trigger("render");
             }
         });
+    },
+    hideLoader: function(){
+        this.set('requesting', false)
+        this.trigger("render");
+    },
+    showLoader: function(){
+        this.set('requesting', true)
+        this.trigger("render");
     },
     //geometric selection
     /**
