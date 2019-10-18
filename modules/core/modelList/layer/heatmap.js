@@ -60,7 +60,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
                 dataLayerNameOrId = dataLayer ? dataLayer.get("name") : this.get("dataLayerId"),
                 dataLayerSource = dataLayer ? dataLayer.get("layerSource") : undefined,
-                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : undefined;
+                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : [];
 
             if (dataLayerFeatures.length > 0) {
                 this.initializeHeatmap(dataLayerFeatures);
