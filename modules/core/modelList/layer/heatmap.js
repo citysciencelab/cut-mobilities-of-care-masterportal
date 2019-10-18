@@ -26,6 +26,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
      * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @description This layer is used to generate a heatmap. It uses the features of a already configured vector layer such as WFS or Sensor.
      */
     initialize: function () {
@@ -44,7 +47,9 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * Loads the initial heatmap features.
      * @param {String} layerId Id of layer whose data has to be loaded.
      * @param {ol/Feature[]} features Features that have to be used for heatmap layer.
-     * @fires Layer#RadioRequestVectorLayerGetFeatures
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
     loadInitialData: function (layerId, features) {
@@ -53,24 +58,26 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
         if (!layerId) {
             const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
-                dataLayerName = dataLayer ? dataLayer.get("name") : undefined,
+                dataLayerNameOrId = dataLayer ? dataLayer.get("name") : this.get("dataLayerId"),
                 dataLayerSource = dataLayer ? dataLayer.get("layerSource") : undefined,
-                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : [];
+                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : undefined;
 
             if (dataLayerFeatures.length > 0) {
                 this.initializeHeatmap(dataLayerFeatures);
             }
             else {
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Bitte aktivieren Sie den Layer \"" + dataLayerName + "\"</strong><br>" +
+                    text: "<strong>Bitte aktivieren Sie den Layer \"" + dataLayerNameOrId + "\"</strong><br>" +
                     "Dieser liefert die Daten für den Heatmap-Layer :<br>" +
                     "\"" + this.get("name") + "\".",
-                    kategorie: "alert-info"
+                    kategorie: "alert-info",
+                    id: "heatmap_" + this.get("id") + "_dataLayerId_" + this.get("dataLayerId")
                 });
             }
         }
         if (this.checkDataLayerId(layerId)) {
             this.initializeHeatmap(features);
+            Radio.trigger("Alert", "alert:remove", "heatmap_" + this.get("id") + "_dataLayerId_" + layerId);
         }
     },
 
