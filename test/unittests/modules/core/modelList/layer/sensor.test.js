@@ -78,15 +78,6 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("aggregateArrays", function () {
-        it("should return an object that is empty for undefined input", function () {
-            expect(sensorLayer.aggregateArrays(undefined)).to.be.an("object").that.is.empty;
-        });
-        it("should return an array that is empty for an empty array input", function () {
-            expect(sensorLayer.aggregateArrays([])).to.be.an("object").that.is.empty;
-        });
-    });
-
     describe("addProperties", function () {
         it("should return an array that is empty for undefined input", function () {
             expect(sensorLayer.addProperties(undefined)).to.be.an("array").that.is.empty;
