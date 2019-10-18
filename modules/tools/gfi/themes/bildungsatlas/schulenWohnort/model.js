@@ -10,6 +10,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         countStudentsSecondary: "",
         socialIndex: "",
         statGebNr: "",
+        anzahlSchuler: 0,
         /**
          * layer name of internal layer with Schule
          * @type {String}
@@ -102,7 +103,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
         if (layerId === conf.id) {
             if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr);
+                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchuleLevel);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -134,7 +135,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             }
 
             if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr);
+                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchuleLevel);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -165,25 +166,88 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * Filters the areas by schoolId
      * @param   {Layer} layer Layer with statistical areas
      * @param   {string} statGebNr statistische Gebiete Number
-     * @param   {string} schoolKey schoolKey
-     * @param   {string} countStudents countStudents
+     * @param   {string} layerSchuleLevel pass the parameter for the school level
      * @returns {void}
      */
-    filterAreasById: function (layer, statGebNr) {
-        const areas = layer.get("layer").getSource().getFeatures(),
+    filterAreasById: function (layer, statGebNr, layerSchuleLevel) {
+        const schulen = layer.get("layer").getSource().getFeatures(),
             featureIds = [];
+        var anzahlAll = this.get("anzahlSchuler");
 
-        areas.forEach(function (area) {
-            const statGebFinalNr = area.get("SG_" + statGebNr);
+        schulen.forEach(function (schule) {
+            const statGebFinal = schule.get("SG_" + statGebNr);
 
-            if (statGebFinalNr && statGebFinalNr !== null) {
-                featureIds.push(area.getId());
+            if (statGebFinal) {
+                featureIds.push(schule.getId());
+
+                schule.set("html", this.getHtml(schule, anzahlAll, statGebFinal, layerSchuleLevel));
             }
-        });
+        }.bind(this));
 
         layer.setIsSelected(true);
         this.filterFeature([layer], featureIds);
     },
+
+    /**
+     * returns  the html as hover ionformation
+     * @param   {object} schule the school information
+     * @param   {number} anzahlAll the whole number of students in this area
+     * @param   {float} statGebFinal the percetage of students in this school
+     * @param   {string} layerSchuleLevel which level is the school
+     * @returns {string} text
+     */
+    getHtml: function (schule, anzahlAll, statGebFinal, layerSchuleLevel) {
+        var name = schule.get("C_S_Name"),
+            adress = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + ", " + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
+            totalSum = schule.get("C_S_SuS"),
+            priSum = schule.get("C_S_SuS_PS"),
+            sozialIndex = schule.get("C_S_SI"),
+            anteil = Math.round(statGebFinal) + "%",
+            anzahl = Math.round(anzahlAll * statGebFinal / 100),
+            level = {"primary": "Primarstufe", "sencondary": "Sekundarstufe I"},
+            finalHtml;
+
+        finalHtml = "<table class=\"table table-striped\">" +
+                        "<thead>" +
+                            "<tr>" +
+                                "<th colspan=\"2\">" + name + "</th>" +
+                            "</tr>" +
+                        "</thead>" +
+                        "<tbody>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Adress: </td>" +
+                                "<td>" + adress + "</td>" +
+                            "</tr>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Gesamtanzahl der Schüler: </td>" +
+                                "<td>" + totalSum + "</td>" +
+                            "</tr>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Anzahl der Schülerinnen und Schüler<br> in der Primarstufe: </td>" +
+                                "<td>" + priSum + "</td>" +
+                            "</tr>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Sozialindex der Schüler: </td>" +
+                                "<td>" + sozialIndex + "</td>" +
+                            "</tr>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchuleLevel] + "): </td>" +
+                                "<td>" + anteil + "</td>" +
+                            "</tr>" +
+                            "<tr colspan=\"2\">" +
+                                "<td>Anzahl: </td>" +
+                                "<td>" + anzahl + "</td>" +
+                            "</tr>" +
+                        "</tbody>" +
+                    "</table>";
+        return finalHtml;
+    },
+
+    /**
+     * returns the category to render area features
+     * @param   {float} value anteil in %
+     * @returns {string} styling
+     */
 
     /**
      * parses the gfiContent and sets all variables
