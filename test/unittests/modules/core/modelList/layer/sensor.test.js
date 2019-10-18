@@ -78,35 +78,6 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("addProperties", function () {
-        it("should return an array that is empty for undefined input", function () {
-            expect(sensorLayer.addProperties(undefined)).to.be.an("array").that.is.empty;
-        });
-        it("should return an array that is empty for an empty array input", function () {
-            expect(sensorLayer.addProperties([])).to.be.an("array").that.is.empty;
-        });
-    });
-
-    describe("combineProperties", function () {
-        it("should return an object that is empty for undefined input", function () {
-            expect(sensorLayer.combineProperties(undefined, undefined)).to.be.an("object").that.is.empty;
-        });
-        it("should return an object that is empty for undefined and empty input", function () {
-            expect(sensorLayer.combineProperties(undefined, [])).to.be.an("object").that.is.empty;
-        });
-        it("should return an object that is empty for empty arrays input", function () {
-            expect(sensorLayer.combineProperties([], [])).to.be.an("object").that.is.empty;
-        });
-        it("should return an object that includes keys ans values with Pipes", function () {
-            var thingsProperties = [{key1: "Text1", key2: "Text2"}, {key1: "Text3", key2: "Text4"}],
-                keys = ["key1", "key2"];
-
-            expect(sensorLayer.combineProperties(keys, thingsProperties)).to.be.an("object").that.includes({
-                key1: "Text1 | Text3",
-                key2: "Text2 | Text4"});
-        });
-    });
-
     describe("changeTimeZone", function () {
         it("should return an empty for undefined input", function () {
             expect(sensorLayer.changeTimeZone(undefined, undefined)).that.have.string("");
@@ -126,17 +97,17 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("drawPoints", function () {
+    describe("createFeatures", function () {
         it("should return a empty array for empty array input", function () {
-            expect(sensorLayer.drawPoints(undefined, undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeatures(undefined, undefined)).to.be.an("array").that.is.empty;
         });
         it("should return a empty array for undefined input", function () {
-            expect(sensorLayer.drawPoints([], undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeatures([], undefined)).to.be.an("array").that.is.empty;
         });
         it("should return a empty array for obj and undefined epsg input", function () {
             var data = [{location: [10, 10]}];
 
-            expect(sensorLayer.drawPoints(data, undefined)).to.be.an("array").that.is.empty;
+            expect(sensorLayer.createFeatures(data, undefined)).to.be.an("array").that.is.empty;
         });
     });
     describe("getFeatureByDataStreamId", function () {
