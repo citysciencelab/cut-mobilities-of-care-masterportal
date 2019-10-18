@@ -2,15 +2,6 @@ import Theme from "../../model";
 
 const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults, {
-        name: "",
-        id: "",
-        address: "",
-        countStudents: "",
-        countStudentsPrimary: "",
-        countStudentsSecondary: "",
-        socialIndex: "",
-        statGebNr: "",
-        anzahlSchuler: 0,
         /**
          * layer name of internal layer with Schule
          * @type {String}
@@ -25,20 +16,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
     /**
-     * @class SchulenEinzugsgebieteThemeModel
+     * @class SchulenWohnortThemeModel
      * @extends Theme
      * @memberof Tools.GFI.Themes.Bildungsatlas
      * @constructs
-     * @property {String} C_S_Name="" Schulname
-     * @property {String} C_S_Nr="" SchulId
-     * @property {String} C_S_Str="" Straßenname
-     * @property {String} C_S_HNr="" Hausnummer
-     * @property {String} C_S_PLZ="" Postleitzahl
-     * @property {String} C_S_Ort="" Ort
-     * @property {String} C_S_SuS_PS="" Anzahl Grundschüler
-     * @property {String} C_S_SuS_S1="" Anzahl Sekundarschüler
-     * @property {String} C_S_SI="" Sozialindex
-     * @property {String} schoolKey="" Kategorie zum stylen
      * @listens GFI#RadioTriggerGFISetIsVisible
      * @listens Layer#RadioTriggerLayerFeaturesLoaded
      * @fires Core#RadioTriggerUtilIsViewMobileChanged
@@ -80,7 +61,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     onIsVisibleEvent: function (gfi, isVisible) {
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (!isVisible && this.get("isCreated") === true) {
-            console.log("test");
             this.destroy();
             this.set("isCreated", false);
         }
@@ -123,6 +103,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
                 statGebNr = this.get("statGebNr");
+
+            if (this.get("anzahlSchuler") && layerSchuleLevel === "sencondary") {
+                this.set("anzahlSchuler", this.get("gfiContent").allProperties.C32_SuS);
+            }
 
             this.listenToOnce(Radio.channel("Layer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
@@ -279,7 +263,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {LayerList} return if the current layer
      */
     getWohnortLayer: function () {
-        console.log(this.get("themeId"));
         var layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "schulenWohnort", "id": this.get("themeId")});
 
         return layerList;
@@ -292,7 +275,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {Layer|false} layers
      */
     getStatisticAreasLayer: function (layerSchuleLevel) {
-        let layer = Radio.request("ModelList", "getModelByAttributes", this.get("layernameAreas")[layerSchuleLevel]);
+        let layer = Radio.request("ModelList", "getModelByAttributes", {"name": this.get("layernameAreas")[layerSchuleLevel]});
 
         if (!layer) {
             const conf = this.getStatisticAreasConfig(layerSchuleLevel);
