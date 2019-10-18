@@ -87,7 +87,7 @@ const SensorLayer = Layer.extend({
             mergeThingsByCoordinates = this.get("mergeThingsByCoordinates") || false;
 
         sensorData = this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates);
-        features = this.drawPoints(sensorData, epsg);
+        features = this.createFeatures(sensorData, epsg);
 
         // Add features to vectorlayer
         if (!_.isEmpty(features)) {
@@ -136,21 +136,20 @@ const SensorLayer = Layer.extend({
 
         return response;
     },
-
     /**
      * draw points on the map
      * @param  {array} sensorData - sensor with location and properties
      * @param  {Sting} epsg - from Sensortype
      * @return {Ol.Features} feature to draw
      */
-    drawPoints: function (sensorData, epsg) {
+    createFeatures: function (sensorData, epsg) {
         var features = [];
 
         _.each(sensorData, function (data, index) {
             var xyTransform,
                 feature;
 
-            if (_.has(data, "location") && !_.isUndefined(epsg)) {
+            if (data.hasOwnProperty("location") && data.location && !_.isUndefined(epsg)) {
                 xyTransform = transformToMapProjection(Radio.request("Map", "getMap"), epsg, data.location);
                 feature = new Feature({
                     geometry: new Point(xyTransform)
@@ -256,24 +255,39 @@ const SensorLayer = Layer.extend({
             allThings.push(things.value);
         }
 
-        allThings = _.flatten(allThings);
+        allThings = allThings.flat();
 
+        allThings = this.getNewestSensorData(allThings);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
         }
 
-        // allThings.forEach(thing => {
-        //     aggregateArrays = this.aggregateArrays(thing);
-        //     if (!_.isUndefined(aggregateArrays.location)) {
-        //         thingsMerge.push(this.aggregateArrays(thing));
-        //     }
-
-        // }, this);
-        allThings = this.aggregateArrays_2(allThings);
+        allThings = this.aggregatePropertiesOfThings(allThings);
 
         return allThings;
     },
 
+    getNewestSensorData: function (allThings) {
+        const allThingsWithSensorData = allThings;
+
+        allThingsWithSensorData.forEach(thing => {
+            const dataStreams = thing.Datastreams;
+
+            dataStreams.forEach((dataStream, i) => {
+                const dataStreamId = dataStream["@iot.id"],
+                    key = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown_datatream_" + i,
+                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
+                    phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+
+                if (value) {
+                    thing.properties[key] = value;
+                    thing.properties[key + "_phenomenonTime"] = phenomenonTime;
+                    thing.properties.dataSteamId = dataStreamId;
+                }
+            });
+        });
+        return allThingsWithSensorData;
+    },
     /**
      * build SensorThings URL
      * @param  {String} url - url to service
@@ -365,117 +379,44 @@ const SensorLayer = Layer.extend({
 
         return xy;
     },
-    aggregateArrays_2: function (allThings) {
+    aggregatePropertiesOfThings: function (allThings) {
         const aggregatedArray = [];
 
         allThings.forEach(thing => {
+            const aggregatedThing = {};
+
             if (Array.isArray(thing)) {
-            // TODO:create aggregated Object from array
+                let keys = [];
+
+                aggregatedThing.location = this.getCoordinates(thing[0]);
+                thing.forEach(thing2 => {
+                    keys.push(Object.keys(thing2.properties));
+                });
+                keys = [...new Set(keys.flat())];
+
+                aggregatedThing.properties = this.aggregateProperties(thing, keys);
             }
             else {
-                // TODO:create aggregated Object
+                aggregatedThing.location = this.getCoordinates(thing);
+                aggregatedThing.properties = thing.properties;
             }
+            aggregatedThing.properties.requestUrl = this.get("url");
+            aggregatedThing.properties.versionUrl = this.get("version");
+            aggregatedArray.push(aggregatedThing);
         });
 
         return aggregatedArray;
     },
-    /**
-     * aggregate a given array into an object with location and properties
-     * @param  {array} thingsArray - contain things with the same location
-     * @return {object} contains location and properties
-     */
-    aggregateArrays: function (thingsArray) {
-        var obj = {},
-            properties,
-            thingsProperties,
-            keys;
 
-        if (_.isEmpty(thingsArray)) {
-            return obj;
-        }
-        else if (_.has(thingsArray[0], "properties")) {
-            keys = _.keys(thingsArray[0].properties);
-        }
-        else {
-            keys = [];
-        }
-        keys.push("state");
-        keys.push("phenomenonTime");
-        keys.push("dataStreamId");
+    aggregateProperties: function (thingArray, keys) {
+        const aggregatedProperties = {};
 
-        // add more properties
-        thingsProperties = this.addProperties(thingsArray);
+        keys.forEach(key => {
+            const valuesArray = thingArray.map(thing => thing.properties[key]);
 
-        // combine properties
-        properties = this.combineProperties(keys, thingsProperties);
-
-        // set URL and version to properties, to build on custom theme with analytics
-        properties.requestUrl = this.get("url");
-        properties.versionURL = this.get("version");
-
-        // add to Object
-        obj.location = this.getCoordinates(thingsArray[0]);
-        obj.properties = properties;
-
-        return obj;
-    },
-
-    /**
-     * add properties to previous properties
-     * @param  {array} thingsArray - contain things with the same location
-     * @return {array} contains location and properties
-     */
-    addProperties: function (thingsArray) {
-        var thingsObservationsLength,
-            thingsProperties = [],
-            utc = this.get("utc");
-
-        _.each(thingsArray, function (thing) {
-            // if no datastream exists
-            if (_.isEmpty(thing.Datastreams)) {
-                return;
-            }
-
-            thingsObservationsLength = thing.Datastreams[0].Observations.length;
-
-            if (!_.has(thing, "properties")) {
-                thing.properties = {};
-            }
-            // get newest observation if existing
-            if (thingsObservationsLength > 0) {
-                thing.properties.state = String(thing.Datastreams[0].Observations[0].result);
-                thing.properties.phenomenonTime = this.changeTimeZone(thing.Datastreams[0].Observations[0].phenomenonTime, utc);
-            }
-            else {
-                thing.properties.state = "undefined";
-                thing.properties.phenomenonTime = "undefined";
-            }
-
-            thing.properties.dataStreamId = thing.Datastreams[0]["@iot.id"];
-            thingsProperties.push(thing.properties);
-        }, this);
-
-        return thingsProperties;
-    },
-
-    /**
-     * combine various properties with a Pipe (|)
-     * @param  {array} keys - contains propertie fields
-     * @param  {array} thingsProperties - contains location and properties
-     * @return {object} contains location and properties
-     */
-    combineProperties: function (keys, thingsProperties) {
-        var properties = {},
-            propList,
-            propString;
-
-        _.each(keys, function (key) {
-            propList = _.pluck(thingsProperties, key);
-            propString = propList.join(" | ");
-            properties[key] = propString;
-        }, this);
-
-        return properties;
+            aggregatedProperties[key] = valuesArray.join(" | ");
+        });
+        return aggregatedProperties;
     },
 
     /**
