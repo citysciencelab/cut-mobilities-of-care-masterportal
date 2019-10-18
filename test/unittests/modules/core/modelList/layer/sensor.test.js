@@ -13,12 +13,12 @@ describe("core/modelList/layer/sensor", function () {
         moment.locale("de");
     });
 
-    describe("buildSensorThingsURL", function () {
+    describe("buildSensorThingsUrl", function () {
         it("should return url as String for undefined input", function () {
-            expect(sensorLayer.buildSensorThingsURL(undefined, undefined, undefined)).to.be.a("string");
+            expect(sensorLayer.buildSensorThingsUrl(undefined, undefined, undefined)).to.be.a("string");
         });
         it("should return version in String", function () {
-            expect(sensorLayer.buildSensorThingsURL(undefined, 1.0, undefined)).to.have.string("v1.0");
+            expect(sensorLayer.buildSensorThingsUrl(undefined, 1.0, undefined)).to.have.string("v1.0");
         });
     });
 
