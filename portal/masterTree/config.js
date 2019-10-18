@@ -15,7 +15,6 @@ const Config = {
     },
     gfiWindow: "attached",
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
@@ -38,6 +37,7 @@ const Config = {
     quickHelp: {
         imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
     },
+    layerConf: "https://geodienste.hamburg.de/services-fhhnet-ALL.json",
     restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
     scaleLine: true,
     simpleMap: false,

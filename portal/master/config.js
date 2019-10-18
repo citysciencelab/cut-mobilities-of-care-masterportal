@@ -38,7 +38,7 @@ const Config = {
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/services-fhhnet-ALL.json",
+    layerConf: "https://geodienste.hamburg.de/services-fhhnet-ALL.json",
     restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
     styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
