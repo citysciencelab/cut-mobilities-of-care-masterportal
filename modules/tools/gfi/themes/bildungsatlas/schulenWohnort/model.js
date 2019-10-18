@@ -80,6 +80,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     onIsVisibleEvent: function (gfi, isVisible) {
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (!isVisible && this.get("isCreated") === true) {
+            console.log("test");
             this.destroy();
             this.set("isCreated", false);
         }
@@ -278,6 +279,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {LayerList} return if the current layer
      */
     getWohnortLayer: function () {
+        console.log(this.get("themeId"));
         var layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "schulenWohnort", "id": this.get("themeId")});
 
         return layerList;
