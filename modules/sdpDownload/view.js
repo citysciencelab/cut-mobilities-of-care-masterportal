@@ -1,12 +1,11 @@
 import SdpDownloadTemplate from "text-loader!./template.html";
-import SnippetDropdownView from "../snippets/dropdown/view";
+import GraphicalSelectView from "../snippets/graphicalselect/view";
 import "bootstrap-select";
 
 const SdpDownloadView = Backbone.View.extend({
       events: {
         "click .close": "closeView",
         "change select.selectpicker[name='formatSelection']": "formatSelected",
-        "changed.bs.select": "createDrawInteraction",
         "click .sdp-download": "download",
         "click .sdp-neuwerk-download": "downloadNeuwerk",
         "click .sdp-download-scharhoern": "downloadScharhoern",
@@ -30,7 +29,7 @@ const SdpDownloadView = Backbone.View.extend({
             }
         });
         if (this.model){
-            this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
+            this.graphicalSelectView = new GraphicalSelectView({model: this.model.get("graphicalSelectModel")});
             this.model.setLoaderPath(Radio.request("Util", "getPathFromLoader"));
         }
         if (this.model && this.model.get("isActive") === true) {
@@ -39,21 +38,19 @@ const SdpDownloadView = Backbone.View.extend({
     },
     template: _.template(SdpDownloadTemplate),
     className:'sdpDownload',
-    snippetDropdownView: {},
+    graphicalSelectView: {},
 
     render: function (model, value) {
-        var attr = model.toJSON();
+        const attr = model.toJSON();
         this.$el.html(this.template(attr));
         Radio.trigger("Sidebar", "append", this.el);
         Radio.trigger("Sidebar", "toggle", true);
         this.initFormatsSelectpicker();
-        this.$el.find(".geometric-selection").append(this.snippetDropdownView.render().el);
+        this.$el.find(".geometric-selection").append(this.graphicalSelectView.render().el);
         this.delegateEvents();
         return this;
     },
     closeView: function () {
-        this.model.resetView();
-        this.model.resetGeographicSelection();
         this.model.setIsActive(false);
         Radio.trigger("ModelList", "toggleDefaultTool");
     },
@@ -63,23 +60,6 @@ const SdpDownloadView = Backbone.View.extend({
             selectedTextFormat: "value",
             size: 6
         });
-    },
-    /**
-     * create draw interaction
-     * @param {*} evt todo
-     * @returns {void}
-     */
-    createDrawInteraction: function (evt) {
-        var geographicValues = this.model.get("geographicValues");
-        for (var prop in geographicValues) {
-            if(prop === evt.target.title){
-                if( this.model.get("drawInteraction")){
-                    this.model.get("drawInteraction").setActive(false);
-                }
-                this.model.createDrawInteraction(evt.target.value);
-                break;
-            }
-        }
     },
     download: function(evt){
         this.model.requestCompressedData();
