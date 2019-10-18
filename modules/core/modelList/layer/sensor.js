@@ -226,7 +226,6 @@ const SensorLayer = Layer.extend({
      */
     loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates) {
         var allThings = [],
-            thingsMerge = [],
             requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             things = this.getResponseFromRequestUrl(requestUrl),
             thingsCount,
@@ -260,19 +259,24 @@ const SensorLayer = Layer.extend({
 
         allThings = _.flatten(allThings);
 
+        console.log(allThings);
+        console.log(mergeThingsByCoordinates);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
         }
+        console.log(allThings);
+        
+        // allThings.forEach(thing => {
+        //     aggregateArrays = this.aggregateArrays(thing);
+        //     if (!_.isUndefined(aggregateArrays.location)) {
+        //         thingsMerge.push(this.aggregateArrays(thing));
+        //     }
 
-        allThings.forEach(thing => {
-            aggregateArrays = this.aggregateArrays(thing);
-            if (!_.isUndefined(aggregateArrays.location)) {
-                thingsMerge.push(this.aggregateArrays(thing));
-            }
+        // }, this);
+        allThings = this.aggregateArrays_2(allThings);
+        
 
-        }, this);
-
-        return thingsMerge;
+        return allThings;
     },
 
     /**
@@ -366,7 +370,22 @@ const SensorLayer = Layer.extend({
 
         return xy;
     },
+    aggregateArrays_2: function (allThings) {
+        const aggregatedArray = [];
 
+        allThings.forEach(thing => {
+            if (Array.isArray(thing)) {
+                console.log("array");
+                
+            }
+            else {
+                console.log("object");
+                
+            }
+        });
+
+        return aggregatedArray;
+    },
     /**
      * aggregate a given array into an object with location and properties
      * @param  {array} thingsArray - contain things with the same location
