@@ -3,7 +3,7 @@ import mqtt from "mqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
-import {transform} from "ol/proj.js";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
 
@@ -83,9 +83,10 @@ const SensorLayer = Layer.extend({
             url = this.get("useProxyURL") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
-            epsg = this.get("epsg");
+            epsg = this.get("epsg"),
+            mergeThingsByCoordinates = this.get("mergeThingsByCoordinates") || false;
 
-        sensorData = this.loadSensorThings(url, version, urlParams);
+        sensorData = this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates);
         features = this.drawPoints(sensorData, epsg);
 
         // Add features to vectorlayer
@@ -104,16 +105,16 @@ const SensorLayer = Layer.extend({
 
     /**
      * get response from a given URL
-     * @param  {String} requestURL - to request sensordata
+     * @param  {String} requestUrl - to request sensordata
      * @return {objects} response with sensorObjects
      */
-    getResponseFromRequestURL: function (requestURL) {
+    getResponseFromRequestUrl: function (requestUrl) {
         var response;
 
         Radio.trigger("Util", "showLoader");
         $.ajax({
             dataType: "json",
-            url: requestURL,
+            url: requestUrl,
             async: false,
             type: "GET",
             context: this,
@@ -146,13 +147,13 @@ const SensorLayer = Layer.extend({
         var features = [];
 
         _.each(sensorData, function (data, index) {
-            var xyTransfrom,
+            var xyTransform,
                 feature;
 
             if (_.has(data, "location") && !_.isUndefined(epsg)) {
-                xyTransfrom = transform(data.location, epsg, Config.view.epsg);
+                xyTransform = transformToMapProjection(Radio.request("Map", "getMap"), epsg, data.location);
                 feature = new Feature({
-                    geometry: new Point(xyTransfrom)
+                    geometry: new Point(xyTransform)
                 });
             }
             else {
@@ -220,17 +221,18 @@ const SensorLayer = Layer.extend({
      * @param  {String} url - url to service
      * @param  {String} version - version from service
      * @param  {String} urlParams - url parameters
+     * @param  {Boolean} mergeThingsByCoordinates - Flag if things should be merged if they have the same Coordinates
      * @return {array} all things with attributes and location
      */
-    loadSensorThings: function (url, version, urlParams) {
+    loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates) {
         var allThings = [],
             thingsMerge = [],
-            requestURL = this.buildSensorThingsURL(url, version, urlParams),
-            things = this.getResponseFromRequestURL(requestURL),
+            requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
+            things = this.getResponseFromRequestUrl(requestUrl),
             thingsCount,
             thingsbyOneRequest,
             aggregateArrays,
-            thingsRequestURL,
+            thingsRequestUrl,
             index;
 
         if (_.isUndefined(things) || !_.has(things, "value")) {
@@ -244,9 +246,9 @@ const SensorLayer = Layer.extend({
 
         allThings.push(things.value);
         for (index = thingsbyOneRequest; index < thingsCount; index += thingsbyOneRequest) {
-            thingsRequestURL = requestURL + "&$skip=" + index;
+            thingsRequestUrl = requestUrl + "&$skip=" + index;
 
-            things = this.getResponseFromRequestURL(thingsRequestURL);
+            things = this.getResponseFromRequestUrl(thingsRequestUrl);
 
             if (_.isUndefined(things) || !_.has(things, "value")) {
                 // Return witout data to prevent crashing
@@ -257,9 +259,12 @@ const SensorLayer = Layer.extend({
         }
 
         allThings = _.flatten(allThings);
-        allThings = this.mergeByCoordinates(allThings);
 
-        _.each(allThings, function (thing) {
+        if (mergeThingsByCoordinates) {
+            allThings = this.mergeByCoordinates(allThings);
+        }
+
+        allThings.forEach(thing => {
             aggregateArrays = this.aggregateArrays(thing);
             if (!_.isUndefined(aggregateArrays.location)) {
                 thingsMerge.push(this.aggregateArrays(thing));
@@ -277,8 +282,8 @@ const SensorLayer = Layer.extend({
      * @param  {String} urlParams - url parameters
      * @return {String} URL to request sensorThings
      */
-    buildSensorThingsURL: function (url, version, urlParams) {
-        var requestURL,
+    buildSensorThingsUrl: function (url, version, urlParams) {
+        var requestUrl,
             and = "$",
             versionAsString = version;
 
@@ -286,16 +291,16 @@ const SensorLayer = Layer.extend({
             versionAsString = version.toFixed(1);
         }
 
-        requestURL = url + "/v" + versionAsString + "/Things?";
+        requestUrl = url + "/v" + versionAsString + "/Things?";
 
-        if (!_.isUndefined(urlParams)) {
+        if (urlParams) {
             _.each(urlParams, function (value, key) {
-                requestURL = requestURL + and + key + "=" + value;
+                requestUrl = requestUrl + and + key + "=" + value;
                 and = "&$";
             });
         }
 
-        return requestURL;
+        return requestUrl;
     },
 
     /**
@@ -393,7 +398,7 @@ const SensorLayer = Layer.extend({
         properties = this.combineProperties(keys, thingsProperties);
 
         // set URL and version to properties, to build on custom theme with analytics
-        properties.requestURL = this.get("url");
+        properties.requestUrl = this.get("url");
         properties.versionURL = this.get("version");
 
         // add to Object

@@ -140,9 +140,10 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
+|[urlParameter](#markdown-header-sensor-layer)|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
+|mergeThingsByCoordinates|nein|Boolean|false|Gibt an ob Things mit gleicher Coordinate zusammenfasst werden sollen.|`true`|
 
 **Beispiel Sensor:**
 
@@ -168,10 +169,47 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
          "plug" : "Stecker",
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
-      }
+      },
+      "mergeThingsByCoordinates": true
    }
 ```
 
+
+## Sensor-Layer.urlParameter ##
+
+Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
+|expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+
+**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeiche auch von jedem Datastream die neueste Observation**
+```
+#!json
+
+   {
+      "urlParameter" : {
+         "filter" : "startswith(Things/name,'Charging')",
+         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+      }
+   }
+```
+**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeiche auch von jedem Datastream die neueste Observation**
+```
+#!json
+
+   {
+      "urlParameter": {
+			"filter": "startswith(Things/name,'Charging')",
+			"expand": [
+				"Locations",
+				"Datastreams($filter=indexof(Datastream/name,'Lastenrad') ge 1)",
+				"Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+			]
+		}
+   }
+```
 ## WMS_WFS_datasets ##
 
 Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter *kategorie..* werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.
