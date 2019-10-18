@@ -87,7 +87,7 @@ const BalkendiagrammTheme = Theme.extend({
             }
             else if (layerDataFormat.type === "anteilWanderungen") {
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + element[0].Stadtteil)) {
-                    content[key] = Math.round(this.get("latestStatistic")) > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
+                    content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
                 }
                 else {
                     content[key] = Math.round(content[key]) + "%";
@@ -135,7 +135,9 @@ const BalkendiagrammTheme = Theme.extend({
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createD3Document: function () {
-        var width = parseInt($(".gfi-balkendiagramm").css("width"), 10);
+        var width = parseInt($(".gfi-balkendiagramm").css("width"), 10),
+            dataType = this.get("layerDataFormatType");
+
         const graphConfig = {
             graphType: "BarGraph",
             selector: ".graph",
@@ -163,15 +165,17 @@ const BalkendiagrammTheme = Theme.extend({
                 "number"
             ],
             setTooltipValue: function (value) {
-                if (!isNaN(value) && value.toString().indexOf(".") !== -1) {
+                if (!isNaN(value) && value.toString().indexOf(".") !== -1 && dataType !== "anteilWanderungen") {
                     return value.toFixed(2) + "%";
+                }
+                else if (value.toString().indexOf(".") !== -1) {
+                    return value.toFixed(2);
                 }
 
                 return value;
             }
         };
 
-        $(".graph svg").remove();
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
