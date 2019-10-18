@@ -108,6 +108,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 this.set("anzahlSchuler", this.get("gfiContent").allProperties.C32_SuS);
             }
 
+            this.set("schuleLevel", layerSchuleLevel);
+
             this.listenToOnce(Radio.channel("Layer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
