@@ -53,9 +53,6 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @returns {void}
      */
     loadInitialData: function (layerId, features) {
-        if (!this.isLayerSourceValid()) {
-            this.prepareLayerObject();
-        }
         if (!layerId) {
             const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
                 dataLayerNameOrId = dataLayer ? dataLayer.get("name") : this.get("dataLayerId"),
@@ -99,9 +96,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
-        if (Radio.request("Parser", "getTreeType") !== "light") {
-            this.loadInitialData();
-        }
+        this.loadInitialData();
     },
 
     /**

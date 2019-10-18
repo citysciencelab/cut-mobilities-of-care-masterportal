@@ -738,7 +738,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
 
-            this.add(lightModels);
+            lightModels.forEach(model => this.add(model));
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
@@ -829,9 +829,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     addModelsByAttributes: function (attrs) {
         var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
-        lightModels.forEach(model => {
-            this.add(model);
-        });
+        lightModels.forEach(model => this.add(model));
         this.updateLayerView();
     },
 
