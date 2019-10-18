@@ -230,7 +230,6 @@ const SensorLayer = Layer.extend({
             things = this.getResponseFromRequestUrl(requestUrl),
             thingsCount,
             thingsbyOneRequest,
-            aggregateArrays,
             thingsRequestUrl,
             index;
 
@@ -259,13 +258,10 @@ const SensorLayer = Layer.extend({
 
         allThings = _.flatten(allThings);
 
-        console.log(allThings);
-        console.log(mergeThingsByCoordinates);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
         }
-        console.log(allThings);
-        
+
         // allThings.forEach(thing => {
         //     aggregateArrays = this.aggregateArrays(thing);
         //     if (!_.isUndefined(aggregateArrays.location)) {
@@ -274,7 +270,6 @@ const SensorLayer = Layer.extend({
 
         // }, this);
         allThings = this.aggregateArrays_2(allThings);
-        
 
         return allThings;
     },
@@ -375,12 +370,10 @@ const SensorLayer = Layer.extend({
 
         allThings.forEach(thing => {
             if (Array.isArray(thing)) {
-                console.log("array");
-                
+            // TODO:create aggregated Object from array
             }
             else {
-                console.log("object");
-                
+                // TODO:create aggregated Object
             }
         });
 
