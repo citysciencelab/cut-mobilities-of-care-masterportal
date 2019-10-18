@@ -586,12 +586,12 @@
               "clusterDistance":30
            },
            {
-              "id":"5708",
-              "visibility":false,
+              "id":"2413",
+              "visibility":true,
               "styleable":true,
               "geomType":"Polygon",
               "attributesToStyle":[
-                 "Pkw_AP30"
+                 "Freq"
               ]
            },
            {
