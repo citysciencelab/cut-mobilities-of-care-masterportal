@@ -156,10 +156,8 @@ const BalkendiagrammTheme = Theme.extend({
             },
             data: this.get("dataset"),
             xAttr: "year",
-            xAxisLabel: {
-                label: "Jahr"
-            },
-            yAxisLabel: this.getyAxislabel(),
+            xAxisLabel: {},
+            yAxisLabel: {},
 
             attrToShowArray: [
                 "number"
@@ -180,29 +178,6 @@ const BalkendiagrammTheme = Theme.extend({
     // setting data for balkendiagramm
     setDataset: function (value) {
         this.set("dataset", value);
-    },
-
-    /**
-     * get the right y axis lebal for bar graph
-     * @returns {object} yAxislabel
-     */
-    getyAxislabel: function () {
-        var dataType = this.get("layerDataFormatType"),
-            yAxislabel = {};
-
-        if (dataType === "anzahl") {
-            yAxislabel = {
-                label: "Anzahl"
-            };
-        }
-        else {
-            yAxislabel = {
-                label: "Anteil in Prozent",
-                offset: 40
-            };
-        }
-
-        return yAxislabel;
     },
 
     /**
