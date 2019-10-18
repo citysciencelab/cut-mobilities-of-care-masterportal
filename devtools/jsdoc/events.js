@@ -927,9 +927,9 @@
  */
 
 /**
- * @event Core.ModelList#RadioTriggerModelListAddInitialyNeededModels
- * @description See {@link List#addInitialyNeededModels}
- * @example Radio.trigger("ModelList", "addInitialyNeededModels")
+ * @event Core.ModelList#RadioTriggerModelListAddInitiallyNeededModels
+ * @description See {@link List#addInitiallyNeededModels}
+ * @example Radio.trigger("ModelList", "addInitiallyNeededModels")
  */
 
 /**
