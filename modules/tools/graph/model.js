@@ -686,7 +686,6 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
-            offset = 0,
             barConfig = {
                 barWidth: width / data.length,
                 setTooltipValue: graphConfig.setTooltipValue
@@ -696,8 +695,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             this.appendLegend(svg, graphConfig.legendData);
         }
         this.drawBars(svg, data, scaleX, scaleY, height, selector, xAttr, attrToShowArray, barConfig);
-        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, offset);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, offset);
+        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width);
     },
 
     /**
