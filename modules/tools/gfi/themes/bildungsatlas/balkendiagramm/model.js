@@ -27,20 +27,18 @@ const BalkendiagrammTheme = Theme.extend({
             key,
             content = {},
             layerList,
-            layerName,
             layerDataFormat;
 
         // Get the attributes from config file
         layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")});
 
         // Get the attributes from list individuelly to show in different layers
-        layerName = layerList[0].get("name");
         layerDataFormat = layerList[0].get("format");
 
         // get the description of this diagram
         this.set("description", layerList[0].get("description"));
 
-        if (layerName.includes("Stadtteile")) {
+        if (layerDataFormat.description === "Stadtteile") {
             this.set("Title", element[0].Stadtteil);
 
             content[element[0].Stadtteil] = this.get("latestStatistic");
@@ -48,21 +46,21 @@ const BalkendiagrammTheme = Theme.extend({
             content.Hamburg = element[0]["Summe hamburg"];
 
             // Check if the layer of wanderungen by the attribute description
-            if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
+            if (layerDataFormat.type === "anteilWanderungen") {
                 content = {};
                 content["In " + element[0].Stadtteil] = this.get("latestStatistic");
                 content["Anteil der Zuzüge aus dem Umland:"] = element[0]["Zuzuege aus_umland"];
                 content["Anteil der Zuzüge ins Umland:"] = element[0]["Fortzuege aus_dem_umland"];
             }
         }
-        else if (layerName.includes("Sozialräume")) {
+        else if (layerDataFormat.description === "Sozialräume") {
             this.set("Title", element[0]["Sozialraum name"]);
 
             content[element[0]["Sozialraum name"]] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.Hamburg = element[0]["Summe hamburg"];
         }
-        else if (layerName.includes(" Gebiete")) {
+        else if (layerDataFormat.description === "Statistische Gebiete") {
             this.set("Title", element[0].Stadtteil + ": " + element[0].Statgebiet);
 
             content["Statistisches Gebiet"] = this.get("latestStatistic");
@@ -70,11 +68,9 @@ const BalkendiagrammTheme = Theme.extend({
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
             content.Hamburg = element[0]["Summe hamburg"];
 
-            // Check if the layer of wanderungen by the attribute description
-            if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
+            if (layerDataFormat.type === "anteilWanderungen") {
                 content = {};
-
-                content["Im Statistischen Gebiet"] = Math.round(this.get("latestStatistic")) > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
+                content["im Statistischen Gebiet"] = this.get("latestStatistic");
             }
         }
 
@@ -86,15 +82,21 @@ const BalkendiagrammTheme = Theme.extend({
             if (content[key] === null || _.isUndefined(content[key]) === true) {
                 content[key] = "*g.F.";
             }
-            else if (layerDataFormat.includes("anteil")) {
+            else if (layerDataFormat.type === "anteil") {
                 content[key] = Math.round(content[key]) + "%";
             }
-            else if (layerDataFormat.includes("anteilWanderungen")) {
-                content[key] = Math.round(content[key]) + "%";
+            else if (layerDataFormat.type === "anteilWanderungen") {
+                if (key.includes("im Statistischen Gebiet") || key.includes("In " + element[0].Stadtteil)) {
+                    content[key] = Math.round(this.get("latestStatistic")) > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
+                }
+                else {
+                    content[key] = Math.round(content[key]) + "%";
+                }
             }
         }
 
         this.set("layerDataFormat", layerDataFormat);
+        this.set("layerDataFormatType", layerDataFormat.type);
         this.set("content", content);
     },
 
@@ -146,7 +148,6 @@ const BalkendiagrammTheme = Theme.extend({
                 left: 45
             },
             svgClass: "graph-svg",
-            selectorTooltip: ".graph-tooltip-div",
             scaleTypeX: "ordinal",
             scaleTypeY: "linear",
             yAxisTicks: {
@@ -155,8 +156,11 @@ const BalkendiagrammTheme = Theme.extend({
             },
             data: this.get("dataset"),
             xAttr: "year",
-            xAxisLabel: {},
-            yAxisLabel: {},
+            xAxisLabel: {
+                label: "Jahr"
+            },
+            yAxisLabel: this.getyAxislabel(),
+
             attrToShowArray: [
                 "number"
             ],
@@ -176,6 +180,29 @@ const BalkendiagrammTheme = Theme.extend({
     // setting data for balkendiagramm
     setDataset: function (value) {
         this.set("dataset", value);
+    },
+
+    /**
+     * get the right y axis lebal for bar graph
+     * @returns {object} yAxislabel
+     */
+    getyAxislabel: function () {
+        var dataType = this.get("layerDataFormatType"),
+            yAxislabel = {};
+
+        if (dataType === "anzahl") {
+            yAxislabel = {
+                label: "Anzahl"
+            };
+        }
+        else {
+            yAxislabel = {
+                label: "Anteil in Prozent",
+                offset: 40
+            };
+        }
+
+        return yAxislabel;
     },
 
     /**

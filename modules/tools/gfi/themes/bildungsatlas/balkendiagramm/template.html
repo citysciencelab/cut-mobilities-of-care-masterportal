@@ -5,7 +5,7 @@
 </ul>
 <div class="tab-content">
     <div class="gfi-info tab-pane fade" id="info">
-        <% if (layerDataFormat.includes("anzahl ")) { %>
+        <% if (layerDataFormat.type === "anzahl") { %>
             <br>
             <p><b>Anzahl der Kinder nach Altersgruppen</b></p>
             <p>Datenstand: 31.12.2017.</p>
@@ -15,7 +15,7 @@
             <br>
             <p><b>Gebietsveränderungen 2011:</b></p>
             <p>Am 1.1.2011 gab es in Hamburg eine Veränderung der Gebietszuschnitte bei den statistischen Gebieten und den Stadtteilen. Für die <b>Darstellung der Zeitreihe</b> im Datenblatt auf Ebene der statistischen Gebiete wurden die Daten aus den alten Gebietseinheiten den entsprechenden neuen Gebietseinheiten ab 2011 zugewiesen. Auf Ebene der Stadtteile wurden die Zahlen der 2011 zu Hamm zusammengelegten Stadtteile Hamm-Süd, Hamm-Mitte und Hamm-Nord auch in der Zeitreihe zu dem heutigen Gebiet von Hamm zusammengefasst. Die Neugründung von Neuallermöhe 2011 aus den Stadtteilen Allermöhe und Bergedorf führt in der Darstellung von Zeitreihen auf Stadtteilebene zu größeren Sprüngen in den betroffenen Gebieten.</P>
-        <% } else if (layerDataFormat.includes("anteil ")) { %>
+        <% } else if (layerDataFormat.type === "anteil") { %>
             <br>
             <p><b>Anteil der Kinder nach Altersgruppen</b></p>
             <p>Datenstand: 31.12.2017.</p>
@@ -25,7 +25,7 @@
             <br>
             <p><b>Gebietsveränderungen 2011:</b></p>
             <p>Am 1.1.2011 gab es in Hamburg eine Veränderung der Gebietszuschnitte bei den statistischen Gebieten und den Stadtteilen. Für die <b>Darstellung der Zeitreihe</b> im Datenblatt auf Ebene der statistischen Gebiete wurden die Daten aus den alten Gebietseinheiten den entsprechenden neuen Gebietseinheiten ab 2011 zugewiesen. Auf Ebene der Stadtteile wurden die Zahlen der 2011 zu Hamm zusammengelegten Stadtteile Hamm-Süd, Hamm-Mitte und Hamm-Nord auch in der Zeitreihe zu dem heutigen Gebiet von Hamm zusammengefasst. Die Neugründung von Neuallermöhe 2011 aus den Stadtteilen Allermöhe und Bergedorf führt in der Darstellung von Zeitreihen auf Stadtteilebene zu größeren Sprüngen in den betroffenen Gebieten.</P>
-        <% } else if (layerDataFormat.includes("anteilWanderungen")) { %>
+        <% } else if (layerDataFormat.type === "anteilWanderungen") { %>
             <br>
             <p><b>Wanderungssaldo von Familien</b></p>
             <p>Datenstand: 31.12.2017.</p>
@@ -65,7 +65,7 @@
         </table>
         <br/>
         <% if (typeof latestStatistic === "number") { %>
-        <div class="panel bikeLevelHeader" id="chart">
+        <div class="panel grahpHeader" id="chart">
             <b>Kennzahl im Zeitverlauf</b>
         </div>
         <div id="d3-div" class="graph">
