@@ -45,7 +45,7 @@ const BalkendiagrammTheme = Theme.extend({
 
             content[element[0].Stadtteil] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
-            content.hamburg = element[0]["Summe hamburg"];
+            content.Hamburg = element[0]["Summe hamburg"];
 
             // Check if the layer of wanderungen by the attribute description
             if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
@@ -60,7 +60,7 @@ const BalkendiagrammTheme = Theme.extend({
 
             content[element[0]["Sozialraum name"]] = this.get("latestStatistic");
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
-            content.hamburg = element[0]["Summe hamburg"];
+            content.Hamburg = element[0]["Summe hamburg"];
         }
         else if (layerName.includes(" Gebiete")) {
             this.set("Title", element[0].Stadtteil + ": " + element[0].Statgebiet);
@@ -68,7 +68,7 @@ const BalkendiagrammTheme = Theme.extend({
             content["Statistisches Gebiet"] = this.get("latestStatistic");
             content[element[0].Stadtteil] = element[0]["Summe stadtteil"];
             content["Bezirk " + element[0].Bezirk] = element[0]["Summe bezirk"];
-            content.hamburg = element[0]["Summe hamburg"];
+            content.Hamburg = element[0]["Summe hamburg"];
 
             // Check if the layer of wanderungen by the attribute description
             if (this.get("description").includes("Anzahl der Zu- bzw. Fortzüge")) {
@@ -87,7 +87,7 @@ const BalkendiagrammTheme = Theme.extend({
                 content[key] = "*g.F.";
             }
             else if (layerDataFormat.includes("anteil")) {
-                content[key] = Math.trunc(content[key]) + "%";
+                content[key] = Math.round(content[key]) + "%";
             }
             else if (layerDataFormat.includes("anteilWanderungen")) {
                 content[key] = Math.round(content[key]) + "%";
@@ -133,7 +133,7 @@ const BalkendiagrammTheme = Theme.extend({
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createD3Document: function () {
-        var width = parseInt($(".gfi-bakendiagramm").css("width"), 10);
+        var width = parseInt($(".gfi-balkendiagramm").css("width"), 10);
         const graphConfig = {
             graphType: "BarGraph",
             selector: ".graph",
@@ -162,7 +162,7 @@ const BalkendiagrammTheme = Theme.extend({
             ],
             setTooltipValue: function (value) {
                 if (!isNaN(value) && value.toString().indexOf(".") !== -1) {
-                    return Math.round(value * 100) / 100 + "%";
+                    return value.toFixed(2) + "%";
                 }
 
                 return value;
