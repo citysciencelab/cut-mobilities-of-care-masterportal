@@ -282,7 +282,7 @@ const SensorLayer = Layer.extend({
                 if (value) {
                     thing.properties[key] = value;
                     thing.properties[key + "_phenomenonTime"] = phenomenonTime;
-                    thing.properties.dataSteamId = dataStreamId;
+                    thing.properties.dataStreamId = dataStreamId;
                 }
             });
         });
