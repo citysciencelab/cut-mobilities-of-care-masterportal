@@ -1,4 +1,6 @@
 import Theme from "../model";
+import ImgView from "../../objects/image/view";
+import VideoView from "../../objects/video/view";
 import RoutableView from "../../objects/routingButton/view";
 
 const DefaultTheme = Theme.extend({
@@ -40,18 +42,79 @@ const DefaultTheme = Theme.extend({
      */
     replaceValuesWithChildObjects: function () {
         var element = this.get("gfiContent"),
-            idx1,
-            key,
-            idx;
+            children = [];
 
-        for (idx1 in element) {
-            for (key in element[idx1]) {
-                idx = key.replace(" ", "_");
-
-                this.set(idx, element[idx1][key]);
-            }
+        if (_.isString(element) && element.match(/content="text\/html/g)) {
+            children.push(element);
         }
+        else {
+            _.each(element, function (ele, index) {
+                _.each(ele, function (val, key) {
+                    var copyright,
+                        imgView,
+                        videoView,
+                        valString = String(val);
 
+                    if (valString.substr(0, 4) === "http"
+                        && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
+                        // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
+                        copyright = "";
+
+                        if (element[index].Copyright !== null) {
+                            copyright = element[index].Copyright;
+                            element[index].Copyright = "#";
+                        }
+                        else if (element[index].copyright !== null) {
+                            copyright = element[index].copyright;
+                            element[index].copyright = "#";
+                        }
+
+                        imgView = new ImgView(valString, copyright);
+
+                        element[index][key] = "#";
+
+                        children.push({
+                            key: imgView.model.get("id"),
+                            val: imgView,
+                            type: "image"
+                        });
+                    }
+                    else if (key === "video" && Radio.request("Util", "isAny") === null) {
+                        videoView = new VideoView(valString, "rtmp/mp4", "400px", "300px");
+
+                        element[index][key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView,
+                            type: "video"
+                        });
+                        if (_.has(element, "mobil_video")) {
+                            element.mobil_video = "#";
+                        }
+                    }
+                    else if (key === "mobil_video" && Radio.request("Util", "isAny")) {
+                        videoView = new VideoView(valString, "application/x-mpegURL", "300px", "300px");
+
+                        element[index][key] = "#";
+                        children.push({
+                            key: videoView.model.get("id"),
+                            val: videoView,
+                            type: "mobil_video"
+                        });
+                        if (_.has(element, "video")) {
+                            element.video = "#";
+                        }
+                    }
+                    // lösche leere Dummy-Einträge wieder raus.
+                    element[index] = _.omit(element[index], function (value) {
+                        return value === "#";
+                    });
+                }, this);
+            });
+        }
+        if (children.length > 0) {
+            this.set("children", children);
+        }
         this.set("gfiContent", element);
     }
 });
