@@ -32,6 +32,8 @@ import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
 import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
 import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
+import BalkendiagrammThemeView from "./bildungsatlas/balkendiagramm/view";
+import BalkendiagrammTheme from "./bildungsatlas/balkendiagramm/model";
 import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
 import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
 
@@ -105,6 +107,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "balkendiagramm") {
+            theme = new BalkendiagrammTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -217,6 +222,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "buildings_3d": {
                 new Buildings3dThemeView({model: model});
+                break;
+            }
+            case "balkendiagramm": {
+                new BalkendiagrammThemeView({model: model});
                 break;
             }
             default: {
