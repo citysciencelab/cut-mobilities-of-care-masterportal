@@ -265,7 +265,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {LayerList} return if the current layer
      */
     getWohnortLayer: function () {
-        var layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "schulenWohnort", "id": this.get("themeId")});
+        var layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
 
         return layerList;
     },
