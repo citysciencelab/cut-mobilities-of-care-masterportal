@@ -32,6 +32,15 @@
       "^/geoportal_metropolregion_hamburg_de": ""
     }
   },
+  "/geoportaltest_metropolregion_hamburg_de": {
+    "target": "https://geoportaltest.metropolregion.hamburg.de",
+    "pathRewrite": {
+      "^/geoportaltest_metropolregion_hamburg_de": ""
+    },
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
   "/hmdk_fhhnet_stadt_hamburg_de": {
     "target": "http://wfalgqw001"
   }
