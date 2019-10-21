@@ -37,7 +37,7 @@ const Config = {
     quickHelp: {
         imgPath: "https://geoportal-hamburg.de.de/lgv-config/img/"
     },
-    layerConf: "https://geodienste.hamburg.de/lgv-config/services-internet.json",
+    layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
     wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
