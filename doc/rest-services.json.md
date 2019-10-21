@@ -1,10 +1,10 @@
->Zurück zur [Dokumentation Masterportal](doc.md).
+>Zurück zur **[Dokumentation Masterportal](doc.md)**.
 
 # rest-services.json
 
 Das in der *config.js* erzeugte Objekt enthält den Key *restConf*, dessen Value auf einen Pfad zu einer JSON – Datei verweist. Dieser Pfad wird initial ausgewertet und die Datei unter der entsprechenden URL geladen, ausgewertet und im Hauptspeicher abgelegt. Einzelne Module lesen die Webservice-Definition aus dieser Datei aus.
 
-In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom Typ WFS oder WMS sind, also nicht für die visuelle Darstellung von Informationen herangezogen werden. Hier geht es zu einem [Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json).
+In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom Typ WFS oder WMS sind, also nicht für die visuelle Darstellung von Informationen herangezogen werden. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json)**.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -23,7 +23,7 @@ In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom
 5.	Gazetteer URL
 6.	WPS
 7.	Email Services
-8.  virtualcityPLANNER Service 
+8.  virtualcityPLANNER Service
 
 Häufig unterscheiden sich die zu verwendenden URLs zwischen Intranet und Internet-Nutzung. Aus diesem Grund erscheint meist das Vorhalten zweier identischer Dateien sinnvoll, die sich nur hinsichtlich der Webservice-URLs unterscheiden.
 Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):

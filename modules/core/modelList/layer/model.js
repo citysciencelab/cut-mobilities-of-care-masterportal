@@ -24,7 +24,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @abstract
      * @description Module to represent any layer
      * @extends Item
-     * @memberOf Core.ModelList.Layer
+     * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
      * @property {Boolean} isVisibleInMap=false Flag if layer is visible in map
@@ -42,16 +42,18 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @fires Layer#RadioTriggerLayerFeaturesLoaded
-     * @fires MapView#RadioRequestMapViewGetResoByScale
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Alerting#RadioTriggerAlertAlert
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
      * @listens Layer#RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#RadioTriggerMapChange
-     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
         this.registerInteractionTreeListeners(this.get("channel"));
@@ -70,6 +72,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Checks if dataLayerId matches the given layer id.
+     * @param {String} dataLayerId Id of dataLayer whose features are requested.
+     * @param {String} layerId Id of current layer.
+     * @returns {Boolean} - flag if dataLayerId matches given layer id.
+     */
+    checkIfDataLayer: function (dataLayerId, layerId) {
+        let isDataLayer = false;
+
+        if (dataLayerId === layerId) {
+            isDataLayer = true;
+        }
+        return isDataLayer;
+    },
+    /**
      * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
      * @param {object} options -
      * @returns {void}
@@ -86,11 +102,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     /**
      * Triggers event if vector features are loaded
      * @param {ol.Feature[]} features Loaded vector features
-     * @fires Layer#event:RadioTriggerLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @return {void}
      */
     featuresLoaded: function (features) {
-        this.get("channel").trigger("featuresLoaded", this.get("id"), features);
+        Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+    },
+    /**
+     * Triggers event if vector feature is loaded
+     * @param {ol.Feature} feature Updated vector feature
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @return {void}
+     */
+    featureUpdated: function (feature) {
+        Radio.trigger("VectorLayer", "featureUpdated", this.get("id"), feature);
     },
 
     /**
@@ -113,7 +138,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#event:changeTransparency
      * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#event:RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @param {Radio.channel} channel Radio channel of this module
      * @return {void}
      */
@@ -169,7 +194,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Register interaction with map view.
-     * @listens MapView#event:RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapViewChangedOptions
      * @returns {void}
      */
     registerInteractionMapViewListeners: function () {
@@ -202,7 +227,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Sets visible min and max resolution on layer.
-     * @fires MapView#event:RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @returns {void}
      */
     getResolutions: function () {

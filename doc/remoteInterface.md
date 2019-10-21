@@ -1,4 +1,4 @@
-Die Kommunikationsschnittstelle (Remote-Interface) bietet Zugriff auf festgelegte Events und Funktionen in unterschiedlichen Modulen. Sie ist mit [Backbone.Radio](https://github.com/marionettejs/backbone.radio) umgesetzt. Backbone.Radio wird als Radio in den globalen Namespace importiert.
+Die Kommunikationsschnittstelle (Remote-Interface) bietet Zugriff auf festgelegte Events und Funktionen in unterschiedlichen Modulen. Sie ist mit **[Backbone.Radio](https://github.com/marionettejs/backbone.radio)** umgesetzt. Backbone.Radio wird als Radio in den globalen Namespace importiert.
 
 Die Kommunikationsschnittstelle kann erst verwendet werden, wenn alle notwendigen Module geladen sind. Hierfür wird per window.postMessage() ein MessageEvent bereitgestellt, auf das sich wie folgt registriert werden kann:
 

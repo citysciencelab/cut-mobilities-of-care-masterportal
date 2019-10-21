@@ -13,7 +13,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @class MapView
      * @description todo
      * @extends Backbone.Model
-     * @memberOf Core
+     * @memberof Core
      * @constructs
      * @property {String} background="" todo
      * @property {String} units="m" todo

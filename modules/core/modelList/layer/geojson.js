@@ -5,29 +5,25 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
-    /**
-     * @class Class representing a GeoJSONLayer
-     * @description Module to represent GeoJSONLayer
-     * @extends Layer
-     * @constructs
-     * @memberOf Core.ModelList.Layer
-     * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
-     * @property {number} [clusterDistance="undefined"] Distance to group features to clusters
-     * @property {string} [styleId="ol default"] ID of style in style.json
-     * @fires StyleList#RadioRequestReturnModelById
-     * @fires MapView#RadioRequestGetProjection
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @fires Util#RadioTriggerUtilHideLoader
-     * @fires RemoteInterface#RadioTriggerPostMessage
-     */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         isClustered: false
     }),
 
     /**
+     * @class GeoJSONLayer
+     * @description Module to represent GeoJSONLayer
+     * @extends Layer
+     * @constructs
+     * @memberof Core.ModelList.Layer
+     * @property {String[]} supported=["2D", "3D"] Supported modes "2D" and / or "3D"
+     * @property {Boolean} isClustered=[false] Distance to group features to clusters
      * @fires StyleList#RadioRequestReturnModelById
-     * @returns {void}
+     * @fires MapView#RadioRequestGetProjection
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Util#RadioTriggerUtilHideLoader
+     * @fires RemoteInterface#RadioTriggerPostMessage
+     * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
 

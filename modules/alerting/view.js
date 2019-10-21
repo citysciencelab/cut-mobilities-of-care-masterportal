@@ -19,7 +19,7 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
      */
     initialize: function () {
         this.listenTo(this.model.get("channel"), {
-            "alert:remove": this.removeAll
+            "alert:remove": this.remove
         }, this);
         this.listenTo(this.model, {
             "addMessage": this.addMessage,
@@ -126,10 +126,16 @@ const AlertingView = Backbone.View.extend(/** @lends AlertingView.prototype */{
 
     /**
      * Removes all alerts
+     * @param {String} id Id of alert to remove
      * @returns {void}
      */
-    removeAll: function () {
-        this.$el.find(".alert").remove();
+    remove: function (id) {
+        if (id) {
+            this.$el.find("#" + id).remove();
+        }
+        else {
+            this.$el.find(".alert").remove();
+        }
     }
 });
 

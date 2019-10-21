@@ -7,7 +7,7 @@
 
 **Aufruf**:
 
-[http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html](http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html)
+**[http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html](http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html)**
 *******************************************************************************
 
 ##Wie man Tests schreibt:###
@@ -76,7 +76,7 @@ Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines *exp
 
 **beforeEach** ist eine Funktion, die benutzt werden kann, um Vorbereitungen für einzelne Testfälle durchzuführen. Sie wird für *jedes* **it** in einem **describe** *einmal* durchgeführt.
 
-[Mehr Infos](https://mochajs.org/)
+**[Mehr Infos](https://mochajs.org/)**
 
 ###Die Testcases###
 
@@ -91,7 +91,7 @@ Innerhalb eines **it** sollte ein **expect** stehen.
  expect(model.testMe()).to.deep.equal({name: "Jon Snow"});
 ```
 
-[Mehr Infos](http://chaijs.com/api/bdd/)
+**[Mehr Infos](http://chaijs.com/api/bdd/)**
 
 
 ###Best practices###
