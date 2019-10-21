@@ -87,10 +87,10 @@ const BalkendiagrammTheme = Theme.extend({
             }
             else if (layerDataFormat.type === "anteilWanderungen") {
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + element[0].Stadtteil)) {
-                    content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic")) : Math.round(this.get("latestStatistic"));
+                    content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic") * 100) / 100 : Math.round(this.get("latestStatistic") * 100) / 100;
                 }
                 else {
-                    content[key] = Math.round(content[key]) + "%";
+                    content[key] = Math.round(content[key] * 100) / 100 + "%";
                 }
             }
         }
@@ -166,10 +166,10 @@ const BalkendiagrammTheme = Theme.extend({
             ],
             setTooltipValue: function (value) {
                 if (!isNaN(value) && value.toString().indexOf(".") !== -1 && dataType !== "anteilWanderungen") {
-                    return value.toFixed(2) + "%";
+                    return Math.round(value * 100) / 100 + "%";
                 }
                 else if (value.toString().indexOf(".") !== -1) {
-                    return value.toFixed(2);
+                    return Math.round(value * 100) / 100;
                 }
 
                 return value;
