@@ -11,6 +11,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         this.listenTo(this, {
             "change:isReady": function () {
                 this.replaceValuesWithRealResults();
+                this.setInfoHtml();
             }
         });
     },
@@ -40,6 +41,21 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
 
             this.set(idx, value);
         }
+    },
+
+    /**
+     * here we need to get the format information to decide which info to show
+     * @returns {void}
+     */
+    setInfoHtml: function () {
+        const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
+        var level;
+
+        if (layerList) {
+            level = layerList[0].get("format").level;
+        }
+
+        this.set("level", level);
     }
 });
 

@@ -5,8 +5,29 @@
 </ul>
 <div class="tab-content">
     <div class="gfi-info tab-pane fade" id="info">
-        <h5><b>Schulstandorte mit Jahrgängen 1 bis 4:</b></h5>
-        <p>Aufgeführt sind alle Grundschulen des allgemeinbildenden Schulsystems* sowie Sonderschulen und Stadtteilschulen mit einer Primarstufe**.</p>
+        <% if (level === "1-4") { %>
+            <br>
+            <p><b>Schulstandorte mit Jahrgängen 1 bis 4:</b></p>
+            <br>
+            <p>Aufgeführt sind alle Grundschulen des allgemeinbildenden Schulsystems* sowie Sonderschulen und Stadtteilschulen mit einer Primarstufe**.</p>
+            <br>
+            <p><b>Stadtteilschulen mit Schülerinnen und Schülern in der Primarstufe:</b></p>
+            <p>Im Schuljahr 2015/16 gibt es in Hamburg insgesamt 25 Stadtteilschulen mit Schülerinnen und Schülern in der Primarstufe. Hierbei handelt es sich um Stadtteilschulen, die gleichzeitig auch einen Grundschulbereich unterhalten. Von den 25 Stadtteilschulen sind 13 Schulen staatlich und 12 Schulen nicht-staatlich.</p>
+            <br>
+            <p><b>Sonderschulen und ReBBZs:</b></p>
+            <P>Seit der Umsetzung inklusiver Bildung an Hamburgs Schulen umfassen die Sonderschulen nur noch die speziellen Sonderschulen. Die Angebote der früheren Förder- und Sprachheilschulen, die vor 2012 auch zu den Sonderschulen zählten, wurden gemeinsam mit den Angeboten der Regionalen Beratungs- und Unterstützungsstellen (REBUS) 2012 in den Regionalen Bildungs- und Beratungszentren (ReBBZ) zu einem Angebot zusammengeführt. Auf der Karte dargestellt sind die ReBBZ unter der Schulform Sonderschule. Ausgewiesen werden nur Hauptstandorte an denen auch Kinder beschult werden. Weitere Standorte der Beratung werden in der Karte nicht ausgewiesen.</P>
+            <br>
+            <p><b>* Allgemeinbildende Schulen </b> vermitteln im Primarbereich die Grundlagen für eine weiterführende Bildung, im Sekundarbereich I und II eine allgemeine Grundbildung bzw. vertiefte Allgemeinbildung. Zu den allgemeinbildenden Schulen der im Bildungsatlas abgebildeten Primarstufe und der Sekundarstufe I gehören in Hamburg Grundschulen, Stadtteilschulen, Gymnasien sowie Sonderschulen.</p>
+            <br>
+            <p><b>** Primarstufe: </b>Die Jahrgangsstufen 1 bis 4.</p>
+        <% } else if (level === "5") { %>
+            <br>
+            <p><b>Standorte der weiterführenden Schulen:</b></p>
+            <p>Aufgeführt sind alle Standorte von Schulen der Sekundarstufe I (Stadtteilschule, Gymnasium, Sonderschule).</p>
+            <br>
+            <p><b>Sonderschulen und ReBBZs:</b></p>
+            <p>Seit der Umsetzung inklusiver Bildung an Hamburgs Schulen umfassen die Sonderschulen nur noch die speziellen Sonderschulen. Die Angebote der früheren Förder- und Sprachheilschulen, die vor 2012 auch zu den Sonderschulen zählten, wurden gemeinsam mit den Angeboten der Regionalen Beratungs- und Unterstützungsstellen (REBUS) 2012 in den Regionalen Bildungs- und Beratungszentren (ReBBZ) zu einem Angebot zusammengeführt. Auf der Karte dargestellt sind die ReBBZ unter der Schulform Sonderschule. Ausgewiesen werden nur Hauptstandorte an denen auch Kinder beschult werden. Weitere Standorte der Beratung werden in der Karte nicht ausgewiesen.</p>
+        <% } %>
     </div>
     <div class="gfi-daten tab-pane fade in active" id="daten">
         <table class="table table-striped">

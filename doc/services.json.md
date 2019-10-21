@@ -1,17 +1,17 @@
->Zurück zur [Dokumentation Masterportal](doc.md).
+>Zurück zur **[Dokumentation Masterportal](doc.md)**.
 
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem [Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json).
+Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ## WMS-Layer ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der [config.json](config.json.md) den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
-|[datasets](#markdown-header-wms_wfs_datasets)|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der [rest-services.json](rest-services.json.md) die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der [config.json](config.json.md) der Baumtyp *default* gesetzt ist.||
+|cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der **[config.json](config.json.md)** den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
+|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der **[rest-services.json](rest-services.json.md)** die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der **[config.json](config.json.md)** der Baumtyp *default* gesetzt ist.||
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
 |gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"ignore"`|
@@ -27,7 +27,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
 |tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
-|typ|ja|String||Diensttyp, in diesem Fall WMS ([WFS siehe unten](#markdown-header-wfs-layer) und [SensorThings-API siehe unten](#markdown-header-sensor-layer))|`"WMS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
 **Beispiel WMS:**
@@ -79,7 +79,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
 |gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
@@ -87,7 +87,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall WFS ([WMS siehe oben](#markdown-header-wms-layer) und [SensorThings-API siehe unten](#markdown-header-sensor-layer))|`"WFS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WFS (**[WMS siehe oben](#markdown-header-wms-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WFS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"`|
 |version|nein|String||Dienste Version, die über GetFeature angesprochen wird.|`"1.1.0"`|
 
@@ -138,7 +138,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |id|ja|String||Frei wählbare Layer-ID|`"999999"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
-|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API ([WMS siehe oben](#markdown-header-wms-layer) und [WFS siehe oben](#markdown-header-wfs-layer))|`"SensorThings"`|
+|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|nein|String||Anagbe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). |`{"filter" : "startswith(Things/name,'Charging')", "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"}`|
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
@@ -261,7 +261,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |gfiAttributes|ja|String||GFI-Attribute die angezeigt werden sollen. Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind: **ignore**: keine GFI-Abfrage möglich, **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt. Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, z.B. *SHAPE, OBJECTID* etc.|`"showAll"`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
@@ -270,7 +270,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |hiddenFeatures|nein|Array||Liste mit IDs, die in der Ebene versteckt werden sollen|`["id_1", "id_2"]`|
 |typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
-|[cesium3DTilesetOptions]|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
+|**[cesium3DTilesetOptions]**|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
 
@@ -314,14 +314,14 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
 |typ|ja|String||Diensttyp, in diesem Fall Terrain3D |`"Terrain3D"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/terrain"`|
-|[cesiumTerrainProviderOptions]|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+|**[cesiumTerrainProviderOptions]**|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
 
 [cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
 
@@ -362,7 +362,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -412,7 +412,7 @@ Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|[datasets](#markdown-header-wms_wfs_datasets)|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -482,4 +482,4 @@ Entity Optionen
      ]
    }
 ```
->Zurück zur [Dokumentation Masterportal](doc.md).
+>Zurück zur **[Dokumentation Masterportal](doc.md)**.
