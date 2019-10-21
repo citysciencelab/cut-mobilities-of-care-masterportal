@@ -34,6 +34,7 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
         isCreated: false,
         hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
+
     /**
      * @class SchulenEinzugsgebieteThemeModel
      * @extends Theme
