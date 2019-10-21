@@ -65,7 +65,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioTriggerModelListShowFeaturesById
      * @listens ModelList#RadioTriggerModelListRemoveModelsByParentId
      * @listens ModelList#RadioTriggerModelListRemoveModelsById
-     * @listens ModelList#RadioTriggerModelListAddInitialyNeededModels
+     * @listens ModelList#RadioTriggerModelListAddInitiallyNeededModels
      * @listens ModelList#RadioTriggerModelListAddModelsByAttributes
      * @listens ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
      * @listens ModelList#RadioTriggerModelListSetIsSelectedOnParent
@@ -110,7 +110,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "removeModelsByParentId": this.removeModelsByParentId,
             "removeModelsById": this.removeModelsById,
             // Initial sichtbare Layer etc.
-            "addInitialyNeededModels": this.addInitialyNeededModels,
+            "addInitiallyNeededModels": this.addInitiallyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
             "addModel": this.addModel,
             "setIsSelectedOnChildLayers": this.setIsSelectedOnChildLayers,
@@ -724,7 +724,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @fires Parser#RadioRequestParserGetItemByAttributes
      * @return {void}
      */
-    addInitialyNeededModels: function () {
+    addInitiallyNeededModels: function () {
         // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
         // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
         // wie sie hinzugefügt werden
@@ -738,7 +738,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
 
-            this.add(lightModels);
+            lightModels.forEach(model => this.add(model));
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
@@ -829,7 +829,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     addModelsByAttributes: function (attrs) {
         var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
-        this.add(lightModels);
+        lightModels.forEach(model => this.add(model));
         this.updateLayerView();
     },
 
