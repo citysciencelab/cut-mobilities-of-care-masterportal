@@ -19,6 +19,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {String[]} supported=["2D", "3D"] Supported map modes.
      * @property {Boolean} showSettings=true Flag if settings selectable.
      * @property {Boolean} isClustered=false Flag if layer is clustered.
+     * @property {String[]} allowedVersions=["1.1.0"] Allowed Version of WFS requests.
+     * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
 

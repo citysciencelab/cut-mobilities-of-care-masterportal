@@ -216,6 +216,47 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
    }
 ```
 
+## Heatmap-Layer ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|id|ja|String||Frei wählbare Layer-ID|`"11111"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Mein Heatmap Layer"`|
+|typ|ja|String||Diensttyp, in diesem Fall Heatmap |`"Heatmap"`|
+|attribute|nein|String|""|Attributname. Nur Features, die dem "attribute" und "value" entsprechen, werden verwendet. |`"attr1"`|
+|value|nein|String|""|Attributwert. Nur Features, die dem "attribute" und "value" entsprechen, werden verwendet.|`"val1"`|
+|radius|nein|Number|10|Radius der Heatmap features.|`10`|
+|blur|nein|Number|15|Blur der Heatmap Features |`15`|
+|gradient|nein|String[]|["#00f", "#0ff", "#0f0", "#ff0", "#f00"]|Farbgradient der Heatmap |`["#f00", "#0f0", "#00f"]`|
+|dataLayerId|ja|String||Id des Layers der die Features für die Heatmap liefert |`"4321"`|
+
+**Beispiel HeatmapLayer:**
+
+
+```
+#!json
+
+    {
+		"id": "1234",
+		"name": "Heatmap des Vektorlayers mit der layerid 4321",
+		"typ": "Heatmap",
+		"attribute": "state",
+		"value": "charging",
+		"radius": 20,
+		"blur": 30,
+		"gradient": [
+			"#ffffb2",
+			"#fd8d3c",
+			"#fd8d3c",
+			"#f03b20",
+			"#bd0026"
+		],
+        "gfiAttributes": "ignore",
+        "dataLayerId": "4321"
+	}
+```
+
 ## 3D Object Layer TileSet ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|

@@ -68,7 +68,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @listens Core#RadioTriggerMapSetCameraParameter
      * @listens Core#RadioTriggerMapChange
      * @listens Core#MapChangeVectorLayer
-     * @fires Core.ModelList#RadioTriggerModelListAddInitialyNeededModels
+     * @fires Core.ModelList#RadioTriggerModelListAddInitiallyNeededModels
      * @fires Core#RadioRequestParametricURLGetZoomToExtent
      * @fires Core#RadioTriggerMapIsReady
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
@@ -179,7 +179,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (Config.obliqueMap) {
             this.set("obliqueMap", new ObliqueMap({}));
         }
-        Radio.trigger("ModelList", "addInitialyNeededModels");
+        Radio.trigger("ModelList", "addInitiallyNeededModels");
         if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
