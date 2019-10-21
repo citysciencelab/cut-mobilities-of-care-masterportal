@@ -409,28 +409,24 @@
  */
 
 /**
- * @event Layer#RadioTriggerLayerFeaturesLoaded
+ * @event Layer#RadioTriggerVectorLayerFeaturesLoaded
  * @param {String} id Id of vector layer.
  * @param {ol/Feature[]} features Features that have been loaded.
- * @example Radio.trigger("Layer", "featuresLoaded", id, features)
+ * @example Radio.trigger("VectorLayer", "featuresLoaded", id, features)
  */
 
-
-/** -------------------- HEATMAP LAYER -------------------- */
-/**
- * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
- * @param {String} layerId Id of vector layer.
+ /**
+ * @event Layer#RadioTriggerVectorLayerFeatureUpdated
+ * @param {String} id Id of vector layer.
  * @param {ol/Feature[]} features Features that have been loaded.
- * @example Radio.trigger("HeatmapLayer", "loadInitialData", layerId, features)
+ * @example Radio.trigger("VectorLayer", "featureUpdated", id, features)
  */
 
-/**
- * @event HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
- * @param {String} layerId Id of vector layer.
- * @param {ol/Feature[]} features Features that have been loaded.
- * @example Radio.trigger("HeatmapLayer", "loadupdateHeatmap", layerId, features)
+ /**
+ * @event Layer#RadioRequestVectorLayerGetFeatures
+ * @param {String} id Id of vector layer.
+ * @example Radio.request("VectorLayer", "getFeatures", id)
  */
-
 
 /** -------------------- MAP -------------------- */
 
@@ -931,9 +927,9 @@
  */
 
 /**
- * @event Core.ModelList#RadioTriggerModelListAddInitialyNeededModels
- * @description See {@link List#addInitialyNeededModels}
- * @example Radio.trigger("ModelList", "addInitialyNeededModels")
+ * @event Core.ModelList#RadioTriggerModelListAddInitiallyNeededModels
+ * @description See {@link List#addInitiallyNeededModels}
+ * @example Radio.trigger("ModelList", "addInitiallyNeededModels")
  */
 
 /**
@@ -1558,6 +1554,13 @@
  * @description returns currentView
  * @returns {Backbone.View} GFI-View
  * @example Radio.request("GFI", "getCurrentView");
+ */
+
+ /**
+ * @event GFI#RadioTriggerGFIChangeFeature
+ * @description updates the current gfi Feature if it matches.
+ * @param {ol.Feature} feature The feature that has changed.
+ * @example Radio.trigger("GFI", "changeFeature", feature);
  */
 
 /** -------------------- GFI.THEME -------------------- */
