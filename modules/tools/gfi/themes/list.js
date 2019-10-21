@@ -34,6 +34,8 @@ import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
 import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
 import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
 import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
+import SchulentlasseneThemeView from "./bildungsatlas/schulentlassene/view";
+import SchulentlasseneTheme from "./bildungsatlas/schulentlassene/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -105,6 +107,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulentlassene") {
+            theme = new SchulentlasseneTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -217,6 +222,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "buildings_3d": {
                 new Buildings3dThemeView({model: model});
+                break;
+            }
+            case "schulentlassene": {
+                new SchulentlasseneThemeView({model: model});
                 break;
             }
             default: {
