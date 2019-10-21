@@ -8,14 +8,14 @@ Ein Proxy wird benötigt um Daten von anderen Resourcen, die von einer anderne D
 
 # Wie funktioniert ein Proxy? #
 
-Der Proxy nimmt die Requests an andere Domains an und stellt sie selber an die eigentliche Domain und leitet diese wieder zurück an den Browser. Somit kann das Problem umgangen werden.
+Der Proxy nimmt die Requests vom localhost an andere Domains an und stellt sie selber an die eigentliche Domain und leitet diese wieder zurück an den Browser. Somit kann das Problem umgangen werden.
 In der proxyconf_example.json bzw. proxyconf.json steht an welche Domain der unter localhost laufende Server den Request stellen soll.
 
 ***
 
 # Wie muss der Proxy für das Masterportal konfiguriert werden? #
 
-Im Beispiel ist der Proxyeintrag für das Masterportal zu sehen um in der lokalen Entwicklungsumgebung die Hamburger Dienste über geodienste.hamburg.de zu nutzen.
+Im Beispiel ist der Proxyeintrag für das Masterportal zu sehen, um in der lokalen Entwicklungsumgebung die Hamburger Dienste über geodienste.hamburg.de zu nutzen.
 
 **Beispiel**
 ```
@@ -32,9 +32,10 @@ Im Beispiel ist der Proxyeintrag für das Masterportal zu sehen um in der lokale
 ```
 
 In der ersten Zeile des Objektes ist die vom Masterportal umgeschriebene Domain für die geodienste.hamburg.de Domain eingetragen. Darüber wird entschieden was der Proxy mit dem eingegangenen Request anstellen soll.
-Im Objekt gibt es zwei Parameter die genutzt werden können:
+Im Beispielobjekt gibt es zwei Parameter die genutzt werden können, weitere Parameter **[hier](https://webpack.js.org/configuration/dev-server/#devserverproxy)**:
+
 1. **target**: hier wird die URL eingetragen an welche Domain der Request gestellt werden soll.
 2. **pathRewrite**: enthält hier im Beispiel eine Ersetzungsregel um die vorher umgeschriebene Domain aus dem Request zu entfernen.
 
-In hamburg gibt es auch den Fall, dass wir einen ReverseProxy eines unserer Server nutzen. Dann findet dort eine erneute Anfrage an die eigentliche Domain statt und vorher wird der Parameter **pathRewrite** nicht verwendet. Vorteil hierfür ist, dass die Weiterleitungsregeln nur einmal auf dem Server eingetragen werden und nicht noch extra bei jedem lokal vorgehalten werden müssen.
+In Hamburg gibt es auch den Fall, dass wir einen ReverseProxy eines unserer Server nutzen. Dann findet dort eine erneute Anfrage an die eigentliche Domain statt und vorher wird der Parameter **pathRewrite** nicht verwendet. Vorteil hierfür ist, dass die Weiterleitungsregeln nur einmal auf dem Server eingetragen werden und nicht noch extra bei jedem lokal vorgehalten werden müssen.
 
