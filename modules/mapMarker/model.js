@@ -35,7 +35,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @class MapMarkerModel
      * @description Model for MapMarker and Highlighting
      * @extends Backbone.Model
-     * @memberOf Core.MapMarker
+     * @memberof Core.MapMarker
      * @constructs
      * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      * @fires Core#RadioTriggerMapAddOverlay

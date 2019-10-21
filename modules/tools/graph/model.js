@@ -9,7 +9,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * @class GraphModel
-     * @memberOf Tools.Graph
+     * @memberof Tools.Graph
      * @constructs
      * @extends Backbone.Model
      * @listens Tools.Graph#RadioTriggerGraphCreateGraph
