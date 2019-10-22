@@ -72,11 +72,9 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
 
         this.listenTo(Radio.channel("Objects3D"), {
             "hide3DObjects": function (hiddenFeatures) {
-                console.log(hiddenFeatures);
                 this.hideObjects(hiddenFeatures);
             },
             "show3DObjects": function (hiddenFeatures) {
-                console.log(hiddenFeatures);
                 this.showObjects(hiddenFeatures);
             }
         });
