@@ -192,13 +192,23 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
      * @returns {String} abstractText Abstract text of the meta data entry
      */
     parseAbstractText: function (xmlDoc) {
-        var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
+        var abstractText,
+            abstractTextContent;
 
-        if (abstractText.length > 1000) {
-            return abstractText.substring(0, 600) + "...";
+        abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0];
+
+        if (abstractText !== undefined && typeof abstractText.textContent === "string") {
+            abstractTextContent = abstractText.textContent;
+        }
+        else {
+            abstractTextContent = "Keine Metadaten vorhanden.";
         }
 
-        return abstractText;
+        if (abstractTextContent.length > 1000) {
+            return abstractTextContent.substring(0, 600) + "...";
+        }
+
+        return abstractTextContent;
     },
     /**
      * Parses the URL part of the data returned by the meta data request.
