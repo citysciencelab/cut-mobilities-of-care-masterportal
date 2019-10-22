@@ -273,9 +273,9 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             if (!hiddenObjects[id]) {
                 hiddenObjects[id] = new Set();
                 dirty = true;
-        }
-    });
-        
+            }
+        });
+
         this.setHiddenObjects(hiddenObjects);
         if (dirty) {
             this.setFeatureVisibilityLastUpdated(Date.now());
