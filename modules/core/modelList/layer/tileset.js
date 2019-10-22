@@ -265,7 +265,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @param {Array<string>} toHide A list of Object Ids which will be hidden
      * @return {void}
      */
-    hideObjects (toHide) {    
+    hideObjects (toHide) {
         let dirty = false;
         const hiddenObjects = this.get("hiddenObjects");
 
