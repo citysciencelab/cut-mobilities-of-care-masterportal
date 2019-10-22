@@ -107,11 +107,24 @@ const BalkendiagrammTheme = Theme.extend({
     getStaticWithYear: function () {
         var element = this.get("gfiContent"),
             key,
-            dataset = [];
+            dataset = [],
+            layerList,
+            layerDataFormat,
+            year;
+
+        // Get the attributes from config file
+        layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")});
+
+        // Get the attributes from list individuelly to show in different layers
+        layerDataFormat = layerList[0].get("format");
 
         for (key in element.allProperties) {
             if (key.includes("jahr_")) {
-                dataset.push({"year": key.replace("jahr_", ""), "number": Number(element.allProperties[key])});
+                year = key.replace("jahr_", "");
+                if (layerDataFormat.category === "schule") {
+                    year = Number(year.slice(-2)) + "/" + (Number(year.slice(-2)) + 1);
+                }
+                dataset.push({"year": year, "number": Number(element.allProperties[key])});
             }
         }
 
