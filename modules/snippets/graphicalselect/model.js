@@ -18,7 +18,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         name: "Geometrie",
         type: "string",
         displayName: "Geometrie auswählen",
-        snippetType: "dropdown",
+        snippetType: "graphicalselect",
         isMultiple: false,
         drawInteraction: undefined,
         circleOverlay: new Overlay({
@@ -40,13 +40,26 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
     },
-
+  /**
+     * @class GraphicalSelectModel
+     * @extends Tool
+     * @memberof Tools.Einwohnerabfrage_hh
+     * @constructs
+     * @property {ol/Overlay} circleOverlay=new Overlay({offset: [15, 0], positioning: "center-left"}) circle overlay (tooltip) - shows the radius
+     * @property {ol/Overlay} tooltipOverlay=new Overlay({offset: [15, 20], positioning: "top-left"}) todo
+     * @property {Object} snippetDropdownModel={}
+     * @property {Obeject} values={"Rechteck aufziehen": "Box", "Kreis aufziehen": "Circle", "Fläche zeichnen": "Polygon"} possible values
+     * @property {String} tooltipMessage="Klicken zum Starten und Beenden" Meassage for tooltip
+     * @property {String} tooltipMessagePolygon="Klicken um Stützpunkt hinzuzufügen" Meassage for tooltip
+     */
     initialize: function () {
+        console.log('GraphicalSelectModel initialize id='+this.get('id'));
         this.superInitialize();
         const channel = Radio.channel("GraphicalSelect");
         channel.on({
             "setStatus": this.setStatus,
-            "resetView": this.resetView
+            "resetView": this.resetView,
+            "resetGeographicSelection": this.resetGeographicSelection
         }, this);
         channel.reply({
             "featureToGeoJson": function (feature) {
@@ -54,16 +67,13 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             }
         }, this);
         this.listenTo(this, {
-            "change:isActive": this.setStatus
-        });
-        this.listenTo(this.snippetDropdownModel, {
-            "valuesChanged": function () {
-                this.createDrawInteraction();
+            "change:selectedAreaGeoJson": function () {
+                channel.trigger("onDrawEnd", this.get("selectedAreaGeoJson"));
             }
         });
         this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
         this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
-        this.setDropDownSnippet(new SnippetDropdownModel({
+        const model = new SnippetDropdownModel({
             name: this.get('name'),
             type: this.get('type'),
             displayName: this.get('displayName'),
@@ -71,8 +81,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             snippetType:this.get('snippetType'),
             isMultiple: this.get('isMultiple'),
             preselectedValues: _.allKeys(this.get("geographicValues"))[0]
-        }));
-
+        });
+        this.setDropDownSnippet(model);
     },
     /**
       * Handles (de-)activation of this Tool
@@ -83,7 +93,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
       */
     setStatus: function (model, value) {
         let selectedValues;
-
         if (value) {
             selectedValues = this.get("snippetDropdownModel").getSelectedValues();
             this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("geographicValues"))[0]);
@@ -214,9 +223,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
+            Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
         }
-        this.resetGeographicSelection();
-        this.setStatus(this.model, false);
     },
 
     /**
@@ -354,25 +362,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         const element = document.createElement("div");
         element.setAttribute("id", id);
         overlay.setElement(element);
-    },
-
-    /**
-     * checks if snippetCheckboxLayer is loaded and toggles the button accordingly
-     * @param {String} layerId - id of the addressLayer
-     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
-     * @fires Core#RadioRequestModelListGetModelByAttributes
-     * @returns {void}
-     */
-    checksSnippetCheckboxLayerIsLoaded: function (layerId, snippetCheckboxModel) {
-        const model = Radio.request("ModelList", "getModelByAttributes", { id: layerId }),
-            isVisibleInMap = !_.isUndefined(model) ? model.get("isVisibleInMap") : false;
-
-        if (isVisibleInMap) {
-            snippetCheckboxModel.setIsSelected(true);
-        }
-        else {
-            snippetCheckboxModel.setIsSelected(false);
-        }
     },
     /**
      * Sets the currentValue

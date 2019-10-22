@@ -64,10 +64,12 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
             "change:isActive": function (value) {
                 const isActive = value.get('isActive');
                 this.toggleRasterLayer(isActive);
-                this.setStatus(this.model, isActive);
                 if(isActive){
                     this.loadWfsRaster();
-                } 
+                    Radio.trigger("GraphicalSelect", 'resetGeographicSelection');
+                }else{
+                    this.setStatus(this.model, false);
+                }
             }
         });
         this.listenTo(Radio.channel("MapView"), {
@@ -83,9 +85,10 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
             //sidebar wird geschlossen, raster nicht mehr anzeigen
             "toggleDefaultTool": function () {
                 this.toggleRasterLayer(false);
+                this.setStatus(this.model, false);
             }
         });
-        this.setGraphicalSelectModel(new GraphicalSelectModel());
+        this.setGraphicalSelectModel(new GraphicalSelectModel({id: "SDPDownload",}));
     },
     setStatus:function(model, val){
         Radio.trigger("GraphicalSelect", "setStatus", model, val);

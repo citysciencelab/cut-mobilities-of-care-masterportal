@@ -51,6 +51,7 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
      */
     initDropdown: function () {
         this.$el.find(".graphical-select").append(this.snippetDropdownView.render().el);
+        this.model.setStatus(this.model, true);
     },
 
     /**
