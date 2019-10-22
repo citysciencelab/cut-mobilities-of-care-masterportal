@@ -48,7 +48,7 @@ export default FlightInstance;
  * parses source and creates a flightInstance
  * @param {Object} source -
  * @return {FlightInstance} flightInstance -
- * @memberOf Tools.VirtualCity
+ * @memberof Tools.VirtualCity
  */
 export function parseFlightOptions (source) {
     const features = source.features;

@@ -6,7 +6,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @description Class to represent a cesium Terrain Dataset
      * @extends Layer
      * @constructs
-     * @memberOf Core.ModelList.Layer
+     * @memberof Core.ModelList.Layer
      */
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["3D"],

@@ -29,7 +29,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @description Parse the configured models from config datas
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Model
-     * @memberOf Core.ConfigLoader
+     * @memberof Core.ConfigLoader
      * @constructs
      * @property {Array} itemList=[] lightModels
      * @property {Array} overlayer=[] Themenconfig.Fachdaten

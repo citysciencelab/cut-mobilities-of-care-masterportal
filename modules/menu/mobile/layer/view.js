@@ -18,7 +18,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     /**
      * @class LayerView
      * @extends Backbone.View
-     * @memberOf Menu.Mobile.Layer
+     * @memberof Menu.Mobile.Layer
      * @constructs
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsSettingVisible
