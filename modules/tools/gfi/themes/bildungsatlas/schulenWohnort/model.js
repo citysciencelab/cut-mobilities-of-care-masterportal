@@ -102,13 +102,15 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             const layerWohnort = this.getWohnortLayer(),
                 layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
-                statGebNr = this.get("statGebNr");
+                statGebNr = this.get("statGebNr"),
+                level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
 
             if (this.get("anzahlSchuler") && layerSchuleLevel === "secondary") {
                 this.set("anzahlSchuler", this.get("gfiContent").allProperties.C32_SuS);
             }
 
             this.set("schuleLevel", layerSchuleLevel);
+            this.set("level", level);
 
             this.listenToOnce(Radio.channel("Layer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
