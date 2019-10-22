@@ -332,7 +332,7 @@ let instance;
 /**
  * returns the singleton flightPlayerInstance
  * @return {FlightPlayer} -
- * @memberOf Tools.VirtualCity
+ * @memberof Tools.VirtualCity
  */
 export function getInstance () {
     if (!instance) {

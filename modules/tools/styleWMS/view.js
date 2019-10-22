@@ -36,7 +36,7 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @class StyleWmsView
      * @description View for style wms. Reacts to user input
      * @extends Backbone.View
-     * @memberOf Tools.StyleWMS
+     * @memberof Tools.StyleWMS
      * @constructs
      * @listens StyleWmsModel#sync
      * @listens StyleWmsModel#changeIsActive

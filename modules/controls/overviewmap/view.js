@@ -26,7 +26,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
 
     /**
      * @class OverviewMapView
-     * @memberOf Controls.Overviewmap
+     * @memberof Controls.Overviewmap
      * @description View to represent Overviewmap
      * @extends Backbone.View
      * @param {Object} el Jquery element to be rendered into.

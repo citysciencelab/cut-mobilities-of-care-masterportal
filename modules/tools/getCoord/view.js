@@ -11,7 +11,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
      * @class GetCoord
      * @description Get Coordinates Tool
      * @extends Backbone.View
-     * @memberOf Tools.GetCoord
+     * @memberof Tools.GetCoord
      * @constructs
      * @listens GetCoord#ChangeIsActive
      * @listens GetCoord#ChangeUrl

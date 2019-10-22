@@ -16,8 +16,8 @@
 
 3.8. Im **CSS/LESS** ist das Styling des *Templates* hinterlegt.
 
-3.9. Die Kommunikation **innerhalb eines Moduls** wird über die [Backbone-Events](https://backbonejs.org/#Events) durchgeführt.
+3.9. Die Kommunikation **innerhalb eines Moduls** wird über die **[Backbone-Events](https://backbonejs.org/#Events)** durchgeführt.
 
-3.10. Die Kommunikation **zwischen den Modulen** wird global mit [Backbone-Radio](https://marionettejs.com/docs/master/backbone.radio.html) durchgeführt.
+3.10. Die Kommunikation **zwischen den Modulen** wird global mit **[Backbone-Radio](https://marionettejs.com/docs/master/backbone.radio.html)** durchgeführt.
 
-Weitere Infos siehe [Backbone](https://backbonejs.org/).
+Weitere Infos siehe **[Backbone](https://backbonejs.org/)**.

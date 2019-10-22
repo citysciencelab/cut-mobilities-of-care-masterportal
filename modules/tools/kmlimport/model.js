@@ -16,7 +16,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @class ImportTool
      * @description The ImportTool is a tool for importing data in kml format.
      * @extends Tool
-     * @memberOf Tools.Kmlimport
+     * @memberof Tools.Kmlimport
      * @constructs
      * @property {String} text="" todo
      * @property {Array} features=[] todo
