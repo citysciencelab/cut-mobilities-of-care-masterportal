@@ -6,14 +6,14 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
          * layer name of internal layer with Schule
          * @type {String}
          */
-        layernameAreas: {"primary": "internal Layer for primary schule am wohnort", "sencondary": "internal Layer for middle schule am wohnort"},
+        layernameAreas: {"primary": "internal Layer for primary schule am wohnort", "secondary": "internal Layer for middle schule am wohnort"},
         /**
          * layer theme to select school layers for wohnort
          * @type {String}
          */
         layerTheme: "schulenWohnort",
         isCreated: false,
-        hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
+        hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger über eine Schule."
     }),
     /**
      * @class SchulenWohnortThemeModel
@@ -104,7 +104,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
                 statGebNr = this.get("statGebNr");
 
-            if (this.get("anzahlSchuler") && layerSchuleLevel === "sencondary") {
+            if (this.get("anzahlSchuler") && layerSchuleLevel === "secondary") {
                 this.set("anzahlSchuler", this.get("gfiContent").allProperties.C32_SuS);
             }
 
@@ -191,7 +191,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             sozialIndex = schule.get("C_S_SI"),
             anteil = Math.round(statGebFinal) + "%",
             anzahl = Math.round(anzahlAll * statGebFinal / 100),
-            level = {"primary": "Primarstufe", "sencondary": "Sekundarstufe I"},
+            level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
             finalHtml;
 
         finalHtml = "<table class=\"table table-striped\">" +
@@ -202,7 +202,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                         "</thead>" +
                         "<tbody>" +
                             "<tr colspan=\"2\">" +
-                                "<td>Adress: </td>" +
+                                "<td>Adresse: </td>" +
                                 "<td>" + adress + "</td>" +
                             "</tr>" +
                             "<tr colspan=\"2\">" +
@@ -246,7 +246,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             const attr = gfiContent.allProperties;
 
             if (attr.C12_SuS) {
-                this.set("anzahlSchuler", attr.C12_SuS);
+                this.set("anzahlSchuler", Math.round(attr.C12_SuS));
             }
             if (attr.StatGeb_Nr && attr.ST_Name) {
                 this.set("statGebiet", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
