@@ -40,7 +40,11 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2"><i><%= hintText %></i></td>
+                    <td colspan="2">
+                        <% if (isViewMobile) { %>
+                            <i>In der mobilen Ansicht ist keine Abfrage der Schülerzahlen möglich.</i>
+                        <% } %>
+                    </td>
                 </tr>
             </tfoot>
         </table>

@@ -29,9 +29,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      */
     initialize: function () {
-        if (Radio.request("Util", "isViewMobile")) {
-            this.set("hintText", "In der mobilen Ansicht ist keine Abfrage der Schülerzahlen möglich.");
-        }
+        this.set("isViewMobile", Radio.request("Util", "isViewMobile"));
+
         this.listenTo(this, {
             "change:isVisible": this.onIsVisibleEvent,
             "change:isReady": this.create
@@ -82,7 +81,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
             statGebNr = this.get("statGebNr");
 
-        if (layerId === conf.id) {
+        if (conf && layerId === conf.id) {
             if (layerStatistischeGebiete && statGebNr !== "") {
                 this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchuleLevel);
             }
@@ -187,7 +186,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     getHtml: function (schule, anzahlAll, statGebFinal, layerSchuleLevel) {
         var name = schule.get("C_S_Name"),
-            adress = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + ", " + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
+            address = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + "<br>" + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
             totalSum = schule.get("C_S_SuS"),
             priSum = schule.get("C_S_SuS_PS"),
             sozialIndex = schule.get("C_S_SI"),
@@ -205,7 +204,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                         "<tbody>" +
                             "<tr colspan=\"2\">" +
                                 "<td>Adresse: </td>" +
-                                "<td>" + adress + "</td>" +
+                                "<td>" + address + "</td>" +
                             "</tr>" +
                             "<tr colspan=\"2\">" +
                                 "<td>Gesamtanzahl der Schüler: </td>" +
@@ -231,12 +230,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                     "</table>";
         return finalHtml;
     },
-
-    /**
-     * returns the category to render area features
-     * @param   {float} value anteil in %
-     * @returns {string} styling
-     */
 
     /**
      * parses the gfiContent and sets all variables
@@ -268,6 +261,11 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     getWohnortLayer: function () {
         var layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
+
+        if (!Array.isArray(layerList)) {
+            console.warn("The layer does not exist");
+            return false;
+        }
 
         return layerList;
     },
