@@ -31,34 +31,42 @@ const SchulentlasseneTheme = Theme.extend({
      */
     setTemplateValues: function () {
         var element = this.get("gfiContent"),
-            layerId = this.get("themeId");
+            layerList,
+            layerDataFormat;
         let idx = 0,
             key = "",
-            realKey = "";
+            realKey = "",
+            modelAttributeFilter = {isVisibleInMap: true, "gfiTheme": "schulentlassene", "id": this.get("themeId")};
 
-        // set the themeType "Abi" or "oHS" (oHS are pupils without graduation)
-        if (layerId === "90033" || layerId === "90034") {
-            this.set("themeType", "Abi");
-        }
-        else if (layerId === "90035" || layerId === "90036") {
-            this.set("themeType", "oHS");
-        }
-        else {
-            this.set("themeType", false);
-            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (1)");
+        // get the layer list by attributes from config file
+        layerList = Radio.request("ModelList", "getModelsByAttributes", modelAttributeFilter);
 
+        if (!layerList || layerList.length <= 0) {
+            console.warn("bildungsatlas - schulentlassene: the layerList couldn't be set by attributes:", modelAttributeFilter);
         }
 
-        // set the layerType "stadtteil" or "sozialraum"
-        if (layerId === "90033" || layerId === "90035") {
-            this.set("layerType", "stadtteil");
-        }
-        else if (layerId === "90034" || layerId === "90036") {
-            this.set("layerType", "sozialraum");
-        }
-        else {
+        layerDataFormat = layerList[0].get("format");
+
+        if (!layerDataFormat || !layerDataFormat.layerType || !layerDataFormat.themeType){
             this.set("layerType", false);
-            console.warn("bildungsatlas - schulentlassene: the layerId " + layerId + " is unknown to the application (2)");
+            this.set("themeType", false);
+            console.warn("bildungsatlas - schulentlassene: the layerDataFormat does not exist or is set inappropriately:", layerDataFormat);
+        }
+        else if (layerDataFormat.layerType !== "stadtteil" && layerDataFormat.layerType !== "sozialraum") {
+            this.set("layerType", false);
+            this.set("themeType", false);
+            console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.layerType is unknown to the application:", layerDataFormat.layerType);
+        }
+        else if (layerDataFormat.themeType !== "Abi" && layerDataFormat.themeType !== "oHS") {
+            this.set("layerType", false);
+            this.set("themeType", false);
+            console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.themeType is unknown to the application:", layerDataFormat.themeType);
+        }
+        else {
+            // set the layerType "stadtteil" or "sozialraum"
+            this.set("layerType", layerDataFormat.layerType);
+            // set the themeType "Abi" or "oHS" (oHS are pupils without graduation)
+            this.set("themeType", layerDataFormat.themeType);
         }
 
         for (idx in element) {
@@ -169,30 +177,35 @@ const SchulentlasseneTheme = Theme.extend({
      * @return {Array} an array of Objects with the structure [{"year", valueTag}] to be used as graph data
      */
     createDataForZeitverlauf: function (tag, valueTag) {
-        const depthBarrierYear = 2010,
-            thisYear = (new Date()).getFullYear(),
-            showMax = 10;
+        const showMax = 10;
+        var element = this.get("gfiContent");
         let result = [],
+            regEx = new RegExp("^" + tag + "_(\\d{4})$"),
+            regRes,
             year,
-            obj;
+            obj,
+            key;
 
         // creates an array [{"year", valueTag}] as result
-        year = depthBarrierYear;
-        while (year <= thisYear) {
-            if (typeof this.get(tag + "_" + year) !== "undefined") {
-                obj = {};
-                // sort by a save and sound parameter
-                obj.fullyear = year;
-                // e.g. Schuljahr 2010 := "10/11"
-                obj.year = year.toString().substr(2, 2) + "/" + (year + 1).toString().substr(2, 2);
-                // for the statistic
-                obj[valueTag] = parseFloat(this.get(tag + "_" + year));
-                // for calculation of dotALL
-                obj.value = obj[valueTag];
-
-                result.push(obj);
+        for (key in element.allProperties) {
+            regRes = regEx.exec(key);
+            if (regRes === null || !regRes[1]) {
+                continue;
             }
-            year++;
+
+            year = parseInt(regRes[1]);
+
+            obj = {};
+            // sort by a save and sound parameter
+            obj.fullyear = year;
+            // e.g. Schuljahr 2010 := "10/11"
+            obj.year = year.toString().substr(2, 2) + "/" + (year + 1).toString().substr(2, 2);
+            // for the statistic
+            obj[valueTag] = parseFloat(this.get(key));
+            // for calculation of dotALL
+            obj.value = obj[valueTag];
+
+            result.push(obj);
         }
 
         result = _.sortBy(result, "fullyear");
@@ -213,11 +226,11 @@ const SchulentlasseneTheme = Theme.extend({
             graphType: "BarGraph",
             selector: ".graph_zeitverlauf",
             width: parseInt($(".schulentlassene-gfi-theme").css("width"), 10) - 10,
-            height: 170,
+            height: 190,
             margin: {
                 top: 20,
                 right: 20,
-                bottom: 20,
+                bottom: 40,
                 left: 40
             },
             svgClass: "graph-svg",
@@ -230,8 +243,13 @@ const SchulentlasseneTheme = Theme.extend({
             },
             data: this.get("data_zeitverlauf"),
             xAttr: "year",
-            xAxisLabel: {},
-            yAxisLabel: {},
+            xAxisLabel: {
+                "label": "Jahr"
+            },
+            yAxisLabel: {
+                "label": "Anteil Schüler in Prozent",
+                "offset": 40
+            },
             attrToShowArray: [
                 "number"
             ],
