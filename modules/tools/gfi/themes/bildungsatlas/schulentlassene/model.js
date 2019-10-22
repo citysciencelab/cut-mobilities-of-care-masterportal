@@ -30,13 +30,13 @@ const SchulentlasseneTheme = Theme.extend({
      * @returns {void}
      */
     setTemplateValues: function () {
+        const modelAttributeFilter = {isVisibleInMap: true, "gfiTheme": "schulentlassene", "id": this.get("themeId")};
         var element = this.get("gfiContent"),
             layerList,
             layerDataFormat;
         let idx = 0,
             key = "",
-            realKey = "",
-            modelAttributeFilter = {isVisibleInMap: true, "gfiTheme": "schulentlassene", "id": this.get("themeId")};
+            realKey = "";
 
         // get the layer list by attributes from config file
         layerList = Radio.request("ModelList", "getModelsByAttributes", modelAttributeFilter);
@@ -47,7 +47,7 @@ const SchulentlasseneTheme = Theme.extend({
 
         layerDataFormat = layerList[0].get("format");
 
-        if (!layerDataFormat || !layerDataFormat.layerType || !layerDataFormat.themeType){
+        if (!layerDataFormat || !layerDataFormat.layerType || !layerDataFormat.themeType) {
             this.set("layerType", false);
             this.set("themeType", false);
             console.warn("bildungsatlas - schulentlassene: the layerDataFormat does not exist or is set inappropriately:", layerDataFormat);
@@ -177,10 +177,10 @@ const SchulentlasseneTheme = Theme.extend({
      * @return {Array} an array of Objects with the structure [{"year", valueTag}] to be used as graph data
      */
     createDataForZeitverlauf: function (tag, valueTag) {
-        const showMax = 10;
+        const showMax = 10,
+            regEx = new RegExp("^" + tag + "_(\\d{4})$");
         var element = this.get("gfiContent");
         let result = [],
-            regEx = new RegExp("^" + tag + "_(\\d{4})$"),
             regRes,
             year,
             obj,
@@ -193,7 +193,7 @@ const SchulentlasseneTheme = Theme.extend({
                 continue;
             }
 
-            year = parseInt(regRes[1]);
+            year = parseInt(regRes[1], 10);
 
             obj = {};
             // sort by a save and sound parameter
