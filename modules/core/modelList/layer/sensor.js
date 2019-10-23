@@ -211,10 +211,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const modifiedFeature = feature,
             dataStreamValues = [];
 
-        feature.get("dataStreamId").split(" | ").forEach(id => {
-            dataStreamValues.push(feature.get("dataStream_" + id));
-        });
-        modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "));
+        if (feature && feature.get("dataStreamId")) {
+            feature.get("dataStreamId").split(" | ").forEach(id => {
+                dataStreamValues.push(feature.get("dataStream_" + id));
+            });
+            modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "));
+        }
         return modifiedFeature;
     },
 
@@ -227,10 +229,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const modifiedFeature = feature,
             dataStreamPhenomenonTimes = [];
 
-        feature.get("dataStreamId").split(" | ").forEach(id => {
-            dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_phenomenonTime"));
-        });
-        modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "));
+        if (feature && feature.get("dataStreamId")) {
+            feature.get("dataStreamId").split(" | ").forEach(id => {
+                dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_phenomenonTime"));
+            });
+            modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "));
+        }
         return modifiedFeature;
     },
     /**
@@ -485,8 +489,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {String[]} - reducedKeys
      */
     excludeDataStreamKeys: function (keys, startsWithString) {
-        const keysToIgnore = keys.filter(key => key.startsWith(startsWithString)),
+        let keysToIgnore,
+            reducedKeys;
+
+        if (keys && startsWithString) {
+            keysToIgnore = keys.filter(key => key.startsWith(startsWithString));
             reducedKeys = keys.filter(key => !keysToIgnore.includes(key));
+        }
 
         return reducedKeys;
     },
@@ -655,24 +664,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
     },
 
+    /**
+     * Setter for style
+     * @param {function}  value Stylefunction.
+     * @returns {void}
+     */
     setStyle: function (value) {
         this.set("style", value);
     },
 
+    /**
+     * Setter for clusterLayerSource
+     * @param {ol/source/cluster} value clusterLayerSource
+     * @returns {void}
+     */
     setClusterLayerSource: function (value) {
         this.set("clusterLayerSource", value);
-    },
-
-    setWssUrl: function (value) {
-        this.set("wssUrl", value);
-    },
-
-    setStreamId: function (value) {
-        this.set("streamId", value);
-    },
-
-    setEpsg: function (value) {
-        this.set("epsg", value);
     }
 
 });

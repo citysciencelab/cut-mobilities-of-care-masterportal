@@ -166,6 +166,86 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.getDataStreamIds(features)).to.be.an("array").that.includes("", "");
         });
     });
+    describe("aggregateDataStreamValue", function () {
+        it("should return undefined for undefined input", function () {
+            expect(sensorLayer.aggregateDataStreamValue(undefined)).to.be.undefined;
+        });
+        it("should return feature as is", function () {
+            var feature = new Feature({
+                geometry: new Point([100, 100])
+            });
 
+            expect(sensorLayer.aggregateDataStreamValue(feature)).to.be.instanceof(Feature);
+        });
+        it("should return feature with dataStreamValue for one dataStream", function () {
+            var feature = new Feature({
+                dataStreamId: "123",
+                dataStream_123: "a",
+                geometry: new Point([100, 100])
+            });
 
+            expect(sensorLayer.aggregateDataStreamValue(feature)).to.be.instanceof(Feature);
+            expect(sensorLayer.aggregateDataStreamValue(feature).get("dataStreamValue")).to.equal("a");
+        });
+        it("should return feature with dataStreamValue for more dataStreams", function () {
+            var feature = new Feature({
+                dataStreamId: "123 | 456",
+                dataStream_123: "a",
+                dataStream_456: "b",
+                geometry: new Point([100, 100])
+            });
+
+            expect(sensorLayer.aggregateDataStreamValue(feature)).to.be.instanceof(Feature);
+            expect(sensorLayer.aggregateDataStreamValue(feature).get("dataStreamValue")).to.equal("a | b");
+        });
+    });
+
+    describe("aggregateDataStreamPhenomenonTime", function () {
+        it("should return undefined for undefined input", function () {
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(undefined)).to.be.undefined;
+        });
+        it("should return feature as is", function () {
+            var feature = new Feature({
+                geometry: new Point([100, 100])
+            });
+
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature)).to.be.instanceof(Feature);
+        });
+        it("should return feature with dataStreamPhenomenonTime for one dataStream", function () {
+            var feature = new Feature({
+                dataStreamId: "123",
+                dataStream_123_phenomenonTime: "a",
+                geometry: new Point([100, 100])
+            });
+
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature)).to.be.instanceof(Feature);
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature).get("dataStreamPhenomenonTime")).to.equal("a");
+        });
+        it("should return feature with dataStreamPhenomenonTime for more dataStreams", function () {
+            var feature = new Feature({
+                dataStreamId: "123 | 456",
+                dataStream_123_phenomenonTime: "a",
+                dataStream_456_phenomenonTime: "b",
+                geometry: new Point([100, 100])
+            });
+
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature)).to.be.instanceof(Feature);
+            expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature).get("dataStreamPhenomenonTime")).to.equal("a | b");
+        });
+    });
+
+    describe("excludeDataStreamKeys", function () {
+        it("should return undefined for undefined input", function () {
+            expect(sensorLayer.excludeDataStreamKeys(undefined, undefined)).to.be.undefined;
+        });
+        it("should return empty array for empty keys", function () {
+            expect(sensorLayer.excludeDataStreamKeys([], "test_")).to.be.an("array").that.is.empty;
+        });
+        it("should return empty array for empty string", function () {
+            expect(sensorLayer.excludeDataStreamKeys(["test_1", "test_2"], "")).to.be.undefined;
+        });
+        it("should return empty array with only one key", function () {
+            expect(sensorLayer.excludeDataStreamKeys(["test_1", "test_2", "hello"], "test_")).to.deep.equal(["hello"]);
+        });
+    });
 });
