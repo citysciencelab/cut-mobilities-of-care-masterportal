@@ -12,8 +12,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
          * @type {String}
          */
         layerTheme: "schulenWohnort",
-        isCreated: false,
-        hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger über eine Schule."
+        isCreated: false
     }),
     /**
      * @class SchulenWohnortThemeModel
