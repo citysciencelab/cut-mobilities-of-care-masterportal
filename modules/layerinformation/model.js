@@ -24,7 +24,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
      * @property {String} periodicity=null Periodicity
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestUtilIsViewMobile
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @fires LayerInformation#RadioTriggerLayerInformationSync
