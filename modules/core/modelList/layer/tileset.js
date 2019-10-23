@@ -69,7 +69,28 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         if (this.has("hiddenFeatures")) {
             this.hideObjects(this.get("hiddenFeatures"));
         }
+
+        this.listenTo(Radio.channel("Objects3D"), {
+            "hide3DObjects": function (hiddenFeatures) {
+                this.hideObjects(hiddenFeatures);
+            },
+            "show3DObjects": function (hiddenFeatures) {
+                this.showObjects(hiddenFeatures);
+            }
+        });
+
+        this.listenTo(this, {
+            "change:isSelected": function () {
+                if (this.get("isSelected") === true && this.has("hiddenFeatures")) {
+                    Radio.trigger("Objects3D", "hide3DObjects", this.get("hiddenFeatures"));
+                }
+                else if (this.get("isSelected") === false && this.has("hiddenFeatures")) {
+                    Radio.trigger("Objects3D", "show3DObjects", this.get("hiddenFeatures"));
+                }
+            }
+        });
     },
+
 
     /**
      * adds the tileset to the cesiumScene
@@ -241,7 +262,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     /**
      * hides a number of objects called in planing.js
      * @param {Array<string>} toHide A list of Object Ids which will be hidden
-     * @return {void} -
+     * @return {void}
      */
     hideObjects (toHide) {
         let dirty = false;
@@ -253,6 +274,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 dirty = true;
             }
         });
+
         this.setHiddenObjects(hiddenObjects);
         if (dirty) {
             this.setFeatureVisibilityLastUpdated(Date.now());
