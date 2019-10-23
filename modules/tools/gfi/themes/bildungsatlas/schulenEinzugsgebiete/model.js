@@ -135,7 +135,7 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
                 schoolKey = this.get("schoolKey"),
                 countStudents = this.get("countStudents");
 
-            this.listenToOnce(Radio.channel("Layer"), {
+            this.listenToOnce(Radio.channel("VectorLayer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
             if (layerEinzugsgebiete) {

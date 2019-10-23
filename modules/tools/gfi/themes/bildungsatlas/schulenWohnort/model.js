@@ -110,7 +110,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             this.set("schuleLevel", layerSchuleLevel);
             this.set("level", level);
 
-            this.listenToOnce(Radio.channel("Layer"), {
+            this.listenToOnce(Radio.channel("VectorLayer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
 
