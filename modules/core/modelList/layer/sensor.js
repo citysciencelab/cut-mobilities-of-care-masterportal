@@ -630,9 +630,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {array} featureArray
      */
     getFeatureByDataStreamId: function (features, id) {
-        return features.filter(feat => {
-            return feat.get("dataStreamId") ? feat.get("dataStreamId").includes(id) : false;
-        })[0];
+        let feature;
+
+        if (features && features.length > 0 && id) {
+            feature = features.filter(feat => {
+                return feat.get("dataStreamId") ? feat.get("dataStreamId").includes(id) : false;
+            })[0];
+        }
+        return feature;
     },
 
     /**

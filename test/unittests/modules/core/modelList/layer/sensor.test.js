@@ -111,31 +111,43 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
     describe("getFeatureByDataStreamId", function () {
-        it("should return a empty array for undefined input", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(undefined, undefined)).to.be.an("array").that.is.empty;
+        it("should return undefined on undefined inputs", function () {
+            expect(sensorLayer.getFeatureByDataStreamId(undefined, undefined)).to.be.undefined;
         });
-        it("should return a empty array for given id and undefined features input", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(15, undefined)).to.be.an("array").that.is.empty;
+        it("should return undefined on undefined array", function () {
+            expect(sensorLayer.getFeatureByDataStreamId(undefined, "1")).to.be.undefined;
         });
-        it("should return a empty array for undefined id and empty array input", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(undefined, [])).to.be.an("array").that.is.empty;
+        it("should return undefined on empty array and undefined datastreamid", function () {
+            expect(sensorLayer.getFeatureByDataStreamId([], undefined)).to.be.undefined;
         });
-        it("should return a empty array for given id an empty array input", function () {
-            expect(sensorLayer.getFeatureByDataStreamId(15, [])).to.be.an("array").that.is.empty;
+        it("should return undefined on empty array", function () {
+            expect(sensorLayer.getFeatureByDataStreamId([], "1")).to.be.undefined;
         });
-        it("should return a empty array for false id an empty array input", function () {
-            expect(sensorLayer.getFeatureByDataStreamId("xyz", [])).to.be.an("array").that.is.empty;
-        });
-        it("should return a empty array", function () {
+        it("should return a Feature", function () {
             var feature0 = new Feature({
+                    dataStreamId: "1",
                     geometry: new Point([100, 100])
                 }),
                 feature1 = new Feature({
+                    dataStreamId: "2",
                     geometry: new Point([100, 100])
                 }),
                 features = [feature0, feature1];
-
-            expect(sensorLayer.getFeatureByDataStreamId("xyz", features)).to.be.an("array").that.is.empty;
+                
+            expect(sensorLayer.getFeatureByDataStreamId(features, "1")).to.be.an.instanceof(Feature);
+        });
+        it("should return a Feature with combined dataStreamId", function () {
+            var feature0 = new Feature({
+                    dataStreamId: "1",
+                    geometry: new Point([100, 100])
+                }),
+                feature1 = new Feature({
+                    dataStreamId: "2 | 3",
+                    geometry: new Point([100, 100])
+                }),
+                features = [feature0, feature1];
+                
+            expect(sensorLayer.getFeatureByDataStreamId(features, "3")).to.be.an.instanceof(Feature);
         });
     });
     describe("getDataStreamIds", function () {
