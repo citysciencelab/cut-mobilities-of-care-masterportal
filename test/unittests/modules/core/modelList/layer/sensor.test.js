@@ -180,7 +180,8 @@ describe("core/modelList/layer/sensor", function () {
         it("should return feature with dataStreamValue for one dataStream", function () {
             var feature = new Feature({
                 dataStreamId: "123",
-                dataStream_123: "a",
+                dataStreamName: "ds",
+                dataStream_123_ds: "a",
                 geometry: new Point([100, 100])
             });
 
@@ -190,8 +191,9 @@ describe("core/modelList/layer/sensor", function () {
         it("should return feature with dataStreamValue for more dataStreams", function () {
             var feature = new Feature({
                 dataStreamId: "123 | 456",
-                dataStream_123: "a",
-                dataStream_456: "b",
+                dataStreamName: "ds1 | ds2",
+                dataStream_123_ds1: "a",
+                dataStream_456_ds2: "b",
                 geometry: new Point([100, 100])
             });
 
@@ -214,7 +216,8 @@ describe("core/modelList/layer/sensor", function () {
         it("should return feature with dataStreamPhenomenonTime for one dataStream", function () {
             var feature = new Feature({
                 dataStreamId: "123",
-                dataStream_123_phenomenonTime: "a",
+                dataStreamName: "ds",
+                dataStream_123_ds_phenomenonTime: "a",
                 geometry: new Point([100, 100])
             });
 
@@ -224,8 +227,9 @@ describe("core/modelList/layer/sensor", function () {
         it("should return feature with dataStreamPhenomenonTime for more dataStreams", function () {
             var feature = new Feature({
                 dataStreamId: "123 | 456",
-                dataStream_123_phenomenonTime: "a",
-                dataStream_456_phenomenonTime: "b",
+                dataStreamName: "ds1 | ds2",
+                dataStream_123_ds1_phenomenonTime: "a",
+                dataStream_456_ds2_phenomenonTime: "b",
                 geometry: new Point([100, 100])
             });
 

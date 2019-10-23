@@ -14,7 +14,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             utc: "+1",
             version: "1.0",
             useProxyURL: false,
-            mqttPath: "/mqtt"
+            mqttPath: "/mqtt",
+            showNoDataValue: true,
+            noDataValue: "no data"
         }),
     /**
      * @class SensorLayer
@@ -212,8 +214,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamValues = [];
 
         if (feature && feature.get("dataStreamId")) {
-            feature.get("dataStreamId").split(" | ").forEach(id => {
-                dataStreamValues.push(feature.get("dataStream_" + id));
+            feature.get("dataStreamId").split(" | ").forEach((id, i) => {
+                const dataStreamName = feature.get("dataStreamName").split(" | ")[i];
+
+                if (this.get("showNoDataValue") && !feature.get("dataStream_" + id + "_" + dataStreamName)) {
+                    dataStreamValues.push(this.get("noDataValue"));
+                }
+                else if (feature.get("dataStream_" + id + "_" + dataStreamName)) {
+                    dataStreamValues.push(feature.get("dataStream_" + id + "_" + dataStreamName));
+                }
             });
             modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "));
         }
@@ -230,8 +239,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamPhenomenonTimes = [];
 
         if (feature && feature.get("dataStreamId")) {
-            feature.get("dataStreamId").split(" | ").forEach(id => {
-                dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_phenomenonTime"));
+            feature.get("dataStreamId").split(" | ").forEach((id, i) => {
+                const dataStreamName = feature.get("dataStreamName").split(" | ")[i];
+
+                if (this.get("showNoDataValue") && !feature.get("dataStream_" + id + "_" + dataStreamName + "_phenomenonTime")) {
+                    dataStreamPhenomenonTimes.push(this.get("noDataValue"));
+                }
+                else if (feature.get("dataStream_" + id + "_" + dataStreamName + "_phenomenonTime")) {
+                    dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_" + dataStreamName + "_phenomenonTime"));
+                }
             });
             modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "));
         }
@@ -326,9 +342,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Iterates over the dataStreams and creates the attributes:
-     * "dataStream_[dataStreamId]" and
-     * "dataStream_[dataStreamId]_phenomenonTime".
+     * Iterates over the dataStreams and creates for each datastream the attributes:
+     * "dataStream_[dataStreamId]_[dataStreamName]" and
+     * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
      * @param {Object[]} allThings All things.
      * @returns {Object[]} - All things with the newest observation for each dataStream.
      */
@@ -338,18 +354,28 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         allThingsWithSensorData.forEach(thing => {
             const dataStreams = thing.Datastreams;
 
-            dataStreams.forEach((dataStream) => {
+            thing.properties.dataStreamId = [];
+            thing.properties.dataStreamName = [];
+            dataStreams.forEach(dataStream => {
                 const dataStreamId = String(dataStream["@iot.id"]),
-                    key = "dataStream_" + dataStreamId,
+                    dataStreamName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
+                    key = "dataStream_" + dataStreamId + "_" + dataStreamName,
                     value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
                     phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
 
-                if (value) {
+                if (this.get("showNoDataValue") && !value) {
+                    thing.properties[key] = this.get("noDataValue");
+                    thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
+                }
+                else if (value) {
                     thing.properties[key] = value;
                     thing.properties[key + "_phenomenonTime"] = phenomenonTime;
                 }
-                thing.properties.dataStreamId = dataStreamId;
+                thing.properties.dataStreamId.push(dataStreamId);
+                thing.properties.dataStreamName.push(dataStreamName);
             });
+            thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
+            thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
         });
         return allThingsWithSensorData;
     },

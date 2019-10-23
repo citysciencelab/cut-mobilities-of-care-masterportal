@@ -144,6 +144,8 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |mergeThingsByCoordinates|nein|Boolean|false|Gibt an ob Things mit gleicher Coordinate zusammenfasst werden sollen.|`true`|
+|showNoDataValues|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
+|noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
 
 **Beispiel Sensor:**
 
