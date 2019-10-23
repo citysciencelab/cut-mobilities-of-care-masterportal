@@ -1,4 +1,17 @@
 .gfi-balkendiagramm {
+    table {
+        &.table {
+            tbody {
+                tr{
+                    td {
+                        &:last-child {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .panel {
         &.grahpHeader{
             padding: 0 8px 8px;
