@@ -189,7 +189,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 feature.set("gfiParams", this.get("gfiTheme").params);
                 feature.set("utc", this.get("utc"));
             }
-
+            feature = this.aggregateDataStreamValue(feature);
+            feature = this.aggregateDataStreamPhenomenonTime(feature);
             features.push(feature);
         }, this);
 
@@ -201,6 +202,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         return features;
     },
 
+    /**
+     * Aggregates the values and adds them as property "dataStreamValues".
+     * @param {ol/feature} feature OL-feature.
+     * @returns {ol/feature} - Feature with new attribute "dataStreamValues".
+     */
+    aggregateDataStreamValue: function (feature) {
+        const modifiedFeature = feature,
+            dataStreamValues = [];
+
+        feature.get("dataStreamId").split(" | ").forEach(id => {
+            dataStreamValues.push(feature.get("dataStream_" + id));
+        });
+        modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "));
+        return modifiedFeature;
+    },
+
+    /**
+     * Aggregates the phenomenonTimes and adds them as property "dataStreamPhenomenonTime".
+     * @param {ol/feature} feature OL-feature.
+     * @returns {ol/feature} - Feature with new attribute "dataStreamPhenomenonTime".
+     */
+    aggregateDataStreamPhenomenonTime: function (feature) {
+        const modifiedFeature = feature,
+            dataStreamPhenomenonTimes = [];
+
+        feature.get("dataStreamId").split(" | ").forEach(id => {
+            dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_phenomenonTime"));
+        });
+        modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "));
+        return modifiedFeature;
+    },
     /**
      * change time zone by given UTC-time
      * @param  {String} phenomenonTime - time of measuring a phenomenon
@@ -289,27 +321,35 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         return allThings;
     },
 
+    /**
+     * Iterates over the dataStreams and creates the attributes:
+     * "dataStream_[dataStreamId]" and
+     * "dataStream_[dataStreamId]_phenomenonTime".
+     * @param {Object[]} allThings All things.
+     * @returns {Object[]} - All things with the newest observation for each dataStream.
+     */
     getNewestSensorData: function (allThings) {
         const allThingsWithSensorData = allThings;
 
         allThingsWithSensorData.forEach(thing => {
             const dataStreams = thing.Datastreams;
 
-            dataStreams.forEach((dataStream, i) => {
-                const dataStreamId = dataStream["@iot.id"],
-                    key = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown_datatream_" + i,
+            dataStreams.forEach((dataStream) => {
+                const dataStreamId = String(dataStream["@iot.id"]),
+                    key = "dataStream_" + dataStreamId,
                     value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
                     phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
 
                 if (value) {
                     thing.properties[key] = value;
                     thing.properties[key + "_phenomenonTime"] = phenomenonTime;
-                    thing.properties.dataStreamId = dataStreamId;
                 }
+                thing.properties.dataStreamId = dataStreamId;
             });
         });
         return allThingsWithSensorData;
     },
+
     /**
      * build SensorThings URL
      * @param  {String} url - url to service
@@ -401,6 +441,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         return xy;
     },
+
+    /**
+     * Aggregates the properties of the things.
+     * @param {Object[]} allThings - all things
+     * @returns {Object[]} - aggregatedThings
+     */
     aggregatePropertiesOfThings: function (allThings) {
         const aggregatedArray = [];
 
@@ -408,15 +454,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             const aggregatedThing = {};
 
             if (Array.isArray(thing)) {
-                let keys = [];
+                let keys = [],
+                    props = {};
 
                 aggregatedThing.location = this.getCoordinates(thing[0]);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
+                    props = Object.assign(props, thing2.properties);
                 });
                 keys = [...new Set(keys.flat())];
-
-                aggregatedThing.properties = this.aggregateProperties(thing, keys);
+                keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
                 aggregatedThing.location = this.getCoordinates(thing);
@@ -430,6 +478,25 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         return aggregatedArray;
     },
 
+    /**
+     * Excludes the keys starting with the given startsWithString
+     * @param {String[]} keys  - keys
+     * @param {String} startsWithString - startsWithString
+     * @returns {String[]} - reducedKeys
+     */
+    excludeDataStreamKeys: function (keys, startsWithString) {
+        const keysToIgnore = keys.filter(key => key.startsWith(startsWithString)),
+            reducedKeys = keys.filter(key => !keysToIgnore.includes(key));
+
+        return reducedKeys;
+    },
+
+    /**
+     * Aggregates the properties of the given keys and joins them by  " | "
+     * @param {Object} thingArray - Array of things to aggregate
+     * @param {String[]} keys - Keys to aggregate
+     * @returns {Object} - aggregatedProperties
+     */
     aggregateProperties: function (thingArray, keys) {
         const aggregatedProperties = {};
 
@@ -498,47 +565,36 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     updateFromMqtt: function (thing) {
         var thingToUpdate = !_.isUndefined(thing) ? thing : {},
-            dataStreamId = thingToUpdate.dataStreamId,
+            dataStreamId = String(thingToUpdate.dataStreamId),
             features = this.get("layerSource").getFeatures(),
-            featureArray = this.getFeatureByDataStreamId(dataStreamId, features),
-            thingResult = String(thingToUpdate.result),
+            feature = this.getFeatureByDataStreamId(features, dataStreamId),
+            result = String(thingToUpdate.result),
             utc = this.get("utc"),
-            thingPhenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
+            phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
 
-        this.liveUpdate(featureArray, thingResult, thingPhenomenonTime);
+        this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
     },
 
     /**
      * performs the live update
-     * @param  {Array} featureArray - contains the and index and feature which should be updates
-     * @param  {String} thingResult - the new state
-     * @param  {String} thingPhenomenonTime - the new phenomenonTime
+     * @param  {ol/feature} feature - feature to be updated
+     * @param  {String} dataStreamId - dataStreamId
+     * @param  {String} result - the new state
+     * @param  {String} phenomenonTime - the new phenomenonTime
      * @fires GFI#RadioTriggerGFIChangeFeature
      * @returns {void}
      */
-    liveUpdate: function (featureArray, thingResult, thingPhenomenonTime) {
-        var itemNumber = featureArray[0],
-            feature = featureArray[1],
-            datastreamStates = feature.get("state"),
-            datastreamPhenomenonTime = feature.get("phenomenonTime");
+    liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
+        let updatedFeature = feature;
 
-        if (_.contains(datastreamStates, "|")) {
-            datastreamStates = datastreamStates.split(" | ");
-            datastreamPhenomenonTime = datastreamPhenomenonTime.split(" | ");
-
-            datastreamStates[itemNumber] = thingResult;
-            datastreamPhenomenonTime[itemNumber] = thingPhenomenonTime;
-
-            feature.set("state", datastreamStates.join(" | "));
-            feature.set("phenomenonTime", datastreamPhenomenonTime.join(" | "));
-        }
-        else {
-            feature.set("state", thingResult);
-            feature.set("phenomenonTime", thingPhenomenonTime);
-        }
-
-        this.featureUpdated(feature);
-        Radio.trigger("GFI", "changeFeature", feature);
+        updatedFeature.set("dataStream_" + dataStreamId, result);
+        updatedFeature.set("dataStream_" + dataStreamId + "_phenomenonTime", phenomenonTime);
+        updatedFeature = this.aggregateDataStreamValue(feature);
+        updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
+        console.log(updatedFeature);
+        
+        this.featureUpdated(updatedFeature);
+        Radio.trigger("GFI", "changeFeature", updatedFeature);
     },
 
     /**
@@ -569,33 +625,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * get feature by a given id
-     * @param  {number} id - the if from examined feature
      * @param  {array} features - features to seacrh for
+     * @param  {number} id - the if from examined feature
      * @return {array} featureArray
      */
-    getFeatureByDataStreamId: function (id, features) {
-        var featureArray = [];
-
-        _.each(features, function (feature) {
-            var datastreamIds = feature.get("dataStreamId");
-
-            if (_.contains(datastreamIds, "|")) {
-                datastreamIds = datastreamIds.split(" | ");
-
-                _.each(datastreamIds, function (thingsId, index) {
-                    if (parseInt(id, 10) === parseInt(thingsId, 10)) {
-                        featureArray.push(index);
-                        featureArray.push(feature);
-                    }
-                });
-            }
-            else if (parseInt(id, 10) === parseInt(datastreamIds, 10)) {
-                featureArray.push(0);
-                featureArray.push(feature);
-            }
-        });
-
-        return featureArray;
+    getFeatureByDataStreamId: function (features, id) {
+        return features.filter(feat => {
+            return feat.get("dataStreamId") ? feat.get("dataStreamId").includes(id) : false;
+        })[0];
     },
 
     /**
