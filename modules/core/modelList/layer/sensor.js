@@ -366,13 +366,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 if (this.get("showNoDataValue") && !value) {
                     thing.properties[key] = this.get("noDataValue");
                     thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
+                    thing.properties.dataStreamId.push(dataStreamId);
+                    thing.properties.dataStreamName.push(dataStreamName);
                 }
                 else if (value) {
                     thing.properties[key] = value;
                     thing.properties[key + "_phenomenonTime"] = phenomenonTime;
+                    thing.properties.dataStreamId.push(dataStreamId);
+                    thing.properties.dataStreamName.push(dataStreamName);
                 }
-                thing.properties.dataStreamId.push(dataStreamId);
-                thing.properties.dataStreamName.push(dataStreamName);
             });
             thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
             thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
