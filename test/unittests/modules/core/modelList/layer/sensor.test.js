@@ -133,7 +133,7 @@ describe("core/modelList/layer/sensor", function () {
                     geometry: new Point([100, 100])
                 }),
                 features = [feature0, feature1];
-                
+
             expect(sensorLayer.getFeatureByDataStreamId(features, "1")).to.be.an.instanceof(Feature);
         });
         it("should return a Feature with combined dataStreamId", function () {
@@ -146,7 +146,7 @@ describe("core/modelList/layer/sensor", function () {
                     geometry: new Point([100, 100])
                 }),
                 features = [feature0, feature1];
-                
+
             expect(sensorLayer.getFeatureByDataStreamId(features, "3")).to.be.an.instanceof(Feature);
         });
     });
