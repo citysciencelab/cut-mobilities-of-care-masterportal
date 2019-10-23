@@ -1,4 +1,13 @@
-.gfi-balkendiagramm {
+.tooltip {
+    &.in {
+        z-index: 10000;
+        max-width: 480px;
+        max-height: 350px;
+        overflow-y: scroll;
+    }
+}
+
+.gfi-schule-wohnort, .tooltip.in {
     max-width: 420px;
     table {
         &.table {
@@ -10,20 +19,6 @@
                         }
                     }
                 }
-            }
-        }
-    }
-    .panel {
-        &.grahpHeader{
-            padding: 0 8px 8px;
-            border-bottom: 2px solid #ddd;
-        }
-    }
-    .graph{
-        .bargraph {
-            fill: #d76629;
-            &:hover {
-                fill: #337ab7;
             }
         }
     }
