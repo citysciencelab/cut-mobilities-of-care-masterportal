@@ -64,7 +64,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
      * @fires Parser#RadioRequestParserGetPortalConfig
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Util#RadioTriggerUtilShowLoader
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires AlertingModel#RadioTriggerAlertAlert
@@ -79,7 +79,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     /**
      * Creates and sets the initially needed attributes
      * @param {JSON} configJson configJson
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @returns {void}
      */
     setAttributes: function (configJson) {

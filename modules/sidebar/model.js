@@ -14,8 +14,8 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      * @property {Boolean} isMobile=false Flag if sidebar is mobile
      * @listens Sidebar#RadioTriggerSidebarToggle
      * @listens Sidebar#RadioTriggerSidebarAppend
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
-     * @fires Util#RadioRequestUtilIsViewMobile
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
+     * @fires Core#RadioRequestUtilIsViewMobile
      * @fires Sidebar#addContent
      * @constructs
      */

@@ -16,8 +16,8 @@ const LegendLoader = Backbone.Model.extend(/** @lends LegendLoader.prototype */{
      * @constructs
      * @property {String} currentLegend currently visible legend,
      * @param {*} LegendModel todo
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
-     * @fires Util#RadioRequestUtilIsViewMobile
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
+     * @fires Core#RadioRequestUtilIsViewMobile
      */
     initialize: function (LegendModel) {
         this.loadMenu(LegendModel);
@@ -32,7 +32,7 @@ const LegendLoader = Backbone.Model.extend(/** @lends LegendLoader.prototype */{
     /**
     * todo
     * @param {*} LegendModel todo
-    * @fires Util#RadioRequestUtilIsViewMobile
+    * @fires Core#RadioRequestUtilIsViewMobile
     * @returns {void}
     */
     loadMenu: function (LegendModel) {
