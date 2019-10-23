@@ -87,7 +87,6 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
                 else if (this.get("isSelected") === false && this.has("hiddenFeatures")) {
                     Radio.trigger("Objects3D", "show3DObjects", this.get("hiddenFeatures"));
                 }
-                this.toggleLayerOnMap();
             }
         });
     },
