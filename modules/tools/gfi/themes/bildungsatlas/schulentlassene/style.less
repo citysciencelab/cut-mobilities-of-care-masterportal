@@ -80,6 +80,23 @@
         border: 2px solid @color_tooltipborder;
         text-align: center;
     }
+
+    table {
+        &.table {
+            tbody {
+                tr{
+                    td {
+                        &:last-child {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .gfi-info {
+        padding: 0 10px 10px;
+    }
 }
 
 
