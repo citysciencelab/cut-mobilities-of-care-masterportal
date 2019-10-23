@@ -18,7 +18,7 @@ const Config = {
     quickHelp: {
         imgPath: "./ressources/img/"
     },
-    layerConf: "./ressources/services-sensor.json",
+    layerConf: "./ressources/services-internet.json",
     restConf: "./ressources/rest-services-internet.json",
     styleConf: "./ressources/style_v2.json",
     scaleLine: true,
