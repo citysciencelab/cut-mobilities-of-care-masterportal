@@ -97,9 +97,6 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
-        // set the themeId for the graph class
-        this.set("themeId", this.get("themeId"));
-
         // set the layer data format
         this.set("layerDataFormat", layerDataFormat);
         this.set("layerDataFormatType", layerDataFormat.type);

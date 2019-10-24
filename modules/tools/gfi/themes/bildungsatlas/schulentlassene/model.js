@@ -87,9 +87,6 @@ const SchulentlasseneTheme = Theme.extend({
             this.set("data_zeitverlauf", this.createDataForZeitverlauf("C41_oHS", "number"));
         }
 
-        // set the themeId for the graph class
-        this.set("themeId", this.get("themeId"));
-
         // set the value for data_abschluesse which is used for the Linegraph zeitverlauf
         this.set("data_abschluesse", this.createDataForAbschluesse());
     },
