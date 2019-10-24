@@ -21,7 +21,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      * @listens VirtualCity#RadioRequestVirtualCityGetViewpointsForPlanning
      * @listens VirtualCity#RadioRequestVirtualCityGetFlightsForPlanning
      * @listens VirtualCity#RadioRequestVirtualCityGotoViewPoint
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      */
     initialize () {
         this.superInitialize();
@@ -68,7 +68,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     },
     /**
      * returns a list of plannings from a virtualcityPLANNER Service
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @return {Promise} Promise which resolves with an array of the public Plannings
      */
     getPlannings () {

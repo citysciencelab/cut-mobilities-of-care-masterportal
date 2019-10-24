@@ -18,8 +18,8 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     * @property {String} desktopURL="" Url to be used in iframe when app runs in desktop mode.
     * @property {String} mobileURL="" Url to be used in iframe when app runs in mobile mode.
     * @property {Boolean} isMobile=false Boolean to indicate if view is in desktop or mobile mode.
-    * @fires Util#RadioRequestUtilIsViewMobile
-    * @listens Util#RadioTriggerUtilIsViewMobileChanged
+    * @fires Core#RadioRequestUtilIsViewMobile
+    * @listens Core#RadioTriggerUtilIsViewMobileChanged
     * @listens ClickCounter#RadioTriggerClickCounterToolChanged
     * @listens ClickCounter#RadioTriggerClickCounterCalcRoute
     * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
@@ -50,7 +50,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
     /**
     * Request isViewMobile state of page
     * This seperate helper method enables unit tests of the setInitialIsMobile-method.
-    * @fires Util#RadioRequestUtilIsViewMobile
+    * @fires Core#RadioRequestUtilIsViewMobile
     * @return {Boolean} Boolean is view in mobile mode or not
     */
     requestIsViewMobile: function () {
@@ -97,7 +97,7 @@ const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.pro
      * @listens ClickCounter#RadioTriggerClickCounterZoomChanged
      * @listens ClickCounter#RadioTriggerClickCounterLayerVisibleChanged
      * @listens ClickCounter#RadioTriggerClickCounterGfi
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @returns {void}
      */
     registerListener: function () {

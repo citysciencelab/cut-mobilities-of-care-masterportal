@@ -24,14 +24,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
      * @property {String} periodicity=null Periodicity
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
-     * @fires Util#RadioRequestUtilIsViewMobile
-     * @fires CswParser#RadioTriggerGetMetaData
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @fires LayerInformation#RadioTriggerLayerInformationSync
      * @fires LayerInformation#RadioTriggerLayerInformationRemoveView
      * @listens LayerInformation#RadioTriggerLayerInformationAdd
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
-     * @listens CswParser#RadioTriggerFetchedMetaData
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
+     * @listens CswParser#RadioTriggerCswParserFetchedMetaData
      */
     initialize: function () {
         var channel = Radio.channel("LayerInformation");
@@ -101,7 +101,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     /**
     * todo
     * @param {*} attrs todo
-    * @fires CswParser#RadioTriggerGetMetaData
+    * @fires CswParser#RadioTriggerCswParserGetMetaData
     * @returns {void}
     */
     requestMetaData: function (attrs) {
@@ -151,7 +151,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         }
         else {
             this.set("title", this.get("layername"));
-            this.set("abstractText", "Keine Metadaten vorhanden.");
+            this.set("abstractText", "Fehler beim Laden der Vorschau der Metadaten.");
             this.set("date", null);
             this.set("metaURL", null);
             this.set("downloadLinks", null);
