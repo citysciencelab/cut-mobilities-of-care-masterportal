@@ -20,11 +20,16 @@
         }
     }
     .graph{
-        .bargraph {
-            fill: #d76629;
-            &:hover {
-                fill: #337ab7;
+        .graph-diagram {
+            rect[class^="bargraph_"] {
+                fill: #d76629;
+                &:hover {
+                    fill: #337ab7;
+                }
             }
         }
+    }
+    .gfi-info {
+        padding: 0 10px 10px;
     }
 }
