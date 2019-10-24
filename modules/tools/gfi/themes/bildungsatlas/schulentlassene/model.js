@@ -7,7 +7,8 @@ const SchulentlasseneTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": function () {
                 this.setTemplateValues();
-
+            },
+            "change:isVisible": function () {
                 // as there is no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
                 setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
                 setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
@@ -85,6 +86,9 @@ const SchulentlasseneTheme = Theme.extend({
         else {
             this.set("data_zeitverlauf", this.createDataForZeitverlauf("C41_oHS", "number"));
         }
+
+        // set the themeId for the graph class
+        this.set("themeId", this.get("themeId"));
 
         // set the value for data_abschluesse which is used for the Linegraph zeitverlauf
         this.set("data_abschluesse", this.createDataForAbschluesse());
@@ -222,45 +226,49 @@ const SchulentlasseneTheme = Theme.extend({
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createGraphZeitverlauf: function () {
-        const graphConfig = {
-            graphType: "BarGraph",
-            selector: ".graph_zeitverlauf",
-            width: parseInt($(".schulentlassene-gfi-theme").css("width"), 10) - 10,
-            height: 190,
-            margin: {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: 40
-            },
-            svgClass: "graph-svg",
-            selectorTooltip: ".graph-tooltip-div",
-            scaleTypeX: "ordinal",
-            scaleTypeY: "linear",
-            yAxisTicks: {
-                ticks: 5,
-                factor: ",f"
-            },
-            data: this.get("data_zeitverlauf"),
-            xAttr: "year",
-            xAxisLabel: {
-                "label": "Jahr"
-            },
-            yAxisLabel: {
-                "label": "Anteil Schüler in Prozent",
-                "offset": 40
-            },
-            attrToShowArray: [
-                "number"
-            ],
-            setTooltipValue: function (value) {
-                return Math.round(value).toString() + "%";
-            }
-        };
+        const themeId = this.get("themeId"),
+            graphConfig = {
+                graphType: "BarGraph",
+                selector: ".graph_zeitverlauf_" + themeId,
+                width: parseInt($(".schulentlassene-gfi-theme").css("width"), 10) - 10,
+                height: 190,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
+                    left: 40
+                },
+                svgClass: "graph-svg",
+                selectorTooltip: ".graph-tooltip-div",
+                scaleTypeX: "ordinal",
+                scaleTypeY: "linear",
+                yAxisTicks: {
+                    ticks: 5,
+                    factor: ",f"
+                },
+                data: this.get("data_zeitverlauf"),
+                xAttr: "year",
+                xAxisLabel: {
+                    "label": "Jahr"
+                },
+                yAxisLabel: {
+                    "label": "Anteil Schüler in Prozent",
+                    "offset": 40
+                },
+                attrToShowArray: [
+                    "number"
+                ],
+                setTooltipValue: function (value) {
+                    return Math.round(value).toString() + "%";
+                }
+            };
 
         if (_.isUndefined(this.get("data_zeitverlauf"))) {
             return;
         }
+
+        // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows
+        $(".graph_zeitverlauf_" + themeId + " svg").remove();
 
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
@@ -271,48 +279,52 @@ const SchulentlasseneTheme = Theme.extend({
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createGraphAbschluesse: function () {
-        const graphConfig = {
-            legendData: this.getLegendAbschluesse(),
-            graphType: "Linegraph",
-            selector: ".graph_abschluesse",
-            width: parseInt($(".schulentlassene-gfi-theme").css("width"), 10) - 10,
-            height: 370,
-            margin: {
-                top: 20,
-                right: 20,
-                bottom: 140,
-                left: 70
-            },
-            svgClass: "graph-svg",
-            selectorTooltip: ".graph-tooltip-div",
-            scaleTypeX: "ordinal",
-            scaleTypeY: "linear",
-            yAxisTicks: {
-                ticks: 5,
-                factor: ",f"
-            },
-            data: this.get("data_abschluesse"),
-            xAttr: "year",
-            xAxisLabel: {
-                label: "Schuljahr",
-                translate: 6
-            },
-            yAxisLabel: {
-                label: "Abschlüsse je 1000 unter 18-Jährige",
-                offset: 60
-            },
-            attrToShowArray: [
-                {attrName: "numberAbi", attrClass: "lineAbi"},
-                {attrName: "numberMSA", attrClass: "lineMSA"},
-                {attrName: "numberESA", attrClass: "lineESA"},
-                {attrName: "numberOSA", attrClass: "lineOSA"},
-                {attrName: "numberALL", attrClass: "lineALL"}
-            ]
-        };
+        const themeId = this.get("themeId"),
+            graphConfig = {
+                legendData: this.getLegendAbschluesse(),
+                graphType: "Linegraph",
+                selector: ".graph_abschluesse_" + themeId,
+                width: parseInt($(".schulentlassene-gfi-theme").css("width"), 10) - 10,
+                height: 370,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 140,
+                    left: 70
+                },
+                svgClass: "graph-svg",
+                selectorTooltip: ".graph-tooltip-div",
+                scaleTypeX: "ordinal",
+                scaleTypeY: "linear",
+                yAxisTicks: {
+                    ticks: 5,
+                    factor: ",f"
+                },
+                data: this.get("data_abschluesse"),
+                xAttr: "year",
+                xAxisLabel: {
+                    label: "Schuljahr",
+                    translate: 6
+                },
+                yAxisLabel: {
+                    label: "Abschlüsse je 1000 unter 18-Jährige",
+                    offset: 60
+                },
+                attrToShowArray: [
+                    {attrName: "numberAbi", attrClass: "lineAbi"},
+                    {attrName: "numberMSA", attrClass: "lineMSA"},
+                    {attrName: "numberESA", attrClass: "lineESA"},
+                    {attrName: "numberOSA", attrClass: "lineOSA"},
+                    {attrName: "numberALL", attrClass: "lineALL"}
+                ]
+            };
 
         if (_.isUndefined(this.get("data_abschluesse"))) {
             return;
         }
+
+        // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows
+        $(".graph_abschluesse_" + themeId + " svg").remove();
 
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
