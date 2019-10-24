@@ -10,6 +10,8 @@ const BalkendiagrammTheme = Theme.extend({
                 this.getStaticWithYear();
                 this.getLatestStatistic();
                 this.setContent();
+            },
+            "change:isVisible": function () {
                 if (isMobile) {
                     timeOut = 300;
                 }
@@ -95,6 +97,7 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
+        this.set("themeId", this.get("themeId"));
         this.set("layerDataFormat", layerDataFormat);
         this.set("layerDataFormatType", layerDataFormat.type);
         this.set("content", content);
@@ -149,11 +152,12 @@ const BalkendiagrammTheme = Theme.extend({
      */
     createD3Document: function () {
         var width = parseInt($(".gfi-balkendiagramm").css("width"), 10),
-            dataType = this.get("layerDataFormatType");
+            dataType = this.get("layerDataFormatType"),
+            themeId = this.get("themeId");
 
         const graphConfig = {
             graphType: "BarGraph",
-            selector: ".graph",
+            selector: ".graph_" + themeId,
             width: width - 10,
             height: 170,
             margin: {
@@ -189,6 +193,7 @@ const BalkendiagrammTheme = Theme.extend({
             }
         };
 
+        $(".graph_" + themeId + " svg").remove();
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
 
