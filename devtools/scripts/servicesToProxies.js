@@ -68,6 +68,7 @@ function appendToLocalProxies (proxyName, domain, port, isLast, proxyForFHHNet) 
             if (err) {
                 return console.log(err);
             }
+            return "";
         });
 }
 
@@ -106,6 +107,7 @@ function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNe
         if (err) {
             return console.log(err);
         }
+        return "";
     });
 }
 
@@ -195,7 +197,9 @@ function printHelpText () {
  */
 function main () {
     printHelpText();
-    var args = process.argv;
+    const args = process.argv;
+    let proxyForFHHNet,
+        allDomains;
 
     // json laden
     if (typeof args[4] !== "undefined") {
@@ -203,7 +207,7 @@ function main () {
             // Apache Zieldatei
             targetFile = args[2] + ".conf";
         }
-        var proxyForFHHNet = false;
+        proxyForFHHNet = false;
 
         if (typeof args[3] !== "undefined" && args[3] === "true") {
             proxyForFHHNet = true;
@@ -216,9 +220,9 @@ function main () {
         fs.writeFile(targetFile, "");
         fs.writeFile(targetFileLocal, "");
 
-        var allDomains = [];
+        allDomains = [];
 
-        for (var i = 4; i < args.length; i++) {
+        for (const i = 4; i < args.length; i++) {
             var data = fs.readFileSync(args[i], "utf8"),
                 obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
 

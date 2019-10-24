@@ -1704,7 +1704,7 @@
  /** -------------------- CswParser -------------------- */
 
 /**
- * @event CswParser#RadioTriggerGetMetaData
+ * @event CswParser#RadioTriggerCswParserGetMetaData
  * @param {Object} cswObj Object of CSW request information.
  * @example Radio.trigger("CswParser", "getMetaData", cswObj);
  */

@@ -11,6 +11,8 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts",
+    "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
+    "browsertest": "./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildPortalsFromPortalconfigs": "node devtools/tasks/exampleBuild.js && node devtools/tasks/buildPortalconfigs.js",
@@ -52,6 +54,7 @@
     "child-process-promise": "^2.2.1",
     "css-loader": "^1.0.0",
     "deep-extend": "^0.6.0",
+    "dotenv": "^8.1.0",
     "es6-promise": "^4.2.5",
     "eslint": "^6.0.1",
     "eslint-plugin-backbone": "^2.1.1",
