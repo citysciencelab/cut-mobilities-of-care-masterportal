@@ -336,16 +336,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         allThings = allThings.flat();
-
         allThings = this.getNewestSensorData(allThings);
-        console.log(allThings);
-        console.log(allThings.filter(thing=> {
-            return thing.properties.dataStreamId.indexOf(" | ") !== -1;
-        }));
-        allThings = allThings.filter(thing=> {
-            return thing.properties.dataStreamId.indexOf(" | ") !== -1;
-        });
-        
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
         }

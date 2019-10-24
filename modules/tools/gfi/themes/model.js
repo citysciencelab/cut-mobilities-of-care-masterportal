@@ -434,8 +434,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                         name = preGfi[origName.toLowerCase()];
                     }
                     if (typeof translatedName === "object") {
-                        name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName);
-                        translatedName = translatedName.translatedName;
+                        name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
+                        translatedName = translatedName.name;
                     }
 
                     if (name) {
@@ -455,36 +455,35 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * Translates the given name from gfiAttribute Object based on the condition type
      * @param {Object} preGfi Object of all values that the feature has.
      * @param {String} origName The name to be proofed against the keys.
-     * @param {Object} obj GFI-Attribute Object.
+     * @param {Object} condition GFI-Attribute Object.
      * @returns {String} - name if condition matches exactly one key.
      */
-    translateNameFromObject: function (preGfi, origName, obj) {
-        const matchingType = obj.type,
-            length = origName.length;
+    translateNameFromObject: function (preGfi, origName, condition) {
+        const length = origName.length;
         let name,
             matches = [];
 
-        if (matchingType === "contains") {
+        if (condition === "contains") {
             matches = Object.keys(preGfi).filter(key => {
                 return key.length !== length && key.includes(origName);
             });
-            if (this.checkIfMatchesValid(origName, matchingType, matches)) {
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
                 name = preGfi[matches[0]];
             }
         }
-        else if (matchingType === "startsWith") {
+        else if (condition === "startsWith") {
             matches = Object.keys(preGfi).filter(key => {
                 return key.length !== length && key.startsWith(origName);
             });
-            if (this.checkIfMatchesValid(origName, matchingType, matches)) {
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
                 name = preGfi[matches[0]];
             }
         }
-        else if (matchingType === "endsWith") {
+        else if (condition === "endsWith") {
             matches = Object.keys(preGfi).filter(key => {
                 return key.length !== length && key.endsWith(origName);
             });
-            if (this.checkIfMatchesValid(origName, matchingType, matches)) {
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
                 name = preGfi[matches[0]];
             }
         }
@@ -497,18 +496,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     /**
      * Checks if the matches have exact one entry.
      * @param {String} origName The name to be proofed against the keys.
-     * @param {String} matchingType Matching conditon.
+     * @param {String} condition Matching conditon.
      * @param {String[]} matches An array of all keys matching the condition.
      * @returns {Boolean} - Flag of array has exacly one entry.
      */
-    checkIfMatchesValid: function (origName, matchingType, matches) {
+    checkIfMatchesValid: function (origName, condition, matches) {
         let isValid = false;
 
         if (matches.length === 0) {
-            console.error("no match found for gfi translation: '" + matchingType + "', '" + origName + "'");
+            console.error("no match found for gfi translation: '" + condition + "', '" + origName + "'");
         }
         else if (matches.length > 1) {
-            console.error("more than 1 match found for gfi translation: " + matchingType + "', '" + origName + "'");
+            console.error("more than 1 match found for gfi translation: " + condition + "', '" + origName + "'");
         }
         else {
             isValid = true;
