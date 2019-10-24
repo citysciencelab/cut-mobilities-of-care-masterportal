@@ -77,7 +77,6 @@ import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backforward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualcity/model";
-import SdpDownloadView from "../modules/sdpDownload/view";
 
 var sbconfig, controls, controlsView;
 
@@ -172,10 +171,6 @@ function loadApp () {
 
     _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
         switch (tool.id) {
-            case "sdpDownload": {
-                new SdpDownloadView({model: tool});
-                break;
-            }
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
                 break;

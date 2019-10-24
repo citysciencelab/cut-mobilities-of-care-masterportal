@@ -47,7 +47,6 @@ import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewpoint/model";
 import VirtualCityModel from "../../tools/virtualcity/model";
-import SdpDownloadModel from "../../sdpDownload/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -320,9 +319,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "virtualcity") {
                 return new VirtualCityModel(attrs, options);
-            }
-            else if (attrs.id === "sdpDownload") {
-                return new SdpDownloadModel(attrs, options);
             }
             return new Tool(attrs, options);
         }
