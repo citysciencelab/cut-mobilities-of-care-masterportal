@@ -42,7 +42,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * This makes it possible to update vector-data in the application without reloading the entire page.
      * The newest observation data of each attribute ist set as follows:
      * name = If "datastream.properties.type" is not undefined, take this. Otherwise take the value in "datastream.unitOfMeasurment.name"
-     * The attribute key is "dataStream_[dataStreamId]_[name]"
+     * The attribute key is "dataStream_[dataStreamId]_[name]".
+     * All available dataStreams, their ids, their latest observation and values are separately aggregated and stored (separated by " | ") in the following attributes:
+     * dataStreamId, dataStreamName, dataStreamValue, dataStreamPhenomenonTime
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -336,6 +338,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         allThings = allThings.flat();
 
         allThings = this.getNewestSensorData(allThings);
+        console.log(allThings);
+        console.log(allThings.filter(thing=> {
+            return thing.properties.dataStreamId.indexOf(" | ") !== -1;
+        }));
+        allThings = allThings.filter(thing=> {
+            return thing.properties.dataStreamId.indexOf(" | ") !== -1;
+        });
+        
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
         }
