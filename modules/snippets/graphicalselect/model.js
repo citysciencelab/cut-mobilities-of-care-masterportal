@@ -1,18 +1,12 @@
 import SnippetDropdownModel from "../dropdown/model";
 import Overlay from "ol/Overlay.js";
-import { GeoJSON } from "ol/format.js";
-import { fromCircle } from "ol/geom/Polygon.js";
-import { Draw } from "ol/interaction.js";
-import { createBox } from "ol/interaction/Draw.js";
-import { Circle } from "ol/geom.js";
+import {GeoJSON} from "ol/format.js";
+import {fromCircle} from "ol/geom/Polygon.js";
+import {Draw} from "ol/interaction.js";
+import {createBox} from "ol/interaction/Draw.js";
+import {Circle} from "ol/geom.js";
 
 const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSelectModel.prototype */{
-    /**
-     * @class GraphicalSelectModel
-     * @extends DropdownModel
-     * @memberof Snippets.GraphicalSelect
-     * @constructs
-     */
     defaults: {
         isOpen: false,
         name: "Geometrie",
@@ -38,24 +32,45 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         currentValue: "",
         selectedAreaGeoJson: {},
         tooltipMessage: "Klicken zum Starten und Beenden",
-        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
+        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
     },
-  /**
+    /**
      * @class GraphicalSelectModel
-     * @extends Tool
-     * @memberof Tools.Einwohnerabfrage_hh
+     * @extends SnippetDropdownModel
+     * @memberof Snippets.GraphicalSelect
+     * @namespace GraphicalSelect
+     * @description creates a dropdown to select an area in a map by square, circle or polygon
      * @constructs
-     * @property {ol/Overlay} circleOverlay=new Overlay({offset: [15, 0], positioning: "center-left"}) circle overlay (tooltip) - shows the radius
-     * @property {ol/Overlay} tooltipOverlay=new Overlay({offset: [15, 20], positioning: "top-left"}) todo
-     * @property {Object} snippetDropdownModel={}
-     * @property {Obeject} values={"Rechteck aufziehen": "Box", "Kreis aufziehen": "Circle", "Fläche zeichnen": "Polygon"} possible values
+     * @property {Boolean} isOpen=false dropdown is open or closed
+     * @property {String} name="Geometrie" name of the dropdown
+     * @property {String} type="string" type of the dropdown values
+     * @property {String} displayName="Geometrie auswählen" label of the dropdown
+     * @property {String} snippetType="graphicalselect" type of the dropdown values
+     * @property {Boolean} isMultiple=false dropdown multiple
+     * @property {Object} drawInteraction=undefined the interaction to draw a square, circle or polygon
+     * @property {ol.overlay} circleOverlay=new Overlay({offset: [15, 0], positioning: "center-left"}) circle overlay (tooltip) - shows the radius
+     * @property {ol.overlay} tooltipOverlay=new Overlay({offset: [15, 20], positioning: "top-left"}) todo
+     * @property {Object} snippetDropdownModel={} contains the model of the underlying dropdown
+     * @property {Object} geographicValues={"Rechteck aufziehen": "Box", "Kreis aufziehen": "Circle", "Fläche zeichnen": "Polygon"} possible values
+     * @property {String} currentValue="" contains the current geographic value for "Box",  "Circle" or "Polygon"
      * @property {String} tooltipMessage="Klicken zum Starten und Beenden" Meassage for tooltip
      * @property {String} tooltipMessagePolygon="Klicken um Stützpunkt hinzuzufügen" Meassage for tooltip
+     * @property {ol.geojson} selectedAreaGeoJson={} the selected area as GeoJSON
+     * @fires Core#RadioRequestMapCreateLayerIfNotExists
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapRemoveOverlay
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires Snippets.GraphicalSelect#setStatus
+     * @fires Snippets.GraphicalSelect#resetView
+     * @fires Snippets.GraphicalSelect#resetGeographicSelection
+     * @fires Snippets.GraphicalSelect#featureToGeoJson
+     * @listens Snippets.Dropdown#ValuesChanged
+     * @listens Snippets.Checkbox#ValuesChanged
      */
     initialize: function () {
-        console.log('GraphicalSelectModel initialize id='+this.get('id'));
         this.superInitialize();
         const channel = Radio.channel("GraphicalSelect");
+
         channel.on({
             "setStatus": this.setStatus,
             "resetView": this.resetView,
@@ -73,26 +88,25 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         });
         this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
         this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
-        const model = new SnippetDropdownModel({
-            name: this.get('name'),
-            type: this.get('type'),
-            displayName: this.get('displayName'),
+        this.setDropDownSnippet(new SnippetDropdownModel({
+            name: this.get("name"),
+            type: this.get("type"),
+            displayName: this.get("displayName"),
             values: _.allKeys(this.get("geographicValues")),
-            snippetType:this.get('snippetType'),
-            isMultiple: this.get('isMultiple'),
+            snippetType: this.get("snippetType"),
+            isMultiple: this.get("isMultiple"),
             preselectedValues: _.allKeys(this.get("geographicValues"))[0]
-        });
-        this.setDropDownSnippet(model);
+        }));
     },
     /**
       * Handles (de-)activation of this Tool
-      * @param {object} model - tool model
-      * @param {boolean} value flag is tool is ctive
+      * @param {boolean} value flag if tool is active
       * @fires Core#RadioTriggerMapRemoveOverlay
       * @returns {void}
       */
-    setStatus: function (model, value) {
+    setStatus: function (value) {
         let selectedValues;
+
         if (value) {
             selectedValues = this.get("snippetDropdownModel").getSelectedValues();
             this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("geographicValues"))[0]);
@@ -106,13 +120,17 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         }
     },
 
+    /**
+      * Sets the selection of the dropdown to the default value
+      * @returns {void}
+      */
     resetGeographicSelection: function () {
         this.get("snippetDropdownModel").updateSelectedValues(_.allKeys(this.get("geographicValues"))[0]);
     },
 
     /**
-     * creates a draw interaction and adds it to the map.
-     * @param {string} drawType - drawing type (Box | Circle | Polygon)
+     * Creates a draw interaction and adds it to the map.
+     * @param {String} drawType - drawing type (Box | Circle | Polygon)
      * @fires Core#RadioRequestMapCreateLayerIfNotExists
      * @fires Core#RadioTriggerMapAddOverlay
      * @fires Core#RadioTriggerMapRegisterListener
@@ -121,7 +139,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      */
     createDrawInteraction: function (drawType) {
         this.resetView();
-        let that = this,
+        const that = this,
             value = this.get("geographicValues")[drawType],
             layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
             createBoxFunc = createBox(),
@@ -131,7 +149,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
                 // drawing type
                 // a circle with four points is internnaly used as Box, since type "Box" does not exist
                 type: value === "Box" ? "Circle" : value,
-                // is called when a geometry's coordinates are updated
+                // is called when a geometry"s coordinates are updated
                 geometryFunction: value === "Polygon" ? undefined : function (coordinates, opt_geom) {
                     if (value === "Box") {
                         return createBoxFunc(coordinates, opt_geom);
@@ -151,17 +169,17 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
     /**
-     * todo
-     * @param {*} coordinates todo
-     * @param {*} opt_geom todo
-     * @returns {*} todo
+     * If drawtype == "Circle" set the radius to the circle-geometry
+     * @param {*} coordinates array of coordinates to get the radius from
+     * @param {*} opt_geom optional existing geometry
+     * @returns {*} the optional existing geometry or a circle geometry
      */
     snapRadiusToInterval: function (coordinates, opt_geom) {
         let radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2));
-        let geometry;
 
         radius = this.precisionRound(radius, -1);
-        geometry = opt_geom || new Circle(coordinates[0]);
+        const geometry = opt_geom || new Circle(coordinates[0]);
+
         geometry.setRadius(radius);
 
         this.showOverlayOnSketch(radius, coordinates[1]);
@@ -169,22 +187,23 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * sets listeners for draw interaction events
-     * @param {ol.interaction.Draw} interaction - todo
-     * @param {ol.layer.Vector} layer - todo
+     * Sets listeners for draw interaction events. On "drawend" the selected area is stored as geoJSON in the model-property "selectedAreaGeoJson".
+     * @param {ol.interaction.Draw} interaction - Interaction for drawing feature geometries.
+     * @param {ol.layer.Vector} layer - Vector data that is rendered client-side
      * @returns {void}
      */
     setDrawInteractionListener: function (interaction, layer) {
         const that = this;
 
         interaction.on("drawstart", function () {
-            //remove alert of "more than 9 kacheln"
+            // remove alert of "more than 9 kacheln"
             Radio.trigger("Alert", "alert:remove");
             layer.getSource().clear();
         }, this);
 
         interaction.on("drawend", function (evt) {
             const geoJson = that.featureToGeoJson(evt.feature);
+
             that.setSelectedAreaGeoJson(geoJson);
         }, this);
 
@@ -197,8 +216,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-* converts a feature to a geojson
-* if the feature geometry is a circle, it is converted to a polygon
+* Converts a feature to a geojson.
+* If the feature geometry is a circle, it is converted to a polygon.
 * @param {ol.Feature} feature - drawn feature
 * @returns {object} GeoJSON
 */
@@ -220,6 +239,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      */
     resetView: function () {
         const layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
+
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
@@ -228,11 +248,11 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * Chooses unit based on value, calls panctuate and converts to unit and appends unit
-     * @param  {number} value -
+     * Chooses unit based on value, calls panctuate and converts to unit and appends unit.
+     * @param  {number} value - to convert
      * @param  {number} maxDecimals - decimals are cut after maxlength chars
      * @fires Core#RadioRequestUtilPunctuate
-     * @returns {string} unit
+     * @returns {String} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
         let newValue;
@@ -250,36 +270,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " km²";
     },
 
-
-
     /**
-     * Iterates ofer response properties
-     * @param  {object} response - todo
-     * @fires Core#RadioRequestUtilPunctuate
-     * @returns {void}
-     */
-    prepareDataForRendering: function (response) {
-        _.each(response, function (value, key, list) {
-            let stringVal = "";
-
-            if (!isNaN(value)) {
-                if (key === "suchflaeche") {
-                    stringVal = this.chooseUnitAndPunctuate(value);
-                }
-                else {
-                    stringVal = Radio.request("Util", "punctuate", value);
-                }
-                list[key] = stringVal;
-            }
-            else {
-                list[key] = value;
-            }
-
-        }, this);
-    },
-
-    /**
-     * calculates the circle radius and places the circle overlay on geometry change
+     * Calculates the circle radius and places the circle overlay on geometry change.
      * @param {number} radius - circle radius
      * @param {number[]} coords - point coordinate
      * @returns {void}
@@ -292,8 +284,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * todo
-     * @param {*} evt todo
+     * Shows tooltips at position of the event.
+     * @param {*} evt of the pointermove
      * @returns {void}
      */
     showTooltipOverlay: function (evt) {
@@ -311,20 +303,21 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * todo
-     * @param {Number} number todo
-     * @param {*} precision todo
-     * @returns {Number} todo
+     * Rounds the given number with the given precision.
+     * @param {Number} number to round
+     * @param {*} precision exponent
+     * @returns {Number} the rounded number
      */
     precisionRound: function (number, precision) {
         const factor = Math.pow(10, precision);
+
         return Math.round(number * factor) / factor;
     },
 
 
     /**
-     * adds or removes the circle overlay from the map
-     * @param {string} type - geometry type
+     * Adds or removes the circle overlay from the map.
+     * @param {String} type - geometry type
      * @param {ol.Overlay} overlay - circleOverlay
      * @fires Core#RadioTriggerMapAddOverlay
      * @fires Core#RadioTriggerMapRemoveOverlay
@@ -340,9 +333,9 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * rounds the circle radius
+     * Rounds the circle radius.
      * @param {number} radius - circle radius
-     * @return {string} the rounded radius
+     * @return {String} the rounded radius
      */
     roundRadius: function (radius) {
         if (radius > 500) {
@@ -352,9 +345,9 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * creates a div element for the circle overlay
-     * and adds it to the overlay
-     * @param {string} id -
+     * Creates a div element for the circle overlay
+     * and adds it to the overlay.
+     * @param {String} id - id of the div to create
      * @param {ol.Overlay} overlay - circleOverlay
      * @returns {void}
      */
@@ -364,34 +357,34 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         overlay.setElement(element);
     },
     /**
-     * Sets the currentValue
-     * @param {*} value todo
+     * Sets  the current geographic value for "Box",  "Circle" or "Polygon"
+     * @param {String} value the current geographic value
      * @returns {void}
      */
     setCurrentValue: function (value) {
         this.set("currentValue", value);
     },
     /**
-     * Sets the snippetDropdownModel
-     * @param {*} value todo
+     * Sets the model of the underlying dropdown
+     * @param {*} value model
      * @returns {void}
      */
     setDropDownSnippet: function (value) {
         this.set("snippetDropdownModel", value);
     },
     /**
-     * Sets the drawInteraction
-     * @param {*} value todo
+     * Sets the drawInteraction - the interaction to draw a square, circle or polygon
+     * @param {*} value interavtion to draw
      * @returns {void}
      */
     setDrawInteraction: function (value) {
         this.set("drawInteraction", value);
     },
-     /**
-     * Sets the selectedAreaGeoJson
-     * @param {*} value todo
-     * @returns {void}
-     */
+    /**
+    * Sets the selected area as GeoJSON
+    * @param {*} value selected area as GeoJSON
+    * @returns {void}
+    */
     setSelectedAreaGeoJson: function (value) {
         this.set("selectedAreaGeoJson", value);
     }

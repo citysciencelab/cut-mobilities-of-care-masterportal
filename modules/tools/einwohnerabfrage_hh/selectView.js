@@ -40,15 +40,16 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
      * @member Template
      * @description Template used to create SelectView for Einwohnerabfrage_hh
      * @memberof Filter/Source
+     * @returns {void}
      */
     template: _.template(Template),
     snippetDropdownView: {},
 
     /**
      * render the temlpate
-     * @param {*} model todo
+     * @param {*} model not used
      * @param {Boolean} value this view is active
-     * @returns {*} todo
+     * @returns {this} this view
      */
     render: function (model, value) {
         var attr = this.model.toJSON();

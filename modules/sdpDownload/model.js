@@ -1,9 +1,10 @@
 import Tool from "../core/modelList/tool/model";
 import GraphicalSelectModel from "../snippets/graphicalselect/model";
-import { WFS } from "ol/format.js";
-import * as turf from '@turf/turf'
+import {WFS} from "ol/format.js";
+import * as turf from "@turf/turf";
 
 const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
+
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         isActive: false,
@@ -11,11 +12,11 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
         renderToWindow: false,
         wmsRasterLayerId: "4707",
         formats: [
-            { id: 'NAS', label: 'NAS', isSelected: true, desc: 'Daten im NAS-Format herunterladen' },
-            { id: 'DWG_310', label: 'DWG, Lagestatus 310 (kurz)', isSelected: false, desc: 'Daten im DWG-Format herunterladen, Lagestatus: ETRS89, UTM-Projektion' },
-            { id: 'DWG_320', label: 'DWG, Lagestatus 320', isSelected: false, desc: 'Daten im DWG-Format herunterladen, Lagestatus: ETRS89, Gauß-Krüger-Projektion' },
-            { id: 'JPG', label: 'JPG + JGW, Lagestatus 310 (kurz)', isSelected: false, desc: 'Daten im JPG-Format herunterladen, inkl. JGW-Dateien im Lagestatus: ETRS89, UTM-Projektion' }],
-        selectedFormat: "NAS",//is preselected
+            {id: "NAS", label: "NAS", isSelected: true, desc: "Daten im NAS-Format herunterladen"},
+            {id: "DWG_310", label: "DWG, Lagestatus 310 (kurz)", isSelected: false, desc: "Daten im DWG-Format herunterladen, Lagestatus: ETRS89, UTM-Projektion"},
+            {id: "DWG_320", label: "DWG, Lagestatus 320", isSelected: false, desc: "Daten im DWG-Format herunterladen, Lagestatus: ETRS89, Gauß-Krüger-Projektion"},
+            {id: "JPG", label: "JPG + JGW, Lagestatus 310 (kurz)", isSelected: false, desc: "Daten im JPG-Format herunterladen, inkl. JGW-Dateien im Lagestatus: ETRS89, UTM-Projektion"}],
+        selectedFormat: "NAS", // is preselected
         compressDataUrl: "https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/dateien_zippen.php",
         compressedFileUrl: "https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/datei_herunterladen.php",
         wfsRasterParams: {
@@ -23,103 +24,149 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
             request: "GetFeature",
             service: "WFS",
             version: "1.1.0",
-            typename: 'app:lgv_kachel_dk5_1km_utm'
+            typename: "app:lgv_kachel_dk5_1km_utm"
         },
         wfsRaster: {},
-        //geometric selection
         graphicalSelectModel: {},
         requesting: false,
         selectedRasterLimit: 9
     }),
     /**
-     * @class SdpDownloadModel
-     * @extends Tool
-     * @property {boolean} deactivateGFI=true avoid show DK5-Info if user clicks into Map
-     * @property {boolean} isActive=false state of the tool
-     * @property {boolean} renderToSidebar=true show this tool in sidebar
-     * @property {boolean} renderToWindow=false not show this tool in window
-     * @property {string} wmsRasterLayerId="4707" id of the Layer utm_dk5_1km (WMS Uebersicht Kachelbezeichnungen)
-     * @property {array} formats=[] provided formats of data to download
-     * @property {string} selectedFormat="NAS" is the preselected format
-     * @property {string} compressDataUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/dateien_zippen.php" todo
-     * @property {string} compressedFileUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/datei_herunterladen.php" todo
-     * @property {Object} wfsRasterParams= {
-            url: "https://geodienste.hamburg.de/HH_WFS_Uebersicht_Kachelbezeichnungen",
-            request: "GetFeature",
-            service: "WFS",
-            version: "1.1.0",
-            typename: 'app:lgv_kachel_dk5_1km_utm'
-        } connection parameters
-     * @property {Object} wfsRaster={} contains wfs raster features after loading them
-     * @constructs
-     * @listens SdpDownloadModel#changeIsActive
-     * @listens Core#RadioTriggerMapViewChangedOptions
-     * @listens Core.ModelList#RadioTriggerModelListToggleDefaultTool
-     * @listens Snippets.Dropdown#ValuesChanged
-     * @fires todo
-     */
+ * @class SdpDownloadModel
+ * @extends Tool
+ * @memberof SDPDownload
+ * @constructs
+ * @property {Boolean} deactivateGFI=true avoid show DK5-Info if user clicks into Map
+ * @property {Boolean} isActive=false state of the tool
+ * @property {Boolean} renderToSidebar=true show this tool in sidebar
+ * @property {Boolean} renderToWindow=false not show this tool in window
+ * @property {String} wmsRasterLayerId="4707" id of the Layer utm_dk5_1km (WMS Uebersicht Kachelbezeichnungen)
+ * @property {array} formats=[] provided formats of data to download
+ * @property {String} selectedFormat="NAS" is the preselected format
+ * @property {String} compressDataUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/dateien_zippen.php" todo
+ * @property {String} compressedFileUrl="https://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/php_lgv/datei_herunterladen.php" todo
+ * @property {Object} wfsRasterParams= {
+        url: "https://geodienste.hamburg.de/HH_WFS_Uebersicht_Kachelbezeichnungen",
+        request: "GetFeature",
+        service: "WFS",
+        version: "1.1.0",
+        typename: "app:lgv_kachel_dk5_1km_utm"
+    } connection parameters
+ * @property {Object} wfsRaster={} contains wfs raster features after loading them
+ * @property {Object} graphicalSelectModel={} model for graphical selection
+ * @property {Object} requesting=false state of server request
+ * @property {Object} selectedRasterLimit=9 limit og raster images for download
+ * @listens SdpDownloadModel#changeIsActive
+ * @listens Core#RadioTriggerMapViewChangedOptions
+ * @listens Core.ModelList#RadioTriggerModelListToggleDefaultTool
+ * @fires Snippets.GraphicalSelect#setStatus
+ * @fires Snippets.GraphicalSelect#resetView
+ * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+ * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
+ * @fires Snippets.GraphicalSelect#featureToGeoJson
+ */
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
             "change:isActive": function (value) {
-                const isActive = value.get('isActive');
+                const isActive = value.get("isActive");
+
                 this.toggleRasterLayer(isActive);
-                if(isActive){
+                if (isActive) {
                     this.loadWfsRaster();
-                    Radio.trigger("GraphicalSelect", 'resetGeographicSelection');
-                }else{
-                    this.setStatus(this.model, false);
+                    Radio.trigger("GraphicalSelect", "resetGeographicSelection");
+                }
+                else {
+                    this.setStatus(false);
                 }
             }
         });
         this.listenTo(Radio.channel("MapView"), {
-            // Wird ausgeloest wenn sich Zoomlevel, Center
-            // oder Resolution der Karte ändert
-            "changedOptions": function (value) {
-                if(this.get('isActive')){
+            // zoomlevel, center or resolution of the map changes
+            "changedOptions": function () {
+                if (this.get("isActive")) {
                     this.toggleRasterLayer(true);
                 }
             }
         });
         this.listenTo(Radio.channel("ModelList"), {
-            //sidebar wird geschlossen, raster nicht mehr anzeigen
+            // sidebar closes -> hide raster
             "toggleDefaultTool": function () {
                 this.toggleRasterLayer(false);
-                this.setStatus(this.model, false);
+                this.setStatus(false);
             }
         });
-        this.setGraphicalSelectModel(new GraphicalSelectModel({id: "SDPDownload",}));
+        this.setGraphicalSelectModel(new GraphicalSelectModel({id: "SDPDownload"}));
     },
-    setStatus:function(model, val){
-        Radio.trigger("GraphicalSelect", "setStatus", model, val);
+    /**
+     * Sets the state at GraphicalSelect - handles (de-)activation of this Tool
+     * @param {Boolean} val active or not
+     * @fires Snippets.GraphicalSelect#setStatus
+     * @returns {void}
+     */
+    setStatus: function (val) {
+        Radio.trigger("GraphicalSelect", "setStatus", val);
     },
-    resetView:function(){
+    /**
+     * Resets the GraphicalSelect
+     * @fires Snippets.GraphicalSelect#resetView
+     * @returns {void}
+     */
+    resetView: function () {
         Radio.trigger("GraphicalSelect", "resetView");
     },
-    //raster layer
+    /**
+     * Shows or hides the raster layer
+     * @param {Boolean} value show or not
+     * @returns {void}
+     */
     toggleRasterLayer: function (value) {
         const layerId = this.get("wmsRasterLayerId");
+
         this.addModelsByAttributesToModelList(layerId);
         this.setModelAttributesByIdToModelList(layerId, value);
     },
+    /**
+     * Adds the layer to the modellist
+     * @param {String} layerId id of the layer
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @returns {void}
+     */
     addModelsByAttributesToModelList: function (layerId) {
-        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", { id: layerId }))) {
-            Radio.trigger("ModelList", "addModelsByAttributes", { id: layerId });
+        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
         }
     },
+    /**
+     * Sets the layer to the modellist
+     * @param {String} layerId id of the layer
+     * @param {Boolean} value is selected and is visible in map
+     * @fires  Core.ModelList#RadioTriggerModelListSetModelAttributesById
+     * @returns {void}
+     */
     setModelAttributesByIdToModelList: function (layerId, value) {
         Radio.trigger("ModelList", "setModelAttributesById", layerId, {
             isSelected: value,
             isVisibleInMap: value
         });
     },
+    /**
+    * Sets the value to models property isSelected
+    * @param {Boolean} value is selected or not
+    * @returns {void}
+    */
     setIsSelected: function (value) {
         this.set("isSelected", value);
     },
-    //wfs raster data
+    /**
+    * Loads the wfs raster with the params stored in property wfsRasterParams.
+    * On success the features are read.
+    * @returns {void}
+    */
     loadWfsRaster: function () {
-        const params = this.get('wfsRasterParams');
-        const data = "service=" + params.service + "&version=" + params.version + "&request=" + params.request + "&TypeName=" + params.typename;
+        const params = this.get("wfsRasterParams"),
+            data = "service=" + params.service + "&version=" + params.version + "&request=" + params.request + "&TypeName=" + params.typename;
+
         $.ajax({
             url: Radio.request("Util", "getProxyURL", params.url),
             data: encodeURI(data),
@@ -136,36 +183,47 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
             }
         });
     },
-
+    /**
+     * Reads all features in the given data and stores it in the property wfsRaster
+     * @param {Object} data of the wfs response
+     * @returns {void}
+     */
     readFeatures: function (data) {
         const format = new WFS(),
-        features = format.readFeatures(data);
+            features = format.readFeatures(data);
+
         this.setWfsRaster(features);
     },
 
     /**
-    * Requests GraphicalSelect.featureToGeoJson
-    * It converts a feature to a geojson
-    * if the feature geometry is a circle, it is converted to a polygon
-    * @param {ol.Feature} feature - drawn feature
-    * @returns {object} GeoJSON
-    */
+     * Requests GraphicalSelect.featureToGeoJson.
+     * It converts a feature to a geojson,
+     * if the feature geometry is a circle, it is converted to a polygon.
+     * @param {ol.Feature} feature - drawn feature
+     * @fires Snippets.GraphicalSelect#featureToGeoJson
+     * @returns {GeoJSON} the converted feature
+     */
     featureToGeoJson: function (feature) {
         return Radio.request("GraphicalSelect", "featureToGeoJson", feature);
     },
-
+    /**
+     * Calculates the intersection of the graphical selection with the raster. The names of the intersected raster squares are returned.
+     * @see {@link https://turfjs.org/docs/#intersect}
+     * @returns {Array} names of the selected raster squares
+     */
     getSelectedRasterNames: function () {
-        const rasterLayerFeatures = this.get('wfsRaster');
-        const selectedAreaGeoJson = this.get('graphicalSelectModel').get('selectedAreaGeoJson');
-        const rasterNames = [];
-        const turfGeoSelection = turf.polygon([selectedAreaGeoJson.coordinates[0]]);
+        const rasterLayerFeatures = this.get("wfsRaster"),
+            selectedAreaGeoJson = this.get("graphicalSelectModel").get("selectedAreaGeoJson"),
+            rasterNames = [],
+            turfGeoSelection = turf.polygon([selectedAreaGeoJson.coordinates[0]]);
 
         for (let j = 0, size = rasterLayerFeatures.length; j < size; j++) {
             const turfRaster = turf.polygon([this.featureToGeoJson(rasterLayerFeatures[j]).coordinates[0]]);
-            const turfGeoSelection = turf.polygon([selectedAreaGeoJson.coordinates[0]]);
+
             if (turf.intersect(turfGeoSelection, turfRaster)) {
-                const intersectedRasterName = rasterLayerFeatures[j].getProperties()['kachel'];
-                const result = rasterNames.find(rasterName => rasterName === intersectedRasterName);
+                const intersectedRasterName = rasterLayerFeatures[j].getProperties().kachel,
+                    result = rasterNames.find(rasterName => rasterName === intersectedRasterName);
+
                 if (result === undefined) {
                     rasterNames.push(intersectedRasterName);
                 }
@@ -173,64 +231,87 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
         }
         return rasterNames;
     },
-    //download raster data
+    /**
+     * Collects the params to request the WMS for "Kacheln".
+     * If there are more than 9 Kachenln selected, the user is warned to reduce the selection.
+     * @returns {void}
+     */
     requestCompressedData: function () {
         const selectedRasterNames = this.getSelectedRasterNames();
-        if (selectedRasterNames.length > this.get('selectedRasterLimit')) {
+
+        if (selectedRasterNames.length > this.get("selectedRasterLimit")) {
             Radio.trigger("Alert", "alert", {
-                text: "Die von Ihnen getroffene Auswahl beinhaltet " + selectedRasterNames.length + " Kacheln.\nSie dürfen maximal " + this.get('selectedRasterLimit') + " Kacheln aufeinmal herunterladen.\n\nBitte reduzieren Sie Ihre Auswahl!",
+                text: "Die von Ihnen getroffene Auswahl beinhaltet " + selectedRasterNames.length + " Kacheln.\nSie dürfen maximal " + this.get("selectedRasterLimit") + " Kacheln aufeinmal herunterladen.\n\nBitte reduzieren Sie Ihre Auswahl!",
                 kategorie: "alert-warning"
             });
             this.setRequesting(false);
             this.trigger("render");
         }
         else {
-            const adaptedNames = [];
+            const adaptedNames = [],
+                params = "kacheln=" + adaptedNames.join("§") + "&type=" + this.get("selectedFormat");
+
             selectedRasterNames.forEach(rasterName => {
-                const adaptedName = rasterName.substring(0, 2) + '0' + rasterName.substring(2, 4) + '0';
+                const adaptedName = rasterName.substring(0, 2) + "0" + rasterName.substring(2, 4) + "0";
+
                 adaptedNames.push(adaptedName);
             });
-            //params have to look like: "kacheln=650330§650340&type=JPG"
-            const params = 'kacheln=' + adaptedNames.join('§') + '&type=' + this.get('selectedFormat');
+            // params have to look like: "kacheln=650330§650340&type=JPG"
             this.doRequest(params);
         }
     },
-    //download data of islands
+    /**
+     * Collects the params to request the WMS for island data.
+     * @param {String} islandName name of the island
+     * @returns {void}
+     */
     requestCompressIslandData: function (islandName) {
-        //params have to look like: "insel=Neuwerk&type=JPG"
-        const params = 'insel=' + islandName + '&type=' + this.get('selectedFormat');
+        // params have to look like: "insel=Neuwerk&type=JPG"
+        const params = "insel=" + islandName + "&type=" + this.get("selectedFormat");
+
         this.doRequest(params);
     },
-    //download overview
+    /**
+     * Collects the params to load an overview.
+     * @param {String} state the LS state
+     * @returns {void}
+     */
     requestCompressRasterOverviewData: function (state) {
-        //todo Datei nicht mehr lokal ablegen
+        // todo Datei nicht mehr lokal ablegen
         const temp = "C:\\sandbox\\BG-74\\U__Kachel_Uebersichten_UTM_Kachel_1KM_" + state + ".dwg";
-        window.location.href= this.get('compressedFileUrl') +'?no_delete=1&mt=dwg&name=' + temp;
-        
+
+        window.location.href = this.get("compressedFileUrl") + "?no_delete=1&mt=dwg&name=" + temp;
+
     },
+    /**
+     * Requests the WFS and loads the data down.
+     * @param {String} params to specify the request
+     * @returns {void}
+     */
     doRequest: function (params) {
-        const url = this.get('compressDataUrl');
+        const url = this.get("compressDataUrl");
+
         $.ajax({
             url: Radio.request("Util", "getProxyURL", url),
             data: encodeURI(params),
             context: this,
             type: "POST",
-            beforeSend: function(){
+            beforeSend: function () {
                 this.showLoader();
             },
             success: function (resp) {
                 this.resetView();
-                this.setStatus(this.model, true);
-                 //download zip-file
-                 window.location.href = this.get('compressedFileUrl') + '?name=' + resp;
+                this.setStatus(true);
+                // download zip-file
+                window.location.href = this.get("compressedFileUrl") + "?name=" + resp;
             },
-            complete:function(data){
+            complete: function () {
                 this.hideLoader();
             },
             timeout: 6000,
             error: function () {
                 this.resetView();
-                this.setStatus(this.model, true);
+                this.setStatus(true);
                 Radio.trigger("Alert", "alert", {
                     text: "<strong>Die Daten konnten leider nicht heruntergeladen werden!</strong> <br> <small>Details: Ein benötigter Dienst antwortet nicht.</small>",
                     kategorie: "alert-warning"
@@ -238,17 +319,27 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
             }
         });
     },
-    hideLoader: function(){
-        this.set('requesting', false)
+    /**
+     * Hides the loader by setting the requesting to false and renders the view.
+     * @fires SdpDownloadModel#render
+     * @returns {void}
+     */
+    hideLoader: function () {
+        this.set("requesting", false);
         this.trigger("render");
     },
-    showLoader: function(){
-        this.set('requesting', true)
+    /**
+     * Shows the loader by setting the requesting to true and renders the view.
+     * @fires SdpDownloadModel#render
+     * @returns {void}
+     */
+    showLoader: function () {
+        this.set("requesting", true);
         this.trigger("render");
     },
     /**
      * Sets the requesting
-     * @param {*} value todo
+     * @param {Boolean} value true or false
      * @returns {void}
      */
     setRequesting: function (value) {
@@ -256,7 +347,7 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
     },
     /**
      * Sets the selected format
-     * @param {*} value todo
+     * @param {String} value SdpDownloadModel#defaults#formats
      * @returns {void}
      */
     setSelectedFormat: function (value) {
@@ -264,19 +355,19 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
     },
     /**
      * Sets the WFSRaster
-     * @param {*} value todo
+     * @param {[ol.feature]} value the features of the WFSRaster
      * @returns {void}
      */
     setWfsRaster: function (value) {
         this.set("wfsRaster", value);
     },
     /**
-     * Sets the selectedAreaGeoJson
-     * @param {*} value todo
+     * Sets the graphicalSelectModel
+     * @param {Snippets.GraphicalSelect.GraphicalSelectModel} value graphicalSelectModel
      * @returns {void}
      */
-    setSelectedAreaGeoJson: function (value) {
-        this.set("selectedAreaGeoJson", value);
+    setGraphicalSelectModel: function (value) {
+        this.set("graphicalSelectModel", value);
     },
     /**
      * Sets the loaderPath
@@ -285,14 +376,6 @@ const SdpDownloadModel = Tool.extend(/** @lends SdpDownloadModel.prototype */{
      */
     setLoaderPath: function (value) {
         this.set("loaderPath", value);
-    },
-    /**
-     * Sets the graphicalSelectModel
-     * @param {String} value graphicalSelectModel
-     * @returns {void}
-     */
-    setGraphicalSelectModel:function(value){
-        this.set("graphicalSelectModel", value);
     }
 
 });

@@ -54,17 +54,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {String} populationReqServiceId="2" serviceid
      * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
-     * @listens Snippets.Dropdown#ValuesChanged
-     * @listens Snippets.Checkbox#ValuesChanged
      * @listens Core#RadioTriggerModelListUpdateVisibleInMapList
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestUtilPunctuate
-     * @fires Core#RadioRequestMapCreateLayerIfNotExists
-     * @fires Core#RadioTriggerMapAddOverlay
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @fires Core#RadioTriggerMapRegisterListener
      * @fires Core#RadioTriggerMapAddInteraction
      * @fires Core#RadioTriggerWPSRequest
      * @fires Core#RadioRequestModelListGetModelByAttributes
@@ -87,8 +81,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }));
 
         this.listenTo(this, {
-            "change:isActive": function (isActive) { 
-                if(!this.get("isActive")){
+            "change:isActive": function () {
+                if (!this.get("isActive")) {
                     this.setStatus(this.model, false);
                 }
             }
@@ -109,7 +103,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             }
         });
         this.on("change:isActive", this.handleCswRequests, this);
-        this.setDropDownSnippet(new GraphicalSelectModel({id:'Einwohnerabfrage',}));
+        this.setDropDownSnippet(new GraphicalSelectModel({id: "Einwohnerabfrage"}));
         this.listenTo(Radio.channel("GraphicalSelect"), {
             "onDrawEnd": function (geoJson) {
                 if (this.get("isActive")) {
@@ -361,7 +355,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {void}
      */
     checksSnippetCheckboxLayerIsLoaded: function (layerId, snippetCheckboxModel) {
-        var model = Radio.request("ModelList", "getModelByAttributes", { id: layerId }),
+        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             isVisibleInMap = !_.isUndefined(model) ? model.get("isVisibleInMap") : false;
 
         if (isVisibleInMap) {
@@ -410,8 +404,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {void}
      */
     addModelsByAttributesToModelList: function (layerId) {
-        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", { id: layerId }))) {
-            Radio.trigger("ModelList", "addModelsByAttributes", { id: layerId });
+        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
+            Radio.trigger("ModelList", "addModelsByAttributes", {id: layerId});
         }
     },
 
@@ -425,7 +419,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {void}
      */
     checkIsModelLoaded: function (layerId, snippetCheckboxModel) {
-        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", { id: layerId }))) {
+        if (_.isEmpty(Radio.request("ModelList", "getModelsByAttributes", {id: layerId}))) {
             Radio.trigger("Alert", "alert", "Der Layer mit der ID: " + layerId + " konnte nicht geladen werden, da dieser im Portal nicht zur Verfügung steht!");
             snippetCheckboxModel.setIsSelected(false);
         }
