@@ -97,9 +97,14 @@ const BalkendiagrammTheme = Theme.extend({
             }
         }
 
+        // set the themeId for the graph class
         this.set("themeId", this.get("themeId"));
+
+        // set the layer data format
         this.set("layerDataFormat", layerDataFormat);
         this.set("layerDataFormatType", layerDataFormat.type);
+
+        // set the content of the template
         this.set("content", content);
     },
 
@@ -193,7 +198,9 @@ const BalkendiagrammTheme = Theme.extend({
             }
         };
 
+        // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows
         $(".graph_" + themeId + " svg").remove();
+
         Radio.trigger("Graph", "createGraph", graphConfig);
     },
 

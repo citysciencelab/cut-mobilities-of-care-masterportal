@@ -9,8 +9,8 @@
 
 .schulentlassene-gfi-theme {
     max-width: 420px;
-    .graph_zeitverlauf {
-        .bargraph_zeitverlauf {
+    div[class^="graph_zeitverlauf"] {
+        rect[class^="bargraph_zeitverlauf"] {
             fill: #d76629;
             &:hover {
                 fill: #337ab7;
@@ -18,7 +18,7 @@
         }
     }
 
-    .graph_abschluesse {
+    div[class^="graph_abschluesse"] {
         .dotAbi {
             cursor: pointer;
             stroke: none;
@@ -79,23 +79,6 @@
         padding: 2px;
         border: 2px solid @color_tooltipborder;
         text-align: center;
-    }
-
-    table {
-        &.table {
-            tbody {
-                tr{
-                    td {
-                        &:last-child {
-                            text-align: right;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .gfi-info {
-        padding: 0 10px 10px;
     }
 }
 
