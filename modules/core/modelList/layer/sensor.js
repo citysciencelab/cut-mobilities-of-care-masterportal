@@ -15,6 +15,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             version: "1.0",
             useProxyURL: false,
             mqttPath: "/mqtt",
+            mergeThingsByCoordinates: false,
             showNoDataValue: true,
             noDataValue: "no data"
         }),
@@ -39,6 +40,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The layer reacts to changes of the own features triggered by the STA.
      * The technology used therefore is WebSocketSecure (wss) and the MessageQueuingTelemetryTransport(MQTT)-Protocol.
      * This makes it possible to update vector-data in the application without reloading the entire page.
+     * The newest observation data of each attribute ist set as follows:
+     * name = If "datastream.properties.type" is not undefined, take this. Otherwise take the value in "datastream.unitOfMeasurment.name"
+     * The attribute key is "dataStream_[dataStreamId]_[name]"
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -104,7 +108,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
             epsg = this.get("epsg"),
-            mergeThingsByCoordinates = this.get("mergeThingsByCoordinates") || false;
+            mergeThingsByCoordinates = this.get("mergeThingsByCoordinates");
 
         sensorData = this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates);
         features = this.createFeatures(sensorData, epsg);
@@ -358,7 +362,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamName = [];
             dataStreams.forEach(dataStream => {
                 const dataStreamId = String(dataStream["@iot.id"]),
-                    dataStreamName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
+                    propertiesType = dataStream.hasOwnProperty("properties") && dataStream.properties.hasOwnProperty("type") ? dataStream.properties.type : undefined,
+                    unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
+                    dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
                     key = "dataStream_" + dataStreamId + "_" + dataStreamName,
                     value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
                     phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
