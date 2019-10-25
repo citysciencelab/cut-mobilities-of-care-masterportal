@@ -65,7 +65,10 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
         this.setIconPath(iconPath);
     },
 
-    // setter for icon path
+    /**
+     * setter for icons path
+     * @returns {void}
+     */
     setIconPath: function (value) {
         this.set("iconPath", value);
     }
