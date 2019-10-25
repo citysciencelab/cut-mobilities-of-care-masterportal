@@ -250,6 +250,7 @@ const WFSStyle = Backbone.Model.extend({
     },
     createCustomPolygonStyle: function (feature) {
         var styleField = this.get("styleField"),
+            featureKeys = [],
             featureValue,
             styleFieldValueObj,
             polygonFillColor,
@@ -259,6 +260,10 @@ const WFSStyle = Backbone.Model.extend({
             fillstyle,
             style = this.getDefaultStyle();
 
+        if (typeof styleField === "object") {
+            featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
+            styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
+        }
         featureValue = feature.get(styleField);
         if (!_.isUndefined(featureValue)) {
             styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
@@ -428,6 +433,7 @@ const WFSStyle = Backbone.Model.extend({
     */
     createCustomPointStyle: function (feature, isClustered) {
         var styleField = this.get("styleField"),
+            featureKeys = [],
             featureValue,
             styleFieldValueObj,
             src,
@@ -442,6 +448,11 @@ const WFSStyle = Backbone.Model.extend({
             offsetYUnit,
             imagestyle,
             style = this.getDefaultStyle();
+
+        if (typeof styleField === "object") {
+            featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
+            styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
+        }
 
         if (isClustered && feature.get("features").length > 1) {
             imagestyle = this.createClusterStyle();
@@ -485,6 +496,69 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
+    /**
+     * Translates the given name from gfiAttribute Object based on the condition type
+     * @param {Object} keys List of all keys that the feature has.
+     * @param {String} name The name to be proofed against the keys.
+     * @param {Object} condition Condition to be proofed.
+     * @returns {String} - Attribute key if condition matches exactly one key.
+     */
+    translateNameFromObject: function (keys, name, condition) {
+        const length = name.length;
+        let match,
+            matches = [];
+
+        if (condition === "contains") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.includes(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else if (condition === "startsWith") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.startsWith(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else if (condition === "endsWith") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.endsWith(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else {
+            console.error("unknown matching type for styling condition");
+        }
+        return match;
+    },
+
+    /**
+     * Checks if the matches have exact one entry.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {String} condition Matching conditon.
+     * @param {String[]} matches An array of all keys matching the condition.
+     * @returns {Boolean} - Flag of array has exacly one entry.
+     */
+    checkIfMatchesValid: function (origName, condition, matches) {
+        let isValid = false;
+
+        if (matches.length === 0) {
+            console.error("no match found at the feature for styling condition: '" + condition + "', '" + origName + "'");
+        }
+        else if (matches.length > 1) {
+            console.error("more than 1 match found at the feature for styling condition: " + condition + "', '" + origName + "'");
+        }
+        else {
+            isValid = true;
+        }
+        return isValid;
+    },
     /*
     * creates circlePointStyle.
     * all features get same circle.
