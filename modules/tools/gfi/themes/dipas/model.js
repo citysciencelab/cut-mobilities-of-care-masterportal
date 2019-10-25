@@ -67,6 +67,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
 
     /**
      * setter for icons path
+     * @param  {String} value - gfi icon path
      * @returns {void}
      */
     setIconPath: function (value) {
