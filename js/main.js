@@ -13,7 +13,6 @@ import "es6-promise/auto";
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js",
-    index,
     strippedLocation,
     loadConfigJs,
     context;
