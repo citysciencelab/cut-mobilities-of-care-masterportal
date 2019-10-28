@@ -39,7 +39,6 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     render: function () {
-        // $("body").append(this.$el.html(this.template));
         this.$el.html(this.template);
         this.$el.hide();
         return this;
@@ -192,7 +191,9 @@ const Orientation3DView = Backbone.View.extend({
         }
 
         this.mouseDraggedBound = this.mouseDragged.bind(this);
-        // window.addEventListener("mouseup", this.northUp.bind(this), { once: true });
+        window.addEventListener("mouseup", this.northUp.bind(this), {
+            "once": true
+        });
 
         this.$el.on("mousemove", this.mouseDraggedBound);
 
