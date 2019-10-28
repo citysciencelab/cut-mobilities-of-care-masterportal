@@ -45,6 +45,28 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     },
 
     /**
+     * Iterates over all objects and all attributes to find the min value.
+     * @param {Object[]} data Data for graph.
+     * @param {String[]} attrToShowArray Attribute array.
+     * @return {number}  - minData
+     */
+    createMinValue: function (data, attrToShowArray) {
+        var minValue = 0;
+
+        if (data !== undefined && attrToShowArray !== undefined) {
+            data.forEach(function (obj) {
+                attrToShowArray.forEach(function (attrToShow) {
+                    if (obj[attrToShow] < minValue) {
+                        minValue = obj[attrToShow];
+                    }
+                });
+            });
+        }
+
+        return minValue;
+    },
+
+    /**
      * Iterates over all objects and all attributes to find the max value.
      * @param {Object[]} data Data for graph.
      * @param {String[]} attrToShowArray Attribute array.
@@ -81,7 +103,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             valueObj.maxValue = axisTicks.end;
         }
         else {
-            valueObj.minValue = 0;
+            valueObj.minValue = this.createMinValue(data, attrToShowArray);
             valueObj.maxValue = this.createMaxValue(data, attrToShowArray);
         }
 
@@ -300,9 +322,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} [xAxisLabel.fill=#000] Text fill color.
      * @param {String} [xAxisLabel.fontSize=10] Text font size.
      * @param {Number} width Width of SVG.
+     * @param {*} y y(value) transitions data value into pixel from top
      * @returns {void}
      */
-    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, width) {
+    appendXAxisToSvg: function (svg, xAxis, xAxisLabel, width, y) {
         var textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
             textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
             fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
@@ -315,11 +338,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .enter()
             .append("g")
             .attr("transform", function () {
-                // gibt den Hochwert des untersten Ticks zurück
-                var tick = svg.select(".yAxisDraw .tick").attr("transform"),
-                    transform = tick.substring(tick.indexOf("(") + 1, tick.indexOf(")")).split(/\s|,/); // blank oder Komma
-
-                return "translate(0," + transform[1] + ")";
+                // positioning the x-axis at y zero
+                return "translate(0," + y(0) + ")";
             })
             .attr("class", "xAxisDraw")
             .call(xAxisDraw);
@@ -624,7 +644,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         }, this);
         // Add the Axis
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width);
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
 
         if (isMobile) {
             this.rotateXAxisTexts(svg);
@@ -686,35 +706,32 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
-            barConfig = {
-                barWidth: width / data.length,
-                setTooltipValue: graphConfig.setTooltipValue
-            };
+            barWidth = width / data.length,
+            setTooltipValue = graphConfig.setTooltipValue;
 
         if (_.has(graphConfig, "legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
         }
-        this.drawBars(svg, data, scaleX, scaleY, height, selector, xAttr, attrToShowArray, barConfig);
+        this.drawBars(svg, data, scaleX, scaleY, selector, xAttr, attrToShowArray, barWidth, setTooltipValue);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width);
+
+        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
     },
 
     /**
-     * ToDo.
+     * draws the bars into the svg using d3 functions
      * @param {*} svg ToDo.
-     * @param {*} dataToAdd ToDo.
-     * @param {*} x ToDo.
-     * @param {*} y ToDo.
-     * @param {*} height ToDo.
-     * @param {*} selector ToDo.
-     * @param {*} xAttr ToDo.
-     * @param {*} attrToShowArray ToDo.
-     * @param {Object} barConfig container for values only used by drawBars (to lower parameter count of method call)
-     * @param {Number} barConfig.barWidth the width of a single bar
-     * @param {function} barConfig.setTooltipValue (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
+     * @param {*} dataToAdd the data for the bar graph as an array of objects [{ (xAttr): valueX, (attrToShowArray[0]): valueY}, ...] where xAttr and attrToShowArray[0] are keys defined in graphConfig
+     * @param {*} x the function to give the place of data value looking from left to right in pixel
+     * @param {*} y y(value) transitions data value into pixel from top
+     * @param {*} selector as set in graphConfig - may be css class of the dom holding the graph
+     * @param {*} xAttr as defined in graphConfig - the name of the key to address the valueX in dataToAdd
+     * @param {*} attrToShowArray as defined in graphConfig - the array of keys to find the data of valueY in dataToAdd
+     * @param {Number} barWidth the width of a single bar - note that if zero or negative, barWidth will be automatically set to 0
+     * @param {function} setTooltipValue (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {void}
      */
-    drawBars: function (svg, dataToAdd, x, y, height, selector, xAttr, attrToShowArray, barConfig) {
+    drawBars: function (svg, dataToAdd, x, y, selector, xAttr, attrToShowArray, barWidth, setTooltipValue) {
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", function () {
@@ -739,24 +756,33 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return x(d[xAttr]);
             })
             .attr("y", function (d) {
-                return y(d[attrToShowArray[0]]);
-            })
-            .attr("width", barConfig.barWidth - 1)
-            .attr("height", function (d) {
-                if (height - y(d[attrToShowArray[0]]) < 0) {
-                    // fixed to zero as negative values would cause an error
-                    return 0;
+                // "y" is the starting point of the bar in pixel from top (0 px) to bottom (height px)
+                if (d[attrToShowArray[0]] < 0) {
+                    // if the value is negative the y zero line is used as starting point of the bar
+                    return y(0);
                 }
 
-                return height - y(d[attrToShowArray[0]]);
+                return y(d[attrToShowArray[0]]);
+            })
+            // need to be carefull with negative width
+            .attr("width", barWidth > 0 ? barWidth - 1 : 0)
+            .attr("height", function (d) {
+                // "height" is the height of the bar graph
+                if (d[attrToShowArray[0]] < 0) {
+                    // for negative values only, y(value) is higher then y(0) so the difference is the bar height
+                    return y(d[attrToShowArray[0]]) - y(0);
+                }
+
+                // the height of the bar is y(value) (the starting point of the bar) but only down to y(0)
+                return y(0) - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
                 select(this);
             }, this)
             .append("title")
             .text(function (d) {
-                if (_.isFunction(barConfig.setTooltipValue)) {
-                    return barConfig.setTooltipValue(d[attrToShowArray[0]]);
+                if (_.isFunction(setTooltipValue)) {
+                    return setTooltipValue(d[attrToShowArray[0]]);
                 }
 
                 // default
