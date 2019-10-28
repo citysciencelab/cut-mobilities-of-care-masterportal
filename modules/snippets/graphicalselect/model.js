@@ -353,6 +353,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      */
     createDomOverlay: function (id, overlay) {
         const element = document.createElement("div");
+
         element.setAttribute("id", id);
         overlay.setElement(element);
     },

@@ -13,6 +13,7 @@ describe("snippets/graphicalselect/model", function () {
     describe("resetGeographicSelection", function () {
         it("should resetGeographicSelection to 'Box'", function () {
             const values = model.get("geographicValues");
+
             model.setValues(values[1]);
             expect(model.get("values") === values[1]);
             model.resetGeographicSelection();

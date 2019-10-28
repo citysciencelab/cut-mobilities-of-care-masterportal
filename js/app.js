@@ -458,7 +458,8 @@ function loadApp () {
             .then(module => {
                 /* eslint-disable new-cap */
                 const customModule = new module.default();
-                //custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Later on the model must be replaced in modellist:
+                // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Later on the model must be replaced in modellist:
+
                 Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
             })
             .catch(error => {

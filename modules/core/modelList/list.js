@@ -954,7 +954,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     */
     replaceModelById: function (id, newModel) {
         var model = this.get(id);
-        if(model){
+
+        if (model) {
             this.remove(model);
             this.add(newModel);
             this.updateLayerView();
