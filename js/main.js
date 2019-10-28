@@ -22,7 +22,6 @@ if (!("Config" in window)) {
 
     // Pfad zur Config.js bei ParametricUrl
     if (window.location.search !== "") {
-        index = window.location.href.indexOf("?");
         strippedLocation = window.location.href.split("?").shift();
 
         // GET parameters are there for a reason - do not drop them!
