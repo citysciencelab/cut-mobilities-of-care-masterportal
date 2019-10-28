@@ -31,8 +31,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         this.set("isViewMobile", Radio.request("Util", "isViewMobile"));
 
         this.listenTo(this, {
-            "change:isVisible": this.onIsVisibleEvent,
-            "change:isReady": this.create
+            "change:isReady": this.onIsVisibleEvent
         });
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
@@ -46,7 +45,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     onGFIIsVisibleEvent: function (visible) {
         if (visible === false) {
-            this.onIsVisibleEvent(null, false);
+            this.destroy();
+            this.set("isCreated", false);
         }
     },
 
@@ -58,11 +58,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     onIsVisibleEvent: function (gfi, isVisible) {
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
-        if (!isVisible && this.get("isCreated") === true) {
-            this.destroy();
-            this.set("isCreated", false);
-        }
-        else if (isVisible && this.get("isCreated") === false) {
+        if (isVisible && this.get("isCreated") === false) {
             this.create();
             this.set("isCreated", true);
         }
