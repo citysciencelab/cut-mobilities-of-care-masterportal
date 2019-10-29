@@ -121,6 +121,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |alias_mobil|nein|String|"LGV"|Bezeichnung bei mobiler Ausspielung.|
 |bezeichnung|nein|String|"Kartographie und Gestaltung: "|Bezeichnung vor dem Link.|
 |url|nein|String|„http://www.geoinfo.hamburg.de/“|Die aufzurufende URL.|
+|toolModelId|nein|String|"sdpdownload"|Die id des Models dessen Tool geöffnet werden soll, eine url ist dann nicht nötig.|
 
 
 **Beispiel:**
@@ -145,6 +146,12 @@ footer: {
             "bezeichnung": "",
             "url": "http://www.hamburg.de/bsu/timonline",
             "alias": "Kartenunstimmigkeit"
+        },
+        {
+            "bezeichnung": "",
+            "url": "",
+            "alias": "SDP Download",
+            "toolModelId": "sdpdownload"
         }
     ],
     "showVersion": true
