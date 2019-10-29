@@ -200,7 +200,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
       }
    }
 ```
-**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation**
+**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation und das Phänomen (ObservedProperty), das beobachtet wird. Wenn vorhanden wird die ObservedProperty für die dynamische Attributerstellung verwendet.**
 ```
 #!json
 
@@ -210,7 +210,8 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 			"expand": [
 				"Locations",
 				"Datastreams($filter=indexof(Datastream/name,'Lastenrad') ge 1)",
-				"Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+				"Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
+            "Datastreams/ObservedProperty"
 			]
 		}
    }
