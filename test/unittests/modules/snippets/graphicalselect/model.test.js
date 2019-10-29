@@ -24,10 +24,10 @@ describe("snippets/graphicalselect/model", function () {
     describe("setStatus", function () {
 
         it("should set status", function () {
-            model.setStatus(true);
+            model.setStatus(model.id, true);
             expect(model.get("drawInteraction").isActive === true);
             expect(model.get("currentValue") === "Box");
-            model.setStatus(false);
+            model.setStatus(model.id, false);
             expect(model.get("drawInteraction").isActive === false);
         });
     });
