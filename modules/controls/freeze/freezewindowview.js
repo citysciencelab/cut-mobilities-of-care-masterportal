@@ -28,7 +28,7 @@ const FreezeView = Backbone.View.extend({
             $("p.freeze-view-close").css("left", $(".table-nav-main").offset().left);
             $("p.freeze-view-close").css("top", $(".table-nav-main").offset().top);
 
-            if ($("#table-nav").attr("class") === "table-nav-0deg ui-draggable" || $("#table-nav").attr("class") === "table-nav-0deg") {
+            if ($("#table-navigation").attr("class") === "table-nav-0deg ui-draggable" || $("#table-navigation").attr("class") === "table-nav-0deg") {
                 $("p.freeze-view-close").css({
                     "transform": "rotate(0deg)",
                     "-webkit-transform-origin": "50% 50%",
@@ -36,7 +36,7 @@ const FreezeView = Backbone.View.extend({
                     "-moz-transform-origin": "50% 50%"
                 });
             }
-            else if ($("#table-nav").attr("class") === "table-nav-90deg") {
+            else if ($("#table-navigation").attr("class") === "table-nav-90deg") {
                 $("p.freeze-view-close").css({
                     "transform": "rotate(90deg)",
                     "-webkit-transform-origin": "5% 50%",
@@ -44,7 +44,7 @@ const FreezeView = Backbone.View.extend({
                     "-moz-transform-origin": "5% 50%"
                 });
             }
-            else if ($("#table-nav").attr("class") === "table-nav-180deg") {
+            else if ($("#table-navigation").attr("class") === "table-nav-180deg") {
                 $("p.freeze-view-close").css({
                     "transform": "rotate(180deg)",
                     "-webkit-transform-origin": "40% 50%",
@@ -52,7 +52,7 @@ const FreezeView = Backbone.View.extend({
                     "-moz-transform-origin": "40% 50%"
                 });
             }
-            else if ($("#table-nav").attr("class") === "table-nav-270deg") {
+            else if ($("#table-navigation").attr("class") === "table-nav-270deg") {
                 $("p.freeze-view-close").css({
                     "transform": "rotate(270deg)",
                     "-webkit-transform-origin": "42% 405%",
