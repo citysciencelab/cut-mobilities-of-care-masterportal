@@ -189,7 +189,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 |filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
 
-**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeiche auch von jedem Datastream die neueste Observation**
+**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 ```
 #!json
 
@@ -200,7 +200,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
       }
    }
 ```
-**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeiche auch von jedem Datastream die neueste Observation**
+**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation**
 ```
 #!json
 
@@ -266,7 +266,7 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|name|true|String||Name bei bei exakt einem Match angezeigt werden soll. |'"Test"'|
+|name|true|String||Name bei exakt einem Match angezeigt werden soll. |'"Test"'|
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
 
 Beispiel gfiAttributes als Objekt

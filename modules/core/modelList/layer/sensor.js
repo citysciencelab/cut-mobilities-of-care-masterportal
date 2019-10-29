@@ -40,7 +40,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The layer reacts to changes of the own features triggered by the STA.
      * The technology used therefore is WebSocketSecure (wss) and the MessageQueuingTelemetryTransport(MQTT)-Protocol.
      * This makes it possible to update vector-data in the application without reloading the entire page.
-     * The newest observation data of each attribute ist set as follows:
+     * The newest observation data of each attribute is set as follows:
      * name = If "datastream.properties.type" is not undefined, take this. Otherwise take the value in "datastream.unitOfMeasurment.name"
      * The attribute key is "dataStream_[dataStreamId]_[name]".
      * All available dataStreams, their ids, their latest observation and values are separately aggregated and stored (separated by " | ") in the following attributes:
