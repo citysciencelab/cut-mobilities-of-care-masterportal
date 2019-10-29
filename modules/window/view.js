@@ -7,7 +7,8 @@ const WindowView = Backbone.View.extend({
     events: {
         "click .glyphicon-minus": "minimize",
         "click .header > .title": "maximize",
-        "click .glyphicon-remove": "hide"
+        "click .glyphicon-remove": "hide",
+        "touchmove .win-heading": "moveWindow",
     },
     initialize: function () {
         var channel = Radio.channel("WindowView");
@@ -131,6 +132,36 @@ const WindowView = Backbone.View.extend({
             toolModel.setIsActive(false);
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
+    },
+    moveWindow: function (evt) {
+        var touch = evt.originalEvent.touches[0],
+            headerWidth = this.$el.find(".win-heading").width(),
+            width = this.$el.find(".win-heading").width() / 2,
+            height = this.$el.height(),
+            headerHeight = this.$el.find(".win-heading").height(),
+            x,
+            y;
+
+            x = touch.clientX - width - 20;
+            y = touch.clientY - headerHeight;
+
+            console.log(x)
+            console.log(touch.clientX)
+            console.log(y)
+            console.log(width)
+            console.log($("#map").width() )
+            console.log($("#map").width() - $(".win-body").width() - 10)
+            console.log($(".win-body").width())
+
+            // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
+            if (x >= 0 && touch.clientX < ($("#map").width() - width - 10) && y >= 0 && touch.clientY < ($("#map").height() - $(".win-body").height() - 75)) {
+                this.$el.css({
+                    "left": x + "px",
+                    "top": y + "px"
+                });
+            }
+
+        console.log("touch tool")
     }
 });
 
