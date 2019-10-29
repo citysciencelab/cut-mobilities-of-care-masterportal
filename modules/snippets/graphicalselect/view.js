@@ -52,7 +52,6 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
      */
     initDropdown: function () {
         this.$el.find(".graphical-select").append(this.snippetDropdownView.render().el);
-        this.model.setStatus(this.model, true);
     },
 
     /**
@@ -68,7 +67,7 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
                 if (this.model.get("drawInteraction")) {
                     this.model.get("drawInteraction").setActive(false);
                 }
-                this.model.createDrawInteraction(evt.target.value);
+                this.model.createDrawInteraction(this.model.id, evt.target.value);
                 break;
             }
         }
@@ -79,7 +78,7 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
      * @returns {void}
      */
     removeView: function () {
-        this.model.resetView();
+        this.model.resetView(this.model.id);
         this.model.setIsOpen(false);
         this.remove();
     }

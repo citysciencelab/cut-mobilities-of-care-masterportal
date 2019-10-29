@@ -39,7 +39,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      * @extends SnippetDropdownModel
      * @memberof Snippets.GraphicalSelect
      * @namespace GraphicalSelect
-     * @description creates a dropdown to select an area in a map by square, circle or polygon
+     * @description creates a dropdown to select an area in a map by square, circle or polygon. Create it like this: new GraphicalSelectModel({id: "idOfTheCaller"}).
+     * The id is used to react only on events of the caller, not on all components, that use a graphicalSelectModel.
      * @constructs
      * @property {Boolean} isOpen=false dropdown is open or closed
      * @property {String} name="Geometrie" name of the dropdown
@@ -100,16 +101,21 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
     /**
       * Handles (de-)activation of this Tool
+      * @param {String} id of the caller
       * @param {boolean} value flag if tool is active
       * @fires Core#RadioTriggerMapRemoveOverlay
       * @returns {void}
       */
-    setStatus: function (value) {
+    setStatus: function (id, value) {
         let selectedValues;
+        // prevent calls from not active callers
 
+        if (id !== this.id) {
+            return;
+        }
         if (value) {
             selectedValues = this.get("snippetDropdownModel").getSelectedValues();
-            this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("geographicValues"))[0]);
+            this.createDrawInteraction(id, selectedValues.values[0] || _.allKeys(this.get("geographicValues"))[0]);
         }
         else {
             if (!_.isUndefined(this.get("drawInteraction"))) {
@@ -122,14 +128,20 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
 
     /**
       * Sets the selection of the dropdown to the default value
+      * @param {String} id of the caller
       * @returns {void}
       */
-    resetGeographicSelection: function () {
+    resetGeographicSelection: function (id) {
+        // prevent calls from not active callers
+        if (id !== this.id) {
+            return;
+        }
         this.get("snippetDropdownModel").updateSelectedValues(_.allKeys(this.get("geographicValues"))[0]);
     },
 
     /**
      * Creates a draw interaction and adds it to the map.
+     * @param {String} id of the caller
      * @param {String} drawType - drawing type (Box | Circle | Polygon)
      * @fires Core#RadioRequestMapCreateLayerIfNotExists
      * @fires Core#RadioTriggerMapAddOverlay
@@ -137,8 +149,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      * @fires Core#RadioTriggerMapAddInteraction
      * @returns {void}
      */
-    createDrawInteraction: function (drawType) {
-        this.resetView();
+    createDrawInteraction: function (id, drawType) {
+        this.resetView(id);
         const that = this,
             value = this.get("geographicValues")[drawType],
             layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
@@ -214,13 +226,12 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             }
         });
     },
-
     /**
-* Converts a feature to a geojson.
-* If the feature geometry is a circle, it is converted to a polygon.
-* @param {ol.Feature} feature - drawn feature
-* @returns {object} GeoJSON
-*/
+    * Converts a feature to a geojson.
+    * If the feature geometry is a circle, it is converted to a polygon.
+    * @param {ol.Feature} feature - drawn feature
+    * @returns {object} GeoJSON
+    */
     featureToGeoJson: function (feature) {
         const reader = new GeoJSON(),
             geometry = feature.getGeometry();
@@ -233,17 +244,23 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
 
     /**
      * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
+     * @param {String} id of the caller
      * @fires Core#RadioRequestMapCreateLayerIfNotExists
      * @fires Core#RadioTriggerMapRemoveOverlay
      * @returns {void}
      */
-    resetView: function () {
+    resetView: function (id) {
+        // prevent calls from not active callers
+        if (id !== this.id) {
+            return;
+        }
         const layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
 
         if (layer) {
             layer.getSource().clear();
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
             Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
+            Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         }
     },
 

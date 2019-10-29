@@ -24,7 +24,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
         alkisAdressLayerId: "9726",
-        populationReqServiceId: "2"
+        populationReqServiceId: "2",
+        id: "Einwohnerabfrage"
     }),
     /**
      * @class EinwohnerabfrageModel
@@ -82,9 +83,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
         this.listenTo(this, {
             "change:isActive": function () {
-                if (!this.get("isActive")) {
-                    this.setStatus(this.model, false);
-                }
+                this.setStatus(this.get("isActive"));
             }
         });
         this.listenTo(Radio.channel("CswParser"), {
@@ -103,7 +102,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             }
         });
         this.on("change:isActive", this.handleCswRequests, this);
-        this.setDropDownSnippet(new GraphicalSelectModel({id: "Einwohnerabfrage"}));
+        this.setDropDownSnippet(new GraphicalSelectModel({id: this.id}));
         this.listenTo(Radio.channel("GraphicalSelect"), {
             "onDrawEnd": function (geoJson) {
                 if (this.get("isActive")) {
@@ -114,8 +113,12 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
     },
+    /**
+     * todo
+     * @returns {void}
+     */
     resetView: function () {
-        Radio.trigger("GraphicalSelect", "resetView");
+        Radio.trigger("GraphicalSelect", "resetView", this.id);
     },
     /**
      * todo
@@ -279,17 +282,16 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Handles (de-)activation of this Tool
-     * @param {object} model - tool model
      * @param {boolean} value flag is tool is ctive
      * @fires Core#RadioTriggerMapRemoveOverlay
      * @returns {void}
      */
-    setStatus: function (model, value) {
+    setStatus: function (value) {
         if (value) {
             this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
             this.checksSnippetCheckboxLayerIsLoaded(this.get("alkisAdressLayerId"), this.get("checkBoxAddress"));
         }
-        Radio.trigger("GraphicalSelect", "setStatus", model, value);
+        Radio.trigger("GraphicalSelect", "setStatus", this.id, value);
     },
 
     /**
