@@ -185,8 +185,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             totalSum = schule.get("C_S_SuS"),
             priSum = schule.get("C_S_SuS_PS"),
             sozialIndex = schule.get("C_S_SI"),
-            anteil = Math.round(statGebFinal) + "%",
-            anzahl = Math.round(anzahlAll * statGebFinal / 100),
+            percentage = Math.round(statGebFinal) + "%",
+            sum = Math.round(anzahlAll * statGebFinal / 100),
             level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
             finalHtml = "<table class=\"table table-striped\">" +
                         "<thead>" +
@@ -213,11 +213,11 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                             "</tr>" +
                             "<tr colspan=\"2\">" +
                                 "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchuleLevel] + "): </td>" +
-                                "<td>" + anteil + "</td>" +
+                                "<td>" + percentage + "</td>" +
                             "</tr>" +
                             "<tr colspan=\"2\">" +
                                 "<td>Anzahl: </td>" +
-                                "<td>" + anzahl + "</td>" +
+                                "<td>" + sum + "</td>" +
                             "</tr>" +
                         "</tbody>" +
                     "</table>";
