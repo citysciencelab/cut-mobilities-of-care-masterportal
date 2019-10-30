@@ -191,7 +191,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         }
 
         if (!_.isUndefined(Config.inputMap)) {
-            this.registerListener("click", this.addMarker, this);
+            this.registerListener("click", this.addMarker.bind(this));
         }
     },
 

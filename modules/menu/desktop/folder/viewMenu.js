@@ -13,7 +13,7 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
      * @memberof Menu.Desktop.Folder
      * @constructs
      * @listens Map#RadioTriggerMapChange
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @fires Map#RadioRequestMapGetMapMode
      */
     initialize: function () {

@@ -143,7 +143,6 @@
         "consistent-this": "error",
         "func-call-spacing": ["error", "never"],
         "func-style": ["error", "declaration"],
-        "function-paren-newline": ["error", "never"],
         "implicit-arrow-linebreak": "error",
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "jsx-quotes": "error",

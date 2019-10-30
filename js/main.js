@@ -13,7 +13,6 @@ import "es6-promise/auto";
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js",
-    index,
     strippedLocation,
     loadConfigJs,
     context;
@@ -23,10 +22,10 @@ if (!("Config" in window)) {
 
     // Pfad zur Config.js bei ParametricUrl
     if (window.location.search !== "") {
-        index = window.location.href.indexOf("?");
-        strippedLocation = window.location.href.slice(0, index);
+        strippedLocation = window.location.href.split("?").shift();
 
-        configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config.js";
+        // GET parameters are there for a reason - do not drop them!
+        configPath = strippedLocation.substring(0, strippedLocation.lastIndexOf("/") + 1) + "config.js" + window.location.search;
     }
 
     // add mouseevent polyfill to fix ie11 clickhandler
@@ -63,9 +62,15 @@ if (!("Config" in window)) {
     scriptTagsArray.forEach(function (scriptTag) {
         if (scriptTag.getAttribute("data-masterportal-config") !== null) {
             // ?noext notwendig, damit nicht automatisch von Require ein .js an den Pfad angehängt wird!
-            configPath = scriptTag.getAttribute("data-masterportal-config")
-                + (scriptTag.getAttribute("data-masterportal-config").indexOf("?") !== -1 ? "&" : "?")
-                + "noext";
+            configPath = scriptTag.getAttribute("data-masterportal-config");
+
+            if (window.location.search !== "") {
+                // GET parameters are there for a reason - do not drop them!
+                configPath = configPath.split("?");
+                configPath = configPath.shift() + "?" + configPath.concat([window.location.search.slice(1)]).join("&");
+            }
+
+            configPath += (configPath.indexOf("?") !== -1 ? "&" : "?") + "noext";
         }
     }, this);
 

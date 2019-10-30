@@ -15,8 +15,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @memberof Tools.Print
      * @extends Backbone.Model
      * @constructs
-     * @fires CswParser#RadioTriggerGetMetaData
-     * @listens CswParser#RadioTriggerFetchedMetaData
+     * @fires CswParser#RadioTriggerCswParserGetMetaData
+     * @listens CswParser#RadioTriggerCswParserFetchedMetaData
      */
     initialize: function () {
         this.listenTo(Radio.channel("CswParser"), {
@@ -795,7 +795,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Requests the metadata for given layer name
      * @param {String} layerName name of current layer
-     * @fires CswParser#RadioTriggerGetMetaData
+     * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @returns {void}
      */
     getMetaData: function (layerName) {
