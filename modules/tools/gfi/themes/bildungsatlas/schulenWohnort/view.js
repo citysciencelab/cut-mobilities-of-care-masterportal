@@ -14,15 +14,9 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
      * @memberof Tools.GFI.Themes.Bildungsatlas
      * @constructs
      */
-    events: {
-        "remove": "destroy"
-    },
     tagName: "div",
     className: "gfi-schule-wohnort",
-    template: _.template(DefaultTemplate),
-    destroy: function () {
-        this.model.onIsVisibleEvent(null, false);
-    }
+    template: _.template(DefaultTemplate)
 });
 
 export default SchulenWohnortThemeView;

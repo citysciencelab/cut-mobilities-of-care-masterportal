@@ -52,11 +52,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
     /**
      * Toggles the visibility of this GFI according to its visibitily.
-     * @param   {object}  gfi       gfi object
      * @param   {Boolean} isVisible is gfi visible
      * @returns {void}
      */
-    onIsVisibleEvent: function (gfi, isVisible) {
+    onIsVisibleEvent: function (isVisible) {
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (isVisible && this.get("isCreated") === false) {
             this.create();
