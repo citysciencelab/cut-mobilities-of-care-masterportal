@@ -1,6 +1,6 @@
 # Fonts im Masterportal #
 
-Im Masterportal werden zwei Schriftarten verwandt "MasterPortalFont" und "MasterPortalFont Bold". Hinter diesen Bezeichnungen verbirgt sich die Schriftart "roboto", sie steht unter Apache Lizenz 2.0 und kann beliebig verwandt werden. Siehe
+Im Masterportal werden zwei Schriftarten verwandt "MasterPortalFont" und "MasterPortalFont Bold". Hinter diesen Bezeichnungen verbirgt sich standardmäßig die Schriftart "roboto", sie steht unter Apache Lizenz 2.0 und kann beliebig verwandt werden.
 
 Die Bezeichnung "MasterPortalFont" und deren Verwendung im Masterportal CSS-Code erlaubt es Nutzern auf einfache Weise ihre eigene bzw. eine andere Schriftart einzubinden. Dazu muss lediglich in eine zusätzliche CSS-Datei erstellt und in der Index-html als Link-tag oder Code eingefügt werden.
 
