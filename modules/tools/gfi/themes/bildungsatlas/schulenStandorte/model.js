@@ -21,8 +21,8 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
      * @returns {void}
      */
     replaceValuesWithRealResults: function () {
-        var element = this.get("gfiContent"),
-            key,
+        const element = this.get("gfiContent");
+        let key,
             idx,
             value;
 
@@ -49,7 +49,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
      */
     setInfoHtml: function () {
         const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
-        var level;
+        let level;
 
         if (layerList) {
             level = layerList[0].get("format").level;

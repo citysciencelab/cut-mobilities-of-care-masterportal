@@ -154,8 +154,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     filterAreasById: function (layer, statGebNr, layerSchuleLevel) {
         const schulen = layer.get("layer").getSource().getFeatures(),
-            featureIds = [];
-        var anzahlAll = this.get("anzahlSchuler");
+            featureIds = [],
+            anzahlAll = this.get("anzahlSchuler");
 
         schulen.forEach(function (schule) {
             const statGebFinal = schule.get("SG_" + statGebNr);
@@ -180,7 +180,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {string} text
      */
     getHtml: function (schule, anzahlAll, statGebFinal, layerSchuleLevel) {
-        var name = schule.get("C_S_Name"),
+        const name = schule.get("C_S_Name"),
             address = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + "<br>" + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
             totalSum = schule.get("C_S_SuS"),
             priSum = schule.get("C_S_SuS_PS"),
@@ -188,9 +188,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             anteil = Math.round(statGebFinal) + "%",
             anzahl = Math.round(anzahlAll * statGebFinal / 100),
             level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
-            finalHtml;
-
-        finalHtml = "<table class=\"table table-striped\">" +
+            finalHtml = "<table class=\"table table-striped\">" +
                         "<thead>" +
                             "<tr>" +
                                 "<th colspan=\"2\">" + name + "</th>" +
@@ -223,6 +221,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                             "</tr>" +
                         "</tbody>" +
                     "</table>";
+
         return finalHtml;
     },
 
@@ -255,7 +254,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {LayerList} return if the current layer
      */
     getWohnortLayer: function () {
-        var layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
+        const layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
 
         if (!Array.isArray(layerList)) {
             console.warn("The layer does not exist");
