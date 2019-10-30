@@ -441,6 +441,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 6. Beende Event
         if (evt) {
             evt.preventDefault();
+            evt.stopImmediatePropagation();
         }
     },
 
