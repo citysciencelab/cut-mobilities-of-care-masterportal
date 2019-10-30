@@ -145,14 +145,14 @@ const BalkendiagrammTheme = Theme.extend({
      * @returns {void}
      */
     getLatestStatistic: function () {
-        const dataset = this.get("dataset");
+        const dataset = this.get("dataset"),
+            latestStatistic = dataset.length > 1 ? dataset[dataset.length - 1].number : null;
 
-        this.set("latestStatistic", dataset[dataset.length - 1].number);
+        this.set("latestStatistic", latestStatistic);
     },
 
     /**
      * Generates the graph config and triggers the Graph-functionality to create the graph
-     * @param {String} key Name of category
      * @returns {void}
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
