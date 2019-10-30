@@ -1,4 +1,4 @@
-import Model from "@modules/tools/layerslider/model.js";
+import Model from "@modules/tools/layerSlider/model.js";
 import {expect} from "chai";
 
 describe("modules/layerslider", function () {
