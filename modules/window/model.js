@@ -3,7 +3,8 @@ const Window = Backbone.Model.extend({
         isCollapsed: false,
         isVisible: false,
         maxPosLeft: "",
-        maxPosTop: "60px"
+        maxPosTop: "60px",
+        rotationAngle: 0
     },
     initialize: function () {
         var channel = Radio.channel("Window");
