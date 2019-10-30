@@ -308,7 +308,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * Creates new layer by given configuration
      * @param {object} conf layer configuration
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @returns {Layer} Layer
      */
     addStatisticAreasLayer: function (conf) {
