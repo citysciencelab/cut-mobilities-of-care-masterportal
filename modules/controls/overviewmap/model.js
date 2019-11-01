@@ -10,7 +10,8 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         layerId: "",
         isInitOpen: true,
         isOpen: false,
-        mapControl: undefined
+        mapControl: undefined,
+        supportedIn3d: false
     },
     /**
      * @class OverviewMapModel
