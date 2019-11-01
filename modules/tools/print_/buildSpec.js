@@ -401,12 +401,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * derives the url of the image from the server the app is running on
-     * if the app is running on localhost the images from test-geofos are used
+     * if the app is running on localhost the images from test.geoportal-hamburg.de are used
      * @return {String} path to image directory
      */
     buildGraphicPath: function () {
-        var url = "https://test-geofos.fhhnet.stadt.hamburg.de/lgv-config/img",
-            origin = window.location.origin;
+        let url = "https://test.geoportal-hamburg.de/lgv-config/img";
+        const origin = window.location.origin;
 
         if (origin.indexOf("localhost") === -1) {
             url = origin + "/lgv-config/img";
@@ -885,6 +885,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 wfsLegendList.push(wfsLegendObject);
             }, this);
         }
+
         return wfsLegendList;
     },
 
@@ -912,6 +913,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             wfsLegendObject.legendType = "wfsImage";
             wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
         }
+
         return wfsLegendObject;
     },
 
