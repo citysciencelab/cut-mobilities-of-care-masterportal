@@ -266,7 +266,7 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
                 this.set("countStudentsSecondary", attr.C_S_SuS_S1);
             }
             if (attr.C_S_SI) {
-                this.set("socialIndex", attr.C_S_SI);
+                this.set("socialIndex", attr.C_S_SI === "-1" ? "nicht vergeben" : attr.C_S_SI);
             }
             if (attr.schoolKey) {
                 this.set("schoolKey", attr.schoolKey);
