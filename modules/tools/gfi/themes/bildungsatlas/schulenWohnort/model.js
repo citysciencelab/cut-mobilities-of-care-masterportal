@@ -183,7 +183,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             address = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + "<br>" + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
             totalSum = schule.get("C_S_SuS"),
             priSum = schule.get("C_S_SuS_PS"),
-            sozialIndex = schule.get("C_S_SI"),
+            sozialIndex = schule.get("C_S_SI") === -1 ? "nicht vergeben" : schule.get("C_S_SI"),
             percentage = Math.round(statGebFinal) + "%",
             sum = Math.round(anzahlAll * statGebFinal / 100),
             level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
