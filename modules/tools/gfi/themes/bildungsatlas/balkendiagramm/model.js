@@ -26,9 +26,10 @@ const BalkendiagrammTheme = Theme.extend({
      */
     setContent: function () {
         const element = this.get("gfiContent")[0],
-            content = {},
             layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")}),
             layerDataFormat = _.isUndefined(layerList) ? null : layerList[0].get("format");
+
+        let content = {};
 
         // get the description of this diagram
         this.set("description", layerList[0].get("description"));
@@ -42,6 +43,7 @@ const BalkendiagrammTheme = Theme.extend({
 
             // Check if the layer of wanderungen by the attribute description
             if (layerDataFormat.type === "anteilWanderungen") {
+                content = {};
                 content["In " + element.Stadtteil] = this.get("latestStatistic");
                 content["Anteil der Zuzüge aus dem Umland:"] = element["Zuzuege aus_umland"];
                 content["Anteil der Zuzüge ins Umland:"] = element["Fortzuege aus_dem_umland"];
@@ -63,6 +65,7 @@ const BalkendiagrammTheme = Theme.extend({
             content.Hamburg = element["Summe hamburg"];
 
             if (layerDataFormat.type === "anteilWanderungen") {
+                content = {};
                 content["im Statistischen Gebiet"] = this.get("latestStatistic");
             }
         }
@@ -124,15 +127,19 @@ const BalkendiagrammTheme = Theme.extend({
             if (content[key] === null || _.isUndefined(content[key])) {
                 content[key] = "*g.F.";
             }
+            else if (layerDataFormat.type === "anzahl") {
+                content[key] = content[key].toLocaleString("de");
+            }
             else if (layerDataFormat.type === "anteil") {
                 content[key] = Math.round(content[key]) + "%";
             }
             else if (layerDataFormat.type === "anteilWanderungen") {
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + element.Stadtteil)) {
                     content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic") * 100) / 100 : Math.round(this.get("latestStatistic") * 100) / 100;
+                    content[key] = content[key].toString().replace(/\./g, ",");
                 }
                 else {
-                    content[key] = Math.round(content[key] * 100) / 100 + "%";
+                    content[key] = (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",") + "%";
                 }
             }
         }
@@ -189,13 +196,13 @@ const BalkendiagrammTheme = Theme.extend({
                 ],
                 setTooltipValue: function (value) {
                     if (!isNaN(value) && value.toString().indexOf(".") !== -1 && dataType !== "anteilWanderungen") {
-                        return Math.round(value * 100) / 100 + "%";
+                        return (Math.round(value * 100) / 100).toLocaleString("de") + "%";
                     }
                     else if (value.toString().indexOf(".") !== -1) {
-                        return Math.round(value * 100) / 100;
+                        return (Math.round(value * 100) / 100).toLocaleString("de");
                     }
 
-                    return value;
+                    return value.toLocaleString("de");
                 }
             };
 
