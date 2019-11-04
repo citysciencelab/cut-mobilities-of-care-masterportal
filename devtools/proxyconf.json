@@ -27,10 +27,12 @@
     }
   },
   "/geoportal_metropolregion_hamburg_de": {
-    "target": "http://geoportal.metropolregion.hamburg.de",
-    "pathRewrite": {
-      "^/geoportal_metropolregion_hamburg_de": ""
-    }
+    "target": "https://geoportal.metropolregion.hamburg.de",
+    "agent": ""
+  },
+  "/geoportaltest_metropolregion_hamburg_de": {
+    "target": "https://geoportaltest.metropolregion.hamburg.de",
+    "agent": ""
   },
   "/hmdk_fhhnet_stadt_hamburg_de": {
     "target": "http://wfalgqw001"
