@@ -143,76 +143,9 @@ const WindowView = Backbone.View.extend({
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
     },
-    MoveWindow: function (evt) {
-        var touch = evt.originalEvent.touches[0],
-            headerWidth = this.$el.find(".win-heading").width(),
-            width = this.$el.find(".win-heading").width() / 2,
-            height = this.$el.height(),
-            headerHeight = this.$el.find(".win-heading").height(),
-            x,
-            y;
-
-            if (this.model.get("rotationAngle") === 0) {
-                x = touch.clientX - width - 20;
-                y = touch.clientY - headerHeight;
-
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-                if (x >= 0 && touch.clientX < ($("#map").width() - width - 10) && y >= 50 && touch.clientY < ($("#map").height() - $(".win-body").height() - 75)) {
-                    this.$el.css({
-                        "left": x + "px",
-                        "top": y + "px"
-                    });
-                }
-            }
-            else if (this.model.get("rotationAngle") === 90) {
-                console.log("angle 90")
-                x = touch.clientX - $(".win-body").height() + 75;
-                y = touch.clientY - $(".win-body").width();
-
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-                if (x - $(".win-body").height()/2 >= 0 && x < ($("#map").width() - 1.5 * headerWidth - 75) && y >= 0 + headerHeight && y < ($("#map").height() - headerWidth - 10)) {
-                    this.$el.css({
-                        "left": x + "px",
-                        "top": y + "px"
-                    });
-                }
-            }
-            else if (this.model.get("rotationAngle") === 180) {
-
-                x = touch.clientX - headerWidth - width + 20;
-                y = touch.clientY - headerHeight;
-
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-                if (x + 1.5 * width >= 0 && x < ($("#map").width() - 2 * headerWidth) && y - height >= 0 && y < ($("#map").height() - height / 2)) {
-                    this.$el.css({
-                        "left": x + "px",
-                        "top": y + "px"
-                    });
-                }
-            }
-            else if (this.model.get("rotationAngle") === 270) {
-
-                x = touch.clientX - headerWidth;
-                y = touch.clientY + width - 20;
-
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
-                if (x + height / 2 - headerHeight >= 0 && x < ($("#map").width() - headerWidth - 50) && y - headerWidth >= 0 && y < ($("#map").height() - headerWidth + width)) {
-                    this.$el.css({
-                        "left": x + "px",
-                        "top": y + "px"
-                    });
-                }
-            }
-    },
     touchStartWindow: function (evt) {
         var touch = evt.changedTouches[0],
-        //this.windowLeft = document.getElementsByClassName("tool-window")[0].style.left
-            //element = document.querySelector("#tool-window"),
             rect =  document.getElementsByClassName("tool-window")[0].getBoundingClientRect();
-        //this.windowLeft = getComputedStyle(element).left;
-        //this.windowLeft = document.getElementsByClassName("tool-window")[0].clientLeft;
-        // this.windowTop = getComputedStyle(element).top;
-        // this.windowTop = document.getElementsByClassName("tool-window")[0].clientTop;
         this.windowLeft = rect.left;
         this.windowTop = rect.top;
         this.startX = parseInt(touch.clientX);
@@ -221,63 +154,57 @@ const WindowView = Backbone.View.extend({
     },
     touchMoveWindow: function (evt) {
         var touch = evt.changedTouches[0],
-           // width = this.$el.find(".win-heading").width(),
             width = document.getElementsByClassName("tool-window")[0].clientWidth,
             height = document.getElementsByClassName("tool-window")[0].clientHeight,
-            distX,
-            distY,
+            mapWidth = document.getElementById("map").clientWidth,
+            mapHeight = document.getElementById("map").clientHeight,
+            distX = parseInt(touch.clientX) - this.startX,
+            distY = parseInt(touch.clientY) - this.startY,
             newPosX,
             newPosY;
 
+            console.log(parseInt(touch.clientX))
+            console.log(parseInt(touch.clientY))
+
             if (this.model.get("rotationAngle") === 0) {
-                distX = parseInt(touch.clientX) - this.startX;
-                distY = parseInt(touch.clientY) - this.startY;
                 newPosX = distX + parseInt(this.windowLeft);
                 newPosY = distY + parseInt(this.windowTop);
                 this.$el.css({
-                    "left": ( (newPosX +  width > $("#map").width()) ? ($("#map").width() - width - 40) : (newPosX < 20 )? 20 : newPosX) + "px",
-                    "top":  ( (newPosY + height  > $("#map").height() - 40) ? ($("#map").height() - height - 40) : (newPosY < 20 )? 20 : newPosY) + "px"
+                    "left": ( (newPosX +  width > mapWidth) ? (mapWidth - width - 40) : (newPosX < 20 )? 20 : newPosX) + "px",
+                    "top":  ( (newPosY + height  > mapHeight - 40) ? (mapHeight - height - 40) : (newPosY < 20 )? 20 : newPosY) + "px"
                 });
             }
             else if (this.model.get("rotationAngle") === 90) {
-                distX = parseInt(touch.clientX) - this.startX;
-                distY = parseInt(touch.clientY) - this.startY;
                 newPosX = distX + parseInt(this.windowLeft) + height;
                 newPosY = distY + parseInt(this.windowTop);
 
                 this.$el.css({
-                    "left": ( (newPosX  > $("#map").width() - 20) ? ($("#map").width()- 20) : (newPosX -height < 20 )? 20 + height : newPosX) + "px",
-                    "top":  ( (newPosY + width  > $("#map").height() - 40) ? ($("#map").height() - width - 40) : newPosY < 20 ? 20 : newPosY) + "px",
+                    "left": ( (newPosX  > mapWidth - 20) ? (mapWidth- 20) : (newPosX -height < 20 )? 20 + height : newPosX) + "px",
+                    "top":  ( (newPosY + width  > mapHeight - 40) ? (mapHeight - width - 40) : newPosY < 20 ? 20 : newPosY) + "px",
                     "transform-origin": "top left"
                 });
 
             }
             if (this.model.get("rotationAngle") === 180) {
-                distX = parseInt(touch.clientX) - this.startX;
-                distY = parseInt(touch.clientY) - this.startY;
                 newPosX = distX + parseInt(this.windowLeft) + width;
                 newPosY = distY + parseInt(this.windowTop) + height;
                 this.$el.css({
-                    "left": ( (newPosX > $("#map").width()) ? ($("#map").width() - 40) : (newPosX - width < 20 )? 20 + width : newPosX) + "px",
-                    "top":  ( (newPosY  > $("#map").height() - 40) ? ($("#map").height() - 40) : (newPosY - height  < 20 )? 20 + height: newPosY) + "px",
+                    "left": ( (newPosX >mapWidth) ? (mapWidth - 40) : (newPosX - width < 20 )? 20 + width : newPosX) + "px",
+                    "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : (newPosY - height  < 20 )? 20 + height: newPosY) + "px",
                     "transform-origin": "top left"
                 });
             }
             else if (this.model.get("rotationAngle") === 270) {
-                distX = parseInt(touch.clientX) - this.startX;
-                distY = parseInt(touch.clientY) - this.startY;
                 newPosX = distX + parseInt(this.windowLeft);
                 newPosY = distY + parseInt(this.windowTop) + width;
 
-
                 this.$el.css({
-                    "left": ( (newPosX + height > $("#map").width() - 20) ? ($("#map").width() - height - 20) : (newPosX < 20 )? 20  : newPosX) + "px",
-                    "top":  ( (newPosY  > $("#map").height() - 40) ? ($("#map").height() - 40) : newPosY -width  < 20 ? 20 + width : newPosY) + "px",
+                    "left": ( (newPosX + height > mapWidth - 20) ? (mapWidth - height - 20) : (newPosX < 20 )? 20  : newPosX) + "px",
+                    "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : newPosY -width  < 20 ? 20 + width : newPosY) + "px",
                     "transform-origin": "top left"
                 });
             }
-            console.log(newPosX + height)
-                console.log(newPosY + width)
+
             evt.preventDefault()
 
     }
