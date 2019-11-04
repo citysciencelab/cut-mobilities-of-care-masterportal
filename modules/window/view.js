@@ -3,7 +3,18 @@ import templateMax from "text-loader!./templateMax.html";
 import templateTable from "text-loader!./templateTable.html";
 import "jquery-ui/ui/widgets/draggable";
 
-const WindowView = Backbone.View.extend({
+/**
+ * @member WindowViewTemplateMax
+ * @description Template used to create the Tool Window maximised
+ * @memberof WindowView
+ */
+/**
+ * @member WindowViewTemplateTable
+ * @description Template used to create Tool Window for the table
+ * @memberof WindowView
+ */
+
+const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     events: {
         "click .glyphicon-minus": "minimize",
         "click .header > .title": "maximize",
@@ -12,6 +23,17 @@ const WindowView = Backbone.View.extend({
         "touchstart .title": "touchStartWindow",
         "touchend .title": "touchMoveEnd"
     },
+
+     /**
+     * @class WindowView
+     * @extends Backbone.View
+     * @memberof Window
+     * @constructs
+     * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
+     * @listens WindowView#changeIsVisible
+     * @listens WindowView#changeWinType
+     * @listens WindowView#RadioTriggerWindowHide
+     */
     initialize: function () {
         var channel = Radio.channel("WindowView");
 
@@ -61,6 +83,11 @@ const WindowView = Backbone.View.extend({
     startY: 0,
     windowLeft: 0,
     windowTop:0,
+
+     /**
+     * Renders the Window
+     * @return {Window} returns this
+     */
     render: function () {
         const attr = this.model.toJSON();
         var currentClass,
@@ -117,6 +144,10 @@ const WindowView = Backbone.View.extend({
         }
         return this;
     },
+     /**
+     * Minimizes the Window
+     *  @return {void}
+     */
     minimize: function () {
         this.model.set("maxPosTop", this.$el.css("top"));
         this.model.set("maxPosLeft", this.$el.css("left"));
@@ -126,6 +157,10 @@ const WindowView = Backbone.View.extend({
         this.$(".header").addClass("header-min");
         this.$el.draggable("disable");
     },
+    /**
+     * Maximizes the Window
+     *  @return {void}
+     */
     maximize: function () {
         if (this.$(".win-body").css("display") === "none") {
             this.$(".win-body").show();
@@ -135,6 +170,10 @@ const WindowView = Backbone.View.extend({
             this.$el.draggable("enable");
         }
     },
+    /**
+     * Hides the Window
+     *  @return {void}
+     */
     hide: function () {
         var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
 
@@ -143,6 +182,11 @@ const WindowView = Backbone.View.extend({
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
     },
+    /**
+     * Triggered on TouchStart
+     * @param {Event} evt Event, window being touched
+     * @return {void}
+     */
     touchStartWindow: function (evt) {
         var touch = evt.changedTouches[0],
             rect =  document.getElementsByClassName("tool-window")[0].getBoundingClientRect();
@@ -152,6 +196,11 @@ const WindowView = Backbone.View.extend({
         this.startY = parseInt(touch.clientY);
         evt.preventDefault()
     },
+     /**
+     * Triggered on TouchMove
+     * @param {Event} evt Event, being moved
+     * @return {void}
+     */
     touchMoveWindow: function (evt) {
         var touch = evt.changedTouches[0],
             width = document.getElementsByClassName("tool-window")[0].clientWidth,
@@ -162,9 +211,6 @@ const WindowView = Backbone.View.extend({
             distY = parseInt(touch.clientY) - this.startY,
             newPosX,
             newPosY;
-
-            console.log(parseInt(width))
-            console.log(parseInt(height))
 
             if (this.model.get("rotationAngle") === 0) {
                 newPosX = distX + parseInt(this.windowLeft);
@@ -213,6 +259,11 @@ const WindowView = Backbone.View.extend({
             evt.preventDefault()
 
     },
+     /**
+     * Triggered on TouchEnd
+     * @param {Event} evt Event, window on touchend
+     * @return {void}
+     */
     touchMoveEnd: function (evt) {
         this.$el.css({
             "width": ""
