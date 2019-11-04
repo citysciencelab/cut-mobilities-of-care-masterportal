@@ -38,6 +38,9 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
             else if (idx === "C_S_GTA") {
                 value = value === 0 ? "nein" : "ja";
             }
+            else if (idx === "C_S_SI") {
+                value = value === -1 ? "nicht vergeben" : value;
+            }
 
             this.set(idx, value);
         }
