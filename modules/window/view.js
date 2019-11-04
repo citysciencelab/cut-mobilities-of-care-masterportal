@@ -9,7 +9,8 @@ const WindowView = Backbone.View.extend({
         "click .header > .title": "maximize",
         "click .glyphicon-remove": "hide",
         "touchmove .title": "touchMoveWindow",
-        "touchstart .title": "touchStartWindow"
+        "touchstart .title": "touchStartWindow",
+        "touchend .title": "touchMoveEnd"
     },
     initialize: function () {
         var channel = Radio.channel("WindowView");
@@ -113,7 +114,6 @@ const WindowView = Backbone.View.extend({
         }
         else {
             this.$el.hide("slow");
-            console.log("hide")
         }
         return this;
     },
@@ -163,15 +163,17 @@ const WindowView = Backbone.View.extend({
             newPosX,
             newPosY;
 
-            console.log(parseInt(touch.clientX))
-            console.log(parseInt(touch.clientY))
+            console.log(parseInt(width))
+            console.log(parseInt(height))
 
             if (this.model.get("rotationAngle") === 0) {
                 newPosX = distX + parseInt(this.windowLeft);
                 newPosY = distY + parseInt(this.windowTop);
                 this.$el.css({
                     "left": ( (newPosX +  width > mapWidth) ? (mapWidth - width - 40) : (newPosX < 20 )? 20 : newPosX) + "px",
-                    "top":  ( (newPosY + height  > mapHeight - 40) ? (mapHeight - height - 40) : (newPosY < 20 )? 20 : newPosY) + "px"
+                    "top":  ( (newPosY + height  > mapHeight - 40) ? (mapHeight - height - 40) : (newPosY < 20 )? 20 : newPosY) + "px",
+                    "width": width,
+                    "transform-origin": "top left"
                 });
             }
             else if (this.model.get("rotationAngle") === 90) {
@@ -181,6 +183,7 @@ const WindowView = Backbone.View.extend({
                 this.$el.css({
                     "left": ( (newPosX  > mapWidth - 20) ? (mapWidth- 20) : (newPosX -height < 20 )? 20 + height : newPosX) + "px",
                     "top":  ( (newPosY + width  > mapHeight - 40) ? (mapHeight - width - 40) : newPosY < 20 ? 20 : newPosY) + "px",
+                    "width": width,
                     "transform-origin": "top left"
                 });
 
@@ -191,6 +194,7 @@ const WindowView = Backbone.View.extend({
                 this.$el.css({
                     "left": ( (newPosX >mapWidth) ? (mapWidth - 40) : (newPosX - width < 20 )? 20 + width : newPosX) + "px",
                     "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : (newPosY - height  < 20 )? 20 + height: newPosY) + "px",
+                    "width": width,
                     "transform-origin": "top left"
                 });
             }
@@ -201,12 +205,18 @@ const WindowView = Backbone.View.extend({
                 this.$el.css({
                     "left": ( (newPosX + height > mapWidth - 20) ? (mapWidth - height - 20) : (newPosX < 20 )? 20  : newPosX) + "px",
                     "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : newPosY -width  < 20 ? 20 + width : newPosY) + "px",
+                    "width": width,
                     "transform-origin": "top left"
                 });
             }
 
             evt.preventDefault()
 
+    },
+    touchMoveEnd: function (evt) {
+        this.$el.css({
+            "width": ""
+        });
     }
 });
 
