@@ -9,9 +9,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * @class GraphModel
+     * @extends Backbone.Model
      * @memberof Tools.Graph
      * @constructs
-     * @extends Backbone.Model
      * @listens Tools.Graph#RadioTriggerGraphCreateGraph
      * @listens Tools.Graph#RadioRequestGraphGetGraphParams
      */
@@ -33,7 +33,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * graphConfig.graphType === "Linegraph" and
      * graphConfig.graphType === "BarGraph".
      * @param {Object} graphConfig Graph configuration.
-     * @returns {void}
+     * @returns {Void}  -
      */
     createGraph: function (graphConfig) {
         if (graphConfig.graphType === "Linegraph") {
@@ -45,156 +45,192 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     },
 
     /**
-     * Iterates over all objects and all attributes to find the min value.
-     * @param {Object[]} data Data for graph.
-     * @param {String[]} attrToShowArray Attribute array.
-     * @return {number}  - minData
+     * searches for the minimum value overall values of data defined in attrToShowArray - note that this function is axis neutral
+     * @param {Object[]} data the data for the graph - this is an array of objects for either Linegraph or BarGraph
+     * @param {String[]} attrToShowArray as defined in graphConfig - an array of keys to find the data for the axis in
+     * @returns {Number}  - the lowest figure for any key in attrToShowArray found in data
      */
     createMinValue: function (data, attrToShowArray) {
-        var minValue = 0;
+        let minPeak = 0;
 
-        if (data !== undefined && attrToShowArray !== undefined) {
-            data.forEach(function (obj) {
-                attrToShowArray.forEach(function (attrToShow) {
-                    if (obj[attrToShow] < minValue) {
-                        minValue = obj[attrToShow];
-                    }
-                });
-            });
+        if (!Array.isArray(data) || !Array.isArray(attrToShowArray)) {
+            return minPeak;
         }
 
-        return minValue;
-    },
-
-    /**
-     * Iterates over all objects and all attributes to find the max value.
-     * @param {Object[]} data Data for graph.
-     * @param {String[]} attrToShowArray Attribute array.
-     * @return {number}  - maxData
-     */
-    createMaxValue: function (data, attrToShowArray) {
-        var maxValue = 0;
-
-        if (data !== undefined && attrToShowArray !== undefined) {
-            data.forEach(function (obj) {
-                attrToShowArray.forEach(function (attrToShow) {
-                    if (obj[attrToShow] > maxValue) {
-                        maxValue = obj[attrToShow];
-                    }
-                });
-            });
-        }
-
-        return maxValue;
-    },
-
-    /**
-     * Creates an object with min- and max-value.
-     * @param {Object[]} data Data for graph.
-     * @param {String[]} attrToShowArray Attribute array.
-     * @param {Object} axisTicks Ticks object.
-     * @return {object} - Object with attribute "minValue" and "maxValue".
-     */
-    createValues: function (data, attrToShowArray, axisTicks) {
-        var valueObj = {};
-
-        if (!_.isUndefined(axisTicks) && _.has(axisTicks, "start") && _.has(axisTicks, "end")) {
-            valueObj.minValue = axisTicks.start;
-            valueObj.maxValue = axisTicks.end;
-        }
-        else {
-            valueObj.minValue = this.createMinValue(data, attrToShowArray);
-            valueObj.maxValue = this.createMaxValue(data, attrToShowArray);
-        }
-
-        return valueObj;
-    },
-
-    /**
-     * Creates a d3 scale for x axis
-     * @param {Object[]} data Data for graph.
-     * @param {Number} width Width for scale.
-     * @param {String} scaletype Enum of scaletype. Possible values are "ordinal" or "linear".
-     * @param {String} attr Attribute name for x axis.
-     * @param {Object} xAxisTicks Ticks object.
-     * @returns {Object} - scaleX
-     */
-    createScaleX: function (data, width, scaletype, attr, xAxisTicks) {
-        var rangeArray = [0, width],
-            scale,
-            valueObj;
-
-        if (scaletype === "ordinal") {
-            scale = this.createOrdinalScale(data, rangeArray, [attr]);
-        }
-        else if (scaletype === "linear") {
-            valueObj = this.createValues(data, [attr], xAxisTicks);
-            scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
-        }
-        else {
-            console.error("Unknown scaletype " + scaletype);
-        }
-        return scale;
-    },
-    /**
-     * Creates a d3 scale for y axis.
-     * @param {Object[]} data Data for graph.
-     * @param {Number} height Height for scale.
-     * @param {String} scaletype Enum of scaletype. Possible values are "ordinal" or "linear".
-     * @param {String[]} attrToShowArray Array of attributes to be shown in graph.
-     * @param {Object} yAxisTicks Ticks object.
-     * @returns {Object} - scaleY
-     */
-    createScaleY: function (data, height, scaletype, attrToShowArray, yAxisTicks) {
-        var rangeArray = [height, 0],
-            scale,
-            valueObj;
-
-        if (scaletype === "ordinal") {
-            scale = this.createOrdinalScale(data, rangeArray, attrToShowArray);
-        }
-        else if (scaletype === "linear") {
-            valueObj = this.createValues(data, attrToShowArray, yAxisTicks);
-            scale = this.createLinearScale(valueObj.minValue, valueObj.maxValue, rangeArray);
-        }
-        else {
-            console.error("Unknown scaletype " + scaletype);
-        }
-
-        return scale;
-    },
-
-    /**
-     * Creates an ordinal scale.
-     * @param {Object[]} data Data for graph.
-     * @param {Number[]} rangeArray Array of 2 numbers defining the range of the scale.
-     * @param {String[]} attrArray Array of attributes to be shown in graph.
-     * @returns {Object} - ordinalScale
-     */
-    createOrdinalScale: function (data, rangeArray, attrArray) {
-        var values = [];
-
-        _.each(data, function (d) {
-            _.each(attrArray, function (attr) {
-                values.push(d[attr]);
+        data.forEach(function (obj) {
+            attrToShowArray.forEach(function (attrToShow) {
+                if (obj[attrToShow] < minPeak) {
+                    minPeak = obj[attrToShow];
+                }
             });
         });
-        values = _.uniq(values);
+
+        return minPeak;
+    },
+
+    /**
+     * searches for the maximum value overall values of data defined in attrToShowArray - note that this function is axis neutral
+     * @param {Object[]} data the data for the graph - this is an array of objects for either Linegraph or BarGraph
+     * @param {String[]} attrToShowArray as defined in graphConfig - an array of keys to find the data for the axis in
+     * @returns {Number}  - the highest figure for any key in attrToShowArray found in data
+     */
+    createMaxValue: function (data, attrToShowArray) {
+        let maxPeak = 0;
+
+        if (!Array.isArray(data) || !Array.isArray(attrToShowArray)) {
+            return maxPeak;
+        }
+
+        data.forEach(function (obj) {
+            attrToShowArray.forEach(function (attrToShow) {
+                if (obj[attrToShow] > maxPeak) {
+                    maxPeak = obj[attrToShow];
+                }
+            });
+        });
+
+        return maxPeak;
+    },
+
+    /**
+     * gets an object with global the minimum and maximum values (peaks) of data defined in attrToShowArray - note that this function is axis neutral
+     * @param {Object[]} data the data for the graph - this is an array of objects for either Linegraph or BarGraph
+     * @param {String[]} attrToShowArray as defined in graphConfig - an array of keys to find the data for the y axis in
+     * @param {Object} [axisTicks] (optional) as defined in graphConfig - used to force start and end of an axis when axisTicks.start and axisTicks.end is given. Otherwise automatic lookup of start and end point will be triggered.
+     * @returns {Object}  - an object {minValue, maxValue}
+     */
+    createPeakValues: function (data, attrToShowArray, axisTicks) {
+        var peakValues = {};
+
+        if (typeof axisTicks === "object" && axisTicks.hasOwnProperty("start") && axisTicks.hasOwnProperty("end")) {
+            peakValues.min = axisTicks.start;
+            peakValues.max = axisTicks.end;
+        }
+        else {
+            peakValues.min = this.createMinValue(data, attrToShowArray);
+            peakValues.max = this.createMaxValue(data, attrToShowArray);
+        }
+
+        return peakValues;
+    },
+
+    /**
+     * creates a d3 scale for the x axis - in general a d3 scale is a function to translate a value into pixels to adjust dom objects in the diagram
+     * @param {Object[]} data the data for the graph - this is an array of objects for either Linegraph or BarGraph
+     * @param {Number} width as defined in graphConfig - the width in pixel to draw the diagram in (note: a margin should be calculated out of width at this point already)
+     * @param {String} scaleTypeX as defined in graphConfig - should be "ordinal" or "linear"
+     * @param {String} xAttr as defined in graphConfig - the key for x-axis data to be found in data
+     * @param {Object} [xAxisTicks] (optional) as defined in graphConfig - if not given automatic processing will take place
+     * @returns {Function}  - a function "pixels := function(value)" to translate a value from data into pixels from left to right of the diagram
+     */
+    createScaleX: function (data, width, scaleTypeX, xAttr, xAxisTicks) {
+        const rangeArray = [0, width];
+        let scale,
+            peak;
+
+        if (scaleTypeX === "ordinal") {
+            // note: as createPeakValues is axis neutral the String xAttr has to be translated into an Array(String) to match the structure of an attrToShowArray
+            scale = this.createOrdinalScale(data, rangeArray, [xAttr]);
+        }
+        else if (scaleTypeX === "linear") {
+            // note: as createPeakValues is axis neutral the String xAttr has to be translated into an Array(String) to match the structure of an attrToShowArray
+            peak = this.createPeakValues(data, [xAttr], xAxisTicks);
+            scale = this.createLinearScale(peak.min, peak.max, rangeArray);
+        }
+        else {
+            console.error("Unknown graphConfig.scaleTypeX", scaleTypeX);
+        }
+
+        return scale;
+    },
+
+    /**
+     * creates a d3 scale for the y axis - in general a d3 scale is a function to translate a value into pixels to adjust dom objects in the diagram
+     * @param {Object[]} data the data for the graph - this is an array of objects for either Linegraph or BarGraph
+     * @param {Number} height as defined in graphConfig - the height in pixel to draw the diagram in (note: a margin should be calculated out of height at this point already)
+     * @param {String} scaleTypeY as defined in graphConfig - should be "ordinal" or "linear"
+     * @param {String[]} attrToShowArray as defined in graphConfig - an array of keys to find the data for the y axis in
+     * @param {Object} [yAxisTicks] (optional) as defined in graphConfig - if not given automatic processing will take place
+     * @returns {Function}  - a function "pixels := function(value)" to translate a value from data into pixels from top to bottom of the diagram
+     */
+    createScaleY: function (data, height, scaleTypeY, attrToShowArray, yAxisTicks) {
+        const rangeArray = [height, 0];
+        let scale,
+            peak;
+
+        if (scaleTypeY === "ordinal") {
+            scale = this.createOrdinalScale(data, rangeArray, attrToShowArray);
+        }
+        else if (scaleTypeY === "linear") {
+            peak = this.createPeakValues(data, attrToShowArray, yAxisTicks);
+            scale = this.createLinearScale(peak.min, peak.max, rangeArray);
+        }
+        else {
+            console.error("Unknown graphConfig.scaleTypeY " + scaleTypeY);
+        }
+
+        return scale;
+    },
+
+    /**
+     * creates an ordinal d3 scale function
+     * @param {Object[]} data the data for the graph
+     * @param {Number[]} rangeArray a simple array [maxPixel, minPixel] defining the diagrams range in pixel (e.g. [height, 0])
+     * @param {String[]} attrArray as defined in graphConfig.xAttr respectively graphConfig.attrToShowArray
+     * @returns {Function}  - a ordinal d3 scale function to translate values into pixel
+     */
+    createOrdinalScale: function (data, rangeArray, attrArray) {
+        var values = [],
+            known = {};
+        let i,
+            atom,
+            n,
+            attr,
+            rArray = rangeArray;
+
+        if (rArray === undefined || rArray === null) {
+            // using d3 .range function with parameter undefined or null would throw an error
+            // this fixes .range not to quit with an error
+            rArray = [rArray];
+        }
+
+        if (Array.isArray(data) && Array.isArray(attrArray)) {
+            for (i in data) {
+                atom = data[i];
+                for (n in attrArray) {
+                    attr = attrArray[n];
+                    if (!atom || !atom.hasOwnProperty(attr) || known.hasOwnProperty(atom[attr])) {
+                        continue;
+                    }
+                    values.push(atom[attr]);
+                    known[atom[attr]] = true;
+                }
+            }
+        }
+
         return scaleBand()
-            .range(rangeArray)
+            .range(rArray)
             .domain(values);
     },
 
     /**
-     * Creates an linear scale.
-     * @param {String/Number} minValue Min value for linear scale.
-     * @param {String/Number} maxValue Max value for linear scale.
-     * @param {Number[]} rangeArray Array of 2 numbers defining the range of the scale.
-     * @returns {Object} - linearScale
+     * creates a linear d3 scale function
+     * @param {Number} minValue min value (from data) for the linear scale
+     * @param {Number} maxValue max value (from data) for the linear scale
+     * @param {Number[]} rangeArray a simple array [maxPixel, minPixel] defining the diagrams range in pixel (e.g. [height, 0])
+     * @returns {Function}  - a linear d3 scale function to translate values into pixel
      */
     createLinearScale: function (minValue, maxValue, rangeArray) {
+        let rArray = rangeArray;
+
+        if (rArray === undefined || rArray === null) {
+            // using d3 .range function with parameter undefined or null would throw an error
+            // this fixes .range not to quit with an error
+            rArray = [rArray];
+        }
+
         return scaleLinear()
-            .range(rangeArray)
+            .range(rArray)
             .domain([minValue, maxValue])
             .nice();
     },
@@ -203,23 +239,23 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * Creates the bottom axis of the graph.
      * @param {Object} scale Scale of bottom axis.
      * @param {Object} xAxisTicks Ticks for bottom axis.
-     * @returns {Object} - axisBottom
+     * @returns {Object}  - axisBottom
      */
     createAxisBottom: function (scale, xAxisTicks) {
-        var unit = !_.has(xAxisTicks, "unit") ? "" : " " + xAxisTicks.unit,
-            d3Object;
+        const unit = xAxisTicks && xAxisTicks.hasOwnProperty("unit") ? " " + xAxisTicks.unit : "";
+        let d3Object;
 
         if (xAxisTicks === undefined) {
             d3Object = axisBottom(scale);
         }
-        else if (_.has(xAxisTicks, "values") && !_.has(xAxisTicks, "factor")) {
+        else if (xAxisTicks.hasOwnProperty("values") && !xAxisTicks.hasOwnProperty("factor")) {
             d3Object = axisBottom(scale)
                 .tickValues(xAxisTicks.values)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
         }
-        else if (_.has(xAxisTicks, "values") && _.has(xAxisTicks, "factor")) {
+        else if (xAxisTicks.hasOwnProperty("values") && xAxisTicks.hasOwnProperty("factor")) {
             d3Object = axisBottom(scale)
                 .ticks(xAxisTicks.values, xAxisTicks.factor)
                 .tickFormat(function (d) {
@@ -234,12 +270,16 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * Creates the axis on the left.
      * @param {Object} scale Scale of left axis.
      * @param {Object} yAxisTicks Ticks for left axis.
-     * @returns {Object} - axisLeft
+     * @returns {Object}  - axisLeft
      */
     createAxisLeft: function (scale, yAxisTicks) {
-        var d3Object;
+        let d3Object;
 
-        if (_.isUndefined(yAxisTicks) && !_.has(yAxisTicks, "ticks")) {
+        if (yAxisTicks && yAxisTicks.hasOwnProperty("ticks") && yAxisTicks.hasOwnProperty("factor")) {
+            d3Object = axisLeft(scale)
+                .ticks(yAxisTicks.ticks, yAxisTicks.factor);
+        }
+        else {
             d3Object = axisLeft(scale)
                 .tickFormat(function (d) {
                     if (d % 1 === 0) {
@@ -248,10 +288,6 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     return false;
 
                 });
-        }
-        else {
-            d3Object = axisLeft(scale)
-                .ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
 
         return d3Object;
@@ -263,7 +299,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object} scaleY Scale of y-axis.
      * @param {String} xAttr  Attribute name for x-axis.
      * @param {string} yAttrToShow Attribut name for y-axis.
-     * @returns {Object} - valueLine.
+     * @returns {Object}  - valueLine.
      */
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
         return line()
@@ -284,17 +320,17 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} data Data for graph.
      * @param {String} className Class name of point.
      * @param {Object} d3line D3 line object.
-     * @returns {void}
+     * @returns {Void}  -
      */
     appendDataToSvg: function (svg, data, className, d3line) {
-        var dataToAdd = data.filter(function (obj) {
+        const dataToAdd = data.filter(function (obj) {
             return obj.yAttrToShow !== "-";
         });
 
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", function () {
-                var y;
+                let y;
 
                 if (svg.select(".graph-legend").size() > 0) {
                     y = svg.select(".graph-legend").node().getBBox().height;
@@ -322,16 +358,16 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} [xAxisLabel.fill=#000] Text fill color.
      * @param {String} [xAxisLabel.fontSize=10] Text font size.
      * @param {Number} width Width of SVG.
-     * @param {*} y y(value) transitions data value into pixel from top
-     * @returns {void}
+     * @param {Function} y y(value) transitions data value into pixel from top
+     * @returns {Void}  -
      */
     appendXAxisToSvg: function (svg, xAxis, xAxisLabel, width, y) {
-        var textOffset = _.isUndefined(xAxisLabel.offset) ? 0 : xAxisLabel.offset,
-            textAnchor = _.isUndefined(xAxisLabel.textAnchor) ? "middle" : xAxisLabel.textAnchor,
-            fill = _.isUndefined(xAxisLabel.fill) ? "#000" : xAxisLabel.fill,
-            fontSize = _.isUndefined(xAxisLabel.fontSize) ? 10 : xAxisLabel.fontSize,
-            label = _.isUndefined(xAxisLabel.label) ? null : [xAxisLabel.label],
-            xAxisDraw = xAxis;
+        const textOffset = xAxisLabel.offset !== undefined ? xAxisLabel.offset : 0,
+            textAnchor = xAxisLabel.textAnchor !== undefined ? xAxisLabel.textAnchor : "middle",
+            fill = xAxisLabel.fill !== undefined ? xAxisLabel.fill : "#000",
+            fontSize = xAxisLabel.fontSize !== undefined ? xAxisLabel.fontSize : 10,
+            label = xAxisLabel.label !== undefined ? [xAxisLabel.label] : null;
+        let xAxisDraw = xAxis;
 
         xAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
             .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
@@ -368,15 +404,15 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} [yAxisLabel.fill=#000] Text fill color.
      * @param {String} [yAxisLabel.fontSize=10] Text font size.
      * @param {Number} height Height of SVG.
-     * @returns {void}
+     * @returns {Void}  -
      */
     appendYAxisToSvg: function (svg, yAxis, yAxisLabel, height) {
-        var textOffset = _.isUndefined(yAxisLabel.offset) ? 0 : yAxisLabel.offset,
-            textAnchor = _.isUndefined(yAxisLabel.textAnchor) ? "middle" : yAxisLabel.textAnchor,
-            fill = _.isUndefined(yAxisLabel.fill) ? "#000" : yAxisLabel.fill,
-            fontSize = _.isUndefined(yAxisLabel.fontSize) ? 10 : yAxisLabel.fontSize,
-            label = _.isUndefined(yAxisLabel.label) ? null : [yAxisLabel.label],
-            yAxisDraw = yAxis;
+        const textOffset = yAxisLabel.offset !== undefined ? yAxisLabel.offset : 0,
+            textAnchor = yAxisLabel.textAnchor !== undefined ? yAxisLabel.textAnchor : "middle",
+            fill = yAxisLabel.fill !== undefined ? yAxisLabel.fill : "#000",
+            fontSize = yAxisLabel.fontSize !== undefined ? yAxisLabel.fontSize : 10,
+            label = yAxisLabel.label !== undefined ? [yAxisLabel.label] : null;
+        let yAxisDraw = yAxis;
 
         yAxisDraw = svg.select(".graph-data").selectAll("yAxisDraw")
             .data([1]) // setze ein Dummy-Array mit Länge 1 damit genau einmal die Achse appended wird
@@ -408,13 +444,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} yAttrToShow Attribute name for line point on y-axis.
      * @param {Selection} tooltipDiv Selection of the tooltip-div.
      * @param {Number} dotSize The size of the dots.
-     * @returns {void}
+     * @returns {Void}  -
      */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
-        var dat = data.filter(function (obj) {
-                return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
-            }),
-            yAttributeToShow;
+        const dat = data.filter(function (obj) {
+            return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
+        });
+        let yAttributeToShow;
 
         svg.select(".graph-diagram").selectAll("points")
             .data(dat)
@@ -503,7 +539,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} legendData.style Type of legend item "rect" for "<rect>" or "circle" for "<circle>".
      * @param {String} legendData.class Class of legend item.
      * @param {String} legendData.text Text of legend item.
-     * @returns {void}
+     * @returns {Void}  -
      */
     appendLegend: function (svg, legendData) {
         var legend = svg.append("g")
@@ -541,13 +577,14 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return d.text;
             });
     },
+
     /**
      * Flattens the attributeToShowArray and only returns an array of the attrNames.
      * @param {Object/String[]} attrToShowArray Array of objects or strings.
      * @returns {String[]} - Flattened Array.
      */
     flattenAttrToShowArray: function (attrToShowArray) {
-        const flatAttrToShowArray = [];
+        var flatAttrToShowArray = [];
 
         attrToShowArray.forEach(function (attrToShow) {
             if (typeof attrToShow === "object") {
@@ -559,6 +596,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         });
         return flatAttrToShowArray;
     },
+
     /**
      * Creates the linegraph.
      * @param {Object} graphConfig Graph config.
@@ -595,10 +633,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
      * @param {String} graphConfig.legendData.text Text for legen object.
-     * @returns {void}
+     * @returns {Void}  -
      */
     createLineGraph: function (graphConfig) {
-        var isMobile = Radio.request("Util", "isViewMobile"),
+        const isMobile = Radio.request("Util", "isViewMobile"),
             selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
             scaleTypeY = graphConfig.scaleTypeY,
@@ -622,13 +660,16 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
-            dotSize = graphConfig.dotSize || 5,
-            valueLine;
+            dotSize = graphConfig.dotSize || 5;
+        let valueLine;
 
-        if (_.has(graphConfig, "legendData")) {
+        if (graphConfig.hasOwnProperty("legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
         }
-        _.each(attrToShowArray, function (yAttrToShow) {
+
+        for (const yAttrToShowKey in attrToShowArray) {
+            const yAttrToShow = attrToShowArray[yAttrToShowKey];
+
             if (typeof yAttrToShow === "object") {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
                 this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
@@ -641,7 +682,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize);
             }
-        }, this);
+        }
+
         // Add the Axis
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
@@ -663,7 +705,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Rotates the label on the x-axis by 45 degrees
      * @param {SVG} svg SVG.
-     * @return {void}
+     * @returns {Void}  -
      */
     rotateXAxisTexts: function (svg) {
         svg.select(".xAxisDraw").selectAll(".tick").selectAll("text")
@@ -674,7 +716,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * Moves the label of the x-axis downwards
      * @param {SVG} svg SVG.
      * @param {Number} xAxisLabelTranslate Translation on the x-axis.
-     * @return {void}
+     * @returns {Void}  -
      */
     translateXAxislabelText: function (svg, xAxisLabelTranslate) {
         svg.select(".xAxisDraw").selectAll(".xAxisLabelText")
@@ -684,10 +726,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * ToDo.
      * @param {object} graphConfig ToDo.
-     * @returns {void}
+     * @returns {Void}  -
      */
     createBarGraph: function (graphConfig) {
-        var selector = graphConfig.selector,
+        const selector = graphConfig.selector,
             scaleTypeX = graphConfig.scaleTypeX,
             scaleTypeY = graphConfig.scaleTypeY,
             data = graphConfig.data,
@@ -709,9 +751,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             barWidth = width / data.length,
             setTooltipValue = graphConfig.setTooltipValue;
 
-        if (_.has(graphConfig, "legendData")) {
+        if (graphConfig.hasOwnProperty("legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
         }
+
         this.drawBars(svg, data, scaleX, scaleY, selector, xAttr, attrToShowArray, barWidth, setTooltipValue);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
 
@@ -720,22 +763,22 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
     /**
      * draws the bars into the svg using d3 functions
-     * @param {*} svg ToDo.
-     * @param {*} dataToAdd the data for the bar graph as an array of objects [{ (xAttr): valueX, (attrToShowArray[0]): valueY}, ...] where xAttr and attrToShowArray[0] are keys defined in graphConfig
-     * @param {*} x the function to give the place of data value looking from left to right in pixel
-     * @param {*} y y(value) transitions data value into pixel from top
-     * @param {*} selector as set in graphConfig - may be css class of the dom holding the graph
-     * @param {*} xAttr as defined in graphConfig - the name of the key to address the valueX in dataToAdd
-     * @param {*} attrToShowArray as defined in graphConfig - the array of keys to find the data of valueY in dataToAdd
+     * @param {SVG} svg the d3 svg object
+     * @param {Object[]} dataToAdd the data for the bar graph as an array of objects [{ (xAttr): valueX, (attrToShowArray[0]): valueY}, ...] where xAttr and attrToShowArray[0] are keys defined in graphConfig
+     * @param {Function} x the function to give the place of data value looking from left to right in pixel
+     * @param {Function} y y(value) transitions data value into pixel from top
+     * @param {String} selector as set in graphConfig - may be css class of the dom holding the graph
+     * @param {String} xAttr as defined in graphConfig - the name of the key to address the valueX in dataToAdd
+     * @param {String[]} attrToShowArray as defined in graphConfig - the array of keys to find the data of valueY in dataToAdd
      * @param {Number} barWidth the width of a single bar - note that if zero or negative, barWidth will be automatically set to 0
-     * @param {function} setTooltipValue (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
-     * @returns {void}
+     * @param {Function} [setTooltipValue] (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
+     * @returns {Void}  -
      */
     drawBars: function (svg, dataToAdd, x, y, selector, xAttr, attrToShowArray, barWidth, setTooltipValue) {
         svg.append("g")
             .attr("class", "graph-data")
             .attr("transform", function () {
-                var legendHeight;
+                let legendHeight;
 
                 if (svg.select(".graph-legend").size() > 0) {
                     legendHeight = svg.select(".graph-legend").node().getBBox().height;
@@ -781,7 +824,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             }, this)
             .append("title")
             .text(function (d) {
-                if (_.isFunction(setTooltipValue)) {
+                if (typeof setTooltipValue === "function") {
                     return setTooltipValue(d[attrToShowArray[0]]);
                 }
 
@@ -793,7 +836,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Setter for attribute "graphParams".
      * @param {Object} value Graph params.
-     * @returns {void}
+     * @returns {Void}  -
      */
     setGraphParams: function (value) {
         this.set("graphParams", value);
