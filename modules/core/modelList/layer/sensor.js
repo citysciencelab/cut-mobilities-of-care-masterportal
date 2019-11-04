@@ -367,8 +367,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
                     dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
                     key = "dataStream_" + dataStreamId + "_" + dataStreamName,
-                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
-                    phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined;
+                let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+
+                phenomenonTime = this.changeTimeZone(phenomenonTime, this.get("utc"));
 
                 if (this.get("showNoDataValue") && !value) {
                     thing.properties[key] = this.get("noDataValue");
