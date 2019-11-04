@@ -1,12 +1,39 @@
 var webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-    path = require("path");
+    path = require("path"),
+    fs = require("fs");
 
-module.exports = function (path2CustomModule) {
+let path2CustomModules = "";
+
+if (fs.existsSync("./customModules/customModulesConf.json")) {
+    path2CustomModules = require("../customModules/customModulesConf.json");
+}
+module.exports = function () {
+    let entryPoints = {},
+        customModules = {};
+
+    for (let entryPointKey in path2CustomModules) {
+        let customModuleFilename = path2CustomModules[entryPointKey],
+            customModulePath = "./customModules/" + customModuleFilename;
+
+        if (fs.existsSync(customModulePath + ".js")) {
+            entryPoints[entryPointKey] = customModulePath;
+            customModules[entryPointKey] = customModuleFilename;
+        }
+        else {
+            console.log("WARNING: IGNORED CUSTOM MODULE \"" + entryPointKey + "\"");
+        }
+    }
+
+    console.log(entryPoints);
+    console.log(customModules);
+
+
+
+    entryPoints.masterportal = "./js/main.js";
+
     return {
-        entry: {
-            masterportal: "./js/main.js"
-        },
+        entry: entryPoints,
         output: {
             path: path.resolve(__dirname, "../build"),
             filename: "js/[name].js"
@@ -49,6 +76,18 @@ module.exports = function (path2CustomModule) {
                 }
             ]
         },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    styles: {
+                        name: "styles",
+                        test: /\.css$/,
+                        chunks: "all",
+                        enforce: true,
+                    },
+                },
+            },
+        },
         plugins: [
             // provide libraries globally
             new webpack.ProvidePlugin({
@@ -60,13 +99,14 @@ module.exports = function (path2CustomModule) {
             }),
             // create css under build/
             new MiniCssExtractPlugin({
-                filename: "css/style.css"
+                filename: "css/style.css",
+                chunkFilename: "css/[id].css"
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                CUSTOMMODULE: JSON.stringify(path2CustomModule)
+                CUSTOMMODULES: JSON.stringify(customModules)
             })
         ]
     };

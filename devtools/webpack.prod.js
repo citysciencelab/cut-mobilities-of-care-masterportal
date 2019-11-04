@@ -5,13 +5,11 @@ const merge = require("webpack-merge"),
     path = require("path");
 
 module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
-    return merge.smart(new Common(path2CustomModule), {
+    return merge.smart(new Common(), {
         mode: "production",
         output: {
             path: path.resolve(__dirname, "../dist/build"),
-            filename: "js/masterportal.js"
+            filename: "js/[name].js"
         },
         module: {
             rules: [

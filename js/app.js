@@ -450,21 +450,37 @@ function loadApp () {
 
     new HighlightFeature();
 
-    // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
-    /* eslint-disable no-undef */
-    if (CUSTOMMODULE !== "") {
-        // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-        import(/* webpackMode: "eager" */CUSTOMMODULE)
-            .then(module => {
-                /* eslint-disable new-cap */
-                new module.default();
-            })
-            .catch(error => {
-                console.error(error);
-                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-            });
-    }
-    /* eslint-enable no-undef */
+    console.log(Config.customModules);
+
+    let allCustomModules = CUSTOMMODULES;
+    console.log(allCustomModules);
+
+
+    //Config.customModules.forEach((customModuleRelativePath) => {
+    Config.customModules.forEach((customModuleKey) => {
+        if (allCustomModules[customModuleKey] !== undefined) {
+
+            /* eslint-disable no-undef */
+            // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
+            console.log(allCustomModules[customModuleKey]);
+
+            import(
+                `../customModules/${allCustomModules[customModuleKey]}.js`
+                /* webpackMode: "eager" */
+                )
+                .then(module => {
+                    /* eslint-disable new-cap */
+                    new module.default();
+                })
+                .catch(error => {
+                    console.error(error);
+                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+                });
+            /* eslint-enable no-undef */
+        }
+    });
+
+
 
     Radio.trigger("Util", "hideLoader");
 }

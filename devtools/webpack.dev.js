@@ -4,8 +4,7 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    fs = require("fs"),
-    _ = require("underscore");
+    fs = require("fs");
 
 
 let proxies;
@@ -17,10 +16,7 @@ else {
     proxies = require("./proxyconf_example.json");
 }
 
-
 module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
@@ -60,5 +56,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    }, new Common(path2CustomModule));
+    }, new Common());
 };
