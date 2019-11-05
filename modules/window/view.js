@@ -189,7 +189,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      */
     touchStartWindow: function (evt) {
         var touch = evt.changedTouches[0],
-            rect = document.getElementsByClassName("tool-window")[0].getBoundingClientRect();
+            rect = document.querySelector(".tool-window").getBoundingClientRect();
 
         this.windowLeft = rect.left;
         this.windowTop = rect.top;
@@ -199,147 +199,18 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     },
     /**
      * Triggered on TouchMove
-     * @param {Event} evt Event, being moved
+     * @param {Event} evt Event of moved window
      * @return {void}
      */
     touchMoveWindow: function (evt) {
-        var touch = evt.changedTouches[0],
-            width = document.getElementsByClassName("tool-window")[0].clientWidth,
-            height = document.getElementsByClassName("tool-window")[0].clientHeight,
-            mapWidth = document.getElementById("map").clientWidth,
-            mapHeight = document.getElementById("map").clientHeight,
-            distX = parseInt(touch.clientX, 10) - this.startX,
-            distY = parseInt(touch.clientY, 10) - this.startY,
-            newPosX,
-            newPosY,
-            leftPos,
-            topPos;
+        var newPosition = this.getNewPosition(evt);
+        this.$el.css({
+            "left": newPosition.left,
+            "top": newPosition.top,
+            "width": newPosition.width,
+            "transform-origin": "top left"
+        });
 
-        if (this.model.get("rotationAngle") === 0) {
-            newPosX = distX + parseInt(this.windowLeft, 10);
-            newPosY = distY + parseInt(this.windowTop, 10);
-
-            if (newPosX + width > mapWidth) {
-                leftPos = mapWidth - width - 40 + "px";
-            }
-            else if (newPosX < 20) {
-                leftPos = 20 + "px";
-            }
-            else {
-                leftPos = newPosX + "px";
-            }
-
-            if (newPosY + height > mapHeight - 40) {
-                topPos = mapHeight - height - 40 + "px";
-            }
-            else if (newPosY < 20) {
-                topPos = 20 + "px";
-            }
-            else {
-                topPos = newPosY + "px";
-            }
-
-            this.$el.css({
-                "left": leftPos,
-                "top": topPos,
-                "width": width,
-                "transform-origin": "top left"
-            });
-        }
-        else if (this.model.get("rotationAngle") === 90) {
-            newPosX = distX + parseInt(this.windowLeft, 10) + height;
-            newPosY = distY + parseInt(this.windowTop, 10);
-
-            if (newPosX > mapWidth - 20) {
-                leftPos = mapWidth - 20 + "px";
-            }
-            else if (newPosX - height < 20) {
-                leftPos = 20 + height + "px";
-            }
-            else {
-                leftPos = newPosX + "px";
-            }
-
-            if (newPosY + width > mapHeight - 40) {
-                topPos = mapHeight - width - 40;
-            }
-            else if (newPosY < 20) {
-                topPos = 20 + "px";
-            }
-            else {
-                topPos = newPosY + "px";
-            }
-
-            this.$el.css({
-                "left": leftPos,
-                "top": topPos,
-                "width": width,
-                "transform-origin": "top left"
-            });
-
-        }
-        if (this.model.get("rotationAngle") === 180) {
-            newPosX = distX + parseInt(this.windowLeft, 10) + width;
-            newPosY = distY + parseInt(this.windowTop, 10) + height;
-
-            if (newPosX > mapWidth) {
-                leftPos = mapWidth - 40 + "px";
-            }
-            else if (newPosX - width < 20) {
-                leftPos = 20 + width + "px";
-            }
-            else {
-                leftPos = newPosX + "px";
-            }
-
-            if (newPosY > mapHeight - 40) {
-                topPos = mapHeight - 40 + "px";
-            }
-            else if (newPosY - height < 20) {
-                topPos = 20 + height + "px";
-            }
-            else {
-                topPos = newPosY + "px";
-            }
-
-            this.$el.css({
-                "left": leftPos,
-                "top": topPos,
-                "width": width,
-                "transform-origin": "top left"
-            });
-        }
-        else if (this.model.get("rotationAngle") === 270) {
-            newPosX = distX + parseInt(this.windowLeft, 10);
-            newPosY = distY + parseInt(this.windowTop, 10) + width;
-
-            if (newPosX + height > mapWidth - 20) {
-                leftPos = mapWidth - height - 20 + "px";
-            }
-            else if (newPosX < 20) {
-                leftPos = 20 + "px";
-            }
-            else {
-                leftPos = newPosX + "px";
-            }
-
-            if (newPosY > mapHeight - 40) {
-                topPos = mapHeight - 40 + "px";
-            }
-            else if (newPosY - width < 20) {
-                topPos = 20 + width + "px";
-            }
-            else {
-                topPos = newPosY + "px";
-            }
-
-            this.$el.css({
-                "left": leftPos,
-                "top": topPos,
-                "width": width,
-                "transform-origin": "top left"
-            });
-        }
         evt.preventDefault();
     },
     /**
@@ -350,6 +221,137 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         this.$el.css({
             "width": ""
         });
+    },
+    /**
+     * Triggered on TouchEnd
+     * @param {Event} evt Event of moved window
+     * @return {Object} newPosition Object containing the new position and width
+     */
+    getNewPosition: function (evt) {
+        var touch = evt.changedTouches[0],
+            width = document.querySelector(".tool-window").clientWidth,
+            height = document.querySelector(".tool-window").clientHeight,
+            mapWidth = document.getElementById("map").clientWidth,
+            mapHeight = document.getElementById("map").clientHeight,
+            distX = parseInt(touch.clientX, 10) - this.startX,
+            distY = parseInt(touch.clientY, 10) - this.startY,
+            newPosX,
+            newPosY,
+            leftPos,
+            topPos,
+            newPosition = {};
+
+        console.log(evt)
+
+        if (this.model.get("rotationAngle") === 0) {
+            newPosX = distX + parseInt(this.windowLeft, 10);
+            newPosY = distY + parseInt(this.windowTop, 10);
+
+            if (newPosX + width > mapWidth) {
+                newPosition.left = mapWidth - width - 40 + "px";
+            }
+            else if (newPosX < 20) {
+                newPosition.left = 20 + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY + height > mapHeight - 40) {
+                newPosition.top = mapHeight - height - 40 + "px";
+            }
+            else if (newPosY < 20) {
+                newPosition.top = 20 + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            newPosition.width = width;
+            return newPosition;
+
+        }
+        else if (this.model.get("rotationAngle") === 90) {
+            newPosX = distX + parseInt(this.windowLeft, 10) + height;
+            newPosY = distY + parseInt(this.windowTop, 10);
+
+            if (newPosX > mapWidth - 20) {
+                newPosition.left = mapWidth - 20 + "px";
+            }
+            else if (newPosX - height < 20) {
+                newPosition.left = 20 + height + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY + width > mapHeight - 40) {
+                newPosition.top = mapHeight - width - 40;
+            }
+            else if (newPosY < 20) {
+                newPosition.top = 20 + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            newPosition.width = width;
+            return newPosition;
+        }
+        if (this.model.get("rotationAngle") === 180) {
+            newPosX = distX + parseInt(this.windowLeft, 10) + width;
+            newPosY = distY + parseInt(this.windowTop, 10) + height;
+
+            if (newPosX > mapWidth) {
+                newPosition.left = mapWidth - 40 + "px";
+            }
+            else if (newPosX - width < 20) {
+                newPosition.left = 20 + width + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY > mapHeight - 40) {
+                newPosition.top = mapHeight - 40 + "px";
+            }
+            else if (newPosY - height < 20) {
+                newPosition.top = 20 + height + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            newPosition.width = width;
+            return newPosition;
+        }
+        else if (this.model.get("rotationAngle") === 270) {
+            newPosX = distX + parseInt(this.windowLeft, 10);
+            newPosY = distY + parseInt(this.windowTop, 10) + width;
+
+            if (newPosX + height > mapWidth - 20) {
+                newPosition.left = mapWidth - height - 20 + "px";
+            }
+            else if (newPosX < 20) {
+                newPosition.left = 20 + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY > mapHeight - 40) {
+                newPosition.top = mapHeight - 40 + "px";
+            }
+            else if (newPosY - width < 20) {
+                newPosition.top = 20 + width + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            newPosition.width = width;
+            return newPosition;
+        }
     }
 });
 
