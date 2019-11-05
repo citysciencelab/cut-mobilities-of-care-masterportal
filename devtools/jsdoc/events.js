@@ -944,11 +944,13 @@
  * @example Radio.trigger("ModelList", "getModelsByAttributes", attrs)
  */
 
- /**
+/**
  * @event Core.ModelList#RadioTriggerModelListReplaceModelById
  * @description See {@link List#replaceModelById}
  * @example Radio.trigger("ModelList", "replaceModelById", id, model)
- *//**
+ */
+
+/**
  * @event Core.ModelList#RadioTriggerModelListSetIsSelectedOnChildLayers
  * @description See {@link List#setIsSelectedOnChildLayers}
  * @example Radio.trigger("ModelList", "setIsSelectedOnChildLayers", model)
