@@ -55,7 +55,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         let level;
 
         if (layerList) {
-            level = layerList[0].get("format").level;
+            level = layerList[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
         }
 
         this.set("level", level);

@@ -28,12 +28,12 @@ const BalkendiagrammTheme = Theme.extend({
         const element = this.get("gfiContent")[0],
             content = {},
             layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")}),
-            layerDataFormat = _.isUndefined(layerList) ? null : layerList[0].get("format");
+            layerDataFormat = _.isUndefined(layerList) ? null : layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
 
         // get the description of this diagram
-        this.set("description", layerList[0].get("description"));
+        this.set("description", layerList[0].get("gfiFormat").gfiBildungsatlasDescription);
 
-        if (layerDataFormat !== null && layerDataFormat.description === "Stadtteile") {
+        if (layerDataFormat !== null && layerDataFormat.layerType === "Stadtteile") {
             this.set("Title", element.Stadtteil);
 
             content[element.Stadtteil] = this.get("latestStatistic");
@@ -41,20 +41,20 @@ const BalkendiagrammTheme = Theme.extend({
             content.Hamburg = element["Summe hamburg"];
 
             // Check if the layer of wanderungen by the attribute description
-            if (layerDataFormat.type === "anteilWanderungen") {
+            if (layerDataFormat.themeUnit === "anteilWanderungen") {
                 content["In " + element.Stadtteil] = this.get("latestStatistic");
                 content["Anteil der Zuzüge aus dem Umland:"] = element["Zuzuege aus_umland"];
                 content["Anteil der Zuzüge ins Umland:"] = element["Fortzuege aus_dem_umland"];
             }
         }
-        else if (layerDataFormat !== null && layerDataFormat.description === "Sozialräume") {
+        else if (layerDataFormat !== null && layerDataFormat.layerType === "Sozialräume") {
             this.set("Title", element["Sozialraum name"]);
 
             content[element["Sozialraum name"]] = this.get("latestStatistic");
             content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
             content.Hamburg = element["Summe hamburg"];
         }
-        else if (layerDataFormat !== null && layerDataFormat.description === "Statistische Gebiete") {
+        else if (layerDataFormat !== null && layerDataFormat.layerType === "Statistische Gebiete") {
             this.set("Title", element.Stadtteil + ": " + element.Statgebiet);
 
             content["Statistisches Gebiet"] = this.get("latestStatistic");
@@ -62,7 +62,7 @@ const BalkendiagrammTheme = Theme.extend({
             content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
             content.Hamburg = element["Summe hamburg"];
 
-            if (layerDataFormat.type === "anteilWanderungen") {
+            if (layerDataFormat.themeUnit === "anteilWanderungen") {
                 content["im Statistischen Gebiet"] = this.get("latestStatistic");
             }
         }
@@ -74,7 +74,7 @@ const BalkendiagrammTheme = Theme.extend({
 
         // set the layer data format
         this.set("layerDataFormat", layerDataFormat);
-        this.set("layerDataFormatType", layerDataFormat.type);
+        this.set("layerDataFormatType", layerDataFormat.themeUnit);
 
         // set the content of the template
         this.set("content", content);
@@ -88,14 +88,14 @@ const BalkendiagrammTheme = Theme.extend({
         const element = this.get("gfiContent"),
             layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")}),
             dataset = [],
-            layerDataFormat = layerList[0].get("format");
+            layerDataFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
         let key,
             year;
 
         for (key in element.allProperties) {
             if (key.includes("jahr_")) {
                 year = key.replace("jahr_", "");
-                if (layerDataFormat.category === "schule") {
+                if (layerDataFormat.themeCategory === "schule") {
                     year = Number(year.slice(-2)) + "/" + (Number(year.slice(-2)) + 1);
                 }
                 dataset.push({"year": year, "number": Number(element.allProperties[key])});
@@ -124,10 +124,10 @@ const BalkendiagrammTheme = Theme.extend({
             if (content[key] === null || _.isUndefined(content[key])) {
                 content[key] = "*g.F.";
             }
-            else if (layerDataFormat.type === "anteil") {
+            else if (layerDataFormat.themeUnit === "anteil") {
                 content[key] = Math.round(content[key]) + "%";
             }
-            else if (layerDataFormat.type === "anteilWanderungen") {
+            else if (layerDataFormat.themeUnit === "anteilWanderungen") {
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + element.Stadtteil)) {
                     content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic") * 100) / 100 : Math.round(this.get("latestStatistic") * 100) / 100;
                 }
