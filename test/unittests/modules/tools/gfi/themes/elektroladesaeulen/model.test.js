@@ -55,14 +55,14 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
     describe("createGfiHeadingChargingStation", function () {
         it("should return an object with keys and blank values for undefined input", function () {
             expect(model.createGfiHeadingChargingStation(undefined)).to.be.an("object").that.includes({
-                StandortID: "",
+                StandortId: "",
                 Adresse: "",
                 Eigentümer: ""
             });
         });
         it("should return an object with keys and blank values for empty object input", function () {
             expect(model.createGfiHeadingChargingStation({})).to.be.an("object").that.includes({
-                StandortID: "",
+                StandortId: "",
                 Adresse: "",
                 Eigentümer: ""
             });
@@ -77,7 +77,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortID: "100",
+                StandortId: "100",
                 Adresse: "Musterstrasse, 99999 Hamburg",
                 Eigentümer: "Mustermann"
             });
@@ -92,7 +92,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortID: "100",
+                StandortId: "100",
                 Adresse: "",
                 Eigentümer: "Mustermann"
             });

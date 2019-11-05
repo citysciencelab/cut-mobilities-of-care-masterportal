@@ -47,4 +47,60 @@ describe("tools/gfi/themes/Model", function () {
             });
         });
     });
+    describe("translateNameFromObject", function () {
+        it("should return 'val2' for origName= 'another_' and condition= 'startsWith'", function () {
+            const preGfi = {
+                key1: "val1",
+                another_key: "val2"
+            };
+
+            expect(model.translateNameFromObject(preGfi, "another_", "startsWith")).to.equal("val2");
+        });
+        it("should return 'val2' for origName= 'key' and condition= 'endsWith'", function () {
+            const preGfi = {
+                key1: "val1",
+                another_key: "val2"
+            };
+
+            expect(model.translateNameFromObject(preGfi, "key", "endsWith")).to.equal("val2");
+        });
+        it("should return 'val2' for origName= 'other_k' and condition= 'contains'", function () {
+            const preGfi = {
+                key1: "val1",
+                another_key: "val2"
+            };
+
+            expect(model.translateNameFromObject(preGfi, "other_k", "contains")).to.equal("val2");
+        });
+        it("should return undefined for invalid condition", function () {
+            const preGfi = {
+                key1: "val1",
+                another_key: "val2"
+            };
+
+            expect(model.translateNameFromObject(preGfi, "other_k", "fooBar")).to.be.undefined;
+        });
+        it("should return undefined for undefined condition", function () {
+            const preGfi = {
+                key1: "val1",
+                another_key: "val2"
+            };
+
+            expect(model.translateNameFromObject(preGfi, "other_k", undefined)).to.be.undefined;
+        });
+        it("should return undefined for empty preGfi", function () {
+            expect(model.translateNameFromObject({}, "other_k", "contains")).to.be.undefined;
+        });
+    });
+    describe("checkIfMatchesValid", function () {
+        it("should return false for more than 1 match", function () {
+            expect(model.checkIfMatchesValid("", "", ["key1", "key2"])).to.be.false;
+        });
+        it("should return true for exactly 1 match", function () {
+            expect(model.checkIfMatchesValid("", "", ["key1"])).to.be.true;
+        });
+        it("should return false for 0 matches", function () {
+            expect(model.checkIfMatchesValid("", "", [])).to.be.false;
+        });
+    });
 });

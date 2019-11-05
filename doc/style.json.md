@@ -44,6 +44,16 @@ Wird in der **[config.json](config.json.md)** in der Layerconfiguration der Para
 |clusterTextStrokeWidth|nein|Integer|3|Breite der Textstriche. Bei geclusterten Features siehe **[config.json](config.json.md)**|
 
 
+#### STYLE FIELD ####
+Das styleField kann entweder ein String sein. Dann wird direkt der Wert verwendet, der sich hinter diesem Attribut des Features befindet.
+Das styleField kann jedoch auch ein Objekt sein. Dann gelten folgende Parameter.
+Es darf nur ein einziges Attribut gefunden werden, das dem "name" und der "condition" entspricht. 
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||String der gegen alle Attributnamen des Features mit der "condition" geprüft wird.|
+|condition|ja|enum["startsWith", "endsWith", "contains"]||Bedingung die erfüllt sein muss. |
+
 ## Spezielle Parameter ##
 Einige Parameter sind nur bei bestimmten Kombinationen von "class" und "subClass" notwendig.
 So gibt es folgende Kombinationen:
@@ -79,7 +89,7 @@ Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|styleField|ja|String||Attribut des Features, nach dessen Wert das Icon gesetzt wird.|
+|**[styleField](#markdown-header-style-field)**|ja|String/Object||Attribut des Features, nach dessen Wert das Icon gesetzt wird.|
 |styleFieldValues|ja|Array [**[styleFieldValue](#markdown-header-styleFieldValue)**]||Object für Attributwert, das den Custom Style setzt .|
 
 ```json
@@ -228,7 +238,7 @@ Bei "class"=== "POLYGON" und "subClass" === "CUSTOM" wird ein flächenhafter Sty
 |polygonFillColor|nein|Array [Integer]|[255, 255, 255, 1]|Füllfarbe des Polygon.|
 |polygonStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe des Polygonrandes in rgba.|
 |polygonStrokeWidth|nein|Integer|2|Breite des Polygonrandes.|
-|styleField|ja|String||Attribut, nach dem das Polygon eingefärbt wird.|
+|**[styleField](#markdown-header-style-field)**|ja|String/Object||Attribut des Features, nach dessen Wert das Icon gesetzt wird.|
 |styleFieldValues|ja|Array[**[polygonStyleFieldValue](#markdown-header-polygonStyleFieldValue)**]||Zuordnung der Farbe zum Attributwert des Features.|
 
 ### polygonStyleFieldValue ###
