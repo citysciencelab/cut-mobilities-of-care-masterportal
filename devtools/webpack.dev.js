@@ -10,7 +10,7 @@ const merge = require("webpack-merge"),
     /* eslint-disable no-process-env */
     proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
     /* eslint-disable no-process-env */
-    proxyAgent = new HttpsProxyAgent(proxyServer);
+    proxyAgent = proxyServer !== undefined ? new HttpsProxyAgent(proxyServer) : "";
 
 let proxies;
 
