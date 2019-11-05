@@ -85,9 +85,11 @@ var sbconfig, controls, controlsView;
  * @return {void}.
  */
 function loadApp () {
+    const allCustomModules = /* eslint-disable no-undef */CUSTOMMODULES/* eslint-enable no-undef */;
 
     // Prepare config for Utils
     var utilConfig = {},
+        style,
         layerInformationModelSettings = {},
         cswParserSettings = {},
         alertingConfig = Config.alerting ? Config.alerting : {};
@@ -302,8 +304,7 @@ function loadApp () {
         }
     });
 
-    const style = Radio.request("Util", "getUiStyle");
-
+    style = Radio.request("Util", "getUiStyle");
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -450,24 +451,10 @@ function loadApp () {
 
     new HighlightFeature();
 
-    console.log(Config.customModules);
-
-    let allCustomModules = CUSTOMMODULES;
-    console.log(allCustomModules);
-
-
-    //Config.customModules.forEach((customModuleRelativePath) => {
     Config.customModules.forEach((customModuleKey) => {
         if (allCustomModules[customModuleKey] !== undefined) {
-
-            /* eslint-disable no-undef */
             // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-            console.log(allCustomModules[customModuleKey]);
-
-            import(
-                `../customModules/${allCustomModules[customModuleKey]}.js`
-                /* webpackMode: "eager" */
-                )
+            import(`../customModules/${allCustomModules[customModuleKey]}.js`/* webpackMode: "eager" */)
                 .then(module => {
                     /* eslint-disable new-cap */
                     new module.default();
@@ -476,11 +463,8 @@ function loadApp () {
                     console.error(error);
                     Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
                 });
-            /* eslint-enable no-undef */
         }
     });
-
-
 
     Radio.trigger("Util", "hideLoader");
 }

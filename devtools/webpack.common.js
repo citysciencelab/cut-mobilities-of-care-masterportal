@@ -9,11 +9,11 @@ if (fs.existsSync("./customModules/customModulesConf.json")) {
     path2CustomModules = require("../customModules/customModulesConf.json");
 }
 module.exports = function () {
-    let entryPoints = {},
+    const entryPoints = {},
         customModules = {};
 
-    for (let entryPointKey in path2CustomModules) {
-        let customModuleFilename = path2CustomModules[entryPointKey],
+    for (const entryPointKey in path2CustomModules) {
+        const customModuleFilename = path2CustomModules[entryPointKey],
             customModulePath = "./customModules/" + customModuleFilename;
 
         if (fs.existsSync(customModulePath + ".js")) {
@@ -21,14 +21,9 @@ module.exports = function () {
             customModules[entryPointKey] = customModuleFilename;
         }
         else {
-            console.log("WARNING: IGNORED CUSTOM MODULE \"" + entryPointKey + "\"");
+            console.error("WARNING: IGNORED CUSTOM MODULE \"" + entryPointKey + "\"");
         }
     }
-
-    console.log(entryPoints);
-    console.log(customModules);
-
-
 
     entryPoints.masterportal = "./js/main.js";
 
@@ -102,7 +97,7 @@ module.exports = function () {
             // create css under build/
             new MiniCssExtractPlugin({
                 filename: "css/style.css"
-                /*chunkFilename: "css/[id].css"*/
+                /* chunkFilename: "css/[id].css" */
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
