@@ -64,6 +64,7 @@ außerdem
 # setx https_proxy <proxy-url:port>
 --> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
 
+Die Proxies müssen ebenfalls in den Systemvariablen eingetragen werden.
 ```
 
 #### npm-Pakete global als Admin installieren

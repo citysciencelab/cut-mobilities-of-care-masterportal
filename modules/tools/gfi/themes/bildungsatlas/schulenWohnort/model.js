@@ -70,7 +70,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     onFeaturesLoadedEvent: function (layerId) {
         const layerWohnort = this.getWohnortLayer(),
-            layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+            layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
             conf = this.getStatisticAreasConfig(layerSchuleLevel),
             layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
             statGebNr = this.get("statGebNr");
@@ -93,7 +93,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     create: function () {
         if (this.parseGfiContent(this.get("gfiContent"))) {
             const layerWohnort = this.getWohnortLayer(),
-                layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+                layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
                 statGebNr = this.get("statGebNr"),
                 level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
@@ -131,7 +131,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     destroy: function () {
         const layerWohnort = this.getWohnortLayer(),
-            layerSchuleLevel = layerWohnort[0].get("schuleLevel"),
+            layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
             layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel);
 
         if (layerWohnort) {
