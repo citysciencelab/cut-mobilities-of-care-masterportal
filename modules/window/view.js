@@ -229,10 +229,10 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
                 leftPos = newPosX + "px";
             }
 
-            if (newPosY + height  > mapHeight - 40) {
+            if (newPosY + height > mapHeight - 40) {
                 topPos = mapHeight - height - 40 + "px";
             }
-            else if (newPosY < 20 ) {
+            else if (newPosY < 20) {
                 topPos = 20 + "px";
             }
             else {
@@ -286,7 +286,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
                 leftPos = mapWidth - 40 + "px";
             }
             else if (newPosX - width < 20) {
-                leftPos =  20 + width + "px";
+                leftPos = 20 + width + "px";
             }
             else {
                 leftPos = newPosX + "px";
