@@ -76,6 +76,7 @@ module.exports = function () {
                 }
             ]
         },
+        /*
         optimization: {
             splitChunks: {
                 cacheGroups: {
@@ -88,6 +89,7 @@ module.exports = function () {
                 },
             },
         },
+        */
         plugins: [
             // provide libraries globally
             new webpack.ProvidePlugin({
@@ -99,8 +101,8 @@ module.exports = function () {
             }),
             // create css under build/
             new MiniCssExtractPlugin({
-                filename: "css/style.css",
-                chunkFilename: "css/[id].css"
+                filename: "css/style.css"
+                /*chunkFilename: "css/[id].css"*/
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
