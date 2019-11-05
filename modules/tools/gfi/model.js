@@ -387,7 +387,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         _.each(layerlist, function (vectorLayer) {
             var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
-                        return layer.get("name") === vectorLayer.get("name");
+                        return layer.get("id") === vectorLayer.get("id");
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),
