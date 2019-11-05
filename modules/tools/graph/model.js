@@ -180,13 +180,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Function}  - a ordinal d3 scale function to translate values into pixel
      */
     createOrdinalScale: function (data, rangeArray, attrArray) {
-        var values = [],
+        const values = [],
             known = {};
-        let i,
-            atom,
-            n,
-            attr,
-            rArray = rangeArray;
+        let rArray = rangeArray;
 
         if (rArray === undefined || rArray === null) {
             // using d3 .range function with parameter undefined or null would throw an error
@@ -195,17 +191,15 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         }
 
         if (Array.isArray(data) && Array.isArray(attrArray)) {
-            for (i in data) {
-                atom = data[i];
-                for (n in attrArray) {
-                    attr = attrArray[n];
+            data.forEach(function (atom) {
+                attrArray.forEach(function (attr) {
                     if (!atom || !atom.hasOwnProperty(attr) || known.hasOwnProperty(atom[attr])) {
-                        continue;
+                        return;
                     }
                     values.push(atom[attr]);
                     known[atom[attr]] = true;
-                }
-            }
+                });
+            });
         }
 
         return scaleBand()
@@ -594,6 +588,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 flatAttrToShowArray.push(attrToShow);
             }
         });
+
         return flatAttrToShowArray;
     },
 
@@ -667,9 +662,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             this.appendLegend(svg, graphConfig.legendData);
         }
 
-        for (const yAttrToShowKey in attrToShowArray) {
-            const yAttrToShow = attrToShowArray[yAttrToShowKey];
-
+        attrToShowArray.forEach(function (yAttrToShow) {
             if (typeof yAttrToShow === "object") {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
                 this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
@@ -682,7 +675,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize);
             }
-        }
+        }, this);
 
         // Add the Axis
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
