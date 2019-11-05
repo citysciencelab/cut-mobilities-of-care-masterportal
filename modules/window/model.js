@@ -7,7 +7,7 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         rotationAngle: 0
     },
 
-     /**
+    /**
      * @class Window
      * @description Model for MapMarker and Highlighting
      * @extends Backbone.Model
@@ -40,7 +40,8 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
 
     /**
      * Sets the value for "isCollapsed"
-     *  @return {void}
+     * @param {Boolean} value true/ false
+     * @return {void}
      */
     setCollapse: function (value) {
         this.set("isCollapsed", value);
@@ -48,7 +49,8 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
 
     /**
      * Sets the value for "isVisible"
-     *  @return {void}
+     * @param {Boolean} value true/ false
+     * @return {void}
      */
     setIsVisible: function (value) {
         this.set("isVisible", value);
