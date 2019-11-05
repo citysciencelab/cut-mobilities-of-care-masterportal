@@ -24,7 +24,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         "touchend .title": "touchMoveEnd"
     },
 
-     /**
+    /**
      * @class WindowView
      * @extends Backbone.View
      * @memberof Window
@@ -82,9 +82,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     startX: 0,
     startY: 0,
     windowLeft: 0,
-    windowTop:0,
+    windowTop: 0,
 
-     /**
+    /**
      * Renders the Window
      * @return {Window} returns this
      */
@@ -144,7 +144,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         }
         return this;
     },
-     /**
+    /**
      * Minimizes the Window
      *  @return {void}
      */
@@ -189,14 +189,15 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      */
     touchStartWindow: function (evt) {
         var touch = evt.changedTouches[0],
-            rect =  document.getElementsByClassName("tool-window")[0].getBoundingClientRect();
+            rect = document.getElementsByClassName("tool-window")[0].getBoundingClientRect();
+
         this.windowLeft = rect.left;
         this.windowTop = rect.top;
-        this.startX = parseInt(touch.clientX);
-        this.startY = parseInt(touch.clientY);
-        evt.preventDefault()
+        this.startX = parseInt(touch.clientX, 10);
+        this.startY = parseInt(touch.clientY, 10);
+        evt.preventDefault();
     },
-     /**
+    /**
      * Triggered on TouchMove
      * @param {Event} evt Event, being moved
      * @return {void}
@@ -207,64 +208,145 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             height = document.getElementsByClassName("tool-window")[0].clientHeight,
             mapWidth = document.getElementById("map").clientWidth,
             mapHeight = document.getElementById("map").clientHeight,
-            distX = parseInt(touch.clientX) - this.startX,
-            distY = parseInt(touch.clientY) - this.startY,
+            distX = parseInt(touch.clientX, 10) - this.startX,
+            distY = parseInt(touch.clientY, 10) - this.startY,
             newPosX,
-            newPosY;
+            newPosY,
+            leftPos,
+            topPos;
 
-            if (this.model.get("rotationAngle") === 0) {
-                newPosX = distX + parseInt(this.windowLeft);
-                newPosY = distY + parseInt(this.windowTop);
-                this.$el.css({
-                    "left": ( (newPosX +  width > mapWidth) ? (mapWidth - width - 40) : (newPosX < 20 )? 20 : newPosX) + "px",
-                    "top":  ( (newPosY + height  > mapHeight - 40) ? (mapHeight - height - 40) : (newPosY < 20 )? 20 : newPosY) + "px",
-                    "width": width,
-                    "transform-origin": "top left"
-                });
+        if (this.model.get("rotationAngle") === 0) {
+            newPosX = distX + parseInt(this.windowLeft, 10);
+            newPosY = distY + parseInt(this.windowTop, 10);
+
+            if (newPosX +  width > mapWidth) {
+                leftPos = mapWidth - width - 40 + "px";
             }
-            else if (this.model.get("rotationAngle") === 90) {
-                newPosX = distX + parseInt(this.windowLeft) + height;
-                newPosY = distY + parseInt(this.windowTop);
-
-                this.$el.css({
-                    "left": ( (newPosX  > mapWidth - 20) ? (mapWidth- 20) : (newPosX -height < 20 )? 20 + height : newPosX) + "px",
-                    "top":  ( (newPosY + width  > mapHeight - 40) ? (mapHeight - width - 40) : newPosY < 20 ? 20 : newPosY) + "px",
-                    "width": width,
-                    "transform-origin": "top left"
-                });
-
+            else if (newPosX < 20 ) {
+                leftPos = 20 + "px";
             }
-            if (this.model.get("rotationAngle") === 180) {
-                newPosX = distX + parseInt(this.windowLeft) + width;
-                newPosY = distY + parseInt(this.windowTop) + height;
-                this.$el.css({
-                    "left": ( (newPosX >mapWidth) ? (mapWidth - 40) : (newPosX - width < 20 )? 20 + width : newPosX) + "px",
-                    "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : (newPosY - height  < 20 )? 20 + height: newPosY) + "px",
-                    "width": width,
-                    "transform-origin": "top left"
-                });
-            }
-            else if (this.model.get("rotationAngle") === 270) {
-                newPosX = distX + parseInt(this.windowLeft);
-                newPosY = distY + parseInt(this.windowTop) + width;
-
-                this.$el.css({
-                    "left": ( (newPosX + height > mapWidth - 20) ? (mapWidth - height - 20) : (newPosX < 20 )? 20  : newPosX) + "px",
-                    "top":  ( (newPosY  > mapHeight - 40) ? (mapHeight - 40) : newPosY -width  < 20 ? 20 + width : newPosY) + "px",
-                    "width": width,
-                    "transform-origin": "top left"
-                });
+            else {
+                leftPos = newPosX + "px";
             }
 
-            evt.preventDefault()
+            if (newPosY + height  > mapHeight - 40) {
+                topPos = mapHeight - height - 40 + "px";
+            }
+            else if (newPosY < 20 ) {
+                topPos = 20 + "px";
+            }
+            else {
+                topPos = newPosY + "px";
+            }
 
+            this.$el.css({
+                "left": leftPos,
+                "top": topPos,
+                "width": width,
+                "transform-origin": "top left"
+            });
+        }
+        else if (this.model.get("rotationAngle") === 90) {
+            newPosX = distX + parseInt(this.windowLeft, 10) + height;
+            newPosY = distY + parseInt(this.windowTop, 10);
+
+            if (newPosX > mapWidth - 20) {
+                leftPos = mapWidth - 20 + "px";
+            }
+            else if (newPosX -height < 20) {
+                leftPos = 20 + height + "px";
+            }
+            else {
+                leftPos = newPosX + "px";
+            }
+
+            if (newPosY + width  > mapHeight - 40) {
+                topPos = mapHeight - width - 40;
+            }
+            else if (newPosY < 20) {
+                topPos = 20 + "px";
+            }
+            else {
+                topPos = newPosY + "px";
+            }
+
+            this.$el.css({
+                "left": leftPos,
+                "top": topPos,
+                "width": width,
+                "transform-origin": "top left"
+            });
+
+        }
+        if (this.model.get("rotationAngle") === 180) {
+            newPosX = distX + parseInt(this.windowLeft, 10) + width;
+            newPosY = distY + parseInt(this.windowTop, 10) + height;
+
+            if (newPosX > mapWidth) {
+                leftPos = mapWidth - 40 + "px";
+            }
+            else if (newPosX - width < 20 ) {
+                leftPos =  20 + width + "px";
+            }
+            else {
+                leftPos = newPosX + "px";
+            }
+
+            if (newPosY  > mapHeight - 40) {
+                topPos = mapHeight - 40 + "px";
+            }
+            else if (newPosY - height < 20 ) {
+                topPos =  20 + height + "px";
+            }
+            else {
+                topPos = newPosY + "px";
+            }
+
+            this.$el.css({
+                "left": leftPos,
+                "top": topPos,
+                "width": width,
+                "transform-origin": "top left"
+            });
+        }
+        else if (this.model.get("rotationAngle") === 270) {
+            newPosX = distX + parseInt(this.windowLeft, 10);
+            newPosY = distY + parseInt(this.windowTop, 10) + width;
+
+            if (newPosX + height > mapWidth - 20) {
+                leftPos = mapWidth - height - 20 + "px";
+            }
+            else if (newPosX < 20) {
+                leftPos = 20 + "px";
+            }
+            else {
+                leftPos = newPosX + "px";
+            }
+
+            if (newPosY  > mapHeight - 40) {
+                topPos = mapHeight - 40 + "px";
+            }
+            else if (newPosY - width < 20) {
+                topPos = 20 + width + "px";
+            }
+            else {
+                topPos = newPosY + "px";
+            }
+
+            this.$el.css({
+                "left": leftPos,
+                "top": topPos,
+                "width": width,
+                "transform-origin": "top left"
+            });
+        }
+        evt.preventDefault();
     },
      /**
      * Triggered on TouchEnd
-     * @param {Event} evt Event, window on touchend
      * @return {void}
      */
-    touchMoveEnd: function (evt) {
+    touchMoveEnd: function () {
         this.$el.css({
             "width": ""
         });
