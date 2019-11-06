@@ -21,64 +21,58 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
      * @returns {void}
      */
     replaceValuesWithRealResults: function () {
-        const attr = this.get("gfiContent").allProperties;
+        const attr = this.get("gfiContent").allProperties,
+            regex = /\B(?=(\d{3})+(?!\d))/g;
 
-        if (!_.isUndefined(attr)) {
-            if (!_.isUndefined(attr.C_S_Name)) {
-                this.set("schoolName", attr.C_S_Name);
-            }
-            if (!_.isUndefined(attr.C_S_Str) && !_.isUndefined(attr.C_S_HNr)) {
-                this.set("streetNo", attr.C_S_Str + " " + attr.C_S_HNr);
-            }
-            if (!_.isUndefined(attr.C_S_PLZ) && !_.isUndefined(attr.C_S_Ort)) {
-                this.set("postCity", attr.C_S_PLZ + " " + attr.C_S_Ort);
-            }
-            if (!_.isUndefined(attr.C_S_SI)) {
-                this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
-            }
-            if (!_.isUndefined(attr.SchPu_PrSt)) {
-                this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
-            }
-            if (!_.isUndefined(attr.C_S_Zweig)) {
-                this.set("schoolWithBranch", attr.C_S_Zweig === 0 ? "nein" : "ja");
-            }
-            if (!_.isUndefined(attr.C_S_SuS_ES)) {
-                this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
-            }
-            if (!_.isUndefined(attr.C_S_GTA)) {
-                this.set("allDaySchool", attr.C_S_GTA === 0 ? "nein" : "ja");
-            }
-            if (!_.isUndefined(attr.C_S_SuS)) {
-                this.set("countStudentsAll", attr.C_S_SuS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.C_S_SuS) && !_.isUndefined(attr.C_S_SuS_ES)) {
-                this.set("countStudents", (attr.C_S_SuS - attr.C_S_SuS_ES).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.C_S_SuS_PS)) {
-                this.set("countStudentsPrimary", attr.C_S_SuS_PS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.C_S_SuS_S1)) {
-                this.set("countStudentsSecondaryOne", attr.C_S_SuS_S1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.C_S_SuS_S2)) {
-                this.set("countStudentsSecondaryTwo", attr.C_S_SuS_S2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.Schule_SuS)) {
-                this.set("countStudentsAllPlace", attr.Schule_SuS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.Schule_PS)) {
-                this.set("countStudentsPrimaryAllPlace", attr.Schule_PS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.Schule_S1)) {
-                this.set("countStudentsSecondary1AllPlace", attr.Schule_S1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.Schule_S2)) {
-                this.set("countStudentsSecondary2AllPlace", attr.Schule_S2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (!_.isUndefined(attr.C_S_HomP)) {
-                this.set("schoolUrl", attr.C_S_HomP);
-            }
+        this.set("schoolName", attr.C_S_Name);
+        this.set("streetNo", attr.C_S_Str + " " + attr.C_S_HNr);
+        this.set("postCity", attr.C_S_PLZ + " " + attr.C_S_Ort);
+
+        if (attr.C_S_SI !== undefined) {
+            this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
         }
+        else {
+            this.set("socialIndex", "");
+        }
+
+        if (attr.SchPu_PrSt !== undefined) {
+            this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
+        }
+        else {
+            this.set("hooverSchool", "");
+        }
+
+        if (attr.C_S_Zweig !== undefined) {
+            this.set("schoolWithBranch", attr.C_S_Zweig === 0 ? "nein" : "ja");
+        }
+        else {
+            this.set("schoolWithBranch", "");
+        }
+
+        if (attr.C_S_SuS_ES !== undefined) {
+            this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
+        }
+        else {
+            this.set("preSchool", "");
+        }
+
+        if (attr.C_S_GTA !== undefined) {
+            this.set("allDaySchool", attr.C_S_GTA === 0 ? "nein" : "ja");
+        }
+        else {
+            this.set("allDaySchool", "");
+        }
+
+        this.set("countStudentsAll", attr.C_S_SuS.toString().replace(regex, "."));
+        this.set("countStudents", (attr.C_S_SuS - attr.C_S_SuS_ES).toString().replace(regex, "."));
+        this.set("countStudentsPrimary", attr.C_S_SuS_PS.toString().replace(regex, "."));
+        this.set("countStudentsSecondaryOne", attr.C_S_SuS_S1.toString().replace(regex, "."));
+        this.set("countStudentsSecondaryTwo", attr.C_S_SuS_S2.toString().replace(regex, "."));
+        this.set("countStudentsAllPlace", attr.Schule_SuS.toString().replace(regex, "."));
+        this.set("countStudentsPrimaryAllPlace", attr.Schule_PS.toString().replace(regex, "."));
+        this.set("countStudentsSecondary1AllPlace", attr.Schule_S1.toString().replace(regex, "."));
+        this.set("countStudentsSecondary2AllPlace", attr.Schule_S2.toString().replace(regex, "."));
+        this.set("schoolUrl", attr.C_S_HomP);
     },
 
     /**
