@@ -8,9 +8,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         renderToWindow: true,
         checkBoxAddress: undefined,
         checkBoxRaster: undefined,
-        drawInteraction: undefined,
-        isCollapsed: undefined,
-        isCurrentWin: undefined,
         data: {},
         dataReceived: false,
         requesting: false,
@@ -36,23 +33,21 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {Boolean} renderToWindow=true render to window for tools
      * @property {*} checkBoxAddress=undefined checkbox snippet for alkis adressen layer
      * @property {*} checkBoxRaster=undefined checkbox snippet for zensus raster layer
-     * @property {*} drawInteraction=undefined todo
-     * @property {*} isCollapsed=undefined todo
-     * @property {*} isCurrentWin=undefined todo
-     * @property {Object} data={} todo
-     * @property {Boolean} dataReceived=false todo
-     * @property {Boolean} requesting=false todo
+     * @property {Object} data={} data of the wps request
+     * @property {Boolean} dataReceived=false true | false, depending on the request
+     * @property {Boolean} requesting=false  true | false, depending on the request
      * @property {String} style = "default" - style for MasterPortal ("table" - for table View)
-     * @property {Object} snippetDropdownModel={}
-     * @property {*} metaDataLink=undefined todo
+     * @property {Object} snippetDropdownModel={} the model of the graphical selection
+     * @property {String} metaDataLink=undefined link to meta data
      * @property {String} mrhId="46969C7D-FAA8-420A-81A0-8352ECCFF526" mrh meta data id
      * @property {String} fhhId="B3FD9BD5-F614-433F-A762-E14003C300BF" fhh meta data id
-     * @property {*} fhhDate=undefined todo
-     * @property {Array} uniqueIdList=[]
+     * @property {*} fhhDate=undefined the date
+     * @property {Array} uniqueIdList=[] array to store unique ids in
      * @property {String} glyphicon="glyphicon-wrench" glyphicon to show
      * @property {String} rasterLayerId="13023" layerId for layer with raster
      * @property {String} alkisAdressLayerId="9726" layerId for the alkis adresses
      * @property {String} populationReqServiceId="2" serviceid
+     * @property {String} id= "Einwohnerabfrage" id of this model
      * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
      * @listens Core#RadioTriggerModelListUpdateVisibleInMapList
@@ -83,7 +78,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
         this.listenTo(this, {
             "change:isActive": function () {
-                this.setStatus(this.get("isActive"));
+                this.changeGraphicalSelectStatus(this.get("isActive"));
             }
         });
         this.listenTo(Radio.channel("CswParser"), {
@@ -114,15 +109,16 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
     },
     /**
-     * todo
+     * Resets the GraphicalSelect
+     * @fires Snippets.GraphicalSelect#resetView
      * @returns {void}
      */
     resetView: function () {
         Radio.trigger("GraphicalSelect", "resetView", this.id);
     },
     /**
-     * todo
-     * @param {*} cswObj todo
+     * Updates the metadata for the unique id of the given csw object
+     * @param {Object} cswObj the csw object
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
@@ -132,27 +128,27 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }
     },
     /**
-     * todo
-     * @param {*} uniqueIdList todo
-     * @param {*} uniqueId todo
-     * @returns {*} todo
+     * Checks if the id is in the list.
+     * @param {Array} uniqueIdList array with ids
+     * @param {String} uniqueId is contained?
+     * @returns {Boolean} true, if id is contained in list
      */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
     /**
-     * todo
-     * @param {*} uniqueIdList todo
-     * @param {*} uniqueId todo
+     * Removes the id from the list.
+     * @param {Array} uniqueIdList array with ids
+     * @param {String} uniqueId to remove from array
      * @returns {void}
      */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
     /**
-     * todo
-     * @param {*} attr todo
-     * @param {*} parsedData todo
+     * If attr equals "fhhDate" the parsed date is set to model
+     * @param {String} attr attribute of the metadata
+     * @param {Object} parsedData date of this param is set
      * @returns {void}
      */
     updateMetaData: function (attr, parsedData) {
@@ -173,8 +169,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Called when the wps modules returns a request
-     * @param  {string} response - the response xml of the wps
-     * @param  {number} status - the HTTPStatusCode
+     * @param  {String} response - the response xml of the wps
+     * @param  {Number} status - the HTTPStatusCode
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @returns {void}
      */
@@ -232,7 +228,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Iterates ofer response properties
-     * @param  {object} response - todo
+     * @param  {Object} response - the parsed response from wps
      * @fires Core#RadioRequestUtilPunctuate
      * @returns {void}
      */
@@ -257,11 +253,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Chooses unit based on value, calls panctuate and converts to unit and appends unit
-     * @param  {number} value -
-     * @param  {number} maxDecimals - decimals are cut after maxlength chars
+     * Chooses unit based on value, calls punctuate and converts to unit and appends unit
+     * @param  {Number} value - to inspect
+     * @param  {Number} maxDecimals - decimals are cut after maxlength chars
      * @fires Core#RadioRequestUtilPunctuate
-     * @returns {string} unit
+     * @returns {String} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
         var newValue;
@@ -281,12 +277,12 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
 
     /**
-     * Handles (de-)activation of this Tool
-     * @param {boolean} value flag is tool is ctive
-     * @fires Core#RadioTriggerMapRemoveOverlay
+     * Sets the state at GraphicalSelect - handles (de-)activation of this Tool
+     * @param {Boolean} value flag is tool is active
+     * @fires Snippets.GraphicalSelect#setStatus
      * @returns {void}
      */
-    setStatus: function (value) {
+    changeGraphicalSelectStatus: function (value) {
         if (value) {
             this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
             this.checksSnippetCheckboxLayerIsLoaded(this.get("alkisAdressLayerId"), this.get("checkBoxAddress"));
@@ -295,7 +291,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * runs the csw requests once and removes this callback from the change:isCurrentWin event
+     * runs the csw requests once and removes this callback from the change:isActive event
      * because both requests only need to be executed once
      * @returns {void}
      */
@@ -324,7 +320,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }
     },
     /**
-     * @param  {object} geoJson - todo
+     * Triggers the wps request "einwohner_ermitteln.fmw" for the selected area.
+     * @param  {Object} geoJson GeoJSON to get selected area from
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @fires Core#RadioTriggerWPSRequest
      * @returns {void}
@@ -338,21 +335,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             "such_flaeche": JSON.stringify(geoJson)
         }, this.handleResponse.bind(this));
     },
-    /**
-     * todo
-     * @param {*} geoJson todo
-     * @returns {void}
-     */
-    prepareData: function (geoJson) {
-        var prepared = {};
 
-        prepared.type = geoJson.getType();
-        prepared.coordinates = geoJson.geometry;
-    },
     /**
      * checks if snippetCheckboxLayer is loaded and toggles the button accordingly
      * @param {String} layerId - id of the addressLayer
-     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
+     * @param {SnippetCheckboxModel} snippetCheckboxModel - snippet checkbox model for a layer
      * @fires Core#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
@@ -370,7 +357,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * show or hide the zensus raster layer
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @returns {void}
      */
     toggleRasterLayer: function (value) {
@@ -385,7 +372,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * show or hide the alkis adressen layer
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @returns {void}
      */
     toggleAlkisAddressLayer: function (value) {
@@ -402,7 +389,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * if the model does not exist, add Model from Parser to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
      * @fires Core#RadioRequestModelListGetModelByAttributes
-     * @fires Core#RadioTriggerModelListAddModelByAttributes
      * @returns {void}
      */
     addModelsByAttributesToModelList: function (layerId) {
@@ -430,7 +416,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * sets selected and visibility to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @fires Core#RadioTriggerModelListSetModelAttributesById
      * @returns {void}
      */
@@ -442,8 +428,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
     /**
      * setter for style
-     * @param {string} value - table or default (for master portal)
-     * @returns {this} this
+     * @param {String} value - table or default (for master portal)
+     * @returns {void}
      */
     setStyle: function (value) {
         this.set("style", value);
@@ -451,7 +437,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxAddress
-     * @param {*} value todo
+     * @param {SnippetCheckboxModel} value  the model of the checkbox
      * @returns {void}
      */
     setCheckBoxAddress: function (value) {
@@ -460,7 +446,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxRaster
-     * @param {*} value todo
+     * @param {SnippetCheckboxModel} value the model of the checkbox
      * @returns {void}
      */
     setCheckBoxRaster: function (value) {
@@ -469,7 +455,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the data
-     * @param {*} value todo
+     * @param {Object} value data of the wps request
      * @returns {void}
      */
     setData: function (value) {
@@ -478,7 +464,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the dataReceived
-     * @param {*} value todo
+     * @param {Boolean} value true | false
      * @returns {void}
      */
     setDataReceived: function (value) {
@@ -487,7 +473,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the requesting
-     * @param {*} value todo
+     * @param {Boolean} value true, if requesting
      * @returns {void}
      */
     setRequesting: function (value) {
@@ -495,8 +481,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Sets the snippetDropdownModel
-     * @param {*} value todo
+     * Sets the GraphicalSelectModel
+     * @param {GraphicalSelectModel} value the model of the graphical selectbox
      * @returns {void}
      */
     setDropDownSnippet: function (value) {
@@ -505,7 +491,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the fhhDate
-     * @param {*} value todo
+     * @param {String} value the date
      * @returns {void}
      */
     setFhhDate: function (value) {
@@ -513,27 +499,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Sets the isCollapsed
-     * @param {*} value todo
-     * @returns {void}
-
-     */
-    setIsCollapsed: function (value) {
-        this.set("isCollapsed", value);
-    },
-
-    /**
-     * Sets the isCurrentWin
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setIsCurrentWin: function (value) {
-        this.set("isCurrentWin", value);
-    },
-
-    /**
      * Sets the uniqueIdList
-     * @param {*} value todo
+     * @param {Array} value the array to store ids in
      * @returns {void}
      */
     setUniqueIdList: function (value) {
@@ -542,7 +509,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the metaDataLink
-     * @param {*} value todo
+     * @param {String} value link to the metadata
      * @returns {void}
      */
     setMetaDataLink: function (value) {

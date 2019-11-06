@@ -93,10 +93,10 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             name: this.get("name"),
             type: this.get("type"),
             displayName: this.get("displayName"),
-            values: _.allKeys(this.get("geographicValues")),
+            values: Object.keys(this.get("geographicValues")),
             snippetType: this.get("snippetType"),
             isMultiple: this.get("isMultiple"),
-            preselectedValues: _.allKeys(this.get("geographicValues"))[0]
+            preselectedValues: Object.keys(this.get("geographicValues"))[0]
         }));
     },
     /**
@@ -115,10 +115,10 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         }
         if (value) {
             selectedValues = this.get("snippetDropdownModel").getSelectedValues();
-            this.createDrawInteraction(id, selectedValues.values[0] || _.allKeys(this.get("geographicValues"))[0]);
+            this.createDrawInteraction(id, selectedValues.values[0] || Object.keys(this.get("geographicValues"))[0]);
         }
         else {
-            if (!_.isUndefined(this.get("drawInteraction"))) {
+            if (typeof this.get("drawInteraction") === "object") {
                 this.get("drawInteraction").setActive(false);
             }
             Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
@@ -136,7 +136,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         if (id !== this.id) {
             return;
         }
-        this.get("snippetDropdownModel").updateSelectedValues(_.allKeys(this.get("geographicValues"))[0]);
+        this.get("snippetDropdownModel").updateSelectedValues(Object.keys(this.get("geographicValues"))[0]);
     },
 
     /**
@@ -208,7 +208,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         const that = this;
 
         interaction.on("drawstart", function () {
-            // remove alert of "more than 9 kacheln"
+            // remove alert of "more than X tiles"
             Radio.trigger("Alert", "alert:remove");
             layer.getSource().clear();
         }, this);
@@ -265,29 +265,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     },
 
     /**
-     * Chooses unit based on value, calls panctuate and converts to unit and appends unit.
-     * @param  {number} value - to convert
-     * @param  {number} maxDecimals - decimals are cut after maxlength chars
-     * @fires Core#RadioRequestUtilPunctuate
-     * @returns {String} unit
-     */
-    chooseUnitAndPunctuate: function (value, maxDecimals) {
-        let newValue;
-
-        if (value < 250000) {
-            return Radio.request("Util", "punctuate", value.toFixed(maxDecimals)) + " m²";
-        }
-        if (value < 10000000) {
-            newValue = value / 10000.0;
-
-            return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " ha";
-        }
-        newValue = value / 1000000.0;
-
-        return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " km²";
-    },
-
-    /**
      * Calculates the circle radius and places the circle overlay on geometry change.
      * @param {number} radius - circle radius
      * @param {number[]} coords - point coordinate
@@ -322,7 +299,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
     /**
      * Rounds the given number with the given precision.
      * @param {Number} number to round
-     * @param {*} precision exponent
+     * @param {Number} precision exponent
      * @returns {Number} the rounded number
      */
     precisionRound: function (number, precision) {

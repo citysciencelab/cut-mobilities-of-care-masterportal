@@ -23,7 +23,7 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
         }
     },
     /**
-     * @description Template used to add the dropdon to
+     * @description Template used to add the dropdown to
      * @memberof Snippets.GraphicalSelect
      */
     template: _.template(Template),

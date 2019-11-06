@@ -29,14 +29,18 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
 
         attr.masterPortalVersionNumber = Radio.request("Util", "getMasterPortalVersionNumber");
         $(".ol-viewport").append(this.$el.html(this.template(attr)));
-        _.each(this.model.get("urls"), function (url) {
-            const toolModelId = url.toolModelId;
+        const urls = this.model.get("urls");
 
-            if (toolModelId && toolModelId !== "") {
-                this.addOnClickListenerForTools(toolModelId, "-footerlink");
-                this.addOnClickListenerForTools(toolModelId, "-footerlink-mobile");
-            }
-        }, this);
+        if (urls) {
+            urls.forEach(function (url) {
+                const toolModelId = url.toolModelId;
+
+                if (toolModelId && toolModelId !== "") {
+                    this.addOnClickListenerForTools(toolModelId, "-footerlink");
+                    this.addOnClickListenerForTools(toolModelId, "-footerlink-mobile");
+                }
+            }, this);
+        }
         return this;
     },
     /**
