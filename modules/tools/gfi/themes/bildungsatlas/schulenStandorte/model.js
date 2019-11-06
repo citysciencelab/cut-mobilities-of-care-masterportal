@@ -34,7 +34,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
                 this.set("postCity", attr.C_S_PLZ + " " + attr.C_S_Ort);
             }
             if (!_.isUndefined(attr.C_S_SI)) {
-                this.set("socialIndex", attr.C_S_SI === "-1" ? "nicht vergeben" : attr.C_S_SI);
+                this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
             }
             if (!_.isUndefined(attr.SchPu_PrSt)) {
                 this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
