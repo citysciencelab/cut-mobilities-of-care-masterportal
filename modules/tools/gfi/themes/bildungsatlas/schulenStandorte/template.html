@@ -33,7 +33,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th colspan="2"><%= C_S_Name %></th>
+                <th colspan="2"><%= schoolName %></th>
             </tr>
             </thead>
 
@@ -41,9 +41,9 @@
             <tr colspan="2">
                 <td></td>
                 <td>
-                    <%= C_S_Str %> <%= C_S_HNr %>
+                    <%= streetNo %>
                     <br/>
-                    <%= C_S_PLZ  %> <%= C_S_Ort %>
+                    <%= postCity %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -51,7 +51,7 @@
                     Sozialindex:
                 </td>
                 <td>
-                    <%= C_S_SI %>
+                    <%= socialIndex %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -59,7 +59,7 @@
                     Schwerpunktschule:
                 </td>
                 <td>
-                    <%= SchPu_PrSt %>
+                    <%= hooverSchool %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -67,7 +67,7 @@
                     Schule mit Zweigstelle:
                 </td>
                 <td>
-                    <%= C_S_Zweig %>
+                    <%= schoolWithBranch %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -75,7 +75,7 @@
                     Schule mit Vorschulklasse:
                 </td>
                 <td>
-                    <%= C_S_SuS_ES %>
+                    <%= preSchool %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -83,7 +83,7 @@
                     Schule mit Ganztagesangebot:
                 </td>
                 <td>
-                    <%= C_S_GTA %>
+                    <%= allDaySchool %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -91,7 +91,7 @@
                     Anzahl Schüler am Standort:
                 </td>
                 <td>
-                    <%= C_S_SuS %>
+                    <%= countStudents %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -99,7 +99,7 @@
                     &nbsp;&nbsp;davon in der Primarstufe:
                 </td>
                 <td>
-                    <%= C_S_SuS_PS %>
+                    <%= countStudentsPrimary %>
                 </td>
             </tr>
 
@@ -108,7 +108,7 @@
                     &nbsp;&nbsp;davon in der Sekundarstufe I:
                 </td>
                 <td>
-                    <%= C_S_SuS_S1 %>
+                    <%= countStudentsSecondaryOne %>
                 </td>
             </tr>
 
@@ -117,7 +117,7 @@
                     &nbsp;&nbsp;davon in der Sekundarstufe II:
                 </td>
                 <td>
-                    <%= C_S_SuS_S2 %>
+                    <%= countStudentsSecondaryTwo %>
                 </td>
             </tr>
 
@@ -127,16 +127,16 @@
                 </td>
                 <td>
                     <%  %>
-                    <a href="<%= C_S_HomP %>" target="_blank"><%= C_S_HomP.replace('https://www.','').replace('http://www.','') %></a>
+                    <a href="<%= schoolUrl %>" target="_blank"><%= schoolUrl.replace('https://www.','').replace('http://www.','') %></a>
                 </td>
             </tr>
-            <% if (Schule_SuS !== C_S_SuS) {  %>
+            <% if (countStudentsAllPlace !== countStudentsAll) {  %>
             <tr colspan="2">
                 <td>
                     Gesamtanzahl der Schüler an allen Standorten:
                 </td>
                 <td>
-                    <%= Schule_SuS %>
+                    <%= countStudentsAllPlace %>
                 </td>
             </tr>
             <tr colspan="2">
@@ -144,7 +144,7 @@
                     &nbsp;&nbsp;davon in der Primarstufe:
                 </td>
                 <td>
-                    <%= Schule_PS %>
+                    <%= countStudentsPrimaryAllPlace %>
                 </td>
             </tr>
 
@@ -153,7 +153,7 @@
                     &nbsp;&nbsp;davon in der Sekundarstufe I:
                 </td>
                 <td>
-                    <%= Schule_S1 %>
+                    <%= countStudentsSecondary1AllPlace %>
                 </td>
             </tr>
 
@@ -162,7 +162,7 @@
                     &nbsp;&nbsp;davon in der Sekundarstufe II:
                 </td>
                 <td>
-                    <%= Schule_S2 %>
+                    <%= countStudentsSecondary2AllPlace %>
                 </td>
             </tr>
             <% } %>

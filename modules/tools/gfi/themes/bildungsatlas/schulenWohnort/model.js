@@ -234,7 +234,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             const attr = gfiContent.allProperties;
 
             if (attr.C12_SuS) {
-                this.set("anzahlSchuler", Math.round(attr.C12_SuS));
+                this.set("anzahlSchuler", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
             }
             if (attr.StatGeb_Nr && attr.ST_Name) {
                 this.set("statGebiet", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
