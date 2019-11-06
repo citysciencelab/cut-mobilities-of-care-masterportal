@@ -438,9 +438,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} yAttrToShow Attribute name for line point on y-axis.
      * @param {Selection} tooltipDiv Selection of the tooltip-div.
      * @param {Number} dotSize The size of the dots.
+     * @param {Function} [setTooltipValue] (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
-    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize) {
+    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
         const dat = data.filter(function (obj) {
             return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
         });
@@ -476,7 +477,12 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return d[yAttrToShow];
             })
             .on("mouseover", function (d) {
-                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (typeof setTooltipValue === "function") {
+                    yAttributeToShow = setTooltipValue(d[yAttrToShow]);
+                }
+                else {
+                    yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
@@ -495,7 +501,12 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     }, tooltipDiv);
             }, tooltipDiv)
             .on("click", function (d) {
-                yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                if (typeof setTooltipValue === "function") {
+                    yAttributeToShow = setTooltipValue(d[yAttrToShow]);
+                }
+                else {
+                    yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
                 tooltipDiv.transition()
                     .duration(200)
                     .style("opacity", 0.9);
@@ -593,7 +604,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     },
 
     /**
-     * Creates the linegraph.
+     * Creates the Linegraph.
      * @param {Object} graphConfig Graph config.
      * @param {String} graphConfig.selector Class for SVG to be appended to.
      * @param {String} graphConfig.scaleTypeX Type of x-axis.
@@ -627,7 +638,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} graphConfig.selectorTooltip Selector for tooltip div.
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
-     * @param {String} graphConfig.legendData.text Text for legen object.
+     * @param {String} graphConfig.legendData.text Text for legend object.
+     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
     createLineGraph: function (graphConfig) {
@@ -655,7 +667,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             tooltipDiv = select(graphConfig.selectorTooltip),
             offset = 10,
-            dotSize = graphConfig.dotSize || 5;
+            dotSize = graphConfig.dotSize || 5,
+            setTooltipValue = graphConfig.setTooltipValue;
         let valueLine;
 
         if (graphConfig.hasOwnProperty("legendData")) {
@@ -667,13 +680,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
                 this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv, dotSize);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv, dotSize, setTooltipValue);
             }
             else {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
                 this.appendDataToSvg(svg, data, "line", valueLine);
                 // Add the scatterplot for each point in line
-                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize);
+                this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue);
             }
         }, this);
 
@@ -717,8 +730,39 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     },
 
     /**
-     * ToDo.
-     * @param {object} graphConfig ToDo.
+     * Creates the BarGraph
+     * @param {Object} graphConfig Graph config.
+     * @param {String} graphConfig.selector Class for SVG to be appended to.
+     * @param {String} graphConfig.scaleTypeX Type of x-axis.
+     * @param {String} graphConfig.scaleTypeY Type of y-axis.
+     * @param {Object[]} graphConfig.data Data for graph.
+     * @param {String} graphConfig.xAttr Attribute name for x-axis.
+     * @param {Object} graphConfig.xAxisLabel Object to define the label for x-axis.
+     * @param {String} graphConfig.xAxisLabel.label Label for x-axis.
+     * @param {Number} graphConfig.xAxisLabel.translate Translation offset for label for x-axis.
+     * @param {Object} graphConfig.yAxisLabel Object to define the label for y-axis.
+     * @param {String} graphConfig.yAxisLabel.label Label for y-axis.
+     * @param {Number} graphConfig.yAxisLabel.offset Offset for label for y-axis.
+     * @param {String[]} graphConfig.attrToShowArray Array of attribute names to be shown on y-axis.
+     * @param {Object} graphConfig.margin Margin object for graph.
+     * @param {Number} graphConfig.margin.top Top margin.
+     * @param {Number} graphConfig.margin.right Right margin.
+     * @param {Number} graphConfig.margin.bottom Bottom margin.
+     * @param {Number} graphConfig.margin.left left margin.
+     * @param {Number} graphConfig.width Width of SVG.
+     * @param {Number} graphConfig.height Height of SVG.
+     * @param {Object} graphConfig.xAxisTicks Ticks for x-axis.
+     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks.
+     * @param {Number/String[]} graphConfig.xAxisTicks.values Values for x-axis-ticks.
+     * @param {Number} graphConfig.xAxisTicks.factor Factor for x-axis-ticks.
+     * @param {Object} graphConfig.yAxisTicks Ticks for y-axis.
+     * @param {Object} graphConfig.yAxisTicks.ticks Values for y-axis-ticks.
+     * @param {Object} graphConfig.yAxisTicks.factor Factor for y-axis-ticks.
+     * @param {String} graphConfig.svgClass Class of SVG.
+     * @param {Object[]} graphConfig.legendData Data for legend.
+     * @param {String} graphConfig.legendData.class CSS class for legend object.
+     * @param {String} graphConfig.legendData.text Text for legend object.
+     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {Void}  -
      */
     createBarGraph: function (graphConfig) {
