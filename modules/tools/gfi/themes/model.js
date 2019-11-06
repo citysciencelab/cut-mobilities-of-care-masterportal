@@ -426,12 +426,22 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             else {
                 preGfi = this.allKeysToLowerCase(preGfi);
                 _.each(gfiAttributes, function (value, key) {
-                    var name = preGfi[key.toLowerCase()];
+                    var name,
+                        origName = key,
+                        translatedName = value;
+
+                    if (typeof translatedName === "string") {
+                        name = preGfi[origName.toLowerCase()];
+                    }
+                    if (typeof translatedName === "object") {
+                        name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
+                        translatedName = translatedName.name;
+                    }
 
                     if (name) {
-                        gfi[value] = name;
+                        gfi[translatedName] = name;
                     }
-                });
+                }, this);
             }
             if (_.isEmpty(gfi) !== true) {
                 pgfi.push(gfi);
@@ -441,6 +451,69 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return pgfi;
     },
 
+    /**
+     * Translates the given name from gfiAttribute Object based on the condition type
+     * @param {Object} preGfi Object of all values that the feature has.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {Object} condition GFI-Attribute Object.
+     * @returns {String} - name if condition matches exactly one key.
+     */
+    translateNameFromObject: function (preGfi, origName, condition) {
+        const length = origName.length;
+        let name,
+            matches = [];
+
+        if (condition === "contains") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.includes(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else if (condition === "startsWith") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.startsWith(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else if (condition === "endsWith") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.endsWith(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else {
+            console.error("unknown matching type for gfi translation");
+        }
+        return name;
+    },
+
+    /**
+     * Checks if the matches have exact one entry.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {String} condition Matching conditon.
+     * @param {String[]} matches An array of all keys matching the condition.
+     * @returns {Boolean} - Flag of array has exacly one entry.
+     */
+    checkIfMatchesValid: function (origName, condition, matches) {
+        let isValid = false;
+
+        if (matches.length === 0) {
+            console.error("no match found for gfi translation: '" + condition + "', '" + origName + "'");
+        }
+        else if (matches.length > 1) {
+            console.error("more than 1 match found for gfi translation: " + condition + "', '" + origName + "'");
+        }
+        else {
+            isValid = true;
+        }
+        return isValid;
+    },
     /**
      * set all keys from object to lowercase
      * @param {object} obj - key value pairs

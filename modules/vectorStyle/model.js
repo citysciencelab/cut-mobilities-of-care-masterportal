@@ -1,6 +1,6 @@
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon, Text} from "ol/style.js";
 
-const WFSStyle = Backbone.Model.extend({
+const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
         "imagePath": "",
         "class": "POINT",
@@ -19,12 +19,8 @@ const WFSStyle = Backbone.Model.extend({
         "imageOffsetYUnit": "fraction",
         // für subclass CIRCLE
         "circleRadius": 10,
-        "circleFillColor": [
-            0, 153, 255, 1
-        ],
-        "circleStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "circleFillColor": [0, 153, 255, 1],
+        "circleStrokeColor": [0, 0, 0, 1],
         "circleStrokeWidth": 2,
         // Für Label
         "textAlign": "center",
@@ -32,23 +28,15 @@ const WFSStyle = Backbone.Model.extend({
         "textScale": 1,
         "textOffsetX": 0,
         "textOffsetY": 0,
-        "textFillColor": [
-            255, 255, 255, 1
-        ],
-        "textStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "textFillColor": [255, 255, 255, 1],
+        "textStrokeColor": [0, 0, 0, 1],
         "textStrokeWidth": 3,
         // Für Cluster
         "clusterClass": "CIRCLE",
         // Für Cluster Class CIRCLE
         "clusterCircleRadius": 10,
-        "clusterCircleFillColor": [
-            0, 153, 255, 1
-        ],
-        "clusterCircleStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "clusterCircleFillColor": [0, 153, 255, 1],
+        "clusterCircleStrokeColor": [0, 0, 0, 1],
         "clusterCircleStrokeWidth": 2,
         // Für Cluster Class SIMPLE
         "clusterImageName": "blank.png",
@@ -64,52 +52,103 @@ const WFSStyle = Backbone.Model.extend({
         "clusterTextScale": 1,
         "clusterTextOffsetX": 0,
         "clusterTextOffsetY": 0,
-        "clusterTextFillColor": [
-            255, 255, 255, 1
-        ],
-        "clusterTextStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "clusterTextFillColor": [255, 255, 255, 1],
+        "clusterTextStrokeColor": [0, 0, 0, 1],
         "clusterTextStrokeWidth": 3,
         // Für Polygon
-        "polygonFillColor": [
-            255, 255, 255, 1
-        ],
-        "polygonStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "polygonFillColor": [255, 255, 255, 1],
+        "polygonStrokeColor": [0, 0, 0, 1],
         "polygonStrokeWidth": 2,
         // Für Line
-        "lineStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "lineStrokeColor": [0, 0, 0, 1],
         "lineStrokeWidth": 2,
         // Für subClass ADVANCED
         // Für scalingShape CIRCLESEGMENTS
         "circleSegmentsRadius": 10,
         "circleSegmentsStrokeWidth": 4,
-        "circleSegmentsBackgroundColor": [
-            255, 255, 255, 0
-        ],
-        "scalingValueDefaultColor": [
-            0, 0, 0, 1
-        ],
+        "circleSegmentsBackgroundColor": [255, 255, 255, 0],
+        "scalingValueDefaultColor": [0, 0, 0, 1],
         "circleSegmentsGap": 10,
         // Für scalingShape CIRCLE_BAR
         "circleBarScalingFactor": 1,
         "circleBarRadius": 6,
         "circleBarLineStroke": 5,
-        "circleBarCircleFillColor": [
-            0, 0, 0, 1
-        ],
-        "circleBarCircleStrokeColor": [
-            0, 0, 0, 1
-        ],
+        "circleBarCircleFillColor": [0, 0, 0, 1],
+        "circleBarCircleStrokeColor": [0, 0, 0, 1],
         "circleBarCircleStrokeWidth": 1,
-        "circleBarLineStrokeColor": [
-            0, 0, 0, 1
-        ]
+        "circleBarLineStrokeColor": [0, 0, 0, 1]
     },
+
+    /**
+     * @class VectorStyleModel
+     * @extends Backbone.Model
+     * @memberof VectorStyle
+     * @constructs
+     * @description Style model to create an open layers vector style for each opbject in style.json.
+     * @param {String} imagePath="" Path to images.
+     * @param {String} class="POINT" Class of style. Matches the geometry
+     * @param {String} subClass="SIMPLE" SubClass of style.
+     * @param {String|Object} styleField="" Attribute name to be styled with. Or object with condition.
+     * @param {Object[]} styleFieldValues=[] Values of attribute name with its style definition.
+     * @param {String} labelField="" Attribute name to create style label.
+     * @param {String} imageName="blank.png" Name of image. Is used with imagePath.
+     * @param {Number} imageWidth=1 Width of image in px.
+     * @param {Number} imageHeight=1 Height of image in px.
+     * @param {Number} imageScale=1 Scale of image.
+     * @param {Number} imageOffsetX=0.5 horizontal offset of image.
+     * @param {Number} imageOffsetY=0.5 vertical offset of image.
+     * @param {String} imageOffsetXUnit="fraction" Unit of horizontal offset of image.
+     * @param {String} imageOffsetYUnit="fraction" Unit of vertical offset of image.
+     * @param {Number} circleRadius=10 Radius of Circle in px.
+     * @param {Number[]} circleFillColor=[0,153,255,1] Fill color of Circle in rgba-format.
+     * @param {Number[]} circleStrokeColor=[0,0,0,1] Stroke color of Circle in rgba-format.
+     * @param {Number} circleStrokeWidth=2 Stroke width of circle.
+     * @param {String} textAlign="center" Alignment of text.
+     * @param {String} textFont="10px sans-serif" Font of text.
+     * @param {Number} textScale=1 Scale of text.
+     * @param {Number} textOffsetX=0 Horizontal offset of text.
+     * @param {Number} textOffsetY=0 Vertical offset of text.
+     * @param {Number[]} textFillColor=[255,255,255,1] Fill color of test in rgba-format.
+     * @param {Number[]} textStrokeColor=[0,0,0,1] Stroke color of text in rgba-format.
+     * @param {Number} textStrokeWidth=3 Stroke width of text.
+     * @param {String} clusterClass="CIRCLE" Class for clustered feature.
+     * @param {Number} clusterCircleRadius=10 Circle radius for clustered feature.
+     * @param {Number[]} clusterCircleFillColor=[0,153,255,1] Fill color of circle for clustered feature in rgba-format.
+     * @param {Number[]} clusterCircleStrokeColor=[0,0,0,1] Stroke color of circle for clustered feature in rgba-format.
+     * @param {Number} clusterCircleStrokeWidth=2 Stroke width of circle for clustered feature.
+     * @param {String} clusterImageName="blank.png" Name of image for clustered feature. Is used with imagePath.
+     * @param {Number} clusterImageWidth=1 Width of image for clustered feature in px.
+     * @param {Number} clusterImageHeight=1 Height of image for clustered feature in px.
+     * @param {Number} clusterImageScale=1 Scale of image for clustered feature.
+     * @param {Number} clusterImageOffsetX=0.5 horizontal offset of image for clustered feature.
+     * @param {Number} clusterImageOffsetY=0.5 vertical offset of image for clustered feature.
+     * @param {String} clusterText="COUNTER" Flag of what text is to be shown.
+     * @param {String} clusterTextAlign="center" Alignment of text for clustered feature.
+     * @param {String} clusterTextFont="10px sans-serif" Font of text for clustered feature.
+     * @param {Number} clusterTextScale=1 Scale of text for clustered feature.
+     * @param {Number} clusterTextOffsetX=0 Horizontal offset of text for clustered feature.
+     * @param {Number} clusterTextOffsetY=0 Vertical offset of text for clustered feature.
+     * @param {Number[]} clusterTextFillColor=[255,255,255,1] Fill color of test in rgba-format for clustered feature.
+     * @param {Number[]} clusterTextStrokeColor=[0,0,0,1] Stroke color of text in rgba-format for clustered feature.
+     * @param {Number} clusterTextStrokeWidth=3 Stroke width of text for clustered feature.
+     * @param {Number[]} polygonFillColor=[255,255,255,1] Fill color of polygon in rgba-format.
+     * @param {Number[]} polygonStrokeColor=[0,0,0,1] Stroke color of polygon in rgba-format.
+     * @param {Number} polygonStrokeWidth=2 Stroke width of polygon.
+     * @param {Number[]} lineStrokeColor=[0,0,0,1] Stroke color of line in rgba-format.
+     * @param {Number} lineStrokeWidth=2 Stroke width of line
+     * @param {Number} circleSegmentsRadius=10 Radius of circle segments.
+     * @param {Number} circleSegmentsStrokeWidth=4 Stroke width of circle segments.
+     * @param {Number[]} circleSegmentsBackgroundColor=[255,255,255,1] Background color of circle segments in rgba-format.
+     * @param {Number[]} scalingValueDefaultColor=[0,0,0,1] Default color of circle segments in rgba-format.
+     * @param {Number} circleSegmentsGap=10 Gap between the circle segments.
+     * @param {Number} circleBarScalingFactor=1 Scaling factor of circle bar.
+     * @param {Number} circleBarRadius=6 Radius of circle bar.
+     * @param {Number} circleBarLineStroke=5 Line stroke of circle bar.
+     * @param {Number[]} circleBarCircleFillColor=[0,0,0,1] Fill color of circle bar in rgba-format.
+     * @param {Number[]} circleBarCircleStrokeColor=[0,0,0,1] Stroke color of circle bar in rgba-format.
+     * @param {Number} circleBarCircleStrokeWidth=1 Circle stroke width of circle bar.
+     * @param {Number[]} circleBarLineStrokeColor=[0,0,0,1] Line stroke color of circle bar in rgba-format.
+     */
     initialize: function () {
         if (!_.isUndefined(Config.wfsImgPath)) {
             this.setImagePath(Config.wfsImgPath);
@@ -119,10 +158,13 @@ const WFSStyle = Backbone.Model.extend({
         }
     },
 
-    /*
-    * in WFS.js this function ist set as style. for each feature, this function is called.
+    /**
+    * This function ist set as style. for each feature, this function is called.
     * Depending on the attribute "class" the respective style is created.
     * allowed values for "class" are "POINT", "LINE", "POLYGON".
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {Boolean} isClustered Flag to show if feature is clustered.
+    * @returns {ol/style} - The created style.
     */
     createStyle: function (feature, isClustered) {
         var style = this.getDefaultStyle(),
@@ -142,6 +184,9 @@ const WFSStyle = Backbone.Model.extend({
         else if (styleClass === "POLYGON") {
             style = this.createPolygonStyle(feature, styleSubClass);
         }
+        else {
+            console.error("styleClass '" + styleClass + "' is not implemented yet");
+        }
 
         // after style is derived, createTextStyle
         if (_.isArray(style)) {
@@ -154,8 +199,9 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * create openLayers Default Style
+    /**
+    * Creates openLayers Default Style
+    * @returns {ol/style} - Open layers default style.
     */
     getDefaultStyle: function () {
         var fill = new Fill({
@@ -177,9 +223,12 @@ const WFSStyle = Backbone.Model.extend({
         });
     },
 
-    /*
-    * creates lineStyle depending on the attribute "subClass".
+    /**
+    * Creates lineStyle depending on the attribute "subClass".
     * allowed values for "subClass" are "SIMPLE".
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {String} styleSubClass Subclass of style.
+    * @returns {ol/style} - The created style.
     */
     createLineStyle: function (feature, styleSubClass) {
         var style = this.getDefaultStyle();
@@ -190,9 +239,10 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates a simpleLineStyle.
+    /**
+    * Creates a simpleLineStyle.
     * all features get the same style.
+    * @returns {ol/style} - The created style.
     */
     createSimpleLineStyle: function () {
         var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
@@ -210,9 +260,12 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates polygonStyle depending on the attribute "subClass".
+    /**
+    * Creates polygonStyle depending on the attribute "subClass".
     * allowed values for "subClass" are "SIMPLE".
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {String} styleSubClass StyleSubClass
+    * @returns {ol/style} - The created style.
     */
     createPolygonStyle: function (feature, styleSubClass) {
         var style = this.getDefaultStyle();
@@ -227,9 +280,10 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates a simplePolygonStyle.
+    /**
+    * Creates a simplePolygonStyle.
     * all features get the same style.
+    * @returns {ol/style} - The created style.
     */
     createSimplePolygonStyle: function () {
         var strokestyle = new Stroke({
@@ -248,8 +302,15 @@ const WFSStyle = Backbone.Model.extend({
 
         return style;
     },
+
+    /**
+     * Created a custom polygon style.
+     * @param {ol/feature} feature Feature to be styled.
+     * @returns {ol/style} - The created style.
+     */
     createCustomPolygonStyle: function (feature) {
         var styleField = this.get("styleField"),
+            featureKeys = [],
             featureValue,
             styleFieldValueObj,
             polygonFillColor,
@@ -259,6 +320,10 @@ const WFSStyle = Backbone.Model.extend({
             fillstyle,
             style = this.getDefaultStyle();
 
+        if (typeof styleField === "object") {
+            featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
+            styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
+        }
         featureValue = feature.get(styleField);
         if (!_.isUndefined(featureValue)) {
             styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
@@ -288,9 +353,13 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates pointStyle depending on the attribute "subClass".
+    /**
+    * Creates pointStyle depending on the attribute "subClass".
     * allowed values for "subClass" are "SIMPLE", "CUSTOM" and "CIRCLE.
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {String} styleSubClass StyleSubClass.
+    * @param {Boolean} isClustered Flag if feature is clustered.
+    * @returns {ol/style} - The created style.
     */
     createPointStyle: function (feature, styleSubClass, isClustered) {
         var style = this.getDefaultStyle();
@@ -311,9 +380,10 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates clusterStyle depending on the attribute "clusterClass".
+    /**
+    * Creates clusterStyle depending on the attribute "clusterClass".
     * allowed values for "clusterClass" are "SIMPLE" and "CIRCLE".
+    * @returns {ol/style} - The created style.
     */
     createClusterStyle: function () {
         var clusterClass = this.get("clusterClass"),
@@ -328,9 +398,10 @@ const WFSStyle = Backbone.Model.extend({
         return clusterStyle;
     },
 
-    /*
-    * creates simpleClusterStyle.
+    /**
+    * Creates simpleClusterStyle.
     * all clustered features get same image.
+    * @returns {ol/style} - The created style.
     */
     createSimpleClusterStyle: function () {
         var src = this.get("imagePath") + this.get("clusterImageName"),
@@ -351,9 +422,10 @@ const WFSStyle = Backbone.Model.extend({
         return clusterStyle;
     },
 
-    /*
-    * creates circleClusterStyle.
+    /**
+    * Creates circleClusterStyle.
     * all clustered features get same circle.
+    * @returns {ol/style} - The created style.
     */
     createCircleClusterStyle: function () {
         var radius = parseFloat(this.get("clusterCircleRadius"), 10),
@@ -374,9 +446,12 @@ const WFSStyle = Backbone.Model.extend({
         return clusterStyle;
     },
 
-    /*
-    * creates simplePointStyle.
+    /**
+    * Creates simplePointStyle.
     * all features get same image.
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {Boolean} isClustered Flag if feature is clustered.
+    * @returns {ol/style} - The created style.
     */
     createSimplePointStyle: function (feature, isClustered) {
         var src,
@@ -422,12 +497,16 @@ const WFSStyle = Backbone.Model.extend({
 
     },
 
-    /*
-    * creates customPointStyle.
+    /**
+    * Creates customPointStyle.
     * each features gets a different image, depending on their attribute which is stored in "styleField".
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {Boolean} isClustered Flag if feature is clustered.
+    * @returns {ol/style} - The created style.
     */
     createCustomPointStyle: function (feature, isClustered) {
         var styleField = this.get("styleField"),
+            featureKeys = [],
             featureValue,
             styleFieldValueObj,
             src,
@@ -442,6 +521,11 @@ const WFSStyle = Backbone.Model.extend({
             offsetYUnit,
             imagestyle,
             style = this.getDefaultStyle();
+
+        if (typeof styleField === "object") {
+            featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
+            styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
+        }
 
         if (isClustered && feature.get("features").length > 1) {
             imagestyle = this.createClusterStyle();
@@ -485,9 +569,76 @@ const WFSStyle = Backbone.Model.extend({
         return style;
     },
 
-    /*
-    * creates circlePointStyle.
+    /**
+     * Translates the given name from gfiAttribute Object based on the condition type
+     * @param {Object} keys List of all keys that the feature has.
+     * @param {String} name The name to be proofed against the keys.
+     * @param {Object} condition Condition to be proofed.
+     * @returns {String} - Attribute key if condition matches exactly one key.
+     */
+    translateNameFromObject: function (keys, name, condition) {
+        const length = name.length;
+        let match,
+            matches = [];
+
+        if (condition === "contains") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.includes(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else if (condition === "startsWith") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.startsWith(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else if (condition === "endsWith") {
+            matches = keys.filter(key => {
+                return key.length !== length && key.endsWith(name);
+            });
+            if (this.checkIfMatchesValid(name, condition, matches)) {
+                match = matches[0];
+            }
+        }
+        else {
+            console.error("unknown matching type for styling condition");
+        }
+        return match;
+    },
+
+    /**
+     * Checks if the matches have exact one entry.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {String} condition Matching conditon.
+     * @param {String[]} matches An array of all keys matching the condition.
+     * @returns {Boolean} - Flag of array has exacly one entry.
+     */
+    checkIfMatchesValid: function (origName, condition, matches) {
+        let isValid = false;
+
+        if (matches.length === 0) {
+            console.error("no match found at the feature for styling condition: '" + condition + "', '" + origName + "'");
+        }
+        else if (matches.length > 1) {
+            console.error("more than 1 match found at the feature for styling condition: " + condition + "', '" + origName + "'");
+        }
+        else {
+            isValid = true;
+        }
+        return isValid;
+    },
+
+    /**
+    * Creates circlePointStyle.
     * all features get same circle.
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {Boolean} isClustered Flag if feature is clustered.
+    * @returns {ol/style} - The created style.
     */
     createCirclePointStyle: function (feature, isClustered) {
         var radius,
@@ -624,8 +775,12 @@ const WFSStyle = Backbone.Model.extend({
         });
     },
 
-    /*
-    * creates textStyle if feature is clustered OR "labelField" is set
+    /**
+    * Creates textStyle if feature is clustered OR "labelField" is set
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {String} labelField Attribute name of feature.
+    * @param {Boolean} isClustered Flag if featured is clustered.
+    * @returns {ol/style} - The created style.
     */
     createTextStyle: function (feature, labelField, isClustered) {
         var textStyle,
@@ -657,6 +812,11 @@ const WFSStyle = Backbone.Model.extend({
 
         return textStyle;
     },
+    /**
+     * Creates an text style from given object.
+     * @param {Object} textObj Object with parameters.
+     * @returns {ol/style} - The created style.
+     */
     createTextStyleFromObject: function (textObj) {
         var textStyle = new Text({
             text: textObj.text,
@@ -676,11 +836,14 @@ const WFSStyle = Backbone.Model.extend({
 
         return textStyle;
     },
-    /*
-    * creates clusteredTextStyle.
+    /**
+    * Creates clusteredTextStyle.
     * if "clusterText" === "COUNTER" then the number if features are set
     * if "clusterText" === "NONE" no Text is shown
-    * else all features get the text that is defined in "clusterText"
+    * else all features get the text that is defined in "clusterText".
+    * @param {ol/feature} feature Feature to be styled.
+    * @param {String} labelField Attribute name of feature to build the label style.
+    * @returns {ol/style} - The created style.
     */
     createClusteredTextStyle: function (feature, labelField) {
         var clusterTextObj = {};
@@ -711,6 +874,11 @@ const WFSStyle = Backbone.Model.extend({
         return clusterTextObj;
     },
 
+    /**
+     * Extends the cluster text style object.
+     * @param {Object} clusterTextObj The given object.
+     * @returns {Object} - The extended object.
+     */
     extendClusterTextStyle: function (clusterTextObj) {
         clusterTextObj.textAlign = this.get("clusterTextAlign");
         clusterTextObj.font = this.get("clusterTextFont").toString();
@@ -724,10 +892,13 @@ const WFSStyle = Backbone.Model.extend({
         return clusterTextObj;
     },
 
-    /*
-    * returns input color to destinated color.
+    /**
+    * Returns input color to destinated color.
     * possible values for dest are "rgb" and "hex".
     * color has to come as hex (e.g. "#ffffff" || "#fff") or as array (e.g [255,255,255,0]) or as String ("[255,255,255,0]")
+    * @param {Number[]|String} color The color to return.
+    * @param {String} dest Destination color type.
+    * @returns {String|Number[]} - The converted color.
     */
     returnColor: function (color, dest) {
         var src,
@@ -760,14 +931,33 @@ const WFSStyle = Backbone.Model.extend({
 
         return newColor;
     },
+    /**
+     * Converts rgb to hex.
+     * @param {Number} r Red value.
+     * @param {Number} g Green Value.
+     * @param {Number} b Blue value.
+     * @returns {String} - Hex color string.
+     */
     rgbToHex: function (r, g, b) {
         return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b);
     },
+
+    /**
+     * Converts number to hex string.
+     * @param {Number} c Color value as number.
+     * @returns {String} - Converted color number as hex string.
+     */
     componentToHex: function (c) {
         var hex = c.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
+
+    /**
+     * Converts hex value to rgbarray.
+     * @param {String} hex Color as hex string.
+     * @returns {Number[]} - Color als rgb array.
+     */
     hexToRgb: function (hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
         var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
@@ -785,7 +975,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * makes sure that one rgb color always consists of four values
+     * Makes sure that one rgb color always consists of four values
      * @param {array} newColor Color in rgb
      * @return {array} normColor
      */
@@ -808,7 +998,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * create a svg with colored circle segments by nominal scaling
+     * Create a svg with colored circle segments by nominal scaling
      * @param  {ol.Feature} feature - feature to be draw
      * @return {String} svg with colored circle segments
      */
@@ -873,7 +1063,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * fills the object with values
+     * Fills the object with values
      * @param {object} scalingAttributesAsObject - object with possible attributes as keys and values = 0
      * @param {string} scalingAttribute - actual states from feature
      * @return {Object} scalingObject - contains the states
@@ -906,7 +1096,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * convert scalingAttributes to object
+     * Convert scalingAttributes to object
      * @param {object} scalingValues - contains attribute with color
      * @return {object} scalingAttribute with value 0
      */
@@ -925,7 +1115,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * create SVG for nominalscaled circle segments
+     * Create SVG for nominalscaled circle segments
      * @param  {number} size - size of the section to be drawn
      * @param  {number} circleSegmentsRadius - radius from circlesegment
      * @param  {String} circleSegmentsBackgroundColor - backgroundcolor from circlesegment
@@ -952,7 +1142,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * extends the SVG with given tags
+     * Extends the SVG with given tags
      * @param  {String} svg - String with svg tags
      * @param  {number} circleSegmentsStrokeWidth strokewidth from circlesegment
      * @param  {String} strokeColor - strokecolor from circlesegment
@@ -968,7 +1158,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * create circle segments
+     * Create circle segments
      * @param  {number} startAngelDegree - start with circle segment
      * @param  {number} endAngelDegree - finish with circle segment
      * @param  {number} circleRadius - radius from circle
@@ -1023,7 +1213,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * create interval circle bar
+     * Create interval circle bar
      * @param  {ol.Feature} feature - contains features to draw
      * @return {String} svg
      */
@@ -1056,7 +1246,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * calculate size for intervalscaled circle bar
+     * Calculate size for intervalscaled circle bar
      * @param  {number} stateValue - value from feature
      * @param  {number} circleBarScalingFactor - factor is multiplied by the stateValue
      * @param  {number} circleBarLineStroke - stroke from bar
@@ -1074,7 +1264,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * calculate the length for the bar
+     * Calculate the length for the bar
      * @param  {number} size - size of the section to be drawn
      * @param  {number} circleBarRadius - radius from point
      * @param  {number} stateValue - value from feature
@@ -1098,7 +1288,7 @@ const WFSStyle = Backbone.Model.extend({
     },
 
     /**
-     * create SVG for intervalscaled circle bars
+     * Create SVG for intervalscaled circle bars
      * @param  {number} size - size of the section to be drawn
      * @param  {number} barLength - length from bar
      * @param  {String} circleBarCircleFillColor - fill color from circle
@@ -1135,269 +1325,481 @@ const WFSStyle = Backbone.Model.extend({
         return svg;
     },
 
+    /**
+     * Setter for circleSegmentsBackgroundColor
+     * @param {Number[]} value Color
+     * @returns {void}
+     */
     setCircleSegmentsBackgroundColor: function (value) {
         this.set("circleSegmentsBackgroundColor", value);
     },
 
+    /**
+     * Setter for size.
+     * @param {*} size Size
+     * @returns {void}
+     */
     setSize: function (size) {
         this.set("size", size);
     },
 
-    // setter for imagePath
+    /**
+     * Setter for imagePath.
+     * @param {String} value Image path.
+     * @returns {void}
+     */
     setImagePath: function (value) {
         this.set("imagePath", value);
     },
 
-    // setter for class
+    /**
+     * Setter for class.
+     * @param {String} value Class.
+     * @returns {void}
+     */
     setClass: function (value) {
         this.set("class", value);
     },
 
-    // setter for subClass
+    /**
+     * Setter for subClass.
+     * @param {String} value SubClass.
+     * @returns {void}
+     */
     setSubClass: function (value) {
         this.set("subClass", value);
     },
 
-    // setter for styleField
+    /**
+     * Setter for styleField.
+     * @param {String} value styleField.
+     * @returns {void}
+     */
     setStyleField: function (value) {
         this.set("styleField", value);
     },
 
-    // setter for styleFieldValues
+    /**
+     * Setter for styleFieldValues.
+     * @param {Object[]} value styleFieldValues.
+     * @returns {void}
+     */
     setStyleFieldValues: function (value) {
         this.set("styleFieldValues", value);
     },
 
-    // setter for labelField
+    /**
+     * Setter for labelField.
+     * @param {String} value labelField.
+     * @returns {void}
+     */
     setLabelField: function (value) {
         this.set("labelField", value);
     },
-    // für subclass SIMPLE
-    // setter for imageName
+    /**
+     * Setter for imageName.
+     * @param {String} value Image name.
+     * @returns {void}
+     */
     setImageName: function (value) {
         this.set("imageName", value);
     },
 
-    // setter for imageWidth
+    /**
+     * Setter for imageWidth.
+     * @param {Number} value Image width.
+     * @returns {void}
+     */
     setImageWidth: function (value) {
         this.set("imageWidth", value);
     },
 
-    // setter for imageHeight
+    /**
+     * Setter for imageHeight.
+     * @param {Number} value Image height.
+     * @returns {void}
+     */
     setImageHeight: function (value) {
         this.set("imageHeight", value);
     },
 
-    // setter for imageScale
+    /**
+     * Setter for imageScale.
+     * @param {Number} value Image scale.
+     * @returns {void}
+     */
     setImageScale: function (value) {
         this.set("imageScale", value);
     },
 
-    // setter for imageOffsetX
+    /**
+     * Setter for imageOffsetX.
+     * @param {Number} value Image offsetX.
+     * @returns {void}
+     */
     setImageOffsetX: function (value) {
         this.set("imageOffsetX", value);
     },
 
-    // setter for imageOffsetY
+    /**
+     * Setter for imageOffsetY.
+     * @param {Number} value Image offsetY.
+     * @returns {void}
+     */
     setImageOffsetY: function (value) {
         this.set("imageOffsetY", value);
     },
 
-    // setter for imageOffsetXUnit
+    /**
+     * Setter for imageOffsetXUnit.
+     * @param {String} value Image offsetX unit.
+     * @returns {void}
+     */
     setImageOffsetXUnit: function (value) {
         this.set("imageOffsetXUnit", value);
     },
 
-    // setter for imageOffsetYUnit
+    /**
+     * Setter for imageOffsetYUnit.
+     * @param {String} value Image offsetY unit.
+     * @returns {void}
+     */
     setImageOffsetYUnit: function (value) {
         this.set("imageOffsetYUnit", value);
     },
 
-    // setter for circleRadius
+    /**
+     * Setter for circleRadius.
+     * @param {Number} value CircleRadius.
+     * @returns {void}
+     */
     setCircleRadius: function (value) {
         this.set("circleRadius", value);
     },
 
-    // setter for circleFillColor
+    /**
+     * Setter for circleFillColor.
+     * @param {Number[]} value CircleFillColor.
+     * @returns {void}
+     */
     setCircleFillColor: function (value) {
         this.set("circleFillColor", value);
     },
 
-    // setter for circleStrokeColor
+    /**
+     * Setter for circleStrokeColor.
+     * @param {Number[]} value CircleStrokeColor.
+     * @returns {void}
+     */
     setCircleStrokeColor: function (value) {
         this.set("circleStrokeColor", value);
     },
 
-    // setter for circleStrokeWidth
+    /**
+     * Setter for circleStrokeWidth.
+     * @param {Number} value CircleStrokeWidth.
+     * @returns {void}
+     */
     setCircleStrokeWidth: function (value) {
         this.set("circleStrokeWidth", value);
     },
-    // Für Label
-    // setter for textAlign
+
+    /**
+     * Setter for textAlign.
+     * @param {String} value textAlign.
+     * @returns {void}
+     */
     setTextAlign: function (value) {
         this.set("textAlign", value);
     },
 
-    // setter for textFont
+    /**
+     * Setter for textFont.
+     * @param {String} value textFont.
+     * @returns {void}
+     */
     setTextFont: function (value) {
         this.set("textFont", value);
     },
 
-    // setter for textScale
+    /**
+     * Setter for textScale.
+     * @param {Number} value textScale.
+     * @returns {void}
+     */
     setTextScale: function (value) {
         this.set("textScale", value);
     },
 
-    // setter for textOffsetX
+    /**
+     * Setter for textOffsetX.
+     * @param {Number} value TextOffsetX.
+     * @returns {void}
+     */
     setTextOffsetX: function (value) {
         this.set("textOffsetX", value);
     },
 
-    // setter for textOffsetY
+    /**
+     * Setter for textOffsetY.
+     * @param {Number} value TextOffsetY.
+     * @returns {void}
+     */
     setTextOffsetY: function (value) {
         this.set("textOffsetY", value);
     },
 
-    // setter for textFillColor
+    /**
+     * Setter for textFillColor.
+     * @param {Object[]} value TextFillColor.
+     * @returns {void}
+     */
     setTextFillColor: function (value) {
         this.set("textFillColor", value);
     },
 
-    // setter for textStrokeColor
+    /**
+     * Setter for textStrokeColor.
+     * @param {Object[]} value TextStrokeColor.
+     * @returns {void}
+     */
     setTextStrokeColor: function (value) {
         this.set("textStrokeColor", value);
     },
 
-    // setter for textStrokeWidth
+    /**
+     * Setter for textStrokeWidth.
+     * @param {Number} value textStrokeWidth.
+     * @returns {void}
+     */
     setTextStrokeWidth: function (value) {
         this.set("textStrokeWidth", value);
     },
-    // Für Cluster
-    // setter for clusterClass
+
+    /**
+     * Setter for clusterClass.
+     * @param {String} value ClusterClass.
+     * @returns {void}
+     */
     setClusterClass: function (value) {
         this.set("clusterClass", value);
     },
-    // Für Cluster Class CIRCLE
-    // setter for clusterCircleRadius
+
+    /**
+     * Setter for clusterCircleRadius.
+     * @param {String} value ClusterCircleRadius.
+     * @returns {void}
+     */
     setClusterCircleRadius: function (value) {
         this.set("clusterCircleRadius", value);
     },
 
-    // setter for clusterCircleFillColor
+    /**
+     * Setter for clusterCircleFillColor.
+     * @param {Object[]} value ClusterCircleFillColor.
+     * @returns {void}
+     */
     setClusterCircleFillColor: function (value) {
         this.set("clusterCircleFillColor", value);
     },
 
-    // setter for clusterCircleStrokeColor
+    /**
+     * Setter for clusterCircleStrokeColor.
+     * @param {Object[]} value ClusterCircleStrokeColor.
+     * @returns {void}
+     */
     setClusterCircleStrokeColor: function (value) {
         this.set("clusterCircleStrokeColor", value);
     },
 
-    // setter for clusterCircleStrokeWidth
+    /**
+     * Setter for clusterCircleStrokeWidth.
+     * @param {Number} value ClusterCircleStrokeWidth.
+     * @returns {void}
+     */
     setClusterCircleStrokeWidth: function (value) {
         this.set("clusterCircleStrokeWidth", value);
     },
-    // Für Cluster Class SIMPLE
 
-    // setter for clusterImageName
+    /**
+     * Setter for clusterImageName.
+     * @param {String} value ClusterImageName.
+     * @returns {void}
+     */
     setClusterImageName: function (value) {
         this.set("clusterImageName", value);
     },
 
-    // setter for clusterImageWidth
+    /**
+     * Setter for clusterImageWidth.
+     * @param {Number} value ClusterImageWidth.
+     * @returns {void}
+     */
     setClusterImageWidth: function (value) {
         this.set("clusterImageWidth", value);
     },
 
-    // setter for clusterImageHeight
+    /**
+     * Setter for clusterImageHeight.
+     * @param {Number} value ClusterImageHeight.
+     * @returns {void}
+     */
     setClusterImageHeight: function (value) {
         this.set("clusterImageHeight", value);
     },
 
-    // setter for clusterImageScale
+    /**
+     * Setter for clusterImageScale.
+     * @param {Number} value ClusterImageScale.
+     * @returns {void}
+     */
     setClusterImageScale: function (value) {
         this.set("clusterImageScale", value);
     },
 
-    // setter for clusterImageOffsetX
+    /**
+     * Setter for clusterImageOffsetX.
+     * @param {Number} value ClusterImageOffsetX.
+     * @returns {void}
+     */
     setClusterImageOffsetX: function (value) {
         this.set("clusterImageOffsetX", value);
     },
 
-    // setter for clusterImageOffsetY
+    /**
+     * Setter for clusterImageOffsetY.
+     * @param {Number} value ClusterImageOffsetY.
+     * @returns {void}
+     */
     setClusterImageOffsetY: function (value) {
         this.set("clusterImageOffsetY", value);
     },
-    // Für Cluster Text
-    // setter for clusterText
+
+    /**
+     * Setter for clusterText.
+     * @param {String} value ClusterText.
+     * @returns {void}
+     */
     setClusterText: function (value) {
         this.set("clusterText", value);
     },
 
-    // setter for clusterTextAlign
+    /**
+     * Setter for clusterTextAlign.
+     * @param {String} value ClusterTextAlign.
+     * @returns {void}
+     */
     setClusterTextAlign: function (value) {
         this.set("clusterTextAlign", value);
     },
 
-    // setter for clusterTextFont
+    /**
+     * Setter for clusterTextFont.
+     * @param {String} value ClusterTextFont.
+     * @returns {void}
+     */
     setClusterTextFont: function (value) {
         this.set("clusterTextFont", value);
     },
 
-    // setter for clusterTextScale
+    /**
+     * Setter for clusterTextScale.
+     * @param {Number} value ClusterTextScale.
+     * @returns {void}
+     */
     setClusterTextScale: function (value) {
         this.set("clusterTextScale", value);
     },
 
-    // setter for clusterTextOffsetX
+    /**
+     * Setter for clusterTextOffsetX.
+     * @param {Number} value ClusterTextOffsetX.
+     * @returns {void}
+     */
     setClusterTextOffsetX: function (value) {
         this.set("clusterTextOffsetX", value);
     },
 
-    // setter for clusterTextOffsetY
+    /**
+     * Setter for clusterTextOffsetY.
+     * @param {Number} value ClusterTextOffsetY.
+     * @returns {void}
+     */
     setClusterTextOffsetY: function (value) {
         this.set("clusterTextOffsetY", value);
     },
 
-    // setter for clusterTextFillColor
+    /**
+     * Setter for clusterTextFillColor.
+     * @param {Object[]} value ClusterTextFillColor.
+     * @returns {void}
+     */
     setClusterTextFillColor: function (value) {
         this.set("clusterTextFillColor", value);
     },
 
-    // setter for clusterTextStrokeColor
+    /**
+     * Setter for clusterTextStrokeColor.
+     * @param {Object[]} value ClusterTextStrokeColor.
+     * @returns {void}
+     */
     setClusterTextStrokeColor: function (value) {
         this.set("clusterTextStrokeColor", value);
     },
 
-    // setter for clusterTextStrokeWidth
+    /**
+     * Setter for clusterTextStrokeWidth.
+     * @param {Number} value ClusterTextStrokeWidth.
+     * @returns {void}
+     */
     setClusterTextStrokeWidth: function (value) {
         this.set("clusterTextStrokeWidth", value);
     },
-    // Für Polygon
-    // setter for polygonFillColor
+
+    /**
+     * Setter for polygonFillColor.
+     * @param {Object[]} value PolygonFillColor.
+     * @returns {void}
+     */
     setPolygonFillColor: function (value) {
         this.set("polygonFillColor", value);
     },
 
-    // setter for polygonStrokeColor
+    /**
+     * Setter for polygonStrokeColor.
+     * @param {Object[]} value PolygonStrokeColor.
+     * @returns {void}
+     */
     setPolygonStrokeColor: function (value) {
         this.set("polygonStrokeColor", value);
     },
 
-    // setter for polygonStrokeWidth
+    /**
+     * Setter for polygonStrokeWidth.
+     * @param {Number} value PolygonStrokeWidth.
+     * @returns {void}
+     */
     setPolygonStrokeWidth: function (value) {
         this.set("polygonStrokeWidth", value);
     },
-    // Für Line
-    // setter for lineStrokeColor
+
+    /**
+     * Setter for lineStrokeColor.
+     * @param {Object[]} value LineStrokeColor.
+     * @returns {void}
+     */
     setLineStrokeColor: function (value) {
         this.set("lineStrokeColor", value);
     },
 
-    // setter for lineStrokeWidth
+    /**
+     * Setter for lineStrokeWidth.
+     * @param {Number} value LineStrokeWidth.
+     * @returns {void}
+     */
     setLineStrokeWidth: function (value) {
         this.set("lineStrokeWidth", value);
     }
 });
 
-export default WFSStyle;
+export default VectorStyleModel;

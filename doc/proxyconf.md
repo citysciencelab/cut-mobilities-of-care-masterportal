@@ -25,17 +25,20 @@ Im Beispiel ist der Proxyeintrag für das Masterportal zu sehen, um in der lokal
     "target": "http://geodienste.hamburg.de",
     "pathRewrite": {
       "^/geodienste_hamburg_de": ""
-    }
+    },
+    "agent": ""
   }
 }
 
 ```
 
 In der ersten Zeile des Objektes ist die vom Masterportal umgeschriebene Domain für die geodienste.hamburg.de Domain eingetragen. Darüber wird entschieden was der Proxy mit dem eingegangenen Request anstellen soll.
-Im Beispielobjekt gibt es zwei Parameter die genutzt werden können, weitere Parameter **[hier](https://webpack.js.org/configuration/dev-server/#devserverproxy)**:
+Im Beispielobjekt gibt es verschiedene Parameter die genutzt werden können:
 
 1. **target**: hier wird die URL eingetragen an welche Domain der Request gestellt werden soll.
 2. **pathRewrite**: enthält hier im Beispiel eine Ersetzungsregel um die vorher umgeschriebene Domain aus dem Request zu entfernen.
+3. **agent**: Wird verwendet, um aus einem Intranet über einen Corporate Proxy ein target im Internet zu erreichen. Der Value des agent wird beim starten des Servers automatisch aus dem Proxy der Systemumgebung (process.env) gefüllt.
+4. **Weitere Parameter** sind unter **[https://webpack.js.org/](https://webpack.js.org/configuration/dev-server/#devserverproxy)** zu finden.
 
 In Hamburg gibt es auch den Fall, dass wir einen ReverseProxy eines unserer Server nutzen. Dann findet dort eine erneute Anfrage an die eigentliche Domain statt und vorher wird der Parameter **pathRewrite** nicht verwendet. Vorteil hierfür ist, dass die Weiterleitungsregeln nur einmal auf dem Server eingetragen werden und nicht noch extra bei jedem lokal vorgehalten werden müssen.
 
