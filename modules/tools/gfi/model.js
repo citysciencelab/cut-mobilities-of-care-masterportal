@@ -206,8 +206,9 @@ const Gfi = Tool.extend({
             unionParams = [],
             coordinate = [],
             feature;
-
+        
         Radio.trigger("ClickCounter", "gfi");
+        
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
