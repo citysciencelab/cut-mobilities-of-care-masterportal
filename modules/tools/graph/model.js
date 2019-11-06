@@ -2,6 +2,7 @@ import {scaleBand, scaleLinear} from "d3-scale";
 import {axisBottom, axisLeft} from "d3-axis";
 import {line} from "d3-shape";
 import {select, event} from "d3-selection";
+import {formatDefaultLocale} from "d3-format";
 import "d3-transition";
 
 const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
@@ -26,6 +27,22 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return this.get("graphParams");
             }
         }, this);
+
+        // axis values are us english by default - this is the german setup
+        formatDefaultLocale({
+            "decimal": ",",
+            "thousands": ".",
+            "grouping": [3],
+            "currency": ["€", ""],
+            "dateTime": "%a %b %e %X %Y",
+            "date": "%d.%m.%Y",
+            "time": "%H:%M:%S",
+            "periods": ["AM", "PM"],
+            "days": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+            "shortDays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+            "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+            "shortMonths": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+        });
     },
 
     /**
