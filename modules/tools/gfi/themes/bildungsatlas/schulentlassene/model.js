@@ -313,7 +313,10 @@ const SchulentlasseneTheme = Theme.extend({
                     {attrName: "numberESA", attrClass: "lineESA"},
                     {attrName: "numberOSA", attrClass: "lineOSA"},
                     {attrName: "numberALL", attrClass: "lineALL"}
-                ]
+                ],
+                setTooltipValue: function (value) {
+                    return (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
+                }
             };
 
         if (_.isUndefined(this.get("data_abschluesse"))) {
