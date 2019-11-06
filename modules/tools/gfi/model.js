@@ -213,24 +213,15 @@ const Gfi = Tool.extend({
             GFIParams3d = this.setGfiParams3d(evt);
         }
 
-        // für detached MapMarker
         if (evt.hasOwnProperty("pixel")) {
             feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
                 return feat;
             });
         }
 
-        // Derive (center) coordinate with respect to the feature type
-        if (feature === null || feature === undefined) {
-            coordinate = evt.coordinate;
-        }
-        else if ((/polygon/i).test(feature.getGeometry().getType())) {
-            coordinate = getCenter(feature.getGeometry().getExtent());
-        }
-        else {
-            coordinate = feature.getGeometry().getFirstCoordinate();
-        }
+        coordinate = evt.coordinate;
 
+        // coordinate = evt.coordinate;
         this.setCoordinate(coordinate);
 
         // Vector
@@ -430,6 +421,7 @@ const Gfi = Tool.extend({
      * @return {object[]}           GFI-Parameter vom WMS-Layern
      */
     getWMSGFIParams: function (layerlist) {
+        
         var wmsGfiParams = [];
 
         _.each(layerlist, function (layer) {
