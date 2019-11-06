@@ -36,12 +36,13 @@ const BalkendiagrammTheme = Theme.extend({
         if (layerDataFormat !== null && layerDataFormat.layerType === "Stadtteile") {
             this.set("Title", element.Stadtteil);
 
-            content[element.Stadtteil] = this.get("latestStatistic");
-            content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
-            content.Hamburg = element["Summe hamburg"];
-
-            // Check if the layer of wanderungen by the attribute description
-            if (layerDataFormat.themeUnit === "anteilWanderungen") {
+            // Check if the layer of wanderungen by layerDataFormat.themeUnit
+            if (layerDataFormat.themeUnit !== "anteilWanderungen") {
+                content[element.Stadtteil] = this.get("latestStatistic");
+                content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
+                content.Hamburg = element["Summe hamburg"];
+            }
+            else {
                 content["In " + element.Stadtteil] = this.get("latestStatistic");
                 content["Anteil der Zuzüge aus dem Umland:"] = element["Zuzuege aus_umland"];
                 content["Anteil der Zuzüge ins Umland:"] = element["Fortzuege aus_dem_umland"];
@@ -57,12 +58,13 @@ const BalkendiagrammTheme = Theme.extend({
         else if (layerDataFormat !== null && layerDataFormat.layerType === "Statistische Gebiete") {
             this.set("Title", element.Stadtteil + ": " + element.Statgebiet);
 
-            content["Statistisches Gebiet"] = this.get("latestStatistic");
-            content[element.Stadtteil] = element["Summe stadtteil"];
-            content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
-            content.Hamburg = element["Summe hamburg"];
-
-            if (layerDataFormat.themeUnit === "anteilWanderungen") {
+            if (layerDataFormat.themeUnit !== "anteilWanderungen") {
+                content["Statistisches Gebiet"] = this.get("latestStatistic");
+                content[element.Stadtteil] = element["Summe stadtteil"];
+                content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
+                content.Hamburg = element["Summe hamburg"];
+            }
+            else {
                 content["im Statistischen Gebiet"] = this.get("latestStatistic");
             }
         }
@@ -124,15 +126,19 @@ const BalkendiagrammTheme = Theme.extend({
             if (content[key] === null || _.isUndefined(content[key])) {
                 content[key] = "*g.F.";
             }
+            else if (layerDataFormat.themeUnit === "anzahl") {
+                content[key] = content[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
             else if (layerDataFormat.themeUnit === "anteil") {
                 content[key] = Math.round(content[key]) + "%";
             }
             else if (layerDataFormat.themeUnit === "anteilWanderungen") {
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + element.Stadtteil)) {
                     content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic") * 100) / 100 : Math.round(this.get("latestStatistic") * 100) / 100;
+                    content[key] = content[key].toString().replace(/\./g, ",");
                 }
                 else {
-                    content[key] = Math.round(content[key] * 100) / 100 + "%";
+                    content[key] = (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",") + "%";
                 }
             }
         }
@@ -189,13 +195,13 @@ const BalkendiagrammTheme = Theme.extend({
                 ],
                 setTooltipValue: function (value) {
                     if (!isNaN(value) && value.toString().indexOf(".") !== -1 && dataType !== "anteilWanderungen") {
-                        return Math.round(value * 100) / 100 + "%";
+                        return (Math.round(value * 100) / 100).toString().replace(/\./g, ",") + "%";
                     }
                     else if (value.toString().indexOf(".") !== -1) {
-                        return Math.round(value * 100) / 100;
+                        return (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
                     }
 
-                    return value;
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 }
             };
 

@@ -257,13 +257,13 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
                 this.set("address", attr.C_S_Str + " " + attr.C_S_HNr + ", " + attr.C_S_PLZ + " " + attr.C_S_Ort);
             }
             if (attr.C_S_SuS_PS && attr.C_S_SuS_S1) {
-                this.set("countStudents", String(parseInt(attr.C_S_SuS_PS, 10) + parseInt(attr.C_S_SuS_S1, 10)));
+                this.set("countStudents", String(parseInt(attr.C_S_SuS_PS, 10) + parseInt(attr.C_S_SuS_S1, 10) + parseInt(attr.C_S_SuS_S2, 10)).replace(/\B(?=(\d{3})+(?!\d))/g, "."));
             }
             if (attr.C_S_SuS_PS) {
-                this.set("countStudentsPrimary", attr.C_S_SuS_PS);
+                this.set("countStudentsPrimary", attr.C_S_SuS_PS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
             }
             if (attr.C_S_SuS_S1) {
-                this.set("countStudentsSecondary", attr.C_S_SuS_S1);
+                this.set("countStudentsSecondary", attr.C_S_SuS_S1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
             }
             if (attr.C_S_SI) {
                 this.set("socialIndex", attr.C_S_SI === "-1" ? "nicht vergeben" : attr.C_S_SI);
