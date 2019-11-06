@@ -33,6 +33,7 @@ const Gfi = Tool.extend({
         isMapMarkerVisible: true,
         unlisten: false
     }),
+
     initialize: function () {
         var channel = Radio.channel("GFI");
 
@@ -204,20 +205,13 @@ const Gfi = Tool.extend({
             wmsGFIParams = [],
             GFIParams3d = [],
             unionParams = [],
-            coordinate = [],
-            feature;
-        
+            coordinate = [];
+
         Radio.trigger("ClickCounter", "gfi");
-        
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
 
-        if (evt.hasOwnProperty("pixel")) {
-            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-                return feat;
-            });
-        }
         coordinate = evt.coordinate;
 
         // coordinate = evt.coordinate;
@@ -418,7 +412,7 @@ const Gfi = Tool.extend({
      * @return {object[]}           GFI-Parameter vom WMS-Layern
      */
     getWMSGFIParams: function (layerlist) {
-        
+
         var wmsGfiParams = [];
 
         _.each(layerlist, function (layer) {
