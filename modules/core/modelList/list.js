@@ -738,7 +738,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
 
-            lightModels.forEach(model => this.add(model));
+            lightModels.forEach(model => {
+                if (model.hasOwnProperty("children")) {
+                    if (model.children.length > 0) {
+                        this.add(model);
+                    }
+                }
+                else {
+                    this.add(model);
+                }
+            });
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
