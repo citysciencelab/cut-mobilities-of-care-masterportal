@@ -49,5 +49,28 @@ describe("tools/einwohnerabfrageModel", function () {
             expect(model.get("uniqueIdList")).to.be.an("array").that.is.empty;
         });
     });
+    describe("chooseUnitAndPunctuate", function () {
+        it("should return correct unit for value < 250000", function () {
+            expect(model.chooseUnitAndPunctuate(567, 0)).to.have.string("m²");
+        });
+        it("should return correct unit for value > 250000 and value < 10000000", function () {
+            expect(model.chooseUnitAndPunctuate(250000.1, 1)).to.have.string("ha");
+        });
+        it("should return correct unit for value >  250000", function () {
+            expect(model.chooseUnitAndPunctuate(99999999, 0)).to.have.string("km²");
+        });
+        it("should return correctly formatted number with unit", function () {
+            expect(model.chooseUnitAndPunctuate(1234567.123, 3)).to.equal("123,457 ha");
+        });
+        it("should return correctly formatted number with unit when number > 250000 and value < 10000000 maxlength === 0", function () {
+            expect(model.chooseUnitAndPunctuate(1234567.123, 0)).to.equal("123 ha");
+        });
+        it("should return correctly formatted number with unit when value < 250000 && maxlength === 0", function () {
+            expect(model.chooseUnitAndPunctuate(14567.123, 0)).to.equal("14.567 m²");
+        });
+        it("should return correctly formatted number with unit when value > 10000000 &&  maxlength === 1", function () {
+            expect(model.chooseUnitAndPunctuate(99999999.999, 1)).to.equal("100,0 km²");
+        });
+    });
 
 });
