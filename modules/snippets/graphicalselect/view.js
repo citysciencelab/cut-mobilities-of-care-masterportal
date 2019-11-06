@@ -62,15 +62,14 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
     createDrawInteraction: function (evt) {
         const geographicValues = this.model.get("geographicValues");
 
-        for (const prop in geographicValues) {
-            if (prop === evt.target.title) {
+        Object.keys(geographicValues).forEach(function (key) {
+            if (key === evt.target.title) {
                 if (this.model.get("drawInteraction")) {
                     this.model.get("drawInteraction").setActive(false);
                 }
                 this.model.createDrawInteraction(this.model.id, evt.target.value);
-                break;
             }
-        }
+        });
     },
     /**
      * Calls the function "setIsOpen" in the model with parameter false
