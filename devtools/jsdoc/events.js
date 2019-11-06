@@ -879,7 +879,7 @@
 /**
  * @event Core.ModelList#RadioRequestModelListGetModelsByAttributes
  * @param {Object} attributes Attributes used to find models to be returned
- * @description Returns the models that match the given attributes
+ * @description Returns the models that match the given attributes in an array, if none found the array is empty
  * @example Radio.request("ModelList", "getModelsByAttributes", attributes)
  */
 
