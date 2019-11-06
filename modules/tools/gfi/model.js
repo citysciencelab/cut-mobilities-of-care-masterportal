@@ -1,5 +1,4 @@
 import Overlay from "ol/Overlay.js";
-import {getCenter} from "ol/extent.js";
 import ThemeList from "./themes/list";
 import DesktopDetachedView from "./desktop/detached/view";
 import TableView from "./table/view";
@@ -218,12 +217,10 @@ const Gfi = Tool.extend({
                 return feat;
             });
         }
-
         coordinate = evt.coordinate;
 
         // coordinate = evt.coordinate;
         this.setCoordinate(coordinate);
-
         // Vector
         vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, evt.map.getEventPixel(evt.originalEvent));
         // WMS
@@ -231,7 +228,6 @@ const Gfi = Tool.extend({
 
         this.setThemeIndex(0);
         unionParams = vectorGFIParams.concat(wmsGFIParams, GFIParams3d);
-
         if (unionParams.length === 0) {
             this.setIsVisible(false);
         }
