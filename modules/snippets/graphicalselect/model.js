@@ -30,7 +30,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             "Fläche zeichnen": "Polygon"
         },
         currentValue: "",
-        selectedAreaGeoJson: {},
+        selectedAreaGeoJson: undefined,
         tooltipMessage: "Klicken zum Starten und Beenden",
         tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
     },
