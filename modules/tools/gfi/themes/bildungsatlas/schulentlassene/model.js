@@ -46,28 +46,45 @@ const SchulentlasseneTheme = Theme.extend({
             console.warn("bildungsatlas - schulentlassene: the layerList couldn't be set by attributes:", modelAttributeFilter);
         }
 
-        layerDataFormat = layerList[0].get("format");
-
-        if (!layerDataFormat || !layerDataFormat.layerType || !layerDataFormat.themeType) {
+        layerDataFormat = layerList[0].get("gfiFormat");
+        if (!layerDataFormat.hasOwnProperty("gfiBildungsatlasFormat")) {
             this.set("layerType", false);
             this.set("themeType", false);
-            console.warn("bildungsatlas - schulentlassene: the layerDataFormat does not exist or is set inappropriately:", layerDataFormat);
-        }
-        else if (layerDataFormat.layerType !== "stadtteil" && layerDataFormat.layerType !== "sozialraum") {
-            this.set("layerType", false);
-            this.set("themeType", false);
-            console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.layerType is unknown to the application:", layerDataFormat.layerType);
-        }
-        else if (layerDataFormat.themeType !== "Abi" && layerDataFormat.themeType !== "oHS") {
-            this.set("layerType", false);
-            this.set("themeType", false);
-            console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.themeType is unknown to the application:", layerDataFormat.themeType);
+            console.warn("bildungsatlas - schulentlassene: layerDataFormat expects to have a key 'gfiBildungsatlasFormat' but has none:", layerDataFormat);
         }
         else {
-            // set the layerType "stadtteil" or "sozialraum"
-            this.set("layerType", layerDataFormat.layerType);
-            // set the themeType "Abi" or "oHS" (oHS are pupils without graduation)
-            this.set("themeType", layerDataFormat.themeType);
+            layerDataFormat = layerDataFormat.gfiBildungsatlasFormat;
+
+            if (!layerDataFormat || !layerDataFormat.layerType || !layerDataFormat.themeType) {
+                this.set("layerType", false);
+                this.set("themeType", false);
+                console.warn("bildungsatlas - schulentlassene: layerDataFormat does not exist or is set inappropriately:", layerDataFormat);
+            }
+            else if (layerDataFormat.layerType !== "stadtteil" && layerDataFormat.layerType !== "sozialraum") {
+                this.set("layerType", false);
+                this.set("themeType", false);
+                console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.layerType is unknown to the application:", layerDataFormat.layerType);
+            }
+            else if (layerDataFormat.themeType !== "Abi" && layerDataFormat.themeType !== "oHS") {
+                this.set("layerType", false);
+                this.set("themeType", false);
+                console.warn("bildungsatlas - schulentlassene: the given layerDataFormat.themeType is unknown to the application:", layerDataFormat.themeType);
+            }
+            else {
+                // set the layerType "stadtteil" or "sozialraum"
+                this.set("layerType", layerDataFormat.layerType);
+                // set the themeType "Abi" or "oHS" (oHS are pupils without graduation)
+                this.set("themeType", layerDataFormat.themeType);
+            }
+        }
+
+        for (idx in element) {
+            for (key in element[idx]) {
+                // beautifyString in /modules/tools/gfi/themes/model.js removes the first "_" in key - so here we have to adjust the "realKey"
+                realKey = key.replace(" ", "_");
+
+                this.set(realKey, element[idx][key]);
+            }
         }
 
         for (idx in element) {
