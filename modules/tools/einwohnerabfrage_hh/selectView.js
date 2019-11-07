@@ -1,4 +1,4 @@
-import SnippetDropdownView from "../../snippets/dropdown/view";
+import GraphicalSelectView from "../../snippets/graphicalselect/view";
 import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
@@ -10,10 +10,6 @@ import SnippetCheckBoxView from "../../snippets/checkbox/view";
  */
 
 const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
-    events: {
-        "change select": "createDrawInteraction"
-    },
-
     /**
      * @class SelectView
      * @extends Backbone.View
@@ -29,7 +25,7 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
             "change:isActive": this.render,
             "renderResult": this.renderResult
         });
-        this.snippetDropdownView = new SnippetDropdownView({model: this.model.get("snippetDropdownModel")});
+        this.snippetDropdownView = new GraphicalSelectView({model: this.model.get("snippetDropdownModel")});
         this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.get("checkBoxRaster")});
         this.checkBoxAddress = new SnippetCheckBoxView({model: this.model.get("checkBoxAddress")});
         if (this.model.get("isActive") === true) {
@@ -44,15 +40,16 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
      * @member Template
      * @description Template used to create SelectView for Einwohnerabfrage_hh
      * @memberof Filter/Source
+     * @returns {void}
      */
     template: _.template(Template),
     snippetDropdownView: {},
 
     /**
      * render the temlpate
-     * @param {*} model todo
+     * @param {*} model not used
      * @param {Boolean} value this view is active
-     * @returns {*} todo
+     * @returns {this} this view
      */
     render: function (model, value) {
         var attr = this.model.toJSON();
@@ -79,16 +76,6 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
     renderResult: function () {
         this.$el.find(".result").html("");
         this.$el.find(".result").append(new ResultView({model: this.model}).render().el);
-    },
-
-    /**
-     * create draw interaction
-     * @param {*} evt todo
-     * @returns {void}
-     */
-    createDrawInteraction: function (evt) {
-        this.model.get("drawInteraction").setActive(false);
-        this.model.createDrawInteraction(evt.target.value);
     }
 });
 

@@ -8,6 +8,11 @@ Um die externen Sourcen in der Entwicklungsumgebung und dem Dev-Server in das pe
 ```
 
 Der genutzte Mechanismus wird über **[webpackMode: eager](https://webpack.js.org/api/module-methods)** gesteuert,indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
+Dadurch wird das Model der externen Sourcen erst ganz zum Schluß initialisiert und ist in der Model-Liste nur rudimentär vorhanden und wird dort ausgetauscht. 
+
+Besonderheit:
+Die View-Klasse der externen Sourcen muss das zugehörige Model neu anlegen. Dieses wird in der Model-Liste mit dem rudimentären Model ausgetauscht.
+
 
 
 Beim build-Prozess per

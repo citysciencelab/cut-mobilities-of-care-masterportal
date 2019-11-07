@@ -457,7 +457,10 @@ function loadApp () {
         import(/* webpackMode: "eager" */CUSTOMMODULE)
             .then(module => {
                 /* eslint-disable new-cap */
-                new module.default();
+                const customModule = new module.default();
+                // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Later on the model must be replaced in modellist:
+
+                Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
             })
             .catch(error => {
                 console.error(error);
