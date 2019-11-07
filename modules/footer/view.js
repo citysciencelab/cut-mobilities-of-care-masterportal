@@ -21,7 +21,7 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
     template: _.template(Template),
     className: "footer",
     /**
-     * Renders the footer to the ol-viewport
+     * Renders the footer to the ol-viewport and creates onClick-listeners for links that opens tools
      * @return {FooterView} returns this
      */
     render: function () {
@@ -29,7 +29,32 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
 
         attr.masterPortalVersionNumber = Radio.request("Util", "getMasterPortalVersionNumber");
         $(".ol-viewport").append(this.$el.html(this.template(attr)));
+        const urls = this.model.get("urls");
+
+        if (urls) {
+            urls.forEach(function (url) {
+                const toolModelId = url.toolModelId;
+
+                if (toolModelId && toolModelId !== "") {
+                    this.addOnClickListenerForTools(toolModelId, "-footerlink");
+                    this.addOnClickListenerForTools(toolModelId, "-footerlink-mobile");
+                }
+            }, this);
+        }
         return this;
+    },
+    /**
+     * Creates onClick-listeners for links that opens tools.
+     * @param {String} toolModelId the id of the model of the tool to be opened on click on footer-link
+     * @param {String} linkIdAppendix "-footerlink" or "-footerlink-mobile"
+     * @return {void}
+     */
+    addOnClickListenerForTools: function (toolModelId, linkIdAppendix) {
+        $("#" + toolModelId + linkIdAppendix).click(function () {
+            const model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+
+            model.set("isActive", !model.get("isActive"));
+        });
     }
 });
 

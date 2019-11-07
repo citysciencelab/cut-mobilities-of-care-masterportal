@@ -1,6 +1,11 @@
 <% _.each(urls, function(value, key){ %>
-    <div class="hidden-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias %></a></div>
-    <div class="visible-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias_mobil %></a></div>
+    <% if (value.toolModelId && value.toolModelId !== "") { %>
+        <div class="hidden-xs pull-left" id="<%=value.toolModelId %>-footerlink"> <%=value.bezeichnung %> <a href="#" role="button"><%=value.alias %></a></div>
+        <div class="visible-xs pull-left" id="<%=value.toolModelId %>-footerlink-mobile"> <%=value.bezeichnung %> <a href="#" role="button"><%=value.alias_mobil %></a></div>
+    <% } else { %>
+        <div class="hidden-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias %></a></div>
+        <div class="visible-xs pull-left"> <%=value.bezeichnung %> <a href=<%=value.url %> target="_blank"><%=value.alias_mobil %></a></div>
+    <% } %>
     <span class="glyphicon glyphicon-option-vertical pull-left hidden-xs"></span>
 <%}); %>
 

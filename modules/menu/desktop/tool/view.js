@@ -109,6 +109,11 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             this.model.setIsActive(true);
         }
         else {
+            if (!this.model.collection) {
+                // custommodules are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the custom module.
+                // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+                this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+            }
             this.model.collection.setActiveToolsToFalse(this.model);
             this.model.setIsActive(true);
         }

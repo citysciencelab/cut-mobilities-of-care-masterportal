@@ -132,10 +132,10 @@ Datei *modules/tools/scale/model.js* öffnen und Model definieren. Das Model erb
 import Tool from "../../core/modelList/tool/model";
 
 const ScaleModel = Tool.extend({
-    defaults: {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-resize-full",
         renderToWindow: true
-    },
+    }),
     // wird aufgerufen wenn das Model erstellt wird
     initialize: function () {
         this.superInitialize();
