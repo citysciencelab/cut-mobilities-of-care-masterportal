@@ -206,11 +206,26 @@ const Gfi = Tool.extend({
             GFIParams3d = [],
             unionParams = [],
             coordinate = [];
+            feature;
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
+
+        // für detached MapMarker
+        if (evt.hasOwnProperty("pixel")) {
+            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                return feat;
+            });
+        }
+        console.log(feature);
+        //     {
+        //         layerFilter: function (layer) {
+        //             return layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true;
+        //         }
+        //     });
+        // }
 
         coordinate = evt.coordinate;
 
