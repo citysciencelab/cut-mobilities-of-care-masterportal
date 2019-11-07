@@ -42,8 +42,8 @@
                 <tr colspan="5">
                     <th></th>
                     <th><%= (themeType === "Abi") ? "Abi/FH" : "oSA" %></th>
-                    <th>MSA</th>
-                    <th>ESA</th>
+                    <th><%= (themeType === "Abi") ? "MSA" : "ESA" %></th>
+                    <th><%= (themeType === "Abi") ? "ESA" : "MSA" %></th>
                     <th></th>
                 </tr>
             </thead>
@@ -51,22 +51,22 @@
                 <tr colspan="5">
                     <td><%= (layerType === "stadtteil") ? ST_Name : SR_Name %></td>
                     <td><%= (themeType === "Abi") ? Math.round(C41_Abi) : Math.round(C41_oHS) %> %</td>
-                    <td><%= Math.round(C41_RS) %> %</td>
-                    <td><%= Math.round(C41_mHS) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_RS) : Math.round(C41_mHS) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_mHS) : Math.round(C41_RS) %> %</td>
                     <td></td>
                 </tr>
                 <tr colspan="5">
                     <td>Bezirk <%= B_Name %></td>
                     <td><%= (themeType === "Abi") ? Math.round(C41_Abi_B) : Math.round(C41_oHS_B) %> %</td>
-                    <td><%= Math.round(C41_RS_B) %> %</td>
-                    <td><%= Math.round(C41_mHS_B) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_RS_B) : Math.round(C41_mHS_B) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_mHS_B) : Math.round(C41_RS_B) %> %</td>
                     <td></td>
                 </tr>
                 <tr colspan="5">
                     <td>Hamburg</td>
                     <td><%= (themeType === "Abi") ? Math.round(C41_Abi_FHH) : Math.round(C41_oHS_FHH) %> %</td>
-                    <td><%= Math.round(C41_RS_FHH) %> %</td>
-                    <td><%= Math.round(C41_mHS_FHH) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_RS_FHH) : Math.round(C41_mHS_FHH) %> %</td>
+                    <td><%= (themeType === "Abi") ? Math.round(C41_mHS_FHH) : Math.round(C41_RS_FHH) %> %</td>
                     <td></td>
                 </tr>
             </tbody>
