@@ -16,7 +16,7 @@ else {
     proxies = require("./proxyconf_example.json");
 }
 
-module.exports = function (env, args) {
+module.exports = function () {
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",

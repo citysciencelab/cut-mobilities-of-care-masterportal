@@ -1,10 +1,9 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
-    _ = require("underscore"),
     UglifyJsPlugin = require("uglifyjs-webpack-plugin"),
     path = require("path");
 
-module.exports = function (env, args) {
+module.exports = function () {
     return merge.smart(new Common(), {
         mode: "production",
         output: {

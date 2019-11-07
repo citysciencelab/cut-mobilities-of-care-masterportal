@@ -85,7 +85,9 @@ var sbconfig, controls, controlsView;
  * @return {void}.
  */
 function loadApp () {
-    const allCustomModules = /* eslint-disable no-undef */CUSTOMMODULES/* eslint-enable no-undef */;
+    /* eslint-disable no-undef */
+    const allCustomModules = Object.is(CUSTOMMODULES, {}) ? {} : CUSTOMMODULES;
+    /* eslint-disable no-undef */
 
     // Prepare config for Utils
     var utilConfig = {},
@@ -451,20 +453,23 @@ function loadApp () {
 
     new HighlightFeature();
 
-    Config.customModules.forEach((customModuleKey) => {
-        if (allCustomModules[customModuleKey] !== undefined) {
-            // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-            import(`../customModules/${allCustomModules[customModuleKey]}.js`/* webpackMode: "eager" */)
-                .then(module => {
-                    /* eslint-disable new-cap */
-                    new module.default();
-                })
-                .catch(error => {
-                    console.error(error);
-                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-                });
-        }
-    });
+    if (Config.hasOwnProperty("customModules")) {
+        Config.customModules.forEach((customModuleKey) => {
+            if (allCustomModules[customModuleKey] !== undefined) {
+                // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
+                import(`../customModules/${allCustomModules[customModuleKey]}.js`/* webpackMode: "eager" */)
+                    .then(module => {
+                        /* eslint-disable new-cap */
+                        new module.default();
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+                    });
+                // import(`../customModules/${allCustomModules[customModuleKey].less}.less` /* webpackMode: "eager" */);
+            }
+        });
+    }
 
     Radio.trigger("Util", "hideLoader");
 }

@@ -8,6 +8,7 @@ let path2CustomModules = "";
 if (fs.existsSync("./customModules/customModulesConf.json")) {
     path2CustomModules = require("../customModules/customModulesConf.json");
 }
+
 module.exports = function () {
     const entryPoints = {},
         customModules = {};
@@ -21,9 +22,40 @@ module.exports = function () {
             customModules[entryPointKey] = customModuleFilename;
         }
         else {
-            console.error("WARNING: IGNORED CUSTOM MODULE \"" + entryPointKey + "\"");
+            console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePath + ".js\"");
         }
     }
+    //     const customModuleFilenameJs = path2CustomModules[entryPointKey].js,
+    //         customModuleFilenameLess = path2CustomModules[entryPointKey].less;
+    //     let customModulePathJs,
+    //         customModulePathLess;
+
+    //     if (customModuleFilenameJs !== undefined) {
+    //         customModulePathJs = "./customModules/" + customModuleFilenameJs;
+    //         if (fs.existsSync(customModulePathJs + ".js")) {
+    //             entryPoints[entryPointKey] = customModulePathJs;
+    //             if (customModules[entryPointKey] === undefined) {
+    //                 customModules[entryPointKey] = {};
+    //             }
+    //             customModules[entryPointKey].js = customModuleFilenameJs;
+    //         }
+    //         else {
+    //             console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePathJs + ".js\"");
+    //         }
+    //     }
+    //     if (customModuleFilenameLess !== undefined) {
+    //         customModulePathLess = "./customModules/" + customModuleFilenameLess;
+    //         if (fs.existsSync(customModulePathLess + ".less")) {
+    //             if (customModules[entryPointKey] === undefined) {
+    //                 customModules[entryPointKey] = {};
+    //             }
+    //             customModules[entryPointKey].less = customModuleFilenameLess;
+    //         }
+    //         else {
+    //             console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePathLess + ".less\"");
+    //         }
+    //     }
+    // }
 
     entryPoints.masterportal = "./js/main.js";
 
@@ -71,20 +103,6 @@ module.exports = function () {
                 }
             ]
         },
-        /*
-        optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    styles: {
-                        name: "styles",
-                        test: /\.css$/,
-                        chunks: "all",
-                        enforce: true,
-                    },
-                },
-            },
-        },
-        */
         plugins: [
             // provide libraries globally
             new webpack.ProvidePlugin({
@@ -96,8 +114,7 @@ module.exports = function () {
             }),
             // create css under build/
             new MiniCssExtractPlugin({
-                filename: "css/style.css"
-                /* chunkFilename: "css/[id].css" */
+                filename: "css/[name].css"
             }),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
