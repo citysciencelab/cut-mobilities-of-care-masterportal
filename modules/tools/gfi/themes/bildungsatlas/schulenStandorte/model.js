@@ -10,8 +10,13 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.parseGfiContent(this.get("gfiContent"));
-                this.setInfoHtml();
+                const gfiContent = this.get("gfiContent"),
+                    gfiTheme = this.get("gfiTheme"),
+                    themeId = this.get("themeId"),
+                    layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": gfiTheme, "id": themeId});
+
+                this.parseGfiContent(gfiContent);
+                this.setInfoHtml(layerList);
             }
         });
     },
@@ -72,10 +77,10 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
 
     /**
      * here we need to get the format information to decide which info to show
+     * @param  {Array} layerList - the list attributes of current layer
      * @returns {void}
      */
-    setInfoHtml: function () {
-        const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
+    setInfoHtml: function (layerList) {
         let level;
 
         if (layerList) {
