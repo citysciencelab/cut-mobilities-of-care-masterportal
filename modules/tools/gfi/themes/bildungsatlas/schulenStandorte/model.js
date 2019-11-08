@@ -14,9 +14,17 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
                     gfiTheme = this.get("gfiTheme"),
                     themeId = this.get("themeId"),
                     layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": gfiTheme, "id": themeId});
+                let gfiBildungsatlasFormat = {};
+
+                if (layerList) {
+                    gfiBildungsatlasFormat = layerList[0].get("gfiFormat");
+                }
+                else {
+                    console.warn("This layer is not existed");
+                }
 
                 this.parseGfiContent(gfiContent);
-                this.setInfoHtml(layerList);
+                this.setInfoHtml(gfiBildungsatlasFormat);
             }
         });
     },
@@ -77,14 +85,14 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
 
     /**
      * here we need to get the format information to decide which info to show
-     * @param  {Array} layerList - the list attributes of current layer
+     * @param  {Object} gfiBildungsatlasFormat - the gfiBildungsatlasFormat of current layer
      * @returns {void}
      */
-    setInfoHtml: function (layerList) {
+    setInfoHtml: function (gfiBildungsatlasFormat) {
         let level;
 
-        if (layerList) {
-            level = layerList[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
+        if (gfiBildungsatlasFormat) {
+            level = gfiBildungsatlasFormat.themeType;
         }
         this.set("level", level);
     }

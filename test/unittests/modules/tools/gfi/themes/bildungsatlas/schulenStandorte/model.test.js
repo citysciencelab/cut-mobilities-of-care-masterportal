@@ -1,7 +1,7 @@
 import Model from "@modules/tools/gfi/themes/bildungsatlas/schulenStandorte/model.js";
 import {expect} from "chai";
 
-let model, gfiContent, regex;
+let model, gfiContent, regex, gfiBildungsatlasFormat;
 
 before(function () {
     model = new Model();
@@ -30,6 +30,7 @@ before(function () {
         }
     };
     regex = /\B(?=(\d{3})+(?!\d))/g;
+    gfiBildungsatlasFormat = {"themeType": "1-4"};
 });
 
 describe("tools/gfi/themes/bildungsatlas/schulenStandorte", function () {
@@ -54,6 +55,13 @@ describe("tools/gfi/themes/bildungsatlas/schulenStandorte", function () {
             expect(model.get("countStudentsSecondaryOneAllPlace")).to.equal(String(gfiContent.allProperties.Schule_S1).replace(regex, "."));
             expect(model.get("countStudentsSecondaryTwoAllPlace")).to.equal(String(gfiContent.allProperties.Schule_S2).replace(regex, "."));
             expect(model.get("schoolUrl")).to.equal(String(gfiContent.allProperties.C_S_HomP));
+        });
+    });
+
+    describe("setInfoHtml should set the level correctly", function () {
+        it("should set all given values", function () {
+            model.setInfoHtml(gfiBildungsatlasFormat);
+            expect(model.get("level")).to.equal(String(gfiBildungsatlasFormat.themeType));
         });
     });
 });
