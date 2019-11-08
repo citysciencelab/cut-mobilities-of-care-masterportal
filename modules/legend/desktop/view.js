@@ -13,7 +13,10 @@ import ContentTemplate from "text-loader!../content.html";
  */
 const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     events: {
-        "click .glyphicon-remove": "hide"
+        "click .glyphicon-remove": "hide",
+        "touchmove .title": "touchMoveWindow",
+        "touchstart .title": "touchStartWindow",
+        "touchend .title": "touchMoveEnd"
     },
     /**
      * @class LegendView

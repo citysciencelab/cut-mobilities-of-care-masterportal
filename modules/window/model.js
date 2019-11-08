@@ -4,12 +4,16 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         isVisible: false,
         maxPosLeft: "",
         maxPosTop: "60px",
-        rotationAngle: 0
+        rotationAngle: 0,
+        startX: 0,
+        startY: 0,
+        windowLeft: 0,
+        windowTop: 0
     },
 
     /**
      * @class Window
-     * @description Model for MapMarker and Highlighting
+     * @description Model for Window
      * @extends Backbone.Model
      * @memberof Window
      * @constructs
@@ -65,6 +69,18 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         this.set("title", value.get("name"));
         this.set("icon", value.get("glyphicon"));
         this.set("winType", value.get("id"));
+    },
+    setWindowLeft: function (value) {
+        this.set("windowLeft", value);
+    },
+    setWindowTop: function (value) {
+        this.set("windowTop", value);
+    },
+    setStartX: function (value) {
+        this.set("startX", value);
+    },
+    setStartY: function (value) {
+        this.set("startY", value);
     }
 });
 

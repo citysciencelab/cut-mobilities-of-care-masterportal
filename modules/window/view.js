@@ -10,7 +10,7 @@ import "jquery-ui/ui/widgets/draggable";
  */
 /**
  * @member WindowViewTemplateTable
- * @description Template used to create Tool Window for the table
+ * @description Template used to create Tool Window for the touch table
  * @memberof WindowView
  */
 
@@ -79,10 +79,6 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     model: new Window(),
     templateMax: _.template(templateMax),
     templateTable: _.template(templateTable),
-    startX: 0,
-    startY: 0,
-    windowLeft: 0,
-    windowTop: 0,
 
     /**
      * Renders the Window
@@ -116,17 +112,17 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
                 else if ($("#table-navigation").attr("class") === "table-nav-90deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-90deg");
-                    this.model.set("rotationAngle", 90);
+                    this.model.set("rotationAngle", -90);
                 }
                 else if ($("#table-navigation").attr("class") === "table-nav-180deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-180deg");
-                    this.model.set("rotationAngle", 180);
+                    this.model.set("rotationAngle", -180);
                 }
                 else if ($("#table-navigation").attr("class") === "table-nav-270deg") {
                     this.$el.removeClass(currentTableClass);
                     this.$el.addClass("table-tool-window-270deg");
-                    this.model.set("rotationAngle", 270);
+                    this.model.set("rotationAngle", -270);
                 }
             }
             else {
@@ -191,10 +187,11 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         var touch = evt.changedTouches[0],
             rect = document.querySelector(".tool-window").getBoundingClientRect();
 
-        this.windowLeft = rect.left;
-        this.windowTop = rect.top;
-        this.startX = parseInt(touch.clientX, 10);
-        this.startY = parseInt(touch.clientY, 10);
+        this.model.setWindowLeft(rect.left);
+        this.model.setWindowTop(rect.top);
+        this.model.setStartX(parseInt(touch.clientX, 10));
+        this.model.setStartY(parseInt(touch.clientY, 10));
+
         evt.preventDefault();
     },
     /**
@@ -229,24 +226,26 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         });
     },
     /**
-     * Triggered on TouchEnd
+     * Function to calculate the new left and top positions
      * @param {Object} touch Object containing the touch attributes
      * @param {Number} width Window width
      * @param {Number} height Window height
      * @param {Number} mapWidth Width of the map
      * @param {Number} mapHeight Height of the map
-     * @return {Object} newPosition Object containing the new position and width
+     * @return {Object} newPosition Object containing the new position
      */
     getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
-        var distX = parseInt(touch.clientX, 10) - this.startX,
-            distY = parseInt(touch.clientY, 10) - this.startY,
+        var distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
+            distY = parseInt(touch.clientY, 10) - this.model.get("startY"),
             newPosX,
             newPosY,
-            newPosition = {};
+            newPosition = {},
+            windowL = this.model.get("windowLeft"),
+            windowT = this.model.get("windowTop");
 
         if (this.model.get("rotationAngle") === 0) {
-            newPosX = distX + parseInt(this.windowLeft, 10);
-            newPosY = distY + parseInt(this.windowTop, 10);
+            newPosX = distX + parseInt(windowL, 10);
+            newPosY = distY + parseInt(windowT, 10);
 
             if (newPosX + width > mapWidth) {
                 newPosition.left = mapWidth - width - 40 + "px";
@@ -271,9 +270,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             return newPosition;
 
         }
-        else if (this.model.get("rotationAngle") === 90) {
-            newPosX = distX + parseInt(this.windowLeft, 10) + height;
-            newPosY = distY + parseInt(this.windowTop, 10);
+        else if (this.model.get("rotationAngle") === -90) {
+            newPosX = distX + parseInt(windowL, 10) + height;
+            newPosY = distY + parseInt(windowT, 10);
 
             if (newPosX > mapWidth - 20) {
                 newPosition.left = mapWidth - 20 + "px";
@@ -297,9 +296,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
             return newPosition;
         }
-        if (this.model.get("rotationAngle") === 180) {
-            newPosX = distX + parseInt(this.windowLeft, 10) + width;
-            newPosY = distY + parseInt(this.windowTop, 10) + height;
+        if (this.model.get("rotationAngle") === -180) {
+            newPosX = distX + parseInt(windowL, 10) + width;
+            newPosY = distY + parseInt(windowT, 10) + height;
 
             if (newPosX > mapWidth) {
                 newPosition.left = mapWidth - 40 + "px";
@@ -323,9 +322,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
             return newPosition;
         }
-        else if (this.model.get("rotationAngle") === 270) {
-            newPosX = distX + parseInt(this.windowLeft, 10);
-            newPosY = distY + parseInt(this.windowTop, 10) + width;
+        else if (this.model.get("rotationAngle") === -270) {
+            newPosX = distX + parseInt(windowL, 10);
+            newPosY = distY + parseInt(windowT, 10) + width;
 
             if (newPosX + height > mapWidth - 20) {
                 newPosition.left = mapWidth - height - 20 + "px";
