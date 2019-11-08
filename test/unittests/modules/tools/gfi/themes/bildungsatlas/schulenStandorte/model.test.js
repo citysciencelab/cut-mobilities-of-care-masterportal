@@ -1,7 +1,7 @@
 import Model from "@modules/tools/gfi/themes/bildungsatlas/schulenStandorte/model.js";
 import {expect} from "chai";
 
-let model, gfiContent, regex, gfiTheme, themeID;
+let model, gfiContent, regex;
 
 before(function () {
     model = new Model();
