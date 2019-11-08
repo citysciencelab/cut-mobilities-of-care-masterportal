@@ -10,7 +10,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
     initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.replaceValuesWithRealResults();
+                this.parseGfiContent(this.get("gfiContent"));
                 this.setInfoHtml();
             }
         });
@@ -18,10 +18,11 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
 
     /**
      * here we need to parse the key and value, so that the real value could be shown in the gfi theme and all the keys will contain underline instead of white space
+     * @param  {Object} gfiContent - the attributes from the gfi content
      * @returns {void}
      */
-    replaceValuesWithRealResults: function () {
-        const attr = this.get("gfiContent").allProperties,
+    parseGfiContent: function (gfiContent) {
+        const attr = gfiContent.allProperties,
             regex = /\B(?=(\d{3})+(?!\d))/g;
 
         this.set("schoolName", attr.C_S_Name);
@@ -42,13 +43,6 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
             this.set("hooverSchool", "");
         }
 
-        if (attr.C_S_Zweig !== undefined) {
-            this.set("schoolWithBranch", attr.C_S_Zweig === 0 ? "nein" : "ja");
-        }
-        else {
-            this.set("schoolWithBranch", "");
-        }
-
         if (attr.C_S_SuS_ES !== undefined) {
             this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
         }
@@ -63,6 +57,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
             this.set("allDaySchool", "");
         }
 
+        this.set("schoolWithBranch", attr.C_S_Zweig);
         this.set("countStudentsAll", attr.C_S_SuS.toString().replace(regex, "."));
         this.set("countStudents", (attr.C_S_SuS - attr.C_S_SuS_ES).toString().replace(regex, "."));
         this.set("countStudentsPrimary", attr.C_S_SuS_PS.toString().replace(regex, "."));
@@ -70,8 +65,8 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         this.set("countStudentsSecondaryTwo", attr.C_S_SuS_S2.toString().replace(regex, "."));
         this.set("countStudentsAllPlace", attr.Schule_SuS.toString().replace(regex, "."));
         this.set("countStudentsPrimaryAllPlace", attr.Schule_PS.toString().replace(regex, "."));
-        this.set("countStudentsSecondary1AllPlace", attr.Schule_S1.toString().replace(regex, "."));
-        this.set("countStudentsSecondary2AllPlace", attr.Schule_S2.toString().replace(regex, "."));
+        this.set("countStudentsSecondaryOneAllPlace", attr.Schule_S1.toString().replace(regex, "."));
+        this.set("countStudentsSecondaryTwoAllPlace", attr.Schule_S2.toString().replace(regex, "."));
         this.set("schoolUrl", attr.C_S_HomP);
     },
 
@@ -86,7 +81,6 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         if (layerList) {
             level = layerList[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
         }
-
         this.set("level", level);
     }
 });
