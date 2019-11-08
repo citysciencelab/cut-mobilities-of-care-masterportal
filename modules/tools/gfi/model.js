@@ -1,4 +1,5 @@
 import Overlay from "ol/Overlay.js";
+import {getCenter} from "ol/extent.js";
 import ThemeList from "./themes/list";
 import DesktopDetachedView from "./desktop/detached/view";
 import TableView from "./table/view";
@@ -31,7 +32,8 @@ const Gfi = Tool.extend({
         rotateAngle: 0,
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
-        unlisten: false
+        unlisten: false,
+        centerMapMarkerPolygon: false
     }),
 
     initialize: function () {
@@ -192,9 +194,9 @@ const Gfi = Tool.extend({
     },
 
     /**
-     *
+     * ToDo
      * @param {ol.MapBrowserPointerEvent} evt Event
-     * @return {undefined}
+     * @return {void}
      */
     setGfiParams: function (evt) {
         var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
@@ -206,34 +208,15 @@ const Gfi = Tool.extend({
             GFIParams3d = [],
             unionParams = [],
             coordinate = [];
-            feature;
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
         }
 
-        // für detached MapMarker
-        if (evt.hasOwnProperty("pixel")) {
-            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-                return feat;
-            });
-        }
-        console.log(feature);
-        //     {
-        //         layerFilter: function (layer) {
-        //             return layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true;
-        //         }
-        //     });
-        // }
-
-        coordinate = evt.coordinate;
-
-        // coordinate = evt.coordinate;
+        coordinate = this.getClickedCoordinate(this.get("centerMapMarkerPolygon"), evt);
         this.setCoordinate(coordinate);
-        // Vector
         vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, evt.map.getEventPixel(evt.originalEvent));
-        // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
@@ -299,6 +282,48 @@ const Gfi = Tool.extend({
             }
         }, this);
         return gfiParams3d;
+    },
+
+    /**
+     * Returns the clicked coordinates, if the parameter centerPolygon is false.
+     * If the parameter centerPolygon has the value true, the coordinate of the center of the feature is determined.
+     * @param {boolean} centerPolygon - Parameter for specifying whether the coordinate of the center of a feature should be determined.
+     * @param {ol.MapBrowserPointerEvent} evt - click event.
+     * @returns {number} coordinate of clicked position or center coordinate of clicked feature.
+     */
+    getClickedCoordinate: function (centerPolygon, evt) {
+        let feature,
+            coordinate;
+
+        if (centerPolygon === true) {
+
+            // für detached MapMarker
+            if (evt.hasOwnProperty("pixel")) {
+                feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                    return feat;
+                },
+                {
+                    layerFilter: function (layer) {
+                        return layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true;
+                    }
+                });
+            }
+
+            // Derive (center) coordinate with respect to the feature type
+            if (feature === null || feature === undefined) {
+                coordinate = evt.coordinate;
+            }
+            else if ((/polygon/i).test(feature.getGeometry().getType())) {
+                coordinate = getCenter(feature.getGeometry().getExtent());
+            }
+            else {
+                coordinate = feature.getGeometry().getFirstCoordinate();
+            }
+        }
+        else {
+            coordinate = evt.coordinate;
+        }
+        return coordinate;
     },
 
     /**
