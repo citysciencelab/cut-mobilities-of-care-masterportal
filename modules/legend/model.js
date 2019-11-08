@@ -9,7 +9,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         renderToWindow: false,
         renderToSidebar: false,
         keepOtherToolsOpened: true,
-        glyphicon: "glyphicon-book"
+        glyphicon: "glyphicon-book",
+        rotationAngle: 0,
+        startX: 0,
+        startY: 0,
+        windowLeft: 0,
+        windowTop: 0
     }),
 
     /**
@@ -675,6 +680,18 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         name.push(layername);
 
         return [image, name];
+    },
+    setWindowLeft: function (value) {
+        this.set("windowLeft", value);
+    },
+    setWindowTop: function (value) {
+        this.set("windowTop", value);
+    },
+    setStartX: function (value) {
+        this.set("startX", value);
+    },
+    setStartY: function (value) {
+        this.set("startY", value);
     }
 });
 

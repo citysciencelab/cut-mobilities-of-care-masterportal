@@ -64,7 +64,9 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     * @returns {Legend.Desktop.LegendView} returns this
     */
     render: function () {
-        var attr = this.model.toJSON();
+        var attr = this.model.toJSON(),
+            currentClass,
+            currentLegendClass;
 
         this.$el.html(this.template(attr));
         $(".masterportal-container").append(this.$el.html(this.template(attr)));
@@ -73,6 +75,39 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
             containment: "#map",
             handle: ".legend-win-header"
         });
+
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            currentClass = document.querySelector(".legend-win");
+
+            _.each(currentClass.classList, function (item) {
+
+                if (item.endsWith("deg")) {
+                    currentLegendClass = item;
+                }
+            });
+
+            if ($("#table-navigation").attr("class") === "table-nav-0deg ui-draggable" || $("#table-navigation").attr("class") === "table-nav-0deg") {
+                this.$el.removeClass(currentLegendClass);
+                this.$el.addClass("legend-window-0deg");
+                this.model.set("rotationAngle", 0);
+            }
+            else if ($("#table-navigation").attr("class") === "table-nav-90deg") {
+                this.$el.removeClass(currentLegendClass);
+                this.$el.addClass("legend-window-90deg");
+                this.model.set("rotationAngle", -90);
+            }
+            else if ($("#table-navigation").attr("class") === "table-nav-180deg") {
+                this.$el.removeClass(currentLegendClass);
+                this.$el.addClass("legend-window-180deg");
+                this.model.set("rotationAngle", -180);
+            }
+            else if ($("#table-navigation").attr("class") === "table-nav-270deg") {
+                this.$el.removeClass(currentLegendClass);
+                this.$el.addClass("legend-window-270deg");
+                this.model.set("rotationAngle", -270);
+            }
+        }
+
         return this;
     },
     /**
@@ -135,6 +170,178 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     */
     updateLegendSize: function () {
         $(".legend-win-content").css("max-height", $(".masterportal-container").height() * 0.7);
+    },
+    /**
+     * Triggered on TouchStart
+     * @param {Event} evt Event, legend window being touched
+     * @return {void}
+     */
+    touchStartWindow: function (evt) {
+        var touch = evt.changedTouches[0],
+            rect = document.querySelector(".legend-win").getBoundingClientRect();
+
+        this.model.setWindowLeft(rect.left);
+        this.model.setWindowTop(rect.top);
+        this.model.setStartX(parseInt(touch.clientX, 10));
+        this.model.setStartY(parseInt(touch.clientY, 10));
+
+        evt.preventDefault();
+    },
+    /**
+     * Triggered on TouchMove
+     * @param {Event} evt Event of moved legend window
+     * @return {void}
+     */
+    touchMoveWindow: function (evt) {
+        var touch = evt.changedTouches[0],
+            width = document.querySelector(".legend-win").clientWidth,
+            height = document.querySelector(".legend-win").clientHeight,
+            mapWidth = document.getElementById("map").clientWidth,
+            mapHeight = document.getElementById("map").clientHeight,
+            newPosition = this.getNewPosition(touch, width, height, mapWidth, mapHeight);
+
+        this.$el.css({
+            "left": newPosition.left,
+            "top": newPosition.top,
+            "width": width,
+            "transform-origin": "top left"
+        });
+
+        evt.preventDefault();
+    },
+    /**
+     * Triggered on TouchEnd
+     * @return {void}
+     */
+    touchMoveEnd: function () {
+        this.$el.css({
+            "width": ""
+        });
+    },
+    /**
+     * Function to calculate the new left and top positions
+     * @param {Object} touch Object containing the touch attributes
+     * @param {Number} width Window width
+     * @param {Number} height Window height
+     * @param {Number} mapWidth Width of the map
+     * @param {Number} mapHeight Height of the map
+     * @return {Object} newPosition Object containing the new position
+     */
+    getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
+        var distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
+            distY = parseInt(touch.clientY, 10) - this.model.get("startY"),
+            newPosX,
+            newPosY,
+            newPosition = {},
+            windowL = this.model.get("windowLeft"),
+            windowT = this.model.get("windowTop");
+
+        if (this.model.get("rotationAngle") === 0) {
+            newPosX = distX + parseInt(windowL, 10);
+            newPosY = distY + parseInt(windowT, 10) - 60;
+
+            if (newPosX + width > mapWidth) {
+                newPosition.left = mapWidth - width - 40 + "px";
+            }
+            else if (newPosX < 20) {
+                newPosition.left = 20 + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY + height > mapHeight - 60) {
+                newPosition.top = mapHeight - height - 80 + "px";
+            }
+            else if (newPosY < 20) {
+                newPosition.top = 20 + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            return newPosition;
+
+        }
+        else if (this.model.get("rotationAngle") === -90) {
+            newPosX = distX + parseInt(windowL, 10) + height;
+            newPosY = distY + parseInt(windowT, 10) - 60;
+
+            if (newPosX > mapWidth - 20) {
+                newPosition.left = mapWidth - 20 + "px";
+            }
+            else if (newPosX - height < 20) {
+                newPosition.left = 20 + height + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY + width > mapHeight - 60) {
+                newPosition.top = mapHeight - width - 80;
+            }
+            else if (newPosY < 20) {
+                newPosition.top = 20 + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            return newPosition;
+        }
+        if (this.model.get("rotationAngle") === -180) {
+            newPosX = distX + parseInt(windowL, 10) + width;
+            newPosY = distY + parseInt(windowT, 10) + height - 60;
+
+            if (newPosX > mapWidth) {
+                newPosition.left = mapWidth - 40 + "px";
+            }
+            else if (newPosX - width < 20) {
+                newPosition.left = 20 + width + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY > mapHeight - 80) {
+                newPosition.top = mapHeight - 80 + "px";
+            }
+            else if (newPosY - height < 20) {
+                newPosition.top = 20 + height + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            return newPosition;
+        }
+        else if (this.model.get("rotationAngle") === -270) {
+            newPosX = distX + parseInt(windowL, 10);
+            newPosY = distY + parseInt(windowT, 10) + width - 60;
+
+            if (newPosX + height > mapWidth - 20) {
+                newPosition.left = mapWidth - height - 20 + "px";
+            }
+            else if (newPosX < 20) {
+                newPosition.left = 20 + "px";
+            }
+            else {
+                newPosition.left = newPosX + "px";
+            }
+
+            if (newPosY > mapHeight - 80) {
+                newPosition.top = mapHeight - 80 + "px";
+            }
+            else if (newPosY - width < 20) {
+                newPosition.top = 20 + width + "px";
+            }
+            else {
+                newPosition.top = newPosY + "px";
+            }
+
+            return newPosition;
+        }
+        return newPosition;
     }
 });
 
