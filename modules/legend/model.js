@@ -681,15 +681,35 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return [image, name];
     },
+    /**
+    * Sets the left position of the legend window in touchmove
+    * @param {Number} value Left position
+    * @returns {void}
+    */
     setWindowLeft: function (value) {
         this.set("windowLeft", value);
     },
+    /**
+    * Sets the top position of the legend window in touchmove
+    * @param {Number} value Top position
+    * @returns {void}
+    */
     setWindowTop: function (value) {
         this.set("windowTop", value);
     },
+    /**
+    * Sets the Start X value of the legend window in touchmove
+    * @param {Number} value Start X position
+    * @returns {void}
+    */
     setStartX: function (value) {
         this.set("startX", value);
     },
+    /**
+    * Sets the Start Y value of the legend window in touchmove
+    * @param {Number} value Start Y position
+    * @returns {void}
+    */
     setStartY: function (value) {
         this.set("startY", value);
     }
