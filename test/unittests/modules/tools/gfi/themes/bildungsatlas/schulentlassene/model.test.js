@@ -67,6 +67,7 @@ describe("tools/gfi/themes/bildungsatlas/schulentlassene", function () {
         });
         it("should include only a maximum number of years", function () {
             const bardata = model.createDataForZeitverlauf(goodGfiProperties, "foo", "foobar", 1);
+
             expect(bardata).to.be.an("array").that.has.lengthOf(1);
             expect(bardata[0]).to.not.include({year: "11/12", foobar: 1});
             expect(bardata[0]).to.include({year: "12/13", foobar: 3});
@@ -126,26 +127,28 @@ describe("tools/gfi/themes/bildungsatlas/schulentlassene", function () {
                 }
             };
 
-        it("should ignore wrong y axis keys in dataset", function(){
+        it("should ignore wrong y axis keys in dataset", function () {
             expect(model.helperCreateDataForAbschluesse("foo", "wrongBar", goodData, goodLegend, {})).to.be.an("array").that.is.empty;
             expect(model.helperCreateDataForAbschluesse("foo", "bar", [{year: 2019, wrongBar: 1}], goodLegend, {})).to.be.an("array").that.is.empty;
         });
-        it("should ignore unknown classname of dots", function(){
+        it("should ignore unknown classname of dots", function () {
             expect(model.helperCreateDataForAbschluesse("wrongFoo", "bar", goodData, goodLegend, {})).to.be.an("array").that.is.empty;
             expect(model.helperCreateDataForAbschluesse("foo", "bar", goodData, {"wrongFoo": {style: "foobar"}, "dotALL": {style: "foobar"}}, {})).to.be.an("array").that.is.empty;
         });
-        it("should only use legends with a 'dotALL' key", function(){
+        it("should only use legends with a 'dotALL' key", function () {
             expect(model.helperCreateDataForAbschluesse("foo", "bar", goodData, {"foo": {style: "foobar"}}, {})).to.be.an("array").that.is.empty;
         });
 
         it("should result in an array of objects with class, style, y- and x-axis values in it", function () {
             const result = model.helperCreateDataForAbschluesse("foo", "bar", goodData, goodLegend, {});
+
             expect(result).to.be.an("array").that.has.lengthOf(1);
             expect(result[0]).to.include({class: "foo", style: "foobar", year: 2019, bar: 1});
         });
 
         it("should expand a given object to collect the aggregated overall data with the class 'dotALL'", function () {
             const verlaufAll = {};
+
             model.helperCreateDataForAbschluesse("foo", "bar", goodData, goodLegend, verlaufAll);
             expect(verlaufAll).to.have.keys("2019");
             expect(verlaufAll["2019"]).to.include({numberALL: 1, class: "dotALL", style: "foobar", year: 2019});
@@ -173,6 +176,7 @@ describe("tools/gfi/themes/bildungsatlas/schulentlassene", function () {
 
         it("should return an array of objects in a certain structure", function () {
             const result = model.createDataForAbschluesse(goodGfiProperties, goodLegendArray, maxYearsToShowInDiagrams, goodIfbqKeysAbsolute);
+
             expect(result).to.be.an("array").that.has.lengthOf(6);
             expect(result[0]).to.include({class: "dotFoo", quxFoo: 1, style: "bazStyle", year: "11/12"});
             expect(result[1]).to.include({class: "dotFoo", quxFoo: 3, style: "bazStyle", year: "12/13"});

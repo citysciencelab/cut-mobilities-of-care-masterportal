@@ -67,11 +67,11 @@ const SchulentlasseneTheme = Theme.extend({
                         console.warn(this.get("warningPrefix") + "initialize: gfiFormat expects to have a key 'gfiBildungsatlasFormat' but has none:", gfiFormat);
                     }
                     else {
-                        gfiBildungsatlasFormat = gfiFormat["gfiBildungsatlasFormat"];
+                        gfiBildungsatlasFormat = gfiFormat.gfiBildungsatlasFormat;
                     }
                 }
 
-                this.setTemplateValues(this.get("gfiContent").allProperties, this.get("legendAbschluesse"), this.get("maxYearsToShowInDiagrams"), this.get("ifbqKeys")["relative"], this.get("ifbqKeys")["absolute"], gfiBildungsatlasFormat);
+                this.setTemplateValues(this.get("gfiContent").allProperties, this.get("legendAbschluesse"), this.get("maxYearsToShowInDiagrams"), this.get("ifbqKeys").relative, this.get("ifbqKeys").absolute, gfiBildungsatlasFormat);
             },
             "change:isVisible": function () {
                 // as there is no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
@@ -132,7 +132,7 @@ const SchulentlasseneTheme = Theme.extend({
         }
 
         // set the value for dataZeitverlauf which is used for the BarGraph zeitverlauf
-        if(typeof gfiBildungsatlasFormat !== "object" || !gfiBildungsatlasFormat.hasOwnProperty("themeType") || !ifbqKeysRelative.hasOwnProperty(gfiBildungsatlasFormat.themeType)) {
+        if (typeof gfiBildungsatlasFormat !== "object" || !gfiBildungsatlasFormat.hasOwnProperty("themeType") || !ifbqKeysRelative.hasOwnProperty(gfiBildungsatlasFormat.themeType)) {
             this.set("dataZeitverlauf", []);
             console.warn(this.get("warningPrefix") + "setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application or can't be found in ifbqKeysRelative:", gfiBildungsatlasFormat.themeType, ifbqKeysRelative);
         }
@@ -173,7 +173,7 @@ const SchulentlasseneTheme = Theme.extend({
 
             obj[numberName] = atomX[numberName];
             result.push(obj);
-            
+
             if (!verlaufAll.hasOwnProperty(atomX.year)) {
                 verlaufAll[atomX.year] = {
                     "numberALL": 0,
@@ -197,7 +197,7 @@ const SchulentlasseneTheme = Theme.extend({
      * @param {Object} ifbqKeysAbsolute the ifbq-Keys for the Linegraph (absolute) - see defaults
      * @returns {Array}  - an array of objects as Array({year, number, class, style})
      */
-    createDataForAbschluesse: function (gfiProperties, legendArr, maxYearsToShowInDiagrams, ifbqKeysAbsolute) {
+    createDataForAbschluesse: function (gfiProperties, legendArray, maxYearsToShowInDiagrams, ifbqKeysAbsolute) {
         const verlaufAll = {},
             legendObj = {};
         let result = [],
@@ -205,7 +205,7 @@ const SchulentlasseneTheme = Theme.extend({
             verlaufX;
 
         // create legendObj having the class attribute as its key
-        legendArr.forEach(function(atom){
+        legendArray.forEach(function (atom) {
             legendObj[atom.class] = atom;
         });
 
