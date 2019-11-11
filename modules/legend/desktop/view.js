@@ -202,111 +202,30 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
             windowL = this.model.get("windowLeft"),
             windowT = this.model.get("windowTop");
 
-        if (this.model.get("rotationAngle") === 0) {
-            newPosX = distX + parseInt(windowL, 10);
-            newPosY = distY + parseInt(windowT, 10) - 60;
 
-            if (newPosX + width > mapWidth) {
-                newPosition.left = mapWidth - width - 40 + "px";
-            }
-            else if (newPosX < 20) {
-                newPosition.left = 20 + "px";
-            }
-            else {
-                newPosition.left = newPosX + "px";
-            }
+        newPosX = distX + parseInt(windowL, 10);
+        newPosY = distY + parseInt(windowT, 10) - 60;
 
-            if (newPosY + height > mapHeight - 60) {
-                newPosition.top = mapHeight - height - 80 + "px";
-            }
-            else if (newPosY < 20) {
-                newPosition.top = 20 + "px";
-            }
-            else {
-                newPosition.top = newPosY + "px";
-            }
-
-            return newPosition;
-
+        if (newPosX + width > mapWidth) {
+            newPosition.left = mapWidth - width - 40 + "px";
         }
-        else if (this.model.get("rotationAngle") === -90) {
-            newPosX = distX + parseInt(windowL, 10) + height;
-            newPosY = distY + parseInt(windowT, 10) - 60;
-
-            if (newPosX > mapWidth - 20) {
-                newPosition.left = mapWidth - 20 + "px";
-            }
-            else if (newPosX - height < 20) {
-                newPosition.left = 20 + height + "px";
-            }
-            else {
-                newPosition.left = newPosX + "px";
-            }
-
-            if (newPosY + width > mapHeight - 60) {
-                newPosition.top = mapHeight - width - 80;
-            }
-            else if (newPosY < 20) {
-                newPosition.top = 20 + "px";
-            }
-            else {
-                newPosition.top = newPosY + "px";
-            }
-
-            return newPosition;
+        else if (newPosX < 20) {
+            newPosition.left = 20 + "px";
         }
-        if (this.model.get("rotationAngle") === -180) {
-            newPosX = distX + parseInt(windowL, 10) + width;
-            newPosY = distY + parseInt(windowT, 10) + height - 60;
-
-            if (newPosX > mapWidth) {
-                newPosition.left = mapWidth - 40 + "px";
-            }
-            else if (newPosX - width < 20) {
-                newPosition.left = 20 + width + "px";
-            }
-            else {
-                newPosition.left = newPosX + "px";
-            }
-
-            if (newPosY > mapHeight - 80) {
-                newPosition.top = mapHeight - 80 + "px";
-            }
-            else if (newPosY - height < 20) {
-                newPosition.top = 20 + height + "px";
-            }
-            else {
-                newPosition.top = newPosY + "px";
-            }
-
-            return newPosition;
+        else {
+            newPosition.left = newPosX + "px";
         }
-        else if (this.model.get("rotationAngle") === -270) {
-            newPosX = distX + parseInt(windowL, 10);
-            newPosY = distY + parseInt(windowT, 10) + width - 60;
 
-            if (newPosX + height > mapWidth - 20) {
-                newPosition.left = mapWidth - height - 20 + "px";
-            }
-            else if (newPosX < 20) {
-                newPosition.left = 20 + "px";
-            }
-            else {
-                newPosition.left = newPosX + "px";
-            }
-
-            if (newPosY > mapHeight - 80) {
-                newPosition.top = mapHeight - 80 + "px";
-            }
-            else if (newPosY - width < 20) {
-                newPosition.top = 20 + width + "px";
-            }
-            else {
-                newPosition.top = newPosY + "px";
-            }
-
-            return newPosition;
+        if (newPosY + height > mapHeight - 60) {
+            newPosition.top = mapHeight - height - 80 + "px";
         }
+        else if (newPosY < 20) {
+            newPosition.top = 20 + "px";
+        }
+        else {
+            newPosition.top = newPosY + "px";
+        }
+
         return newPosition;
     }
 });
