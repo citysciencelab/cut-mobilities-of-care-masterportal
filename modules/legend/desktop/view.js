@@ -64,9 +64,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     * @returns {Legend.Desktop.LegendView} returns this
     */
     render: function () {
-        var attr = this.model.toJSON(),
-            currentClass,
-            currentLegendClass;
+        var attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         $(".masterportal-container").append(this.$el.html(this.template(attr)));
@@ -75,38 +73,6 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
             containment: "#map",
             handle: ".legend-win-header"
         });
-
-        if (Radio.request("Util", "getUiStyle") === "TABLE") {
-            currentClass = document.querySelector(".legend-win");
-
-            _.each(currentClass.classList, function (item) {
-
-                if (item.endsWith("deg")) {
-                    currentLegendClass = item;
-                }
-            });
-
-            if ($("#table-navigation").attr("class") === "table-nav-0deg ui-draggable" || $("#table-navigation").attr("class") === "table-nav-0deg") {
-                this.$el.removeClass(currentLegendClass);
-                this.$el.addClass("legend-window-0deg");
-                this.model.set("rotationAngle", 0);
-            }
-            else if ($("#table-navigation").attr("class") === "table-nav-90deg") {
-                this.$el.removeClass(currentLegendClass);
-                this.$el.addClass("legend-window-90deg");
-                this.model.set("rotationAngle", -90);
-            }
-            else if ($("#table-navigation").attr("class") === "table-nav-180deg") {
-                this.$el.removeClass(currentLegendClass);
-                this.$el.addClass("legend-window-180deg");
-                this.model.set("rotationAngle", -180);
-            }
-            else if ($("#table-navigation").attr("class") === "table-nav-270deg") {
-                this.$el.removeClass(currentLegendClass);
-                this.$el.addClass("legend-window-270deg");
-                this.model.set("rotationAngle", -270);
-            }
-        }
 
         return this;
     },
