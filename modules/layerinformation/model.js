@@ -139,10 +139,11 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
     /**
      * Checks if the metaDataIds are an array and filled with at least on string
-     * @param {Array} metaDataIds 
+     * @param {Array} metaDataIds an array containing metIds
+     * @returns {Boolean} true, if metaId is found in the array
      */
-    areMetaIdsSet: function(metaDataIds){
-       return Array.isArray(metaDataIds) && metaDataIds.length > 0 && typeof metaDataIds[0] === 'string' && metaDataIds[0].length > 0;
+    areMetaIdsSet: function (metaDataIds) {
+        return Array.isArray(metaDataIds) && metaDataIds.length > 0 && typeof metaDataIds[0] === "string" && metaDataIds[0].length > 0;
     },
 
     /**

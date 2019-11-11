@@ -70,8 +70,7 @@ describe("Layerinformation", function () {
             expect(model.areMetaIdsSet(["7A77D5EA-C3B4-44D9-8004-36D5D324485D"])).to.be.true;
         });
         it("checks if 2 metaIds are set correctly", function () {
-            expect(model.areMetaIdsSet(["7A77D5EA-C3B4-44D9-8004-36D5D324485D","456"])).to.be.true;
+            expect(model.areMetaIdsSet(["7A77D5EA-C3B4-44D9-8004-36D5D324485D", "456"])).to.be.true;
         });
-        
     });
 });
