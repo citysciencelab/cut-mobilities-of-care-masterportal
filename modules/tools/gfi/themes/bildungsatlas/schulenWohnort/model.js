@@ -45,8 +45,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     onGFIIsVisibleEvent: function (visible) {
         if (visible === false) {
-            this.destroy();
             this.set("isCreated", false);
+            this.destroy();
         }
     },
 
@@ -58,8 +58,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     onIsVisibleEvent: function (isVisible) {
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (isVisible && this.get("isCreated") === false) {
-            this.create();
             this.set("isCreated", true);
+            this.create();
         }
     },
 
@@ -69,15 +69,30 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {void}
      */
     onFeaturesLoadedEvent: function (layerId) {
-        const layerWohnort = this.getWohnortLayer(),
-            layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
-            conf = this.getStatisticAreasConfig(layerSchuleLevel),
-            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
+        const layerHomeAddress = this.getHomeAddressLayer(),
             statGebNr = this.get("statGebNr");
+        let layerSchoolLevel,
+            conf,
+            layerStatistischeGebiete;
+
+        if (layerHomeAddress && layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
+            layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
+        }
+        else {
+            console.warn("Missing data for school level");
+        }
+
+        if (layerSchoolLevel) {
+            conf = this.getStatisticAreasConfig(layerSchoolLevel);
+            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
+        }
+        else {
+            console.warn("Missing data for school areas");
+        }
 
         if (conf && layerId === conf.id) {
             if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchuleLevel);
+                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchoolLevel);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -92,32 +107,42 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     create: function () {
         if (this.parseGfiContent(this.get("gfiContent"))) {
-            const layerWohnort = this.getWohnortLayer(),
-                layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
-                layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel),
+            const layerHomeAddress = this.getHomeAddressLayer(),
                 statGebNr = this.get("statGebNr"),
                 level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
-
-            if (this.get("anzahlSchuler") && layerSchuleLevel === "secondary") {
-                this.set("anzahlSchuler", this.get("gfiContent").allProperties.C32_SuS);
-            }
-
-            this.set("schuleLevel", layerSchuleLevel);
-            this.set("level", level);
+            let layerSchoolLevel,
+                layerStatistischeGebiete;
 
             this.listenTo(Radio.channel("VectorLayer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
 
-            if (layerWohnort) {
-                this.filterFeature(layerWohnort, [this.get("feature").getId()]);
+            if (layerHomeAddress) {
+                this.filterFeature(layerHomeAddress, [this.get("feature").getId()]);
+                if (layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
+                    layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
+                }
             }
             else {
-                console.warn("Missing data for school filter");
+                console.warn("Missing data for school level");
+            }
+
+            if (this.get("accountStudents") && layerSchoolLevel === "secondary") {
+                this.set("accountStudents", this.get("gfiContent").allProperties.C32_SuS);
+            }
+
+            this.set("schoolLevel", layerSchoolLevel);
+            this.set("level", level);
+
+            if (layerSchoolLevel) {
+                layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
+            }
+            else {
+                console.warn("Missing data for school areas");
             }
 
             if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchuleLevel);
+                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchoolLevel);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -130,12 +155,19 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {void}
      */
     destroy: function () {
-        const layerWohnort = this.getWohnortLayer(),
-            layerSchuleLevel = layerWohnort[0].get("gfiFormat").gfiBildungsatlasFormat.themeType,
-            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchuleLevel);
+        const layerHomeAddress = this.getHomeAddressLayer();
+        let layerSchoolLevel,
+            layerStatistischeGebiete;
 
-        if (layerWohnort) {
-            this.unfilterFeature(layerWohnort);
+        if (layerHomeAddress) {
+            this.unfilterFeature(layerHomeAddress);
+            if (layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
+                layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
+            }
+        }
+
+        if (layerSchoolLevel) {
+            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
         }
 
         if (layerStatistischeGebiete) {
@@ -148,13 +180,13 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * Filters the areas by schoolId
      * @param   {Layer} layer Layer with statistical areas
      * @param   {string} statGebNr statistische Gebiete Number
-     * @param   {string} layerSchuleLevel pass the parameter for the school level
+     * @param   {string} layerSchoolLevel pass the parameter for the school level
      * @returns {void}
      */
-    filterAreasById: function (layer, statGebNr, layerSchuleLevel) {
+    filterAreasById: function (layer, statGebNr, layerSchoolLevel) {
         const schulen = layer.get("layer").getSource().getFeatures(),
             featureIds = [],
-            anzahlAll = this.get("anzahlSchuler");
+            anzahlAll = this.get("accountStudents");
 
         schulen.forEach(function (schule) {
             const statGebFinal = schule.get("SG_" + statGebNr);
@@ -162,7 +194,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             if (statGebFinal) {
                 featureIds.push(schule.getId());
 
-                schule.set("html", this.getHtml(schule, anzahlAll, statGebFinal, layerSchuleLevel));
+                schule.set("html", this.getHtml(schule, anzahlAll, statGebFinal, layerSchoolLevel));
             }
         }.bind(this));
 
@@ -175,10 +207,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @param   {object} schule the school information
      * @param   {number} anzahlAll the whole number of students in this area
      * @param   {float} statGebFinal the percetage of students in this school
-     * @param   {string} layerSchuleLevel which level is the school
+     * @param   {string} layerSchoolLevel which level is the school
      * @returns {string} text
      */
-    getHtml: function (schule, anzahlAll, statGebFinal, layerSchuleLevel) {
+    getHtml: function (schule, anzahlAll, statGebFinal, layerSchoolLevel) {
         const name = schule.get("C_S_Name"),
             address = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + "<br>" + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
             totalSum = schule.get("C_S_SuS"),
@@ -211,7 +243,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                                 "<td>" + sozialIndex + "</td>" +
                             "</tr>" +
                             "<tr colspan=\"2\">" +
-                                "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchuleLevel] + "): </td>" +
+                                "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchoolLevel] + "): </td>" +
                                 "<td>" + percentage + "</td>" +
                             "</tr>" +
                             "<tr colspan=\"2\">" +
@@ -234,7 +266,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             const attr = gfiContent.allProperties;
 
             if (attr.C12_SuS) {
-                this.set("anzahlSchuler", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                this.set("accountStudents", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
             }
             if (attr.StatGeb_Nr && attr.ST_Name) {
                 this.set("statGebiet", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
@@ -252,7 +284,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * check which from layer primary school or secondary scholl
      * @returns {LayerList} return if the current layer
      */
-    getWohnortLayer: function () {
+    getHomeAddressLayer: function () {
         const layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
 
         if (!Array.isArray(layerList)) {
@@ -266,14 +298,14 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     /**
      * Requests the Modellist for layer with layernameAreas. If necessary this function starts its creation.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @param {object} layerSchuleLevel get the key for the layers
+     * @param {object} layerSchoolLevel get the key for the layers
      * @returns {Layer|false} layers
      */
-    getStatisticAreasLayer: function (layerSchuleLevel) {
-        let layer = Radio.request("ModelList", "getModelByAttributes", {"name": this.get("layernameAreas")[layerSchuleLevel]});
+    getStatisticAreasLayer: function (layerSchoolLevel) {
+        let layer = Radio.request("ModelList", "getModelByAttributes", {"name": this.get("layernameAreas")[layerSchoolLevel]});
 
         if (!layer) {
-            const conf = this.getStatisticAreasConfig(layerSchuleLevel);
+            const conf = this.getStatisticAreasConfig(layerSchoolLevel);
 
             if (!conf) {
                 console.warn("Cannot create layer without config.");
@@ -289,14 +321,14 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     /**
      * Requests the Parser for first layer with statistic areas by name
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
-     * @param {object} layerSchuleLevel get the key for the layers
+     * @param {object} layerSchoolLevel get the key for the layers
      * @returns {object|false} conf
      */
-    getStatisticAreasConfig: function (layerSchuleLevel) {
-        const conf = Radio.request("Parser", "getItemByAttributes", {"name": this.get("layernameAreas")[layerSchuleLevel]});
+    getStatisticAreasConfig: function (layerSchoolLevel) {
+        const conf = Radio.request("Parser", "getItemByAttributes", {"name": this.get("layernameAreas")[layerSchoolLevel]});
 
         if (!conf) {
-            console.warn("No layer configuration with name: " + this.get("layernameAreas")[layerSchuleLevel]);
+            console.warn("No layer configuration with name: " + this.get("layernameAreas")[layerSchoolLevel]);
 
             return false;
         }

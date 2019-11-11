@@ -5,7 +5,7 @@
 </ul>
 <div class="tab-content">
     <div class="gfi-info tab-pane fade" id="info">
-        <% if (schuleLevel === "primary") %>
+        <% if (schoolLevel === "primary") %>
             <br>
             <p><b>Schulwahl am Wohnort :</b></p>
             <br>
@@ -34,8 +34,8 @@
             </thead>
             <tbody>
                 <tr colspan="2">
-                    <td> Anzahl der Schülerinnen und Schüler im statistischen Gebiet in der <%= level[schuleLevel] %>:</td>
-                    <td><%= anzahlSchuler %></td>
+                    <td> Anzahl der Schülerinnen und Schüler im statistischen Gebiet in der <%= level[schoolLevel] %>:</td>
+                    <td><%= accountStudents %></td>
                 </tr>
             </tbody>
             <tfoot>
