@@ -58,7 +58,8 @@ module.exports = function (env, args) {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
-                        name: "[name].[ext]"
+                        name: "[name].[ext]",
+                        publicPath: "../../css/fonts"
                     }
                 }
             ]
