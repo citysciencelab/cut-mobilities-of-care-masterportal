@@ -320,17 +320,18 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         if (styleClass === "POINT") {
             // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
-                _.each(styleFieldValues, function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
                     for (const key in styleFieldValue) {
                         subStyle.set(key, styleFieldValue[key]);
                     }
+
                     subLegend = this.getLegendParamsForPoint("", layername, subStyle);
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
-                }, this);
+                });
             }
             else {
                 subLegend = this.getLegendParamsForPoint(styleSubClass, layername, style);
@@ -440,7 +441,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
 
     /**
-     * Creates the legend for a point style
+     * Creates the legend for a point style.
+     * The Styles Circle and Advanced are processed separately.
      * @param   {string} styleSubClass name of subclass defined in style
      * @param   {string} layername     layername defined in config
      * @param   {VectorStyle} style    style created by vectorStyle
@@ -451,11 +453,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = [],
             allItems;
 
-        // Circle Point Style
         if (styleSubClass === "CIRCLE") {
             svg = this.createCircleSVG(style);
         }
-        // Advanced Point Styles
         else if (styleSubClass === "ADVANCED") {
             allItems = this.drawAdvancedStyle(style, layername, svg, name);
 
@@ -468,17 +468,35 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = this.createImageSVG(style);
         }
 
-        if (style.has("legendValue")) {
-            name = style.get("legendValue");
-        }
-        else {
-            name = layername;
-        }
+        name = this.determineValueName(style, layername);
 
         return {
             name: name,
             svg: svg
         };
+    },
+
+    /**
+     * Determines the name of a feature to display in the legend.
+     * The attributes are considered in the order legendValue, styleFieldValue and layerName.
+     * @param {VectorStyle} style - Style created by vectorStyle.
+     * @param {string} layername - Layername defined in config.
+     * @returns {string} the name for the layer in legend
+     */
+    determineValueName: function (style, layername) {
+        let name = "";
+
+        if (style.has("legendValue")) {
+            name = style.get("legendValue");
+        }
+        else if (style.has("styleFieldValue") && style.get("styleFieldValue").length > 0) {
+            name = style.get("styleFieldValue");
+        }
+        else {
+            name = layername;
+        }
+
+        return name;
     },
 
     /**
