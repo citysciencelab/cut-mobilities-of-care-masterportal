@@ -12,7 +12,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
          * @type {String}
          */
         layerTheme: "schulenWohnort",
-        isCreated: false
+        isCreated: false,
+        accountStudents: "",
+        urbanArea: "",
+        urbanAreaNr: ""
     }),
     /**
      * @class SchulenWohnortThemeModel
@@ -70,7 +73,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      */
     onFeaturesLoadedEvent: function (layerId) {
         const layerHomeAddress = this.getHomeAddressLayer(),
-            statGebNr = this.get("statGebNr");
+            urbanAreaNr = this.get("urbanAreaNr");
         let layerSchoolLevel,
             conf,
             layerStatistischeGebiete;
@@ -91,8 +94,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         }
 
         if (conf && layerId === conf.id) {
-            if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchoolLevel);
+            if (layerStatistischeGebiete && urbanAreaNr !== "") {
+                this.filterAreasById(layerStatistischeGebiete, urbanAreaNr, layerSchoolLevel);
             }
             else {
                 console.warn("Missing data for area filter");
@@ -108,7 +111,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     create: function () {
         if (this.parseGfiContent(this.get("gfiContent"))) {
             const layerHomeAddress = this.getHomeAddressLayer(),
-                statGebNr = this.get("statGebNr"),
+                urbanAreaNr = this.get("urbanAreaNr"),
                 level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
             let layerSchoolLevel,
                 layerStatistischeGebiete;
@@ -124,7 +127,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 }
             }
             else {
-                console.warn("Missing data for school level");
+                console.warn("Missing data for layer theme type");
             }
 
             if (this.get("accountStudents") && layerSchoolLevel === "secondary") {
@@ -138,14 +141,14 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
             }
             else {
-                console.warn("Missing data for school areas");
+                console.warn("Missing data for layer theme type");
             }
 
-            if (layerStatistischeGebiete && statGebNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, statGebNr, layerSchoolLevel);
+            if (layerStatistischeGebiete && urbanAreaNr !== "") {
+                this.filterAreasById(layerStatistischeGebiete, urbanAreaNr, layerSchoolLevel);
             }
             else {
-                console.warn("Missing data for area filter");
+                console.warn("Missing data for layer area filter");
             }
         }
     },
@@ -179,22 +182,22 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     /**
      * Filters the areas by schoolId
      * @param   {Layer} layer Layer with statistical areas
-     * @param   {string} statGebNr statistische Gebiete Number
+     * @param   {string} urbanAreaNr statistische Gebiete Number
      * @param   {string} layerSchoolLevel pass the parameter for the school level
      * @returns {void}
      */
-    filterAreasById: function (layer, statGebNr, layerSchoolLevel) {
-        const schulen = layer.get("layer").getSource().getFeatures(),
+    filterAreasById: function (layer, urbanAreaNr, layerSchoolLevel) {
+        const schools = layer.get("layer").getSource().getFeatures(),
             featureIds = [],
-            anzahlAll = this.get("accountStudents");
+            accountsAll = this.get("accountStudents");
 
-        schulen.forEach(function (schule) {
-            const statGebFinal = schule.get("SG_" + statGebNr);
+        schools.forEach(function (school) {
+            const urbanAreaFinal = school.get("SG_" + urbanAreaNr);
 
-            if (statGebFinal) {
-                featureIds.push(schule.getId());
+            if (urbanAreaFinal) {
+                featureIds.push(school.getId());
 
-                schule.set("html", this.getHtml(schule, anzahlAll, statGebFinal, layerSchoolLevel));
+                school.set("html", this.getHtml(school, accountsAll, urbanAreaFinal, layerSchoolLevel));
             }
         }.bind(this));
 
@@ -204,20 +207,20 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
     /**
      * returns  the html as hover ionformation
-     * @param   {object} schule the school information
-     * @param   {number} anzahlAll the whole number of students in this area
-     * @param   {float} statGebFinal the percetage of students in this school
+     * @param   {object} school the school information
+     * @param   {number} accountsAll the whole number of students in this area
+     * @param   {float} urbanAreaFinal the percetage of students in this school
      * @param   {string} layerSchoolLevel which level is the school
      * @returns {string} text
      */
-    getHtml: function (schule, anzahlAll, statGebFinal, layerSchoolLevel) {
-        const name = schule.get("C_S_Name"),
-            address = schule.get("C_S_Str") + " " + schule.get("C_S_HNr") + "<br>" + schule.get("C_S_PLZ") + " " + schule.get("C_S_Ort"),
-            totalSum = schule.get("C_S_SuS"),
-            priSum = schule.get("C_S_SuS_PS"),
-            sozialIndex = schule.get("C_S_SI") === -1 ? "nicht vergeben" : schule.get("C_S_SI"),
-            percentage = Math.round(statGebFinal) + "%",
-            sum = Math.round(anzahlAll * statGebFinal / 100),
+    getHtml: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
+        const name = school.get("C_S_Name"),
+            address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
+            totalSum = school.get("C_S_SuS"),
+            priSum = school.get("C_S_SuS_PS"),
+            sozialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
+            percentage = Math.round(urbanAreaFinal) + "%",
+            sum = Math.round(accountsAll * urbanAreaFinal / 100),
             level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
             finalHtml = "<table class=\"table table-striped\">" +
                         "<thead>" +
@@ -265,15 +268,10 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         if (gfiContent && gfiContent.allProperties) {
             const attr = gfiContent.allProperties;
 
-            if (attr.C12_SuS) {
-                this.set("accountStudents", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            }
-            if (attr.StatGeb_Nr && attr.ST_Name) {
-                this.set("statGebiet", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
-            }
-            if (attr.StatGeb_Nr) {
-                this.set("statGebNr", attr.StatGeb_Nr);
-            }
+            this.set("accountStudents", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+            this.set("urbanArea", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
+            this.set("urbanAreaNr", attr.StatGeb_Nr);
+
             return true;
         }
 
