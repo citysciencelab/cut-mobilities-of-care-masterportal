@@ -13,7 +13,10 @@ import ContentTemplate from "text-loader!../content.html";
  */
 const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     events: {
-        "click .glyphicon-remove": "hide"
+        "click .glyphicon-remove": "hide",
+        "touchmove .title": "touchMoveWindow",
+        "touchstart .title": "touchStartWindow",
+        "touchend .title": "touchMoveEnd"
     },
     /**
      * @class LegendView
@@ -70,6 +73,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
             containment: "#map",
             handle: ".legend-win-header"
         });
+
         return this;
     },
     /**
@@ -132,6 +136,97 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     */
     updateLegendSize: function () {
         $(".legend-win-content").css("max-height", $(".masterportal-container").height() * 0.7);
+    },
+    /**
+     * Triggered on TouchStart
+     * @param {Event} evt Event, legend window being touched
+     * @return {void}
+     */
+    touchStartWindow: function (evt) {
+        var touch = evt.changedTouches[0],
+            rect = document.querySelector(".legend-win").getBoundingClientRect();
+
+        this.model.setWindowLeft(rect.left);
+        this.model.setWindowTop(rect.top);
+        this.model.setStartX(parseInt(touch.clientX, 10));
+        this.model.setStartY(parseInt(touch.clientY, 10));
+
+        evt.preventDefault();
+    },
+    /**
+     * Triggered on TouchMove
+     * @param {Event} evt Event of moved legend window
+     * @return {void}
+     */
+    touchMoveWindow: function (evt) {
+        var touch = evt.changedTouches[0],
+            width = document.querySelector(".legend-win").clientWidth,
+            height = document.querySelector(".legend-win").clientHeight,
+            mapWidth = document.getElementById("map").clientWidth,
+            mapHeight = document.getElementById("map").clientHeight,
+            newPosition = this.getNewPosition(touch, width, height, mapWidth, mapHeight);
+
+        this.$el.css({
+            "left": newPosition.left,
+            "top": newPosition.top,
+            "width": width,
+            "transform-origin": "top left"
+        });
+
+        evt.preventDefault();
+    },
+    /**
+     * Triggered on TouchEnd
+     * @return {void}
+     */
+    touchMoveEnd: function () {
+        this.$el.css({
+            "width": ""
+        });
+    },
+    /**
+     * Function to calculate the new left and top positions
+     * @param {Object} touch Object containing the touch attributes
+     * @param {Number} width Window width
+     * @param {Number} height Window height
+     * @param {Number} mapWidth Width of the map
+     * @param {Number} mapHeight Height of the map
+     * @return {Object} newPosition Object containing the new position
+     */
+    getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
+        var distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
+            distY = parseInt(touch.clientY, 10) - this.model.get("startY"),
+            newPosX,
+            newPosY,
+            newPosition = {},
+            windowL = this.model.get("windowLeft"),
+            windowT = this.model.get("windowTop");
+
+
+        newPosX = distX + parseInt(windowL, 10);
+        newPosY = distY + parseInt(windowT, 10) - 60;
+
+        if (newPosX + width > mapWidth) {
+            newPosition.left = mapWidth - width - 40 + "px";
+        }
+        else if (newPosX < 20) {
+            newPosition.left = 20 + "px";
+        }
+        else {
+            newPosition.left = newPosX + "px";
+        }
+
+        if (newPosY + height > mapHeight - 60) {
+            newPosition.top = mapHeight - height - 80 + "px";
+        }
+        else if (newPosY < 20) {
+            newPosition.top = 20 + "px";
+        }
+        else {
+            newPosition.top = newPosY + "px";
+        }
+
+        return newPosition;
     }
 });
 

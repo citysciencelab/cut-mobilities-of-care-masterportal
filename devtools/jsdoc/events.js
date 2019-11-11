@@ -1530,6 +1530,16 @@
  * @example Radio.trigger("WindowView", "hide");
  */
 
+ /**
+ * @event WindowView#changeIsVisible
+ * @description Triggered when the visibility of the Window changes
+ */
+
+ /**
+ * @event WindowView#changeWinType
+ * @description Triggered when the WinType of the Window changes
+ */
+
 
 /** -------------------- TITLE -------------------- */
 

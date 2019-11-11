@@ -9,7 +9,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         renderToWindow: false,
         renderToSidebar: false,
         keepOtherToolsOpened: true,
-        glyphicon: "glyphicon-book"
+        glyphicon: "glyphicon-book",
+        rotationAngle: 0,
+        startX: 0,
+        startY: 0,
+        windowLeft: 0,
+        windowTop: 0
     }),
 
     /**
@@ -675,6 +680,38 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         name.push(layername);
 
         return [image, name];
+    },
+    /**
+    * Sets the left position of the legend window in touchmove
+    * @param {Number} value Left position
+    * @returns {void}
+    */
+    setWindowLeft: function (value) {
+        this.set("windowLeft", value);
+    },
+    /**
+    * Sets the top position of the legend window in touchmove
+    * @param {Number} value Top position
+    * @returns {void}
+    */
+    setWindowTop: function (value) {
+        this.set("windowTop", value);
+    },
+    /**
+    * Sets the Start X value of the legend window in touchmove
+    * @param {Number} value Start X position
+    * @returns {void}
+    */
+    setStartX: function (value) {
+        this.set("startX", value);
+    },
+    /**
+    * Sets the Start Y value of the legend window in touchmove
+    * @param {Number} value Start Y position
+    * @returns {void}
+    */
+    setStartY: function (value) {
+        this.set("startY", value);
     }
 });
 
