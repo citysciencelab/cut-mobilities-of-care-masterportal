@@ -491,16 +491,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} the name for the layer in legend
      */
     determineValueName: function (style, layername) {
-        let name = "";
+        let name = layername;
 
         if (style.has("legendValue")) {
             name = style.get("legendValue");
         }
         else if (style.has("styleFieldValue") && style.get("styleFieldValue").length > 0) {
             name = style.get("styleFieldValue");
-        }
-        else {
-            name = layername;
         }
 
         return name;
