@@ -27,11 +27,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @listens Legend#RadioRequestLegendGetLegendParams
      * @listens Legend#RadioTriggerLegendSetLayerList
      * @listens Legend#changeParamsStyleWMSArray
-     * @listens ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @listens Core.ModelList#RadioTriggerModelListUpdatedSelectedLayerList
      * @listens StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
      * @listens StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
-     * @fires StyleList#RadioRequestReturnModelById
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @fires Legend#changeLegendParams
      * @fires Legend#changeParamsStyleWMSArray
      */
@@ -161,7 +161,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
     /**
     * Sets the legend information for all visible layers
-    * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+    * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
     * @returns {void}
     */
     setLayerList: function () {
@@ -284,7 +284,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates legend object for vector layer using it's style
-     * @fires StyleList#RadioRequestReturnModelById
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
      * @param   {integer} styleId styleId
      * @returns {object} legendObject legend item
