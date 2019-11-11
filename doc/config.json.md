@@ -404,16 +404,14 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
-|baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
+|layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
 
 **Beispiel overviewmap als Object:**
 ```
 #!json
 "overviewMap": {
-    "resolution": 305.7487246381551,
-    "baselayer": "452",
+    "layerId": "452",
     "isInitOpen": false
 }
 ```
