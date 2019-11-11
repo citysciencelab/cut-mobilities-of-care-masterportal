@@ -295,7 +295,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
     getLegendParamsFromVector: function (layername, styleId) {
-        let subLegend;
+        let subLegend,
+            image = [],
+            name = [];
 
         if (!Radio.request("StyleList", "returnModelById", styleId)) {
             console.warn("Missing style for styleId " + styleId);
@@ -313,9 +315,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         const style = Radio.request("StyleList", "returnModelById", styleId).clone(),
             styleClass = style.get("class"),
             styleSubClass = style.get("subClass"),
-            styleFieldValues = style.get("styleFieldValues"),
-            image = [],
-            name = [];
+            styleFieldValues = style.get("styleFieldValues");
 
         if (styleClass === "POINT") {
             // Custom Point Styles
@@ -335,8 +335,15 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             }
             else {
                 subLegend = this.getLegendParamsForPoint(styleSubClass, layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+
+                if (Array.isArray(subLegend.name) && Array.isArray(subLegend.svg)) {
+                    image = subLegend.svg;
+                    name = subLegend.name;
+                }
+                else {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
         else if (styleClass === "LINE") {
