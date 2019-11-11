@@ -115,7 +115,7 @@ const SchulentlasseneTheme = Theme.extend({
     setTemplateValues: function (gfiProperties, legendArray, maxYearsToShowInDiagrams, ifbqKeysRelative, ifbqKeysAbsolute, gfiBildungsatlasFormat) {
         let key;
 
-        if (typeof gfiBildungsatlasFormat !== "object" || !gfiBildungsatlasFormat.hasOwnProperty("layerType") || !gfiBildungsatlasFormat.hasOwnProperty("themeType")) {
+        if (!gfiBildungsatlasFormat || !gfiBildungsatlasFormat.hasOwnProperty("layerType") || !gfiBildungsatlasFormat.hasOwnProperty("themeType")) {
             console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: gfiBildungsatlasFormat does not exist or is set inappropriately:", gfiBildungsatlasFormat);
         }
         else if (gfiBildungsatlasFormat.layerType !== "stadtteil" && gfiBildungsatlasFormat.layerType !== "sozialraum") {
@@ -141,7 +141,7 @@ const SchulentlasseneTheme = Theme.extend({
             this.set("dataZeitverlauf", this.createDataForZeitverlauf(gfiProperties, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].prefix, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].attrToShowArray, maxYearsToShowInDiagrams));
         }
         else {
-            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application or can't be found in ifbqKeysRelative:", gfiBildungsatlasFormat.themeType, ifbqKeysRelative);
+            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application or can't be found in ifbqKeysRelative:", gfiBildungsatlasFormat, ifbqKeysRelative);
         }
 
         this.set("dataAbschluesse", this.createDataForAbschluesse(gfiProperties, legendArray, maxYearsToShowInDiagrams, ifbqKeysAbsolute));
