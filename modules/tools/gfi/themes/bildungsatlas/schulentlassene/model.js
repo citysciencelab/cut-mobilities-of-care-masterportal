@@ -39,7 +39,28 @@ const SchulentlasseneTheme = Theme.extend({
                 "ESA": {prefix: "C42_ESA", attrToShowArray: "numberESA", refLegendClass: "dotESA"},
                 "oHS": {prefix: "C42_oSA", attrToShowArray: "numberOSA", refLegendClass: "dotOSA"}
             }
-        }
+        },
+
+        // default values to be set for the template
+        themeType: "",
+        layerType: "",
+        ST_Name: "",
+        SR_Name: "",
+        C41_Abi: "",
+        C41_RS: "",
+        C41_mHS: "",
+        C41_oHS: "",
+        C41_Abi_B: "",
+        C41_RS_B: "",
+        C41_mHS_B: "",
+        C41_oHS_B: "",
+        C41_Abi_FHH: "",
+        C41_RS_FHH: "",
+        C41_mHS_FHH: "",
+        C41_oHS_FHH: "",
+        themeId: 0,
+        dataZeitverlauf: [],
+        dataAbschluesse: []
     }),
 
     /**
@@ -49,32 +70,22 @@ const SchulentlasseneTheme = Theme.extend({
      * @constructs
      */
     initialize: function () {
-        const timeOut = this.checkIsMobile() ? 300 : 100,
-            modelAttributeFilter = {isVisibleInMap: true, "gfiTheme": "schulentlassene", "id": this.get("themeId")};
-        let layerList,
-            gfiFormat,
-            gfiBildungsatlasFormat = {};
-
         this.listenTo(this, {
             "change:isReady": function () {
-                layerList = Radio.request("ModelList", "getModelsByAttributes", modelAttributeFilter);
-                if (!Array.isArray(layerList) || layerList.length <= 0) {
-                    console.warn(this.get("warningPrefix") + "initialize: the layerList couldn't be set by attributes:", layerList, modelAttributeFilter);
-                }
-                else {
+                const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
                     gfiFormat = layerList[0].get("gfiFormat");
-                    if (typeof gfiFormat !== "object" || !gfiFormat.hasOwnProperty("gfiBildungsatlasFormat")) {
-                        console.warn(this.get("warningPrefix") + "initialize: gfiFormat expects to have a key 'gfiBildungsatlasFormat' but has none:", gfiFormat);
-                    }
-                    else {
-                        gfiBildungsatlasFormat = gfiFormat.gfiBildungsatlasFormat;
-                    }
+
+                if (!gfiFormat || !gfiFormat.hasOwnProperty("gfiBildungsatlasFormat")) {
+                    console.warn("Regionaler Bildungsatlas Schulentlassene - initialize: gfiFormat expects to have a key 'gfiBildungsatlasFormat' but has none:", gfiFormat);
+                    return;
                 }
 
-                this.setTemplateValues(this.get("gfiContent").allProperties, this.get("legendAbschluesse"), this.get("maxYearsToShowInDiagrams"), this.get("ifbqKeys").relative, this.get("ifbqKeys").absolute, gfiBildungsatlasFormat);
+                this.setTemplateValues(this.get("gfiContent").allProperties, this.get("legendAbschluesse"), this.get("maxYearsToShowInDiagrams"), this.get("ifbqKeys").relative, this.get("ifbqKeys").absolute, gfiFormat.gfiBildungsatlasFormat);
             },
             "change:isVisible": function () {
-                // as there is no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
+                const timeOut = this.checkIsMobile() ? 300 : 100;
+
+                // as there is currently no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
                 setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
                 setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
             }
@@ -105,19 +116,13 @@ const SchulentlasseneTheme = Theme.extend({
         let key;
 
         if (typeof gfiBildungsatlasFormat !== "object" || !gfiBildungsatlasFormat.hasOwnProperty("layerType") || !gfiBildungsatlasFormat.hasOwnProperty("themeType")) {
-            this.set("layerType", false);
-            this.set("themeType", false);
-            console.warn(this.get("warningPrefix") + "setTemplateValues: gfiBildungsatlasFormat does not exist or is set inappropriately:", gfiBildungsatlasFormat);
+            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: gfiBildungsatlasFormat does not exist or is set inappropriately:", gfiBildungsatlasFormat);
         }
         else if (gfiBildungsatlasFormat.layerType !== "stadtteil" && gfiBildungsatlasFormat.layerType !== "sozialraum") {
-            this.set("layerType", false);
-            this.set("themeType", false);
-            console.warn(this.get("warningPrefix") + "setTemplateValues: the given gfiBildungsatlasFormat.layerType is unknown to the application:", gfiBildungsatlasFormat.layerType);
+            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: the given gfiBildungsatlasFormat.layerType is unknown to the application:", gfiBildungsatlasFormat.layerType);
         }
         else if (gfiBildungsatlasFormat.themeType !== "Abi" && gfiBildungsatlasFormat.themeType !== "oHS") {
-            this.set("layerType", false);
-            this.set("themeType", false);
-            console.warn(this.get("warningPrefix") + "setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application (1):", gfiBildungsatlasFormat.themeType);
+            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application (1):", gfiBildungsatlasFormat.themeType);
         }
         else {
             // set the layerType "stadtteil" or "sozialraum"
@@ -127,17 +132,16 @@ const SchulentlasseneTheme = Theme.extend({
         }
 
         for (key in gfiProperties) {
-            // beautifyString in /modules/tools/gfi/themes/model.js removes the first "_" in key - so here we have to adjust the key to be the "real key"
+            // beautifyString in /modules/tools/gfi/themes/model.js removes the first "_" in key - so here we have to correct the key to be the real key again
             this.set(key.replace(" ", "_"), gfiProperties[key]);
         }
 
         // set the value for dataZeitverlauf which is used for the BarGraph zeitverlauf
-        if (typeof gfiBildungsatlasFormat !== "object" || !gfiBildungsatlasFormat.hasOwnProperty("themeType") || !ifbqKeysRelative.hasOwnProperty(gfiBildungsatlasFormat.themeType)) {
-            this.set("dataZeitverlauf", []);
-            console.warn(this.get("warningPrefix") + "setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application or can't be found in ifbqKeysRelative:", gfiBildungsatlasFormat.themeType, ifbqKeysRelative);
+        if (gfiBildungsatlasFormat && gfiBildungsatlasFormat.hasOwnProperty("themeType") && ifbqKeysRelative.hasOwnProperty(gfiBildungsatlasFormat.themeType)) {
+            this.set("dataZeitverlauf", this.createDataForZeitverlauf(gfiProperties, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].prefix, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].attrToShowArray, maxYearsToShowInDiagrams));
         }
         else {
-            this.set("dataZeitverlauf", this.createDataForZeitverlauf(gfiProperties, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].prefix, ifbqKeysRelative[gfiBildungsatlasFormat.themeType].attrToShowArray, maxYearsToShowInDiagrams));
+            console.warn("Regionaler Bildungsatlas Schulentlassene - setTemplateValues: the given gfiBildungsatlasFormat.themeType is unknown to the application or can't be found in ifbqKeysRelative:", gfiBildungsatlasFormat.themeType, ifbqKeysRelative);
         }
 
         this.set("dataAbschluesse", this.createDataForAbschluesse(gfiProperties, legendArray, maxYearsToShowInDiagrams, ifbqKeysAbsolute));
@@ -253,13 +257,13 @@ const SchulentlasseneTheme = Theme.extend({
             year = parseInt(regRes[1], 10);
 
             obj = {};
-            // sort by a save and sound parameter
+            // to sort by a save and sound parameter
             obj.fullyear = year;
             // e.g. Schuljahr 2010 := "10/11"
             obj.year = year.toString().substr(2, 2) + "/" + (year + 1).toString().substr(2, 2);
             // for the statistic
             obj[valueTag] = parseFloat(gfiProperties[key]);
-            // for calculation of dotALL
+            // for the calculation of dotALL
             obj.value = obj[valueTag];
 
             result.push(obj);
@@ -314,10 +318,6 @@ const SchulentlasseneTheme = Theme.extend({
                 }
             };
 
-        if (this.get("dataZeitverlauf") === undefined) {
-            return;
-        }
-
         // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows
         $(".graph_zeitverlauf_" + themeId + " svg").remove();
 
@@ -366,10 +366,6 @@ const SchulentlasseneTheme = Theme.extend({
                     return (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
                 }
             };
-
-        if (this.get("dataAbschluesse") === undefined) {
-            return;
-        }
 
         // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows
         $(".graph_abschluesse_" + themeId + " svg").remove();
