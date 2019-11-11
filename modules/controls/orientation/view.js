@@ -65,7 +65,7 @@ const OrientationView = Backbone.View.extend({
             this.$el.find(".glyphicon-record").css("display", "none");
         }
         else {
-            this.$el.find(".glyphicon-map-marker").css("background-color", "rgb(182, 0, 0)");
+            this.$el.find(".glyphicon-map-marker").css("background-color", "#E10019");
         }
     },
 
