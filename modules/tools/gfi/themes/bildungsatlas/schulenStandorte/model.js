@@ -18,13 +18,15 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
 
                 if (layerList && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
                     gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
+                    this.setInfoHtml(gfiBildungsatlasFormat);
                 }
                 else {
                     console.warn("This layer is not existed");
                 }
 
-                this.parseGfiContent(gfiContent);
-                this.setInfoHtml(gfiBildungsatlasFormat);
+                if (gfiContent) {
+                    this.parseGfiContent(gfiContent);
+                }
             }
         });
     },
