@@ -16,7 +16,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
                     layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": gfiTheme, "id": themeId});
                 let gfiBildungsatlasFormat = {};
 
-                if (layerList) {
+                if (layerList && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
                     gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
                 }
                 else {
@@ -91,7 +91,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
     setInfoHtml: function (gfiBildungsatlasFormat) {
         let level;
 
-        if (gfiBildungsatlasFormat) {
+        if (gfiBildungsatlasFormat.themeType) {
             level = gfiBildungsatlasFormat.themeType;
         }
 
