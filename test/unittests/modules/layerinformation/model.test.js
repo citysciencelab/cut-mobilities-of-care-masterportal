@@ -47,4 +47,31 @@ describe("Layerinformation", function () {
             expect(model.get("uniqueIdList")).to.be.an("array").that.is.empty;
         });
     });
+    describe("areMetaIdsSet", function () {
+        it("checks if metaIds are undefined", function () {
+            expect(model.areMetaIdsSet(undefined)).to.be.false;
+        });
+        it("checks if metaIds are null", function () {
+            expect(model.areMetaIdsSet(null)).to.be.false;
+        });
+        it("checks if metaIds are an empty array", function () {
+            expect(model.areMetaIdsSet([])).to.be.false;
+        });
+        it("checks if metaIds are array with null", function () {
+            expect(model.areMetaIdsSet([null])).to.be.false;
+        });
+        it("checks if metaIds are arrray with undefined", function () {
+            expect(model.areMetaIdsSet([undefined])).to.be.false;
+        });
+        it("checks if metaIds are array with empty string", function () {
+            expect(model.areMetaIdsSet([""])).to.be.false;
+        });
+        it("checks if metaIds are set correctly", function () {
+            expect(model.areMetaIdsSet(["7A77D5EA-C3B4-44D9-8004-36D5D324485D"])).to.be.true;
+        });
+        it("checks if 2 metaIds are set correctly", function () {
+            expect(model.areMetaIdsSet(["7A77D5EA-C3B4-44D9-8004-36D5D324485D","456"])).to.be.true;
+        });
+        
+    });
 });

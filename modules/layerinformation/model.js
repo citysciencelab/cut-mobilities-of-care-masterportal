@@ -105,7 +105,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     * @returns {void}
     */
     requestMetaData: function (attrs) {
-        var metaId = !_.isNull(attrs.metaID) ? attrs.metaID[0] : null,
+        var metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
             uniqueId = _.uniqueId(),
             cswObj = {};
 
@@ -138,6 +138,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     },
 
     /**
+     * Checks if the metaDataIds are an array and filled with at least on string
+     * @param {Array} metaDataIds 
+     */
+    areMetaIdsSet: function(metaDataIds){
+       return Array.isArray(metaDataIds) && metaDataIds.length > 0 && typeof metaDataIds[0] === 'string' && metaDataIds[0].length > 0;
+    },
+
+    /**
      * Is started with a trigger from the layer and takes the attributes for presentation
      * @param {Object} attrs Objekt mit Attributen zur Darstellung
      * @fires LayerInformation#RadioTriggerLayerInformationSync
@@ -146,7 +154,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     setAttributes: function (attrs) {
         this.set(attrs);
         this.setMetadataURL();
-        if (!_.isNull(this.get("metaID")[0])) {
+        if (this.areMetaIdsSet(this.get("metaID"))) {
             this.requestMetaData(attrs);
         }
         else {
