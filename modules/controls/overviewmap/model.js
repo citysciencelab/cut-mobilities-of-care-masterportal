@@ -20,6 +20,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @param {Object} [attr] configuration object defined in config.json
      * @param {String} [attr.layerId=baselayer] layerId to use in map
      * @param {Boolean} [attr.isInitOpen=true] Flag to open or disable map control on startup
+     * @param {Float} [attr.resolution=maxResolution] Resolution to use in map control
      * @fires Core#RadioRequestMapGetMap
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
@@ -80,11 +81,11 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
             initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
             baselayer = this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId),
-            newOlView = new View({
+            newOlView = new View(Object.assign({
                 center: mapView.getCenter(),
                 projection: mapView.getProjection(),
                 resolution: mapView.getResolution()
-            });
+            }, this.appendExtraParams()));
 
         if (!baselayer) {
             console.error("Missing layerID " + baselayer + " for OverviewMap");
@@ -94,6 +95,15 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         }
 
         return this.newOverviewmap(id, baselayer, newOlView);
+    },
+
+    appendExtraParams: function () {
+        const extraParams = {};
+
+        if (this.get("resolution")) {
+            extraParams.resolutions = [this.get("resolution")];
+        }
+        return extraParams;
     },
 
     /**
