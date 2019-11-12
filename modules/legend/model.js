@@ -27,11 +27,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @listens Legend#RadioRequestLegendGetLegendParams
      * @listens Legend#RadioTriggerLegendSetLayerList
      * @listens Legend#changeParamsStyleWMSArray
-     * @listens ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @listens Core.ModelList#RadioTriggerModelListUpdatedSelectedLayerList
      * @listens StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
      * @listens StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
-     * @fires StyleList#RadioRequestReturnModelById
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @fires Legend#changeLegendParams
      * @fires Legend#changeParamsStyleWMSArray
      */
@@ -161,7 +161,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
     /**
     * Sets the legend information for all visible layers
-    * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+    * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
     * @returns {void}
     */
     setLayerList: function () {
@@ -284,7 +284,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates legend object for vector layer using it's style
-     * @fires StyleList#RadioRequestReturnModelById
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
      * @param   {integer} styleId styleId
      * @returns {object} legendObject legend item
@@ -295,7 +295,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
     getLegendParamsFromVector: function (layername, styleId) {
-        let subLegend;
+        let subLegend,
+            image = [],
+            name = [];
 
         if (!Radio.request("StyleList", "returnModelById", styleId)) {
             console.warn("Missing style for styleId " + styleId);
@@ -313,29 +315,35 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         const style = Radio.request("StyleList", "returnModelById", styleId).clone(),
             styleClass = style.get("class"),
             styleSubClass = style.get("subClass"),
-            styleFieldValues = style.get("styleFieldValues"),
-            image = [],
-            name = [];
+            styleFieldValues = style.get("styleFieldValues");
 
         if (styleClass === "POINT") {
             // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
-                _.each(styleFieldValues, function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
                     for (const key in styleFieldValue) {
                         subStyle.set(key, styleFieldValue[key]);
                     }
+
                     subLegend = this.getLegendParamsForPoint("", layername, subStyle);
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
-                }, this);
+                });
             }
             else {
                 subLegend = this.getLegendParamsForPoint(styleSubClass, layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+
+                if (Array.isArray(subLegend.name) && Array.isArray(subLegend.svg)) {
+                    image = subLegend.svg;
+                    name = subLegend.name;
+                }
+                else {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
         else if (styleClass === "LINE") {
@@ -440,7 +448,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
 
     /**
-     * Creates the legend for a point style
+     * Creates the legend for a point style.
+     * The Styles Circle and Advanced are processed separately.
      * @param   {string} styleSubClass name of subclass defined in style
      * @param   {string} layername     layername defined in config
      * @param   {VectorStyle} style    style created by vectorStyle
@@ -451,11 +460,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = [],
             allItems;
 
-        // Circle Point Style
         if (styleSubClass === "CIRCLE") {
             svg = this.createCircleSVG(style);
         }
-        // Advanced Point Styles
         else if (styleSubClass === "ADVANCED") {
             allItems = this.drawAdvancedStyle(style, layername, svg, name);
 
@@ -468,17 +475,32 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = this.createImageSVG(style);
         }
 
-        if (style.has("legendValue")) {
-            name = style.get("legendValue");
-        }
-        else {
-            name = layername;
-        }
+        name = this.determineValueName(style, layername);
 
         return {
             name: name,
             svg: svg
         };
+    },
+
+    /**
+     * Determines the name of a feature to display in the legend.
+     * The attributes are considered in the order legendValue, styleFieldValue and layerName.
+     * @param {VectorStyle} style - Style created by vectorStyle.
+     * @param {string} layername - Layername defined in config.
+     * @returns {string} the name for the layer in legend
+     */
+    determineValueName: function (style, layername) {
+        let name = layername;
+
+        if (style.has("legendValue")) {
+            name = style.get("legendValue");
+        }
+        else if (style.has("styleFieldValue") && style.get("styleFieldValue").length > 0) {
+            name = style.get("styleFieldValue");
+        }
+
+        return name;
     },
 
     /**
