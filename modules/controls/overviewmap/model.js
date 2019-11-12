@@ -20,7 +20,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @param {Object} [attr] configuration object defined in config.json
      * @param {String} [attr.layerId=baselayer] layerId to use in map
      * @param {Boolean} [attr.isInitOpen=true] Flag to open or disable map control on startup
-     * @param {Float} [attr.resolution=maxResolution] Resolution to use in map control
+     * @param {Number} [attr.resolution=maxResolution] Resolution to use in map control
      * @fires Core#RadioRequestMapGetMap
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
