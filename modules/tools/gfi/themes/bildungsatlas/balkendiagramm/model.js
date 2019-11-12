@@ -1,145 +1,103 @@
 import Theme from "../../model";
 
 const BalkendiagrammTheme = Theme.extend({
-    initialize: function () {
-        const isMobile = this.checkIsMobile();
-        let timeOut = 100;
+    defaults: _.extend({}, Theme.prototype.defaults, {
+        // default values to be set for the template
+        themeTitle: "",
+        description: "",
+        dataset: [],
+        tableContent: [],
+        themeUnit: "",
+        themeCategory: "",
+        themeType: ""
+    }),
 
+    /**
+     * @class BalkendiagrammTheme
+     * @extends Backbone.Model
+     * @memberof Tools.Gfi.Themes.Bildungsatlas
+     * @constructs
+     */
+    initialize: function () {
         this.listenTo(this, {
             "change:isReady": function () {
-                this.getStaticWithYear();
-                this.getLatestStatistic();
-                this.setContent();
+                const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
+                    gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat,
+                    gfiProperties = this.get("gfiContent").allProperties,
+                    statisticWithYear = this.getStatisticWithYear(gfiProperties, gfiBildungsatlasFormat.themeCategory, "jahr_"),
+                    latestValue = statisticWithYear.length >= 1 ? statisticWithYear[statisticWithYear.length - 1].number : null,
+                    rawTableContent = this.getRawTableContent(gfiProperties, gfiBildungsatlasFormat.layerType, gfiBildungsatlasFormat.themeUnit, latestValue),
+                    tableContent = this.getRevertData(rawTableContent, gfiBildungsatlasFormat.themeUnit, gfiProperties.stadtteil);
+
+                // set the tableContent for the template
+                this.set("tableContent", tableContent);
+
+                // set the data formats for the layer
+                this.set("themeUnit", gfiBildungsatlasFormat.themeUnit);
+                this.set("themeCategory", gfiBildungsatlasFormat.themeCategory);
+                this.set("themeType", gfiBildungsatlasFormat.themeType);
+
+                // set the description for the BarGraph
+                this.set("description", layerList[0].get("gfiFormat").gfiBildungsatlasDescription);
+
+                // set the statistic with year for BarGraph
+                this.set("dataset", statisticWithYear);
             },
             "change:isVisible": function () {
-                if (isMobile) {
-                    timeOut = 300;
-                }
+                const timeOut = this.checkIsMobile() ? 300 : 100;
+
                 setTimeout(_.bind(this.createD3Document, this), timeOut);
             }
         });
     },
 
     /**
-     * here the content will be parsed and added for the template
-     * @returns {void}
+     * here the content for the gfi-theme table will be parsed - note: to optimize this data this.getRevertData is used
+     * @param {Object} gfiProperties the given data for this theme gotten by this.get("gfiContent").allProperties
+     * @param {String} layerType as set in the config.json -> gfiFormat -> gfiBildungsatlasFormat
+     * @param {String} themeUnit as set in the config.json -> gfiFormat -> gfiBildungsatlasFormat
+     * @param {Number} latestValue the latest (youngest) value found in gfiProperties (you may use this.getStatisticWithYear to single it out)
+     * @pre the themeTitle (see defaults) is not set for the template yet
+     * @post the themeTitle (see defaults) for the template is set correctly
+     * @returns {Object}  - an object with keys as used in the template and values not yet optimized
      */
-    setContent: function () {
-        const element = this.get("gfiContent")[0],
-            content = {},
-            layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")}),
-            layerDataFormat = _.isUndefined(layerList) ? null : layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
+    getRawTableContent: function (gfiProperties, layerType, themeUnit, latestValue) {
+        const content = {};
+        // note: content needs no default values as it is iterated in the template and shown with key/value pairs as they are
 
-        // get the description of this diagram
-        this.set("description", layerList[0].get("gfiFormat").gfiBildungsatlasDescription);
+        if (layerType === "Stadtteile") {
+            this.set("themeTitle", gfiProperties.stadtteil);
 
-        if (layerDataFormat !== null && layerDataFormat.layerType === "Stadtteile") {
-            this.set("Title", element.Stadtteil);
-
-            // Check if the layer of wanderungen by layerDataFormat.themeUnit
-            if (layerDataFormat.themeUnit !== "anteilWanderungen") {
-                content[element.Stadtteil] = this.get("latestStatistic");
-                content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
-                content.Hamburg = element["Summe hamburg"];
+            // Check if this is a layer of wanderungen by themeUnit
+            if (themeUnit === "anteilWanderungen") {
+                content["In " + gfiProperties.stadtteil] = latestValue;
+                content["Anteil der Zuzüge aus dem Umland:"] = gfiProperties.zuzuege_aus_umland;
+                content["Anteil der Zuzüge ins Umland:"] = gfiProperties.fortzuege_aus_dem_umland;
             }
             else {
-                content["In " + element.Stadtteil] = this.get("latestStatistic");
-                content["Anteil der Zuzüge aus dem Umland:"] = element["Zuzuege aus_umland"];
-                content["Anteil der Zuzüge ins Umland:"] = element["Fortzuege aus_dem_umland"];
+                content[gfiProperties.stadtteil] = latestValue;
+                content["Bezirk " + gfiProperties.bezirk] = gfiProperties.summe_bezirk;
+                content.Hamburg = gfiProperties.summe_hamburg;
             }
         }
-        else if (layerDataFormat !== null && layerDataFormat.layerType === "Sozialräume") {
-            this.set("Title", element["Sozialraum name"]);
+        else if (layerType === "Sozialräume") {
+            this.set("themeTitle", gfiProperties.sozialraum_name);
 
-            content[element["Sozialraum name"]] = this.get("latestStatistic");
-            content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
-            content.Hamburg = element["Summe hamburg"];
+            content[gfiProperties.sozialraum_name] = latestValue;
+            content["Bezirk " + gfiProperties.bezirk] = gfiProperties.summe_bezirk;
+            content.Hamburg = gfiProperties.summe_hamburg;
         }
-        else if (layerDataFormat !== null && layerDataFormat.layerType === "Statistische Gebiete") {
-            this.set("Title", element.Stadtteil + ": " + element.Statgebiet);
+        else if (layerType === "Statistische Gebiete") {
+            this.set("themeTitle", gfiProperties.stadtteil + ": " + gfiProperties.statgebiet);
 
-            if (layerDataFormat.themeUnit !== "anteilWanderungen") {
-                content["Statistisches Gebiet"] = this.get("latestStatistic");
-                content[element.Stadtteil] = element["Summe stadtteil"];
-                content["Bezirk " + element.Bezirk] = element["Summe bezirk"];
-                content.Hamburg = element["Summe hamburg"];
+            if (themeUnit !== "anteilWanderungen") {
+                content["Statistisches Gebiet"] = latestValue;
+                content[gfiProperties.stadtteil] = gfiProperties.summe_stadtteil;
+                content["Bezirk " + gfiProperties.bezirk] = gfiProperties.summe_bezirk;
+                content.Hamburg = gfiProperties.summe_hamburg;
             }
             else {
-                content["im Statistischen Gebiet"] = this.get("latestStatistic");
-            }
-        }
-
-        /**
-         * get the reverted data with the right format
-         */
-        this.getRevertData(content, layerDataFormat, element);
-
-        // set the layer data format
-        this.set("layerDataFormat", layerDataFormat);
-        this.set("layerDataFormatType", layerDataFormat.themeUnit);
-
-        // set the content of the template
-        this.set("content", content);
-    },
-
-    /**
-     * Here we get the data with the year for preparaing the balkendiagram
-     * @returns {void}
-     */
-    getStaticWithYear: function () {
-        const element = this.get("gfiContent"),
-            layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": "balkendiagramm", "id": this.get("themeId")}),
-            dataset = [],
-            layerDataFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
-        let key,
-            year;
-
-        for (key in element.allProperties) {
-            if (key.includes("jahr_")) {
-                year = key.replace("jahr_", "");
-                if (layerDataFormat.themeCategory === "schule") {
-                    year = Number(year.slice(-2)) + "/" + (Number(year.slice(-2)) + 1);
-                }
-                dataset.push({"year": year, "number": Number(element.allProperties[key])});
-            }
-        }
-
-        this.setDataset(dataset);
-    },
-
-    /**
-     * Revert the null or empty value to standard value
-     * check if the percentage should be added
-     * @param {array} content the full content of data
-     * @param {object} layerDataFormat the defined format from config file
-     * @param {object} element the raw data from gficontent
-     * @returns {array} the content with reverted data
-     */
-    getRevertData: function (content, layerDataFormat, element) {
-        let key = "";
-
-        if (layerDataFormat === null) {
-            return false;
-        }
-
-        for (key in content) {
-            if (content[key] === null || _.isUndefined(content[key])) {
-                content[key] = "*g.F.";
-            }
-            else if (layerDataFormat.themeUnit === "anzahl") {
-                content[key] = content[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
-            else if (layerDataFormat.themeUnit === "anteil") {
-                content[key] = Math.round(content[key]) + "%";
-            }
-            else if (layerDataFormat.themeUnit === "anteilWanderungen") {
-                if (key.includes("im Statistischen Gebiet") || key.includes("In " + element.Stadtteil)) {
-                    content[key] = this.get("latestStatistic") > 0 ? "+" + Math.round(this.get("latestStatistic") * 100) / 100 : Math.round(this.get("latestStatistic") * 100) / 100;
-                    content[key] = content[key].toString().replace(/\./g, ",");
-                }
-                else {
-                    content[key] = (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",") + "%";
-                }
+                content["im Statistischen Gebiet"] = latestValue;
             }
         }
 
@@ -147,14 +105,101 @@ const BalkendiagrammTheme = Theme.extend({
     },
 
     /**
-     * Here we get the data with the latest year
-     * @returns {void}
+     * Here we get the data with the year for preparaing the balkendiagram
+     * @param {Object} gfiProperties the content for this theme gotten by this.get("gfiContent").allProperties
+     * @param {Object} themeCategory the category of the theme based on config.json -> gfiFormat -> gfiBildungsatlasFormat
+     * @param {String} yearPrefix the prefix to search for in gfiProperties for data prefix+year to be used for the result
+     * @returns {Array}  - an array of objects [{String: year, Integer: number}] found in gfiProperties where data has key prefixed with yearPrefix
      */
-    getLatestStatistic: function () {
-        const dataset = this.get("dataset"),
-            latestStatistic = dataset.length > 1 ? dataset[dataset.length - 1].number : null;
+    getStatisticWithYear: function (gfiProperties, themeCategory, yearPrefix) {
+        const dataset = [],
+            regEx = new RegExp("^" + yearPrefix + "(\\d{4})$");
+        let key,
+            year,
+            regRes;
 
-        this.set("latestStatistic", latestStatistic);
+        for (key in gfiProperties) {
+            regRes = regEx.exec(key);
+            if (regRes === null || !regRes[1]) {
+                continue;
+            }
+            year = regRes[1];
+
+            if (themeCategory === "schule") {
+                year = Number(year.slice(-2)) + "/" + (Number(year.slice(-2)) + 1);
+            }
+            dataset.push({"year": year, "number": Number(gfiProperties[key])});
+        }
+
+        return dataset;
+    },
+
+    /**
+     * Revert the null or empty value to standard value
+     * check if the percentage should be added
+     * @param {Object} content the full content of data created in setContent
+     * @param {String} themeUnit the themeUnit as defined in config.json => gfiFormat => gfiBildungsatlasFormat
+     * @param {String} nameStadtteil the name of the Stadtteil - should be found in this.get("gfiContent").allProperties
+     * @returns {Object} the content with reverted/optimized data
+     */
+    getRevertData: function (content, themeUnit, nameStadtteil) {
+        const result = {};
+        let key = "";
+
+        for (key in content) {
+            if (content[key] === null || content[key] === undefined) {
+                result[key] = "*g.F.";
+            }
+            else if (themeUnit === "anzahl") {
+                if (isNaN(Number(content[key]))) {
+                    content[key] = 0;
+                }
+                result[key] = Math.round(content[key]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+            else if (themeUnit === "anteil") {
+                if (isNaN(Number(content[key]))) {
+                    content[key] = 0;
+                }
+                result[key] = Math.round(content[key]) + "%";
+            }
+            else if (themeUnit === "anteilWanderungen") {
+                if (isNaN(Number(content[key]))) {
+                    content[key] = 0;
+                }
+                if (key.includes("im Statistischen Gebiet") || key.includes("In " + nameStadtteil)) {
+                    result[key] = (content[key] > 0 ? "+" : "") + (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",");
+                }
+                else {
+                    result[key] = (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",") + "%";
+                }
+            }
+            else {
+                result[key] = content[key];
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * setter for TooltipValue of the BarGraph - note that this is sourced out because of its complexity (must be testable - see testings)
+     * @param {Number} value the value to be shown
+     * @param {String} themeUnit as set in config.json => gfiFormat => gfiBildungsatlasFormat
+     * @returns {String}  - the well formed value to be shown on mouse hover
+     */
+    setTooltipValue: function (value, themeUnit) {
+        if (value === null || value === undefined || isNaN(Number(value))) {
+            return "";
+        }
+
+        if (value.toString().indexOf(".") !== -1 && themeUnit !== "anteilWanderungen") {
+            return (Math.round(value * 100) / 100).toString().replace(/\./g, ",") + "%";
+        }
+        else if (value.toString().indexOf(".") !== -1) {
+            return (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
+        }
+
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
 
     /**
@@ -164,7 +209,8 @@ const BalkendiagrammTheme = Theme.extend({
      */
     createD3Document: function () {
         const width = parseInt($(".gfi-balkendiagramm").css("width"), 10),
-            dataType = this.get("layerDataFormatType"),
+            themeUnit = this.get("themeUnit"),
+            setTooltipValue = this.setTooltipValue,
             themeId = this.get("themeId"),
 
             graphConfig = {
@@ -194,14 +240,7 @@ const BalkendiagrammTheme = Theme.extend({
                     "number"
                 ],
                 setTooltipValue: function (value) {
-                    if (!isNaN(value) && value.toString().indexOf(".") !== -1 && dataType !== "anteilWanderungen") {
-                        return (Math.round(value * 100) / 100).toString().replace(/\./g, ",") + "%";
-                    }
-                    else if (value.toString().indexOf(".") !== -1) {
-                        return (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
-                    }
-
-                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    return setTooltipValue(value, themeUnit);
                 }
             };
 
@@ -209,11 +248,6 @@ const BalkendiagrammTheme = Theme.extend({
         $(".graph_" + themeId + " svg").remove();
 
         Radio.trigger("Graph", "createGraph", graphConfig);
-    },
-
-    // setting data for balkendiagramm
-    setDataset: function (value) {
-        this.set("dataset", value);
     },
 
     /**
