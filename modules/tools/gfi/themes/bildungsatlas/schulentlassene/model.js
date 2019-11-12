@@ -132,8 +132,7 @@ const SchulentlasseneTheme = Theme.extend({
         }
 
         for (key in gfiProperties) {
-            // beautifyString in /modules/tools/gfi/themes/model.js removes the first "_" in key - so here we have to correct the key to be the real key again
-            this.set(key.replace(" ", "_"), gfiProperties[key]);
+            this.set(key, gfiProperties[key]);
         }
 
         // set the value for dataZeitverlauf which is used for the BarGraph zeitverlauf
