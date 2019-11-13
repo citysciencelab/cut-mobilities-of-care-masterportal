@@ -211,7 +211,8 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     },
 
     /**
-     * ToDo
+     * Function to define the Gfi Parameters.
+     * Determines from which layers and from which coordinate the information of one or more features is retrieved.
      * @param {ol.MapBrowserPointerEvent} evt Event
      * @return {void}
      */
