@@ -8,6 +8,7 @@ const DrawToolView = Backbone.View.extend({
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
+        "keyup .circleRadiusInner input": "setCircleRadius",
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
         "change .color select": "setColor",
@@ -101,6 +102,8 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".font").hide();
                 this.$el.find(".radius").show();
                 this.$el.find(".stroke-width").hide();
+                this.$el.find(".circleRadiusInner").hide();
+                this.$el.find(".circleRadiusOuter").hide();
                 break;
             }
             case "Text schreiben": {
@@ -109,6 +112,30 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".font").show();
                 this.$el.find(".radius").hide();
                 this.$el.find(".stroke-width").hide();
+                this.$el.find(".circleRadiusOuter").hide();
+                this.$el.find(".circleRadiusInner").hide();
+                break;
+            }
+            case "Kreis zeichnen": {
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").hide();
+                this.$el.find(".stroke-width").show();
+                this.$el.find(".circleRadiusInner").show();
+                this.$el.find(".circleRadiusOuter").hide();
+                this.$el.find(".dropdownUnit").show();
+                break;
+            }
+            case "Doppelkreis zeichnen": {
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").hide();
+                this.$el.find(".stroke-width").show();
+                this.$el.find(".circleRadiusInner").show();
+                this.$el.find(".circleRadiusOuter").show();
+                this.$el.find(".dropdownUnit").show();
                 break;
             }
             default: {
@@ -116,7 +143,10 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".font-size").hide();
                 this.$el.find(".font").hide();
                 this.$el.find(".radius").hide();
+                this.$el.find(".circleRadiusInner").hide();
+                this.$el.find(".circleRadiusOuter").hide();
                 this.$el.find(".stroke-width").show();
+                this.$el.find(".dropdownUnit").show();
                 break;
             }
         }
@@ -273,6 +303,16 @@ const DrawToolView = Backbone.View.extend({
      */
     setRadius: function (evt) {
         this.model.setRadius(evt.target.value);
+        this.model.updateDrawInteraction();
+    },
+
+    /**
+     * setter for radius on the model
+     * @param {event} evt - with new radius
+     * @return {void}
+     */
+    setCircleRadius: function (evt) {
+        this.model.setCircleRadius(evt.target.value);
         this.model.updateDrawInteraction();
     },
 
