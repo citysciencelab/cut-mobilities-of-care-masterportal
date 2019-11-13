@@ -11,11 +11,14 @@ const BalkendiagrammTheme = Theme.extend({
                 this.getLatestStatistic();
                 this.setContent();
             },
-            "change:isVisible": function () {
+            "change:isVisible": function (model, isVisible) {
                 if (isMobile) {
                     timeOut = 300;
                 }
-                setTimeout(_.bind(this.createD3Document, this), timeOut);
+                if (isVisible) {
+                    // as there seems to be currently no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used instead of a pure solution
+                    setTimeout(_.bind(this.createD3Document, this), timeOut);
+                }
             }
         });
     },
