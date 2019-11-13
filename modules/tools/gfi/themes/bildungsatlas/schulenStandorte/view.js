@@ -9,7 +9,7 @@ const SchulenStandorteThemeView = ThemeView.extend(/** @lends SchulenStandorteTh
      * @constructs
      */
     tagName: "div",
-    className: "gfi-schule",
+    className: "gfi-school-location",
     template: _.template(DefaultTemplate)
 });
 
