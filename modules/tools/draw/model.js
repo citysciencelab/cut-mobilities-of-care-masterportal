@@ -17,6 +17,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         font: "Arial",
         fontSize: 10,
         text: "Klicken Sie auf die Karte um den Text zu platzieren",
+        circleRadiusInner: 0,
         color: [55, 126, 184, 1],
         radius: 6,
         strokeWidth: 1,
@@ -484,11 +485,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             font = this.get("font"),
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
+            circleRadiusInner = this.get("circleRadiusInner"),
             radius = this.get("radius"),
             zIndex = this.get("zIndex");
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
+        }
+        else if (_.has(drawType, "geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
+            style = this.getCircleStyle(color, circleRadiusInner, strokeWidth, radius, zIndex);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex);
@@ -512,6 +517,33 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 textAlign: "left",
                 text: text,
                 font: fontSize + "px " + font,
+                fill: new Fill({
+                    color: color
+                })
+            }),
+            zIndex: zIndex
+        });
+    },
+
+    /**
+     * Creates and returns a feature style for points, lines, or faces and returns it
+     * @param {number} color - of drawings
+     * @param {number} circleRadiusInner - radius of the inner circle
+     * @param {number} strokeWidth - from geometry
+     * @param {number} zIndex - zIndex of Element
+     * @return {ol/style/Style} style
+     */
+    getCircleStyle: function (color, circleRadiusInner, strokeWidth, zIndex) {
+        return new Style({
+            fill: new Fill({
+                color: color
+            }),
+            image: new Circle({
+                radius: circleRadiusInner,
+                stroke: new Stroke({
+                    color: "#00ff44",
+                    width: strokeWidth
+                }),
                 fill: new Fill({
                     color: color
                 })
@@ -563,6 +595,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.deactivateSelectInteraction();
 
         this.setRadius(this.defaults.radius);
+        this.setCircleRadius(this.defaults.circleRadiusInner);
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
 
@@ -809,6 +842,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      */
     setRadius: function (value) {
         this.set("radius", parseInt(value, 10));
+    },
+
+    /**
+     * setter for radius
+     * @param {number} value - radius
+     * @return {void}
+     */
+    setCircleRadius: function (value) {
+        this.set("circleRadiusInner", parseFloat(value));
     },
 
     /**
