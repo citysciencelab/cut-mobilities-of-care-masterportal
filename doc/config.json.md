@@ -793,7 +793,10 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeuges im Menu.|false|
-|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
+|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
+|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
+|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
+|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
 
 **Beispiel einer GFI Konfiguration**
 ```
@@ -817,6 +820,16 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 }
 ```
 
+**Beispiel einer GFI Konfiguration zur Informationsabfrage von Features**
+```
+#!json
+"gfi":{
+    "name":"Informationen abfragen",
+    "glyphicon":"glyphicon-info-sign",
+    "isActive":true,
+    "centerMapMarkerPolygon":true
+}
+```
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules
@@ -1212,32 +1225,6 @@ Routing Modul.
     "bkgSuggestID": "2",
     "bkgGeosearchID": "3",
     "isInitOpen": false
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.gfi
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Requests oder GetFeature-Requests oder geladene Vektordaten abgefragt werden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeugs im Menu.|false|
-|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
-|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
-|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
-
-**Beispiel**
-```
-#!json
-"gfi":{
-    "name":"Informationen abfragen",
-    "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
-    "centerMapMarkerPolygon":true
 }
 ```
 
