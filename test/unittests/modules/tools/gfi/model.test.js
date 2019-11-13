@@ -23,16 +23,16 @@ before(function () {
 
 describe("tools/gfi/Model", function () {
     describe("getClickedCoordinate", function () {
-        it("should return undefined for true as input event", async () => {
+        it("should return undefined for true as input event", function () {
             expect(model.getClickedCoordinate(true, true)).to.be.undefined;
         });
-        it("should return undefined for false as input event", async () => {
+        it("should return undefined for false as input event", function () {
             expect(model.getClickedCoordinate(false, false)).to.be.undefined;
         });
-        it("should return undefined for true as input event", async () => {
+        it("should return undefined for true as input event", function () {
             expect(model.getClickedCoordinate(false, true)).to.be.undefined;
         });
-        it("should return undefined for false as input event", async () => {
+        it("should return undefined for false as input event", function () {
             expect(model.getClickedCoordinate(true, false)).to.be.undefined;
         });
         it("should return undefined output for undefined and empty input", function () {
