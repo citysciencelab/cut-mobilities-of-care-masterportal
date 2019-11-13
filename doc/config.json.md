@@ -1158,6 +1158,32 @@ Routing Modul.
 
 ***
 
+#### Portalconfig.menu.tool.gfi
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Requests oder GetFeature-Requests oder geladene Vektordaten abgefragt werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeugs im Menu.|false|
+|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
+|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
+|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
+
+**Beispiel**
+```
+#!json
+"gfi":{
+    "name":"Informationen abfragen",
+    "glyphicon":"glyphicon-info-sign",
+    "isActive":true,
+    "centerMapMarkerPolygon":true
+}
+```
+
+***
+
 #### Portalconfig.menu.tool.featureLister
 
 [inherits]: # (Portalconfig.menu.tool)
