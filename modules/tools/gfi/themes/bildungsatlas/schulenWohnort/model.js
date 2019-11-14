@@ -62,7 +62,9 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (isVisible && this.get("isCreated") === false) {
             this.set("isCreated", true);
-            this.create();
+            if (this.parseGfiContent(this.get("gfiContent"))) {
+                this.create();
+            }
         }
     },
 
@@ -130,12 +132,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
                 console.warn("Missing data for layer theme type");
             }
 
-            if (this.get("accountStudents") && layerSchoolLevel === "secondary") {
-                this.set("accountStudents", this.get("gfiContent").allProperties.C32_SuS);
-            }
-
-            this.set("schoolLevel", layerSchoolLevel);
-            this.set("level", level);
+            this.updateTemplateValue(this.get("accountStudents"), level, layerSchoolLevel, this.get("gfiContent").allProperties.C32_SuS);
 
             if (layerSchoolLevel) {
                 layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
@@ -164,7 +161,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
         if (layerHomeAddress) {
             this.unfilterFeature(layerHomeAddress);
-            if (layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
+            if (Array.isArray(layerHomeAddress) && layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
                 layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
             }
         }
@@ -177,6 +174,23 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             this.unfilterFeature([layerStatistischeGebiete]);
             layerStatistischeGebiete.setIsSelected(false);
         }
+    },
+
+    /**
+     * Filters the areas by schoolId
+     * @param   {integer} accountStudents - the account of the students
+     * @param   {object} level - the level object for primary and secondary school
+     * @param   {string} layerSchoolLevel - the current school layer level
+     * @param   {integer} accountStudentSecondary - the account of the secondary students
+     * @returns {void}
+     */
+    updateTemplateValue: function (accountStudents, level, layerSchoolLevel, accountStudentSecondary) {
+        if (accountStudents && layerSchoolLevel === "secondary") {
+            this.set("accountStudents", accountStudentSecondary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
+
+        this.set("schoolLevel", layerSchoolLevel);
+        this.set("level", level);
     },
 
     /**
@@ -218,45 +232,25 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
             totalSum = school.get("C_S_SuS"),
             priSum = school.get("C_S_SuS_PS"),
-            sozialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
+            socialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
             percentage = Math.round(urbanAreaFinal) + "%",
             sum = Math.round(accountsAll * urbanAreaFinal / 100),
-            level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
-            finalHtml = "<table class=\"table table-striped\">" +
-                        "<thead>" +
-                            "<tr>" +
-                                "<th colspan=\"2\">" + name + "</th>" +
-                            "</tr>" +
-                        "</thead>" +
-                        "<tbody>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Adresse: </td>" +
-                                "<td>" + address + "</td>" +
-                            "</tr>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Gesamtanzahl der Schüler: </td>" +
-                                "<td>" + totalSum + "</td>" +
-                            "</tr>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Anzahl der Schülerinnen und Schüler<br> in der Primarstufe: </td>" +
-                                "<td>" + priSum + "</td>" +
-                            "</tr>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Sozialindex der Schüler: </td>" +
-                                "<td>" + sozialIndex + "</td>" +
-                            "</tr>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchoolLevel] + "): </td>" +
-                                "<td>" + percentage + "</td>" +
-                            "</tr>" +
-                            "<tr colspan=\"2\">" +
-                                "<td>Anzahl: </td>" +
-                                "<td>" + sum + "</td>" +
-                            "</tr>" +
-                        "</tbody>" +
-                    "</table>";
+            level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
 
-        return finalHtml;
+        // triggere view an
+        this.trigger("renderMouseHover", {
+            accountsAll: accountsAll,
+            urbanAreaFinal: urbanAreaFinal,
+            layerSchoolLevel: layerSchoolLevel,
+            name: name,
+            address: address,
+            totalSum: totalSum,
+            priSum: priSum,
+            socialIndex: socialIndex,
+            percentage: percentage,
+            sum: sum,
+            level: {"primary": "Primarstufe", "secondary": "Sekundarstufe I"}
+        });
     },
 
     /**
@@ -285,7 +279,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     getHomeAddressLayer: function () {
         const layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
 
-        if (!Array.isArray(layerList)) {
+        if (!Array.isArray(layerList) || layerList.length === 0) {
             console.warn("The layer does not exist");
             return false;
         }
@@ -330,6 +324,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
             return false;
         }
+
         return conf;
     },
 
