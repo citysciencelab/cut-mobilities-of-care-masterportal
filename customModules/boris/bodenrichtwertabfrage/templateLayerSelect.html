@@ -1,0 +1,16 @@
+<div class="form-group <% if (!isViewMobile) {print ('form-group-sm')} %>">
+    <label for="brwLayerSelect">Die Bodenrichtwertabfrage erfolgt für das Jahr:</label>
+    <select id="brwLayerSelect" class="form-control">
+	    <% modelList.forEach(function (model) { %>
+	        <% if (model.get("isSelected") === true) { %>
+	            <option selected><%= model.get("name") %></option>
+	        <% }
+	        else { %>
+	            <option><%= model.get("name") %> </option>
+	        <% } %>
+	    <% }); %>
+	</select>
+</div>
+<% if (!isViewMobile && !gfiFeature) { %>
+    <label>Bitte klicken Sie nun auf den gewünschten BRW in der Karte.</label>
+<% } %>

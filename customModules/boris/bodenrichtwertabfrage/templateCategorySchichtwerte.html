@@ -1,0 +1,118 @@
+<span class="text-justify">Durchschnittliche Bodenwerte der Geschossfläche einer bestimmten Nutzung:</span>
+<dl>
+    <% if (selectedBrwFeature.get("schichtwert").normschichtwert_wohnen) { %>
+        <dt>normierter Bodenrichtwert für Mehrfamilienhäuser:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= selectedBrwFeature.get("schichtwert").normschichtwert_wohnen %> €/m²</dd>
+        <% }
+         else { %>
+            <dd><span><%= selectedBrwFeature.get("schichtwert").normschichtwert_wohnen %> €/m²</span><span class="pull-right"><%= selectedBrwFeature.get("schichtwert").normschichtwert_wohnenDM %> DM/m²</span></dd>
+        <% } %>
+
+    <% } %>
+    <% if (selectedBrwFeature.get("schichtwert").normschichtwert_buero) { %>
+        <dt>normierter Bodenrichtwert für Bürohäuser:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= selectedBrwFeature.get("schichtwert").normschichtwert_buero %> €/m²</dd>
+        <% }
+         else { %>
+            <dd><span><%= selectedBrwFeature.get("schichtwert").normschichtwert_buero %> €/m²</span><span class="pull-right"><%= selectedBrwFeature.get("schichtwert").normschichtwert_bueroDM %> DM/m²</span></dd>
+        <% } %>
+    <% } %>
+    <% if (selectedBrwFeature.get("schichtwert").normschichtwert_laden) { %>
+        <dt>normierter Bodenrichtwert für Geschäftshäuser (Erdgesch.-anteil):</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= selectedBrwFeature.get("schichtwert").normschichtwert_laden %> €/m²</dd>
+        <% }
+         else { %>
+            <dd><span><%= selectedBrwFeature.get("schichtwert").normschichtwert_laden %> €/m²</span><span class="pull-right"><%= selectedBrwFeature.get("schichtwert").normschichtwert_ladenDM %> DM/m²</span></dd>
+        <% } %>
+    <% } %>
+</dl>
+<% if (selectedBrwFeature.get("schichtwert").schichtwerte) { %>
+    <% selectedBrwFeature.get("schichtwert").schichtwerte.filter(function (schichtwert) { return schichtwert.geschoss === "3. Obergeschoss oder höher"; }).forEach(function(schichtwert) { %>
+    </br>
+    <label><%= schichtwert.geschoss %>:</label>
+    <dl>
+        <dt>Anteilige WGFZ:</dt>
+        <dd><%= schichtwert.wgfz %></dd>
+        <dt>Nutzung:</dt>
+        <dd><%= schichtwert.nutzung %></dd>
+        <dt>Schichtwert:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= schichtwert.schichtwert %> €/m² WGF</dd>
+        <% }
+         else { %>
+            <dd><span><%= schichtwert.schichtwert %> €/m² WGF</span><span class="pull-right"><%= schichtwert.schichtwertDM %> DM/m² WGF</span></dd>
+        <% } %>
+    </dl>
+    <% }); %>
+    <% selectedBrwFeature.get("schichtwert").schichtwerte.filter(function (schichtwert) { return schichtwert.geschoss === "2. Obergeschoss"; }).forEach(function(schichtwert) { %>
+    </br>
+    <label><%= schichtwert.geschoss %>:</label>
+    <dl>
+        <dt>Anteilige WGFZ:</dt>
+        <dd><%= schichtwert.wgfz %></dd>
+        <dt>Nutzung:</dt>
+        <dd><%= schichtwert.nutzung %></dd>
+        <dt>Schichtwert:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= schichtwert.schichtwert %> €/m² WGF</dd>
+        <% }
+         else { %>
+            <dd><span><%= schichtwert.schichtwert %> €/m² WGF</span><span class="pull-right"><%= schichtwert.schichtwertDM %> DM/m² WGF</span></dd>
+        <% } %>
+    </dl>
+    <% }); %>
+    <% selectedBrwFeature.get("schichtwert").schichtwerte.filter(function (schichtwert) { return schichtwert.geschoss === "1. Obergeschoss"; }).forEach(function(schichtwert) { %>
+    </br>
+    <label><%= schichtwert.geschoss %>:</label>
+    <dl>
+        <dt>Anteilige WGFZ:</dt>
+        <dd><%= schichtwert.wgfz %></dd>
+        <dt>Nutzung:</dt>
+        <dd><%= schichtwert.nutzung %></dd>
+        <dt>Schichtwert:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= schichtwert.schichtwert %> €/m² WGF</dd>
+        <% }
+         else { %>
+            <dd><span><%= schichtwert.schichtwert %> €/m² WGF</span><span class="pull-right"><%= schichtwert.schichtwertDM %> DM/m² WGF</span></dd>
+        <% } %>
+    </dl>
+    <% }); %>
+    <% selectedBrwFeature.get("schichtwert").schichtwerte.filter(function (schichtwert) { return schichtwert.geschoss === "Erdgeschoss"; }).forEach(function(schichtwert) { %>
+    </br>
+    <label><%= schichtwert.geschoss %>:</label>
+    <dl>
+        <dt>Anteilige WGFZ:</dt>
+        <dd><%= schichtwert.wgfz %></dd>
+        <dt>Nutzung:</dt>
+        <dd><%= schichtwert.nutzung %></dd>
+        <dt>Schichtwert:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= schichtwert.schichtwert %> €/m² WGF</dd>
+        <% }
+         else { %>
+            <dd><span><%= schichtwert.schichtwert %> €/m² WGF</span><span class="pull-right"><%= schichtwert.schichtwertDM %> DM/m² WGF</span></dd>
+        <% } %>
+    </dl>
+    <% }); %>
+    <% selectedBrwFeature.get("schichtwert").schichtwerte.filter(function (schichtwert) { return schichtwert.geschoss === "Untergeschoss"; }).forEach(function(schichtwert) { %>
+    </br>
+    <label><%= schichtwert.geschoss %>:</label>
+    <dl>
+        <dt>Anteilige WGFZ:</dt>
+        <dd><%= schichtwert.wgfz %></dd>
+        <dt>Nutzung:</dt>
+        <dd><%= schichtwert.nutzung %></dd>
+        <dt>Schichtwert:</dt>
+        <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+            <dd><%= schichtwert.schichtwert %> €/m² WGF</dd>
+        <% }
+         else { %>
+            <dd><span><%= schichtwert.schichtwert %> €/m² WGF</span><span class="pull-right"><%= schichtwert.schichtwertDM %> DM/m² WGF</span></dd>
+        <% } %>
+    </dl>
+    <% }); %>
+<% } %>

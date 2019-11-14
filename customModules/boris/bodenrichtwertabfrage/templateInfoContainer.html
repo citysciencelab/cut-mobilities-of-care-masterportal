@@ -1,0 +1,32 @@
+<div class="info-container">
+    <hr>
+    <label><u>Bodenrichtwert: <%= selectedBrwFeature.get("richtwertnummer") %></u></label>
+	<div class="btn-group btn-group-justified" role="group" aria-label="...">
+		<div class="btn-group" role="group">
+			<button id="brwCategorySelect" value="Detailinformationen" type="button" class="btn btn-default <% if (selectedCategory === 'Detailinformationen') {print ('active')} %>" title ="Detailinformationen">
+				<span class="glyphicon glyphicon-info-sign"></span>
+			</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button id="brwCategorySelect" value="Lagebeschreibung" type="button" class="btn btn-default<% if (selectedCategory === 'Lagebeschreibung') {print ('active')} %>" title ="Lagebeschreibung">
+				<span class="glyphicon glyphicon-map-marker"></span>
+			</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button id="brwCategorySelect" value="Umrechnung auf individuelles Grundstück" type="button" class="btn btn-default <% if (selectedCategory === 'Umrechnung auf individuelles Grundstück') {print ('active')} %>" title ="Umrechnung auf individuelles Grundstück">
+				<span class="glyphicon glyphicon-euro"></span>
+			</button>
+		</div>
+		<% if (selectedBrwFeature.get("schichtwert")) { %>
+		<div class="btn-group" role="group">
+			<button id="brwCategorySelect" value="Schichtwerte" type="button" class="btn btn-default <% if (selectedCategory === 'Schichtwerte') {print ('active')} %>" title ="Schichtwerte" >
+				<span class="glyphicon glyphicon-list"></span>
+			</button>
+		</div>
+		<% } %>
+    </div>
+    <label><%= selectedCategory %></label>
+    <div class="info-container-content"></div>
+    <hr>
+    <button class="btn btn-primary col-xs-offset-3 col-xs-6 print">Drucken</button>
+</div>
