@@ -1,12 +1,16 @@
 const fs = require("fs-extra"),
-    replaceStrings = require("./replace"),
-    prependVersionNumber = require("./prependVersionNumber"),
-    path = require("path"),
     execute = require("child-process-promise").exec,
 
+    path = require("path"),
     rootPath = path.resolve(__dirname, "../../"),
-    buildTempPath = path.resolve(rootPath, "dist/build/");
 
+    replaceStrings = require(path.resolve(rootPath, "devtools/tasks/replace")),
+    prependVersionNumber = require(path.resolve(rootPath, "devtools/tasks/prependVersionNumber")),
+
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
+    distPath = path.resolve(rootPath, "dist/"),
+    mastercodeVersionPath = path.resolve(distPath, "mastercode/", stableVersionNumber),
+    buildTempPath = path.resolve(distPath, "build/");
 
 /**
  * copy files to the given destination
@@ -14,15 +18,16 @@ const fs = require("fs-extra"),
  * @param {String} distPortalPath destination folder for the built portal
  * @returns {void}
  */
-function copyFiles (sourcePortalPath, distPortalPath) {
+function copyPortalFiles (sourcePortalPath, distPortalPath) {
     fs.copy(sourcePortalPath, distPortalPath).then(() => {
-        console.warn("NOTE: Successfully Copied \"" + sourcePortalPath + "\" to \"" + distPortalPath + "\".");
-        fs.copy("./img", distPortalPath + "/img").then(() => {
-            console.warn("NOTE: Successfully copied \"./img\" to \"" + distPortalPath + "\".");
-            fs.copy(buildTempPath, distPortalPath).then(() => {
+        console.warn("NOTE: Copied \"" + sourcePortalPath + "\" to \"" + distPortalPath + "\".");
+        fs.copy("./img", mastercodeVersionPath + "/img").then(() => {
+            console.warn("NOTE: Copied \"./img\" to \"" + mastercodeVersionPath + "\".");
+            fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
+                console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
                 fs.remove(buildTempPath).then(() => {
                     replaceStrings(distPortalPath);
-                    console.warn("NOTE: Successfully copied \"" + buildTempPath + "\" to \"" + distPortalPath + "\".");
+                    console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + distPortalPath + "\".");
                 }).catch(error => console.error(error));
             }).catch(error => console.error(error));
         }).catch(error => console.error(error));
@@ -36,9 +41,14 @@ function copyFiles (sourcePortalPath, distPortalPath) {
  * @returns {void}
  */
 function removeOldBuiltFiles (sourcePortalPath, distPortalPath) {
-    fs.remove(distPortalPath).then(() => {
-        console.warn("NOTE: Successfully deleted \"" + distPortalPath + "\" directory.");
-        copyFiles(sourcePortalPath, distPortalPath);
+    fs.remove(mastercodeVersionPath).then(() => {
+        console.warn("NOTE: Deleted directory \"" + mastercodeVersionPath + "\".");
+        fs.remove(distPortalPath).then(() => {
+            console.warn("NOTE: Deleted directory \"" + distPortalPath + "\".");
+            copyPortalFiles(sourcePortalPath, distPortalPath);
+        }).catch(function (err) {
+            throw new Error("ERROR", err);
+        });
     }).catch(function (err) {
         throw new Error("ERROR", err);
     });
@@ -53,7 +63,7 @@ module.exports = function buildWebpack (answers) {
     const
         sourcePortalPath = path.resolve(rootPath, answers.portalPath),
         portalName = sourcePortalPath.split(path.sep).pop(),
-        distPortalPath = path.resolve(rootPath, "dist/", portalName),
+        distPortalPath = path.resolve(distPath, portalName),
         cliExecCommand = "webpack --config devtools/webpack.prod.js";
 
     if (!fs.existsSync(sourcePortalPath)) {
@@ -64,7 +74,7 @@ module.exports = function buildWebpack (answers) {
     console.warn("NOTICE: executing command \"" + cliExecCommand + "\"");
     execute(cliExecCommand).then(function (result) {
         console.warn(result.stdout);
-        prependVersionNumber(path.resolve(buildTempPath, "js/masterportal.js")); // TODO masterportal dynamisch machen
+        prependVersionNumber(path.resolve(buildTempPath, "js/masterportal.js"));
         removeOldBuiltFiles(sourcePortalPath, distPortalPath);
     }).catch(function (err) {
         throw new Error("ERROR", err);

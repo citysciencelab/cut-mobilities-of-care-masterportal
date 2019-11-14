@@ -4,7 +4,6 @@ const webpack = require("webpack"),
     fs = require("fs"),
 
     rootPath = path.resolve(__dirname, "../"),
-    portalconfigsPath = path.resolve(rootPath, "portalconfigs/"),
     customModulePath = path.resolve(rootPath, "customModules/"),
     customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
     entryPoint = {masterportal: path.resolve(rootPath, "js/main.js")};

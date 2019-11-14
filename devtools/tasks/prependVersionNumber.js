@@ -1,17 +1,18 @@
 const fs = require("fs-extra"),
-    stableVersion = require("../../package.json").version.replace(/\./g, "_");
+    path = require("path"),
+    rootPath = path.resolve(__dirname, "../../"),
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
 
-module.exports = function prependVersionAndTime (path) {
+module.exports = function prependVersionAndTime (filepath) {
     var
-        jsContent = fs.readFileSync(path),
-        fd = fs.openSync(path, "w+"),
+        jsContent = fs.readFileSync(filepath),
+        fd = fs.openSync(filepath, "w+"),
         dt = new Date(),
         currentFormattedDt,
-        masterPortalBuildVersion = stableVersion.replace(/_/g, "."),
         contentToPrepend;
 
     currentFormattedDt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-    contentToPrepend = "/*v" + masterPortalBuildVersion + ",built@" + currentFormattedDt + "*/";
+    contentToPrepend = "/*v" + stableVersionNumber + ",built@" + currentFormattedDt + "*/";
 
     fs.writeSync(fd, contentToPrepend + jsContent, {mode: 438, flags: "w"});
     fs.close(fd, (error) => {

@@ -1,7 +1,10 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     UglifyJsPlugin = require("uglifyjs-webpack-plugin"),
-    path = require("path");
+    path = require("path"),
+
+    rootPath = path.resolve(__dirname, "../"),
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
 
 module.exports = function () {
     return merge.smart(new Common(), {
@@ -9,7 +12,7 @@ module.exports = function () {
         output: {
             path: path.resolve(__dirname, "../dist/build"),
             filename: "js/[name].js",
-            publicPath: "./"
+            publicPath: "../mastercode/" + stableVersionNumber + "/"
         },
         module: {
             rules: [
