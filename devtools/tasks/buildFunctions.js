@@ -5,7 +5,6 @@ const fs = require("fs-extra"),
     execute = require("child-process-promise").exec,
 
     rootPath = path.resolve(__dirname, "../../"),
-    portalconfigsFolderPath = path.resolve(rootPath, "portalconfigs/"),
     buildTempPath = path.resolve(rootPath, "dist/build/");
 
 

@@ -1,14 +1,16 @@
-const Chunks2JsonPlugin = require("chunks-2-json-webpack-plugin"),
-    webpack = require("webpack"),
+const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
     fs = require("fs"),
-    portalconfigsPath = path.resolve(__dirname, "../portalconfigs/"),
-    customModuleConfigPath = path.resolve(portalconfigsPath, "customModules", "customModulesConf.json"),
-    entryPoint = {masterportal: path.resolve(__dirname, "../js/main.js")};
+
+    rootPath = path.resolve(__dirname, "../"),
+    portalconfigsPath = path.resolve(rootPath, "portalconfigs/"),
+    customModulePath = path.resolve(rootPath, "customModules/"),
+    customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
+    entryPoint = {masterportal: path.resolve(rootPath, "js/main.js")};
 
 if (!fs.existsSync(customModuleConfigPath)) {
-    console.error("---\n---");
+    console.error("############\n------------");
     throw new Error("ERROR: NO CUSTOM MODULE CONFIG FILE FOUND AT \"" + customModuleConfigPath + "\"\nABORTED...");
 }
 const portalEntryPoints = require(customModuleConfigPath);
@@ -17,16 +19,15 @@ module.exports = function () {
     const customModulesRelPaths = {};
 
     for (const portalName in portalEntryPoints) {
-
         if (typeof portalEntryPoints[portalName] !== "string") {
-            console.error("---\n---");
+            console.error("############\n------------");
             throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + portalName + "\"\nABORTED...");
         }
 
-        const customModuleFilePath = path.resolve([portalconfigsPath, "customModules", portalName, portalEntryPoints[portalName]].join("/") + ".js");
+        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName]+ ".js");
 
         if (!fs.existsSync(customModuleFilePath)) {
-            console.error("---\n---");
+            console.error("############\n------------");
             throw new Error("ERROR: FILE DOES NOT EXIST \"" + customModuleFilePath + "\"\nABORTED...");
         }
 
@@ -106,7 +107,6 @@ module.exports = function () {
             ]
         },
         plugins: [
-            new Chunks2JsonPlugin({outputDir: "dist/__wp_chunks/"}),
             // provide libraries globally
             new webpack.ProvidePlugin({
                 jQuery: "jquery",

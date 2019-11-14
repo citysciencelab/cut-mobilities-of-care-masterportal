@@ -456,15 +456,13 @@ function loadApp () {
     if (Config.hasOwnProperty("customModules")) {
         Config.customModules.forEach((customModuleKey) => {
             if (allCustomModules[customModuleKey] !== undefined) {
-                import( /* webpackChunkName: "[request]" */ `../customModules/${allCustomModules[customModuleKey]}.js`)
-                    .then(module => {
-                        /* eslint-disable new-cap */
-                        new module.default();
-                    })
-                    .catch(error => {
-                        console.error(error);
-                        Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-                    });
+                import(/* webpackChunkName: "[request]" */ `../customModules/${allCustomModules[customModuleKey]}.js`).then(module => {
+                    /* eslint-disable new-cap */
+                    new module.default();
+                }).catch(error => {
+                    console.error(error);
+                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+                });
             }
         });
     }
