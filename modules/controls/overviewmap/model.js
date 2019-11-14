@@ -77,18 +77,16 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     createOverviewMap: function () {
         const id = this.get("id"),
             map = Radio.request("Map", "getMap"),
-            maxResolution = _.first(Radio.request("MapView", "getResolutions")),
             mapView = map.getView(),
             layers = map.getLayers().getArray(),
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
             initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
             baselayer = this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId),
-            newOlView = new View({
+            newOlView = new View(Object.assign({
                 center: mapView.getCenter(),
                 projection: mapView.getProjection(),
-                resolution: mapView.getResolution(),
-                resolutions: [this.get("resolution") ? this.get("resolution") : maxResolution]
-            });
+                resolution: mapView.getResolution()
+            }, this.appendExtraParams()));
 
         if (!baselayer) {
             console.error("Missing layerID " + baselayer + " for OverviewMap");
@@ -98,6 +96,15 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         }
 
         return this.newOverviewmap(id, baselayer, newOlView);
+    },
+
+    appendExtraParams: function () {
+        const extraParams = {};
+
+        if (this.get("resolution")) {
+            extraParams.resolutions = [this.get("resolution")];
+        }
+        return extraParams;
     },
 
     /**

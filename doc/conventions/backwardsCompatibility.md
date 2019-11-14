@@ -1,8 +1,8 @@
-**8. Abwärts-Kompatibilität**
+**9. Abwärts-Kompatibilität**
 
-8.1. Stelle sicher, dass alle bisherigen Konfigurationsparameter weiterhin verwendbar sind.
+9.1. Stelle sicher, dass alle bisherigen Konfigurationsparameter weiterhin verwendbar sind.
 
-8.2 Bei Veränderung/Refactoring/Löschen eines Parameters:
+9.2 Bei Veränderung/Refactoring/Löschen eines Parameters:
 * Markiere den Parameter in der Doku mit "Deprecated in [nächstes Major-Release]".
 
 Beispiel des deprecated Parameters "Baumtyp" in der config.json.md:

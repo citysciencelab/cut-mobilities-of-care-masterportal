@@ -34,7 +34,8 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
         unlisten: false,
-        highlightFeature: undefined
+        highlightFeature: undefined,
+        centerMapMarkerPolygon: false
     }),
     /**
      * @class GFI
@@ -210,9 +211,10 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     },
 
     /**
-     *
+     * Function to define the Gfi Parameters.
+     * Determines from which layers and from which coordinate the information of one or more features is retrieved.
      * @param {ol.MapBrowserPointerEvent} evt Event
-     * @return {undefined}
+     * @return {void}
      */
     setGfiParams: function (evt) {
         var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
@@ -223,8 +225,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
             wmsGFIParams = [],
             GFIParams3d = [],
             unionParams = [],
-            coordinate = [],
-            feature;
+            coordinate = [];
 
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
@@ -233,29 +234,9 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
             this.setCoordinate(evt.pickedPosition);
         }
 
-        // für detached MapMarker
-        if (evt.hasOwnProperty("pixel")) {
-            feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
-                return feat;
-            });
-        }
-
-        // Derive (center) coordinate with respect to the feature type
-        if (feature === null || feature === undefined) {
-            coordinate = evt.coordinate;
-        }
-        else if ((/polygon/i).test(feature.getGeometry().getType())) {
-            coordinate = getCenter(feature.getGeometry().getExtent());
-        }
-        else {
-            coordinate = feature.getGeometry().getFirstCoordinate();
-        }
-
+        coordinate = this.getClickedCoordinate(this.get("centerMapMarkerPolygon"), evt);
         this.setCoordinate(coordinate);
-
-        // Vector
         vectorGFIParams = this.getVectorGFIParams(visibleVectorLayerList, evt.map.getEventPixel(evt.originalEvent));
-        // WMS
         wmsGFIParams = this.getWMSGFIParams(visibleWMSLayerList);
 
         this.setThemeIndex(0);
@@ -339,6 +320,48 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     },
 
     /**
+     * Returns the clicked coordinates, if the parameter centerPolygon is false.
+     * If the parameter centerPolygon has the value true, the coordinate of the center of the feature is determined.
+     * @param {boolean} centerPolygon - Parameter for specifying whether the coordinate of the center of a feature should be determined.
+     * @param {ol.MapBrowserPointerEvent} evt - click event.
+     * @returns {number} coordinate of clicked position or center coordinate of clicked feature.
+     */
+    getClickedCoordinate: function (centerPolygon, evt) {
+        let feature,
+            coordinate;
+
+        if (centerPolygon === true) {
+
+            // für detached MapMarker
+            if (evt.hasOwnProperty("pixel")) {
+                feature = evt.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                    return feat;
+                },
+                {
+                    layerFilter: function (layer) {
+                        return layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true;
+                    }
+                });
+            }
+
+            // Derive (center) coordinate with respect to the feature type
+            if (feature === null || feature === undefined) {
+                coordinate = evt.coordinate;
+            }
+            else if ((/polygon/i).test(feature.getGeometry().getType())) {
+                coordinate = getCenter(feature.getGeometry().getExtent());
+            }
+            else {
+                coordinate = feature.getGeometry().getFirstCoordinate();
+            }
+        }
+        else {
+            coordinate = evt.coordinate;
+        }
+        return coordinate;
+    },
+
+    /**
      * Aufschlüsselung von WMS und Vector-GFI Abfragen aus einer gemischten Layerliste unter Berücksichtung von GroupLayern.
      * @param   {model[]} layerList Liste der aufzuschlüsselnden Layer
      * @returns {Object}            Objekt der aufgeschlüsslten GFI
@@ -387,7 +410,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         _.each(layerlist, function (vectorLayer) {
             var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
-                        return layer.get("name") === vectorLayer.get("name");
+                        return layer.get("id") === vectorLayer.get("id");
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),

@@ -1,12 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
-import SnippetDropdownModel from "../../snippets/dropdown/model";
+import GraphicalSelectModel from "../../snippets/graphicalselect/model";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";
-import {GeoJSON} from "ol/format.js";
-import Overlay from "ol/Overlay.js";
-import {Draw} from "ol/interaction.js";
-import {createBox} from "ol/interaction/Draw.js";
-import {Circle} from "ol/geom.js";
-import {fromCircle} from "ol/geom/Polygon.js";
 
 const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -14,39 +8,21 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         renderToWindow: true,
         checkBoxAddress: undefined,
         checkBoxRaster: undefined,
-        drawInteraction: undefined,
-        isCollapsed: undefined,
-        isCurrentWin: undefined,
-        circleOverlay: new Overlay({
-            offset: [15, 0],
-            positioning: "center-left"
-        }),
-        tooltipOverlay: new Overlay({
-            offset: [15, 20],
-            positioning: "top-left"
-        }),
         data: {},
         dataReceived: false,
         requesting: false,
         style: "DEFAULT",
         snippetDropdownModel: {},
-        values: {
-            "Rechteck aufziehen": "Box",
-            "Kreis aufziehen": "Circle",
-            "Fläche zeichnen": "Polygon"
-        },
-        currentValue: "",
         metaDataLink: undefined,
         mrhId: "46969C7D-FAA8-420A-81A0-8352ECCFF526",
         fhhId: "B3FD9BD5-F614-433F-A762-E14003C300BF",
         fhhDate: undefined,
-        tooltipMessage: "Klicken zum Starten und Beenden",
-        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen",
         uniqueIdList: [],
         glyphicon: "glyphicon-wrench",
         rasterLayerId: "13023",
         alkisAdressLayerId: "9726",
-        populationReqServiceId: "2"
+        populationReqServiceId: "2",
+        id: "Einwohnerabfrage"
     }),
     /**
      * @class EinwohnerabfrageModel
@@ -57,41 +33,28 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @property {Boolean} renderToWindow=true render to window for tools
      * @property {*} checkBoxAddress=undefined checkbox snippet for alkis adressen layer
      * @property {*} checkBoxRaster=undefined checkbox snippet for zensus raster layer
-     * @property {*} drawInteraction=undefined todo
-     * @property {*} isCollapsed=undefined todo
-     * @property {*} isCurrentWin=undefined todo
-     * @property {ol/Overlay} circleOverlay=new Overlay({offset: [15, 0], positioning: "center-left"}) circle overlay (tooltip) - shows the radius
-     * @property {ol/Overlay} tooltipOverlay=new Overlay({offset: [15, 20], positioning: "top-left"}) todo
-     * @property {Object} data={} todo
-     * @property {Boolean} dataReceived=false todo
-     * @property {Boolean} requesting=false todo
+     * @property {Object} data={} data of the wps request
+     * @property {Boolean} dataReceived=false true | false, depending on the request
+     * @property {Boolean} requesting=false  true | false, depending on the request
      * @property {String} style = "default" - style for MasterPortal ("table" - for table View)
-     * @property {Object} snippetDropdownModel={}
-     * @property {Obeject} values={"Rechteck aufziehen": "Box", "Kreis aufziehen": "Circle", "Fläche zeichnen": "Polygon"} possible values
-     * @property {*} metaDataLink=undefined todo
+     * @property {Object} snippetDropdownModel={} the model of the graphical selection
+     * @property {String} metaDataLink=undefined link to meta data
      * @property {String} mrhId="46969C7D-FAA8-420A-81A0-8352ECCFF526" mrh meta data id
      * @property {String} fhhId="B3FD9BD5-F614-433F-A762-E14003C300BF" fhh meta data id
-     * @property {*} fhhDate=undefined todo
-     * @property {String} tooltipMessage="Klicken zum Starten und Beenden" Meassage for tooltip
-     * @property {String} tooltipMessagePolygon="Klicken um Stützpunkt hinzuzufügen" Meassage for tooltip
-     * @property {Array} uniqueIdList=[]
+     * @property {*} fhhDate=undefined the date
+     * @property {Array} uniqueIdList=[] array to store unique ids in
      * @property {String} glyphicon="glyphicon-wrench" glyphicon to show
      * @property {String} rasterLayerId="13023" layerId for layer with raster
      * @property {String} alkisAdressLayerId="9726" layerId for the alkis adresses
      * @property {String} populationReqServiceId="2" serviceid
+     * @property {String} id= "Einwohnerabfrage" id of this model
      * @listens Tools.Einwohnerabfrage_hh#ChangeIsActive
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
-     * @listens Snippets.Dropdown#ValuesChanged
-     * @listens Snippets.Checkbox#ValuesChanged
      * @listens Core#RadioTriggerModelListUpdateVisibleInMapList
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestUtilPunctuate
-     * @fires Core#RadioRequestMapCreateLayerIfNotExists
-     * @fires Core#RadioTriggerMapAddOverlay
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @fires Core#RadioTriggerMapRegisterListener
      * @fires Core#RadioTriggerMapAddInteraction
      * @fires Core#RadioTriggerWPSRequest
      * @fires Core#RadioRequestModelListGetModelByAttributes
@@ -114,13 +77,12 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }));
 
         this.listenTo(this, {
-            "change:isActive": this.setStatus
+            "change:isActive": function () {
+                this.changeGraphicalSelectStatus(this.get("isActive"));
+            }
         });
         this.listenTo(Radio.channel("CswParser"), {
             "fetchedMetaData": this.fetchedMetaData
-        });
-        this.listenTo(this.snippetDropdownModel, {
-            "valuesChanged": this.createDrawInteraction
         });
         this.listenTo(this.get("checkBoxRaster"), {
             "valuesChanged": this.toggleRasterLayer
@@ -135,23 +97,28 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             }
         });
         this.on("change:isActive", this.handleCswRequests, this);
-        this.createDomOverlay("circle-overlay", this.get("circleOverlay"));
-        this.createDomOverlay("tooltip-overlay", this.get("tooltipOverlay"));
-        this.setDropDownSnippet(new SnippetDropdownModel({
-            name: "Geometrie",
-            type: "string",
-            displayName: "Geometrie auswählen",
-            values: _.allKeys(this.get("values")),
-            snippetType: "dropdown",
-            isMultiple: false,
-            preselectedValues: _.allKeys(this.get("values"))[0]
-        }));
+        this.setDropDownSnippet(new GraphicalSelectModel({id: this.id}));
+        this.listenTo(Radio.channel("GraphicalSelect"), {
+            "onDrawEnd": function (geoJson) {
+                if (this.get("isActive")) {
+                    this.makeRequest(geoJson);
+                }
+            }
+        });
 
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
     },
     /**
-     * todo
-     * @param {*} cswObj todo
+     * Resets the GraphicalSelect
+     * @fires Snippets.GraphicalSelect#resetView
+     * @returns {void}
+     */
+    resetView: function () {
+        Radio.trigger("GraphicalSelect", "resetView", this.id);
+    },
+    /**
+     * Updates the metadata for the unique id of the given csw object
+     * @param {Object} cswObj the csw object
      * @returns {void}
      */
     fetchedMetaData: function (cswObj) {
@@ -161,27 +128,27 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         }
     },
     /**
-     * todo
-     * @param {*} uniqueIdList todo
-     * @param {*} uniqueId todo
-     * @returns {*} todo
+     * Checks if the id is in the list.
+     * @param {Array} uniqueIdList array with ids
+     * @param {String} uniqueId is contained?
+     * @returns {Boolean} true, if id is contained in list
      */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
         return _.contains(uniqueIdList, uniqueId);
     },
     /**
-     * todo
-     * @param {*} uniqueIdList todo
-     * @param {*} uniqueId todo
+     * Removes the id from the list.
+     * @param {Array} uniqueIdList array with ids
+     * @param {String} uniqueId to remove from array
      * @returns {void}
      */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
         this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
     },
     /**
-     * todo
-     * @param {*} attr todo
-     * @param {*} parsedData todo
+     * If attr equals "fhhDate" the parsed date is set to model
+     * @param {String} attr attribute of the metadata
+     * @param {Object} parsedData date of this param is set
      * @returns {void}
      */
     updateMetaData: function (attr, parsedData) {
@@ -202,8 +169,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Called when the wps modules returns a request
-     * @param  {string} response - the response xml of the wps
-     * @param  {number} status - the HTTPStatusCode
+     * @param  {String} response - the response xml of the wps
+     * @param  {Number} status - the HTTPStatusCode
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @returns {void}
      */
@@ -261,7 +228,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Iterates ofer response properties
-     * @param  {object} response - todo
+     * @param  {Object} response - the parsed response from wps
      * @fires Core#RadioRequestUtilPunctuate
      * @returns {void}
      */
@@ -286,11 +253,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Chooses unit based on value, calls panctuate and converts to unit and appends unit
-     * @param  {number} value -
-     * @param  {number} maxDecimals - decimals are cut after maxlength chars
+     * Chooses unit based on value, calls punctuate and converts to unit and appends unit
+     * @param  {Number} value - to inspect
+     * @param  {Number} maxDecimals - decimals are cut after maxlength chars
      * @fires Core#RadioRequestUtilPunctuate
-     * @returns {string} unit
+     * @returns {String} unit
      */
     chooseUnitAndPunctuate: function (value, maxDecimals) {
         var newValue;
@@ -308,49 +275,23 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         return Radio.request("Util", "punctuate", newValue.toFixed(maxDecimals)) + " km²";
     },
 
-    /**
-     * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
-     * @fires Core#RadioRequestMapCreateLayerIfNotExists
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @returns {void}
-     */
-    resetView: function () {
-        var layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer");
-
-        if (layer) {
-            layer.getSource().clear();
-            Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-        }
-    },
 
     /**
-     * Handles (de-)activation of this Tool
-     * @param {object} model - tool model
-     * @param {boolean} value flag is tool is ctive
-     * @fires Core#RadioTriggerMapRemoveOverlay
+     * Sets the state at GraphicalSelect - handles (de-)activation of this Tool
+     * @param {Boolean} value flag is tool is active
+     * @fires Snippets.GraphicalSelect#setStatus
      * @returns {void}
      */
-    setStatus: function (model, value) {
-        var selectedValues;
-
+    changeGraphicalSelectStatus: function (value) {
         if (value) {
             this.checksSnippetCheckboxLayerIsLoaded(this.get("rasterLayerId"), this.get("checkBoxRaster"));
             this.checksSnippetCheckboxLayerIsLoaded(this.get("alkisAdressLayerId"), this.get("checkBoxAddress"));
-            selectedValues = this.get("snippetDropdownModel").getSelectedValues();
-            this.createDrawInteraction(selectedValues.values[0] || _.allKeys(this.get("values"))[0]);
         }
-        else {
-            // this.setIsCurrentWin(false);
-            if (!_.isUndefined(this.get("drawInteraction"))) {
-                this.get("drawInteraction").setActive(false);
-            }
-            Radio.trigger("Map", "removeOverlay", this.get("circleOverlay"));
-            Radio.trigger("Map", "removeOverlay", this.get("tooltipOverlay"));
-        }
+        Radio.trigger("GraphicalSelect", "setStatus", this.id, value);
     },
 
     /**
-     * runs the csw requests once and removes this callback from the change:isCurrentWin event
+     * runs the csw requests once and removes this callback from the change:isActive event
      * because both requests only need to be executed once
      * @returns {void}
      */
@@ -378,93 +319,9 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             this.off("change:isActive", this.handleCswRequests);
         }
     },
-
     /**
-     * creates a draw interaction and adds it to the map.
-     * @param {string} drawType - drawing type (Box | Circle | Polygon)
-     * @fires Core#RadioRequestMapCreateLayerIfNotExists
-     * @fires Core#RadioTriggerMapAddOverlay
-     * @fires Core#RadioTriggerMapRegisterListener
-     * @fires Core#RadioTriggerMapAddInteraction
-     * @returns {void}
-     */
-    createDrawInteraction: function (drawType) {
-        var that = this,
-            value = this.get("values")[drawType],
-            layer = Radio.request("Map", "createLayerIfNotExists", "ewt_draw_layer"),
-            createBoxFunc = createBox(),
-            drawInteraction = new Draw({
-                // destination for drawn features
-                source: layer.getSource(),
-                // drawing type
-                // a circle with four points is internnaly used as Box, since type "Box" does not exist
-                type: value === "Box" ? "Circle" : value,
-                // is called when a geometry's coordinates are updated
-                geometryFunction: value === "Polygon" ? undefined : function (coordinates, opt_geom) {
-                    if (value === "Box") {
-                        return createBoxFunc(coordinates, opt_geom);
-                    }
-                    // value === "Circle"
-                    return that.snapRadiusToInterval(coordinates, opt_geom);
-                }
-            });
-
-        this.setCurrentValue(value);
-        this.toggleOverlay(value, this.get("circleOverlay"));
-        Radio.trigger("Map", "addOverlay", this.get("tooltipOverlay"));
-
-        this.setDrawInteractionListener(drawInteraction, layer);
-        this.setDrawInteraction(drawInteraction);
-        Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
-        Radio.trigger("Map", "addInteraction", drawInteraction);
-    },
-    /**
-     * todo
-     * @param {*} coordinates todo
-     * @param {*} opt_geom todo
-     * @returns {*} todo
-     */
-    snapRadiusToInterval: function (coordinates, opt_geom) {
-        var radius = Math.sqrt(Math.pow(coordinates[1][0] - coordinates[0][0], 2) + Math.pow(coordinates[1][1] - coordinates[0][1], 2)),
-            geometry;
-
-        radius = this.precisionRound(radius, -1);
-        geometry = opt_geom || new Circle(coordinates[0]);
-        geometry.setRadius(radius);
-
-        this.showOverlayOnSketch(radius, coordinates[1]);
-        return geometry;
-    },
-
-    /**
-     * sets listeners for draw interaction events
-     * @param {ol.interaction.Draw} interaction - todo
-     * @param {ol.layer.Vector} layer - todo
-     * @returns {void}
-     */
-    setDrawInteractionListener: function (interaction, layer) {
-        var that = this;
-
-        interaction.on("drawstart", function () {
-            layer.getSource().clear();
-        }, this);
-
-        interaction.on("drawend", function (evt) {
-            var geoJson = that.featureToGeoJson(evt.feature);
-
-            that.makeRequest(geoJson);
-        }, this);
-
-        interaction.on("change:active", function (evt) {
-            if (evt.oldValue) {
-                layer.getSource().clear();
-                Radio.trigger("Map", "removeInteraction", evt.target);
-            }
-        });
-    },
-
-    /**
-     * @param  {object} geoJson - todo
+     * Triggers the wps request "einwohner_ermitteln.fmw" for the selected area.
+     * @param  {Object} geoJson GeoJSON to get selected area from
      * @fires Tools.Einwohnerabfrage_hh#RenderResult
      * @fires Core#RadioTriggerWPSRequest
      * @returns {void}
@@ -478,125 +335,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
             "such_flaeche": JSON.stringify(geoJson)
         }, this.handleResponse.bind(this));
     },
-    /**
-     * todo
-     * @param {*} geoJson todo
-     * @returns {void}
-     */
-    prepareData: function (geoJson) {
-        var prepared = {};
-
-        prepared.type = geoJson.getType();
-        prepared.coordinates = geoJson.geometry;
-    },
-
-    /**
-     * calculates the circle radius and places the circle overlay on geometry change
-     * @param {number} radius - circle radius
-     * @param {number[]} coords - point coordinate
-     * @returns {void}
-     */
-    showOverlayOnSketch: function (radius, coords) {
-        var circleOverlay = this.get("circleOverlay");
-
-        circleOverlay.getElement().innerHTML = this.roundRadius(radius);
-        circleOverlay.setPosition(coords);
-    },
-
-    /**
-     * todo
-     * @param {*} evt todo
-     * @returns {void}
-     */
-    showTooltipOverlay: function (evt) {
-        var coords = evt.coordinate,
-            tooltipOverlay = this.get("tooltipOverlay"),
-            currentValue = this.get("currentValue");
-
-        if (currentValue === "Polygon") {
-            tooltipOverlay.getElement().innerHTML = this.get("tooltipMessagePolygon");
-        }
-        else {
-            tooltipOverlay.getElement().innerHTML = this.get("tooltipMessage");
-        }
-        tooltipOverlay.setPosition(coords);
-    },
-
-    /**
-     * todo
-     * @param {Number} number todo
-     * @param {*} precision todo
-     * @returns {Number} todo
-     */
-    precisionRound: function (number, precision) {
-        var factor = Math.pow(10, precision);
-
-        return Math.round(number * factor) / factor;
-    },
-
-    /**
-     * converts a feature to a geojson
-     * if the feature geometry is a circle, it is converted to a polygon
-     * @param {ol.Feature} feature - drawn feature
-     * @returns {object} GeoJSON
-     */
-    featureToGeoJson: function (feature) {
-        var reader = new GeoJSON(),
-            geometry = feature.getGeometry();
-
-        if (geometry.getType() === "Circle") {
-            feature.setGeometry(fromCircle(geometry));
-        }
-        return reader.writeGeometryObject(feature.getGeometry());
-    },
-
-    /**
-     * adds or removes the circle overlay from the map
-     * @param {string} type - geometry type
-     * @param {ol.Overlay} overlay - circleOverlay
-     * @fires Core#RadioTriggerMapAddOverlay
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @returns {void}
-     */
-    toggleOverlay: function (type, overlay) {
-        if (type === "Circle") {
-            Radio.trigger("Map", "addOverlay", overlay);
-        }
-        else {
-            Radio.trigger("Map", "removeOverlay", overlay);
-        }
-    },
-
-    /**
-     * rounds the circle radius
-     * @param {number} radius - circle radius
-     * @return {string} the rounded radius
-     */
-    roundRadius: function (radius) {
-        if (radius > 500) {
-            return (Math.round(radius / 1000 * 100) / 100) + " km";
-        }
-        return (Math.round(radius * 10) / 10) + " m";
-    },
-
-    /**
-     * creates a div element for the circle overlay
-     * and adds it to the overlay
-     * @param {string} id -
-     * @param {ol.Overlay} overlay - circleOverlay
-     * @returns {void}
-     */
-    createDomOverlay: function (id, overlay) {
-        var element = document.createElement("div");
-
-        element.setAttribute("id", id);
-        overlay.setElement(element);
-    },
 
     /**
      * checks if snippetCheckboxLayer is loaded and toggles the button accordingly
      * @param {String} layerId - id of the addressLayer
-     * @param {SnippetCheckboxModel} snippetCheckboxModel - snbippet checkbox model for a layer
+     * @param {SnippetCheckboxModel} snippetCheckboxModel - snippet checkbox model for a layer
      * @fires Core#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
@@ -614,7 +357,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * show or hide the zensus raster layer
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @returns {void}
      */
     toggleRasterLayer: function (value) {
@@ -629,7 +372,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * show or hide the alkis adressen layer
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @returns {void}
      */
     toggleAlkisAddressLayer: function (value) {
@@ -646,7 +389,6 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * if the model does not exist, add Model from Parser to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
      * @fires Core#RadioRequestModelListGetModelByAttributes
-     * @fires Core#RadioTriggerModelListAddModelByAttributes
      * @returns {void}
      */
     addModelsByAttributesToModelList: function (layerId) {
@@ -674,7 +416,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     /**
      * sets selected and visibility to ModelList via Radio.trigger
      * @param {String} layerId id of the layer to be toggled
-     * @param {boolean} value - true | false
+     * @param {Boolean} value - true | false
      * @fires Core#RadioTriggerModelListSetModelAttributesById
      * @returns {void}
      */
@@ -686,8 +428,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
     /**
      * setter for style
-     * @param {string} value - table or default (for master portal)
-     * @returns {this} this
+     * @param {String} value - table or default (for master portal)
+     * @returns {void}
      */
     setStyle: function (value) {
         this.set("style", value);
@@ -695,7 +437,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxAddress
-     * @param {*} value todo
+     * @param {SnippetCheckboxModel} value  the model of the checkbox
      * @returns {void}
      */
     setCheckBoxAddress: function (value) {
@@ -704,7 +446,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the checkBoxRaster
-     * @param {*} value todo
+     * @param {SnippetCheckboxModel} value the model of the checkbox
      * @returns {void}
      */
     setCheckBoxRaster: function (value) {
@@ -713,7 +455,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the data
-     * @param {*} value todo
+     * @param {Object} value data of the wps request
      * @returns {void}
      */
     setData: function (value) {
@@ -722,7 +464,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the dataReceived
-     * @param {*} value todo
+     * @param {Boolean} value true | false
      * @returns {void}
      */
     setDataReceived: function (value) {
@@ -731,7 +473,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the requesting
-     * @param {*} value todo
+     * @param {Boolean} value true, if requesting
      * @returns {void}
      */
     setRequesting: function (value) {
@@ -739,8 +481,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Sets the snippetDropdownModel
-     * @param {*} value todo
+     * Sets the GraphicalSelectModel
+     * @param {GraphicalSelectModel} value the model of the graphical selectbox
      * @returns {void}
      */
     setDropDownSnippet: function (value) {
@@ -749,7 +491,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the fhhDate
-     * @param {*} value todo
+     * @param {String} value the date
      * @returns {void}
      */
     setFhhDate: function (value) {
@@ -757,45 +499,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
     },
 
     /**
-     * Sets the drawInteraction
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setDrawInteraction: function (value) {
-        this.set("drawInteraction", value);
-    },
-
-    /**
-     * Sets the isCollapsed
-     * @param {*} value todo
-     * @returns {void}
-
-     */
-    setIsCollapsed: function (value) {
-        this.set("isCollapsed", value);
-    },
-
-    /**
-     * Sets the isCurrentWin
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setIsCurrentWin: function (value) {
-        this.set("isCurrentWin", value);
-    },
-
-    /**
-     * Sets the currentValue
-     * @param {*} value todo
-     * @returns {void}
-     */
-    setCurrentValue: function (value) {
-        this.set("currentValue", value);
-    },
-
-    /**
      * Sets the uniqueIdList
-     * @param {*} value todo
+     * @param {Array} value the array to store ids in
      * @returns {void}
      */
     setUniqueIdList: function (value) {
@@ -804,7 +509,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
     /**
      * Sets the metaDataLink
-     * @param {*} value todo
+     * @param {String} value link to the metadata
      * @returns {void}
      */
     setMetaDataLink: function (value) {

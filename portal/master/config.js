@@ -4,8 +4,7 @@ const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
-    wfsImgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/",
-    allowParametricURL: true,
+    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         wfsId: "4560",
@@ -22,34 +21,29 @@ const Config = {
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ],
     footer: {
-        urls: [
-            {
-                "bezeichnung": "Kartographie und Gestaltung: ",
-                "url": "https://www.geoinfo.hamburg.de/",
-                "alias": "Landesbetrieb Geoinformation und Vermessung",
-                "alias_mobil": "LGV"
-            }
-        ],
+        urls: [{
+            "bezeichnung": "Kartographie und Gestaltung: ",
+            "url": "https://www.geoinfo.hamburg.de/",
+            "alias": "Landesbetrieb Geoinformation und Vermessung",
+            "alias_mobil": "LGV"
+        }],
         showVersion: true
     },
     quickHelp: {
-        imgPath: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/"
+        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
-    layerConf: "https://geodienste.hamburg.de/services-fhhnet-ALL.json",
-    restConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/rest-services-fhhnet.json",
-    styleConf: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/style_v2.json",
+    layerConf: "https://geodienste.hamburg.de/services-internet.json",
+    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
+    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
     proxyURL: "/cgi-bin/proxy.cgi",
-    attributions: true,
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
     },
-    isMenubarVisible: true,
-    geoAPI: false,
     clickCounter: {},
     startingMap3D: false,
     obliqueMap: true,

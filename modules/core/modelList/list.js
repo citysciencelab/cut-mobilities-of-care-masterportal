@@ -74,6 +74,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioTriggerModelListSetAllDescendantsInvisible
      * @listens ModelList#RadioTriggerModelListRenderTree
      * @listens ModelList#RadioTriggerModelListToggleDefaultTool
+     * @listens ModelList#RadioTriggerModelListReplaceModelById
      * @listens ModelList#ChangeIsVisibleInMap
      * @listens ModelList#ChangeIsExpanded
      * @listens ModelList#ChangeIsSelected
@@ -109,6 +110,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "showFeaturesById": this.showFeaturesById,
             "removeModelsByParentId": this.removeModelsByParentId,
             "removeModelsById": this.removeModelsById,
+            "replaceModelById": this.replaceModelById,
             // Initial sichtbare Layer etc.
             "addInitiallyNeededModels": this.addInitiallyNeededModels,
             "addModelsByAttributes": this.addModelsByAttributes,
@@ -738,7 +740,16 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             lightModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
             lightModels = this.mergeParamsToLightModels(lightModels, paramLayers);
 
-            lightModels.forEach(model => this.add(model));
+            lightModels.forEach(model => {
+                if (model.hasOwnProperty("children")) {
+                    if (model.children.length > 0) {
+                        this.add(model);
+                    }
+                }
+                else {
+                    this.add(model);
+                }
+            });
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
@@ -944,6 +955,21 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }, this);
     },
 
+    /**
+    * replaces a model by a given id
+    * @param  {String} id from model that be replaced in ModelList
+    * @param  {Object} newModel to add to the ModelList
+    * @return {void}
+    */
+    replaceModelById: function (id, newModel) {
+        var model = this.get(id);
+
+        if (model) {
+            this.remove(model);
+            this.add(newModel);
+            this.updateLayerView();
+        }
+    },
     /**
     * remove a model by a given id
     * @param  {String} id from model that be remove from ModelList
