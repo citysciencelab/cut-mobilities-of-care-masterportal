@@ -15,7 +15,7 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
      * @constructs
      */
     tagName: "div",
-    className: "gfi-schule-wohnort",
+    className: "gfi-school-address",
     template: _.template(DefaultTemplate)
 });
 
