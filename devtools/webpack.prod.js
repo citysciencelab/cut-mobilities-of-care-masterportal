@@ -8,7 +8,8 @@ module.exports = function () {
         mode: "production",
         output: {
             path: path.resolve(__dirname, "../dist/build"),
-            filename: "js/[name].js"
+            filename: "js/[name].js",
+            publicPath: "./"
         },
         module: {
             rules: [
@@ -18,7 +19,8 @@ module.exports = function () {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "css/woffs/"
+                        outputPath: "css/woffs/",
+                        publicPath: "./woffs/"
                     }
                 }
             ]

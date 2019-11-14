@@ -456,8 +456,7 @@ function loadApp () {
     if (Config.hasOwnProperty("customModules")) {
         Config.customModules.forEach((customModuleKey) => {
             if (allCustomModules[customModuleKey] !== undefined) {
-                // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-                import(`../customModules/${allCustomModules[customModuleKey]}.js`/* webpackMode: "eager" */)
+                import( /* webpackChunkName: "[request]" */ `../customModules/${allCustomModules[customModuleKey]}.js`)
                     .then(module => {
                         /* eslint-disable new-cap */
                         new module.default();
@@ -466,7 +465,6 @@ function loadApp () {
                         console.error(error);
                         Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
                     });
-                // import(`../customModules/${allCustomModules[customModuleKey].less}.less` /* webpackMode: "eager" */);
             }
         });
     }

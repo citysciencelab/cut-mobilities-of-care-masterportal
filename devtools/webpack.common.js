@@ -1,69 +1,69 @@
-var webpack = require("webpack"),
+const Chunks2JsonPlugin = require("chunks-2-json-webpack-plugin"),
+    webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
-    fs = require("fs");
+    fs = require("fs"),
+    portalconfigsPath = path.resolve(__dirname, "../portalconfigs/"),
+    customModuleConfigPath = path.resolve(portalconfigsPath, "customModules", "customModulesConf.json"),
+    entryPoint = {masterportal: path.resolve(__dirname, "../js/main.js")};
 
-let path2CustomModules = "";
-
-if (fs.existsSync("./customModules/customModulesConf.json")) {
-    path2CustomModules = require("../customModules/customModulesConf.json");
+if (!fs.existsSync(customModuleConfigPath)) {
+    console.error("---\n---");
+    throw new Error("ERROR: NO CUSTOM MODULE CONFIG FILE FOUND AT \"" + customModuleConfigPath + "\"\nABORTED...");
 }
+const portalEntryPoints = require(customModuleConfigPath);
 
 module.exports = function () {
-    const entryPoints = {},
-        customModules = {};
+    const customModulesRelPaths = {};
 
-    for (const entryPointKey in path2CustomModules) {
-        const customModuleFilename = path2CustomModules[entryPointKey],
-            customModulePath = "./customModules/" + customModuleFilename;
+    for (const portalName in portalEntryPoints) {
 
-        if (fs.existsSync(customModulePath + ".js")) {
-            entryPoints[entryPointKey] = customModulePath;
-            customModules[entryPointKey] = customModuleFilename;
+        if (typeof portalEntryPoints[portalName] !== "string") {
+            console.error("---\n---");
+            throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + portalName + "\"\nABORTED...");
         }
-        else {
-            console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePath + ".js\"");
+
+        const customModuleFilePath = path.resolve([portalconfigsPath, "customModules", portalName, portalEntryPoints[portalName]].join("/") + ".js");
+
+        if (!fs.existsSync(customModuleFilePath)) {
+            console.error("---\n---");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + customModuleFilePath + "\"\nABORTED...");
         }
+
+        customModulesRelPaths[portalName] = [portalName, portalEntryPoints[portalName]].join("/");
     }
-    //     const customModuleFilenameJs = path2CustomModules[entryPointKey].js,
-    //         customModuleFilenameLess = path2CustomModules[entryPointKey].less;
-    //     let customModulePathJs,
-    //         customModulePathLess;
-
-    //     if (customModuleFilenameJs !== undefined) {
-    //         customModulePathJs = "./customModules/" + customModuleFilenameJs;
-    //         if (fs.existsSync(customModulePathJs + ".js")) {
-    //             entryPoints[entryPointKey] = customModulePathJs;
-    //             if (customModules[entryPointKey] === undefined) {
-    //                 customModules[entryPointKey] = {};
-    //             }
-    //             customModules[entryPointKey].js = customModuleFilenameJs;
-    //         }
-    //         else {
-    //             console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePathJs + ".js\"");
-    //         }
-    //     }
-    //     if (customModuleFilenameLess !== undefined) {
-    //         customModulePathLess = "./customModules/" + customModuleFilenameLess;
-    //         if (fs.existsSync(customModulePathLess + ".less")) {
-    //             if (customModules[entryPointKey] === undefined) {
-    //                 customModules[entryPointKey] = {};
-    //             }
-    //             customModules[entryPointKey].less = customModuleFilenameLess;
-    //         }
-    //         else {
-    //             console.error("WARNING: FILE DOES NOT EXIST \"" + customModulePathLess + ".less\"");
-    //         }
-    //     }
-    // }
-
-    entryPoints.masterportal = "./js/main.js";
 
     return {
-        entry: entryPoints,
+        entry: entryPoint,
+        stats: {
+            all: false,
+            assets: true,
+            //chunkModules: true,
+            colors: true,
+            entrypoints: true,
+            //modules: true,
+            outputPath: true
+        },
+        optimization: {
+            splitChunks: {
+                minSize: 0,
+                maxInitialRequests: Infinity,
+                cacheGroups: {
+                    /*
+                    vendor: {
+                        test: /node_modules/,
+                        chunks: "all",
+                        name: "vendor"
+                        enforce: true
+                    }
+                    */
+                }
+            }
+        },
         output: {
-            path: path.resolve(__dirname, "../build"),
-            filename: "js/[name].js"
+            path: path.resolve(__dirname, "../build/"),
+            filename: "js/[name].js",
+            publicPath: "../../build/"
         },
         resolve: {
             alias: {
@@ -86,7 +86,9 @@ module.exports = function () {
                     test: /\.less$/,
                     use: [
                         {
-                            loader: MiniCssExtractPlugin.loader
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                            }
                         },
                         "css-loader",
                         "less-loader"
@@ -104,6 +106,7 @@ module.exports = function () {
             ]
         },
         plugins: [
+            new Chunks2JsonPlugin({outputDir: "dist/__wp_chunks/"}),
             // provide libraries globally
             new webpack.ProvidePlugin({
                 jQuery: "jquery",
@@ -120,7 +123,7 @@ module.exports = function () {
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                CUSTOMMODULES: JSON.stringify(customModules)
+                CUSTOMMODULES: JSON.stringify(customModulesRelPaths)
             })
         ]
     };
