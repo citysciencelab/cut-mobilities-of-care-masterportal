@@ -14,6 +14,7 @@ dist
 temp
 lgv-config
 build
+masterportalapi
 examples*
 
 /nbproject/private/
