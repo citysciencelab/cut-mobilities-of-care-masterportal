@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th colspan="2"><%= name %></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr colspan="2">
+            <td>Adresse: </td>
+            <td> <%= address %></td>
+        </tr>
+        <tr colspan="2">
+            <td>Gesamtanzahl der Schüler:</td>
+            <td> <%= totalSum %></td>
+        </tr>
+        <tr colspan="2">
+            <td>Anzahl der Schülerinnen und Schüler<br> in der Primarstufe: </td>
+            <td> <%= priSum %></td>
+        </tr>
+        <tr colspan="2">
+            <td>Sozialindex der Schüler: </td>
+            <td> <%= socialIndex %></td>
+        </tr>
+        <tr colspan="2">
+            "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchoolLevel] + "): </td>" +
+            <td> <%= percentage %></td>
+        </tr>
+        <tr colspan="2">
+            <td>Anzahl: </td>
+            <td><%= sum %></td>
+        </tr>
+    </tbody>
+</table>
