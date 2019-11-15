@@ -23,7 +23,7 @@ module.exports = function () {
             throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + portalName + "\"\nABORTED...");
         }
 
-        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName]+ ".js");
+        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName] + ".js");
 
         if (!fs.existsSync(customModuleFilePath)) {
             console.error("############\n------------");
@@ -38,10 +38,10 @@ module.exports = function () {
         stats: {
             all: false,
             assets: true,
-            //chunkModules: true,
+            // chunkModules: true,
             colors: true,
             entrypoints: true,
-            //modules: true,
+            // modules: true,
             outputPath: true
         },
         /*
