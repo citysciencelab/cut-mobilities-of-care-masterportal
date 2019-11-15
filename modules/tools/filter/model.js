@@ -61,9 +61,9 @@ const FilterModel = Tool.extend({
 
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId) {
-                var predefinedQueries = this.get("predefinedQueries"),
-                    queryCollection = this.get("queryCollection"),
-                    filterModels;
+                const predefinedQueries = this.get("predefinedQueries"),
+                    queryCollection = this.get("queryCollection");
+                let filterModels;
 
                 if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
                     filterModels = predefinedQueries.filter(function (query) {

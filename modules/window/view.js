@@ -184,7 +184,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @return {void}
      */
     touchStartWindow: function (evt) {
-        var touch = evt.changedTouches[0],
+        const touch = evt.changedTouches[0],
             rect = document.querySelector(".tool-window").getBoundingClientRect();
 
         this.model.setWindowLeft(rect.left);
@@ -200,7 +200,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @return {void}
      */
     touchMoveWindow: function (evt) {
-        var touch = evt.changedTouches[0],
+        const touch = evt.changedTouches[0],
             width = document.querySelector(".tool-window").clientWidth,
             height = document.querySelector(".tool-window").clientHeight,
             mapWidth = document.getElementById("map").clientWidth,
@@ -235,13 +235,13 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @return {Object} newPosition Object containing the new position
      */
     getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
-        var distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
+        const distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
             distY = parseInt(touch.clientY, 10) - this.model.get("startY"),
-            newPosX,
-            newPosY,
             newPosition = {},
             windowL = this.model.get("windowLeft"),
             windowT = this.model.get("windowTop");
+        let newPosX,
+            newPosY;
 
         if (this.model.get("rotationAngle") === 0) {
             newPosX = distX + parseInt(windowL, 10);

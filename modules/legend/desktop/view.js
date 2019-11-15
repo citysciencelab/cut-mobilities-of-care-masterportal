@@ -143,7 +143,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      * @return {void}
      */
     touchStartWindow: function (evt) {
-        var touch = evt.changedTouches[0],
+        const touch = evt.changedTouches[0],
             rect = document.querySelector(".legend-win").getBoundingClientRect();
 
         this.model.setWindowLeft(rect.left);
@@ -159,7 +159,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      * @return {void}
      */
     touchMoveWindow: function (evt) {
-        var touch = evt.changedTouches[0],
+        const touch = evt.changedTouches[0],
             width = document.querySelector(".legend-win").clientWidth,
             height = document.querySelector(".legend-win").clientHeight,
             mapWidth = document.getElementById("map").clientWidth,
@@ -194,17 +194,14 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      * @return {Object} newPosition Object containing the new position
      */
     getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
-        var distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
+        const distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
             distY = parseInt(touch.clientY, 10) - this.model.get("startY"),
-            newPosX,
-            newPosY,
             newPosition = {},
             windowL = this.model.get("windowLeft"),
-            windowT = this.model.get("windowTop");
+            windowT = this.model.get("windowTop"),
+            newPosX = distX + parseInt(windowL, 10),
+            newPosY = distY + parseInt(windowT, 10) - 60;
 
-
-        newPosX = distX + parseInt(windowL, 10);
-        newPosY = distY + parseInt(windowT, 10) - 60;
 
         if (newPosX + width > mapWidth) {
             newPosition.left = mapWidth - width - 40 + "px";

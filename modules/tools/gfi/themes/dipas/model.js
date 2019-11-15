@@ -20,7 +20,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      * @listens Theme#changeIsReady
      */
     initialize: function () {
-        var featureList = this.get("gfiFeatureList");
+        const featureList = this.get("gfiFeatureList");
 
         this.listenTo(this, {
             "change:isReady": function () {
@@ -35,7 +35,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      * @returns {void}
      */
     getGfiTheme: function () {
-        var gfiContent = this.get("gfiContent"),
+        const gfiContent = this.get("gfiContent"),
             gfiAttributes = this.get("gfiAttributes");
 
         _.each(gfiAttributes, function (value, key) {
@@ -50,9 +50,9 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      * @returns {void}
      */
     getIconPath: function (value) {
-        var styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId")),
-            valueStyle = null,
-            iconPath = "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png";
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId"));
+        let iconPath = "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
+            valueStyle = null;
 
         if (styleModel && styleModel.has("styleFieldValues")) {
             valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {

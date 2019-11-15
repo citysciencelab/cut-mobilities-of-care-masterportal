@@ -788,8 +788,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     zoomToExtent: function (extent, options) {
-        var extentToUse = extent,
-            projectionGiven = Radio.request("ParametricURL", "getProjectionFromUrl");
+        let extentToUse = extent;
+        const projectionGiven = Radio.request("ParametricURL", "getProjectionFromUrl");
 
         if (!_.isUndefined(projectionGiven)) {
             const leftBottom = extent.slice(0, 2),

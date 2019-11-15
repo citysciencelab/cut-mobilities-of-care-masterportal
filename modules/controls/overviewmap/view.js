@@ -122,7 +122,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @returns {void}
      */
     toggleSupportedVisibility: function (mode) {
-        var showIn3D = this.model.get("supportedIn3d");
+        const showIn3D = this.model.get("supportedIn3d");
 
         if ((mode === "3D" || mode === "Oblique") && !showIn3D) {
             if (this.model.get("isOpen")) {

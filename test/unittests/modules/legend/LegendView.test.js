@@ -2,7 +2,7 @@ import View from "@modules/legend/desktop/view.js";
 import Model from "@modules/legend/model.js";
 import {expect} from "chai";
 
-var view,
+let view,
     fakeModel,
     model;
 
