@@ -201,10 +201,12 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      */
     touchMoveWindow: function (evt) {
         const touch = evt.changedTouches[0],
-            width = document.querySelector(".tool-window").clientWidth,
-            height = document.querySelector(".tool-window").clientHeight,
-            mapWidth = document.getElementById("map").clientWidth,
-            mapHeight = document.getElementById("map").clientHeight,
+            toolWindowElement = document.querySelector(".tool-window"),
+            mapDomElement = document.getElementById("map"),
+            width = toolWindowElement.clientWidth,
+            height = toolWindowElement.clientHeight,
+            mapWidth = mapDomElement.clientWidth,
+            mapHeight = mapDomElement.clientHeight,
             newPosition = this.getNewPosition(touch, width, height, mapWidth, mapHeight);
 
         this.$el.css({

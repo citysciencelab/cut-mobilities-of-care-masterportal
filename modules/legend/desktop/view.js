@@ -160,10 +160,12 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      */
     touchMoveWindow: function (evt) {
         const touch = evt.changedTouches[0],
-            width = document.querySelector(".legend-win").clientWidth,
-            height = document.querySelector(".legend-win").clientHeight,
-            mapWidth = document.getElementById("map").clientWidth,
-            mapHeight = document.getElementById("map").clientHeight,
+            legendWinElement = document.querySelector(".legend-win"),
+            mapDomElement = document.getElementById("map"),
+            width = legendWinElement.clientWidth,
+            height = legendWinElement.clientHeight,
+            mapWidth = mapDomElement.clientWidth,
+            mapHeight = mapDomElement.clientHeight,
             newPosition = this.getNewPosition(touch, width, height, mapWidth, mapHeight);
 
         this.$el.css({
