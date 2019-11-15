@@ -8,11 +8,15 @@ const webpack = require("webpack"),
     customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
     entryPoint = {masterportal: path.resolve(rootPath, "js/main.js")};
 
+let portalEntryPoints = {};
+
 if (!fs.existsSync(customModuleConfigPath)) {
-    console.error("############\n------------");
-    throw new Error("ERROR: NO CUSTOM MODULE CONFIG FILE FOUND AT \"" + customModuleConfigPath + "\"\nABORTED...");
+    console.warn("############\n------------");
+    console.warn("WARNING: NO CUSTOM MODULE CONFIG FILE FOUND AT \"" + customModuleConfigPath + "\"");
 }
-const portalEntryPoints = require(customModuleConfigPath);
+else {
+    portalEntryPoints = require(customModuleConfigPath);
+}
 
 module.exports = function () {
     const customModulesRelPaths = {};
