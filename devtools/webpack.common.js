@@ -44,22 +44,22 @@ module.exports = function () {
             //modules: true,
             outputPath: true
         },
+        /*
         optimization: {
             splitChunks: {
                 minSize: 0,
                 maxInitialRequests: Infinity,
                 cacheGroups: {
-                    /*
                     vendor: {
                         test: /node_modules/,
                         chunks: "all",
                         name: "vendor"
                         enforce: true
                     }
-                    */
                 }
             }
         },
+        */
         output: {
             path: path.resolve(__dirname, "../build/"),
             filename: "js/[name].js",
