@@ -7,6 +7,11 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import {fromCircle as circPoly} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
+import {getSize, getWidth} from "ol/extent";
+import {getView} from "ol/extent";
+import Map from 'ol/Map';
+import {toLonLat, transform} from 'ol/proj';
+
 
 const DrawTool = Tool.extend({
     defaults: _.extend({}, Tool.prototype.defaults, {
@@ -74,6 +79,20 @@ const DrawTool = Tool.extend({
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
     },
 
+    newPointInDistance: function (lat, lon) {
+        // https://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
+        let earthRadius = 6378137,
+            offsetLon = 2000, // meters
+            offsetLat = 2000;
+
+        var deltaLat = offsetLat / earthRadius,
+            deltaLon = offsetLon / (earthRadius * Math.cos(Math.PI * lat/180)),
+            newPositionLat = lat + deltaLat * 180 / Math.PI,
+            newPositionLon = lon + deltaLon * 180 / Math.PI;
+
+        return [newPositionLon, newPositionLat];
+    },
+
     /**
      * Creates an addfeature-Listener
      * @param   {ol.layer} layer Layer, to which the Listener is registered
@@ -83,6 +102,18 @@ const DrawTool = Tool.extend({
         var layerSource = layer.getSource();
 
         this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
+            let circleCenter = evt.feature.getGeometry().getCenter(),
+                circleCenterWGS = toLonLat(circleCenter, "EPSG:25832"),
+                coordinatesCircle = this.newPointInDistance(circleCenterWGS[1], circleCenterWGS[0]);
+                console.log(transform(coordinatesCircle, "EPSG:4326", "EPSG:25832"));
+            // let circleCenter = Radio.request("Map", "registerListener", "click", this.CalculateCircleCenter.bind(this));
+            var array = transform(coordinatesCircle, "EPSG:4326", "EPSG:25832");
+            array.push(circleCenter[0], circleCenter[1]);
+            console.log(array);
+            evt.feature.getGeometry().flatCoordinates = array;
+            // evt.feature.getGeometry().extent_ = coordinatesCircle;
+            console.log(evt.feature.getGeometry().flatCoordinates);
+            console.log(evt.feature);
             evt.feature.setStyle(this.getStyle());
             this.countupZIndex();
         }.bind(this)));
@@ -400,12 +431,31 @@ const DrawTool = Tool.extend({
      * @return {ol/interaction/Draw} draw
      */
     createDrawInteraction: function (drawType, layer) {
+        this.getResolutionMapView();
+        //this.zoomChangeListener();
+
+        // Radio.request("Map", "getMap").on("moveend", that.getResolutionMapView());
+        Radio.request("Map", "registerListener", "moveend", this.getResolutionMapView.bind(this));
+
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
             style: this.getStyle()
         });
     },
+
+    zoomChangeListener: function () {
+        Radio.request("Map", "getMap").on("moveend", function () {
+            let newResolution = Radio.request("Map", "getMap").getView().getResolution();
+            this.set("ResolutionNumber", newResolution);
+        });
+    },
+
+    getResolutionMapView: function () {
+        let mapViewResolution = Radio.request("Map", "getMap").getView().getResolution();
+        this.setResolutionNumber(mapViewResolution);
+    },
+
 
     /**
      * lister to change the entries for the next drawing
@@ -457,21 +507,28 @@ const DrawTool = Tool.extend({
             font = this.get("font"),
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
-            circleRadiusInner = this.get("circleRadiusInner"),
             radius = this.get("radius"),
-            zIndex = this.get("zIndex");
+            zIndex = this.get("zIndex"),
+            radiusToDisplay = this.metersToPixel(this.get("circleRadiusInner"), this.get("ResolutionNumber"));
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
-            style = this.getCircleStyle(color, circleRadiusInner, strokeWidth, radius, zIndex);
+
+            style = this.getCircleStyle(color, radiusToDisplay, strokeWidth, radius, zIndex);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex);
+            console.log(style);
         }
 
         return style.clone();
+    },
+
+    metersToPixel: function (radiusInMeters, getResolutionMapView) {
+        let diameterInPixel = radiusInMeters / getResolutionMapView / 2;
+        return diameterInPixel;
     },
 
     /**
@@ -500,18 +557,18 @@ const DrawTool = Tool.extend({
     /**
      * Creates and returns a feature style for points, lines, or faces and returns it
      * @param {number} color - of drawings
-     * @param {number} circleRadiusInner - radius of the inner circle
+     * @param {number} radiusToDisplay - radius of the inner circle
      * @param {number} strokeWidth - from geometry
      * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getCircleStyle: function (color, circleRadiusInner, strokeWidth, zIndex) {
+    getCircleStyle: function (color, radiusToDisplay, strokeWidth, zIndex) {
         return new Style({
             fill: new Fill({
                 color: color
             }),
             image: new Circle({
-                radius: circleRadiusInner,
+                radius: radiusToDisplay,
                 stroke: new Stroke({
                     color: "#00ff44",
                     width: strokeWidth
@@ -525,7 +582,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Creates and returns a feature style for points, lines, or faces and returns it
+     * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
@@ -534,6 +591,7 @@ const DrawTool = Tool.extend({
      * @return {ol/style/Style} style
      */
     getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex) {
+        console.log("ausgeführt");
         return new Style({
             fill: new Fill({
                 color: color
@@ -899,6 +957,10 @@ const DrawTool = Tool.extend({
     */
     setZIndex: function (value) {
         this.set("zIndex", value);
+    },
+
+    setResolutionNumber: function (value) {
+        this.set("ResolutionNumber", value);
     }
 });
 
