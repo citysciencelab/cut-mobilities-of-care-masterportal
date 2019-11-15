@@ -7,6 +7,11 @@ css/bootstrap.css
 css/modules.css
 
 coverage
+
+customModules/*
+!customModules/customModules.md
+!customModules/customModulesConf.json
+
 test/coverage
 node_modules
 components
