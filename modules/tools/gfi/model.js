@@ -241,7 +241,6 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
         this.setThemeIndex(0);
         unionParams = vectorGFIParams.concat(wmsGFIParams, GFIParams3d);
-
         if (unionParams.length === 0) {
             this.setIsVisible(false);
         }
@@ -487,6 +486,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {object[]}           GFI-Parameter vom WMS-Layern
      */
     getWMSGFIParams: function (layerlist) {
+
         var wmsGfiParams = [];
 
         _.each(layerlist, function (layer) {
