@@ -1,7 +1,7 @@
 import View from "@modules/window/view.js";
 import {expect} from "chai";
 
-var view;
+let view;
 
 before(function () {
     view = new View();

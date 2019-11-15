@@ -38,8 +38,8 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
         const gfiContent = this.get("gfiContent"),
             gfiAttributes = this.get("gfiAttributes");
 
-        _.each(gfiAttributes, function (value, key) {
-            this.get("gfiAttributesDipas")[key] = gfiContent[0][value] || key;
+        Object.keys(gfiAttributes).forEach(function (value) {
+            this.get("gfiAttributesDipas")[value] = gfiContent[0][gfiAttributes[value]] || value;
         }, this);
     },
 

@@ -791,7 +791,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let extentToUse = extent;
         const projectionGiven = Radio.request("ParametricURL", "getProjectionFromUrl");
 
-        if (!_.isUndefined(projectionGiven)) {
+        if (typeof projectionGiven !== "undefined") {
             const leftBottom = extent.slice(0, 2),
                 topRight = extent.slice(2, 4),
                 transformedLeftBottom = transformToMapProjection(this.get("map"), projectionGiven, leftBottom),
