@@ -1,762 +1,880 @@
 {
-  "Portalconfig":
-  {
-    "portalTitle":
-    {
-      "title": "GeoViewer",
-      "logo": "",
-      "link": "",
-      "toolTip": ""
-    },
-    "searchBar":
-    {
-      "minChars": 3,
-      "gazetteer":
-      {
-        "minChars": 3,
-        "serviceId": "6",
-        "searchStreets": true,
-        "searchHouseNumbers": true,
-        "searchDistricts": true,
-        "searchParcels": true,
-        "searchStreetKey": true
-      },
-      "bkg":
-      {
-        "minChars": 3,
-        "suggestServiceId": "4",
-        "geosearchServiceId": "5",
-        "extent": [454591, 5809000, 700000, 6075769],
-        "suggestCount": 10,
-        "epsg": "EPSG:25832",
-        "filter": "filter=(typ:*)",
-        "score": 0.6
-      },
-      "specialWFS":
-      {
-        "minChar": 3,
-        "definitions": [
-          {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:hh_hh_festgestellt",
-            "propertyNames": ["app:geltendes_planrecht"],
-            "geometryName": "app:geom",
-            "name": "festgestellt"
-          },
-          {
-            "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
-            "typeName": "app:prosin_imverfahren",
-            "propertyNames": ["app:plan"],
-            "geometryName": "app:the_geom",
-            "name": "im Verfahren"
-          }
-        ]
-      },
-      "visibleWFS":
-      {
-        "minChars": 3
-      },
-      "tree":
-      {
-        "minChars": 3
-      },
-      "gdi":{
-		    "minChars": 3,
-        "serviceId": "elastic_qs",
-        "queryObject": {
-          "id": "query",
-          "params": {
-            "query_string": "%%searchString%%"
-          }
-        }
-	    },
-      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
-    },
-    "menu":
-    {
-      "tree":
-      {
-        "name": "Themen",
-        "glyphicon": "glyphicon-list",
-        "isInitOpen": true,
-        "isAlwaysExpanded": ["SelectedLayer"]
-      },
-      "filter":
-      {
-        "name": "Filter",
-        "glyphicon": "glyphicon-filter",
-        "deactivateGFI": false,
-        "isGeneric": false,
-        "isInitOpen": false,
-        "allowMultipleQueriesPerLayer": false,
-        "predefinedQueries": [
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Grundschulen",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Grundschulen", "Langformschulen"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "bilingual"]
-            },
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Stadtteilschulen",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Stadtteilschulen", "Langformschulen"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "schwerpunktschule", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-            },
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Gymnasien",
-              "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-              "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": ["Gymnasien"]
-              }],
-              "attributeWhiteList": ["bezirk", "stadtteil", "schulform", "ganztagsform", "anzahl_schueler", "fremdsprache", "fremdsprache_mit_klasse", "schulische_ausrichtung"]
-            },
-            {
-              "layerId": "8712",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Sonderschulen",
-              "predefinedRules": [
-                {
-                  "attrName": "kapitelbezeichnung",
-                  "values": ["Sonderschulen"]
-                }
-              ],
-              "attributeWhiteList": ["bezirk", "stadtteil", "ganztagsform", "foerderart", "abschluss"]
-            },
-            {
-              "layerId": "1711",
-              "isActive": false,
-              "isSelected": false,
-              "name": "Krankenhäuser",
-              "predefinedRules": [],
-              "attributeWhiteList": ["teilnahme_geburtsklinik", "teilnahme_notversorgung"]
-            }
-          ]
-      },
-      "tools":
-      {
-        "name": "Werkzeuge",
-        "glyphicon": "glyphicon-wrench",
-        "children":
-        {
-          "parcelSearch":
-          {
-            "name": "Flurstückssuche",
-            "glyphicon": "glyphicon-search",
-            "serviceId": "6",
-            "storedQueryID": "Flurstueck",
-            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
-            "parcelDenominator": false
-          },
-          "measure":
-          {
-            "name": "Strecke / Fläche messen",
-            "glyphicon": "glyphicon-resize-full"
-          },
-          "coord":
-          {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
-          },
-          "gfi":
-          {
-            "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
-            "isActive": true
-          },
-          "print":
-          {
-            "name": "Karte drucken",
-            "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish_qs",
-            "printAppId": "master",
-            "filename": "Ausdruck",
-            "title": "Mein Titel",
-            "version" : "mapfish_print_3"
-          },
-          "searchByCoord":
-          {
-            "name": "Koordinatensuche",
-            "glyphicon": "glyphicon-record"
-          },
-          "kmlimport":
-          {
-            "name": "KML Import",
-            "glyphicon": "glyphicon-import"
-          },
-          "wfsFeatureFilter":
-          {
-            "name": "Filter",
-            "glyphicon": "glyphicon-filter",
-            "deactivateGFI": false
-          },
-          "extendedFilter":
-          {
-            "name": "Erweiterter Filter",
-            "glyphicon": "glyphicon-filter",
-            "deactivateGFI": false
-          },
-          "routing":
-          {
-            "name": "Routenplaner",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5"
-          },
-          "draw":
-          {
-            "name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
-          },
-          "featureLister":
-          {
-            "name": "Liste",
-            "glyphicon": "glyphicon-menu-hamburger",
-            "lister": 10
-          },
-          "lines": {
-            "name": "Pendler (Linien)",
-            "glyphicon": "glyphicon-play-circle"
-          },
-          "animation":
-          {
-            "name": "Pendler (Animation)",
-            "glyphicon": "glyphicon-play-circle",
-            "steps": 30,
-            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-            "params": {
-                "REQUEST": "GetFeature",
-                "SERVICE": "WFS",
-                "TYPENAME": "app:mrh_kreise",
-                "VERSION": "1.1.0",
-                "maxFeatures": "10000"
-            },
-            "featureType": "mrh_einpendler_gemeinde",
-            "attrAnzahl": "anzahl_einpendler",
-            "attrGemeinde": "wohnort",
-            "minPx": 5,
-            "maxPx": 30,
-            "zoomlevel": 1,
-            "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-          },
-          "saveSelection":
-          {
-            "name": "Auswahl speichern",
-            "glyphicon": "glyphicon-share"
-          },
-          "addWMS":
-          {
-            "name": "WMS hinzufügen",
-            "glyphicon": "glyphicon-plus"
-                    },
-                    "styleWMS": {
-                        "name": "Style WMS",
-                        "glyphicon": "glyphicon-tint",
-                        "onlyDesktop": true
-          }
-        }
-      },
-      "legend":
-      {
-        "name": "Legende",
-        "glyphicon": "glyphicon-book"
-      },
-      "contact":
-      {
-        "name": "Kontakt",
-        "glyphicon": "glyphicon-envelope",
-        "serviceID": "80001",
-        "includeSystemInfo": true
-      },
-      "info":
-      {
-        "name": "Informationen",
-        "glyphicon": "glyphicon-info-sign",
-        "children":
-        {
-          "staticlinks": [
-          {
-            "name": "Haftungsausschluss",
-            "glyphicon": "glyphicon-globe",
-            "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
-          },
-          {
-            "name": "Hamburg",
-            "glyphicon": "glyphicon-globe",
-            "url": "http://www.hamburg.de"
-          }]
-        }
-      }
-    },
-    "controls":
-    {
-      "orientation3d": true,
-      "fullScreen": true,
-      "zoom": true,
-      "orientation": {
-        "zoomMode": "once",
-        "poiDistances": [500, 1000, 2000]
-      },
-      "totalView": true,
-      "attributions":
-      {
-        "isInitOpenDesktop": true,
-        "isInitOpenMobile": true
-      },
-      "overviewMap":
-      {
-        "resolution": 611.4974492763076,
-        "layerId": "452"
-      },
-      "mousePosition": true,
-      "buttonOblique": true,
-      "button3d": true
-    },
-    "scaleLine": true,
-    "treeType": "custom",
-    "layersRemovable": false
-  },
-  "Themenconfig":
-  {
-    "Hintergrundkarten":
-    {
-      "Layer":
-        [
-          {
-            "id": ["149", "150", "151", "152", "153", "154", "155", "157", "13926", "13927", "159", "160", "161", "156", "158", "13928", "162", "163", "164", "165", "166", "167", "168", "169", "170", "13930", "171", "172", "173", "174", "13931", "175", "176", "177", "178"],
-            "name": "ALKIS grau-blau (ab 1: 10 000)",
-            "maxScale": "10000"
-          },
-          {
-            "id": ["368", "369", "370", "371", "372", "373", "374", "376", "13923", "13924", "378", "379", "380", "375", "377", "13920", "381", "382", "383", "384", "385", "386", "387", "388", "389", "13921", "390", "391", "392", "393", "13922", "394", "395", "396", "397"],
-            "name": "ALKIS farbig (ab 1: 10 000)",
-            "maxScale": "10000"
-          },
-          {
-            "id": "452"
-          },
-          {
-            "id": ["1043", "1044", "1045", "1046", "13649", "13652", "13654", "13656"],
-            "name": "Geobasiskarten (grau-blau)"
-          },
-          {
-            "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
-            "visibility": true,
-            "name": "Geobasiskarten (farbig)"
-          },
-          {
-            "id": "453"
-          },
-          {
-              "id": "14261",
-              "name": "Oblique",
-              "visibility": true
-          }
-       ]
-    },
-    "Fachdaten_3D":
-    {
-      "Layer":
-        [
-        {
-          "id": "12883",
-          "name": "Gelände"
+  "Portalconfig":{
+     "portalTitle":{
+        "title":"GeoViewer",
+        "logo":"",
+        "link":"",
+        "toolTip":""
+     },
+     "searchBar":{
+        "minChars":3,
+        "gazetteer":{
+           "minChars":3,
+           "serviceId":"6",
+           "searchStreets":true,
+           "searchHouseNumbers":true,
+           "searchDistricts":true,
+           "searchParcels":true,
+           "searchStreetKey":true
         },
-        {
-          "id": "12884",
-          "name": "Gebäude LoD2"
-        }
-       ]
-    },
-    "Fachdaten":
-    {
-      "Ordner":
-       [
-        {
-        "Titel": "Lage und Gebietszugehörigkeit",
-        "Ordner":
-          [
-            {
-              "Titel": "Überschwemmungsgebiete",
-              "Ordner":
-                [
-                  {
-                    "Titel": "Überschwemmungsgebiete",
-                    "Layer":
-                      [
-                        {
-                          "id": "1103"
-                        },
-                        {
-                          "id": "1104"
-                        }
-                      ]
-                  }
-                ],
-            "Layer":
-                [
-                  {
-                    "id": "684"
-                  },
-                  {
-                    "id": "685"
-                  }
-                ]
-            }
-        ],
-        "Layer":
-          [
-            {
-              "id": "2427"
-            },
-            {
-              "id": "2426"
-            },
-            {
-              "id": "2425"
-            },
-            {
-              "id": "2423"
-            },
-            {
-              "id": "2428"
-            },
-            {
-              "id": "936",
-              "name": "Hafengebiet (§ 2 HafenEG)"
-            }
-         ]
-      },
-      {
-        "Titel": "Vermessungswesen",
-        "Layer":
-          [
-            {
-              "id": "1200",
-              "name": "Hoehenlinien 1,25m"
-            },
-            {
-              "id": "1199",
-              "name": "Hoehenlinien 1,50m"
-            },
-            {
-              "id": "1198"
-            },
-            {
-              "id": "1197"
-            }
-         ]
-      },
-      {
-        "Titel": "Städtebaurecht",
-        "Layer":
-          [
-            {
-              "id": "1561",
-              "name": "Festgestellte Bebauungspläne (§ 10 BauGB)"
-            },
-            {
-              "id": "1562",
-              "visibility": false,
-              "name": "Bebauungspläne im Verfahren (§ 2 BauGB)"
-            },
-            {
-              "id": "2438",
-              "name": "Umlegungsgebiete (§§ 45 ff BauGB)"
-            },
-            {
-              "id": "2437",
-              "name": "Sanierungsgebiete (§§ 136 ff BauGB)"
-            },
-            {
-              "id": "1205",
-              "name": "Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
-            },
-            {
-              "id": "4445",
-              "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
-            },
-            {
-              "id": "4446",
-              "name": "Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
-            }
-         ]
-      },
-      {
-        "Titel": "Denkmalschutz",
-        "Layer":
-          [
-            {
-              "id": "1757",
-              "name": "Baudenkmäler (§§ 4, 6 DSchG)"
-            },
-            {
-              "id": "1755",
-              "name": "Gartendenkmäler (§§ 4, 6 DSchG)"
-            },
-            {
-              "id": "1754",
-              "name": "Ensemble (§§ 4, 6 DSchG)"
-            }
-         ]
-      },
-      {
-        "Titel": "Naturschutz und Landschaftsschutz",
-        "Ordner":
-          [
-            {
-            "Titel": "Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
-              "Layer":
-                [
-                  {
-                    "id": "1689"
-                  },
-                  {
-                    "id": "1688"
-                  }
-                ]
-            }
-         ],
-        "Layer":
-          [
+        "bkg":{
+           "minChars":3,
+           "suggestServiceId":"4",
+           "geosearchServiceId":"5",
+           "extent":[
+              454591,
+              5809000,
+              700000,
+              6075769
+           ],
+           "suggestCount":10,
+           "epsg":"EPSG:25832",
+           "filter":"filter=(typ:*)",
+           "score":0.6
+        },
+        "specialWFS":{
+           "minChar":3,
+           "definitions":[
               {
-                "id": "1453",
-                "name": "Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
+                 "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                 "typeName":"app:hh_hh_festgestellt",
+                 "propertyNames":[
+                    "app:geltendes_planrecht"
+                 ],
+                 "geometryName":"app:geom",
+                 "name":"festgestellt"
               },
               {
-                "id": "1992",
-                "name": "Naturschutzgebiete (§ 23 BNatSchG)"
-              },
-              {
-                "id": "1996",
-                "name": "Nationalpark (§ 24 BNatSchG)"
-              },
-              {
-                "id": "1997",
-                "name": "Biosphärenreservate (§ 25 BNatSchG)"
-              },
-              {
-                "id": "1998",
-                "name": "Landschaftsschutzgebiete (§ 26 BNatSchG)"
-              },
-              {
-                "id": "1999",
-                "name": "Naturdenkmäler (§ 28 BNatSchG)"
+                 "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
+                 "typeName":"app:prosin_imverfahren",
+                 "propertyNames":[
+                    "app:plan"
+                 ],
+                 "geometryName":"app:the_geom",
+                 "name":"im Verfahren"
               }
-         ]
-      },
-      {
-        "Titel": "Wasserrecht",
-        "Ordner":
-          [
-            {
-              "Titel": "Überschwemmungsgebiete (ÜSG)",
-              "Layer":
-                [
-                  {
-                    "id": "2432",
-                    "name": "Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
-                  },
-                  {
-                    "id": "2433",
-                    "name": "Vorläufig gesicherte ÜSG (§ 76 WHG)"
-                  }
-               ]
-            }
-          ],
-        "Layer":
-          [
-            {
-                "id": "685",
-                "name": "Hamburger Wasserschutzgebiete (§§ 51 ff WHG)"
-            }
-          ]
-      },
-      {
-        "Titel": "Luftverkehr",
-        "Layer":
-          [
-            {
-              "id": ["422","420","418","417","416","413","430","412","428","426","427","425","424"],
-              "name": "Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-              "legendURL": "http:/geofos/legenden/bauschutz_flughafen_legende.png"
-            }
-         ]
-      },
-      {
-        "Titel": "Emissionen",
-        "Ordner":
-          [
+           ]
+        },
+        "visibleWFS":{
+           "minChars":3
+        },
+        "tree":{
+           "minChars":3
+        },
+        "gdi":{
+           "minChars":3,
+           "serviceId":"elastic_qs",
+           "queryObject":{
+              "id":"query",
+              "params":{
+                 "query_string":"%%searchString%%"
+              }
+           }
+        },
+        "placeholder":"Suche nach Adresse/Krankenhaus/B-Plan"
+     },
+     "menu":{
+        "tree":{
+           "name":"Themen",
+           "glyphicon":"glyphicon-list",
+           "isInitOpen":true,
+           "isAlwaysExpanded":[
+              "SelectedLayer"
+           ]
+        },
+        "filter":{
+           "name":"Filter",
+           "glyphicon":"glyphicon-filter",
+           "deactivateGFI":false,
+           "isGeneric":false,
+           "isInitOpen":false,
+           "allowMultipleQueriesPerLayer":false,
+           "predefinedQueries":[
+              {
+                 "layerId":"8712",
+                 "isActive":false,
+                 "isSelected":false,
+                 "name":"Grundschulen",
+                 "predefinedRules":[
+                    {
+                       "attrName":"kapitelbezeichnung",
+                       "values":[
+                          "Grundschulen",
+                          "Langformschulen"
+                       ]
+                    }
+                 ],
+                 "attributeWhiteList":[
+                    "bezirk",
+                    "stadtteil",
+                    "schulform",
+                    "ganztagsform",
+                    "anzahl_schueler",
+                    "schwerpunktschule",
+                    "bilingual"
+                 ]
+              },
+              {
+                 "layerId":"8712",
+                 "isActive":false,
+                 "isSelected":false,
+                 "name":"Stadtteilschulen",
+                 "predefinedRules":[
+                    {
+                       "attrName":"kapitelbezeichnung",
+                       "values":[
+                          "Stadtteilschulen",
+                          "Langformschulen"
+                       ]
+                    }
+                 ],
+                 "attributeWhiteList":[
+                    "bezirk",
+                    "stadtteil",
+                    "schulform",
+                    "ganztagsform",
+                    "anzahl_schueler",
+                    "schwerpunktschule",
+                    "fremdsprache",
+                    "fremdsprache_mit_klasse",
+                    "schulische_ausrichtung"
+                 ]
+              },
+              {
+                 "layerId":"8712",
+                 "isActive":false,
+                 "isSelected":false,
+                 "name":"Gymnasien",
+                 "info":"Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
+                 "predefinedRules":[
+                    {
+                       "attrName":"kapitelbezeichnung",
+                       "values":[
+                          "Gymnasien"
+                       ]
+                    }
+                 ],
+                 "attributeWhiteList":[
+                    "bezirk",
+                    "stadtteil",
+                    "schulform",
+                    "ganztagsform",
+                    "anzahl_schueler",
+                    "fremdsprache",
+                    "fremdsprache_mit_klasse",
+                    "schulische_ausrichtung"
+                 ]
+              },
+              {
+                 "layerId":"8712",
+                 "isActive":false,
+                 "isSelected":false,
+                 "name":"Sonderschulen",
+                 "predefinedRules":[
+                    {
+                       "attrName":"kapitelbezeichnung",
+                       "values":[
+                          "Sonderschulen"
+                       ]
+                    }
+                 ],
+                 "attributeWhiteList":[
+                    "bezirk",
+                    "stadtteil",
+                    "ganztagsform",
+                    "foerderart",
+                    "abschluss"
+                 ]
+              },
+              {
+                 "layerId":"1711",
+                 "isActive":false,
+                 "isSelected":false,
+                 "name":"Krankenhäuser",
+                 "predefinedRules":[
 
-           {
-            "Titel": "Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
-            "Layer":
-             [
-                {
-                  "id": "2431"
-                },
-                {
-                  "id": "2430"
-                },
-                {
-                  "id": "2429"
-                }
-            ]
-          }
-        ]
-      },
-      {
-        "Titel": "Eisenbahnwesen / Personenbeförderung",
-        "Ordner":
-          [
-            {
-              "Titel": "Hamburger Verkehrsverbund (HVV)",
-              "Layer":
-                [
-                  {
-                    "id": "1935",
-                    "visibility": false,
-                    "styles":
-                      [
-                      "geofox_Faehre",
-                      "geofox-bahn",
-                      "geofox-bus",
-                      "geofox_BusName"
-                      ],
-                    "name":
-                      [
-                      "Fährverbindungen",
-                      "Bahnlinien",
-                      "Buslinien",
-                      "Busliniennummern"
-                      ],
-                    "legendURL":
-                      [
-                      "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png",
-                      "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png",
-                      "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png",
-                      "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
-                     ]
-                  },
-                  {
-                    "id": "1933",
-                    "styles":
-                      [
-                      "geofox_stations"
-                      ],
-                    "name":
-                      [
-                      "Haltestellen"
-                      ],
-                    "legendURL":
-                      [
-                      "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
-                      ]
-                  }
-               ]
-            }
-        ],
-        "Layer":
-          [
-            {
-              "id": "2182"
-            },
-            {
-              "id": "2181"
-            },
-            {
-              "id": "2180"
-            },
-            {
-              "id": "2179"
-            },
-            {
-              "id": "2178"
-            }
-         ]
-      },
-      {
-        "Titel": "Gruppenlayer",
-        "Layer":
-          [
-            {
-              "id": "xyz",
-              "children":
-                [
-                    {
-                      "id": "682"
-                    },
-                    {
-                      "id": "1731"
-                    }
-               ],
-              "visibility": false,
-              "name": "Kita und Krankenhäuser"
-            },
-            {
-              "id": "schUk",
-              "layerAttribution": "<span>Attributierung für Gruppenlayer</span>",
-              "children":
-                [
-                    {
-                      "id": "1711",
-                      "styleId": "1711",
-                      "visibility": false,
-                      "layerAttribution": "<span>Attributierung für Fachlayer</span>",
-                      "mouseHoverField": ["name", "strasse"],
-                      "searchField": "name",
-                      "filterOptions":
-                        [
-                            {
-                              "fieldName": "teilnahme_geburtsklinik",
-                              "filterType": "combo",
-                              "filterName": "Geburtshilfe",
-                              "filterString": ["*", "Ja", "Nein"]
-                            },
-                            {
-                              "fieldName": "teilnahme_notversorgung",
-                              "filterType": "combo",
-                              "filterName": "Not- und Unfallversorgung",
-                              "filterString": ["*", "Ja", "Eingeschränkt", "Nein"]
-                            }
-                      ],
-                      "extendedFilter": true
-                    },
-                    {
-                      "id": "8712",
-                      "visibility": false,
-                      "name": "Schulinfosystem",
-                      "styleId": "8712",
-                      "searchField": "schulname",
-                      "mouseHoverField": ["schulname", "kapitelbezeichnung"],
-                      "gfiTheme": "schulinfo",
-                      "additionalInfoField": "adresse_strasse_hausnr"
-                    }
-              ],
-              "name": "Krankenhäuser und Schulen",
-              "visibility": true
-            }
-          ]
+                 ],
+                 "attributeWhiteList":[
+                    "teilnahme_geburtsklinik",
+                    "teilnahme_notversorgung"
+                 ]
+              }
+           ]
+        },
+        "tools":{
+           "name":"Werkzeuge",
+           "glyphicon":"glyphicon-wrench",
+           "children":{
+              "parcelSearch":{
+                 "name":"Flurstückssuche",
+                 "glyphicon":"glyphicon-search",
+                 "serviceId":"6",
+                 "storedQueryID":"Flurstueck",
+                 "configJSON":"https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                 "parcelDenominator":false
+              },
+              "measure":{
+                 "name":"Strecke / Fläche messen",
+                 "glyphicon":"glyphicon-resize-full"
+              },
+              "coord":{
+                 "name":"Koordinaten abfragen",
+                 "glyphicon":"glyphicon-screenshot"
+              },
+              "gfi":{
+                 "name":"Informationen abfragen",
+                 "glyphicon":"glyphicon-info-sign",
+                 "isActive":true
+              },
+              "print":{
+                 "name":"Karte drucken",
+                 "glyphicon":"glyphicon-print",
+                 "mapfishServiceId":"mapfish_qs",
+                 "printAppId":"master",
+                 "filename":"Ausdruck",
+                 "title":"Mein Titel",
+                 "version":"mapfish_print_3"
+              },
+              "searchByCoord":{
+                 "name":"Koordinatensuche",
+                 "glyphicon":"glyphicon-record"
+              },
+              "kmlimport":{
+                 "name":"KML Import",
+                 "glyphicon":"glyphicon-import"
+              },
+              "wfsFeatureFilter":{
+                 "name":"Filter",
+                 "glyphicon":"glyphicon-filter",
+                 "deactivateGFI":false
+              },
+              "extendedFilter":{
+                 "name":"Erweiterter Filter",
+                 "glyphicon":"glyphicon-filter",
+                 "deactivateGFI":false
+              },
+              "routing":{
+                 "name":"Routenplaner",
+                 "glyphicon":"glyphicon-road",
+                 "viomRoutingID":"7",
+                 "bkgSuggestID":"4",
+                 "bkgGeosearchID":"5"
+              },
+              "draw":{
+                 "name":"Zeichnen / Schreiben",
+                 "glyphicon":"glyphicon-pencil"
+              },
+              "featureLister":{
+                 "name":"Liste",
+                 "glyphicon":"glyphicon-menu-hamburger",
+                 "lister":10
+              },
+              "lines":{
+                 "name":"Pendler (Linien)",
+                 "glyphicon":"glyphicon-play-circle"
+              },
+              "animation":{
+                 "name":"Pendler (Animation)",
+                 "glyphicon":"glyphicon-play-circle",
+                 "steps":30,
+                 "url":"https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+                 "params":{
+                    "REQUEST":"GetFeature",
+                    "SERVICE":"WFS",
+                    "TYPENAME":"app:mrh_kreise",
+                    "VERSION":"1.1.0",
+                    "maxFeatures":"10000"
+                 },
+                 "featureType":"mrh_einpendler_gemeinde",
+                 "attrAnzahl":"anzahl_einpendler",
+                 "attrGemeinde":"wohnort",
+                 "minPx":5,
+                 "maxPx":30,
+                 "zoomlevel":1,
+                 "colors":[
+                    "rgba(255,0,0,0.5)",
+                    "rgba(0,255,0,0.5)",
+                    "rgba(0,0,255,0.5)",
+                    "rgba(0,255,255,0.5)"
+                 ]
+              },
+              "saveSelection":{
+                 "name":"Auswahl speichern",
+                 "glyphicon":"glyphicon-share"
+              },
+              "addWMS":{
+                 "name":"WMS hinzufügen",
+                 "glyphicon":"glyphicon-plus"
+              },
+              "styleWMS":{
+                 "name":"Style WMS",
+                 "glyphicon":"glyphicon-tint",
+                 "onlyDesktop":true
+              }
+           }
+        },
+        "legend":{
+           "name":"Legende",
+           "glyphicon":"glyphicon-book"
+        },
+        "contact":{
+           "name":"Kontakt",
+           "glyphicon":"glyphicon-envelope",
+           "serviceID":"80001",
+           "includeSystemInfo":true
+        },
+        "info":{
+           "name":"Informationen",
+           "glyphicon":"glyphicon-info-sign",
+           "children":{
+              "staticlinks":[
+                 {
+                    "name":"Haftungsausschluss",
+                    "glyphicon":"glyphicon-globe",
+                    "url":"https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+                 },
+                 {
+                    "name":"Hamburg",
+                    "glyphicon":"glyphicon-globe",
+                    "url":"https://www.hamburg.de"
+                 }
+              ]
+           }
         }
-      ]
-    }
+     },
+     "controls":{
+        "orientation3d":true,
+        "fullScreen":true,
+        "zoom":true,
+        "orientation":{
+           "zoomMode":"once",
+           "poiDistances":[
+              500,
+              1000,
+              2000
+           ]
+        },
+        "totalView":true,
+        "attributions":{
+           "isInitOpenDesktop":true,
+           "isInitOpenMobile":true
+        },
+        "overviewMap":{
+           "resolution":611.4974492763076,
+           "layerId":"452"
+        },
+        "mousePosition":true,
+        "buttonOblique":true,
+        "button3d":true
+     },
+     "scaleLine":true,
+     "treeType":"custom",
+     "layersRemovable":false
+  },
+  "Themenconfig":{
+     "Hintergrundkarten":{
+        "Layer":[
+           {
+              "id":[
+                 "149",
+                 "150",
+                 "151",
+                 "152",
+                 "153",
+                 "154",
+                 "155",
+                 "157",
+                 "13926",
+                 "13927",
+                 "159",
+                 "160",
+                 "161",
+                 "156",
+                 "158",
+                 "13928",
+                 "162",
+                 "163",
+                 "164",
+                 "165",
+                 "166",
+                 "167",
+                 "168",
+                 "169",
+                 "170",
+                 "13930",
+                 "171",
+                 "172",
+                 "173",
+                 "174",
+                 "13931",
+                 "175",
+                 "176",
+                 "177",
+                 "178"
+              ],
+              "name":"ALKIS grau-blau (ab 1: 10 000)",
+              "maxScale":"10000"
+           },
+           {
+              "id":[
+                 "368",
+                 "369",
+                 "370",
+                 "371",
+                 "372",
+                 "373",
+                 "374",
+                 "376",
+                 "13923",
+                 "13924",
+                 "378",
+                 "379",
+                 "380",
+                 "375",
+                 "377",
+                 "13920",
+                 "381",
+                 "382",
+                 "383",
+                 "384",
+                 "385",
+                 "386",
+                 "387",
+                 "388",
+                 "389",
+                 "13921",
+                 "390",
+                 "391",
+                 "392",
+                 "393",
+                 "13922",
+                 "394",
+                 "395",
+                 "396",
+                 "397"
+              ],
+              "name":"ALKIS farbig (ab 1: 10 000)",
+              "maxScale":"10000"
+           },
+           {
+              "id":"452"
+           },
+           {
+              "id":[
+                 "1043",
+                 "1044",
+                 "1045",
+                 "1046",
+                 "13649",
+                 "13652",
+                 "13654",
+                 "13656"
+              ],
+              "name":"Geobasiskarten (grau-blau)"
+           },
+           {
+              "id":[
+                 "717",
+                 "718",
+                 "719",
+                 "720",
+                 "13712",
+                 "13709",
+                 "13714",
+                 "13716"
+              ],
+              "visibility":true,
+              "name":"Geobasiskarten (farbig)"
+           },
+           {
+              "id":"453"
+           },
+           {
+              "id":"13032",
+              "name":"Oblique",
+              "visibility":true
+           }
+        ]
+     },
+     "Fachdaten_3D":{
+        "Layer":[
+           {
+              "id":"12883",
+              "name":"Gelände"
+           },
+           {
+              "id":"12884",
+              "name":"Gebäude LoD2"
+           }
+        ]
+     },
+     "Fachdaten":{
+        "Ordner":[
+           {
+              "Titel":"Lage und Gebietszugehörigkeit",
+              "Ordner":[
+                 {
+                    "Titel":"Überschwemmungsgebiete",
+                    "Ordner":[
+                       {
+                          "Titel":"Überschwemmungsgebiete",
+                          "Layer":[
+                             {
+                                "id":"1103"
+                             },
+                             {
+                                "id":"1104"
+                             }
+                          ]
+                       }
+                    ],
+                    "Layer":[
+                       {
+                          "id":"684"
+                       },
+                       {
+                          "id":"685"
+                       }
+                    ]
+                 }
+              ],
+              "Layer":[
+                 {
+                    "id":"2427"
+                 },
+                 {
+                    "id":"2426"
+                 },
+                 {
+                    "id":"2425"
+                 },
+                 {
+                    "id":"2423"
+                 },
+                 {
+                    "id":"2428"
+                 },
+                 {
+                    "id":"936",
+                    "name":"Hafengebiet (§ 2 HafenEG)"
+                 }
+              ]
+           },
+           {
+              "Titel":"Vermessungswesen",
+              "Layer":[
+                 {
+                    "id":"1200",
+                    "name":"Hoehenlinien 1,25m"
+                 },
+                 {
+                    "id":"1199",
+                    "name":"Hoehenlinien 1,50m"
+                 },
+                 {
+                    "id":"1198"
+                 },
+                 {
+                    "id":"1197"
+                 }
+              ]
+           },
+           {
+              "Titel":"Städtebaurecht",
+              "Layer":[
+                 {
+                    "id":"1561",
+                    "name":"Festgestellte Bebauungspläne (§ 10 BauGB)"
+                 },
+                 {
+                    "id":"1562",
+                    "visibility":false,
+                    "name":"Bebauungspläne im Verfahren (§ 2 BauGB)"
+                 },
+                 {
+                    "id":"2438",
+                    "name":"Umlegungsgebiete (§§ 45 ff BauGB)"
+                 },
+                 {
+                    "id":"2437",
+                    "name":"Sanierungsgebiete (§§ 136 ff BauGB)"
+                 },
+                 {
+                    "id":"1205",
+                    "name":"Städtebauliche Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 1 BauGB)"
+                 },
+                 {
+                    "id":"4445",
+                    "name":"Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Kraft"
+                 },
+                 {
+                    "id":"4446",
+                    "name":"Soziale Erhaltungsverordnungen (§ 172 Abs. 1 Nr. 2 BauGB) in Aufstellung"
+                 }
+              ]
+           },
+           {
+              "Titel":"Denkmalschutz",
+              "Layer":[
+                 {
+                    "id":"1757",
+                    "name":"Baudenkmäler (§§ 4, 6 DSchG)"
+                 },
+                 {
+                    "id":"1755",
+                    "name":"Gartendenkmäler (§§ 4, 6 DSchG)"
+                 },
+                 {
+                    "id":"1754",
+                    "name":"Ensemble (§§ 4, 6 DSchG)"
+                 }
+              ]
+           },
+           {
+              "Titel":"Naturschutz und Landschaftsschutz",
+              "Ordner":[
+                 {
+                    "Titel":"Biotopkataster gesetzlich geschützte Biotope (§ 30 BNatSchG, § 14 HmbBNatSchAG) - ab 1:5000 bis 1:500",
+                    "Layer":[
+                       {
+                          "id":"1689"
+                       },
+                       {
+                          "id":"1688"
+                       }
+                    ]
+                 }
+              ],
+              "Layer":[
+                 {
+                    "id":"1453",
+                    "name":"Ausgleichsfächen (§§ 13, 17 Absatz 6 BNatSchG)"
+                 },
+                 {
+                    "id":"1992",
+                    "name":"Naturschutzgebiete (§ 23 BNatSchG)"
+                 },
+                 {
+                    "id":"1996",
+                    "name":"Nationalpark (§ 24 BNatSchG)"
+                 },
+                 {
+                    "id":"1997",
+                    "name":"Biosphärenreservate (§ 25 BNatSchG)"
+                 },
+                 {
+                    "id":"1998",
+                    "name":"Landschaftsschutzgebiete (§ 26 BNatSchG)"
+                 },
+                 {
+                    "id":"1999",
+                    "name":"Naturdenkmäler (§ 28 BNatSchG)"
+                 }
+              ]
+           },
+           {
+              "Titel":"Wasserrecht",
+              "Ordner":[
+                 {
+                    "Titel":"Überschwemmungsgebiete (ÜSG)",
+                    "Layer":[
+                       {
+                          "id":"2432",
+                          "name":"Festgesetzte ÜSG (§ 76 WHG, § 54 HWaG)"
+                       },
+                       {
+                          "id":"2433",
+                          "name":"Vorläufig gesicherte ÜSG (§ 76 WHG)"
+                       }
+                    ]
+                 }
+              ],
+              "Layer":[
+                 {
+                    "id":"685",
+                    "name":"Hamburger Wasserschutzgebiete (§§ 51 ff WHG)"
+                 }
+              ]
+           },
+           {
+              "Titel":"Luftverkehr",
+              "Layer":[
+                 {
+                    "id":[
+                       "422",
+                       "420",
+                       "418",
+                       "417",
+                       "416",
+                       "413",
+                       "430",
+                       "412",
+                       "428",
+                       "426",
+                       "427",
+                       "425",
+                       "424"
+                    ],
+                    "name":"Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
+                    "legendURL":"https:/geofos/legenden/bauschutz_flughafen_legende.png"
+                 }
+              ]
+           },
+           {
+              "Titel":"Emissionen",
+              "Ordner":[
+                 {
+                    "Titel":"Lärmschutzbereiche Flughafen Hamburg (FluLärmHmbV)",
+                    "Layer":[
+                       {
+                          "id":"2431"
+                       },
+                       {
+                          "id":"2430"
+                       },
+                       {
+                          "id":"2429"
+                       }
+                    ]
+                 }
+              ]
+           },
+           {
+              "Titel":"Eisenbahnwesen / Personenbeförderung",
+              "Ordner":[
+                 {
+                    "Titel":"Hamburger Verkehrsverbund (HVV)",
+                    "Layer":[
+                       {
+                          "id":"1935",
+                          "visibility":false,
+                          "styles":[
+                             "geofox_Faehre",
+                             "geofox-bahn",
+                             "geofox-bus",
+                             "geofox_BusName"
+                          ],
+                          "name":[
+                             "Fährverbindungen",
+                             "Bahnlinien",
+                             "Buslinien",
+                             "Busliniennummern"
+                          ],
+                          "legendURL":[
+                             "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png",
+                             "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png",
+                             "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png",
+                             "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
+                          ]
+                       },
+                       {
+                          "id":"1933",
+                          "styles":[
+                             "geofox_stations"
+                          ],
+                          "name":[
+                             "Haltestellen"
+                          ],
+                          "legendURL":[
+                             "https://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png"
+                          ]
+                       }
+                    ]
+                 }
+              ],
+              "Layer":[
+                 {
+                    "id":"2182"
+                 },
+                 {
+                    "id":"2181"
+                 },
+                 {
+                    "id":"2180"
+                 },
+                 {
+                    "id":"2179"
+                 },
+                 {
+                    "id":"2178"
+                 }
+              ]
+           },
+           {
+              "Titel":"Gruppenlayer",
+              "Layer":[
+                 {
+                    "id":"xyz",
+                    "children":[
+                       {
+                          "id":"682"
+                       },
+                       {
+                          "id":"1731"
+                       }
+                    ],
+                    "visibility":false,
+                    "name":"Kita und Krankenhäuser"
+                 },
+                 {
+                    "id":"schUk",
+                    "layerAttribution":"<span>Attributierung für Gruppenlayer</span>",
+                    "children":[
+                       {
+                          "id":"1711",
+                          "styleId":"1711",
+                          "visibility":false,
+                          "layerAttribution":"<span>Attributierung für Fachlayer</span>",
+                          "mouseHoverField":[
+                             "name",
+                             "strasse"
+                          ],
+                          "searchField":"name",
+                          "filterOptions":[
+                             {
+                                "fieldName":"teilnahme_geburtsklinik",
+                                "filterType":"combo",
+                                "filterName":"Geburtshilfe",
+                                "filterString":[
+                                   "*",
+                                   "Ja",
+                                   "Nein"
+                                ]
+                             },
+                             {
+                                "fieldName":"teilnahme_notversorgung",
+                                "filterType":"combo",
+                                "filterName":"Not- und Unfallversorgung",
+                                "filterString":[
+                                   "*",
+                                   "Ja",
+                                   "Eingeschränkt",
+                                   "Nein"
+                                ]
+                             }
+                          ],
+                          "extendedFilter":true
+                       },
+                       {
+                          "id":"8712",
+                          "visibility":false,
+                          "name":"Schulinfosystem",
+                          "styleId":"8712",
+                          "searchField":"schulname",
+                          "mouseHoverField":[
+                             "schulname",
+                             "kapitelbezeichnung"
+                          ],
+                          "gfiTheme":"schulinfo",
+                          "additionalInfoField":"adresse_strasse_hausnr"
+                       }
+                    ],
+                    "name":"Krankenhäuser und Schulen",
+                    "visibility":true
+                 }
+              ]
+           }
+        ]
+     }
   }
 }

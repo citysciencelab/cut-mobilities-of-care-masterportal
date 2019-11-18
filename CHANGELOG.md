@@ -1,3 +1,25 @@
+# Changelog LGV Master-Portal 2.4.3
+
+NEU:
+
+  (none)
+
+REFACTOR:
+
+  (none)
+
+FIXES:
+
+  - KML-Import: Ein Fehler wurde behoben, der verhindert hat, dass von QGIS exportierte KML-Dateien geladen werden.
+  - GFI: Das GFI wird nun auch bei größeren Datenmengen innerhalb des Portals dargestellt.
+  - GFI: Das GFI wird nun immer nach dem Schließen eines anderen Werkzeugs aktiviert.
+  - Tools: Die Minimierung von Werkzeugen wird nun richtig dargestellt.
+  - Menü: Die Menüleiste ist nun auch nach einer Suche noch intakt.
+  - 3D-Modus: Die 3D-Navigation per Mausrad im Firefox funktioniert nun.
+  - 3D-Modus: Die 3D-Navigation über den Kompass lässt sich nun wieder deaktivieren.
+  - GFI: Für sich überlagernde WFS- und WMS-Features werden nun die jeweils richtigen Informationen abgerufen.
+
+
 # Changelog LGV Master-Portal 2.4.2
 
 NEU:

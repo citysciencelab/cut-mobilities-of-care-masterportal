@@ -431,4 +431,35 @@ describe("vectorStyle", function () {
             });
         });
     });
+    describe("translateNameFromObject", function () {
+        it("should return 'another_key' for origName= 'another_' and condition= 'startsWith'", function () {
+            expect(model.translateNameFromObject(["key1", "another_key"], "another_", "startsWith")).to.equal("another_key");
+        });
+        it("should return 'another_key' for origName= 'key' and condition= 'endsWith'", function () {
+            expect(model.translateNameFromObject(["key1", "another_key"], "key", "endsWith")).to.equal("another_key");
+        });
+        it("should return 'another_key' for origName= 'other_k' and condition= 'contains'", function () {
+            expect(model.translateNameFromObject(["key1", "another_key"], "other_k", "contains")).to.equal("another_key");
+        });
+        it("should return undefined for invalid condition", function () {
+            expect(model.translateNameFromObject(["key1", "another_key"], "other_k", "fooBar")).to.be.undefined;
+        });
+        it("should return undefined for undefined condition", function () {
+            expect(model.translateNameFromObject(["key1", "another_key"], "other_k", undefined)).to.be.undefined;
+        });
+        it("should return undefined for empty keys", function () {
+            expect(model.translateNameFromObject([], "other_k", "contains")).to.be.undefined;
+        });
+    });
+    describe("checkIfMatchesValid", function () {
+        it("should return false for more than 1 match", function () {
+            expect(model.checkIfMatchesValid("", "", ["key1", "key2"])).to.be.false;
+        });
+        it("should return true for exactly 1 match", function () {
+            expect(model.checkIfMatchesValid("", "", ["key1"])).to.be.true;
+        });
+        it("should return false for 0 matches", function () {
+            expect(model.checkIfMatchesValid("", "", [])).to.be.false;
+        });
+    });
 });

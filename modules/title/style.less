@@ -1,12 +1,11 @@
-@color_1: #777;
-@font_family_1: 'UniversNextW01-Regular','Arial Narrow',Arial,sans-serif;
+@color_1: rgb(51,51,51);
+@font_family_1: 'MasterPortalFont','Arial Narrow',Arial,sans-serif;
 
 .portal-title {
     padding-left: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    text-shadow: #c0c0c0 3px 3px 5px;
     font-size: 26px;
     color: @color_1;
     font-family: @font_family_1;
@@ -15,7 +14,8 @@
     float: left;
     >a {
         >img {
-            margin: 5px 5px 5px 10px;
+            margin: 5px 5px 5px 5px;
+            max-height: 40px;
         }
     }
     >span {

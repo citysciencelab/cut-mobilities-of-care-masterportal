@@ -4,8 +4,13 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    fs = require("fs");
-
+    fs = require("fs"),
+    _ = require("underscore"),
+    HttpsProxyAgent = require("https-proxy-agent"),
+    /* eslint-disable no-process-env */
+    proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
+    /* eslint-disable no-process-env */
+    proxyAgent = proxyServer !== undefined ? new HttpsProxyAgent(proxyServer) : "";
 
 let proxies;
 
@@ -16,7 +21,15 @@ else {
     proxies = require("./proxyconf_example.json");
 }
 
-module.exports = function () {
+Object.keys(proxies).forEach(proxy => {
+    if (proxies[proxy].agent !== undefined) {
+        proxies[proxy].agent = proxyAgent;
+    }
+});
+
+module.exports = function (env, args) {
+    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
+
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
@@ -45,7 +58,8 @@ module.exports = function () {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
-                        name: "[name].[ext]"
+                        name: "[name].[ext]",
+                        publicPath: "../../css/fonts"
                     }
                 }
             ]

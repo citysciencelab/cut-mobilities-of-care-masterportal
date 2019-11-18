@@ -336,6 +336,12 @@
  */
 
 /**
+ * @namespace GraphicalSelect
+ * @memberOf Snippets
+ * @description GraphicalSelect Snippet for a dropdown to select square, circle or polygon to select an area in the map
+ */
+
+/**
  * @namespace Tools
  * @description Tools available in the application
  */

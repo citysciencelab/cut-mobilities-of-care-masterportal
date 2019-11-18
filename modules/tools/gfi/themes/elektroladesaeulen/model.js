@@ -25,8 +25,8 @@ const ElektroladesaeulenTheme = Theme.extend({
             gfiProperties = this.splitProperties(gfiContent[0]),
             allProperties = this.splitProperties(gfiContent.allProperties),
             dataStreamIds = allProperties.dataStreamId,
-            requestURL = allProperties.requestURL[0],
-            versionURL = allProperties.versionURL[0],
+            requestUrl = allProperties.requestUrl[0],
+            versionUrl = allProperties.versionUrl[0],
             gfiParams = this.get("feature").get("gfiParams"),
             utc = this.get("feature").get("utc"),
             headTitleObject = this.createGfiHeadingChargingStation(allProperties),
@@ -35,8 +35,8 @@ const ElektroladesaeulenTheme = Theme.extend({
         gfiProperties = this.changeStateToGerman(gfiProperties);
 
         // set Properties
-        this.setRequestURL(requestURL);
-        this.setVersionURL(versionURL);
+        this.setRequestUrl(requestUrl);
+        this.setVersionUrl(versionUrl);
         this.setDataStreamIds(dataStreamIds);
         this.setGfiParams(gfiParams);
         this.setUTC(utc);
@@ -133,7 +133,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     createGfiHeadingChargingStation: function (allProperties) {
         var headTitleObject = {};
 
-        headTitleObject.StandortID = _.has(allProperties, "chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
+        headTitleObject.StandortId = _.has(allProperties, "chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
         headTitleObject.Adresse = _.has(allProperties, "chargings_station_nr") && _.has(allProperties, "postal_code") && _.has(allProperties, "city")
             ? allProperties.location_name[0] + ", " + allProperties.postal_code[0] + " " + allProperties.city[0] : "";
         headTitleObject.Eigentümer = _.has(allProperties, "owner") ? allProperties.owner[0] : "";
@@ -194,29 +194,29 @@ const ElektroladesaeulenTheme = Theme.extend({
     createHistoricalData: function (async, dataStreamIds, gfiParams) {
         var historicalData,
             query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
-            requestURL = this.get("requestURL"),
-            versionURL = this.get("versionURL"),
-            completeURL;
+            requestUrl = this.get("requestUrl"),
+            versionUrl = this.get("versionUrl"),
+            completeUrl;
 
         // add gfiParams an filter to query
         query = this.addGfiParams(query, gfiParams);
         query = this.addFilter(query, dataStreamIds);
 
-        completeURL = this.buildRequestFromQuery(query, requestURL, versionURL);
-        historicalData = this.sendRequest(completeURL, async);
+        completeUrl = this.buildRequestFromQuery(query, requestUrl, versionUrl);
+        historicalData = this.sendRequest(completeUrl, async);
 
         // if with one request not all data can be fetched
         _.each(historicalData, function (data) {
-            var observationsID = data["@iot.id"],
+            var observationsId = data["@iot.id"],
                 observationsCount = data["Observations@iot.count"],
                 observationsLength = data.Observations.length,
-                skipCompleteURL,
+                skipCompleteUrl,
                 skipHistoricalData;
 
-            // this.moreHistoricalData(data, observationsCount, completeURL, observationsLength, observationsID, async);
+            // this.moreHistoricalData(data, observationsCount, completeUrl, observationsLength, observationsId, async);
             while (observationsCount > data.Observations.length) {
-                skipCompleteURL = completeURL.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsID + "'";
-                skipHistoricalData = this.sendRequest(skipCompleteURL, async);
+                skipCompleteUrl = completeUrl.split(")")[0] + ";$skip=" + observationsLength + ")&$filter=@iot.id eq'" + observationsId + "'";
+                skipHistoricalData = this.sendRequest(skipCompleteUrl, async);
 
                 data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
             }
@@ -243,6 +243,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 workingQuery = workingQuery + "or ";
             }
         });
+
         return workingQuery;
     },
 
@@ -305,36 +306,36 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * create the request with given query for one Datastream
      * @param  {String} query - add filter to url
-     * @param  {String} requestURL - url to service
-     * @param  {String} versionURL - version of the service
-     * @return {String} complete URL
+     * @param  {String} requestUrl - url to service
+     * @param  {String} versionUrl - version of the service
+     * @return {String} complete Url
      */
-    buildRequestFromQuery: function (query, requestURL, versionURL) {
-        var completeURL;
+    buildRequestFromQuery: function (query, requestUrl, versionUrl) {
+        var completeUrl;
 
-        if (_.isUndefined(query || requestURL) || _.isNaN(parseFloat(versionURL, 10))) {
-            completeURL = "";
+        if (_.isUndefined(query || requestUrl) || _.isNaN(parseFloat(versionUrl, 10))) {
+            completeUrl = "";
         }
         else {
-            completeURL = requestURL + "/"
-                + "v" + versionURL + "/"
+            completeUrl = requestUrl + "/"
+                + "v" + versionUrl + "/"
                 + "Datastreams" + query;
         }
 
-        return completeURL;
+        return completeUrl;
     },
 
     /**
      * returns the historicalData by Ajax-Request
-     * @param  {String} requestURLHistoricaldata - url with query
+     * @param  {String} requestUrlHistoricaldata - url with query
      * @param  {Boolean} async - state fo ajax-request
      * @return {Object[]} historicalData
      */
-    sendRequest: function (requestURLHistoricaldata, async) {
+    sendRequest: function (requestUrlHistoricaldata, async) {
         var response;
 
         $.ajax({
-            url: requestURLHistoricaldata,
+            url: requestUrlHistoricaldata,
             async: async,
             type: "GET",
             context: this,
@@ -909,12 +910,12 @@ const ElektroladesaeulenTheme = Theme.extend({
     },
 
     // setter-functions
-    setRequestURL: function (value) {
-        this.set("requestURL", value);
+    setRequestUrl: function (value) {
+        this.set("requestUrl", value);
     },
 
-    setVersionURL: function (value) {
-        this.set("versionURL", value);
+    setVersionUrl: function (value) {
+        this.set("versionUrl", value);
     },
 
     setDataStreamIds: function (value) {
