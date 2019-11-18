@@ -456,7 +456,10 @@ function loadApp () {
     if (Config.customModules !== undefined) {
         Config.customModules.forEach((customModuleKey) => {
             if (allCustomModules[customModuleKey] !== undefined) {
-                import(/* webpackChunkName: "[request]" */ `../customModules/${allCustomModules[customModuleKey]}.js`).then(module => {
+                // .js need to be removed so webpack only searches for .js files
+                const entryPoint = allCustomModules[customModuleKey].replace(/\.js$/, "");
+
+                import(/* webpackChunkName: "[request]" */ `../customModules/${entryPoint}.js`).then(module => {
                     /* eslint-disable new-cap */
                     new module.default();
                 }).catch(error => {

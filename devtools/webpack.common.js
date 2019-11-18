@@ -27,7 +27,7 @@ module.exports = function () {
             throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + portalName + "\"\nABORTED...");
         }
 
-        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName] + ".js");
+        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName]);
 
         if (!fs.existsSync(customModuleFilePath)) {
             console.error("############\n------------");
