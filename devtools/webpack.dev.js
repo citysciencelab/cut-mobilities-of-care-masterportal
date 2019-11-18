@@ -27,9 +27,7 @@ Object.keys(proxies).forEach(proxy => {
     }
 });
 
-module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
+module.exports = function () {
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
