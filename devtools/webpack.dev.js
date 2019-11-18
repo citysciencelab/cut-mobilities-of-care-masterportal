@@ -5,7 +5,6 @@ const merge = require("webpack-merge"),
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
     fs = require("fs"),
-    _ = require("underscore"),
     HttpsProxyAgent = require("https-proxy-agent"),
     /* eslint-disable no-process-env */
     proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
