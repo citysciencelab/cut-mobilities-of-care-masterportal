@@ -103,7 +103,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "pushToIsInitOpen": this.pushToIsInitOpen
         }, this);
 
-        this.parseURL();
+        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
         channel.trigger("ready");
     },
 
@@ -147,33 +147,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * Setter for result.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setResult: function (value) {
-        this.set("result", value);
-    },
-
-    /**
-     * Setter for layerParams.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setLayerParams: function (value) {
-        this.set("layerParams", value);
-    },
-
-    /**
-     * Setter for isInitOpen.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setIsInitOpenArray: function (value) {
-        this.set("isInitOpen", value);
-    },
-
-    /**
      * todo
      * @param {*} value - todo
      * @returns {void}
@@ -201,12 +174,12 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
     /**
      * todo
+     * @param {string} layerIdString - The layerIds.
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
-    createLayerParams: function () {
-        var layerIdString = _.values(_.pick(this.get("result"), "LAYERIDS"))[0],
-            visibilityListString = _.has(this.get("result"), "VISIBILITY") ? _.values(_.pick(this.get("result"), "VISIBILITY"))[0] : "",
+    createLayerParams: function (layerIdString) {
+        var visibilityListString = _.has(this.get("result"), "VISIBILITY") ? _.values(_.pick(this.get("result"), "VISIBILITY"))[0] : "",
             transparencyListString = _.has(this.get("result"), "TRANSPARENCY") ? _.values(_.pick(this.get("result"), "TRANSPARENCY"))[0] : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
             visibilityList,
@@ -306,7 +279,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseMDID: function (result) {
-        var values = _.values(_.pick(result, "MDID"))[0].split(",");
+        var values = result.split(",");
 
         Config.tree.metaIdsToSelected = values;
         Config.view.zoomLevel = 0;
@@ -319,7 +292,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseProjection: function (result) {
-        var projection = _.values(_.pick(result, "PROJECTION")).pop();
+        var projection = result.pop();
 
         if (!_.isUndefined(projection)) {
             this.setProjectionFromUrl(projection);
@@ -332,12 +305,10 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @param {*} property - todo
      * @returns {void}
      */
-    parseCoordinates: function (result, property) {
-        var values = _.values(_.pick(result, property))[0].split("@")[1] ? _.values(_.pick(result, property))[0].split("@")[0].split(",") : _.values(_.pick(result, property))[0].split(",");
+    parseCoordinates: function (result) {
+        const coordinates = result.split(",");
 
-        // parse Strings to numbers
-        values = _.map(values, Number);
-        return values;
+        return coordinates.map(coordinate => parseFloat(coordinate, 10));
     },
 
     /**
@@ -346,7 +317,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseZOOMTOEXTENT: function (result) {
-        var values = _.values(_.pick(result, "ZOOMTOEXTENT"))[0].split(",");
+        const values = result.split(",");
 
         this.set("zoomToExtent", [parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3])]);
     },
@@ -357,17 +328,17 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseBezirk: function (result) {
-        var bezirk = _.values(_.pick(result, "BEZIRK"))[0],
-            bezirke = [
-                {name: "ALTONA", number: "2"},
-                {name: "HARBURG", number: "7"},
-                {name: "HAMBURG-NORD", number: "4"},
-                {name: "BERGEDORF", number: "6"},
-                {name: "EIMSBÜTTEL", number: "3"},
-                {name: "HAMBURG-MITTE", number: "1"},
-                {name: "WANDSBEK", number: "5"},
-                {name: "ALL", number: "0"}
-            ];
+        const bezirke = [
+            {name: "ALTONA", number: "2"},
+            {name: "HARBURG", number: "7"},
+            {name: "HAMBURG-NORD", number: "4"},
+            {name: "BERGEDORF", number: "6"},
+            {name: "EIMSBÜTTEL", number: "3"},
+            {name: "HAMBURG-MITTE", number: "1"},
+            {name: "WANDSBEK", number: "5"},
+            {name: "ALL", number: "0"}
+        ];
+        let bezirk = result;
 
         if (bezirk.length === 1) {
             bezirk = _.findWhere(bezirke, {number: bezirk});
@@ -386,75 +357,29 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * todo
-     * @param {*} result - todo
+     * Controls which tool is to be opened initially.
+     * @param {string} tool - Tool to be opened initially.
+     * @param {string} property - The parameter that is in URL.
      * @returns {void}
      */
-    parseBrwId: function (result) {
-        var brwId = _.values(_.pick(result, "BRWID"))[0];
-
-        this.setBrwId(brwId);
+    parseIsInitOpen: function (tool, property) {
+        /**
+         * STARTUPMODUL
+         * @deprecated in 3.0.0
+         */
+        if (property === "STARTUPMODUL") {
+            console.warn("Para,eter 'STARTUPMODUL' is deprecated. Please use 'ISINITOPEN' instead.");
+        }
+        this.get("isInitOpen").push(tool);
     },
 
     /**
      * todo
-     * @param {*} result - todo
+     * @param {*} value - todo
      * @returns {void}
      */
-    parseBrwLayerName: function (result) {
-        var brwLayerName = _.values(_.pick(result, "BRWLAYERNAME"))[0];
-
-        this.setBrwLayerName(brwLayerName);
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseFeatureId: function (result) {
-        var ids = _.values(_.pick(result, "FEATUREID"))[0];
-
-        this.setZoomToFeatureIds(ids.split(","));
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseZoomLevel: function (result) {
-        var value = _.values(_.pick(result, "ZOOMLEVEL"))[0];
-
-        this.set("zoomLevel", value);
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseIsInitOpen: function (result) {
-        this.get("isInitOpen").push(_.values(_.pick(result, "ISINITOPEN"))[0].toUpperCase());
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseStartupModul: function (result) {
-        this.get("isInitOpen").push(_.values(_.pick(result, "STARTUPMODUL"))[0].toUpperCase());
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseQuery: function (result) {
-        var value = _.values(_.pick(result, "QUERY"))[0].toLowerCase(),
-            initString = "",
+    parseQuery: function (value) {
+        let initString = "",
             split;
 
         // Bei " " oder "-" im Suchstring
@@ -480,37 +405,74 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         else {
             initString = value.substring(0, 1).toUpperCase() + value.substring(1);
         }
-        this.set("initString", initString);
+        this.setIinitString(initString);
     },
 
     /**
-     * todo
-     * @param {*} result - todo
+     * Triggers the uiStyle for the modes: table or simple.
+     * @param {*} result - Table or simple style.
+     * @fires Core#RadioTriggerUtilSetUiStyle
      * @returns {void}
      */
     parseStyle: function (result) {
-        var value = _.values(_.pick(result, "STYLE"))[0].toUpperCase();
-
-        if (value && (value === "TABLE" || value === "SIMPLE")) {
-            Radio.trigger("Util", "setUiStyle", value);
+        if (result && (result === "TABLE" || result === "SIMPLE")) {
+            Radio.trigger("Util", "setUiStyle", result);
         }
     },
 
     /**
-     * Parse the URL parameters
+     * Possible parameters that can be specified in the URL.
+     * @returns {object} The possible URL-parameters.
+     */
+    possibleUrlParameters: function () {
+        return {
+            "ALTITUDE": this.evaluateCameraParameters.bind(this),
+            "BEZIRK": this.parseBezirk.bind(this),
+            "BRWID": this.setBrwId.bind(this),
+            "BRWLAYERNAME": this.setBrwLayerName.bind(this),
+            "CENTER": this.setCenter.bind(this),
+            "CLICKCOUNTER": this.setClickCounter.bind(this),
+            "FEATUREID": this.setZoomToFeatureIds.bind(this),
+            "FILTER": this.setFilter.bind(this),
+            "HEADING": this.evaluateCameraParameters.bind(this),
+            "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
+            "LAYERIDS": this.createLayerParams.bind(this),
+            "ISINITOPEN": this.parseIsInitOpen.bind(this),
+            "MAP": this.adjustStartingMap3DParameter.bind(this),
+            "MARKER": this.setMarkerFromUrl.bind(this),
+            "MDID": this.parseMDID.bind(this),
+            "PROJECTION": this.parseProjection.bind(this),
+            "QUERY": this.parseQuery.bind(this),
+            "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
+            "STYLE": this.parseStyle.bind(this),
+            "TILT": this.evaluateCameraParameters.bind(this),
+            "ZOOMLEVEL": this.setZoomLevel.bind(this),
+            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this)
+        };
+    },
+
+    /**
+     * Parse the URL parameters.
+     * @param {string} query - URL --> everything after ? if available.
+     * @param {object} possibleUrlParameters - The possible URL-parameters.
      * @returns {void}
      */
-    parseURL: function () {
-        // Parsen des parametrisierten Aufruf --> http://wscd0096/libs/lgv/portale/master?layerIDs=453,1346&center=555874,5934140&zoomLevel=4
-        var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {},
-            value;
+    parseURL: function (query, possibleUrlParameters) {
+        const result = {};
 
         if (query.length > 0) {
-            query.split("&").forEach(function (keyValue) {
-                var item = keyValue.split("=");
+            query.split("&").forEach(parameterFromUrl => {
+                const parameterFromUrlAsArray = parameterFromUrl.split("="),
+                    parameterNameUpperCase = parameterFromUrlAsArray[0].toUpperCase(),
+                    parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
 
-                result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
+                result[parameterNameUpperCase] = parameterValue;
+                if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
+                    possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
+                }
+                else {
+                    console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
+                }
             });
             this.setResult(result);
         }
@@ -519,148 +481,76 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         }
 
         /**
-         * This parameter is used to call GeoOnline from the transparency portal.
+         * MDID: This parameter is used to call GeoOnline from the transparency portal.
          * The corresponding data set is to be displayed.
          * Behind the parameter Id is the metadataId of the metadata record.
          * The metadata record ID is written to the config.
          */
-        if (_.has(result, "MDID")) {
-            this.parseMDID(result);
-        }
-
-        if (_.has(result, "PROJECTION")) {
-            this.parseProjection(result);
-        }
 
         /**
-         * Returns the initial center coordinate.
+         * CENTER: Returns the initial center coordinate.
          * If the parameter "center" exists its value is returned, otherwise the default value.
          * Specification of the EPSG code of the coordinate via "@".
          */
-        if (_.has(result, "CENTER")) {
-            this.setCenter(this.parseCoordinates(result, "CENTER"));
-        }
 
-        // Sets a marker, if present in the URL.
-        if (_.has(result, "MARKER")) {
-            this.setMarkerFromUrl(this.parseCoordinates(result, "MARKER"));
-        }
-
-        if (_.has(result, "ZOOMTOEXTENT")) {
-            this.parseZOOMTOEXTENT(result);
-        }
-
-        if (_.has(result, "BEZIRK")) {
-            this.parseBezirk(result);
-        }
-
-        if (_.has(result, "BRWID")) {
-            this.parseBrwId(result);
-        }
-        if (_.has(result, "BRWLAYERNAME")) {
-            this.parseBrwLayerName(result);
-        }
+        // MARKER: Sets a marker, if present in the URL.
 
         /**
-         * Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
+         * LAYERIDS: Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
          * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
          */
-        if (_.has(result, "LAYERIDS") && result.LAYERIDS.length > 0) {
-            this.createLayerParams();
-        }
 
-        if (_.has(result, "FEATUREID")) {
-            this.parseFeatureId(result);
-        }
 
         /**
-         * Gibt die initiale Resolution (Zoomlevel) zurück.
+         * ZOOMLEVEL: Gibt die initiale Resolution (Zoomlevel) zurück.
          * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
          */
-        if (_.has(result, "ZOOMLEVEL")) {
-            this.parseZoomLevel(result);
-        }
 
         /**
-        * Initial zu startendes Modul
+        * ISINITOPEN: Initial zu startendes Modul
         *
         */
-        if (_.has(result, "ISINITOPEN")) {
-            this.parseIsInitOpen(result);
-        }
 
         /**
-        * Rückwärtskompatibel: entspricht isinitopen
-        */
-        if (_.has(result, "STARTUPMODUL")) {
-            this.parseStartupModul(result);
-        }
-
-        /**
+        * STYLE: blendet alle Bedienelemente aus - für MRH
         *
         */
-        if (_.has(result, "QUERY")) {
-            this.parseQuery(result);
-        }
+    },
 
-        /**
-        * blendet alle Bedienelemente aus - für MRH
-        *
-        */
-        if (_.has(result, "STYLE")) {
-            this.parseStyle(result);
-        }
-
-        if (_.has(result, "FILTER")) {
-            value = _.values(_.pick(result, "FILTER"))[0];
-
-            this.set("filter", JSON.parse(value));
-        }
-
-        /**
-         * passt den Config startingMap3D Parameter an.
-         */
-        if (_.has(result, "MAP")) {
-            value = _.values(_.pick(result, "MAP"))[0].toUpperCase();
-
-            if (value === "2D") {
-                Config.startingMap3D = false;
-            }
-            else if (value === "3D") {
-                Config.startingMap3D = true;
-            }
-        }
-
-        if (!Config.cameraParameter) {
+    /**
+     * Evaluates and sets the camera parameters
+     * @param {*} result - the value for the camera
+     * @param {string} property - represents the camera element
+     * @returns {void}
+     */
+    evaluateCameraParameters: function (result, property) {
+        if (!Config.hasOwnProperty("cameraParameter")) {
             Config.cameraParameter = {};
         }
-        /**
-         * wertet die Camera Parameter( heading, tilt, altitude) aus
-         */
-        if (_.has(result, "HEADING")) {
-            value = _.values(_.pick(result, "HEADING"))[0];
 
-            Config.cameraParameter.heading = value;
+        Config.cameraParameter[property.toLowerCase()] = result;
+    },
+
+    /**
+     * Sets the clickCounter staticLink to the Config.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setClickCounter: function (value) {
+        Config.clickCounter.staticLink = value;
+    },
+
+    /**
+     * aAjusts the Config startingMap3D parameter.
+     * @param {string} mapMode - The map Mode, 2D or 3D.
+     * @returns {void}
+     */
+    adjustStartingMap3DParameter: function (mapMode) {
+        if (mapMode === "2D") {
+            Config.startingMap3D = false;
         }
-        if (_.has(result, "TILT")) {
-            value = _.values(_.pick(result, "TILT"))[0];
-
-            Config.cameraParameter.tilt = value;
-        }
-        if (_.has(result, "ALTITUDE")) {
-            value = _.values(_.pick(result, "ALTITUDE"))[0];
-
-            Config.cameraParameter.altitude = value;
-        }
-        if (_.has(result, "HIGHLIGHTFEATURE")) {
-            value = _.values(_.pick(result, "HIGHLIGHTFEATURE"))[0];
-
-            this.set("highlightfeature", value);
-        }
-        if (_.has(result, "CLICKCOUNTER")) {
-            value = _.values(_.pick(result, "CLICKCOUNTER"))[0];
-
-            Config.clickCounter.staticLink = value;
+        else if (mapMode === "3D") {
+            Config.startingMap3D = true;
         }
     },
 
@@ -700,39 +590,12 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             window.history.replaceState({}, "", baseUrl + params);
         }
 
-        this.parseURL();
-    },
-
-    /**
-     * Setter for zoomToGeometry.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setZoomToGeometry: function (value) {
-        this.set("zoomToGeometry", value);
-    },
-
-    /**
-     * Setter for zoomLevel.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setZoomLevel: function (value) {
-        this.set("zoomLevel", value);
-    },
-
-    /**
-     * Setter for zoomToFeatureIds.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setZoomToFeatureIds: function (value) {
-        this.set("zoomToFeatureIds", value);
+        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
 
     /**
      * Setter for brwId.
-     * @param {String} value - Brw id
+     * @param {String} value - The Id from the groundValue (dt. Bodenrichtwert).
      * @returns {void}
      */
     setBrwId: function (value) {
@@ -749,6 +612,69 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
+     * Setter for center.
+     * @param {String} coordinate - The center-coordinate for the map.
+     * @returns {void}
+     */
+    setCenter: function (coordinate) {
+        this.set("center", this.parseCoordinates(coordinate, "CENTER"));
+    },
+
+    /**
+     * Sets the filter.
+     * @param {string} value - Filer values.
+     * @returns {void}
+     */
+    setFilter: function (value) {
+        this.set("filter", JSON.parse(value));
+    },
+
+    /**
+     * Sets the highlightfeature.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setHighlightfeature: function (value) {
+        this.set("highlightfeature", value);
+    },
+
+    /**
+     * Sets the highlightfeature.
+     * @param {*} initString - todo
+     * @returns {void}
+     */
+    setInitString: function (initString) {
+        this.set("initString", initString);
+    },
+
+    /**
+     * Setter for isInitOpen.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setIsInitOpenArray: function (value) {
+        this.set("isInitOpen", value);
+    },
+
+    /**
+     * Setter for layerParams.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setLayerParams: function (value) {
+        this.set("layerParams", value);
+    },
+
+    /**
+     * Setter for markerFromUrl.
+     * @param {String} coordinate - Coordinate for the marker.
+     * @returns {void}
+     */
+    setMarkerFromUrl: function (coordinate) {
+        this.set("markerFromUrl", this.parseCoordinates(coordinate, "MARKER"));
+    },
+
+    /**
      * Setter for projectionFromUrl.
      * @param {String} value - todo
      * @returns {void}
@@ -757,22 +683,41 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         this.set("projectionFromUrl", value);
     },
 
+
     /**
-     * Setter for center.
-     * @param {String} value - todo
+     * Setter for result.
+     * @param {*} value - todo
      * @returns {void}
      */
-    setCenter: function (value) {
-        this.set("center", value);
+    setResult: function (value) {
+        this.set("result", value);
     },
 
     /**
-     * Setter for markerFromUrl.
-     * @param {String} value - todo
+     * Setter for zoomLevel.
+     * @param {*} value - todo
      * @returns {void}
      */
-    setMarkerFromUrl: function (value) {
-        this.set("markerFromUrl", value);
+    setZoomLevel: function (value) {
+        this.set("zoomLevel", value);
+    },
+
+    /**
+     * Setter for zoomToFeatureIds.
+     * @param {*} ids - Feature IDs.
+     * @returns {void}
+     */
+    setZoomToFeatureIds: function (ids) {
+        this.set("zoomToFeatureIds", ids.split(","));
+    },
+
+    /**
+     * Setter for zoomToGeometry.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setZoomToGeometry: function (value) {
+        this.set("zoomToGeometry", value);
     }
 });
 
