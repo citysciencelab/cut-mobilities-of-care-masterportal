@@ -1,6 +1,7 @@
 import ThemeView from "../../view";
 import DefaultTemplate from "text-loader!./template.html";
 import MouseoverTemplate from "text-loader!./mouseoverTemplate.html";
+import SchulenWohnortModel from "./model";
 
 /**
  * @member SchulenWohnortThemeTemplate
@@ -17,18 +18,19 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
      */
     tagName: "div",
     className: "gfi-school-address",
-    template: _.template(DefaultTemplate),
-    mouseoverTemplate: _.template(MouseoverTemplate),
+
     initialize: function () {
         this.template = _.template(DefaultTemplate);
-
+        this.mouseoverTemplate = _.template(MouseoverTemplate);
+        this.model = new SchulenWohnortModel();
         this.listenTo(this.model, {
-            "change:isActive": this.render,
-            "renderMouseover": this.renderMouseover
+            "renderMouseover": this.renderMouseHover
         });
+        this.render();
     },
 
-    renderMouseover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
+
+    renderMouseHover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
         const name = school.get("C_S_Name"),
             address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
             totalSum = school.get("C_S_SuS"),
@@ -51,28 +53,13 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
                 level: level
             };
 
-        console.log(attr);
         school.set("html", this.mouseoverTemplate(attr));
-
-        return this;
     },
 
-    /**
-     * generates the print modul
-     * @param {Backbone.Model} model - Print Model
-     * @return {Backbone.View} itself
-     */
-    render: function (model) {
-        var attributes = model.toJSON();
+    render: function () {
+        const attr = this.model.toJSON();
 
-        if (model.get("isActive")) {
-            this.$el.html(this.template(attributes));
-            this.delegateEvents();
-        }
-        else {
-            this.$el.empty();
-        }
-
+        this.$el.html(this.template(attr));
         return this;
     }
 

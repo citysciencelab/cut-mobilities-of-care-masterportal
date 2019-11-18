@@ -211,7 +211,8 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             if (urbanAreaFinal) {
                 featureIds.push(school.getId());
 
-                school.set("html", this.getHtml(school, accountsAll, urbanAreaFinal, layerSchoolLevel));
+                // school.set("html", this.getHtml(school, accountsAll, urbanAreaFinal, layerSchoolLevel));
+                this.trigger("renderMouseover", school, accountsAll, urbanAreaFinal, layerSchoolLevel);
             }
         }.bind(this));
 
@@ -249,7 +250,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             socialIndex: socialIndex,
             percentage: percentage,
             sum: sum,
-            level: {"primary": "Primarstufe", "secondary": "Sekundarstufe I"}
+            level: level
         });
     },
 
