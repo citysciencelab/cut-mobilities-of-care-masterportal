@@ -22,12 +22,20 @@ const BalkendiagrammTheme = Theme.extend({
         this.listenTo(this, {
             "change:isReady": function () {
                 const layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
-                    gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat,
-                    gfiProperties = this.get("gfiContent").allProperties,
-                    statisticWithYear = this.getStatisticWithYear(gfiProperties, gfiBildungsatlasFormat.themeCategory, "jahr_"),
-                    latestValue = statisticWithYear.length >= 1 ? statisticWithYear[statisticWithYear.length - 1].number : null,
-                    rawTableContent = this.getRawTableContent(gfiProperties, gfiBildungsatlasFormat.layerType, gfiBildungsatlasFormat.themeUnit, latestValue),
+                    gfiProperties = this.get("gfiContent").allProperties;
+                let gfiBildungsatlasFormat,
+                    statisticWithYear,
+                    latestValue,
+                    rawTableContent,
+                    tableContent;
+
+                if (layerList && Array.isArray(layerList) && layerList[0].get("gfiFormat") && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
+                    gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
+                    statisticWithYear = this.getStatisticWithYear(gfiProperties, gfiBildungsatlasFormat.themeCategory, "jahr_");
+                    latestValue = statisticWithYear.length >= 1 ? statisticWithYear[statisticWithYear.length - 1].number : null;
+                    rawTableContent = this.getRawTableContent(gfiProperties, gfiBildungsatlasFormat.layerType, gfiBildungsatlasFormat.themeUnit, latestValue);
                     tableContent = this.getRevertData(rawTableContent, gfiBildungsatlasFormat.themeUnit, gfiProperties.stadtteil);
+                }
 
                 // set the tableContent for the template
                 this.set("tableContent", tableContent);
