@@ -51,6 +51,7 @@ const BalkendiagrammTheme = Theme.extend({
                 // set the statistic with year for BarGraph
                 this.set("dataset", statisticWithYear);
             },
+
             "change:isVisible": function () {
                 const timeOut = this.checkIsMobile() ? 300 : 100;
 

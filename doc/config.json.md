@@ -404,8 +404,9 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|resolution|nein|Integer||Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
-|baselayer|nein|String||Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
+|resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
+|baselayer|nein|String||deprecated in 3.0.0, danach bitte layerId verwenden!: Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
+|layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
 
 **Beispiel overviewmap als Object:**
@@ -413,7 +414,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 #!json
 "overviewMap": {
     "resolution": 305.7487246381551,
-    "baselayer": "452",
+    "layerId": "452",
     "isInitOpen": false
 }
 ```
@@ -793,7 +794,10 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeuges im Menu.|false|
-|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
+|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
+|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
+|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
+|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
 
 **Beispiel einer GFI Konfiguration**
 ```
@@ -817,6 +821,16 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 }
 ```
 
+**Beispiel einer GFI Konfiguration zur Informationsabfrage von Features**
+```
+#!json
+"gfi":{
+    "name":"Informationen abfragen",
+    "glyphicon":"glyphicon-info-sign",
+    "isActive":true,
+    "centerMapMarkerPolygon":true
+}
+```
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules
@@ -1212,6 +1226,32 @@ Routing Modul.
     "bkgSuggestID": "2",
     "bkgGeosearchID": "3",
     "isInitOpen": false
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.gfi
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Requests oder GetFeature-Requests oder geladene Vektordaten abgefragt werden.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeugs im Menu.|false|
+|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
+|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
+|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
+
+**Beispiel**
+```
+#!json
+"gfi":{
+    "name":"Informationen abfragen",
+    "glyphicon":"glyphicon-info-sign",
+    "isActive":true,
+    "centerMapMarkerPolygon":true
 }
 ```
 

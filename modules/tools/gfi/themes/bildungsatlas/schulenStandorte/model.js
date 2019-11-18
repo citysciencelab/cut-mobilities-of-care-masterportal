@@ -1,6 +1,28 @@
 import Theme from "../../model";
 
 const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTheme.prototype */{
+    defaults: _.extend({}, Theme.prototype.defaults, {
+        // default values to be set for the template
+        C_S_Name: "",
+        C_S_Str: "",
+        C_S_HNr: "",
+        C_S_PLZ: "",
+        C_S_Ort: "",
+        C_S_SI: "nicht vergeben",
+        SchPu_PrSt: "",
+        C_S_SuS_ES: "",
+        C_S_GTA: "",
+        C_S_Zweig: "",
+        C_S_SuS: "",
+        C_S_SuS_PS: "",
+        C_S_SuS_S1: "",
+        C_S_SuS_S2: "",
+        Schule_SuS: "",
+        Schule_PS: "",
+        Schule_S1: "",
+        Schule_S2: "",
+        C_S_HomP: ""
+    }),
     /**
      * @class SchulenStandorteViewTheme
      * @extends Theme
@@ -43,35 +65,10 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         this.set("schoolName", attr.C_S_Name);
         this.set("streetNo", attr.C_S_Str + " " + attr.C_S_HNr);
         this.set("postCity", attr.C_S_PLZ + " " + attr.C_S_Ort);
-
-        if (attr.C_S_SI !== undefined) {
-            this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
-        }
-        else {
-            this.set("socialIndex", "");
-        }
-
-        if (attr.SchPu_PrSt !== undefined) {
-            this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
-        }
-        else {
-            this.set("hooverSchool", "");
-        }
-
-        if (attr.C_S_SuS_ES !== undefined) {
-            this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
-        }
-        else {
-            this.set("preSchool", "");
-        }
-
-        if (attr.C_S_GTA !== undefined) {
-            this.set("allDaySchool", attr.C_S_GTA === 0 ? "nein" : "ja");
-        }
-        else {
-            this.set("allDaySchool", "");
-        }
-
+        this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
+        this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
+        this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
+        this.set("allDaySchool", attr.C_S_GTA === 0 ? "nein" : "ja");
         this.set("schoolWithBranch", attr.C_S_Zweig);
         this.set("countStudentsAll", attr.C_S_SuS.toString().replace(regex, "."));
         this.set("countStudents", (attr.C_S_SuS - attr.C_S_SuS_ES).toString().replace(regex, "."));

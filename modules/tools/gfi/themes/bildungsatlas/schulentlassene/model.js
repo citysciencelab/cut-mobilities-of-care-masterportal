@@ -82,12 +82,14 @@ const SchulentlasseneTheme = Theme.extend({
 
                 this.setTemplateValues(this.get("gfiContent").allProperties, this.get("legendAbschluesse"), this.get("maxYearsToShowInDiagrams"), this.get("ifbqKeys").relative, this.get("ifbqKeys").absolute, gfiFormat.gfiBildungsatlasFormat);
             },
-            "change:isVisible": function () {
+            "change:isVisible": function (model, isVisible) {
                 const timeOut = this.checkIsMobile() ? 300 : 100;
 
-                // as there is currently no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used
-                setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
-                setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
+                if (isVisible) {
+                    // as there seems to be currently no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used instead of a pure solution
+                    setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
+                    setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
+                }
             }
         });
 
@@ -132,8 +134,7 @@ const SchulentlasseneTheme = Theme.extend({
         }
 
         for (key in gfiProperties) {
-            // beautifyString in /modules/tools/gfi/themes/model.js removes the first "_" in key - so here we have to correct the key to be the real key again
-            this.set(key.replace(" ", "_"), gfiProperties[key]);
+            this.set(key, gfiProperties[key]);
         }
 
         // set the value for dataZeitverlauf which is used for the BarGraph zeitverlauf
