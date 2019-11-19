@@ -328,6 +328,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseBezirk: function (result) {
+        console.log(result);
+        
         const bezirke = [
             {name: "ALTONA", number: "2"},
             {name: "HARBURG", number: "7"},
@@ -353,6 +355,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             });
             return;
         }
+        console.log(bezirk.name);
+        
         this.setZoomToGeometry(bezirk.name);
     },
 
@@ -368,7 +372,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
          * @deprecated in 3.0.0
          */
         if (property === "STARTUPMODUL") {
-            console.warn("Para,eter 'STARTUPMODUL' is deprecated. Please use 'ISINITOPEN' instead.");
+            console.warn("Parameter 'STARTUPMODUL' is deprecated. Please use 'ISINITOPEN' instead.");
         }
         this.get("isInitOpen").push(tool);
     },
@@ -470,6 +474,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
                     possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
                 }
+                //todo Except VISIBILITY an TRANSPARENCY
                 else {
                     console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
                 }
