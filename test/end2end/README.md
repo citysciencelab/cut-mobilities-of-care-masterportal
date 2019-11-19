@@ -1,3 +1,3 @@
 please refer to
 
-* [Browser-Test-Dokumentation](browsertesting.md)
+* [Browser-Test-Dokumentation](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/browsertesting.md)
