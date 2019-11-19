@@ -294,19 +294,18 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     parseProjection: function (result) {
         var projection = result.pop();
 
-        if (!_.isUndefined(projection)) {
+        if (projection !== undefined) {
             this.setProjectionFromUrl(projection);
         }
     },
 
     /**
-     * todo
-     * @param {*} result - todo
-     * @param {*} property - todo
+     * Parse the coorinates from string to floats.
+     * @param {string} coordinatesFromUrl - Coordinates from URL.
      * @returns {void}
      */
-    parseCoordinates: function (result) {
-        const coordinates = result.split(",");
+    parseCoordinates: function (coordinatesFromUrl) {
+        const coordinates = coordinatesFromUrl.split(",");
 
         return coordinates.map(coordinate => parseFloat(coordinate, 10));
     },
@@ -323,41 +322,36 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * todo
-     * @param {*} result - todo
+     * Parse a Gemometry to be zoomed on.
+     * Only configured geometries are zoomed in.
+     * @param {*} gemometryFromUrl - Geometry to be zoomed on.
+     * @param {string} property - The parameter that is in URL.
      * @returns {void}
      */
-    parseBezirk: function (result) {
-        console.log(result);
-        
-        const bezirke = [
-            {name: "ALTONA", number: "2"},
-            {name: "HARBURG", number: "7"},
-            {name: "HAMBURG-NORD", number: "4"},
-            {name: "BERGEDORF", number: "6"},
-            {name: "EIMSBÜTTEL", number: "3"},
-            {name: "HAMBURG-MITTE", number: "1"},
-            {name: "WANDSBEK", number: "5"},
-            {name: "ALL", number: "0"}
-        ];
-        let bezirk = result;
+    parseZoomToGeometry: function (gemometryFromUrl, property) {
+        let geometries,
+            gemometryToZoom = "";
 
-        if (bezirk.length === 1) {
-            bezirk = _.findWhere(bezirke, {number: bezirk});
+        /**
+         * BEZIRK
+         * @deprecated in 3.0.0
+         */
+        if (property === "BEZIRK") {
+            console.warn("Parameter 'BEZIRK' is deprecated. Please use 'ZOOMTOGEOMETRY' instead.");
         }
-        else {
-            bezirk = _.findWhere(bezirke, {name: bezirk.trim().toUpperCase()});
+
+        if (Config.hasOwnProperty("zoomToGeometry") && Config.zoomToGeometry.hasOwnProperty("geometries")) {
+            geometries = Config.zoomToGeometry.geometries;
+
+            if (geometries.includes(gemometryFromUrl.toUpperCase())) {
+                gemometryToZoom = gemometryFromUrl.toUpperCase();
+            }
+            else if (Number.isInteger(parseInt(gemometryFromUrl, 10))) {
+                gemometryToZoom = geometries[parseInt(gemometryFromUrl, 10) - 1];
+            }
         }
-        if (_.isUndefined(bezirk)) {
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Konnte den Parameter Bezirk = " + _.values(_.pick(result, "BEZIRK"))[0] + " nicht auflösen.</small>",
-                kategorie: "alert-warning"
-            });
-            return;
-        }
-        console.log(bezirk.name);
-        
-        this.setZoomToGeometry(bezirk.name);
+
+        this.setZoomToGeometry(gemometryToZoom);
     },
 
     /**
@@ -431,7 +425,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     possibleUrlParameters: function () {
         return {
             "ALTITUDE": this.evaluateCameraParameters.bind(this),
-            "BEZIRK": this.parseBezirk.bind(this),
+            "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
             "BRWID": this.setBrwId.bind(this),
             "BRWLAYERNAME": this.setBrwLayerName.bind(this),
             "CENTER": this.setCenter.bind(this),
@@ -451,7 +445,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "STYLE": this.parseStyle.bind(this),
             "TILT": this.evaluateCameraParameters.bind(this),
             "ZOOMLEVEL": this.setZoomLevel.bind(this),
-            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this)
+            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
+            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
         };
     },
 
@@ -474,7 +469,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
                     possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
                 }
-                //todo Except VISIBILITY an TRANSPARENCY
+                // todo Except VISIBILITY an TRANSPARENCY
                 else {
                     console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
                 }

@@ -4,7 +4,7 @@ import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 const ZoomToGeometry = Backbone.Model.extend({
     defaults: {
         wfsParams: {
-            url: "https://geodienste.hamburg.de/HH_WFS_Verwaltungsgrenzen",
+            url: "https://test-dienst",
             version: "1.1.0",
             typename: "app:bezirke",
             attribute: "bezirk_name"
@@ -12,7 +12,7 @@ const ZoomToGeometry = Backbone.Model.extend({
         isRender: false
     },
     initialize: function () {
-        var name = Radio.request("ParametricURL", "getZoomToGeometry"),
+        const name = Radio.request("ParametricURL", "getZoomToGeometry"),
             channel = Radio.channel("ZoomToGeometry");
 
         channel.on({

@@ -10,6 +10,27 @@ const Config = {
         wfsId: "4560",
         styleId: "location_eventlotse"
     },
+    zoomToGeometry: {
+        wfsParams: {
+            attribute: "bezirk_name",
+            url: "https://geodienste.hamburg.de/HH_WFS_Verwaltungsgrenzen",
+            version: "1.1.0",
+            typename: "app:bezirke"
+        },
+        layerId: "1692",
+        attribute: "bezirk_name",
+        typename: "app:bezirke",
+        geometries: [
+            "ALTONA",
+            "HARBURG",
+            "HAMBURG-NORD",
+            "BERGEDORF",
+            "EIMSBÜTTEL",
+            "HAMBURG-MITTE",
+            "WANDSBEK",
+            "ALL"
+        ]
+    },
     namedProjections: [
         // GK DHDN
         ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
