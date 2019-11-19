@@ -239,7 +239,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
             level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
 
         // triggere view an
-        this.trigger("renderMouseHover", {
+        this.trigger("renderMouseover", {
             accountsAll: accountsAll,
             urbanAreaFinal: urbanAreaFinal,
             layerSchoolLevel: layerSchoolLevel,

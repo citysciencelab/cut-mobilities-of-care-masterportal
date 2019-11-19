@@ -1,7 +1,6 @@
 import ThemeView from "../../view";
 import DefaultTemplate from "text-loader!./template.html";
 import MouseoverTemplate from "text-loader!./mouseoverTemplate.html";
-import SchulenWohnortModel from "./model";
 
 /**
  * @member SchulenWohnortThemeTemplate
@@ -18,19 +17,17 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
      */
     tagName: "div",
     className: "gfi-school-address",
+    template: _.template(DefaultTemplate),
+    mouseoverTemplate: _.template(MouseoverTemplate),
 
     initialize: function () {
-        this.template = _.template(DefaultTemplate);
-        this.mouseoverTemplate = _.template(MouseoverTemplate);
-        this.model = new SchulenWohnortModel();
         this.listenTo(this.model, {
-            "renderMouseover": this.renderMouseHover
+            "renderMouseover": this.renderMouseover
         });
-        this.render();
     },
 
-
-    renderMouseHover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
+    renderMouseover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
+        console.log("test");
         const name = school.get("C_S_Name"),
             address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
             totalSum = school.get("C_S_SuS"),
