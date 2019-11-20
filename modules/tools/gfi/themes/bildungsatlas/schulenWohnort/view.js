@@ -24,10 +24,11 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
         this.listenTo(this.model, {
             "renderMouseover": this.renderMouseover
         });
+
+        this.render();
     },
 
     renderMouseover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
-        console.log("test");
         const name = school.get("C_S_Name"),
             address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
             totalSum = school.get("C_S_SuS"),
