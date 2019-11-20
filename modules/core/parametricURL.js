@@ -2,12 +2,12 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
-        layerParams: [],
-        isInitOpen: [],
-        zoomToGeometry: "",
-        zoomToFeatureIds: [],
         brwId: undefined,
-        brwLayerName: undefined
+        brwLayerName: undefined,
+        isInitOpen: [],
+        layerParams: [],
+        zoomToFeatureIds: [],
+        zoomToGeometry: ""
     },
 
     /**
@@ -16,12 +16,26 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @extends Backbone.Model
      * @memberOf Core
      * @constructs
-     * @property {Array} layerParams=[] todo
-     * @property {Array} isInitOpen=[] todo
-     * @property {String} zoomToGeometry="" todo
-     * @property {Array} zoomToFeatureIds=[] todo
      * @property {*} brwId=undefined todo
      * @property {*} brwLayerName=undefined todo
+     * @property {Array} isInitOpen=[] todo
+     * @property {Array} layerParams=[] todo
+     * @property {Array} zoomToFeatureIds=[] todo
+     * @property {String} zoomToGeometry="" todo
+     *      * - CENTER: Returns the initial center coordinate.
+     * If the parameter "center" exists its value is returned, otherwise the default value.
+     * Specification of the EPSG code of the coordinate via "@".
+     * - ISINITOPEN: Initial zu startendes Modul
+     * - LAYERIDS: Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
+     * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
+     * - MARKER: Sets a marker, if present in the URL.
+     * - MDID: This parameter is used to call GeoOnline from the transparency portal.
+     * The corresponding data set is to be displayed.
+     * Behind the parameter Id is the metadataId of the metadata record.
+     * The metadata record ID is written to the config.
+     * - STYLE: blendet alle Bedienelemente aus - für MRH
+     * - ZOOMLEVEL: Gibt die initiale Resolution (Zoomlevel) zurück.
+     * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -105,6 +119,69 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
         this.parseURL(location.search.substr(1), this.possibleUrlParameters());
         channel.trigger("ready");
+    },
+
+    /**
+     * Parse the URL parameters.
+     * @param {string} query - URL --> everything after ? if available.
+     * @param {object} possibleUrlParameters - The possible URL-parameters.
+     * @returns {void}
+     */
+    parseURL: function (query, possibleUrlParameters) {
+        const result = {};
+
+        if (query.length > 0) {
+            query.split("&").forEach(parameterFromUrl => {
+                const parameterFromUrlAsArray = parameterFromUrl.split("="),
+                    parameterNameUpperCase = parameterFromUrlAsArray[0].toUpperCase(),
+                    parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
+
+                result[parameterNameUpperCase] = parameterValue;
+                if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
+                    possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
+                }
+                /* todo Except VISIBILITY an TRANSPARENCY and alert for user */
+                else {
+                    console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
+                }
+            });
+            this.setResult(result);
+        }
+        else {
+            this.setResult(undefined);
+        }
+    },
+
+    /**
+     * Delivers the possible parameters that can be specified in the URL.
+     * @returns {object} The possible URL-parameters.
+     */
+    possibleUrlParameters: function () {
+        return {
+            "ALTITUDE": this.evaluateCameraParameters.bind(this),
+            "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
+            "BRWID": this.setBrwId.bind(this),
+            "BRWLAYERNAME": this.setBrwLayerName.bind(this),
+            "CENTER": this.setCenter.bind(this),
+            "CLICKCOUNTER": this.setClickCounter.bind(this),
+            "FEATUREID": this.setZoomToFeatureIds.bind(this),
+            "FILTER": this.setFilter.bind(this),
+            "HEADING": this.evaluateCameraParameters.bind(this),
+            "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
+            "LAYERIDS": this.createLayerParams.bind(this),
+            "ISINITOPEN": this.parseIsInitOpen.bind(this),
+            "MAP": this.adjustStartingMap3DParameter.bind(this),
+            "MARKER": this.setMarkerFromUrl.bind(this),
+            "MDID": this.parseMDID.bind(this),
+            "PROJECTION": this.parseProjection.bind(this),
+            "QUERY": this.parseQuery.bind(this),
+            "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
+            "STYLE": this.parseStyle.bind(this),
+            "TILT": this.evaluateCameraParameters.bind(this),
+            "ZOOMLEVEL": this.setZoomLevel.bind(this),
+            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
+            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
+        };
     },
 
     /**
@@ -372,38 +449,39 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * todo
-     * @param {*} value - todo
+     * Parse parameter to search in searchbar.
+     * @param {string} query - The Searchquery.
      * @returns {void}
      */
-    parseQuery: function (value) {
-        let initString = "",
-            split;
+    parseQuery: function (query) {
+        let initString = "";
 
-        // Bei " " oder "-" im Suchstring
-        if (value.indexOf(" ") >= 0 || value.indexOf("-") >= 0) {
-
-            // nach " " splitten
-            split = value.split(" ");
-
-            _.each(split, function (splitpart) {
-                initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + " ";
-            });
-            initString = initString.substring(0, initString.length - 1);
-
-            // nach "-" splitten
-            split = "";
-            split = initString.split("-");
-            initString = "";
-            _.each(split, function (splitpart) {
-                initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + "-";
-            });
-            initString = initString.substring(0, initString.length - 1);
+        if (query.indexOf(" ") >= 0 || query.indexOf("-") >= 0) {
+            initString = this.convertInitialLettersToUppercase(query, " ");
+            initString = this.convertInitialLettersToUppercase(initString, "-");
         }
         else {
-            initString = value.substring(0, 1).toUpperCase() + value.substring(1);
+            initString = query.substring(0, 1).toUpperCase() + query.substring(1);
         }
-        this.setIinitString(initString);
+
+        this.setInitString(initString);
+    },
+
+    /**
+     * convert all initial letters to uppercase letters
+     * @param {string} [words=""] - Words with lettes.
+     * @param {string} [separator=" "] - Separator for split words.
+     * @returns {string} convertet Letters.
+     */
+    convertInitialLettersToUppercase: function (words = "", separator = " ") {
+        const split = words.split(separator);
+        let initString = "";
+
+        split.forEach(splitpart => {
+            initString += splitpart.substring(0, 1).toUpperCase() + splitpart.substring(1) + separator;
+        });
+
+        return initString.substring(0, initString.length - 1);
     },
 
     /**
@@ -416,105 +494,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         if (result && (result === "TABLE" || result === "SIMPLE")) {
             Radio.trigger("Util", "setUiStyle", result);
         }
-    },
-
-    /**
-     * Possible parameters that can be specified in the URL.
-     * @returns {object} The possible URL-parameters.
-     */
-    possibleUrlParameters: function () {
-        return {
-            "ALTITUDE": this.evaluateCameraParameters.bind(this),
-            "BEZIRK": this.parseZoomToGeometry.bind(this), // @deprecated in version 3.0.0
-            "BRWID": this.setBrwId.bind(this),
-            "BRWLAYERNAME": this.setBrwLayerName.bind(this),
-            "CENTER": this.setCenter.bind(this),
-            "CLICKCOUNTER": this.setClickCounter.bind(this),
-            "FEATUREID": this.setZoomToFeatureIds.bind(this),
-            "FILTER": this.setFilter.bind(this),
-            "HEADING": this.evaluateCameraParameters.bind(this),
-            "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
-            "LAYERIDS": this.createLayerParams.bind(this),
-            "ISINITOPEN": this.parseIsInitOpen.bind(this),
-            "MAP": this.adjustStartingMap3DParameter.bind(this),
-            "MARKER": this.setMarkerFromUrl.bind(this),
-            "MDID": this.parseMDID.bind(this),
-            "PROJECTION": this.parseProjection.bind(this),
-            "QUERY": this.parseQuery.bind(this),
-            "STARTUPMODUL": this.parseIsInitOpen.bind(this), // @deprecated in version 3.0.0
-            "STYLE": this.parseStyle.bind(this),
-            "TILT": this.evaluateCameraParameters.bind(this),
-            "ZOOMLEVEL": this.setZoomLevel.bind(this),
-            "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
-            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
-        };
-    },
-
-    /**
-     * Parse the URL parameters.
-     * @param {string} query - URL --> everything after ? if available.
-     * @param {object} possibleUrlParameters - The possible URL-parameters.
-     * @returns {void}
-     */
-    parseURL: function (query, possibleUrlParameters) {
-        const result = {};
-
-        if (query.length > 0) {
-            query.split("&").forEach(parameterFromUrl => {
-                const parameterFromUrlAsArray = parameterFromUrl.split("="),
-                    parameterNameUpperCase = parameterFromUrlAsArray[0].toUpperCase(),
-                    parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
-
-                result[parameterNameUpperCase] = parameterValue;
-                if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
-                    possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
-                }
-                // todo Except VISIBILITY an TRANSPARENCY
-                else {
-                    console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
-                }
-            });
-            this.setResult(result);
-        }
-        else {
-            this.setResult(undefined);
-        }
-
-        /**
-         * MDID: This parameter is used to call GeoOnline from the transparency portal.
-         * The corresponding data set is to be displayed.
-         * Behind the parameter Id is the metadataId of the metadata record.
-         * The metadata record ID is written to the config.
-         */
-
-        /**
-         * CENTER: Returns the initial center coordinate.
-         * If the parameter "center" exists its value is returned, otherwise the default value.
-         * Specification of the EPSG code of the coordinate via "@".
-         */
-
-        // MARKER: Sets a marker, if present in the URL.
-
-        /**
-         * LAYERIDS: Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
-         * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
-         */
-
-
-        /**
-         * ZOOMLEVEL: Gibt die initiale Resolution (Zoomlevel) zurück.
-         * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
-         */
-
-        /**
-        * ISINITOPEN: Initial zu startendes Modul
-        *
-        */
-
-        /**
-        * STYLE: blendet alle Bedienelemente aus - für MRH
-        *
-        */
     },
 
     /**
