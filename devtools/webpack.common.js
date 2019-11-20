@@ -6,7 +6,10 @@ const webpack = require("webpack"),
     rootPath = path.resolve(__dirname, "../"),
     customModulePath = path.resolve(rootPath, "customModules/"),
     customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
-    entryPoint = {masterportal: path.resolve(rootPath, "js/main.js")};
+    entryPoint = {
+        masterportal: path.resolve(rootPath, "js/main.js"),
+        ida: path.resolve(rootPath, "portalconfigs/ida/main.js")
+    };
 
 let portalEntryPoints = {};
 
