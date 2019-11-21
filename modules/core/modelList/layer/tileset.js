@@ -66,7 +66,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         });
 
         // Hides features by id if config param has "hiddenFeatures"
-        if (this.has("hiddenFeatures")) {
+        if (this.has("hiddenFeatures") && this.get("isSelected") === true) {
             this.hideObjects(this.get("hiddenFeatures"));
         }
 
