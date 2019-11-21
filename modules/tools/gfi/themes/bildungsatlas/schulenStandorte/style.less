@@ -1,2 +1,19 @@
-// styles befinden sich dort: portalconfigs/bildungsatlas/portal.css
-// hier definierte styles überschreiben vieles, z.B. die Klassen "gfi gfi-detached ui-draggable" - Das ist nicht gewuenscht!
+.gfi-schule {
+    max-width: 420px;
+    table {
+        &.table {
+            tbody {
+                tr{
+                    td {
+                        &:last-child {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .gfi-info {
+        padding: 0 10px 10px;
+    }
+}
