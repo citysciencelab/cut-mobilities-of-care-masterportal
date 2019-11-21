@@ -6,42 +6,46 @@ const webpack = require("webpack"),
     rootPath = path.resolve(__dirname, "../"),
     customModulePath = path.resolve(rootPath, "customModules/"),
     customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
-    entryPoint = {
-        masterportal: path.resolve(rootPath, "js/main.js"),
-        ida: path.resolve(rootPath, "portalconfigs/ida/main.js")
-    };
+    portalconfigsIdaPath = path.resolve(rootPath, "portalconfigs/ida/main.js"),
+    entryPoints = {masterportal: path.resolve(rootPath, "js/main.js")};
 
-let portalEntryPoints = {};
+let customModuleEntryPoints = {};
 
-if (!fs.existsSync(customModuleConfigPath)) {
-    console.warn("############\n------------");
-    console.warn("WARNING: NO CUSTOM MODULE CONFIG FILE FOUND AT \"" + customModuleConfigPath + "\"");
+if (!fs.existsSync(portalconfigsIdaPath)) {
+    console.warn("NOTICE: " + portalconfigsIdaPath + " not found. Skipping entrypoint for \"IDA\"");
 }
 else {
-    portalEntryPoints = require(customModuleConfigPath);
+    entryPoints.ida = portalconfigsIdaPath;
+}
+
+if (!fs.existsSync(customModuleConfigPath)) {
+    console.warn("NOTICE: " + customModuleConfigPath + " not found. Skipping all custommodules.");
+}
+else {
+    customModuleEntryPoints = require(customModuleConfigPath);
 }
 
 module.exports = function () {
     const customModulesRelPaths = {};
 
-    for (const portalName in portalEntryPoints) {
-        if (typeof portalEntryPoints[portalName] !== "string") {
+    for (const customModuleName in customModuleEntryPoints) {
+        if (typeof customModuleEntryPoints[customModuleName] !== "string") {
             console.error("############\n------------");
-            throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + portalName + "\"\nABORTED...");
+            throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + customModuleName + "\"\nABORTED...");
         }
 
-        const customModuleFilePath = path.resolve(customModulePath, portalName, portalEntryPoints[portalName]);
+        const customModuleFilePath = path.resolve(customModulePath, customModuleName, customModuleEntryPoints[customModuleName]);
 
         if (!fs.existsSync(customModuleFilePath)) {
             console.error("############\n------------");
             throw new Error("ERROR: FILE DOES NOT EXIST \"" + customModuleFilePath + "\"\nABORTED...");
         }
 
-        customModulesRelPaths[portalName] = [portalName, portalEntryPoints[portalName]].join("/");
+        customModulesRelPaths[customModuleName] = [customModuleName, customModuleEntryPoints[customModuleName]].join("/");
     }
 
     return {
-        entry: entryPoint,
+        entry: entryPoints,
         stats: {
             all: false,
             assets: true,
