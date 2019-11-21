@@ -106,10 +106,10 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      */
     toggleSendButton: function (val) {
         if (val === true) {
-            this.$(".contactButton").removeClass("disabled");
+            this.$(".contactButton").prop("disabled", false);
         }
         else {
-            this.$(".contactButton").addClass("disabled");
+            this.$(".contactButton").prop("disabled", true);
         }
     },
 
