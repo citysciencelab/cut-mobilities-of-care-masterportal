@@ -37,11 +37,20 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      */
     getGfiTheme: function () {
         const gfiContent = this.get("gfiContent"),
-            gfiAttributes = this.get("gfiAttributes");
+            gfiAttributes = this.get("gfiAttributes"),
+            uiStyle = this.get("uiStyle");
+        let parentLocation = "",
+            contributionLink = "";
 
         Object.keys(gfiAttributes).forEach(value => {
             this.get("gfiAttributesDipas")[value] = gfiContent[0][gfiAttributes[value]] || value;
-        });
+        }, this);
+
+        if (uiStyle !== "TABLE" && Object.keys(this.gfiAttributesDipas).indexOf("link") > -1) {
+            parentLocation = window.parent.location;
+            contributionLink = parentLocation.split("#")[0] + "#/contribution/" + gfiContent.nid;
+            this.get("gfiAttributesDipas").link = contributionLink;
+        }
     },
 
     /**
