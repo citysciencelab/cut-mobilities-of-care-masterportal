@@ -46,9 +46,9 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
             this.get("gfiAttributesDipas")[value] = gfiContent[0][gfiAttributes[value]] || value;
         }, this);
 
-        if (uiStyle !== "TABLE" && Object.keys(this.gfiAttributesDipas).indexOf("link") > -1) {
-            parentLocation = window.parent.location;
-            contributionLink = parentLocation.split("#")[0] + "#/contribution/" + gfiContent.nid;
+        if (uiStyle !== "TABLE") {
+            parentLocation = document.referrer;
+            contributionLink = parentLocation.split("#")[0] + "#/contribution/" + gfiContent[0].nid;
             this.get("gfiAttributesDipas").link = contributionLink;
         }
     },
