@@ -184,6 +184,10 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
+        if (!this.isMap3d()) {
+            this.stopMouseMoveEvent();
+        }
+
         Radio.trigger("Map", "isReady", "gfi", false);
         if (Config.startingMap3D) {
             this.activateMap3d();
@@ -931,6 +935,25 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
         }
         return resultLayer;
+    },
+
+    /**
+     * DThe ol-overlaycontainer-stopevent container does not stop every event.
+     * Among other things the Mousemove Event. This method does that.
+     * @see {@link https://github.com/openlayers/openlayers/issues/4953}
+     * @returns {void}
+     */
+    stopMouseMoveEvent: function () {
+    // Firefox & Safari.
+        $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {
+            evt.stopPropagation();
+        });
+        $(".ol-overlaycontainer-stopevent").on("touchmove", function (evt) {
+            evt.stopPropagation();
+        });
+        $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
+            evt.stopPropagation();
+        });
     },
 
     /**
