@@ -9,58 +9,54 @@ import MouseoverTemplate from "text-loader!./mouseoverTemplate.html";
  */
 
 const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeView.prototype */{
-    /**
-     * @class SchulenWohnortThemeView
-     * @extends ThemeView
-     * @memberof Tools.GFI.Themes.Bildungsatlas
-     * @constructs
-     */
     tagName: "div",
     className: "gfi-school-address",
     template: _.template(DefaultTemplate),
     mouseoverTemplate: _.template(MouseoverTemplate),
 
+    /**
+     * @class SchulenWohnortThemeView
+     * @extends ThemeView
+     * @memberof Tools.GFI.Themes.Bildungsatlas
+     * @listens Layer#RadioTriggerLayerFeaturesLoaded
+     * @constructs
+     */
     initialize: function () {
-        this.listenTo(this.model, {
-            "renderMouseover": this.renderMouseover
+        ThemeView.prototype.initialize.apply(this);
+
+        // Fired only once when layer of statistical areas is loaded initially to filter areas
+        this.listenTo(Radio.channel("VectorLayer"), {
+            "featuresLoaded": this.showSchoolLayer
         });
 
-        this.render();
+        this.showSchoolLayer();
     },
 
-    renderMouseover: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
-        const name = school.get("C_S_Name"),
-            address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
-            totalSum = school.get("C_S_SuS"),
-            priSum = school.get("C_S_SuS_PS"),
-            socialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
-            percentage = Math.round(urbanAreaFinal) + "%",
-            sum = Math.round(accountsAll * urbanAreaFinal / 100),
-            level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
-            attr = {
-                accountsAll: accountsAll,
-                urbanAreaFinal: urbanAreaFinal,
-                layerSchoolLevel: layerSchoolLevel,
-                name: name,
-                address: address,
-                totalSum: totalSum,
-                priSum: priSum,
-                socialIndex: socialIndex,
-                percentage: percentage,
-                sum: sum,
-                level: level
-            };
+    /**
+     * activates selected features of the school layer and adds html data for mouse hovering
+     * @returns {Void}  -
+     */
+    showSchoolLayer: function () {
+        const layerSchools = this.model.getLayerSchools(),
+            urbanAreaNr = this.model.get("urbanAreaNr"),
+            schools = layerSchools.get("layer").getSource().getFeatures(),
+            featureIds = [];
+        let attr;
 
-        school.set("html", this.mouseoverTemplate(attr));
-    },
+        schools.forEach(function (school) {
+            const urbanAreaFinal = school.get("SG_" + urbanAreaNr);
 
-    render: function () {
-        const attr = this.model.toJSON();
+            if (urbanAreaFinal !== undefined) {
+                featureIds.push(school.getId());
 
-        this.$el.html(this.template(attr));
-        return this;
+                attr = this.model.getDataForMouseHoverTemplate(school, urbanAreaFinal);
+                school.set("html", this.mouseoverTemplate(attr));
+            }
+        }.bind(this));
+
+        layerSchools.setIsSelected(true);
+        this.model.showFeaturesByIds(layerSchools, featureIds);
     }
-
 });
 
 export default SchulenWohnortThemeView;

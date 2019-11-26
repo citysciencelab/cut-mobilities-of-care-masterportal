@@ -2,32 +2,32 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th colspan="2"><%= name %></th>
+            <th colspan="3"><%= name %></th>
         </tr>
     </thead>
     <tbody>
-        <tr colspan="2">
-            <td>Adresse: </td>
-            <td> <%= address %></td>
+        <tr>
+            <td width="25%">Adresse:</td>
+            <td colspan="2"><%= address %></td>
         </tr>
-        <tr colspan="2">
-            <td>Gesamtanzahl der Schüler:</td>
-            <td> <%= totalSum %></td>
+        <tr>
+            <td colspan="2">Gesamtanzahl der Schüler:</td>
+            <td width="25%"><%= totalSum %></td>
         </tr>
-        <tr colspan="2">
-            <td>Anzahl der Schülerinnen und Schüler<br> in der Primarstufe: </td>
-            <td> <%= priSum %></td>
+        <tr>
+            <td colspan="2">Anzahl der Schülerinnen und Schüler<br> in der Primarstufe:</td>
+            <td><%= priSum %></td>
         </tr>
-        <tr colspan="2">
-            <td>Sozialindex der Schüler: </td>
-            <td> <%= socialIndex %></td>
+        <tr>
+            <td colspan="2">Sozialindex der Schüler:</td>
+            <td><%= socialIndex %></td>
         </tr>
-        <tr colspan="2">
-            "<td>Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (" + level[layerSchoolLevel] + "): </td>" +
-            <td> <%= percentage %></td>
+        <tr>
+            <td colspan="2">Anteil der Schülerschaft des angeklickten<br> Gebiets, der diese Schule besucht<br> an der gesamten Schülerschaft des<br> angeklickten Gebiets (<%= schoolLevel %>:</td>
+            <td><%= percentage %></td>
         </tr>
-        <tr colspan="2">
-            <td>Anzahl: </td>
+        <tr>
+            <td colspan="2">Anzahl:</td>
             <td><%= sum %></td>
         </tr>
     </tbody>

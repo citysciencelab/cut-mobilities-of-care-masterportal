@@ -12,11 +12,19 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
          * @type {String}
          */
         layerTheme: "schulenWohnort",
+        /**
+         * level of schools - keys should equal layernameAreas keys
+         */
+        level: {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
+
+        themeType: "primary",
+        isViewMobile: false,
         isCreated: false,
         accountStudents: "",
         urbanArea: "",
         urbanAreaNr: ""
     }),
+
     /**
      * @class SchulenWohnortThemeModel
      * @extends Theme
@@ -31,8 +39,6 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      */
     initialize: function () {
-        this.set("isViewMobile", Radio.request("Util", "isViewMobile"));
-
         this.listenTo(this, {
             "change:isReady": this.onIsVisibleEvent
         });
@@ -42,333 +48,148 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     },
 
     /**
-     * Fired when GFI visibility changes
-     * @param   {boolean} visible gfi visibility
-     * @returns {void}
+     * sets isCreated to true if isVisible and not yet created
+     * @param   {Boolean} isVisible is gfi visible
+     * @returns {Void}  -
+     */
+    onIsVisibleEvent: function (isVisible) {
+        const layerStatisticAreas = this.getLayerStatisticAreas();
+
+        // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
+        if (isVisible && this.get("isCreated") === false) {
+            this.set("isCreated", true);
+
+            this.setGFIProperties();
+            this.showFeaturesByIds(layerStatisticAreas, [this.get("feature").getId()]);
+        }
+    },
+
+    /**
+     * Fired when GFI visibility changes, resets to area layer if GFI visibility is false
+     * @param   {Boolean} visible gfi visibility
+     * @returns {Void}  -
      */
     onGFIIsVisibleEvent: function (visible) {
         if (visible === false) {
             this.set("isCreated", false);
-            this.destroy();
-        }
-    },
-
-    /**
-     * Toggles the visibility of this GFI according to its visibitily.
-     * @param   {Boolean} isVisible is gfi visible
-     * @returns {void}
-     */
-    onIsVisibleEvent: function (isVisible) {
-        // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
-        if (isVisible && this.get("isCreated") === false) {
-            this.set("isCreated", true);
-            if (this.parseGfiContent(this.get("gfiContent"))) {
-                this.create();
-            }
-        }
-    },
-
-    /**
-     * Fired only once when layer of statistical areas is loaded initially to filter areas
-     * @param   {string} layerId  layerId that was loaded
-     * @returns {void}
-     */
-    onFeaturesLoadedEvent: function (layerId) {
-        const layerHomeAddress = this.getHomeAddressLayer(),
-            urbanAreaNr = this.get("urbanAreaNr");
-        let layerSchoolLevel,
-            conf,
-            layerStatistischeGebiete;
-
-        if (layerHomeAddress && layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
-            layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
-        }
-        else {
-            console.warn("Missing data for school level");
-        }
-
-        if (layerSchoolLevel) {
-            conf = this.getStatisticAreasConfig(layerSchoolLevel);
-            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
-        }
-        else {
-            console.warn("Missing data for school areas");
-        }
-
-        if (conf && layerId === conf.id) {
-            if (layerStatistischeGebiete && urbanAreaNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, urbanAreaNr, layerSchoolLevel);
-            }
-            else {
-                console.warn("Missing data for area filter");
-            }
+            this.reset();
         }
     },
 
     /**
      * Sets this GFI
-     * @listens Layer#RadioTriggerLayerFeaturesLoaded
-     * @returns {void}
+     * @returns {Void}  -
      */
-    create: function () {
-        if (this.parseGfiContent(this.get("gfiContent"))) {
-            const layerHomeAddress = this.getHomeAddressLayer(),
-                urbanAreaNr = this.get("urbanAreaNr"),
-                level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
-            let layerSchoolLevel,
-                layerStatistischeGebiete;
+    setGFIProperties: function () {
+        const allProperties = this.get("gfiContent").allProperties,
+            layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
+            gfiFormat = layerList[0].get("gfiFormat");
 
-            this.listenTo(Radio.channel("VectorLayer"), {
-                "featuresLoaded": this.onFeaturesLoadedEvent
-            });
+        this.set("themeType", gfiFormat.gfiBildungsatlasFormat.themeType);
+        this.set("isViewMobile", Radio.request("Util", "isViewMobile"));
 
-            if (layerHomeAddress) {
-                this.filterFeature(layerHomeAddress, [this.get("feature").getId()]);
-                if (layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
-                    layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
-                }
-            }
-            else {
-                console.warn("Missing data for layer theme type");
-            }
+        if (this.get("themeType") === "secondary") {
+            this.set("accountStudents", allProperties.C32_SuS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
+        else {
+            this.set("accountStudents", Math.round(allProperties.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
 
-            this.updateTemplateValue(this.get("accountStudents"), level, layerSchoolLevel, this.get("gfiContent").allProperties.C32_SuS);
+        this.set("urbanAreaNr", allProperties.StatGeb_Nr);
+        this.set("urbanArea", allProperties.ST_Name);
+    },
 
-            if (layerSchoolLevel) {
-                layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
-            }
-            else {
-                console.warn("Missing data for layer theme type");
-            }
+    /**
+     * shows the features of the area layer, hides school layers
+     * @returns {Void}  -
+     */
+    reset: function () {
+        const layerStatisticAreas = this.getLayerStatisticAreas(),
+            layerSchools = this.getLayerSchools();
 
-            if (layerStatistischeGebiete && urbanAreaNr !== "") {
-                this.filterAreasById(layerStatistischeGebiete, urbanAreaNr, layerSchoolLevel);
-            }
-            else {
-                console.warn("Missing data for layer area filter");
-            }
+        this.showAllFeatures(layerStatisticAreas);
+
+        if (layerSchools) {
+            this.showAllFeatures(layerSchools);
+            layerSchools.setIsSelected(false);
         }
     },
 
     /**
-     * Destroys this GFI and resets all layer data
-     * @returns {void}
+     * returns the html as hover information
+     * @param   {Object} school the school information
+     * @param   {Float} relativeNumberOfStudents the percentage of students in this school
+     * @returns {Array}  - the template data for mouseoverTemplate as requested by the view
      */
-    destroy: function () {
-        const layerHomeAddress = this.getHomeAddressLayer();
-        let layerSchoolLevel,
-            layerStatistischeGebiete;
-
-        if (layerHomeAddress) {
-            this.unfilterFeature(layerHomeAddress);
-            if (Array.isArray(layerHomeAddress) && layerHomeAddress[0].get("gfiFormat") && layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType) {
-                layerSchoolLevel = layerHomeAddress[0].get("gfiFormat").gfiBildungsatlasFormat.themeType;
-            }
-        }
-
-        if (layerSchoolLevel) {
-            layerStatistischeGebiete = this.getStatisticAreasLayer(layerSchoolLevel);
-        }
-
-        if (layerStatistischeGebiete) {
-            this.unfilterFeature([layerStatistischeGebiete]);
-            layerStatistischeGebiete.setIsSelected(false);
-        }
+    getDataForMouseHoverTemplate: function (school, relativeNumberOfStudents) {
+        return {
+            schoolLevel: this.get("level")[this.get("themeType")],
+            name: school.get("C_S_Name"),
+            address: school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
+            totalSum: school.get("C_S_SuS"),
+            priSum: school.get("C_S_SuS_PS"),
+            socialIndex: school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
+            percentage: Math.round(relativeNumberOfStudents) + "%",
+            sum: Math.round(this.get("accountStudents") * relativeNumberOfStudents / 100)
+        };
     },
 
     /**
-     * Filters the areas by schoolId
-     * @param   {integer} accountStudents - the account of the students
-     * @param   {object} level - the level object for primary and secondary school
-     * @param   {string} layerSchoolLevel - the current school layer level
-     * @param   {integer} accountStudentSecondary - the account of the secondary students
-     * @returns {void}
+     * returns the areas layer
+     * @returns {Object/Boolean}  - the areas layer or false if there is no such layer
      */
-    updateTemplateValue: function (accountStudents, level, layerSchoolLevel, accountStudentSecondary) {
-        if (accountStudents && layerSchoolLevel === "secondary") {
-            this.set("accountStudents", accountStudentSecondary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        }
+    getLayerStatisticAreas: function () {
+        const gfiTheme = this.get("layerTheme"),
+            themeId = this.get("themeId"),
+            layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": gfiTheme, "id": themeId});
 
-        this.set("schoolLevel", layerSchoolLevel);
-        this.set("level", level);
-    },
-
-    /**
-     * Filters the areas by schoolId
-     * @param   {Layer} layer Layer with statistical areas
-     * @param   {string} urbanAreaNr statistische Gebiete Number
-     * @param   {string} layerSchoolLevel pass the parameter for the school level
-     * @returns {void}
-     */
-    filterAreasById: function (layer, urbanAreaNr, layerSchoolLevel) {
-        const schools = layer.get("layer").getSource().getFeatures(),
-            featureIds = [],
-            accountsAll = this.get("accountStudents");
-
-        schools.forEach(function (school) {
-            const urbanAreaFinal = school.get("SG_" + urbanAreaNr);
-
-            if (urbanAreaFinal) {
-                featureIds.push(school.getId());
-
-                // school.set("html", this.getHtml(school, accountsAll, urbanAreaFinal, layerSchoolLevel));
-                this.trigger("renderMouseover", school, accountsAll, urbanAreaFinal, layerSchoolLevel);
-            }
-        }.bind(this));
-
-        layer.setIsSelected(true);
-        this.filterFeature([layer], featureIds);
-    },
-
-    /**
-     * returns  the html as hover ionformation
-     * @param   {object} school the school information
-     * @param   {number} accountsAll the whole number of students in this area
-     * @param   {float} urbanAreaFinal the percetage of students in this school
-     * @param   {string} layerSchoolLevel which level is the school
-     * @returns {string} text
-     */
-    getHtml: function (school, accountsAll, urbanAreaFinal, layerSchoolLevel) {
-        const name = school.get("C_S_Name"),
-            address = school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
-            totalSum = school.get("C_S_SuS"),
-            priSum = school.get("C_S_SuS_PS"),
-            socialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
-            percentage = Math.round(urbanAreaFinal) + "%",
-            sum = Math.round(accountsAll * urbanAreaFinal / 100),
-            level = {"primary": "Primarstufe", "secondary": "Sekundarstufe I"};
-
-        // triggere view an
-        this.trigger("renderMouseover", {
-            accountsAll: accountsAll,
-            urbanAreaFinal: urbanAreaFinal,
-            layerSchoolLevel: layerSchoolLevel,
-            name: name,
-            address: address,
-            totalSum: totalSum,
-            priSum: priSum,
-            socialIndex: socialIndex,
-            percentage: percentage,
-            sum: sum,
-            level: level
-        });
-    },
-
-    /**
-     * parses the gfiContent and sets all variables
-     * @param {object} gfiContent gfiContent
-     * @returns {boolean} valid true if gfiContent could be parsed
-     */
-    parseGfiContent: function (gfiContent) {
-        if (gfiContent && gfiContent.allProperties) {
-            const attr = gfiContent.allProperties;
-
-            this.set("accountStudents", Math.round(attr.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-            this.set("urbanArea", "Statistisches Gebiet: " + attr.StatGeb_Nr + "<br>(" + attr.ST_Name + ")");
-            this.set("urbanAreaNr", attr.StatGeb_Nr);
-
-            return true;
-        }
-
-        return false;
-    },
-
-    /**
-     * check which from layer primary school or secondary scholl
-     * @returns {LayerList} return if the current layer
-     */
-    getHomeAddressLayer: function () {
-        const layerList = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("layerTheme"), "id": this.get("themeId")});
-
-        if (!Array.isArray(layerList) || layerList.length === 0) {
-            console.warn("The layer does not exist");
+        if (!layers.length) {
             return false;
         }
 
-        return layerList;
+        return layers[0];
     },
 
     /**
      * Requests the Modellist for layer with layernameAreas. If necessary this function starts its creation.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @param {object} layerSchoolLevel get the key for the layers
-     * @returns {Layer|false} layers
+     * @returns {Layer|Boolean}  - the layer of schools or false if there aren't any
      */
-    getStatisticAreasLayer: function (layerSchoolLevel) {
-        let layer = Radio.request("ModelList", "getModelByAttributes", {"name": this.get("layernameAreas")[layerSchoolLevel]});
+    getLayerSchools: function () {
+        const modelAttributes = {"name": this.get("layernameAreas")[this.get("themeType")]},
+            conf = Radio.request("Parser", "getItemByAttributes", modelAttributes);
+        let layer = Radio.request("ModelList", "getModelByAttributes", modelAttributes);
 
         if (!layer) {
-            const conf = this.getStatisticAreasConfig(layerSchoolLevel);
-
-            if (!conf) {
-                console.warn("Cannot create layer without config.");
-
-                return false;
-            }
-            layer = this.addStatisticAreasLayer(conf);
+            Radio.trigger("ModelList", "addModelsByAttributes", {id: conf.id});
+            layer = Radio.request("ModelList", "getModelByAttributes", {id: conf.id});
+            layer.setIsSelected(true);
         }
-
-        return layer;
-    },
-
-    /**
-     * Requests the Parser for first layer with statistic areas by name
-     * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
-     * @param {object} layerSchoolLevel get the key for the layers
-     * @returns {object|false} conf
-     */
-    getStatisticAreasConfig: function (layerSchoolLevel) {
-        const conf = Radio.request("Parser", "getItemByAttributes", {"name": this.get("layernameAreas")[layerSchoolLevel]});
-
-        if (!conf) {
-            console.warn("No layer configuration with name: " + this.get("layernameAreas")[layerSchoolLevel]);
-
-            return false;
-        }
-
-        return conf;
-    },
-
-    /**
-     * Creates new layer by given configuration
-     * @param {object} conf layer configuration
-     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @returns {Layer} Layer
-     */
-    addStatisticAreasLayer: function (conf) {
-        Radio.trigger("ModelList", "addModelsByAttributes", {id: conf.id});
-        const layer = Radio.request("ModelList", "getModelByAttributes", {id: conf.id});
-
-        layer.setIsSelected(true);
 
         return layer;
     },
 
     /**
      * Hide all features in all given layers except all features with given id
-     * @param   {Layer[]} layers  Layers filtered by gfiTheme
-     * @param   {string[]} featureIds Array of feature Id to keep
-     * @returns {void}
+     * @param   {Object} layer the Layer filtered by gfiTheme
+     * @param   {String[]} featureIds Array of feature Id to keep
+     * @returns {Void}  -
      */
-    filterFeature: function (layers, featureIds) {
-        layers.forEach(function (layer) {
-            if (layer.get("isSelected")) {
-                layer.showFeaturesByIds(featureIds);
-            }
-        });
+    showFeaturesByIds: function (layer, featureIds) {
+        if (layer && layer.get("isSelected")) {
+            layer.showFeaturesByIds(featureIds);
+        }
     },
 
     /**
      * Show all features in all given layers
-     * @param   {Layer[]} layers Layers to show
-     * @returns {void}
+     * @param   {Object} layer Layer to show
+     * @returns {Void}  -
      */
-    unfilterFeature: function (layers) {
-        layers.forEach(function (layer) {
-            if (layer.get("isSelected")) {
-                layer.showAllFeatures();
-            }
-        });
+    showAllFeatures: function (layer) {
+        if (layer && layer.get("isSelected")) {
+            layer.showAllFeatures();
+        }
     }
 });
 

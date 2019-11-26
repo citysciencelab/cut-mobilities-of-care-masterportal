@@ -5,7 +5,7 @@
 </ul>
 <div class="tab-content">
     <div class="gfi-info tab-pane fade" id="info">
-        <% if (schoolLevel === "primary") %>
+        <% if (themeType === "primary") %>
             <br>
             <p><b>Schulwahl am Wohnort :</b></p>
             <br>
@@ -29,12 +29,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th colspan="2"><%= urbanArea %></th>
+                    <th colspan="2">Statistisches Gebiet: <%= urbanAreaNr %><br>(<%= urbanArea %>)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr colspan="2">
-                    <td> Anzahl der Schülerinnen und Schüler im statistischen Gebiet in der <%= level[schoolLevel] %>:</td>
+                    <td> Anzahl der Schülerinnen und Schüler im statistischen Gebiet in der <%= level[themeType] %>:</td>
                     <td><%= accountStudents %></td>
                 </tr>
             </tbody>
