@@ -18,8 +18,8 @@ import Filter from "../../tools/filter/model";
  * @deprecated in 3.0.0
  */
 import PrintV2 from "../../tools/print/model";
-import Print from "../../tools/print_/Mapfish3_PlotService";
-import HighResolutionPrint from "../../tools/print_/HighResolution_PlotService";
+import Print from "../../tools/print_/mapfish3PlotService";
+import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Measure from "../../tools/measure/model";
 import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
@@ -28,13 +28,13 @@ import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
-import KmlImport from "../../tools/kmlimport/model";
+import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
 import WfsFeatureFilter from "../../wfsfeaturefilter/model";
 import TreeFilter from "../../treefilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
-import FeatureLister from "../../featurelister/model";
+import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addwms/model";
 import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
@@ -45,8 +45,8 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
-import Viewpoint from "./viewpoint/model";
-import VirtualCityModel from "../../tools/virtualcity/model";
+import Viewpoint from "./viewPoint/model";
+import VirtualCityModel from "../../tools/virtualCity/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**

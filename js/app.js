@@ -9,21 +9,22 @@ import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
+import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomtofeature/model";
+import ZoomToFeature from "../modules/zoomToFeature/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import LayerinformationModel from "../modules/layerinformation/model";
+import LayerinformationModel from "../modules/layerInformation/model";
 import FooterView from "../modules/footer/view";
-import ClickCounterModel from "../modules/ClickCounter/model";
+import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleline/view";
+import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
@@ -42,15 +43,15 @@ import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlimport/view";
-import WFSFeatureFilterView from "../modules/wfsfeaturefilter/view";
+import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addwms/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
-import TreeFilterView from "../modules/treefilter/view";
+import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featurelister/view";
+import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 // @deprecated in version 3.0.0
 // remove "version" in doc and config.
@@ -105,6 +106,7 @@ function loadApp () {
     // RemoteInterface laden
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
+        new RadioMasterportalAPI();
     }
 
     if (_.has(Config, "quickHelp")) {
