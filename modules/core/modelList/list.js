@@ -31,7 +31,7 @@ import SaveSelection from "../../tools/saveSelection/model";
 import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
 import WfsFeatureFilter from "../../wfsFeatureFilter/model";
-import TreeFilter from "../../treefilter/model";
+import TreeFilter from "../../treeFilter/model";
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../featureLister/model";
