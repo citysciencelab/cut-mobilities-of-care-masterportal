@@ -7,11 +7,7 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import {fromCircle as circPoly} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
-import {getSize, getWidth} from "ol/extent";
-import {getView} from "ol/extent";
-import Map from 'ol/Map';
-import {toLonLat, transform} from 'ol/proj';
-
+import {toLonLat, transform} from "ol/proj";
 
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -23,7 +19,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         fontSize: 10,
         text: "Klicken Sie auf die Karte um den Text zu platzieren",
         circleRadiusInner: 0,
+        circleRadiusOuter: 0,
         color: [55, 126, 184, 1],
+        colorContour: [55, 126, 184, 1],
         radius: 6,
         strokeWidth: 1,
         opacity: 1,
@@ -75,6 +73,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         this.superInitialize();
 
+        this.setMethodCircle("interaktiv");
+
         channel.reply({
             "getLayer": function () {
                 return this.get("layer");
@@ -100,51 +100,85 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     this.createSelectInteractionAndAddToMap(layer, false);
                     this.createModifyInteractionAndAddToMap(layer, false);
                     this.off(this);
-                    this.createSourceListenerForStyling(layer);
                 }
             }
         });
+
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
-    },
-
-    newPointInDistance: function (lat, lon) {
-        // https://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
-        let earthRadius = 6378137,
-            offsetLon = 2000, // meters
-            offsetLat = 2000;
-
-        var deltaLat = offsetLat / earthRadius,
-            deltaLon = offsetLon / (earthRadius * Math.cos(Math.PI * lat/180)),
-            newPositionLat = lat + deltaLat * 180 / Math.PI,
-            newPositionLon = lon + deltaLon * 180 / Math.PI;
-
-        return [newPositionLon, newPositionLat];
     },
 
     /**
      * Creates an addfeature-Listener
-     * @param   {ol.layer} layer Layer, to which the Listener is registered
+     * @param   {ol.layer} layer - Layer, to which the Listener is registered.
+     * @param   {Boolean} doubleIsActive - Boolean to compute a double circle or single circle.
      * @returns {void}
      */
-    createSourceListenerForStyling: function (layer) {
+    createSourceListenerForStyling: function (layer, doubleIsActive) {
         var layerSource = layer.getSource();
 
         this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
-            let circleCenter = evt.feature.getGeometry().getCenter(),
-                circleCenterWGS = toLonLat(circleCenter, "EPSG:25832"),
-                coordinatesCircle = this.newPointInDistance(circleCenterWGS[1], circleCenterWGS[0]);
-                console.log(transform(coordinatesCircle, "EPSG:4326", "EPSG:25832"));
-            // let circleCenter = Radio.request("Map", "registerListener", "click", this.CalculateCircleCenter.bind(this));
-            var array = transform(coordinatesCircle, "EPSG:4326", "EPSG:25832");
-            array.push(circleCenter[0], circleCenter[1]);
-            console.log(array);
-            evt.feature.getGeometry().flatCoordinates = array;
-            // evt.feature.getGeometry().extent_ = coordinatesCircle;
-            console.log(evt.feature.getGeometry().flatCoordinates);
-            console.log(evt.feature);
-            evt.feature.setStyle(this.getStyle());
-            this.countupZIndex();
+            if (this.get("methodCircle") === "definiert" && this.get("drawType").geometry === "Circle") {
+                this.setDoubleCircle(doubleIsActive);
+                this.getDefinedRadius(evt);
+                evt.feature.setStyle(this.getStyle());
+                evt.feature.style_.text_ = "";
+                this.countupZIndex();
+            }
+            else {
+                this.setDoubleCircle(false);
+                evt.feature.setStyle(this.getStyle());
+                evt.feature.style_.text_ = "";
+                this.countupZIndex();
+            }
         }.bind(this)));
+    },
+
+    /**
+     * Getter to get the radius of the inner or outer circle.
+     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * @returns {void}
+     */
+    getDefinedRadius: function (evt) {
+        let circleRadius;
+
+        if (this.get("Doppelkreis") === true) {
+            circleRadius = this.get("circleRadiusOuter");
+        }
+        else {
+            circleRadius = this.get("circleRadiusInner");
+        }
+        this.addNewCoordinatesToFeature(evt, circleRadius);
+    },
+
+    /**
+     * Overwrites the flat coordinates of an existing (circle-) feature with recalculated ones.
+     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * @param   {Number} circleRadius - Diameter of the inner or outer circle, specified by the user.
+     * @returns {void}
+     */
+    addNewCoordinatesToFeature: function (evt, circleRadius) {
+        const circleCenter = evt.feature.getGeometry().getCenter(),
+            coordinatesCircle = this.newPointInDistance(circleCenter, circleRadius);
+
+        circleCenter.push(coordinatesCircle[0], coordinatesCircle[1]);
+        evt.feature.getGeometry().flatCoordinates = circleCenter;
+    },
+
+    /**
+     * Calculates new flat coordinates for the (circle-) feature.
+     * These coordiantes are calculated on the basis of the circle diameter specified by the user.
+     * @param   {Array} circleCenter - Centercoordinates of the circle.
+     * @param   {Array} circleRadius - Diameter of the new circle.
+     * @returns {Array} - returns new and transformed flat coordinates of the circle.
+     */
+    newPointInDistance: function (circleCenter, circleRadius) {
+        const earthRadius = 6378137,
+            offsetLat = circleRadius / 2,
+            circleCenterWGS = toLonLat(circleCenter, "EPSG:25832"),
+            deltaLat = offsetLat / earthRadius,
+            newPositionLat = circleCenterWGS[1] + deltaLat * 180 / Math.PI;
+
+        return transform([circleCenterWGS[0], newPositionLat], "EPSG:4326", "EPSG:25832");
     },
 
     /**
@@ -428,11 +462,21 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         return vectorLayer;
     },
     createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
-        var drawInteraction = this.createDrawInteraction(drawType, layer);
+        const drawInteraction1 = this.createDrawInteraction(drawType, layer);
 
+        this.processDrawInteraction(drawInteraction1, isActive, maxFeatures, false);
+
+        if (this.get("drawType").text === "Doppelkreis zeichnen") {
+            const drawInteraction2 = this.createDrawInteraction(drawType, layer);
+
+            this.processDrawInteraction(drawInteraction2, isActive, maxFeatures, true);
+        }
+    },
+
+    processDrawInteraction: function (drawInteraction, isActive, maxFeatures, doubleIsActive) {
         drawInteraction.setActive(isActive);
         this.setDrawInteraction(drawInteraction);
-        this.createDrawInteractionListener(drawInteraction, maxFeatures);
+        this.createDrawInteractionListener(drawInteraction, maxFeatures, doubleIsActive);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
     createSelectInteractionAndAddToMap: function (layer, isActive) {
@@ -459,12 +503,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {ol/interaction/Draw} draw
      */
     createDrawInteraction: function (drawType, layer) {
-        this.getResolutionMapView();
-        //this.zoomChangeListener();
-
-        // Radio.request("Map", "getMap").on("moveend", that.getResolutionMapView());
-        Radio.request("Map", "registerListener", "moveend", this.getResolutionMapView.bind(this));
-
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
@@ -472,30 +510,25 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         });
     },
 
-    zoomChangeListener: function () {
-        Radio.request("Map", "getMap").on("moveend", function () {
-            let newResolution = Radio.request("Map", "getMap").getView().getResolution();
-            this.set("ResolutionNumber", newResolution);
-        });
-    },
-
-    getResolutionMapView: function () {
-        let mapViewResolution = Radio.request("Map", "getMap").getView().getResolution();
-        this.setResolutionNumber(mapViewResolution);
-    },
-
-
     /**
-     * lister to change the entries for the next drawing
+     * Listener to change the entries for the next drawing.
      * @param {ol/interaction/Draw} drawInteraction - drawInteraction
-     * @param {integer} maxFeatures - maximal number of features to be drawn
+     * @param {integer} maxFeatures - maximal number of features to be drawn.
+     * @param {Boolean} doubleIsActive -  - Boolean to compute a double circle or single circle.
      * @return {void}
      */
-    createDrawInteractionListener: function (drawInteraction, maxFeatures) {
+    createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         var that = this;
+
+        drawInteraction.on("drawstart", function (evt) {
+            that.drawInteractionOnDrawevent(evt, drawInteraction, doubleIsActive);
+        });
 
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", _.uniqueId());
+            if (that.get("drawType").text === "Doppelkreis zeichnen") {
+                drawInteraction.setActive(false);
+            }
         });
 
         if (maxFeatures && maxFeatures > 0) {
@@ -516,6 +549,19 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }, this);
         }
     },
+
+    drawInteractionOnDrawevent: function (evt, drawInteraction, doubleIsActive) {
+        if (this.get("drawType").text === "Doppelkreis zeichnen") {
+            this.setMethodCircle("definiert", "Doppelkreis zeichnen");
+        }
+        this.createSourceListenerForStyling(this.get("layer"), doubleIsActive);
+        if (this.get("methodCircle") === "definiert") {
+            drawInteraction.finishDrawing();
+            this.setMethodCircle("interaktiv", "Kreis zeichnen");
+        }
+        evt.feature.set("styleId", _.uniqueId());
+    },
+
     updateDrawInteraction: function () {
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
@@ -531,32 +577,25 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         var style = new Style(),
             drawType = this.get("drawType"),
             color = this.get("color"),
+            colorContour = this.get("colorContour"),
             text = this.get("text"),
             font = this.get("font"),
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
             radius = this.get("radius"),
-            zIndex = this.get("zIndex"),
-            radiusToDisplay = this.metersToPixel(this.get("circleRadiusInner"), this.get("ResolutionNumber"));
+            zIndex = this.get("zIndex");
 
         if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
-
-            style = this.getCircleStyle(color, radiusToDisplay, strokeWidth, radius, zIndex);
+            style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
-            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex);
-            console.log(style);
+            style = this.getDrawStyle(color, colorContour, drawType.geometry, strokeWidth, radius, zIndex);
         }
 
         return style.clone();
-    },
-
-    metersToPixel: function (radiusInMeters, getResolutionMapView) {
-        let diameterInPixel = radiusInMeters / getResolutionMapView / 2;
-        return diameterInPixel;
     },
 
     /**
@@ -585,25 +624,37 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     /**
      * Creates and returns a feature style for points, lines, or faces and returns it
      * @param {number} color - of drawings
-     * @param {number} radiusToDisplay - radius of the inner circle
+     * @param {number} colorContour - color of the contours
      * @param {number} strokeWidth - from geometry
      * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getCircleStyle: function (color, radiusToDisplay, strokeWidth, zIndex) {
+    getCircleStyle: function (color, colorContour, strokeWidth, zIndex) {
         return new Style({
-            fill: new Fill({
-                color: color
+            text: new Text({
+                textAlign: "left",
+                text: "     Set where the center of the circle should be.",
+                font: "20px Arial",
+                fill: new Fill({
+                    color: "#000000"
+                })
             }),
             image: new Circle({
-                radius: radiusToDisplay,
+                radius: 6,
                 stroke: new Stroke({
-                    color: "#00ff44",
+                    color: colorContour,
                     width: strokeWidth
                 }),
                 fill: new Fill({
                     color: color
                 })
+            }),
+            stroke: new Stroke({
+                color: colorContour,
+                width: strokeWidth
+            }),
+            fill: new Fill({
+                color: color
             }),
             zIndex: zIndex
         });
@@ -612,26 +663,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     /**
      * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
+     * @param {number} colorContour - color of the contours
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
      * @param {number} radius - from geometry
      * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex) {
-        console.log("ausgeführt");
+    getDrawStyle: function (color, colorContour, drawGeometryType, strokeWidth, radius, zIndex) {
         return new Style({
             fill: new Fill({
                 color: color
             }),
             stroke: new Stroke({
-                color: color,
+                color: colorContour,
                 width: strokeWidth
             }),
             image: new Circle({
                 radius: drawGeometryType === "Point" ? radius : 6,
                 fill: new Fill({
-                    color: color
+                    color: drawGeometryType === "Point" ? color : colorContour
                 })
             }),
             zIndex: zIndex
@@ -654,8 +705,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         this.setRadius(this.defaults.radius);
         this.setCircleRadius(this.defaults.circleRadiusInner);
+        this.setCircleRadiusOuter(this.defaults.circleRadiusOuter);
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
+        this.setColorContour(defaultColor);
 
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
     },
@@ -839,6 +892,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
+     * activate the method "definiert", to define a circle by diameter.
+     * @return {void}
+     */
+    enableMethodDefiniert: function () {
+        $(".input-unit")[0].disabled = false;
+        $(".diameter")[0].disabled = false;
+    },
+
+    /**
      * setter for drawType
      * @param {string} value1 - geometry
      * @param {string} value2 - text
@@ -876,6 +938,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
+     * setter for color
+     * @param {array} value - color
+     * @return {void}
+     */
+    setColorContour: function (value) {
+        this.set("colorContour", value);
+    },
+
+    /**
      * setter for opacity
      * @param {number} value - opacity
      * @return {void}
@@ -908,7 +979,52 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     setCircleRadius: function (value) {
-        this.set("circleRadiusInner", parseFloat(value));
+        const selectedUnit = this.get("unit");
+        let valueRadius = value;
+
+        if (selectedUnit === "km") {
+            valueRadius = valueRadius * 1000;
+        }
+
+        this.set("circleRadiusInner", parseFloat(valueRadius));
+    },
+
+    /**
+     * setter for outer radius
+     * @param {number} value - radius
+     * @return {void}
+     */
+    setCircleRadiusOuter: function (value) {
+        const selectedUnit = this.get("unit");
+        let valueRadius = value;
+
+        if (selectedUnit === "km") {
+            valueRadius = valueRadius * 1000;
+        }
+
+        this.set("circleRadiusOuter", parseFloat(valueRadius));
+    },
+
+    setDoubleCircle: function (value) {
+        this.set("Doppelkreis", value);
+    },
+
+    /**
+     * Setter for unit
+     * @param {string} value - m/km
+     * @returns {void}
+     */
+    setUnit: function (value) {
+        this.set("unit", value);
+    },
+
+    /**
+     * Setter for the method to draw a circle.
+     * @param {string} value - interaktiv or definiert
+     * @returns {void}
+     */
+    setMethodCircle: function (value) {
+        this.set("methodCircle", value);
     },
 
     /**
@@ -982,10 +1098,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     */
     setZIndex: function (value) {
         this.set("zIndex", value);
-    },
-
-    setResolutionNumber: function (value) {
-        this.set("ResolutionNumber", value);
     }
 });
 
