@@ -92,12 +92,20 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
         if (isVisible && this.get("isCreated") === false) {
             const layerStatisticAreas = this.getLayerStatisticAreas(),
                 allProperties = this.get("gfiContent").allProperties,
-                layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
-                gfiFormat = layerList[0].get("gfiFormat");
+                layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
+
+            let gfiBildungsatlasFormat = {};
 
             this.set("isCreated", true);
 
-            this.setGFIProperties(allProperties, gfiFormat.gfiBildungsatlasFormat.themeType, Radio.request("Util", "isViewMobile"));
+            if (layerList && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
+                gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
+            }
+
+            if (gfiBildungsatlasFormat.themeType) {
+                this.setGFIProperties(allProperties, gfiBildungsatlasFormat.themeType, Radio.request("Util", "isViewMobile"));
+            }
+
             this.showFeaturesByIds(layerStatisticAreas, [this.get("feature").getId()]);
         }
     },
