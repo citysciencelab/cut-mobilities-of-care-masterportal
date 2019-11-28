@@ -184,7 +184,7 @@ Konfiguration des GDI Suchdienstes
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
-|queryObject|ja|Object||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false|
+|queryObject|ja|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false|
 
 **Beispiel**
 ```
@@ -202,6 +202,24 @@ Konfiguration des GDI Suchdienstes
 
 ***
 
+#### Portalconfig.searchBar.gdi.queryObject
+Todo
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|id|ja|String|""|Todo|false|
+|params|ja|**[params](#markdown-header-portalconfigsearchbargdiqueryobjectparams)**||Parameter Object für ElasticSearch.|false|
+
+***
+
+#### Portalconfig.searchBar.gdi.queryObject.params
+Todo
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|query_string|ja|String|"%%searchString%%"|Todo|false|
+
+***
 
 #### Portalconfig.searchBar.specialWFS
 Konfiguration der SpecialWFS Suche
@@ -796,7 +814,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
 |isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
 |centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
-|highlightVectorRules|nein|Object|undefined|Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
+|highlightVectorRules|nein|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
 
 **Beispiel einer GFI Konfiguration**
 ```
@@ -840,10 +858,58 @@ Liste der Einstellungen zum überschreiben von Vektorstyles bei GFI Abfragen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|fill|nein|Objekt|undefined|Mögliche Einstellung: color|false|
-|image|nein|Objekt|undefined|Mögliche Einstellung: scale|false|
-|stroke|nein|Objekt|undefined|Mögliche Einstellung: width|false|
-|text|nein|Objekt|undefined|Mögliche Einstellung: scale|false|
+|fill|nein|**[fill](#markdown-header-portalconfigmenutoolgfihighlightvectorrulesfill)**||Mögliche Einstellung: color|false|
+|image|nein|**[image](#markdown-header-portalconfigmenutoolgfihighlightvectorrulesimage)**||Mögliche Einstellung: scale|false|
+|stroke|nein|**[stroke](#markdown-header-portalconfigmenutoolgfihighlightvectorrulesstroke)**||Mögliche Einstellung: width|false|
+|text|nein|**[text](#markdown-header-portalconfigmenutoolgfihighlightvectorrulestext)**||Mögliche Einstellung: scale|false|
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules.fill
+Todo
+
+```
+#!json
+{
+    "color": [215, 102, 41, 0.9]
+}
+```
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules.image
+Todo
+
+```
+#!json
+{
+    "scale": 1.5
+}
+```
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules.stroke
+Todo
+
+```
+#!json
+{
+    "width": 4
+}
+```
+
+***
+
+##### Portalconfig.menu.tool.gfi.highlightVectorRules.text
+Todo
+
+```
+#!json
+{
+    "scale": 2
+}
+```
 
 ***
 
@@ -1155,6 +1221,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |isLegendSelected|nein|Boolean|false|Gibt an ob die Checkbox zum Legende mitdrucken aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
 |dpiForPdf|nein|Number|200|Auflösung der Karte im PDF.|false|
+
 **Beispiel Konfiguration mit MapfishPrint2**
 ```
 #!json
@@ -1538,7 +1605,7 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|shadowTime|nein|Object|Now()|Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
+|shadowTime|nein|**[shadowTime](#markdown-header-portalconfigmenutoolshadowshadowTime)**|Now()|Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
 |isShadowEnabled|nein|Boolean|false|Default Shadow-Wert. True um unmittelbar Shadow einzuschalten. False zum manuellen bestätigen.|
 
 
@@ -1556,6 +1623,24 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 }
 ```
 
+***
+
+#### Portalconfig.menu.tool.shadow.shadowTime
+
+[inherits]: # (Portalconfig.menu.tool.shadow)
+
+Todo
+
+**Beispiel**
+```
+#!json
+{
+    "month": "6",
+    "day": "20",
+    "hour": "13",
+    "minute": "0"
+}
+```
 
 ***
 
@@ -1981,7 +2066,7 @@ Hier werden Tileset typische Attribute aufgelistet.
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |hiddenFeatures|nein|Array|[]|Liste mit IDs, die in der Ebene versteckt werden sollen|
-|[cesium3DTilesetOptions]|nein|Object|{}|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
+|[cesium3DTilesetOptions]|nein|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
 
@@ -2001,6 +2086,23 @@ Hier werden Tileset typische Attribute aufgelistet.
 
 ***
 
+#### Themenconfig.Layer.Tileset.Cesium3DTilesetOptions
+
+[inherits]: # (Themenconfig.Layer.Tileset)
+
+Todo
+
+**Beispiel**
+```
+#!json
+"cesium3DTilesetOptions" : {
+    maximumScreenSpaceError : 6
+}
+```
+
+***
+
+
 #### Themenconfig.Layer.Terrain
 
 [inherits]: # (Themenconfig.Layer)
@@ -2009,7 +2111,7 @@ Hier werden Terrain typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|**[cesiumTerrainProviderOptions]**|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+|**[cesiumTerrainProviderOptions]**|nein|**[cesiumTerrainProviderOption](#markdown-header-themenconfiglayerterraincesiumterrainprovideroption)**||Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
 
 [cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
 
@@ -2023,6 +2125,21 @@ Hier werden Terrain typische Attribute aufgelistet.
     "cesiumTerrainProviderOptions": {
         "requestVertexNormals" : true
     },
+}
+```
+
+***
+
+#### Themenconfig.Layer.Terrain.CesiumTerrainProviderOptions
+
+[inherits]: # (Themenconfig.Layer)
+
+Todo
+
+```
+#!json
+"cesiumTerrainProviderOptions": {
+    "requestVertexNormals" : true
 }
 ```
 
@@ -2043,9 +2160,9 @@ Entity Optionen
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |url|ja|String|`""`|Url zu dem Modell|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
-|attributes|nein|Object|{}|Attribute für das Modell|`{"name": "test"}`|
-|latitude|ja|Number| |Breitengrad des Modell-Origins in Grad|`53.541831`|
-|longitude|ja|Number| |Längengrad des Modell-Origins in Grad|`9.917963`|
+|attributes|nein|**[attribute](#markdown-header-themenconfiglayerentities3dattribute)**||Attribute für das Modell|`{"name": "test"}`|
+|latitude|ja|Number||Breitengrad des Modell-Origins in Grad|`53.541831`|
+|longitude|ja|Number||Längengrad des Modell-Origins in Grad|`9.917963`|
 |height|nein|Number|0|Höhe des Modell-Origins|`10`|
 |heading|nein|Number|0|Rotation des Modells, in Grad|`0`|
 |pitch|nein|Number|0|Neigung des Modells in Grad |`0`|
@@ -2083,6 +2200,23 @@ Entity Optionen
 ```
 
 ***
+
+#### Themenconfig.Layer.Entitites3D
+
+[inherits]: # (Themenconfig.Layer.Entities3D)
+
+Todo
+
+**Beispiel**
+```
+#!json
+"attributes": {
+    "name": "Fernsehturm.kmz"
+}
+```
+
+***
+
 
 #### Themenconfig.Layer.StaticImage
 
