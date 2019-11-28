@@ -3,26 +3,61 @@ import Theme from "../../model";
 const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeModel.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults, {
         /**
-         * layer name of internal layer with Schule
+         * the theme type according to config.json -> gfiFormat.gfiBildungsatlasFormat.themeType (should equal school levels: primary, secondary)
          * @type {String}
          */
-        layernameAreas: {"primary": "internal Layer for primary schule am wohnort", "secondary": "internal Layer for middle schule am wohnort"},
+        themeType: "",
         /**
-         * layer theme to select school layers for wohnort
-         * @type {String}
+         * result of Radio.request("Util", "isViewMobile") - sourced out for testing purpose
          */
-        layerTheme: "schulenWohnort",
-        /**
-         * level of schools - keys should equal layernameAreas keys
-         */
-        level: {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
-
-        themeType: "primary",
         isViewMobile: false,
+        /**
+         * titles for level of schools for each possible themeType (school levels: primary, secondary)
+         */
+        schoolLevels: {"primary": "Primarstufe", "secondary": "Sekundarstufe I"},
+        /**
+         * the school level as well formed title based on schoolLevels and themeType
+         */
+        schoolLevelTitle: "",
+        /**
+         * correlation between the layer name as defined in config.json (see Themenconfig) and the themeType (school levels: primary, secondary)
+         * @type {Object}
+         */
+        layerNameCorrelation: {"primary": "internal Layer for primary schule am wohnort", "secondary": "internal Layer for middle schule am wohnort"},
+        /**
+         * simple switch to avoid double calls/events if layer is or is not created
+         */
         isCreated: false,
-        accountStudents: "",
-        urbanArea: "",
-        urbanAreaNr: ""
+        /**
+         * area code of the selected district
+         * @type {Integer}
+         */
+        StatGeb_Nr: 0,
+        /**
+         * name of the selected district
+         * @type {String}
+         */
+        ST_Name: "",
+        /**
+         * total number of students in primary schools living in the selected district
+         * @type {Integer}
+         */
+        C12_SuS: 0,
+        /**
+         * total number of students in middle schools living in the selected district
+         * @type {Integer}
+         */
+        C32_SuS: 0,
+        /**
+         * the total number of students to show in the gfi based on C12_SuS and C32_SuS choosen by themeType (total number in district)
+         * @type {Integer}
+         */
+        numberOfStudentsInDistrict: 0,
+        /**
+         * total number of students to show in the gfi based on numberOfStudents formated with thousand points - for calculations use numberOfStudents instead
+         * @type {String}
+         */
+        numberOfStudentsInDistrictFormated: ""
     }),
 
     /**
@@ -53,13 +88,16 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {Void}  -
      */
     onIsVisibleEvent: function (isVisible) {
-        const layerStatisticAreas = this.getLayerStatisticAreas();
-
         // make sure to check on isVisible as well as on isCreated to avoid problems mith multiple einzugsgebieten in gfi
         if (isVisible && this.get("isCreated") === false) {
+            const layerStatisticAreas = this.getLayerStatisticAreas(),
+                allProperties = this.get("gfiContent").allProperties,
+                layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
+                gfiFormat = layerList[0].get("gfiFormat");
+
             this.set("isCreated", true);
 
-            this.setGFIProperties();
+            this.setGFIProperties(allProperties, gfiFormat.gfiBildungsatlasFormat.themeType, Radio.request("Util", "isViewMobile"));
             this.showFeaturesByIds(layerStatisticAreas, [this.get("feature").getId()]);
         }
     },
@@ -78,25 +116,39 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
     /**
      * Sets this GFI
+     * @pre default values (as defined in model.defaults) are in place
+     * @post default values themeType, isViewMobile, numberOfStudentsInDistrict, StatGeb_Nr and ST_Name are set accordingly to the given arguments
+     * @param   {Object} allProperties the properties of this model as simple object that may include {C32_SuS, C12_SuS, StatGeb_Nr, ST_Name}
+     * @param   {String} themeType the type of this theme as defined in config.json -> gfiFormat.gfiBildungsatlasFormat.themeType
+     * @param   {Boolean} isViewMobile true if this is a mobile device, false if otherwise
      * @returns {Void}  -
      */
-    setGFIProperties: function () {
-        const allProperties = this.get("gfiContent").allProperties,
-            layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")}),
-            gfiFormat = layerList[0].get("gfiFormat");
+    setGFIProperties: function (allProperties, themeType, isViewMobile) {
+        const schoolLevels = this.get("schoolLevels");
 
-        this.set("themeType", gfiFormat.gfiBildungsatlasFormat.themeType);
-        this.set("isViewMobile", Radio.request("Util", "isViewMobile"));
-
-        if (this.get("themeType") === "secondary") {
-            this.set("accountStudents", allProperties.C32_SuS.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
-        }
-        else {
-            this.set("accountStudents", Math.round(allProperties.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        if (schoolLevels && schoolLevels.hasOwnProperty(themeType)) {
+            this.set("schoolLevelTitle", schoolLevels[themeType]);
         }
 
-        this.set("urbanAreaNr", allProperties.StatGeb_Nr);
-        this.set("urbanArea", allProperties.ST_Name);
+        this.set("themeType", themeType);
+        this.set("isViewMobile", Boolean(isViewMobile));
+
+        if (themeType === "primary" && allProperties.hasOwnProperty("C12_SuS")) {
+            this.set("numberOfStudentsInDistrict", Math.round(allProperties.C12_SuS));
+            this.set("numberOfStudentsInDistrictFormated", Math.round(allProperties.C12_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
+        else if (themeType === "secondary" && allProperties.hasOwnProperty("C32_SuS")) {
+            this.set("numberOfStudentsInDistrict", Math.round(allProperties.C32_SuS));
+            this.set("numberOfStudentsInDistrictFormated", Math.round(allProperties.C32_SuS).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+        }
+
+        if (allProperties.hasOwnProperty("StatGeb_Nr")) {
+            this.set("StatGeb_Nr", allProperties.StatGeb_Nr);
+        }
+
+        if (allProperties.hasOwnProperty("ST_Name")) {
+            this.set("ST_Name", allProperties.ST_Name);
+        }
     },
 
     /**
@@ -116,22 +168,78 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     },
 
     /**
-     * returns the html as hover information
-     * @param   {Object} school the school information
-     * @param   {Float} relativeNumberOfStudents the percentage of students in this school
-     * @returns {Array}  - the template data for mouseoverTemplate as requested by the view
+     * @typedef {Object} DataForMouseHoverTemplate
+     * @property {String} schoolLevelTitle the well formated level of the school (e.g. "Primarstufe")
+     * @property {String} schoolName the full name of the school
+     * @property {Object} address the address of the school
+     * @property {String} address.street the street
+     * @property {String} address.houseNumber the house number
+     * @property {String} address.postalCode the postal code (zip code)
+     * @property {String} address.city the city
+     * @property {Integer} numberOfStudents the total number of students at this school
+     * @property {Integer} numberOfStudentsPrimary the total number of primary students at this school (if secondary school only this may be 0)
+     * @property {String} socialIndex a number to describe the economical and social milieu of the students (see http://www.arge.schule-hamburg.de/Archiv/STISozialindex.html) - can be "nicht vergeben"
+     * @property {Integer} percentageOfStudentsFromDistrict the percentage [0 .. 100] of students at this school from the selected district as defined in school.get("SG_" + StatGeb_Nr)
+     * @property {Integer} numberOfStudentsFromDistrict the total number of students at this school from the district
      */
-    getDataForMouseHoverTemplate: function (school, relativeNumberOfStudents) {
-        return {
-            schoolLevel: this.get("level")[this.get("themeType")],
-            name: school.get("C_S_Name"),
-            address: school.get("C_S_Str") + " " + school.get("C_S_HNr") + "<br>" + school.get("C_S_PLZ") + " " + school.get("C_S_Ort"),
-            totalSum: school.get("C_S_SuS"),
-            priSum: school.get("C_S_SuS_PS"),
-            socialIndex: school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI"),
-            percentage: Math.round(relativeNumberOfStudents) + "%",
-            sum: Math.round(this.get("accountStudents") * relativeNumberOfStudents / 100)
+
+    /**
+     * returns the html as hover information
+     * @param   {Object} school an object type Feature with the school information
+     * @param   {function(String):*} school.get a function to request information from the feature
+     * @param   {String} schoolLevelTitle the school level as defined in defaults.schoolLevels and selected with themeType
+     * @param   {Integer} StatGeb_Nr the area code of the selected district as defined in defaults.StatGeb_Nr
+     * @param   {Integer} numberOfStudentsInDistrict total number of students in the selected district
+     * @returns {DataForMouseHoverTemplate}  - the data for the mouseoverTemplate used by the view to fill its html placeholders
+     */
+    getDataForMouseHoverTemplate: function (school, schoolLevelTitle, StatGeb_Nr, numberOfStudentsInDistrict) {
+        const data = {
+            schoolLevelTitle: schoolLevelTitle,
+            schoolName: "",
+            address: {
+                street: "",
+                houseNumber: "",
+                postalCode: "",
+                city: ""
+            },
+            numberOfStudents: "",
+            numberOfStudentsPrimary: "",
+            socialIndex: "",
+            percentageOfStudentsFromDistrict: 0,
+            numberOfStudentsFromDistrict: 0
         };
+
+        if (school && typeof school.get === "function") {
+            const percentage = this.getPercentageOfStudentsByStatGeb_Nr(school, StatGeb_Nr) === false ? 0 : this.getPercentageOfStudentsByStatGeb_Nr(school, StatGeb_Nr);
+
+            data.schoolName = school.get("C_S_Name");
+            data.address.street = school.get("C_S_Str");
+            data.address.houseNumber = school.get("C_S_HNr");
+            data.address.postalCode = school.get("C_S_PLZ");
+            data.address.city = school.get("C_S_Ort");
+            data.numberOfStudents = school.get("C_S_SuS");
+            data.numberOfStudentsPrimary = school.get("C_S_SuS_PS");
+            data.socialIndex = school.get("C_S_SI") === -1 ? "nicht vergeben" : school.get("C_S_SI");
+            data.percentageOfStudentsFromDistrict = Math.round(percentage);
+            data.numberOfStudentsFromDistrict = Math.round(numberOfStudentsInDistrict * percentage / 100);
+        }
+
+        return data;
+    },
+
+    /**
+     * get
+     * @param   {Object} school an object type Feature with the school information
+     * @param   {function(String):*} school.get a function to request information from the feature
+     * @param   {Integer} StatGeb_Nr the area code of the selected district as defined in defaults.StatGeb_Nr
+     * @returns {Float|Boolean}  the percentage of students defined in school.get("SG_" + StatGeb_Nr) - this should be a float [0 .. 100] - or false if the school seems to have no students from the district defined by StatGeb_Nr
+     */
+    getPercentageOfStudentsByStatGeb_Nr: function (school, StatGeb_Nr) {
+        if (!school || typeof school.get !== "function" || school.get("SG_" + StatGeb_Nr) === undefined) {
+            return false;
+        }
+
+        return school.get("SG_" + StatGeb_Nr);
     },
 
     /**
@@ -139,9 +247,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
      * @returns {Object/Boolean}  - the areas layer or false if there is no such layer
      */
     getLayerStatisticAreas: function () {
-        const gfiTheme = this.get("layerTheme"),
-            themeId = this.get("themeId"),
-            layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": gfiTheme, "id": themeId});
+        const layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
 
         if (!layers.length) {
             return false;
@@ -151,16 +257,20 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     },
 
     /**
-     * Requests the Modellist for layer with layernameAreas. If necessary this function starts its creation.
+     * Requests the Modellist for layer with layerNameCorrelation. If necessary this function starts its creation.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {Layer|Boolean}  - the layer of schools or false if there aren't any
      */
     getLayerSchools: function () {
-        const modelAttributes = {"name": this.get("layernameAreas")[this.get("themeType")]},
+        const modelAttributes = {"name": this.get("layerNameCorrelation")[this.get("themeType")]},
+            /**
+             * conf as {Object} - a simple object {id, ...} with config parameters (see config.json -> Themenconfig)
+             * conf is the config of the module based on config.json Themenconfig found by name (see defaults.layerNameCorrelation) choosen by themeType
+             */
             conf = Radio.request("Parser", "getItemByAttributes", modelAttributes);
         let layer = Radio.request("ModelList", "getModelByAttributes", modelAttributes);
 
-        if (!layer) {
+        if (!layer && conf && conf.hasOwnProperty("id")) {
             Radio.trigger("ModelList", "addModelsByAttributes", {id: conf.id});
             layer = Radio.request("ModelList", "getModelByAttributes", {id: conf.id});
             layer.setIsSelected(true);

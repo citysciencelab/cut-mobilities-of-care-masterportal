@@ -37,25 +37,68 @@ const SchulenWohnortThemeView = ThemeView.extend(/** @lends SchulenWohnortThemeV
      * @returns {Void}  -
      */
     showSchoolLayer: function () {
-        const layerSchools = this.model.getLayerSchools(),
-            urbanAreaNr = this.model.get("urbanAreaNr"),
-            schools = layerSchools.get("layer").getSource().getFeatures(),
-            featureIds = [];
+        const StatGeb_Nr = this.model.get("StatGeb_Nr"),
+            schoolLevelTitle = this.model.get("schoolLevelTitle"),
+            numberOfStudentsInDistrict = this.model.get("numberOfStudentsInDistrict"),
+            layerSchools = this.model.getLayerSchools(),
+            schools = layerSchools ? layerSchools.get("layer").getSource().getFeatures() : [],
+            featureIds = this.getFeatureIds(schools, StatGeb_Nr);
+
+        this.addHtmlMouseHoverCode(schools, schoolLevelTitle, StatGeb_Nr, numberOfStudentsInDistrict);
+
+        if (layerSchools) {
+            layerSchools.setIsSelected(true);
+        }
+        this.model.showFeaturesByIds(layerSchools, featureIds);
+    },
+
+    /**
+     * adds html mouse hover code to all school features where the StatGeb_Nr valids StatGeb_Nr
+     * @pre features may or may not have mouse hover html code already attatched
+     * @post all features with a StatGeb_Nr validated by StatGeb_Nr have attatched mouse hover html code
+     * @param {Feature[]} schools schools an array of features to check
+     * @param {String} schoolLevelTitle schoolLevelTitle the school level as defined in defaults.schoolLevelTitle
+     * @param {String} StatGeb_Nr StatGeb_Nr the urban area number based on the customers content (equals StatGeb_Nr)
+     * @param {Integer} numberOfStudentsInDistrict numberOfStudentsInDistrict total number of students in the selected district
+     * @returns {Void}  -
+     */
+    addHtmlMouseHoverCode: function (schools, schoolLevelTitle, StatGeb_Nr, numberOfStudentsInDistrict) {
         let attr;
 
         schools.forEach(function (school) {
-            const urbanAreaFinal = school.get("SG_" + urbanAreaNr);
-
-            if (urbanAreaFinal !== undefined) {
-                featureIds.push(school.getId());
-
-                attr = this.model.getDataForMouseHoverTemplate(school, urbanAreaFinal);
-                school.set("html", this.mouseoverTemplate(attr));
+            if (this.model.getPercentageOfStudentsByStatGeb_Nr(school, StatGeb_Nr) === false) {
+                // continue with forEach
+                return;
             }
-        }.bind(this));
 
-        layerSchools.setIsSelected(true);
-        this.model.showFeaturesByIds(layerSchools, featureIds);
+            attr = this.model.getDataForMouseHoverTemplate(school, schoolLevelTitle, StatGeb_Nr, numberOfStudentsInDistrict);
+            school.set("html", this.mouseoverTemplate(attr));
+        }, this);
+    },
+
+    /**
+     * creates an array of featureIds to select by the model
+     * @param {Feature[]} schools an array of features to check
+     * @param {String} StatGeb_Nr the urban area number based on the customers content (equals StatGeb_Nr)
+     * @returns {Integer[]}  an array of feature ids where the feature is grouped by StatGeb_Nr
+     */
+    getFeatureIds: function (schools, StatGeb_Nr) {
+        const featureIds = [];
+
+        if (!Array.isArray(schools)) {
+            return featureIds;
+        }
+
+        schools.forEach(function (school) {
+            if (this.model.getPercentageOfStudentsByStatGeb_Nr(school, StatGeb_Nr) === false) {
+                // continue with forEach
+                return;
+            }
+
+            featureIds.push(school.getId());
+        }, this);
+
+        return featureIds;
     }
 });
 
