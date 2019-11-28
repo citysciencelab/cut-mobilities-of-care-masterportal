@@ -184,9 +184,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
-        if (!this.isMap3d()) {
-            this.stopMouseMoveEvent();
-        }
+        this.showMouseMovText();
 
         Radio.trigger("Map", "isReady", "gfi", false);
         if (Config.startingMap3D) {
@@ -938,21 +936,25 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * DThe ol-overlaycontainer-stopevent container does not stop every event.
-     * Among other things the Mousemove Event. This method does that.
-     * @see {@link https://github.com/openlayers/openlayers/issues/4953}
+     * This function allows the hover text to be hovered so that the text could be copied
+     * a new class "hoverText" will be inserted by mouseover and removed by mouseout
      * @returns {void}
      */
-    stopMouseMoveEvent: function () {
+    showMouseMovText: function () {
     // Firefox & Safari.
-        $(".ol-overlaycontainer-stopevent").on("mousemove", function (evt) {
-            evt.stopPropagation();
-        });
-        $(".ol-overlaycontainer-stopevent").on("touchmove", function (evt) {
-            evt.stopPropagation();
-        });
-        $(".ol-overlaycontainer-stopevent").on("pointermove", function (evt) {
-            evt.stopPropagation();
+        $(".ol-overlaycontainer-stopevent").on("mousemove, touchmove, pointermove", function () {
+            const overlayContainer = $(this).find(".ol-overlay-container.ol-selectable"),
+                tooltip = overlayContainer.find(".tooltip");
+
+            overlayContainer.mouseover(function () {
+                overlayContainer.addClass("hoverText");
+            });
+
+            tooltip.mouseout(function () {
+                if (overlayContainer.hasClass("hoverText")) {
+                    overlayContainer.removeClass("hoverText");
+                }
+            });
         });
     },
 
