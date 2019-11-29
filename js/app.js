@@ -461,7 +461,12 @@ function loadApp () {
 
                 import(/* webpackChunkName: "[request]" */ `../customModules/${entryPoint}.js`).then(module => {
                     /* eslint-disable new-cap */
-                    new module.default();
+                    const customModule = new module.default();
+
+                    // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                    if (customModule.model) {
+                        Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
+                    }
                 }).catch(error => {
                     console.error(error);
                     Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
