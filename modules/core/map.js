@@ -184,7 +184,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
-        this.showMouseMovText();
+        this.showMouseMoveText();
 
         Radio.trigger("Map", "isReady", "gfi", false);
         if (Config.startingMap3D) {
@@ -940,7 +940,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * a new class "hoverText" will be inserted by mouseover and removed by mouseout
      * @returns {void}
      */
-    showMouseMovText: function () {
+    showMouseMoveText: function () {
     // Firefox & Safari.
         $(".ol-overlaycontainer-stopevent").on("mousemove, touchmove, pointermove", function () {
             const overlayContainer = $(this).find(".ol-overlay-container.ol-selectable"),
