@@ -1,0 +1,924 @@
+[
+  {
+    "id": "452",
+    "name": "Luftbilder DOP 20",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Cache_Luftbilder",
+    "typ": "WMS",
+    "layers": "dop",
+    "format": "image/png",
+    "version": "1.1.1",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "0",
+    "maxScale": "2500000",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": true,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/932c8a6b-31f7-40e0-aade-c29c5c631c4f",
+        "md_name": "Internetstadtplan Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "453",
+    "name": "Stadtplan",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Cache_Stadtplan",
+    "typ": "WMS",
+    "layers": "stadtplan",
+    "format": "image/png",
+    "version": "1.1.1",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "0",
+    "maxScale": "2500000",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": true,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/932c8a6b-31f7-40e0-aade-c29c5c631c4f",
+        "md_name": "Internetstadtplan Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "682",
+    "name": "Kindertagesstätten",
+    "url": "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
+    "typ": "WMS",
+    "layers": "KitaEinrichtungen",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "5",
+    "minScale": "0",
+    "maxScale": "2500000",
+    "gfiAttributes": {
+      "Name": "Name der Einrichtung",
+      "Strasse": "Straße",
+      "Hausnr": "Hausnummer",
+      "PLZ": "Postleitzahl"
+    },
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/6fdc7be8-520c-44ee-8e9a-855bac1b6a6b",
+        "md_name": "Kita Einrichtungen Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Soziales",
+          "Öffentliche Verwaltung, Haushalt und Steuern"
+        ],
+        "kategorie_inspire": [
+          "Versorgungswirtschaft und staatliche Dienste"
+        ],
+        "kategorie_organisation": "Behörde für Arbeit, Soziales, Familie und Integration"
+      }
+    ]
+  },
+  {
+    "id": "717",
+    "name": "M100000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "6",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "60009",
+    "maxScale": "100010",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "718",
+    "name": "M60000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "10",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "40009",
+    "maxScale": "60009",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "719",
+    "name": "M20000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "18",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "10010",
+    "maxScale": "20010",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "720",
+    "name": "M5000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "26",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "2509",
+    "maxScale": "5010",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "1132",
+    "name": "app:poi",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Stadtgruen",
+    "typ": "WFS",
+    "featureType": "poi",
+    "version": "1.1.0",
+    "featureNS": "http://www.deegree.org/app",
+    "outputFormat": "XML",
+    "gfiAttributes": {
+      "Name": "Name",
+      "titel": "Titel",
+      "kurztext": "Beschreibung",
+      "internet": "Weitere Informationen",
+      "bild": "Bild",
+      "copyright": "Copyright"
+    },
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "4E67DF32-AAC0-4410-A215-4110F8D50BBD",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/e085712c-1cce-49b6-a4c3-c28e58a76da4",
+        "md_name": "100 Jahre Stadtgrün - Stadtpark und Volkspark",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Kultur, Freizeit, Sport und Tourismus",
+          "Umwelt und Klima"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Behörde für Umwelt und Energie (BUE)"
+      }
+    ]
+  },
+  {
+    "id": "1133",
+    "name": "app:strecken",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Stadtgruen",
+    "typ": "WFS",
+    "featureType": "strecken",
+    "version": "1.1.0",
+    "featureNS": "http://www.deegree.org/app",
+    "outputFormat": "XML",
+    "gfiAttributes": "showAll",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "4E67DF32-AAC0-4410-A215-4110F8D50BBD",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/e085712c-1cce-49b6-a4c3-c28e58a76da4",
+        "md_name": "100 Jahre Stadtgrün - Stadtpark und Volkspark",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Kultur, Freizeit, Sport und Tourismus",
+          "Umwelt und Klima"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Behörde für Umwelt und Energie (BUE)"
+      }
+    ]
+  },
+  {
+    "id": "1731",
+    "name": "Krankenhäuser",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser",
+    "typ": "WMS",
+    "layers": "krankenhaeuser",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "7",
+    "minScale": "0",
+    "maxScale": "2500000",
+    "gfiAttributes": {
+      "name": "Name",
+      "strasse": "Straße",
+      "ort": "Ort",
+      "homepage": "Homepage",
+      "krankenhausverzeichnis": "Krankenhausverzeichnis",
+      "anzahl_planbetten": "Planbetten",
+      "hinweiszeile": "",
+      "anzahl_plaetze_teilstationaer": "Teilstationäre Behandlungsplätze",
+      "teilnahme_notversorgung": "Not- und Unfallversorgung",
+      "geburtsklinik_differenziert": "Geburtshilfe",
+      "stand": "Stand"
+    },
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "9329C2CB-4552-4780-B343-0CC847538896",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/010d7370-5306-4b63-983b-59cdd6e94c3c",
+        "md_name": "Krankenhäuser Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Gesundheit"
+        ],
+        "kategorie_inspire": [
+          "Versorgungswirtschaft und staatliche Dienste"
+        ],
+        "kategorie_organisation": "Behörde für Gesundheit und Verbraucherschutz"
+      }
+    ]
+  },
+  {
+    "id": "2003",
+    "name": "de.hh.up:nr f naturschutzgebiet",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Schutzgebiete",
+    "typ": "WFS",
+    "featureType": "nr_f_naturschutzgebiet",
+    "version": "1.1.0",
+    "featureNS": "https://registry.gdi-de.org/id/de.hh.up",
+    "outputFormat": "XML",
+    "gfiAttributes": "showAll",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "8761AF79-641F-4E64-AE4D-280FAAEF4EC2",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/d0361a3c-27ed-4c5a-bcbe-08a4a3793f29",
+        "md_name": "Naturschutzgebiete in Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Umwelt und Klima"
+        ],
+        "kategorie_inspire": [
+          "Schutzgebiete"
+        ],
+        "kategorie_organisation": "Behörde für Umwelt und Energie (BUE)"
+      }
+    ]
+  },
+  {
+    "id": "2404",
+    "name": "Bike and Ride Parkplätze",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata",
+    "typ": "WFS",
+    "featureType": "bikeandride_os",
+    "version": "1.1.0",
+    "featureNS": "http://www.deegree.org/app",
+    "outputFormat": "XML",
+    "gfiAttributes": {
+      "bezeichnung": "Haltestelle",
+      "plaetzegesamt": "Abstellplätze gesamt",
+      "fahrradbox": "davon abschließbare Mietplätze",
+      "stand": "Letzte Erfassung",
+      "email": "Kontakt"
+    },
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "6520CC0A-D2A6-11D5-88C8-000102DCCF41",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/c8898da0-c19e-453e-9e48-0de68994a3cb",
+        "md_name": "Bike + Ride Anlagen Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Transport und Verkehr"
+        ],
+        "kategorie_inspire": [
+          "Verkehrsnetze"
+        ],
+        "kategorie_organisation": "Behörde für Wirtschaft, Verkehr und Innovation"
+      }
+    ]
+  },
+  {
+    "id": "2426",
+    "name": "Bezirke",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Verwaltungsgrenzen",
+    "typ": "WMS",
+    "layers": "bezirke",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": true,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "0",
+    "maxScale": "2500000",
+    "gfiAttributes": "showAll",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "F35EAC11-C236-429F-B1BF-751C0C18E8B7",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/2e348904-17de-48fd-9376-8f6fd2750feb",
+        "md_name": "ALKIS Verwaltungsgrenzen Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Geographie, Geologie und Geobasisdaten"
+        ],
+        "kategorie_inspire": [
+          "Verwaltungseinheiten"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "3302",
+    "name": "Trinkwasser",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Trinkwasserdaten",
+    "typ": "WMS",
+    "layers": "trinkwasser",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "15",
+    "minScale": "0",
+    "maxScale": "350000",
+    "gfiAttributes": {
+      "probenahmestelle_probe_entnahmedatum": "Entnahmedatum",
+      "bezirk": "Bezirk",
+      "stadtteil": "Stadtteil",
+      "versorgungsgebiet": "Versorgungsgebiet",
+      "coliforme_bakterien": "Coliforme Bakterien",
+      "coliforme_bakterien_grenzwertwarnung": "Coliforme Bakterien Grenzwertwarnung",
+      "coliforme_bakterien_mpn": "Coliforme Bakterien MPN",
+      "coliforme_bakterien_mpn_grenzwertwarnung": "Coliforme Bakterien MPN Grenzwertwarnung",
+      "escherichia_coli": "Escherichia coli",
+      "escherichia_coli_grenzwertwarnung": "Escherichia coli Grenzwertwarnung",
+      "escherichia_coli__e_coli__mpn": "Escherichia coli (E.coli) MPN",
+      "escherichia_coli__e_coli__mpn_grenzwertwarnung": "Escherichia coli (E.coli) MPN Grenzwertwarnung",
+      "koloniezahl_36c__trinkwv_2001_anlage_5_i_d_bb___trinkwv_00": "Koloniezahl, 36°C",
+      "koloniezahl_36c__trinkwv_2001_anlage_5_i_d_bb___trinkwv_19": "Koloniezahl, 36°C Grenzwertwarnung",
+      "koloniezahl_20c__trinkwv_1990_": "Koloniezahl, 20°C",
+      "koloniezahl_20c__trinkwv_1990__grenzwertwarnung": "Koloniezahl, 20°C Grenzwertwarnung",
+      "intestinale_enterokokken": "intestinale Enterokokken",
+      "intestinale_enterokokken_grenzwertwarnung": "intestinale Enterokokken Grenzwertwarnung",
+      "blei": "Blei",
+      "blei_grenzwertwarnung": "Blei Grenzwertwarnung",
+      "kupfer_gesamt": "Kupfer, gesamt",
+      "kupfer_gesamt_grenzwertwarnung": "Kupfer, gesamt Grenzwertwarnung",
+      "nickel": "Nickel",
+      "nickel_grenzwertwarnung": "Nickel Grenzwertwarnung",
+      "cadmium": "Cadmium",
+      "cadmium_grenzwertwarnung": "Cadmium Grenzwertwarnung",
+      "chrom_gesamt": "Chrom, gesamt",
+      "chrom_gesamt_grenzwertwarnung": "Chrom, gesamt Grenzwertwarnung",
+      "antimon": "Antimon",
+      "antimon_grenzwertwarnung": "Antimon Grenzwertwarnung",
+      "arsen": "Arsen",
+      "arsen_grenzwertwarnung": "Arsen Grenzwertwarnung",
+      "ammonium": "Ammonium",
+      "ammonium_grenzwertwarnung": "Ammonium Grenzwertwarnung",
+      "calcium": "Calcium",
+      "calcium_grenzwertwarnung": "Calcium Grenzwertwarnung",
+      "chlorid": "Chlorid",
+      "chlorid_grenzwertwarnung": "Chlorid Grenzwertwarnung",
+      "aluminium_gesamt": "Aluminium, gesamt",
+      "aluminium_gesamt_grenzwertwarnung": "Aluminium, gesamt Grenzwertwarnung",
+      "bor": "Bor",
+      "bor_grenzwertwarnung": "Bor Grenzwertwarnung",
+      "bromat": "Bromat",
+      "eisen_gesamt": "Eisen, gesamt",
+      "eisen_gesamt_grenzwertwarnung": "Eisen, gesamt Grenzwertwarnung",
+      "mangan_gesamt": "Mangan, gesamt",
+      "mangan_gesamt_grenzwertwarnung": "Mangan, gesamt Grenzwertwarnung",
+      "gesamthaerte": "Gesamthärte",
+      "gesamthaerte_grenzwertwarnung": "Gesamthärte Grenzwertwarnung",
+      "kalium": "Kalium",
+      "kalium_grenzwertwarnung": "Kalium Grenzwertwarnung",
+      "magnesium": "Magnesium",
+      "magnesium_grenzwertwarnung": "Magnesium Grenzwertwarnung",
+      "natrium": "Natrium",
+      "natrium_grenzwertwarnung": "Natrium Grenzwertwarnung",
+      "nitrat": "Nitrat",
+      "nitrat_grenzwertwarnung": "Nitrat Grenzwertwarnung",
+      "nitrit": "Nitrit",
+      "nitrit_grenzwertwarnung": "Nitrit Grenzwertwarnung",
+      "ph_wert": "ph-Wert",
+      "ph_wert_grenzwertwarnung": "ph-Wert Grenzwertwarnung",
+      "elektrische_leitfaehigkeit_bei_20c": "elektrische Leitfähigkeit bei 20°C",
+      "elektrische_leitfaehigkeit_bei_20c_grenzwertwarnung": "elektrische Leitfähigkeit bei 20°C Grenzwertwarnung",
+      "fluorid": "Fluorid",
+      "fluorid_grenzwertwarnung": "Fluorid Grenzwertwarnung",
+      "quecksilber": "Quecksilber",
+      "quecksilber_grenzwertwarnung": "Quecksilber Grenzwertwarnung",
+      "trichlorethen": "Trichlorethen",
+      "trichlorethen_grenzwertwarnung": "Trichlorethen Grenzwertwarnung",
+      "dichlorethan": "1,2-Dichlorethan",
+      "dichlorethan_grenzwertwarnung": "1,2-Dichlorethan Grenzwertwarnung",
+      "vinylchlorid": "Vinylchlorid",
+      "vinylchlorid_grenzwertwarnung": "Vinylchlorid Grenzwertwarnung",
+      "summe_polycyclische_aromatische_kohlenwasserst__2356": "Summe polycyclische aromatische Kohlenwasserst. 2,3,5,6",
+      "summe_polycyclische_aromatische_kohlenwasserst__2356_grenzwe": "Summe polycyclische aromatische Kohlenwasserst. 2,3,5,6 Grenzwertwarnung",
+      "selen": "Selen",
+      "selen_grenzwertwarnung": "Selen Grenzwertwarnung",
+      "sulfat": "Sulfat",
+      "sulfat_grenzwertwarnung": "Sulfat Grenzwertwarnung",
+      "summe_trihalogenmethane": "Summe Trihalogenmethane",
+      "summe_trihalogenmethane_grenzwertwarnung": "Summe Trihalogenmethane Grenzwertwarnung",
+      "gesamter_organisch_gebundener_kohlenstoff": "gesamter organisch gebundener Kohlenstoff",
+      "gesamter_organisch_gebundener_kohlenstoff_grenzwertwarnung": "gesamter organisch gebundener Kohlenstoff Grenzwertwarnung",
+      "uran": "Uran",
+      "uran_grenzwertwarnung": "Uran Grenzwertwarnung",
+      "summe_pflanzenschutzmittel": "Summe Pflanzenschutzmittel",
+      "summe_pflanzenschutzmittel_grenzwertwarnung": "Summe Pflanzenschutzmittel Grenzwertwarnung",
+      "benzo_a_pyren": "Benzo[a]pyren",
+      "benzo_a_pyren_grenzwertwarnung": "Benzo[a]pyren Grenzwertwarnung",
+      "benzol": "Benzol",
+      "benzol_grenzwertwarnung": "Benzol_Grenzwertwarnung"
+    },
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "73A344E9-CDB5-4A17-89C1-05E202989755",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/2535cb6b-0447-4c4a-9bcd-63c1ac3e0622",
+        "md_name": "Hamburger Trinkwasserdatenbank (ZTEIS)",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Behörde für Gesundheit und Verbraucherschutz"
+      }
+    ]
+  },
+  {
+    "id": "4560",
+    "name": "app:hamburgconvention",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Eventlotse",
+    "typ": "WFS",
+    "featureType": "hamburgconvention",
+    "version": "1.1.0",
+    "featureNS": "http://www.deegree.org/app",
+    "outputFormat": "XML",
+    "gfiAttributes": {
+      "flaechenname": "Flächenname",
+      "bezirk": "Bezirk",
+      "flaeche_eventlotse_m": "Eventfläche",
+      "hinweisstempel": "Hinweisstempel",
+      "premiumflaeche": "Premiumfläche",
+      "url": "Link zur Detailansicht"
+    },
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "295985A0-B456-4BAD-904B-B780508F214C",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/38c52173-45cf-41bc-bdf8-373de9d12947",
+        "md_name": "Eventlotse Daten Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Kultur, Freizeit, Sport und Tourismus"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Hamburg Convention Bureau GmbH "
+      }
+    ]
+  },
+  {
+    "id": "4561",
+    "name": "Eventlotse Hamburgconvention",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Eventlotse",
+    "typ": "WMS",
+    "layers": "eventlotse_hamburgconvention",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "0",
+    "maxScale": "350000",
+    "gfiAttributes": {
+      "flaechenname": "Flächenname",
+      "bezirk": "Bezirk",
+      "flaeche_eventlotse_m": "Eventfläche",
+      "hinweisstempel": "Hinweisstempel",
+      "premiumflaeche": "Premiumfläche",
+      "url": "Link zur Detailansicht"
+    },
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "cache": false,
+    "featureCount": "10",
+    "datasets": [
+      {
+        "md_id": "295985A0-B456-4BAD-904B-B780508F214C",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/38c52173-45cf-41bc-bdf8-373de9d12947",
+        "md_name": "Eventlotse Daten Hamburg",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Kultur, Freizeit, Sport und Tourismus"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Hamburg Convention Bureau GmbH "
+      }
+    ]
+  },
+  {
+    "id": "8712",
+    "name": "app:staatliche schulen",
+    "url": "https://geodienste.hamburg.de/HH_WFS_Schulen",
+    "typ": "WFS",
+    "featureType": "staatliche_schulen",
+    "version": "1.1.0",
+    "featureNS": "http://www.deegree.org/app",
+    "outputFormat": "XML",
+    "gfiAttributes": {
+      "schulname": "Name",
+      "schulform": "Schulform",
+      "schultyp": "Schulstandort",
+      "schwerpunktschule": "Schwerpunktschule Inklusion",
+      "adresse_strasse_hausnr": "Straße",
+      "adresse_ort": "Ort",
+      "stadtteil": "Stadtteil",
+      "bezirk": "Bezirk",
+      "schul_telefonnr": "Telefon",
+      "schul_email": "Email",
+      "schulportrait": "Schulportrait",
+      "schul_homepage": "Homepage",
+      "name_schulleiter": "Schulleitung",
+      "zustaendiges_rebbz": "Zuständiges ReBBZ",
+      "rebbz_homepage": "Homepage des ReBBZ",
+      "schulaufsicht": "Schulaufsicht",
+      "offenetuer": "Tag d. offenen Tür",
+      "anzahl_schueler": "Schülerzahl",
+      "anzahl_schueler_gesamt": "Schülerzahl gesamt",
+      "zuegigkeit_kl_1": "Parallelklassen (Kl.1)",
+      "standortkl1": "Standort Klasse 1",
+      "zuegigkeit_kl_5": "Parallelklassen (Kl.5)",
+      "standortkl5": "Standort Klasse 5",
+      "abschluss": "Abschluss",
+      "foerderart": "Förderart",
+      "auszeichnung": "Auszeichnung",
+      "schuelerzeitung": "Schülerzeitung",
+      "schulische_ausrichtung": "Schwerpunkte in den Angeboten",
+      "schulpartnerschaft": "Schulpartnerschaft",
+      "schulinspektion_link": "Schulinspektion",
+      "einzugsgebiet": "Einzugsgebiet",
+      "schulwahl_wohnort": "Schulwahl Wohnort",
+      "fremdsprache": "Fremdsprachen",
+      "fremdsprache_mit_klasse": "Fremdsprachen an Klassenstufe",
+      "bilingual": "Bilingual",
+      "sprachzertifikat": "Sprachzertifikat",
+      "ganztagsform": "Ganztagsform",
+      "kernzeitbetreuung": "Anteil Kernzeitbetreuung",
+      "ferienbetreuung_anteil": "Anteil Ferienbetreuung",
+      "kernunterricht": "Kernunterricht",
+      "mittagspause": "Mittagspause",
+      "kantine_vorh": "Kantine",
+      "wahlmoeglichkeit_essen": "Wahlmöglichkeit Essen",
+      "vegetarisch": "Vegetarisch",
+      "nutzung_kantine_anteil": "Nutzung Kantine",
+      "kiosk_vorh": "Kiosk",
+      "name_stellv_schulleiter": "Stellv. Schulleitung",
+      "ansprechp_buero": "Ansprechpartner Büro",
+      "ansprechp_klasse_1": "Ansprechpartner Kl.1",
+      "ansprechp_klasse_5": "Ansprechpartner Kl.5",
+      "name_oberstufenkoordinator": "Oberstufenkoordinator",
+      "oberstufenprofil": "Oberstufenprofil",
+      "standortoberstufe": "Standort Oberstufe"
+    },
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "",
+    "hitTolerance": "",
+    "datasets": [
+      {
+        "md_id": "D3DDBBA3-7329-475C-BB07-14D539ED6B1E",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/7988c147-7523-45bb-8f18-7f39d0d20541",
+        "md_name": "Schulstammdaten und Schülerzahlen der Hamburger Schulen",
+        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+        "kategorie_opendata": [
+          "Öffentliche Verwaltung, Haushalt und Steuern"
+        ],
+        "kategorie_inspire": [
+          "Versorgungswirtschaft und staatliche Dienste"
+        ],
+        "kategorie_organisation": "Behörde für Schule und Berufsbildung"
+      }
+    ]
+  },
+  {
+    "id": "13709",
+    "name": "M125000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "2",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "100010",
+    "maxScale": "2500000",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "13712",
+    "name": "M40000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "14",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "20010",
+    "maxScale": "40009",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "13714",
+    "name": "M10000 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "22",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "5010",
+    "maxScale": "10010",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  },
+  {
+    "id": "13716",
+    "name": "M2500 N",
+    "url": "https://geodienste.hamburg.de/HH_WMS_Geobasiskarten",
+    "typ": "WMS",
+    "layers": "30",
+    "format": "image/png",
+    "version": "1.3.0",
+    "singleTile": false,
+    "transparent": true,
+    "transparency": 0,
+    "tilesize": "512",
+    "gutter": "0",
+    "minScale": "0",
+    "maxScale": "2509",
+    "gfiAttributes": "ignore",
+    "gfiTheme": "default",
+    "layerAttribution": "nicht vorhanden",
+    "legendURL": "ignore",
+    "cache": false,
+    "featureCount": "1",
+    "datasets": [
+      {
+        "md_id": "B6A59A2B-2D40-4676-9094-0EB73039ED34",
+        "rs_id": "https://registry.gdi-de.org/id/de.hh/001719df-6619-40b7-aefe-32e8aaf49337",
+        "md_name": "GeoBasisKarten Hamburg",
+        "bbox": "466251.43,5844577.89,661887.13,6042030.31",
+        "kategorie_opendata": [
+          "Sonstiges"
+        ],
+        "kategorie_inspire": [
+          "nicht INSPIRE-identifiziert"
+        ],
+        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
+      }
+    ]
+  }
+]

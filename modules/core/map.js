@@ -184,6 +184,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
+        this.showMouseMoveText();
+
         Radio.trigger("Map", "isReady", "gfi", false);
         if (Config.startingMap3D) {
             this.activateMap3d();
@@ -931,6 +933,29 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
         }
         return resultLayer;
+    },
+
+    /**
+     * This function allows the hover text to be hovered so that the text could be copied
+     * a new class "hoverText" will be inserted by mouseover and removed by mouseout
+     * @returns {void}
+     */
+    showMouseMoveText: function () {
+    // Firefox & Safari.
+        $(".ol-overlaycontainer-stopevent").on("mousemove, touchmove, pointermove", function () {
+            const overlayContainer = $(this).find(".ol-overlay-container.ol-selectable"),
+                tooltip = overlayContainer.find(".tooltip");
+
+            overlayContainer.mouseover(function () {
+                overlayContainer.addClass("hoverText");
+            });
+
+            tooltip.mouseout(function () {
+                if (overlayContainer.hasClass("hoverText")) {
+                    overlayContainer.removeClass("hoverText");
+                }
+            });
+        });
     },
 
     /**
