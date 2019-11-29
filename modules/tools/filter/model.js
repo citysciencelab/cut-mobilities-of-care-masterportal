@@ -59,11 +59,11 @@ const FilterModel = Tool.extend({
             }
         }, this);
 
-        this.listenTo(Radio.channel("Layer"), {
+        this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId) {
-                var predefinedQueries = this.get("predefinedQueries"),
-                    queryCollection = this.get("queryCollection"),
-                    filterModels;
+                const predefinedQueries = this.get("predefinedQueries"),
+                    queryCollection = this.get("queryCollection");
+                let filterModels;
 
                 if (!this.isModelInQueryCollection(layerId, queryCollection) && this.get("isActive")) {
                     filterModels = predefinedQueries.filter(function (query) {
@@ -74,7 +74,6 @@ const FilterModel = Tool.extend({
                         this.createQuery(filterModel);
                     }, this);
                 }
-
             }
         }, this);
     },
@@ -247,10 +246,10 @@ const FilterModel = Tool.extend({
     },
 
     createQuery: function (model) {
-        var layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId}),
-            query;
+        const layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId});
+        let query;
 
-        if (!_.isUndefined(layer) && layer.has("layer")) {
+        if (typeof layer !== "undefined" && layer.has("layer") && layer.get("layerSource").getFeatures().length > 0) {
             query = this.getQueryByTyp(layer.get("typ"), model);
             if (!_.isNull(query)) {
                 if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {

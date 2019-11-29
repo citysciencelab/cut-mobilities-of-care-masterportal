@@ -36,15 +36,23 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
      * @param {String} config.resolution Resolution of baseLayer.
      * @param {Boolean} [config.isInitOpen=true] Flag to open map initially or not
      * @constructs
+     * @listens Map#RadioTriggerMapChange
      */
     initialize: function (el, id, config) {
         const style = Radio.request("Util", "getUiStyle");
+
+        this.listenTo(Radio.channel("Map"), {
+            "change": function (mode) {
+                this.toggleSupportedVisibility(mode);
+            }
+        });
 
         this.model = new OverviewMapModel(Object.assign(config, {id: id}));
         this.render(style, el);
         if (this.model.get("isInitOpen") === true) {
             this.model.showControl();
         }
+        this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
     },
 
     id: "overviewmap",
@@ -104,6 +112,30 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         }
         else {
             this.model.showControl();
+        }
+    },
+
+    /**
+     * Toggles the visibility of the mini map and the control to start/stop the map
+     * depending on the map-state (3d, 2d or oblique).
+     * @param {String} mode Flag of the view mode
+     * @returns {void}
+     */
+    toggleSupportedVisibility: function (mode) {
+        const showIn3D = this.model.get("supportedIn3d");
+
+        if ((mode === "3D" || mode === "Oblique") && !showIn3D) {
+            if (this.model.get("isOpen")) {
+                this.toggle();
+            }
+            // overviewmap-button on desktop and mini-map in table mode
+            this.$(".overviewmap-button").hide();
+            $("#mini-map").hide();
+        }
+        else {
+            // overviewmap-button on desktop and mini-map in table mode
+            this.$(".overviewmap-button").show();
+            $("#mini-map").show();
         }
     }
 });

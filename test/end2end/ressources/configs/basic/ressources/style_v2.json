@@ -1,0 +1,69 @@
+[
+  {
+    "layerId" : "1711",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterImageName": "krankenhaus.png",
+    "imageName" : "krankenhaus.png",
+    "imageScale" : "0.7"
+  },
+  {
+    "layerId": "45",
+    "class": "POINT",
+    "subClass" : "SIMPLE",
+    "clusterClass": "SIMPLE",
+    "imageName" : "bikeandride.png",
+    "imageScale" : "0.7",
+    "clusterImageName": "bikeandride.png",
+    "clusterImageScale": "0.7",
+    "clusterTextScale" : "2",
+    "clusterTextOffsetX" : "18",
+    "clusterTextOffsetY" : "-10",
+    "clusterTextFillColor" : [69, 96, 166, 1],
+    "clusterTextStrokeColor" : [240, 240, 240, 1],
+    "clusterTextStrokeWidth" : "3"
+  },
+    {
+    "layerId": "2003",
+    "class": "POLYGON",
+    "subClass": "SIMPLE",
+    "polygonStrokeColor": [0, 0, 0, 1],
+    "polygonStrokeWidth": 1,
+    "polygonFillColor": [10, 200, 0, 0.2]
+  },
+    {
+    "layerId" : "8712",
+    "class": "POINT",
+    "subClass" : "CUSTOM",
+    "imageScale" : "0.6",
+    "imageWidth": 40,
+    "imageHeight": 40,
+    "styleField": "kapitelbezeichnung",
+    "styleFieldValues": [
+      {
+        "styleFieldValue": "Grundschulen",
+        "imageName" : "grundschulen.png"
+      },
+      {
+        "styleFieldValue": "Gymnasien",
+        "imageName" : "gymnasien.png"
+      },
+      {
+        "styleFieldValue": "Stadtteilschulen",
+        "imageName" : "stadtteilschulen.png"
+      },
+      {
+        "styleFieldValue": "Sonderschulen",
+        "imageName" : "sonderschulen.png"
+      },
+      {
+        "styleFieldValue": "Berufliche Schulen",
+        "imageName" : "berufliche_schulen.png"
+      },
+      {
+        "styleFieldValue": "Langformschulen",
+        "imageName" : "langformschulen.png"
+      }
+    ]
+  }
+]

@@ -90,7 +90,6 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 |epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmuss suchen soll.|false|
 |filter|nein|String|"filter=(typ:*)"|Filter string der an die BKG-Schnittstelle geschickt wird.|false|
-
 |geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
 |minChars|nein|Integer|3|Deprecated in 3.0.0. Bitte "minCharacters" verwenden.|false|
 |minCharacters|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|

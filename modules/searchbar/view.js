@@ -440,7 +440,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         Radio.trigger("Searchbar", "hit", hit);
         // 6. Beende Event
         if (evt) {
-            evt.stopPropagation();
+            evt.preventDefault();
+            evt.stopImmediatePropagation();
         }
     },
 
