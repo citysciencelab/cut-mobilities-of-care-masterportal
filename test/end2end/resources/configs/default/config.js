@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: true,
@@ -49,8 +51,8 @@ const Config = {
             "DB433BD1-1640-4FBC-A879-72402BD5CFDB", // Bodenrichtwertzonen Hamburg
             "6A0D8B9D-1BBD-441B-BA5C-6159EE41EE71", // Bodenrichtwerte für Hamburg
             "3233E124-E576-4B5D-978E-164720C4E75F", // MRH Große Verkehrsprojekte
-            "24513F73-D928-450C-A334-E30037945729", // 3D Straßenbaumkataster Hamburg 
-            "7595A206-F07E-470D-A6C1-2F74F0B0C64E"  // 3D Hamburger Hauptkirchen 
+            "24513F73-D928-450C-A334-E30037945729", // 3D Straßenbaumkataster Hamburg
+            "7595A206-F07E-470D-A6C1-2F74F0B0C64E" // 3D Hamburger Hauptkirchen
         ]
     },
     scaleLine: true,
@@ -113,3 +115,5 @@ const Config = {
     },
     startingMap3D: false
 };
+
+/* eslint-enable no-unused-vars */
