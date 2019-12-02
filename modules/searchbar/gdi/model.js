@@ -39,7 +39,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         let result;
 
         if (searchString.length >= this.get("minChars")) {
-            result = this.get("elasticSearch").searchNew(xhrConfig);
+            result = this.get("elasticSearch").search(xhrConfig);
             this.createRecommendedList(result.hits);
         }
     },

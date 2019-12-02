@@ -1,3 +1,6 @@
+
+import ElasticSearch from "../../core/elasticsearch";
+
 const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
         minChars: 3,
@@ -15,7 +18,9 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         },
         hitType: "Elastic",
         hitGlyphicon: "glyphicon-road",
-        xhrRequest: {}
+        xhrRequest: {},
+        async: false,
+        elasticSearch: new ElasticSearch()
     },
     /**
      * @class ElasticSearchModel
@@ -36,31 +41,20 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @listens Searchbar#RadioTriggerSearchbarSearch
      */
-    initialize: function (config) {
+    initialize: function () {
         const initSearchString = Radio.request("ParametricURL", "getInitString");
-        let url = "";
+        // let url = "";
 
-        this.parseConfig(config);
-        url = this.retrieveUrlFromServiceId(this.get("serviceId"));
-        if (url !== "") {
-            this.setUrl(url);
-            this.listenTo(Radio.channel("Searchbar"), {
-                "search": this.search
-            });
-            if (initSearchString) {
-                this.search(initSearchString);
-            }
-        }
-    },
-    /**
-     * Reads the Configuration from config.json and sets all given params.
-     * @param {Object} config Configuration from config.json.
-     * @returns {void}
-     */
-    parseConfig: function (config) {
-        Object.keys(config).forEach(key => {
-            this.set(key, config[key]);
+        // url = this.retrieveUrlFromServiceId(this.get("serviceId"));
+        // if (url !== "") {
+        // this.setUrl(url);
+        this.listenTo(Radio.channel("Searchbar"), {
+            "search": this.search
         });
+        if (initSearchString) {
+            this.search(initSearchString);
+        }
+        // }
     },
 
     /**
@@ -88,16 +82,20 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @returns {void}
      */
     search: function (searchString) {
-        let payload = this.get("payload");
-        const xhrRequest = this.get("xhrRequest");
+        const searchStringAttribute = this.get("searchStringAttribute"),
+            payload = this.appendSearchStringToPayload(this.get("payload"), searchStringAttribute, searchString),
+            xhrConfig = {
+                serviceId: this.get("serviceId"),
+                type: this.get("type"),
+                async: this.get("async"),
+                payload: payload,
+                responseEntryPath: this.get("responseEntryPath")
+            };
+        let result;
 
-        if (xhrRequest instanceof XMLHttpRequest) {
-            xhrRequest.abort();
-            this.setXhrRequest({});
-        }
         if (searchString.length >= this.get("minChars")) {
-            payload = this.appendSearchStringToPayload(payload, this.get("searchStringAttribute"), searchString);
-            this.sendRequest(payload);
+            result = this.get("elasticSearch").search(xhrConfig);
+            this.createRecommendedList(result.hits);
         }
     },
 
@@ -120,89 +118,6 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         });
 
         return payload;
-    },
-
-    /**
-     * Posts the request to the url with the given payload.
-     * @param {Object} payload Payload object to be sent via POST to the url.
-     * @fires Core#RadioRequestUtilGetProxyURL
-     * @returns {void}
-     */
-    sendRequest: function (payload) {
-        const url = Radio.request("Util", "getProxyURL", this.get("url")),
-            type = this.get("type");
-        let xhr = {};
-
-        if (type === "POST") {
-            xhr = this.sendPostRequest(url, payload);
-        }
-        else if (type === "GET") {
-            xhr = this.sendGetRequest(url, payload);
-        }
-        else {
-            console.error("type: " + type + " not supported in elasticSearch");
-        }
-        this.setXhrRequest(xhr);
-    },
-
-    /**
-     * Sends POST request.
-     * @param {String} url Url to post request.
-     * @param {Object} payload The data to be sent.
-     * @returns {XMLHttpRequest} - XHR.
-     */
-    sendPostRequest: function (url, payload) {
-        const xhr = new XMLHttpRequest(),
-            that = this;
-
-        xhr.open("POST", url);
-        xhr.onload = function (event) {
-            that.parseResponse(event);
-        };
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(JSON.stringify(payload));
-        return xhr;
-    },
-
-    /**
-     * Sends GET request.
-     * @param {String} url Url to get request.
-     * @param {Object} payload The data to be sent.
-     * @returns {XMLHttpRequest} - XHR.
-     */
-    sendGetRequest: function (url, payload) {
-        const xhr = new XMLHttpRequest(),
-            that = this,
-            urlWithPayload = url + JSON.stringify(payload);
-
-        xhr.open("GET", urlWithPayload);
-        xhr.onload = function (event) {
-            that.parseResponse(event);
-        };
-        xhr.send();
-        return xhr;
-    },
-    /**
-     * Parses the response of the request
-     * @param {Event} event Response event.
-     * @returns {void}
-     */
-    parseResponse: function (event) {
-        const currentTarget = event.currentTarget,
-            status = currentTarget.status,
-            responseEntryPath = this.get("responseEntryPath");
-        let responseData = [],
-            response;
-
-        if (status === 200) {
-            response = JSON.parse(currentTarget.response);
-            responseData = this.findAttributeByPath(response, responseEntryPath);
-            this.createRecommendedList(responseData);
-        }
-        else {
-            console.error("could not parse Response from elasticSearch, Status: " + status);
-        }
-        this.setXhrRequest({});
     },
 
     /**
@@ -280,23 +195,6 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             });
         }
         return attribute;
-    },
-
-    /**
-     * Setter for attribute "url".
-     * @param {String} value url.
-     * @returns {void}
-     */
-    setUrl: function (value) {
-        this.set("url", value);
-    },
-    /**
-     * Setter for attribute "xhrRequest".
-     * @param {XMLHttpRequest} value XHR.
-     * @returns {void}
-     */
-    setXhrRequest: function (value) {
-        this.set("xhrRequest", value);
     }
 });
 
