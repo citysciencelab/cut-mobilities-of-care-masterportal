@@ -265,6 +265,12 @@
  * @description Configures search in geodata infrastructure with elastic search
  */
 
+ /**
+ * @namespace ElasticSearch
+ * @memberof Searchbar
+ * @description Configures search in geodata infrastructure with elastic search
+ */
+
 /**
  * @namespace Osm
  * @memberof Searchbar

@@ -1,7 +1,25 @@
-const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
+const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
+    /**
+     * @class ElasticModel
+     * @description This model ist the central functionality to send and receive requests from elastic indices.
+     * It is called by several other tools such as the gdi search or the elastic search.
+     * @extends Backbone.Model
+     * @memberOf Core
+     * @constructs
+     */
     defaults: {
         xhrRequests: {}
     },
+    /**
+     * Main function to start the search using the xhrConfig.
+     * @param {Object} xhrConfig The configuration of the xhr request.
+     * @param {String} xhrConfig.serviceId Id of the rest-service to be used.
+     * @param {String} xhrConfig.type Type of request. "POST" or "GET".
+     * @param {Object} xhrConfig.payload Payload used to "POST" to url or be appended to url if type is "GET".
+     * @param {Boolean} xhrConfig.async Flag if request should be sent asynchronously.
+     * @property {String} responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
+     * @returns {Object} - The result object of the request.
+     */
     search: function (xhrConfig) {
         const serviceId = xhrConfig.hasOwnProperty("serviceId") ? xhrConfig.serviceId : undefined,
             restService = Radio.request("RestReader", "getServiceById", serviceId);
@@ -28,6 +46,12 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         return result;
     },
 
+    /**
+     * Aborts the running request by given serviceId and deletes it from the object.
+     * @param {Object} xhrRequests all xhr requests that are currently running.
+     * @param {String} serviceId Id of rest-service.
+     * @returns {Object} - All xhr requests that have not be cancelled.
+     */
     abortXhrRequestByServiceId: function (xhrRequests, serviceId) {
         if (xhrRequests[serviceId]) {
             xhrRequests[serviceId].abort();
@@ -36,6 +60,18 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
 
         return xhrRequests;
     },
+
+    /**
+     * Sends the request
+     * @param {String} serviceId Id of rest-service.
+     * @param {String} url url to send request.
+     * @param {Object} xhrConfig Config with all necccessary params for request.
+     * @param {Object} result Result object.
+     * @param {String} result.status Status of request "success" or "error".
+     * @param {String} result.message Message of request.
+     * @param {Object[]} result.hits Array of result hits.
+     * @returns {Object} - Parsed result of request.
+     */
     xhrSend: function (serviceId, url, xhrConfig, result) {
         const xhr = new XMLHttpRequest(),
             type = xhrConfig.type || "POST",
@@ -66,6 +102,17 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         }
         return resultWithHits;
     },
+
+    /**
+     * Parses the response event.
+     * @param {Event} event Event of xhrRequest.
+     * @param {String} responseEntryPath The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
+     * @param {Object} result Result object.
+     * @param {String} result.status Status of request "success" or "error".
+     * @param {String} result.message Message of request.
+     * @param {Object[]} result.hits Array of result hits.
+     * @returns {Object} - Parsed result of request.
+     */
     parseResponse: function (event, responseEntryPath, result) {
         const currentTarget = event.currentTarget,
             status = currentTarget.status,
@@ -113,9 +160,14 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         return attribute;
     },
 
+    /**
+     * Setter for attribute "xhrRequests"
+     * @param {Object} value xhr requests.
+     * @returns {void}
+     */
     setXhrRequests: function (value) {
         this.set("xhrRequests", value);
     }
 });
 
-export default ElasticSearchModel;
+export default ElasticModel;

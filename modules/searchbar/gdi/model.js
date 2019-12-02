@@ -1,30 +1,37 @@
 import "../model";
-import ElasticSearch from "../../core/elasticsearch";
+import ElasticModel from "../../core/elasticsearch";
 
 const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     defaults: {
         minChars: 3,
         serviceId: "",
-        queryObject: {
-            id: "query",
-            params: {
-                query_string: "%%searchString%%"
-            }
-        },
-        elasticSearch: new ElasticSearch()
+        queryObject: {},
+        elasticSearch: new ElasticModel()
     },
     /**
-     * @description Initialise GDI-Search via ElasticSearch
-     * @returns {void}
+     * @class GdiModel
+     * @extends Backbone.Model
+     * @memberof Searchbar.Gdi
+     * @constructs
+     * @property {Number} minChars=3 Minimum length of search string to start.
+     * @property {String} serviceId="" Id of restService to derive url from.
+     * @property {Object} queryObject={} Payload used to append to url.
+     * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
+     * @fires Core#RadioRequestParametricURLGetInitString
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Searchbar#RadioTriggerSearchbarRemoveHits
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
+     * @listens Searchbar#RadioTriggerSearchbarSearch
      */
     initialize: function () {
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
     },
+
     /**
-     * Searchs layer if enough characters have been touched (if >="minChars")
-     * @param {String} searchString - what is searched
+     * Checks if the minChars criterium is passed, then sends the request to the elastic search index.
+     * @param {String} searchString The search string.
      * @returns {void}
      */
     search: function (searchString) {
@@ -45,7 +52,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     },
 
     /**
-     * Creates the reccommended List
+     * Creates the recommended List
      * @param {Object[]} responseData Response data.
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarRemoveHits
@@ -73,9 +80,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Straße"});
+            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Fachthema"});
         }
-        Radio.trigger("Searchbar", "createRecommendedList", "elasticSearch");
+        Radio.trigger("Searchbar", "createRecommendedList", "gdi");
     },
 
     /**
@@ -147,45 +154,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         });
 
         return payload;
-    },
-
-    /**
-     * function for the layers that are being searched for
-     * @param {String} datasources - layers that have been found
-     * @returns {void}
-     */
-    triggerHitList: function (datasources) {
-        if (datasources) {
-            _.each(datasources, function (hit) {
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
-                    name: hit.name,
-                    type: "Fachthema",
-                    glyphicon: "glyphicon-list",
-                    id: hit.id,
-                    triggerEvent: {
-                        channel: "GDI-Search",
-                        event: "addLayer"
-                    },
-                    source: hit
-                });
-            }, this);
-        }
-
-        Radio.trigger("Searchbar", "createRecommendedList");
-    },
-    /**
-     * creates query for searched string (layer)
-     * @param {String} searchString - string that will be touched
-     * @param {Object} queryObject - Query object.
-     * @returns {Oject} result
-     */
-    createQuery: function (searchString, queryObject) {
-        const query_object = queryObject,
-            string_query = JSON.stringify(query_object),
-            replace_object = string_query.replace("%%searchString%%", searchString),
-            result = JSON.parse(replace_object);
-
-        return result;
     }
 });
 

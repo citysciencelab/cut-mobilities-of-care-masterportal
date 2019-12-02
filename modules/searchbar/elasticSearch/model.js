@@ -1,5 +1,5 @@
 
-import ElasticSearch from "../../core/elasticsearch";
+import ElasticModel from "../../core/elasticsearch";
 
 const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
@@ -18,9 +18,8 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         },
         hitType: "Elastic",
         hitGlyphicon: "glyphicon-road",
-        xhrRequest: {},
         async: false,
-        elasticSearch: new ElasticSearch()
+        elasticSearch: new ElasticModel()
     },
     /**
      * @class ElasticSearchModel
@@ -32,10 +31,17 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @property {String} url="" Url derived from restService.
      * @property {Object} payload={} Payload used to POST to url.
      * @property {String} searchStringAttribute="searchString" The Search string is added to the payload object with this key.
-     * @param {Object} config Config from config.json
+     * @property {String} type="POST" The type of the request. "POST" or "GET".
+     * @property {String} responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
+     * @property {Object} triggerEvent = {} An object defining the channel and event to be posted by clicking on the search result.
+     * @property {String} triggerEvent.channel = "" Channel of radio event.
+     * @property {String} triggerEvent.event = "" Event of radio event.
+     * @property {Object} hitMap = {name: "", id: "id", coordinate: "coordinate"} Mapping object of the response hit to fit the structure of the searchbars hits.
+     * @property {String} hitType = "Elastic" Type of the hit to be appended in the recommended list.
+     * @property {String} hitGlyphicon = "glyphicon-road" Css class of the glyphicon to be prepended in the recommended list.
+     * @property {Boolean} async = false Flag if request should be asynchronous.
+     * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
      * @fires Core#RadioRequestParametricURLGetInitString
-     * @fires RestReader#RadioRequestRestReaderGetServiceById
-     * @fires Core#RadioRequestUtilGetProxyURL
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarRemoveHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
@@ -43,37 +49,13 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      */
     initialize: function () {
         const initSearchString = Radio.request("ParametricURL", "getInitString");
-        // let url = "";
 
-        // url = this.retrieveUrlFromServiceId(this.get("serviceId"));
-        // if (url !== "") {
-        // this.setUrl(url);
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
         if (initSearchString) {
             this.search(initSearchString);
         }
-        // }
-    },
-
-    /**
-     * Retrieves url from rest service using the attribute "serviceId".
-     * @param {String} serviceId Id of rest service.
-     * @fires RestReader#RadioRequestRestReaderGetServiceById
-     * @returns {String} - url of rest service.
-     */
-    retrieveUrlFromServiceId: function (serviceId) {
-        const service = Radio.request("RestReader", "getServiceById", serviceId);
-        let url = "";
-
-        if (service) {
-            url = service.get("url");
-        }
-        else {
-            console.error("Could not retrieve url from rest service. Elastic search will fail!");
-        }
-        return url;
     },
 
     /**
@@ -121,7 +103,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
     },
 
     /**
-     * Creates the reccommended List
+     * Creates the recommended List
      * @param {Object[]} responseData Response data.
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarRemoveHits
