@@ -344,7 +344,9 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
 
         if (textArray.length > maxNum) {
             textArrayCorrected = _.sample(textArray, maxNum);
-            textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
+            if (this.get("infoText").length > 0) {
+                textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
+            }
         }
         else {
             textArrayCorrected = textArray;
