@@ -17,7 +17,7 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
      * @param {String} xhrConfig.type Type of request. "POST" or "GET".
      * @param {Object} xhrConfig.payload Payload used to "POST" to url or be appended to url if type is "GET".
      * @param {Boolean} xhrConfig.async Flag if request should be sent asynchronously.
-     * @property {String} responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
+     * @param {String} xhrConfig.responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
      * @returns {Object} - The result object of the request.
      */
     search: function (xhrConfig) {
