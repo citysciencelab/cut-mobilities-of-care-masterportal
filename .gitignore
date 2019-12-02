@@ -15,6 +15,7 @@ temp
 lgv-config
 build
 examples*
+addons
 
 /nbproject/private/
 /img/*.db
