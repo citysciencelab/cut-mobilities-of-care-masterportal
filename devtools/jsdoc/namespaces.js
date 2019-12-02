@@ -1,4 +1,9 @@
 /**
+ * @namespace AddOns
+ * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ */
+
+/**
  * @namespace Controls
  * @description Controls are small Elements that allow the user to interact directly with the Application.
  * In the Application the controls are situated in red squares on the map on the right side of the window.
