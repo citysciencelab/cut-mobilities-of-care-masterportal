@@ -9,6 +9,7 @@ import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./osm/model";
 import GdiModel from "./gdi/model";
+import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 
 /**
@@ -145,6 +146,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (_.has(config, "gdi") === true) {
             new GdiModel(config.gdi);
+        }
+        if (_.has(config, "elasticSearch") === true) {
+            new ElasticSearchModel(config.elasticSearch);
         }
 
         this.model.setHitIsClick(false);
