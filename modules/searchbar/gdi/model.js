@@ -186,22 +186,6 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             result = JSON.parse(replace_object);
 
         return result;
-    },
-    /**
-     * Setter for MinChars
-     * @param {Number} value - value for minChars
-     * @returns {void}
-     */
-    setMinChars: function (value) {
-        this.set("minChars", value);
-    },
-    /**
-     * Setter for ServiceId
-     * @param {Number} value for serviceId
-     * @returns {void}
-     */
-    setServiceId: function (value) {
-        this.set("serviceId", value);
     }
 });
 
