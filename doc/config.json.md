@@ -48,6 +48,7 @@ Konfiguration der Searchbar
 |bkg|nein|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||Konfiguration des BKG Suchdienstes.|false|
 |gazetteer|nein|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Konfiguration des Gazetteer Suchdienstes.|false|
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes.|false|
+|elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
@@ -218,6 +219,55 @@ Todo
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |query_string|ja|String|"%%searchString%%"|Todo|false|
+
+***
+
+#### Portalconfig.searchBar.elasticSearch
+Konfiguration des Elastic Search Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
+|serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|type|nein|enum["POST", "GET"]|"POST"|Art des Requests.|false|
+|payload|nein|Object|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
+|searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
+|responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, dass die gefundenen features enthält.|false|
+|triggerEvent|nein|Object|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
+|triggerEvent.channel|ja|String||Name des channels.|false|
+|triggerEvent.event|ja|String||Name des events.|false|
+|hitMap|nein|Object|{name: "name", id: "id", coordinate: "coordinate"|Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
+|hitType|nein|String|"Elastic"|Typ des Suchergebnissses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
+|hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
+ 
+ **Beispiel**
+ ```
+ #!json
+"elasticSearch": {
+    "minChars":3,
+    "serviceId":"elastic_hh",
+    "type": "GET",
+    "payload": {
+        "id":"query",
+        "params":{
+            "query_string":""
+        }
+    },
+    "searchStringAttribute": "query_string",
+    "responseEntryPath": "hits.hits",
+    "triggerEvent": {
+        "channel": "Parser",
+        "event": "addGdiLayer"
+    },
+    "hitMap": {
+        "name": "_source.name",
+        "id": "_source.id",
+        "source": "_source"
+    },
+    "hitType": "Fachthema",
+    "hitGlyphicon": "glyphicon-list"
+}
+```
 
 ***
 
