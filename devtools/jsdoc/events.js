@@ -1004,6 +1004,12 @@
  */
 
 /**
+* @event Core.ModelList#RadioTriggerModelListRefreshLightTree
+* @description Refreshes the light tree.
+* @example Radio.trigger("ModelList", "refreshLightTree")
+*/
+
+/**
  * @event Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
  * @description Triggered when one item has a change in the attribute isVisibleInMap
  */
