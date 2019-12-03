@@ -10,6 +10,7 @@ module.exports = {
     resolve: {
         alias: {
             "@modules": path.resolve(__dirname, "../modules"),
+            "@addons": path.resolve(__dirname, "../addons"),
             "@testUtil": path.resolve(__dirname, "../test/unittests/Util"),
             "@portalconfigs": path.resolve(__dirname, "../portalconfigs")
         }
