@@ -5,6 +5,7 @@
 
 /**
  * Scrolls the ol canvas up.
+ * Needed since selenium does not support scrolling.
  * @returns {void}
  */
 function mouseWheelCanvasUp () {
@@ -18,6 +19,7 @@ function mouseWheelCanvasUp () {
 
 /**
  * Scrolls the ol canvas down.
+ * Needed since selenium does not support scrolling.
  * @returns {void}
  */
 function mouseWheelCanvasDown () {
@@ -52,13 +54,15 @@ function getCenter () {
  * @returns {Number} current resolution of MapView
  */
 function getResolution () {
-    return Backbone.Radio.request("MapView", "getOptions").resolution;
+    const options = Backbone.Radio.request("MapView", "getOptions");
+
+    return options ? options.resolution : null;
 }
 
 module.exports = {
+    mouseWheelCanvasUp,
+    mouseWheelCanvasDown,
     isFullscreen,
     getCenter,
-    getResolution,
-    mouseWheelCanvasUp,
-    mouseWheelCanvasDown
+    getResolution
 };

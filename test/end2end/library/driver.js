@@ -1,4 +1,5 @@
-const {until, By} = require("selenium-webdriver");
+const {until, By} = require("selenium-webdriver"),
+    {getResolution} = require("./scripts");
 
 /**
  * Prepares the driver for testing.
@@ -14,6 +15,9 @@ async function initDriver (builder, url, resolution) {
     await driver.get(url);
     await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
     await driver.wait(until.elementLocated(By.id("loader")), 50000);
+
+    // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
+    await driver.wait(async () => await driver.executeScript(getResolution) !== null);
 
     return driver;
 }
