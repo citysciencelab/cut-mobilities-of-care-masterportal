@@ -1,4 +1,17 @@
-const zoomtests = require("./modules/controls/Zoom.js");
+const modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+    panTests = require("./tests/Pan.js"),
+    zoomTests = require("./tests/Zoom.js");
+
+/**
+ * The complete Triforce, or one or more components of the Triforce.
+ * @typedef {Object} e2eTestParams
+ * @property {selenium-webdriver.Builder} builder fully prepared builder that can be used for instantiation
+ * @property {String} url to open Masterportal with
+ * @property {String} resolution as WIDTHxHEIGHT
+ * @property {String} config key that defines which config the Masterportal should run on
+ * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
+ * @property {String} browsername string indicating which browser is in use
+ */
 
 /**
  * Test Runner. Will call all tests for a given set of parameters.
@@ -20,23 +33,17 @@ function tests (builder, url, browsername, resolution, config, mode) {
         setTimeout(done, 500);
     });
 
-    describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, async function () {
+    describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
         this.timeout(150000);
 
-        // --- Zoom ---
-        await zoomtests(builder, url, resolution, config, mode);
+        const e2eTestParams = {builder, url, resolution, config, mode, browsername};
 
-        // // --- Search ---
-        // suchtests(driver);
+        // modules/controls
+        modulesControlsZoomTests(e2eTestParams);
 
-        // // --- Controls ---
-        // controltests(driver);
-
-        // // --- Themenbaum ---
-        // themenbaumlighttests(driver);
-
-        // // --- ParametricUrl ---
-        // parametricUrlTests(driver);
+        // non-module tests
+        panTests(e2eTestParams);
+        zoomTests(e2eTestParams);
     });
 }
 
