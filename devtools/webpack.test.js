@@ -44,6 +44,7 @@ module.exports = {
             Backbone: "backbone",
             Radio: "backbone.radio",
             _: "underscore",
+            i18next: ["i18next/dist/cjs/i18next.js"],
             Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
             XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
             fs: "fs",
