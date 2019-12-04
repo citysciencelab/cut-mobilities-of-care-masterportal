@@ -10,8 +10,8 @@ const webdriver = require("selenium-webdriver"),
     ],
     configs = new Map([
         // ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
-        // ["DT", "/test/end2end/resources/configs/default"], // DT = Default Tree (like portal/master)
-        ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
+        ["DT", "/test/end2end/resources/configs/default"], // DT = Default Tree (like portal/master)
+        // ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
     ]),
     modes = [
         "2D"
@@ -26,6 +26,15 @@ const webdriver = require("selenium-webdriver"),
  */
 function isMobile (resolution) {
     return resolution === resolutions[1];
+}
+
+/**
+ * Returns true for url indicating basic (LT) configuration.
+ * @param {String} url url in use
+ * @returns {boolean} whether configuration is basic
+ */
+function isBasic (url) {
+    return url.includes(configs.get("LT"));
 }
 
 /**
@@ -68,5 +77,6 @@ module.exports = {
     configs,
     modes,
     isMobile,
+    isBasic,
     getBsCapabilities
 };

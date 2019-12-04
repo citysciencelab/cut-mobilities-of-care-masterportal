@@ -36,11 +36,8 @@ function mouseWheelCanvasDown () {
  * @returns {boolean} true if fullscreen is detected
  */
 function isFullscreen () {
-    const windowValue = window.innerHeight,
-        screenValue = screen.availHeight,
-        tolerance = 2;
-
-    return windowValue >= screenValue - tolerance && windowValue <= screenValue + tolerance;
+    // should be used according to MDN https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+    return Boolean(document.fullscreenElement);
 }
 
 /**

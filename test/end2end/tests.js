@@ -1,4 +1,5 @@
 const modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+    modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js");
 
@@ -40,6 +41,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
 
         // modules/controls
         modulesControlsZoomTests(e2eTestParams);
+        modulesControlsFullScreenTests(e2eTestParams);
 
         // non-module tests
         panTests(e2eTestParams);
