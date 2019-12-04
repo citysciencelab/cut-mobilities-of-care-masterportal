@@ -1,0 +1,12 @@
+{
+    "something": "etwas spezielles",
+    "modules": {
+        "tools": {
+            "contact": {
+                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(special:modules.tools.contact.textSendButton)&quot;",
+                "userNamePlaceholder": "Ihr Name",
+                "textSendButton": "Abschicken"
+            }
+        }
+    }
+}

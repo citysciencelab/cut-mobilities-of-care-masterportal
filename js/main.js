@@ -10,6 +10,9 @@ import "../css/style.css";
 // polyfill für Promises im IE
 import "es6-promise/auto";
 
+import i18nextXHRBackend from "i18next-xhr-backend";
+import i18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
+
 var scriptTags = document.getElementsByTagName("script"),
     scriptTagsArray = Array.prototype.slice.call(scriptTags),
     configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js",
@@ -104,5 +107,51 @@ else {
 context = require.context("../modules/", true, /.+\.less?$/);
 
 context.keys().forEach(context);
+
+// configuration of i18next
+i18next
+    .use(i18nextXHRBackend)
+    .use(i18nextBrowserLanguageDetector)
+    .on("languageChanged", function (lng) {
+        Radio.trigger("i18next", "languageChanged", lng);
+    })
+    .init({
+        debug: true,
+
+        lng: "en",
+        fallbackLng: "en", // use en if detected lng is not available
+        whitelist: ["en", "de"],
+
+        ns: ["common", "special"],
+        defaultNS: "common",
+
+        backend: {
+            loadPath: "/locales/{{lng}}/{{ns}}.json",
+            crossDomain: false
+        },
+
+        detection: {
+            // order and from where user language should be detected
+            order: ["querystring", "cookie", "localStorage", "navigator", "htmlTag", "path", "subdomain"],
+
+            // keys or params to lookup language from
+            lookupQuerystring: "lng",
+            lookupCookie: "i18next",
+            lookupLocalStorage: "i18nextLng",
+            lookupFromPathIndex: 0,
+            lookupFromSubdomainIndex: 0,
+
+            // cache user language on
+            caches: ["localStorage", "cookie"],
+            excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
+
+            // optional expire and domain for set cookie
+            cookieMinutes: 10,
+            cookieDomain: "myDomain",
+
+            // only detect languages that are in the whitelist
+            checkWhitelist: true
+        }
+    });
 
 export default context;
