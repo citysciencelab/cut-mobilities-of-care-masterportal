@@ -46,7 +46,9 @@ const BalkendiagrammTheme = Theme.extend({
                 this.set("themeType", gfiBildungsatlasFormat.themeType);
 
                 // set the description for the BarGraph
-                this.set("description", layerList[0].get("gfiFormat").gfiBildungsatlasDescription);
+                if (layerList && Array.isArray(layerList) && layerList.length > 0 && layerList[0].get("gfiFormat") && layerList[0].get("gfiFormat").gfiBildungsatlasDescription) {
+                    this.set("description", layerList[0].get("gfiFormat").gfiBildungsatlasDescription);
+                }
 
                 // set the statistic with year for BarGraph
                 this.set("dataset", statisticWithYear);
