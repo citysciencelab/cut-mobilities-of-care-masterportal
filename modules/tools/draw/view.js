@@ -14,8 +14,9 @@ const DrawToolView = Backbone.View.extend({
         "keyup .circleRadiusOuter input": "setCircleRadiusOuter",
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
+        "change .opacityContour select": "setOpacityContour",
         "change .color select": "setColor",
-        "change .colorContour select": "setColor",
+        "change .colorContour select": "setColorContour",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
         "click .modify": "toggleInteraction",
@@ -114,6 +115,8 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".dropdownMethod").hide();
                 this.$el.find(".colorContour").hide();
                 this.$el.find(".color").show();
+                this.$el.find(".opacity").show();
+                this.$el.find(".opacityContour").hide();
                 break;
             }
             case "Text schreiben": {
@@ -127,6 +130,8 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".dropdownUnit").hide();
                 this.$el.find(".dropdownMethod").hide();
                 this.$el.find(".colorContour").hide();
+                this.$el.find(".opacity").show();
+                this.$el.find(".opacityContour").hide();
                 break;
             }
             case "Kreis zeichnen": {
@@ -139,7 +144,10 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".circleRadiusOuter").hide();
                 this.$el.find(".dropdownUnit").show();
                 this.$el.find(".dropdownMethod").show();
+                this.$el.find(".color").show();
                 this.$el.find(".colorContour").show();
+                this.$el.find(".opacity").show();
+                this.$el.find(".opacityContour").show();
                 break;
             }
             case "Doppelkreis zeichnen": {
@@ -147,17 +155,46 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".font-size").hide();
                 this.$el.find(".font").hide();
                 this.$el.find(".radius").hide();
+                this.$el.find(".dropdownMethod").hide();
                 this.$el.find(".stroke-width").show();
                 this.$el.find(".circleRadiusInner").show();
                 this.$el.find(".circleRadiusOuter").show();
                 this.$el.find(".dropdownUnit").show();
-                this.$el.find(".dropdownMethod").hide();
+                this.$el.find(".color").show();
                 this.$el.find(".colorContour").show();
+                this.$el.find(".opacity").show();
+                this.$el.find(".opacityContour").show();
                 break;
             }
             case "Linie zeichnen": {
-                this.$el.find(".colorContour").show();
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").hide();
                 this.$el.find(".color").hide();
+                this.$el.find(".dropdownUnit").hide();
+                this.$el.find(".dropdownMethod").hide();
+                this.$el.find(".circleRadiusInner").hide();
+                this.$el.find(".circleRadiusOuter").hide();
+                this.$el.find(".stroke-width").show();
+                this.$el.find(".colorContour").show();
+                this.$el.find(".opacityContour").show();
+                this.$el.find(".opacity").hide();
+                break;
+            }
+            case "Fläche zeichnen": {
+                this.$el.find(".text").hide();
+                this.$el.find(".font-size").hide();
+                this.$el.find(".font").hide();
+                this.$el.find(".radius").hide();
+                this.$el.find(".dropdownUnit").hide();
+                this.$el.find(".dropdownMethod").hide();
+                this.$el.find(".circleRadiusInner").hide();
+                this.$el.find(".circleRadiusOuter").hide();
+                this.$el.find(".stroke-width").show();
+                this.$el.find(".color").show();
+                this.$el.find(".opacity").show();
+                this.$el.find(".opacityContour").show();
                 break;
             }
             default: {
@@ -170,7 +207,7 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".stroke-width").show();
                 this.$el.find(".dropdownUnit").hide();
                 this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".colorContour").hide();
+                this.$el.find(".colorContour").show();
                 this.$el.find(".color").show();
                 break;
             }
@@ -307,7 +344,7 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
-     * setter for fontSize on the model
+     * setter for the unit of the circle diameter
      * @param {event} evt - with new fontSize
      * @return {void}
      */
@@ -330,12 +367,25 @@ const DrawToolView = Backbone.View.extend({
             newColor.push(parseInt(color, 10));
         });
         newColor.push(this.model.get("opacity"));
-        if (evt.target.classList[2] === "colorContour") {
-            this.model.setColorContour(newColor);
-        }
-        else {
-            this.model.setColor(newColor);
-        }
+        this.model.setColor(newColor);
+        this.model.updateDrawInteraction();
+    },
+
+    /**
+     * setter for new strokecolor on the model
+     * and adds the opacity before
+     * @param {event} evt - with new color
+     * @return {void}
+     */
+    setColorContour: function (evt) {
+        var colors = evt.target.value.split(","),
+            newColorContour = [];
+
+        colors.forEach(function (color) {
+            newColorContour.push(parseInt(color, 10));
+        });
+        newColorContour.push(this.model.get("opacity"));
+        this.model.setColorContour(newColorContour);
         this.model.updateDrawInteraction();
     },
 
@@ -350,6 +400,7 @@ const DrawToolView = Backbone.View.extend({
     },
 
     setMethodCircle: function (evt, drawTypeCircle = "Kreis zeichnen") {
+
         if (evt.target.value === "definiert") {
             this.model.enableMethodDefiniert();
         }
@@ -392,17 +443,20 @@ const DrawToolView = Backbone.View.extend({
 
     /**
      * setter for opacity on the model
-     * and also sets the color new on the model
      * @param {event} evt - with new opacity
      * @return {void}
      */
     setOpacity: function (evt) {
-        var newColor = this.model.get("colorFill");
+        this.model.setOpacity(evt.target.value);
+    },
 
-        newColor[3] = parseFloat(evt.target.value);
-        this.model.setColorFill(newColor);
-        this.model.setOpacity(parseFloat(evt.target.value));
-        this.model.updateDrawInteraction();
+    /**
+     * setter for opacity of the stroke on the model
+     * @param {event} evt - with new opacity
+     * @return {void}
+     */
+    setOpacityContour: function (evt) {
+        this.model.setOpacityContour(evt.target.value);
     }
 });
 
