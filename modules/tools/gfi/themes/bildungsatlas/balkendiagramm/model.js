@@ -155,33 +155,28 @@ const BalkendiagrammTheme = Theme.extend({
      */
     getRevertData: function (content, themeUnit, nameStadtteil) {
         const result = {};
-        let key = "";
+        let key = "",
+            value = "";
 
         for (key in content) {
             if (content[key] === null || content[key] === undefined) {
                 result[key] = "*g.F.";
             }
             else if (themeUnit === "anzahl") {
-                if (isNaN(Number(content[key]))) {
-                    content[key] = 0;
-                }
-                result[key] = Math.round(content[key]).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                value = this.getValuebByKey(content[key]);
+                result[key] = Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
             else if (themeUnit === "anteil") {
-                if (isNaN(Number(content[key]))) {
-                    content[key] = 0;
-                }
-                result[key] = Math.round(content[key]) + "%";
+                value = this.getValuebByKey(content[key]);
+                result[key] = Math.round(value) + "%";
             }
             else if (themeUnit === "anteilWanderungen") {
-                if (isNaN(Number(content[key]))) {
-                    content[key] = 0;
-                }
+                value = this.getValuebByKey(content[key]);
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + nameStadtteil)) {
-                    result[key] = (content[key] > 0 ? "+" : "") + (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",");
+                    result[key] = (value > 0 ? "+" : "") + (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
                 }
                 else {
-                    result[key] = (Math.round(content[key] * 100) / 100).toString().replace(/\./g, ",") + "%";
+                    result[key] = (Math.round(value * 100) / 100).toString().replace(/\./g, ",") + "%";
                 }
             }
             else {
@@ -190,6 +185,17 @@ const BalkendiagrammTheme = Theme.extend({
         }
 
         return result;
+    },
+
+    /**
+     * @param {object} value the value from the content with individual key
+     * @returns {String}  - the well formed value to be shown on mouse hover
+     */
+    getValuebByKey (value) {
+        if (isNaN(Number(value))) {
+            return 0;
+        }
+        return value;
     },
 
     /**
