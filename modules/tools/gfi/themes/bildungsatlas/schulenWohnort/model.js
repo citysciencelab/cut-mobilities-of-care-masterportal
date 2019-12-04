@@ -257,7 +257,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     getLayerStatisticAreas: function () {
         const layers = Radio.request("ModelList", "getModelsByAttributes", {"gfiTheme": this.get("gfiTheme"), "id": this.get("themeId")});
 
-        if (!layers.length) {
+        if (!layers.length || layers.length === 0) {
             return false;
         }
 
