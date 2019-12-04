@@ -29,7 +29,7 @@ const BalkendiagrammTheme = Theme.extend({
                     rawTableContent,
                     tableContent;
 
-                if (layerList && Array.isArray(layerList) && layerList[0].get("gfiFormat") && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
+                if (layerList && Array.isArray(layerList) && layerList.length > 0 && layerList[0].get("gfiFormat") && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
                     gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
                     statisticWithYear = this.getStatisticWithYear(gfiProperties, gfiBildungsatlasFormat.themeCategory, "jahr_");
                     latestValue = statisticWithYear.length >= 1 ? statisticWithYear[statisticWithYear.length - 1].number : null;
