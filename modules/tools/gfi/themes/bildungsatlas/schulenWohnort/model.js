@@ -300,6 +300,31 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     },
 
     /**
+     * creates an array of featureIds to select by the model
+     * @param {Feature[]} schools an array of features to check
+     * @param {String} StatGeb_Nr the urban area number based on the customers content (equals StatGeb_Nr)
+     * @returns {Integer[]}  an array of feature ids where the feature is grouped by StatGeb_Nr
+     */
+    getFeatureIds: function (schools, StatGeb_Nr) {
+        const featureIds = [];
+
+        if (!Array.isArray(schools)) {
+            return featureIds;
+        }
+
+        schools.forEach(function (school) {
+            if (this.getPercentageOfStudentsByStatGeb_Nr(school, StatGeb_Nr) === false) {
+                // continue with forEach
+                return;
+            }
+
+            featureIds.push(school.getId());
+        }, this);
+
+        return featureIds;
+    },
+
+    /**
      * Show all features in all given layers
      * @param   {Object} layer Layer to show
      * @returns {Void}  -

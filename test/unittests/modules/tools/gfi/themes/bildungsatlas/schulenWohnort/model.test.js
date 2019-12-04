@@ -158,6 +158,62 @@ describe("tools/gfi/themes/bildungsatlas/schulenWohnort/model", function () {
         });
     });
 
+    describe("getFeatureIds", function () {
+        it("should add all ids (gotten by school.getId) of schools with the requested area code into the response array", function () {
+            const UnitTestSchulenWohnortSchool = class {
+                    /**
+                     * constructor
+                     * @param {Integer} id the id of the school as number
+                     * @param {Integer} StatGeb_Nr the code of the district as number
+                     * @param {*} someValue test value to be returned on specific conditions
+                     */
+                    constructor (id, StatGeb_Nr, someValue) {
+                        this.id = id;
+                        this.StatGeb_Nr = StatGeb_Nr;
+                        this.someValue = someValue;
+                    }
+
+                    /**
+                     * getter for this.someValue on certain conditions
+                     * @param {*} key the key to get data if condition "SG_" + this.StatGeb_Nr is fulfilled this.someValue is returned
+                     * @returns {*|Undefined}  returns this.someValue if condition is fulfilled, returns undefined if otherwise
+                     */
+                    get (key) {
+                        if (key === "SG_" + this.StatGeb_Nr) {
+                            return this.someValue;
+                        }
+                        return undefined;
+                    }
+
+                    /**
+                     * getter for the id of the school
+                     * @returns {Integer}  returns the value this.id set by the constructor
+                     */
+                    getId () {
+                        return this.id;
+                    }
+                },
+                schools = [
+                    new UnitTestSchulenWohnortSchool(1, 123456789, 50),
+                    new UnitTestSchulenWohnortSchool(2, 123456789, 25),
+                    new UnitTestSchulenWohnortSchool(3, 987654321, 15),
+                    new UnitTestSchulenWohnortSchool(4, 987654321, 10)
+                ];
+
+            expect(model.getFeatureIds(schools, 123456789)).to.deep.equal([1, 2]);
+        });
+
+        it("should return an empty array if schools looks somehow strange", function () {
+            expect(model.getFeatureIds(undefined, 123456789)).to.be.empty;
+            expect(model.getFeatureIds(false, 123456789)).to.be.empty;
+            expect(model.getFeatureIds(null, 123456789)).to.be.empty;
+            expect(model.getFeatureIds("foo", 123456789)).to.be.empty;
+            expect(model.getFeatureIds(1234, 123456789)).to.be.empty;
+            expect(model.getFeatureIds({}, 123456789)).to.be.empty;
+            expect(model.getFeatureIds([1, 2, 3, 4])).to.be.empty;
+        });
+    });
+
     describe("getPercentageOfStudentsByStatGeb_Nr", function () {
         it("should return false if the school parameter is used inappropriately", function () {
             expect(model.getPercentageOfStudentsByStatGeb_Nr(undefined, 1234)).to.be.false;
