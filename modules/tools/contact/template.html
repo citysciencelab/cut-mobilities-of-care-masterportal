@@ -7,7 +7,7 @@
     <div id="contactNameDiv" class="form-group has-feedback">
         <div class="input-group">
             <span class="contactInputGroup input-group-addon">Name</span>
-            <input type="text" class="form-control" id="contactName" aria-describedby="contactNameStatus" placeholder="Ihr Name" value="<%= userName %>">
+            <input type="text" class="form-control" id="contactName" aria-describedby="contactNameStatus" placeholder="<%= userNamePlaceholder %>" value="<%= userName %>">
         </div>
         <span id="contactNameFeedback" class="contactHide glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
         <span id="contactNameStatus" class="sr-only">(success)</span>
@@ -37,6 +37,11 @@
         <span id="contactTextStatus" class="sr-only">(success)</span>
     </div>
     <button type="button" class="contactButton btn btn-default" title="Eingaben jetzt abschicken." disabled="disabled">
-        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Abschicken
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <%= textSendButton %>
     </button>
+
+    <div>
+        <button id="languageChangeToDE">de</button>
+        <button id="languageChangeToEN">en</button>
+    </div>
 </div>
