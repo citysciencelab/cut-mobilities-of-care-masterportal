@@ -98,7 +98,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
 
             this.set("isCreated", true);
 
-            if (layerList && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
+            if (layerList && Array.isArray(layerList) && layerList.length > 0 && layerList[0].get("gfiFormat") && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
                 gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
             }
 
