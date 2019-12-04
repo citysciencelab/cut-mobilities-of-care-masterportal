@@ -38,7 +38,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
                     layerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, "gfiTheme": gfiTheme, "id": themeId});
                 let gfiBildungsatlasFormat = {};
 
-                if (layerList && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
+                if (layerList && Array.isArray(layerList) && layerList.length > 0 && layerList[0].get("gfiFormat").gfiBildungsatlasFormat) {
                     gfiBildungsatlasFormat = layerList[0].get("gfiFormat").gfiBildungsatlasFormat;
                     this.setInfoHtml(gfiBildungsatlasFormat);
                 }
@@ -65,7 +65,7 @@ const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTh
         this.set("schoolName", attr.C_S_Name);
         this.set("streetNo", attr.C_S_Str + " " + attr.C_S_HNr);
         this.set("postCity", attr.C_S_PLZ + " " + attr.C_S_Ort);
-        this.set("socialIndex", attr.C_S_SI === -1 ? "nicht vergeben" : attr.C_S_SI);
+        this.set("socialIndex", attr.C_S_SI.toString() === "-1" ? "nicht vergeben" : attr.C_S_SI);
         this.set("hooverSchool", attr.SchPu_PrSt === 0 ? "nein" : "ja");
         this.set("preSchool", attr.C_S_SuS_ES === 0 ? "nein" : "ja");
         this.set("allDaySchool", attr.C_S_GTA === 0 ? "nein" : "ja");
