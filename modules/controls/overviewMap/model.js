@@ -15,7 +15,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
     },
     /**
      * @class OverviewMapModel
-     * @memberof Controls.Overviewmap
+     * @memberof Controls.OverviewMap
      * @extends Backbone.Model
      * @constructs
      * @param {Object} [attr] configuration object defined in config.json

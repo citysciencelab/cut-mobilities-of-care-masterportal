@@ -1,6 +1,6 @@
-import FreezeView from "./freezewindowview";
-import FreezeToolMenuView from "./freezetoolmenuview";
-import FreezeControlMenuView from "./freezecontrolmenuview";
+import FreezeView from "./freezeWindowView";
+import FreezeToolMenuView from "./freezeToolMenuView";
+import FreezeControlMenuView from "./freezeControlMenuView";
 
 const FreezeModel = Backbone.Model.extend({
     defaults: {

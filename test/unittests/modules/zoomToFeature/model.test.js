@@ -1,4 +1,4 @@
-import Model from "@modules/zoomtofeature/model";
+import Model from "@modules/zoomToFeature/model";
 import Feature from "ol/Feature";
 const chai = require("chai");
 
