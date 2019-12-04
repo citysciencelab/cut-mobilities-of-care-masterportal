@@ -23,6 +23,10 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
             "invalid": this.showValidity
         });
 
+        this.listenTo(this.model, {
+            "change": this.render
+        });
+
         if (this.model.get("isActive") === true) {
             this.render();
         }
@@ -44,6 +48,18 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
             this.setMaxHeight();
             this.delegateEvents();
         }
+
+        // -------------- switch buttons for language ---------------
+        this.$el.find("#languageChangeToEN").unbind("click");
+        this.$el.find("#languageChangeToDE").unbind("click");
+        this.$el.find("#languageChangeToEN").click(function () {
+            i18next.changeLanguage("en");
+        });
+        this.$el.find("#languageChangeToDE").click(function () {
+            i18next.changeLanguage("de");
+        });
+        // -------------- switch buttons for language ---------------
+
         return this;
     },
 

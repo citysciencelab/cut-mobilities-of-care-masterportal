@@ -1,0 +1,12 @@
+{
+    "something": "and now for something completely different",
+    "modules": {
+        "tools": {
+            "contact": {
+                "textPlaceholder": "Please write down your message in here and press &quot;$t(special:modules.tools.contact.textSendButton)&quot;",
+                "userNamePlaceholder": "your name",
+                "textSendButton": "send message"
+            }
+        }
+    }
+}
