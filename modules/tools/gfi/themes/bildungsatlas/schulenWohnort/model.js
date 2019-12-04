@@ -236,7 +236,7 @@ const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeMode
     },
 
     /**
-     * get
+     * get the percentage of students as defined in school using the parameter StatGeb_Nr
      * @param   {Object} school an object type Feature with the school information
      * @param   {function(String):*} school.get a function to request information from the feature
      * @param   {Integer} StatGeb_Nr the area code of the selected district as defined in defaults.StatGeb_Nr
