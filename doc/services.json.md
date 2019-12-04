@@ -108,6 +108,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
+      "gfiFormat": {"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}                                             },
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "",
       "datasets" : [
