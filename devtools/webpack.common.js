@@ -56,6 +56,7 @@ module.exports = function (path2CustomModule) {
                 $: "jquery",
                 Backbone: "backbone",
                 Radio: "backbone.radio",
+                i18next: ["i18next/dist/cjs/i18next.js"],
                 _: "underscore"
             }),
             // create css under build/
