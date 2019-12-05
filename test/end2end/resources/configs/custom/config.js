@@ -31,7 +31,7 @@ const Config = {
     ],
     portalConf: "../../portal/master/",
     remoteInterface: {
-        postMessageUrl: "https://localhost:9001"
+        postMessageUrl: "http://localhost:9001"
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
