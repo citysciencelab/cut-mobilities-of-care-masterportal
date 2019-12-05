@@ -346,6 +346,7 @@
         "orientation3d":true,
         "fullScreen":true,
         "backForward":true,
+        "freeze":true,
         "zoom":true,
         "orientation":{
            "zoomMode":"once",
