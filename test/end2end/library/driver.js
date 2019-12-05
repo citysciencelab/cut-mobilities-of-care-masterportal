@@ -6,7 +6,7 @@ const {until, By} = require("selenium-webdriver"),
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
-async function prepare3D (driver) {
+async function prepare3D (driver) { // eslint-disable-line
     // TODO set driver state to activated 3D mode
 }
 
@@ -15,7 +15,7 @@ async function prepare3D (driver) {
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
-async function prepareOB (driver) {
+async function prepareOB (driver) { // eslint-disable-line
     // TODO set driver state to activated OB mode
 }
 

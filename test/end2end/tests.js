@@ -1,10 +1,10 @@
-const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
-    // modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
-    // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
+const modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
+    modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
+    modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
     modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
-    // modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
+    modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
     modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js");
@@ -42,16 +42,21 @@ function tests (builder, url, browsername, resolution, config, mode) {
 
         /*
          * restriction statement to reduce tests during writing; will change a lot and should be ultimately removed;
-         * overall test call structure may require changes previously to reduce run-time
+         * overall test call structure may require some changes previously to reduce run-time
          */
-        if (mode !== "2D" || !["DT", "LT"].includes(config)) {
+        if (mode !== "2D") {
+            // usage of 3D/OB mode not ready yet
             return;
         }
 
         // modules/controls
+        modulesControlsAttributionsTests(e2eTestParams);
+        modulesControlsBackForwardTests(e2eTestParams);
+        modulesControlsFreezeTests(e2eTestParams);
         modulesControlsFullScreenTests(e2eTestParams);
         modulesControlsOrientationTests(e2eTestParams);
         modulesControlsOverviewMapTests(e2eTestParams);
+        modulesControlsTotalViewTests(e2eTestParams);
         modulesControlsZoomTests(e2eTestParams);
 
         // non-module tests
