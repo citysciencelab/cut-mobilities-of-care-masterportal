@@ -1,12 +1,6 @@
 import ThemeView from "../../view";
 import DefaultTemplate from "text-loader!./template.html";
 
-/**
- * @member SchulenEinzugsgebieteThemeTemplate
- * @description Template used to create gfi for schulenEinzugsgebiete
- * @memberof Tools.GFI.Themes.Bildungsatlas
- */
-
 const SchulenEinzugsgebieteThemeView = ThemeView.extend(/** @lends SchulenEinzugsgebieteThemeView.prototype */{
     /**
      * @class SchulenEinzugsgebieteThemeView
