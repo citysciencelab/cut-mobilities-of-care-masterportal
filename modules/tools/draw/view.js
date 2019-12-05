@@ -255,7 +255,7 @@ const DrawToolView = Backbone.View.extend({
             selectedElement = element.options[element.selectedIndex];
 
         if (selectedElement.text === "Doppelkreis zeichnen") {
-            this.model.enableMethodDefiniert();
+            this.model.enableMethodDefiniert(false);
         }
         this.model.setDrawType(selectedElement.value, selectedElement.text);
         this.model.updateDrawInteraction();
@@ -399,16 +399,15 @@ const DrawToolView = Backbone.View.extend({
         this.model.updateDrawInteraction();
     },
 
-    setMethodCircle: function (evt, drawTypeCircle = "Kreis zeichnen") {
+    setMethodCircle: function (evt) {
 
         if (evt.target.value === "definiert") {
-            this.model.enableMethodDefiniert();
+            this.model.enableMethodDefiniert(false);
         }
         else if (evt.target.value === "interaktiv") {
-            $(".input-unit")[0].disabled = true;
-            $(".diameter")[0].disabled = true;
+            this.model.enableMethodDefiniert(true);
         }
-        this.model.setMethodCircle(evt.target.value, drawTypeCircle);
+        this.model.setMethodCircle(evt.target.value);
     },
 
     /**
@@ -417,8 +416,7 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     setCircleRadius: function () {
-        this.model.setCircleRadius($(".diameter")[0].value);
-        // this.model.updateDrawInteraction();
+        this.model.setCircleRadius($(".circleRadiusInner input")[0].value);
     },
 
     /**
@@ -427,8 +425,7 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     setCircleRadiusOuter: function () {
-        this.model.setCircleRadiusOuter($(".diameterOuter")[0].value);
-        // this.model.updateDrawInteraction();
+        this.model.setCircleRadiusOuter($(".circleRadiusOuter input")[0].value);
     },
 
     /**
