@@ -345,6 +345,7 @@
      "controls":{
         "orientation3d":true,
         "fullScreen":true,
+        "backForward":true,
         "zoom":true,
         "orientation":{
            "zoomMode":"once",
