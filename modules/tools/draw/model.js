@@ -25,6 +25,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         radius: 6,
         strokeWidth: 1,
         opacity: 1,
+        opacityContour: 1,
         drawType: {
             geometry: "Point",
             text: "Punkt zeichnen"
@@ -486,11 +487,21 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         return vectorLayer;
     },
+
+    /**
+     * creates a single new draw interactions. If the drawType "Doppelkreis" is selected,
+     * then two new draw interactions will be initialized.
+     * @param {ol/layer/Vector} layer - the layer for the drawing.
+     * @param {object} drawType - contains the geometry and description
+     * @param {Boolean} isActive - true or false. Sets the draw interaction active or deactive.
+     * @param {integer} maxFeatures - maximal number of features to be drawn.
+     * @return {ol/layer/Vector} vectorLayer
+     */
     createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
         const previousDrawInteraction = this.get("drawInteraction2"),
             drawInteraction1 = this.createDrawInteraction(drawType, layer);
 
-        if (!_.isUndefined(previousDrawInteraction) === true && this.get("drawType").text !== "Text schreiben") {
+        if (previousDrawInteraction !== undefined && this.get("drawType").text !== "Text schreiben") {
             previousDrawInteraction.setActive(false);
         }
 
@@ -507,10 +518,25 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
     },
 
+    /**
+     * creates a single new draw interactions. If the drawType "Doppelkreis" is selected,
+     * then two new draw interactions will be initialized.
+     * @param {ol/interaction/Draw} drawInteraction - Openlayers drawInteraction.
+     * @param {integer} maxFeatures - maximal number of features to be drawn.
+     * @param {Boolean} doubleIsActive - Boolean to compute a double circle or single circle.
+     * @return {void}
+     */
     processDrawInteraction: function (drawInteraction, maxFeatures, doubleIsActive) {
         this.createDrawInteractionListener(drawInteraction, maxFeatures, doubleIsActive);
         Radio.trigger("Map", "addInteraction", drawInteraction);
     },
+
+    /**
+     * creates a select interaction and adds it to the map.
+     * @param {ol/layer/Vector} layer - the layer for the drawing.
+     * @param {Boolean} isActive - true or false. Sets the draw interaction active or deactive.
+     * @return {void}
+     */
     createSelectInteractionAndAddToMap: function (layer, isActive) {
         var selectInteraction = this.createSelectInteraction(layer);
 
@@ -519,6 +545,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.createSelectInteractionListener(selectInteraction, layer);
         Radio.trigger("Map", "addInteraction", selectInteraction);
     },
+
+    /**
+     * creates a modify interaction and adds it to the map, so the features can be modified.
+     * @param {ol/layer/Vector} layer - the layer for the drawing.
+     * @param {Boolean} isActive - true or false. Sets the draw interaction active or deactive.
+     * @return {void}
+     */
     createModifyInteractionAndAddToMap: function (layer, isActive) {
         var modifyInteraction = this.createModifyInteraction(layer);
 
@@ -579,10 +612,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
     },
 
+    /**
+     * Calls further function to enable and process the drawevent.
+     * Finishes the draw interaction if the method "definiert" is selected.
+     * @param {DrawEvent} evt - DrawEvent.
+     * @param {Interaction} drawInteraction - drawInteraction.
+     * @param {Boolean} doubleIsActive - true if draw type "Doppelkreis" is selected or false if not.
+     * @return {void}
+     */
     drawInteractionOnDrawevent: function (evt, drawInteraction, doubleIsActive) {
-        if (this.get("drawType").text === "Doppelkreis zeichnen") {
-            this.setMethodCircle("definiert");
-        }
         this.createSourceListenerForStyling(this.get("layer"), doubleIsActive);
         if (this.get("methodCircle") === "definiert") {
             drawInteraction.finishDrawing();
@@ -590,6 +628,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         evt.feature.set("styleId", _.uniqueId());
     },
 
+    /**
+     * Updates the draw interaction if some changes are made by the user.
+     * @return {void}
+     */
     updateDrawInteraction: function () {
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
@@ -620,7 +662,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
-            style = this.getDrawStyle(color, colorContour, drawType.geometry, strokeWidth, radius, zIndex);
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
         }
 
         return style.clone();
@@ -691,20 +733,19 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     /**
      * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
-     * @param {number} colorContour - color of the contours
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
      * @param {number} radius - from geometry
      * @param {number} zIndex - zIndex of Element
+     * @param {number} colorContour - color of the contours
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, colorContour, drawGeometryType, strokeWidth, radius, zIndex) {
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex, colorContour) {
         return new Style({
             fill: new Fill({
                 color: color
             }),
             stroke: new Stroke({
-                // color: drawGeometryType === "LineString" ? color : colorContour,
                 color: colorContour,
                 width: strokeWidth
             }),
@@ -736,6 +777,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setCircleRadius(this.defaults.circleRadiusInner);
         this.setCircleRadiusOuter(this.defaults.circleRadiusOuter);
         this.setOpacity(this.defaults.opacity);
+        this.setOpacityContour(this.defaults.opacityContour);
         this.setColor(defaultColor);
         this.setColorContour(defaultColor);
 
@@ -808,6 +850,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         if (mode.indexOf("modify") !== -1) {
             this.deactivateDrawInteraction();
             this.activateModifyInteraction();
+            this.disAbleAllDrawOptions(true);
         }
         else if (mode.indexOf("trash") !== -1) {
             this.deactivateDrawInteraction();
@@ -815,6 +858,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.activateSelectInteraction();
         }
         else if (mode.indexOf("draw") !== -1) {
+            this.disAbleAllDrawOptions(false);
             this.deactivateModifyInteraction();
             this.deactivateSelectInteraction();
             this.activateDrawInteraction();
@@ -826,10 +870,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     activateDrawInteraction: function () {
-        if (!_.isUndefined(this.get("drawInteraction"))) {
+        if (this.get("drawInteraction") !== undefined) {
             this.get("drawInteraction").setActive(true);
         }
-        if (!_.isUndefined(this.get("drawInteraction2"))) {
+        if (this.get("drawInteraction2") !== undefined) {
             this.get("drawInteraction2").setActive(true);
         }
     },
@@ -839,10 +883,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     deactivateDrawInteraction: function () {
-        if (!_.isUndefined(this.get("drawInteraction"))) {
+        if (this.get("drawInteraction") !== undefined) {
             this.get("drawInteraction").setActive(false);
         }
-        if (!_.isUndefined(this.get("drawInteraction2"))) {
+        if (this.get("drawInteraction2") !== undefined) {
             this.get("drawInteraction2").setActive(false);
         }
     },
@@ -853,7 +897,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     activateModifyInteraction: function () {
-        if (!_.isUndefined(this.get("modifyInteraction"))) {
+        if (this.get("modifyInteraction") !== undefined) {
             this.get("modifyInteraction").setActive(true);
             this.putGlyphToCursor("glyphicon glyphicon-wrench");
         }
@@ -865,7 +909,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     deactivateModifyInteraction: function () {
-        if (!_.isUndefined(this.get("modifyInteraction"))) {
+        if (this.get("modifyInteraction") !== undefined) {
             this.get("modifyInteraction").setActive(false);
             this.putGlyphToCursor("glyphicon glyphicon-pencil");
         }
@@ -887,7 +931,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     deactivateSelectInteraction: function () {
-        if (!_.isUndefined(this.get("selectInteraction"))) {
+        if (this.get("selectInteraction") !== undefined) {
             this.get("selectInteraction").setActive(false);
             this.putGlyphToCursor("glyphicon glyphicon-pencil");
         }
@@ -928,25 +972,56 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
     /**
      * activate the method "definiert", to define a circle by diameter.
+     * @param {boolean} deEnable - true or false to enable or disable.
      * @return {void}
      */
-    enableMethodDefiniert: function () {
-        $(".input-unit")[0].disabled = false;
-        $(".diameter")[0].disabled = false;
+    enableMethodDefiniert: function (deEnable) {
+        if ($(".dropdownUnit select")[0] !== undefined && $(".circleRadiusInner input")[0] !== undefined) {
+            $(".dropdownUnit select")[0].disabled = deEnable;
+            $(".circleRadiusInner input")[0].disabled = deEnable;
+        }
+    },
+
+    /**
+     * enables or disables the input/select options
+     * @param {boolean} disAble - true or false to disable or enable.
+     * @return {void}
+     */
+    disAbleAllDrawOptions: function (disAble) {
+        $(".text input")[0].disabled = disAble;
+        $(".font-size select")[0].disabled = disAble;
+        $(".font select")[0].disabled = disAble;
+        $(".radius select")[0].disabled = disAble;
+        $(".dropdownMethod select")[0].disabled = disAble;
+        $(".circleRadiusOuter input")[0].disabled = disAble;
+        $(".stroke-width select")[0].disabled = disAble;
+        $(".opacity select")[0].disabled = disAble;
+        $(".opacityContour select")[0].disabled = disAble;
+        $(".color select")[0].disabled = disAble;
+        $(".colorContour select")[0].disabled = disAble;
+        if (disAble === false && this.get("methodCircle") === "definiert") {
+            this.enableMethodDefiniert(disAble);
+        }
+        else {
+            this.enableMethodDefiniert(true);
+        }
     },
 
     /**
      * setter for drawType
-     * @param {string} value1 - geometry
+     * @param {string} value1 - geometry type
      * @param {string} value2 - text
      * @return {void}
      */
     setDrawType: function (value1, value2) {
-        if (value2 !== "Doppelkreis zeichnen") {
+        if (value2 !== "Doppelkreis zeichnen" && value2 !== undefined) {
             $(".input-method").val("interaktiv");
-            $(".input-unit")[0].disabled = true;
-            $(".diameter")[0].disabled = true;
-            this.setMethodCircle("interaktiv"); // benötige ich nicht, solange nach dem Doppelkreis setMethodCircle aufgerufen wird.
+            this.enableMethodDefiniert(true);
+            this.setMethodCircle("interaktiv");
+        }
+        else if (value2 === "Doppelkreis zeichnen") {
+            this.enableMethodDefiniert(false);
+            this.setMethodCircle("definiert");
         }
         this.set("drawType", {geometry: value1, text: value2});
     },
@@ -998,7 +1073,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         newColor[3] = parseFloat(value);
         this.setColor(newColor);
         this.set("opacity", value);
-        this.updateDrawInteraction();
     },
 
     /**
@@ -1012,7 +1086,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         newColor[3] = parseFloat(value);
         this.setColorContour(newColor);
         this.set("opacity", value);
-        this.updateDrawInteraction();
     },
 
     /**
@@ -1078,13 +1151,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("unit", value);
     },
 
+    setSelectOptionDefiniert: function (value) {
+        this.set("selectOptionDefiniert", value);
+    },
+
     /**
      * Setter for the method to draw a circle.
      * @param {string} value - interaktiv or definiert
      * @returns {void}
      */
     setMethodCircle: function (value) {
-        this.trigger("changedMethod");
         this.set("methodCircle", value);
     },
 
