@@ -1,15 +1,19 @@
+/* eslint-disable prefer-rest-params */
+
 /*
  * Scripts meant for execution within driver.executeScript function.
+ * Rest params can not be used; see docs on why arguments is used.
  * https://selenium.dev/selenium/docs/api/javascript/module/selenium-webdriver/ie_exports_Driver.html#executeScript
  */
 
 /**
- * Scrolls the ol canvas up.
+ * Scrolls the first given argument up.
  * Needed since selenium does not support scrolling.
+ * @param {WebElement} x element to scroll
  * @returns {void}
  */
-function mouseWheelCanvasUp () {
-    document.getElementsByTagName("canvas")[0].dispatchEvent(new WheelEvent("wheel", {
+function mouseWheelUp () {
+    arguments[0].dispatchEvent(new WheelEvent("wheel", {
         view: window,
         bubbles: true,
         cancelable: true,
@@ -18,12 +22,13 @@ function mouseWheelCanvasUp () {
 }
 
 /**
- * Scrolls the ol canvas down.
+ * Scrolls the first given argument down.
  * Needed since selenium does not support scrolling.
+ * @param {WebElement} x element to scroll
  * @returns {void}
  */
-function mouseWheelCanvasDown () {
-    document.getElementsByTagName("canvas")[0].dispatchEvent(new WheelEvent("wheel", {
+function mouseWheelDown () {
+    arguments[0].dispatchEvent(new WheelEvent("wheel", {
         view: window,
         bubbles: true,
         cancelable: true,
@@ -57,9 +62,11 @@ function getResolution () {
 }
 
 module.exports = {
-    mouseWheelCanvasUp,
-    mouseWheelCanvasDown,
+    mouseWheelUp,
+    mouseWheelDown,
     isFullscreen,
     getCenter,
     getResolution
 };
+
+/* eslint-enable prefer-rest-params */

@@ -7,15 +7,13 @@ const webdriver = require("selenium-webdriver"),
     {until, By} = webdriver;
 
 /**
- * Tests regarding full screen control element.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
 function FullScreenTest ({builder, url, resolution}) {
     const skipAll = isMobile(resolution) || isBasic(url);
-    // TODO test in 23, OB, too
 
-    (skipAll ? describe.skip : describe)("Modules Controls Fullscreen", function () {
+    (skipAll ? describe.skip : describe)("Modules Controls FullScreen", function () {
         let driver, fullscreenElement;
 
         before(async function () {

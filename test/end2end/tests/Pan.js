@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../library/scripts"),
     {onMoveEnd} = require("../library/scriptsAsync"),
     {initDriver} = require("../library/driver"),
-    {By} = webdriver;
+    {By, Button} = webdriver;
 
 /**
  * Tests regarding map panning.
@@ -11,9 +11,10 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function PanTests ({builder, url, resolution, browsername}) {
-    describe("Map Pan", function () {
-        // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-        const skipCanvasPan = browsername.toLowerCase().includes("chrome");
+    // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
+    const skipCanvasPan = browsername.toLowerCase().includes("chrome");
+
+    (skipCanvasPan ? describe.skip : describe)("Map Pan", function () {
         let driver;
 
         before(async function () {
@@ -24,15 +25,15 @@ async function PanTests ({builder, url, resolution, browsername}) {
             await driver.quit();
         });
 
-        (skipCanvasPan ? it.skip : it)("should move when panned", async function () {
+        it("should move when panned", async function () {
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));
 
             await driver.actions({bridge: true})
                 .move({origin: viewport})
-                .press(webdriver.Button.LEFT)
+                .press(Button.LEFT)
                 .move({origin: viewport, x: 10, y: 10})
-                .release(webdriver.Button.LEFT)
+                .release(Button.LEFT)
                 .perform();
 
             await driver.executeAsyncScript(onMoveEnd);

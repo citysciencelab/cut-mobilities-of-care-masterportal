@@ -5,18 +5,18 @@ const webdriver = require("selenium-webdriver"),
         ie: webdriver.Capabilities.ie()
     },
     resolutions = [
-        "1024x768"
-        // "600x800"
+        "1024x768",
+        "600x800"
     ],
     configs = new Map([
-        // ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
+        ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
         ["DT", "/test/end2end/resources/configs/default"], // DT = Default Tree (like portal/master)
-        // ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
+        ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
     ]),
     modes = [
-        "2D"
-        // "3D",
-        // "OB"
+        "2D",
+        "3D",
+        "OB"
     ];
 
 /**
@@ -29,12 +29,57 @@ function isMobile (resolution) {
 }
 
 /**
+ * Returns true for 2D mode.
+ * @param {String} mode to check
+ * @returns {boolean} whether mode is 2D
+ */
+function is2D (mode) {
+    return mode === modes[0];
+}
+
+/**
+ * Returns true for 3D mode.
+ * @param {String} mode to check
+ * @returns {boolean} whether mode is 3D
+ */
+function is3D (mode) {
+    return mode === modes[1];
+}
+
+/**
+ * Returns true for OB mode.
+ * @param {String} mode to check
+ * @returns {boolean} whether mode is OB
+ */
+function isOB (mode) {
+    return mode === modes[0];
+}
+
+/**
  * Returns true for url indicating basic (LT) configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
     return url.includes(configs.get("LT"));
+}
+
+/**
+ * Returns true for url indicating default (DT) configuration.
+ * @param {String} url url in use
+ * @returns {boolean} whether configuration is default
+ */
+function isDefault (url) {
+    return url.includes(configs.get("DT"));
+}
+
+/**
+ * Returns true for url indicating custom (CT) configuration.
+ * @param {String} url url in use
+ * @returns {boolean} whether configuration is custom
+ */
+function isCustom (url) {
+    return url.includes(configs.get("CT"));
 }
 
 /**
@@ -76,7 +121,12 @@ module.exports = {
     resolutions,
     configs,
     modes,
+    is2D,
+    is3D,
+    isOB,
     isMobile,
     isBasic,
+    isDefault,
+    isCustom,
     getBsCapabilities
 };

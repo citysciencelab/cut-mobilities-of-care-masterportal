@@ -6,12 +6,11 @@ const webdriver = require("selenium-webdriver"),
     {until, By} = webdriver;
 
 /**
- * Tests regarding zoom control elements.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
 function ZoomTests ({builder, url, resolution}) {
-    const skipAll = isMobile(resolution);
+    const skipAll = isMobile(resolution); // no zoom buttons on mobile devices
 
     (skipAll ? describe.skip : describe)("Modules Controls Zoom", function () {
         let driver, minus, plus;

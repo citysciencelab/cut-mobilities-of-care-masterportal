@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("./fixes");
 
 const webdriver = require("selenium-webdriver"),
     path = require("path"),

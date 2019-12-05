@@ -1,5 +1,11 @@
-const modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
+    // modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
+    // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
+    modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
+    modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
+    // modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
+    modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js");
 
@@ -29,19 +35,24 @@ const modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode) {
-    afterEach(function (done) {
-        // TODO remove eventually - I'm using this to watch the webdriver interactions - DSE
-        setTimeout(done, 500);
-    });
-
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
         this.timeout(150000);
 
         const e2eTestParams = {builder, url, resolution, config, mode, browsername};
 
+        /*
+         * restriction statement to reduce tests during writing; will change a lot and should be ultimately removed;
+         * overall test call structure may require changes previously to reduce run-time
+         */
+        if (mode !== "2D" || !["DT", "LT"].includes(config)) {
+            return;
+        }
+
         // modules/controls
-        modulesControlsZoomTests(e2eTestParams);
         modulesControlsFullScreenTests(e2eTestParams);
+        modulesControlsOrientationTests(e2eTestParams);
+        modulesControlsOverviewMapTests(e2eTestParams);
+        modulesControlsZoomTests(e2eTestParams);
 
         // non-module tests
         panTests(e2eTestParams);

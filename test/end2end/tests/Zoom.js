@@ -1,8 +1,10 @@
-const {expect} = require("chai"),
-    {getResolution, mouseWheelCanvasUp, mouseWheelCanvasDown} = require("../library/scripts"),
+const webdriver = require("selenium-webdriver"),
+    {expect} = require("chai"),
+    {getResolution, mouseWheelUp, mouseWheelDown} = require("../library/scripts"),
     {onMoveEnd} = require("../library/scriptsAsync"),
     {initDriver} = require("../library/driver"),
-    {isMobile} = require("../settings");
+    {isMobile} = require("../settings"),
+    {By} = webdriver;
 
 /**
  * Tests regarding map zooming.
@@ -10,13 +12,14 @@ const {expect} = require("chai"),
  * @returns {void}
  */
 async function ZoomTests ({builder, url, resolution}) {
-    const skipAll = isMobile(resolution);
+    const skipWheel = isMobile(resolution); // no mouse wheel on mobile devices
 
-    (skipAll ? describe.skip : describe)("Map Zoom", function () {
-        let driver;
+    (skipWheel ? describe.skip : describe)("Map Zoom with MouseWheel", function () {
+        let driver, canvas;
 
         before(async function () {
             driver = await initDriver(builder, url, resolution);
+            canvas = await driver.findElement(By.css(".ol-viewport"));
         });
 
         after(async function () {
@@ -26,7 +29,7 @@ async function ZoomTests ({builder, url, resolution}) {
         it("should zoom in on mouse wheel up", async function () {
             const res = await driver.executeScript(getResolution);
 
-            await driver.executeScript(mouseWheelCanvasUp);
+            await driver.executeScript(mouseWheelUp, canvas);
             await driver.executeAsyncScript(onMoveEnd);
 
             expect(res).to.be.above(await driver.executeScript(getResolution));
@@ -35,7 +38,7 @@ async function ZoomTests ({builder, url, resolution}) {
         it("should zoom out on mouse wheel down", async function () {
             const res = await driver.executeScript(getResolution);
 
-            await driver.executeScript(mouseWheelCanvasDown);
+            await driver.executeScript(mouseWheelDown, canvas);
             await driver.executeAsyncScript(onMoveEnd);
 
             expect(res).to.be.below(await driver.executeScript(getResolution));
