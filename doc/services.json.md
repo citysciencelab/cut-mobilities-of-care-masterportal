@@ -83,6 +83,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
+|gfiFormat|nein|String/Object||Optionale Steuerung des Inhaltes der GFI-Informationen für diesen Layer. Der Inhalt kann im Rahmen eines Projektes frei gewählt werden. Die Steuerung der Inhalte über diesen Parameter ist z.B. bei der Verwendung eines gfi-Themes für mehrere Layer von zentraler Bedeutung.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -107,6 +108,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
+      "gfiFormat": {"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}                                             },
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "",
       "datasets" : [

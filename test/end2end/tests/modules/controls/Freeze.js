@@ -1,12 +1,3 @@
-// 2.8. (23, MO) Ansicht sperren
-// 2.8.1 Button auf rechter Seite mit “Ansicht sperren” klicken (3h)
-// -> Grauer Button mit “Ansicht entsperren” wird eingeblendet
-// -> Die Karte lässt sich nicht mehr bewegen
-// -> Controls, Suchleiste, Werkzeuge und andere Element in der Themenleiste lassen sich nicht benutzen
-// 2.8.1 Klick auf den grauen Button “Ansicht entsperren” (1h)
-// -> Controls, Suchleiste, Werkzeuge und andere Element in der Themenleiste lassen sich wieder benutzen
-// -> Der graue Button mit “Ansicht entsperren” wird ausgeblendet
-
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
