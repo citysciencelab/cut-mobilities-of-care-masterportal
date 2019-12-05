@@ -26,6 +26,7 @@ stablePortale
 package-lock.json
 test/end2end/Screenshots/ScreenshotsTest
 npm-debug.log
+debug.log
 .vscode
 build
 /jsdoc
