@@ -11,7 +11,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @class AddWMSModel
      * @description Todo
      * @extends Tool
-     * @memberof Tools
+     * @memberof Tools.AddWMS
      * @constructs
      * @fires Util#RadioTriggerUtilShowLoader
      * @fires Util#RadioTriggerUtilHideLoader

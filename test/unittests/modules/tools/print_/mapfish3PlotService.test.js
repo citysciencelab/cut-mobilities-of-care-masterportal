@@ -1,4 +1,4 @@
-import PrintModel from "@modules/tools/print_/Mapfish3_PlotService.js";
+import PrintModel from "@modules/tools/print_/mapfish3PlotService.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 const chai = require("chai");

@@ -1,7 +1,7 @@
 import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
-import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
+import SnippetMultiCheckboxModel from "../../../snippets/multiCheckbox/model";
 import {getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
 
 const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{

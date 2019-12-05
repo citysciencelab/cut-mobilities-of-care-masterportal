@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Print2Model from "@modules/tools/print_/HighResolution_PlotService.js";
+import Print2Model from "@modules/tools/print_/highResolutionPlotService.js";
 
 describe("tools/print_/HighResolutionPlotService", function () {
     var print2Model,

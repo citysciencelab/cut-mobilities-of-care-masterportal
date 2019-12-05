@@ -9,21 +9,22 @@ import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
+import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomtofeature/model";
+import ZoomToFeature from "../modules/zoomToFeature/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import LayerinformationModel from "../modules/layerinformation/model";
+import LayerinformationModel from "../modules/layerInformation/model";
 import FooterView from "../modules/footer/view";
-import ClickCounterModel from "../modules/ClickCounter/model";
+import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleline/view";
+import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
@@ -41,16 +42,16 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
-import ImportView from "../modules/tools/kmlimport/view";
-import WFSFeatureFilterView from "../modules/wfsfeaturefilter/view";
+import ImportView from "../modules/tools/kmlImport/view";
+import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
-import AddWMSView from "../modules/tools/addwms/view";
+import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
-import TreeFilterView from "../modules/treefilter/view";
+import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featurelister/view";
+import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 // @deprecated in version 3.0.0
 // remove "version" in doc and config.
@@ -63,20 +64,20 @@ import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
-import TotalView from "../modules/controls/totalview/view";
+import TotalView from "../modules/controls/totalView/view";
 import AttributionsView from "../modules/controls/attributions/view";
-import OverviewmapView from "../modules/controls/overviewmap/view";
+import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
-import ButtonObliqueView from "../modules/controls/buttonoblique/view";
+import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-import BackForwardView from "../modules/controls/backforward/view";
+import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
-import VirtualcityModel from "../modules/tools/virtualcity/model";
+import VirtualcityModel from "../modules/tools/virtualCity/model";
 
 var sbconfig, controls, controlsView;
 
@@ -105,6 +106,7 @@ function loadApp () {
     // RemoteInterface laden
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
+        new RadioMasterportalAPI();
     }
 
     if (_.has(Config, "quickHelp")) {
