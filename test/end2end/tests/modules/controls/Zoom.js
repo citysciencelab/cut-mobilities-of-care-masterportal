@@ -24,8 +24,8 @@ function ZoomTests ({builder, url, resolution}) {
         });
 
         it("should have a plus button", async function () {
-            await driver.wait(until.elementLocated(By.css("span.glyphicon.glyphicon-plus")), 50000);
-            plus = await driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-plus']"));
+            await driver.wait(until.elementLocated(By.css(".zoomButtons span.glyphicon.glyphicon-plus")), 50000);
+            plus = await driver.findElement(By.css(".zoomButtons span.glyphicon.glyphicon-plus"));
 
             expect(plus).to.exist;
         });
@@ -39,7 +39,7 @@ function ZoomTests ({builder, url, resolution}) {
         });
 
         it("should have a minus button", async function () {
-            minus = await driver.findElement(By.xpath("//div[@class='zoomButtons']/span[@class='glyphicon glyphicon-minus']"));
+            minus = await driver.findElement(By.css(".zoomButtons span.glyphicon.glyphicon-minus"));
 
             expect(minus).to.exist;
         });

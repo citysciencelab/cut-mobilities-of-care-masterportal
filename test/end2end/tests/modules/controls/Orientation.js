@@ -25,6 +25,7 @@ function Orientation ({builder, url, resolution}) {
         });
 
         it("has a button for geolocating", async function () {
+            await driver.wait(until.elementLocated(By.id("geolocate")), 9000);
             geolocateButton = await driver.findElement(By.id("geolocate"));
 
             expect(geolocateButton).to.exist;
