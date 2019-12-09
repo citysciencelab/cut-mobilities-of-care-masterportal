@@ -1627,8 +1627,6 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 #### Portalconfig.menu.tool.shadow.shadowTime
 
-[inherits]: # (Portalconfig.menu.tool.shadow)
-
 Todo
 
 **Beispiel**
