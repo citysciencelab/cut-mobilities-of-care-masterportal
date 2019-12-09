@@ -1605,7 +1605,7 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|shadowTime|nein|**[shadowTime](#markdown-header-portalconfigmenutoolshadowshadowTime)**|Now()|Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
+|shadowTime|nein|**[shadowTime](#markdown-header-portalconfigmenutoolshadowshadowtime)**|Now()|Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
 |isShadowEnabled|nein|Boolean|false|Default Shadow-Wert. True um unmittelbar Shadow einzuschalten. False zum manuellen bestätigen.|
 
 
