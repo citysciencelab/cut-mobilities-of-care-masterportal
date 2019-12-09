@@ -1,5 +1,5 @@
 import DrawTemplate from "text-loader!./template.html";
-import DownloadView from "../download/view";
+import DownloadView from "../download_new/view";
 
 const DrawToolView = Backbone.View.extend({
     events: {
@@ -25,13 +25,11 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     initialize: function () {
-        var downloadModel = Radio.request("ModelList", "getModelByAttributes", {id: "download"});
-
         this.listenTo(this.model, {
             "change:isActive": this.render
         });
 
-        new DownloadView({model: downloadModel});
+        new DownloadView();
 
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
