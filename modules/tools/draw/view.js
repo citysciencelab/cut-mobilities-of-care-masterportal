@@ -386,7 +386,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         colors.forEach(function (color) {
             newColorContour.push(parseInt(color, 10));
         });
-        newColorContour.push(this.model.get("opacity"));
+        newColorContour.push(this.model.get("opacityContour"));
         this.model.setColorContour(newColorContour);
         this.model.updateDrawInteraction();
     },
@@ -447,6 +447,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     setOpacity: function (evt) {
         this.model.setOpacity(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**
@@ -456,6 +457,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     setOpacityContour: function (evt) {
         this.model.setOpacityContour(evt.target.value);
+        this.model.updateDrawInteraction();
     }
 });
 

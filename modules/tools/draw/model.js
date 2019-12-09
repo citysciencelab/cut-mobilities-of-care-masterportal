@@ -117,7 +117,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     createSourceListenerForStyling: function (layer, doubleIsActive) {
         var layerSource = layer.getSource();
 
-        this.setAddFeatureListener(layerSource.on("addfeature", function (evt) {
+        this.setAddFeatureListener(layerSource.once("addfeature", function (evt) {
+
             if (this.get("methodCircle") === "definiert" && this.get("drawType").geometry === "Circle") {
                 this.setDoubleCircle(doubleIsActive);
                 this.getDefinedRadius(evt);
@@ -1085,7 +1086,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         newColor[3] = parseFloat(value);
         this.setColorContour(newColor);
-        this.set("opacity", value);
+        this.set("opacityContour", value);
     },
 
     /**
