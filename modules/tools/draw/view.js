@@ -1,5 +1,5 @@
 import DrawTemplate from "text-loader!./template.html";
-import DownloadView from "../download_new/view";
+import DownloadView from "../download/view";
 
 const DrawToolView = Backbone.View.extend({
     events: {
@@ -18,12 +18,6 @@ const DrawToolView = Backbone.View.extend({
         "click .downloadDrawing": "startDownloadTool"
     },
 
-    /**
-     * initialize the drawTool
-     * that would be called by creates this tool
-     * create an instance from download tool
-     * @return {void}
-     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render

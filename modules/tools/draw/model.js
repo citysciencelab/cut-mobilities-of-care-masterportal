@@ -713,17 +713,9 @@ const DrawTool = Tool.extend({
     startDownloadTool: function () {
         var features = this.get("layer").getSource().getFeatures();
 
-        // Radio.trigger("download", "start", {
-        //     data: features,
-        //     formats: ["kml"],
-        //     caller: {
-        //         name: "draw",
-        //         glyph: "glyphicon-pencil"
-        //     }});
-
         Radio.trigger("Download", "start", {
             features: features,
-            formats: ["KML", "GeoJSON", "GPX"]
+            formats: ["KML", "GEOJSON", "GPX"]
         });
     },
 
