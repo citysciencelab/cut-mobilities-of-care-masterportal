@@ -2336,6 +2336,13 @@
  * @example Radio.trigger("Draw", "cancelDrawWithoutGUI", cursor);
  */
 
+/**
+ * @event Tools.Draw#RadioTriggerDownloadViaRemoteInterface
+ * @description Deletes all drawn features.
+ * @param {String} geomType Type of geometry.
+ * @example Radio.trigger("Draw", "downloadViaRemoteInterface", geomType);
+ */
+
 
 /** -------------------- TOOLS.DOWNLOAD -------------------- */
 
