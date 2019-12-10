@@ -4,7 +4,7 @@ import Tool from "../../core/modelList/tool/model";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
-const DownloadModel = Tool.extend({
+const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         id: "download",
         name: "Download",
@@ -18,18 +18,42 @@ const DownloadModel = Tool.extend({
         fileName: ""
     }),
 
-    // /**
-    //  * @class DownloadModel
-    //  * @extends Tool
-    //  * @memberof Tools.Download
-    //  * @constructs
-    //  */
+    /**
+     * @class DownloadModel
+     * @extends Tool
+     * @memberof Tools.Download
+     * @property {String} id="download" Id.
+     * @property {String} name="Download" Name.
+     * @property {String} glyphicon="glyphicon-plus" Glyphicon class.
+     * @property {Boolean} renderToWindow=true Flag if tool should render to tool window.
+     * @property {Radio.channel} channel Channel of tool.
+     * @property {String[]} formats=["KML", "GEOJSON", "GPX"] Default formats that are supported.
+     * @property {String} selectedFormat="" The selected format.
+     * @property {ol/Feature[]} features=[] The features to be donloaded.
+     * @property {String} dataString="" The features converted as dataString.
+     * @property {String} fileName="" The filename.
+     * @listens Tools.Download#RadioTriggerDownloadStart
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core#RadioRequestUtilIsInternetExplorer
+     * @fires Tools.Download#changeIsActive
+     * @constructs
+     */
     initialize: function () {
         this.superInitialize();
         this.listenTo(this.get("channel"), {
             "start": this.start
         });
     },
+
+    /**
+     * @param {Object} obj Configuration to start the download module.
+     * @param {String[]} obj.formats Formats to be supported.
+     * @param {ol/Feature[]} obj.features Features to be downloaded.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @returns {void}
+     */
     start: function (obj) {
         if (obj.features.length === 0) {
             Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
@@ -48,6 +72,11 @@ const DownloadModel = Tool.extend({
         this.set("isActive", true);
     },
 
+    /**
+     * Converts the data and saves it to the param "dataString"
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
     prepareData: function () {
         let features = this.get("features");
         const selectedFormat = this.get("selectedFormat"),
@@ -70,6 +99,13 @@ const DownloadModel = Tool.extend({
         }
         this.setDataString(features);
     },
+
+    /**
+     * Converts the given features into the given format.
+     * @param {ol/Feature[]} features The features to be downloaded.
+     * @param {ol/Format} format The format for the features to be downloaded.
+     * @return {String} - The converted features as string.
+     */
     convertFeatures: function (features, format) {
         let convertedFeatures = [];
 
@@ -88,6 +124,13 @@ const DownloadModel = Tool.extend({
         convertedFeatures = format.writeFeatures(convertedFeatures);
         return convertedFeatures;
     },
+
+    /**
+     * Converts features to KML and also storing the style information.
+     * @param {ol/Feature[]} features The features to be downloaded.
+     * @param {ol/Format} format The format for the features to be downloaded.
+     * @return {String} - The converted features as string.
+     */
     convertFeaturesToKML: function (features, format) {
         var pointOpacities = [],
             pointColors = [],
@@ -157,6 +200,13 @@ const DownloadModel = Tool.extend({
         return new XMLSerializer().serializeToString(convertedFeatures);
     },
 
+    /**
+     * Gets the projection in proj4 format.
+     * @param {String} sourceProj Source projection name.
+     * @param {String} destProj Destination projection name.
+     * @param {String} zone Zone of source projection.
+     * @returns {Object} - an object with the definitions of the goven projection names.
+     */
     getProjections: function (sourceProj, destProj, zone) {
         proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
 
@@ -166,8 +216,14 @@ const DownloadModel = Tool.extend({
         };
     },
 
+    /**
+     * Transform the given Geometry into the given projections.
+     * @param {ol/Geom} geometry Geometry.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
     transformCoords: function (geometry, projections) {
-
         var transCoord = [];
 
         switch (geometry.getType()) {
@@ -190,6 +246,13 @@ const DownloadModel = Tool.extend({
         return transCoord;
     },
 
+    /**
+     * Transform the given polygon coords into the given projections.
+     * @param {ol/Coordinate} coords Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
     transformPolygon: function (coords, projections) {
         var transCoord = [];
 
@@ -201,6 +264,13 @@ const DownloadModel = Tool.extend({
         return [transCoord];
     },
 
+    /**
+     * Transform the given line coords into the given projections.
+     * @param {ol/Coordinate} coords Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
     transformLine: function (coords, projections) {
         var transCoord = [];
 
@@ -210,13 +280,21 @@ const DownloadModel = Tool.extend({
         return transCoord;
     },
 
+    /**
+     * Transform the given point coords into the given projections.
+     * @param {ol/Coordinate} point Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
     transformPoint: function (point, projections) {
         return proj4(projections.sourceProj, projections.destProj, point);
     },
 
-    isInternetExplorer: function () {
-        return window.navigator.msSaveOrOpenBlob;
-    },
+    /**
+     * Validates the Filename and appends the extension if the user didnt add it.
+     * @returns {String} - the generated fileName.
+     */
     validateFileNameAndExtension: function () {
         const fileName = this.get("fileName"),
             selectedFormat = this.get("selectedFormat"),
@@ -234,6 +312,11 @@ const DownloadModel = Tool.extend({
         return validatedFileName;
     },
 
+    /**
+     * Prepares the download button. Distinguishes between IE and nonIE.
+     * @fires Core#RadioRequestUtilIsInternetExplorer
+     * @returns {void}
+     */
     prepareDownloadButton: function () {
         const fileName = this.validateFileNameAndExtension(),
             isInternetExplorer = Radio.request("Util", "isInternetExplorer");
@@ -251,9 +334,21 @@ const DownloadModel = Tool.extend({
             this.setDisabledOnDownloadButton(true);
         }
     },
+
+    /**
+     * Enabnles or disables the download button.
+     * @param {Boolean} isDisabled Flag if download button is disabled or not.
+     * @returns {void}
+     */
     setDisabledOnDownloadButton: function (isDisabled) {
         $(".downloadBtn").prop("disabled", isDisabled);
     },
+
+    /**
+     * Prepares the download button for nonIE browsers.
+     * @param {String} fileName Full filename with extension.
+     * @returns {void}
+     */
     prepareDownloadButtonNonIE: function (fileName) {
         var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
 
@@ -262,6 +357,12 @@ const DownloadModel = Tool.extend({
             $(".downloadFile").attr("download", fileName);
         });
     },
+
+    /**
+     * Prepares the download button for IE browsers.
+     * @param {String} fileName Full filename with extension.
+     * @returns {void}
+     */
     prepareDownloadButtonIE: function (fileName) {
         var fileData = [this.get("dataString")],
             blobObject = new Blob(fileData);
@@ -270,6 +371,11 @@ const DownloadModel = Tool.extend({
             window.navigator.msSaveOrOpenBlob(blobObject, fileName);
         });
     },
+
+    /**
+     * Resets the model.
+     * @returns {void}
+     */
     reset: function () {
         this.setFormats([]);
         this.setFeatures([]);
@@ -277,18 +383,48 @@ const DownloadModel = Tool.extend({
         this.setSelectedFormat("");
         this.setFileName("");
     },
+
+    /**
+     * Setter for attribute "formats"
+     * @param {String[]} value Formats.
+     * @returns {void}
+     */
     setFormats: function (value) {
         this.set("formats", value);
     },
+
+    /**
+     * Setter for attribute "features"
+     * @param {ol/Feature[]} value Features.
+     * @returns {void}
+     */
     setFeatures: function (value) {
         this.set("features", value);
     },
+
+    /**
+     * Setter for attribute "dataString"
+     * @param {String} value The features saved as string.
+     * @returns {void}
+     */
     setDataString: function (value) {
         this.set("dataString", value);
     },
+
+    /**
+     * Setter for attribute "selectedFormat"
+     * @param {String} value The selected Format.
+     * @returns {void}
+     */
     setSelectedFormat: function (value) {
         this.set("selectedFormat", value);
     },
+
+    /**
+     * Setter for attribute "fileName"
+     * @param {String} value Filename without extension.
+     * @returns {void}
+     */
     setFileName: function (value) {
         this.set("fileName", value);
     }

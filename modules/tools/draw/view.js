@@ -1,7 +1,7 @@
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
 
-const DrawToolView = Backbone.View.extend({
+const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
@@ -18,6 +18,12 @@ const DrawToolView = Backbone.View.extend({
         "click .downloadDrawing": "startDownloadTool"
     },
 
+    /**
+     * @class DrawToolView
+     * @extends Backbone.View
+     * @memberof Tools.Draw
+     * @constructs
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render
@@ -30,6 +36,11 @@ const DrawToolView = Backbone.View.extend({
         }
     },
 
+    /**
+     * @member DrawTemplate
+     * @description Template used to create the draw tool.
+     * @memberof Tools.Draw
+     */
     template: _.template(DrawTemplate),
 
     /**

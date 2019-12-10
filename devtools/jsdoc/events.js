@@ -2289,3 +2289,66 @@
  * @event Tools.GetCoord#RadioTriggerChangeIsActive
  * @description todo
  */
+
+/** -------------------- TOOLS.DRAW -------------------- */
+
+/**
+ * @event Tools.Draw#RadioRequestDrawGetLayer
+ * @description Returns the draw layer
+ * @example Radio.request("Draw", "getLayer");
+ * @returns {ol/Layer} - The draw layer.
+ */
+
+/**
+ * @event Tools.Draw#RadioRequestDrawDownloadWithoutGUI
+ * @description Returns download features without using the download gui.
+ * @param {Object} obj Params for download without gui.
+ * @param {String} obj.geomType Geometry type of features.
+ * @param {Boolean} obj.transformWGS Flag if features should be transformed.
+ * @example Radio.request("Draw", "downloadWithoutGUI", obj);
+ * @returns {String} - The Features as string.
+ */
+
+ /**
+ * @event Tools.Draw#RadioTriggerDrawInitWithoutGUI
+ * @description Initializes the Draw tool to perform download without the download gui.
+ * @param {Object} obj Params for init without gui.
+ * @param {String} obj.drawType Draw type of features. Possible values are "Point", "LineString", "Polygon", "Circle".
+ * @param {String} obj.color="55, 126, 184" Color as rgb string.
+ * @param {Number} obj.opacity=1.0 Opacity.
+ * @param {Number} obj.maxFeatures maximum of Features.
+ * @param {String} obj.initialJSON Features to be Drawn on the layer.
+ * @param {Boolean} obj.transformWGS Flag if features should be transformed.
+ * @param {Boolean} obj.zoomToExtent Flag if map should be zoomed to extent.
+ * @example Radio.trigger("Draw", "initWithoutGUI", obj);
+ */
+
+/**
+ * @event Tools.Draw#RadioTriggerDeleteAllFeatures
+ * @description Deletes all drawn features.
+ * @example Radio.trigger("Draw", "deleteAllFeatures");
+ */
+
+/**
+ * @event Tools.Draw#RadioTriggerCancelDrawWithoutGUI
+ * @description Deletes all drawn features.
+ * @param {String} cursor Cursor.
+ * @example Radio.trigger("Draw", "cancelDrawWithoutGUI", cursor);
+ */
+
+
+/** -------------------- TOOLS.DOWNLOAD -------------------- */
+
+/**
+ * @event Tools.Download#RadioTriggerDownloadStart
+ * @description Triggers the download tool to start.
+ * @param {Object} obj Configuration to start the download module.
+ * @param {String[]} obj.formats Formats to be supported.
+ * @param {ol/Feature[]} obj.features Features to be downloaded.
+ * @example Radio.trigger("Download", "start", obj);
+ */
+
+ /**
+ * @event Tools.Download#changeIsActive
+ * @description Triggered when the model attribute "isActive" changes.
+ */

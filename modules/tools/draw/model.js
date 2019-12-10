@@ -8,7 +8,7 @@ import {fromCircle as circPoly} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
 
-const DrawTool = Tool.extend({
+const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         drawInteraction: undefined,
         selectInteraction: undefined,
@@ -33,8 +33,36 @@ const DrawTool = Tool.extend({
     }),
 
     /**
-     * create a DrawTool instance
-     * @return {void}
+     * @class DrawModel
+     * @extends Tool
+     * @memberof Tools.Draw
+     * @property {*} drawInteraction=undefined The draw interaction.
+     * @property {*} selectInteraction=undefined The select interaction.
+     * @property {*} modifyInteraction=undefined The modify interaction.
+     * @property {ol/layer} layer=undefined The layer for the drawn features.
+     * @property {String} font="Arial" Selected font of the model.
+     * @property {Number} fontSize=10 Selected fontSize of the model.
+     * @property {String} text="Klicken Sie auf die Karte um den Text zu platzieren" Placeholder.
+     * @property {Number[]} color=[55, 126, 184, 1] Selectd color in rgba array.
+     * @property {Number} radius=6 Selected radius.
+     * @property {Number} strokeWidth=1 Selected stroke width.
+     * @property {Number} opacity=1 Selected opacity.
+     * @property {Object} drawType The drawType.
+     * @property {String} drawType.geometry The geometry of the draw type.
+     * @property {String} drawType.text The placeholder text.
+     * @property {Boolean} renderToWindow=true Flag to render in tool window.
+     * @property {Boolean} deactivateGFI=true Flag to deactivate GFI if draw tool gets activated.
+     * @property {String} glyphicon="glyphicon-pencil" CSS glyphicon class.
+     * @property {Object} addFeatureListener Listener.
+     * @property {Number} zIndex=0 zIndex.
+     * @listens Tools.Draw#RadioRequestDrawGetLayer
+     * @listens Tools.Draw#RadioRequestDrawDownloadWithoutGUI
+     * @listens Tools.Draw#RadioTriggerDrawInitWithoutGUI
+     * @listens Tools.Draw#RadioTriggerDeleteAllFeatures
+     * @listens Tools.Draw#RadioTriggerCancelDrawWithoutGUI
+     * @listens Tools.Draw#RadioTriggerDownloadViaRemoteInterface
+     * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
+     * @constructs
      */
     initialize: function () {
         const channel = Radio.channel("Draw");
