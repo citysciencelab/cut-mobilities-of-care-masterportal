@@ -1,3 +1,16 @@
 {
-    "anything": "irgendetwas allgemeines"
+    "anything": "irgendetwas allgemeines",
+    "modules": {
+        "tools": {
+            "print": {
+                "titleLable": "Titel",
+                "titlePlaceholder": "Mein Titel",
+                "layoutLable": "Layout",
+                "formatLable": "Format",
+                "scaleLable": "Maßstab",
+                "withLegendLable": "Mit Legende",
+                "printLable": "Drucken"
+            }
+        }
+    }
 }

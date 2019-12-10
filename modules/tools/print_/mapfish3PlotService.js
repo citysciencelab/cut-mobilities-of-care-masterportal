@@ -44,8 +44,14 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
         eventListener: {},
-        legendText: "Mit Legende",
-        dpiForPdf: 200
+        dpiForPdf: 200,
+        titleLable: "",
+        titlePlaceholder: "",
+        layoutLable: "",
+        formatLable: "",
+        scaleLable: "",
+        withLegendLable: "",
+        printLable: ""
     }),
 
     /**
@@ -77,7 +83,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} eventListener={} - todo
      * @property {Boolean} printLegend=false Flag if checkbox to print legend should be activated.
-     * @property {String} legendText="Mit legende" Label text for print legend checkbox
+     * @property {String} titleLable Label text for print-window
+     * @property {String} titlePlaceholder placeholder text for print-window
+     * @property {String} layoutLable Label text for print-window
+     * @property {String} formatLable Label text for print-window
+     * @property {String} scaleLable Label text for print-window
+     * @property {String} legendLable Label text for print-window
+     * @property {String} printLable Label text for print-window
      * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
      * @listens GFI#RadioTriggerGFIIsVisible
@@ -116,6 +128,27 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             "createPrintJob": this.createPrintJob
         }, this);
         this.createMapFishServiceUrl(this.get("mapfishServiceId"));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set("titleLable", i18next.t("common:modules.tools.print.titleLable"));
+        this.set("titlePlaceholder", i18next.t("common:modules.tools.print.titlePlaceholder"));
+        this.set("layoutLable", i18next.t("common:modules.tools.print.layoutLable"));
+        this.set("formatLable", i18next.t("common:modules.tools.print.formatLable"));
+        this.set("scaleLable", i18next.t("common:modules.tools.print.scaleLable"));
+        this.set("withLegendLable", i18next.t("common:modules.tools.print.withLegendLable"));
+        this.set("printLable", i18next.t("common:modules.tools.print.printLable"));
     },
 
     /**
