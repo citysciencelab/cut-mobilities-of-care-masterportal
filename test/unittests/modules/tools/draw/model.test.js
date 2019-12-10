@@ -52,6 +52,132 @@ describe("drawModel", function () {
         });
     });
 
+    describe("createDrawInteractionAndAddToMap", function () {
+        it("the result should be two instances of draw", function () {
+            var drawType = {
+                    geometry: "Circle",
+                    text: "Doppelkreis zeichnen"
+                },
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = "";
+
+            model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+            expect(model.get("drawInteraction") instanceof Draw).to.be.true;
+            expect(model.get("drawInteraction2") instanceof Draw).to.be.true;
+        });
+        it("there should only be one drawInteraction", function () {
+            var listOfDrawTypes = [{geometry: "Circle", text: "Kreis zeichnen"}, {geometry: "Point", text: "Punkt zeichnen"},
+                    {geometry: "Text", text: "Text schreiben"}, {geometry: "LineString", text: "Linie zeichnen"}],
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = "";
+
+            for (let index = 0; index < listOfDrawTypes.length; index++) {
+                const drawType = listOfDrawTypes[index];
+
+                model.setDrawInteraction(undefined);
+                model.setDrawInteraction2(undefined);
+                model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+                expect(model.get("drawInteraction") instanceof Draw).to.be.true;
+                expect(model.get("drawInteraction2") instanceof Draw).to.be.false;
+            }
+        });
+    });
+
+    describe("setDoubleCircle", function () {
+        it("the result should be meters", function () {
+            var radius = Math.random();
+
+            model.setUnit("m");
+            model.setCircleRadius(radius);
+
+            expect(model.get("circleRadiusInner")).to.deep.equal(radius);
+        });
+        it("the result should be kilometers", function () {
+            var radius = Math.random;
+
+            model.setUnit("km");
+            model.setCircleRadius(radius);
+
+            expect(model.get("circleRadiusInner")).to.deep.equal(radius / 1000);
+        });
+    });
+
+    describe("setDoubleCircleOuter", function () {
+        it("the result should be meters", function () {
+            var radius = Math.random();
+
+            model.setUnit("m");
+            model.setCircleRadiusOuter(radius);
+
+            expect(model.get("circleRadiusOuter")).to.deep.equal(radius);
+        });
+        it("the result should be kilometers", function () {
+            var radius = Math.random;
+
+            model.setUnit("km");
+            model.setCircleRadiusOuter(radius);
+
+            expect(model.get("circleRadiusOuter")).to.deep.equal(radius / 1000);
+        });
+    });
+
+    describe("setDrawType", function () {
+        it("should return 'undefined'", function () {
+            model.setMethodCircle(undefined, undefined);
+            model.setDrawType(undefined, undefined);
+
+            expect(model.get("methodCircle")).to.be.undefined;
+        });
+        it("should return 'interaktiv'", function () {
+            model.setDrawType("Circle", "Kreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("interaktiv");
+        });
+        it("should return 'definiert'", function () {
+            model.setDrawType("Circle", "Doppelkreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("definiert");
+        });
+    });
+
+    describe("getCircleExtentByDistanceLat", function () {
+        it("should return an array with two values", function () {
+            const circleCenter = [560694.1292972941, 5930285.32630731],
+                radius = 2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, radius);
+
+            expect(result).to.deep.equal([560681.2898157198, 5931284.678816934]);
+        });
+        it("should return an array with two values", function () {
+            const circleCenter = [562069.9622106553, 5930532.270403086],
+                radius = -2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, radius);
+
+            expect(result).to.deep.equal([562083.092226224, 5929532.920741077]);
+        });
+    });
+
+    describe("getCircleExtentByDistanceLon", function () {
+        it("should return an array with two values", function () {
+            const circleCenter = [562069.9622106553, 5930532.270403086],
+                radius = 2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, radius);
+
+            expect(result).to.deep.equal([563071.6927002022, 5930545.538693837]);
+        });
+        it("should return an array with two values", function () {
+            const circleCenter = [562069.9622106553, 5930532.270403086],
+                radius = -2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, radius);
+
+            expect(result).to.deep.equal([561068.2304592272, 5930519.214558409]);
+        });
+    });
+
     describe("getStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
             var result;
