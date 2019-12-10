@@ -59,9 +59,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
             return;
         }
-        _.each(obj.features, function (feature) {
+        obj.features.forEach(feature => {
             if (feature.getGeometry() instanceof Circle) {
-            // creates a regular polygon from a circle with 32(default) sides
                 feature.setGeometry(fromCircle(feature.getGeometry()));
             }
         });
@@ -113,7 +112,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             const featureClone = feature.clone(),
                 transCoord = this.transformCoords(featureClone.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
 
-            // für den Download nach einem Import! Z-Koordinate absägen
             if (transCoord.length === 3) {
                 transCoord.pop();
             }
@@ -132,32 +130,25 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @return {String} - The converted features as string.
      */
     convertFeaturesToKML: function (features, format) {
-        var pointOpacities = [],
+        const pointOpacities = [],
             pointColors = [],
-            convertedFeatures = [],
             pointRadiuses = [],
             textFonts = [];
+        let convertedFeatures = [];
 
         features.forEach(feature => {
-            var type,
-                styles,
-                color,
-                style;
+            const type = feature.getGeometry().getType(),
+                styles = feature.getStyleFunction().call(feature),
+                style = styles[0];
+            let color;
 
-            type = feature.getGeometry().getType();
-            styles = feature.getStyleFunction().call(feature);
-            style = styles[0];
-
-            // wenn Punkt-Geometrie
             if (type === "Point") {
-
                 if (feature.getStyle().getText()) {
                     textFonts.push(feature.getStyle().getText().getFont());
                     pointOpacities.push(undefined);
                     pointColors.push(undefined);
                     pointRadiuses.push(undefined);
                 }
-                // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                 else {
                     color = style.getImage().getFill().getColor();
                     pointOpacities.push(style.getImage().getFill().getColor()[3]);
@@ -169,12 +160,11 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             }
         }, this);
 
-        // KML zerlegen und die Punktstyles einfügen
         convertedFeatures = $.parseXML(this.convertFeatures(features, format));
 
         $(convertedFeatures).find("Point").each(function (i, point) {
-            var placemark = point.parentNode,
-                style,
+            const placemark = point.parentNode;
+            let style,
                 pointStyle,
                 fontStyle;
 
@@ -183,7 +173,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                 fontStyle = "<font>" + textFonts[i] + "</font>";
                 $(style).append($(fontStyle));
             }
-            // kein Text, muss also Punkt sein
             else {
                 style = $(placemark).find("Style")[0];
                 pointStyle = "<pointstyle>";
@@ -224,7 +213,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformCoords: function (geometry, projections) {
-        var transCoord = [];
+        let transCoord = [];
 
         switch (geometry.getType()) {
             case "Polygon": {
@@ -254,7 +243,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformPolygon: function (coords, projections) {
-        var transCoord = [];
+        const transCoord = [];
 
         _.each(coords, function (points) {
             _.each(points, function (point) {
@@ -272,7 +261,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformLine: function (coords, projections) {
-        var transCoord = [];
+        const transCoord = [];
 
         _.each(coords, function (point) {
             transCoord.push(this.transformPoint(point, projections));
@@ -336,7 +325,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Enabnles or disables the download button.
+     * Enables or disables the download button.
      * @param {Boolean} isDisabled Flag if download button is disabled or not.
      * @returns {void}
      */
@@ -350,7 +339,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {void}
      */
     prepareDownloadButtonNonIE: function (fileName) {
-        var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
+        const url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
 
         $(".downloadFile").attr("href", url);
         $(".downloadBtn").on("click", function () {
@@ -364,7 +353,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {void}
      */
     prepareDownloadButtonIE: function (fileName) {
-        var fileData = [this.get("dataString")],
+        const fileData = [this.get("dataString")],
             blobObject = new Blob(fileData);
 
         $(".downloadBtn").on("click", function () {
