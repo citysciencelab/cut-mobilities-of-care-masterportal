@@ -123,7 +123,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 this.setDoubleCircle(doubleIsActive);
                 this.getDefinedRadius(evt);
                 evt.feature.setStyle(this.getStyle());
-                evt.feature.style_.text_ = "";
                 this.countupZIndex();
             }
             else {
@@ -148,7 +147,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else {
             circleRadius = this.get("circleRadiusInner");
         }
-        this.addNewCoordinatesToFeature(evt, circleRadius);
+        if (isNaN(circleRadius) === false && circleRadius !== 0 && circleRadius !== undefined) {
+            this.addNewCoordinatesToFeature(evt, circleRadius);
+        }
+        else {
+            Radio.trigger("Alert", "alert", "Bitte definieren Sie den Durchmesser des Kreises.");
+        }
     },
 
     /**
@@ -502,7 +506,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         const previousDrawInteraction = this.get("drawInteraction2"),
             drawInteraction1 = this.createDrawInteraction(drawType, layer);
 
-        if (previousDrawInteraction !== undefined && this.get("drawType").text !== "Text schreiben") {
+        if (previousDrawInteraction !== undefined && drawType.text !== "Text schreiben") {
             previousDrawInteraction.setActive(false);
         }
 
@@ -510,7 +514,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setDrawInteraction(drawInteraction1);
         this.processDrawInteraction(drawInteraction1, maxFeatures, false);
 
-        if (this.get("drawType").text === "Doppelkreis zeichnen") {
+        if (drawType.text === "Doppelkreis zeichnen") {
             const drawInteraction2 = this.createDrawInteraction(drawType, layer);
 
             drawInteraction2.setActive(isActive);
@@ -704,7 +708,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         return new Style({
             text: new Text({
                 textAlign: "left",
-                // text: "     Set where the center of the circle should be.",
                 font: "20px Arial",
                 fill: new Fill({
                     color: "#000000"
@@ -1020,7 +1023,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.enableMethodDefiniert(true);
             this.setMethodCircle("interaktiv");
         }
-        else if (value2 === "Doppelkreis zeichnen") {
+        else if (value2 === "Doppelkreis zeichnen" && value2 !== undefined) {
             this.enableMethodDefiniert(false);
             this.setMethodCircle("definiert");
         }
