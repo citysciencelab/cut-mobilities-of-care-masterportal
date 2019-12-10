@@ -5,7 +5,6 @@ import Point from "ol/geom/Point";
 import Line from "ol/geom/LineString";
 import Polygon from "ol/geom/Polygon";
 import {KML, GeoJSON, GPX} from "ol/format";
-import Projection from 'ol/proj/Projection';
 
 describe("downloadModel", function () {
     var model;
