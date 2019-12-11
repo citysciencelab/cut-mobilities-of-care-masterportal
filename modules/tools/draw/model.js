@@ -21,7 +21,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         circleRadiusInner: 0,
         circleRadiusOuter: 0,
         color: [55, 126, 184, 1],
-        colorContour: [55, 126, 184, 1],
+        colorContour: [0, 0, 0, 1],
         radius: 6,
         strokeWidth: 1,
         opacity: 1,
@@ -109,73 +109,160 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates an addfeature-Listener
-     * @param   {ol.layer} layer - Layer, to which the Listener is registered.
+     * Creates an addfeature-Listener. This feature-listener checks the method how to draw the
+     * circle. If the method is "defined", then a variety of other function is called and the
+     * openlayers drawevent will be changed accordingly. If the method is not "defined" (but "interactiv"),
+     * the function to define the style of the drawn feature is called.
+     * @param   {Event} evt - Drawevent.
+     * @param   {Interaction} drawInteraction - drawInteraction.
      * @param   {Boolean} doubleIsActive - Boolean to compute a double circle or single circle.
+     * @param   {ol.layer} layer - Layer, to which the Listener is registered.
      * @returns {void}
      */
-    createSourceListenerForStyling: function (layer, doubleIsActive) {
-        var layerSource = layer.getSource();
+    drawInteractionOnDrawevent: function (evt, drawInteraction, doubleIsActive, layer) {
+        var layerSource = layer.getSource(),
+            defined = true;
 
-        this.setAddFeatureListener(layerSource.once("addfeature", function (evt) {
-
+        this.setAddFeatureListener(layerSource.once("addfeature", function (event) {
             if (this.get("methodCircle") === "definiert" && this.get("drawType").geometry === "Circle") {
-                this.setDoubleCircle(doubleIsActive);
-                this.getDefinedRadius(evt);
-                evt.feature.setStyle(this.getStyle());
+                const circleRadius = this.getDefinedRadius(doubleIsActive),
+                    circleCenter = event.feature.getGeometry().getCenter();
+                let resultCoordinates,
+                    assortedCoordinates;
+
+                defined = this.checkIfRadiusDefined(circleRadius);
+
+                if (defined === true) {
+                    resultCoordinates = this.calculateNewCoordinates(circleCenter, circleRadius);
+                    assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
+                    this.overwriteExtentCoordinates(event, resultCoordinates);
+                    this.overwriteFlatCoordinates(event, assortedCoordinates);
+                }
+                else if (defined === false) {
+                    this.alertForgetToDefineRadius(event, layer);
+                }
+                event.feature.setStyle(this.getStyle());
                 this.countupZIndex();
             }
             else {
-                this.setDoubleCircle(false);
-                evt.feature.setStyle(this.getStyle());
+                event.feature.setStyle(this.getStyle());
                 this.countupZIndex();
             }
         }.bind(this)));
+
+        if (this.get("methodCircle") === "definiert" && this.get("drawType").geometry === "Circle") {
+            drawInteraction.finishDrawing();
+        }
     },
 
     /**
      * Getter to get the radius of the inner or outer circle.
-     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * Depends on whether a double circle is to be calculated or not.
+     * @param   {Boolean} doubleIsActive - defines if a doublecircle or singlecircle should be calculated.
      * @returns {void}
      */
-    getDefinedRadius: function (evt) {
+    getDefinedRadius: function (doubleIsActive) {
         let circleRadius;
 
-        if (this.get("Doppelkreis") === true) {
+        if (doubleIsActive === true) {
             circleRadius = this.get("circleRadiusOuter");
         }
         else {
             circleRadius = this.get("circleRadiusInner");
         }
+        return circleRadius;
+    },
+
+    /**
+     * Check if the radius is defined by the user or not.
+     * @param   {Number} circleRadius - Radius defined by the user.
+     * @returns {void}
+     */
+    checkIfRadiusDefined: function (circleRadius) {
+        let defined;
+
         if (isNaN(circleRadius) === false && circleRadius !== 0 && circleRadius !== undefined) {
-            this.addNewCoordinatesToFeature(evt, circleRadius);
+            defined = true;
         }
         else {
-            Radio.trigger("Alert", "alert", "Bitte definieren Sie den Durchmesser des Kreises.");
+            defined = false;
         }
+        return defined;
+    },
+
+    /**
+     * Overwrites the flat coordinates of an existing (circle-) feature with recalculated ones.
+     * @param   {Number} circleCenter - Coordinates of the circlecenter.
+     * @param   {Number} circleRadius - Diameter of the inner or outer circle, specified by the user.
+     * @returns {void}
+     */
+    calculateNewCoordinates: function (circleCenter, circleRadius) {
+        return [
+            this.getCircleExtentByDistanceLat(circleCenter, circleRadius),
+            this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius),
+            this.getCircleExtentByDistanceLon(circleCenter, circleRadius),
+            this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius)
+        ];
+    },
+
+    /**
+     * Merges the coordinates of the circle center and the calculated ones for the defined radius in one array and the right order together.
+     * @param   {Number} circleCenter - Coordinates of the circlecenter.
+     * @param   {Number} resultCoordinates - Calculated coordinates for defined radius.
+     * @returns {void}
+     */
+    assortResultCoordinates: function (circleCenter, resultCoordinates) {
+        return [
+            circleCenter[0],
+            circleCenter[1],
+            resultCoordinates[3][0],
+            resultCoordinates[3][1]];
     },
 
     /**
      * Overwrites the flat and extent coordinates of an existing (circle-) feature with recalculated ones.
      * @param   {Event} evt - DrawEvent with the drawn-feature.
-     * @param   {Number} circleRadius - Diameter of the inner or outer circle, specified by the user.
+     * @param   {Number} resultCoordinates - New coordinates to describe the extent of the circle. Consists of four single values.
+     * The northernmost point of the circle is described by the longitude (northing) of that point (0).
+     * The southernmost point is described by the longitude (northing) of that point (1).
+     * The easternmost point is described by the latitude (easting) of that point (2).
+     * The westernmost point is described by the latitude (easting) of that point (3).
+     * They must be added to the array in the following order: [3, 1, 2, 0]
      * @returns {void}
      */
-    addNewCoordinatesToFeature: function (evt, circleRadius) {
-        const circleCenter = evt.feature.getGeometry().getCenter(),
-            coordinatesCircleExtentLatNorth = this.getCircleExtentByDistanceLat(circleCenter, circleRadius),
-            coordinatesCircleExtentLatSouth = this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius),
-            coordinatesCircleExtentLonWest = this.getCircleExtentByDistanceLon(circleCenter, circleRadius),
-            coordinatesCircleExtentLonEast = this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius);
-
-        circleCenter.push(coordinatesCircleExtentLonEast[0], coordinatesCircleExtentLonEast[1]);
-        evt.feature.getGeometry().flatCoordinates = circleCenter;
+    overwriteExtentCoordinates: function (evt, resultCoordinates) {
         evt.feature.getGeometry().extent_ = [
-            coordinatesCircleExtentLonEast[0],
-            coordinatesCircleExtentLatSouth[1],
-            coordinatesCircleExtentLonWest[0],
-            coordinatesCircleExtentLatNorth[1]
+            resultCoordinates[3][0],
+            resultCoordinates[1][1],
+            resultCoordinates[2][0],
+            resultCoordinates[0][1]
         ];
+        return evt.feature.getGeometry().extent_;
+    },
+
+    /**
+     * Overwrites the extent coordinates of an existing (circle-) feature with recalculated ones.
+     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * @param   {Number} flatCoordinates - new flat coordinates of the drawn feature.
+     * @returns {void}
+     */
+    overwriteFlatCoordinates: function (evt, flatCoordinates) {
+        evt.feature.getGeometry().flatCoordinates = flatCoordinates;
+
+        return evt.feature.getGeometry().flatCoordinates;
+    },
+
+    /**
+     * Alert function that shows up the alert, if the user has not defined the radius.
+     * Because the function (or the review if the radius is defined) is called after the drawstart,
+     * the feature already set due to the drawstart has to be removed.
+     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * @param   {Number} layer - Layer with the drawFeatures.
+     * @returns {void}
+     */
+    alertForgetToDefineRadius: function (evt, layer) {
+        Radio.trigger("Alert", "alert", "Bitte definieren Sie den Durchmesser des Kreises.");
+        layer.getSource().removeFeature(evt.feature);
     },
 
     /**
@@ -326,19 +413,19 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             multiGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
 
-        if (!_.isUndefined(para_object) && para_object.geomType === "multiGeometry") {
+        if (para_object !== undefined && para_object.geomType === "multiGeometry") {
             geomType = "multiGeometry";
         }
-        if (!_.isUndefined(para_object) && para_object.transformWGS === true) {
+        if (para_object !== undefined && para_object.transformWGS === true) {
             transformWGS = true;
         }
 
-        if (!_.isUndefined(this.get("layer")) && !_.isNull(this.get("layer"))) {
+        if (this.get("layer") !== undefined && this.get("layer") !== null) {
             features = this.get("layer").getSource().getFeatures();
 
             if (geomType === "multiGeometry") {
 
-                _.each(features, function (item) {
+                features.forEach(function (item) {
                     featureType = item.getGeometry().getType();
 
                     if (featureType === "Polygon") {
@@ -411,7 +498,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
             }
             else {
-                _.each(features, function (item) {
+                features.forEach(function (item) {
                     featureType = item.getGeometry().getType();
 
                     if (transformWGS === true) {
@@ -486,7 +573,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     createLayer: function (layer) {
         var vectorLayer = layer;
 
-        if (_.isUndefined(vectorLayer)) {
+        if (vectorLayer === undefined) {
             vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
         }
 
@@ -503,37 +590,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {ol/layer/Vector} vectorLayer
      */
     createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
-        const previousDrawInteraction = this.get("drawInteraction2"),
-            drawInteraction1 = this.createDrawInteraction(drawType, layer);
+        const drawInteraction1 = this.createDrawInteraction(drawType, layer),
+            drawInteraction2 = this.createDrawInteraction(drawType, layer);
 
-        if (previousDrawInteraction !== undefined && drawType.text !== "Text schreiben") {
-            previousDrawInteraction.setActive(false);
-        }
+        this.deactivateDrawInteraction();
+        this.checkAndRemovePreviousDrawInteraction();
 
         drawInteraction1.setActive(isActive);
         this.setDrawInteraction(drawInteraction1);
-        this.processDrawInteraction(drawInteraction1, maxFeatures, false);
+        this.createDrawInteractionListener(drawInteraction1, maxFeatures, false);
+        Radio.trigger("Map", "addInteraction", drawInteraction1);
 
         if (drawType.text === "Doppelkreis zeichnen") {
-            const drawInteraction2 = this.createDrawInteraction(drawType, layer);
-
             drawInteraction2.setActive(isActive);
             this.setDrawInteraction2(drawInteraction2);
-            this.processDrawInteraction(drawInteraction2, maxFeatures, true);
+            this.createDrawInteractionListener(drawInteraction2, maxFeatures, true);
+            Radio.trigger("Map", "addInteraction", drawInteraction2);
         }
-    },
-
-    /**
-     * creates a single new draw interactions. If the drawType "Doppelkreis" is selected,
-     * then two new draw interactions will be initialized.
-     * @param {ol/interaction/Draw} drawInteraction - Openlayers drawInteraction.
-     * @param {integer} maxFeatures - maximal number of features to be drawn.
-     * @param {Boolean} doubleIsActive - Boolean to compute a double circle or single circle.
-     * @return {void}
-     */
-    processDrawInteraction: function (drawInteraction, maxFeatures, doubleIsActive) {
-        this.createDrawInteractionListener(drawInteraction, maxFeatures, doubleIsActive);
-        Radio.trigger("Map", "addInteraction", drawInteraction);
+        return [drawInteraction1, drawInteraction2];
     },
 
     /**
@@ -589,13 +663,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      */
     createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         var that = this;
+        const layer = this.get("layer");
 
         drawInteraction.on("drawstart", function (evt) {
-            that.drawInteractionOnDrawevent(evt, drawInteraction, doubleIsActive);
-        });
-
-        drawInteraction.on("drawend", function (evt) {
-            evt.feature.set("styleId", _.uniqueId());
+            that.drawInteractionOnDrawevent(evt, drawInteraction, doubleIsActive, layer);
         });
 
         if (maxFeatures && maxFeatures > 0) {
@@ -615,22 +686,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 }
             }, this);
         }
-    },
-
-    /**
-     * Calls further function to enable and process the drawevent.
-     * Finishes the draw interaction if the method "definiert" is selected.
-     * @param {DrawEvent} evt - DrawEvent.
-     * @param {Interaction} drawInteraction - drawInteraction.
-     * @param {Boolean} doubleIsActive - true if draw type "Doppelkreis" is selected or false if not.
-     * @return {void}
-     */
-    drawInteractionOnDrawevent: function (evt, drawInteraction, doubleIsActive) {
-        this.createSourceListenerForStyling(this.get("layer"), doubleIsActive);
-        if (this.get("methodCircle") === "definiert") {
-            drawInteraction.finishDrawing();
-        }
-        evt.feature.set("styleId", _.uniqueId());
+        return drawInteraction;
     },
 
     /**
@@ -660,13 +716,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             radius = this.get("radius"),
             zIndex = this.get("zIndex");
 
-        if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
+        if (drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
-        else if (_.has(drawType, "geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
+        else if (drawType.hasOwnProperty("geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
-        else if (_.has(drawType, "geometry") && drawType.geometry) {
+        else if (drawType.hasOwnProperty("geometry") && drawType.geometry) {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
         }
 
@@ -768,10 +824,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     resetModule: function () {
-        const defaultColor = this.defaults.color;
+        const defaultColor = this.defaults.color,
+            defaultColorContour = this.defaults.colorContour;
 
         defaultColor.pop();
         defaultColor.push(this.defaults.opacity);
+        defaultColorContour.pop();
+        defaultColorContour.push(this.defaults.opacityContour);
 
         this.deactivateDrawInteraction();
         this.deactivateModifyInteraction();
@@ -783,7 +842,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setOpacity(this.defaults.opacity);
         this.setOpacityContour(this.defaults.opacityContour);
         this.setColor(defaultColor);
-        this.setColorContour(defaultColor);
+        this.setColorContour(defaultColorContour);
 
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
     },
@@ -892,6 +951,19 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
         if (this.get("drawInteraction2") !== undefined) {
             this.get("drawInteraction2").setActive(false);
+        }
+    },
+
+    /**
+     * removes previous draw interaction
+     * @return {void}
+     */
+    checkAndRemovePreviousDrawInteraction: function () {
+        if (this.get("drawInteraction") !== undefined) {
+            this.setDrawInteraction(undefined);
+        }
+        if (this.get("drawInteraction2") !== undefined) {
+            this.setDrawInteraction2(undefined);
         }
     },
 
@@ -1140,10 +1212,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
 
         this.set("circleRadiusOuter", parseFloat(valueRadius));
-    },
-
-    setDoubleCircle: function (value) {
-        this.set("Doppelkreis", value);
     },
 
     /**
