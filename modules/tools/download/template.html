@@ -5,7 +5,7 @@
         <div class="col-md-9 col-sm-9">
            <select class="form-control formats">
             <option value="none">Bitte Auswählen</option>
-            <% formats.forEach(format => { %>
+            <% formats.forEach(function(format) { %>
                 <option value="<%=format%>"><%=format%></option>
             <% }); %>
             </select>
