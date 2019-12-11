@@ -176,7 +176,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (value) {
             if (this.get("mapfishServiceId") !== undefined) {
                 serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url");
-                console.log(serviceUrl);
                 this.setMapfishServiceUrl(serviceUrl);
                 this.sendRequest(serviceUrl + this.get("printAppId") + "/capabilities.json", "GET", this.parseMapfishCapabilities);
             }
