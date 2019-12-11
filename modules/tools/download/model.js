@@ -15,7 +15,9 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         selectedFormat: "",
         features: [],
         dataString: "",
-        fileName: ""
+        fileName: "",
+        isInternetExplorer: undefined,
+        blob: undefined
     }),
 
     /**
@@ -314,12 +316,13 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         const fileName = this.validateFileNameAndExtension(),
             isInternetExplorer = Radio.request("Util", "isInternetExplorer");
 
+        this.setIsInternetExplorer(isInternetExplorer);
         if (fileName) {
             if (isInternetExplorer) {
-                this.prepareDownloadButtonIE(fileName);
+                this.prepareDownloadButtonIE();
             }
             else {
-                this.prepareDownloadButtonNonIE(fileName);
+                this.prepareDownloadButtonNonIE();
             }
             this.setDisabledOnDownloadButton(false);
         }
@@ -339,32 +342,37 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
 
     /**
      * Prepares the download button for nonIE browsers.
-     * @param {String} fileName Full filename with extension.
      * @returns {void}
      */
-    prepareDownloadButtonNonIE: function (fileName) {
+    prepareDownloadButtonNonIE: function () {
         const url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
 
         $(".downloadFile").attr("href", url);
-        $(".downloadBtn").on("click", function () {
-            $(".downloadFile").attr("download", fileName);
-        });
     },
 
     /**
      * Prepares the download button for IE browsers.
-     * @param {String} fileName Full filename with extension.
      * @returns {void}
      */
-    prepareDownloadButtonIE: function (fileName) {
+    prepareDownloadButtonIE: function () {
         const fileData = [this.get("dataString")],
             blobObject = new Blob(fileData);
 
-        $(".downloadBtn").on("click", function () {
-            window.navigator.msSaveOrOpenBlob(blobObject, fileName);
-        });
+        this.setBlob(blobObject);
     },
 
+    /**
+     * Triggers the download
+     * @returns {void}
+     */
+    download: function () {
+        if (this.get("isInternetExplorer")) {
+            window.navigator.msSaveOrOpenBlob(this.get("blob"), this.validateFileNameAndExtension());
+        }
+        else {
+            $(".downloadFile").attr("download", this.validateFileNameAndExtension());
+        }
+    },
     /**
      * Resets the model.
      * @returns {void}
@@ -378,7 +386,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Setter for attribute "formats"
+     * Setter for attribute "formats".
      * @param {String[]} value Formats.
      * @returns {void}
      */
@@ -387,7 +395,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Setter for attribute "features"
+     * Setter for attribute "features".
      * @param {ol/Feature[]} value Features.
      * @returns {void}
      */
@@ -396,7 +404,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Setter for attribute "dataString"
+     * Setter for attribute "dataString".
      * @param {String} value The features saved as string.
      * @returns {void}
      */
@@ -405,7 +413,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Setter for attribute "selectedFormat"
+     * Setter for attribute "selectedFormat".
      * @param {String} value The selected Format.
      * @returns {void}
      */
@@ -414,12 +422,30 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
-     * Setter for attribute "fileName"
+     * Setter for attribute "fileName".
      * @param {String} value Filename without extension.
      * @returns {void}
      */
     setFileName: function (value) {
         this.set("fileName", value);
+    },
+
+    /**
+     * Setter for attribute "blob".
+     * @param {Blob} value Blob.
+     * @returns {void}
+     */
+    setBlob: function (value) {
+        this.set("blob", value);
+    },
+
+    /**
+     * Setter for attribute "isInternetExplorer".
+     * @param {Boolean} value Flag if browser is ie.
+     * @returns {void}
+     */
+    setIsInternetExplorer: function (value) {
+        this.set("isInternetExplorer", value);
     }
 });
 

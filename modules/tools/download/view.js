@@ -5,7 +5,8 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
     events: {
         "click .back": "back",
         "change .formats": "setSelectedFormat",
-        "keyup .filename": "setFileName"
+        "keyup .filename": "setFileName",
+        "click .downloadBtn": "download"
     },
     /**
      * @class DownloadView
@@ -64,6 +65,9 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
         this.model.prepareDownloadButton();
     },
 
+    download: function () {
+        this.model.download();
+    },
     /**
      * renders the models content.
      * @param {Tools.Download.DownloadModel} model Download model.
