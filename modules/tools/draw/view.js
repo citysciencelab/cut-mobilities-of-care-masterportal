@@ -130,6 +130,7 @@ const DrawToolView = Backbone.View.extend({
                 this.$el.find(".dropdownUnit").hide();
                 this.$el.find(".dropdownMethod").hide();
                 this.$el.find(".colorContour").hide();
+                this.$el.find(".color").show();
                 this.$el.find(".opacity").show();
                 this.$el.find(".opacityContour").hide();
                 break;
