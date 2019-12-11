@@ -142,13 +142,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set("titleLable", i18next.t("common:modules.tools.print.titleLable"));
-        this.set("titlePlaceholder", i18next.t("common:modules.tools.print.titlePlaceholder"));
-        this.set("layoutLable", i18next.t("common:modules.tools.print.layoutLable"));
-        this.set("formatLable", i18next.t("common:modules.tools.print.formatLable"));
-        this.set("scaleLable", i18next.t("common:modules.tools.print.scaleLable"));
-        this.set("withLegendLable", i18next.t("common:modules.tools.print.withLegendLable"));
-        this.set("printLable", i18next.t("common:modules.tools.print.printLable"));
+        this.set({
+            "titleLable": i18next.t("common:modules.tools.print.titleLable"),
+            "titlePlaceholder": i18next.t("common:modules.tools.print.titlePlaceholder"),
+            "layoutLable": i18next.t("common:modules.tools.print.layoutLable"),
+            "formatLable": i18next.t("common:modules.tools.print.formatLable"),
+            "scaleLable": i18next.t("common:modules.tools.print.scaleLable"),
+            "withLegendLable": i18next.t("common:modules.tools.print.withLegendLable"),
+            "printLable": i18next.t("common:modules.tools.print.printLable")
+        });
     },
 
     /**
@@ -174,6 +176,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (value) {
             if (this.get("mapfishServiceId") !== undefined) {
                 serviceUrl = Radio.request("RestReader", "getServiceById", this.get("mapfishServiceId")).get("url");
+                console.log(serviceUrl);
                 this.setMapfishServiceUrl(serviceUrl);
                 this.sendRequest(serviceUrl + this.get("printAppId") + "/capabilities.json", "GET", this.parseMapfishCapabilities);
             }
