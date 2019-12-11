@@ -5,7 +5,7 @@ import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 
 const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         id: "download",
         name: "Download",
         glyphicon: "glyphicon-plus",
@@ -92,6 +92,10 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                 break;
             case "GPX":
                 features = this.convertFeatures(features, formatGpx);
+                break;
+            case "none":
+                features = "";
+                this.setSelectedFormat("");
                 break;
             default:
                 Radio.trigger("Alert", "alert", "Das Format " + selectedFormat + " wird noch nicht unterstützt.");
@@ -245,8 +249,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     transformPolygon: function (coords, projections) {
         const transCoord = [];
 
-        _.each(coords, function (points) {
-            _.each(points, function (point) {
+        coords.forEach(points => {
+            points.forEach(point => {
                 transCoord.push(this.transformPoint(point, projections));
             }, this);
         }, this);
@@ -263,7 +267,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     transformLine: function (coords, projections) {
         const transCoord = [];
 
-        _.each(coords, function (point) {
+        coords.forEach(point => {
             transCoord.push(this.transformPoint(point, projections));
         }, this);
         return transCoord;
