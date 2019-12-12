@@ -1,18 +1,18 @@
 var replace = require("replace-in-file"),
     replacements = [];
 
-module.exports = function (destination, stableVersion) {
+module.exports = function (destination, stableVersionNumber) {
     replacements = [];
 
     replacements.push({
         "files": destination + "/index.html",
         "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
-        "to": "../Mastercode/" + stableVersion + "/img/ajax-loader.gif"
+        "to": "../Mastercode/" + stableVersionNumber + "/img/ajax-loader.gif"
     });
     replacements.push({
         "files": destination + "/index.html",
         "from": /\/*(\.+\/)*build\/css\/style\.css/g,
-        "to": "../Mastercode/" + stableVersion + "/css/style.css"
+        "to": "../Mastercode/" + stableVersionNumber + "/css/style.css"
     });
     replacements.push({
         "files": destination + "/index.html",

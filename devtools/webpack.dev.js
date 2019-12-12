@@ -5,7 +5,6 @@ const merge = require("webpack-merge"),
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
     fs = require("fs"),
-    _ = require("underscore"),
     HttpsProxyAgent = require("https-proxy-agent"),
     /* eslint-disable no-process-env */
     proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
@@ -27,9 +26,7 @@ Object.keys(proxies).forEach(proxy => {
     }
 });
 
-module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
+module.exports = function () {
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
@@ -70,5 +67,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    }, new Common(path2CustomModule));
+    }, new Common());
 };
