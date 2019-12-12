@@ -1,3 +1,79 @@
 {
-    "anything": "something common"
+    "modules": {
+        "controls": {
+            "fullScreen": {
+                "enable": "enable fullscreen",
+                "disable": "disable fullscreen",
+                "toggle": "toggle fullscreen"
+            },
+            "zoom": {
+                "zoomIn": "Zoom In",
+                "zoomOut": "Zoom Out"
+            },
+            "orientation": {
+                "titleGeolocate": "common position",
+                "titleGeolocatePOI": "close to me",
+                "geolocationDeniedText": "localisation is not available",
+                "trackingDeniedText": "'$t(common:modules.controls.orientation.titleGeolocatePOI)' is not available"
+            },
+            "orientation3d": {
+                "compass": {
+                    "pointerNorth": "north the view/rotate view",
+                    "pointerSouth": "south view",
+                    "pointerWest": "west view",
+                    "pointerEast": "east view",
+                    "moveNorth": "move north",
+                    "moveSouth": "move south",
+                    "moveWest": "move west",
+                    "moveEast": "move east"
+                },
+                "control": {
+                    "tiltDown": "tilt the view",
+                    "tiltReset": "reset view",
+                    "zoomIn": "$t(common:modules.controls.zoom.zoomIn)",
+                    "zoomOut": "$t(common:modules.controls.zoom.zoomOut)"
+                }
+            },
+            "totalView": {
+                "titleButton": "back to home screen",
+                "titleMenu": "main view"
+            },
+            "3d": {
+                "buttonTitle": "3D",
+                "openView3d": "start view",
+                "closeView3d": "close view",
+                "betaWarning3d": "The 3D mode is currently still in the beta version!"
+            },
+            "oblique": {
+                "buttonTitle": "oblique aerial photos",
+                "openViewOblique": "show oblique aerial photos",
+                "closeViewOblique": "close oblique aerial photos",
+                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+            },
+            "freeze": {
+                "freeze": "freeze view",
+                "unfreeze": "unfreeze view",
+                "freezeTable": "freeze view"
+            },
+            "backForward": {
+                "stepForward": "next view",
+                "stepBackward": "last view"
+            },
+            "attributions": {
+                "showAttributions": "show layer attributions",
+                "hideAttributions": "hide layer attributions"
+            },
+            "overviewMap": {
+                "showOverviewControl": "show overview map",
+                "hideOverviewControl": "hide overview map",
+                "showOverviewTable": "show mini map",
+                "hideOverviewTable": "hide mini map"
+            },
+            "mousePosition": {
+                "hint": "Move the computer mouse over your screen.",
+                "showMousePosition": "mouse position - fade in",
+                "hideMousePosition": "fade out"
+            }
+        }
+    }
 }
