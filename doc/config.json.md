@@ -17,24 +17,25 @@ Die config.json besteht aus der **[Portalconfig](#markdown-header-Portalconfig)*
 ***
 
 ## Portalconfig
-In der *Portalconfig* kann die Oberfläche des Portals konfiguriert werden:
-1.  der Titel mit Logo, falls erforderlich
-2.  welche/r Suchdienst/e angesprochen werden soll/en
-3.  welche Themenbaumart genutzt werden soll (einfach/light oder mit Unterordnern/custom)
-4.  welche Werkzeuge an welcher Stelle geladen werden sollen
-5.  welche Interaktionen mit der Karte möglich sein sollen (zoomen, Menüzeile ein/ausblenden, Standortbestimmung des Nutzers, Vollbildmodus, etc.)
-6.  welche Layer genutzt werden und ggf. in welchen Ordnern, sie in der Themenauswahl erscheinen sollen.
+Im Abschnitt *Portalconfig* können folgende Eigenschaften konfiguriert werden:
+1. Titel & Logo (*portalTitle*)
+2. Art der Themenauswahl (*treeType*)
+3. Starteinstellungen der Kartenansicht (*mapView*)
+4. Schaltflächen auf der Kartenansicht sowie mögliche Interaktionen (*controls*)
+5. Menüeinträge sowie Vorhandenheit jeweiliger Tools und deren Reihenfolge (*menu*)
+6. Typ und Eigenschaften des genutzten Suchdienstes (*searchBar*)
+7. Löschbarkeit von Themen (*layersRemovable*)
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|treeType|nein|enum["light", "default", "custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
-|Baumtyp|nein|enum["light", "default", "custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
-|controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
-|mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
-|menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |portalTitle|nein|**[portalTitle](#markdown-header-portalconfigportaltitle)**||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|false|
+|treeType|nein|enum["light","default","custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
+|Baumtyp|nein|enum["light","default","custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
+|mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
+|controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
+|menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |searchBar|nein|**[searchBar](#markdown-header-portalconfigsearchbar)**||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|false|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|false|
 
@@ -344,7 +345,7 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|attributions|nein|**[attributions](#markdown-header-portalconfigcontrolsattributions)**|false|Zusätzliche Layerinformationen die im Portal angezeigt werden sollen|
+|attributions|nein|**[attributions](#markdown-header-portalconfigcontrolsattributions)**|false|Zusätzliche Layerinformationen die im Portal angezeigt werden sollen|false|
 |fullScreen|nein|Boolean|false|Ermöglicht dem User die Darstellung im Vollbildmodus (ohne Tabs und Adressleiste) per Klick auf den Button. Ein erneuter Klick auf den Button wechselt wieder in den normalen Modus.|false|
 |mousePosition|nein|Boolean|false|Die Koordinaten des Mauszeigers werden angeziegt.|false|
 |orientation|nein|**[orientation](#markdown-header-portalconfigcontrolsorientation)**||Orientation nutzt die geolocation des Browsers zur Standortbestimmung des Nutzers.|false|
@@ -747,6 +748,10 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
 
+[type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
+
+[type:gfi]: # (Portalconfig.menu.tool.gfi)
+
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -756,7 +761,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Flurstückssuche.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
-|gfi|nein|**[tool](#markdown-header-portalconfigmenutool)**||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|false|
+|gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
@@ -775,13 +780,14 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|false|
 |schulwegrouting|nein|**[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)**||Schulwegrouting.|true|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Neues Filtermodul.|false|
-|virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|
-|shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|
+|virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
+|shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
 
 
 ***
 
 #### Portalconfig.menu.tool
+
 Über den Attribut-key des Werkzeuges wird definiert, welches Werkzeug mit welchen Eigenschaften geladen wird. Jedes Tool besitzt mindestens die unten aufgeführten Attribute. Welche Tools konfigurierbar sind, finden Sie unter **[tools](#markdown-header-portalconfigmenutools)**.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -821,6 +827,9 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 #!json
 "gfi":{
     "name":"Informationen abfragen",
+    "glyphicon":"glyphicon-info-sign",
+    "isActive":true,
+    "centerMapMarkerPolygon":true,
     "highlightVectorRules": {
         "fill": {
             "color": [215, 102, 41, 0.9]
@@ -848,11 +857,10 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
     "centerMapMarkerPolygon":true
 }
 ```
+
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules
-
-[inherits]: # (Portalconfig.menu.tool.gfi)
 
 Liste der Einstellungen zum überschreiben von Vektorstyles bei GFI Abfragen.
 
@@ -1297,32 +1305,6 @@ Routing Modul.
 
 ***
 
-#### Portalconfig.menu.tool.gfi
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Requests oder GetFeature-Requests oder geladene Vektordaten abgefragt werden.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeugs im Menu.|false|
-|glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
-|isActive|nein|Boolean|true|Gibt an ob das GFI per default aktiviert ist.|false|
-|centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
-
-**Beispiel**
-```
-#!json
-"gfi":{
-    "name":"Informationen abfragen",
-    "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
-    "centerMapMarkerPolygon":true
-}
-```
-
-***
-
 #### Portalconfig.menu.tool.featureLister
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1527,7 +1509,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |----|-------------|---|-------|------------|------|
 |title|ja|String||Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
-|layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
+|layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
 
 **Beispiel**
 ```
@@ -1556,13 +1538,14 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 
 ***
 
-#### Portalconfig.menu.tool.layerslider.layerId
+#### Portalconfig.menu.tool.layerSlider.layerId
+
 Definiert einen Layer für den Layerslider.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |title|ja|String||Name des Diestes, wie er im Portal angezeigt werden soll.|false|
-|layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|
+|layerId|ja|String||Id des Diestes, der im Portal angezeigt werden soll. ACHTUNG: Diese LayerId muss auch in der Themenconfig konfiguriert sein!|false|
 
 **Beispiel**
 ```
@@ -1573,6 +1556,7 @@ Definiert einen Layer für den Layerslider.
 }
 ```
 
+***
 
 #### Portalconfig.menu.tool.virtualcity
 
@@ -1605,7 +1589,7 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|shadowTime|nein|**[shadowTime](#markdown-header-portalconfigmenutoolshadowshadowtime)**|Now()|Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
+|shadowTime|nein|**[shadowTime](#markdown-header-portalconfigmenutoolshadowshadowtime)**||Default-Zeitangabe, mit der das ShadowTool startet. Erkennt "month", "day", "hour", "minute"|
 |isShadowEnabled|nein|Boolean|false|Default Shadow-Wert. True um unmittelbar Shadow einzuschalten. False zum manuellen bestätigen.|
 
 
@@ -1973,6 +1957,10 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 [type:Extent]: # (Datatypes.Extent)
 
+[type:Entity3D]: # (Themenconfig.Layer.Entity3D)
+
+[type:WMS]: # (Themenconfig.Layer.WMS)
+
 Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein großteil der Attribute ist in der **[services.json](services.json.md)** definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#markdown-header-themenconfiglayerwms)** und **[Vector](#markdown-header-themenconfiglayervector)**.
 
@@ -1981,6 +1969,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |----|-------------|---|-------|------------|------|
 |id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids diesselbe URL ansprechen, also den selben Dienst benutzen.|false|
 |name|nein|String||Name des Layers.|false|
+|entities|ja|**[Entity3D](#markdown-header-themenconfiglayerentity3d)**[]||Modelle, die angezeigt werden sollen |false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an in denen der Layer verwendet werden kann.|false|
@@ -2063,7 +2052,7 @@ Hier werden Tileset typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|hiddenFeatures|nein|Array|[]|Liste mit IDs, die in der Ebene versteckt werden sollen|
+|hiddenFeatures|nein|String[]|[]|Liste mit IDs, die in der Ebene versteckt werden sollen|
 |[cesium3DTilesetOptions]|nein|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
 
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
@@ -2143,31 +2132,23 @@ Todo
 
 ***
 
-#### Themenconfig.Layer.Entitites3D
-
-[inherits]: # (Themenconfig.Layer)
+#### Themenconfig.Layer.Entity3D
 
 Hier werden Entities3D typische Attribute aufgelistet.
 
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|entities|ja|Array||Modelle, die angezeigt werden sollen |`[]`|
-
-Entity Optionen
-
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|url|ja|String|`""`|Url zu dem Modell|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
-|attributes|nein|**[attribute](#markdown-header-themenconfiglayerentities3dattribute)**||Attribute für das Modell|`{"name": "test"}`|
-|latitude|ja|Number||Breitengrad des Modell-Origins in Grad|`53.541831`|
-|longitude|ja|Number||Längengrad des Modell-Origins in Grad|`9.917963`|
-|height|nein|Number|0|Höhe des Modell-Origins|`10`|
-|heading|nein|Number|0|Rotation des Modells, in Grad|`0`|
-|pitch|nein|Number|0|Neigung des Modells in Grad |`0`|
-|roll|nein|Number|0|Roll des Modells in Grad|`0`|
-|scale|nein|Number|1|Skalierung des Modells|`1`|
-|allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI)|`true`|
-|show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein)|`true`|
+|Name|Verpflichtend|Typ|default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|url|ja|String|""|Url zu dem Modell. Beispiel: `"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|false|
+|attributes|nein|**[Attribute](#markdown-header-themenconfiglayerentities3dattribute)**||Attribute für das Modell. Beispiel: `{"name": "test"}`|false|
+|latitude|ja|Number||Breitengrad des Modell-Origins in Grad. Beispiel: `53.541831`|false|
+|longitude|ja|Number||Längengrad des Modell-Origins in Grad. Beispiel: `9.917963`|false|
+|height|nein|Number|0|Höhe des Modell-Origins. Beispiel: `10`|false|
+|heading|nein|Number|0|Rotation des Modells, in Grad. Beispiel: `0`|false|
+|pitch|nein|Number|0|Neigung des Modells in Grad. Beispiel: `0`|false|
+|roll|nein|Number|0|Roll des Modells in Grad. Beispiel: `0`|false|
+|scale|nein|Number|1|Skalierung des Modells. Beispiel: `1`|false|
+|allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI). Beispiel: `true`|false|
+|show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein). Beispiel: `true`|false|
 
 
 **Beispiel**
@@ -2199,22 +2180,21 @@ Entity Optionen
 
 ***
 
-#### Themenconfig.Layer.Entitites3D
+#### Themenconfig.Layer.Entity3D.Attribute
 
-[inherits]: # (Themenconfig.Layer.Entities3D)
-
-Todo
+|Name|Verpflichtend|Typ|default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|nein|String|""|Todo|false|
 
 **Beispiel**
 ```
 #!json
-"attributes": {
-    "name": "Fernsehturm.kmz"
+{
+   "name": "Fernsehturm.kmz"
 }
 ```
 
 ***
-
 
 #### Themenconfig.Layer.StaticImage
 
@@ -2259,7 +2239,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|false|
 |routable|nein|Boolean||Gibt an ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug **[routing](#markdown-header-portalconfigmenutoolrouting)** konfiguriert sein.|false|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
-|additionalInfoField|nein|String|name|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden wird der Layername angegeben.|false|
+|additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.md)** aufgelöst.|false|
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|false|
 

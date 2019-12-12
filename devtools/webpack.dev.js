@@ -12,6 +12,7 @@ const merge = require("webpack-merge"),
     /* eslint-disable no-process-env */
     proxyAgent = proxyServer !== undefined ? new HttpsProxyAgent(proxyServer) : "";
 
+
 let proxies;
 
 if (fs.existsSync("./devtools/proxyconf.json")) {
@@ -34,13 +35,16 @@ module.exports = function (env, args) {
         mode: "development",
         devtool: "cheap-module-eval-source-map",
         devServer: {
-            port: 9001,
-            publicPath: "/build/",
-            overlay: true,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             https: true,
             open: true,
             openPage: "portal/master",
-            proxy: proxies
+            overlay: true,
+            port: 9001,
+            proxy: proxies,
+            publicPath: "/build/"
         },
         module: {
             rules: [
