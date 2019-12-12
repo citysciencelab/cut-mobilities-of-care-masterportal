@@ -32,8 +32,8 @@ const CheckboxSnippet = SnippetModel.extend({
      */
     changeLang: function () {
         this.set({
-            textOn:  i18next.t("common:snippets.checkbox.on"),
-            textOff:  i18next.t("common:snippets.checkbox.off"),
+            textOn: i18next.t("common:snippets.checkbox.on"),
+            textOff: i18next.t("common:snippets.checkbox.off")
         });
     },
     addValueModel: function (value) {

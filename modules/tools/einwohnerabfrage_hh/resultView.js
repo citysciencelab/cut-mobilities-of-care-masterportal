@@ -1,7 +1,6 @@
 import ResultTemplate from "text-loader!./resultTemplate.html";
 
 const ResultView = Backbone.View.extend({
-    model: {},
     /**
      * @class ContactView
      * @extends Backbone.View
@@ -20,9 +19,11 @@ const ResultView = Backbone.View.extend({
     },
     render: function () {
         const attr = this.model.toJSON();
+
         this.$el.html(this.template(attr));
         return this;
-    }
+    },
+    model: {}
 });
 
 export default ResultView;
