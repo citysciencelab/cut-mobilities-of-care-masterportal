@@ -19,7 +19,11 @@ const OrientationModel = Backbone.Model.extend({
         position: "",
         isGeolocationDenied: false,
         isGeoLocationPossible: false,
-        epsg: "EPSG:25832"
+        epsg: "EPSG:25832",
+
+        titleGeolocate: "Standpunkt",
+        titleGeolocatePOI: "In meiner Nähe"
+
     },
     initialize: function (config) {
         var channel;
@@ -54,8 +58,25 @@ const OrientationModel = Backbone.Model.extend({
             "updateVisibleInMapList": this.checkWFS
         });
 
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
         this.setConfig();
         this.setIsGeoLocationPossible();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            "titleGeolocate": i18next.t("common:modules.controls.orientation.titleGeolocate"),
+            "titleGeolocatePOI": i18next.t("common:modules.controls.orientation.titleGeolocatePOI")
+        });
     },
 
     /**
@@ -138,7 +159,7 @@ const OrientationModel = Backbone.Model.extend({
             this.get("marker").setPosition(position);
         }
         catch (e) {
-            console.error("Marker konnte nicht gesetzt werden");
+            console.error("wasn't able to set marker");
         }
     },
     zoomAndCenter: function (position) {
@@ -172,7 +193,7 @@ const OrientationModel = Backbone.Model.extend({
     },
     onError: function () {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>Lokalisierung nicht verfügbar: </strong>",
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.geolocationDeniedText") + ": </strong>",
             kategorie: "alert-danger"
         });
         this.setIsGeolocationDenied(true);
@@ -180,7 +201,7 @@ const OrientationModel = Backbone.Model.extend({
     },
     onPOIError: function (evt) {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>'In meiner Nähe' nicht verfügbar: </strong>" + evt.message,
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.trackingDeniedText") + ": </strong>" + evt.message,
             kategorie: "alert-danger"
         });
         this.untrack();
