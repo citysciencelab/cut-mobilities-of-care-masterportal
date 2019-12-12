@@ -6,26 +6,51 @@ import VectorLayer from "ol/layer/Vector.js";
 import Feature from "ol/Feature.js";
 
 
-const Lines = PendlerCoreModel.extend({
+const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     defaults: _.extend({}, PendlerCoreModel.prototype.defaults, {
         zoomLevel: 0,
         // Layer zur Darstellung der Linien / Strahlen
         lineLayer: new VectorLayer({
             source: new VectorSource(),
             style: null,
-            name: "lineLayer"
+            name: "pendlerLineLayer"
         }),
         // Layer zur Darstellung der Beschriftung an Punkten am Strahlenende
         labelLayer: new VectorLayer({
             source: new VectorSource(),
             style: null,
-            name: "labelLayer"
+            name: "pendlerLabelLayer"
         }),
         glyphicon: "glyphicon-play-circle"
     }),
+    /**
+     * @class Lines
+     * @extends PendlerCoreModel
+     * @memberof pendler
+     * @constructs
+     * @property {Number} zoomLevel=0 level map is not zoomed
+     * @property {Object} lineLayer=new VectorLayer({
+            source: new VectorSource(),
+            style: null,
+            name: "pendlerLineLayer"
+        }) Layer zur Darstellung der Linien / Strahlen
+     * @property {Object} labelLayer=new VectorLayer({
+            source: new VectorSource(),
+            style: null,
+            name: "pendlerLabelLayer"
+        }) Layer zur Darstellung der Beschriftung an Punkten am Strahlenende
+     * @property {String} glyphicon="glyphicon-play-circle" icon to start the animation
+     * @fires Core#RadioTriggerMapRender
+     * @listens Alerting#RadioTriggerAlertConfirmed
+     */
 
+    /**
+     * Iterates over the given features and prepares the data for the legend.
+     * @param {Object[]} features array of 'gemeinde' features
+     * @returns {void}
+     */
     preparePendlerLegend: function (features) {
-        var pendlerLegend = [];
+        const pendlerLegend = [];
 
         _.each(features, function (feature) {
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
@@ -38,12 +63,15 @@ const Lines = PendlerCoreModel.extend({
 
         this.set("pendlerLegend", pendlerLegend);
     },
-
+    /**
+     * creates the layers and their order and centers the 'gemeinde'
+     * @returns {void}
+     */
     handleData: function () {
-        var rawFeatures = this.get("lineFeatures"),
-            topFeatures,
-            lineLayer,
-            labelLayer;
+        const rawFeatures = this.get("lineFeatures");
+        let topFeatures = null,
+            lineLayer = null,
+            labelLayer = null;
 
         // Handling for "no data": Just refresh legend (clear and print message).
         if (rawFeatures.length === 0) {
@@ -56,16 +84,16 @@ const Lines = PendlerCoreModel.extend({
 
         // Add layers for lines and labels if neccessary. If Layers
         // are already exiting clean them.
-        labelLayer = Radio.request("Map", "createLayerIfNotExists", "labelLayer");
-        this.set("labelLayer", labelLayer);
-        this.get("labelLayer").getSource().clear();
-        lineLayer = Radio.request("Map", "createLayerIfNotExists", "lineLayer");
-        this.set("lineLayer", lineLayer);
-        this.get("lineLayer").getSource().clear();
+        labelLayer = Radio.request("Map", "createLayerIfNotExists", "pendlerLabelLayer");
+        this.set("pendlerLabelLayer", labelLayer);
+        this.get("pendlerLabelLayer").getSource().clear();
+        lineLayer = Radio.request("Map", "createLayerIfNotExists", "pendlerLineLayer");
+        this.set("pendlerLineLayer", lineLayer);
+        this.get("pendlerLineLayer").getSource().clear();
 
         // Lege die Reihenfolge der Layer fest, damit die Beschriftungen nicht von den Zahlen überdeckt werden.
-        this.get("labelLayer").setZIndex(11);
-        this.get("lineLayer").setZIndex(10);
+        this.assertLayerOnTop("pendlerLineLayer");
+        this.assertLayerOnTop("pendlerLabelLayer");
 
         // Zentriere View auf die Gemeinde, zeichne aber keinen Marker ein.
         this.centerGemeinde(false);
@@ -74,6 +102,8 @@ const Lines = PendlerCoreModel.extend({
 
         this.preparePendlerLegend(topFeatures);
         this.createFeatures(topFeatures);
+        // setzte den layer nochmals ganz oben drauf, da der z-index zwischenzeitlich angepaßt wurde
+        this.assertLayerOnTop("pendlerLabelLayer");
 
         Radio.trigger("Map", "render");
     },
@@ -81,15 +111,14 @@ const Lines = PendlerCoreModel.extend({
     /**
      * Erzeuge die Strahlen mit Beschriftung für jede Gemeinde.
      * @param {Object[]} features Feature-Liste
-     * @returns {Void} Keine Rückgabe
+     * @returns {void} Keine Rückgabe
      */
     createFeatures: function (features) {
+        let lineLayerFeature,
+            labelCoordinates,
+            labelLayerFeature;
 
         _.each(features, function (feature) {
-            var lineLayerFeature,
-                labelCoordinates,
-                labelLayerFeature;
-
             // Erzeuge die Strahlen
             lineLayerFeature = new Feature({
                 geometry: feature.getGeometry()
@@ -103,7 +132,7 @@ const Lines = PendlerCoreModel.extend({
             }));
             // "styleId" neccessary for print, that style and feature can be linked
             lineLayerFeature.set("styleId", _.uniqueId());
-            this.get("lineLayer").getSource().addFeature(lineLayerFeature);
+            this.get("pendlerLineLayer").getSource().addFeature(lineLayerFeature);
 
             // Erzeuge die Beschriftung. Dafür wird ein (unsichtbarere) Punkt am Ende jeder Linie gesetzt.
             // Wo das Ende ist (erste oder zweite Koordinate) entschreidet sich dabei aus der (Pendel-)Richtung
@@ -131,25 +160,25 @@ const Lines = PendlerCoreModel.extend({
             }));
             // "styleId" neccessary for print, that style and feature can be linked
             labelLayerFeature.set("styleId", _.uniqueId());
-            this.get("labelLayer").getSource().addFeature(labelLayerFeature);
+            this.get("pendlerLabelLayer").getSource().addFeature(labelLayerFeature);
 
         }, this);
     },
 
     /**
-     * Entefernt das Diagramm von der Karte
-     * @returns {Void} Kein Rückgabewert
+     * Entfernt das Diagramm von der Karte
+     * @returns {void}
      */
     clear: function () {
-        var lineLayer,
-            labelLayer;
+        let lineLayer = null,
+            labelLayer = null;
 
-        lineLayer = this.get("lineLayer");
+        lineLayer = this.get("pendlerLineLayer");
         if (!_.isUndefined(lineLayer)) {
             Radio.trigger("Map", "removeLayer", lineLayer);
         }
 
-        labelLayer = this.get("labelLayer");
+        labelLayer = this.get("pendlerLabelLayer");
         if (!_.isUndefined(lineLayer)) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
