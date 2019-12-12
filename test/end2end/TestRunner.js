@@ -44,7 +44,7 @@ function runTests (browsers) {
                     });
                 }
                 else {
-                    let bsCapabilities = resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r));
+                    const bsCapabilities = resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r));
 
                     if (Array.isArray(bsCapabilities)) {
                         bsCapabilities.flat(1).forEach(capability => {
