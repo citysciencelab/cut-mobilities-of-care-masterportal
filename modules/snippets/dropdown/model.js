@@ -18,7 +18,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         numOfOptions: 10,
         isMultiple: true
     },
-   /**
+    /**
      * @class DropdownModel
      * @extends SnippetModel
      * @memberof Snippets.Dropdown
@@ -58,7 +58,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     /**
      * removes all value-models from collection and calls addValueModel for each new value
      * @param {string[]} newValueList - new dropdown values
-     * @param {string[]} newValueList - new preselected values
+     * @param {string[]} preselectedValues - new preselected values
      * @returns {void}
      */
     replaceValueModels: function (newValueList, preselectedValues) {

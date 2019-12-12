@@ -23,15 +23,15 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         alkisAdressLayerId: "9726",
         populationReqServiceId: "2",
         id: "Einwohnerabfrage",
-        //translations
-        confidentialityHint:"",
-        confidentialityHintSmallValues:"",
+        // translations
+        confidentialityHint: "",
+        confidentialityHintSmallValues: "",
         populationFHH: "",
-        populationMRH:"",
-        areaSize:"",
-        hint:"",
-        dataSourceFHHKey:"",
-        dataSourceFHHValue:"",
+        populationMRH: "",
+        areaSize: "",
+        hint: "",
+        dataSourceFHHKey: "",
+        dataSourceFHHValue: "",
         dataSourceFHHLinktext: "",
         dataSourceMRHKey: "",
         dataSourceMRHValue: "",
@@ -135,23 +135,24 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {Void}  -
      */
     changeLang: function () {
-        const prefixSelect = "common:modules.tools.populationRequest.select.";
-        const prefixResult = "common:modules.tools.populationRequest.result.";
-        const values = {
-            confidentialityHint:  i18next.t(prefixResult+"confidentialityHint"),
-            populationFHH:  i18next.t(prefixResult+"populationFHH"),
-            populationMRH:  i18next.t(prefixResult+"populationMRH"),
-            areaSize:  i18next.t(prefixResult+"areaSize"),
-            confidentialityHintSmallValues:  i18next.t(prefixResult+"confidentialityHintSmallValues"),
-            hint:  i18next.t(prefixResult+"hint"),
-            dataSourceFHHKey:  i18next.t(prefixResult+"dataSourceFHHKey"),
-            dataSourceFHHValue:  i18next.t(prefixResult+"dataSourceFHHValue"),
-            dataSourceFHHLinktext:  i18next.t(prefixResult+"dataSourceFHHLinktext"),
-            dataSourceMRHKey:  i18next.t(prefixResult+"dataSourceMRHKey"),
-            dataSourceMRHValue:  i18next.t(prefixResult+"dataSourceMRHValue"),
-            dataSourceMRHLinktext:  i18next.t(prefixResult+"dataSourceMRHLinktext"),
-            showRasterLayer:  i18next.t(prefixSelect+"showRasterLayer")
-        }
+        const prefixSelect = "common:modules.tools.populationRequest.select.",
+            prefixResult = "common:modules.tools.populationRequest.result.",
+            values = {
+                confidentialityHint: i18next.t(prefixResult + "confidentialityHint"),
+                populationFHH: i18next.t(prefixResult + "populationFHH"),
+                populationMRH: i18next.t(prefixResult + "populationMRH"),
+                areaSize: i18next.t(prefixResult + "areaSize"),
+                confidentialityHintSmallValues: i18next.t(prefixResult + "confidentialityHintSmallValues"),
+                hint: i18next.t(prefixResult + "hint"),
+                dataSourceFHHKey: i18next.t(prefixResult + "dataSourceFHHKey"),
+                dataSourceFHHValue: i18next.t(prefixResult + "dataSourceFHHValue"),
+                dataSourceFHHLinktext: i18next.t(prefixResult + "dataSourceFHHLinktext"),
+                dataSourceMRHKey: i18next.t(prefixResult + "dataSourceMRHKey"),
+                dataSourceMRHValue: i18next.t(prefixResult + "dataSourceMRHValue"),
+                dataSourceMRHLinktext: i18next.t(prefixResult + "dataSourceMRHLinktext"),
+                showRasterLayer: i18next.t(prefixSelect + "showRasterLayer")
+            };
+
         this.set(values);
     },
     /**
