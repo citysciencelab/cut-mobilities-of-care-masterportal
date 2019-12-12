@@ -12,6 +12,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         "change .dropdownUnit": "setUnit",
         "keyup .circleRadiusInner input": "setCircleRadius",
         "keyup .circleRadiusOuter input": "setCircleRadiusOuter",
+        "change .circleRadiusInner input": "setCircleRadius",
+        "change .circleRadiusOuter input": "setCircleRadiusOuter",
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
         "change .opacityContour select": "setOpacityContour",
@@ -354,6 +356,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     setUnit: function (evt) {
         this.model.setUnit(evt.target.value);
         this.setCircleRadius();
+        this.setCircleRadiusOuter();
     },
 
     /**

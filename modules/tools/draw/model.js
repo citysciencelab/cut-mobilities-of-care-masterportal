@@ -125,32 +125,20 @@ const DrawTool = Tool.extend({
         this.setAddFeatureListener(layerSource.once("addfeature", function (evt) {
             if (this.get("methodCircle") === "definiert" && drawType.geometry === "Circle") {
 
-                const circleRadius = this.getDefinedRadius(doubleIsActive),
+                const radiusInner = this.get("circleRadiusInner"),
+                    radiusOuter = this.get("circleRadiusOuter"),
+                    innerRadius = this.transformNaNToUndefined(radiusInner),
+                    outerRadius = this.transformNaNToUndefined(radiusOuter),
+                    circleRadius = this.getDefinedRadius(doubleIsActive, radiusOuter, radiusInner),
                     circleCenter = evt.feature.getGeometry().getCenter();
-                let resultCoordinates,
-                    assortedCoordinates,
-                    innerRadius = this.get("circleRadiusInner"),
-                    outerRadius = this.get("circleRadiusOuter");
 
-                if (isNaN(innerRadius) === true) {
-                    innerRadius = undefined;
-                }
-                if (isNaN(outerRadius) === true) {
-                    outerRadius = undefined;
-                }
                 if (innerRadius !== undefined && outerRadius !== undefined && drawType.text === "Doppelkreis zeichnen") {
-                    resultCoordinates = this.calculateNewCoordinates(circleCenter, circleRadius);
-                    assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
-                    this.overwriteExtentCoordinates(evt, resultCoordinates);
-                    this.overwriteFlatCoordinates(evt, assortedCoordinates);
+                    this.calculateCircle(evt, circleCenter, circleRadius);
                     $(".circleRadiusInner input")[0].style.borderColor = "";
                     $(".circleRadiusOuter input")[0].style.borderColor = "";
                 }
                 else if (innerRadius !== undefined && drawType.text !== "Doppelkreis zeichnen") {
-                    resultCoordinates = this.calculateNewCoordinates(circleCenter, circleRadius);
-                    assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
-                    this.overwriteExtentCoordinates(evt, resultCoordinates);
-                    this.overwriteFlatCoordinates(evt, assortedCoordinates);
+                    this.calculateCircle(evt, circleCenter, circleRadius);
                     $(".circleRadiusInner input")[0].style.borderColor = "";
                 }
                 else if (innerRadius === undefined && outerRadius === undefined && drawType.text === "Doppelkreis zeichnen") {
@@ -188,28 +176,59 @@ const DrawTool = Tool.extend({
     },
 
     /**
+     * Function to transform value "not a number (NaN)" to undefined.
+     * @param   {Boolean} radius - radius of the circle.
+     * @returns {undefined} - returns undefined.
+     */
+    transformNaNToUndefined: function (radius) {
+        let transformedRadius = radius;
+
+        if (isNaN(transformedRadius) === true) {
+            transformedRadius = undefined;
+        }
+        return radius;
+    },
+
+    /**
      * Getter to get the radius of the inner or outer circle.
      * Depends on whether a double circle is to be calculated or not.
      * @param   {Boolean} doubleIsActive - defines if a doublecircle or singlecircle should be calculated.
-     * @returns {void}
+     * @param   {Number} circleRadiusOuter - Diameter of the outer circle.
+     * @param   {Number} circleRadiusInner - Diameter of the inner / single circle.
+     * @returns {Number} - returns the circle radius.
      */
-    getDefinedRadius: function (doubleIsActive) {
+    getDefinedRadius: function (doubleIsActive, circleRadiusOuter, circleRadiusInner) {
         let circleRadius;
 
         if (doubleIsActive === true) {
-            circleRadius = this.get("circleRadiusOuter");
+            circleRadius = circleRadiusOuter;
         }
         else {
-            circleRadius = this.get("circleRadiusInner");
+            circleRadius = circleRadiusInner;
         }
         return circleRadius;
     },
 
     /**
-     * Overwrites the flat coordinates of an existing (circle-) feature with recalculated ones.
+     * Function to coordinate the circle calculation.
+     * @param   {Event} evt - DrawEvent with the drawn-feature.
+     * @param   {Number} circleCenter - Center of the circle.
+     * @param   {Number} circleRadius - Diameter of the circle.
+     * @returns {void}
+     */
+    calculateCircle: function (evt, circleCenter, circleRadius) {
+        const resultCoordinates = this.calculateNewCoordinates(circleCenter, circleRadius),
+            assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
+
+        this.overwriteExtentCoordinates(evt, resultCoordinates);
+        this.overwriteFlatCoordinates(evt, assortedCoordinates);
+    },
+
+    /**
+     * Calculates the new flat coordiantes of the circle feature.
      * @param   {Number} circleCenter - Coordinates of the circlecenter.
      * @param   {Number} circleRadius - Diameter of the inner or outer circle, specified by the user.
-     * @returns {void}
+     * @returns {Array} - returns an array with flat coordinates of the circle.
      */
     calculateNewCoordinates: function (circleCenter, circleRadius) {
         return [
@@ -224,7 +243,7 @@ const DrawTool = Tool.extend({
      * Merges the coordinates of the circle center and the calculated ones for the defined radius in one array and the right order together.
      * @param   {Number} circleCenter - Coordinates of the circlecenter.
      * @param   {Number} resultCoordinates - Calculated coordinates for defined radius.
-     * @returns {void}
+     * @returns {Array} - returns an array with the extent coordinates of the circle feature.
      */
     assortResultCoordinates: function (circleCenter, resultCoordinates) {
         return [
@@ -235,7 +254,7 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Overwrites the flat and extent coordinates of an existing (circle-) feature with recalculated ones.
+     * Overwrites the extent coordinates of an existing (circle-) feature with recalculated ones.
      * @param   {Event} evt - DrawEvent with the drawn-feature.
      * @param   {Number} resultCoordinates - New coordinates to describe the extent of the circle. Consists of four single values.
      * The northernmost point of the circle is described by the longitude (northing) of that point (0).
@@ -243,7 +262,7 @@ const DrawTool = Tool.extend({
      * The easternmost point is described by the latitude (easting) of that point (2).
      * The westernmost point is described by the latitude (easting) of that point (3).
      * They must be added to the array in the following order: [3, 1, 2, 0]
-     * @returns {void}
+     * @returns {Object} - returns the feature with the new extent coordinates.
      */
     overwriteExtentCoordinates: function (evt, resultCoordinates) {
         evt.feature.getGeometry().extent_ = [
@@ -256,10 +275,10 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * Overwrites the extent coordinates of an existing (circle-) feature with recalculated ones.
+     * Overwrites the flat coordinates of an existing (circle-) feature with recalculated ones.
      * @param   {Event} evt - DrawEvent with the drawn-feature.
      * @param   {Number} flatCoordinates - new flat coordinates of the drawn feature.
-     * @returns {void}
+     * @returns {Object} - returns the feature with the new flat coordinates.
      */
     overwriteFlatCoordinates: function (evt, flatCoordinates) {
         evt.feature.getGeometry().flatCoordinates = flatCoordinates;
@@ -275,7 +294,7 @@ const DrawTool = Tool.extend({
      * @param   {Number} layer - Layer with the drawFeatures.
      * @param   {String} textMessage - Message shown up in the alert window.
      * @param {object} drawType - contains the geometry and description
-     * @returns {void}
+     * @returns {Layer} - returns the layer without the event feature.
      */
     alertForgetToDefineRadius: function (evt, layer, textMessage, drawType) {
 
@@ -287,6 +306,8 @@ const DrawTool = Tool.extend({
         }
 
         layer.getSource().removeFeature(evt.feature);
+
+        return layer;
     },
 
     /**
@@ -294,7 +315,7 @@ const DrawTool = Tool.extend({
      * These coordiantes are calculated on the basis of the circle diameter specified by the user.
      * @param   {Array} circleCenter - Centercoordinates of the circle.
      * @param   {Array} circleRadius - Diameter of the new circle.
-     * @returns {Array} - returns new and transformed flat coordinates of the circle.
+     * @returns {Array} - returns new and transformed flat / extent coordinates of the circle.
      */
     getCircleExtentByDistanceLat: function (circleCenter, circleRadius) {
         const earthRadius = 6378137,
@@ -1108,6 +1129,22 @@ const DrawTool = Tool.extend({
     },
 
     /**
+     * Function to adjust the value / radius to the units meters or kilometers.
+     * @param {string} diameter - diameter of the circle.
+     * @param {string} unit - unit of thfe diameter.
+     * @return {string} - returns value / string without comma.
+     */
+    adjustValueToUnits: function (diameter, unit) {
+        let valueDiameter = diameter;
+
+        if (unit === "km") {
+            valueDiameter = valueDiameter * 1000;
+        }
+
+        return valueDiameter;
+    },
+
+    /**
      * setter for drawType
      * @param {string} value1 - geometry type
      * @param {string} value2 - text
@@ -1221,12 +1258,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     setCircleRadius: function (value) {
-        const selectedUnit = this.get("unit");
-        let valueRadius = value;
-
-        if (selectedUnit === "km") {
-            valueRadius = valueRadius * 1000;
-        }
+        const valueRadius = this.adjustValueToUnits(value, this.get("unit"));
 
         this.set("circleRadiusInner", parseFloat(valueRadius));
     },
@@ -1237,12 +1269,7 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     setCircleRadiusOuter: function (value) {
-        const selectedUnit = this.get("unit");
-        let valueRadius = value;
-
-        if (selectedUnit === "km") {
-            valueRadius = valueRadius * 1000;
-        }
+        const valueRadius = this.adjustValueToUnits(value, this.get("unit"));
 
         this.set("circleRadiusOuter", parseFloat(valueRadius));
     },
