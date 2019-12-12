@@ -8,7 +8,7 @@ Um die externen Sourcen in der Entwicklungsumgebung und dem Dev-Server in das pe
 ```
 
 Der genutzte Mechanismus wird über **[webpackMode: eager](https://webpack.js.org/api/module-methods)** gesteuert,indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
-Dadurch wird das Model der externen Sourcen erst ganz zum Schluß initialisiert und ist in der Model-Liste nur rudimentär vorhanden und wird dort ausgetauscht. 
+Dadurch wird das Model der externen Sourcen erst ganz zum Schluß initialisiert und ist in der Model-Liste nur rudimentär vorhanden und wird dort ausgetauscht.
 
 Besonderheit:
 Die View-Klasse der externen Sourcen muss das zugehörige Model neu anlegen. Dieses wird in der Model-Liste mit dem rudimentären Model ausgetauscht.
@@ -24,3 +24,11 @@ Beim build-Prozess per
 wird der Pfad zum Custom Module ebenfalls abgefragt. Wird unter dem Pfad ein entsprechendes Modul gefunden wird dieses mit in das webpack-bundle geschrieben und ist in der gebauten App verfügbar.
 
 Das Custom-Module selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repos und erlaubt so eine getrennte Verwaltung.
+
+
+# Neue Struktur (ab spätestens 2020)
+Es gibt nun einen extra Ordner *"customModules"*, welcher unabhängig vom Portal sämtliche *CustomModules* enthält.
+
+## Nutzung der neuen Struktur
+- Zum Starten des Servers reicht ein **npm start**
+- Zum Exportieren des Portals reicht ein **npm run build**

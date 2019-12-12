@@ -70,7 +70,7 @@
  */
 
 /**
- * @namespace Overviewmap
+ * @namespace OverviewMap
  * @memberof Controls
  * @description Small map on the bottom right of the Application, that gives the user an overview.
  */
@@ -283,7 +283,7 @@
  */
 
 /**
- * @namespace SpecialWfs
+ * @namespace SpecialWFS
  * @memberof Searchbar
  * @description foobar
  */
@@ -323,7 +323,7 @@
  */
 
 /**
- * @namespace Multicheckbox
+ * @namespace MultiCheckbox
  * @memberof Snippets
  * @description Multicheckbox snippet for the filter model
  */
@@ -364,7 +364,7 @@
  */
 
 /**
- * @namespace AddWms
+ * @namespace AddWMS
  * @memberof Tools
  * @description Tool to add external WMS services as layer to the map.
  */
@@ -532,7 +532,7 @@
  */
 
 /**
- * @namespace ElektroladeSaeulen
+ * @namespace Elektroladesaeulen
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for ElektroladeSaeulen
  */
