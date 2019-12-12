@@ -1,81 +1,62 @@
 require("dotenv").config();
-let webdriver = require("selenium-webdriver"),
+require("./fixes");
+
+const webdriver = require("selenium-webdriver"),
     path = require("path"),
-    http = require('http'),
+    http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
+    {
+        getBsCapabilities,
+        capabilities,
+        resolutions,
+        configs,
+        modes
+    } = require("./settings"),
+    /* eslint-disable no-process-env */
     browser = process.env.browser || "chrome",
     browserstackuser = process.env.bs_user,
     browserstackkey = process.env.bs_key,
-    proxy = process.env.proxy || '',
-    url = process.env.url || "http://localhost:9001/portal/basic",
-    driver;
+    proxy = process.env.proxy || "",
+    url = process.env.url || "http://localhost:9001";
+    /* eslint-enable no-process-env */
 
-let HttpAgent = new http.Agent({
-    keepAlive: true,
-});
+// pulling execution to separate function for JSDoc; expected input is e.g. "chrome", "bs", "chrome,firefox"
+runTests(browser.split(","));
 
-switch (browser) {
-    case "firefox":
-        driver = new webdriver.Builder().
-                    withCapabilities({'browserName': 'firefox', acceptSslCerts: true, acceptInsecureCerts: true}).
-                    build();
+/**
+ * Constructs all combinations-to-test of
+ *     BROWSER x CONFIG x MODE x RESOLUTION
+ * This is done for both local and browserstack testing.
+ * @param {String[]} browsers should be ["bs"] for browserstack testing or an array of the browsers you test locally
+ * @returns {void}
+ */
+function runTests (browsers) {
+    browsers.forEach(currentBrowser => {
+        configs.forEach((pathEnd, config) => {
+            const completeUrl = url + pathEnd;
 
-                    tests(driver, url, browser);
-        break;
-    case "ie":
-        driver = new webdriver.Builder().
-                    withCapabilities(webdriver.Capabilities.ie()).
-                    build();
+            modes.forEach(mode => {
+                if (currentBrowser !== "bs") {
+                    const builder = new webdriver.Builder().withCapabilities(capabilities[currentBrowser]);
 
-                    tests(driver, url, browser);
-        break;
-    case "bs":
-        let capabilities = [
-            {
-                'browserName' : 'Chrome',
-                'browser_version' : '74.0',
-                'os' : 'Windows',
-                'os_version' : '10',
-                'resolution' : '1024x768',
-                'project': 'MasterPortal',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            },
-            {
-                'browserName' : 'Safari',
-                'browser_version' : '12.0',
-                'os' : 'OS X',
-                'os_version' : 'Mojave',
-                'resolution' : '1024x768',
-                'project': 'MasterPortal',
-                'browserstack.local' : true,
-                'browserstack.user' : browserstackuser,
-                'browserstack.key' : browserstackkey
-            }
-        ];
+                    resolutions.forEach(resolution => {
+                        tests(builder, completeUrl, currentBrowser, resolution, config, mode);
+                    });
+                }
+                else {
+                    const bsCapabilities = resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r)).flat(1);
 
-        for (let index in capabilities) {
-            driver = new webdriver.Builder().
-            usingHttpAgent(HttpAgent).
-            usingServer('http://hub-cloud.browserstack.com/wd/hub').
-            withCapabilities(capabilities[index]).
-            usingWebDriverProxy(proxy).
-            build();
+                    bsCapabilities.forEach(capability => {
+                        const builder = new webdriver.Builder().
+                            usingHttpAgent(new http.Agent({keepAlive: true})).
+                            usingServer("http://hub-cloud.browserstack.com/wd/hub").
+                            withCapabilities(capability).
+                            usingWebDriverProxy(proxy);
 
-            tests(driver, url, "browserstack / " + capabilities[index].browserName);
-            }
-
-        break;
-    default:
-        driver = new webdriver.Builder().
-                    withCapabilities(webdriver.Capabilities.chrome()).
-                    build();
-
-                    tests(driver, url, browser);
-        break;
-};
-
-
-
-
+                        tests(builder, completeUrl, "browserstack / " + capability.browserName, capability.resolution, config, mode);
+                    });
+                }
+            });
+        });
+    });
+}

@@ -16,6 +16,7 @@ coverage
 css/bootstrap.css
 css/modules.css
 customModules/*
+debug.log
 devtools/proxyconf.json
 dist
 examples*

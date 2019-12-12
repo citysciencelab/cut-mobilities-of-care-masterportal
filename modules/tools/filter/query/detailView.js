@@ -3,7 +3,7 @@ import ValueView from "../../../snippets/value/view";
 import SnippetCheckBoxView from "../../../snippets/checkbox/view";
 import Template from "text-loader!./templateDetailView.html";
 import SnippetSliderView from "../../../snippets/slider/range/view";
-import SnippetMultiCheckboxView from "../../../snippets/multicheckbox/view";
+import SnippetMultiCheckboxView from "../../../snippets/multiCheckbox/view";
 
 const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototype */{
     events: {
