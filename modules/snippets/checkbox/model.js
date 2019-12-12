@@ -13,12 +13,27 @@ const CheckboxSnippet = SnippetModel.extend({
 
     initialize: function () {
         this.superInitialize();
+        this.changeLang(i18next.language);
         this.addValueModel(this.get("isSelected"));
         this.listenTo(this.get("valuesCollection"), {
             "change:isSelected": function (model) {
                 this.trigger("valuesChanged", model.get("isSelected"));
                 this.renderView();
             }
+        });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            textOn:  i18next.t("common:snippets.checkbox.on"),
+            textOff:  i18next.t("common:snippets.checkbox.off"),
         });
     },
     addValueModel: function (value) {

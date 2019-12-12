@@ -1,3 +1,43 @@
 {
-    "anything": "something common"
+    "anything": "something common",
+    "modules": {
+        "tools": {
+            "populationRequest": {
+                "select": {
+                    "info": "You can query the number of inhabitants for both the Free Hanseatic City of Hamburg and the Hamburg metropolitan region.",
+                    "showRasterLayer": "Display Raster Layer (from 1: 100,000)",
+                    "showAlkisAdresses": "Show ALKIS addresses (from 1: 20,000)"
+                },
+                "result": {
+                    "confidentialityHint": "Taking confidentiality into account, the following value was calculated",
+                    "confidentialityHintSmallValues": "For data protection reasons, small numbers of cases under 3 are not changed.",
+                    "populationFHH": "Population in Hamburg",
+                    "populationMRH": "Population in the metropolitan region excluding Hamburg",
+                    "areaSize": "Size of the queried area",
+                    "hint": "Hint",
+                    "dataSourceFHHKey": "Data source Hamburg",
+                    "dataSourceFHHValue": "Inhabitants with main residence, population register",
+                    "dataSourceFHHLinktext": "Source FHH",
+                    "sourceAreaOutside": "Parts of the search area lie outside the boundaries of the Hamburg metropolitan region and were not taken into account for the calculation of the number of inhabitants.",
+                    "dataSourceMRHKey": "Data source Metropolitan region without Hamburg",
+                    "dataSourceMRHValue": "Total population in 100 metre grid, census 2011. Status of census data 09.05.2011.",
+                    "dataSourceMRHLinktext": "Source MRH"
+                }
+            }
+        }
+    },
+    "snippets": {
+        "checkbox":{
+            "on":"On",
+            "off":"Off"
+        },
+        "graphicalSelect": {
+            "displayName":"Select geometry",
+            "selectBySquare":"Draw up rectangle",
+            "selectByCircle":"Draw circle",
+            "selectByPolygon":"Draw surface",
+            "tooltipMessage": "Click to start and exit",
+            "tooltipMessagePolygon": "Click to add a point"
+        }
+    }
 }

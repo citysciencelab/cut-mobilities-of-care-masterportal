@@ -22,7 +22,23 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         rasterLayerId: "13023",
         alkisAdressLayerId: "9726",
         populationReqServiceId: "2",
-        id: "Einwohnerabfrage"
+        id: "Einwohnerabfrage",
+        //translations
+        confidentialityHint:"",
+        confidentialityHintSmallValues:"",
+        populationFHH: "",
+        populationMRH:"",
+        areaSize:"",
+        hint:"",
+        dataSourceFHHKey:"",
+        dataSourceFHHValue:"",
+        dataSourceFHHLinktext: "",
+        dataSourceMRHKey: "",
+        dataSourceMRHValue: "",
+        dataSourceMRHLinktext: "",
+        info: "",
+        showRasterLayer: "",
+        showAlkisAdresses: ""
     }),
     /**
      * @class EinwohnerabfrageModel
@@ -62,6 +78,7 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @fires Core#RadioTriggerModelListSetModelAttributesById
      */
     initialize: function () {
+        this.changeLang(i18next.language);
         if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
             this.setStyle("TABLE");
         }
@@ -69,11 +86,11 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
 
         this.setCheckBoxAddress(new SnippetCheckboxModel({
             isSelected: false,
-            label: "ALKIS Adressen anzeigen (ab 1: 20.000)"
+            label: this.get("showAlkisAdresses")
         }));
         this.setCheckBoxRaster(new SnippetCheckboxModel({
             isSelected: false,
-            label: "Raster Layer anzeigen (ab 1: 100.000)"
+            label: this.get("showRasterLayer")
         }));
 
         this.listenTo(this, {
@@ -107,6 +124,35 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         });
 
         this.setMetaDataLink(Radio.request("RestReader", "getServiceById", this.get("populationReqServiceId")).get("url"));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        const prefixSelect = "common:modules.tools.populationRequest.select.";
+        const prefixResult = "common:modules.tools.populationRequest.result.";
+        const values = {
+            confidentialityHint:  i18next.t(prefixResult+"confidentialityHint"),
+            populationFHH:  i18next.t(prefixResult+"populationFHH"),
+            populationMRH:  i18next.t(prefixResult+"populationMRH"),
+            areaSize:  i18next.t(prefixResult+"areaSize"),
+            confidentialityHintSmallValues:  i18next.t(prefixResult+"confidentialityHintSmallValues"),
+            hint:  i18next.t(prefixResult+"hint"),
+            dataSourceFHHKey:  i18next.t(prefixResult+"dataSourceFHHKey"),
+            dataSourceFHHValue:  i18next.t(prefixResult+"dataSourceFHHValue"),
+            dataSourceFHHLinktext:  i18next.t(prefixResult+"dataSourceFHHLinktext"),
+            dataSourceMRHKey:  i18next.t(prefixResult+"dataSourceMRHKey"),
+            dataSourceMRHValue:  i18next.t(prefixResult+"dataSourceMRHValue"),
+            dataSourceMRHLinktext:  i18next.t(prefixResult+"dataSourceMRHLinktext"),
+            showRasterLayer:  i18next.t(prefixSelect+"showRasterLayer")
+        }
+        this.set(values);
     },
     /**
      * Resets the GraphicalSelect
