@@ -44,19 +44,17 @@ function runTests (browsers) {
                     });
                 }
                 else {
-                    const bsCapabilities = resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r));
+                    const bsCapabilities = [].concat(...resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r)));
 
-                    if (Array.isArray(bsCapabilities)) {
-                        bsCapabilities.flat(1).forEach(capability => {
-                            const builder = new webdriver.Builder().
-                                usingHttpAgent(new http.Agent({keepAlive: true})).
-                                usingServer("http://hub-cloud.browserstack.com/wd/hub").
-                                withCapabilities(capability).
-                                usingWebDriverProxy(proxy);
+                    bsCapabilities.forEach(capability => {
+                        const builder = new webdriver.Builder().
+                            usingHttpAgent(new http.Agent({keepAlive: true})).
+                            usingServer("http://hub-cloud.browserstack.com/wd/hub").
+                            withCapabilities(capability).
+                            usingWebDriverProxy(proxy);
 
-                            tests(builder, completeUrl, "browserstack / " + capability.browserName, capability.resolution, config, mode);
-                        });
-                    }
+                        tests(builder, completeUrl, "browserstack / " + capability.browserName, capability.resolution, config, mode);
+                    });
                 }
             });
         });
