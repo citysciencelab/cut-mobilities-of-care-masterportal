@@ -1,5 +1,7 @@
 {
-    "anything": "something common",
+    "button":{
+        "back": "Zurück"
+    },
     "modules": {
         "tools": {
             "populationRequest": {
@@ -22,6 +24,25 @@
                     "dataSourceMRHKey": "Datenquelle Metropolregion ohne Hamburg",
                     "dataSourceMRHValue": "Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.",
                     "dataSourceMRHLinktext": "Quelle MRH"
+                }
+            },
+            "compareFeatures": {
+                "title": "Vergleichsliste",
+                "topicsSelection": "Themen Auswahl",
+                "moreInfo": "mehr Infos",
+                "lessInfo": "weniger Infos",
+                "exportAsPdf": "Export als PDF",
+                "noFeatures":{
+                    "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
+                    "objectName": "Objekte",
+                    "info": "Klicken Sie auf ein Objekt in der Karte. Es öffnet sich ein Fenster mit den jeweiligen Sachinformationen. In der rechten oberen Ecke befindet sich ein Sternsymbol {{iconEmptyStar}}. Klicken Sie auf dieses Symbol, um das Objekt zur Vergleichsliste hinzuzufügen. Das Sternsymbol wird gelb eingefärbt {{iconYellowStar}}. Ein erneuter Klick auf das Sternsymbol entfernt das Objekt wieder von der Vergleichsliste."
+                },
+                "feedback": {
+                    "added": "{{object}} wurde zur Vergleichsliste hinzugefügt",
+                    "notAdded": "{{object}} konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "limitReached": "Die maximale Anzahl an Objekten in der Vergleichsliste wurde erreicht.",
+                    "removeObjects": "Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.",
+                    "gotoComparisonlist": "Zur Vergleichsliste"
                 }
             }
         }
