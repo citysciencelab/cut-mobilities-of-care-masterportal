@@ -10,6 +10,7 @@ const FreezeToolViewMenu = Backbone.View.extend({
                 this.renderToToolbar();
             }
         });
+
         this.listenTo(this.model, {
             "change": function () {
                 const changed = this.model.changed;
@@ -22,6 +23,7 @@ const FreezeToolViewMenu = Backbone.View.extend({
         // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
         // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
         this.renderToToolbar();
+        $("#table-tools-menu").append(this.$el);
     },
     collection: {},
     id: "freeze-view-menu",
@@ -30,9 +32,8 @@ const FreezeToolViewMenu = Backbone.View.extend({
     renderToToolbar: function () {
         const attr = this.model.toJSON();
 
-        $(this.$el).html(this.template(attr));
-        $(this.$el).children().last().addClass("freeze-view-start");
-        $("#table-tools-menu").append(this.$el);
+        this.$el.html(this.template(attr));
+        this.$el.children().last().addClass("freeze-view-start");
     },
     toggleFreezeWindow: function () {
         this.model.startFreezeWin();
