@@ -48,7 +48,27 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         });
 
         this.model = new OverviewMapModel(Object.assign(config, {id: id}));
-        this.render(style, el);
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+                if (changed.showOverviewControlText || changed.hideOverviewControlText || changed.showOverviewTableText || changed.hideOverviewTableText) {
+                    this.render(style, el);
+                }
+            }
+        });
+
+        if (style === "DEFAULT") {
+            this.render(style, el);
+        }
+        else if (style === "TABLE") {
+            this.render(style, el);
+
+            // important: call once on init after render
+            this.$el.attr("class", "");
+            this.$el.attr("id", "overviewmapForTable");
+            $("#table-tools-menu").append(this.$el);
+        }
+
         if (this.model.get("isInitOpen") === true) {
             this.model.showControl();
         }
@@ -69,10 +89,14 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         const attr = this.model.toJSON();
 
         if (style === "TABLE") {
-            this.setElement("#table-tools-menu");
-            this.$el.append(this.tabletemplate(attr));
+            this.$el.html(this.tabletemplate(attr));
         }
         else {
+            // mapControl and isOpen have to be set correctly for control (not table) to have the right status for changing languages
+            this.model.set({
+                mapControl: undefined,
+                isOpen: false
+            });
             this.setElement(control);
             this.$el.html(this.controlTemplate(attr));
         }
@@ -82,22 +106,28 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
 
     /**
      * Toggles the title of the DOM element
-     * @returns {void}
+     * @returns {Void}  -
      */
     toggle: function () {
-        this.toggleControl(this.model.get("isOpen"));
+        const isOpen = this.model.get("isOpen");
 
-        if (this.$(".overviewmap-button > .glyphicon-globe").attr("title") === "Übersichtskarte ausblenden") {
-            this.$(".overviewmap-button > .glyphicon-globe").attr("title", "Übersichtskarte einblenden");
+        this.toggleControl(isOpen);
+
+        if (isOpen) {
+            if (this.$(".overviewmap-button > .glyphicon-globe")) {
+                this.$(".overviewmap-button > .glyphicon-globe").attr("title", i18next.t("common:modules.controls.overviewMap.showOverviewControl"));
+            }
+            if (document.getElementById("mini-map_title")) {
+                document.getElementById("mini-map_title").innerText = i18next.t("common:modules.controls.overviewMap.showOverviewTable");
+            }
         }
-        else if (this.$(".overviewmap-button > .glyphicon-globe").attr("title") === "Übersichtskarte einblenden") {
-            this.$(".overviewmap-button > .glyphicon-globe").attr("title", "Übersichtskarte ausblenden");
-        }
-        else if (document.getElementById("mini-map_title").innerText === "Mini-Map ausschalten") {
-            document.getElementById("mini-map_title").innerText = "Mini-Map einschalten";
-        }
-        else if (document.getElementById("mini-map_title").innerText === "Mini-Map einschalten") {
-            document.getElementById("mini-map_title").innerText = "Mini-Map ausschalten";
+        else {
+            if (this.$(".overviewmap-button > .glyphicon-globe")) {
+                this.$(".overviewmap-button > .glyphicon-globe").attr("title", i18next.t("common:modules.controls.overviewMap.hideOverviewControl"));
+            }
+            if (document.getElementById("mini-map_title")) {
+                document.getElementById("mini-map_title").innerText = i18next.t("common:modules.controls.overviewMap.hideOverviewTable");
+            }
         }
     },
 
