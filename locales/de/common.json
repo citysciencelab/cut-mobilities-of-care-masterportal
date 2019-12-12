@@ -1,3 +1,43 @@
 {
-    "anything": "irgendetwas allgemeines"
+    "anything": "something common",
+    "modules": {
+        "tools": {
+            "populationRequest": {
+                "select": {
+                    "info": "Die Abfrage der Einwohnerzahl ist sowohl für die Freie Hansestadt Hamburg als auch für die Metropolregion Hamburg möglich.",
+                    "showRasterLayer": "Raster Layer anzeigen (ab 1: 100.000)",
+                    "showAlkisAdresses": "ALKIS Adressen anzeigen (ab 1: 20.000)"
+                },
+                "result": {
+                    "confidentialityHint": "Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet",
+                    "confidentialityHintSmallValues": "Aus Datenschutzgründen werden kleine Fallzahlen unter 3 verändert.",
+                    "populationFHH": "Einwohnerzahl in Hamburg",
+                    "populationMRH": "Einwohnerzahl in der Metropolregion ohne Hamburg",
+                    "areaSize": "Größe der abgefragten Fläche",
+                    "hint": "Hinweis",
+                    "dataSourceFHHKey": "Datenquelle Hamburg",
+                    "dataSourceFHHValue": "Einwohner mit Hauptwohnsitz, Melderegister",
+                    "dataSourceFHHLinktext": "Quelle FHH",
+                    "sourceAreaOutside": "Teile des Suchgebiets liegen außerhalb der Grenzen der Metropolregion Hamburg und wurden für die Ermittlung der Einwohnerzahl nicht berücksichtigt.",
+                    "dataSourceMRHKey": "Datenquelle Metropolregion ohne Hamburg",
+                    "dataSourceMRHValue": "Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.",
+                    "dataSourceMRHLinktext": "Quelle MRH"
+                }
+            }
+        }
+    },
+    "snippets": {
+        "checkbox": {
+            "on": "An",
+            "off": "Aus"
+        },
+        "graphicalSelect": {
+            "displayName": "Geometrie auswählen",
+            "selectBySquare": "Rechteck aufziehen",
+            "selectByCircle": "Kreis aufziehen",
+            "selectByPolygon": "Fläche zeichnen",
+            "tooltipMessage": "Klicken zum Starten und Beenden",
+            "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
+        }
+    }
 }

@@ -2,10 +2,24 @@ import ResultTemplate from "text-loader!./resultTemplate.html";
 
 const ResultView = Backbone.View.extend({
     model: {},
-    template: _.template(ResultTemplate),
-    render: function () {
-        var attr = this.model.toJSON();
+    /**
+     * @class ContactView
+     * @extends Backbone.View
+     * @memberof Contact
+     * @constructs
+     * @listens ContactModel#changeIsActive
+     * @listens ContactModel#changeInvalid
+     */
+    initialize: function () {
+        this.template = _.template(ResultTemplate);
 
+        this.listenTo(this.model, {
+            "change": this.render
+        });
+
+    },
+    render: function () {
+        const attr = this.model.toJSON();
         this.$el.html(this.template(attr));
         return this;
     }
