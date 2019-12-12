@@ -9,7 +9,7 @@ import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         drawInteraction: undefined,
         selectInteraction: undefined,
         modifyInteraction: undefined,
@@ -739,7 +739,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     startDownloadTool: function () {
-        var features = this.get("layer").getSource().getFeatures();
+        const features = this.get("layer").getSource().getFeatures();
 
         Radio.trigger("Download", "start", {
             features: features,

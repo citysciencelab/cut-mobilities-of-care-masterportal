@@ -7,7 +7,7 @@ import Polygon from "ol/geom/Polygon";
 import {KML, GeoJSON, GPX} from "ol/format";
 
 describe("downloadModel", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model();

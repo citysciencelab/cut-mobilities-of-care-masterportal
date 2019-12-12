@@ -50,8 +50,8 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                var gfiModel = model.collection ? model.collection.findWhere({id: "gfi"}) : undefined,
-                    activeTools = [];
+                const gfiModel = model.collection ? model.collection.findWhere({id: "gfi"}) : undefined;
+                let activeTools = [];
 
                 if (value) {
 
