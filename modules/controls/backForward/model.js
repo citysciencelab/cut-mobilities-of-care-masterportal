@@ -1,23 +1,43 @@
 const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.prototype */{
-    /**
-     * @class BackForwardModel
-     * @extends Backbone.Model
-     * @memberof Controls.BackForward
-     * @constructs
-     */
     defaults: {
         CenterScales: [],
         wentFor: false,
         currentPos: 0,
-        config: {}
+        config: {},
+
+        stepForwardText: "Nächste Ansicht",
+        stepBackwardText: "Letzte Ansicht"
     },
     /**
-     * Create backforward control instance
-     * @returns {void}
+     * @class BackForwardModel
+     * @description Create backforward control instance
+     * @extends Backbone.Model
+     * @memberof Controls.BackForward
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.setConfigData(Radio.request("Parser", "getItemByAttributes", {id: "backforward"}));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
+
+    /**
+    * change language - sets default values for the language
+    * @param {String} lng the language changed to
+    * @returns {Void} -
+    */
+    changeLang: function () {
+        this.set({
+            "stepForwardText": i18next.t("common:modules.controls.backForward.stepForward"),
+            "stepBackwardText": i18next.t("common:modules.controls.backForward.stepBackward")
+        });
+    },
+
     /**
      * Sets the given parameter for config
      * @param {Object} configData - bakcforward object form config.json
