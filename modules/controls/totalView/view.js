@@ -15,19 +15,16 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      */
     initialize: function (id) {
         var style = Radio.request("Util", "getUiStyle"),
-            element,
-            template,
-            tableTemplate;
+            element;
 
         this.id = id;
-        template = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='Zurück zur Startansicht'></span></div>", false);
-        tableTemplate = this.modifyTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>Hauptansicht</div>", true);
-        this.template = _.template(template);
-        this.tableTemplate = _.template(tableTemplate);
         if (style === "DEFAULT") {
             // element = Radio.request("ControlsView", "addRowTR", "totalview");
             element = Radio.request("ControlsView", "addRowTR", id);
             this.setElement(element[0]);
+            this.listenTo(Radio.channel("i18next"), {
+                "languageChanged": this.render
+            });
             this.render();
         }
 
@@ -42,6 +39,9 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
                     this.renderToToolbar();
                 }
             });
+            this.listenTo(Radio.channel("i18next"), {
+                "languageChanged": this.renderToToolbar
+            });
             // Hier unschön gehackt, da in gebauter Version der MenuLoader schon fertig ist und sein ready lange gesendet hat
             // bis hier der Listener enabled wird. Muss noch mal generell überarbeitet werden ToDo! Christa Becker 05.06.2018
             this.setElement("#table-tools-menu");
@@ -54,7 +54,10 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      * @returns {TotalViewMapView} TotalViewMapView
      */
     render: function () {
-        this.$el.html(this.template());
+        const title = i18next.t("common:modules.controls.totalView.titleButton"),
+            template = this.modifyTemplate("<div class='total-view-button' id='start-totalview'><span class='glyphicon glyphicon-fast-backward' title='" + title + "'></span></div>", false);
+
+        this.$el.html(_.template(template));
 
         return this;
     },
@@ -63,7 +66,11 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      * @returns {void}
      */
     renderToToolbar: function () {
-        this.$el.prepend(this.tableTemplate());
+        const title = i18next.t("common:modules.controls.totalView.titleMenu"),
+            tableTemplate = this.modifyTemplate("<div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>" + title + "</div>", true);
+
+        $("#start-totalview").remove();
+        this.$el.prepend(_.template(tableTemplate));
     },
 
     /**
