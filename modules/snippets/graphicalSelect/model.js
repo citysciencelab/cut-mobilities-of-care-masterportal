@@ -25,7 +25,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         snippetDropdownModel: {},
         currentValue: "",
         selectedAreaGeoJson: undefined,
-        //to translate
+        // to translate
         geographicValues: {},
         displayName: "",
         tooltipMessage: "",
@@ -105,26 +105,27 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
-    changeLang: function (lng) {
-        const geographicValues = {};
-        const selectBySquare = i18next.t("common:snippets.graphicalSelect.selectBySquare");
-        const selectByCircle = i18next.t("common:snippets.graphicalSelect.selectByCircle");
-        const selectByPolygon = i18next.t("common:snippets.graphicalSelect.selectByPolygon");
+    changeLang: function () {
+        const geographicValues = {},
+            model = this.get("snippetDropdownModel"),
+            selectBySquare = i18next.t("common:snippets.graphicalSelect.selectBySquare"),
+            selectByCircle = i18next.t("common:snippets.graphicalSelect.selectByCircle"),
+            selectByPolygon = i18next.t("common:snippets.graphicalSelect.selectByPolygon");
+
         geographicValues[selectBySquare] = "Box";
         geographicValues[selectByCircle] = "Circle";
         geographicValues[selectByPolygon] = "Polygon";
         this.set({
-            displayName:  i18next.t("common:snippets.graphicalSelect.displayName"),
-            selectBySquare:  selectBySquare,
-            selectByCircle:  selectByCircle,
-            selectByPolygon:  selectByPolygon,
-            tooltipMessage:  i18next.t("common:snippets.graphicalSelect.tooltipMessage"),
-            tooltipMessagePolygon:  i18next.t("common:snippets.graphicalSelect.tooltipMessagePolygon"),
-            geographicValues:  geographicValues
+            displayName: i18next.t("common:snippets.graphicalSelect.displayName"),
+            selectBySquare: selectBySquare,
+            selectByCircle: selectByCircle,
+            selectByPolygon: selectByPolygon,
+            tooltipMessage: i18next.t("common:snippets.graphicalSelect.tooltipMessage"),
+            tooltipMessagePolygon: i18next.t("common:snippets.graphicalSelect.tooltipMessagePolygon"),
+            geographicValues: geographicValues
         });
-        const model = this.get("snippetDropdownModel");
-        if(model.replaceValueModels){
-            model.replaceValueModels(Object.keys(geographicValues),  Object.keys(geographicValues)[0]);
+        if (model.replaceValueModels) {
+            model.replaceValueModels(Object.keys(geographicValues), Object.keys(geographicValues)[0]);
         }
     },
     /**

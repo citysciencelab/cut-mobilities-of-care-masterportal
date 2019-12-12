@@ -56,12 +56,12 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
      */
     render: function (model, value) {
         const attr = this.model.toJSON(),
-              prefixSelect = "common:modules.tools.populationRequest.select.";
+            prefixSelect = "common:modules.tools.populationRequest.select.";
 
         if (value) {
-            attr.info = i18next.t(prefixSelect+"info");
-            this.checkBoxAddress.model.set("label", i18next.t(prefixSelect+"showAlkisAdresses"));
-            this.checkBoxRaster.model.set("label", i18next.t(prefixSelect+"showRasterLayer"));
+            attr.info = i18next.t(prefixSelect + "info");
+            this.checkBoxAddress.model.set("label", i18next.t(prefixSelect + "showAlkisAdresses"));
+            this.checkBoxRaster.model.set("label", i18next.t(prefixSelect + "showRasterLayer"));
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(attr));
             this.$el.find(".dropdown").append(this.snippetDropdownView.render().el);
