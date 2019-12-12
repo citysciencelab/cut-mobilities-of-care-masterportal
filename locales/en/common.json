@@ -3,13 +3,13 @@
     "modules": {
         "tools": {
             "print": {
-                "titleLable": "Title",
+                "titleLabel": "Title",
                 "titlePlaceholder": "My title",
-                "layoutLable": "Layout",
-                "formatLable": "Format",
-                "scaleLable": "Scale",
-                "withLegendLable": "With legend",
-                "printLable": "Print"
+                "layoutLabel": "Layout",
+                "formatLabel": "Format",
+                "scaleLabel": "Scale",
+                "withLegendLabel": "With legend",
+                "printLabel": "Print"
             }
         }
     }

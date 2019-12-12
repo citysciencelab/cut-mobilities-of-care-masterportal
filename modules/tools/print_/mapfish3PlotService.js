@@ -47,7 +47,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         dpiForPdf: 200,
         titleLable: "",
         titlePlaceholder: "",
-        layoutLable: "",
+        layoutLabel: "",
         formatLable: "",
         scaleLable: "",
         withLegendLable: "",
@@ -83,13 +83,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} eventListener={} - todo
      * @property {Boolean} printLegend=false Flag if checkbox to print legend should be activated.
-     * @property {String} titleLable Label text for print-window
+     * @property {String} titleLabel Label text for print-window
      * @property {String} titlePlaceholder placeholder text for print-window
-     * @property {String} layoutLable Label text for print-window
-     * @property {String} formatLable Label text for print-window
-     * @property {String} scaleLable Label text for print-window
-     * @property {String} legendLable Label text for print-window
-     * @property {String} printLable Label text for print-window
+     * @property {String} layoutLabel Label text for print-window
+     * @property {String} formatLabel Label text for print-window
+     * @property {String} scaleLabel Label text for print-window
+     * @property {String} legendLabel Label text for print-window
+     * @property {String} printLabel Label text for print-window
      * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
      * @listens GFI#RadioTriggerGFIIsVisible
@@ -143,13 +143,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     changeLang: function () {
         this.set({
-            "titleLable": i18next.t("common:modules.tools.print.titleLable"),
+            "titleLabel": i18next.t("common:modules.tools.print.titleLabel"),
             "titlePlaceholder": i18next.t("common:modules.tools.print.titlePlaceholder"),
-            "layoutLable": i18next.t("common:modules.tools.print.layoutLable"),
-            "formatLable": i18next.t("common:modules.tools.print.formatLable"),
-            "scaleLable": i18next.t("common:modules.tools.print.scaleLable"),
-            "withLegendLable": i18next.t("common:modules.tools.print.withLegendLable"),
-            "printLable": i18next.t("common:modules.tools.print.printLable")
+            "layoutLabel": i18next.t("common:modules.tools.print.layoutLabel"),
+            "formatLabel": i18next.t("common:modules.tools.print.formatLabel"),
+            "scaleLabel": i18next.t("common:modules.tools.print.scaleLabel"),
+            "withLegendLabel": i18next.t("common:modules.tools.print.withLegendLabel"),
+            "printLabel": i18next.t("common:modules.tools.print.printLabel")
         });
     },
 
