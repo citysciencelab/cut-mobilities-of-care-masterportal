@@ -60,6 +60,7 @@ const CompareFeaturesModel = Tool.extend({
                 gotoComparisonlist: i18next.t(feedbackPrefix + "gotoComparisonlist"),
                 back: i18next.t("common:button.back")
             };
+
         this.set(values);
     },
 
