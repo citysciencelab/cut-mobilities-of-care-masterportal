@@ -18,7 +18,19 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         numOfOptions: 10,
         isMultiple: true
     },
-
+   /**
+     * @class DropdownModel
+     * @extends SnippetModel
+     * @memberof Snippets.Dropdown
+     * @namespace GraphicalSelect
+     * @description creates a dropdown
+     * @constructs
+     * @property {Boolean} isOpen=false dropdown is open or closed
+     * @property {Boolean} values=[] init dropdown values
+     * @property {Boolean} preselectedValues=[] preselected values
+     * @property {Boolean} numOfOptions=10 number of entries displayed
+     * @property {Boolean} isMultiple=true dropdown multiple
+     */
     initialize: function () {
         this.superInitialize();
         this.addValueModels(this.get("values"));
@@ -42,6 +54,24 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         _.each(valueList, function (value) {
             this.addValueModel(value);
         }, this);
+    },
+    /**
+     * removes all value-models from collection and calls addValueModel for each new value
+     * @param {string[]} newValueList - new dropdown values
+     * @param {string[]} newValueList - new preselected values
+     * @returns {void}
+     */
+    replaceValueModels: function (newValueList, preselectedValues) {
+        this.get("valuesCollection").reset();
+        _.each(newValueList, function (value) {
+            this.addValueModel(value);
+        }, this);
+        this.set("preselectedValues", preselectedValues);
+        if (preselectedValues.length > 0) {
+            this.updateSelectedValues(preselectedValues);
+        }
+        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+        this.trigger("render");
     },
 
     /**
