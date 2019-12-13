@@ -92,7 +92,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
         "seleniumVersion": "4.0.0-alpha-2",
         "project": "MasterPortal",
-        "browserstack.local": true,
+        // "browserstack.local": true,
         "browserstack.user": browserstackuser,
         "browserstack.key": browserstackkey
     };
