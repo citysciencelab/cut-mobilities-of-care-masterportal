@@ -87,41 +87,71 @@ describe("drawModel", function () {
         });
     });
 
-    describe("setDoubleCircle", function () {
-        it("the result should be meters", function () {
-            var radius = Math.random();
+    describe("adjustValueToUnits", function () {
+        it("Should return the defined diameter unchanged (= in meters)", function () {
+            const diameter = Math.random(),
+                units = "m",
+                result = model.adjustValueToUnits(diameter, units);
 
-            model.setUnit("m");
-            model.setCircleRadius(radius);
-
-            expect(model.get("circleRadiusInner")).to.deep.equal(radius);
+            expect(result).to.deep.equal(diameter);
         });
-        it("the result should be kilometers", function () {
-            var radius = Math.random;
+        it("Should return the defined diameter unchanged (= in kilometers)", function () {
+            const diameter = Math.random(),
+                units = "km",
+                result = model.adjustValueToUnits(diameter, units);
 
-            model.setUnit("km");
-            model.setCircleRadius(radius);
-
-            expect(model.get("circleRadiusInner")).to.deep.equal(radius / 1000);
+            expect(result).to.deep.equal(diameter * 1000);
         });
     });
 
-    describe("setDoubleCircleOuter", function () {
-        it("the result should be meters", function () {
-            var radius = Math.random();
+    describe("getDefinedRadius", function () {
+        it("the result should be a value and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
 
-            model.setUnit("m");
-            model.setCircleRadiusOuter(radius);
-
-            expect(model.get("circleRadiusOuter")).to.deep.equal(radius);
+            expect(result).to.deep.equal(circleRadiusOuter);
         });
-        it("the result should be kilometers", function () {
-            var radius = Math.random;
+        it("the result should be a value and the third input parameter.", function () {
+            const doubleIsActive = false,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
 
-            model.setUnit("km");
-            model.setCircleRadiusOuter(radius);
+            expect(result).to.deep.equal(circleRadiusInner);
+        });
+        it("the result should be undefined and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = undefined,
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
 
-            expect(model.get("circleRadiusOuter")).to.deep.equal(radius / 1000);
+            expect(result).to.deep.equal(undefined);
+        });
+        it("the result should be undefined and the third input parameter.", function () {
+            const doubleIsActive = false,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = undefined,
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(undefined);
+        });
+        it("the result should be a value and the third input parameter.", function () {
+            const doubleIsActive = undefined,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(circleRadiusInner);
+        });
+        it("the result should be a not a number (NaN) and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = NaN,
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(NaN);
         });
     });
 
