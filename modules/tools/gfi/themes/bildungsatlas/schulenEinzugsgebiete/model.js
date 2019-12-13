@@ -34,6 +34,7 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
         isCreated: false,
         hintText: "Zur Abfrage der Schülerzahlen bewegen Sie den Mauszeiger auf ein Gebiet."
     }),
+
     /**
      * @class SchulenEinzugsgebieteThemeModel
      * @extends Theme
@@ -134,7 +135,7 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
                 schoolKey = this.get("schoolKey"),
                 countStudents = this.get("countStudents");
 
-            this.listenToOnce(Radio.channel("Layer"), {
+            this.listenToOnce(Radio.channel("VectorLayer"), {
                 "featuresLoaded": this.onFeaturesLoadedEvent
             });
             if (layerEinzugsgebiete) {
@@ -244,7 +245,8 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
      */
     parseGfiContent: function (gfiContent) {
         if (gfiContent && gfiContent.allProperties) {
-            const attr = gfiContent.allProperties;
+            const attr = gfiContent.allProperties,
+                regex = /\B(?=(\d{3})+(?!\d))/g;
 
             if (attr.C_S_Nr) {
                 this.set("id", String(attr.C_S_Nr));
@@ -256,16 +258,16 @@ const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsge
                 this.set("address", attr.C_S_Str + " " + attr.C_S_HNr + ", " + attr.C_S_PLZ + " " + attr.C_S_Ort);
             }
             if (attr.C_S_SuS_PS && attr.C_S_SuS_S1) {
-                this.set("countStudents", String(parseInt(attr.C_S_SuS_PS, 10) + parseInt(attr.C_S_SuS_S1, 10)));
+                this.set("countStudents", String(parseInt(attr.C_S_SuS_PS, 10) + parseInt(attr.C_S_SuS_S1, 10) + parseInt(attr.C_S_SuS_S2, 10)).replace(regex, "."));
             }
             if (attr.C_S_SuS_PS) {
-                this.set("countStudentsPrimary", attr.C_S_SuS_PS);
+                this.set("countStudentsPrimary", attr.C_S_SuS_PS.toString().replace(regex, "."));
             }
             if (attr.C_S_SuS_S1) {
-                this.set("countStudentsSecondary", attr.C_S_SuS_S1);
+                this.set("countStudentsSecondary", attr.C_S_SuS_S1.toString().replace(regex, "."));
             }
             if (attr.C_S_SI) {
-                this.set("socialIndex", attr.C_S_SI);
+                this.set("socialIndex", attr.C_S_SI === "-1" ? "nicht vergeben" : attr.C_S_SI);
             }
             if (attr.schoolKey) {
                 this.set("schoolKey", attr.schoolKey);

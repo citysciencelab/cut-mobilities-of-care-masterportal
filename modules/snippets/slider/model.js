@@ -1,5 +1,5 @@
 import SnippetModel from "../model";
-import ValueModel from "./valuemodel";
+import ValueModel from "./valueModel";
 import moment from "moment";
 
 const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{

@@ -2,7 +2,7 @@ import DesktopToolView from "./tool/view";
 import DesktopFolderView from "./folder/viewMenu";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopStaticLinkView from "./staticlink/view";
-import DesktopViewpointView from "./viewpoint/view";
+import DesktopViewpointView from "./viewPoint/view";
 
 import "bootstrap";
 
