@@ -1,3 +1,10 @@
 {
-    "anything": "irgendetwas allgemeines"
+    "anything": "irgendetwas allgemeines",
+    "modules": {
+        "tools": {
+            "saveSelection": {
+                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
+            }
+        }
+    }
 }

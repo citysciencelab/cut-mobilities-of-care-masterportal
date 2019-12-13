@@ -1,3 +1,10 @@
 {
-    "anything": "something common"
+    "anything": "something common",
+    "modules": {
+        "tools": {
+            "saveSelection": {
+                "saveSelectionText": "Save this URL as a bookmark"
+            }
+        }
+    }
 }
