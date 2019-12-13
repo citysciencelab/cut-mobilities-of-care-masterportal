@@ -573,4 +573,5 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         this.set("loaderPath", value);
     }
 });
+
 export default EinwohnerabfrageModel;

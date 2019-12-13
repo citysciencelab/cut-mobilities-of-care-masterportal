@@ -2,7 +2,6 @@ import GraphicalSelectView from "../../snippets/graphicalSelect/view";
 import ResultView from "./resultView";
 import Template from "text-loader!./selectTemplate.html";
 import SnippetCheckBoxView from "../../snippets/checkbox/view";
-import { BoxGeometry } from "cesium";
 
 /**
  * @member Template
