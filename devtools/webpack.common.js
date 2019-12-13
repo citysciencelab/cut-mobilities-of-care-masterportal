@@ -48,12 +48,12 @@ module.exports = function () {
         entry: entryPoints,
         stats: {
             all: false,
-            assets: true,
-            // chunkModules: true,
-            colors: true,
-            entrypoints: true,
-            // modules: true,
-            outputPath: true
+            colors: true
+            // assets: true
+            // chunkModules: true
+            // entrypoints: true
+            // modules: true
+            // outputPath: true
         },
         /*
         optimization: {
