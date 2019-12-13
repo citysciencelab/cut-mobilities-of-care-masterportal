@@ -155,22 +155,22 @@ describe("drawModel", function () {
         });
     });
 
-    describe("setDrawType", function () {
-        it("should return 'undefined'", function () {
-            model.setMethodCircle(undefined, undefined);
-            model.setDrawType(undefined, undefined);
+    describe("transformNaNToUndefined", function () {
+        it("should return undefined", function () {
+            const result = model.transformNaNToUndefined(NaN);
 
-            expect(model.get("methodCircle")).to.be.undefined;
+            expect(result).to.deep.equal(undefined);
         });
-        it("should return 'interaktiv'", function () {
-            model.setDrawType("Circle", "Kreis zeichnen");
+        it("should return undefined", function () {
+            const result = model.transformNaNToUndefined(undefined);
 
-            expect(model.get("methodCircle")).to.deep.equal("interaktiv");
+            expect(result).to.deep.equal(undefined);
         });
-        it("should return 'definiert'", function () {
-            model.setDrawType("Circle", "Doppelkreis zeichnen");
+        it("should return the radius", function () {
+            const radius = Math.random(),
+                result = model.transformNaNToUndefined(radius);
 
-            expect(model.get("methodCircle")).to.deep.equal("definiert");
+            expect(result).to.deep.equal(radius);
         });
     });
 
@@ -205,6 +205,103 @@ describe("drawModel", function () {
                 result = model.getCircleExtentByDistanceLon(circleCenter, radius);
 
             expect(result).to.deep.equal([561068.2304592272, 5930519.214558409]);
+        });
+    });
+
+    describe("assortResultCoordinates", function () {
+        it("should return an array with four correct coordinates.", function () {
+            const circleCenter = [561964.1286114944, 5931572.964070238],
+                resultCoordinates = [
+                    [561957.5719733026, 5932072.640277341],
+                    [561970.6848649463, 5931073.288230813],
+                    [562464.9943155645, 5931579.562693274],
+                    [561463.2625920147, 5931566.418576883]
+                ],
+                result = model.assortResultCoordinates(circleCenter, resultCoordinates),
+                assortedCoordinates = [
+                    561964.1286114944, 5931572.964070238,
+                    561463.2625920147, 5931566.418576883
+                ];
+
+            expect(result).to.deep.equal(assortedCoordinates);
+        });
+    });
+
+    describe("deactivateDrawInteraction", function () {
+        before(function () {
+            var drawType = "",
+                layer = new VectorLayer(),
+                drawInteraction1 = model.createDrawInteraction(drawType, layer),
+                drawInteraction2 = model.createDrawInteraction(drawType, layer);
+
+            model.setDrawInteraction(drawInteraction1);
+            model.setDrawInteraction2(drawInteraction2);
+            model.deactivateDrawInteraction();
+        });
+
+        it("should deactivate the first draw Interaction", function () {
+
+            expect(model.get("drawInteraction").get("active")).to.be.false;
+        });
+
+        it("should deactivate the second draw Interaction", function () {
+
+            expect(model.get("drawInteraction2").get("active")).to.be.false;
+        });
+    });
+
+    describe("checkAndRemovePreviousDrawInteraction", function () {
+        before(function () {
+            var drawType = "",
+                layer = new VectorLayer(),
+                drawInteraction1 = model.createDrawInteraction(drawType, layer),
+                drawInteraction2 = model.createDrawInteraction(drawType, layer);
+
+            model.setDrawInteraction(drawInteraction1);
+            model.setDrawInteraction2(drawInteraction2);
+            model.checkAndRemovePreviousDrawInteraction();
+        });
+
+        it("should deactivate the first draw Interaction", function () {
+
+            expect(model.get("drawInteraction")).to.be.undefined;
+        });
+
+        it("should deactivate the second draw Interaction", function () {
+
+            expect(model.get("drawInteraction2")).to.be.undefined;
+        });
+    });
+
+    describe("createDrawInteractionAndAddToMap", function () {
+        it("the result should be two draw Interactions", function () {
+            const drawType = "",
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = undefined,
+                result = model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+            expect(result[0] instanceof Draw).to.be.true;
+            expect(result[1] instanceof Draw).to.be.true;
+        });
+    });
+
+    describe("setDrawType", function () {
+        it("should return 'undefined'", function () {
+            model.setMethodCircle(undefined, undefined);
+            model.setDrawType(undefined, undefined);
+
+            expect(model.get("methodCircle")).to.be.undefined;
+        });
+        it("should return 'interaktiv'", function () {
+            model.setDrawType("Circle", "Kreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("interaktiv");
+        });
+        it("should return 'definiert'", function () {
+            model.setDrawType("Circle", "Doppelkreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("definiert");
         });
     });
 
