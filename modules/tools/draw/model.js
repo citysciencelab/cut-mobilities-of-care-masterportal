@@ -885,11 +885,11 @@ const DrawTool = Tool.extend({
         this.setCircleRadius(this.defaults.circleRadiusInner);
         this.setCircleRadiusOuter(this.defaults.circleRadiusOuter);
         this.setOpacity(this.defaults.opacity);
-        this.setOpacityContour(this.defaults.opacityContour);
         this.setColor(defaultColor);
         this.setColorContour(defaultColorContour);
 
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
+        this.combineColorOpacityContour(this.defaults.opacityContour);
     },
 
     /**
@@ -1145,6 +1145,26 @@ const DrawTool = Tool.extend({
     },
 
     /**
+     * Function to add the information about the opacity to the colorcode.
+     * @param {Number} value - the opacity as value.
+     * @return {void}
+     */
+    combineColorOpacityContour: function (value) {
+        const newColor = this.get("colorContour"),
+            drawType = this.get("drawType");
+
+        if (drawType.geometry === "LineString") {
+            newColor[3] = parseFloat(value);
+            this.setOpacityContour(value);
+        }
+        else {
+            newColor[3] = parseFloat(this.defaults.opacityContour);
+            this.setOpacityContour(this.defaults.opacityContour);
+        }
+        this.setColorContour(newColor);
+    },
+
+    /**
      * setter for drawType
      * @param {string} value1 - geometry type
      * @param {string} value2 - text
@@ -1160,6 +1180,8 @@ const DrawTool = Tool.extend({
             this.enableMethodDefiniert(false);
             this.setMethodCircle("definiert");
         }
+        this.combineColorOpacityContour(this.defaults.opacityContour);
+        $(".input-opacity").val("1.0");
         this.set("drawType", {geometry: value1, text: value2});
     },
 
@@ -1187,7 +1209,12 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     setColor: function (value) {
-        this.set("color", value);
+        if (value === null) {
+            this.set("color", this.defaults.color);
+        }
+        else {
+            this.set("color", value);
+        }
     },
 
     /**
@@ -1218,10 +1245,6 @@ const DrawTool = Tool.extend({
      * @return {void}
      */
     setOpacityContour: function (value) {
-        var newColor = this.get("colorContour");
-
-        newColor[3] = parseFloat(value);
-        this.setColorContour(newColor);
         this.set("opacityContour", value);
     },
 

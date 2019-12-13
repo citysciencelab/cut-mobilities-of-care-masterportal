@@ -152,7 +152,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                 this.$el.find(".color").show();
                 this.$el.find(".colorContour").show();
                 this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").show();
+                this.$el.find(".opacityContour").hide();
                 break;
             }
             case "Doppelkreis zeichnen": {
@@ -168,7 +168,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                 this.$el.find(".color").show();
                 this.$el.find(".colorContour").show();
                 this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").show();
+                this.$el.find(".opacityContour").hide();
                 break;
             }
             case "Linie zeichnen": {
@@ -199,7 +199,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                 this.$el.find(".stroke-width").show();
                 this.$el.find(".color").show();
                 this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").show();
+                this.$el.find(".opacityContour").hide();
                 break;
             }
             default: {
@@ -460,7 +460,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setOpacityContour: function (evt) {
-        this.model.setOpacityContour(evt.target.value);
+        this.model.combineColorOpacityContour(evt.target.value);
         this.model.updateDrawInteraction();
     }
 });
