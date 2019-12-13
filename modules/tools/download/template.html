@@ -3,30 +3,33 @@
     <div class="form-group form-group-sm">
         <label for="districtField" class="col-md-3 col-sm-3 control-label">Format</label>
         <div class="col-md-9 col-sm-9">
-           <select class="form-control file-endings" id="decimalField">
+           <select class="form-control formats">
             <option value="none">Bitte Auswählen</option>
+            <% formats.forEach(function(format) { %>
+                <option value="<%=format%>"><%=format%></option>
+            <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm">
         <label for="parcelField" class="col-md-3 col-sm-3 control-label">Dateiname</label>
         <div class="col-md-9 col-sm-9">
-            <input type="text" class="form-control file-name" placeholder="Bitte Dateiname angeben">
+            <input type="text" class="form-control filename" placeholder="Bitte Dateiname angeben">
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <a class="btn btn-sm btn-lgv-grey col-md-12 col-sm-12 downloadFile">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-                Herunterladen
+        <div class="col-xs-12">
+            <a class="col-xs-12 downloadFile">
+                <button class="btn btn-sm btn-lgv-grey col-xs-12 downloadBtn" disabled>
+                    <span class="glyphicon glyphicon-floppy-disk"></span>Herunterladen
+                </button>
             </a>
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-            <button class="btn btn-sm btn-lgv-grey col-md-12 col-sm-12 back">
-                <span class="glyphicon glyphicon glyphicon-arrow-left"></span>
-                Zurück
+        <div class="col-xs-12">
+            <button class="btn btn-sm btn-lgv-grey col-xs-12 back">
+                <span class="glyphicon glyphicon-arrow-left"></span>Zurück
             </button>
         </div>
     </div>
