@@ -44,7 +44,7 @@ function runTests (browsers) {
                     });
                 }
                 else {
-                    const bsCapabilities = resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r)).flat(1);
+                    const bsCapabilities = [].concat(...resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r)));
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().

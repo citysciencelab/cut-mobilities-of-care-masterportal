@@ -86,9 +86,13 @@ var sbconfig, controls, controlsView;
  * @return {void}.
  */
 function loadApp () {
+    /* eslint-disable no-undef */
+    const allCustomModules = Object.is(CUSTOMMODULES, {}) ? {} : CUSTOMMODULES;
+    /* eslint-disable no-undef */
 
     // Prepare config for Utils
     var utilConfig = {},
+        style,
         layerInformationModelSettings = {},
         cswParserSettings = {},
         alertingConfig = Config.alerting ? Config.alerting : {};
@@ -304,8 +308,7 @@ function loadApp () {
         }
     });
 
-    const style = Radio.request("Util", "getUiStyle");
-
+    style = Radio.request("Util", "getUiStyle");
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -452,24 +455,27 @@ function loadApp () {
 
     new HighlightFeature();
 
-    // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
-    /* eslint-disable no-undef */
-    if (CUSTOMMODULE !== "") {
-        // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-        import(/* webpackMode: "eager" */CUSTOMMODULE)
-            .then(module => {
-                /* eslint-disable new-cap */
-                const customModule = new module.default();
-                // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Later on the model must be replaced in modellist:
+    if (Config.customModules !== undefined) {
+        Config.customModules.forEach((customModuleKey) => {
+            if (allCustomModules[customModuleKey] !== undefined) {
+                // .js need to be removed so webpack only searches for .js files
+                const entryPoint = allCustomModules[customModuleKey].replace(/\.js$/, "");
 
-                Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
-            })
-            .catch(error => {
-                console.error(error);
-                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-            });
+                import(/* webpackChunkName: "[request]" */ `../customModules/${entryPoint}.js`).then(module => {
+                    /* eslint-disable new-cap */
+                    const customModule = new module.default();
+
+                    // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                    if (customModule.model) {
+                        Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+                });
+            }
+        });
     }
-    /* eslint-enable no-undef */
 
     Radio.trigger("Util", "hideLoader");
 }

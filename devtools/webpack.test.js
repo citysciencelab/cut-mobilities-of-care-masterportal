@@ -34,6 +34,10 @@ module.exports = {
                 options: {
                     name: "[name].[ext]"
                 }
+            },
+            {
+                test: /\.(le|c|sa)ss$/,
+                use: "null-loader"
             }
         ]
     },
