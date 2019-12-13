@@ -170,13 +170,14 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {void}
     */
     setLayerList: function () {
-        var modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            sortedModelList = _.sortBy(modelList, layer => layer.get("name")),
+        const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+            sortedModelList = modelList.sort((layerA, layerB) => layerB.get("selectionIDX") - layerA.get("selectionIDX")),
             visibleLayer = sortedModelList.filter(layer => layer.get("legendURL") !== "ignore"),
             tempArray = [];
 
-        _.each(visibleLayer, function (layer) {
-            var layerSources = layer.get("layerSource"); // Array oder undefined
+
+        visibleLayer.forEach(layer => {
+            const layerSources = layer.get("layerSource"); // Array oder undefined
 
             tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources));
         }, this);
