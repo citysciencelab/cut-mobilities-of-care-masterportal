@@ -90,28 +90,29 @@ function isCustom (url) {
  * @returns {Array} array of bs configuration objects
  */
 function getBsCapabilities (browserstackuser, browserstackkey, resolution) {
+    const base = {
+        "seleniumVersion": "4.0.0-alpha.5",
+        "resolution": resolution,
+        "project": "MasterPortal",
+        "browserstack.local": true,
+        "browserstack.user": browserstackuser,
+        "browserstack.key": browserstackkey
+    };
+
     return [
         {
+            ...base,
             "browserName": "Chrome",
             "browser_version": "74.0",
             "os": "Windows",
-            "os_version": "10",
-            "resolution": resolution,
-            "project": "MasterPortal",
-            "browserstack.local": true,
-            "browserstack.user": browserstackuser,
-            "browserstack.key": browserstackkey
+            "os_version": "10"
         },
         {
+            ...base,
             "browserName": "Safari",
             "browser_version": "12.0",
             "os": "OS X",
-            "os_version": "Mojave",
-            "resolution": resolution,
-            "project": "MasterPortal",
-            "browserstack.local": true,
-            "browserstack.user": browserstackuser,
-            "browserstack.key": browserstackkey
+            "os_version": "Mojave"
         }
     ];
 }
