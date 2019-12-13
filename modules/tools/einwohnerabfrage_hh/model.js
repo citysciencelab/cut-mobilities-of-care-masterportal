@@ -150,7 +150,8 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
                 dataSourceMRHKey: i18next.t(prefixResult + "dataSourceMRHKey"),
                 dataSourceMRHValue: i18next.t(prefixResult + "dataSourceMRHValue"),
                 dataSourceMRHLinktext: i18next.t(prefixResult + "dataSourceMRHLinktext"),
-                showRasterLayer: i18next.t(prefixSelect + "showRasterLayer")
+                showRasterLayer: i18next.t(prefixSelect + "showRasterLayer"),
+                showAlkisAdresses: i18next.t(prefixSelect + "showAlkisAdresses")
             };
 
         this.set(values);
@@ -572,5 +573,4 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
         this.set("loaderPath", value);
     }
 });
-
 export default EinwohnerabfrageModel;
