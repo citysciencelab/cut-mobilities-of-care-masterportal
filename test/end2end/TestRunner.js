@@ -44,7 +44,7 @@ function runTests (browsers) {
                     });
                 }
                 else {
-                    const bsCapabilities = [].concat(...resolutions.map(r => getBsCapabilities(browserstackuser, browserstackkey, r)));
+                    const bsCapabilities = getBsCapabilities(browserstackuser, browserstackkey);
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().
@@ -53,7 +53,9 @@ function runTests (browsers) {
                             withCapabilities(capability).
                             usingWebDriverProxy(proxy);
 
-                        tests(builder, completeUrl, "browserstack / " + capability.browserName, capability.resolution, config, mode);
+                        resolutions.forEach(resolution => {
+                            tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode);
+                        });
                     });
                 }
             });
