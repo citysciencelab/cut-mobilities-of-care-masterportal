@@ -186,7 +186,7 @@ const DrawTool = Tool.extend({
         if (isNaN(transformedRadius) === true) {
             transformedRadius = undefined;
         }
-        return radius;
+        return transformedRadius;
     },
 
     /**
@@ -217,26 +217,16 @@ const DrawTool = Tool.extend({
      * @returns {void}
      */
     calculateCircle: function (evt, circleCenter, circleRadius) {
-        const resultCoordinates = this.calculateNewCoordinates(circleCenter, circleRadius),
+        const resultCoordinates = [
+                this.getCircleExtentByDistanceLat(circleCenter, circleRadius),
+                this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, circleRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius)
+            ],
             assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
 
         this.overwriteExtentCoordinates(evt, resultCoordinates);
         this.overwriteFlatCoordinates(evt, assortedCoordinates);
-    },
-
-    /**
-     * Calculates the new flat coordiantes of the circle feature.
-     * @param   {Number} circleCenter - Coordinates of the circlecenter.
-     * @param   {Number} circleRadius - Diameter of the inner or outer circle, specified by the user.
-     * @returns {Array} - returns an array with flat coordinates of the circle.
-     */
-    calculateNewCoordinates: function (circleCenter, circleRadius) {
-        return [
-            this.getCircleExtentByDistanceLat(circleCenter, circleRadius),
-            this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius),
-            this.getCircleExtentByDistanceLon(circleCenter, circleRadius),
-            this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius)
-        ];
     },
 
     /**
