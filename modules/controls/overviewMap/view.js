@@ -51,6 +51,7 @@ const OverviewMapView = Backbone.View.extend(/** @lends OverviewMapView.prototyp
         this.listenTo(this.model, {
             "change": function () {
                 const changed = this.model.changed;
+
                 if (changed.showOverviewControlText || changed.hideOverviewControlText || changed.showOverviewTableText || changed.hideOverviewTableText) {
                     this.render(style, el);
                 }

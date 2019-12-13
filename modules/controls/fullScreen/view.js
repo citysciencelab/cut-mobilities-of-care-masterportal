@@ -18,7 +18,6 @@ const FullScreenControlView = Backbone.View.extend(/** @lends FullScreenControlV
         "click .full-screen-button": "toggleFullscreen",
         "click div#full-screen-view": "toggleFullscreen"
     },
-    id: "full-screen-button",
 
     /**
      * @class FullScreenControlView
@@ -58,6 +57,8 @@ const FullScreenControlView = Backbone.View.extend(/** @lends FullScreenControlV
             this.renderToToolbarInit();
         }
     },
+
+    id: "full-screen-button",
 
     /**
      * render function for the default UiStyle
@@ -117,10 +118,8 @@ const FullScreenControlView = Backbone.View.extend(/** @lends FullScreenControlV
                     this.model.set("state", true);
                 }
             }
-            else {
-                if (this.closeFullscreen()) {
-                    this.model.set("state", false);
-                }
+            else if (this.closeFullscreen()) {
+                this.model.set("state", false);
             }
         }
         else {

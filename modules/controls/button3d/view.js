@@ -41,7 +41,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         var channel = Radio.channel("Map"),
             style = Radio.request("Util", "getUiStyle");
 
-        this.model = new Button3dModel;
+        this.model = new Button3dModel();
         channel.on({
             "change": this.change
         }, this);
@@ -98,7 +98,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     render: function () {
         const attr = this.model.toJSON(),
             template = _.template(Button3dTemplate);
-        
+
         this.$el.html(template(attr));
         if (Radio.request("Map", "isMap3d")) {
             this.$("#button3D").addClass("toggleButtonPressed");
