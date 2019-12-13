@@ -1,0 +1,94 @@
+@color_1: #fff;
+@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
+@background_color_1: rgba(0, 0, 0,.5);
+
+/*sdp download*/
+.sdpDownload {
+    min-height: 150px;
+    .header {
+        width: 100%;
+        border-bottom: 1px solid rgb(229,229,229);
+        padding: 10px;
+        .glyphicon-download{
+            cursor: default;
+        }
+    }
+    .content {
+        .first{
+            padding-top: 20px;
+        }
+        .form-group {
+            >label {
+                float: left;
+                width: 75%;
+            }
+        }
+    }
+    .tool-name {
+        padding-left: 15px;
+        font-family: @font_family_1;
+        font-size: 16px;
+    }
+    .btn-select {
+        color: @color_1;
+        background-color: @background_color_1;
+        .name {
+            &:hover {
+                font-weight: normal;
+            }
+        }
+    }
+    .dropdown-container {
+        padding: 8px 0px;
+    }
+    .bootstrap-select {
+        .dropdown-menu {
+            right: 0;
+            left: null;
+        }
+        .filter-option{
+            font-size: 12px;
+            line-height: 1.5;
+        }
+    }
+    .sdp-download{
+        margin-top: 15px;
+    }
+    .limiter{
+        border-bottom: 1px solid rgb(229,229,229);
+        padding-bottom: 20px;
+    }
+    #sdp-loader {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #FFFFFF;
+        height: calc(100% - 50px);
+        position: absolute;
+        width: 100%;
+        z-index: 2000;
+        img {
+            position: absolute;
+            left: 45%;
+            top: 45%;
+        }
+    }
+}
+@media (min-width: 768px) {
+    .sdpDownload {
+        .header {
+            padding: 10px;
+        }
+    }
+}
+
+#circle-overlay {
+    position: relative;
+    background: rgba(51, 153, 204, 0.8);
+    color: @color_1;
+    padding: 4px 8px;
+}
+#tooltip-overlay {
+    position: relative;
+    background: rgba(51, 153, 204, 0.8);
+    color: @color_1;
+    padding: 4px 8px;
+}

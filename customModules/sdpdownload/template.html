@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<div class="header">
+    <span class="glyphicon <%=glyphicon%>"></span>
+    <span class="tool-name"><%= name %></span>
+    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="content">
+    <div class="form-group col-xs-12 first">
+        <span>Wählen Sie das Format aus</span>
+    </div>
+    <div class="form-group col-xs-12">
+        <div class="input-group bootstrap-select" style="width: 100%">
+            <select class="selectpicker" name="formatSelection">
+                <% formats.forEach(function (format) { %>
+                    <option <% if (selectedFormat && selectedFormat === format.id) print ("selected") %> value="<%= format.id %>"><%= format.label %></option>
+                <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-xs-12">
+        <span>Wie möchten Sie die Kacheln auswählen?</span>
+    </div>
+    <div class="form-group col-xs-12">
+        <div class="input-group bootstrap-select" style="width: 100%">
+            <div class="geometric-selection" style="width: 100%"></div>
+        </div>
+    </div>
+    <div class="form-group col-md-12 col-xs-12 limiter">
+        <button type="button" class="btn btn-default btn-sm btn-block sdp-download center-block">
+            Datenpaket herunterladen
+        </button>
+    </div>
+    <div class="form-group col-xs-12">
+        <span>Spezielle Downloads</span>
+    </div>
+    <div class="form-group col-md-12 col-xs-12">
+        <button type="button" class="btn btn-default btn-sm btn-block sdp-neuwerk-download center-block">
+            Datenpaket von Neuwerk - Format bitte oben auswählen
+        </button>
+    </div>
+    <div class="form-group col-md-12 col-xs-12">
+        <button type="button" class="btn btn-default btn-sm btn-block sdp-download-scharhoern center-block">
+            Datenpaket von Scharhörn - Format bitte oben auswählen
+        </button>
+    </div>
+    <div class="form-group col-md-12 col-xs-12">
+        <button type="button" class="btn btn-default btn-sm btn-block sdp-download-raster-overview-310 center-block">
+            UTM-Kachel Übersichten LS310
+        </button>
+    </div>
+    <div class="form-group col-md-12 col-xs-12">
+        <button type="button" class="btn btn-default btn-sm btn-block sdp-download-raster-overview-320 center-block">
+            UTM-Kachel Übersichten LS320
+        </button>
+    </div>
+    <% if (requesting) { %>
+        <div id="sdp-loader"><img src="<%= this.model.get('loaderPath')%>"></div>
+    <% } %>
+</div>

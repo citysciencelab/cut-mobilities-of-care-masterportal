@@ -1,0 +1,16 @@
+{
+  "name": "sdpdownload",
+  "version": "1.0.0",
+  "description": "Standarddatenpaket Download",
+  "title": "SDP Daten-Download",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/geowerkstatt-hamburg/masterportal.git"
+  },
+  "scripts": {},
+  "dependencies": {
+    "@turf/turf": "^5.1.6"
+  },
+  "devDependencies": {}
+}

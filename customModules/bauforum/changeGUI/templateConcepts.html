@@ -1,0 +1,27 @@
+<div id="table-nav-concepts-panel" class="table-nav-concepts-panel collapse unselectable">
+	<div class="table-concepts-container"></div>
+	    <h1><%= mainStreet.heading1 %></h1>
+	    <h2><%= mainStreet.heading2 %></h2>
+	    <ul class="concept_list">
+	    <% _.each(mainStreet.concepts, function (concept, index) { %>
+			<li id="<%= concept.conceptId %>" class="list-bullet">
+                <span id="<%= concept.conceptId + '_' + index %>" class="bauforum-icon-bullet"/><%= concept.name %></span>
+            	<button type="button" class="btn btn-link disabled startFlight">Fly it!</button>
+            	<button type="button" class="btn btn-link hidden stopFlight">Stop!</button>
+            </li>
+		<% }); %>
+		</ul>
+		<div class="checkStadtmodell">
+			<input type="checkbox" id="stadtmodell" name="stadtmodell" checked>
+			<label for="stadtmodell">Hamburger Stadtmodell</label>
+		</div>
+	    <div id="funnel">
+		    <div id="left-funnel-corner"></div>
+		    <div id="middle-funnel"></div>
+		    <div id="right-funnel-corner"></div>
+		</div>
+	</div>
+</div>
+<div id="table-nav-concepts-panel-toggler">
+    <a id="table-nav-concepts-panel-icon" class="bauforum-icon-variants"></a>
+</div>

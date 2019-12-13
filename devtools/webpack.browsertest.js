@@ -17,7 +17,7 @@ else {
 
 
 module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
+    const path2Addon = _.isString(args.ADDON) && args.ADDON !== "" ? args.ADDON : "";
 
     return merge.smart({
         mode: "development",
@@ -51,5 +51,5 @@ module.exports = function (env, args) {
                 }
             ]
         }
-    }, new Common(path2CustomModule));
+    }, new Common(path2Addon));
 };

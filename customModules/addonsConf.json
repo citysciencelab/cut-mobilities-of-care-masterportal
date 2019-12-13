@@ -1,0 +1,10 @@
+{
+  "bauforum": "changeGUI/loader.js",
+  "boris": "bodenrichtwertabfrage/view.js",
+  "cockpit_bauvorhaben": "cockpit/view.js",
+  "flaecheninfo": "showParcelGFI.js",
+  "sdpdownload": "view.js",
+  "sga": "gfionaddress/view.js",
+  "verkehrsportal": "addon.js",
+  "verkehr-geoportal_fhhnet": "verkehrsfunctions.js"
+}

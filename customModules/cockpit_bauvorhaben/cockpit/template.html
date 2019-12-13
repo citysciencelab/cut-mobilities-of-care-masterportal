@@ -1,0 +1,101 @@
+<div class="btn-group header">
+    <span class="tool-name"><%= name %></span>
+</div>
+<div class="row">
+    <div class="filter col-xs-7">
+        <select class="selectpicker selectpicker-district" title="nach Bezirken" multiple>
+            <% districts.forEach(function (district) { %>
+                <option><%= district %></option>
+            <% }); %>
+        </select>
+        <div class="placeholder-suburb"></div>
+        <select class="selectpicker selectpicker-year" title="nach Jahren" multiple>
+            <% years.forEach(function (year) { %>
+                <option><%= year %></option>
+            <% }); %>
+        </select>
+        <div class="checkbox">
+            <label>
+                <input class="month" type="checkbox" <% if(filterObject.monthMode) { print('checked');} %>> Monatsansicht
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input class="flat" type="checkbox" <% if(filterObject.flatMode) { print('checked');} %>> nur Wohnungsbau
+            </label>
+        </div>
+    </div>
+    <div class="legend col-xs-5"></div>
+</div>
+<div class="graphs">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" href="#panel-baugenehmigungen">
+                <h4 class="panel-title">
+                    <a>
+                    Anzahl Baugenehmigungen
+                    </a>
+                    <a class="sum-baugenehmigungen"/>
+                </h4>
+            </div>
+            <div id="panel-baugenehmigungen" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="graph graph-baugenehmigungen">
+                        <div class="graph-tooltip-div graph-tooltip-div-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="button" data-toggle="collapse" href="#panel-wohneinheiten">
+                <h4 class="panel-title">
+                    <a class="collapsed">
+                    Anzahl Wohneinheiten
+                    </a>
+                    <a class="sum-wohneinheiten"/>
+                </h4>
+            </div>
+            <div id="panel-wohneinheiten" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten">
+                        <div class="graph-tooltip-div graph-tooltip-div-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="button" data-toggle="collapse" href="#panel-wohneinheiten-noch-nicht-im-bau">
+                <h4 class="panel-title">
+                    <a class="collapsed">
+                        Anzahl Wohneinheiten (noch nicht im Bau)
+                    </a>
+                    <a class="sum-wohneinheiten-noch-nicht-im-bau"/>
+                </h4>
+            </div>
+            <div id="panel-wohneinheiten-noch-nicht-im-bau" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten-noch-nicht-im-bau">
+                        <div class="graph-tooltip-div graph-tooltip-div-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="button" data-toggle="collapse" href="#panel-wohneinheiten-im-bau">
+                <h4 class="panel-title">
+                    <a class="collapsed">
+                        Anzahl Wohneinheiten (im Bau)
+                    </a>
+                    <a class="sum-wohneinheiten-im-bau"/>
+                </h4>
+            </div>
+            <div id="panel-wohneinheiten-im-bau" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="graph graph-wohneinheiten-im-bau">
+                        <div class="graph-tooltip-div graph-tooltip-div-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

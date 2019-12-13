@@ -1,0 +1,39 @@
+<dl>
+    <% if (selectedBrwFeature.get("postleitzahl")) { %>
+        <dt>PLZ, Gemeinde:</dt>
+        <dd><%= selectedBrwFeature.get("postleitzahl") + ' ' + selectedBrwFeature.get("gemeinde") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("bezirk")) { %>
+        <dt>Bezirk:</dt>
+        <dd><%= selectedBrwFeature.get("bezirk") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("stadtteil")) { %>
+        <dt>Stadtteil:</dt>
+        <dd><%= selectedBrwFeature.get("stadtteil") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("statistisches_gebiet")) { %>
+        <dt>SGE (Stat. Gebietseinheit):</dt>
+        <dd><%= selectedBrwFeature.get("statistisches_gebiet") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("baublock")) { %>
+        <dt>Baublock:</dt>
+        <dd><%= selectedBrwFeature.get("baublock") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("strassenname")) { %>
+        <dt>Adresse:</dt>
+        <% if (selectedBrwFeature.get("hausnummerzusatz")) { %>
+            <dd><%= selectedBrwFeature.get("strassenname") + ' ' + selectedBrwFeature.get("hausnummer") + ' ' + selectedBrwFeature.get("hausnummerzusatz")%></dd>
+        <% }
+        else { %>
+            <dd><%= selectedBrwFeature.get("strassenname") + ' ' + selectedBrwFeature.get("hausnummer") %></dd>
+        <% } %>
+    <% } %>
+    <% if (selectedBrwFeature.get("lagebezeichnung")) { %>
+        <dt>Weitere Lagebezeichnung:</dt>
+        <dd><%= selectedBrwFeature.get("lagebezeichnung") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("bezeichnung_sanierungsgebiet")) { %>
+        <dt>Sanierungsgebiet:</dt>
+        <dd><%= selectedBrwFeature.get("bezeichnung_sanierungsgebiet") %></dd>
+    <% } %>
+</dl>

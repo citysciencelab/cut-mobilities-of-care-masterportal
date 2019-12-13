@@ -1,0 +1,42 @@
+<dl>
+    <% if (selectedBrwFeature.get("entwicklungszustand")) { %>
+        <dt>Entwicklungszustand:</dt>
+        <dd><%= selectedBrwFeature.get("entwicklungszustand") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("beitragszustand")) { %>
+        <dt>Beitrags- u. abgabenrechtl. Zustand:</dt>
+        <dd><%= selectedBrwFeature.get("beitragszustand") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("sanierungszusatz")) { %>
+        <dt>Sanierungs- oder Entwicklungszusatz:</dt>
+        <dd><%= selectedBrwFeature.get("sanierungszusatz") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("nutzung_kombiniert")) { %>
+        <dt>Art der Nutzung:</dt>
+        <dd><%= selectedBrwFeature.get("nutzung_kombiniert") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("anbauart")) { %>
+        <dt>Anbauart:</dt>
+        <dd><%= selectedBrwFeature.get("anbauart") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("geschossfl_zahl")) { %>
+        <dt>Wertrelevante Geschossflächenzahl (WGFZ):</dt>
+        <dd><%= selectedBrwFeature.get("geschossfl_zahl") %></dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("grdstk_flaeche")) { %>
+        <dt>Grundstücksfläche:</dt>
+        <dd><%= selectedBrwFeature.get("grdstk_flaeche") %> m²</dd>
+    <% } %>
+    <% if (selectedBrwFeature.get("bemerkung")) { %>
+        <dt>weitere Merkmale:</dt>
+        <dd><%= selectedBrwFeature.get("bemerkung") %></dd>
+    <% } %>
+    <% if (parseInt(selectedBrwFeature.get("jahrgang"), 10) >= 2002) { %>
+        <dt>Bodenrichtwert:</dt>
+        <dd><%= selectedBrwFeature.get("richtwert_euro") %> €/m²</dd>
+    <% }
+    else { %>
+        <dt>Bodenrichtwert</dt>
+        <dd><span><%= selectedBrwFeature.get("richtwert_euro") %> €/m²</span><span class="pull-right"><%= selectedBrwFeature.get("richtwert_dm") %> DM/m²</span></dd>
+    <% } %>
+</dl>
