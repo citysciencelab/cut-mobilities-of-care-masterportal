@@ -154,4 +154,7 @@ i18next
         }
     });
 
+// access for command line over Backbone (> Backbone.i18next)
+Backbone.i18next = i18next;
+
 export default context;
