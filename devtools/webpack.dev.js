@@ -33,7 +33,7 @@ module.exports = function () {
         devtool: "cheap-module-eval-source-map",
         devServer: {
             headers: {
-                'Access-Control-Allow-Origin': '*'
+                "Access-Control-Allow-Origin": "*"
             },
             https: true,
             open: true,
