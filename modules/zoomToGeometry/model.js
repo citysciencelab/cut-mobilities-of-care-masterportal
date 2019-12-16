@@ -66,6 +66,14 @@ const ZoomToGeometry = Backbone.Model.extend({
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
                 this.zoomToFeature(responseXML, name, wfsParams.attribute);
+            })
+            .catch(error => {
+                console.warn("The fetch of the data failed with the following error message: " + error);
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br>"
+                        + "<small>Details: Ein benötigter Dienst antwortet nicht.</small>",
+                    kategorie: "alert-warning"
+                });
             });
     },
 
@@ -112,6 +120,7 @@ const ZoomToGeometry = Backbone.Model.extend({
 
         return foundFeature[0];
     },
+
     calcExtent: function (feature) {
         var coordLength = 0,
             polygonIndex = 0;
