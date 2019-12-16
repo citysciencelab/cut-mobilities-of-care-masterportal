@@ -1,6 +1,9 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 
+import i18nextXHRBackend from "i18next-xhr-backend";
+import i18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
+
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {},
     /**
@@ -103,15 +106,93 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     parse: function (response) {
-        var attributes = {
-            portalConfig: response.Portalconfig,
-            baselayer: response.Themenconfig.Hintergrundkarten,
-            overlayer: response.Themenconfig.Fachdaten,
-            overlayer_3d: response.Themenconfig.Fachdaten_3D,
-            treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
-            isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
-            snippetInfos: this.requestSnippetInfos()
-        };
+        let attributes = {
+                portalConfig: response.Portalconfig,
+                baselayer: response.Themenconfig.Hintergrundkarten,
+                overlayer: response.Themenconfig.Fachdaten,
+                overlayer_3d: response.Themenconfig.Fachdaten_3D,
+                treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
+                isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
+                snippetInfos: this.requestSnippetInfos()
+            },
+            portalLanguage = typeof response.Portalconfig.portalLanguage === "object" ? response.Portalconfig.portalLanguage : {enabled: true};
+
+        // default language configuration
+        portalLanguage = Object.assign({
+            "enabled": true,
+            "debug": false,
+            "languages": {
+                "de": "deutsch",
+                "en": "english"
+            },
+            "startLanguage": "de",
+            "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
+        }, portalLanguage);
+
+        // init i18next
+        i18next
+            .use(i18nextXHRBackend)
+            .use(i18nextBrowserLanguageDetector)
+            .on("languageChanged", function (lng) {
+                Radio.trigger("i18next", "languageChanged", lng);
+            }, this)
+            .init({
+                debug: portalLanguage.debug,
+
+                lng: portalLanguage.startLanguage,
+                fallbackLng: portalLanguage.startLanguage,
+                whitelist: Object.keys(portalLanguage.languages),
+
+                /**
+                 * getter for configured languages
+                 * @returns {Object}  an object {krz: full} with krz the language shortform and full the language longform
+                 */
+                getLanguages: function () {
+                    return portalLanguage.languages;
+                },
+
+                /**
+                 * check wheather portalLanguage switcher is enabled or not
+                 * @returns {Boolean}  true if switcher has to be shown
+                 */
+                isEnabled: function () {
+                    return portalLanguage.enabled;
+                },
+
+                ns: ["common", "additional"],
+                defaultNS: "common",
+
+                backend: {
+                    loadPath: "/locales/{{lng}}/{{ns}}.json",
+                    crossDomain: false
+                },
+
+                detection: {
+                    // order and from where user language should be detected
+                    order: portalLanguage.changeLanguageOnStartWhen,
+
+                    // keys or params to lookup language from
+                    lookupQuerystring: "lng",
+                    lookupCookie: "i18next",
+                    lookupLocalStorage: "i18nextLng",
+                    lookupFromPathIndex: 0,
+                    lookupFromSubdomainIndex: 0,
+
+                    // cache user language on
+                    caches: ["localStorage", "cookie"],
+                    excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
+
+                    // optional expire and domain for set cookie
+                    cookieMinutes: 10,
+                    cookieDomain: "myDomain",
+
+                    // only detect languages that are in the whitelist
+                    checkWhitelist: true
+                }
+            });
+
+        // bind i18next to backbone to enable use of command line with  > Backbone.i18next...
+        Backbone.i18next = i18next;
 
         /**
          * this.updateTreeType

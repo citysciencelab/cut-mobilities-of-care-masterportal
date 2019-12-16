@@ -47,6 +47,7 @@ module.exports = {
             $: "jquery",
             Backbone: "backbone",
             Radio: "backbone.radio",
+            i18next: ["i18next/dist/cjs/i18next.js"],
             _: "underscore",
             Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
             XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
