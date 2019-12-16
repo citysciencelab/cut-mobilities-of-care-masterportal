@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<select>
+    <% _.each(languageCode, function (key, value){%>
+        <option value="<%= value %>" <% if(value === defaultCode){ %>selected<% } %>><%= value %></option>
+    <%});%>
+    <%= languageCode %>
+</select>
