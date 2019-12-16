@@ -1,3 +1,17 @@
 {
-    "anything": "something common"
+    "anything": "something common",
+    "date": "Date",
+    "time": "Time",
+    "modules": {
+        "tools": {
+            "viomRouting": {
+                "startAddressLabel": "Start address",
+                "destinationAddressLabel": "Destination address",
+                "fromPlaceholder": "From",
+                "toPlaceholder": "To",
+                "setStartTimeText": "Set start time",
+                "routingError": "Error"
+            }
+        }
+    }
 }

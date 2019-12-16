@@ -1,3 +1,17 @@
 {
-    "anything": "irgendetwas allgemeines"
+    "anything": "irgendetwas allgemeines",
+    "date": "Datum",
+    "time": "Uhrzeit",
+    "modules": {
+        "tools": {
+            "viomRouting": {
+                "startAddressLabel": "Startadresse",
+                "destinationAddressLabel": "Zieladresse",
+                "fromPlaceholder": "Von",
+                "toPlaceholder": "Bis",
+                "setStartTimeText": "Startzeitpunkt vorgeben",
+                "routingError": "Fehlermeldung bei Routenberechung"
+            }
+        }
+    }
 }

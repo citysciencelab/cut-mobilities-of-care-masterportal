@@ -26,14 +26,46 @@ const RoutingModel = Tool.extend({
         mhpOverlay: "",
         isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
         renderToWindow: true,
-        glyphicon: "glyphicon-road"
+        glyphicon: "glyphicon-road",
+        startAddressLabel: "",
+        destinationAddressLabel: "",
+        fromPlaceholder: "",
+        toPlaceholder: "",
+        setStartTimeText: "",
+        date: "",
+        time: "",
+        routingError: ""
     }),
+
     initialize: function () {
         this.superInitialize();
 
         Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
         Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set("startAddressLabel", i18next.t("common:modules.tools.viomRouting.startAddressLabel"));
+        this.set("destinationAddressLabel", i18next.t("common:modules.tools.viomRouting.destinationAddressLabel"));
+        this.set("fromPlaceholder", i18next.t("common:modules.tools.viomRouting.fromPlaceholder"));
+        this.set("toPlaceholder", i18next.t("common:modules.tools.viomRouting.toPlaceholder"));
+        this.set("setStartTimeText", i18next.t("common:modules.tools.viomRouting.setStartTimeText"));
+        this.set("date", i18next.t("common:date"));
+        this.set("time", i18next.t("common:time"));
+        this.set("routingError", i18next.t("common:modules.tools.viomRouting.routingError"));
+    },
+
     setStartpoint: function (geoloc) {
         this.set("fromCoord", geoloc);
         this.setCenter(geoloc);
@@ -225,7 +257,7 @@ const RoutingModel = Tool.extend({
                 Radio.trigger("Util", "hideLoader");
                 this.set("description", "");
                 this.set("endDescription", "");
-                Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: this.get("routingError"), kategorie: "alert-warning"});
             }
         });
     },
