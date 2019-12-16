@@ -25,6 +25,7 @@ Im Abschnitt *Portalconfig* können folgende Eigenschaften konfiguriert werden:
 5. Menüeinträge sowie Vorhandenheit jeweiliger Tools und deren Reihenfolge (*menu*)
 6. Typ und Eigenschaften des genutzten Suchdienstes (*searchBar*)
 7. Löschbarkeit von Themen (*layersRemovable*)
+8. welche Sprachen genutzt werden sollen (*portalLanguage*)
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
@@ -38,6 +39,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |searchBar|nein|**[searchBar](#markdown-header-portalconfigsearchbar)**||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|false|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|false|
+|portalLanguage|nein|**[portalLanguage](#markdown-header-portalLanguage)**||Mit dieser Konfiguration werden die Sprachen im Portal eingestellt, eine Default-Sprache ausgewählt und die Start-Reihenfolge festgelegt.|false|
 
 ***
 
@@ -2348,4 +2350,18 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschr
 #!json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
+
+***
+
+### Portalconfig.portalLanguage
+Konfiguration der Sprache
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|enabled|nein|Boolean|true|Aktiviert die Sprach-Umschalter-GUI im Portal.|Die Sprache kann dann nur noch über andere Eingriffe (z.B. Kommandozeile Backbone.i18next.changeLanguage("en")) umgeschaltet werden.|
+|debug|nein|Boolean|false|Kann für die Entwicklungsphase auf true gesetzt werden, um das Sprach-Tool zu debuggen.||
+|languages|nein|Object|{"de": "deutsch, "en": "english"}|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.||
+|startLanguage|nein|String|"de"|Die Standard-Sprache die beim Start automatisch aktiv sein soll.|Bitte beachten, dass dieser Wert ignoriert wird wenn eine andere Start-Bedingung erfüllt ist. Die startLanguage ist zugleich der Fallback, falls eine Sprache nicht erkannt wird oder Sprach-Schlüssel fehlen.|
+|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator"]|Stellt die Reihenfolge der Sprach-Eingriffe ein, auf die beim Start geachtet werden soll.||
+
 ***
