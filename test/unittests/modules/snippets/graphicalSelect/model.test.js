@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Model from "@modules/snippets/graphicalSelect/model.js";
+import Model from "@modules/snippets/graphicalselect/model.js";
 
 describe("snippets/graphicalselect/model", function () {
     var model;
