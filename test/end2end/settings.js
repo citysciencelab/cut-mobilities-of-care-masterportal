@@ -90,11 +90,13 @@ function isCustom (url) {
  */
 function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
-        "seleniumVersion": "4.0.0-alpha-2",
+        "seleniumVersion": "4.0.0-alpha.5",
         "project": "MasterPortal",
-        // "browserstack.local": true,
+        "browserstack.local": true,
         "browserstack.user": browserstackuser,
-        "browserstack.key": browserstackkey
+        "browserstack.key": browserstackkey,
+        // resolution of device, not resolution of browser window
+        "resolution": "1024x768"
     };
 
     return [
