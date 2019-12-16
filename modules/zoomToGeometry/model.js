@@ -18,7 +18,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
      * @description Zooms to a feature of a wfs. Can be used via the parametricURL call zoomToGeometry.
      * @property {string} layerId="123456789" Id from layer with geometries.
      * @property {string} attribute="bezirk_name" The attribute from the wfs.
-     * @property {string[]} geometries="["BEZIRK1", "BEZIRK2"]" Geometries to be zoomed on.
+     * @property {string[]} geometries="["BEZIRK1","BEZIRK2"]" Geometries to be zoomed on.
      * @property {string} isRender=false todo
      * @listens ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
      * @listens ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender

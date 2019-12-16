@@ -2,12 +2,6 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
-        brwId: undefined,
-        brwLayerName: undefined,
-        isInitOpen: [],
-        layerParams: [],
-        zoomToFeatureIds: [],
-        zoomToGeometry: ""
     },
 
     /**
@@ -16,26 +10,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @extends Backbone.Model
      * @memberOf Core
      * @constructs
-     * @property {*} brwId=undefined todo
-     * @property {*} brwLayerName=undefined todo
-     * @property {Array} isInitOpen=[] todo
-     * @property {Array} layerParams=[] todo
-     * @property {Array} zoomToFeatureIds=[] todo
-     * @property {String} zoomToGeometry="" todo
-     *      * - CENTER: Returns the initial center coordinate.
-     * If the parameter "center" exists its value is returned, otherwise the default value.
-     * Specification of the EPSG code of the coordinate via "@".
-     * - ISINITOPEN: Initial zu startendes Modul
-     * - LAYERIDS: Gibt die LayerIDs für die Layer zurück, die initial sichtbar sein sollen.
-     * Ist der Parameter "layerIDs" vorhanden werden dessen IDs zurückgegeben, ansonsten die konfigurierten IDs.
-     * - MARKER: Sets a marker, if present in the URL.
-     * - MDID: This parameter is used to call GeoOnline from the transparency portal.
-     * The corresponding data set is to be displayed.
-     * Behind the parameter Id is the metadataId of the metadata record.
-     * The metadata record ID is written to the config.
-     * - STYLE: blendet alle Bedienelemente aus - für MRH
-     * - ZOOMLEVEL: Gibt die initiale Resolution (Zoomlevel) zurück.
-     * Ist der Parameter "zoomLevel" vorhanden wird der Wert in die Config geschrieben und in der mapView ausgewertet.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -140,8 +114,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 if (possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)) {
                     possibleUrlParameters[parameterNameUpperCase](parameterValue, parameterNameUpperCase);
                 }
-                /* todo Except VISIBILITY an TRANSPARENCY and alert for user */
-                else {
+                else if (parameterNameUpperCase !== "VISIBILITY" && parameterNameUpperCase !== "TRANSPARENCY") {
                     console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
                 }
             });
@@ -168,8 +141,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
-            "LAYERIDS": this.createLayerParams.bind(this),
             "ISINITOPEN": this.parseIsInitOpen.bind(this),
+            "LAYERIDS": this.createLayerParams.bind(this),
             "MAP": this.adjustStartingMap3DParameter.bind(this),
             "MARKER": this.setMarkerFromUrl.bind(this),
             "MDID": this.parseMDID.bind(this),
@@ -324,43 +297,45 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * todo
-     * @param {*} metaIds - todo
+     * Parses a metadataid.
+     * @param {String[]} result - The metadataid.
+     * @returns {void}
+     */
+    parseMDID: function (result) {
+        const values = result.split(",");
+
+        Config.tree.metaIdsToSelected = values;
+        Config.view.zoomLevel = 0;
+        this.createLayerParamsUsingMetaId(values);
+    },
+
+    /**
+     * Starts the layer with the given metadataid and the lasz configured basemap.
+     * @param {string[]} metaIds - layer to be drawn.
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @fires Core.ConfigLoader#RadioRequestParserGetItemsByMetaID
      * @returns {void}
      */
     createLayerParamsUsingMetaId: function (metaIds) {
-        var layers = [],
+        const layers = [],
             layerParams = [],
-            hintergrundKarte = Radio.request("Parser", "getItemByAttributes", {id: "453"});
+            baseMaps = Radio.request("Parser", "getItemsByAttributes", {isBaseLayer: true});
 
-        layers.push(hintergrundKarte);
+        layers.push(baseMaps[baseMaps.length - 1]);
 
-        _.each(metaIds, function (metaId) {
-            var metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
+        metaIds.forEach(metaId => {
+            const metaIDlayers = Radio.request("Parser", "getItemsByMetaID", metaId);
 
-            _.each(metaIDlayers, function (layer) {
+            metaIDlayers.forEach(layer => {
                 layers.push(layer);
             });
         });
-        _.each(layers, function (layer) {
+
+        layers.forEach(layer => {
             layerParams.push({id: layer.id, visibility: true, transparency: 0});
         });
+
         this.setLayerParams(layerParams);
-    },
-
-    /**
-     * todo
-     * @param {*} result - todo
-     * @returns {void}
-     */
-    parseMDID: function (result) {
-        var values = result.split(",");
-
-        Config.tree.metaIdsToSelected = values;
-        Config.view.zoomLevel = 0;
-        this.createLayerParamsUsingMetaId(values);
     },
 
     /**
