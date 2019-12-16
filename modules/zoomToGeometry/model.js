@@ -1,8 +1,11 @@
 import {WFS} from "ol/format.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ZoomToGeometry = Backbone.Model.extend({
     defaults: {
+        layerId: "123456789",
+        geometries: ["BEZIRK1", "BEZIRK2"],
         wfsParams: {
             url: "https://test-dienst",
             version: "1.1.0",
@@ -20,55 +23,52 @@ const ZoomToGeometry = Backbone.Model.extend({
             "setIsRender": this.setIsRender
         }, this);
 
-        if (name.length > 0 && name !== "ALL") {
-            this.zoomToGeometry(name, this.get("wfsParams"));
+        // if (name.length > 0 && name !== "ALL") {
+        if (name.length > 0) {
+            this.zoomToGeometry(name, this.get("wfsParams"), this.get("layerId"));
         }
 
         Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
     },
     /**
-    * Zoomt auf eine Geometrie, die auf einem WFS geladen wird.
-    * @param {string} name - des Features auf das gezommt werdem soll
-    * @param {string} wfsParams - die Parameter, des WFS, von dem die Featurs geladen werden sollen, wenn nicht angegeben, dann werden standardwerte des Moduls genommen.
+    * Zooms to a geometry loaded from a WFS.
+    * @param {string} name - Name of the feature to zoom to.
+    * @param {string} wfsParams - The parameters of the WFS from which the features are to be loaded.
+    * @param {string} layerId - Id from WFS-layer
     * @returns {void}
     **/
-    zoomToGeometry: function (name, wfsParams) {
-        var params = wfsParams || this.get("wfsParams");
+    zoomToGeometry: function (name, wfsParams, layerId) {
+        const layerInformation = getLayerWhere({id: layerId});
 
-        if (!this.validateWfsParams(params)) {
-            return;
-        }
-
-        this.getGeometryFromWFS(name, params);
+        this.getGeometryFromWFS(name, wfsParams, layerInformation);
     },
-    validateWfsParams: function (wfsParams) {
-        var keysArray = _.keys(this.get("wfsParams"));
 
-        return _.every(keysArray, function (key) {
-            return _.has(wfsParams, key) && !_.isUndefined(wfsParams[key]);
-        });
-    },
-    getGeometryFromWFS: function (name, wfsParams) {
-        var data = "service=WFS&version=" + wfsParams.version + "&request=GetFeature&TypeName=" + wfsParams.typename;
+    /**
+     * Fetches the data from WFS.
+     * @param {string} name - Name of the feature to zoom to.
+     * @param {string} wfsParams - The parameters of the WFS from which the features are to be loaded.
+     * @param {object} layerInformation - All information from a layer to be fetched.
+     * @returns {void}
+     */
+    getGeometryFromWFS: async function (name, wfsParams, layerInformation) {
+        const url = new URL(layerInformation.url),
+            params = {
+                "SERVICE": "WFS",
+                "VERSION": layerInformation.version,
+                "REQUEST": "GetFeature",
+                "TYPENAME": layerInformation.featureType
+            };
 
-        $.ajax({
-            url: Radio.request("Util", "getProxyURL", wfsParams.url),
-            data: encodeURI(data),
-            context: this,
-            async: false,
-            type: "GET",
-            success: function (resp) {
-                this.zoomToFeature(resp, name, wfsParams.attribute);
-            },
-            timeout: 6000,
-            error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Ein benötigter Dienst antwortet nicht.</small>",
-                    kategorie: "alert-warning"
-                });
-            }
-        });
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        fetch(url)
+            .then(response => response.text())
+            .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
+            .then(responseXML => {
+                this.zoomToFeature(responseXML, name, wfsParams.attribute);
+            });
     },
+
     /**
     * zommt auf das Feature, das vom WFS geladen wurde.
     * @param {obj} data - der GML String
@@ -92,6 +92,7 @@ const ZoomToGeometry = Backbone.Model.extend({
         }
         this.setFeatureGeometry(foundFeature.getGeometry());
     },
+
     /**
     * durchsucht ein GML String nach einem bestimmten Feature
     * @param {obj} data - der GML String
