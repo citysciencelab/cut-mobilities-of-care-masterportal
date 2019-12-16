@@ -15,6 +15,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
      * @extends Backbone.Model
      * @memberof ZoomToGeometry
      * @constructs
+     * @description Zooms to a feature of a wfs. Can be used via the parametricURL call zoomToGeometry.
      * @property {string} layerId="123456789" Id from layer with geometries.
      * @property {string} attribute="bezirk_name" The attribute from the wfs.
      * @property {string[]} geometries="["BEZIRK1", "BEZIRK2"]" Geometries to be zoomed on.
@@ -34,13 +35,13 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             "setIsRender": this.setIsRender
         }, this);
 
-        // if (name.length > 0 && name !== "ALL") {
         if (name.length > 0) {
             this.zoomToGeometry(name, this.get("layerId"), this.get("attribute"));
         }
 
         Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
     },
+
     /**
     * Zooms to a geometry loaded from a WFS.
     * @param {string} name - Name of the feature to zoom to.
@@ -144,7 +145,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
         let coordLength = 0,
             polygonIndex = 0;
 
-        _.each(feature.getGeometry().getPolygons(), function (polygon, index) {
+        feature.getGeometry().getPolygons().forEach(function (polygon, index) {
             if (polygon.getCoordinates()[0].length > coordLength) {
                 coordLength = polygon.getCoordinates()[0].length;
                 polygonIndex = index;

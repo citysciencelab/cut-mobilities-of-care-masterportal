@@ -20,8 +20,7 @@ const Config = {
             "BERGEDORF",
             "EIMSBÜTTEL",
             "HAMBURG-MITTE",
-            "WANDSBEK",
-            "ALL"
+            "WANDSBEK"
         ]
     },
     namedProjections: [

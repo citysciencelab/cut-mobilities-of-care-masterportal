@@ -426,6 +426,14 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             else if (Number.isInteger(parseInt(gemometryFromUrl, 10))) {
                 gemometryToZoom = geometries[parseInt(gemometryFromUrl, 10) - 1];
             }
+            else {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
+                    + "<br>"
+                    + "<small>Der Parameter " + property + "=" + gemometryFromUrl + " existiert nicht.</small>",
+                    kategorie: "alert-warning"
+                });
+            }
         }
 
         this.setZoomToGeometry(gemometryToZoom);
