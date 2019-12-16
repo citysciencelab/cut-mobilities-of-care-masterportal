@@ -11,15 +11,8 @@ const Config = {
         styleId: "location_eventlotse"
     },
     zoomToGeometry: {
-        wfsParams: {
-            attribute: "bezirk_name",
-            url: "https://geodienste.hamburg.de/HH_WFS_Verwaltungsgrenzen",
-            version: "1.1.0",
-            typename: "app:bezirke"
-        },
         layerId: "1692",
         attribute: "bezirk_name",
-        typename: "app:bezirke",
         geometries: [
             "ALTONA",
             "HARBURG",
