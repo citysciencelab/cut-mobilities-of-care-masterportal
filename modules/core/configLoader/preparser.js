@@ -106,19 +106,54 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     parse: function (response) {
+        const portalLanguage = typeof response.Portalconfig.portalLanguage === "object" ? response.Portalconfig.portalLanguage : {enabled: true};
         let attributes = {
-                portalConfig: response.Portalconfig,
-                baselayer: response.Themenconfig.Hintergrundkarten,
-                overlayer: response.Themenconfig.Fachdaten,
-                overlayer_3d: response.Themenconfig.Fachdaten_3D,
-                treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
-                isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
-                snippetInfos: this.requestSnippetInfos()
-            },
-            portalLanguage = typeof response.Portalconfig.portalLanguage === "object" ? response.Portalconfig.portalLanguage : {enabled: true};
+            portalConfig: response.Portalconfig,
+            baselayer: response.Themenconfig.Hintergrundkarten,
+            overlayer: response.Themenconfig.Fachdaten,
+            overlayer_3d: response.Themenconfig.Fachdaten_3D,
+            treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
+            isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
+            snippetInfos: this.requestSnippetInfos()
+        };
 
+        this.initLanguage(portalLanguage);
+
+        /**
+         * this.updateTreeType
+         * @deprecated in 3.0.0
+         */
+        attributes = this.updateTreeType(attributes, response);
+
+        if (attributes.treeType === "default") {
+            new DefaultTreeParser(attributes);
+        }
+        else {
+            new CustomTreeParser(attributes);
+        }
+
+        /**
+         * changeLgvContainer
+         * @deprecated in 3.0.0
+         */
+        this.changeLgvContainer();
+    },
+
+    /**
+     * initialization of the language with i18next
+     * @pre i18next is not initialized
+     * @post i18next is initialized, i18next is bound to Backbone.i18next for control over the console
+     * @param {Object} config the configuration
+     * @param {Boolean} config.enabled activates the GUI for language switching
+     * @param {Boolean} config.debug if true i18next show debugging for developing
+     * @param {Object} config.languages the languages to be used as {krz: full} where krz is "en" and full is "english"
+     * @param {String} config.startLanguage the language to use on startup
+     * @param {Array} config.changeLanguageOnStartWhen the incidents that changes the language on startup as Array where the order is important
+     * @returns {Void}  -
+     */
+    initLanguage: function (config) {
         // default language configuration
-        portalLanguage = Object.assign({
+        const portalLanguage = Object.assign({
             "enabled": true,
             "debug": false,
             "languages": {
@@ -127,7 +162,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             },
             "startLanguage": "de",
             "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
-        }, portalLanguage);
+        }, config);
 
         // init i18next
         i18next
@@ -193,25 +228,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
         // bind i18next to backbone to enable use of command line with  > Backbone.i18next...
         Backbone.i18next = i18next;
-
-        /**
-         * this.updateTreeType
-         * @deprecated in 3.0.0
-         */
-        attributes = this.updateTreeType(attributes, response);
-
-        if (attributes.treeType === "default") {
-            new DefaultTreeParser(attributes);
-        }
-        else {
-            new CustomTreeParser(attributes);
-        }
-
-        /**
-         * changeLgvContainer
-         * @deprecated in 3.0.0
-         */
-        this.changeLgvContainer();
     },
 
     /**

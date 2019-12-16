@@ -10,11 +10,10 @@
     },
     "portalLanguage": {
       "enabled": true,
-      "debug": true,
+      "debug": false,
       "languages": {
         "de": "deutsch",
-        "en": "english",
-        "he": "עברי"
+        "en": "english"
       },
       "startLanguage": "de",
       "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
