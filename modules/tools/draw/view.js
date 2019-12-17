@@ -26,7 +26,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:drawPoint": this.render
         });
 
         new DownloadView();
@@ -97,30 +98,32 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     renewSurface: function () {
         var element = this.$el.find(".interaction")[0];
 
-        switch (element.options[element.selectedIndex].text) {
-            case "Punkt zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").show();
-                this.$el.find(".stroke-width").hide();
-                break;
-            }
-            case "Text schreiben": {
-                this.$el.find(".text").show();
-                this.$el.find(".font-size").show();
-                this.$el.find(".font").show();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").hide();
-                break;
-            }
-            default: {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").show();
-                break;
+        if (element) {
+            switch (element.options[element.selectedIndex].text) {
+                case this.model.get("drawPoint"): {
+                    this.$el.find(".text").hide();
+                    this.$el.find(".font-size").hide();
+                    this.$el.find(".font").hide();
+                    this.$el.find(".radius").show();
+                    this.$el.find(".stroke-width").hide();
+                    break;
+                }
+                case this.model.get("writeText"): {
+                    this.$el.find(".text").show();
+                    this.$el.find(".font-size").show();
+                    this.$el.find(".font").show();
+                    this.$el.find(".radius").hide();
+                    this.$el.find(".stroke-width").hide();
+                    break;
+                }
+                default: {
+                    this.$el.find(".text").hide();
+                    this.$el.find(".font-size").hide();
+                    this.$el.find(".font").hide();
+                    this.$el.find(".radius").hide();
+                    this.$el.find(".stroke-width").show();
+                    break;
+                }
             }
         }
     },
