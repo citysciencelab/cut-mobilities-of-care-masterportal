@@ -11,10 +11,7 @@
     "portalLanguage": {
       "enabled": true,
       "debug": false,
-      "languages": {
-        "de": "deutsch",
-        "en": "english"
-      },
+      "languages": ["de", "en"],
       "startLanguage": "de",
       "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
     },

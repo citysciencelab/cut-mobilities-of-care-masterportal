@@ -2,6 +2,13 @@
     "button":{
         "back": "Back"
     },
+    "language": {
+        "de": "German",
+        "en": "English",
+        "fr": "French",
+        "es": "Spanish",
+        "tr": "Turkish"
+    },
     "modules": {
         "tools": {
             "contact": {

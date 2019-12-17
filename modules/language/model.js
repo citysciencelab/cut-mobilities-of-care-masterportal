@@ -1,39 +1,43 @@
 const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype */ {
     defaults: {
-        languageCode: {"de": "deutsch"},
-        defaultCode: "en"
+        languageCode: ["de"],
+        defaultCode: "en",
+        de: "Deutsch",
+        en: "Englisch",
+        fr: "Französisch",
+        es: "Spanish",
+        tr: "Türkisch"
     },
     /**
      * @class LanguageModel
      * @extends Backbone.Model
      * @memberof language
      * @constructs
-     * @param {String} defaultCode="DE" language code of portal
-     * @param {String} languageCode={} the list of language codes
      */
     initialize: function () {
-        const languageCode = i18next.options.getLanguages(),
-            defaultCode = i18next.language;
-        console.log(i18next.language);
-        console.log(i18next.languages);
-        console.log(languageCode);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
 
-        if (languageCode) {
-            this.setLanguageCode(languageCode);
-        }
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        const defaultCode = i18next.language,
+            languageCode = i18next.options.getLanguages();
 
         if (defaultCode) {
             this.setDefaultCode(defaultCode);
         }
-    },
 
-    /**
-     * Setter for attribute "languageCode".
-     * @param {object} value - the list of language codes.
-     * @returns {void}
-     */
-    setLanguageCode: function (value) {
-        this.set("languageCode", value);
+        if (languageCode && defaultCode) {
+            this.setLanguageCode(languageCode);
+        }
     },
 
     /**
@@ -43,6 +47,17 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
      */
     setDefaultCode: function (value) {
         this.set("defaultCode", value);
+    },
+
+    /**
+     * Setter for attribute "languageCode".
+     * @param {object} value - the list of language codes.
+     * @returns {void}
+     */
+    setLanguageCode: function (value) {
+
+
+        this.set("languageCode", value);
     }
 });
 

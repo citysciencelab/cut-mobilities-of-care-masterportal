@@ -226,7 +226,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                 }
             });
 
-        console.log(i18next);
         // bind i18next to backbone to enable use of command line with  > Backbone.i18next...
         Backbone.i18next = i18next;
     },
