@@ -48,7 +48,7 @@ module.exports = function () {
         entry: entryPoints,
         stats: {
             all: false,
-            colors: true, 
+            colors: true,
             errors: true,
             errorDetails: true
             // assets: true
