@@ -11,7 +11,12 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         isInitOpen: true,
         isOpen: false,
         mapControl: undefined,
-        supportedIn3d: false
+        supportedIn3d: false,
+
+        showOverviewControlText: "Übersichtskarte einblenden",
+        hideOverviewControlText: "Übersichtskarte ausblenden",
+        showOverviewTableText: "Mini-Map einschalten",
+        hideOverviewTableText: "Mini-Map ausschalten"
     },
     /**
      * @class OverviewMapModel
@@ -30,6 +35,11 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function (attr) {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
+
         /**
          * baselayer
          * @deprecated in 3.0.0
@@ -38,6 +48,20 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
             this.setLayerId(attr.baselayer);
         }
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            showOverviewControlText: i18next.t("common:modules.controls.overviewMap.showOverviewControl"),
+            hideOverviewControlText: i18next.t("common:modules.controls.overviewMap.hideOverviewControl"),
+            showOverviewTableText: i18next.t("common:modules.controls.overviewMap.showOverviewTable"),
+            hideOverviewTableText: i18next.t("common:modules.controls.overviewMap.hideOverviewTable")
+        });
     },
 
     /**
