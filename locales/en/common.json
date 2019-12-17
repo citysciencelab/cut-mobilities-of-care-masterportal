@@ -61,6 +61,13 @@
             },
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
+            },
+            "kmlImport": {
+                "unknownGeometry": "Unknown Geometry",
+                "chooseFileFirst": "Please choose the kml data file for importing first.",
+                "fakeButton": "Choose file (no file chosen yet)",
+                "importButton": "IMPORT",
+                "file": "File"
             }
         },
         "controls": {
