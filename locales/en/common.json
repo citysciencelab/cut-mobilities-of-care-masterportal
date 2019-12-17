@@ -61,6 +61,17 @@
             },
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
+            },
+            "getCoord": {
+                "coordSystemField": "coordinate system",
+                "hdms": {
+                    "eastingLabel": "longitude",
+                    "northingLabel": "altitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "easting",
+                    "northingLabel": "northing"
+                }
             }
         },
         "controls": {

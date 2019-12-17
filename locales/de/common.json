@@ -61,6 +61,17 @@
             },
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
+            },
+            "getCoord": {
+                "coordSystemField": "Koordinatensystem",
+                "hdms": {
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Höhe"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                }
             }
         },
         "controls": {
