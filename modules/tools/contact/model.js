@@ -90,9 +90,9 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set("textPlaceholder", i18next.t("special:modules.tools.contact.textPlaceholder"));
-        this.set("userNamePlaceholder", i18next.t("special:modules.tools.contact.userNamePlaceholder"));
-        this.set("textSendButton", i18next.t("special:modules.tools.contact.textSendButton"));
+        this.set("textPlaceholder", i18next.t("common:modules.tools.contact.textPlaceholder"));
+        this.set("userNamePlaceholder", i18next.t("common:modules.tools.contact.userNamePlaceholder"));
+        this.set("textSendButton", i18next.t("common:modules.tools.contact.textSendButton"));
     },
 
     /**

@@ -53,17 +53,6 @@ Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfigur
 
 Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen **[Proxy](/proxyconf.md)** weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten.
 
-
-### npm start mit customModule
-Sofern ein eigenes Skript mit Abhängigkeiten zum Masterportal in die Entwicklungsumgebung eingebunden werden soll, so besteht in der Konsole über Eingabe eines weiteren Parameters die Möglichkeit hierzu. _CUSTOMMODULE_ wird als relativer Pfad zum JavaScript ausgehend von der _js/main.js_ angegeben.
-
-```
-# npm start -- --CUSTOMMODULE "../portalconfigs/verkehrsportal/custom"
-```
-
-Der genutzte Mechanismus wird über **[webpackMode: eager](https://webpack.js.org/api/module-methods)** gesteuert, indem zur Kompilierzeit der Pfad im übergebenen Parameter importiert wird.
-
-
 ### npm run test
 Unittests durchführen
 
@@ -88,7 +77,6 @@ Ein Portal vor Veröffentlichung optimieren/bauen.
 ```
 
 - baut das Portal und alles, was es braucht in den Ordner dist/
- - Sucht im angegebenen Ordner nach einem customModule mit angegebenem Namen und importiert dieses Skript in den current chunk.
 - Pfade in index.html werden automatisch ersetzt
  - Pfade zu Conf in config.js werden automatisch ersetzt
 
@@ -115,7 +103,7 @@ Mit diesem Kommando lassen sich mehrere Portale auf einemal bauen. Die Konfigura
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |modulesBlackList|String[]|Portale die nicht gebaut werden sollen.|
-|customModules|Object|Portale die mit einem Custommodul gebaut werdne sollen.|
+|addons|Object|Portale die mit einem Custommodul gebaut werdne sollen.|
 |portalname|Object|Name des Portals.|
 |initFile|String|Pfad zu dem Custommodul.|
 |ignoreList|String[]|Dateien die nicht im gebauten Portal enthalten sein sollen.|
@@ -131,10 +119,10 @@ const
             "badegewaesser"
         ],
 
-        // relative paths to custom modules entry js files
-        // although custom modules creation script does not expect the .js suffix, it is redundantly added
+        // relative paths to addons entry js files
+        // although addons creation script does not expect the .js suffix, it is redundantly added
         // for the sake of readability
-        customModules: {
+        addons: {
             "portalname": {
                 "initFile": "../portalconfigs/boris/bodenrichtwertabfrage/view.js",
                 "ignoreList": ["bodenrichtwertabfrage"]

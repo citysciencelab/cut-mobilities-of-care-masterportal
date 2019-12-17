@@ -1,7 +1,20 @@
 {
-    "anything": "something common",
     "modules": {
         "tools": {
+            "contact": {
+                "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
+                "userNamePlaceholder": "your name",
+                "textSendButton": "send message"
+            },
+            "print": {
+                "titleLabel": "Title",
+                "titlePlaceholder": "My title",
+                "layoutLabel": "Layout",
+                "formatLabel": "Format",
+                "scaleLabel": "Scale",
+                "withLegendLabel": "With legend",
+                "printLabel": "Print"
+            },
             "populationRequest": {
                 "select": {
                     "info": "You can query the number of inhabitants for both the Free Hanseatic City of Hamburg and the Hamburg metropolitan region.",
