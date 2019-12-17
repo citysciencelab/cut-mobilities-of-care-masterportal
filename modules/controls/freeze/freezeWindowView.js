@@ -5,6 +5,15 @@ const FreezeView = Backbone.View.extend({
         "click .freeze-view-close": "hideFreezeWin"
     },
     initialize: function () {
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.freezeText || changed.unfreezeText || changed.name || changed.glyphicon) {
+                    this.render();
+                }
+            }
+        });
         this.render();
     },
     collection: {},
@@ -12,7 +21,9 @@ const FreezeView = Backbone.View.extend({
     className: "freeze-view freeze-deactivated",
     template: _.template(FreezeTemplate),
     render: function () {
-        $(this.$el).html(this.template());
+        const attr = this.model.toJSON();
+
+        $(this.$el).html(this.template(attr));
         $(".masterportal-container").append(this.$el);
 
         return this;

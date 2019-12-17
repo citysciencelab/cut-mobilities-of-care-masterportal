@@ -62,6 +62,81 @@
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
             }
+        },
+        "controls": {
+            "fullScreen": {
+                "enable": "Vollbild aktivieren",
+                "disable": "Vollbild deaktivieren",
+                "toggle": "Vollbild umschalten"
+            },
+            "zoom": {
+                "zoomIn": "Hineinzoomen",
+                "zoomOut": "Herauszoomen"
+            },
+            "orientation": {
+                "titleGeolocate": "Standpunkt",
+                "titleGeolocatePOI": "In meiner Nähe",
+                "geolocationDeniedText": "Lokalisierung nicht verfügbar",
+                "trackingDeniedText": "'In meiner Nähe' nicht verfügbar"
+            },
+            "orientation3d": {
+                "compass": {
+                    "pointerNorth": "Ansicht einnorden/Ansicht drehen",
+                    "pointerSouth": "Südblick",
+                    "pointerEast": "Ost Blick",
+                    "pointerWest": "West Blick",
+                    "moveNorth": "Nach Norden bewegen",
+                    "moveSouth": "Nach Süden bewegen",
+                    "moveWest": "Nach Westen bewegen",
+                    "moveEast": "Nach Osten bewegen"
+                },
+                "control": {
+                    "tiltDown": "Ansicht neigen",
+                    "tiltReset": "Ansicht zurückstellen",
+                    "zoomIn": "$t(common:modules.controls.zoom.zoomIn)",
+                    "zoomOut": "$t(common:modules.controls.zoom.zoomOut)"
+                }
+            },
+            "totalView": {
+                "titleButton": "Zurück zur Startansicht",
+                "titleMenu": "Hauptansicht"
+            },
+            "3d": {
+                "buttonTitle": "3D",
+                "openView3d": "Ansicht einschalten",
+                "closeView3d": "Ansicht ausschalten",
+                "betaWarning": "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "oblique": {
+                "buttonTitle": "Schrägluftbilder",
+                "openViewOblique": "Schrägluftbilder einschalten",
+                "closeViewOblique": "Schrägluftbilder ausschalten",
+                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "freeze": {
+                "freeze": "Ansicht sperren",
+                "unfreeze": "Ansicht entsperren",
+                "freezeTable": "$t(common:modules.controls.freeze.freeze)"
+            },
+            "backForward": {
+                "stepForward": "Nächste Ansicht",
+                "stepBackward": "Letzte Ansicht"
+            },
+            "attributions": {
+                "showAttributions": "Layer-Attributions anzeigen",
+                "hideAttributions": "Layer-Attributions ausblenden"
+            },
+            "overviewMap": {
+                "showOverviewControl": "Übersichtskarte einblenden",
+                "hideOverviewControl": "Übersichtskarte ausblenden",
+                "showOverviewTable": "Mini-Map einschalten",
+                "hideOverviewTable": "Mini-Map ausschalten"
+            },
+            "mousePosition": {
+                "hint": "Bewegen Sie die Maus über die Karte",
+                "showMousePosition": "Einblenden",
+                "hideMousePosition": "Ausblenden"
+            }
         }
     },
     "snippets": {

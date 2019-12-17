@@ -62,6 +62,81 @@
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
             }
+        },
+        "controls": {
+            "fullScreen": {
+                "enable": "Enable fullscreen",
+                "disable": "Disable fullscreen",
+                "toggle": "toggle fullscreen"
+            },
+            "zoom": {
+                "zoomIn": "Zoom In",
+                "zoomOut": "Zoom Out"
+            },
+            "orientation": {
+                "titleGeolocate": "Common position",
+                "titleGeolocatePOI": "Close to me",
+                "geolocationDeniedText": "localisation is not available",
+                "trackingDeniedText": "'$t(common:modules.controls.orientation.titleGeolocatePOI)' is not available"
+            },
+            "orientation3d": {
+                "compass": {
+                    "pointerNorth": "North the view/rotate view",
+                    "pointerSouth": "South view",
+                    "pointerWest": "West view",
+                    "pointerEast": "East view",
+                    "moveNorth": "Move north",
+                    "moveSouth": "Move south",
+                    "moveWest": "Move west",
+                    "moveEast": "Move east"
+                },
+                "control": {
+                    "tiltDown": "Tilt the view",
+                    "tiltReset": "Reset view",
+                    "zoomIn": "$t(common:modules.controls.zoom.zoomIn)",
+                    "zoomOut": "$t(common:modules.controls.zoom.zoomOut)"
+                }
+            },
+            "totalView": {
+                "titleButton": "Back to home screen",
+                "titleMenu": "Main View"
+            },
+            "3d": {
+                "buttonTitle": "3D",
+                "openView3d": "Start view",
+                "closeView3d": "Close view",
+                "betaWarning3d": "The 3D mode is currently still in the beta version!"
+            },
+            "oblique": {
+                "buttonTitle": "Oblique aerial photos",
+                "openViewOblique": "show oblique aerial photos",
+                "closeViewOblique": "close oblique aerial photos",
+                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+            },
+            "freeze": {
+                "freeze": "Freeze view",
+                "unfreeze": "Unfreeze view",
+                "freezeTable": "freeze view"
+            },
+            "backForward": {
+                "stepForward": "Next view",
+                "stepBackward": "Last view"
+            },
+            "attributions": {
+                "showAttributions": "Show layer attributions",
+                "hideAttributions": "Hide layer attributions"
+            },
+            "overviewMap": {
+                "showOverviewControl": "Show overview map",
+                "hideOverviewControl": "Hide overview map",
+                "showOverviewTable": "show mini map",
+                "hideOverviewTable": "hide mini map"
+            },
+            "mousePosition": {
+                "hint": "Move the computer mouse over your screen.",
+                "showMousePosition": "Mouse position - fade in",
+                "hideMousePosition": "Fade out"
+            }
         }
     },
     "snippets": {
