@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <form id="printTool" class="form-horizontal">
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Titel</label>
+        <label class="col-sm-5 control-label"><%= titleLabel %></label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" maxLength="45" value="<%= title %>">
+            <input type="text" class="form-control" maxLength="45" value="<%= titlePlaceholder %>">
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Layout</label>
+        <label class="col-sm-5 control-label"><%= layoutLabel %></label>
         <div class="col-sm-7">
             <select id="printLayout" class="form-control input-sm">
                 <% _.each(layoutList, function(layout) { %>
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Format</label>
+        <label class="col-sm-5 control-label"><%= formatLabel %></label>
         <div class="col-sm-7">
             <select id="printFormat" class="form-control input-sm">
                 <% _.each(formatList, function(format) { %>
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Maßstab</label>
+        <label class="col-sm-5 control-label"><%= scaleLabel %></label>
         <div class="col-sm-7">
             <select id="printScale" class="form-control input-sm">
                 <% _.each(scaleList, function(scale) { %>
@@ -50,7 +50,7 @@
     </div>
     <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label"><%= legendText %></label>
+        <label class="col-sm-5 control-label"><%= withLegendLabel %></label>
         <div class="col-sm-7">
             <div class="checkbox">
                 <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>
@@ -70,7 +70,7 @@
     <% } %>
     <div class="form-group form-group-sm">
         <div class="col-sm-12">
-            <button type="button" class="btn btn-lgv-grey btn-block">Drucken</button>
+            <button type="button" class="btn btn-lgv-grey btn-block"><%= printLabel %></button>
         </div>
     </div>
 </form>
