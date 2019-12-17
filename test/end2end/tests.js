@@ -1,4 +1,4 @@
-const modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
+const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
     modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
     modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
@@ -50,7 +50,8 @@ function tests (builder, url, browsername, resolution, config, mode) {
         }
 
         // modules/controls
-        modulesControlsAttributionsTests(e2eTestParams);
+        // TODO commented out for dev branch until ready
+        // modulesControlsAttributionsTests(e2eTestParams);
         modulesControlsBackForwardTests(e2eTestParams);
         modulesControlsFreezeTests(e2eTestParams);
         // TODO commented out for dev branch until ready
