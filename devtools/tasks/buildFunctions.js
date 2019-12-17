@@ -21,16 +21,8 @@ const fs = require("fs-extra"),
 function copyPortalFiles (sourcePortalPath, distPortalPath) {
     fs.copy(sourcePortalPath, distPortalPath).then(() => {
         console.warn("NOTE: Copied \"" + sourcePortalPath + "\" to \"" + distPortalPath + "\".");
-        fs.copy("./img", mastercodeVersionPath + "/img").then(() => {
-            console.warn("NOTE: Copied \"./img\" to \"" + mastercodeVersionPath + "\".");
-            fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
-                console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
-                fs.remove(buildTempPath).then(() => {
-                    replaceStrings(distPortalPath);
-                    console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + distPortalPath + "\".");
-                }).catch(error => console.error(error));
-            }).catch(error => console.error(error));
-        }).catch(error => console.error(error));
+        replaceStrings(distPortalPath);
+        console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + distPortalPath + "\".");
     }).catch(error => console.error(error));
 }
 
@@ -41,14 +33,9 @@ function copyPortalFiles (sourcePortalPath, distPortalPath) {
  * @returns {void}
  */
 function removeOldBuiltFiles (sourcePortalPath, distPortalPath) {
-    fs.remove(mastercodeVersionPath).then(() => {
-        console.warn("NOTE: Deleted directory \"" + mastercodeVersionPath + "\".");
-        fs.remove(distPortalPath).then(() => {
-            console.warn("NOTE: Deleted directory \"" + distPortalPath + "\".");
-            copyPortalFiles(sourcePortalPath, distPortalPath);
-        }).catch(function (err) {
-            throw new Error("ERROR", err);
-        });
+    fs.remove(distPortalPath).then(() => {
+        console.warn("NOTE: Deleted directory \"" + distPortalPath + "\".");
+        copyPortalFiles(sourcePortalPath, distPortalPath);
     }).catch(function (err) {
         throw new Error("ERROR", err);
     });
@@ -61,21 +48,49 @@ function removeOldBuiltFiles (sourcePortalPath, distPortalPath) {
  */
 module.exports = function buildWebpack (answers) {
     const
-        sourcePortalPath = path.resolve(rootPath, answers.portalPath),
-        portalName = sourcePortalPath.split(path.sep).pop(),
-        distPortalPath = path.resolve(distPath, portalName),
+        sourcePortalsFolder = path.resolve(rootPath, answers.portalPath),
         cliExecCommand = "webpack --config devtools/webpack.prod.js";
 
-    if (!fs.existsSync(sourcePortalPath)) {
+    let allPortalPaths = [];
+
+
+    if (!fs.existsSync(sourcePortalsFolder)) {
         console.error("---\n---");
-        throw new Error("ERROR: PATH DOES NOT EXIST \"" + sourcePortalPath + "\"\nABORTED...");
+        throw new Error("ERROR: PATH DOES NOT EXIST \"" + sourcePortalsFolder + "\"\nABORTED...");
     }
+
+    allPortalPaths = fs.readdirSync(sourcePortalsFolder)
+        .map(name => sourcePortalsFolder + "\\" + name)
+        .filter(name => fs.lstatSync(name).isDirectory() && !name.endsWith(".git"));
 
     console.warn("NOTICE: executing command \"" + cliExecCommand + "\"");
     execute(cliExecCommand).then(function (result) {
         console.warn(result.stdout);
         prependVersionNumber(path.resolve(buildTempPath, "js/masterportal.js"));
-        removeOldBuiltFiles(sourcePortalPath, distPortalPath);
+
+        fs.remove(mastercodeVersionPath).then(() => {
+            console.warn("NOTE: Deleted directory \"" + mastercodeVersionPath + "\".");
+
+            fs.copy("./img", mastercodeVersionPath + "/img").then(() => {
+                console.warn("NOTE: Copied \"./img\" to \"" + mastercodeVersionPath + "\".");
+
+                fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
+                    console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
+
+                    fs.remove(buildTempPath).catch(error => console.error(error));
+                }).catch(error => console.error(error));
+            }).catch(error => console.error(error));
+        }).catch(function (err) {
+            throw new Error("ERROR", err);
+        });
+
+        allPortalPaths.forEach(sourcePortalPath => {
+            const portalName = sourcePortalPath.split(path.sep).pop(),
+                distPortalPath = path.resolve(distPath, portalName);
+
+            removeOldBuiltFiles(sourcePortalPath, distPortalPath);
+        });
+
     }).catch(function (err) {
         throw new Error("ERROR", err);
     });
