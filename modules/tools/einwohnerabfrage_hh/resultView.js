@@ -13,7 +13,14 @@ const ResultView = Backbone.View.extend({
         this.template = _.template(ResultTemplate);
 
         this.listenTo(this.model, {
-            "change": this.render
+            "change": function () {
+                const changed = this.model.changed;
+
+                // if one of the language properties changes, all other language properties changed too, so only check one of them
+                if (changed.confidentialityHint) {
+                    this.render();
+                }
+            }
         });
 
     },

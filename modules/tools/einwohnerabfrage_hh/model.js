@@ -135,25 +135,22 @@ const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.proto
      * @returns {Void}  -
      */
     changeLang: function () {
-        const prefixSelect = "common:modules.tools.populationRequest.select.",
-            prefixResult = "common:modules.tools.populationRequest.result.",
-            values = {
-                confidentialityHint: i18next.t(prefixResult + "confidentialityHint"),
-                populationFHH: i18next.t(prefixResult + "populationFHH"),
-                populationMRH: i18next.t(prefixResult + "populationMRH"),
-                areaSize: i18next.t(prefixResult + "areaSize"),
-                confidentialityHintSmallValues: i18next.t(prefixResult + "confidentialityHintSmallValues"),
-                hint: i18next.t(prefixResult + "hint"),
-                dataSourceFHHKey: i18next.t(prefixResult + "dataSourceFHHKey"),
-                dataSourceFHHValue: i18next.t(prefixResult + "dataSourceFHHValue"),
-                dataSourceFHHLinktext: i18next.t(prefixResult + "dataSourceFHHLinktext"),
-                dataSourceMRHKey: i18next.t(prefixResult + "dataSourceMRHKey"),
-                dataSourceMRHValue: i18next.t(prefixResult + "dataSourceMRHValue"),
-                dataSourceMRHLinktext: i18next.t(prefixResult + "dataSourceMRHLinktext"),
-                showRasterLayer: i18next.t(prefixSelect + "showRasterLayer")
-            };
-
-        this.set(values);
+        this.set({
+            confidentialityHint: i18next.t("common:modules.tools.populationRequest.result.confidentialityHint"),
+            populationFHH: i18next.t("common:modules.tools.populationRequest.result.populationFHH"),
+            populationMRH: i18next.t("common:modules.tools.populationRequest.result.populationMRH"),
+            areaSize: i18next.t("common:modules.tools.populationRequest.result.areaSize"),
+            confidentialityHintSmallValues: i18next.t("common:modules.tools.populationRequest.result.confidentialityHintSmallValues"),
+            hint: i18next.t("common:modules.tools.populationRequest.result.hint"),
+            dataSourceFHHKey: i18next.t("common:modules.tools.populationRequest.result.dataSourceFHHKey"),
+            dataSourceFHHValue: i18next.t("common:modules.tools.populationRequest.result.dataSourceFHHValue"),
+            dataSourceFHHLinktext: i18next.t("common:modules.tools.populationRequest.result.dataSourceFHHLinktext"),
+            dataSourceMRHKey: i18next.t("common:modules.tools.populationRequest.result.dataSourceMRHKey"),
+            dataSourceMRHValue: i18next.t("common:modules.tools.populationRequest.result.dataSourceMRHValue"),
+            dataSourceMRHLinktext: i18next.t("common:modules.tools.populationRequest.result.dataSourceMRHLinktext"),
+            showRasterLayer: i18next.t("common:modules.tools.populationRequest.select.showRasterLayer"),
+            showAlkisAdresses: i18next.t("common:modules.tools.populationRequest.select.showAlkisAdresses")
+        });
     },
     /**
      * Resets the GraphicalSelect

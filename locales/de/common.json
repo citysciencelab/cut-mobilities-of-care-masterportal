@@ -4,6 +4,20 @@
     },
     "modules": {
         "tools": {
+            "contact": {
+                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
+                "userNamePlaceholder": "Ihr Name",
+                "textSendButton": "Abschicken"
+            },
+            "print": {
+                "titleLabel": "Titel",
+                "titlePlaceholder": "Mein Titel",
+                "layoutLabel": "Layout",
+                "formatLabel": "Format",
+                "scaleLabel": "Maßstab",
+                "withLegendLabel": "Mit Legende",
+                "printLabel": "Drucken"
+            },
             "populationRequest": {
                 "select": {
                     "info": "Die Abfrage der Einwohnerzahl ist sowohl für die Freie Hansestadt Hamburg als auch für die Metropolregion Hamburg möglich.",

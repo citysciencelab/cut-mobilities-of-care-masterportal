@@ -18,7 +18,7 @@ Zum Schreiben von Unittests:
 
 Um Code zu schreiben der nicht im Masterportal-Repository landen soll sondern als Custom-Module eingebunden wird:
 
-* **[Custom-Modules](customModules.md)**
+* **[Custom-Modules](addons.md)**
 
 Weitere Infos:
 

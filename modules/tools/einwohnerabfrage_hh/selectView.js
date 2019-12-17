@@ -26,7 +26,11 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
             "renderResult": this.renderResult
         });
         this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.render
+            "languageChanged": () => {
+                this.render(this.model, true);
+                // reset selection by box, circle or polygon
+                this.model.changeGraphicalSelectStatus(true);
+            }
         });
         this.snippetDropdownView = new GraphicalSelectView({model: this.model.get("snippetDropdownModel")});
         this.checkBoxRaster = new SnippetCheckBoxView({model: this.model.get("checkBoxRaster")});
