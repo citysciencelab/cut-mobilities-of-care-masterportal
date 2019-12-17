@@ -143,13 +143,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     changeLang: function () {
         this.set({
-            "titleLabel": i18next.t("common:modules.tools.print.titleLabel"),
-            "titlePlaceholder": i18next.t("common:modules.tools.print.titlePlaceholder"),
-            "layoutLabel": i18next.t("common:modules.tools.print.layoutLabel"),
-            "formatLabel": i18next.t("common:modules.tools.print.formatLabel"),
-            "scaleLabel": i18next.t("common:modules.tools.print.scaleLabel"),
-            "withLegendLabel": i18next.t("common:modules.tools.print.withLegendLabel"),
-            "printLabel": i18next.t("common:modules.tools.print.printLabel")
+            titleLabel: i18next.t("common:modules.tools.print.titleLabel"),
+            titlePlaceholder: i18next.t("common:modules.tools.print.titlePlaceholder"),
+            layoutLabel: i18next.t("common:modules.tools.print.layoutLabel"),
+            formatLabel: i18next.t("common:modules.tools.print.formatLabel"),
+            scaleLabel: i18next.t("common:modules.tools.print.scaleLabel"),
+            withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
+            printLabel: i18next.t("common:modules.tools.print.printLabel")
         });
     },
 

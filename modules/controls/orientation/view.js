@@ -29,8 +29,19 @@ const OrientationView = Backbone.View.extend({
             });
 
             this.listenTo(this.model, {
-                "change:tracking": this.trackingChanged,
-                "change:isGeolocationDenied": this.toggleBackground
+                "change": function () {
+                    const changed = this.model.changed;
+
+                    if (changed.hasOwnProperty("tracking")) {
+                        this.trackingChanged();
+                    }
+                    else if (changed.hasOwnProperty("isGeolocationDenied")) {
+                        this.toggleBackground();
+                    }
+                    else if (changed.titleGeolocate || changed.titleGeolocatePOI) {
+                        this.render();
+                    }
+                }
             }, this);
 
             this.render();

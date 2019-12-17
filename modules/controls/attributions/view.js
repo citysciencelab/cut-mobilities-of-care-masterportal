@@ -1,13 +1,25 @@
-import TemplateShow from "text-loader!./templateShow.html";
-import TemplateHide from "text-loader!./templateHide.html";
-import Attributions from "./model";
+import AttributionsTemplateShow from "text-loader!./templateShow.html";
+import AttributionsTemplateHide from "text-loader!./templateHide.html";
+import AttributionsControlModel from "./model";
 
-const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.prototype */{
+/**
+ * @member AttributionsTemplateShow
+ * @description template used if attributions are shown
+ * @memberof Controls.Attributions
+ */
+/**
+ * @member AttributionsTemplateHide
+ * @description template used if attributions are hidden
+ * @memberof Controls.Attributions
+ */
+
+const AttributionsControlView = Backbone.View.extend(/** @lends AttributionsControlView.prototype */{
     events: {
         "click .attributions-button": "toggleIsContentVisible"
     },
+
     /**
-     * @class AttributionsView
+     * @class AttributionsControlView
      * @extends Backbone.View
      * @memberof Controls.Attributions
      * @constructs
@@ -16,61 +28,71 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
      * @listens Controls.Attributions#changeAttributionList
      * @listens Controls.Attributions#changeIsVisibleInMap
      * @listens Controls.Attributions#renderAttributions
+     * @listens Controls.Attributions#changeShowAttributionsText
+     * @listens Controls.Attributions#changeHideAttributionsText
      * @fires Core.ConfigLoader#RadioRequestParserGetPortalConfig
      */
     initialize: function () {
-        var channel = Radio.channel("Attributions"),
-            jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
+        var jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
-        this.model = new Attributions(jAttributionsConfig);
-        this.listenTo(channel, {
+        this.model = new AttributionsControlModel(jAttributionsConfig);
+        this.listenTo(Radio.channel("Attributions"), {
             "renderAttributions": this.render
         });
 
         this.listenTo(this.model, {
-            "change:isContentVisible": this.render,
-            "change:attributionList": this.render,
-            "change:isVisibleInMap": this.readIsVisibleInMap,
-            "renderAttributions": this.render
+            "renderAttributions": this.render,
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.hasOwnProperty("isContentVisible")) {
+                    this.render();
+                }
+                else if (changed.hasOwnProperty("attributionList")) {
+                    this.render();
+                }
+                else if (changed.hasOwnProperty("isVisibleInMap")) {
+                    this.readIsVisibleInMap();
+                }
+                else if (changed.showAttributionsText || changed.hideAttributionsText) {
+                    this.render();
+                }
+            }
         });
 
         this.readIsVisibleInMap();
         this.render();
     },
-    /**
-     * Shows the attributions pane
-     * @returns {void}
-     */
-    templateShow: _.template(TemplateShow),
 
     /**
-     * Hides the attributions pane
-     * @returns {void}
-     */
-    templateHide: _.template(TemplateHide),
-    /**
-     * Modules render method. Decides whitch control click icon to show depending on model's isContentVisible property.
-     * @returns {object} self
+     * Modules render method. Decides whitch control click icon to show depending on models isContentVisible and attributionList property.
+     * @returns {this}  -
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
+        let templateShow,
+            templateHide;
 
         if (this.model.get("isContentVisible") === true && this.model.get("attributionList").length > 0) {
-            this.$el.html(this.templateShow(attr));
+            templateShow = _.template(AttributionsTemplateShow);
+
+            this.$el.html(templateShow(attr));
             this.$(".attributions-div").addClass("attributions-div");
         }
         else {
-            this.$el.html(this.templateHide(attr));
+            templateHide = _.template(AttributionsTemplateHide);
+
+            this.$el.html(templateHide(attr));
             this.$(".attributions-div").removeClass("attributions-div");
         }
 
         return this;
     },
 
-
     /**
-     * Wrapper method for model's toggleIsContentVisible()
-     * @return {void}
+     * Wrapper method for models toggleIsContentVisible()
+     * @post the moduls function toggleIsContentVisible has been called - see modul for details
+     * @return {Void}  -
      */
     toggleIsContentVisible: function () {
         return this.model.toggleIsContentVisible();
@@ -78,7 +100,7 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
 
     /**
      * Decides whether to display the module or to hide it. Uses model property isVisibleInMap for it.
-     * @return {void}
+     * @return {Void}  -
      */
     readIsVisibleInMap: function () {
         if (this.model.get("isVisibleInMap")) {
@@ -91,4 +113,4 @@ const AttributionsView = Backbone.View.extend(/** @lends AttributionsView.protot
     }
 });
 
-export default AttributionsView;
+export default AttributionsControlView;
