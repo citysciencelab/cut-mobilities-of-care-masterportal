@@ -10,7 +10,11 @@
                 "fromPlaceholder": "Von",
                 "toPlaceholder": "Bis",
                 "setStartTimeText": "Startzeitpunkt vorgeben",
-                "routingError": "Fehlermeldung bei Routenberechung"
+                "routingError": "Fehlermeldung bei Routenberechung",
+                "enterStartDestHoverText": "Start- und Ziel eingeben",
+                "enterOptionsText": "Optionen eingeben",
+                "calculateRoute": "Route berechnen",
+                "currentPosition": "Aktueller Standpunkt"
             }
         }
     }

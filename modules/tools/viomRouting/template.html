@@ -1,13 +1,13 @@
 <nav aria-label="...">
   <ul class="pagination pagination-lg">
     <li class="<% if (_.isNull(routelayer)) {print ('active');} %>">
-      <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
+      <span id="address" title="<%= enterStartDestHoverText %>" class="glyphicon glyphicon-road" aria-hidden="true"></span>
     </li>
     <li>
-      <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+      <span id="options" title="<%= enterOptionsText %>" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     </li>
     <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (!_.isNull(routelayer)) {print ('active');} %>">
-      <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+      <span id="calc" title="<%= calculateRoute %>" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </li>
   </ul>
 </nav>

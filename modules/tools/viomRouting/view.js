@@ -15,17 +15,77 @@ const RoutingView = Backbone.View.extend({
 
         this.model.setParams();
         this.template = _.template(RoutingWin);
+
         this.listenTo(this.model, {
-            "change:isActive": this.render,
-            "change:fromCoord": this.toggleRoutingButton,
-            "change:toCoord": this.toggleRoutingButton,
-            "change:description": this.addDescription,
-            "change:fromList": this.fromListChanged,
-            "change:toList": this.toListChanged,
-            "change:startAdresse": this.changeStartAdresse,
-            "change:zielAdresse": this.changeZielAdresse,
-            "change:isGeolocationPossible": this.changeGeolocationPossible
-        }, this);
+            "change": function (model) {
+                const changed = model.changed;
+
+                if (changed.hasOwnProperty("isActive")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("fromCoord")) {
+                    this.toggleRoutingButton();
+                }
+                else if (changed.hasOwnProperty("toCoord")) {
+                    this.toggleRoutingButton();
+                }
+                else if (changed.hasOwnProperty("description")) {
+                    this.addDescription();
+                }
+                else if (changed.hasOwnProperty("fromList")) {
+                    this.fromListChanged();
+                }
+                else if (changed.hasOwnProperty("toList")) {
+                    this.toListChanged();
+                }
+                else if (changed.hasOwnProperty("startAdresse")) {
+                    this.changeStartAdresse();
+                }
+                else if (changed.hasOwnProperty("zielAdresse")) {
+                    this.changeZielAdresse();
+                }
+                else if (changed.hasOwnProperty("isGeolocationPossible")) {
+                    this.changeGeolocationPossible();
+                }
+                else if (changed.hasOwnProperty("startAddressLabel")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("destinationAddressLabel")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("fromPlaceholder")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("toPlaceholder")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("setStartTimeText")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("date")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("time")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("routingError")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("enterStartDestHoverText")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("enterOptionsText")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("calculateRoute")) {
+                    this.render(this.model, true);
+                }
+                else if (changed.hasOwnProperty("currentPosition")) {
+                    this.render(this.model, true);
+                }
+            }
+        });
+
         channel.on({
             "setRoutingDestination": this.setRoutingDestination
         }, this);

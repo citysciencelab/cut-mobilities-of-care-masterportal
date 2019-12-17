@@ -10,7 +10,11 @@
                 "fromPlaceholder": "From",
                 "toPlaceholder": "To",
                 "setStartTimeText": "Set start time",
-                "routingError": "Error"
+                "routingError": "Error",
+                "enterStartDestHoverText": "Enter start and destination",
+                "enterOptionsText": "Enter options",
+                "calculateRoute": "Calculate route",
+                "currentPosition": "Current position"
             }
         }
     }

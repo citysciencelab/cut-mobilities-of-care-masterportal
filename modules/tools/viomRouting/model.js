@@ -34,7 +34,11 @@ const RoutingModel = Tool.extend({
         setStartTimeText: "",
         date: "",
         time: "",
-        routingError: ""
+        routingError: "",
+        enterStartDestHoverText: "",
+        enterOptionsText: "",
+        calculateRoute: "",
+        currentPosition: ""
     }),
 
     initialize: function () {
@@ -64,12 +68,16 @@ const RoutingModel = Tool.extend({
         this.set("date", i18next.t("common:date"));
         this.set("time", i18next.t("common:time"));
         this.set("routingError", i18next.t("common:modules.tools.viomRouting.routingError"));
+        this.set("enterStartDestHoverText", i18next.t("common:modules.tools.viomRouting.enterStartDestHoverText"));
+        this.set("enterOptionsText", i18next.t("common:modules.tools.viomRouting.enterOptionsText"));
+        this.set("calculateRoute", i18next.t("common:modules.tools.viomRouting.calculateRoute"));
+        this.set("currentPosition", i18next.t("common:modules.tools.viomRouting.currentPosition"));
     },
 
     setStartpoint: function (geoloc) {
         this.set("fromCoord", geoloc);
         this.setCenter(geoloc);
-        this.set("startAdresse", "aktueller Standpunkt");
+        this.set("startAdresse", this.get("currentPosition"));
     },
     setParams: function () {
         var viomRoutingModel,
