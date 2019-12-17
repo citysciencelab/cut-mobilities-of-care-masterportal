@@ -5,8 +5,9 @@ const webdriver = require("selenium-webdriver"),
         ie: webdriver.Capabilities.ie()
     },
     resolutions = [
-        "1024x768",
-        "600x800"
+        "1024x768"
+        // TODO commented out for dev branch until ready
+        // "600x800"
     ],
     configs = new Map([
         ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
@@ -86,33 +87,34 @@ function isCustom (url) {
  * Produces browserstack configurations.
  * @param {String} browserstackuser username
  * @param {String} browserstackkey key
- * @param {String} resolution as WIDTHxHEIGHT
  * @returns {Array} array of bs configuration objects
  */
-function getBsCapabilities (browserstackuser, browserstackkey, resolution) {
+function getBsCapabilities (browserstackuser, browserstackkey) {
+    const base = {
+        "seleniumVersion": "4.0.0-alpha.5",
+        "project": "MasterPortal",
+        "browserstack.local": true,
+        "browserstack.user": browserstackuser,
+        "browserstack.key": browserstackkey,
+        // resolution of device, not resolution of browser window
+        "resolution": "1024x768"
+    };
+
     return [
         {
+            ...base,
             "browserName": "Chrome",
             "browser_version": "74.0",
             "os": "Windows",
-            "os_version": "10",
-            "resolution": resolution,
-            "project": "MasterPortal",
-            "browserstack.local": true,
-            "browserstack.user": browserstackuser,
-            "browserstack.key": browserstackkey
-        },
+            "os_version": "10"
+        }/* , TODO commented out for dev branch until ready
         {
+            ...base,
             "browserName": "Safari",
             "browser_version": "12.0",
             "os": "OS X",
-            "os_version": "Mojave",
-            "resolution": resolution,
-            "project": "MasterPortal",
-            "browserstack.local": true,
-            "browserstack.user": browserstackuser,
-            "browserstack.key": browserstackkey
-        }
+            "os_version": "Mojave"
+        }*/
     ];
 }
 

@@ -110,7 +110,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         }
         else {
             if (!this.model.collection) {
-                // custommodules are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the custom module.
+                // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
                 // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
                 this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
             }
