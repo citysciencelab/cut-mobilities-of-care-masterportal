@@ -421,13 +421,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             };
 
         if (hit.source) {
-            /* Erst mal prüfen, ob es den Layer schon im Themenbaum gibt */
+            // check if layer is already in layer tree
             layerTreeId = this.getItemByAttributes({id: hit.source.id});
-            /* wenn es den Layer noch nicht gibt, diesen aus dem ElasticSearch-Ergebnis erzeugen */
             if (!layerTreeId) {
 
                 if (treeType === "custom") {
-                    /* Im Custom-Tree erst mal einen neuen Folder erzeugen und diesem den Folder "Ext.Thema" hinzufügen (falls es diese noch nicht gibt) */
+                    // create folder and add it as "Externe Fachdaten"
                     parentId = "extthema";
                     level = 2;
                     if (!this.getItemByAttributes({id: "ExternalLayer"})) {
@@ -451,9 +450,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     datasets: hit.source.datasets,
                     isJustAdded: true
                 });
-                /* Dann den neuen Layer aus dem ElasicSearch-Ergebnis erzeugen */
                 this.addItemAtTop(gdiLayer);
-                /* und der ModelList hinzufügen */
                 Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
             }
 
