@@ -64,8 +64,6 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang
         });
-
-        this.changeLang();
     },
 
     /**

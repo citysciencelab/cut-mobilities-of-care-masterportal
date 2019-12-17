@@ -1,6 +1,7 @@
 {
     "button":{
-        "back": "Back"
+        "back": "Back",
+        "search": "search"
     },
     "modules": {
         "tools": {
@@ -72,6 +73,15 @@
                     "eastingLabel": "easting",
                     "northingLabel": "northing"
                 }
+            },
+            "searchByCoord": {
+                "exampleAcronym": "e.g.",
+                "ErrorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
+                },
+                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             }
         }
     },
