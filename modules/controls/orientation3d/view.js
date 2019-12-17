@@ -20,7 +20,8 @@ const Orientation3DView = Backbone.View.extend({
             "change": function () {
                 const changed = this.model.changed;
 
-                if (changed.pointerNorthText || changed.pointerSouthText || changed.pointerEastText || changed.pointerWestText || changed.moveNorthText || changed.moveSouthText || changed.moveWestText || changed.moveEastText || changed.tiltDownText || changed.tiltResetText || changed.zoomInText || changed.zoomOutText) {
+                if (changed.pointerNorthText) {
+                    // listening to one text changed should be enaught to know what's happening
                     this.render();
                 }
             }

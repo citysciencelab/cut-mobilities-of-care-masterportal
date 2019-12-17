@@ -33,9 +33,9 @@ const ButtonObliqueModel = Backbone.Model.extend(/** @lends ButtonObliqueModel.p
     */
     changeLang: function () {
         this.set({
-            "buttonTitle": i18next.t("common:modules.controls.oblique.buttonTitle"),
-            "openViewObliqueText": i18next.t("common:modules.controls.oblique.openViewOblique"),
-            "closeViewObliqueText": i18next.t("common:modules.controls.oblique.closeViewOblique")
+            buttonTitle: i18next.t("common:modules.controls.oblique.buttonTitle"),
+            openViewObliqueText: i18next.t("common:modules.controls.oblique.openViewOblique"),
+            closeViewObliqueText: i18next.t("common:modules.controls.oblique.closeViewOblique")
         });
     }
 });

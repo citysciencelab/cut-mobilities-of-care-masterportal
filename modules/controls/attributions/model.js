@@ -77,8 +77,8 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
     */
     changeLang: function () {
         this.set({
-            "showAttributionsText": i18next.t("common:modules.controls.attributions.showAttributions"),
-            "hideAttributionsText": i18next.t("common:modules.controls.attributions.hideAttributions")
+            showAttributionsText: i18next.t("common:modules.controls.attributions.showAttributions"),
+            hideAttributionsText: i18next.t("common:modules.controls.attributions.hideAttributions")
         });
     },
 

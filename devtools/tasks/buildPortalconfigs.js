@@ -1,5 +1,7 @@
 const fs = require("fs-extra"),
-    stableVersion = require("../../package.json").version.replace(/\./g, "_"),
+    path = require("path"),
+    rootPath = path.resolve(__dirname, "../../"),
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
     portalsForStableReplace = require("./buildPortalconfigsReplace"),
     execute = require("child-process-promise").exec,
     customPortalsForStableReplace = require("./customBuildPortalconfigsReplace"),
@@ -7,17 +9,17 @@ const fs = require("fs-extra"),
     conf = {
         sourceFolder: "portalconfigs",
         targetFolder: "dist/builtPortals",
-        stableVersion: stableVersion,
-        masterCodeFolder: "dist/builtPortals/Mastercode/" + stableVersion,
+        stableVersionNumber: stableVersionNumber,
+        masterCodeFolder: "dist/builtPortals/Mastercode/" + stableVersionNumber,
 
-        // folder where custom modules creation script saves its result
+        // folder where addons creation script saves its result
         tempPortalFolder: "dist/build",
         basicPortalFolder: "dist/basic"
     },
     confPortalConfigs = require("../../" + conf.sourceFolder + "/conf-buildPortalconfigs.js");
 
 /**
- * copy a portal without custom module
+ * copy a portal without addons
  * @param {String} portalName name from portal
  * @param {String[]} aPortalQueue contains names of portals to build
  * @returns {void}
@@ -30,7 +32,7 @@ function copyPortal (portalName, aPortalQueue) {
         }
         fileNames.forEach((sourceFile, index) => {
             fs.copy(conf.sourceFolder + "/" + portalName + "/" + sourceFile, conf.targetFolder + "/" + portalName + "/" + sourceFile).then(() => {
-                portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersion);
+                portalsForStableReplace(conf.targetFolder + "/" + portalName + "/" + sourceFile, conf.stableVersionNumber);
                 if (index === fileNames.length - 1) {
                     console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
                     // eslint-disable-next-line no-use-before-define
@@ -59,25 +61,25 @@ function createPortalsRec (aPortalQueue) {
 
     portalName = aPortalQueue.shift();
 
-    if (confPortalConfigs.customModules[portalName] === undefined || confPortalConfigs.customModules[portalName].initFile === undefined) {
+    if (confPortalConfigs.addons[portalName] === undefined || confPortalConfigs.addons[portalName].initFile === undefined) {
         copyPortal(portalName, aPortalQueue);
         createPortalsRec(aPortalQueue);
     }
     else {
-        command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE " + confPortalConfigs.customModules[portalName].initFile;
+        command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE " + confPortalConfigs.addons[portalName].initFile;
 
         console.warn("NOTE: Executing script: " + command);
         execute(command).then(function () {
             console.warn("NOTE: Finished script execution");
             fs.copy(conf.tempPortalFolder, conf.targetFolder + "/" + portalName).then(() => {
                 fs.copy(conf.sourceFolder + "/" + portalName + "/", conf.targetFolder + "/" + portalName).then(() => {
-                    if (Array.isArray(confPortalConfigs.customModules[portalName].ignoreList) && confPortalConfigs.customModules[portalName].ignoreList.length > 0) {
-                        confPortalConfigs.customModules[portalName].ignoreList.forEach(fileOrFolder => {
+                    if (Array.isArray(confPortalConfigs.addons[portalName].ignoreList) && confPortalConfigs.addons[portalName].ignoreList.length > 0) {
+                        confPortalConfigs.addons[portalName].ignoreList.forEach(fileOrFolder => {
                             fs.remove(conf.targetFolder + "/" + portalName + "/" + fileOrFolder);
                         });
                     }
 
-                    customPortalsForStableReplace(conf.targetFolder + "/" + portalName, conf.stableVersion);
+                    customPortalsForStableReplace(conf.targetFolder + "/" + portalName, conf.stableVersionNumber);
                     console.warn("NOTE: Portal finished building: \"" + portalName + "\"");
                     createPortalsRec(aPortalQueue);
                 });

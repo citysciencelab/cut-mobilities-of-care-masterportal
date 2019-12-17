@@ -101,7 +101,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
 
     /**
      * initial render function for the table UiStyle - this is necessary because $el has classes attached that are styled for red buttons (which are not used in table style)
-     * @pre the bound element $e is in its initial state (with some css classes)
+     * @pre the bound element $el is in its initial state (with some css classes)
      * @post the table template is attached to $el, $el has been striped from its css classes and $el is append to the list #table-tools-menu
      * @returns {Void}  -
      */
@@ -115,7 +115,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
 
     /**
      * render function for the table UiStyle
-     * @pre the bound element $e is something
+     * @pre the bound element $el is something
      * @post the table template is attached to $el
      * @fires Core#RadioRequestObliqueMapIsActive
      * @returns {ButtonObliqueView} - Returns itself

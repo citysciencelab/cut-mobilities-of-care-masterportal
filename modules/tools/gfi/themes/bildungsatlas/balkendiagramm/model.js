@@ -163,15 +163,15 @@ const BalkendiagrammTheme = Theme.extend({
                 result[key] = "*g.F.";
             }
             else if (themeUnit === "anzahl") {
-                value = this.getValuebByKey(content[key]);
+                value = this.getValueByKey(content[key]);
                 result[key] = Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
             else if (themeUnit === "anteil") {
-                value = this.getValuebByKey(content[key]);
+                value = this.getValueByKey(content[key]);
                 result[key] = Math.round(value) + "%";
             }
             else if (themeUnit === "anteilWanderungen") {
-                value = this.getValuebByKey(content[key]);
+                value = this.getValueByKey(content[key]);
                 if (key.includes("im Statistischen Gebiet") || key.includes("In " + nameStadtteil)) {
                     result[key] = (value > 0 ? "+" : "") + (Math.round(value * 100) / 100).toString().replace(/\./g, ",");
                 }
@@ -191,7 +191,7 @@ const BalkendiagrammTheme = Theme.extend({
      * @param {object} value the value from the content with individual key
      * @returns {String}  - the well formed value to be shown on mouse hover
      */
-    getValuebByKey (value) {
+    getValueByKey (value) {
         if (isNaN(Number(value))) {
             return 0;
         }

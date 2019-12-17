@@ -74,8 +74,8 @@ const OrientationModel = Backbone.Model.extend({
      */
     changeLang: function () {
         this.set({
-            "titleGeolocate": i18next.t("common:modules.controls.orientation.titleGeolocate"),
-            "titleGeolocatePOI": i18next.t("common:modules.controls.orientation.titleGeolocatePOI")
+            titleGeolocate: i18next.t("common:modules.controls.orientation.titleGeolocate"),
+            titleGeolocatePOI: i18next.t("common:modules.controls.orientation.titleGeolocatePOI")
         });
     },
 
@@ -193,7 +193,7 @@ const OrientationModel = Backbone.Model.extend({
     },
     onError: function () {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>" + i18next.t("common:modules.controls.orientation.geolocationDeniedText") + ": </strong>",
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.geolocationDeniedText") + " </strong>",
             kategorie: "alert-danger"
         });
         this.setIsGeolocationDenied(true);
@@ -201,7 +201,7 @@ const OrientationModel = Backbone.Model.extend({
     },
     onPOIError: function (evt) {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>" + i18next.t("common:modules.controls.orientation.trackingDeniedText") + ": </strong>" + evt.message,
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.trackingDeniedText") + " </strong>" + evt.message,
             kategorie: "alert-danger"
         });
         this.untrack();

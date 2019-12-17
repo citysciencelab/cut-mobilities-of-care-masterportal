@@ -30,9 +30,9 @@ const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype *
     */
     changeLang: function () {
         this.set({
-            "buttonTitle": i18next.t("common:modules.controls.3d.buttonTitle"),
-            "openView3dText": i18next.t("common:modules.controls.3d.openView3d"),
-            "closeView3dText": i18next.t("common:modules.controls.3d.closeView3d")
+            buttonTitle: i18next.t("common:modules.controls.3d.buttonTitle"),
+            openView3dText: i18next.t("common:modules.controls.3d.openView3d"),
+            closeView3dText: i18next.t("common:modules.controls.3d.closeView3d")
         });
     }
 });

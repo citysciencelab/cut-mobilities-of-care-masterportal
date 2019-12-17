@@ -31,8 +31,8 @@ const ZoomControlModel = Backbone.Model.extend(/** @lends ZoomControlModel.proto
     */
     changeLang: function () {
         this.set({
-            "zoomInText": i18next.t("common:modules.controls.zoom.zoomIn"),
-            "zoomOutText": i18next.t("common:modules.controls.zoom.zoomOut")
+            zoomInText: i18next.t("common:modules.controls.zoom.zoomIn"),
+            zoomOutText: i18next.t("common:modules.controls.zoom.zoomOut")
         });
     }
 });

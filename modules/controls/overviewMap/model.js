@@ -57,10 +57,10 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      */
     changeLang: function () {
         this.set({
-            "showOverviewControlText": i18next.t("common:modules.controls.overviewMap.showOverviewControl"),
-            "hideOverviewControlText": i18next.t("common:modules.controls.overviewMap.hideOverviewControl"),
-            "showOverviewTableText": i18next.t("common:modules.controls.overviewMap.showOverviewTable"),
-            "hideOverviewTableText": i18next.t("common:modules.controls.overviewMap.hideOverviewTable")
+            showOverviewControlText: i18next.t("common:modules.controls.overviewMap.showOverviewControl"),
+            hideOverviewControlText: i18next.t("common:modules.controls.overviewMap.hideOverviewControl"),
+            showOverviewTableText: i18next.t("common:modules.controls.overviewMap.showOverviewTable"),
+            hideOverviewTableText: i18next.t("common:modules.controls.overviewMap.hideOverviewTable")
         });
     },
 

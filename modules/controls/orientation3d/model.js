@@ -39,18 +39,18 @@ const Orientation3DModel = Backbone.Model.extend(/** @lends Orientation3DModel.p
     */
     changeLang: function () {
         this.set({
-            "pointerNorthText": i18next.t("common:modules.controls.orientation3d.compass.pointerNorth"),
-            "pointerSouthText": i18next.t("common:modules.controls.orientation3d.compass.pointerSouth"),
-            "pointerEastText": i18next.t("common:modules.controls.orientation3d.compass.pointerEast"),
-            "pointerWestText": i18next.t("common:modules.controls.orientation3d.compass.pointerWest"),
-            "moveNorthText": i18next.t("common:modules.controls.orientation3d.compass.moveNorth"),
-            "moveSouthText": i18next.t("common:modules.controls.orientation3d.compass.moveSouth"),
-            "moveWestText": i18next.t("common:modules.controls.orientation3d.compass.moveWest"),
-            "moveEastText": i18next.t("common:modules.controls.orientation3d.compass.moveEast"),
-            "tiltDownText": i18next.t("common:modules.controls.orientation3d.control.tiltDown"),
-            "tiltResetText": i18next.t("common:modules.controls.orientation3d.control.tiltReset"),
-            "zoomInText": i18next.t("common:modules.controls.orientation3d.control.zoomIn"),
-            "zoomOutText": i18next.t("common:modules.controls.orientation3d.control.zoomOut")
+            pointerNorthText: i18next.t("common:modules.controls.orientation3d.compass.pointerNorth"),
+            pointerSouthText: i18next.t("common:modules.controls.orientation3d.compass.pointerSouth"),
+            pointerEastText: i18next.t("common:modules.controls.orientation3d.compass.pointerEast"),
+            pointerWestText: i18next.t("common:modules.controls.orientation3d.compass.pointerWest"),
+            moveNorthText: i18next.t("common:modules.controls.orientation3d.compass.moveNorth"),
+            moveSouthText: i18next.t("common:modules.controls.orientation3d.compass.moveSouth"),
+            moveWestText: i18next.t("common:modules.controls.orientation3d.compass.moveWest"),
+            moveEastText: i18next.t("common:modules.controls.orientation3d.compass.moveEast"),
+            tiltDownText: i18next.t("common:modules.controls.orientation3d.control.tiltDown"),
+            tiltResetText: i18next.t("common:modules.controls.orientation3d.control.tiltReset"),
+            zoomInText: i18next.t("common:modules.controls.orientation3d.control.zoomIn"),
+            zoomOutText: i18next.t("common:modules.controls.orientation3d.control.zoomOut")
         });
     }
 });

@@ -43,7 +43,7 @@ const CompareFeaturesView = Backbone.View.extend({
     render: function (model, value) {
         if (value) {
             if (model.get("featureList").length === 0) {
-                this.renderErrorModal();
+                this.renderErrorModal(model);
             }
             else {
                 this.renderListModal(model);
@@ -64,13 +64,13 @@ const CompareFeaturesView = Backbone.View.extend({
         // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
         var realLayerId = model.get("layerId").split("_")[0],
             layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": realLayerId}),
-            attr = {
+            attr = Object.assign(model.toJSON(), {
                 list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
                 rowsToShow: model.get("numberOfAttributesToShow"),
                 featureIds: model.getFeatureIds(model.get("groupedFeatureList"), model.get("layerId")),
                 layerSelection: model.getLayerSelection(model.get("groupedFeatureList")),
                 layerId: model.get("layerId")
-            };
+            });
 
         this.$el.html(this.template(attr));
     },
@@ -80,21 +80,38 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     renderFeedbackModal: function (feature) {
-        this.$el.html(this.templateFeedback({feature: feature}));
+        const schoolName = feature.get("schulname"),
+            added = i18next.t("common:modules.tools.compareFeatures.feedback.added", {object: schoolName}),
+            notAdded = i18next.t("common:modules.tools.compareFeatures.feedback.notAdded", {object: schoolName}),
+            attr = Object.assign(this.model.toJSON(), {added: added, notAdded: notAdded, feature: feature});
+
+        this.$el.html(this.templateFeedback(attr));
         this.$el.modal("show");
     },
 
     /**
+     * Renders a modal window to inform user that nothing is selected for compare.
+     * @param {Object} model - the dedicated model
      * @returns {void}
      */
-    renderErrorModal: function () {
-        var comparableLayerModels = Radio.request("ModelList", "getModelsByAttributes", {isComparable: true}),
-            displayText = "Objekte";
+    renderErrorModal: function (model) {
+        const comparableLayerModels = Radio.request("ModelList", "getModelsByAttributes", {isComparable: true}),
+            emptyStar = "<span class=\"glyphicon glyphicon-star-empty\"></span>",
+            yellowStar = "<span class=\"glyphicon glyphicon-star\"></span>",
+            info = i18next.t("common:modules.tools.compareFeatures.noFeatures.info", {iconEmptyStar: emptyStar, iconYellowStar: yellowStar, interpolation: {escapeValue: false}});
+        let objectsText,
+            nothingSelectedText = null,
+            attr = null;
 
         if (comparableLayerModels.length > 0 && comparableLayerModels.length < 2) {
-            displayText = comparableLayerModels[0].get("name");
+            objectsText = comparableLayerModels[0].get("name");
         }
-        this.$el.html(this.templateNoFeatures({text: displayText}));
+        else {
+            objectsText = i18next.t("common:modules.tools.compareFeatures.noFeatures.objectName");
+        }
+        nothingSelectedText = i18next.t("common:modules.tools.compareFeatures.noFeatures.nothingSelected", {objects: objectsText});
+        attr = Object.assign(model.toJSON(), {nothingSelected: nothingSelectedText, info: info});
+        this.$el.html(this.templateNoFeatures(attr));
     },
 
     /**
@@ -126,11 +143,11 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     toggleRows: function (evt) {
-        var text = "mehr Infos";
+        var text = this.model.get("moreInfo");
 
         this.$el.find(".toggle-row").toggle();
-        if (evt.target.textContent === "mehr Infos") {
-            text = "weniger Infos";
+        if (evt.target.textContent === text) {
+            text = this.model.get("lessInfo");
         }
         evt.target.textContent = text;
     },

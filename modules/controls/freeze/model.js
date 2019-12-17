@@ -36,9 +36,9 @@ const FreezeModel = Backbone.Model.extend({
     */
     changeLang: function () {
         this.set({
-            "freezeText": i18next.t("common:modules.controls.freeze.freeze"),
-            "unfreezeText": i18next.t("common:modules.controls.freeze.unfreeze"),
-            "name": i18next.t("common:modules.controls.freeze.freezeTable")
+            freezeText: i18next.t("common:modules.controls.freeze.freeze"),
+            unfreezeText: i18next.t("common:modules.controls.freeze.unfreeze"),
+            name: i18next.t("common:modules.controls.freeze.freezeTable")
         });
     },
 

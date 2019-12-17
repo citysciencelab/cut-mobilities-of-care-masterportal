@@ -33,8 +33,8 @@ const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.proto
     */
     changeLang: function () {
         this.set({
-            "stepForwardText": i18next.t("common:modules.controls.backForward.stepForward"),
-            "stepBackwardText": i18next.t("common:modules.controls.backForward.stepBackward")
+            stepForwardText: i18next.t("common:modules.controls.backForward.stepForward"),
+            stepBackwardText: i18next.t("common:modules.controls.backForward.stepBackward")
         });
     },
 

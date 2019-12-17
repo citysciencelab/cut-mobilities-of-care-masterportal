@@ -27,7 +27,6 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
             });
             this.render();
         }
-
         else if (style === "TABLE") {
             this.listenTo(Radio.channel("MenuLoader"), {
                 /**
