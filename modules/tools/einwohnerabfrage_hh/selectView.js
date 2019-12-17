@@ -27,9 +27,11 @@ const SelectView = Backbone.View.extend(/** @lends SelectView.prototype */{
         });
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": () => {
-                this.render(this.model, true);
-                // reset selection by box, circle or polygon
-                this.model.changeGraphicalSelectStatus(true);
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                    // reset selection by box, circle or polygon
+                    this.model.changeGraphicalSelectStatus(true);
+                }
             }
         });
         this.snippetDropdownView = new GraphicalSelectView({model: this.model.get("snippetDropdownModel")});
