@@ -2269,10 +2269,10 @@
  * @param {string} [featureAttribute] - if given, only one entry of map is returned
  */
 
-/** -------------------- CUSTOMMODULE -------------------- */
+/** -------------------- ADDON -------------------- */
 
 /**
- * @event CustomModule#RadioRequestCustomModuleGetMarkerPosition
+ * @event Addon#RadioRequestAddonGetMarkerPosition
  * @description todo
  */
 
