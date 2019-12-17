@@ -9,7 +9,7 @@ import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
 import {toLonLat, transform} from "ol/proj";
 
-const DrawTool = Tool.extend({
+const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         drawInteraction: undefined,
         selectInteraction: undefined,
@@ -74,7 +74,7 @@ const DrawTool = Tool.extend({
 
         this.superInitialize();
 
-        this.setMethodCircle("interaktiv");
+        this.setMethodCircle("interactiv");
 
         channel.reply({
             "getLayer": function () {
@@ -123,7 +123,7 @@ const DrawTool = Tool.extend({
             drawType = this.get("drawType");
 
         this.setAddFeatureListener(layerSource.once("addfeature", function (evt) {
-            if (this.get("methodCircle") === "definiert" && drawType.geometry === "Circle") {
+            if (this.get("methodCircle") === "defined" && drawType.geometry === "Circle") {
 
                 const radiusInner = this.get("circleRadiusInner"),
                     radiusOuter = this.get("circleRadiusOuter"),
@@ -132,35 +132,39 @@ const DrawTool = Tool.extend({
                     circleRadius = this.getDefinedRadius(doubleIsActive, radiusOuter, radiusInner),
                     circleCenter = evt.feature.getGeometry().getCenter();
 
-                if (innerRadius !== undefined && outerRadius !== undefined && drawType.text === "Doppelkreis zeichnen") {
-                    this.calculateCircle(evt, circleCenter, circleRadius);
-                    $(".circleRadiusInner input")[0].style.borderColor = "";
-                    $(".circleRadiusOuter input")[0].style.borderColor = "";
-                }
-                else if (innerRadius !== undefined && drawType.text !== "Doppelkreis zeichnen") {
-                    this.calculateCircle(evt, circleCenter, circleRadius);
-                    $(".circleRadiusInner input")[0].style.borderColor = "";
-                }
-                else if (innerRadius === undefined && outerRadius === undefined && drawType.text === "Doppelkreis zeichnen") {
-                    this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie beide Kreise.", drawType);
+                if (innerRadius === undefined) {
                     $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
-                    $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
+                    if (drawType.text === "Doppelkreis zeichnen") {
+                        if (outerRadius === undefined) {
+                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie beide Kreise.");
+                            $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
+                        }
+                        else {
+                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den inneren Kreis.");
+                            $(".circleRadiusOuter input")[0].style.borderColor = "";
+                        }
+                    }
+                    else {
+                        this.alertForgetToDefineRadius(evt, layer, "Bitte geben Sie einen Durchmesser an.");
+                        $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
+                    }
                 }
-                else if (innerRadius !== undefined && outerRadius === undefined && drawType.text === "Doppelkreis zeichnen") {
-                    this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den äußeren Kreis.", drawType);
+                else if (innerRadius !== undefined) {
+                    if (outerRadius === undefined) {
+                        if (drawType.text === "Doppelkreis zeichnen") {
+                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den äußeren Kreis.");
+                            $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
+                        }
+                        else {
+                            this.calculateCircle(evt, circleCenter, circleRadius);
+                        }
+                    }
+                    else {
+                        this.calculateCircle(evt, circleCenter, circleRadius);
+                        $(".circleRadiusOuter input")[0].style.borderColor = "";
+                    }
                     $(".circleRadiusInner input")[0].style.borderColor = "";
-                    $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
                 }
-                else if (innerRadius === undefined && outerRadius !== undefined && drawType.text === "Doppelkreis zeichnen") {
-                    this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den inneren Kreis.", drawType);
-                    $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
-                    $(".circleRadiusOuter input")[0].style.borderColor = "";
-                }
-                else if (innerRadius === undefined && drawType.text !== "Doppelkreis zeichnen") {
-                    this.alertForgetToDefineRadius(evt, layer, "Bitte geben Sie einen Durchmesser an.", drawType);
-                    $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
-                }
-
                 evt.feature.setStyle(this.getStyle());
                 this.countupZIndex();
             }
@@ -170,7 +174,7 @@ const DrawTool = Tool.extend({
             }
         }.bind(this)));
 
-        if (this.get("methodCircle") === "definiert" && this.get("drawType").geometry === "Circle") {
+        if (this.get("methodCircle") === "defined" && this.get("drawType").geometry === "Circle") {
             drawInteraction.finishDrawing();
         }
     },
@@ -181,12 +185,7 @@ const DrawTool = Tool.extend({
      * @returns {undefined} - returns undefined.
      */
     transformNaNToUndefined: function (radius) {
-        let transformedRadius = radius;
-
-        if (isNaN(transformedRadius) === true) {
-            transformedRadius = undefined;
-        }
-        return transformedRadius;
+        return isNaN(radius) ? undefined : radius;
     },
 
     /**
@@ -198,15 +197,7 @@ const DrawTool = Tool.extend({
      * @returns {Number} - returns the circle radius.
      */
     getDefinedRadius: function (doubleIsActive, circleRadiusOuter, circleRadiusInner) {
-        let circleRadius;
-
-        if (doubleIsActive === true) {
-            circleRadius = circleRadiusOuter;
-        }
-        else {
-            circleRadius = circleRadiusInner;
-        }
-        return circleRadius;
+        return doubleIsActive ? circleRadiusOuter : circleRadiusInner;
     },
 
     /**
@@ -283,18 +274,10 @@ const DrawTool = Tool.extend({
      * @param   {Event} evt - DrawEvent with the drawn-feature.
      * @param   {Number} layer - Layer with the drawFeatures.
      * @param   {String} textMessage - Message shown up in the alert window.
-     * @param {object} drawType - contains the geometry and description
      * @returns {Layer} - returns the layer without the event feature.
      */
-    alertForgetToDefineRadius: function (evt, layer, textMessage, drawType) {
-
-        if (drawType.text === "Doppelkreis zeichnen") {
-            Radio.trigger("Alert", "alert", textMessage);
-        }
-        else {
-            Radio.trigger("Alert", "alert", textMessage);
-        }
-
+    alertForgetToDefineRadius: function (evt, layer, textMessage) {
+        Radio.trigger("Alert", "alert", textMessage);
         layer.getSource().removeFeature(evt.feature);
 
         return layer;
@@ -1082,11 +1065,11 @@ const DrawTool = Tool.extend({
     },
 
     /**
-     * activate the method "definiert", to define a circle by diameter.
+     * activate the method "defined", to define a circle by diameter.
      * @param {boolean} deEnable - true or false to enable or disable.
      * @return {void}
      */
-    enableMethodDefiniert: function (deEnable) {
+    enableMethodDefined: function (deEnable) {
         if ($(".dropdownUnit select")[0] !== undefined && $(".circleRadiusInner input")[0] !== undefined) {
             $(".dropdownUnit select")[0].disabled = deEnable;
             $(".circleRadiusInner input")[0].disabled = deEnable;
@@ -1110,11 +1093,11 @@ const DrawTool = Tool.extend({
         $(".opacityContour select")[0].disabled = disAble;
         $(".color select")[0].disabled = disAble;
         $(".colorContour select")[0].disabled = disAble;
-        if (disAble === false && this.get("methodCircle") === "definiert") {
-            this.enableMethodDefiniert(disAble);
+        if (disAble === false && this.get("methodCircle") === "defined") {
+            this.enableMethodDefined(disAble);
         }
         else {
-            this.enableMethodDefiniert(true);
+            this.enableMethodDefined(true);
         }
     },
 
@@ -1162,13 +1145,13 @@ const DrawTool = Tool.extend({
      */
     setDrawType: function (value1, value2) {
         if (value2 !== "Doppelkreis zeichnen" && value2 !== undefined) {
-            $(".input-method").val("interaktiv");
-            this.enableMethodDefiniert(true);
-            this.setMethodCircle("interaktiv");
+            $(".input-method").val("interactiv");
+            this.enableMethodDefined(true);
+            this.setMethodCircle("interactiv");
         }
         else if (value2 === "Doppelkreis zeichnen" && value2 !== undefined) {
-            this.enableMethodDefiniert(false);
-            this.setMethodCircle("definiert");
+            this.enableMethodDefined(false);
+            this.setMethodCircle("defined");
         }
         this.combineColorOpacityContour(this.defaults.opacityContour);
         $(".input-opacity").val("1.0");
@@ -1298,7 +1281,7 @@ const DrawTool = Tool.extend({
 
     /**
      * Setter for the method to draw a circle.
-     * @param {string} value - interaktiv or definiert
+     * @param {string} value - interactive or defined
      * @returns {void}
      */
     setMethodCircle: function (value) {

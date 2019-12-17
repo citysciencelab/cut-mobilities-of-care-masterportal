@@ -260,7 +260,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             selectedElement = element.options[element.selectedIndex];
 
         if (selectedElement.text === "Doppelkreis zeichnen") {
-            this.model.enableMethodDefiniert(false);
+            this.model.enableMethodDefined(false);
         }
         this.model.setDrawType(selectedElement.value, selectedElement.text);
         this.model.updateDrawInteraction();
@@ -407,11 +407,11 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
 
     setMethodCircle: function (evt) {
 
-        if (evt.target.value === "definiert") {
-            this.model.enableMethodDefiniert(false);
+        if (evt.target.value === "defined") {
+            this.model.enableMethodDefined(false);
         }
-        else if (evt.target.value === "interaktiv") {
-            this.model.enableMethodDefiniert(true);
+        else if (evt.target.value === "interactiv") {
+            this.model.enableMethodDefined(true);
         }
         this.model.setMethodCircle(evt.target.value);
     },
