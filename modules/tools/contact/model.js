@@ -14,7 +14,9 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         cc: [],
         ccToUser: false,
         bcc: [],
-        textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
+        textPlaceholder: "",
+        userNamePlaceholder: "Ihr Name",
+        textSendButton: "Abschicken",
         text: "",
         url: "",
         ticketId: "",
@@ -74,6 +76,23 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     initialize: function () {
         this.superInitialize();
         this.setAttributes(Radio.request("Parser", "getPortalConfig"));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set("textPlaceholder", i18next.t("common:modules.tools.contact.textPlaceholder"));
+        this.set("userNamePlaceholder", i18next.t("common:modules.tools.contact.userNamePlaceholder"));
+        this.set("textSendButton", i18next.t("common:modules.tools.contact.textSendButton"));
     },
 
     /**
