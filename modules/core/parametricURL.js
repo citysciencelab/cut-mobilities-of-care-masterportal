@@ -292,7 +292,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
             }
         }, this);
-
+        
         this.setLayerParams(layerParams);
     },
 
@@ -370,7 +370,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     parseZOOMTOEXTENT: function (result) {
         const values = result.split(",");
 
-        this.set("zoomToExtent", [parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3])]);
+        this.setZoomToExtent([parseFloat(values[0]), parseFloat(values[1]), parseFloat(values[2]), parseFloat(values[3])]);
     },
 
     /**
@@ -680,6 +680,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     setZoomToGeometry: function (value) {
         this.set("zoomToGeometry", value);
+    },
+
+    /**
+     * Setter for zoomToExtent.
+     * @param {*} value - todo
+     * @returns {void}
+     */
+    setZoomToExtent: function (value) {
+        this.set("zoomToExtent", value);
     }
 });
 
