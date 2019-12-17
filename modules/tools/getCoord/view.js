@@ -104,13 +104,13 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     adjustWindow: function (targetProjection) {
         // geographische Koordinaten
         if (targetProjection.projName === "longlat") {
-            this.$("#coordinatesEastingLabel").text("Breite");
-            this.$("#coordinatesNorthingLabel").text("Länge");
+            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"));
+            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.northingLabel"));
         }
         // kartesische Koordinaten
         else {
-            this.$("#coordinatesEastingLabel").text("Rechtswert");
-            this.$("#coordinatesNorthingLabel").text("Hochwert");
+            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"));
+            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"));
         }
     },
 
