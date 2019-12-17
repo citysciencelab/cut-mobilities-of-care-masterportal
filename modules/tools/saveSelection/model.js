@@ -10,8 +10,10 @@ const SaveSelection = Tool.extend({
         url: "",
         simpleMap: false,
         renderToWindow: true,
-        glyphicon: "glyphicon-share"
+        glyphicon: "glyphicon-share",
+        saveSelectionText: ""
     }),
+
     initialize: function () {
         var channel = Radio.channel("SaveSelection");
 
@@ -39,6 +41,18 @@ const SaveSelection = Tool.extend({
             },
             "change:zoomLevel change:centerCoords": this.setUrl,
             "change:url": this.setSimpleMapUrl
+        });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    changeLang: function () {
+        this.set({
+            "saveSelectionText": i18next.t("common:modules.tools.saveSelection.saveSelectionText")
         });
     },
 

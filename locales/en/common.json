@@ -58,6 +58,9 @@
                     "removeObjects": "Please remove at least one object before proceeding.",
                     "gotoComparisonlist": "To the comparison list"
                 }
+            },
+            "saveSelection": {
+                "saveSelectionText": "Save this URL as a bookmark"
             }
         }
     },

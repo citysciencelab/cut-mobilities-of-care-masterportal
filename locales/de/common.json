@@ -58,6 +58,9 @@
                     "removeObjects": "Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.",
                     "gotoComparisonlist": "Zur Vergleichsliste"
                 }
+            },
+            "saveSelection": {
+                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
             }
         }
     },
