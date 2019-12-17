@@ -2,6 +2,10 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
+        layerParams: [],
+        isInitOpen: [],
+        zoomToGeometry: "",
+        zoomToFeatureIds: []
     },
 
     /**
@@ -10,6 +14,10 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @extends Backbone.Model
      * @memberOf Core
      * @constructs
+     * @property {String[]} layerParamas=[] Parameters to show layers.
+     * @property {String[]} isInitOpen="" Tool to be opened initially.
+     * @property {string} zoomToGeometry=[] Geoemtry to be zoomed on.
+     * @property {String[]} zoomToFeatureIds=[] Features to be zoomed in on.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -292,7 +300,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
             }
         }, this);
-        
+
         this.setLayerParams(layerParams);
     },
 
