@@ -293,15 +293,15 @@ describe("drawModel", function () {
 
             expect(model.get("methodCircle")).to.be.undefined;
         });
-        it("should return 'interaktiv'", function () {
+        it("should return 'interactiv'", function () {
             model.setDrawType("Circle", "Kreis zeichnen");
 
-            expect(model.get("methodCircle")).to.deep.equal("interaktiv");
+            expect(model.get("methodCircle")).to.deep.equal("interactiv");
         });
-        it("should return 'definiert'", function () {
+        it("should return 'defined'", function () {
             model.setDrawType("Circle", "Doppelkreis zeichnen");
 
-            expect(model.get("methodCircle")).to.deep.equal("definiert");
+            expect(model.get("methodCircle")).to.deep.equal("defined");
         });
     });
 
