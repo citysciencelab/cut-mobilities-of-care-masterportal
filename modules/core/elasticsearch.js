@@ -75,7 +75,7 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
     xhrSend: function (serviceId, url, xhrConfig, result) {
         const xhr = new XMLHttpRequest(),
             type = xhrConfig.type || "POST",
-            payload = xhrConfig.payload || undefined,
+            payload = xhrConfig.payload,
             async = xhrConfig.async || false,
             responseEntryPath = xhrConfig.responseEntryPath || "",
             that = this,

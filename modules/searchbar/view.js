@@ -147,7 +147,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (_.has(config, "gdi") === true) {
             new GdiModel(config.gdi);
         }
-        if (_.has(config, "elasticSearch") === true) {
+        if (config.hasOwnProperty("elasticSearch")) {
             new ElasticSearchModel(config.elasticSearch);
         }
 
