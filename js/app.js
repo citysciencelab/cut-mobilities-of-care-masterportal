@@ -87,7 +87,7 @@ var sbconfig, controls, controlsView;
  */
 function loadApp () {
     /* eslint-disable no-undef */
-    const allCustomModules = Object.is(CUSTOMMODULES, {}) ? {} : CUSTOMMODULES;
+    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS;
     /* eslint-disable no-undef */
 
     // Prepare config for Utils
@@ -455,19 +455,19 @@ function loadApp () {
 
     new HighlightFeature();
 
-    if (Config.customModules !== undefined) {
-        Config.customModules.forEach((customModuleKey) => {
-            if (allCustomModules[customModuleKey] !== undefined) {
+    if (Config.addons !== undefined) {
+        Config.addons.forEach((addonKey) => {
+            if (allAddons[addonKey] !== undefined) {
                 // .js need to be removed so webpack only searches for .js files
-                const entryPoint = allCustomModules[customModuleKey].replace(/\.js$/, "");
+                const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ `../customModules/${entryPoint}.js`).then(module => {
+                import(/* webpackChunkName: "[request]" */ `../addons/${entryPoint}.js`).then(module => {
                     /* eslint-disable new-cap */
-                    const customModule = new module.default();
+                    const addon = new module.default();
 
-                    // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
-                    if (customModule.model) {
-                        Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
+                    // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                    if (addon.model) {
+                        Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
                     }
                 }).catch(error => {
                     console.error(error);

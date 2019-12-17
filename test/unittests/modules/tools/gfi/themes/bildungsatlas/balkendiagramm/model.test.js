@@ -183,19 +183,19 @@ describe("tools/gfi/themes/bildungsatlas/balkendiagramm", function () {
         });
     });
 
-    describe("getValuebByKey", function () {
+    describe("getValueByKey", function () {
         let result,
             value;
 
         it("should return 0", function () {
             value = "not text";
-            result = model.getValuebByKey(value);
+            result = model.getValueByKey(value);
             expect(result).to.equal(0);
         });
 
         it("should return the same value", function () {
             value = 20;
-            result = model.getValuebByKey(value);
+            result = model.getValueByKey(value);
             expect(result).to.equal(20);
         });
     });

@@ -1,7 +1,7 @@
 # Include your project-specific ignores in this file
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
-!customModules/customModules.md
+!addons/addons.md
 *.sass-cache
 .DS_Store
 .env
@@ -15,7 +15,7 @@ components
 coverage
 css/bootstrap.css
 css/modules.css
-customModules/*
+addons/*
 debug.log
 devtools/proxyconf.json
 dist

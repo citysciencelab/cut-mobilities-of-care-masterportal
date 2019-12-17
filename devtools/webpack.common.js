@@ -4,12 +4,12 @@ const webpack = require("webpack"),
     fs = require("fs"),
 
     rootPath = path.resolve(__dirname, "../"),
-    customModulePath = path.resolve(rootPath, "customModules/"),
-    customModuleConfigPath = path.resolve(customModulePath, "customModulesConf.json"),
+    addonPath = path.resolve(rootPath, "addons/"),
+    addonConfigPath = path.resolve(addonPath, "addonsConf.json"),
     portalconfigsIdaPath = path.resolve(rootPath, "portalconfigs/ida/main.js"),
     entryPoints = {masterportal: path.resolve(rootPath, "js/main.js")};
 
-let customModuleEntryPoints = {};
+let addonEntryPoints = {};
 
 if (!fs.existsSync(portalconfigsIdaPath)) {
     console.warn("NOTICE: " + portalconfigsIdaPath + " not found. Skipping entrypoint for \"IDA\"");
@@ -18,42 +18,42 @@ else {
     entryPoints.ida = portalconfigsIdaPath;
 }
 
-if (!fs.existsSync(customModuleConfigPath)) {
-    console.warn("NOTICE: " + customModuleConfigPath + " not found. Skipping all custommodules.");
+if (!fs.existsSync(addonConfigPath)) {
+    console.warn("NOTICE: " + addonConfigPath + " not found. Skipping all addons.");
 }
 else {
-    customModuleEntryPoints = require(customModuleConfigPath);
+    addonEntryPoints = require(addonConfigPath);
 }
 
 module.exports = function () {
-    const customModulesRelPaths = {};
+    const addonsRelPaths = {};
 
-    for (const customModuleName in customModuleEntryPoints) {
-        if (typeof customModuleEntryPoints[customModuleName] !== "string") {
+    for (const addonName in addonEntryPoints) {
+        if (typeof addonEntryPoints[addonName] !== "string") {
             console.error("############\n------------");
-            throw new Error("ERROR: WRONG ENTRY IN \"" + customModuleConfigPath + "\" at key \"" + customModuleName + "\"\nABORTED...");
+            throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
         }
 
-        const customModuleFilePath = path.resolve(customModulePath, customModuleName, customModuleEntryPoints[customModuleName]);
+        const addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
 
-        if (!fs.existsSync(customModuleFilePath)) {
+        if (!fs.existsSync(addonFilePath)) {
             console.error("############\n------------");
-            throw new Error("ERROR: FILE DOES NOT EXIST \"" + customModuleFilePath + "\"\nABORTED...");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
         }
 
-        customModulesRelPaths[customModuleName] = [customModuleName, customModuleEntryPoints[customModuleName]].join("/");
+        addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
     }
 
     return {
         entry: entryPoints,
         stats: {
             all: false,
-            assets: true,
-            // chunkModules: true,
-            colors: true,
-            entrypoints: true,
-            // modules: true,
-            outputPath: true
+            colors: true
+            // assets: true
+            // chunkModules: true
+            // entrypoints: true
+            // modules: true
+            // outputPath: true
         },
         /*
         optimization: {
@@ -134,7 +134,7 @@ module.exports = function () {
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                CUSTOMMODULES: JSON.stringify(customModulesRelPaths)
+                ADDONS: JSON.stringify(addonsRelPaths)
             })
         ]
     };
