@@ -7,7 +7,6 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
      * @extends Backbone.View
      * @memberof language
      * @constructs
-     * @listens Title#RadioTriggerTitleSetSize
      */
     initialize: function () {
         this.model = new Model();
@@ -62,7 +61,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
         lngLink.unbind("click");
         lngLink.click(function () {
             i18next.changeLanguage($(this).data("code"));
-            content.find(".popup").hide();
+            content.find(".popup-language").hide();
         });
     },
 
@@ -73,7 +72,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
      */
     showLanguageList: function (content) {
         content.find(".currentLan").click(function () {
-            content.find(".popup").show();
+            content.find(".popup-language").show();
         });
     },
 
@@ -84,7 +83,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
      */
     closePopup: function (content) {
         content.find(".lng-header span").click(function () {
-            content.find(".popup").hide();
+            content.find(".popup-language").hide();
         });
     }
 });

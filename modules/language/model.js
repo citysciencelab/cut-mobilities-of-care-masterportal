@@ -24,8 +24,8 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
-    changeLang: function () {
-        const defaultCode = i18next.language,
+    changeLang: function (lng) {
+        const defaultCode = lng,
             languageCode = i18next.options.getLanguages();
 
         if (defaultCode) {
