@@ -14,7 +14,13 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
         currentProjectionName: "EPSG:25832",
         deactivateGFI: true,
         renderToWindow: true,
-        glyphicon: "glyphicon-screenshot"
+        glyphicon: "glyphicon-screenshot",
+
+        coordSystemField: "",
+        hdmsEastingLabel: "",
+        hdmsNorthingLabel: "",
+        cartesianEastingLabel: "",
+        cartesianNorthingLabel: ""
     }),
 
     /**
@@ -53,6 +59,27 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
                     this.stopListening(Radio.channel("Map", "clickedWindowPosition"));
                 }
             }
+        });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            "coordSystemField": i18next.t("common:modules.tools.getCoord.coordSystemField"),
+            "hdmsEastingLabel": i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
+            "hdmsNorthingLabel": i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
+            "cartesianEastingLabel": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
+            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel")
         });
     },
 
