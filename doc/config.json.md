@@ -234,10 +234,8 @@ Konfiguration des Elastic Search Suchdienstes
 |payload|nein|Object|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
 |searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
 |responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, dass die gefundenen features enthält.|false|
-|triggerEvent|nein|Object|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
-|triggerEvent.channel|ja|String||Name des channels.|false|
-|triggerEvent.event|ja|String||Name des events.|false|
-|hitMap|nein|Object|{name: "name", id: "id", coordinate: "coordinate"|Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
+|triggerEvent|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
+|hitMap|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
 |hitType|nein|String|"Elastic"|Typ des Suchergebnissses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
 |hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
  
@@ -269,6 +267,30 @@ Konfiguration des Elastic Search Suchdienstes
     "hitGlyphicon": "glyphicon-list"
 }
 ```
+
+***
+#### Portalconfig.searchBar.elasticSearch.hitMap
+
+[type:Coordinate]: # (Datatypes.Coordinate)
+
+Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String|"name"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
+|id|ja|String|"id"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
+|coordinate|ja|**[Coordinate](#markdown-header-datatypescoordinate)**|"coordinate"|Attribut value wird auf attribut key gemappt. Notwendig um den mapMarker anzuzeigen.|false|
+***
+
+***
+#### Portalconfig.searchBar.elasticSearch.triggerEvent
+
+Radio event das ausgelöst werden soll durch Mouseover und Click. Definiert durch "channel" und "event".
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|channel|ja|String||Channel an den der hit beim mouseover und click in der recommendedList getriggered wird.|false|
+|event|ja|String||Event das getriggered wird.|false|
 
 ***
 
