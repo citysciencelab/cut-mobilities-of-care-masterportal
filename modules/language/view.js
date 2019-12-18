@@ -22,6 +22,12 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
         if (this.model.get("isActive") === true) {
             this.render();
         }
+
+        Radio.on("Util", {
+            "isViewMobileChanged": function () {
+                this.render();
+            }
+        }, this);
     },
 
     className: "language-switch",
