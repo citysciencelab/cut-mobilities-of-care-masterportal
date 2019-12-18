@@ -49,11 +49,22 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
             $(".footer").append(this.$el);
         }
 
-        this.showLanguageList(this.$el);
-        this.changeLanguage(this.$el);
-        this.closePopup(this.$el);
+        this.bindShowLanguageList(this.$el);
+        this.bindChangeLanguage(this.$el);
+        this.bindClosePopup(this.$el);
 
         return this;
+    },
+
+    /**
+     * show the popup window of the language list
+     * @param {object} content - the content of current element
+     * @returns {void}
+     */
+    bindShowLanguageList: function (content) {
+        content.find(".currentLan").click(function () {
+            content.find(".popup-language").show();
+        });
     },
 
     /**
@@ -61,7 +72,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
      * @param {object} content - the content of current element
      * @returns {void}
      */
-    changeLanguage: function (content) {
+    bindChangeLanguage: function (content) {
         const lngLink = content.find("a.lng");
 
         lngLink.unbind("click");
@@ -72,22 +83,11 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
     },
 
     /**
-     * show the popup window of the language list
-     * @param {object} content - the content of current element
-     * @returns {void}
-     */
-    showLanguageList: function (content) {
-        content.find(".currentLan").click(function () {
-            content.find(".popup-language").show();
-        });
-    },
-
-    /**
      * close the popup window of the language list
      * @param {object} content - the content of current element
      * @returns {void}
      */
-    closePopup: function (content) {
+    bindClosePopup: function (content) {
         content.find(".lng-header span").click(function () {
             content.find(".popup-language").hide();
         });
