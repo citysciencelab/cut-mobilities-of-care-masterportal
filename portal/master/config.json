@@ -13,7 +13,10 @@
       "debug": false,
       "languages": {
         "de": "deutsch",
-        "en": "english"
+        "en": "english",
+        "fr": "francais",
+        "it": "italiano",
+        "tr": "turkce"
       },
       "startLanguage": "de",
       "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]

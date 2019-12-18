@@ -4,6 +4,9 @@
         "close": "Close"
     },
     "modules": {
+        "language": {
+            "languageTitle": "Please choose a language"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",

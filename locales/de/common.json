@@ -4,6 +4,9 @@
         "close": "Schließen"
     },
     "modules": {
+        "language": {
+            "languageTitle": "Wählen Sie eine Sprache aus bitte"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
