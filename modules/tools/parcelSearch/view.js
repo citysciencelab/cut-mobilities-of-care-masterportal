@@ -27,9 +27,16 @@ const ParcelSearchView = Backbone.View.extend({
             "change:parcelNumber": this.checkInput,
             "change:parcelDenominatorNumber": this.checkInput,
             "change:districtNumber": this.checkInput,
-            "change:cadastralDistrictNumber": this.checkInput
+            "change:cadastralDistrictNumber": this.checkInput,
+            "change:districtText": () => {
+                if (this.model.has("renderToDOM")) {
+                    this.render2DOM();
+                }
+                else if (this.model.get("isActive") === true) {
+                    this.render2Window(this.model, true);
+                }
+            }
         });
-
         if (this.model.has("renderToDOM")) {
             this.setElement(this.model.get("renderToDOM"));
             this.listenTo(this.model, {

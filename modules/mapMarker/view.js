@@ -16,7 +16,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @listens MapMarker#RadioTriggerMapMarkerShowPolygon
      * @listens MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
      *
-     * @fires CustomModule#RadioRequestCustomModuleGetMarkerPosition
+     * @fires Addon#RadioRequestAddonGetMarkerPosition
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires Core#RadioTriggerMapZoomToExtent
@@ -54,8 +54,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         }
 
         this.render();
-        // For BauInfo: requests customModule and askes for marker position to set.
-        markerPosition = Radio.request("CustomModule", "getMarkerPosition");
+        // For BauInfo: requests addon and askes for marker position to set.
+        markerPosition = Radio.request("Addon", "getMarkerPosition");
         if (markerPosition) {
             this.showMarker(markerPosition);
         }

@@ -1,9 +1,92 @@
 {
-    "anything": "irgendetwas allgemeines",
-    "date": "Datum",
-    "time": "Uhrzeit",
+    "button":{
+        "back": "Zurück",
+        "search": "Suchen"
+    },
     "modules": {
         "tools": {
+            "contact": {
+                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
+                "userNamePlaceholder": "Ihr Name",
+                "textSendButton": "Abschicken"
+            },
+            "print": {
+                "titleLabel": "Titel",
+                "titlePlaceholder": "Mein Titel",
+                "layoutLabel": "Layout",
+                "formatLabel": "Format",
+                "scaleLabel": "Maßstab",
+                "withLegendLabel": "Mit Legende",
+                "printLabel": "Drucken"
+            },
+            "populationRequest": {
+                "select": {
+                    "info": "Die Abfrage der Einwohnerzahl ist sowohl für die Freie Hansestadt Hamburg als auch für die Metropolregion Hamburg möglich.",
+                    "showRasterLayer": "Raster Layer anzeigen (ab 1: 100.000)",
+                    "showAlkisAdresses": "ALKIS Adressen anzeigen (ab 1: 20.000)"
+                },
+                "result": {
+                    "confidentialityHint": "Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet",
+                    "confidentialityHintSmallValues": "Aus Datenschutzgründen werden kleine Fallzahlen unter 3 verändert.",
+                    "populationFHH": "Einwohnerzahl in Hamburg",
+                    "populationMRH": "Einwohnerzahl in der Metropolregion ohne Hamburg",
+                    "areaSize": "Größe der abgefragten Fläche",
+                    "hint": "Hinweis",
+                    "dataSourceFHHKey": "Datenquelle Hamburg",
+                    "dataSourceFHHValue": "Einwohner mit Hauptwohnsitz, Melderegister",
+                    "dataSourceFHHLinktext": "Quelle FHH",
+                    "sourceAreaOutside": "Teile des Suchgebiets liegen außerhalb der Grenzen der Metropolregion Hamburg und wurden für die Ermittlung der Einwohnerzahl nicht berücksichtigt.",
+                    "dataSourceMRHKey": "Datenquelle Metropolregion ohne Hamburg",
+                    "dataSourceMRHValue": "Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.",
+                    "dataSourceMRHLinktext": "Quelle MRH"
+                }
+            },
+            "compareFeatures": {
+                "title": "Vergleichsliste",
+                "topicsSelection": "Themen Auswahl",
+                "moreInfo": "mehr Infos",
+                "lessInfo": "weniger Infos",
+                "exportAsPdf": "Export als PDF",
+                "noFeatures":{
+                    "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
+                    "objectName": "Objekte",
+                    "info": "Klicken Sie auf ein Objekt in der Karte. Es öffnet sich ein Fenster mit den jeweiligen Sachinformationen. In der rechten oberen Ecke befindet sich ein Sternsymbol {{iconEmptyStar}}. Klicken Sie auf dieses Symbol, um das Objekt zur Vergleichsliste hinzuzufügen. Das Sternsymbol wird gelb eingefärbt {{iconYellowStar}}. Ein erneuter Klick auf das Sternsymbol entfernt das Objekt wieder von der Vergleichsliste."
+                },
+                "feedback": {
+                    "added": "{{object}} wurde zur Vergleichsliste hinzugefügt",
+                    "notAdded": "{{object}} konnte nicht zur Vergleichsliste hinzugefügt werden",
+                    "limitReached": "Die maximale Anzahl an Objekten in der Vergleichsliste wurde erreicht.",
+                    "removeObjects": "Bitte entfernen Sie zuerst mindestens ein Objekt bevor Sie fortfahren.",
+                    "gotoComparisonlist": "Zur Vergleichsliste"
+                }
+            },
+            "saveSelection": {
+                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
+            },
+            "parcelSearch": {
+                "wrongConfig": "Ungültige oder unvollständige Konfiguration",
+                "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
+                "wrongConfigParcelsearch": "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support.",
+                "parcelSearchImpossible": "Flurstücksabfrage derzeit nicht möglich!",
+                "tryAgainLater": "Bitte versuchen Sie es später erneut.",
+                "parcelNotFound": "Es wurde kein Flurstück mit der Nummer {{flstNr}} gefunden.",
+                "district": "Gemarkung",
+                "choose": "bitte wählen",
+                "parcelNumber": "Flurstücksnummer",
+                "parcelNumberPlaceholder": "Nummer eingeben",
+                "generateReport": "Bericht erzeugen"
+            },
+            "getCoord": {
+                "coordSystemField": "Koordinatensystem",
+                "hdms": {
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Höhe"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                }
+            },
             "viomRouting": {
                 "startAddressLabel": "Startadresse",
                 "destinationAddressLabel": "Zieladresse",
@@ -15,10 +98,100 @@
                 "enterOptionsText": "Optionen eingeben",
                 "calculateRoute": "Route berechnen",
                 "currentPosition": "Aktueller Standpunkt",
-                "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.",
-                "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten.",
+                "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
+                "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
                 "addressRequestFailed": "Adressabfrage fehlgeschlagen"
             }
+        },
+        "controls": {
+            "fullScreen": {
+                "enable": "Vollbild aktivieren",
+                "disable": "Vollbild deaktivieren",
+                "toggle": "Vollbild umschalten"
+            },
+            "zoom": {
+                "zoomIn": "Hineinzoomen",
+                "zoomOut": "Herauszoomen"
+            },
+            "orientation": {
+                "titleGeolocate": "Standpunkt",
+                "titleGeolocatePOI": "In meiner Nähe",
+                "geolocationDeniedText": "Lokalisierung nicht verfügbar",
+                "trackingDeniedText": "'In meiner Nähe' nicht verfügbar"
+            },
+            "orientation3d": {
+                "compass": {
+                    "pointerNorth": "Ansicht einnorden/Ansicht drehen",
+                    "pointerSouth": "Südblick",
+                    "pointerEast": "Ost Blick",
+                    "pointerWest": "West Blick",
+                    "moveNorth": "Nach Norden bewegen",
+                    "moveSouth": "Nach Süden bewegen",
+                    "moveWest": "Nach Westen bewegen",
+                    "moveEast": "Nach Osten bewegen"
+                },
+                "control": {
+                    "tiltDown": "Ansicht neigen",
+                    "tiltReset": "Ansicht zurückstellen",
+                    "zoomIn": "$t(common:modules.controls.zoom.zoomIn)",
+                    "zoomOut": "$t(common:modules.controls.zoom.zoomOut)"
+                }
+            },
+            "totalView": {
+                "titleButton": "Zurück zur Startansicht",
+                "titleMenu": "Hauptansicht"
+            },
+            "3d": {
+                "buttonTitle": "3D",
+                "openView3d": "Ansicht einschalten",
+                "closeView3d": "Ansicht ausschalten",
+                "betaWarning": "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "oblique": {
+                "buttonTitle": "Schrägluftbilder",
+                "openViewOblique": "Schrägluftbilder einschalten",
+                "closeViewOblique": "Schrägluftbilder ausschalten",
+                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "freeze": {
+                "freeze": "Ansicht sperren",
+                "unfreeze": "Ansicht entsperren",
+                "freezeTable": "$t(common:modules.controls.freeze.freeze)"
+            },
+            "backForward": {
+                "stepForward": "Nächste Ansicht",
+                "stepBackward": "Letzte Ansicht"
+            },
+            "attributions": {
+                "showAttributions": "Layer-Attributions anzeigen",
+                "hideAttributions": "Layer-Attributions ausblenden"
+            },
+            "overviewMap": {
+                "showOverviewControl": "Übersichtskarte einblenden",
+                "hideOverviewControl": "Übersichtskarte ausblenden",
+                "showOverviewTable": "Mini-Map einschalten",
+                "hideOverviewTable": "Mini-Map ausschalten"
+            },
+            "mousePosition": {
+                "hint": "Bewegen Sie die Maus über die Karte",
+                "showMousePosition": "Einblenden",
+                "hideMousePosition": "Ausblenden"
+            }
+        }
+    },
+    "snippets": {
+        "checkbox": {
+            "on": "An",
+            "off": "Aus"
+        },
+        "graphicalSelect": {
+            "displayName": "Geometrie auswählen",
+            "selectBySquare": "Rechteck aufziehen",
+            "selectByCircle": "Kreis aufziehen",
+            "selectByPolygon": "Fläche zeichnen",
+            "tooltipMessage": "Klicken zum Starten und Beenden",
+            "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
         }
     }
 }
+>>>>>>> feature/i18next-integrieren

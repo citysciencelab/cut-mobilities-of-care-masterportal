@@ -15,17 +15,53 @@ const CompareFeaturesModel = Tool.extend({
         // number of attributes to be displayed
         numberOfAttributesToShow: 12,
         glyphicon: "glyphicon-th-list",
-        renderToWindow: false
+        renderToWindow: false,
+        // translation
+        title: "",
+        topicsSelection: "",
+        moreInfo: "",
+        lessInfo: "",
+        exportAsPdf: "",
+        limitReached: "",
+        removeObjects: "",
+        gotoComparisonlist: "",
+        back: ""
     }),
     initialize: function () {
         var channel = Radio.channel("CompareFeatures");
 
         this.superInitialize();
+        this.changeLang(i18next.language);
         channel.on({
             "setIsActivated": this.setIsActive,
             "addFeatureToList": this.addFeatureToList,
             "removeFeatureFromList": this.removeFeatureFromList
         }, this);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        const prefix = "common:modules.tools.compareFeatures.",
+            feedbackPrefix = prefix + "feedback.",
+            values = {
+                title: i18next.t(prefix + "title"),
+                topicsSelection: i18next.t(prefix + "topicsSelection"),
+                moreInfo: i18next.t(prefix + "moreInfo"),
+                lessInfo: i18next.t(prefix + "lessInfo"),
+                exportAsPdf: i18next.t(prefix + "exportAsPdf"),
+                limitReached: i18next.t(feedbackPrefix + "limitReached"),
+                removeObjects: i18next.t(feedbackPrefix + "removeObjects"),
+                gotoComparisonlist: i18next.t(feedbackPrefix + "gotoComparisonlist"),
+                back: i18next.t("common:button.back")
+            };
+
+        this.set(values);
     },
 
     /**

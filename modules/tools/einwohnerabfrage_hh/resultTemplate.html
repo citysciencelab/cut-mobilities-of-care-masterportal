@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 
 <% if (dataReceived) { %>
-    <div class="heading additional-text">Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet:</div>
+    <div class="heading additional-text"><%=confidentialityHint%>:</div>
     <table class="table">
         <% if (data.quelle_fhh !== "nein") { %>
             <tr>
-                <td>Einwohnerzahl in Hamburg:</td>
+                <td><%=populationFHH%>:</td>
                 <td><%=data.einwohner_fhh%></td>
             </tr>
         <% } %>
         <% if (data.quelle_mrh !== "nein") { %>
             <tr>
-                <td>Einwohnerzahl in der Metropolregion ohne Hamburg:</td>
+                <td><%=populationMRH%>:</td>
                 <td><%=data.einwohner_mrh%></td>
             </tr>
         <% } %>
             <tr>
-                <td>Größe der abgefragten Fläche:</td>
+                <td><%=areaSize%>:</td>
                 <td><%=data.suchflaeche%></td>
             </tr>
     </table>
     <% if (data.einwohner_fhh > 0) { %>
         <div class="hinweis additional-text">
-            <span>Hinweis:</span> Aus Datenschutzgründen werden kleine Fallzahlen unter 3 verändert.
+            <span><%=hint%>:</span>&nbsp;<%=confidentialityHintSmallValues%> 
             <br>
             <!--Datum 31.12.2017-->
-            <span>Datenquelle Hamburg:</span> Einwohner mit Hauptwohnsitz, Melderegister <%=fhhDate%>.
+            <span><%=dataSourceFHHKey%>:</span>&nbsp;<%=dataSourceFHHValue%>&nbsp;<%=fhhDate%>.
         </div>
-        <div><a target="_blank" href="<%= metaDataLink + fhhId %>">Quelle FHH</a></div>
+        <div><a target="_blank" href="<%= metaDataLink + fhhId %>"><%=dataSourceFHHLinktext%></a></div>
     <% } %>
     <% if (data.einwohner_mrh > 0) { %>
         <div class="hinweis additional-text">
             <% if (data.quelle_mrh === "tlw" && data.quelle_fhh === "nein") { %>
-                <span>Hinweis:</span> Teile des Suchgebiets liegen außerhalb der Grenzen der Metropolregion Hamburg und wurden für die Ermittlung der Einwohnerzahl nicht berücksichtigt.
+                <span><%=hint%>:</span>&nbsp;<%=sourceAreaOutside%>
             <% } %>
             <!--Datum 09.05.2011-->
-            <span>Datenquelle Metropolregion ohne Hamburg:</span> Bevölkerung insgesamt im 100 Meter-Gitter, Zensus 2011. Stand der Zensus-Daten 09.05.2011.
+            <span><%=dataSourceMRHKey%>:</span>&nbsp;<%=dataSourceMRHValue%>
         </div>
-        <div><a target="_blank" href="<%= metaDataLink + mrhId %>">Quelle MRH</div>
+        <div><a target="_blank" href="<%= metaDataLink + mrhId %>"><%=dataSourceMRHLinktext%></div>
     <% } %>
 <% } else { %>
     <% if (requesting) { %>
