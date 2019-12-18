@@ -59,10 +59,10 @@ const Config = {
         fxaa: true
     },
     defaultToolId: "gfi",
-    portalLanguage:{
+    portalLanguage: {
         enabled: true,
         debug: false,
-        languages:{
+        languages: {
             de: "deutsch",
             en: "englisch"
         },
