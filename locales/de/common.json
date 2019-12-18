@@ -1,13 +1,7 @@
 {
     "button":{
-        "back": "Zurück"
-    },
-    "language": {
-        "de": "Deutsch",
-        "en": "Englisch",
-        "fr": "Französisch",
-        "es": "Spanish",
-        "tr": "Türkisch"
+        "back": "Zurück",
+        "close": "Schließen"
     },
     "modules": {
         "tools": {

@@ -1,12 +1,8 @@
 const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype */ {
     defaults: {
-        languageCode: ["de"],
-        defaultCode: "en",
-        de: "Deutsch",
-        en: "Englisch",
-        fr: "Französisch",
-        es: "Spanish",
-        tr: "Türkisch"
+        languageCode: {},
+        defaultCode: "",
+        closeButton: ""
     },
     /**
      * @class LanguageModel
@@ -35,8 +31,9 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
             this.setDefaultCode(defaultCode);
         }
 
-        if (languageCode && defaultCode) {
+        if (languageCode) {
             this.setLanguageCode(languageCode);
+            this.set("closeButton", i18next.t("common:button.close"));
         }
     },
 
@@ -55,9 +52,15 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
      * @returns {void}
      */
     setLanguageCode: function (value) {
-
-
         this.set("languageCode", value);
+    },
+
+    /**
+     * requests util if portal is running on mobile device
+     * @returns {Boolean}  - isMobile
+     */
+    checkIsMobile: function () {
+        return Radio.request("Util", "isViewMobile");
     }
 });
 

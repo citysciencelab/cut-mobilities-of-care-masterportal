@@ -454,7 +454,9 @@ function loadApp () {
         }
     }
 
-    new LanguageView();
+    if (Object.keys(i18next.options.getLanguages()).length > 1) {
+        new LanguageView();
+    }
 
     new HighlightFeature();
 

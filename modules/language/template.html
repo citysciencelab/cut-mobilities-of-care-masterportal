@@ -1,7 +1,18 @@
 <!DOCTYPE html>
-<select>
-    <% _.each(languageCode, function (key, value){%>
-        <option value="<%= value %>" <% if(value === defaultCode){ %>selected<% } %>><%= value %></option>
-    <%});%>
-    <%= languageCode %>
-</select>
+<span class="currentLan"><%= defaultCode %></span>
+<div class="popup">
+    <div class="lng-header">
+        <span class="buttons pull-right">
+            <span class="glyphicon glyphicon-remove" title="<%= closeButton %>"></span>
+        </span>
+    </div>
+    <div class="form-group form-group-sm">
+        <%  _.each(languageCode, function(value, key) { %>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <a class="lng btn <% if (key === defaultCode) print('disabled') %>" data-code="<%= key %>">
+                    <%= value %>
+                </a>
+            </div>
+        <% }); %>
+    </div>
+</div>

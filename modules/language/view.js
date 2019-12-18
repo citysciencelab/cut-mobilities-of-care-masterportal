@@ -2,9 +2,6 @@ import Template from "text-loader!./template.html";
 import Model from "./model";
 
 const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
-    events: {
-        "change select": "changeLanguage"
-    },
     /**
      * @class LanguageView
      * @extends Backbone.View
@@ -15,8 +12,19 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
     initialize: function () {
         this.model = new Model();
 
-        this.render();
+        this.listenTo(this.model, {
+            "change:isActive": this.render
+        });
+
+        this.listenTo(this.model, {
+            "change": this.render
+        });
+
+        if (this.model.get("isActive") === true) {
+            this.render();
+        }
     },
+
     className: "language-switch",
     id: "languagebar",
     template: _.template(Template),
@@ -25,22 +33,59 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
      * @returns {void}
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        $("#searchbar").after(this.$el);
+
+        if (!this.model.checkIsMobile()) {
+            $("#searchbar").after(this.$el);
+        }
+        else {
+            $(".footer").append(this.$el);
+        }
+
+        this.showLanguageList(this.$el);
+        this.changeLanguage(this.$el);
+        this.closePopup(this.$el);
 
         return this;
     },
 
     /**
      * change the language when one option is selected
-     * @param {evt} evt - current selected value of option
+     * @param {object} content - the content of current element
      * @returns {void}
      */
-    changeLanguage: function (evt) {
-        this.$el.find("#languagebar :selected").unbind("click");
-        i18next.changeLanguage(evt.currentTarget.value);
+    changeLanguage: function (content) {
+        const lngLink = content.find("a.lng");
+
+        lngLink.unbind("click");
+        lngLink.click(function () {
+            i18next.changeLanguage($(this).data("code"));
+            content.find(".popup").hide();
+        });
+    },
+
+    /**
+     * show the popup window of the language list
+     * @param {object} content - the content of current element
+     * @returns {void}
+     */
+    showLanguageList: function (content) {
+        content.find(".currentLan").click(function () {
+            content.find(".popup").show();
+        });
+    },
+
+    /**
+     * close the popup window of the language list
+     * @param {object} content - the content of current element
+     * @returns {void}
+     */
+    closePopup: function (content) {
+        content.find(".lng-header span").click(function () {
+            content.find(".popup").hide();
+        });
     }
 });
 
