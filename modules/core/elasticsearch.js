@@ -22,6 +22,7 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
      */
     search: function (xhrConfig) {
         const serviceId = xhrConfig.hasOwnProperty("serviceId") ? xhrConfig.serviceId : undefined,
+            useProxy = xhrConfig.hasOwnProperty("useProxy") ? xhrConfig.useProxy : false,
             restService = Radio.request("RestReader", "getServiceById", serviceId);
         let xhrRequests = this.get("xhrRequests"),
             result = {
@@ -33,7 +34,7 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
 
         if (url) {
             xhrRequests = this.abortXhrRequestByServiceId(xhrRequests, serviceId);
-            url = Radio.request("Util", "getProxyURL", url);
+            url = useProxy ? Radio.request("Util", "getProxyURL", url) : url;
             result = this.xhrSend(serviceId, url, xhrConfig, result);
             xhrRequests = this.abortXhrRequestByServiceId(xhrRequests, serviceId);
             this.setXhrRequests(xhrRequests);

@@ -19,6 +19,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
         hitType: "Elastic",
         hitGlyphicon: "glyphicon-road",
         async: false,
+        useProxy: false,
         elasticSearch: new ElasticModel()
     },
     /**
@@ -40,6 +41,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
      * @property {String} hitType = "Elastic" Type of the hit to be appended in the recommended list.
      * @property {String} hitGlyphicon = "glyphicon-road" Css class of the glyphicon to be prepended in the recommended list.
      * @property {Boolean} async = false Flag if request should be asynchronous.
+     * @property {Boolean} useProxy = false Flag if request should be proxied.
      * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
      * @fires Core#RadioRequestParametricURLGetInitString
      * @fires Searchbar#RadioTriggerSearchbarPushHits
@@ -68,6 +70,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             payload = this.appendSearchStringToPayload(this.get("payload"), searchStringAttribute, searchString),
             xhrConfig = {
                 serviceId: this.get("serviceId"),
+                useProxy: this.get("useProxy"),
                 type: this.get("type"),
                 async: this.get("async"),
                 payload: payload,

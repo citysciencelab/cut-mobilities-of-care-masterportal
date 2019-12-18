@@ -48,7 +48,7 @@ Konfiguration der Searchbar
 |----|-------------|---|-------|------------|------|
 |bkg|nein|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||Konfiguration des BKG Suchdienstes.|false|
 |gazetteer|nein|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Konfiguration des Gazetteer Suchdienstes.|false|
-|gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes.|false|
+|gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
 |elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
@@ -180,7 +180,8 @@ Konfiguration des Gazetteer Suchdienstes
 ***
 
 #### Portalconfig.searchBar.gdi
-Konfiguration des GDI Suchdienstes
+Konfiguration des GDI Suchdienstes.
+Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -224,6 +225,9 @@ Todo
 ***
 
 #### Portalconfig.searchBar.elasticSearch
+
+[type:CustomObject]: # (Datatypes.CustomObject)
+
 Konfiguration des Elastic Search Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -231,14 +235,15 @@ Konfiguration des Elastic Search Suchdienstes
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
 |type|nein|enum["POST", "GET"]|"POST"|Art des Requests.|false|
-|payload|nein|Object|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
+|payload|nein|**[CustomObject](#markdown-header-datatypescustomobject)**|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
 |searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
 |responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, dass die gefundenen features enthält.|false|
 |triggerEvent|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
-|hitMap|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
+|hitMap|nein|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
 |hitType|nein|String|"Elastic"|Typ des Suchergebnissses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
 |hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
- 
+|useProxy|nein|Boolean|false|Flag die angibt ob die url vom geproxied werden soll oder nicht.|false|
+
  **Beispiel**
  ```
  #!json
@@ -271,15 +276,14 @@ Konfiguration des Elastic Search Suchdienstes
 ***
 #### Portalconfig.searchBar.elasticSearch.hitMap
 
-[type:Coordinate]: # (Datatypes.Coordinate)
-
 Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String|"name"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
 |id|ja|String|"id"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
-|coordinate|ja|**[Coordinate](#markdown-header-datatypescoordinate)**|"coordinate"|Attribut value wird auf attribut key gemappt. Notwendig um den mapMarker anzuzeigen.|false|
+|coordinate|ja|String|"coordinate"|Attribut value wird auf attribut key gemappt. Notwendig um den mapMarker anzuzeigen.|false|
+
 ***
 
 ***
@@ -2420,4 +2424,11 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschr
 #!json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
+***
+
+## Datatypes.CustomObject
+
+Ein Objekt mit den benötigten Inhalten.
+Parameter können je nach Konfiguration, Verwendung und Backend-Komponenten unterschiedlich sein.
+
 ***

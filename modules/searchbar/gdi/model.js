@@ -27,6 +27,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
+        console.error("GDI-Search is deprecated in version 3.0.0. Please use the elasticSearch!");
     },
 
     /**
@@ -39,6 +40,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             xhrConfig = {
                 serviceId: this.get("serviceId"),
                 type: "GET",
+                useProxy: false,
                 async: false,
                 payload: payload,
                 responseEntryPath: "hits.hits"
