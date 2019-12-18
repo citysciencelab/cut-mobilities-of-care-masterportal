@@ -27,7 +27,11 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:drawPoint": this.render
+            "change:drawPoint": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
+            }
         });
 
         new DownloadView();
