@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<span class="currentLan"><%= defaultCode %></span>
+<span class="currentLan"><%= activeCode %></span>
 <div class="popup-language">
     <div class="lng-header">
         <span><%= languageTitle %></span>
@@ -8,9 +8,9 @@
         </span>
     </div>
     <div class="form-group form-group-sm">
-        <%  _.each(languageCode, function(value, key) { %>
+        <%  _.each(languageCodes, function(value, key) { %>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <a class="lng btn <% if (key === defaultCode) print('disabled') %>" data-code="<%= key %>">
+                <a class="lng btn <% if (key === activeCode) print('disabled') %>" data-code="<%= key %>">
                     <%= value %>
                 </a>
             </div>

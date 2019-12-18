@@ -454,7 +454,7 @@ function loadApp () {
         }
     }
 
-    if (Object.keys(i18next.options.getLanguages()).length > 1) {
+    if (Object.keys(i18next.options.getLanguages()).length > 1 && i18next.options.isEnabled()) {
         new LanguageView();
     }
 

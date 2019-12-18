@@ -1,7 +1,7 @@
 const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype */ {
     defaults: {
-        languageCode: {},
-        defaultCode: "",
+        languageCodes: {},
+        activeCode: "",
         closeButton: "",
         languageTitle: ""
     },
@@ -21,42 +21,23 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
 
     /**
      * change language - sets default values for the language
-     * @param {String} lng the language changed to
+     * @param {String} activeCode the language changed to
      * @returns {Void}  -
      */
-    changeLang: function (lng) {
-        const defaultCode = lng,
-            languageCode = i18next.options.getLanguages();
+    changeLang: function (activeCode) {
+        const languageCodes = i18next.options.getLanguages();
 
-        if (defaultCode) {
-            this.setDefaultCode(defaultCode);
+        if (activeCode) {
+            this.set("activeCode", activeCode);
         }
 
-        if (languageCode) {
-            this.setLanguageCode(languageCode);
+        if (languageCodes) {
+            this.set("languageCodes", languageCodes);
             this.set({
                 closeButton: i18next.t("common:button.close"),
                 languageTitle: i18next.t("common:modules.language.languageTitle")
             });
         }
-    },
-
-    /**
-     * Setter for attribute "defaultCode".
-     * @param {object} value - the list of language codes.
-     * @returns {void}
-     */
-    setDefaultCode: function (value) {
-        this.set("defaultCode", value);
-    },
-
-    /**
-     * Setter for attribute "languageCode".
-     * @param {object} value - the list of language codes.
-     * @returns {void}
-     */
-    setLanguageCode: function (value) {
-        this.set("languageCode", value);
     },
 
     /**
