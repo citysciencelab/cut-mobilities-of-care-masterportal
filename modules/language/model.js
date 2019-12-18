@@ -16,18 +16,17 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
             "languageChanged": this.changeLang
         });
 
-        this.changeLang(i18next.language, i18next.options.getLanguages());
+        this.changeLang(i18next.language);
     },
 
     /**
      * change language - sets default values for the language
      * @param {String} lng the language changed to
-     * @param {Object} lngList the list of languages
      * @returns {Void}  -
      */
-    changeLang: function (lng, lngList) {
+    changeLang: function (lng) {
         const defaultCode = lng,
-            languageCode = lngList;
+            languageCode = i18next.options.getLanguages();
 
         if (defaultCode) {
             this.setDefaultCode(defaultCode);
