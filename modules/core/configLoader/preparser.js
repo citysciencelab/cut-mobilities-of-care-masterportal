@@ -161,7 +161,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                 "en": "english"
             },
             "startLanguage": "de",
-            "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
+            "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator", "htmlTag"]
         }, config);
 
         // init i18next
@@ -174,9 +174,16 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             .init({
                 debug: portalLanguage.debug,
 
-                lng: portalLanguage.startLanguage,
+                // lng overrides language detection - so shall not be set (!)
+                // lng: portalLanguage.startLanguage,
+
                 fallbackLng: portalLanguage.startLanguage,
                 whitelist: Object.keys(portalLanguage.languages),
+
+                // to allow en-US when only en is on the whitelist - nonExplicitWhitelist must be set to true
+                nonExplicitWhitelist: true,
+                // to not look into a folder like /locals/en-US/... when en-US is detected, use load: "languageOnly" to avoid using Country-Code in path
+                load: "languageOnly",
 
                 /**
                  * getter for configured languages
@@ -214,12 +221,12 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                     lookupFromSubdomainIndex: 0,
 
                     // cache user language on
-                    caches: ["localStorage", "cookie"],
+                    caches: ["localStorage"],
                     excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
 
                     // optional expire and domain for set cookie
-                    cookieMinutes: 10,
-                    cookieDomain: "myDomain",
+                    // cookieMinutes: 10,
+                    // cookieDomain: "myDomain",
 
                     // only detect languages that are in the whitelist
                     checkWhitelist: true
