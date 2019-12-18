@@ -44,12 +44,5 @@
     },
     "changeOrigin": true,
     "secure": false
-  },
-  "/geoportal_muenchen_de": {
-    "target": "https://geoportal.muenchen.de",
-    "pathRewrite": {
-      "^/geoportal_muenchen_de": ""
-    },
-    "changeOrigin": true
   }
 }
