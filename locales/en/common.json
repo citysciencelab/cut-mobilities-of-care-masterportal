@@ -1,7 +1,19 @@
 {
-    "button":{
+    "button": {
         "back": "Back",
+        "download": "Download",
+        "search": "Search",
         "close": "Close"
+    },
+    "colors": {
+        "blue": "Blue",
+        "yellow": "Yellow",
+        "grey": "Grey",
+        "green": "Green",
+        "orange": "Orange",
+        "red": "Red",
+        "black": "Black",
+        "white": "White"
     },
     "modules": {
         "language": {
@@ -50,7 +62,7 @@
                 "moreInfo": "more info",
                 "lessInfo": "less info",
                 "exportAsPdf": "Export as PDF",
-                "noFeatures":{
+                "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
@@ -66,6 +78,19 @@
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
             },
+            "parcelSearch": {
+                "wrongConfig": "Invalid or incomplete configuration",
+                "districtsLoadFailed": "Districts could not be loaded",
+                "wrongConfigParcelsearch": "The parcel search configuration is incorrect. Please contact the support team",
+                "parcelSearchImpossible": "Land parcel query currently not possible!",
+                "tryAgainLater": "Please try again later.",
+                "parcelNotFound": "No parcel with the number {{flstNr}} was found.",
+                "district": "District",
+                "choose": "please choose",
+                "parcelNumber": "Parcel number",
+                "parcelNumberPlaceholder": "Enter number",
+                "generateReport": "Generate report"
+            },
             "getCoord": {
                 "coordSystemField": "coordinate system",
                 "hdms": {
@@ -75,6 +100,30 @@
                 "cartesian": {
                     "eastingLabel": "easting",
                     "northingLabel": "northing"
+                }
+            },
+            "draw": {
+                "clickToPlaceText": "Click on the map to place the text",
+                "draw": "draw",
+                "geometryDrawFailed": "The transferred geometry could not be displayed.",
+                "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
+                "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
+                "drawPoint": "Draw point",
+                "writeText": "Write text",
+                "drawLine": "Draw line",
+                "drawArea": "Draw area",
+                "drawCircle": "Draw circle",
+                "fontSize": "Font size",
+                "fontName": "Font",
+                "size": "Size",
+                "lineWidth": "Line width",
+                "transparency": "Transparency",
+                "color": "Color",
+                "button": {
+                    "draw": "Draw geometry / text",
+                    "edit": "Edit geometry",
+                    "delete": "Delete geometry / text",
+                    "deleteAll": "Delete all"
                 }
             }
         },
@@ -155,15 +204,15 @@
         }
     },
     "snippets": {
-        "checkbox":{
-            "on":"On",
-            "off":"Off"
+        "checkbox": {
+            "on": "On",
+            "off": "Off"
         },
         "graphicalSelect": {
-            "displayName":"Select geometry",
-            "selectBySquare":"Draw up rectangle",
-            "selectByCircle":"Draw circle",
-            "selectByPolygon":"Draw surface",
+            "displayName": "Select geometry",
+            "selectBySquare": "Draw up rectangle",
+            "selectByCircle": "Draw circle",
+            "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
         }
