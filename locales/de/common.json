@@ -136,7 +136,6 @@
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
                 }
->>>>>>> feature/i18next-integrieren
             }
         },
         "controls": {
