@@ -33,9 +33,23 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-
-Dann in der Admin-cmd ausführen:
+Nun müssen die vorhandenen, konfigurierten Portale eingefügt werden. Diese sind in einem eigenen Repo namens *portalconfigs*. Dieses direkt in den Masterportal-Ordner klonen:
 ```
+# git clone https://@bitbucket.org/geowerkstatt-hamburg/portalconfigs.git
+```
+
+Jetzt fehlen noch die Addons. Diese liegen getrennt in einem weiteren Repo namens *addons*. Dafür in den Ordner *addons* navigieren (welcher nicht leer ist) und darin das Repo klonen.
+```
+# cd addons
+# git clone https://@bitbucket.org/geowerkstatt-hamburg/addons.git
+```
+
+Nun ist ein *addons* Ordner in einem anderen *addons* Ordner. Den Inhalt des inneren Ordners (Repo *addons*) ausschneiden und in den äußeren Ordner verschieben. Den inneren, leeren Ordner jetzt löschen.
+
+
+Jetzt müssen die Node-Module installiert werden:
+```
+# cd .. // wieder zurück ins Masterportal-Root-Verzeichnis
 # npm install
 ```
 
@@ -69,16 +83,14 @@ Unittests durchführen
 
 
 ### npm run build
-Ein Portal vor Veröffentlichung optimieren/bauen.
+Erstellt den Code zur Veröffentlichung für alle Portale in einem Quellordner.
 
 ```
 // npm run build
 # npm run build
 ```
 
-- baut das Portal und alles, was es braucht in den Ordner dist/
-- Pfade in index.html werden automatisch ersetzt
- - Pfade zu Conf in config.js werden automatisch ersetzt
+Die Ergebnisse werden im Ordner *dist* abgelegt. Dieser wird automatisch im Masterportal-Root-Ordner angelegt.
 
 
 ### npm run buildExamples
@@ -90,53 +102,6 @@ Ein Beispielportal erzeugen.
 ```
 
 - erzeugt examples.zip und examples-x.x.x.zip (Version), in denen jeweils eine lauffähige Portal-Instanz (Basic) enthalten ist inkl. einem Ordner Ressources
-
-
-### npm run buildPortalsFromPortalconfigs
-Mit diesem Kommando lassen sich mehrere Portale auf einemal bauen. Die Konfigurationen der Portale müssen in einem Ordner "portalconfigs" abgelegt werden. In portalconfigs kann eine Datei conf-buildPortalconfigs.js abgelegt werden zur Angabe von Portalen die nicht gebaut werden sollen oder ein Custommoudl enthalten
-
-```
-// npm run buildPortalsFromPortalconfigs
-# npm run buildPortalsFromPortalconfigs
-```
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|modulesBlackList|String[]|Portale die nicht gebaut werden sollen.|
-|addons|Object|Portale die mit einem Custommodul gebaut werdne sollen.|
-|portalname|Object|Name des Portals.|
-|initFile|String|Pfad zu dem Custommodul.|
-|ignoreList|String[]|Dateien die nicht im gebauten Portal enthalten sein sollen.|
-
-
-**Beispiel**
-```
-#!json
-const
-    conf = {
-        modulesBlackList: [
-            "artenkataster",
-            "badegewaesser"
-        ],
-
-        // relative paths to addons entry js files
-        // although addons creation script does not expect the .js suffix, it is redundantly added
-        // for the sake of readability
-        addons: {
-            "portalname": {
-                "initFile": "../portalconfigs/boris/bodenrichtwertabfrage/view.js",
-                "ignoreList": ["bodenrichtwertabfrage"]
-            }
-        }
-    };
-```
-***
-
-- Die Portale werden in den Ordner dist/ gebaut
-- Portale ohne Custommodul verweisen auf eine zentral gebaute Instanz des Masterportals im Ordner Mastercode, unter der gebauten Version
-- Portale mit Custommodul werden separat gebaut und erhalten eine eigene Instanz des Masterportals, mit dem angegebenen Custommodul
-- Pfade in index.html werden automatisch ersetzt
-
 
 ## Aktualisieren der Abhängigkeiten
 
