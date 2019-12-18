@@ -124,7 +124,7 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Straße"});
+            Radio.trigger("Searchbar", "removeHits", "hitList", {type: hitType});
         }
         Radio.trigger("Searchbar", "createRecommendedList", "elasticSearch");
     },
