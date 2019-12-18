@@ -1,6 +1,7 @@
 {
     "button":{
-        "back": "Back"
+        "back": "Back",
+        "search": "Search"
     },
     "modules": {
         "tools": {
@@ -61,6 +62,19 @@
             },
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
+            },
+            "parcelSearch": {
+                "wrongConfig": "Invalid or incomplete configuration",
+                "districtsLoadFailed": "Districts could not be loaded",
+                "wrongConfigParcelsearch": "The parcel search configuration is incorrect. Please contact the support team",
+                "parcelSearchImpossible": "Land parcel query currently not possible!",
+                "tryAgainLater": "Please try again later.",
+                "parcelNotFound": "No parcel with the number {{flstNr}} was found.",
+                "district": "District",
+                "choose": "please choose",
+                "parcelNumber": "Parcel number",
+                "parcelNumberPlaceholder": "Enter number",
+                "generateReport": "Generate report"
             },
             "getCoord": {
                 "coordSystemField": "coordinate system",
