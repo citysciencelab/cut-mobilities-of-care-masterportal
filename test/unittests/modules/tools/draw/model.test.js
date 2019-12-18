@@ -11,6 +11,11 @@ describe("drawModel", function () {
     var model;
 
     before(function () {
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
+        });
         model = new Model();
         model.collection = new ModelList();
     });
@@ -42,7 +47,7 @@ describe("drawModel", function () {
         it("should be the result color is the same as input color", function () {
             var drawType = {
                     geometry: "Point",
-                    text: "Punkt zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1],
@@ -70,7 +75,7 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
             result = model.getStyle();
 
@@ -80,7 +85,7 @@ describe("drawModel", function () {
             var color = [255, 0, 0, 1],
                 result;
 
-            model.setDrawType("text", "Text schreiben");
+            model.setDrawType("text",  i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
             result = model.getStyle();
 
@@ -152,27 +157,27 @@ describe("drawModel", function () {
 
         describe("resetModule", function () {
             it("should radius is equal default radius", function () {
-                model.setDrawType("Point", "Punkt zeichnen");
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.setRadius(10000);
                 model.resetModule();
                 expect(model.get("radius")).to.deep.equal(model.defaults.radius);
             });
             it("should opacity is equal default opacity", function () {
-                model.setDrawType("Point", "Punkt zeichnen");
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.setOpacity(0.5);
                 model.resetModule();
 
                 expect(model.get("opacity")).is.equal(model.defaults.opacity);
             });
             it("should color is equal default color", function () {
-                model.setDrawType("Point", "Punkt zeichnen");
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.setColor([111, 112, 113, 0.4]);
                 model.resetModule();
 
                 expect(model.get("color")).is.equal(model.defaults.color);
             });
             it("should drawType is equal default drawType", function () {
-                model.setDrawType("Point", "Punkt zeichnen");
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.resetModule();
 
                 expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
