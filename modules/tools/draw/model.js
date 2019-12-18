@@ -29,7 +29,35 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
         addFeatureListener: {},
-        zIndex: 0
+        zIndex: 0,
+        // translations
+        clickToPlaceText: "",
+        draw: "",
+        geometryDrawFailed: "",
+        drawPoint: "",
+        writeText: "",
+        drawLine: "",
+        drawArea: "",
+        drawCircle: "",
+        fontSizeText: "",
+        fontName: "",
+        size: "",
+        lineWidth: "",
+        transparency: "",
+        colorText: "",
+        blue: "",
+        yellow: "",
+        grey: "",
+        green: "",
+        orange: "",
+        red: "",
+        black: "",
+        white: "",
+        drawBtnText: "",
+        editBtnText: "",
+        downloadBtnText: "",
+        deleteBtnText: "",
+        deleteAllBtnText: ""
     }),
 
     /**
@@ -61,6 +89,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @listens Tools.Draw#RadioTriggerDeleteAllFeatures
      * @listens Tools.Draw#RadioTriggerCancelDrawWithoutGUI
      * @listens Tools.Draw#RadioTriggerDownloadViaRemoteInterface
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @constructs
      */
@@ -68,6 +97,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         const channel = Radio.channel("Draw");
 
         this.superInitialize();
+        this.changeLang(i18next.language);
 
         channel.reply({
             "getLayer": function () {
@@ -98,7 +128,49 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 }
             }
         });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            clickToPlaceText: i18next.t("common:modules.tools.draw.clickToPlaceText"),
+            draw: i18next.t("common:modules.tools.draw.draw"),
+            geometryDrawFailed: i18next.t("common:modules.tools.draw.geometryDrawFailed"),
+            drawPoint: i18next.t("common:modules.tools.draw.drawPoint"),
+            writeText: i18next.t("common:modules.tools.draw.writeText"),
+            drawLine: i18next.t("common:modules.tools.draw.drawLine"),
+            drawArea: i18next.t("common:modules.tools.draw.drawArea"),
+            drawCircle: i18next.t("common:modules.tools.draw.drawCircle"),
+            fontSizeText: i18next.t("common:modules.tools.draw.fontSize"),
+            fontName: i18next.t("common:modules.tools.draw.fontName"),
+            size: i18next.t("common:modules.tools.draw.size"),
+            lineWidth: i18next.t("common:modules.tools.draw.lineWidth"),
+            transparency: i18next.t("common:modules.tools.draw.transparency"),
+            colorText: i18next.t("common:modules.tools.draw.color"),
+            blue: i18next.t("common:colors.blue"),
+            yellow: i18next.t("common:colors.yellow"),
+            grey: i18next.t("common:colors.grey"),
+            green: i18next.t("common:colors.green"),
+            orange: i18next.t("common:colors.orange"),
+            red: i18next.t("common:colors.red"),
+            black: i18next.t("common:colors.black"),
+            white: i18next.t("common:colors.white"),
+            drawBtnText: i18next.t("common:modules.tools.draw.button.draw"),
+            editBtnText: i18next.t("common:modules.tools.draw.button.edit"),
+            deleteBtnText: i18next.t("common:modules.tools.draw.button.delete"),
+            deleteAllBtnText: i18next.t("common:modules.tools.draw.button.deleteAll"),
+            downloadBtnText: i18next.t("common:button.download")
+        });
+        this.set("text", this.get("clickToPlaceText"));
+        this.setDrawType("Point", this.get("drawPoint"));
     },
 
     /**
@@ -144,7 +216,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setIsActive(true);
 
         if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
-            this.setDrawType(para_object.drawType, para_object.drawType + " zeichnen");
+            this.setDrawType(para_object.drawType, para_object.drawType + " " + this.get("draw"));
             if (para_object.color) {
                 this.set("color", para_object.color);
             }
@@ -187,7 +259,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 }
                 catch (e) {
                     // das übergebene JSON war nicht gültig
-                    Radio.trigger("Alert", "alert", "Die übergebene Geometrie konnte nicht dargestellt werden.");
+                    Radio.trigger("Alert", "alert", this.get("geometryDrawFailed"));
                 }
             }
         }
@@ -454,11 +526,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     text = "";
 
                 if (count > maxFeatures - 1) {
-                    text = "Sie haben bereits " + maxFeatures + " Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!";
-                    if (maxFeatures === 1) {
-                        text = "Sie haben bereits " + maxFeatures + " Objekt gezeichnet, bitte löschen Sie dieses, bevor Sie fortfahren!";
-                    }
-
+                    text = i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures});
                     Radio.trigger("Alert", "alert", text);
                     that.deactivateDrawInteraction();
                 }
@@ -487,7 +555,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             radius = this.get("radius"),
             zIndex = this.get("zIndex");
 
-        if (_.has(drawType, "text") && drawType.text === "Text schreiben") {
+        if (_.has(drawType, "text") && drawType.text === this.get("writeText")) {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (_.has(drawType, "geometry") && drawType.geometry) {
@@ -749,12 +817,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
     /**
      * setter for drawType
-     * @param {string} value1 - geometry
-     * @param {string} value2 - text
+     * @param {string} geometry - geometry
+     * @param {string} text - text
      * @return {void}
      */
-    setDrawType: function (value1, value2) {
-        this.set("drawType", {geometry: value1, text: value2});
+    setDrawType: function (geometry, text) {
+        this.set("drawType", {geometry: geometry, text: text});
     },
 
     /**

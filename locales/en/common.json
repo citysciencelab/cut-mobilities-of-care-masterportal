@@ -1,7 +1,18 @@
 {
-    "button":{
+    "button": {
         "back": "Back",
+        "download": "Download",
         "search": "Search"
+    },
+    "colors": {
+        "blue": "Blue",
+        "yellow": "Yellow",
+        "grey": "Grey",
+        "green": "Green",
+        "orange": "Orange",
+        "red": "Red",
+        "black": "Black",
+        "white": "White"
     },
     "modules": {
         "tools": {
@@ -47,7 +58,7 @@
                 "moreInfo": "more info",
                 "lessInfo": "less info",
                 "exportAsPdf": "Export as PDF",
-                "noFeatures":{
+                "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
                     "objectName": "objects",
                     "info": "Click on an object on the map. A window opens with the respective factual information. In the upper right corner there is a star symbol {{iconEmptyStar}}. Click on this icon to add the object to the comparison list. The star icon will be colored yellow {{iconYellowStar}}. Click the star icon again to remove the object from the comparison list."
@@ -100,7 +111,32 @@
                 "currentPosition": "Current position",
                 "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
                 "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed"
+                "addressRequestFailed": "Address request failed",
+            },
+            "draw": {
+                "clickToPlaceText": "Click on the map to place the text",
+                "draw": "draw",
+                "geometryDrawFailed": "The transferred geometry could not be displayed.",
+                "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
+                "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
+                "drawPoint": "Draw point",
+                "writeText": "Write text",
+                "drawLine": "Draw line",
+                "drawArea": "Draw area",
+                "drawCircle": "Draw circle",
+                "fontSize": "Font size",
+                "fontName": "Font",
+                "size": "Size",
+                "lineWidth": "Line width",
+                "transparency": "Transparency",
+                "color": "Color",
+                "button": {
+                    "draw": "Draw geometry / text",
+                    "edit": "Edit geometry",
+                    "delete": "Delete geometry / text",
+                    "deleteAll": "Delete all"
+                }
+>>>>>>> feature/i18next-integrieren
             }
         },
         "controls": {
@@ -180,15 +216,15 @@
         }
     },
     "snippets": {
-        "checkbox":{
-            "on":"On",
-            "off":"Off"
+        "checkbox": {
+            "on": "On",
+            "off": "Off"
         },
         "graphicalSelect": {
-            "displayName":"Select geometry",
-            "selectBySquare":"Draw up rectangle",
-            "selectByCircle":"Draw circle",
-            "selectByPolygon":"Draw surface",
+            "displayName": "Select geometry",
+            "selectBySquare": "Draw up rectangle",
+            "selectByCircle": "Draw circle",
+            "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
         }
