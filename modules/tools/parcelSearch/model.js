@@ -78,7 +78,7 @@ const ParcelSearch = Tool.extend({
      */
     changeLang: function () {
         this.set({
-            searchText: i18next.t("common:modules.tools.parcelSearch.search"),
+            searchText: i18next.t("common:button.search"),
             generateReportText: i18next.t("common:modules.tools.parcelSearch.generateReport"),
             parcelNumberText: i18next.t("common:modules.tools.parcelSearch.parcelNumber"),
             parcelNumberPlaceholderText: i18next.t("common:modules.tools.parcelSearch.parcelNumberPlaceholder"),
