@@ -58,7 +58,17 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: true
     },
-    defaultToolId: "gfi"
+    defaultToolId: "gfi",
+    portalLanguage:{
+        enabled: true,
+        debug: false,
+        languages:{
+            de: "deutsch",
+            en: "englisch"
+        },
+        startLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator"]
+    }
 };
 
 /* eslint-enable no-unused-vars */
