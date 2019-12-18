@@ -30,13 +30,15 @@ const SensorTheme = Theme.extend({
         const grafanaUrls = {};
         let attributesContainingGrafana = [];
 
-        attributesContainingGrafana = feature.getKeys().filter(key => {
-            return key.startsWith("grafana_url");
-        });
+        if (feature) {
+            attributesContainingGrafana = feature.getKeys().filter(key => {
+                return key.startsWith("grafana_url");
+            });
 
-        attributesContainingGrafana.forEach(attr => {
-            grafanaUrls[attr] = feature.get(attr);
-        });
+            attributesContainingGrafana.forEach(attr => {
+                grafanaUrls[attr] = feature.get(attr);
+            });
+        }
 
         return grafanaUrls;
     },
