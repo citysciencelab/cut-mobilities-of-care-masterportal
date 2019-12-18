@@ -14,7 +14,10 @@
                 "enterStartDestHoverText": "Start- und Ziel eingeben",
                 "enterOptionsText": "Optionen eingeben",
                 "calculateRoute": "Route berechnen",
-                "currentPosition": "Aktueller Standpunkt"
+                "currentPosition": "Aktueller Standpunkt",
+                "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.",
+                "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten.",
+                "addressRequestFailed": "Adressabfrage fehlgeschlagen"
             }
         }
     }

@@ -47,40 +47,22 @@ const RoutingView = Backbone.View.extend({
                 else if (changed.hasOwnProperty("isGeolocationPossible")) {
                     this.changeGeolocationPossible();
                 }
-                else if (changed.hasOwnProperty("startAddressLabel")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("destinationAddressLabel")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("fromPlaceholder")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("toPlaceholder")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("setStartTimeText")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("date")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("time")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("routingError")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("enterStartDestHoverText")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("enterOptionsText")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("calculateRoute")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("currentPosition")) {
+                else if (changed.hasOwnProperty("startAddressLabel") ||
+                    changed.hasOwnProperty("destinationAddressLabel") ||
+                    changed.hasOwnProperty("fromPlaceholder") ||
+                    changed.hasOwnProperty("toPlaceholder") ||
+                    changed.hasOwnProperty("setStartTimeText") ||
+                    changed.hasOwnProperty("date") ||
+                    changed.hasOwnProperty("time") ||
+                    changed.hasOwnProperty("routingError") ||
+                    changed.hasOwnProperty("enterStartDestHoverText") ||
+                    changed.hasOwnProperty("enterOptionsText") ||
+                    changed.hasOwnProperty("calculateRoute") ||
+                    changed.hasOwnProperty("currentPosition") ||
+                    changed.hasOwnProperty("routingCalcError") ||
+                    changed.hasOwnProperty("routingCalcAborted") ||
+                    changed.hasOwnProperty("addressRequestFailed")
+                ) {
                     this.render(this.model, true);
                 }
             }

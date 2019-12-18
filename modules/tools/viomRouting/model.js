@@ -60,18 +60,20 @@ const RoutingModel = Tool.extend({
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set("startAddressLabel", i18next.t("common:modules.tools.viomRouting.startAddressLabel"));
-        this.set("destinationAddressLabel", i18next.t("common:modules.tools.viomRouting.destinationAddressLabel"));
-        this.set("fromPlaceholder", i18next.t("common:modules.tools.viomRouting.fromPlaceholder"));
-        this.set("toPlaceholder", i18next.t("common:modules.tools.viomRouting.toPlaceholder"));
-        this.set("setStartTimeText", i18next.t("common:modules.tools.viomRouting.setStartTimeText"));
-        this.set("date", i18next.t("common:date"));
-        this.set("time", i18next.t("common:time"));
-        this.set("routingError", i18next.t("common:modules.tools.viomRouting.routingError"));
-        this.set("enterStartDestHoverText", i18next.t("common:modules.tools.viomRouting.enterStartDestHoverText"));
-        this.set("enterOptionsText", i18next.t("common:modules.tools.viomRouting.enterOptionsText"));
-        this.set("calculateRoute", i18next.t("common:modules.tools.viomRouting.calculateRoute"));
-        this.set("currentPosition", i18next.t("common:modules.tools.viomRouting.currentPosition"));
+        this.set({
+            startAddressLabel: i18next.t("common:modules.tools.viomRouting.startAddressLabel"),
+            destinationAddressLabel: i18next.t("common:modules.tools.viomRouting.destinationAddressLabel"),
+            fromPlaceholder: i18next.t("common:modules.tools.viomRouting.fromPlaceholder"),
+            toPlaceholder: i18next.t("common:modules.tools.viomRouting.toPlaceholder"),
+            setStartTimeText: i18next.t("common:modules.tools.viomRouting.setStartTimeText"),
+            date: i18next.t("common:date"),
+            time: i18next.t("common:time"),
+            routingError: i18next.t("common:modules.tools.viomRouting.routingError"),
+            enterStartDestHoverText: i18next.t("common:modules.tools.viomRouting.enterStartDestHoverText"),
+            enterOptionsText: i18next.t("common:modules.tools.viomRouting.enterOptionsText"),
+            calculateRoute: i18next.t("common:modules.tools.viomRouting.calculateRoute"),
+            currentPosition: i18next.t("common:modules.tools.viomRouting.currentPosition")
+        });
     },
 
     setStartpoint: function (geoloc) {
@@ -166,11 +168,11 @@ const RoutingModel = Tool.extend({
                     }
                 }
                 catch (error) {
-                    Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcError") + ".", kategorie: "alert-warning"});
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten:  " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcAborted") + ". " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
@@ -198,7 +200,7 @@ const RoutingModel = Tool.extend({
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.addressRequestFailed") + ": " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });

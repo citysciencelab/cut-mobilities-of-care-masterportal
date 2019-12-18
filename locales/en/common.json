@@ -14,7 +14,10 @@
                 "enterStartDestHoverText": "Enter start and destination",
                 "enterOptionsText": "Enter options",
                 "calculateRoute": "Calculate route",
-                "currentPosition": "Current position"
+                "currentPosition": "Current position",
+                "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
+                "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
+                "addressRequestFailed": "Address request failed"
             }
         }
     }
