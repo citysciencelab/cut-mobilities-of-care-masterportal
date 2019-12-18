@@ -8,7 +8,11 @@ const ImportView = Backbone.View.extend({
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:fakeButtonText": this.render
+            "change:fakeButtonText": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
+            }
         });
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
