@@ -14,6 +14,8 @@
         "black": "Schwarz",
         "white": "Weiß"
     },
+    "date": "Datum",
+    "time": "Zeit",
     "modules": {
         "tools": {
             "contact": {

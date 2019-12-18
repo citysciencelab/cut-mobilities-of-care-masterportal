@@ -14,6 +14,8 @@
         "black": "Black",
         "white": "White"
     },
+    "date": "Date",
+    "time": "Time",
     "modules": {
         "tools": {
             "contact": {

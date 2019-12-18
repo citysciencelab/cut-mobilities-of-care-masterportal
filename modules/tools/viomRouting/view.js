@@ -17,56 +17,21 @@ const RoutingView = Backbone.View.extend({
         this.template = _.template(RoutingWin);
 
         this.listenTo(this.model, {
-            "change": function (model) {
-                const changed = model.changed;
-
-                if (changed.hasOwnProperty("isActive")) {
-                    this.render(this.model, true);
-                }
-                else if (changed.hasOwnProperty("fromCoord")) {
-                    this.toggleRoutingButton();
-                }
-                else if (changed.hasOwnProperty("toCoord")) {
-                    this.toggleRoutingButton();
-                }
-                else if (changed.hasOwnProperty("description")) {
-                    this.addDescription();
-                }
-                else if (changed.hasOwnProperty("fromList")) {
-                    this.fromListChanged();
-                }
-                else if (changed.hasOwnProperty("toList")) {
-                    this.toListChanged();
-                }
-                else if (changed.hasOwnProperty("startAdresse")) {
-                    this.changeStartAdresse();
-                }
-                else if (changed.hasOwnProperty("zielAdresse")) {
-                    this.changeZielAdresse();
-                }
-                else if (changed.hasOwnProperty("isGeolocationPossible")) {
-                    this.changeGeolocationPossible();
-                }
-                else if (changed.hasOwnProperty("startAddressLabel") ||
-                    changed.hasOwnProperty("destinationAddressLabel") ||
-                    changed.hasOwnProperty("fromPlaceholder") ||
-                    changed.hasOwnProperty("toPlaceholder") ||
-                    changed.hasOwnProperty("setStartTimeText") ||
-                    changed.hasOwnProperty("date") ||
-                    changed.hasOwnProperty("time") ||
-                    changed.hasOwnProperty("routingError") ||
-                    changed.hasOwnProperty("enterStartDestHoverText") ||
-                    changed.hasOwnProperty("enterOptionsText") ||
-                    changed.hasOwnProperty("calculateRoute") ||
-                    changed.hasOwnProperty("currentPosition") ||
-                    changed.hasOwnProperty("routingCalcError") ||
-                    changed.hasOwnProperty("routingCalcAborted") ||
-                    changed.hasOwnProperty("addressRequestFailed")
-                ) {
+            "change:isActive": this.render,
+            "change:fromCoord": this.toggleRoutingButton,
+            "change:toCoord": this.toggleRoutingButton,
+            "change:description": this.addDescription,
+            "change:fromList": this.fromListChanged,
+            "change:toList": this.toListChanged,
+            "change:startAdresse": this.changeStartAdresse,
+            "change:zielAdresse": this.changeZielAdresse,
+            "change:isGeolocationPossible": this.changeGeolocationPossible,
+            "change:startAddressLabel": function () {
+                if (this.model.get("isActive")) {
                     this.render(this.model, true);
                 }
             }
-        });
+        }, this);
 
         channel.on({
             "setRoutingDestination": this.setRoutingDestination
