@@ -52,7 +52,7 @@ const SaveSelection = Tool.extend({
 
     changeLang: function () {
         this.set({
-            "saveSelectionText": i18next.t("common:modules.tools.saveSelection.saveSelectionText")
+            saveSelectionText: i18next.t("common:modules.tools.saveSelection.saveSelectionText")
         });
     },
 

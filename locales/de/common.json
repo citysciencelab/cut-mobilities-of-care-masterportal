@@ -1,7 +1,18 @@
 {
-    "button":{
+    "button": {
         "back": "Zurück",
+        "download": "Herunterladen",
         "search": "Suchen"
+    },
+    "colors": {
+        "blue": "Blau",
+        "yellow": "Gelb",
+        "grey": "Grau",
+        "green": "Grün",
+        "orange": "Orange",
+        "red": "Rot",
+        "black": "Schwarz",
+        "white": "Weiß"
     },
     "modules": {
         "tools": {
@@ -47,7 +58,7 @@
                 "moreInfo": "mehr Infos",
                 "lessInfo": "weniger Infos",
                 "exportAsPdf": "Export als PDF",
-                "noFeatures":{
+                "noFeatures": {
                     "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",
                     "objectName": "Objekte",
                     "info": "Klicken Sie auf ein Objekt in der Karte. Es öffnet sich ein Fenster mit den jeweiligen Sachinformationen. In der rechten oberen Ecke befindet sich ein Sternsymbol {{iconEmptyStar}}. Klicken Sie auf dieses Symbol, um das Objekt zur Vergleichsliste hinzuzufügen. Das Sternsymbol wird gelb eingefärbt {{iconYellowStar}}. Ein erneuter Klick auf das Sternsymbol entfernt das Objekt wieder von der Vergleichsliste."
@@ -63,6 +74,26 @@
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
             },
+            "kmlImport": {
+                "unknownGeometry": "Unbekannte Geometry",
+                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
+                "fakeButton": "Datei auswählen (keine ausgewählt)",
+                "importButton": "IMPORT",
+                "file": "Datei"
+            },
+            "parcelSearch": {
+                "wrongConfig": "Ungültige oder unvollständige Konfiguration",
+                "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
+                "wrongConfigParcelsearch": "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support.",
+                "parcelSearchImpossible": "Flurstücksabfrage derzeit nicht möglich!",
+                "tryAgainLater": "Bitte versuchen Sie es später erneut.",
+                "parcelNotFound": "Es wurde kein Flurstück mit der Nummer {{flstNr}} gefunden.",
+                "district": "Gemarkung",
+                "choose": "bitte wählen",
+                "parcelNumber": "Flurstücksnummer",
+                "parcelNumberPlaceholder": "Nummer eingeben",
+                "generateReport": "Bericht erzeugen"
+            },
             "getCoord": {
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
@@ -76,12 +107,111 @@
             },
             "searchByCoord": {
                 "exampleAcronym": "Bsp.",
-                "ErrorMsg": {
+                "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
                     "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
                 },
                 "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
                 "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
+            },
+            "draw": {
+                "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
+                "draw": "zeichnen",
+                "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",
+                "limitReached": "Sie haben bereits {{count}} Objekt gezeichnet, bitte löschen Sie dieses, bevor Sie fortfahren!",
+                "limitReached_plural": "Sie haben bereits {{count}} Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!",
+                "drawPoint": "Punkt zeichnen",
+                "writeText": "Text schreiben",
+                "drawLine": "Linie zeichnen",
+                "drawArea": "Fläche zeichnen",
+                "drawCircle": "Kreis zeichnen",
+                "fontSize": "Schriftgröße",
+                "fontName": "Schriftart",
+                "size": "Größe",
+                "lineWidth": "Strichstärke",
+                "transparency": "Transparenz",
+                "color": "Farbe",
+                "button": {
+                    "draw": "Geometrie / Text zeichnen",
+                    "edit": "Geometrie bearbeiten",
+                    "delete": "Geometrie / Text löschen",
+                    "deleteAll": "Alles löschen"
+                }
+            }
+        },
+        "controls": {
+            "fullScreen": {
+                "enable": "Vollbild aktivieren",
+                "disable": "Vollbild deaktivieren",
+                "toggle": "Vollbild umschalten"
+            },
+            "zoom": {
+                "zoomIn": "Hineinzoomen",
+                "zoomOut": "Herauszoomen"
+            },
+            "orientation": {
+                "titleGeolocate": "Standpunkt",
+                "titleGeolocatePOI": "In meiner Nähe",
+                "geolocationDeniedText": "Lokalisierung nicht verfügbar",
+                "trackingDeniedText": "'In meiner Nähe' nicht verfügbar"
+            },
+            "orientation3d": {
+                "compass": {
+                    "pointerNorth": "Ansicht einnorden/Ansicht drehen",
+                    "pointerSouth": "Südblick",
+                    "pointerEast": "Ost Blick",
+                    "pointerWest": "West Blick",
+                    "moveNorth": "Nach Norden bewegen",
+                    "moveSouth": "Nach Süden bewegen",
+                    "moveWest": "Nach Westen bewegen",
+                    "moveEast": "Nach Osten bewegen"
+                },
+                "control": {
+                    "tiltDown": "Ansicht neigen",
+                    "tiltReset": "Ansicht zurückstellen",
+                    "zoomIn": "$t(common:modules.controls.zoom.zoomIn)",
+                    "zoomOut": "$t(common:modules.controls.zoom.zoomOut)"
+                }
+            },
+            "totalView": {
+                "titleButton": "Zurück zur Startansicht",
+                "titleMenu": "Hauptansicht"
+            },
+            "3d": {
+                "buttonTitle": "3D",
+                "openView3d": "Ansicht einschalten",
+                "closeView3d": "Ansicht ausschalten",
+                "betaWarning": "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "oblique": {
+                "buttonTitle": "Schrägluftbilder",
+                "openViewOblique": "Schrägluftbilder einschalten",
+                "closeViewOblique": "Schrägluftbilder ausschalten",
+                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+            },
+            "freeze": {
+                "freeze": "Ansicht sperren",
+                "unfreeze": "Ansicht entsperren",
+                "freezeTable": "$t(common:modules.controls.freeze.freeze)"
+            },
+            "backForward": {
+                "stepForward": "Nächste Ansicht",
+                "stepBackward": "Letzte Ansicht"
+            },
+            "attributions": {
+                "showAttributions": "Layer-Attributions anzeigen",
+                "hideAttributions": "Layer-Attributions ausblenden"
+            },
+            "overviewMap": {
+                "showOverviewControl": "Übersichtskarte einblenden",
+                "hideOverviewControl": "Übersichtskarte ausblenden",
+                "showOverviewTable": "Mini-Map einschalten",
+                "hideOverviewTable": "Mini-Map ausschalten"
+            },
+            "mousePosition": {
+                "hint": "Bewegen Sie die Maus über die Karte",
+                "showMousePosition": "Einblenden",
+                "hideMousePosition": "Ausblenden"
             }
         }
     },

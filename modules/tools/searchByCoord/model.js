@@ -36,13 +36,13 @@ const SearchByCoord = Tool.extend({
      */
     changeLang: function () {
         this.set({
-            "coordSystemField": i18next.t("common:modules.tools.getCoord.coordSystemField"),
-            "hdmsEastingLabel": i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
-            "hdmsNorthingLabel": i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
-            "cartesianEastingLabel": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
-            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
-            "exampleAcronym": i18next.t("common:modules.tools.searchByCoord.exampleAcronym"),
-            "searchButtonText": i18next.t("common:button.search")
+            coordSystemField: i18next.t("common:modules.tools.getCoord.coordSystemField"),
+            hdmsEastingLabel: i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
+            hdmsNorthingLabel: i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
+            cartesianEastingLabel: i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
+            cartesianNorthingLabel: i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            exampleAcronym: i18next.t("common:modules.tools.searchByCoord.exampleAcronym"),
+            searchButtonText: i18next.t("common:button.search")
         });
     },
 
@@ -63,13 +63,13 @@ const SearchByCoord = Tool.extend({
                     fieldName = "#coordinatesNorthingField";
                 }
                 if (_.isUndefined(value.coord) || value.coord.length < 1) {
-                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noCoord", {valueKey: value.key});
+                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: value.key});
                     $(fieldName + "+ .text-danger").html("");
                     $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
                     $(fieldName).parent().addClass("has-error");
                 }
                 else if (!value.coord.match(validETRS89)) {
-                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noMatch", {valueKey: value.key, valueExample: value.example});
+                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: value.key, valueExample: value.example});
                     $(fieldName + "+ .text-danger").html("");
                     $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
                     $(fieldName).parent().addClass("has-error");
@@ -83,13 +83,13 @@ const SearchByCoord = Tool.extend({
         }
         else if (attributes.coordSystem === "WGS84") {
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
-                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84))) {
-                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
@@ -101,13 +101,13 @@ const SearchByCoord = Tool.extend({
             }
 
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
-                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84))) {
-                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
@@ -120,13 +120,13 @@ const SearchByCoord = Tool.extend({
         }
         else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
-                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84_dez))) {
-                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
@@ -137,13 +137,13 @@ const SearchByCoord = Tool.extend({
                 Radio.trigger("Alert", "alert:remove");
             }
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
-                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84_dez))) {
-                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.ErrorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");

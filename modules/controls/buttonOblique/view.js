@@ -1,7 +1,14 @@
 import ButtonObliqueTemplate from "text-loader!./template.html";
+import ButtonObliqueTemplateTable from "text-loader!./templateTable.html";
+import ButtonObliqueModel from "./model";
 /**
  * @member ButtonObliqueTemplate
- * @description Template used for the "Schräglüftbilder" button
+ * @description Template used for the "oblique aerial photos" button
+ * @memberof Controls.ButtonOblique
+ */
+/**
+ * @member ButtonObliqueTemplateTable
+ * @description tableTemplate used for the ObliqueMap in Table View Tools
  * @memberof Controls.ButtonOblique
  */
 
@@ -24,35 +31,42 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @fires ObliqueMap#RadioTriggerObliqueMapActivate
      * @fires Alerting#RadioTriggerAlertAlert
      * @listens Core#RadioTriggerMapChange
+     * @listens Controls.ButtonOblique#changeButtonTitle
+     * @listens Controls.ButtonOblique#changeOpenViewObliqueText
+     * @listens Controls.ButtonOblique#changeCloseViewObliqueText
      */
     initialize: function () {
         var channel = Radio.channel("Map"),
             style = Radio.request("Util", "getUiStyle");
 
+        this.model = new ButtonObliqueModel();
         channel.on({
             "change": this.change
         }, this);
+
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.buttonTitle || changed.openViewObliqueText || changed.closeViewObliqueText) {
+                    if (style === "DEFAULT") {
+                        this.render();
+                    }
+                    else if (style === "TABLE") {
+                        this.renderToToolbar();
+                    }
+                }
+            }
+        });
+
         if (style === "DEFAULT") {
-            this.template = _.template(ButtonObliqueTemplate);
             this.render();
         }
         else if (style === "TABLE") {
-            this.listenTo(Radio.channel("MenuLoader"), {
-                "ready": function () {
-                    this.setElement("#table-tools-menu");
-                    this.renderToToolbar();
-                }
-            });
-            this.setElement("#table-tools-menu");
-            this.renderToToolbar();
+            this.renderToToolbarInit();
         }
     },
-    /**
-     * @member ButtonObliqueTemplate
-     * @description tableTemplate used for the ObliqueMap in Table View Tools
-     * @memberof Controls.ButtonOblique
-     */
-    tabletemplate: _.template("<div id='ObliqueTable' class='table-tool'><a href='#'><span class='glyphicon glyphicon-picture'></span><span id='ObliqueTable_title'><%=ansicht %></span></a> </div>"),
+
     /**
      * Shows the "Schrägluftbilder" button as selected.
      * Shows the "Schrägluftbilder" button as not selected.
@@ -67,31 +81,56 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
             this.$("#buttonOblique").removeClass("toggleButtonPressed");
         }
     },
+
     /**
      * Render Function
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @returns {ButtonObliqueView} - Returns itself
      */
     render: function () {
-        this.$el.html(this.template);
+        const attr = this.model.toJSON(),
+            template = _.template(ButtonObliqueTemplate);
+
+        this.$el.html(template(attr));
         if (Radio.request("ObliqueMap", "isActive")) {
             this.change("Oblique");
         }
 
         return this;
     },
+
     /**
-     * Render Function
+     * initial render function for the table UiStyle - this is necessary because $el has classes attached that are styled for red buttons (which are not used in table style)
+     * @pre the bound element $el is in its initial state (with some css classes)
+     * @post the table template is attached to $el, $el has been striped from its css classes and $el is append to the list #table-tools-menu
+     * @returns {Void}  -
+     */
+    renderToToolbarInit: function () {
+        this.renderToToolbar();
+
+        // remove all css classes of main element because this is not a red button
+        this.$el.attr("class", "");
+        $("#table-tools-menu").append(this.$el);
+    },
+
+    /**
+     * render function for the table UiStyle
+     * @pre the bound element $el is something
+     * @post the table template is attached to $el
      * @fires Core#RadioRequestObliqueMapIsActive
      * @returns {ButtonObliqueView} - Returns itself
      */
     renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: "Schrägluftbilder einschalten"}));
+        const attr = this.model.toJSON(),
+            templateTable = _.template(ButtonObliqueTemplateTable);
+
+        this.$el.html(templateTable(attr));
         if (Radio.request("ObliqueMap", "isActive")) {
             this.$("#ObliqueTable").addClass("toggleButtonPressed");
         }
         return this;
     },
+
     /**
      * Shows the oblique aerial picture if the "Schräglüftbilder" button is activated.
      * Shows the map if the "Schräglüftbilder" button is deactivated.
@@ -109,7 +148,8 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
         if (Radio.request("ObliqueMap", "isActive")) {
             Radio.trigger("ObliqueMap", "deactivate");
             Radio.trigger("Alert", "alert:remove");
-            this.$("#ObliqueTable_title").text("Schrägluftbilder einschalten");
+            this.$("#ObliqueTable-title-close").hide();
+            this.$("#ObliqueTable-title-open").show();
         }
         else {
             if (Radio.request("Map", "isMap3d")) {
@@ -121,11 +161,11 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
                 Radio.trigger("Map", "deactivateMap3d");
                 return;
             }
-            this.$("#ObliqueTable_title").text("Schrägluftbilder ausschalten");
+            this.$("#ObliqueTable-title-open").hide();
+            this.$("#ObliqueTable-title-close").show();
             Radio.trigger("ObliqueMap", "activate");
-            Radio.trigger("Alert", "alert", "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!");
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.oblique.betaWarningOblique"));
         }
-
     }
 });
 
