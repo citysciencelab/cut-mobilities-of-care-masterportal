@@ -1,7 +1,8 @@
 {
     "button": {
         "back": "Zurück",
-        "download": "Herunterladen"
+        "download": "Herunterladen",
+        "search": "Suchen"
     },
     "colors": {
         "blue": "Blau",
@@ -72,6 +73,19 @@
             },
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
+            },
+            "parcelSearch": {
+                "wrongConfig": "Ungültige oder unvollständige Konfiguration",
+                "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
+                "wrongConfigParcelsearch": "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support.",
+                "parcelSearchImpossible": "Flurstücksabfrage derzeit nicht möglich!",
+                "tryAgainLater": "Bitte versuchen Sie es später erneut.",
+                "parcelNotFound": "Es wurde kein Flurstück mit der Nummer {{flstNr}} gefunden.",
+                "district": "Gemarkung",
+                "choose": "bitte wählen",
+                "parcelNumber": "Flurstücksnummer",
+                "parcelNumberPlaceholder": "Nummer eingeben",
+                "generateReport": "Bericht erzeugen"
             },
             "getCoord": {
                 "coordSystemField": "Koordinatensystem",
