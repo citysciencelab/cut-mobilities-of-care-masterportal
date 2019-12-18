@@ -85,7 +85,7 @@ describe("drawModel", function () {
             var color = [255, 0, 0, 1],
                 result;
 
-            model.setDrawType("text",  i18next.t("common:modules.tools.draw.writeText"));
+            model.setDrawType("text", i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
             result = model.getStyle();
 
