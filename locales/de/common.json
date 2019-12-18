@@ -1,6 +1,7 @@
 {
     "button":{
-        "back": "Zurück"
+        "back": "Zurück",
+        "search": "Suchen"
     },
     "modules": {
         "tools": {
@@ -73,9 +74,18 @@
                 "choose": "bitte wählen",
                 "parcelNumber": "Flurstücksnummer",
                 "parcelNumberPlaceholder": "Nummer eingeben",
-                "generateReport": "Bericht erzeugen",
-                "search": "Suchen"
-                
+                "generateReport": "Bericht erzeugen"
+            },
+            "getCoord": {
+                "coordSystemField": "Koordinatensystem",
+                "hdms": {
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Höhe"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                }
             }
         },
         "controls": {

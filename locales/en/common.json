@@ -1,6 +1,7 @@
 {
     "button":{
-        "back": "Back"
+        "back": "Back",
+        "search": "Search"
     },
     "modules": {
         "tools": {
@@ -73,8 +74,18 @@
                 "choose": "please choose",
                 "parcelNumber": "Parcel number",
                 "parcelNumberPlaceholder": "Enter number",
-                "generateReport": "Generate report",
-                "search": "Search"
+                "generateReport": "Generate report"
+            },
+            "getCoord": {
+                "coordSystemField": "coordinate system",
+                "hdms": {
+                    "eastingLabel": "longitude",
+                    "northingLabel": "altitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "easting",
+                    "northingLabel": "northing"
+                }
             }
         },
         "controls": {
