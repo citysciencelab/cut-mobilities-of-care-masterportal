@@ -113,6 +113,15 @@
                     "northingLabel": "northing"
                 }
             },
+            "searchByCoord": {
+                "exampleAcronym": "e.g.",
+                "errorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
+                },
+                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
+            },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
                 "draw": "draw",
