@@ -125,7 +125,7 @@ function initLanguage (portalLanguageConfig) {
             "en": "english"
         },
         "startLanguage": "de",
-        "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
+        "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator", "htmlTag"]
     }, portalLanguageConfig);
 
     // init i18next
@@ -138,7 +138,8 @@ function initLanguage (portalLanguageConfig) {
         .init({
             debug: portalLanguage.debug,
 
-            lng: portalLanguage.startLanguage,
+            // lng overrides language detection - so shall not be set (!)
+            // lng: portalLanguage.startLanguage,
             fallbackLng: portalLanguage.startLanguage,
             whitelist: Object.keys(portalLanguage.languages),
 
@@ -178,12 +179,12 @@ function initLanguage (portalLanguageConfig) {
                 lookupFromSubdomainIndex: 0,
 
                 // cache user language on
-                caches: ["localStorage", "cookie"],
+                caches: ["localStorage"],
                 excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
 
                 // optional expire and domain for set cookie
-                cookieMinutes: 10,
-                cookieDomain: "myDomain",
+                // cookieMinutes: 10,
+                // cookieDomain: "myDomain",
 
                 // only detect languages that are in the whitelist
                 checkWhitelist: true
