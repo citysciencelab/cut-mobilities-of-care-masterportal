@@ -23,6 +23,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
                 this.render();
             }
         }, this);
+        this.render();
     },
 
     className: "language-switch",
