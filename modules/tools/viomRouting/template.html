@@ -1,30 +1,30 @@
 <nav aria-label="...">
   <ul class="pagination pagination-lg">
     <li class="<% if (_.isNull(routelayer)) {print ('active');} %>">
-      <span id="address" title="Start- und Ziel eingeben" class="glyphicon glyphicon-road" aria-hidden="true"></span>
+      <span id="address" title="<%= enterStartDestHoverText %>" class="glyphicon glyphicon-road" aria-hidden="true"></span>
     </li>
     <li>
-      <span id="options" title="Optionen eingeben" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+      <span id="options" title="<%= enterOptionsText %>" class="glyphicon glyphicon-tags" aria-hidden="true"></span>
     </li>
     <li id="calcLi" class="<% if (fromCoord === '' || toCoord === '') {print ('disabled');} else if (!_.isNull(routelayer)) {print ('active');} %>">
-      <span id="calc" title="Route berechnen" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+      <span id="calc" title="<%= calculateRoute %>" class="glyphicon glyphicon-flag" aria-hidden="true"></span>
     </li>
   </ul>
 </nav>
 
 <div class="address innerRDiv" style="<% if (!_.isNull(routelayer)) {print ('display: none');} %>">
-    <h4>Startadresse:</h4>
+    <h4><%= startAddressLabel %>:</h4>
     <div class="input-group inputGroupR" id="input-group-start">
-        <input type="text" class="form-control adresse" id="startAdresse" placeholder="Von:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
+        <input type="text" class="form-control adresse" id="startAdresse" placeholder="<%= fromPlaceholder %>:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
         <div style="position:relative;">
              <ul id="start" class="dropdown-menu-routing" aria-labelledby="startAdresse">
             </ul>
         </div>
         <span id="startAdressePositionSpan" class="<% if (!isGeolocationPossible) {print ('hidden ');} %>input-group-addon glyphicon glyphicon-map-marker routinglocator startAdressePosition" aria-hidden="true"></span>
     </div>
-    <h4>Zieladresse:</h4>
+    <h4><%= destinationAddressLabel%>:</h4>
     <div class="input-group inputGroupR" id="input-group-ziel">
-        <input type="text" class="form-control adresse" id="zielAdresse" placeholder="Nach:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
+        <input type="text" class="form-control adresse" id="zielAdresse" placeholder="<%= toPlaceholder %>:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
         <div style="position:relative;">
             <ul id="ziel" class="dropdown-menu-routing" role="menu" aria-labelledby="zielAdresse">
             </ul>
@@ -33,14 +33,14 @@
 </div>
 
 <div class="options innerRDiv" style="display: none;">
-    <h4>Startzeitpunkt vorgeben:</h4>
+    <h4><%= setStartTimeText %>:</h4>
     <div class="input-group inputGroupR">
-        <span class="input-group-addon">Datum</span>
+        <span class="input-group-addon"><%= date %></span>
         <input type="date" id="dayOfWeekButton" class="form-control changedWochentag" aria-describedby="basic-addon2" min="2017-01-01" value="<% var date = new Date(); print (date.toISOString().split('T')[0]) %>">
     </div>
     <br>
     <div class="input-group inputGroupR">
-        <span class="input-group-addon">Uhrzeit</span>
+        <span class="input-group-addon"><%= time %></span>
         <input type="time" id="timeButton" class="form-control changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" value="<% var date = new Date(); print (date.toLocaleTimeString()) %>">
     </div>
 </div>

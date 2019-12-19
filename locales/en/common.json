@@ -15,6 +15,8 @@
         "black": "Black",
         "white": "White"
     },
+    "date": "Date",
+    "time": "Time",
     "modules": {
         "language": {
             "languageTitle": "Please choose a language"
@@ -112,6 +114,21 @@
                     "eastingLabel": "easting",
                     "northingLabel": "northing"
                 }
+            },
+            "viomRouting": {
+                "startAddressLabel": "Start address",
+                "destinationAddressLabel": "Destination address",
+                "fromPlaceholder": "From",
+                "toPlaceholder": "To",
+                "setStartTimeText": "Set start time",
+                "routingError": "Error",
+                "enterStartDestHoverText": "Enter start and destination",
+                "enterOptionsText": "Enter options",
+                "calculateRoute": "Calculate route",
+                "currentPosition": "Current position",
+                "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
+                "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
+                "addressRequestFailed": "Address request failed"
             },
             "searchByCoord": {
                 "exampleAcronym": "e.g.",
