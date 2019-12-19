@@ -44,6 +44,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         }
     },
 
+    testIt: "Dies ist ein Test zum testen",
+
     /**
      * @member DrawTemplate
      * @description Template used to create the draw tool.
@@ -61,7 +63,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
 
         if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
-            // this.$el.find(".dropdown_unit").append(this.snippetDropdownViewUnit.render().el);
         }
         else {
             this.removeSurface();
@@ -108,112 +109,140 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
 
         switch (element.options[element.selectedIndex].text) {
             case "Punkt zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").show();
-                this.$el.find(".stroke-width").hide();
-                this.$el.find(".circleRadiusInner").hide();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".dropdownUnit").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".colorContour").hide();
-                this.$el.find(".color").show();
-                this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").hide();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .stroke-width,
+                    .circleRadiusInner,
+                    .circleRadiusOuter,
+                    .dropdownUnit,
+                    .dropdownMethod,
+                    .colorContour,
+                    .opacityContour`
+                ).hide();
+                this.$el.find(
+                    `.radius,
+                    .color,
+                    .opacity`
+                ).show();
                 break;
             }
             case "Text schreiben": {
-                this.$el.find(".text").show();
-                this.$el.find(".font-size").show();
-                this.$el.find(".font").show();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").hide();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".circleRadiusInner").hide();
-                this.$el.find(".dropdownUnit").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".colorContour").hide();
-                this.$el.find(".color").show();
-                this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").hide();
+                this.$el.find(
+                    `.radius,
+                    .stroke-width,
+                    .circleRadiusOuter,
+                    .circleRadiusInner,
+                    .dropdownUnit,
+                    .dropdownMethod,
+                    .colorContour,
+                    .opacityContour`
+                ).hide();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .color,
+                    .opacity`
+                ).show();
                 break;
             }
             case "Kreis zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").show();
-                this.$el.find(".circleRadiusInner").show();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".dropdownUnit").show();
-                this.$el.find(".dropdownMethod").show();
-                this.$el.find(".color").show();
-                this.$el.find(".colorContour").show();
-                this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").hide();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .radius,
+                    .circleRadiusOuter,
+                    .opacityContour`
+                ).hide();
+                this.$el.find(
+                    `.stroke-width,
+                    .circleRadiusInner,
+                    .dropdownUnit,
+                    .dropdownMethod,
+                    .color,
+                    .colorContour,
+                    .opacity`
+                ).show();
                 break;
             }
             case "Doppelkreis zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".stroke-width").show();
-                this.$el.find(".circleRadiusInner").show();
-                this.$el.find(".circleRadiusOuter").show();
-                this.$el.find(".dropdownUnit").show();
-                this.$el.find(".color").show();
-                this.$el.find(".colorContour").show();
-                this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").hide();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .radius,
+                    .dropdownMethod,
+                    .opacityContour`
+                ).hide();
+                this.$el.find(
+                    `.stroke-width,
+                    .circleRadiusInner,
+                    .circleRadiusOuter,
+                    .dropdownUnit,
+                    .color,
+                    .colorContour,
+                    .opacity`
+                ).show();
                 break;
             }
             case "Linie zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".color").hide();
-                this.$el.find(".dropdownUnit").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".circleRadiusInner").hide();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".stroke-width").show();
-                this.$el.find(".colorContour").show();
-                this.$el.find(".opacityContour").show();
-                this.$el.find(".opacity").hide();
+                this.$el.find(
+                    `.text,
+                    .font.size,
+                    .font,
+                    .radius,
+                    .color,
+                    .dropdownUnit,
+                    .dropdownMethod,
+                    .circleRadiusInner,
+                    .circleRadiusOuter,
+                    .opacity`
+                ).hide();
+                this.$el.find(
+                    `.stroke-width,
+                    .colorContour,
+                    .opacityContour`
+                ).show();
                 break;
             }
             case "Fläche zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".dropdownUnit").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".circleRadiusInner").hide();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".stroke-width").show();
-                this.$el.find(".color").show();
-                this.$el.find(".opacity").show();
-                this.$el.find(".opacityContour").hide();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .radius,
+                    .dropdownUnit,
+                    .dropdownMethod,
+                    .circleRadiusInner,
+                    .circleRadiusOuter,
+                    .opacityContour`
+                ).hide();
+                this.$el.find(
+                    `.stroke-width,
+                    .color,
+                    .opacity`
+                ).show();
                 break;
             }
             default: {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".circleRadiusInner").hide();
-                this.$el.find(".circleRadiusOuter").hide();
-                this.$el.find(".stroke-width").show();
-                this.$el.find(".dropdownUnit").hide();
-                this.$el.find(".dropdownMethod").hide();
-                this.$el.find(".colorContour").show();
-                this.$el.find(".color").show();
+                this.$el.find(
+                    `.text,
+                    .font-size,
+                    .font,
+                    .radius,
+                    .circleRadiusInner,
+                    .circleRadiusOuter,
+                    .dropdownUnit,
+                    .dropdownMethod`
+                ).hide();
+                this.$el.find(
+                    `.stroke-width,
+                    .colorContour,
+                    .color`
+                ).show();
                 break;
             }
         }

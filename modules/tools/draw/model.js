@@ -34,7 +34,67 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
         addFeatureListener: {},
-        zIndex: 0
+        zIndex: 0,
+        transparencyOptions: [
+            {caption: "0 %", value: 1.0},
+            {caption: "10 %", value: 0.9},
+            {caption: "20 %", value: 0.8},
+            {caption: "30 %", value: 0.7},
+            {caption: "40 %", value: 0.6},
+            {caption: "50 %", value: 0.5},
+            {caption: "60 %", value: 0.4},
+            {caption: "70 %", value: 0.3},
+            {caption: "80 %", value: 0.2},
+            {caption: "90 %", value: 0.1},
+            {caption: "100 %", value: 0.0}
+        ],
+        colorOptions: [
+            {caption: "Blau", value: "55, 126, 184"},
+            {caption: "Schwarz", value: "0, 0, 0"},
+            {caption: "Gelb", value: "255, 255, 51"},
+            {caption: "Grau", value: "153, 153, 153"},
+            {caption: "Grün", value: "77, 175, 74"},
+            {caption: "Orange", value: "255, 127, 0"},
+            {caption: "Rot", value: "228, 26, 28"},
+            {caption: "Weiß", value: "255, 255, 255"}
+        ],
+        strokeOptions: [
+            {caption: "1 px", value: 1},
+            {caption: "2 px", value: 2},
+            {caption: "3 px", value: 3},
+            {caption: "4 px", value: 4},
+            {caption: "5 px", value: 5},
+            {caption: "6 px", value: 6}
+        ],
+        pointSizeOptions: [
+            {caption: "6 px", value: 6},
+            {caption: "8 px", value: 8},
+            {caption: "10 px", value: 10},
+            {caption: "12 px", value: 12},
+            {caption: "14 px", value: 14},
+            {caption: "16 px", value: 16}
+        ],
+        fontSizeOptions: [
+            {caption: "10 px", value: 10},
+            {caption: "12 px", value: 12},
+            {caption: "16 px", value: 16},
+            {caption: "20 px", value: 20},
+            {caption: "24 px", value: 24},
+            {caption: "32 px", value: 32}
+        ],
+        fontOptions: [
+            {caption: "Arial", value: "Arial"},
+            {caption: "Calibri", value: "Calibri"},
+            {caption: "Times New Roman", value: "Times New Roman"}
+        ],
+        drawTypeOptions: [
+            {caption: "Punkt zeichnen", value: "Point"},
+            {caption: "Linie zeichnen", value: "LineString"},
+            {caption: "Fläche zeichnen", value: "Polygon"},
+            {caption: "Kreis zeichnen", value: "Circle"},
+            {caption: "Doppelkreis zeichnen", value: "Circle"},
+            {caption: "Text schreiben", value: "Point"}
+        ]
     }),
 
     /**
@@ -146,10 +206,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     }
                     else {
                         this.alertForgetToDefineRadius(evt, layer, "Bitte geben Sie einen Durchmesser an.");
-                        $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
                     }
                 }
-                else if (innerRadius !== undefined) {
+                else {
                     if (outerRadius === undefined) {
                         if (drawType.text === "Doppelkreis zeichnen") {
                             this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den äußeren Kreis.");
@@ -165,13 +224,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     }
                     $(".circleRadiusInner input")[0].style.borderColor = "";
                 }
-                evt.feature.setStyle(this.getStyle());
-                this.countupZIndex();
             }
-            else {
-                evt.feature.setStyle(this.getStyle());
-                this.countupZIndex();
-            }
+            evt.feature.setStyle(this.getStyle());
+            this.countupZIndex();
         }.bind(this)));
 
         if (this.get("methodCircle") === "defined" && this.get("drawType").geometry === "Circle") {
@@ -291,13 +346,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {Array} - returns new and transformed flat / extent coordinates of the circle.
      */
     getCircleExtentByDistanceLat: function (circleCenter, circleRadius) {
-        const earthRadius = 6378137,
-            offsetLat = circleRadius / 2,
-            circleCenterWGS = toLonLat(circleCenter, "EPSG:25832"),
-            deltaLat = offsetLat / earthRadius,
+        const offsetLat = circleRadius / 2,
+            circleCenterWGS = toLonLat(circleCenter, Config.namedProjections[1][0]),
+            deltaLat = offsetLat / Config.earthRadius,
             newPositionLat = circleCenterWGS[1] + deltaLat * 180 / Math.PI;
 
-        return transform([circleCenterWGS[0], newPositionLat], "EPSG:4326", "EPSG:25832");
+        return transform([circleCenterWGS[0], newPositionLat], Config.namedProjections[3][0], Config.namedProjections[1][0]);
     },
 
     /**
@@ -308,13 +362,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {Array} - returns new and transformed flat coordinates of the circle.
      */
     getCircleExtentByDistanceLon: function (circleCenter, circleRadius) {
-        const earthRadius = 6378137,
-            offsetLon = circleRadius / 2,
-            circleCenterWGS = toLonLat(circleCenter, "EPSG:25832"),
-            deltaLon = offsetLon / (earthRadius * Math.cos(Math.PI * circleCenterWGS[1] / 180)),
+        const offsetLon = circleRadius / 2,
+            circleCenterWGS = toLonLat(circleCenter, Config.namedProjections[1][0]),
+            deltaLon = offsetLon / (Config.earthRadius * Math.cos(Math.PI * circleCenterWGS[1] / 180)),
             newPositionLon = circleCenterWGS[0] + deltaLon * 180 / Math.PI;
 
-        return transform([newPositionLon, circleCenterWGS[1]], "EPSG:4326", "EPSG:25832");
+        return transform([newPositionLon, circleCenterWGS[1]], Config.namedProjections[3][0], Config.namedProjections[1][0]);
     },
 
     /**
@@ -737,10 +790,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         if (drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
-        else if (drawType.hasOwnProperty("geometry") && drawType.geometry && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
+        else if (drawType.hasOwnProperty("geometry") && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
-        else if (drawType.hasOwnProperty("geometry") && drawType.geometry) {
+        else {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
         }
 
@@ -845,10 +898,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         const defaultColor = this.defaults.color,
             defaultColorContour = this.defaults.colorContour;
 
-        defaultColor.pop();
-        defaultColor.push(this.defaults.opacity);
-        defaultColorContour.pop();
-        defaultColorContour.push(this.defaults.opacityContour);
+        defaultColor[3] = this.defaults.opacity;
+        defaultColorContour[3] = this.defaults.opacityContour;
 
         this.deactivateDrawInteraction();
         this.deactivateModifyInteraction();
@@ -1108,13 +1159,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {string} - returns value / string without comma.
      */
     adjustValueToUnits: function (diameter, unit) {
-        let valueDiameter = diameter;
-
-        if (unit === "km") {
-            valueDiameter = valueDiameter * 1000;
-        }
-
-        return valueDiameter;
+        return unit === "km" ? diameter * 1000 : diameter;
     },
 
     /**
@@ -1144,17 +1189,18 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     setDrawType: function (value1, value2) {
-        if (value2 !== "Doppelkreis zeichnen" && value2 !== undefined) {
-            $(".input-method").val("interactiv");
-            this.enableMethodDefined(true);
-            this.setMethodCircle("interactiv");
-        }
-        else if (value2 === "Doppelkreis zeichnen" && value2 !== undefined) {
-            this.enableMethodDefined(false);
-            this.setMethodCircle("defined");
+        if (value2 !== undefined) {
+            if (value2 !== "Doppelkreis zeichnen") {
+                $(".input-method").val("interactiv");
+                this.enableMethodDefined(true);
+                this.setMethodCircle("interactiv");
+            }
+            else {
+                this.enableMethodDefined(false);
+                this.setMethodCircle("defined");
+            }
         }
         this.combineColorOpacityContour(this.defaults.opacityContour);
-        $(".input-opacity").val("1.0");
         this.set("drawType", {geometry: value1, text: value2});
     },
 
