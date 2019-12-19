@@ -71,6 +71,7 @@ import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
+import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -451,6 +452,10 @@ function loadApp () {
         if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
             new TitleView();
         }
+    }
+
+    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
+        new LanguageView();
     }
 
     new HighlightFeature();

@@ -2,7 +2,8 @@
     "button": {
         "back": "Back",
         "download": "Download",
-        "search": "Search"
+        "search": "Search",
+        "close": "Close"
     },
     "colors": {
         "blue": "Blue",
@@ -15,6 +16,9 @@
         "white": "White"
     },
     "modules": {
+        "language": {
+            "languageTitle": "Please choose a language"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -137,6 +141,15 @@
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Please choose",
+                "filename": "Filename",
+                "enterFilename": "Please enter filename",
+                "createFirst": "Please create a drawing or text first!",
+                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                "unknownGeometry": "Unknown geometry:"
             }
         },
         "controls": {

@@ -1,9 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 
-import i18nextXHRBackend from "i18next-xhr-backend";
-import i18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
-
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {},
     /**
@@ -106,7 +103,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     parse: function (response) {
-        const portalLanguage = typeof response.Portalconfig.portalLanguage === "object" ? response.Portalconfig.portalLanguage : {enabled: true};
         let attributes = {
             portalConfig: response.Portalconfig,
             baselayer: response.Themenconfig.Hintergrundkarten,
@@ -116,8 +112,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
             snippetInfos: this.requestSnippetInfos()
         };
-
-        this.initLanguage(portalLanguage);
 
         /**
          * this.updateTreeType
@@ -137,104 +131,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
          * @deprecated in 3.0.0
          */
         this.changeLgvContainer();
-    },
-
-    /**
-     * initialization of the language with i18next
-     * @pre i18next is not initialized
-     * @post i18next is initialized, i18next is bound to Backbone.i18next for control over the console
-     * @param {Object} config the configuration
-     * @param {Boolean} config.enabled activates the GUI for language switching
-     * @param {Boolean} config.debug if true i18next show debugging for developing
-     * @param {Object} config.languages the languages to be used as {krz: full} where krz is "en" and full is "english"
-     * @param {String} config.startLanguage the language to use on startup
-     * @param {Array} config.changeLanguageOnStartWhen the incidents that changes the language on startup as Array where the order is important
-     * @returns {Void}  -
-     */
-    initLanguage: function (config) {
-        // default language configuration
-        const portalLanguage = Object.assign({
-            "enabled": true,
-            "debug": false,
-            "languages": {
-                "de": "deutsch",
-                "en": "english"
-            },
-            "startLanguage": "de",
-            "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator", "htmlTag"]
-        }, config);
-
-        // init i18next
-        i18next
-            .use(i18nextXHRBackend)
-            .use(i18nextBrowserLanguageDetector)
-            .on("languageChanged", function (lng) {
-                Radio.trigger("i18next", "languageChanged", lng);
-            }, this)
-            .init({
-                debug: portalLanguage.debug,
-
-                // lng overrides language detection - so shall not be set (!)
-                // lng: portalLanguage.startLanguage,
-
-                fallbackLng: portalLanguage.startLanguage,
-                whitelist: Object.keys(portalLanguage.languages),
-
-                // to allow en-US when only en is on the whitelist - nonExplicitWhitelist must be set to true
-                nonExplicitWhitelist: true,
-                // to not look into a folder like /locals/en-US/... when en-US is detected, use load: "languageOnly" to avoid using Country-Code in path
-                load: "languageOnly",
-
-                /**
-                 * getter for configured languages
-                 * @returns {Object}  an object {krz: full} with krz the language shortform and full the language longform
-                 */
-                getLanguages: function () {
-                    return portalLanguage.languages;
-                },
-
-                /**
-                 * check wheather portalLanguage switcher is enabled or not
-                 * @returns {Boolean}  true if switcher has to be shown
-                 */
-                isEnabled: function () {
-                    return portalLanguage.enabled;
-                },
-
-                ns: ["common", "additional"],
-                defaultNS: "common",
-
-                backend: {
-                    loadPath: "/locales/{{lng}}/{{ns}}.json",
-                    crossDomain: false
-                },
-
-                detection: {
-                    // order and from where user language should be detected
-                    order: portalLanguage.changeLanguageOnStartWhen,
-
-                    // keys or params to lookup language from
-                    lookupQuerystring: "lng",
-                    lookupCookie: "i18next",
-                    lookupLocalStorage: "i18nextLng",
-                    lookupFromPathIndex: 0,
-                    lookupFromSubdomainIndex: 0,
-
-                    // cache user language on
-                    caches: ["localStorage"],
-                    excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
-
-                    // optional expire and domain for set cookie
-                    // cookieMinutes: 10,
-                    // cookieDomain: "myDomain",
-
-                    // only detect languages that are in the whitelist
-                    checkWhitelist: true
-                }
-            });
-
-        // bind i18next to backbone to enable use of command line with  > Backbone.i18next...
-        Backbone.i18next = i18next;
     },
 
     /**
