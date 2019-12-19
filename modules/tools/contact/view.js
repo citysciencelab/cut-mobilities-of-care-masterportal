@@ -22,7 +22,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "invalid": this.showValidity,
-            "change:lngSwitchDetected": this.reshowValidiy
+            "change:lngSwitchDetected": this.recheckValidiy
         });
 
         if (this.model.get("isActive") === true) {
@@ -198,7 +198,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      * render the content and recheck the validity
      * @returns {Void} -
      */
-    reshowValidiy: function () {
+    recheckValidiy: function () {
         this.render();
         this.showValidity();
     }
