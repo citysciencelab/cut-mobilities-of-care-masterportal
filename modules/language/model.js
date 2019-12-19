@@ -38,14 +38,6 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
                 languageTitle: i18next.t("common:modules.language.languageTitle")
             });
         }
-    },
-
-    /**
-     * requests util if portal is running on mobile device
-     * @returns {Boolean}  - isMobile
-     */
-    checkIsMobile: function () {
-        return Radio.request("Util", "isViewMobile");
     }
 });
 
