@@ -53,7 +53,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
 
     /**
      * show the popup window of the language list
-     * @param {object} content - the content of current element
+     * @param {Object} content - the content of current element
      * @returns {void}
      */
     bindShowLanguageList: function (content) {
@@ -64,7 +64,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
 
     /**
      * change the language when one option is selected
-     * @param {object} content - the content of current element
+     * @param {Object} content - the content of current element
      * @returns {void}
      */
     bindChangeLanguage: function (content) {
@@ -79,7 +79,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
 
     /**
      * close the popup window of the language list
-     * @param {object} content - the content of current element
+     * @param {Object} content - the content of current element
      * @returns {void}
      */
     bindClosePopup: function (content) {
