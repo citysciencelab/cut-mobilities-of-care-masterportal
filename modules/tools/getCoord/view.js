@@ -104,8 +104,9 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     adjustWindow: function (targetProjection) {
         // geographische Koordinaten
         if (targetProjection.projName === "longlat") {
-            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"));
-            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.northingLabel"));
+            // hint: this is turned around (easting <=> northing) just for labeling in hdms
+            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.northingLabel"));
+            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"));
         }
         // kartesische Koordinaten
         else {

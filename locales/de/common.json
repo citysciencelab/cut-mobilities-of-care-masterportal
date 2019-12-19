@@ -73,6 +73,10 @@
                 "topicsHelp6": "Über den Button \"Auswahl speichern\" im Reiter Themenauswahl, erscheint ein kleines Popup-Fenster mit einer URL. In dieser URL sind die ausgewählten Themen und der aktuelle Kartenausschnitt gespeichert. Wird der FHH-Atlas über diese URL geöffnet, werden die zuvor ausgewählten Themen automatisch in die Auswahl eingebunden. Zusätzlich zoomt die Karte auf den in der URL gespeicherten Kartenausschnitt. Damit sich der FHH-Atlas immer mit dieser Themenauswahl öffnet, kann diese URL als Lesezeichen ablegt werden."
             }
         },
+        "footer":{
+            "designation":"Kartographie und Gestaltung:",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -155,13 +159,22 @@
             "getCoord": {
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
-                    "eastingLabel": "Breite",
-                    "northingLabel": "Höhe"
+                    "eastingLabel": "Länge",
+                    "northingLabel": "Breite"
                 },
                 "cartesian": {
                     "eastingLabel": "Rechtswert",
                     "northingLabel": "Hochwert"
                 }
+            },
+            "searchByCoord": {
+                "exampleAcronym": "Bsp.",
+                "errorMsg": {
+                    "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
+                },
+                "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",

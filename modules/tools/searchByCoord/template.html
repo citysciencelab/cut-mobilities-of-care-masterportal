@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <form class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
-        <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
+        <label for="coordSystemField" class="col-md-5 col-sm-5 control-label"><%= coordSystemField %></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="coordSystemField">
                 <% _.each(coordSystems, function(value, key) {
@@ -15,50 +15,50 @@
     </div>
     <%if (coordSystem === "ETRS89") { %>
         <div class="form-group form-group-sm">
-            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Rechtswert</label>
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label"><%= cartesianEastingLabel %></label>
             <div class="col-md-7 col-sm-7">
-                <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="Bsp: 564459.13">
+                <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="<%= exampleAcronym %>: 564459.13">
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Hochwert</label>
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label"><%= cartesianNorthingLabel %></label>
             <div class="col-md-7 col-sm-7">
-                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="Bsp: 5935103.67">
+                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="<%= exampleAcronym %>: 5935103.67">
             </div>
         </div>
     <% }
     else if (coordSystem === "WGS84") {%>
          <div class="form-group form-group-sm">
-            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Breite</label>
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label"><%= hdmsNorthingLabel %></label>
             <div class="col-md-7 col-sm-7">
-                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="Bsp: 53° 33′ 25″">
+                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="<%= exampleAcronym %>: 53° 33′ 25″">
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Länge</label>
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label"><%= hdmsEastingLabel %></label>
                 <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="Bsp: 9° 59′ 50″">
+                    <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="<%= exampleAcronym %>: 9° 59′ 50″">
                 </div>
         </div>
 
     <% }
     else if (coordSystem === "WGS84(Dezimalgrad)") {%>
          <div class="form-group form-group-sm">
-            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">Breite</label>
+            <label for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label"><%= hdmsNorthingLabel %></label>
             <div class="col-md-7 col-sm-7">
-                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="Bsp: 53.55555°">
+                <input type="text" class="form-control" id="coordinatesNorthingField" value="<%=coordinatesNorthing %>" placeholder="<%= exampleAcronym %>: 53.55555°">
             </div>
         </div>
         <div class="form-group form-group-sm">
-            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">Länge</label>
+            <label for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label"><%= hdmsEastingLabel %></label>
                 <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="Bsp: 10.01234°">
+                    <input type="text" class="form-control" id="coordinatesEastingField" value="<%=coordinatesEasting %>" placeholder="<%= exampleAcronym %>: 10.01234°">
                 </div>
         </div>
     <% }%>
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-lgv-grey col-xs-12">Suchen</button>
+            <button type="button" class="btn btn-lgv-grey col-xs-12"><%= searchButtonText %></button>
         </div>
     </div>
 </form>

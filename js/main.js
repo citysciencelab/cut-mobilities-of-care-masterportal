@@ -143,6 +143,11 @@ function initLanguage (portalLanguageConfig) {
             fallbackLng: portalLanguage.startLanguage,
             whitelist: Object.keys(portalLanguage.languages),
 
+            // to allow en-US when only en is on the whitelist - nonExplicitWhitelist must be set to true
+            nonExplicitWhitelist: true,
+            // to not look into a folder like /locals/en-US/... when en-US is detected, use load: "languageOnly" to avoid using Country-Code in path
+            load: "languageOnly",
+
             /**
              * getter for configured languages
              * @returns {Object}  an object {krz: full} with krz the language shortform and full the language longform

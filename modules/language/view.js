@@ -18,11 +18,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
             "change:activeCode": this.render
         });
 
-        Radio.on("Util", {
-            "isViewMobileChanged": function () {
-                this.render();
-            }
-        }, this);
+        this.render();
     },
 
     className: "language-switch",
@@ -37,12 +33,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
 
         this.$el.html(this.template(attr));
 
-        if (!this.model.checkIsMobile()) {
-            $("#searchbar").after(this.$el);
-        }
-        else {
-            $(".footer").append(this.$el);
-        }
+        $(".footer").append(this.$el);
 
         this.bindShowLanguageList(this.$el);
         this.bindChangeLanguage(this.$el);

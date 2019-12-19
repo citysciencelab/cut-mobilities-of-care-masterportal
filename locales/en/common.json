@@ -73,6 +73,10 @@
                 "topicsHelp6": "By clicking the button \"Save selection\" in the tab Topic selection, a small popup window with a URL appears. This URL contains the selected topics and the current map section. If the FHH Atlas is opened via this URL, the previously selected topics are automatically included in the selection. In addition, the map zooms to the map section stored in the URL. To ensure that the FHH Atlas always opens with this topic selection, this URL can be saved as a bookmark."
             }
         },
+        "footer":{
+            "designation":"Cartography and design:",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -162,6 +166,15 @@
                     "eastingLabel": "easting",
                     "northingLabel": "northing"
                 }
+            },
+            "searchByCoord": {
+                "exampleAcronym": "e.g.",
+                "errorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
+                },
+                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",

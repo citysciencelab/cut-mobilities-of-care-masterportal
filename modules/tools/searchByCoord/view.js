@@ -8,7 +8,12 @@ const SearchByCoordView = Backbone.View.extend({
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:coordSystem": this.setFocusToCoordSystemInput
+            "change:coordSystem": this.setFocusToCoordSystemInput,
+            "change:coordSystemField change:hdmsEastingLabel change:hdmsNorthingLabel change:cartesianEastingLabel change:cartesianNorthingLabel": function () {
+                if (this.model.get("isActive")) {
+                    this.render(this.model, true);
+                }
+            }
         });
     },
     template: _.template(SearchByCoordTemplate),
