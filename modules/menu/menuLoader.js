@@ -18,8 +18,6 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     initialize: function () {
         this.treeType = Radio.request("Parser", "getTreeType");
 
-        this.loadMenu();
-
         // im Table-Style soll das ui nicht verändert werden
         if (this.menuStyle === "DEFAULT") {
             Radio.on("Util", {
@@ -30,7 +28,45 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
                 }
             }, this);
         }
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": function () {
+                this.switchCollectionLanguage(Radio.request("ModelList", "getCollection"));
+
+                $("div.collapse.navbar-collapse ul.nav-menu").empty();
+                $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
+                this.loadMenu();
+            }
+        });
+
+        this.switchCollectionLanguage(Radio.request("ModelList", "getCollection"));
+        this.loadMenu();
     },
+
+    /**
+     * changes the values of all models in ModelList collection where a translate function is given
+     * @pre the collection is somewhat
+     * @post the collection is translated where translations where found
+     * @param {Backbone.Collection} collection the collection (e.g. ModelList) to run through
+     * @return {Void}  -
+     */
+    switchCollectionLanguage: function (collection) {
+        if (!collection || typeof collection.each !== "function") {
+            return;
+        }
+
+        collection.each(function (model) {
+            if (model.has("i18nextTranslate") && typeof model.get("i18nextTranslate") === "function") {
+                model.get("i18nextTranslate")(function (key, value) {
+                    if (!model.has(key) || typeof value !== "String") {
+                        return;
+                    }
+                    model.set(key, value);
+                });
+            }
+        }, this);
+    },
+
     /**
      * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
      * @param  {Object} caller this MenuLoader
