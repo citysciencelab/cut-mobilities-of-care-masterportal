@@ -38,7 +38,8 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         glyphicon: "glyphicon-envelope",
         serviceID: undefined,
         closeAndDelete: false,
-        withTicketNo: true
+        withTicketNo: true,
+        lngSwitchDetected: ""
     }),
 
     /**
@@ -109,7 +110,8 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             errorNumber: i18next.t("common:modules.tools.contact.errorNumber"),
             errorMessage: i18next.t("common:modules.tools.contact.errorMessage"),
             successMessage: i18next.t("common:modules.tools.contact.successMessage"),
-            successTicket: i18next.t("common:modules.tools.contact.successTicket")
+            successTicket: i18next.t("common:modules.tools.contact.successTicket"),
+            lngSwitchDetected: i18next.language
         });
     },
 

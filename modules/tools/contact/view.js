@@ -14,24 +14,20 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      * @memberof Contact
      * @constructs
      * @listens ContactModel#changeIsActive
+     * @listens ContactModel#userNamePlaceholder
      * @listens ContactModel#changeInvalid
      */
     initialize: function () {
         this.template = _.template(Template);
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "invalid": this.showValidity
-        });
-
-        this.listenTo(this.model, {
-            "change": this.render
+            "invalid": this.showValidity,
+            "change:lngSwitchDetected": this.reshowValidiy
         });
 
         if (this.model.get("isActive") === true) {
             this.render();
         }
-
-        this.render();
     },
 
     /**
@@ -196,6 +192,15 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
             this.$("#textDiv").addClass("has-error");
             this.$("#contactTextFeedback").addClass("contactHide");
         }
+    },
+
+    /**
+     * render the content and recheck the validity
+     * @returns {Void} -
+     */
+    reshowValidiy: function () {
+        this.render();
+        this.showValidity();
     }
 });
 
