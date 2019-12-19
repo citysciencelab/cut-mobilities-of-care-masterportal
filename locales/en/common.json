@@ -44,6 +44,9 @@
         "trafficCameras": "survey cameras (traffic)"
     },
     "modules": {
+        "quickHelp": {
+            "titleTag": "Open help"
+        },
         "language": {
             "languageTitle": "Please choose a language"
         },
@@ -244,6 +247,35 @@
                 "hint": "Move the computer mouse over your screen.",
                 "showMousePosition": "Mouse position - fade in",
                 "hideMousePosition": "Fade out"
+            }
+        },
+        "searchbar": {
+            "placeholder": "Search for Address/Hospital/B-Plan",
+            "showAllResults": "Show all results",
+            "type": {
+                "street": "street",
+                "district": "district",
+                "parcel": "parcel",
+                "address": "address",
+                "location": "location",
+                "subject": "subject",
+                "topic": "issues & topics"
+            },
+            "specialWFS": {
+                "ongoing": "in process",
+                "terminated": "terminated",
+                "hazardous": "event of malfunction",
+                "childcare": "childcare",
+                "bplan": "b-plan"
+            },
+            "bkg": {
+                "errorMsg": "BKG address service is currently not available."
+            },
+            "gaz": {
+                "errorMsg": "Gazetteer url is currently not available."
+            },
+            "osm": {
+                "errorMsg": "Searching with OpenStreetMap is currently not available."
             }
         }
     },

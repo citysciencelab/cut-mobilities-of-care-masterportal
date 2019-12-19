@@ -305,7 +305,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     showError: function (err) {
         var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        Radio.trigger("Alert", "alert", "OpenStreetMap-Suche nicht erreichbar. " + detail);
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.searchbar.osm.errorMsg") + " " + detail);
     },
 
     /**

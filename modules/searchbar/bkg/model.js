@@ -96,7 +96,7 @@ const BKGSearchModel = Backbone.Model.extend({
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.suggestion,
                         metaName: hit.suggestion,
-                        type: "Ort",
+                        type: i18next.t("common:modules.searchbar.type.location"),
                         bkg: true,
                         glyphicon: "glyphicon-road",
                         id: _.uniqueId("bkgSuggest"),
@@ -140,7 +140,7 @@ const BKGSearchModel = Backbone.Model.extend({
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hit.suggestion,
                     metaName: hit.suggestion,
-                    type: "Ort",
+                    type: i18next.t("common:modules.searchbar.type.location"),
                     bkg: true,
                     glyphicon: "glyphicon-road",
                     id: _.uniqueId("bkgSuggest"),
@@ -235,7 +235,7 @@ const BKGSearchModel = Backbone.Model.extend({
     showError: function (err) {
         var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        Radio.trigger("Alert", "alert", "BKG-Adressdienst nicht erreichbar. " + detail);
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.searchbar.bkg.errorMsg") + " " + detail);
     },
 
     /**
