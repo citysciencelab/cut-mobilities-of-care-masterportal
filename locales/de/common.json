@@ -132,6 +132,15 @@
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Bitte Auswählen",
+                "filename": "Dateiname",
+                "enterFilename": "Bitte Dateiname angeben",
+                "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
+                "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
+                "unknownGeometry": "Unbekannte Geometry:"
             }
         },
         "controls": {

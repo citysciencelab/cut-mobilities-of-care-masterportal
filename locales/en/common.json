@@ -132,6 +132,15 @@
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Please choose",
+                "filename": "Filename",
+                "enterFilename": "Please enter filename",
+                "createFirst": "Please create a drawing or text first!",
+                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                "unknownGeometry": "Unknown geometry:"
             }
         },
         "controls": {

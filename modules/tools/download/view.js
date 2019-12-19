@@ -18,7 +18,12 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
      */
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:createFirstText": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
+            }
         });
     },
 
