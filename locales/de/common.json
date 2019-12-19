@@ -19,6 +19,12 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus"
         },
+        "footer":{
+            "designation":"Kartographie und Gestaltung:",
+            "alias":"Landesbetrieb Geoinformation und Vermessung",
+            "aliasMobil":"LGV Hamburg",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
