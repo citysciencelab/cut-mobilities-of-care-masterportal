@@ -9,7 +9,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         supported: ["2D", "3D"],
         showSettings: true,
         isClustered: false,
-        allowedVersions: ["1.1.0"]
+        allowedVersions: ["1.1.0"],
+        altitudeMode: "clampToGround"
     }),
     /**
      * @class WFSLayer
@@ -98,7 +99,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
             hitTolerance: this.get("hitTolerance"),
-            altitudeMode: "clampToGround"
+            altitudeMode: this.get("altitudeMode")
         }));
 
         this.updateSource(true);
@@ -160,6 +161,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         this.get("layerSource").clear(true);
         this.get("layerSource").addFeatures(features);
         this.styling();
+        this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
     },
 

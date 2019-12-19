@@ -10,6 +10,7 @@ import Point from "ol/geom/Point.js";
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults,
         {
+            supported: ["2D", "3D"],
             epsg: "EPSG:4326",
             utc: "+1",
             version: "1.0",
@@ -17,7 +18,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             mqttPath: "/mqtt",
             mergeThingsByCoordinates: false,
             showNoDataValue: true,
-            noDataValue: "no data"
+            noDataValue: "no data",
+            altitudeMode: "clampToGround"
         }),
     /**
      * @class SensorLayer
@@ -80,7 +82,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             gfiAttributes: this.get("gfiAttributes"),
             gfiTheme: _.isObject(this.get("gfiTheme")) ? this.get("gfiTheme").name : this.get("gfiTheme"),
             routable: this.get("routable"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: this.get("altitudeMode")
         }));
 
         this.updateData();
@@ -118,6 +121,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         // Add features to vectorlayer
         if (!_.isEmpty(features)) {
             this.get("layerSource").addFeatures(features);
+            this.prepareFeaturesFor3D(features);
             this.featuresLoaded(features);
         }
 

@@ -108,6 +108,67 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     featuresLoaded: function (features) {
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
     },
+
+    prepareFeaturesFor3D: function (features) {
+        const altitude = this.get("altitude"),
+            altitudeOffset = this.get("altitudeOffset");
+
+        features.forEach(feature => {
+            let geometry = feature.getGeometry();
+
+            if (altitude || altitudeOffset) {
+                geometry = this.setAltitudeOnGeometry(geometry, altitude, altitudeOffset);
+            }
+            feature.setGeometry(geometry);
+        });
+    },
+
+    setAltitudeOnGeometry: function (geometry, altitude, altitudeOffset) {
+        const type = geometry.getType(),
+            coords = geometry.getCoordinates();
+
+        let overwrittenCoords = [];
+
+        if (type === "Point") {
+            overwrittenCoords = this.setAltitudeOnPointGeometry(coords, altitude, altitudeOffset);
+        }
+        else if (type === "MultiPoint") {
+            coords.forEach(coord => {
+                overwrittenCoords.push(this.setAltitudeOnPointGeometry(coord, altitude, altitudeOffset));
+            });
+        }
+        else {
+            console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
+        }
+
+        geometry.setCoordinates(overwrittenCoords);
+
+        return geometry;
+    },
+
+    setAltitudeOnPointGeometry: function (coords, altitude, altitudeOffset) {
+        const overwrittenCoords = coords,
+            altitudeAsFloat = parseFloat(altitude),
+            altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+
+        if (!isNaN(altitudeAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = altitudeAsFloat;
+            }
+        }
+        if (!isNaN(altitudeOffsetAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeOffsetAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+            }
+        }
+        return overwrittenCoords;
+    },
     /**
      * Triggers event if vector feature is loaded
      * @param {ol.Feature} feature Updated vector feature
