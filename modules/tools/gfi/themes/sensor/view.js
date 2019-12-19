@@ -1,13 +1,29 @@
 import ThemeView from "../view";
 import SensorTemplate from "text-loader!./template.html";
 
-const SensorThemeView = ThemeView.extend({
+const SensorThemeView = ThemeView.extend(/** @lends SensorThemeView.prototype */{
+    /**
+    * @class SensorThemeView
+    * @memberof Tools.GFI.Themes.Sensor
+    * @constructs
+    */
     tagName: "div",
     className: "sensor",
+    /**
+     * @member SensorTemplate
+     * @description Template used to create the sensor gfi.
+     * @memberof Tools.GFI.Themes.Sensor
+     */
     template: _.template(SensorTemplate),
     events: {
         "click .tab-toggle": "activateGraph"
     },
+
+    /**
+     * Activates or deactivates the graph tab.
+     * @param {Event} evt Click-event.
+     * @returns {void}
+     */
     activateGraph: function (evt) {
         const value = $(evt.currentTarget).attr("value");
 
