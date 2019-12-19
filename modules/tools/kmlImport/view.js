@@ -7,7 +7,12 @@ const ImportView = Backbone.View.extend({
     },
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:fakeButtonText": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
+            }
         });
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
@@ -55,8 +60,7 @@ const ImportView = Backbone.View.extend({
                 test = fakeBtnTxt.slice(12);
 
             this.model.setText(reader.result);
-            this.$("#fakebutton").html("Datei: " +
-            test);
+            this.$("#fakebutton").html(i18next.t("common:modules.tools.kmlImport.file") + ": " + test);
         }.bind(this);
 
         reader.readAsText(file);
