@@ -2,7 +2,8 @@
     "button": {
         "back": "Back",
         "download": "Download",
-        "search": "Search"
+        "search": "Search",
+        "close": "Close"
     },
     "colors": {
         "blue": "Blue",
@@ -14,7 +15,38 @@
         "black": "Black",
         "white": "White"
     },
+    "menu": {
+        "topics": "Issues & Topics",
+        "views": {
+            "name": "Views",
+            "view01": "View 1"
+        },
+        "wayToSchool": "Your way to school",
+        "filter": "Filtering",
+        "tools": {
+            "name": "more tools",
+            "popularFigures": "Population figures",
+            "compareFeatures": "Compare features",
+            "parcelSearch": "Parcel search"
+        },
+        "legend": "explanations",
+        "contact": "mail",
+        "info": {
+            "name": "informations",
+            "disclaimer": "legal disclaimer",
+            "home": {
+                "name": "Hamburg Town",
+                "url": "https://www.hamburg.com/"
+            }
+        }
+    },
+    "tree": {
+        "trafficCameras": "survey cameras (traffic)"
+    },
     "modules": {
+        "language": {
+            "languageTitle": "Please choose a language"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -128,6 +160,15 @@
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Please choose",
+                "filename": "Filename",
+                "enterFilename": "Please enter filename",
+                "createFirst": "Please create a drawing or text first!",
+                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                "unknownGeometry": "Unknown geometry:"
             }
         },
         "controls": {

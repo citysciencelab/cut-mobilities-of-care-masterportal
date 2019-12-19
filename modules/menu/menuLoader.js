@@ -58,7 +58,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         collection.each(function (model) {
             if (model.has("i18nextTranslate") && typeof model.get("i18nextTranslate") === "function") {
                 model.get("i18nextTranslate")(function (key, value) {
-                    if (!model.has(key) || typeof value !== "String") {
+                    if (!model.has(key) || typeof value !== "string") {
                         return;
                     }
                     model.set(key, value);

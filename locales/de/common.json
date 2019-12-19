@@ -2,7 +2,8 @@
     "button": {
         "back": "Zurück",
         "download": "Herunterladen",
-        "search": "Suchen"
+        "search": "Suchen",
+        "close": "Schließen"
     },
     "colors": {
         "blue": "Blau",
@@ -14,7 +15,38 @@
         "black": "Schwarz",
         "white": "Weiß"
     },
+    "menu": {
+        "topics": "Themen",
+        "views": {
+            "name": "Ansichten",
+            "view01": "Ansicht 1"
+        },
+        "wayToSchool": "Schulweg-Routing",
+        "filter": "Filter",
+        "tools": {
+            "name": "Werkzeuge",
+            "popularFigures": "Einwohneranzahl abfragen",
+            "compareFeatures": "Vergleichsliste",
+            "parcelSearch": "Flurstückssuche"
+        },
+        "legend": "Legende",
+        "contact": "Kontakt",
+        "info": {
+            "name": "Informationen",
+            "disclaimer": "Haftungsausschluss",
+            "home": {
+                "name": "Hamburg",
+                "url": "https://www.hamburg.de/"
+            }
+        }
+    },
+    "tree": {
+        "trafficCameras": "Verkehrskameras"
+    },
     "modules": {
+        "language": {
+            "languageTitle": "Bitte wählen Sie eine Sprache aus"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -128,6 +160,15 @@
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Bitte Auswählen",
+                "filename": "Dateiname",
+                "enterFilename": "Bitte Dateiname angeben",
+                "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
+                "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
+                "unknownGeometry": "Unbekannte Geometry:"
             }
         },
         "controls": {
