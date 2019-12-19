@@ -74,6 +74,13 @@
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
             },
+            "kmlImport": {
+                "unknownGeometry": "Unbekannte Geometry",
+                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
+                "fakeButton": "Datei auswählen (keine ausgewählt)",
+                "importButton": "IMPORT",
+                "file": "Datei"
+            },
             "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration",
                 "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
