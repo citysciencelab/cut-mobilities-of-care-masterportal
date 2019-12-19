@@ -21,8 +21,6 @@
         },
         "footer":{
             "designation":"Cartography and design:",
-            "alias":"Landesbetrieb Geoinformation und Vermessung",
-            "aliasMobil":"LGV Hamburg",
             "version":"Version"
         },
         "tools": {

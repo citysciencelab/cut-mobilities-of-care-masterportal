@@ -39,13 +39,11 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
         const urls = this.get("urls");
 
         urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
-        urls[0].alias = i18next.t("common:modules.footer.alias");
-        urls[0].aliasMobil = i18next.t("common:modules.footer.aliasMobil");
         this.set({
             urls: urls,
-            versionText: i18next.t("common:modules.footer.version")
+            versionText: i18next.t("common:modules.footer.version"),
+            currentLng: lng
         });
-        this.set("currentLng", lng);
     }
 });
 
