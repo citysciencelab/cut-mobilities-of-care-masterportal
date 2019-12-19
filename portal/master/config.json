@@ -8,16 +8,6 @@
       "link": "https://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
-    "portalLanguage": {
-      "enabled": true,
-      "debug": false,
-      "languages": {
-        "de": "deutsch",
-        "en": "english"
-      },
-      "startLanguage": "de",
-      "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator"]
-    },
     "searchBar":
     {
       "gazetteer":
