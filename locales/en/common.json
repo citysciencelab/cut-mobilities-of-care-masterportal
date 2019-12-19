@@ -26,8 +26,16 @@
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
-                "userNamePlaceholder": "your name",
-                "textSendButton": "send message"
+                "userNamePlaceholder": "Your name",
+                "textSendButton": "send message",
+                "emailAddressPlaceholder": "Your E-mail Address",
+                "telephonePlaceholder": "Your phone number",
+                "errorName": "Please input your name",
+                "errorEmail": "Please input a valid E-mail address",
+                "errorNumber": "Please input your phone number",
+                "errorMessage": "Sending Email failed!",
+                "successMessage": "Your request was sent successfully",
+                "successTicket": "Your ticket number is: "
             },
             "print": {
                 "titleLabel": "Title",

@@ -16,7 +16,15 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         bcc: [],
         textPlaceholder: "",
         userNamePlaceholder: "Ihr Name",
+        emailAddressPlaceholder: "Ihre Emailadresse",
+        telephonePlaceholder: "Ihre Telefonnummer",
+        errorName: "Bitte nennen Sie uns Ihren Namen.",
+        errorEmail: "Bitte geben Sie eine gültige Emailadresse ein.",
+        errorNumber: "Unter welcher Telefonnummer können wir Sie erreichen?",
         textSendButton: "Abschicken",
+        errorMessage: "Emailversand fehlgeschlagen!",
+        successMessage: "Ihre Anfrage wurde erfolgreich versendet",
+        successTicket: "Ihre Ticketnummer lautet: ",
         text: "",
         url: "",
         ticketId: "",
@@ -90,9 +98,19 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set("textPlaceholder", i18next.t("common:modules.tools.contact.textPlaceholder"));
-        this.set("userNamePlaceholder", i18next.t("common:modules.tools.contact.userNamePlaceholder"));
-        this.set("textSendButton", i18next.t("common:modules.tools.contact.textSendButton"));
+        this.set({
+            textPlaceholder: i18next.t("common:modules.tools.contact.textPlaceholder"),
+            userNamePlaceholder: i18next.t("common:modules.tools.contact.userNamePlaceholder"),
+            textSendButton: i18next.t("common:modules.tools.contact.textSendButton"),
+            emailAddressPlaceholder: i18next.t("common:modules.tools.contact.emailAddressPlaceholder"),
+            telephonePlaceholder: i18next.t("common:modules.tools.contact.telephonePlaceholder"),
+            errorName: i18next.t("common:modules.tools.contact.errorName"),
+            errorEmail: i18next.t("common:modules.tools.contact.errorEmail"),
+            errorNumber: i18next.t("common:modules.tools.contact.errorNumber"),
+            errorMessage: i18next.t("common:modules.tools.contact.errorMessage"),
+            successMessage: i18next.t("common:modules.tools.contact.successMessage"),
+            successTicket: i18next.t("common:modules.tools.contact.successTicket")
+        });
     },
 
     /**
@@ -239,7 +257,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             complete: function (jqXHR) {
                 Radio.trigger("Util", "hideLoader");
                 if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                    Radio.trigger("Alert", "alert", {text: "<strong>Emailversand fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                    Radio.trigger("Alert", "alert", {text: "<strong>" + this.get("errorMessage") + "</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
                 }
             },
             success: function (data) {
@@ -248,10 +266,10 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
                 }
                 else {
                     if (withTicketNo === false) {
-                        Radio.trigger("Alert", "alert", {text: "Ihre Anfrage wurde erfolgreich versendet", kategorie: "alert-success"});
+                        Radio.trigger("Alert", "alert", {text: this.get("successMessage"), kategorie: "alert-success"});
                     }
                     else {
-                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
+                        Radio.trigger("Alert", "alert", {text: data.message + "<br>" + this.get("successTicket") + "<strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
                     }
                     if (closeAndDelete === true) {
                         Radio.trigger("WindowView", "hide");

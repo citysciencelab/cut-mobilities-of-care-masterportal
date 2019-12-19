@@ -27,7 +27,15 @@
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
                 "userNamePlaceholder": "Ihr Name",
-                "textSendButton": "Abschicken"
+                "textSendButton": "Abschicken",
+                "emailAddressPlaceholder": "Ihre Emailadresse",
+                "telephonePlaceholder": "Ihre Telefonnummer",
+                "errorName": "Bitte nennen Sie uns Ihren Namen.",
+                "errorEmail": "Bitte geben Sie eine gültige Emailadresse ein.",
+                "errorNumber": "Unter welcher Telefonnummer können wir Sie erreichen?",
+                "errorMessage": "Emailversand fehlgeschlagen!",
+                "successMessage": "Ihre Anfrage wurde erfolgreich versendet",
+                "successTicket": "Ihre Ticketnummer lautet: "
             },
             "print": {
                 "titleLabel": "Titel",
