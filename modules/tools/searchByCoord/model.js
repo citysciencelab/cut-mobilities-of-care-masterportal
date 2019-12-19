@@ -8,11 +8,44 @@ const SearchByCoord = Tool.extend({
         "coordinatesEasting": "",
         "coordinatesNorthing": "",
         renderToWindow: true,
-        glyphicon: "glyphicon-record"
+        glyphicon: "glyphicon-record",
+
+        coordSystemField: "",
+        hdmsEastingLabel: "",
+        hdmsNorthingLabel: "",
+        cartesianEastingLabel: "",
+        cartesianNorthingLabel: "",
+
+        exampleAcronym: "",
+        searchButtonText: ""
     }),
     initialize: function () {
         this.superInitialize();
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            coordSystemField: i18next.t("common:modules.tools.getCoord.coordSystemField"),
+            hdmsEastingLabel: i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
+            hdmsNorthingLabel: i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
+            cartesianEastingLabel: i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
+            cartesianNorthingLabel: i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            exampleAcronym: i18next.t("common:modules.tools.searchByCoord.exampleAcronym"),
+            searchButtonText: i18next.t("common:button.search")
+        });
+    },
+
     validate: function (attributes) {
         var validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
@@ -30,13 +63,13 @@ const SearchByCoord = Tool.extend({
                     fieldName = "#coordinatesNorthingField";
                 }
                 if (_.isUndefined(value.coord) || value.coord.length < 1) {
-                    value.ErrorMsg = "Bitte geben Sie ihren " + value.key + " ein";
+                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: value.key});
                     $(fieldName + "+ .text-danger").html("");
                     $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
                     $(fieldName).parent().addClass("has-error");
                 }
                 else if (!value.coord.match(validETRS89)) {
-                    value.ErrorMsg = "Die Eingabe für den " + value.key + " ist nicht korrekt! (Beispiel: " + value.example + ")";
+                    value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: value.key, valueExample: value.example});
                     $(fieldName + "+ .text-danger").html("");
                     $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
                     $(fieldName).parent().addClass("has-error");
@@ -50,13 +83,13 @@ const SearchByCoord = Tool.extend({
         }
         else if (attributes.coordSystem === "WGS84") {
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
-                attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " vollständig ein";
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84))) {
-                attributes.coordinates[0].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[0].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[0].example + ")";
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
@@ -68,13 +101,13 @@ const SearchByCoord = Tool.extend({
             }
 
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
-                attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " vollständig ein";
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84))) {
-                attributes.coordinates[1].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[1].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[1].example + ")";
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
@@ -87,13 +120,13 @@ const SearchByCoord = Tool.extend({
         }
         else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
-                attributes.coordinates[0].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[0].key + " ein";
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84_dez))) {
-                attributes.coordinates[0].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[0].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[0].example + ")";
+                attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
@@ -104,13 +137,13 @@ const SearchByCoord = Tool.extend({
                 Radio.trigger("Alert", "alert:remove");
             }
             if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
-                attributes.coordinates[1].ErrorMsg = "Bitte geben Sie ihren " + attributes.coordinates[1].key + " ein";
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
             else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84_dez))) {
-                attributes.coordinates[1].ErrorMsg = "Die Eingabe für den " + attributes.coordinates[1].key + " ist nicht korrekt! (Beispiel: " + attributes.coordinates[1].example + ")";
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
@@ -136,16 +169,16 @@ const SearchByCoord = Tool.extend({
 
             this.set("eastingCoords", easting.split(/[\s°′″'"´`]+/));
             this.set("northingCoords", northing.split(/[\s°′″'"´`]+/));
-            coordinateArray = [{"coord": easting, "key": "Wert der Länge", "example": "9° 59′ 50″"}, {"coord": northing, "key": "Wert der Breite", "example": "53° 33′ 25″"}];
+            coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.searchByCoord.hdmsEastingText"), "example": "9° 59′ 50″"}, {"coord": northing, "key": i18next.t("common:modules.tools.searchByCoord.hdmsNorthingText"), "example": "53° 33′ 25″"}];
         }
         else if (this.get("coordSystem") === "WGS84(Dezimalgrad)") {
 
             this.set("eastingCoords", easting.split(/[\s°]+/));
             this.set("northingCoords", northing.split(/[\s°]+/));
-            coordinateArray = [{"coord": easting, "key": "Wert der Länge", "example": "10.01234°"}, {"coord": northing, "key": "Wert der Breite", "example": "53.55555°"}];
+            coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.searchByCoord.hdmsEastingText"), "example": "10.01234°"}, {"coord": northing, "key": i18next.t("common:modules.tools.searchByCoord.hdmsNorthingText"), "example": "53.55555°"}];
         }
         else {
-            coordinateArray = [{"coord": easting, "key": "Rechtswert", "example": "564459.13"}, {"coord": northing, "key": "Hochwert", "example": "5935103.67"}];
+            coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"), "example": "564459.13"}, {"coord": northing, "key": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"), "example": "5935103.67"}];
         }
         this.setCoordinatesEasting(easting);
         this.setCoordinatesNorthing(northing);

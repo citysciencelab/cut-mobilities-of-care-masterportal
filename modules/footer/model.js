@@ -1,12 +1,4 @@
 const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
-    /**
-     * @class FooterModel
-     * @extends Backbone.Model
-     * @memberof Footer
-     * @constructs
-     * @property {Array} urls Array of URLs to be displayed in the Footer (defaults to LGV Hamburg)
-     * @property {Object} version={} Version of Masterportal to be shown in the footer
-     */
     defaults: {
         urls: [
             {
@@ -18,7 +10,40 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
                 "toolModelId": "sdpdownload"
             }
         ],
-        showVersion: false
+        showVersion: false,
+        // translations
+        currentLng: "",
+        versionText: ""
+    },
+    /**
+     * @class FooterModel
+     * @extends Backbone.Model
+     * @memberof Footer
+     * @property {Array} urls Array of URLs to be displayed in the Footer (defaults to LGV Hamburg)
+     * @property {Object} version={} Version of Masterportal to be shown in the footer
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @constructs
+     */
+    initialize: function () {
+        this.changeLang(i18next.language);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        const urls = this.get("urls");
+
+        urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
+        this.set({
+            urls: urls,
+            versionText: i18next.t("common:modules.footer.version"),
+            currentLng: lng
+        });
     }
 });
 

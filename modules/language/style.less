@@ -1,0 +1,73 @@
+#languagebar {
+    position: fixed;
+    right: 10px;
+    width: 25px;
+    min-height: 22px;
+    bottom: 0;
+    .currentLan {
+        width: 25px;
+        height: 22px;
+        cursor: pointer;
+        display: block;
+        text-align: left;
+        padding-top: 5px;
+        /* font-size: 12px; */
+        text-transform: uppercase;
+        color: #23527c;
+        font-weight: 900;
+    }
+    .popup-language {
+        display: none;
+        position: absolute;
+        right: 10px;
+        padding: 10px 0 20px;
+        min-width: 400px;
+        background: rgba(255, 255, 255, 1);
+        padding: 10px 0 20px;
+        z-index: 10010;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        bottom: 50px;
+        .lng-header {
+            display: block;
+            float: right;
+            width: 100%;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0px 0px 3px 10px;
+            span {
+                width: 30px;
+                cursor: pointer;
+            }
+        }
+        .form-group {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0 0;
+            a {
+                font-size: 12px;
+                &:hover{
+                    background-color: #08589e;
+                    color: #ffffff;
+                }
+                &.disabled {
+                    background-color: #e7e7e7;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #languagebar {
+        width: 100%;
+        .currentLan {
+            float: right;
+            text-align: right;
+        }
+        .popup-language {
+            width: calc(100% - 20px);
+            min-width: inherit;
+            right: 0;
+        }
+    }
+}

@@ -2,7 +2,8 @@
     "button": {
         "back": "Zurück",
         "download": "Herunterladen",
-        "search": "Suchen"
+        "search": "Suchen",
+        "close": "Schließen"
     },
     "colors": {
         "blue": "Blau",
@@ -17,6 +18,13 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "language": {
+            "languageTitle": "Bitte wählen Sie eine Sprache aus"
+        },
+        "footer":{
+            "designation":"Kartographie und Gestaltung:",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -76,6 +84,13 @@
             "saveSelection": {
                 "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
             },
+            "kmlImport": {
+                "unknownGeometry": "Unbekannte Geometry",
+                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
+                "fakeButton": "Datei auswählen (keine ausgewählt)",
+                "importButton": "IMPORT",
+                "file": "Datei"
+            },
             "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration",
                 "districtsLoadFailed": "Gemarkungen konnten nicht geladen werden",
@@ -92,8 +107,8 @@
             "getCoord": {
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
-                    "eastingLabel": "Breite",
-                    "northingLabel": "Höhe"
+                    "eastingLabel": "Länge",
+                    "northingLabel": "Breite"
                 },
                 "cartesian": {
                     "eastingLabel": "Rechtswert",
@@ -114,6 +129,15 @@
                 "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
                 "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
                 "addressRequestFailed": "Adressabfrage fehlgeschlagen"
+            },
+            "searchByCoord": {
+                "exampleAcronym": "Bsp.",
+                "errorMsg": {
+                    "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
+                },
+                "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
@@ -138,6 +162,15 @@
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Bitte Auswählen",
+                "filename": "Dateiname",
+                "enterFilename": "Bitte Dateiname angeben",
+                "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
+                "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
+                "unknownGeometry": "Unbekannte Geometry:"
             }
         },
         "controls": {

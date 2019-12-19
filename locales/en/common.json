@@ -2,7 +2,8 @@
     "button": {
         "back": "Back",
         "download": "Download",
-        "search": "Search"
+        "search": "Search",
+        "close": "Close"
     },
     "colors": {
         "blue": "Blue",
@@ -17,6 +18,13 @@
     "date": "Date",
     "time": "Time",
     "modules": {
+        "language": {
+            "languageTitle": "Please choose a language"
+        },
+        "footer":{
+            "designation":"Cartography and design:",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -76,6 +84,13 @@
             "saveSelection": {
                 "saveSelectionText": "Save this URL as a bookmark"
             },
+            "kmlImport": {
+                "unknownGeometry": "Unknown Geometry",
+                "chooseFileFirst": "Please choose the kml data file for importing first.",
+                "fakeButton": "Choose file (no file chosen yet)",
+                "importButton": "IMPORT",
+                "file": "File"
+            },
             "parcelSearch": {
                 "wrongConfig": "Invalid or incomplete configuration",
                 "districtsLoadFailed": "Districts could not be loaded",
@@ -113,7 +128,16 @@
                 "currentPosition": "Current position",
                 "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
                 "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed",
+                "addressRequestFailed": "Address request failed"
+            },
+            "searchByCoord": {
+                "exampleAcronym": "e.g.",
+                "errorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
+                },
+                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
@@ -138,6 +162,15 @@
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
                 }
+            },
+            "download": {
+                "format": "Format",
+                "pleaseChoose": "Please choose",
+                "filename": "Filename",
+                "enterFilename": "Please enter filename",
+                "createFirst": "Please create a drawing or text first!",
+                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                "unknownGeometry": "Unknown geometry:"
             }
         },
         "controls": {

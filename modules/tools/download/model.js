@@ -17,7 +17,16 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         dataString: "",
         fileName: "",
         isInternetExplorer: undefined,
-        blob: undefined
+        blob: undefined,
+        // translations:
+        createFirstText: "",
+        unknownGeometry: "",
+        formatText: "",
+        pleaseChooseText: "",
+        filenameText: "",
+        enterFilenameText: "",
+        loadDownText: "",
+        backText: ""
     }),
 
     /**
@@ -35,6 +44,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @property {String} dataString="" The features converted as dataString.
      * @property {String} fileName="" The filename.
      * @listens Tools.Download#RadioTriggerDownloadStart
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core#RadioRequestUtilIsInternetExplorer
@@ -43,8 +53,29 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     initialize: function () {
         this.superInitialize();
+        this.changeLang(i18next.language);
         this.listenTo(this.get("channel"), {
             "start": this.start
+        });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            createFirstText: i18next.t("common:modules.tools.download.createFirst"),
+            unknownGeometry: i18next.t("common:modules.tools.download.unknownGeometry"),
+            formatText: i18next.t("common:modules.tools.download.format"),
+            pleaseChooseText: i18next.t("common:modules.tools.download.pleaseChoose"),
+            filenameText: i18next.t("common:modules.tools.download.filename"),
+            enterFilenameText: i18next.t("common:modules.tools.download.enterFilename"),
+            loadDownText: i18next.t("common:button.download"),
+            backText: i18next.t("common:button.back")
         });
     },
 
@@ -58,7 +89,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     start: function (obj) {
         if (obj.features.length === 0) {
-            Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
+            Radio.trigger("Alert", "alert", this.get("createFirstText"));
             return;
         }
         obj.features.forEach(feature => {
@@ -100,7 +131,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                 this.setSelectedFormat("");
                 break;
             default:
-                Radio.trigger("Alert", "alert", "Das Format " + selectedFormat + " wird noch nicht unterstützt.");
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.download.formatNotSupported"), {selectedFormat: selectedFormat});
         }
         this.setDataString(features);
     },
@@ -235,7 +266,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                 break;
             }
             default: {
-                Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
+                Radio.trigger("Alert", "alert", this.get("unknownGeometry") + " <br><strong>" + geometry.getType());
             }
         }
         return transCoord;
