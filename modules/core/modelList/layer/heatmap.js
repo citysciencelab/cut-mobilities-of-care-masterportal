@@ -26,6 +26,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
      * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @listens Layer#RadioTriggerVectorLayerResetFeatures
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
@@ -39,8 +40,24 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": this.loadInitialData,
-            "featureUpdated": this.updateFeature
+            "featureUpdated": this.updateFeature,
+            "resetFeatures": this.resetFeatures
         }, this);
+    },
+
+    resetFeatures: function (layerId, features) {
+        const featureClones = [];
+
+        if (this.checkDataLayerId(layerId)) {
+            features.forEach(feature => {
+                const clone = feature.clone();
+
+                clone.setStyle(null);
+                featureClones.push(clone);
+            });
+            this.get("layerSource").clear();
+            this.initializeHeatmap(featureClones);
+        }
     },
 
     /**
