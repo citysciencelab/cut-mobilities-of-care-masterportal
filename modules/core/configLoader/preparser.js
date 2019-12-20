@@ -197,6 +197,12 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         }
                     };
                 }
+
+                // run the translation once for startup to ensure the absence of any translation key found in the config.json
+                // after this - use i18nextTranslate on any object to translate the value
+                if (i18next.exists(translationKey)) {
+                    subconf[subkey] = i18next.t(translationKey);
+                }
             }
             else if (typeof subobj === "object") {
                 this.addTranslationToRawConfig(subobj, prefix);
