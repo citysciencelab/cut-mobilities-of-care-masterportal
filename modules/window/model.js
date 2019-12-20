@@ -8,7 +8,14 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         startX: 0,
         startY: 0,
         windowLeft: 0,
-        windowTop: 0
+        windowTop: 0,
+
+        // the current value that is shown in the window
+        currentValue: false,
+
+        name: "",
+        minimizeText: "Minimieren",
+        closeText: "Schließen"
     },
 
     /**
@@ -29,9 +36,33 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
             "showTool": this.setParams
         }, this);
 
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
         channel.on({
             "collapseWin": this.collapseWindow
         }, this);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        const setLanguage = {
+            minimizeText: i18next.t("common:button.minimize"),
+            closeText: i18next.t("common:button.close")
+        };
+
+        if (this.get("currentValue") !== false && typeof this.get("currentValue").get("i18nextTranslate") === "function") {
+            this.get("currentValue").get("i18nextTranslate")(function (key, value) {
+                setLanguage[key] = value;
+            });
+        }
+
+        this.set(setLanguage);
     },
 
     /**
@@ -40,6 +71,7 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
      */
     collapseWindow: function () {
         this.setCollapse(true);
+        this.set("currentValue", null);
     },
 
     /**
@@ -58,6 +90,11 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
      */
     setIsVisible: function (value) {
         this.set("isVisible", value);
+
+        if (value === false) {
+            // on collapse (value is false) this function will also disable currentValue
+            this.set("currentValue", false);
+        }
     },
 
     /**
@@ -66,7 +103,8 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
      *  @return {void}
      */
     setParams: function (value) {
-        this.set("title", value.get("name"));
+        this.set("currentValue", value);
+        this.set("name", value.get("name"));
         this.set("icon", value.get("glyphicon"));
         this.set("winType", value.get("id"));
     },

@@ -107,16 +107,16 @@
     {
       "tree":
       {
-        "name": "Themen",
+        "name": "translate#common:menu.topics",
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
       "ansichten": {
-        "name" : "Ansichten",
+        "name" : "translate#common:menu.views.name",
         "glyphicon": "glyphicon-list",
         "children": {
           "view1": {
-            "name": "Ansicht1",
+            "name": "translate#common:menu.views.view01",
             "type" : "viewpoint",
             "glyphicon": "glyphicon-screenshot",
             "heading": -0.30858728378862876,
@@ -128,13 +128,13 @@
         }
       },
       "schulwegrouting": {
-        "name": "Schulweg-Routing",
+        "name": "translate#common:menu.wayToSchool",
         "glyphicon": "glyphicon-filter",
         "layerId": "8712"
       },
       "filter":
       {
-        "name": "Filter",
+        "name": "translate#common:menu.filter",
         "glyphicon": "glyphicon-filter",
         "deactivateGFI": false,
         "isGeneric": false,
@@ -203,21 +203,21 @@
       },
       "tools":
       {
-        "name": "Werkzeuge",
+        "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
           "einwohnerabfrage": {
-            "name": "Einwohneranzahl abfragen",
+            "name": "translate#common:menu.tools.popularFigures",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false
           },
           "compareFeatures": {
-            "name": "Vergleichsliste",
+            "name": "translate#common:menu.tools.compareFeatures",
             "glyphicon": "glyphicon-th-list"
           },
           "parcelSearch":
           {
-            "name": "Flurstückssuche",
+            "name": "translate#common:menu.tools.parcelSearch",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
@@ -356,32 +356,32 @@
       },
       "legend":
       {
-        "name": "Legende",
+        "name": "translate#common:menu.legend",
         "glyphicon": "glyphicon-book"
       },
       "contact":
       {
-        "name": "Kontakt",
+        "name": "translate#common:menu.contact",
         "glyphicon": "glyphicon-envelope",
         "serviceID": "80001",
         "includeSystemInfo": true
       },
       "info":
       {
-        "name": "Informationen",
+        "name": "translate#common:menu.info.name",
         "glyphicon": "glyphicon-info-sign",
         "children":
         {
           "staticlinks": [
           {
-            "name": "Haftungsausschluss",
+            "name": "translate#common:menu.info.disclaimer",
             "glyphicon": "glyphicon-globe",
             "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
           },
           {
-            "name": "Hamburg",
+            "name": "translate#common:menu.info.home.name",
             "glyphicon": "glyphicon-globe",
-            "url": "http://www.hamburg.de"
+            "url": "translate#common:menu.info.home.url"
           }]
         }
       }
@@ -481,7 +481,8 @@
       },
       {
         "id": "2128",
-        "styleId": "2128"
+        "styleId": "2128",
+        "name": "translate#common:tree.trafficCameras"
       },
       {
         "id": "8730"

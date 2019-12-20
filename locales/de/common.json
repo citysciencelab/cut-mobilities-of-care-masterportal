@@ -3,7 +3,8 @@
         "back": "Zurück",
         "download": "Herunterladen",
         "search": "Suchen",
-        "close": "Schließen"
+        "close": "Schließen",
+        "minimize": "Minimieren"
     },
     "colors": {
         "blue": "Blau",
@@ -14,6 +15,34 @@
         "red": "Rot",
         "black": "Schwarz",
         "white": "Weiß"
+    },
+    "menu": {
+        "topics": "Themen",
+        "views": {
+            "name": "Ansichten",
+            "view01": "Ansicht 1"
+        },
+        "wayToSchool": "Schulweg-Routing",
+        "filter": "Filter",
+        "tools": {
+            "name": "Werkzeuge",
+            "popularFigures": "Einwohneranzahl abfragen",
+            "compareFeatures": "Vergleichsliste",
+            "parcelSearch": "Flurstückssuche"
+        },
+        "legend": "Legende",
+        "contact": "Kontakt",
+        "info": {
+            "name": "Informationen",
+            "disclaimer": "Haftungsausschluss",
+            "home": {
+                "name": "Hamburg",
+                "url": "https://www.hamburg.de/"
+            }
+        }
+    },
+    "tree": {
+        "trafficCameras": "Verkehrskameras"
     },
     "date": "Datum",
     "time": "Zeit",

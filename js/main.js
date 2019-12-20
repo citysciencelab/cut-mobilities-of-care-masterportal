@@ -111,7 +111,7 @@ else {
  * @param {Boolean} config.enabled activates the GUI for language switching
  * @param {Boolean} config.debug if true i18next show debugging for developing
  * @param {Object} config.languages the languages to be used as {krz: full} where krz is "en" and full is "english"
- * @param {String} config.startLanguage the language to use on startup
+ * @param {String} config.fallbackLanguage the language to use on startup
  * @param {Array} config.changeLanguageOnStartWhen the incidents that changes the language on startup as Array where the order is important
  * @returns {Void}  -
  */
@@ -124,7 +124,7 @@ function initLanguage (portalLanguageConfig) {
             "de": "deutsch",
             "en": "english"
         },
-        "startLanguage": "de",
+        "fallbackLanguage": "de",
         "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator", "htmlTag"]
     }, portalLanguageConfig);
 
@@ -139,8 +139,8 @@ function initLanguage (portalLanguageConfig) {
             debug: portalLanguage.debug,
 
             // lng overrides language detection - so shall not be set (!)
-            // lng: portalLanguage.startLanguage,
-            fallbackLng: portalLanguage.startLanguage,
+            // lng: portalLanguage.fallbackLanguage,
+            fallbackLng: portalLanguage.fallbackLanguage,
             whitelist: Object.keys(portalLanguage.languages),
 
             // to allow en-US when only en is on the whitelist - nonExplicitWhitelist must be set to true

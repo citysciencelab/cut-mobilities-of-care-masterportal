@@ -3,7 +3,8 @@
         "back": "Back",
         "download": "Download",
         "search": "Search",
-        "close": "Close"
+        "close": "Close",
+        "minimize": "Minimize"
     },
     "colors": {
         "blue": "Blue",
@@ -14,6 +15,34 @@
         "red": "Red",
         "black": "Black",
         "white": "White"
+    },
+    "menu": {
+        "topics": "Issues & Topics",
+        "views": {
+            "name": "Views",
+            "view01": "View 1"
+        },
+        "wayToSchool": "Your way to school",
+        "filter": "Filtering",
+        "tools": {
+            "name": "more tools",
+            "popularFigures": "Population figures",
+            "compareFeatures": "Compare features",
+            "parcelSearch": "Parcel search"
+        },
+        "legend": "explanations",
+        "contact": "mail",
+        "info": {
+            "name": "informations",
+            "disclaimer": "legal disclaimer",
+            "home": {
+                "name": "Hamburg Town",
+                "url": "https://www.hamburg.com/"
+            }
+        }
+    },
+    "tree": {
+        "trafficCameras": "survey cameras (traffic)"
     },
     "date": "Date",
     "time": "Time",

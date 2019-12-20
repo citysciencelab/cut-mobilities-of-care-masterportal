@@ -66,7 +66,7 @@ const Config = {
             de: "deutsch",
             en: "englisch"
         },
-        startLanguage: "de",
+        fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     }
 };
