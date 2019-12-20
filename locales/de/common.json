@@ -46,7 +46,14 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Maßstab",
                 "withLegendLabel": "Mit Legende",
-                "printLabel": "Drucken"
+                "printLabel": "Drucken",
+                "withInfoLabel": "Mit Informationen",
+                "layoutNameList": {
+                    "A4 Hochformat": "A4 Hochformat",
+                    "A4 Querformat": "A4 Querformat",
+                    "A3 Hochformat": "A3 Hochformat",
+                    "A3 Querformat": "A3 Querformat"
+                }
             },
             "populationRequest": {
                 "select": {

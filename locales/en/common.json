@@ -46,7 +46,14 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Scale",
                 "withLegendLabel": "With legend",
-                "printLabel": "Print"
+                "printLabel": "Print",
+                "withInfoLabel": "With information",
+                "layoutNameList": {
+                    "A4 Hochformat": "A4 portrait format",
+                    "A4 Querformat": "A4 landscape format",
+                    "A3 Hochformat": "A3 portrait format",
+                    "A3 Querformat": "A3 landscape format"
+                }
             },
             "populationRequest": {
                 "select": {
