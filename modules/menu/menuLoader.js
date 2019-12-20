@@ -39,7 +39,6 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
         });
 
-        this.switchCollectionLanguage(Radio.request("ModelList", "getCollection"));
         this.loadMenu();
     },
 
