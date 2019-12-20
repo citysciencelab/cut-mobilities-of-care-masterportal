@@ -74,6 +74,12 @@
  * @description Triggered by Model when new content is available.
  */
 
+ /**
+ * @event Sidebar#setWidth
+ * @param {String} width Width of sidebar.
+ * @description Triggered by Model when sidebar is toggled.
+ */
+
 /**
  * @event Sidebar#RadioTriggerSidebarToggle
  * @param {Boolean} isVisible Flag if sidebar is now visible or not.
