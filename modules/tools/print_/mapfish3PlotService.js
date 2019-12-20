@@ -45,13 +45,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         glyphicon: "glyphicon-print",
         eventListener: {},
         dpiForPdf: 200,
-        titleLable: "",
+        titleLabel: "",
         titlePlaceholder: "",
         layoutLabel: "",
-        formatLable: "",
-        scaleLable: "",
-        withLegendLable: "",
-        printLable: ""
+        formatLabel: "",
+        scaleLabel: "",
+        withLegendLabel: "",
+        withInfoLabel: "",
+        printLabel: "",
+        layoutNameList: []
     }),
 
     /**
@@ -149,7 +151,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             formatLabel: i18next.t("common:modules.tools.print.formatLabel"),
             scaleLabel: i18next.t("common:modules.tools.print.scaleLabel"),
             withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
-            printLabel: i18next.t("common:modules.tools.print.printLabel")
+            printLabel: i18next.t("common:modules.tools.print.printLabel"),
+            withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
+            layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true})
         });
     },
 

@@ -44,15 +44,29 @@
     "tree": {
         "trafficCameras": "survey cameras (traffic)"
     },
+    "date": "Date",
+    "time": "Time",
     "modules": {
         "language": {
             "languageTitle": "Please choose a language"
         },
+        "footer":{
+            "designation":"Cartography and design:",
+            "version":"Version"
+        },
         "tools": {
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
-                "userNamePlaceholder": "your name",
-                "textSendButton": "send message"
+                "userNamePlaceholder": "Your name",
+                "textSendButton": "send message",
+                "emailAddressPlaceholder": "Your E-mail Address",
+                "telephonePlaceholder": "Your phone number",
+                "errorName": "Please input your name",
+                "errorEmail": "Please input a valid E-mail address",
+                "errorNumber": "Please input your phone number",
+                "errorMessage": "Sending Email failed!",
+                "successMessage": "Your request was sent successfully",
+                "successTicket": "Your ticket number is: "
             },
             "print": {
                 "titleLabel": "Title",
@@ -61,7 +75,14 @@
                 "formatLabel": "Format",
                 "scaleLabel": "Scale",
                 "withLegendLabel": "With legend",
-                "printLabel": "Print"
+                "printLabel": "Print",
+                "withInfoLabel": "With information",
+                "layoutNameList": {
+                    "A4 Hochformat": "A4 portrait format",
+                    "A4 Querformat": "A4 landscape format",
+                    "A3 Hochformat": "A3 portrait format",
+                    "A3 Querformat": "A3 landscape format"
+                }
             },
             "populationRequest": {
                 "select": {
@@ -137,6 +158,30 @@
                     "eastingLabel": "easting",
                     "northingLabel": "northing"
                 }
+            },
+            "viomRouting": {
+                "startAddressLabel": "Start address",
+                "destinationAddressLabel": "Destination address",
+                "fromPlaceholder": "From",
+                "toPlaceholder": "To",
+                "setStartTimeText": "Set start time",
+                "routingError": "Error",
+                "enterStartDestHoverText": "Enter start and destination",
+                "enterOptionsText": "Enter options",
+                "calculateRoute": "Calculate route",
+                "currentPosition": "Current position",
+                "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
+                "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
+                "addressRequestFailed": "Address request failed"
+            },
+            "searchByCoord": {
+                "exampleAcronym": "e.g.",
+                "errorMsg": {
+                    "noCoord": "Please enter your {{valueKey}}.",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
+                },
+                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",

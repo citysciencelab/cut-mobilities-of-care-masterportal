@@ -26,18 +26,60 @@ const RoutingModel = Tool.extend({
         mhpOverlay: "",
         isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
         renderToWindow: true,
-        glyphicon: "glyphicon-road"
+        glyphicon: "glyphicon-road",
+        startAddressLabel: "",
+        destinationAddressLabel: "",
+        fromPlaceholder: "",
+        toPlaceholder: "",
+        setStartTimeText: "",
+        date: "",
+        time: "",
+        routingError: "",
+        enterStartDestHoverText: "",
+        enterOptionsText: "",
+        calculateRoute: "",
+        currentPosition: ""
     }),
+
     initialize: function () {
         this.superInitialize();
 
         Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
         Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            startAddressLabel: i18next.t("common:modules.tools.viomRouting.startAddressLabel"),
+            destinationAddressLabel: i18next.t("common:modules.tools.viomRouting.destinationAddressLabel"),
+            fromPlaceholder: i18next.t("common:modules.tools.viomRouting.fromPlaceholder"),
+            toPlaceholder: i18next.t("common:modules.tools.viomRouting.toPlaceholder"),
+            setStartTimeText: i18next.t("common:modules.tools.viomRouting.setStartTimeText"),
+            date: i18next.t("common:date"),
+            time: i18next.t("common:time"),
+            routingError: i18next.t("common:modules.tools.viomRouting.routingError"),
+            enterStartDestHoverText: i18next.t("common:modules.tools.viomRouting.enterStartDestHoverText"),
+            enterOptionsText: i18next.t("common:modules.tools.viomRouting.enterOptionsText"),
+            calculateRoute: i18next.t("common:modules.tools.viomRouting.calculateRoute"),
+            currentPosition: i18next.t("common:modules.tools.viomRouting.currentPosition")
+        });
+    },
+
     setStartpoint: function (geoloc) {
         this.set("fromCoord", geoloc);
         this.setCenter(geoloc);
-        this.set("startAdresse", "aktueller Standpunkt");
+        this.set("startAdresse", this.get("currentPosition"));
     },
     setParams: function () {
         var viomRoutingModel,
@@ -126,11 +168,11 @@ const RoutingModel = Tool.extend({
                     }
                 }
                 catch (error) {
-                    Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcError") + ".", kategorie: "alert-warning"});
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten:  " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcAborted") + ". " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
@@ -158,7 +200,7 @@ const RoutingModel = Tool.extend({
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.addressRequestFailed") + ": " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
@@ -225,7 +267,7 @@ const RoutingModel = Tool.extend({
                 Radio.trigger("Util", "hideLoader");
                 this.set("description", "");
                 this.set("endDescription", "");
-                Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: this.get("routingError"), kategorie: "alert-warning"});
             }
         });
     },

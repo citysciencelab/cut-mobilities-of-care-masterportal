@@ -41,7 +41,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
                 else if (changed.hasOwnProperty("currentScale")) {
                     this.render(model);
                 }
-                else if (changed.titleLabel || changed.titlePlaceholder || changed.layoutLabel || changed.formatLabel || changed.scaleLabel || changed.withLegendLabel || changed.printLabel) {
+                else if (changed.titleLabel || changed.titlePlaceholder || changed.layoutLabel || changed.formatLabel || changed.scaleLabel || changed.withLegendLabel || changed.printLabel || changed.withInfoLabel || changed.layoutNameList) {
                     this.render(model);
                 }
             }
