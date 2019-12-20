@@ -3,7 +3,8 @@
         "back": "Zurück",
         "download": "Herunterladen",
         "search": "Suchen",
-        "close": "Schließen"
+        "close": "Schließen",
+        "minimize": "Minimieren"
     },
     "colors": {
         "blue": "Blau",
