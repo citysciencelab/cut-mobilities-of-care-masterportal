@@ -247,7 +247,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     expandFeaturesBySubTyp: function (subTyp) {
         const expandedFeatures = this.get("layerSource").getFeatures();
 
-        if (subTyp && subTyp === "OpenSenseMap") {
+        if (subTyp === "OpenSenseMap") {
             expandedFeatures.forEach(feature => {
                 const sensors = feature.get("sensors");
 
@@ -260,6 +260,9 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                     this.getValueFromOpenSenseMapSensor(feature, sensorId, name, unit, type);
                 });
             });
+        }
+        else {
+            console.error("Subtype " + subTyp + " is not yet supported for GeoJSON-Layer.");
         }
     },
 
