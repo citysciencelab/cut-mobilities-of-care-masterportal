@@ -33,20 +33,6 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # cd lgv
 ```
 
-Nun müssen die vorhandenen, konfigurierten Portale eingefügt werden. Diese sind in einem eigenen Repo namens *portalconfigs*. Dieses direkt in den Masterportal-Ordner klonen:
-```
-# git clone https://@bitbucket.org/geowerkstatt-hamburg/portalconfigs.git
-```
-
-Jetzt fehlen noch die Addons. Diese liegen getrennt in einem weiteren Repo namens *addons*. Dafür in den Ordner *addons* navigieren (welcher nicht leer ist) und darin das Repo klonen.
-```
-# cd addons
-# git clone https://@bitbucket.org/geowerkstatt-hamburg/addons.git
-```
-
-Nun ist ein *addons* Ordner in einem anderen *addons* Ordner. Den Inhalt des inneren Ordners (Repo *addons*) ausschneiden und in den äußeren Ordner verschieben. Den inneren, leeren Ordner jetzt löschen.
-
-
 Jetzt müssen die Node-Module installiert werden:
 ```
 # cd .. // wieder zurück ins Masterportal-Root-Verzeichnis
