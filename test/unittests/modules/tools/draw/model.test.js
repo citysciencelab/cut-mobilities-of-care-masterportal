@@ -6,6 +6,8 @@ import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
 import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
+import Map from "ol/Map";
+import View from "ol/View";
 
 describe("drawModel", function () {
     var model;
@@ -175,36 +177,53 @@ describe("drawModel", function () {
     });
 
     describe("getCircleExtentByDistanceLat", function () {
-        it("should return an array with two values", function () {
-            const circleCenter = [560694.1292972941, 5930285.32630731],
-                radius = 2000,
-                result = model.getCircleExtentByDistanceLat(circleCenter, radius);
+        const testMap = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:25832"
+                })
+            }),
+            earthRadius = 6378137;
 
-            expect(result).to.deep.equal([560681.2898157198, 5931284.678816934]);
+        it("should return an array with two values.", function () {
+            const circleCenter = [563054.1959507341, 5931428.60952855],
+                diameter = 2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([563040.8522628784, 5932427.960697326]);
         });
-        it("should return an array with two values", function () {
-            const circleCenter = [562069.9622106553, 5930532.270403086],
-                radius = -2000,
-                result = model.getCircleExtentByDistanceLat(circleCenter, radius);
 
-            expect(result).to.deep.equal([562083.092226224, 5929532.920741077]);
+        it("should return an array with two values.", function () {
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = -2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([561320.9362901135, 5930661.805980023]);
         });
     });
 
     describe("getCircleExtentByDistanceLon", function () {
-        it("should return an array with two values", function () {
-            const circleCenter = [562069.9622106553, 5930532.270403086],
-                radius = 2000,
-                result = model.getCircleExtentByDistanceLon(circleCenter, radius);
+        const testMap = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:25832"
+                })
+            }),
+            earthRadius = 6378137;
 
-            expect(result).to.deep.equal([563071.6927002022, 5930545.538693837]);
+        it("should return an array with two values", function () {
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = 2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([562309.6945844457, 5931674.269837391]);
         });
         it("should return an array with two values", function () {
-            const circleCenter = [562069.9622106553, 5930532.270403086],
-                radius = -2000,
-                result = model.getCircleExtentByDistanceLon(circleCenter, radius);
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = -2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, diameter, testMap, earthRadius);
 
-            expect(result).to.deep.equal([561068.2304592272, 5930519.214558409]);
+            expect(result).to.deep.equal([560306.2294113865, 5931648.259190894]);
         });
     });
 

@@ -7,16 +7,11 @@ import MultiLine from "ol/geom/MultiLineString.js";
 import {fromCircle as circPoly} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
+import {getMapProjection} from "masterportalAPI/src/crs";
 import {toLonLat, transform} from "ol/proj";
 
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
-        drawInteraction: undefined,
-        selectInteraction: undefined,
-        modifyInteraction: undefined,
-        layer: undefined,
-        circleRadiusInner: undefined,
-        circleRadiusOuter: undefined,
         font: "Arial",
         fontSize: 10,
         text: "Klicken Sie auf die Karte um den Text zu platzieren",
@@ -263,11 +258,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     calculateCircle: function (evt, circleCenter, circleRadius) {
-        const resultCoordinates = [
-                this.getCircleExtentByDistanceLat(circleCenter, circleRadius),
-                this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius),
-                this.getCircleExtentByDistanceLon(circleCenter, circleRadius),
-                this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius)
+        const map = Radio.request("Map", "getMap"),
+            resultCoordinates = [
+                this.getCircleExtentByDistanceLat(circleCenter, circleRadius, map, Config.earthRadius),
+                this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius, map, Config.earthRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, circleRadius, map, Config.earthRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius, map, Config.earthRadius)
             ],
             assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
 
@@ -342,32 +338,36 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * Calculates new flat and extent latitude coordinates for the (circle-) feature.
      * These coordiantes are calculated on the basis of the circle diameter specified by the user.
      * @param   {Array} circleCenter - Centercoordinates of the circle.
-     * @param   {Array} circleRadius - Diameter of the new circle.
+     * @param   {Array} diameter - Diameter of the new circle.
+     * @param   {ol.Map} map - Map to project to.
+     * @param   {Number} earthRadius - Radius of the earth.
      * @returns {Array} - returns new and transformed flat / extent coordinates of the circle.
      */
-    getCircleExtentByDistanceLat: function (circleCenter, circleRadius) {
-        const offsetLat = circleRadius / 2,
-            circleCenterWGS = toLonLat(circleCenter, Config.namedProjections[1][0]),
-            deltaLat = offsetLat / Config.earthRadius,
+    getCircleExtentByDistanceLat: function (circleCenter, diameter, map, earthRadius) {
+        const offsetLat = diameter / 2,
+            circleCenterWGS = toLonLat(circleCenter, getMapProjection(map)),
+            deltaLat = offsetLat / earthRadius,
             newPositionLat = circleCenterWGS[1] + deltaLat * 180 / Math.PI;
 
-        return transform([circleCenterWGS[0], newPositionLat], Config.namedProjections[3][0], Config.namedProjections[1][0]);
+        return transform([circleCenterWGS[0], newPositionLat], "EPSG:4326", getMapProjection(map));
     },
 
     /**
      * Calculates new flat and extent longitude coordinates for the (circle-) feature.
      * These coordiantes are calculated on the basis of the circle diameter specified by the user.
      * @param   {Array} circleCenter - Centercoordinates of the circle.
-     * @param   {Array} circleRadius - Diameter of the new circle.
+     * @param   {Array} diameter - Diameter of the new circle.
+     * @param   {ol.Map} map - Map to project to.
+     * @param   {Number} earthRadius - Radius of the earth.
      * @returns {Array} - returns new and transformed flat coordinates of the circle.
      */
-    getCircleExtentByDistanceLon: function (circleCenter, circleRadius) {
-        const offsetLon = circleRadius / 2,
-            circleCenterWGS = toLonLat(circleCenter, Config.namedProjections[1][0]),
-            deltaLon = offsetLon / (Config.earthRadius * Math.cos(Math.PI * circleCenterWGS[1] / 180)),
+    getCircleExtentByDistanceLon: function (circleCenter, diameter, map, earthRadius) {
+        const offsetLon = diameter / 2,
+            circleCenterWGS = toLonLat(circleCenter, getMapProjection(map)),
+            deltaLon = offsetLon / (earthRadius * Math.cos(Math.PI * circleCenterWGS[1] / 180)),
             newPositionLon = circleCenterWGS[0] + deltaLon * 180 / Math.PI;
 
-        return transform([newPositionLon, circleCenterWGS[1]], Config.namedProjections[3][0], Config.namedProjections[1][0]);
+        return transform([newPositionLon, circleCenterWGS[1]], "EPSG:4326", getMapProjection(map));
     },
 
     /**

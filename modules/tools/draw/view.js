@@ -44,8 +44,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         }
     },
 
-    testIt: "Dies ist ein Test zum testen",
-
     /**
      * @member DrawTemplate
      * @description Template used to create the draw tool.
