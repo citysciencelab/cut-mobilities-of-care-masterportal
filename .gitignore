@@ -20,6 +20,7 @@ debug.log
 devtools/proxyconf.json
 dist
 examples*
+
 examples.zip
 jshintrc
 lgv-config
