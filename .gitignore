@@ -27,6 +27,7 @@ css/modules.css
 dist
 
 examples*
+
 examples.zip
 
 jshintrc
