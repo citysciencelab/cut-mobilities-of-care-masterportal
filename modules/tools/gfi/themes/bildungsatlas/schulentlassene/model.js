@@ -1,6 +1,6 @@
 import Theme from "../../model";
 
-const SchulentlasseneTheme = Theme.extend({
+const SchulentlasseneTheme = Theme.extend(/** @lends SchulentlasseneTheme.prototype */{
     defaults: _.extend({}, Theme.prototype.defaults, {
         warningPrefix: "Regionaler Bildungsatlas - Schulentlassene ",
         maxYearsToShowInDiagrams: 10,
