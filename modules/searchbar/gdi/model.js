@@ -44,8 +44,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
 
         if (restService) {
             url = restService.get("url");
-            url = url + "source_content_type=application/json&source=";
+            url = url + "?source_content_type=application/json&source=";
         }
+
         return url;
     },
 
