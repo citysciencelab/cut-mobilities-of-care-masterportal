@@ -13,7 +13,8 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
     /**
      * Main function to start the search using the xhrConfig.
      * @param {Object} xhrConfig The configuration of the xhr request.
-     * @param {String} xhrConfig.serviceId Id of the rest-service to be used.
+     * @param {String} xhrConfig.serviceId Id of the rest-service to be used. If serviceId is give, the url from the rest-service is taken.
+     * @param {String} xhrConfig.url If no serviceId is given, alternatively an url can be passed.
      * @param {String} xhrConfig.type Type of request. "POST" or "GET".
      * @param {Object} xhrConfig.payload Payload used to "POST" to url or be appended to url if type is "GET".
      * @param {Boolean} xhrConfig.async Flag if request should be sent asynchronously.
@@ -30,7 +31,7 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
                 message: "",
                 hits: []
             },
-            url = restService ? restService.get("url") : undefined;
+            url = restService ? restService.get("url") : xhrConfig.url;
 
         if (url) {
             xhrRequests = this.abortXhrRequestByServiceId(xhrRequests, serviceId);

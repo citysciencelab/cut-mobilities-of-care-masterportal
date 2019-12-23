@@ -24,10 +24,29 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @listens Searchbar#RadioTriggerSearchbarSearch
      */
     initialize: function () {
+        const url = this.deriveUrlFromServiceIdAndAppendParameter(this.get("serviceId"));
+
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
         console.error("GDI-Search is deprecated in version 3.0.0. Please use the elasticSearch!");
+        this.setUrl(url);
+    },
+
+    /**
+     * Derives the url from the serviceId and appends url parameters.
+     * @param {String} serviceId Service Id.
+     * @returns {String} - url with appended parameters.
+     */
+    deriveUrlFromServiceIdAndAppendParameter: function (serviceId) {
+        const restService = Radio.request("RestReader", "getServiceById", serviceId);
+        let url;
+
+        if (restService) {
+            url = restService.get("url");
+            url = url + "source_content_type=application/json&source=";
+        }
+        return url;
     },
 
     /**
@@ -38,7 +57,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
     search: function (searchString) {
         const payload = this.appendSearchStringToPayload(this.get("queryObject"), "query_string", searchString),
             xhrConfig = {
-                serviceId: this.get("serviceId"),
+                url: this.get("url"),
                 type: "GET",
                 useProxy: false,
                 async: false,
@@ -156,6 +175,15 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
         });
 
         return payload;
+    },
+
+    /**
+     * Setter for Attribute "url".
+     * @param {String} value Url.
+     * @returns {void}
+     */
+    setUrl: function (value) {
+        this.set("url", value);
     }
 });
 
