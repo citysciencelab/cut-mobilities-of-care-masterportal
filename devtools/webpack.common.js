@@ -2,6 +2,7 @@ const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
     fs = require("fs"),
+    VueLoaderPlugin = require("vue-loader/lib/plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
@@ -115,6 +116,15 @@ module.exports = function () {
                         },
                         "css-loader"
                     ]
+                },
+                {
+                    test: /\.vue$/,
+                    loader: "vue-loader",
+                    options: {
+                        loaders: {
+                            js: "babel-loader?presets[]=env"
+                        }
+                    }
                 }
             ]
         },
@@ -131,6 +141,7 @@ module.exports = function () {
             new MiniCssExtractPlugin({
                 filename: "css/[name].css"
             }),
+            new VueLoaderPlugin(),
             // import only de-locale from momentjs
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
