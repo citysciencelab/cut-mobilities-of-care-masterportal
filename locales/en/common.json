@@ -215,6 +215,16 @@
                 "createFirst": "Please create a drawing or text first!",
                 "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
                 "unknownGeometry": "Unknown geometry:"
+            },
+            "measure": {
+                "geometry": "Geometry",
+                "measure": "Measure",
+                "plzConsider": "Please consider",
+                "valuesNotExact": "The displayed values are not exact",
+                "findFurtherInf": "You can find further information here",
+                "deleteMeasurements": "Delete measurements",
+                "stretch": "Distance",
+                "area": "Area"
             }
         },
         "controls": {
