@@ -1,3 +1,6 @@
+import Vue from "vue";
+import App from "../src/App.vue";
+import store from "../src/store";
 import Alert from "../modules/alerting/model";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
@@ -118,7 +121,7 @@ function loadApp () {
     }
 
     // Core laden
-    new Alert(alertingConfig);
+    // new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -454,6 +457,13 @@ function loadApp () {
     }
 
     new HighlightFeature();
+
+    Vue.config.productionTip = false;
+
+    new Vue({
+        render: h => h(App),
+        store,
+      }).$mount("#app")      
 
     if (Config.addons !== undefined) {
         Config.addons.forEach((addonKey) => {
