@@ -77,7 +77,6 @@ const LayerSliderView = Backbone.View.extend({
                 htmlString = "<span style=\"left:" + left + "px;width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
             }
             this.$el.find(".slider-layer-titles").append(htmlString);
-            // this.$el.find(tick).append(htmlString);
         });
     },
 
