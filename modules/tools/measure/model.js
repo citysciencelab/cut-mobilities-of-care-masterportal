@@ -219,6 +219,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         });
     },
 
+    /**
+     * Returns a localized object
+     * @returns {Object} localized Object
+     */
     getLocalizedValues: function () {
         const localizedValues = {};
 
@@ -233,14 +237,21 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set("geometry", i18next.t("common:modules.tools.measure.geometry"));
-        this.set("measure", i18next.t("common:modules.tools.measure.measure"));
-        this.set("plzConsider", i18next.t("common:modules.tools.measure.plzConsider"));
-        this.set("valuesNotExact", i18next.t("common:modules.tools.measure.valuesNotExact"));
-        this.set("findFurtherInf", i18next.t("common:modules.tools.measure.findFurtherInf"));
-        this.set("deleteMeasurements", i18next.t("common:modules.tools.measure.deleteMeasurements"));
-        this.set("stretch", i18next.t("common:modules.tools.measure.stretch"));
-        this.set("area", i18next.t("common:modules.tools.measure.area"));
+        this.set({
+            geometry: i18next.t("common:modules.tools.measure.geometry"),
+            measure: i18next.t("common:modules.tools.measure.measure"),
+            plzConsider: i18next.t("common:modules.tools.measure.plzConsider"),
+            valuesNotExact: i18next.t("common:modules.tools.measure.valuesNotExact"),
+            findFurtherInf: i18next.t("common:modules.tools.measure.findFurtherInf"),
+            deleteMeasurements: i18next.t("common:modules.tools.measure.deleteMeasurements"),
+            stretch: i18next.t("common:modules.tools.measure.stretch"),
+            area: i18next.t("common:modules.tools.measure.area")
+        });
+        if (!_.isEmpty(this.get("snippetDropdownModelGeometry"))) {
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.getLocalizedValues())[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.getLocalizedValues()));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.getLocalizedValues()));
+        }
     },
 
     /**
@@ -546,7 +557,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {object} styles
      */
     generateTextStyles: function (feature) {
-        var geom = feature.getGeometry(),
+        var geom,
             output = {},
             fill = new Fill({
                 color: [0, 0, 0, 1]
@@ -559,6 +570,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 color: [255, 127, 0, 1]
             }),
             styles = [];
+
+        if (!_.isUndefined(feature)) {
+            geom = feature.getGeometry();
+        }
 
         if (geom instanceof Polygon) {
             output = this.formatArea(geom);
@@ -607,9 +622,13 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} pointFeature
      */
     generateTextPoint: function (feature, distance, heightDiff, coords) {
-        var geom = feature.getGeometry(),
+        var geom,
             coord,
             pointFeature;
+
+        if (!_.isUndefined(feature)) {
+            geom = feature.getGeometry();
+        }
 
         if (distance !== undefined) {
             coord = coords;
