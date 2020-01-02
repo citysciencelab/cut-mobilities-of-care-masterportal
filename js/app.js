@@ -133,7 +133,7 @@ function loadApp () {
         }
     });
 
-    app.$store.commit("addConfigToAlerting", Config.alerting);
+    app.$store.commit("addConfigToStore", Config);
     app.$mount("#app");
 //  #### Use Vue finish! ###
 

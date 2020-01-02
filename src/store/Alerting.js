@@ -9,11 +9,6 @@ export default {
     },
 
     mutations: {
-        addConfigToAlerting (state, Config = {}) {
-            Object.keys(state).forEach(value => {
-                state[value] = Config.hasOwnProperty(value) ? Config[value] : state[value];
-            });
-        },
         /**
          * Adds an alert to state if the message to report is not a duplicate.
          * @param {object} state - vuex store
