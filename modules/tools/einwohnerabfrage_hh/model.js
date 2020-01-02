@@ -1,5 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
-import GraphicalSelectModel from "../../snippets/graphicalselect/model";
+import GraphicalSelectModel from "../../snippets/graphicalSelect/model";
 import SnippetCheckboxModel from "../../snippets/checkbox/model";
 
 const EinwohnerabfrageModel = Tool.extend(/** @lends EinwohnerabfrageModel.prototype */{
