@@ -215,6 +215,16 @@
                 "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
                 "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
                 "unknownGeometry": "Unbekannte Geometry:"
+            },
+            "measure": {
+                "geometry": "Geometrie",
+                "measure": "Einheit",
+                "plzConsider": "Bitte beachten Sie",
+                "valuesNotExact": "Die angezeigten Werte unterliegen Ungenauigkeiten",
+                "findFurtherInf": "Weitere Informationen finden Sie hier",
+                "deleteMeasurements": "Messungen löschen",
+                "stretch": "Strecke",
+                "area": "Fläche"
             }
         },
         "controls": {
