@@ -11,10 +11,10 @@ export default {
 
     actions: {
         storeUser ({commit}, user) {
-            commit('setUser', user);
+            commit("setUser", user);
         },
-        removeUser ({ commit }) {
-            commit('setUser', null);
+        removeUser ({commit}) {
+            commit("setUser", null);
         }
     }
 };

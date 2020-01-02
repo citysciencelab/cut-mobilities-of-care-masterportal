@@ -9,9 +9,9 @@ export default {
     },
     mounted() {
         console.log ('Hello World was mounted!!');
-        console.log(this.$store.state.user);
+        console.log(this.$store.state.User.user);
         document.getElementById('main-nav').appendChild(this.$el);
-        Radio.trigger("Alert", "alert", {text:"Hello World!", kategorie: "alert-danger"});
+        Radio.trigger("Alert", "alert", {id: "123", text:"Hello World!", kategorie: "alert-danger"});
         // this.$store.commit("setAlert", "Text")
         this.$store.dispatch('storeUser', "XYUser");
     }
