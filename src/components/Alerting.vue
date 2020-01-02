@@ -3,29 +3,18 @@
         <div v-for="alert in alerts">
             <div :id="alert.id" :class="['alert', alert.category]" role="alert">
                 <p>{{alert.isDismissable}}</p>
-                <button v-if="alert.isDismissable===true" v-on:click="closeAlert('closed', $event)" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button v-if="alert.isDismissable===true" v-on:click="closeAlert('closed', $event)" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <p>{{ alert.message }}</p>
-                <button v-if="alert.isConfirmable" v-on:click="closeAlert('confirmed', $event)" type="button" class="btn btn-primary alert-confirm" data-dismiss="alert" aria-label="Close">OK</button>
+                <button v-if="alert.isConfirmable" v-on:click="closeAlert('confirmed', $event)" type="button" class="btn btn-primary alert-confirm" aria-label="Close">OK</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-// todo:
-// position dynamisch
-// fade out
-// daten aus config übernehmen
-
 export default {
-    data() {
-        return {
-            position: "top-center",
-            fadeOut: 5000,
-        }
-    },
     created() {
         const that = this,
             myBus = Backbone.Events;
@@ -39,13 +28,29 @@ export default {
             }
         });
     },
-    mounted() {
+    mounted() {    
         document.getElementsByTagName("body")[0].append(this.$el);
+    },
+    updated() {
+        const that = this;
+
+        if (this.fadeOut) {
+            $(".alert").fadeOut(this.fadeOut, function () {
+                that.$store.dispatch("removeAlert", $(this).attr("id"));
+                $(this).remove();
+            });
+        }
     },
     computed: {
         alerts () {
-            return this.$store.state.Alert.alerts
+            return this.$store.state.Alerting.alerts
         },
+        fadeOut () {
+            return this.$store.state.Alerting.fadeOut;
+        },
+        position () {
+            return this.$store.state.Alerting.position;
+        }
     },
     methods: {
         closeAlert: function (mode, event) {
@@ -83,5 +88,8 @@ div#messages.bottom-center {
 .alert-confirm {
     margin-top: 10px;
     width: 100%;
+}
+.close {
+    outline: none;
 }
 </style>

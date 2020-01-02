@@ -120,6 +120,23 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+//  #### Use Vue start! ###
+    Vue.config.productionTip = false;
+    
+    const app = new Vue({
+        render: h => h(App),
+        store,
+        data() {
+            return {
+                Config: Config
+            }
+        }
+    });
+
+    app.$store.commit("addConfigToAlerting", Config.alerting);
+    app.$mount("#app");
+//  #### Use Vue finish! ###
+
     // Core laden
     // new Alert(alertingConfig);
     new Autostarter();
@@ -456,14 +473,7 @@ function loadApp () {
         }
     }
 
-    new HighlightFeature();
-
-    Vue.config.productionTip = false;
-
-    new Vue({
-        render: h => h(App),
-        store,
-      }).$mount("#app")      
+    new HighlightFeature();      
 
     if (Config.addons !== undefined) {
         Config.addons.forEach((addonKey) => {

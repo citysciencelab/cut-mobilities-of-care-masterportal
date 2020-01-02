@@ -1,9 +1,19 @@
 export default {
     state: {
-        alerts: []
+        alerts: [],
+        category: "alert-info",
+        isDismissable: true,
+        isConfirmable: false,
+        position: "top-center",
+        fadeOut: null
     },
 
     mutations: {
+        addConfigToAlerting (state, Config = {}) {
+            Object.keys(state).forEach(value => {
+                state[value] = Config.hasOwnProperty(value) ? Config[value] : state[value];
+            });
+        },
         /**
          * Adds an alert to state if the message to report is not a duplicate.
          * @param {object} state - vuex store
@@ -45,12 +55,13 @@ export default {
     actions: {
         addAlert ({commit}, alert) {
             const newAlert = {
-                id: _.uniqueId(),
+                id: _.uniqueId("alert_"),
                 message: "",
-                category: "alert-info",
-                isDismissable: true,
-                isConfirmable: false
+                category: this.state.Alerting.category,
+                isDismissable: this.state.Alerting.isDismissable,
+                isConfirmable: this.state.Alerting.isConfirmable
             };
+
 
             if (typeof alert === "string") {
                 newAlert.message = alert;
