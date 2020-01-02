@@ -10,7 +10,11 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         activeLayer: {layerId: ""},
         windowsInterval: null,
         renderToWindow: true,
-        glyphicon: "glyphicon-film"
+        glyphicon: "glyphicon-film",
+        sliderType: "player",
+        dataSliderMin: "0",
+        dataSliderMax: "",
+        dataSliderTicks: ""
     }),
 
     /**
@@ -36,12 +40,9 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         const invalidLayerIds = this.checkIfAllLayersAvailable(this.get("layerIds"));
 
         this.superInitialize();
-        this.setProgressBarWidth(this.get("layerIds"));
-
         if (invalidLayerIds.length > 0) {
             Radio.trigger("Alert", "alert", "Konfiguration des Werkzeuges: " + this.get("name") + " fehlerhaft. <br>Bitte prüfen Sie folgende LayerIds: " + invalidLayerIds + "!");
         }
-
         this.listenTo(this, {
             "change:isActive": function (model, value) {
                 if (value) {
@@ -49,6 +50,99 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
                 }
             }
         });
+        this.checkSliderType(this.get("sliderType"));
+    },
+
+    checkSliderType: function (sliderType) {
+        if (sliderType === "player") {
+            this.setProgressBarWidth(this.get("layerIds"));
+        }
+        else if (sliderType === "handle") {
+            this.initHandle();
+        }
+        else {
+            Radio.trigger("Alert", "alert", "Konfiguration von Werkzeug <b>" + this.get("name") + "</b> fehlerhaft: <b>sliderType</b> \"" + sliderType + "\" ist noch nicht implementiert!");
+        }
+    },
+
+    initHandle: function () {
+        const layerIds = this.get("layerIds"),
+            dataSliderTicks = this.prepareSliderTicks(layerIds);
+
+        this.setDataSliderMax(String((layerIds.length - 1) * 10));
+        this.setDataSliderTicks(dataSliderTicks);
+    },
+
+    dragHandle: function (value) {
+        const prevLayerId = this.getLayerIdFromValue(value),
+            nextLayerId = this.getLayerIdFromValue(value, "next"),
+            prevLayerTransparency = (value % 10) * 10,
+            nextLayerTransparency = 100 - prevLayerTransparency;
+
+        this.showLayer(prevLayerId, prevLayerTransparency);
+        this.showLayer(nextLayerId, nextLayerTransparency);
+    },
+
+    getLayerIdFromValue: function (value, mode) {
+        const index = this.getIndexFromValue(value, mode),
+            layerIdObj = this.get("layerIds")[index],
+            layerId = layerIdObj ? layerIdObj.layerId : this.get("layerIds").length - 1;
+
+        return layerId;
+    },
+
+    getIndexFromValue: function (value, mode) {
+        let index = Math.floor(Math.round(value) / 10);
+
+        if (mode && mode === "next") {
+            index++;
+        }
+
+        return index;
+    },
+
+    showLayer: function (layerId, transparency) {
+        const layerIds = this.get("layerIds");
+        let filteredObj,
+            index;
+
+        if (transparency < 100) {
+            this.sendModification(layerId, true, transparency);
+        }
+        if (transparency === 0) {
+            this.sendModification(layerId, true, transparency);
+            filteredObj = layerIds.filter(obj => {
+                return obj.layerId === layerId;
+            });
+            index = layerIds.indexOf(filteredObj[0]);
+            this.setActiveIndex(index);
+        }
+        if (transparency === 100) {
+            this.sendModification(layerId, false, 0);
+        }
+    },
+
+    prepareSliderTicks: function (layerIds) {
+        let sliderTicks = [];
+
+        layerIds.forEach((obj, index) => {
+            sliderTicks.push(index * 10);
+        });
+        sliderTicks = JSON.stringify(sliderTicks);
+
+        return sliderTicks;
+    },
+
+    setDataSliderMin: function (value) {
+        this.set("dataSliderMin", value);
+    },
+
+    setDataSliderMax: function (value) {
+        this.set("dataSliderMax", value);
+    },
+
+    setDataSliderTicks: function (value) {
+        this.set("dataSliderTicks", value);
     },
 
     /**
@@ -103,12 +197,16 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * Triggers the new visibility over the radio
      * @param {string} layerId - layerId
      * @param {boolean} status - Visibility true / false
+     * @param {Number} transparency Transparency of layer.
      * @returns {void}
      */
-    sendModification: function (layerId, status) {
+    sendModification: function (layerId, status, transparency) {
+        const transp = transparency || 0;
+
         Radio.trigger("ModelList", "setModelAttributesById", layerId, {
             isSelected: status,
-            isVisibleInMap: status
+            isVisibleInMap: status,
+            transparency: transp
         });
     },
 

@@ -1,11 +1,14 @@
 import LayerSliderTemplate from "text-loader!./template.html";
+import "bootstrap-slider";
 
 const LayerSliderView = Backbone.View.extend({
     events: {
         "click #play": "playSlider",
         "click #stop": "stopSlider",
         "click #backward": "backwardSlider",
-        "click #forward": "forwardSlider"
+        "click #forward": "forwardSlider",
+        // This event fires when the slider is dragged
+        "slide input.slider": "dragHandle"
     },
     initialize: function () {
         this.listenTo(this.model, {
@@ -30,6 +33,10 @@ const LayerSliderView = Backbone.View.extend({
             this.$el.html(this.template(attr));
             this.layerSwitched();
             this.delegateEvents();
+            if (this.model.get("sliderType") === "handle") {
+                this.initHandle();
+                this.appendLayerTitles();
+            }
         }
         else {
             this.model.reset();
@@ -37,6 +44,41 @@ const LayerSliderView = Backbone.View.extend({
             this.undelegateEvents();
         }
         return this;
+    },
+
+    initHandle: function () {
+        this.$el.find(".slider").slider();
+        this.model.setActiveIndex(0);
+    },
+
+    appendLayerTitles: function () {
+        const ticks = this.$el.find(".slider-tick").toArray(),
+            layerIds = this.model.get("layerIds"),
+            length = layerIds.length;
+        let width = this.$el.find(".slider-layer-titles").css("width");
+
+        width = parseFloat(width.replace("px", ""));
+        width = width / length;
+        ticks.forEach((tick, index) => {
+            const layerTitle = layerIds[index].title,
+                left = width * (index + 1);
+            let className = "text-center",
+                htmlString = "";
+
+            if (index === 0) {
+                className = "text-left";
+                htmlString = "<span style=\"left:" + left + "px;width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
+            }
+            else if (index === length - 1) {
+                className = "text-right";
+                htmlString = "<span style=\"left:" + left + "px;width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
+            }
+            else {
+                htmlString = "<span style=\"left:" + left + "px;width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
+            }
+            this.$el.find(".slider-layer-titles").append(htmlString);
+            // this.$el.find(tick).append(htmlString);
+        });
     },
 
     /**
@@ -124,6 +166,9 @@ const LayerSliderView = Backbone.View.extend({
      */
     toggleGlyphicon: function (glyph) {
         this.$el.find("#stop").find("span").removeClass("glyphicon-stop glyphicon-pause").addClass(glyph);
+    },
+    dragHandle: function (evt) {
+        this.model.dragHandle(evt.value);
     }
 });
 
