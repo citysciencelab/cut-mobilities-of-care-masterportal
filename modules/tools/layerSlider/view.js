@@ -62,15 +62,15 @@ const LayerSliderView = Backbone.View.extend({
         ticks.forEach((tick, index) => {
             const layerTitle = layerIds[index].title,
                 left = width * index;
-            let className = "text-center",
+            let className = "text text-center",
                 htmlString = "";
 
             if (index === 0) {
-                className = "text-left";
+                className = "text text-left";
                 htmlString = "<span style=\"width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
             }
             else if (index === length - 1) {
-                className = "text-right";
+                className = "text text-right";
                 htmlString = "<span style=\"left:" + left + "px;width:" + width + "px\" class=\"" + className + "\">" + layerTitle + "</span>";
             }
             else {
