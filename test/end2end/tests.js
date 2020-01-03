@@ -7,7 +7,8 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     panTests = require("./tests/Pan.js"),
-    zoomTests = require("./tests/Zoom.js");
+    zoomTests = require("./tests/Zoom.js"),
+    legendTests = require("./tests/Legend.js");
 
 /**
  * The complete Triforce, or one or more components of the Triforce.
@@ -66,6 +67,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
         // non-module tests
         panTests(e2eTestParams);
         zoomTests(e2eTestParams);
+        legendTests(e2eTestParams);
     });
 }
 
