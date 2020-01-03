@@ -1,15 +1,22 @@
 import LayerSliderTemplate from "text-loader!./template.html";
 import "bootstrap-slider";
 
-const LayerSliderView = Backbone.View.extend({
+const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototype*/{
     events: {
         "click #play": "playSlider",
         "click #stop": "stopSlider",
         "click #backward": "backwardSlider",
         "click #forward": "forwardSlider",
-        // This event fires when the slider is dragged
         "slide input.slider": "dragHandle"
     },
+    /**
+     * @class LayerSliderView
+     * @extends Backbone.View
+     * @memberof Tools.LayerSlider
+     * @listens Tools.LayerSlider#changeIsActive
+     * @listens Tools.LayerSlider#changeActiveLayer
+     * @constructs
+     */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": function () {
@@ -22,8 +29,18 @@ const LayerSliderView = Backbone.View.extend({
         }
     },
     className: "layerslider",
+
+    /**
+     * @member LayerSliderTemplate
+     * @description Template used to create the layer slider
+     * @memberof Tools.LayerSlider
+     */
     template: _.template(LayerSliderTemplate),
 
+    /**
+     * Render function.
+     * @returns {void}
+     */
     render: function () {
         var attr;
 
@@ -46,11 +63,19 @@ const LayerSliderView = Backbone.View.extend({
         return this;
     },
 
+    /**
+     * Initializes the handle
+     * @returns {void}
+     */
     initHandle: function () {
         this.$el.find(".slider").slider();
         this.model.setActiveIndex(0);
     },
 
+    /**
+     * Appends the layer titles based on the position of the slider ticks.
+     * @returns {void}
+     */
     appendLayerTitles: function () {
         const ticks = this.$el.find(".slider-tick").toArray(),
             layerIds = this.model.get("layerIds"),
@@ -81,7 +106,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Startet das Interval
+     * Starts the interval.
      * @returns {void}
      */
     playSlider: function () {
@@ -90,7 +115,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Stoppt das Interval durch Pause oder Stop
+     * Stops the interval by pause or stop.
      * @returns {void}
      */
     stopSlider: function () {
@@ -104,7 +129,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Triggert den vorherigen Layer an
+     * Triggers the backward layer.
      * @returns {void}
      */
     backwardSlider: function () {
@@ -112,7 +137,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Triggert den nächsten Layer an
+     * Triggers the forward layer.
      * @returns {void}
      */
     forwardSlider: function () {
@@ -121,6 +146,7 @@ const LayerSliderView = Backbone.View.extend({
 
     /**
      * Steuert die Aktionen nach einem Layerwechsel im Model
+     * Steers the actions after a changed layer in the model.
      * @returns {void}
      */
     layerSwitched: function () {
@@ -129,7 +155,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Berechnet und setzt die Breite und Abstand der ProgressBar
+     * Calculates the progress bar.
      * @returns {void}
      */
     setProgress: function () {
@@ -151,7 +177,7 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * Setzt den Titel des aktiven Layer
+     * Sets the layer title.
      * @returns {void}
      */
     setTitle: function () {
@@ -159,13 +185,19 @@ const LayerSliderView = Backbone.View.extend({
     },
 
     /**
-     * toggelt das Pause / Stop Glyphicon
+     * Toggles the pause / stop glyphicon.
      * @param   {string} glyph Class des Glyphicon
      * @returns {void}
      */
     toggleGlyphicon: function (glyph) {
         this.$el.find("#stop").find("span").removeClass("glyphicon-stop glyphicon-pause").addClass(glyph);
     },
+
+    /**
+     * Calls model-function on dragged handle.
+     * @param {Event} evt Drag event.
+     * @returns {void}
+     */
     dragHandle: function (evt) {
         this.model.dragHandle(evt.value);
     }

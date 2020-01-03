@@ -613,6 +613,8 @@
  * @namespace LayerSlider
  * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).
+ * Can be configured as Player (sliderType="player") with start, stop, pause buttons.
+ * Can be configured as Handle (sliderType="handle") with a drag handle to wander through the layers using transparency.
  */
 
 /**

@@ -2,7 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         layerIds: [],
         timeInterval: 2000,
         title: null,
@@ -21,17 +21,23 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @class LayerSliderModel
      * @description todo
      * @extends Tool
-     * @memberOf Tools.LayerSliderModel
+     * @memberOf Tools.LayerSlider
      * @constructs
-     * @property {Array} layerIds=[] todo
-     * @property {number} timeInterval=2000 todo
-     * @property {*} title=null todo
-     * @property {number} progressBarWidth=10 todo
-     * @property {object} activeLayer={layerId: ""} todo
-     * @property {*} windowsInterval=null todo
-     * @property {boolean} renderToWindow=true todo
-     * @property {string} glyphicon="glyphicon-film" todo
-     * @listens Tools.LayerSliderModel#RadioTriggerChangeIsActive
+     * @property {Array} layerIds=[] the configured layer with their ids and titles.
+     * @property {number} timeInterval=2000 Time interval.
+     * @property {*} title=null The title of the currently selected layer.
+     * @property {number} progressBarWidth=10 The Width of the progress bar.
+     * @property {object} activeLayer={layerId: ""} The Active layer.
+     * @property {*} windowsInterval=null the Windows Interval used to iterate through the layers.
+     * @property {boolean} renderToWindow=true Flag that shows if tool renders to window.
+     * @property {string} glyphicon="glyphicon-film" Glyphicon.
+     * @property {String} sliderType="player" Slidertype. "player" or "handle".
+     * @property {String} dataSliderMin="0" Data slider min. Used for slider input.
+     * @property {String} dataSliderMax="" Data slider max. Used for slider input.
+     * @property {String} dataSliderTicks="" Data slider ticks. Show the positions of the layers in the slider. Used for slider input.
+     * @listens Tools.LayerSlider#changeIsActive
+     * @fires Tools.LayerSlider#changeIsActive
+     * @fires Tools.LayerSlider#changeActiveLayer
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
@@ -53,6 +59,11 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         this.checkSliderType(this.get("sliderType"));
     },
 
+    /**
+     * Checks the slider type and starts the specific functions.
+     * @param {String} sliderType type of slider. Possible values are "player" or "handle".
+     * @returns {void}
+     */
     checkSliderType: function (sliderType) {
         if (sliderType === "player") {
             this.setProgressBarWidth(this.get("layerIds"));
@@ -65,6 +76,10 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         }
     },
 
+    /**
+     * Initializes the handle functionality.
+     * @returns {void}
+     */
     initHandle: function () {
         const layerIds = this.get("layerIds"),
             dataSliderTicks = this.prepareSliderTicks(layerIds);
@@ -73,34 +88,57 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         this.setDataSliderTicks(dataSliderTicks);
     },
 
-    dragHandle: function (value) {
-        const prevLayerId = this.getLayerIdFromValue(value),
-            nextLayerId = this.getLayerIdFromValue(value, "next"),
-            prevLayerTransparency = (value % 10) * 10,
+    /**
+     * Drags the handle and shows the corresponding layer with its transparency.
+     * @param {Number} index Index of handle position.
+     * @returns {void}
+     */
+    dragHandle: function (index) {
+        const prevLayerId = this.getLayerIdFromIndex(index),
+            nextLayerId = this.getLayerIdFromIndex(index, "next"),
+            prevLayerTransparency = (index % 10) * 10,
             nextLayerTransparency = 100 - prevLayerTransparency;
 
         this.showLayer(prevLayerId, prevLayerTransparency);
         this.showLayer(nextLayerId, nextLayerTransparency);
     },
 
-    getLayerIdFromValue: function (value, mode) {
-        const index = this.getIndexFromValue(value, mode),
-            layerIdObj = this.get("layerIds")[index],
+    /**
+     * Gets the layerId from the given index.
+     * @param {Number} index Index of handle position.
+     * @param {String} [mode] Mode. Indicates which layer should be taken.
+     * @returns {String} - layerId.
+     */
+    getLayerIdFromIndex: function (index, mode) {
+        const position = this.getPositionFromValue(index, mode),
+            layerIdObj = this.get("layerIds")[position],
             layerId = layerIdObj ? layerIdObj.layerId : this.get("layerIds").length - 1;
 
         return layerId;
     },
 
-    getIndexFromValue: function (value, mode) {
-        let index = Math.floor(Math.round(value) / 10);
+    /**
+     * Calculates the position of the layer, based on the handle position.
+     * @param {Number} index Index of handle position.
+     * @param {String} [mode] Mode. Indicates which layer should be taken.
+     * @returns {Number} - position of layer in "layerIds"
+     */
+    getPositionFromValue: function (index, mode) {
+        let position = Math.floor(Math.round(index) / 10);
 
         if (mode && mode === "next") {
-            index++;
+            position++;
         }
 
-        return index;
+        return position;
     },
 
+    /**
+     * Modificates the layers visibility and transparency based on the handle position.
+     * @param {String} layerId Layer id.
+     * @param {Number} transparency transparency based on the handle position.
+     * @returns {void}
+     */
     showLayer: function (layerId, transparency) {
         const layerIds = this.get("layerIds");
         let filteredObj,
@@ -122,6 +160,11 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         }
     },
 
+    /**
+     * Prepares the slider ticks based on the layerIds array.
+     * @param {Object[]} layerIds Layer ids.
+     * @return {String} - Slider ticks configuration for bootstrap-slider.
+     */
     prepareSliderTicks: function (layerIds) {
         let sliderTicks = [];
 
@@ -133,20 +176,8 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         return sliderTicks;
     },
 
-    setDataSliderMin: function (value) {
-        this.set("dataSliderMin", value);
-    },
-
-    setDataSliderMax: function (value) {
-        this.set("dataSliderMax", value);
-    },
-
-    setDataSliderTicks: function (value) {
-        this.set("dataSliderTicks", value);
-    },
-
     /**
-     * todo
+     * Resets the tool.
      * @returns {void}
      */
     reset: function () {
@@ -387,6 +418,24 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     */
     setActiveLayer: function (value) {
         this.set("activeLayer", value);
+    },
+
+    /**
+     * Setter for attribute "dataSliderMax".
+     * @param {String} value Value
+     * @returns {void}
+     */
+    setDataSliderMax: function (value) {
+        this.set("dataSliderMax", value);
+    },
+
+    /**
+     * Setter for attribute "dataSliderTicks".
+     * @param {String} value Value
+     * @returns {void}
+     */
+    setDataSliderTicks: function (value) {
+        this.set("dataSliderTicks", value);
     }
 });
 
