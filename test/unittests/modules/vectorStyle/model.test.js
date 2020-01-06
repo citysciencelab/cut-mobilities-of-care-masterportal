@@ -200,6 +200,54 @@ describe("vectorStyle", function () {
             });
         });
 
+        describe("isFeatureValueInStyleFieldRange", function () {
+            it("should check wheather or not an absolute value is in a given absolute range [x..y[", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [0, 1])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(1, [0, 1])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(20, [20, 30])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(30, [20, 30])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(-30, [-30, -20])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(-20, [-30, -20])).to.be.false;
+            });
+            it("should interpret null in a range as infinit", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MIN_SAFE_INTEGER, [null, 0])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [null, 0])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MAX_SAFE_INTEGER, [0, null])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [1, null])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MIN_SAFE_INTEGER, [null, null])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MAX_SAFE_INTEGER, [null, null])).to.be.true;
+            });
+            it("should calculate a given value into a relative range if a maximum value is given to process", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(20, [0.2, 0.8], 100)).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(80, [0.2, 0.8], 100)).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MAX_SAFE_INTEGER / 2, [0.5, null], Number.MAX_SAFE_INTEGER)).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(Number.MAX_SAFE_INTEGER / 2, [null, 0.5], Number.MAX_SAFE_INTEGER)).to.be.false;
+            });
+            it("should calculate a given value into a relative range if a maximum and minimum value is given to process", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [0.5, null], 50, -50)).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [null, 0.5], 50, -50)).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [0.5, null], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [null, 0.5], Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)).to.be.false;
+            });
+            it("should process values even if they are numbers hidden in strings", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange("-100", [null, null])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange("100", [null, null])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange("0.123456789", [null, null])).to.be.true;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange("foo", [null, null])).to.be.false;
+            });
+
+            it("should not process null as value - as null stands for infinit in this case", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(null, [null, null])).to.be.false;
+            });
+            it("should not process funny ranges", function () {
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, null)).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, {})).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [1, 2, 3])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [1])).to.be.false;
+                expect(vectorStyle.isFeatureValueInStyleFieldRange(0, "foo")).to.be.false;
+            });
+        });
+
         describe("POINT CIRCLE", function () {
             it("should return style with default circle values", function () {
                 var style = {

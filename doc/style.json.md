@@ -85,7 +85,7 @@ Bei "class"=== "POINT" und "subClass" === "SIMPLE" wird nur ein Image für alle 
 |imageOffsetY|nein|Float|0.5|Offset des Bildes in Y-Richtung.|
 
 #### POINT CUSTOM ####
-Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhänhig von einem gegebenen Attributwert, das Image gesetzt. Es können alle Attribute aus **[POINT SIMPLE](#markdown-header-point-simple)** gesetzt werden. Diese dienen dann als defaults, falls styleFieldValues keine entsprechenden Parameter gegeben werden.
+Bei "class"=== "POINT" und "subClass" === "CUSTOM" wird jedem Feature, abhängig von einem gegebenen Attributwert, das Image gesetzt. Es können alle Attribute aus **[POINT SIMPLE](#markdown-header-point-simple)** gesetzt werden. Diese dienen dann als defaults, falls styleFieldValues keine entsprechenden Parameter gegeben werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -135,7 +135,7 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|styleFieldValue|ja|String||Attributwert.|
+|styleFieldValue|ja|String/Array||Attributwert oder Range des Attributwerts.|
 |imageName|ja|String||Name des Images.|
 |legendValue|nein|String||Name zur Beschreibung des Attributes in der Legende|
 |imageWidth|nein|String||Breite des Images.|
@@ -145,6 +145,8 @@ Objekt das für einen Attributwert das entsprechend angegebene Icon setzt. Werde
 |imageOffsetY|nein|String||Offset des Bildes in Y-Richtung.|
 |imageOffsetXUnit|nein|String|"fraction"|Einheit des Offsets in X-Richtung.|
 |imageOffsetYUnit|nein|String|"fraction"|Einheit des Offsets in Y-Richtung.|
+
+Wird mit "POINT CUSTOM" und "POLYGON CUSTOM" gearbeitet und statt eines String-Attributwertes eine Range als Array[x, y] angegeben, kann statt eines einfachen String-Vergleichs ein automatischer Von-Bis-Vergleich für den unter styleField (Attribut des Features, nach dessen Wert das Icon gesetzt wird) gefundenen Wert vorgenommen werden (siehe **[styleFieldValue als Range](#markdown-header-stylefieldvalue-als-range)**.
 
 ### POINT CIRCLE ###
 Bei "class"=== "POINT" und "subClass" === "CIRCLE" wird jedem Feature, anstelle eines Images, ein Kreis gesetzt. Cluster-Attribute können gesetzt werden wie in **[POINT SIMPLE](#markdown-header-point-simple)** zu sehen. Label-Attribute können gesetzt werden wie in **[Allgemeine Style Parameter](#markdown-header-allgemeine-style-parameter)** zu sehen.
@@ -275,4 +277,120 @@ Darstellung eines Attributwertes auf die Auswirkungen des Polygons. Werden hier 
     ]
   }
 ```
+
+### styleFieldValue als Range ###
+Statt eines String-Attributwertes kann für styleFieldValue ein Array[x, y] als Range [x .. y[ angegeben werden. Das mit styleField bezeichnete Attribut des Features kann in diesem Fall ein freier Zahlenwert sein. Für die Angabe einer relativen Range bitte den Unterpunkt [styleFieldValue als relative Range](#markdown-header-stylefieldvalue-als-relative-range) beachten.
+
+(!) Für ein Array[x, y] wird immer die Range [x..y[ angenommen (d.h. immer inklusive x und exklusive y).
+(!) Wird für x bzw. y der Wert null eingesetzt, wird hierfür Minus bzw. Plus Unendlich angenommen.
+
+Beispiele:
+  - [null, -20] - alles *kleiner* -20
+  - [-20, 20] - alles *größer gleich* -20 und *kleiner* 20
+  - [20, null] - alles *größer gleich* 20
+  - [null, null] - alles.
+
+Config-Beispiel:
+```json
+{
+  "layerId": "123456",
+  "class":"POLYGON",
+  "subClass":"CUSTOM",
+  "polygonStrokeColor": [255, 255, 255, 1],
+  "polygonStrokeWidth": 2,
+  "styleField": "anzahl",
+  "styleFieldValues": [
+    {
+      "styleFieldValue": [null, 1],
+      "polygonFillColor": [0, 0, 0, 0.3],
+      "legendValue": "keine oder zu geringe Fallzahlen"
+    },
+    {
+      "styleFieldValue": [1, 130],
+      "polygonFillColor": [238, 240, 149, 0.7],
+      "legendValue": "unter 130"
+    },
+    {
+      "styleFieldValue": [130, 400],
+      "polygonFillColor": [176, 211, 96, 0.7],
+      "legendValue": "130 bis unter 400"
+    },
+    {
+      "styleFieldValue": [400, 600],
+      "polygonFillColor": [109, 173, 68, 0.7],
+      "legendValue": "400 bis unter 600"
+    },
+    {
+      "styleFieldValue": [600, 1100],
+      "polygonFillColor": [66, 130, 26, 0.7],
+      "legendValue": "600 bis unter 1100"
+    },
+    {
+      "styleFieldValue": [1100, null],
+      "polygonFillColor": [0, 90, 0, 0.7],
+      "legendValue": "1100 und mehr"
+    }
+  ]
+}
+```
+
+#### styleFieldValue als relative Range ####
+Um relative Ranges für absolute Feature-Attribute verwenden zu können (z.B. für Prozentwerte), muss das Attribut des Features in Bezug zu 100% gesetzt werden. Dies passiert automatisch immer dann, wenn im Layerobjekt zusätzlich der Wert *maxRangeAttribute* mit einem String-Attributwert auf einen maximal anzunehmenden Wert für das Attribut des Features mit angegeben wird (default: false).
+Um auch negative Zahlen mit aufzunehmen, wird im Layerobjekt das zusätzliche Feld *minRangeAttribute* mit einem String-Attributwert für den minimal anzunehmenden Wert (default: 0) mit angegeben.
+
+(!) Für ein Array[x, y] wird immer die Range [x..y[ angenommen (d.h. immer inklusive x und exklusive y).
+(!) Wird für x bzw. y der Wert null eingesetzt, wird hierfür Minus bzw. Plus Unendlich angenommen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|maxRangeAttribute|nein|String|false|Attribut des Features, nach dessen Wert der Maximal-Wert für eine relative Range angenommen wird.|
+|minRangeAttribute|nein|String|0|Attribut des Features, nach dessen Wert der Minimal-Wert für eine relative Range angenommen wird.|
+
+Beispiele:
+  - [0, 0.5] mit (min: -50) und (max: 50) - alles von -50 bis *exklusive* 0
+  - [0.5, 1] mit (min: -50) und (max: 50) - alles von 0 bis *exklusive* 50 (!)
+  - [0.5, null] mit (min: -50) und (max: 50) - alles von 0 bis Unendlich
+
+Config-Beispiel:
+```json
+{
+  "layerId": "123456",
+  "class":"POLYGON",
+  "subClass":"CUSTOM",
+  "polygonStrokeColor": [255, 255, 255, 1],
+  "polygonStrokeWidth": 2,
+  "styleField": "anzahl",
+  "maxRangeAttribute": "anzahlMax",
+  "styleFieldValues": [
+    {
+      "styleFieldValue": [0, 0.2],
+      "polygonFillColor": [238, 240, 149, 0.7],
+      "legendValue": "unter 20%"
+    },
+    {
+      "styleFieldValue": [0.2, 0.4],
+      "polygonFillColor": [176, 211, 96, 0.7],
+      "legendValue": "20% bis unter 40%"
+    },
+    {
+      "styleFieldValue": [0.4, 0.6],
+      "polygonFillColor": [109, 173, 68, 0.7],
+      "legendValue": "40% bis unter 60%"
+    },
+    {
+      "styleFieldValue": [0.6, 0.8],
+      "polygonFillColor": [66, 130, 26, 0.7],
+      "legendValue": "60% bis unter 80%"
+    },
+    {
+      "styleFieldValue": [0.8, null],
+      "polygonFillColor": [0, 90, 0, 0.7],
+      "legendValue": "80% und mehr"
+    }
+  ]
+}
+```
+
+
+
 >Zurück zur **[Dokumentation Masterportal](doc.md)**.).

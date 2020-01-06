@@ -304,6 +304,51 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
+     * checks wheather or not featureValue is in the range of styleFieldRange (depending on rangeMax and rangeMin - if given)
+     * @param {Float} featureValue the featureValue to be checked (e.g. 732 cars)
+     * @param {Float[]} styleFieldRange a range as an array [x, y] - x and y should be relative if rangeMax is given, absolute otherwise - x and y can be null for infinite
+     * @param {Integer|Boolean} rangeMax the maximum value to be expected as featureValue gets - if not given styleFieldRange should be absolute
+     * @param {Integer} rangeMin the minimum value to be expected for featureValue - is only taken into account if rangeMax is given
+     * @return {Boolean}  false if featureValue is not in the range - true if featureValue is in the range
+     */
+    isFeatureValueInStyleFieldRange: function (featureValue, styleFieldRange, rangeMax, rangeMin) {
+        const rMax = isNaN(rangeMax) ? false : rangeMax,
+            rMin = isNaN(rangeMin) ? 0 : rangeMin;
+        let value = featureValue;
+
+        if (!Array.isArray(styleFieldRange) || styleFieldRange.length !== 2) {
+            // there is no range - so featureValue can't be in it
+            return false;
+        }
+        else if (isNaN(value) || value === null) {
+            // if featureValue is not a number it can't be in the range
+            // as null stands for infinit, null can't be in any range
+            return false;
+        }
+
+        if (rMax !== false) {
+            // if rMax is set, a relative range is expected: value has to be set to be relative to max-min
+            value = 1 / (parseInt(rMax, 10) - parseInt(rMin, 10)) * (value - parseInt(rMin, 10));
+        }
+
+        if (styleFieldRange[0] === null && styleFieldRange[1] === null) {
+            // everything is in a range of [null, null]
+            return true;
+        }
+        else if (styleFieldRange[0] === null) {
+            // if a range [null, x] is given, x should not be included
+            return value < styleFieldRange[1];
+        }
+        else if (styleFieldRange[1] === null) {
+            // if a range [x, null] is given, x should be included
+            return value >= styleFieldRange[0];
+        }
+
+        // if a range [x, y] is given, x should be included but y should not be included
+        return value >= styleFieldRange[0] && value < styleFieldRange[1];
+    },
+
+    /**
      * Created a custom polygon style.
      * @param {ol/feature} feature Feature to be styled.
      * @returns {ol/style} - The created style.
@@ -312,6 +357,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         var styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
+            maxRangeAttribute = this.get("maxRangeAttribute"),
+            minRangeAttribute = this.get("minRangeAttribute"),
+            rangeMax,
+            rangeMin,
             styleFieldValueObj,
             polygonFillColor,
             polygonStrokeColor,
@@ -325,10 +374,22 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
         }
         featureValue = feature.get(styleField);
+
+        // rangeMax is set to false if no maxRangeAttribute is given
+        rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) !== undefined ? feature.get(maxRangeAttribute) : false;
+        // rangeMin is set to 0 if no minRangeAttribute is given
+        rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
+
         if (!_.isUndefined(featureValue)) {
             styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toString().toUpperCase();
-            })[0];
+                if (Array.isArray(styleFieldValue.styleFieldValue)) {
+                    // a range is given
+                    return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
+                }
+
+                // a normal string is given in styleFieldValue.styleFieldValue
+                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+            }, this)[0];
         }
 
         if (_.isUndefined(styleFieldValueObj)) {
@@ -508,6 +569,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         var styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
+            maxRangeAttribute = this.get("maxRangeAttribute"),
+            minRangeAttribute = this.get("minRangeAttribute"),
+            rangeMax,
+            rangeMin,
             styleFieldValueObj,
             src,
             isSVG,
@@ -532,8 +597,20 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else {
             featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
+
+            // rangeMax is set to false if no maxRangeAttribute is given
+            rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) ? feature.get(maxRangeAttribute) : false;
+            // rangeMin is set to 0 if no minRangeAttribute is given
+            rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
+
             if (!_.isUndefined(featureValue)) {
                 styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
+                    if (Array.isArray(styleFieldValue.styleFieldValue)) {
+                        // a range is given
+                        return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
+                    }
+
+                    // a normal string is given in styleFieldValue.styleFieldValue
                     return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 })[0];
             }
