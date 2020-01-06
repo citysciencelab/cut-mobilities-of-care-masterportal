@@ -312,6 +312,7 @@ describe("vectorStyle", function () {
                 expect(vectorStyle.isFeatureValueInStyleFieldRange(0, "foo")).to.be.false;
             });
         });
+
         describe("getStyleFieldValueObject", function () {
             it("should return false if no feature, no styleFieldValues or no styleFieldParam as String or Object is given", function () {
                 expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, false, [1, 2, 3])).to.be.false;
