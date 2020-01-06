@@ -220,47 +220,17 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|lineStrokeColor|nein|Integer[]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
+|lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
-|lineStrokeDash|nein|Integer[]|undefined|Gestrichelte Linie als [x, y] mit x="Länge der sichtbaren Linie" und y="Länge der Unterbrechung"|
-|**[styleField](#markdown-header-style-field)**|nein|String/Object|undefined|Attribut des Features, nach dessen Wert eines der verfügbaren Stylings unter styleFieldValues ausgewählt wird.|
-|styleFieldValues|nein|Array[**[lineStyleFieldValue](#markdown-header-lineStyleFieldValue)**]|undefined|Eine Liste von verfügbaren Stylings für erwartete Werte (oder Ranges) des Attributwertes des Features.|
 
-### lineStyleFieldValue ###
-Eine Liste von verfügbaren Stylings für erwartete Werte (oder Ranges) des Attributwertes des Features. Werden in den Objekten der Liste keine Styling-Attribute gesetzt, so werden die Werte des Layerobjektes (wenn angegeben) oder die Defaultwerte verwendet.
-Für die Angabe einer relativen Range als styleFieldValue bitte den Unterpunkt [styleFieldValue als relative Range](#markdown-header-stylefieldvalue-als-relative-range) beachten.
+### LINE DASH ###
+Bei "class"=== "LINE" und "subClass" === "DASH" wird ein linienhafter Style definiert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|styleFieldValue|ja|String/Number[]||Attributwert oder Range. Wert des Attributes wie ihn der WFS-Dienst liefert (Case-Insensitive). Oder eine Range [x, y[ als Array[x, y].|
-|lineStrokeColor|nein|Integer[]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
+|lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
-|lineStrokeDash|nein|Integer[]|undefined|Gestrichelte Linie als [x, y] mit x="Länge der sichtbaren Linie" und y="Länge der Unterbrechung"|
-
-```json
-{
-    "layerId": "123456",
-    "class": "LINE",
-    "subClass": "SIMPLE",
-    "lineStrokeWidth": 3,
-    "lineStrokeDash": [8, 8],
-    "styleField": "nutzung",
-    "styleFieldValues": [
-      {
-        "styleFieldValue": "1",
-        "lineStrokeColor" : [78, 78, 78, 0.6]
-      },
-      {
-        "styleFieldValue": "2",
-        "lineStrokeColor" : [178, 178, 178, 0.6]
-      },
-      {
-        "styleFieldValue": "3",
-        "lineStrokeColor" : [225, 225, 225, 0.6]
-      }
-    ]
-  }
-```
+|lineStrokeDash|nein|Array|undefined |Style der Linie mit dash|
 
 ### POLYGON SIMPLE ###
 Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style definiert.
@@ -398,9 +368,9 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "Temperatur",
-  "maxRangeAttribute": 300,
-  "minRangeAttribute": -274,
+  "styleField": "anzahl",
+  "minRangeAttribute": "anzahlMin",
+  "maxRangeAttribute": "anzahlMax",
   "styleFieldValues": [
     {
       "styleFieldValue": [null, 0.2],
