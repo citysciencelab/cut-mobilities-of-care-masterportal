@@ -47,7 +47,7 @@ Wird in der **[config.json](config.json.md)** in der Layerconfiguration der Para
 #### STYLE FIELD ####
 Das styleField kann entweder ein String sein. Dann wird direkt der Wert verwendet, der sich hinter diesem Attribut des Features befindet.
 Das styleField kann jedoch auch ein Objekt sein. Dann gelten folgende Parameter.
-Es darf nur ein einziges Attribut gefunden werden, das dem "name" und der "condition" entspricht.
+Es darf nur ein einziges Attribut gefunden werden, das dem "name" und der "condition" entspricht. 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -223,15 +223,6 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 |lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
-### LINE DASH ###
-Bei "class"=== "LINE" und "subClass" === "DASH" wird ein linienhafter Style definiert.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
-|lineStrokeWidth|nein|Integer|2|Breite der Linie.|
-|lineStrokeDash|nein|Array|undefined |Style der Linie mit dash|
-
 ### POLYGON SIMPLE ###
 Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style definiert.
 
@@ -307,52 +298,52 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "Temperatur",
+  "styleField": "anzahl",
   "styleFieldValues": [
     {
-      "styleFieldValue": [null, 0],
+      "styleFieldValue": [null, 1],
       "polygonFillColor": [0, 0, 0, 0.3],
-      "legendValue": "eiskalt"
+      "legendValue": "keine oder zu geringe Fallzahlen"
     },
     {
-      "styleFieldValue": [0, 10],
+      "styleFieldValue": [1, 130],
       "polygonFillColor": [238, 240, 149, 0.7],
-      "legendValue": "frisch"
+      "legendValue": "unter 130"
     },
     {
-      "styleFieldValue": [10, 20],
+      "styleFieldValue": [130, 400],
       "polygonFillColor": [176, 211, 96, 0.7],
-      "legendValue": "frühlinghaft"
+      "legendValue": "130 bis unter 400"
     },
     {
-      "styleFieldValue": [20, 30],
+      "styleFieldValue": [400, 600],
       "polygonFillColor": [109, 173, 68, 0.7],
-      "legendValue": "schönster Altweibersommer"
+      "legendValue": "400 bis unter 600"
     },
     {
-      "styleFieldValue": [30, 40],
+      "styleFieldValue": [600, 1100],
       "polygonFillColor": [66, 130, 26, 0.7],
-      "legendValue": "Strandwetter"
+      "legendValue": "600 bis unter 1100"
     },
     {
-      "styleFieldValue": [40, null],
+      "styleFieldValue": [1100, null],
       "polygonFillColor": [0, 90, 0, 0.7],
-      "legendValue": "zu heiß"
+      "legendValue": "1100 und mehr"
     }
   ]
 }
 ```
 
 #### styleFieldValue als relative Range ####
-Um relative Ranges für absolute Feature-Attribute verwenden zu können (z.B. für Prozentwerte), muss das Attribut des Features in Bezug zu 100% gesetzt werden. Dies passiert automatisch immer dann, wenn im Layerobjekt zusätzlich der Wert *maxRangeAttribute* mit einer Number für den maximal anzunehmenden wert gesetzt oder mit einem String-Attributwert auf einen maximal anzunehmenden Wert für das Attribut des Features angegeben wird (default: false).
-Um auch negative Zahlen mit aufzunehmen, wird im Layerobjekt das zusätzliche Feld *minRangeAttribute* mit einem Number- bzw. String-Attributwert für den minimal anzunehmenden Wert (default: 0) mit angegeben.
+Um relative Ranges für absolute Feature-Attribute verwenden zu können (z.B. für Prozentwerte), muss das Attribut des Features in Bezug zu 100% gesetzt werden. Dies passiert automatisch immer dann, wenn im Layerobjekt zusätzlich der Wert *maxRangeAttribute* mit einem String-Attributwert auf einen maximal anzunehmenden Wert für das Attribut des Features mit angegeben wird (default: false).
+Um auch negative Zahlen mit aufzunehmen, wird im Layerobjekt das zusätzliche Feld *minRangeAttribute* mit einem String-Attributwert für den minimal anzunehmenden Wert (default: 0) mit angegeben.
 
 (!) Für ein Array[x, y] wird immer die Range [x..y[ angenommen (d.h. immer inklusive x und exklusive y).
 (!) Wird für x bzw. y der Wert null eingesetzt, wird hierfür Minus bzw. Plus Unendlich angenommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|maxRangeAttribute|nein|String/Number|false|wenn ein String: Attribut des Features, nach dessen Wert der Maximal-Wert für eine relative Range angenommen wird; wenn vom Typ Number: der Maximal-Wert der angenommen wird.|
+|maxRangeAttribute|nein|String|false|Attribut des Features, nach dessen Wert der Maximal-Wert für eine relative Range angenommen wird.|
 |minRangeAttribute|nein|String|0|Attribut des Features, nach dessen Wert der Minimal-Wert für eine relative Range angenommen wird.|
 
 Beispiele:
@@ -368,34 +359,33 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "Temperatur",
-  "maxRangeAttribute": 300,
-  "minRangeAttribute": -274,
+  "styleField": "anzahl",
+  "maxRangeAttribute": "anzahlMax",
   "styleFieldValues": [
     {
-      "styleFieldValue": [null, 0.2],
+      "styleFieldValue": [0, 0.2],
       "polygonFillColor": [238, 240, 149, 0.7],
-      "legendValue": "nahe dem absoluten Nullpunkt"
+      "legendValue": "unter 20%"
     },
     {
       "styleFieldValue": [0.2, 0.4],
       "polygonFillColor": [176, 211, 96, 0.7],
-      "legendValue": "extrem kalt"
+      "legendValue": "20% bis unter 40%"
     },
     {
       "styleFieldValue": [0.4, 0.6],
       "polygonFillColor": [109, 173, 68, 0.7],
-      "legendValue": "lebensfreundlich"
+      "legendValue": "40% bis unter 60%"
     },
     {
       "styleFieldValue": [0.6, 0.8],
       "polygonFillColor": [66, 130, 26, 0.7],
-      "legendValue": "zu heiß"
+      "legendValue": "60% bis unter 80%"
     },
     {
       "styleFieldValue": [0.8, null],
       "polygonFillColor": [0, 90, 0, 0.7],
-      "legendValue": "viel zu heiß"
+      "legendValue": "80% und mehr"
     }
   ]
 }
