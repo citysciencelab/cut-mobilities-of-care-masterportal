@@ -2371,3 +2371,15 @@
  * @event Tools.Download#changeIsActive
  * @description Triggered when the model attribute "isActive" changes.
  */
+
+/** -------------------- ZOOMTOGEOMETRY -------------------- */
+
+/**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
+ * @description Zooms the map to a geometry from wfs.
+ */
+
+ /**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
+ * @description Todo
+ */
