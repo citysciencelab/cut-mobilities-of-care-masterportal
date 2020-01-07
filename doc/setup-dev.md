@@ -41,6 +41,7 @@ Jetzt müssen die Node-Module installiert werden:
 
 Es werden alle Abhängigkeiten installiert.
 
+Falls Addons genutzt werden sollen, siehe hier für weitere Informationen bezüglich **[Addons](/addons.md)**.
 
 ### npm start
 Einen lokalen Entwicklungsserver starten.
