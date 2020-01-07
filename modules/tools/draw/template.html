@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
-    <% _.each(drawTypeOptions, function (option) { %>
+    <% drawTypeOptions.forEach(function (option) { %>
         <option value="<%= option.value %>"><%= option.caption %></option>
     <% }); %>
 </select>
@@ -47,7 +47,7 @@
         <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <% _.each(fontSizeOptions, function (option) { %>
+                <% fontSizeOptions.forEach(function (option) { %>
                     <option value="<%= option.value %>"><%= option.caption %></option>
                 <% }); %>
             </select>
@@ -57,7 +57,7 @@
         <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <% _.each(fontOptions, function (option) { %>
+                <% fontOptions.forEach(function (option) { %>
                     <option value="<%= option.value %>"><%= option.caption %></option>
                 <% }); %>
             </select>
@@ -67,7 +67,7 @@
         <label class="col-md-5 col-sm-5 control-label">Größe</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <% _.each(strokeOptions, function (option) { %>
+                <% strokeOptions.forEach(function (option) { %>
                     <option value="<%= option.value %>"><%= option.caption %></option>
                 <% }); %>
             </select>
@@ -77,7 +77,7 @@
         <label class="col-md-5 col-sm-5 control-label">Strichstärke</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <% _.each(strokeOptions, function (option) { %>
+                <% strokeOptions.forEach(function (option) { %>
                     <option value="<%= option.value %>"><%= option.caption %></option>
                 <% }); %>
             </select>
@@ -87,7 +87,7 @@
         <label class="col-md-5 col-sm-5 control-label">Transparenz</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                    <% _.each(transparencyOptions, function (option) { %>
+                    <% transparencyOptions.forEach(function (option) { %>
                         <option value="<%= option.value %>"><%= option.caption %></option>
                     <% }); %>
             </select>
@@ -97,7 +97,7 @@
         <label class="col-md-5 col-sm-5 control-label">Transparenz Umriss</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                    <% _.each(transparencyOptions.slice(0, transparencyOptions.length - 1), function (option) { %>
+                    <% transparencyOptions.slice(0, transparencyOptions.length - 1).forEach(function (option) { %>
                         <option value="<%= option.value %>"><%= option.caption %></option>
                     <% }); %>
             </select>
@@ -109,7 +109,7 @@
             <select class="form-control input-sm colorContour">
                 <option value="<%= colorOptions[1].value %>"><%= colorOptions[1].caption %></option>
                 <option value="<%= colorOptions[0].value %>"><%= colorOptions[0].caption %></option>
-                <% _.each(colorOptions.slice(2), function (option) { %>
+                <% colorOptions.slice(2).forEach(function (option) { %>
                     <option value="<%= option.value %>"><%= option.caption %></option>
                 <% }); %>
             </select>
@@ -120,7 +120,7 @@
             <label class="col-md-5 col-sm-5 control-label">Füllfarbe</label>
             <div class="col-md-7 col-sm-7">
                 <select class="form-control input-sm colorFill">
-                    <% _.each(colorOptions, function (option) { %>
+                    <% colorOptions.forEach(function (option) { %>
                         <option value="<%= option.value %>"><%= option.caption %></option>
                     <% }); %>
                 </select>
