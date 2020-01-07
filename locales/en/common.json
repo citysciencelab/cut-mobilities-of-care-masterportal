@@ -50,6 +50,60 @@
         "language": {
             "languageTitle": "Please choose a language"
         },
+        "quickHelp": {
+            "search":{
+                "title": "Help - Search function",
+                "generalInfo": "General Information",
+                "addressSearch":"Address search",
+                "houseNumberSearch": "Search for all house numbers of a street",
+                "topicsSearch": "Search for topics / Geo data",
+                "parcelSearch": "Land parcel search",
+                "generalInfoHelp1": "At least three letters must be entered in the search mask <strong>(1)</strong> to receive suggestions. A maximum of five proposals will be displayed randomly <strong>(2)</strong>. An icon before and a name after the hit <strong>(3)</strong> indicate which \"hit category\" it is.",
+                "generalInfoHelp2": "By clicking on the magnifying glass <strong>(1)</strong> or by pressing the Enter/Return key, all results will be listed categorized, including the number of hits per category <strong>(2)</strong>. Another click on one of the categories will display the respective hits <strong>(3)</strong>.",
+                "addressHelp": "Enter the address you are looking for in the search mask. By pressing the Enter/Return key or the magnifying glass or by clicking on the address in the suggestion list, the map zooms to the address you are looking for. In addition, the current position of the address is indicated by an icon on the map.",
+                "houseNumberHelp": "Enter the corresponding street in the search mask. As soon as the address search results in only one street, the house number search is performed automatically and the proposal list is filled with addresses. By pressing the Enter/Return key or the magnifying glass, all house numbers of the street are listed.",
+                "topicsHelp": "With the topic search you can enter search terms (e.g. protected areas, elections, housing construction, etc.) and search for available geodata on this topic. When you select a result, it is displayed directly on the map.",
+                "parcelHelp": "You can search for parcels of land using the cadastral number and the district number. Simply enter the cadastral district number followed by the parcel number <strong>(1)</strong> (with or without spaces) in the search mask and press the enter/return key or the magnifying glass. The map is then centred on the parcel you are looking for <strong>(2)</strong>."
+            },
+            "measureTool": {
+                "title": "Help - Measure distance/area",
+                "statisticalApprox": "Statistical approximation",
+                "equalizationUTM": "Equalization in UTM",
+                "conversionInMap": "Conversions in the map",
+                "influenceFactors": "The displayed values are subject to inaccuracies that are influenced by factors such as the following:",
+                "scale": "Scale",
+                "resolution": "Resolution of the map",
+                "screenResolution": "Screen resolution",
+                "inputAccuracy": "input accuracy and number of digitized points and",
+                "measureDistance": "Distance of the measuring line or size of the measuring surface",
+                "standardDeviation": "Since the above mentioned error sizes can vary from workstation to workstation, a standard deviation of 1mm per click on the map is assumed. This results in a scale-dependent point error of :",
+                "spotDefects": "Spot defects [m]",
+                "errorPropagationLaw": "According to the error propagation law from coordinates without consideration of correlations and uniform standard deviation according to the Gaussian triangle formula applies:",
+                "forDistances": "For distances:",
+                "forAreas": "For surfaces:",
+                "errorReason": "The error is therefore dependent on the standard deviation of the single error, the scale and the number of points.",
+                "example": "Example:",
+                "exampleContent": "For a square polygon with a side length of 10m (area: 100 m²), a scale of 1:1000 results in an expected error of 10.00 m². This error is caused by inaccurate measurements made by the user on the screen.",
+                "UTMHelp1": "The UTM coordinate system is a global coordinate system that represents the earth's surface in 6° wide stripes. Each strip represents a zone, which are numbered consecutively from 180° West to 180° East. Germany is largely located in zone 32 (6° to 12° eastern longitude). A transverse Mercator projection is used to project the curved surface of the earth on a flat map. The projection cylinder (<font color=\"red\">red</font>) cuts the earth's surface so that a 360km wide cutting strip is created, which protrudes \"above\" the projection cylinder. The coordinates of the cutting strip are therefore displayed in a shortened form on the image plane, whereas the coordinates outside the cutting strip are stretched.",
+                "UTM6": "UTM image 6° wide",
+                "imageDistortion1": "Image distortion in UTM imaging",
+                "imageDistortion2": "This distortion must be counteracted, because when measuring directly in the map, the measured distances/areas are distorted and therefore incorrect. For Hamburg, for example, the distortion is about 40cm for a distance measurement of 1000m. This is a not insignificant error, which is far beyond the tolerances of today's measuring instruments. With the help of the following formulas measured distances and areas can be rectified:",
+                "formulas": "Formulas for the equalization of the areas/ distances measured in UTM",
+                "useInMapHelp": "The maximum absolute error to be expected is displayed behind the measured area/distance and marked by a plus/minus symbol (\"+/-\"). This means that the true value deviates from the measured value by the maximum absolute error. The absolute error displayed is therefore the inaccuracy of the measured area/distance.<br><br> In this application, the measured area/distance is immediately rectified so that the displayed measurement corresponds to the \"real\" area/distance on the earth's surface. No further rectification needs to be calculated."
+            },
+            "topicTree": {
+                "title": "Help - Topic tree",
+                "topics": "How is the topic tree structured under topics data?",
+                "selection": "What is the selection?",
+                "saveSelection": "Save the selection",
+                "topicsHelp1": "The topic tree is divided into background maps, a catalogue of subject data and the current selection of map layers.",
+                "topicsHelp2": "The FHH atlas represents all map layers to which a data record in the Hamburg Metadata Catalogue (HMDK) is assigned. LGV makes the assignment according to the references in the HMDK. In cases of doubt, the LGV will consult with the specialist data holders. The data records assigned to the map levels control the automated structure of the topic tree in the FHH Atlas:<br/><br/> The top categories of the topic tree result from the open data categories (e.g. population, health) that have been assigned to the data records in the HMDK (see figure below).  Each record appears in 'its' category. Currently, to select an Open Data category, the record must also be published as Open Data. This technical restriction will soon be removed by a further development of the HMDK's data entry interface. The selection of an Open Data category can then be made independently of the publication as Open Data. If no category is assigned to a data set, the data set will be displayed in the topic tree under Miscellaneous.<br/> We have chosen the Open Data categories because the data in the Transparency Portal is also sorted according to these categories and many data sets are already categorized accordingly.<br/> Alternatively, the tree can also be structured according to the INSPIRE categories.",
+                "topicsHelp3": "The level below the top categories represents a data record from the HMDK. If several map levels are assigned to a data record, a folder is created. The folder has the same name as the data record in the HMDK (e.g. Hamburg traffic counting points, see picture below). The folder then contains the individual map layers that are assigned to the data record (for example, requirement counting point, see figure below). (For experts: The map layers are usually named as they are called in the associated map service, i.e. as they were named in the underlying map document)<br/> If exactly one map layer is assigned to a data record, a simple entry is created in the topic tree. The simple entry is also named in the same way as the data record in the HMDK (e.g. Current construction sites, see image below).<br/> For each layer, the associated metadata for data records can be called up via the i-button (<span class=\"{{iconCls}}\"></span>).",
+                "topicsHelp4": "The topic tree is generated and updated daily based on the information in the HMDK. So if 'your' record does not appear in the correct category, you can change it yourself. You simply adjust the OpenData category in the relevant HMDK entry and the next day the data record will appear in the correct category in the FHH Atlas. If the map layers assigned to 'your' data set are not correct, please contact GVGeoportal@gv.hamburg.de.<br/><br/> We ask you to check the categories for correctness. If several categories are assigned to a data record in the HMDK, the data record will appear several times in the topic tree. For reasons of clarity, we recommend that you assign only one category per data record.",
+                "topicsHelp5": "The map layers selected in the subject tree (subject data) are displayed in the selection. In the settings (<span class=\"{{iconCls}}\"></span>) of each map layer you can adjust its display sequence and transparency. Of course the layer can be made visible or invisible and removed from the selection. The selection also shows if a map layer cannot be displayed at the current scale. The entry is then grayed out.",
+                "topicsHelp6": "By clicking the button \"Save selection\" in the tab Topic selection, a small popup window with a URL appears. This URL contains the selected topics and the current map section. If the FHH Atlas is opened via this URL, the previously selected topics are automatically included in the selection. In addition, the map zooms to the map section stored in the URL. To ensure that the FHH Atlas always opens with this topic selection, this URL can be saved as a bookmark."
+            }
+        },
         "footer":{
             "designation":"Cartography and design:",
             "version":"Version"
