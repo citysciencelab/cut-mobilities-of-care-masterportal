@@ -1,5 +1,5 @@
 
-># Translation Guide
+# Translation Guide
 
 This document describes how to work with languages and translations in the Masterportal (MP).
 This document is intended for beginners, advanced users and experts.
@@ -45,19 +45,8 @@ We of course provide a complete english translation at any point in time:
 Language Files are used to store translations in "Keys". These Keys are important to access translations in code and in the config of the MP.
 To work with Language Files we assume basic knowledge for the JSON syntax.
 For beginners we recommend a short look into JSON guides:
-- https://restfulapi.net/json-syntax/
-- https://www.w3schools.com/js/js_json_syntax.asp
-
-
-
-
-
-
-
-
-
-
-
+* https://restfulapi.net/json-syntax/
+* https://www.w3schools.com/js/js_json_syntax.asp
 
 ## Language Files
 
@@ -68,14 +57,14 @@ We decided to split translations into three different files:
 3. custom
 
 
->### Common Language File
+### Common Language File
 The Common Language File is the collection of all translations used throughout the MP in its standard configuration.
 This includes common modules as well as most used menu entries and application logic.
 
->### Additional Language File
+### Additional Language File
 The Additional Language File is used for addons (former custom modules).
 
->### Custom Language File
+### Custom Language File
 The Custom Language File is used for translations of the instanz of the MP (the portal).
 
 
@@ -204,7 +193,7 @@ Second is the description what happens in the background and why it happens.
 
 ### Best practise szenario
 
->### Menu
+### Menu
 
 To translate a value from the config.json the value itself has to be formated correctly.
 This formated value must than be placed into the translation files.
@@ -243,7 +232,7 @@ Part of the config.json you can edit for translation of the menu
 
 As the menu is already programmed to react for the translation prefix ("translate#") correctly, this is all to do for a menu entry.
 
->### Tree of topics
+### Tree of topics
 
 Similar to the menu the tree of topics (german: "Themenbaum") can be translated as well.
 
@@ -266,7 +255,7 @@ Part of the config.json you can edit for translation of the tree of topics
 }
 ```
 
->### Tools
+### Tools
 
 Similar to the menu the tools (german: "Werkzeuge") can be translated as well.
 This includes the entry in the menu under "Tools" and the title of the tool window.
