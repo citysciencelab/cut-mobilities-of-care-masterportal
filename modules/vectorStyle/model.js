@@ -354,45 +354,45 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style} - The created style.
      */
     createCustomPolygonStyle: function (feature) {
-        var styleField = this.get("styleField"),
-            featureKeys = [],
-            featureValue,
-            maxRangeAttribute = this.get("maxRangeAttribute"),
+        const maxRangeAttribute = this.get("maxRangeAttribute"),
             minRangeAttribute = this.get("minRangeAttribute"),
-            rangeMax,
-            rangeMin,
+            rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) !== undefined ? feature.get(maxRangeAttribute) : false,
+            rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
+        let styleField = this.get("styleField"),
+            featureKeys = [],
             styleFieldValueObj,
+            style = this.getDefaultStyle();
+        var featureValue,
             polygonFillColor,
             polygonStrokeColor,
             polygonStrokeWidth,
             strokestyle,
-            fillstyle,
-            style = this.getDefaultStyle();
+            fillstyle;
 
         if (typeof styleField === "object") {
             featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
             styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
         }
+
         featureValue = feature.get(styleField);
 
-        // rangeMax is set to false if no maxRangeAttribute is given
-        rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) !== undefined ? feature.get(maxRangeAttribute) : false;
-        // rangeMin is set to 0 if no minRangeAttribute is given
-        rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
-
-        if (!_.isUndefined(featureValue)) {
+        if (featureValue !== undefined) {
             styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
-                if (Array.isArray(styleFieldValue.styleFieldValue)) {
-                    // a range is given
-                    return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
+                if (!styleFieldValue.hasOwnProperty("styleFieldValue")) {
+                    return false;
                 }
 
-                // a normal string is given in styleFieldValue.styleFieldValue
-                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                if (typeof styleFieldValue.styleFieldValue === "string") {
+                    // a normal string is given in styleFieldValue.styleFieldValue
+                    return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                }
+
+                // a range is given
+                return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
             }, this)[0];
         }
 
-        if (_.isUndefined(styleFieldValueObj)) {
+        if (styleFieldValueObj === undefined) {
             return style;
         }
         polygonFillColor = styleFieldValueObj.polygonFillColor ? styleFieldValueObj.polygonFillColor : this.get("polygonFillColor");
@@ -411,6 +411,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             stroke: strokestyle,
             fill: fillstyle
         });
+
         return style;
     },
 
@@ -566,11 +567,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createCustomPointStyle: function (feature, isClustered) {
-        var styleField = this.get("styleField"),
+        const maxRangeAttribute = this.get("maxRangeAttribute"),
+            minRangeAttribute = this.get("minRangeAttribute");
+        let styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
-            maxRangeAttribute = this.get("maxRangeAttribute"),
-            minRangeAttribute = this.get("minRangeAttribute"),
             rangeMax,
             rangeMin,
             styleFieldValueObj,
@@ -596,28 +597,32 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             imagestyle = this.createClusterStyle();
         }
         else {
-            featureValue = !_.isUndefined(feature.get("features")) ? feature.get("features")[0].get(styleField) : feature.get(styleField);
+            featureValue = feature.get("features") !== undefined ? feature.get("features")[0].get(styleField) : feature.get(styleField);
 
             // rangeMax is set to false if no maxRangeAttribute is given
             rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) ? feature.get(maxRangeAttribute) : false;
             // rangeMin is set to 0 if no minRangeAttribute is given
             rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
 
-            if (!_.isUndefined(featureValue)) {
+            if (featureValue !== undefined) {
                 styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
-                    if (Array.isArray(styleFieldValue.styleFieldValue)) {
-                        // a range is given
-                        return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
+                    if (!styleFieldValue.hasOwnProperty("styleFieldValue")) {
+                        return false;
                     }
 
-                    // a normal string is given in styleFieldValue.styleFieldValue
-                    return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
-                })[0];
+                    if (typeof styleFieldValue.styleFieldValue === "string") {
+                        // a normal string is given in styleFieldValue.styleFieldValue
+                        return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                    }
+
+                    // a range is given
+                    return this.isFeatureValueInStyleFieldRange(featureValue, styleFieldValue.styleFieldValue, rangeMax, rangeMin);
+                }, this)[0];
             }
-            if (_.isUndefined(styleFieldValueObj)) {
+            if (styleFieldValueObj === undefined) {
                 return style;
             }
-            src = !_.isUndefined(styleFieldValueObj) && _.has(styleFieldValueObj, "imageName") ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
+            src = styleFieldValueObj !== undefined && styleFieldValueObj.hasOwnProperty("imageName") ? this.get("imagePath") + styleFieldValueObj.imageName : this.get("imagePath") + this.get("imageName");
             isSVG = src.indexOf(".svg") > -1;
             width = styleFieldValueObj.imageWidth ? styleFieldValueObj.imageWidth : this.get("imageWidth");
             height = styleFieldValueObj.imageHeight ? styleFieldValueObj.imageHeight : this.get("imageHeight");
