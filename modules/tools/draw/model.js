@@ -10,6 +10,8 @@ import Tool from "../../core/modelList/tool/model";
 
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
+        name: "Zeichnen / Schreiben",
+        nameTranslationKey: "common:modules.tools.draw.name",
         drawInteraction: undefined,
         selectInteraction: undefined,
         modifyInteraction: undefined,

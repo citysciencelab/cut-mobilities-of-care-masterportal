@@ -47,6 +47,7 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
 
     /**
      * change language - sets default values for the language
+     * Translates the title of the window, if 'nameTranslationKey' exists in tool and no name is defined in config.js for the tool.
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
@@ -60,6 +61,18 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
             this.get("currentValue").get("i18nextTranslate")(function (key, value) {
                 setLanguage[key] = value;
             });
+        }
+        else if (this.get("currentValue") !== false && this.get("currentValue").get("useConfigName") !== true) {
+            const key = this.get("currentValue").get("nameTranslationKey");
+
+            if (i18next.exists(key)) {
+                const value = i18next.t(key);
+
+                setLanguage.name = value;
+            }
+            else {
+                console.warn("Cannot translate name of tool with id:" + this.get("currentValue").id + ", translationKey does not exist:", key);
+            }
         }
 
         this.set(setLanguage);

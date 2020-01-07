@@ -44,6 +44,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @listens Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     superInitialize: function () {
         const channel = Radio.channel("Tool");
@@ -94,6 +95,27 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         Radio.trigger("Autostart", "initializedModul", this.get("id"));
         if (this.get("isInitOpen")) {
             this.setIsActive("true");
+        }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.superChangeLang
+        });
+        this.superChangeLang();
+
+    },
+    /**
+     * change language - sets or translates the name of this tool, if property i18nextTranslate is no function.
+     * If name is defined in config.json, the name is not translated else property nameTranslationKey is used.
+     * @returns {Void}  -
+     */
+    superChangeLang: function () {
+        if (typeof this.get("i18nextTranslate") !== "function") {
+            if (this.get("useConfigName") === true) {
+                // do not translate, use name defined in config.json
+                this.set("name", this.get("name"));
+            }
+            else if (typeof this.get("nameTranslationKey") === "string" && i18next.exists(this.get("nameTranslationKey"))) {
+                this.set("name", i18next.t(this.get("nameTranslationKey")));
+            }
         }
     },
     /**
