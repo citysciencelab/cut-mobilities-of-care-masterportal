@@ -57,14 +57,14 @@ Wir haben uns entschieden, die Übersetzungen in drei verschiedene Dateien aufzu
 3. custom
 
 
-### Common Sprachdatei
-Das Common Language File ist die Sammlung aller Übersetzungen, die im MP in seiner Standardkonfiguration verwendet werden.
+### Common Sprachdatei - common.json
+Die Common Sprachdatei ist die Sammlung aller Übersetzungen, die im MP in seiner Standardkonfiguration verwendet werden.
 Dies beinhaltet sowohl die allgemeinen Module als auch die am häufigsten verwendeten Menüeinträge und die Anwendungslogik.
 
-### Additional Sprachdatei
+### Additional Sprachdatei - additional.json
 Die Additional Sprachdatei wird für Addons (ehemalige custom modules) verwendet.
 
-### Custom Sprachdatei
+### Custom Sprachdatei - custom.json
 Die Custom Sprachdatei wird für Übersetzungen der Instanzen des MP (das Portal) verwendet.
 
 
@@ -73,7 +73,7 @@ Die Custom Sprachdatei wird für Übersetzungen der Instanzen des MP (das Portal
 
 ## Wie man i18next in der Produktion verwendet
 
-Dieser Abschnitt ist eine Anleitung, wie Sie i18next mit MV* in Ihr MP-Projekt einbauen können.
+Der folgende Abschnitt ist eine Anleitung, wie Sie i18next mit MV* in Ihr MP-Projekt integrieren können.
 
 
 
@@ -83,7 +83,7 @@ Um die Werte für dein Model mit i18next zu übersetzen, kannst du die Werte ein
 Durch das Horchen auf das Radio-Channel-Event "i18next#RadioTriggerLanguageChanged" kann das Model seine Übersetzungen während der Laufzeit ändern.
 
 
-BeispielModell
+ExampleModel
 ```
 const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
     defaults: {
@@ -185,9 +185,8 @@ export default ExampleView;
 
 ## Übersetzung der Namen in der config.json
 
-Dieser Abschnitt beschreibt einen anderen Ansatz, wie i18next die in die config.json angegebenen Namen übersetzt.
-Das Erste ist ein best practise Szenario.
-Dann folgt eine Beschreibung, was im Hintergrund passiert und warum es passiert.
+Dieser Abschnitt beschreibt den Ansatz, wie i18next die in die config.json angegebenen Namen übersetzt.
+Das Erste ist ein best practise Szenario, dann folgt eine Beschreibung, was im Hintergrund passiert und warum es passiert.
 
 
 ### Best practice szenario
@@ -214,7 +213,6 @@ Nur das Feld *"name "* wird bei der Übersetzung berücksichtigt!
 
 
 Teil der config.json, den Sie für die Übersetzung des Menüs bearbeiten können:
-Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
 ```
 {
     "Portalconfig": {
@@ -228,6 +226,9 @@ Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
     }
 }
 ```
+Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
+
+ translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
 
 
 Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix ("translate#") korrekt reagiert, ist dies für einen Menüeintrag alles, was zu tun ist.
@@ -269,7 +270,7 @@ Dieser Teil der config.json kann für die Übersetzung der Tools bearbeitet werd
         "children": {
           "draw":
           {
-            "name": "Zeichnen / Schreiben",
+            "name": "translate#example:foo.bar.exampleMenuTitle",
             "glyphicon": "glyphicon-pencil"
           },
           ...
@@ -281,7 +282,7 @@ Es gibt folgende Möglichkeiten und folgende Hierarchie:
 
 #### Werkzeugname in der model.js definieren
 
-Wenn das Feld "name" in der model.js gefüllt ist, wird es als Standardname angesehen, der nicht übersetzt wird.
+Wenn das Feld "name" in der model.js gefüllt ist, wird es als Default-Name angesehen, der nicht übersetzt wird.
 ```
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -329,6 +330,3 @@ before(function () {
     model = new Model();
 });
 ```
-
-
-Übersetzt mit www.DeepL.com/Translator (kostenlose Version)

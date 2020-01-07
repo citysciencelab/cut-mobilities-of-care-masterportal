@@ -57,14 +57,14 @@ We decided to split translations into three different files:
 3. custom
 
 
-### Common Language File
+### Common Language File - common.json
 The Common Language File is the collection of all translations used throughout the MP in its standard configuration.
 This includes common modules as well as most used menu entries and application logic.
 
-### Additional Language File
+### Additional Language File - additional.json
 The Additional Language File is used for addons (former custom modules).
 
-### Custom Language File
+### Custom Language File - custom.json
 The Custom Language File is used for translations of the instanz of the MP (the portal).
 
 
@@ -215,7 +215,6 @@ Translation File example.js
 
 
 Part of the config.json you can edit for translation of the menu:
-The translation key must be preceded by the following text: translate#.
 ```
 {
     "Portalconfig": {
@@ -229,7 +228,9 @@ The translation key must be preceded by the following text: translate#.
     }
 }
 ```
+The translation key must be preceded by the following text: translate#.
 
+translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
 
 As the menu is already programmed to react for the translation prefix ("translate#") correctly, this is all to do for a menu entry.
 
@@ -270,7 +271,7 @@ Part of the config.json you can edit for translation of the tools
         "children": {
           "draw":
           {
-            "name": "Zeichnen / Schreiben",
+            "name": "translate#example:foo.bar.exampleMenuTitle",
             "glyphicon": "glyphicon-pencil"
           },
           ...
