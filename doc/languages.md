@@ -1,5 +1,5 @@
 
-# Translation Guide
+># Translation Guide
 
 This document describes how to work with languages and translations in the Masterportal (MP).
 This document is intended for beginners, advanced users and experts.
@@ -39,17 +39,6 @@ We of course provide a complete english translation at any point in time:
 1. German
 2. English
 
-A decision was made to also provide language sets for common regional tongues of Hamburg Town on a regular basis:
-3. Turkish
-4. French
-5. Spanish
-6. Italian
-
-In the long run a lose testament is made to provide language files for:
-7. Afghan
-8. Syrian
-9. Polish
-
 
 ### Language Files
 
@@ -79,14 +68,14 @@ We decided to split translations into three different files:
 3. custom
 
 
-### Common Language File
+>### Common Language File
 The Common Language File is the collection of all translations used throughout the MP in its standard configuration.
 This includes common modules as well as most used menu entries and application logic.
 
-### Additional Language File
+>### Additional Language File
 The Additional Language File is used for addons (former custom modules).
 
-### Custom Language File
+>### Custom Language File
 The Custom Language File is used for translations of the instanz of the MP (the portal).
 
 
@@ -206,18 +195,21 @@ export default ExampleView;
 
 
 
-Translation for the config.json
+## Translation for the config.json
 
 This section describes a different take on i18next to translate values put into the config.json.
 First is a best practise szenario.
 Second is the description what happens in the background and why it happens.
 
 
-Best practise szenario
+### Best practise szenario
+
+>### Menu
 
 To translate a value from the config.json the value itself has to be formated correctly.
 This formated value must than be placed into the translation files.
 If the part of the config.json is considered for translation by the Masterportal, the translation will take place as required.
+Only the field *"name"* is considered during translation!
 
 Translation File example.js
 ```
@@ -250,8 +242,12 @@ Part of the config.json you can edit for translation of the menu
 
 
 As the menu is already programmed to react for the translation prefix ("translate#") correctly, this is all to do for a menu entry.
+
+>### Tree of topics
+
 Similar to the menu the tree of topics (german: "Themenbaum") can be translated as well.
-Please be aware: A translation key added to an item in the tree of topics will overwrite any titles or names coming from services.
+
+**Please be aware**: A translation key added to an item in the tree of topics will overwrite any titles or names coming from services.
 
 
 Part of the config.json you can edit for translation of the tree of topics
@@ -270,8 +266,49 @@ Part of the config.json you can edit for translation of the tree of topics
 }
 ```
 
+>### Tools
 
-Common errors
+Similar to the menu the tools (german: "Werkzeuge") can be translated as well.
+This includes the entry in the menu under "Tools" and the title of the tool window.
+
+Part of the config.json you can edit for translation of the tools
+```
+      "tools":
+      {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "draw":
+          {
+            "name": "Zeichnen / Schreiben",
+            "glyphicon": "glyphicon-pencil"
+          },
+          ...
+```
+The following possibilities and hierarchy exist:
+* "name": "Zeichnen / Schreiben" --> is never translated
+* "name": "translate#example:foo.bar.exampleMenuTitle" --> is translated, if the key exists
+* no name specified (the Name field does not exist here) --> Name comes from the model.js (here ../tools/draw/model.js)
+
+#### Define tool name in the model.js
+
+If the field "name" in the model.js is filled, it is considered the default name, which is not translated.
+```
+const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
+    defaults: Object.assign({}, Tool.prototype.defaults, {
+        name: "Zeichnen / Schreiben",
+        ...
+```     
+
+If it should be translated, the key for the translation of the name can be entered in the field "nameTranslationKey".
+```
+const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
+    defaults: Object.assign({}, Tool.prototype.defaults, {
+        nameTranslationKey: "common:modules.tools.draw.name",
+        ...
+```
+
+## Common errors
 
 You have set a translation key but what is shown is the translation key itself.
     Please check the correct spelling of the key. i18next can't find this key neither in the selected language file nor in the fallback language file.
@@ -284,7 +321,7 @@ You have set a translation key in the config.json but allways the startup langua
 
 
 
-Unit Tests
+## Unit Tests
 
 i18next provides a test mode for unit testing.
 In test mode no real translation will be made (no files will be loaded).
