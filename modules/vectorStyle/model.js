@@ -368,6 +368,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             minRangeAttribute = this.get("minRangeAttribute"),
             rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
             rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
+
         let styleField = this.get("styleField"),
             featureKeys = [],
             styleFieldValueObj,
@@ -581,11 +582,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             minRangeAttribute = this.get("minRangeAttribute"),
             rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
             rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
+
         let styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
-            maxRangeAttribute = this.get("maxRangeAttribute"),
-            minRangeAttribute = this.get("minRangeAttribute"),
             rangeMax,
             rangeMin,
             styleFieldValueObj,
