@@ -1,7 +1,6 @@
 import Vue from "vue";
 import App from "../src/App.vue";
 import store from "../src/store";
-import Alert from "../modules/alerting/model";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -98,7 +97,7 @@ function loadApp () {
         style,
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        alertingConfig = Config.alerting ? Config.alerting : {};
+        app;
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -120,25 +119,24 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-//  #### Use Vue start! ###
+    //  #### Use Vue start! ###
     Vue.config.productionTip = false;
-    
-    const app = new Vue({
+
+    app = new Vue({
         render: h => h(App),
         store,
-        data() {
+        data () {
             return {
                 Config: Config
-            }
+            };
         }
     });
 
     app.$store.commit("addConfigToStore", Config);
     app.$mount("#app");
-//  #### Use Vue finish! ###
+    //  #### Use Vue finish! ###
 
     // Core laden
-    // new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -475,7 +473,7 @@ function loadApp () {
         }
     }
 
-    new HighlightFeature();      
+    new HighlightFeature();
 
     if (Config.addons !== undefined) {
         Config.addons.forEach((addonKey) => {
