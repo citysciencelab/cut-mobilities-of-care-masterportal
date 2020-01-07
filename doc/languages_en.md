@@ -22,9 +22,9 @@ This section provides some background and common knowledge around working with t
 The used technology for the translation of the MP is "i18next" (https://www.i18next.com/).
 For advanced users and experts we recommend to read the short but sharp documentation of i18next.
 
-For advanced usage we decided to use the following i18next plugins:
-- "i18next-xhr-backend" to use of language files rather then hard coded translations
-- "i18next-browser-languagedetector" for detecting the language of the browser, use of the localStorage and reacting of the query url
+Following i18next plugins are used:
+* "i18next-xhr-backend" to use of language files rather then hard coded translations
+* "i18next-browser-languagedetector" for detecting the language of the browser, use of the localStorage and reacting of the query url
 
 i18next broadcasts a change in language with this Radio Event: "i18next#RadioTriggerLanguageChanged".
 To use i18next in code it is provided as the global variable "i18next" or for devs from browser console with "Backbone.i18next".
@@ -123,7 +123,7 @@ export default ExampleModel;
 ```
 
 
-Listen to your model
+#### Listen to your model
 
 
 If set up properly, the view should listen to changes in the model and renders the template already.
@@ -184,7 +184,7 @@ export default ExampleView;
 
 
 
-## Translation for the config.json
+## Translation of the names in the config.json
 
 This section describes a different take on i18next to translate values put into the config.json.
 First is a best practise szenario.
@@ -214,7 +214,8 @@ Translation File example.js
 
 
 
-Part of the config.json you can edit for translation of the menu
+Part of the config.json you can edit for translation of the menu:
+The translation key must be preceded by the following text: translate#.
 ```
 {
     "Portalconfig": {
@@ -274,7 +275,7 @@ Part of the config.json you can edit for translation of the tools
           },
           ...
 ```
-The following possibilities and hierarchy exist:
+The following possibilities and following hierarchy exist:
 * "name": "Zeichnen / Schreiben" --> is never translated
 * "name": "translate#example:foo.bar.exampleMenuTitle" --> is translated, if the key exists
 * no name specified (the Name field does not exist here) --> Name comes from the model.js (here ../tools/draw/model.js)
