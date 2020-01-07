@@ -11,6 +11,7 @@
 /nbproject/private/
 
 addons/*
+!addons/.keep
 
 bowerupdate.log
 build
