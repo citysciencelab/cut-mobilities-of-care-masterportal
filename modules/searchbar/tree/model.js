@@ -114,7 +114,7 @@ const TreeModel = Backbone.Model.extend({
             this.get("layers").push({
                 name: model.name,
                 metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
-                type: "Thema",
+                type: i18next.t("common:modules.searchbar.type.topic"),
                 glyphicon: "glyphicon-list",
                 id: model.id
             });

@@ -47,6 +47,9 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "quickHelp": {
+            "titleTag": "Hilfe öffnen"
+        },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus"
         },
@@ -354,6 +357,35 @@
                 "hint": "Bewegen Sie die Maus über die Karte",
                 "showMousePosition": "Einblenden",
                 "hideMousePosition": "Ausblenden"
+            }
+        },
+        "searchbar": {
+            "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+            "showAllResults": "alle Ergebnisse anzeigen",
+            "type": {
+                "street": "Straße",
+                "district": "Stadtteil",
+                "parcel": "Flurstück",
+                "address": "Adresse",
+                "location": "Ort",
+                "subject": "Fachthema",
+                "topic": "Thema"
+            },
+            "specialWFS": {
+                "ongoing": "im Verfahren",
+                "terminated": "festgestellt",
+                "hazardous": "Störfallbetrieb",
+                "childcare": "Kita",
+                "bplan": "B-Plan"
+            },
+            "bkg": {
+                "errorMsg": "BKG-Adressdienst nicht erreichbar."
+            },
+            "gaz": {
+                "errorMsg": "Gazetteer-URL nicht erreichbar."
+            },
+            "osm": {
+                "errorMsg": "OpenStreetMap-Suche nicht erreichbar."
             }
         }
     },

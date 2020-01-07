@@ -68,7 +68,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             }
 
             if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
-                console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+                console.error("SpecialWFS (setDefinitions): parameters missing - definition of specialWFS is ignored.");
                 return undefined;
             }
 
@@ -93,7 +93,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         });
 
         if (_.has(parameters, "TYPENAMES") === false || _.has(parameters, "PROPERTYNAME") === false) {
-            console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+            console.error("SpecialWFS (getDataParameters): parameters missing - definition of specialWFS is ignored.");
             return undefined;
         }
 
@@ -152,6 +152,13 @@ const SpecialWFSModel = Backbone.Model.extend({
 
         if (searchString.length >= this.get("minChars")) {
             _.each(definitions, function (def) {
+                // translate if necessary
+                if (typeof def.i18nextTranslate === "function") {
+                    def.i18nextTranslate(function (key, value) {
+                        def[key] = value;
+                    });
+                }
+
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);

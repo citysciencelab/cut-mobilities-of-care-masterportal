@@ -85,7 +85,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.className = "navbar-form col-xs-9";
 
         this.listenTo(this.model, {
-            "renderRecommendedList": this.renderRecommendedList
+            "renderRecommendedList": this.renderRecommendedList,
+            "change:placeholder change:buttonSearchTitle change:showAllResultsText": this.initialRender
         });
 
         this.listenTo(Radio.channel("TableMenu"), {

@@ -61,33 +61,33 @@
             "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "translate#common:modules.searchbar.specialWFS.bplan"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
-            "name": "festgestellt"
+            "name": "translate#common:modules.searchbar.specialWFS.terminated"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "translate#common:modules.searchbar.specialWFS.ongoing"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
             "typeName": "app:KitaEinrichtungen",
             "propertyNames": ["app:Name"],
-            "name": "Kita"
+            "name": "translate#common:modules.searchbar.specialWFS.childcare"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
             "typeName": "app:stoerfallbetrieb",
             "propertyNames": ["app:standort"],
-            "name": "Störfallbetrieb"
+            "name": "translate#common:modules.searchbar.specialWFS.hazardous"
           }
         ]
       },
@@ -96,7 +96,7 @@
         "minChars": 3
       },
       "zoomLevel": 9,
-      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+      "placeholder": "translate#common:modules.searchbar.placeholder"
     },
     "mapView":
     {

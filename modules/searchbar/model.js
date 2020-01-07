@@ -10,7 +10,12 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
-        activeInitialSearchTasks: []
+        activeInitialSearchTasks: [],
+
+        i18nextTranslate: null,
+        buttonSearchTitle: "Suchen",
+        buttonOpenHelpTitle: "Hilfe öffnen",
+        showAllResultsText: "alle Ergebnisse anzeigen"
     },
 
     /**
@@ -51,6 +56,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             "abortSearch": this.abortSearch
         });
 
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
         if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
             // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
             this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
@@ -61,6 +70,28 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             this.set("isInitialRecommendedListCreated", true);
         }
 
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        const setLanguage = {};
+
+        if (typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                setLanguage[key] = value;
+            });
+        }
+
+        setLanguage.buttonSearchTitle = i18next.t("common:button.search");
+        setLanguage.buttonOpenHelpTitle = i18next.t("common:modules.quickHelp.titleTag");
+        setLanguage.showAllResultsText = i18next.t("common:modules.searchbar.showAllResults");
+
+        this.set(setLanguage);
     },
 
     /**

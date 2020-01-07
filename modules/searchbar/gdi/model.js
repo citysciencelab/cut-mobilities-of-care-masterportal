@@ -53,7 +53,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             _.each(datasources, function (hit) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hit.name,
-                    type: "Fachthema",
+                    type: i18next.t("common:modules.searchbar.type.subject"),
                     glyphicon: "glyphicon-list",
                     id: hit.id,
                     triggerEvent: {
@@ -145,7 +145,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             }
         }
         else {
-            console.error("Es konnte kein Eintrag für Layer " + hit.id + " in ElasticSearch gefunden werden.");
+            console.error("There is no entry for layer " + hit.id + " found in ElasticSearch.");
         }
     },
     /**
