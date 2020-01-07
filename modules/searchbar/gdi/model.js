@@ -145,7 +145,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             }
         }
         else {
-            console.error("Couldn't found an entry for layer " + hit.id + " in ElasticSearch.");
+            console.error("There is no entry for layer " + hit.id + " found in ElasticSearch.");
         }
     },
     /**
