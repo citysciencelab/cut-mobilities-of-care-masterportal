@@ -1,7 +1,7 @@
 # Include your project-specific ignores in this file
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
-!addons/addons.md
+
 *.sass-cache
 .DS_Store
 .env
@@ -9,27 +9,40 @@
 /img/*.db
 /jsdoc
 /nbproject/private/
+
+addons/*
+!addons/addons.md
+!addons/__example__addonsConf.json
+!addons/exampleAddon
+!addons/exampleAddon/*
+
 bowerupdate.log
 build
 components
 coverage
+
 css/bootstrap.css
 css/modules.css
-addons/*
-debug.log
-devtools/proxyconf.json
+
 dist
+
 examples*
+
 examples.zip
+
 jshintrc
 lgv-config
-lintfixed.html
 masterportalapi
 node_modules
-npm-debug.log
-package-lock.json
 portalconfigs
 stablePortale
 temp
+
 test/coverage
 test/end2end/Screenshots/ScreenshotsTest
+
+debug.log
+devtools/proxyconf.json
+lintfixed.html
+npm-debug.log
+package-lock.json

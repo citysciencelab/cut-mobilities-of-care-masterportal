@@ -52,9 +52,17 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
     /**
      * Toggles the visibility of the sidebar. Sets the width if not undefined
      * @param {Boolean} isVisible Flag if sidebar is visible.
+     * @param {String} width Width for sidebar
+     * @fires Sidebar#setWidth
      * @returns {void}
      */
-    toggle: function (isVisible) {
+    toggle: function (isVisible, width) {
+        if (width) {
+            this.trigger("setWidth", width);
+        }
+        else {
+            this.trigger("setWidth", "30%");
+        }
         this.setIsVisible(isVisible);
     },
     /**

@@ -25,7 +25,9 @@ function createFolders (folder, portal) {
     fs.mkdir(folder).then(() => {
         fs.mkdir(destinationFolder).then(() => {
             fs.copy(portal.source, destinationFolder).then(() => {
-                zipFolder(folder);
+                fs.copy(portal.mastercode, folder + "/mastercode").then(() => {
+                    zipFolder(folder);
+                }).catch(err => console.error(err));
             }).catch(err => console.error(err));
         }).catch(err => console.error(err));
     }).catch(err => console.error(err));
@@ -53,7 +55,8 @@ function createFolderStructure () {
     const folders = ["examples", "examples-" + packageJSON.version],
         portal = {
             name: "Basic",
-            source: "./dist/basic"
+            source: "./dist/basic",
+            mastercode: "./dist/mastercode"
         };
 
     removeFolders(folders, portal);
