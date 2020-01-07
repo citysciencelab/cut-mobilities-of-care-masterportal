@@ -151,6 +151,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
             if (typeof subobj === "string") {
                 if (subobj.indexOf(prefix) !== 0) {
+                    if (subkey === "name") {
+                        // use name defined in config.json and do not use defaultName (defined in model with key "nameTranslationKey")
+                        subconf.useConfigName = true;
+                    }
                     // no translation wanted
                     return;
                 }

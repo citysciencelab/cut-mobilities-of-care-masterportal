@@ -291,7 +291,7 @@
           },
           "draw":
           {
-            "name": "Zeichnen / Schreiben",
+            "name": "translate#common:modules.tools.draw.name",
             "glyphicon": "glyphicon-pencil"
           },
           "styleWMS": {

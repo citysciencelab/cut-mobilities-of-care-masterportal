@@ -184,6 +184,7 @@
                 "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
+                "name": "Drawing / Writing",
                 "clickToPlaceText": "Click on the map to place the text",
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
