@@ -360,6 +360,7 @@ Config-Beispiel:
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
   "styleField": "anzahl",
+  "minRangeAttribute": "anzahlMin",
   "maxRangeAttribute": "anzahlMax",
   "styleFieldValues": [
     {
