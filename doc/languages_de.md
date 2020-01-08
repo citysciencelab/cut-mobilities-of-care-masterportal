@@ -44,7 +44,7 @@ Selbstverständlich stellen wir jederzeit eine komplette englische Übersetzung 
 
 ### Konfiguration
 
-Die Konfiguration der Sprachen und von i18next findet in der config.js statt: **[Dokumentation config.js](config.js.md)**.
+Die Konfiguration der Sprachen und von i18next findet in der config.js statt: **[Dokumentation config.js](config.js.md#markdown-header-portallanguage)**.
 
 ### Sprachdateien
 
