@@ -119,7 +119,6 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-    //  #### Use Vue start! ###
     Vue.config.productionTip = false;
 
     app = new Vue({
@@ -133,8 +132,6 @@ function loadApp () {
     });
 
     app.$store.commit("addConfigToStore", Config);
-    app.$mount("#app");
-    //  #### Use Vue finish! ###
 
     // Core laden
     new Autostarter();
@@ -497,6 +494,7 @@ function loadApp () {
         });
     }
 
+    app.$mount();
     Radio.trigger("Util", "hideLoader");
 }
 
