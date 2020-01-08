@@ -1,6 +1,9 @@
 const fs = require("fs-extra"),
     zipAFolder = require("zip-a-folder"),
-    packageJSON = require("../../package.json");
+    path = require("path"),
+
+    rootPath = path.resolve(__dirname, "../../"),
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
 
 /**
  * zips a given folder and deletes it afterwards
@@ -9,8 +12,35 @@ const fs = require("fs-extra"),
  */
 function zipFolder (folder) {
     zipAFolder.zip(folder, folder + ".zip").then(() => {
-        fs.remove(folder).catch(error => console.error(error));
+        // fs.remove(folder).catch(error => console.error(error));
     });
+}
+
+/**
+ * Removes js and css files created for addons
+ * @param {String} folder folder check
+ * @returns {void}
+ */
+function removeAddonFiles (folder) {
+    let folderToCheck;
+
+    ["js", "css"].forEach(suffix => {
+        folderToCheck = folder + "/mastercode/" + stableVersionNumber + "/" + suffix + "/";
+
+        fs.readdir(folderToCheck, (err, files) => {
+            if (err) {
+                throw new Error("ERROR", err);
+            }
+
+            files.forEach(file => {
+                if (file !== "masterportal." + suffix && file !== "woffs") {
+                    fs.remove(folderToCheck + file);
+                }
+            });
+        });
+    });
+
+    zipFolder(folder);
 }
 
 /**
@@ -26,7 +56,7 @@ function createFolders (folder, portal) {
         fs.mkdir(destinationFolder).then(() => {
             fs.copy(portal.source, destinationFolder).then(() => {
                 fs.copy(portal.mastercode, folder + "/mastercode").then(() => {
-                    zipFolder(folder);
+                    removeAddonFiles(folder);
                 }).catch(err => console.error(err));
             }).catch(err => console.error(err));
         }).catch(err => console.error(err));
@@ -52,7 +82,7 @@ function removeFolders (folders, portal) {
  * @returns {void}
  */
 function createFolderStructure () {
-    const folders = ["examples", "examples-" + packageJSON.version],
+    const folders = ["dist/examples_" + stableVersionNumber],
         portal = {
             name: "Basic",
             source: "./dist/basic",
