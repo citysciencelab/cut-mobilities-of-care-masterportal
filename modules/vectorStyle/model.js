@@ -236,6 +236,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         if (styleSubClass === "SIMPLE") {
             style = this.createSimpleLineStyle();
         }
+        else if (styleSubClass === "DASH") {
+            style = this.creatDashLineStyle();
+        }
+
         return style;
     },
 
@@ -245,17 +249,36 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createSimpleLineStyle: function () {
-        var strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
+        const strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
             strokewidth = parseFloat(this.get("lineStrokeWidth"), 10),
             strokestyle = new Stroke({
                 color: strokecolor,
                 width: strokewidth
             }),
-            style;
+            style = new Style({
+                stroke: strokestyle
+            });
 
-        style = style = new Style({
-            stroke: strokestyle
-        });
+        return style;
+    },
+
+    /**
+     * Creates a dashLineStyle.
+     * all features get the same style.
+     * @returns {ol/style} - The created style.
+     */
+    creatDashLineStyle: function () {
+        const strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
+            strokewidth = parseFloat(this.get("lineStrokeWidth"), 10),
+            strokeLinedash = this.get("lineStrokeDash"),
+            strokestyle = new Stroke({
+                color: strokecolor,
+                width: strokewidth,
+                lineDash: strokeLinedash
+            }),
+            style = new Style({
+                stroke: strokestyle
+            });
 
         return style;
     },
