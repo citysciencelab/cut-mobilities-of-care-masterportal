@@ -223,6 +223,15 @@ Bei "class"=== "LINE" und "subClass" === "SIMPLE" wird ein linienhafter Style de
 |lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
 |lineStrokeWidth|nein|Integer|2|Breite der Linie.|
 
+### LINE DASH ###
+Bei "class"=== "LINE" und "subClass" === "DASH" wird ein linienhafter Style definiert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|lineStrokeColor|nein|Array [Integer]|[0, 0, 0, 1]|Farbe der Linie in rgba.|
+|lineStrokeWidth|nein|Integer|2|Breite der Linie.|
+|lineStrokeDash|nein|Array|undefined |Style der Linie mit dash|
+
 ### POLYGON SIMPLE ###
 Bei "class"=== "POLYGON" und "subClass" === "SIMPLE" wird ein flächenhafter Style definiert.
 
