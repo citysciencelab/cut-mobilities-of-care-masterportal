@@ -53,6 +53,13 @@ export default {
         }
     },
     methods: {
+        /**
+         * Reacts to click on dismiss or confirm button.
+         * @param {string} mode ;ode that closes the alert.
+         * @param {Event} event Click event on dismissable alert.
+         * @fires AlertingView#RadioTriggerAlertClosed
+         * @return {void}
+         */
         closeAlert: function (mode, event) {
             const div = $(event.currentTarget).parent();
 

@@ -48,6 +48,12 @@ export default {
     },
 
     actions: {
+        /**
+         * Adds an alert to store.
+         * @param {ActionContext} param0 - context passed by vuex
+         * @param {string} alert - message to alert
+         * @returns {void}
+         */
         addAlert ({commit}, alert) {
             const newAlert = {
                 id: _.uniqueId("alert_"),
@@ -82,8 +88,15 @@ export default {
 
             commit("addAlert", newAlert);
         },
-        removeAlert ({commit}, removeAlertId) {
-            if (removeAlertId) {
+
+        /**
+         * Removes one alert by id or all alerts from store.
+         * @param {ActionContext} param0 - context passed by vuex
+         * @param {string} [removeAlertId=""] - Id of the alert to be deleted.
+         * @returns {void}
+         */
+        removeAlert ({commit}, removeAlertId = "") {
+            if (removeAlertId !== "") {
                 commit("removeAlertById", String(removeAlertId));
             }
             else {
