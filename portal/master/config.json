@@ -49,16 +49,30 @@
         "states": "Hamburg Thüringen Hessen Nordrhein-Westfalen",
         "classes": "place,highway,building,shop,historic,leisure,county"
       },
-      "gdi":{
-		    "minChars": 3,
-        "serviceId": "elastic_qs",
-        "queryObject": {
-          "id": "query",
-          "params": {
-            "query_string": "%%searchString%%"
-          }
-        }
-	    },
+      "elasticSearch": {
+        "minChars":3,
+        "serviceId":"elastic_test",
+        "type": "GET",
+        "payload": {
+           "id":"query",
+           "params":{
+              "query_string":""
+           }
+        },
+        "searchStringAttribute": "query_string",
+        "responseEntryPath": "hits.hits",
+        "triggerEvent": {
+           "channel": "Parser",
+           "event": "addGdiLayer"
+        },
+        "hitMap": {
+           "name": "_source.name",
+           "id": "_source.id",
+           "source": "_source"
+        },
+        "hitType": "Fachthema",
+        "hitGlyphicon": "glyphicon-list"
+    },
      "visibleVector": {
         "gfiOnClick": false
       },

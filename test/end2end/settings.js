@@ -5,8 +5,9 @@ const webdriver = require("selenium-webdriver"),
         ie: webdriver.Capabilities.ie()
     },
     resolutions = [
-        "1024x768",
-        "600x800"
+        "1024x768"
+        // TODO commented out for dev branch until ready
+        // "600x800"
     ],
     configs = new Map([
         ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
@@ -106,14 +107,14 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
             "browser_version": "74.0",
             "os": "Windows",
             "os_version": "10"
-        },
+        }/* , TODO commented out for dev branch until ready
         {
             ...base,
             "browserName": "Safari",
             "browser_version": "12.0",
             "os": "OS X",
             "os_version": "Mojave"
-        }
+        }*/
     ];
 }
 

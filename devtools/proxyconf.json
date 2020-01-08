@@ -37,11 +37,12 @@
   "/hmdk_fhhnet_stadt_hamburg_de": {
     "target": "http://wfalgqw001"
   },
-  "/geoportal_muenchen_de": {
-        "target": "https://geoportal.muenchen.de",
-        "pathRewrite": {
-          "^/geoportal_muenchen_de": ""
-        },
-        "changeOrigin": true
+  "/test-geodienste_hamburg_de": {
+    "target": "https://test-geodienste.hamburg.de",
+    "pathRewrite": {
+      "^/test-geodienste_hamburg_de": ""
+    },
+    "changeOrigin": true,
+    "secure": false
   }
 }

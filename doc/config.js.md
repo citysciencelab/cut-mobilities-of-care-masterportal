@@ -225,6 +225,25 @@ zoomtofeature: {
 ```
 ********
 
+## zoomToGeometry ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|[imgLink(Deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
+|layerId|ja|String|"123456789"|ID des WFS-Layers aus dem der Umring abgefragt wird.|
+|attribute|ja|String|"bezirk_name"|Attributname. Entspricht dem Attribut nach dem der WFS gefiltert wird.|
+|geometries|ja|String|["BEZIRK1", "BEZIRK2"]|Enthäkt die Gemometrien, die aus dem WFS gefiltert werden können.|
+
+**Beispiel:**
+```
+#!json
+zoomToGeometry: {
+    layerId: "123456789",
+    attribute: "bezirk_name",
+    geometries: ["BEZIRK1", "BEZIRK2"]
+}
+```
+********
+
 ## cameraParameter ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|

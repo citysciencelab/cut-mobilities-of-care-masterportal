@@ -138,8 +138,10 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
-    new ZoomToGeometry();
 
+    if (Config.hasOwnProperty("zoomToGeometry")) {
+        new ZoomToGeometry(Config.zoomToGeometry);
+    }
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
