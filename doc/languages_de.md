@@ -42,6 +42,9 @@ Selbstverständlich stellen wir jederzeit eine komplette englische Übersetzung 
 1. Deutsch
 2. Englisch
 
+### Konfiguration
+
+Die Konfiguration der Sprachen und von i18next findet in der config.js statt: **[Dokumentation config.js](config.js.md)**.
 
 ### Sprachdateien
 
@@ -60,6 +63,8 @@ Wir haben uns entschieden, die Übersetzungen in drei verschiedene Dateien aufzu
 1. common
 2. additional
 3. custom
+
+Hier ein Link zur **[Architektur](i18n_Architektur.JPG)**
 
 
 ### Common Sprachdatei - common.json

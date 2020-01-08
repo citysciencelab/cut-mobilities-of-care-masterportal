@@ -256,4 +256,28 @@ zoomtofeature: {
 |position|nein|String|"top-center"|Position des Alerts (Bootstrap-Class)|
 |fadeOut|nein|Integer|null|Milliseconds bis zum automatischen fade-out des alerts|
 
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+
+portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+    }
+
+## portalLanguage ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|enabled|ja|Boolean|true|Abhängig von diesem Schalter wird ein Button zum Umschalten von Sprachen angezeigt|
+|debug|nein|Boolean|false|Schalter um debug-Ausgaben bez. der Übersetzung in der console anzuzeigen|
+|languages|ja|Object|de: "deutsch", en: "englisch"|Kurzbezeichnung und Langbezeichnung der Sprachen|
+|fallbackLanguage|ja|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
+|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
+
+>Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages_de.md)**.
+
+>Zurück zur **[Dokumentation Masterportal](doc.md)**
+

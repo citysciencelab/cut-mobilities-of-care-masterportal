@@ -43,6 +43,10 @@ We of course provide a complete english translation at any point in time:
 1. German
 2. English
 
+### Konfiguration
+
+The configuration of the languages and i18next takes place in the config.js: **[Documentation config.js](config.js.md)**.
+
 
 ### Language Files
 
@@ -61,6 +65,8 @@ We decided to split translations into three different files:
 1. common
 2. additional
 3. custom
+
+See the **[architecture](i18n_Architektur.JPG)**
 
 
 ### Common Language File - common.json
