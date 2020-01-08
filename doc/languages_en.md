@@ -5,6 +5,7 @@ This document describes how to work with languages and translations in the Maste
 This document is intended for beginners, advanced users and experts.
 
 The goals of ths document are as follows:
+
 1. To show how to expand language files and add new languages (beginners).
 2. To show how to put languages into new models (advanced users).
 3. To show how we managed to put translations and languages to work (experts).
@@ -20,9 +21,11 @@ This section provides some background and common knowledge around working with t
 ### Technology
 
 The used technology for the translation of the MP is "i18next" (https://www.i18next.com/).
+
 For advanced users and experts we recommend to read the short but sharp documentation of i18next.
 
 Following i18next plugins are used:
+
 * "i18next-xhr-backend" to use of language files rather then hard coded translations
 * "i18next-browser-languagedetector" for detecting the language of the browser, use of the localStorage and reacting of the query url
 
@@ -36,6 +39,7 @@ As the MP is currently mainly developed in Hamburg Town of Germany the language 
 (You can change your fallback language manualy in the config.js.)
 
 We of course provide a complete english translation at any point in time:
+
 1. German
 2. English
 
@@ -45,6 +49,7 @@ We of course provide a complete english translation at any point in time:
 Language Files are used to store translations in "Keys". These Keys are important to access translations in code and in the config of the MP.
 To work with Language Files we assume basic knowledge for the JSON syntax.
 For beginners we recommend a short look into JSON guides:
+
 * https://restfulapi.net/json-syntax/
 * https://www.w3schools.com/js/js_json_syntax.asp
 
@@ -52,6 +57,7 @@ For beginners we recommend a short look into JSON guides:
 
 Language files are the core of the translations. Any language needs its own translation files.
 We decided to split translations into three different files:
+
 1. common
 2. additional
 3. custom
@@ -277,6 +283,7 @@ Part of the config.json you can edit for translation of the tools
           ...
 ```
 The following possibilities and following hierarchy exist:
+
 * "name": "Zeichnen / Schreiben" --> is never translated
 * "name": "translate#example:foo.bar.exampleMenuTitle" --> is translated, if the key exists
 * no name specified (the Name field does not exist here) --> Name comes from the model.js (here ../tools/draw/model.js)

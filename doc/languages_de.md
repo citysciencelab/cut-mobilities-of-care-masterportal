@@ -20,9 +20,11 @@ Dieser Abschnitt bietet einige Hintergründe und allgemeines Wissen rund um die 
 ### Technik
 
 Die verwendete Technologie für die Übersetzung des MP ist "i18next" (https://www.i18next.com/).
+
 Für fortgeschrittene Benutzer und Experten empfehlen wir die kurze aber scharfe Dokumentation von i18next zu lesen.
 
 Es werden folgenden i18next-Plugins verwendet:
+
 * "i18next-xhr-backend" zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
 * "i18next-browser-languagedetector" zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Reaktion der Abfrage-Url
 
@@ -36,6 +38,7 @@ Da das MP derzeit hauptsächlich in Hamburg entwickelt wird, ist die Fallback-Sp
 (Sie können Ihre Fallback-Sprache manuell in der config.js ändern)
 
 Selbstverständlich stellen wir jederzeit eine komplette englische Übersetzung zur Verfügung:
+
 1. Deutsch
 2. Englisch
 
@@ -45,6 +48,7 @@ Selbstverständlich stellen wir jederzeit eine komplette englische Übersetzung 
 Sprachdateien werden verwendet, um Übersetzungen in "Keys" zu speichern. Diese Keys sind wichtig, um auf die Übersetzungen im Code und in der Konfiguration des MPs zuzugreifen.
 Für die Arbeit mit Sprachdateien setzen wir Grundkenntnisse der JSON-Syntax voraus.
 Für Einsteiger empfehlen wir einen kurzen Blick in die JSON-Anleitungen:
+
 * https://restfulapi.net/json-syntax/
 * https://www.w3schools.com/js/js_json_syntax.asp
 
@@ -52,6 +56,7 @@ Für Einsteiger empfehlen wir einen kurzen Blick in die JSON-Anleitungen:
 
 Sprachdateien sind der Kern der Übersetzungen. Jede Sprache benötigt eigene Übersetzungsdateien.
 Wir haben uns entschieden, die Übersetzungen in drei verschiedene Dateien aufzuteilen:
+
 1. common
 2. additional
 3. custom
@@ -228,7 +233,7 @@ Teil der config.json, den Sie für die Übersetzung des Menüs bearbeiten könne
 ```
 Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
 
- translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
+translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
 
 
 Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix ("translate#") korrekt reagiert, ist dies für einen Menüeintrag alles, was zu tun ist.
@@ -276,6 +281,7 @@ Dieser Teil der config.json kann für die Übersetzung der Tools bearbeitet werd
           ...
 ```
 Es gibt folgende Möglichkeiten und folgende Hierarchie:
+
 * "name": "Zeichnen / Schreiben" --> wird nie übersetzt
 * "name": "translate#example:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
 * kein Name angegeben (das Feld Name existiert hier nicht) --> Name kommt aus der model.js (hier ../tools/draw/model.js)
