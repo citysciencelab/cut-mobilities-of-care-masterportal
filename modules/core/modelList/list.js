@@ -38,7 +38,6 @@ import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addWMS/model";
 import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
-import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
@@ -243,9 +242,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "legend") {
                 return new Legend(attrs, options);
-            }
-            else if (attrs.id === "schulwegrouting") {
-                return new Schulwegrouting(attrs, options);
             }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
