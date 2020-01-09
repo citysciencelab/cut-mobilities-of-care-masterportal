@@ -62,6 +62,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         // Für Line
         "lineStrokeColor": [0, 0, 0, 1],
         "lineStrokeWidth": 2,
+        // Für SubClass DASH
+        "lineStrokeDash": [0.5, 1],
         // Für subClass ADVANCED
         // Für scalingShape CIRCLESEGMENTS
         "circleSegmentsRadius": 10,
@@ -136,6 +138,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param {Number} polygonStrokeWidth=2 Stroke width of polygon.
      * @param {Number[]} lineStrokeColor=[0,0,0,1] Stroke color of line in rgba-format.
      * @param {Number} lineStrokeWidth=2 Stroke width of line
+     * @param {Number} lineStrokeDash=[0.5, 1] Stroke width of line
      * @param {Number} circleSegmentsRadius=10 Radius of circle segments.
      * @param {Number} circleSegmentsStrokeWidth=4 Stroke width of circle segments.
      * @param {Number[]} circleSegmentsBackgroundColor=[255,255,255,1] Background color of circle segments in rgba-format.
