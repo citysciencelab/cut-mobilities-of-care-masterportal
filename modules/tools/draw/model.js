@@ -1,5 +1,5 @@
 import {Select, Modify, Draw} from "ol/interaction.js";
-import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import {Circle, Fill, Stroke, Style, Text, Icon} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
@@ -25,6 +25,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             geometry: "Point",
             text: "Punkt zeichnen"
         },
+        symbol: "Lieferwagen",
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
@@ -89,6 +90,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Kreis zeichnen", value: "Circle"},
             {caption: "Doppelkreis zeichnen", value: "Circle"},
             {caption: "Text schreiben", value: "Point"}
+        ],
+        // TODO: Die verschiedenen Optionen mit ihren Pfaden hinzufügen
+        symbolOptions: [
+            {caption: "Anker", value: "../../../icons/anker.png"},
+            {caption: "Einkaufswagen", value: "../../../icons/einkaufswagen.png"},
+            {caption: "Film", value: "../../../icons/film.png"},
+            {caption: "Kaffee", value: "../../../icons/kaffee.png"},
+            {caption: "Lieferwagen", value: "../../../icons/lieferwagen.png"},
+            {caption: "Paket", value: "../../../icons/paket.png"},
+            {caption: "WIFI", value: "../../../icons/wifi.png"}
         ]
     }),
 
@@ -785,13 +796,17 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
             radius = this.get("radius"),
-            zIndex = this.get("zIndex");
+            zIndex = this.get("zIndex"),
+            symbol = this.get("symbol");
 
         if (drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
         else if (drawType.hasOwnProperty("geometry") && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
+        }
+        else if (drawType.text === "Punkt zeichnen") {
+            style = this.getPointStyle(color, strokeWidth, radius, zIndex, colorContour, symbol);
         }
         else {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
@@ -862,7 +877,33 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates and returns a feature style for points, lines, or polygon and returns it
+     * Creates and returns a feature style for points.
+     * @param {*} color - of drawings
+     * @param {*} radius - from geometry
+     * @param {*} zIndex - of Element
+     * @param {*} symbol - to be drawn
+     * @return {ol/style/Style} style
+     */
+    getPointStyle: function (color, radius, zIndex, symbol) {
+        return new Style({
+            // TODO: Aktuell wird nichts angezeigt und nichts gezeichnet
+            image: new Icon({
+                size: [radius, radius],
+                color: color,
+                src: symbol
+            }),
+            /* image: new Circle({
+                radius: radius,
+                fill: new Fill({
+                    color: color
+                })
+            }),*/
+            zIndex: zIndex
+        });
+    },
+
+    /**
+     * Creates and returns a feature style for lines or polygons and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
@@ -1144,6 +1185,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         $(".opacityContour select")[0].disabled = disAble;
         $(".color select")[0].disabled = disAble;
         $(".colorContour select")[0].disabled = disAble;
+        $(".symbol select")[0].disabled = disAble;
         if (disAble === false && this.get("methodCircle") === "defined") {
             this.enableMethodDefined(disAble);
         }
@@ -1202,6 +1244,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
         this.combineColorOpacityContour(this.defaults.opacityContour);
         this.set("drawType", {geometry: value1, text: value2});
+    },
+
+    /**
+     * setter for symbol
+     * @param {string} value - symbol
+     * @return {void}
+     */
+    setSymbol: function (value) {
+        this.set("symbol", value);
     },
 
     /**
