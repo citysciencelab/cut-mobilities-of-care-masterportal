@@ -666,7 +666,7 @@
  */
 
 /**
- * @namespace SchulwegRouting_HH
+ * @namespace Schulwegrouting
  * @memberof Tools
  * @description Routing for school children based on Hamburg ATKIS data.
  */

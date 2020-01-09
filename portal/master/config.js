@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const Config = {
+    addons: ["schulwegrouting"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
