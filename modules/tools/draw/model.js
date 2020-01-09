@@ -96,36 +96,35 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Doppelkreis zeichnen", value: "Circle"},
             {caption: "Text schreiben", value: "Point"}
         ],
-         // translations
-         clickToPlaceText: "",
-         draw: "",
-         geometryDrawFailed: "",
-         drawPoint: "",
-         writeText: "",
-         drawLine: "",
-         drawArea: "",
-         drawCircle: "",
-         fontSizeText: "",
-         fontName: "",
-         size: "",
-         lineWidth: "",
-         transparency: "",
-         colorText: "",
-         blue: "",
-         yellow: "",
-         grey: "",
-         green: "",
-         orange: "",
-         red: "",
-         black: "",
-         white: "",
-         drawBtnText: "",
-         editBtnText: "",
-         downloadBtnText: "",
-         deleteBtnText: "",
-         deleteAllBtnText: ""
+        // translations
+        clickToPlaceText: "",
+        draw: "",
+        geometryDrawFailed: "",
+        drawPoint: "",
+        writeText: "",
+        drawLine: "",
+        drawArea: "",
+        drawCircle: "",
+        fontSizeText: "",
+        fontName: "",
+        size: "",
+        lineWidth: "",
+        transparency: "",
+        colorText: "",
+        blue: "",
+        yellow: "",
+        grey: "",
+        green: "",
+        orange: "",
+        red: "",
+        black: "",
+        white: "",
+        drawBtnText: "",
+        editBtnText: "",
+        downloadBtnText: "",
+        deleteBtnText: "",
+        deleteAllBtnText: ""
     }),
-
     /**
      * @class DrawModel
      * @extends Tool
@@ -242,8 +241,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates an addfeature-Listener
-     * @param   {ol.layer} layer Layer, to which the Listener is registered
      * Creates an addfeature-Listener. This feature-listener checks the method how to draw the
      * circle. If the method is "defined", then a variety of other function is called and the
      * openlayers drawevent will be changed accordingly. If the method is not "defined" (but "interactiv"),

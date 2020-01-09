@@ -111,7 +111,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         const element = this.$el.find(".interaction")[0];
 
         if (element) {
-            //i18n:
+            // i18n:
             // switch (element.options[element.selectedIndex].text) {
             //     case this.model.get("drawPoint"): {
             //         this.$el.find(".text").hide();
