@@ -49,16 +49,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "90 %", value: 0.1},
             {caption: "100 %", value: 0.0}
         ],
-        colorOptions: [
-            {caption: "Blau", value: "55, 126, 184"},
-            {caption: "Schwarz", value: "0, 0, 0"},
-            {caption: "Gelb", value: "255, 255, 51"},
-            {caption: "Grau", value: "153, 153, 153"},
-            {caption: "Grün", value: "77, 175, 74"},
-            {caption: "Orange", value: "255, 127, 0"},
-            {caption: "Rot", value: "228, 26, 28"},
-            {caption: "Weiß", value: "255, 255, 255"}
-        ],
+        colorOptions: [], // is set later on
         strokeOptions: [
             {caption: "1 px", value: 1},
             {caption: "2 px", value: 2},
@@ -88,23 +79,32 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Calibri", value: "Calibri"},
             {caption: "Times New Roman", value: "Times New Roman"}
         ],
-        drawTypeOptions: [
-            {caption: "Punkt zeichnen", value: "Point"},
-            {caption: "Linie zeichnen", value: "LineString"},
-            {caption: "Fläche zeichnen", value: "Polygon"},
-            {caption: "Kreis zeichnen", value: "Circle"},
-            {caption: "Doppelkreis zeichnen", value: "Circle"},
-            {caption: "Text schreiben", value: "Point"}
-        ],
+        drawTypeOptions: [], // is set later on
         // translations
+        currentLng: "",
         clickToPlaceText: "",
         draw: "",
         geometryDrawFailed: "",
+        defindeTwoCircles: "",
+        defindeInnerCircle: "",
+        defindeDiameter: "",
+        defindeOuterCircle: "",
         drawPoint: "",
         writeText: "",
         drawLine: "",
         drawArea: "",
         drawCircle: "",
+        drawDoubleCircle: "",
+        doubleCirclePlaceholder: "",
+        diameter: "",
+        outerDiameter: "",
+        unit: "",
+        textI18n: "",
+        method: "",
+        interactive: "",
+        defined: "",
+        transparencyOutline: "",
+        outlineColor: "",
         fontSizeText: "",
         fontName: "",
         size: "",
@@ -162,7 +162,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         const channel = Radio.channel("Draw");
 
         this.superInitialize();
-        this.changeLang(i18next.language);
+        this.changeLang(i18next.language, true);
 
         this.setMethodCircle("interactiv");
 
@@ -204,32 +204,63 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     /**
      * change language - sets default values for the language
      * @param {String} lng the language changed to
+     * @param {Boolean} initial initial set of lng
      * @returns {Void}  -
      */
-    changeLang: function () {
+    changeLang: function (lng, initial) {
+        const blue = i18next.t("common:colors.blue"),
+            yellow = i18next.t("common:colors.yellow"),
+            grey = i18next.t("common:colors.grey"),
+            green = i18next.t("common:colors.green"),
+            orange = i18next.t("common:colors.orange"),
+            red = i18next.t("common:colors.red"),
+            black = i18next.t("common:colors.black"),
+            white = i18next.t("common:colors.white"),
+            drawPoint = i18next.t("common:modules.tools.draw.drawPoint"),
+            writeText = i18next.t("common:modules.tools.draw.writeText"),
+            drawLine = i18next.t("common:modules.tools.draw.drawLine"),
+            drawArea = i18next.t("common:modules.tools.draw.drawArea"),
+            drawCircle = i18next.t("common:modules.tools.draw.drawCircle"),
+            drawDoubleCircle = i18next.t("common:modules.tools.draw.drawDoubleCircle");
+
         this.set({
             clickToPlaceText: i18next.t("common:modules.tools.draw.clickToPlaceText"),
             draw: i18next.t("common:modules.tools.draw.draw"),
             geometryDrawFailed: i18next.t("common:modules.tools.draw.geometryDrawFailed"),
-            drawPoint: i18next.t("common:modules.tools.draw.drawPoint"),
-            writeText: i18next.t("common:modules.tools.draw.writeText"),
-            drawLine: i18next.t("common:modules.tools.draw.drawLine"),
-            drawArea: i18next.t("common:modules.tools.draw.drawArea"),
-            drawCircle: i18next.t("common:modules.tools.draw.drawCircle"),
+            defindeTwoCircles: i18next.t("common:modules.tools.draw.defindeTwoCircles"),
+            defindeInnerCircle: i18next.t("common:modules.tools.draw.defindeInnerCircle"),
+            defindeDiameter: i18next.t("common:modules.tools.draw.defindeDiameter"),
+            defindeOuterCircle: i18next.t("common:modules.tools.draw.defindeOuterCircle"),
+            drawPoint: drawPoint,
+            writeText: writeText,
+            drawLine: drawLine,
+            drawArea: drawArea,
+            drawCircle: drawCircle,
+            drawDoubleCircle: drawDoubleCircle,
+            doubleCirclePlaceholder: i18next.t("common:modules.tools.draw.doubleCirclePlaceholder"),
+            diameter: i18next.t("common:modules.tools.draw.diameter"),
+            outerDiameter: i18next.t("common:modules.tools.draw.outerDiameter"),
+            unit: i18next.t("common:modules.tools.draw.unit"),
+            textI18n: i18next.t("common:modules.tools.draw.text"),
+            method: i18next.t("common:modules.tools.draw.method"),
+            interactive: i18next.t("common:modules.tools.draw.interactive"),
+            defined: i18next.t("common:modules.tools.draw.defined"),
+            transparencyOutline: i18next.t("common:modules.tools.draw.transparencyOutline"),
+            outlineColor: i18next.t("common:modules.tools.draw.outlineColor"),
             fontSizeText: i18next.t("common:modules.tools.draw.fontSize"),
             fontName: i18next.t("common:modules.tools.draw.fontName"),
             size: i18next.t("common:modules.tools.draw.size"),
             lineWidth: i18next.t("common:modules.tools.draw.lineWidth"),
             transparency: i18next.t("common:modules.tools.draw.transparency"),
             colorText: i18next.t("common:modules.tools.draw.color"),
-            blue: i18next.t("common:colors.blue"),
-            yellow: i18next.t("common:colors.yellow"),
-            grey: i18next.t("common:colors.grey"),
-            green: i18next.t("common:colors.green"),
-            orange: i18next.t("common:colors.orange"),
-            red: i18next.t("common:colors.red"),
-            black: i18next.t("common:colors.black"),
-            white: i18next.t("common:colors.white"),
+            blue: blue,
+            yellow: yellow,
+            grey: grey,
+            green: green,
+            orange: orange,
+            red: red,
+            black: black,
+            white: white,
             drawBtnText: i18next.t("common:modules.tools.draw.button.draw"),
             editBtnText: i18next.t("common:modules.tools.draw.button.edit"),
             deleteBtnText: i18next.t("common:modules.tools.draw.button.delete"),
@@ -237,7 +268,27 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             downloadBtnText: i18next.t("common:button.download")
         });
         this.set("text", this.get("clickToPlaceText"));
-        this.setDrawType("Point", this.get("drawPoint"));
+        this.set("colorOptions", [
+            {caption: blue, value: "55, 126, 184"},
+            {caption: black, value: "0, 0, 0"},
+            {caption: yellow, value: "255, 255, 51"},
+            {caption: grey, value: "153, 153, 153"},
+            {caption: green, value: "77, 175, 74"},
+            {caption: orange, value: "255, 127, 0"},
+            {caption: red, value: "228, 26, 28"},
+            {caption: white, value: "255, 255, 255"}]);
+        this.set("drawTypeOptions", [
+            {caption: drawPoint, value: "Point", id: "drawPoint"},
+            {caption: drawLine, value: "LineString", id: "drawLine"},
+            {caption: drawArea, value: "Polygon", id: "drawArea"},
+            {caption: drawCircle, value: "Circle", id: "drawCircle"},
+            {caption: drawDoubleCircle, value: "Circle", id: "drawDoubleCircle"},
+            {caption: writeText, value: "Point", id: "writeText"}
+        ]);
+        if (initial) {
+            this.setDrawType("Point", this.get("drawPoint"));
+        }
+        this.set("currentLng", lng);
     },
 
     /**
@@ -264,26 +315,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     circleRadius = this.getDefinedRadius(doubleIsActive, radiusOuter, radiusInner),
                     circleCenter = evt.feature.getGeometry().getCenter();
 
-                if (innerRadius === undefined) {
+                if (innerRadius === undefined || innerRadius === 0) {
                     $(".circleRadiusInner input")[0].style.borderColor = "#E10019";
-                    if (drawType.text === "Doppelkreis zeichnen") {
-                        if (outerRadius === undefined) {
-                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie beide Kreise.");
+                    if (drawType.text === this.get("drawDoubleCircle")) {
+                        if (outerRadius === undefined || outerRadius === 0) {
+                            this.alertForgetToDefineRadius(evt, layer, this.get("defindeTwoCircles"));
                             $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
                         }
                         else {
-                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den inneren Kreis.");
+                            this.alertForgetToDefineRadius(evt, layer, this.get("defindeInnerCircle"));
                             $(".circleRadiusOuter input")[0].style.borderColor = "";
                         }
                     }
                     else {
-                        this.alertForgetToDefineRadius(evt, layer, "Bitte geben Sie einen Durchmesser an.");
+                        this.alertForgetToDefineRadius(evt, layer, this.get("defindeDiameter"));
                     }
                 }
                 else {
-                    if (outerRadius === undefined) {
-                        if (drawType.text === "Doppelkreis zeichnen") {
-                            this.alertForgetToDefineRadius(evt, layer, "Bitte definieren Sie auch den äußeren Kreis.");
+                    if (outerRadius === undefined || outerRadius === 0) {
+                        if (drawType.text === this.get("drawDoubleCircle")) {
+                            this.alertForgetToDefineRadius(evt, layer, this.get("defindeOuterCircle"));
                             $(".circleRadiusOuter input")[0].style.borderColor = "#E10019";
                         }
                         else {
@@ -749,7 +800,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.createDrawInteractionListener(drawInteraction1, maxFeatures, false);
         Radio.trigger("Map", "addInteraction", drawInteraction1);
 
-        if (drawType.text === "Doppelkreis zeichnen") {
+        if (drawType.text === this.get("drawDoubleCircle")) {
             drawInteraction2.setActive(isActive);
             this.setDrawInteraction2(drawInteraction2);
             this.createDrawInteractionListener(drawInteraction2, maxFeatures, true);
@@ -864,7 +915,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         // if (drawType.text === "Text schreiben") {//von Kilian
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
-        else if (drawType.hasOwnProperty("geometry") && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
+        else if (drawType.hasOwnProperty("geometry") && (_.has(drawType, "text") && drawType.text === this.get("drawCircle") || drawType.text === this.get("drawDoubleCircle"))) {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
         else {
@@ -985,7 +1036,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
         this.setColorContour(defaultColorContour);
-
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
         this.combineColorOpacityContour(this.defaults.opacityContour);
     },
@@ -1264,7 +1314,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      */
     setDrawType: function (value1, value2) {
         if (value2 !== undefined) {
-            if (value2 !== "Doppelkreis zeichnen") {
+            if (value2 !== this.get("drawDoubleCircle")) {
                 $(".input-method").val("interactiv");
                 this.enableMethodDefined(true);
                 this.setMethodCircle("interactiv");

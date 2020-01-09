@@ -1,41 +1,35 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
-    <!-- //i18n: -->
-    <!-- <option value="Point"><%=drawPoint%></option>
-    <option value="LineString"><%=drawLine%></option>
-    <option value="Polygon"><%=drawArea%></option>
-    <option value="Circle"><%=drawCircle%></option>
-    <option value="Point"><%=writeText%></option> -->
     <% drawTypeOptions.forEach(function (option) { %>
-        <option value="<%= option.value %>"><%= option.caption %></option>
+        <option value="<%= option.value %>" id="<%= option.id %>"><%= option.caption %></option>
     <% }); %>
 </select>
 <hr>
 <form class="form-horizontal" role="form">
     <div class="checkbox"></div>
     <div class="form-group form-group-sm dropdownMethod">
-        <label class="col-md-5 col-sm-5 control-label">Methode</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=method%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm input-method">
-                <option value="interactiv">interaktiv</option>
-                <option value="defined">definiert</option>
+                <option value="interactiv"><%=interactive%></option>
+                <option value="defined"><%=defined%></option>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm circleRadiusInner">
-        <label class="col-md-5 col-sm-5 control-label">Durchmesser</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=diameter%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren" disabled=true/>
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>" disabled=true/>
         </div>
     </div>
     <div class="form-group form-group-sm circleRadiusOuter">
-        <label class="col-md-5 col-sm-5 control-label">Äußerer Durchmesser</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=outerDiameter%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren">
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>">
         </div>
     </div>
     <div class="form-group form-group-sm dropdownUnit">
-        <label class="col-md-5 col-sm-5 control-label">Einheit</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=unit%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" disabled=true>
                 <option value="m">m</option>
@@ -44,9 +38,9 @@
         </div>
     </div>
     <div class="form-group form-group-sm text">
-        <label class="col-md-5 col-sm-5 control-label">Text</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=textI18n%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="text" class="form-control" placeholder=<%=clickToPlaceText%>>
+            <input type="text" placeholder="<%=clickToPlaceText%>" class="form-control">
         </div>
     </div>
     <div class="form-group form-group-sm font-size">
@@ -100,7 +94,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm opacityContour">
-        <label class="col-md-5 col-sm-5 control-label">Transparenz Umriss</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=transparencyOutline%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                     <% transparencyOptions.slice(0, transparencyOptions.length - 1).forEach(function (option) { %>
@@ -110,7 +104,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm colorContour">
-        <label class="col-md-5 col-sm-5 control-label">Umrissfarbe</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=outlineColor%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm colorContour">
                 <option value="<%= colorOptions[1].value %>"><%= colorOptions[1].caption %></option>
@@ -123,19 +117,7 @@
     </div>
     <div class="form-horizontal" role="form">
         <div class="form-group form-group-sm color">
-            <!-- i18n: -->
-            <!-- <label class="col-md-5 col-sm-5 control-label"><%=colorText%></label>
-            <div class="col-md-7 col-sm-7">
-                <select class="form-control input-sm">
-                    <option value="55, 126, 184"><%=blue%></option>
-                    <option value="255, 255, 51"><%=yellow%></option>
-                    <option value="153, 153, 153"><%=grey%></option>
-                    <option value="77, 175, 74"><%=green%></option>
-                    <option value="255, 127, 0"><%=orange%></option>
-                    <option value="228, 26, 28"><%=red%></option>
-                    <option value="0, 0, 0"><%=black%></option>
-                    <option value="255, 255, 255"><%=white%></option> -->
-            <label class="col-md-5 col-sm-5 control-label">todo i18n: Füllfarbe</label>
+            <label class="col-md-5 col-sm-5 control-label"><%=colorText%></label>
             <div class="col-md-7 col-sm-7">
                 <select class="form-control input-sm colorFill">
                     <% colorOptions.forEach(function (option) { %>
