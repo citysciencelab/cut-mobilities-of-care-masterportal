@@ -220,11 +220,6 @@
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          "einwohnerabfrage": {
-            "name": "Einwohneranzahl abfragen",
-            "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": false
-          },
           "compareFeatures": {
             "name": "Vergleichsliste",
             "glyphicon": "glyphicon-th-list"
