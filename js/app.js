@@ -41,7 +41,6 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlImport/view";
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
@@ -181,10 +180,6 @@ function loadApp () {
         switch (tool.id) {
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
-                break;
-            }
-            case "einwohnerabfrage": {
-                new EinwohnerabfrageView({model: tool});
                 break;
             }
             case "lines": {

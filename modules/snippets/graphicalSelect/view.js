@@ -69,7 +69,7 @@ const GraphicalSelectView = Backbone.View.extend(/** @lends GraphicalSelectView.
                 }
                 this.model.createDrawInteraction(this.model.id, evt.target.value);
             }
-        });
+        }, this);
     },
     /**
      * Calls the function "setIsOpen" in the model with parameter false
