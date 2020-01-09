@@ -282,7 +282,7 @@ zoomToGeometry: {
 |enabled|ja|Boolean|true|Abhängig von diesem Schalter wird ein Button zum Umschalten von Sprachen angezeigt|
 |debug|nein|Boolean|false|Schalter um debug-Ausgaben bez. der Übersetzung in der console anzuzeigen|
 |languages|ja|Object|de: "deutsch", en: "englisch"|Kurzbezeichnung und Langbezeichnung der Sprachen|
-|fallbackLanguage|ja|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
+|fallbackLanguage|nein|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
 |changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
 
 **Beispiel:**
