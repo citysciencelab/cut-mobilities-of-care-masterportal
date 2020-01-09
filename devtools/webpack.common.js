@@ -85,6 +85,13 @@ module.exports = function () {
         },
         module: {
             rules: [
+                // ignore all .test.js files
+                {
+                    test: /\.test\.js$/,
+                    use: {
+                        loader: "null-loader"
+                    }
+                },
                 {
                     test: /\.js$/,
                     use: {
