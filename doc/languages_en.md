@@ -2,7 +2,7 @@
 # Translation Guide
 
 This document describes how to work with languages and translations in the Masterportal (MP).
-This document is intended for beginners, advanced users and experts.
+It is intended for beginners, advanced users and experts.
 
 The goals of ths document are as follows:
 
@@ -26,8 +26,8 @@ For advanced users and experts we recommend to read the short but sharp document
 
 Following i18next plugins are used:
 
-* "i18next-xhr-backend" to use of language files rather then hard coded translations
-* "i18next-browser-languagedetector" for detecting the language of the browser, use of the localStorage and reacting of the query url
+* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) to use of language files rather then hard coded translations
+* [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) for detecting the language of the browser, use of the localStorage and reacting of the query url
 
 i18next broadcasts a change in language with this Radio Event: "i18next#RadioTriggerLanguageChanged".
 To use i18next in code it is provided as the global variable "i18next" or for devs from browser console with "Backbone.i18next".
@@ -242,6 +242,7 @@ Part of the config.json you can edit for translation of the menu:
 ```
 The translation key must be preceded by the following text: translate#.
 
+Structure:
 translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
 
 As the menu is already programmed to react for the translation prefix ("translate#") correctly, this is all to do for a menu entry.
@@ -292,7 +293,7 @@ The following possibilities and following hierarchy exist:
 
 * "name": "Zeichnen / Schreiben" --> is never translated
 * "name": "translate#example:foo.bar.exampleMenuTitle" --> is translated, if the key exists
-* no name specified (the Name field does not exist here) --> Name comes from the model.js (here ../tools/draw/model.js)
+* no name specified (the Name field does not exist) --> Name comes from the model.js (here ../tools/draw/model.js)
 
 #### Define tool name in the model.js
 
