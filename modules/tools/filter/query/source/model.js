@@ -56,7 +56,7 @@ const SourceModel = QueryModel.extend({
      * @return {void}
      */
     listenToFeaturesLoaded: function () {
-        this.listenTo(Radio.channel("Layer"), {
+        this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
                 var urlFilterRules;
 
@@ -78,7 +78,7 @@ const SourceModel = QueryModel.extend({
                         this.setIsInitialLoad(false);
 
                         if (!this.get("isAutoRefreshing")) {
-                            this.stopListening(Radio.channel("Layer"), "featuresLoaded");
+                            this.stopListening(Radio.channel("VectorLayer"), "featuresLoaded");
                         }
                     }
                 }

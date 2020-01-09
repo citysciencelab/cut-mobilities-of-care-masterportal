@@ -50,7 +50,8 @@ Konfiguration der Searchbar
 |----|-------------|---|-------|------------|------|
 |bkg|nein|**[bkg](#markdown-header-portalconfigsearchbarbkg)**||Konfiguration des BKG Suchdienstes.|false|
 |gazetteer|nein|**[gazetteer](#markdown-header-portalconfigsearchbargazetteer)**||Konfiguration des Gazetteer Suchdienstes.|false|
-|gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes.|false|
+|gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
+|elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
@@ -181,7 +182,8 @@ Konfiguration des Gazetteer Suchdienstes
 ***
 
 #### Portalconfig.searchBar.gdi
-Konfiguration des GDI Suchdienstes
+Konfiguration des GDI Suchdienstes.
+Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -221,6 +223,80 @@ Todo
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |query_string|ja|String|"%%searchString%%"|Todo|false|
+
+***
+
+#### Portalconfig.searchBar.elasticSearch
+
+[type:CustomObject]: # (Datatypes.CustomObject)
+
+Konfiguration des Elastic Search Suchdienstes
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
+|serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|type|nein|enum["POST", "GET"]|"POST"|Art des Requests.|false|
+|payload|nein|**[CustomObject](#markdown-header-datatypescustomobject)**|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
+|searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
+|responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, dass die gefundenen features enthält.|false|
+|triggerEvent|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
+|hitMap|nein|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
+|hitType|nein|String|"Elastic"|Typ des Suchergebnissses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
+|hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
+|useProxy|nein|Boolean|false|Flag die angibt ob die url vom geproxied werden soll oder nicht.|false|
+
+ **Beispiel**
+ ```
+ #!json
+"elasticSearch": {
+    "minChars":3,
+    "serviceId":"elastic_hh",
+    "type": "GET",
+    "payload": {
+        "id":"query",
+        "params":{
+            "query_string":""
+        }
+    },
+    "searchStringAttribute": "query_string",
+    "responseEntryPath": "hits.hits",
+    "triggerEvent": {
+        "channel": "Parser",
+        "event": "addGdiLayer"
+    },
+    "hitMap": {
+        "name": "_source.name",
+        "id": "_source.id",
+        "source": "_source"
+    },
+    "hitType": "Fachthema",
+    "hitGlyphicon": "glyphicon-list"
+}
+```
+
+***
+#### Portalconfig.searchBar.elasticSearch.hitMap
+
+Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String|"name"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
+|id|ja|String|"id"|Attribut value wird auf attribut key gemappt. Notwendig um das Ergebnis anzuzeigen.|false|
+|coordinate|ja|String|"coordinate"|Attribut value wird auf attribut key gemappt. Notwendig um den mapMarker anzuzeigen.|false|
+
+***
+
+***
+#### Portalconfig.searchBar.elasticSearch.triggerEvent
+
+Radio event das ausgelöst werden soll durch Mouseover und Click. Definiert durch "channel" und "event".
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|channel|ja|String||Channel an den der hit beim mouseover und click in der recommendedList getriggered wird.|false|
+|event|ja|String||Event das getriggered wird.|false|
 
 ***
 
@@ -1512,7 +1588,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |title|ja|String||Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
-
+|sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die transparenz der Layer zusätzlich mit angepasst.|false|
 **Beispiel**
 ```
 #!json
@@ -1520,6 +1596,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
     "name": "Zeitreihe",
     "glyphicon": "glyphicon-film",
     "title": "Simulation von Beispiel-WMS",
+    "sliderType": "player",
     "timeInterval": 2000,
     "layerIds": [
         {
@@ -2363,5 +2440,12 @@ Konfiguration der Sprache
 |languages|nein|Object|{"de": "deutsch, "en": "english"}|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.||
 |startLanguage|nein|String|"de"|Die Standard-Sprache die beim Start automatisch aktiv sein soll.|Bitte beachten, dass dieser Wert ignoriert wird wenn eine andere Start-Bedingung erfüllt ist. Die startLanguage ist zugleich der Fallback, falls eine Sprache nicht erkannt wird oder Sprach-Schlüssel fehlen.|
 |changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator"]|Stellt die Reihenfolge der Sprach-Eingriffe ein, auf die beim Start geachtet werden soll.||
+
+***
+
+## Datatypes.CustomObject
+
+Ein Objekt mit den benötigten Inhalten.
+Parameter können je nach Konfiguration, Verwendung und Backend-Komponenten unterschiedlich sein.
 
 ***

@@ -6,6 +6,8 @@ import Feature from "ol/Feature";
 import Model from "@modules/tools/draw/model.js";
 import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
+import Map from "ol/Map";
+import View from "ol/View";
 
 describe("drawModel", function () {
     var model;
@@ -54,6 +56,276 @@ describe("drawModel", function () {
                 result = model.createDrawInteraction(drawType, layer);
 
             expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
+        });
+    });
+
+    describe("createDrawInteractionAndAddToMap", function () {
+        it("the result should be two instances of draw", function () {
+            var drawType = {
+                    geometry: "Circle",
+                    text: "Doppelkreis zeichnen"
+                },
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = "";
+
+            model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+            expect(model.get("drawInteraction") instanceof Draw).to.be.true;
+            expect(model.get("drawInteraction2") instanceof Draw).to.be.true;
+        });
+        it("there should only be one drawInteraction", function () {
+            var listOfDrawTypes = [{geometry: "Circle", text: "Kreis zeichnen"}, {geometry: "Point", text: "Punkt zeichnen"},
+                    {geometry: "Text", text: "Text schreiben"}, {geometry: "LineString", text: "Linie zeichnen"}],
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = "";
+
+            for (let index = 0; index < listOfDrawTypes.length; index++) {
+                const drawType = listOfDrawTypes[index];
+
+                model.setDrawInteraction(undefined);
+                model.setDrawInteraction2(undefined);
+                model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+                expect(model.get("drawInteraction") instanceof Draw).to.be.true;
+                expect(model.get("drawInteraction2") instanceof Draw).to.be.false;
+            }
+        });
+    });
+
+    describe("adjustValueToUnits", function () {
+        it("Should return the defined diameter unchanged (= in meters)", function () {
+            const diameter = Math.random(),
+                units = "m",
+                result = model.adjustValueToUnits(diameter, units);
+
+            expect(result).to.deep.equal(diameter);
+        });
+        it("Should return the defined diameter unchanged (= in kilometers)", function () {
+            const diameter = Math.random(),
+                units = "km",
+                result = model.adjustValueToUnits(diameter, units);
+
+            expect(result).to.deep.equal(diameter * 1000);
+        });
+    });
+
+    describe("getDefinedRadius", function () {
+        it("the result should be a value and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(circleRadiusOuter);
+        });
+        it("the result should be a value and the third input parameter.", function () {
+            const doubleIsActive = false,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(circleRadiusInner);
+        });
+        it("the result should be undefined and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = undefined,
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(undefined);
+        });
+        it("the result should be undefined and the third input parameter.", function () {
+            const doubleIsActive = false,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = undefined,
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(undefined);
+        });
+        it("the result should be a value and the third input parameter.", function () {
+            const doubleIsActive = undefined,
+                circleRadiusOuter = Math.random(),
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(circleRadiusInner);
+        });
+        it("the result should be a not a number (NaN) and the second input parameter.", function () {
+            const doubleIsActive = true,
+                circleRadiusOuter = NaN,
+                circleRadiusInner = Math.random(),
+                result = model.getDefinedRadius(doubleIsActive, circleRadiusOuter, circleRadiusInner);
+
+            expect(result).to.deep.equal(NaN);
+        });
+    });
+
+    describe("transformNaNToUndefined", function () {
+        it("should return undefined", function () {
+            const result = model.transformNaNToUndefined(NaN);
+
+            expect(result).to.deep.equal(undefined);
+        });
+        it("should return undefined", function () {
+            const result = model.transformNaNToUndefined(undefined);
+
+            expect(result).to.deep.equal(undefined);
+        });
+        it("should return the radius", function () {
+            const radius = Math.random(),
+                result = model.transformNaNToUndefined(radius);
+
+            expect(result).to.deep.equal(radius);
+        });
+    });
+
+    describe("getCircleExtentByDistanceLat", function () {
+        const testMap = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:25832"
+                })
+            }),
+            earthRadius = 6378137;
+
+        it("should return an array with two values.", function () {
+            const circleCenter = [563054.1959507341, 5931428.60952855],
+                diameter = 2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([563040.8522628784, 5932427.960697326]);
+        });
+
+        it("should return an array with two values.", function () {
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = -2000,
+                result = model.getCircleExtentByDistanceLat(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([561320.9362901135, 5930661.805980023]);
+        });
+    });
+
+    describe("getCircleExtentByDistanceLon", function () {
+        const testMap = new Map({
+                target: "map",
+                view: new View({
+                    projection: "EPSG:25832"
+                })
+            }),
+            earthRadius = 6378137;
+
+        it("should return an array with two values", function () {
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = 2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([562309.6945844457, 5931674.269837391]);
+        });
+        it("should return an array with two values", function () {
+            const circleCenter = [561307.9626221351, 5931661.158251739],
+                diameter = -2000,
+                result = model.getCircleExtentByDistanceLon(circleCenter, diameter, testMap, earthRadius);
+
+            expect(result).to.deep.equal([560306.2294113865, 5931648.259190894]);
+        });
+    });
+
+    describe("assortResultCoordinates", function () {
+        it("should return an array with four correct coordinates.", function () {
+            const circleCenter = [561964.1286114944, 5931572.964070238],
+                resultCoordinates = [
+                    [561957.5719733026, 5932072.640277341],
+                    [561970.6848649463, 5931073.288230813],
+                    [562464.9943155645, 5931579.562693274],
+                    [561463.2625920147, 5931566.418576883]
+                ],
+                result = model.assortResultCoordinates(circleCenter, resultCoordinates),
+                assortedCoordinates = [
+                    561964.1286114944, 5931572.964070238,
+                    561463.2625920147, 5931566.418576883
+                ];
+
+            expect(result).to.deep.equal(assortedCoordinates);
+        });
+    });
+
+    describe("deactivateDrawInteraction", function () {
+        before(function () {
+            var drawType = "",
+                layer = new VectorLayer(),
+                drawInteraction1 = model.createDrawInteraction(drawType, layer),
+                drawInteraction2 = model.createDrawInteraction(drawType, layer);
+
+            model.setDrawInteraction(drawInteraction1);
+            model.setDrawInteraction2(drawInteraction2);
+            model.deactivateDrawInteraction();
+        });
+
+        it("should deactivate the first draw Interaction", function () {
+
+            expect(model.get("drawInteraction").get("active")).to.be.false;
+        });
+
+        it("should deactivate the second draw Interaction", function () {
+
+            expect(model.get("drawInteraction2").get("active")).to.be.false;
+        });
+    });
+
+    describe("checkAndRemovePreviousDrawInteraction", function () {
+        before(function () {
+            var drawType = "",
+                layer = new VectorLayer(),
+                drawInteraction1 = model.createDrawInteraction(drawType, layer),
+                drawInteraction2 = model.createDrawInteraction(drawType, layer);
+
+            model.setDrawInteraction(drawInteraction1);
+            model.setDrawInteraction2(drawInteraction2);
+            model.checkAndRemovePreviousDrawInteraction();
+        });
+
+        it("should deactivate the first draw Interaction", function () {
+
+            expect(model.get("drawInteraction")).to.be.undefined;
+        });
+
+        it("should deactivate the second draw Interaction", function () {
+
+            expect(model.get("drawInteraction2")).to.be.undefined;
+        });
+    });
+
+    describe("createDrawInteractionAndAddToMap", function () {
+        it("the result should be two draw Interactions", function () {
+            const drawType = "",
+                layer = new VectorLayer(),
+                isActive = true,
+                maxFeatures = undefined,
+                result = model.createDrawInteractionAndAddToMap(layer, drawType, isActive, maxFeatures);
+
+            expect(result[0] instanceof Draw).to.be.true;
+            expect(result[1] instanceof Draw).to.be.true;
+        });
+    });
+
+    describe("setDrawType", function () {
+        it("should return 'undefined'", function () {
+            model.setMethodCircle(undefined, undefined);
+            model.setDrawType(undefined, undefined);
+
+            expect(model.get("methodCircle")).to.be.undefined;
+        });
+        it("should return 'interactiv'", function () {
+            model.setDrawType("Circle", "Kreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("interactiv");
+        });
+        it("should return 'defined'", function () {
+            model.setDrawType("Circle", "Doppelkreis zeichnen");
+
+            expect(model.get("methodCircle")).to.deep.equal("defined");
         });
     });
 
