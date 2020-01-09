@@ -145,7 +145,6 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
     },
 
     /**
-     * Steuert die Aktionen nach einem Layerwechsel im Model
      * Steers the actions after a changed layer in the model.
      * @returns {void}
      */
