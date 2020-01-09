@@ -196,10 +196,10 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
     "minChars": 3,
     "serviceId": "elastic",
     "queryObject": {
-                        "id": "query",
-                        "params": {
-                            "query_string": "%%searchString%%"
-                        }
+        "id": "query",
+        "params": {
+            "query_string": "%%searchString%%"
+        }
 }
 ```
 
@@ -244,8 +244,22 @@ Konfiguration des Elastic Search Suchdienstes
 |hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
 |useProxy|nein|Boolean|false|Flag die angibt ob die url vom geproxied werden soll oder nicht.|false|
 
+**Beispiel**
+```
+#!json
+"gdi": {
+    "minChars": 3,
+    "serviceId": "elastic",
+    "queryObject": {
+        "id": "query",
+        "params": {
+            "query_string": "%%searchString%%"
+        }
+}
+```
+
  **Beispiel**
- ```
+```
 #!json
 "elasticSearch": {
     "minChars":3,
@@ -272,6 +286,7 @@ Konfiguration des Elastic Search Suchdienstes
     "hitGlyphicon": "glyphicon-list"
 }
 ```
+
 
 ***
 #### Portalconfig.searchBar.elasticSearch.hitMap
