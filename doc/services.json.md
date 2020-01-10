@@ -256,6 +256,7 @@ Beispiel gfiTheme für das template "sensor"
 ```
 ## gfi_theme_params ##
 Hier werden die Parameter für die GFI-Templates definiert.
+
 |Name|params|
 |----|------|
 |sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
