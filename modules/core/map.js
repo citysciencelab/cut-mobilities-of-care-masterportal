@@ -514,7 +514,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.setMap3d(this.createMap3d());
             this.handle3DEvents();
             this.setCesiumSceneDefaults();
-            this.setCameraParameter(cameraParameter);
+            if (cameraParameter) {
+                this.setCameraParameter(cameraParameter);
+            }
             camera = this.getMap3d().getCesiumScene().camera;
             camera.changed.addEventListener(this.reactToCameraChanged, this);
         }

@@ -64,7 +64,7 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
             }
         }, this);
 
-        this.listenTo(Radio.channel("Layer"), {
+        this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
                 if (layerId === this.get("layerId")) {
                     this.setLayer(Radio.request("Map", "createLayerIfNotExists", "school_route_layer"));
@@ -92,7 +92,7 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
             }
         });
 
-        this.listenTo(Radio.channel("Layer"), {
+        this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
                 if (layerId === this.get("layerId")) {
                     this.setSchoolList(this.sortSchoolsByName(features));
@@ -291,7 +291,6 @@ const SchulwegRouting = Tool.extend(/** @lends SchulwegRouting.prototype */{
             requestObj = this.setObjectAttribute(requestObj, "SchuelerHausnr", "integer", parseInt(address.houseNumber, 10));
             requestObj = this.setObjectAttribute(requestObj, "SchuelerZusatz", "string", address.houseNumberSupplement);
             requestObj = this.setObjectAttribute(requestObj, "RouteAusgeben", "boolean", 1);
-            requestObj = this.setObjectAttribute(requestObj, "tm_tag", "string", "fast");
 
             this.sendRequest(requestObj);
         }
