@@ -428,6 +428,14 @@
  * @example Radio.trigger("VectorLayer", "featureUpdated", id, features)
  */
 
+/**
+ * @event Layer#RadioTriggerVectorLayerResetFeatures
+ * @description Triggers an event with the features that are shown. Used for updates in heatmap after filter.
+ * @param {String} id Id of vector layer.
+ * @param {ol/Feature[]} features Features that are visible.
+ * @example Radio.trigger("VectorLayer", "resetFeatures", id, features)
+ */
+
  /**
  * @event Layer#RadioRequestVectorLayerGetFeatures
  * @param {String} id Id of vector layer.
