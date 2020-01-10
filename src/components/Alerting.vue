@@ -23,7 +23,7 @@ export default {
                 that.$store.dispatch("addAlert", alert);
             },
             "alert:remove": function (removeAlertId) {
-                that.$store.dispatch("removeAlert", removeAlertId)
+                that.$store.dispatch("removeAlert", removeAlertId);
             }
         });
     },
@@ -42,7 +42,7 @@ export default {
     },
     computed: {
         alerts () {
-            return this.$store.state.Alerting.alerts
+            return this.$store.state.Alerting.alerts;
         },
         fadeOut () {
             return this.$store.state.Alerting.fadeOut;
@@ -54,7 +54,7 @@ export default {
     methods: {
         /**
          * Reacts to click on dismiss or confirm button.
-         * @param {string} mode ;ode that closes the alert.
+         * @param {string} mode mode that closes the alert.
          * @param {Event} event Click event on dismissable alert.
          * @fires AlertingView#RadioTriggerAlertClosed
          * @return {void}
@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="less">
 div#messages {
     max-width: 100%;
     z-index: 2001;
