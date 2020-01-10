@@ -81,6 +81,13 @@ const exampleAddon = Backbone.Model.extend({
 
 export default exampleAddon;
 ```
+Das Model muss folgende properties haben:
+```
+type: "tool",
+id: "exampleId", // muss gleich dem Schlüssel unter tools in der config.json sein
+name: "Example Tool", 
+glyphicon: "glyphicon-example"
+```
 
 3. Die Addons-Config-Datei erstellen:
 
