@@ -9,7 +9,10 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         features: [],
         format: new KML({extractStyles: true}),
         renderToWindow: true,
-        glyphicon: "glyphicon-import"
+        glyphicon: "glyphicon-import",
+        kmlLineColor: "000000",
+        kmlLabelColor: "000000",
+        kmlPolyColor: "000000"
     }),
 
     /**
@@ -94,32 +97,25 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      */
     styleFeatures: function (features) {
         const styleObjects = this.parseStyleFromKML(features, this.get("text"));
-        console.log(styleObjects);
 
         features.forEach((feature, index) => {
             const drawGeometryType = feature.getGeometry().getType(),
-                fontText = feature.get("name");
+                fontText = feature.get("name"),
+                lineStyle = styleObjects[index].lineStyle.color,
+                labelStyle = styleObjects[index].labelStyle.color,
+                polyStyle = styleObjects[index].polyStyle.color;
             let style;
 
-            if (styleObjects[index].lineStyle.color === "") {
-                styleObjects[index].lineStyle.color = "fc031c";
-            }
-            if (styleObjects[index].labelStyle.color === "") {
-                styleObjects[index].labelStyle.color = "fc031c";
-            }
-            if (styleObjects[index].polyStyle.color === "") {
-                styleObjects[index].polyStyle.color = "fc031c";
-            }
-            console.log(styleObjects[index].lineStyle.color);
-            console.log(styleObjects[index].labelStyle.color);
-            console.log(styleObjects[index].polyStyle.color);
+            styleObjects[index].lineStyle.color = lineStyle === "" ? this.defaults.kmlLineColor : lineStyle;
+            styleObjects[index].labelStyle.color = labelStyle === "" ? this.defaults.kmlLabelColor : labelStyle;
+            styleObjects[index].polyStyle.color = polyStyle === "" ? this.defaults.kmlPolyColor : polyStyle;
+
             if (drawGeometryType === "Point" && fontText !== undefined) {
                 styleObjects[index].labelStyle.color = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
                 style = this.getTextStyle(fontText, styleObjects[index]);
             }
             else {
                 styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
-                console.log(styleObjects[index].lineStyle.color);
                 styleObjects[index].lineStyle.width = Number.isNaN(styleObjects[index].lineStyle.width) ? 1 : styleObjects[index].lineStyle.width;
                 styleObjects[index].polyStyle.color = styleObjects[index].polyStyle.color.length < 6
                     ? styleObjects[index].lineStyle.color : this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
@@ -167,6 +163,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                     }
                 };
 
+            // console.log($(lineStyle).find("color").text());
             styleObjects.push(styleObject);
         });
 
@@ -179,12 +176,10 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {String[]} values in RGBA
      */
     convertHexColorToRgbArray: function (hexColor) {
-        console.log(hexColor);
         const hexColor8 = hexColor.length === 6 ? "FF" + hexColor : hexColor;
         let colorRgbArray = [];
-        console.log(hexColor8);
+
         colorRgbArray = hexColor8.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
-        console.log(colorRgbArray);
         colorRgbArray = colorRgbArray.splice(1, 4);
         colorRgbArray = colorRgbArray.map(hexValue => parseInt(hexValue, 16));
         colorRgbArray[0] = Math.round(colorRgbArray[0] / 255 * 100) / 100;
