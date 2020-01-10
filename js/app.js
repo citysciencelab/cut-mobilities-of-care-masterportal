@@ -124,6 +124,7 @@ function loadApp () {
     });
 
     app.$store.commit("addConfigToStore", Config);
+    app.$mount();
 
     // Core laden
     new Autostarter();
@@ -480,7 +481,6 @@ function loadApp () {
         });
     }
 
-    app.$mount();
     Radio.trigger("Util", "hideLoader");
 }
 
