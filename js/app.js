@@ -117,7 +117,7 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-    app.config.productionTip = false;
+    Vue.config.productionTip = false;
     app = new Vue({
         render: h => h(App),
         store
