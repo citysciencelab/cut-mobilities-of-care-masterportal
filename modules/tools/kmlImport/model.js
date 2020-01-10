@@ -94,19 +94,32 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      */
     styleFeatures: function (features) {
         const styleObjects = this.parseStyleFromKML(features, this.get("text"));
+        console.log(styleObjects);
 
         features.forEach((feature, index) => {
             const drawGeometryType = feature.getGeometry().getType(),
                 fontText = feature.get("name");
             let style;
 
+            if (styleObjects[index].lineStyle.color === "") {
+                styleObjects[index].lineStyle.color = "fc031c";
+            }
+            if (styleObjects[index].labelStyle.color === "") {
+                styleObjects[index].labelStyle.color = "fc031c";
+            }
+            if (styleObjects[index].polyStyle.color === "") {
+                styleObjects[index].polyStyle.color = "fc031c";
+            }
+            console.log(styleObjects[index].lineStyle.color);
+            console.log(styleObjects[index].labelStyle.color);
+            console.log(styleObjects[index].polyStyle.color);
             if (drawGeometryType === "Point" && fontText !== undefined) {
                 styleObjects[index].labelStyle.color = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
                 style = this.getTextStyle(fontText, styleObjects[index]);
             }
             else {
                 styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
-
+                console.log(styleObjects[index].lineStyle.color);
                 styleObjects[index].lineStyle.width = Number.isNaN(styleObjects[index].lineStyle.width) ? 1 : styleObjects[index].lineStyle.width;
                 styleObjects[index].polyStyle.color = styleObjects[index].polyStyle.color.length < 6
                     ? styleObjects[index].lineStyle.color : this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);
@@ -166,10 +179,12 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {String[]} values in RGBA
      */
     convertHexColorToRgbArray: function (hexColor) {
+        console.log(hexColor);
         const hexColor8 = hexColor.length === 6 ? "FF" + hexColor : hexColor;
         let colorRgbArray = [];
-
+        console.log(hexColor8);
         colorRgbArray = hexColor8.match(/([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
+        console.log(colorRgbArray);
         colorRgbArray = colorRgbArray.splice(1, 4);
         colorRgbArray = colorRgbArray.map(hexValue => parseInt(hexValue, 16));
         colorRgbArray[0] = Math.round(colorRgbArray[0] / 255 * 100) / 100;
