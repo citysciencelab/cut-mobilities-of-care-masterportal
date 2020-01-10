@@ -43,7 +43,6 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlImport/view";
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
@@ -81,7 +80,7 @@ import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 
-var sbconfig, controls, controlsView;
+let sbconfig, controls, controlsView;
 
 /**
  * load the configuration of master portal
@@ -89,15 +88,14 @@ var sbconfig, controls, controlsView;
  */
 function loadApp () {
     /* eslint-disable no-undef */
-    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS;
-    /* eslint-disable no-undef */
-
-    // Prepare config for Utils
-    var utilConfig = {},
-        style,
+    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
+        utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        app;
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        style = Radio.request("Util", "getUiStyle");
+        /* eslint-disable no-undef */
+    let app = {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -119,16 +117,10 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
-    Vue.config.productionTip = false;
-
+    app.config.productionTip = false;
     app = new Vue({
         render: h => h(App),
-        store,
-        data () {
-            return {
-                Config: Config
-            };
-        }
+        store
     });
 
     app.$store.commit("addConfigToStore", Config);
@@ -196,10 +188,6 @@ function loadApp () {
         switch (tool.id) {
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
-                break;
-            }
-            case "einwohnerabfrage": {
-                new EinwohnerabfrageView({model: tool});
                 break;
             }
             case "lines": {
@@ -324,8 +312,6 @@ function loadApp () {
             }
         }
     });
-
-    style = Radio.request("Util", "getUiStyle");
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -459,7 +445,7 @@ function loadApp () {
         });
     }
 
-    new MapMarkerView();
+    new MapMarkerView(mapMarkerConfig);
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);

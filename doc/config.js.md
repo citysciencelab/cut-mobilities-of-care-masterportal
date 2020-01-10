@@ -44,7 +44,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |**[remoteInterface](#markdown-header-remoteInterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
-
+|mapMarker|nein|**[mapMarker](#markdown-header-mapMarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
 *********
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -274,5 +274,13 @@ zoomToGeometry: {
 |isDismissable|nein|Boolean|true|Legt fest, ob der Alert weggeklickt werden kann, indem eine weitere Bootstrap-Class am alert gesetzt wird.|
 |isConfirmable|nein|Boolean|false|Legt fest, ob der Alert mit einem OK-Button bestätigt werden muss.|
 |position|nein|String|"top-center"|Position des Alerts. Mögliche Werte: "top-center", "center-center" und "bottom-center")|
+
+***
+## mapMarker ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|type|nein|enum["Overlay", "Layer"]|"Overlay"|Typ des MapMarkers.|
+|mapMarkerStyleId|nein|String|"mapMarkerStyle"|Style Id des MapMarkers.|
+
 
 >Zurück zur **[Dokumentation Masterportal](doc.md)**.

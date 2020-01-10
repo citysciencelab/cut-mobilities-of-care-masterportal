@@ -1586,7 +1586,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |title|ja|String||Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
-
+|sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die transparenz der Layer zusätzlich mit angepasst.|false|
 **Beispiel**
 ```
 #!json
@@ -1594,6 +1594,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
     "name": "Zeitreihe",
     "glyphicon": "glyphicon-film",
     "title": "Simulation von Beispiel-WMS",
+    "sliderType": "player",
     "timeInterval": 2000,
     "layerIds": [
         {
