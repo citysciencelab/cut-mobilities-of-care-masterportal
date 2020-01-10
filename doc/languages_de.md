@@ -1,12 +1,12 @@
 
 # Übersetzungen im Masterportal
 
-Dieses Dokument beschreibt, wie man mit Sprachen und Übersetzungen im Masterportal (MP) arbeitet.
-Dieses Dokument ist für Anfänger, Fortgeschrittene und Experten gedacht.
+Dieses Dokument beschreibt, wie mit Sprachen und Übersetzungen im Masterportal (MP) gearbeitet wird.
+Es ist für Anfänger, Fortgeschrittene und Experten gedacht.
 
 Dies sind die Ziele dieses Dokuments:
 1. Wie erweitert man Sprachdateien und wie werden neue Sprachen hinzugefügt (Anfänger).
-2. Wie fügt man Sprachen in neue models ein (fortgeschrittene Benutzer).
+2. Wie fügst du Sprachen in neue models ein (fortgeschrittene Benutzer).
 3. Wie haben wir es geschafft Übersetzungen und Sprachen zu verwenden (Experten).
 
 
@@ -23,10 +23,10 @@ Die verwendete Technologie für die Übersetzung des MP ist "i18next" (https://w
 
 Für fortgeschrittene Benutzer und Experten empfehlen wir die kurze aber scharfe Dokumentation von i18next zu lesen.
 
-Es werden folgenden i18next-Plugins verwendet:
+Es werden folgende i18next-Plugins verwendet:
 
-* "i18next-xhr-backend" zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
-* "i18next-browser-languagedetector" zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Reaktion der Abfrage-Url
+* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
+* [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Auslesen der Sprache aus der query Url
 
 i18next sendet mit diesem Radio-Event einen Sprachwechsel: "i18next#RadioTriggerSprachwechsel".
 Um i18next im Code zu verwenden, wird es als globale Variable "i18next" oder für Devs von der Browser-Konsole aus mit "Backbone.i18next" bereitgestellt.
@@ -35,7 +35,7 @@ Um i18next im Code zu verwenden, wird es als globale Variable "i18next" oder fü
 ### Sprachen
 
 Da das MP derzeit hauptsächlich in Hamburg entwickelt wird, ist die Fallback-Sprache deutsch.
-(Sie können Ihre Fallback-Sprache manuell in der config.js ändern)
+(Du kannst die Fallback-Sprache manuell in der config.js ändern)
 
 Selbstverständlich stellen wir jederzeit eine komplette englische Übersetzung zur Verfügung:
 
@@ -83,11 +83,11 @@ Die Custom Sprachdatei wird für Übersetzungen der Instanzen des MP (das Portal
 
 ## Wie man i18next in der Produktion verwendet
 
-Der folgende Abschnitt ist eine Anleitung, wie Sie i18next mit MV* in Ihr MP-Projekt integrieren können.
+Der folgende Abschnitt ist eine Anleitung, wie du i18next mit MV* in dein MP-Projekt integrieren kannst.
 
 
 
-### Übersetzen Sie Ihr Model
+### Übersetze dein Model
 
 Um die Werte für dein Model mit i18next zu übersetzen, kannst du die Werte einfach mit der Übersetzungsfunktion von i18next übersetzen.
 Durch das Horchen auf das Radio-Channel-Event "i18next#RadioTriggerLanguageChanged" kann das Model seine Übersetzungen während der Laufzeit ändern.
@@ -136,7 +136,7 @@ export default ExampleModel;
 #### Höre auf dein Model
 
 
-Wenn sie richtig eingerichtet ist, sollte der View auf Änderungen im Model hören und das Template bereits rendern.
+Wenn der View richtig eingerichtet ist, sollte er auf Änderungen im Model hören und das Template bereits rendern.
 Derzeit verwenden wir im Masterportal underscore für das Templating.
 Um zu zeigen, wie dies geschehen SOLLTE, verwenden wir das Modell von oben und setzen den MV* wie folgt auf.
 
@@ -199,14 +199,14 @@ Dieser Abschnitt beschreibt den Ansatz, wie i18next die in die config.json angeg
 Das Erste ist ein best practise Szenario, dann folgt eine Beschreibung, was im Hintergrund passiert und warum es passiert.
 
 
-### Best practice szenario
+### Best practise szenario
 
 ### Menü
 
 Um einen Namen aus der config.json zu übersetzen, muss der Name selbst korrekt formatiert werden. 
 Dieser formatierte Wert muss dann in die Übersetzungsdateien übernommen werden. 
 Wird der Teil der config.json vom Masterportal für die Übersetzung berücksichtigt, erfolgt die Übersetzung wie gewünscht.
-Nur das Feld *"name "* wird bei der Übersetzung berücksichtigt!
+Nur das Feld *"name"* wird bei der Übersetzung berücksichtigt!
 
 Übersetzungsdatei beispiel.js
 ```
@@ -222,7 +222,7 @@ Nur das Feld *"name "* wird bei der Übersetzung berücksichtigt!
 
 
 
-Teil der config.json, den Sie für die Übersetzung des Menüs bearbeiten können:
+Teil der config.json, den du für die Übersetzung des Menüs bearbeiten kannst:
 ```
 {
     "Portalconfig": {
@@ -238,6 +238,7 @@ Teil der config.json, den Sie für die Übersetzung des Menüs bearbeiten könne
 ```
 Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
 
+Aufbau:
 translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
 
 
@@ -250,7 +251,7 @@ Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix (
 **Achtung**: Ein Übersetzungsschlüssel, der zu einem Eintrag im Themenbaum hinzugefügt wird, überschreibt alle Titel oder Namen, die von Diensten stammen.
 
 
-Der Teil der config.json, den Sie für die Übersetzung des Themenbaums bearbeiten können:
+Der Teil der config.json, den du für die Übersetzung des Themenbaums bearbeiten kannst:
 ```
 {
     "Themenconfig": {
@@ -289,7 +290,7 @@ Es gibt folgende Möglichkeiten und folgende Hierarchie:
 
 * "name": "Zeichnen / Schreiben" --> wird nie übersetzt
 * "name": "translate#example:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
-* kein Name angegeben (das Feld Name existiert hier nicht) --> Name kommt aus der model.js (hier ../tools/draw/model.js)
+* kein Name angegeben (das Feld Name existiert nicht) --> Name kommt aus der model.js (hier ../tools/draw/model.js)
 
 #### Werkzeugname in der model.js definieren
 
@@ -311,10 +312,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
 ## Häufige Fehler
 
-Sie haben einen Übersetzungsschlüssel der Sprach-Datei hinzugefügt, aber was angezeigt wird, ist der Übersetzungsschlüssel selbst.
-    Bitte überprüfen Sie die korrekte Schreibweise des Schlüssels. i18next kann diesen Schlüssel weder in der ausgewählten Sprachdatei noch in der Fallback-Sprachdatei finden.
+Du hast einen Übersetzungsschlüssel der Sprach-Datei hinzugefügt, aber was angezeigt wird, ist der Übersetzungsschlüssel selbst.
+    Bitte überprüfe die korrekte Schreibweise des Schlüssels. i18next kann diesen Schlüssel weder in der ausgewählten Sprachdatei noch in der Fallback-Sprachdatei finden.
 
-Sie haben einen Übersetzungsschlüssel in der config.json gesetzt, aber es wird immer die Startsprache angezeigt, es wird nie die Sprache gewechselt.
+Du hast einen Übersetzungsschlüssel in der config.json gesetzt, aber es wird immer die Startsprache angezeigt, es wird nie die Sprache gewechselt.
     Hier ist zu prüfen, ob das Modul, das von diesem Teil der config.json gesteuert wird, so programmiert wurde, dass es auf die Übersetzung reagiert.
     Experte: Der Inhalt der config.json wird beim Start komplett übersetzt. Zur Übersetzung wird ab diesem Zeitpunkt die Übersetzungsfunktion i18nextTranslate verwendet. Wird sie nicht verwendet, bleibt der Inhalt auch bei einem Sprachwechsel erhalten.
 
