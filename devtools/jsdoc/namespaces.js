@@ -1,4 +1,9 @@
 /**
+ * @namespace AddOns
+ * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ */
+
+/**
  * @namespace Controls
  * @description Controls are small Elements that allow the user to interact directly with the Application.
  * In the Application the controls are situated in red squares on the map on the right side of the window.
@@ -261,6 +266,12 @@
 
 /**
  * @namespace Gdi
+ * @memberof Searchbar
+ * @description Configures search in geodata infrastructure with elastic search
+ */
+
+ /**
+ * @namespace ElasticSearch
  * @memberof Searchbar
  * @description Configures search in geodata infrastructure with elastic search
  */
@@ -602,6 +613,8 @@
  * @namespace LayerSlider
  * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).
+ * Can be configured as Player (sliderType="player") with start, stop, pause buttons.
+ * Can be configured as Handle (sliderType="handle") with a drag handle to wander through the layers using transparency.
  */
 
 /**

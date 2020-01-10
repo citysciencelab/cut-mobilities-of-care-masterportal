@@ -4,8 +4,8 @@ const inquirer = require("inquirer"),
         {
             type: "input",
             name: "portalPath",
-            message: "Pfad zum Portal ausgehend von \"[...]/masterportal/\":",
-            default: "portal/basic"
+            message: "Pfad zum Ordner mit Portalen ausgehend von \"[...]/masterportal/\":",
+            default: "portal"
         }
     ];
 
