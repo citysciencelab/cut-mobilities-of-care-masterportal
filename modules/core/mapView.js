@@ -76,7 +76,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             "getScales": function () {
                 return _.pluck(this.get("options"), "scale");
             },
-            "getCurrentExtent": this.getCurrentExtent
+            "getCurrentExtent": this.getCurrentExtent,
+            "getBackgroundImage": function () {
+                return this.get("backgroundImage");
+            }
         }, this);
 
         channel.on({
@@ -89,17 +92,9 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             "toggleBackground": this.toggleBackground
         }, this);
 
-        this.listenTo(this, {
-            "change:background": function (model, value) {
-                if (value === "white") {
-                    $("#map").css("background", "white");
-                }
-                else {
-                    $("#map").css("background", "url('" + value + "') repeat scroll 0 0 rgba(0, 0, 0, 0)");
-                }
-            }
-        });
-
+        if (document.getElementById("map") !== null) {
+            this.setBackgroundImage(document.getElementById("map").style.backgroundImage);
+        }
         this.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         this.prepareStartCenter(Radio.request("ParametricURL", "getCenter"));
         this.setStartZoomLevel(Radio.request("ParametricURL", "getZoomLevel"));
@@ -225,9 +220,11 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     toggleBackground: function () {
         if (this.get("background") === "white") {
             this.setBackground(this.get("backgroundImage"));
+            $("#map").css("background", this.get("backgroundImage") + "repeat scroll 0 0 rgba(0, 0, 0, 0)");
         }
         else {
             this.setBackground("white");
+            $("#map").css("background", "white");
         }
     },
 

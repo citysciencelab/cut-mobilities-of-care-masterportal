@@ -38,7 +38,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      * @class GraphicalSelectModel
      * @extends SnippetDropdownModel
      * @memberof Snippets.GraphicalSelect
-     * @namespace GraphicalSelect
      * @description creates a dropdown to select an area in a map by square, circle or polygon. Create it like this: new GraphicalSelectModel({id: "idOfTheCaller"}).
      * The id is used to react only on events of the caller, not on all components, that use a graphicalSelectModel.
      * @constructs

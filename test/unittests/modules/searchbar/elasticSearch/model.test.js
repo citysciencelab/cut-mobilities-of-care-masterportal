@@ -1,26 +1,37 @@
-import Model from "@modules/searchbar/gdi/model.js";
+import Model from "@modules/searchbar/elasticSearch/model.js";
 import {expect} from "chai";
 
-describe("modules/searchbar/gdi", function () {
+describe("modules/searchbar/elasticSearch", function () {
     var model = {},
         config = {
-            "searchBar": {
-                "gdi": {
-                    "minChars": 4,
-                    "serviceId": "elastic",
-                    "queryObject": {
-                        "id": "query",
-                        "params": {
-                            "query_string": "%%searchString%%"
-                        }
-                    }
+            "minChars": 3,
+            "serviceId": "elastic_hh",
+            "type": "GET",
+            "payload": {
+                "id": "query",
+                "params": {
+                    "query_string": ""
                 }
-            }
+            },
+            "searchStringAttribute": "query_string",
+            "responseEntryPath": "hits.hits",
+            "triggerEvent": {
+                "channel": "Parser",
+                "event": "addGDILayer"
+            },
+            "hitMap": {
+                "name": "_source.name",
+                "id": "_source.id",
+                "source": "_source"
+            },
+            "hitType": "Fachthema",
+            "hitGlyphicon": "glyphicon-list"
         };
 
     before(function () {
         model = new Model(config);
     });
+
     describe("appendSearchStringToPayload", function () {
         it("should append string to searchStringAttribute", function () {
             const payload = {

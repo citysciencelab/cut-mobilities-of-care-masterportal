@@ -1,21 +1,47 @@
-import "../model";
+
 import ElasticModel from "../../core/elasticsearch";
 
-const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
+const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.prototype */{
     defaults: {
         minChars: 3,
-        serviceId: "",
-        queryObject: {},
+        serviceId: "11",
+        url: "",
+        payload: {},
+        searchStringAttribute: "searchString",
+        type: "POST",
+        responseEntryPath: "",
+        triggerEvent: {},
+        hitMap: {
+            name: "name",
+            id: "id",
+            coordinate: "coordinate"
+        },
+        hitType: "Elastic",
+        hitGlyphicon: "glyphicon-road",
+        async: false,
+        useProxy: false,
         elasticSearch: new ElasticModel()
     },
     /**
-     * @class GdiModel
+     * @class ElasticSearchModel
      * @extends Backbone.Model
-     * @memberof Searchbar.Gdi
+     * @memberof Searchbar.ElasticSearch
      * @constructs
      * @property {Number} minChars=3 Minimum length of search string to start.
-     * @property {String} serviceId="" Id of restService to derive url from.
-     * @property {Object} queryObject={} Payload used to append to url.
+     * @property {String} serviceId="11" Id of restService to derive url from.
+     * @property {String} url="" Url derived from restService.
+     * @property {Object} payload={} Payload used to POST to url.
+     * @property {String} searchStringAttribute="searchString" The Search string is added to the payload object with this key.
+     * @property {String} type="POST" The type of the request. "POST" or "GET".
+     * @property {String} responseEntryPath="" The path of the hits in the response JSON. The different levels of the response JSON are marked with "."
+     * @property {Object} triggerEvent = {} An object defining the channel and event to be posted by clicking on the search result.
+     * @property {String} triggerEvent.channel = "" Channel of radio event.
+     * @property {String} triggerEvent.event = "" Event of radio event.
+     * @property {Object} hitMap = {name: "", id: "id", coordinate: "coordinate"} Mapping object of the response hit to fit the structure of the searchbars hits.
+     * @property {String} hitType = "Elastic" Type of the hit to be appended in the recommended list.
+     * @property {String} hitGlyphicon = "glyphicon-road" Css class of the glyphicon to be prepended in the recommended list.
+     * @property {Boolean} async = false Flag if request should be asynchronous.
+     * @property {Boolean} useProxy = false Flag if request should be proxied.
      * @property {ElasticModel} elasticSearch = new ElasticSearch() ElasticModel.
      * @fires Core#RadioRequestParametricURLGetInitString
      * @fires Searchbar#RadioTriggerSearchbarPushHits
@@ -24,30 +50,14 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @listens Searchbar#RadioTriggerSearchbarSearch
      */
     initialize: function () {
-        const url = this.deriveUrlFromServiceIdAndAppendParameter(this.get("serviceId"));
+        const initSearchString = Radio.request("ParametricURL", "getInitString");
 
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search
         });
-        console.error("GDI-Search is deprecated in version 3.0.0. Please use the elasticSearch!");
-        this.setUrl(url);
-    },
-
-    /**
-     * Derives the url from the serviceId and appends url parameters.
-     * @param {String} serviceId Service Id.
-     * @returns {String} - url with appended parameters.
-     */
-    deriveUrlFromServiceIdAndAppendParameter: function (serviceId) {
-        const restService = Radio.request("RestReader", "getServiceById", serviceId);
-        let url;
-
-        if (restService) {
-            url = restService.get("url");
-            url = url + "?source_content_type=application/json&source=";
+        if (initSearchString) {
+            this.search(initSearchString);
         }
-
-        return url;
     },
 
     /**
@@ -56,14 +66,15 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-        const payload = this.appendSearchStringToPayload(this.get("queryObject"), "query_string", searchString),
+        const searchStringAttribute = this.get("searchStringAttribute"),
+            payload = this.appendSearchStringToPayload(this.get("payload"), searchStringAttribute, searchString),
             xhrConfig = {
-                url: this.get("url"),
-                type: "GET",
-                useProxy: false,
-                async: false,
+                serviceId: this.get("serviceId"),
+                useProxy: this.get("useProxy"),
+                type: this.get("type"),
+                async: this.get("async"),
                 payload: payload,
-                responseEntryPath: "hits.hits"
+                responseEntryPath: this.get("responseEntryPath")
             };
         let result;
 
@@ -71,6 +82,27 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             result = this.get("elasticSearch").search(xhrConfig);
             this.createRecommendedList(result.hits);
         }
+    },
+
+    /**
+     * Recursively searches for the searchStringAttribute key and sets the searchString.
+     * Adds the search string to the payload using the given key
+     * @param {Object} payload Payload as Object
+     * @param {String} searchStringAttribute Attribute key to be added to the payload object.
+     * @param {String} searchString Search string to be added using the searchStringAttribute.
+     * @returns {Object} - the payload with the search string.
+     */
+    appendSearchStringToPayload: function (payload, searchStringAttribute, searchString) {
+        Object.keys(payload).forEach(key => {
+            if (typeof payload[key] === "object") {
+                payload[key] = this.appendSearchStringToPayload(payload[key], searchStringAttribute, searchString);
+            }
+            if (key === searchStringAttribute) {
+                payload[searchStringAttribute] = searchString;
+            }
+        });
+
+        return payload;
     },
 
     /**
@@ -82,17 +114,10 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
      * @returns {void}
      */
     createRecommendedList: function (responseData) {
-        const triggerEvent = {
-                channel: "Parser",
-                event: "addGdiLayer"
-            },
-            hitMap = {
-                name: "_source.name",
-                id: "_source.id",
-                source: "_source"
-            },
-            hitType = "Fachthema",
-            hitGlyphicon = "glyphicon-list";
+        const triggerEvent = this.get("triggerEvent"),
+            hitMap = this.get("hitMap"),
+            hitType = this.get("hitType"),
+            hitGlyphicon = this.get("hitGlyphicon");
 
         if (responseData.length > 0) {
             responseData.forEach(result => {
@@ -102,9 +127,9 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             });
         }
         else {
-            Radio.trigger("Searchbar", "removeHits", "hitList", {type: "Fachthema"});
+            Radio.trigger("Searchbar", "removeHits", "hitList", {type: hitType});
         }
-        Radio.trigger("Searchbar", "createRecommendedList", "gdi");
+        Radio.trigger("Searchbar", "createRecommendedList", "elasticSearch");
     },
 
     /**
@@ -155,37 +180,7 @@ const GdiModel = Backbone.Model.extend(/** @lends GdiModel.prototype */{
             });
         }
         return attribute;
-    },
-
-    /**
-     * Recursively searches for the searchStringAttribute key and sets the searchString.
-     * Adds the search string to the payload using the given key
-     * @param {Object} payload Payload as Object
-     * @param {String} searchStringAttribute Attribute key to be added to the payload object.
-     * @param {String} searchString Search string to be added using the searchStringAttribute.
-     * @returns {Object} - the payload with the search string.
-     */
-    appendSearchStringToPayload: function (payload, searchStringAttribute, searchString) {
-        Object.keys(payload).forEach(key => {
-            if (typeof payload[key] === "object") {
-                payload[key] = this.appendSearchStringToPayload(payload[key], searchStringAttribute, searchString);
-            }
-            if (key === searchStringAttribute) {
-                payload[searchStringAttribute] = searchString;
-            }
-        });
-
-        return payload;
-    },
-
-    /**
-     * Setter for Attribute "url".
-     * @param {String} value Url.
-     * @returns {void}
-     */
-    setUrl: function (value) {
-        this.set("url", value);
     }
 });
 
-export default GdiModel;
+export default ElasticSearchModel;
