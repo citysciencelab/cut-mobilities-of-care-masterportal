@@ -163,7 +163,6 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                     }
                 };
 
-            // console.log($(lineStyle).find("color").text());
             styleObjects.push(styleObject);
         });
 
