@@ -2,7 +2,6 @@
     <div id="messages" v-bind:class="[position]">
         <div v-for="alert in alerts">
             <div :id="alert.id" :class="['alert', alert.category]" role="alert">
-                <p>{{alert.isDismissable}}</p>
                 <button v-if="alert.isDismissable===true" v-on:click="closeAlert('closed', $event)" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

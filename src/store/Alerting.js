@@ -55,6 +55,8 @@ export default {
          * @returns {void}
          */
         addAlert ({commit}, alert) {
+            console.log("add");
+            
             const newAlert = {
                 id: _.uniqueId("alert_"),
                 message: "",

@@ -1,18 +1,15 @@
 <template>
   <div id="app">
-    <FooBar msg="Welcome to Your Vue.js App"/>
     <Alerting/>
   </div>
 </template>
 
 <script>
-import FooBar from './components/FooBar.vue'
 import Alerting from './components/Alerting.vue'
 
 export default {
   name: 'app',
   components: {
-    FooBar,
     Alerting
   }
 }
