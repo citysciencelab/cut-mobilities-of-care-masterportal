@@ -3,39 +3,39 @@ const replace = require("replace-in-file"),
     rootPath = path.resolve(__dirname, "../../"),
     stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
 
-var replacements = [];
-
 module.exports = function (destination) {
-    replacements.push({
-        "files": destination + "/index.html",
-        "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
-        "to": "../mastercode/" + stableVersionNumber + "/img/ajax-loader.gif"
-    },
-    {
-        "files": destination + "/index.html",
-        "from": /\/*(\.+\/)*build/g,
-        "to": "../mastercode/" + stableVersionNumber
-    },
-    {
-        "files": destination + "/css/style.css",
-        "from": /css\/woffs/g,
-        "to": "./woffs"
-    },
-    {
-        "files": destination + "/css/style.css",
-        "from": /url\s?\(\s?"\/img\//g,
-        "to": "url(\"../img/"
-    },
-    {
-        "files": destination + "/css/style.css",
-        "from": /url\s?\(\s?'\/img\//g,
-        "to": "url('../img/"
-    },
-    {
-        "files": destination + "/css/style.css",
-        "from": /url\s?\(\s?\/img\//g,
-        "to": "url(../img/"
-    });
+    const replacements = [
+        {
+            "files": destination + "/index.html",
+            "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
+            "to": "../mastercode/" + stableVersionNumber + "/img/ajax-loader.gif"
+        },
+        {
+            "files": destination + "/index.html",
+            "from": /\/*(\.+\/)*build/g,
+            "to": "../mastercode/" + stableVersionNumber
+        },
+        {
+            "files": destination + "/css/style.css",
+            "from": /css\/woffs/g,
+            "to": "./woffs"
+        },
+        {
+            "files": destination + "/css/style.css",
+            "from": /url\s?\(\s?"\/img\//g,
+            "to": "url(\"../img/"
+        },
+        {
+            "files": destination + "/css/style.css",
+            "from": /url\s?\(\s?'\/img\//g,
+            "to": "url('../img/"
+        },
+        {
+            "files": destination + "/css/style.css",
+            "from": /url\s?\(\s?\/img\//g,
+            "to": "url(../img/"
+        }
+    ];
 
     replacements.forEach(function (replacement) {
         replace.sync({

@@ -10,6 +10,19 @@ const Config = {
         wfsId: "4560",
         styleId: "location_eventlotse"
     },
+    zoomToGeometry: {
+        layerId: "1692",
+        attribute: "bezirk_name",
+        geometries: [
+            "ALTONA",
+            "HARBURG",
+            "HAMBURG-NORD",
+            "BERGEDORF",
+            "EIMSBÜTTEL",
+            "HAMBURG-MITTE",
+            "WANDSBEK"
+        ]
+    },
     namedProjections: [
         // GK DHDN
         ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -20,6 +33,7 @@ const Config = {
         // WGS84
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ],
+    earthRadius: 6378137,
     footer: {
         urls: [{
             "bezeichnung": "Kartographie und Gestaltung: ",

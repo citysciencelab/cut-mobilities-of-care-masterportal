@@ -70,7 +70,7 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
                 this.addFeature(layer.get("layerSource").getFeatureById(featureId));
             }
             else {
-                this.listenTo(Radio.channel("Layer"), {
+                this.listenTo(Radio.channel("VectorLayer"), {
                     "featuresLoaded": function (loadedLayerId) {
                         if (layerId === loadedLayerId) {
                             this.addFeature(layer.get("layerSource").getFeatureById(featureId));

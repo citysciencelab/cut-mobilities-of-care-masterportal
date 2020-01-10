@@ -74,6 +74,12 @@
  * @description Triggered by Model when new content is available.
  */
 
+ /**
+ * @event Sidebar#setWidth
+ * @param {String} width Width of sidebar.
+ * @description Triggered by Model when sidebar is toggled.
+ */
+
 /**
  * @event Sidebar#RadioTriggerSidebarToggle
  * @param {Boolean} isVisible Flag if sidebar is now visible or not.
@@ -1002,6 +1008,12 @@
  * @description See {@link List#toggleDefaultTool}
  * @example Radio.trigger("ModelList", "toggleDefaultTool")
  */
+
+/**
+* @event Core.ModelList#RadioTriggerModelListRefreshLightTree
+* @description Refreshes the light tree.
+* @example Radio.trigger("ModelList", "refreshLightTree")
+*/
 
 /**
  * @event Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
@@ -2279,8 +2291,13 @@
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**
- * @event Tools.LayerSliderModel#RadioTriggerChangeIsActive
- * @description todo
+ * @event Tools.LayerSlider#changeIsActive
+ * @description Event fired when layer slider model changes its attribute "isActive".
+ */
+
+ /**
+ * @event Tools.LayerSlider#changeActiveLayer
+ * @description Event fired when layer slider model changes its attribute "activeLayer".
  */
 
 /** -------------------- TOOLS.GETCOORD -------------------- */
@@ -2358,4 +2375,16 @@
  /**
  * @event Tools.Download#changeIsActive
  * @description Triggered when the model attribute "isActive" changes.
+ */
+
+/** -------------------- ZOOMTOGEOMETRY -------------------- */
+
+/**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
+ * @description Zooms the map to a geometry from wfs.
+ */
+
+ /**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
+ * @description Todo
  */

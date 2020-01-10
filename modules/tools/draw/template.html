@@ -1,29 +1,55 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
-    <option value="Point">Punkt zeichnen</option>
-    <option value="LineString">Linie zeichnen</option>
-    <option value="Polygon">Fläche zeichnen</option>
-    <option value="Circle">Kreis zeichnen</option>
-    <option value="Point">Text schreiben</option>
+    <% drawTypeOptions.forEach(function (option) { %>
+        <option value="<%= option.value %>"><%= option.caption %></option>
+    <% }); %>
 </select>
 <hr>
 <form class="form-horizontal" role="form">
+    <div class="checkbox"></div>
+    <div class="form-group form-group-sm dropdownMethod">
+        <label class="col-md-5 col-sm-5 control-label">Methode</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm input-method">
+                <option value="interactiv">interaktiv</option>
+                <option value="defined">definiert</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm circleRadiusInner">
+        <label class="col-md-5 col-sm-5 control-label">Durchmesser</label>
+        <div class="col-md-7 col-sm-7">
+            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren" disabled=true/>
+        </div>
+    </div>
+    <div class="form-group form-group-sm circleRadiusOuter">
+        <label class="col-md-5 col-sm-5 control-label">Äußerer Durchmesser</label>
+        <div class="col-md-7 col-sm-7">
+            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren">
+        </div>
+    </div>
+    <div class="form-group form-group-sm dropdownUnit">
+        <label class="col-md-5 col-sm-5 control-label">Einheit</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm" disabled=true>
+                <option value="m">m</option>
+                <option value="km">km</option>
+            </select>
+        </div>
+    </div>
     <div class="form-group form-group-sm text">
         <label class="col-md-5 col-sm-5 control-label">Text</label>
         <div class="col-md-7 col-sm-7">
-            <input type="text" class="form-control" placeholder="Klicken Sie auf die Karte um den Text zu platzieren">
+            <input type="text" class="form-control" placeholder="Klicken Sie auf die Karte um den Text zu platzieren"/>
         </div>
     </div>
     <div class="form-group form-group-sm font-size">
         <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="10">10 px</option>
-                <option value="12">12 px</option>
-                <option value="16">16 px</option>
-                <option value="20">20 px</option>
-                <option value="24">24 px</option>
-                <option value="32">32 px</option>
+                <% fontSizeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
@@ -31,9 +57,9 @@
         <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="Arial">Arial</option>
-                <option value="Calibri">Calibri</option>
-                <option value="Times New Roman">Times New Roman</option>
+                <% fontOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
@@ -41,12 +67,9 @@
         <label class="col-md-5 col-sm-5 control-label">Größe</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="6">6 px</option>
-                <option value="8">8 px</option>
-                <option value="10">10 px</option>
-                <option value="12">12 px</option>
-                <option value="14">14 px</option>
-                <option value="16">16 px</option>
+                <% strokeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
@@ -54,12 +77,9 @@
         <label class="col-md-5 col-sm-5 control-label">Strichstärke</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="1">1 px</option>
-                <option value="2">2 px</option>
-                <option value="3">3 px</option>
-                <option value="4">4 px</option>
-                <option value="5">5 px</option>
-                <option value="6">6 px</option>
+                <% strokeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
@@ -67,32 +87,42 @@
         <label class="col-md-5 col-sm-5 control-label">Transparenz</label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="1.0">0 %</option>
-                <option value="0.9">10 %</option>
-                <option value="0.8">20 %</option>
-                <option value="0.7">30 %</option>
-                <option value="0.6">40 %</option>
-                <option value="0.5">50 %</option>
-                <option value="0.4">60 %</option>
-                <option value="0.3">70 %</option>
-                <option value="0.2">80 %</option>
-                <option value="0.1">90 %</option>
+                    <% transparencyOptions.forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm opacityContour">
+        <label class="col-md-5 col-sm-5 control-label">Transparenz Umriss</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                    <% transparencyOptions.slice(0, transparencyOptions.length - 1).forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm colorContour">
+        <label class="col-md-5 col-sm-5 control-label">Umrissfarbe</label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm colorContour">
+                <option value="<%= colorOptions[1].value %>"><%= colorOptions[1].caption %></option>
+                <option value="<%= colorOptions[0].value %>"><%= colorOptions[0].caption %></option>
+                <% colorOptions.slice(2).forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-horizontal" role="form">
         <div class="form-group form-group-sm color">
-            <label class="col-md-5 col-sm-5 control-label">Farbe</label>
+            <label class="col-md-5 col-sm-5 control-label">Füllfarbe</label>
             <div class="col-md-7 col-sm-7">
-                <select class="form-control input-sm">
-                    <option value="55, 126, 184">Blau</option>
-                    <option value="255, 255, 51">Gelb</option>
-                    <option value="153, 153, 153">Grau</option>
-                    <option value="77, 175, 74">Grün</option>
-                    <option value="255, 127, 0">Orange</option>
-                    <option value="228, 26, 28">Rot</option>
-                    <option value="0, 0, 0">Schwarz</option>
-                    <option value="255, 255, 255">Weiß</option>
+                <select class="form-control input-sm colorFill">
+                    <% colorOptions.forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
                 </select>
             </div>
         </div>
