@@ -579,6 +579,12 @@
  * @description GFI Theme for SolarAtlas
  */
 
+ /**
+ * @namespace Sensor
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for Sensordata
+ */
+
 /**
  * @namespace Table
  * @memberof Tools.GFI.Themes
