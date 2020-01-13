@@ -5,7 +5,8 @@ export default {
         isDismissable: true,
         isConfirmable: false,
         position: "top-center",
-        fadeOut: null
+        fadeOut: null,
+        uuid: ""
     },
 
     mutations: {
@@ -23,6 +24,16 @@ export default {
             if (findAlert === undefined) {
                 state.alerts.push(newAlert);
             }
+        },
+
+        /**
+         * Adds a uuid to vuex store.
+         * @param {object} state  - vuex store
+         * @param {string} uuid The uuid
+         * @returns {void}
+         */
+        addUUid (state, uuid) {
+            state.uuid = uuid;
         },
 
         /**
@@ -49,20 +60,39 @@ export default {
 
     actions: {
         /**
+         * Creates an UUID with prefix.
+         * @param {string} [namespace=""] The prefix.
+         * @returns {string} UUID with prefix
+         */
+        createUuidv4 ({commit}, namespace = "") {
+            const uuid = namespace + "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+                const r = Math.random() * 16 | 0,
+                    v = c === "x" ? r : r & 0x3 | 0x8;
+
+                return v.toString(16);
+            });
+
+            commit("addUUid", uuid);
+        },
+
+        /**
          * Adds an alert to store.
          * @param {ActionContext} param0 - context passed by vuex
          * @param {string} alert - message to alert
+         * @param {string} uuid - uuid for alert
          * @returns {void}
          */
         addAlert ({commit}, alert) {
             const newAlert = {
-                id: _.uniqueId("alert_"),
-                message: "",
+                message: this.state,
                 category: this.state.Alerting.category,
                 isDismissable: this.state.Alerting.isDismissable,
                 isConfirmable: this.state.Alerting.isConfirmable
             };
 
+            this.dispatch("createUuidv4", "alert_");
+
+            newAlert.id = this.state.Alerting.uuid;
 
             if (typeof alert === "string") {
                 newAlert.message = alert;
