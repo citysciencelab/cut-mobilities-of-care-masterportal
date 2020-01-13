@@ -333,6 +333,7 @@ Beispiel gfiAttributes als Objekt
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"lokale GeoJSON"`|
 |typ|ja|String||Diensttyp, in diesem Fall GeoJSON |`"GeoJSON"`|
+|subTyp|nein|enum["OpenSenseMap]||SubTyp um spezielle Daten nachzuladen. |`"OpenSenseMap"`|
 |url|ja|String||Pfad/URL zur GeoJSON. Der Pfad ist relativ zur index.html|`"/myJsons/test.json"`|
 
 **Beispiel GeoJSON:**
