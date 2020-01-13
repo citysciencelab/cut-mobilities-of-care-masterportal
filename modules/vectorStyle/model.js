@@ -375,6 +375,30 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
+     * special handling of min/max-range values for the use of ranges in styleFieldValue
+     * checkes if rangeAttribute exists and is an instant number or a key for a fieldValue
+     * @param {ol/feature} feature Feature to relay on
+     * @param {*} rangeAttribute the rangeAttribute (maxRangeAttribute, minRangeAttribute) from the config
+     * @param {*} defaultValue the to use default value if rangeAttribute seems to be absent
+     * @returns {Number}  the range value to go with
+     */
+    getRangeValueFromRangeAttribute: function (feature, rangeAttribute, defaultValue) {
+        if (rangeAttribute !== undefined) {
+            // handle rangeAttribute to get the result if necessary
+            if (isNaN(rangeAttribute)) {
+                // if rangeAttribute is not a number, rangeAttribute is the identifier for the attribute field used for the max number
+                return feature && typeof feature.get === "function" && feature.get(rangeAttribute) !== undefined ? feature.get(rangeAttribute) : defaultValue;
+            }
+
+            // if rangeAttribute is just a number: use rangeAttribute as result
+            return rangeAttribute;
+        }
+
+        // default for rangeMax is false (no maximum value given)
+        return defaultValue;
+    },
+
+    /**
      * Created a custom polygon style.
      * @param {ol/feature} feature Feature to be styled.
      * @returns {ol/style} - The created style.
@@ -382,8 +406,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     createCustomPolygonStyle: function (feature) {
         const maxRangeAttribute = this.get("maxRangeAttribute"),
             minRangeAttribute = this.get("minRangeAttribute"),
-            rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) !== undefined ? feature.get(maxRangeAttribute) : false,
-            rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
+            rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
+            rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
         let styleField = this.get("styleField"),
             featureKeys = [],
             styleFieldValueObj,
@@ -594,12 +618,12 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     */
     createCustomPointStyle: function (feature, isClustered) {
         const maxRangeAttribute = this.get("maxRangeAttribute"),
-            minRangeAttribute = this.get("minRangeAttribute");
+            minRangeAttribute = this.get("minRangeAttribute"),
+            rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
+            rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
         let styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
-            rangeMax,
-            rangeMin,
             styleFieldValueObj,
             src,
             isSVG,
@@ -624,11 +648,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else {
             featureValue = feature.get("features") !== undefined ? feature.get("features")[0].get(styleField) : feature.get(styleField);
-
-            // rangeMax is set to false if no maxRangeAttribute is given
-            rangeMax = maxRangeAttribute && feature.get(maxRangeAttribute) ? feature.get(maxRangeAttribute) : false;
-            // rangeMin is set to 0 if no minRangeAttribute is given
-            rangeMin = minRangeAttribute && feature.get(minRangeAttribute) ? feature.get(minRangeAttribute) : 0;
 
             if (featureValue !== undefined) {
                 styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {

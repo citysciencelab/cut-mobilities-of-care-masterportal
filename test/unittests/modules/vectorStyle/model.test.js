@@ -265,6 +265,63 @@ describe("vectorStyle", function () {
             });
         });
 
+        describe("getRangeValueFromRangeAttribute", function () {
+            const testFeatureForRangeValue = {
+                get: function (key) {
+                    if (key === "foo") {
+                        return 100;
+                    }
+                    else if (key === "1") {
+                        return "this should never happen";
+                    }
+                    else if (key === 1) {
+                        return "and this should also never happen";
+                    }
+                    return undefined;
+                }
+            };
+
+            it("should return the value of rangeAttribute as key of the given feature if rangeAttribute is no Number", function () {
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "foo", null)).to.equal(100);
+            });
+            it("should return the default value if rangeAttribute is not a number and not a feature key", function () {
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "bar", "baz")).to.equal("baz");
+            });
+            it("should return the given rangeAttribute if rangeAttribute is a Number - even if no feature is given", function () {
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, 1, null)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, "1", null)).to.equal("1");
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, false, 1)).to.equal(false);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, true, 1)).to.equal(true);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, null, 1)).to.equal(null);
+            });
+            it("should return the given default value if an undefined rangeAttribute is given - even if no feature is given", function () {
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, undefined, 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, undefined, "bar")).to.equal("bar");
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, undefined, {bar: "baz"})).to.deep.equal({bar: "baz"});
+            });
+
+            it("should handle a rangeAttribute of the type Number always as max value, never as key of the feature", function () {
+                // see testFeatureForRangeValue and its reaction to the key "1"
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, 1, null)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "1", null)).to.equal("1");
+            });
+            it("should return the default value if anything unexpected is given", function () {
+                expect(vectorStyle.getRangeValueFromRangeAttribute(null, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(undefined, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(false, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(true, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute("bar", "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(123456, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute([1, 2, 3], "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute({}, "foo", 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute({get: "bar"}, "foo", 1)).to.equal(1);
+
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, undefined, 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, [1, 2, 3], 1)).to.equal(1);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, {}, 1)).to.equal(1);
+            });
+        });
+
         describe("isFeatureValueInStyleFieldRange", function () {
             it("should check wheather or not an absolute value is in a given absolute range [x..y[", function () {
                 expect(vectorStyle.isFeatureValueInStyleFieldRange(0, [0, 1])).to.be.true;
