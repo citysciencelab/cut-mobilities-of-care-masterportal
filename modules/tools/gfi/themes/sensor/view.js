@@ -8,7 +8,7 @@ const SensorThemeView = ThemeView.extend(/** @lends SensorThemeView.prototype */
     * @constructs
     */
     tagName: "div",
-    className: "sensor",
+    id: "gfi-theme-sensor",
     /**
      * @member SensorTemplate
      * @description Template used to create the sensor gfi.
