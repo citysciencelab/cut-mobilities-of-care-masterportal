@@ -2069,19 +2069,6 @@
  * @description todo
  */
 
-
-/** -------------------- Tools.Einwohnerabfrage_hh -------------------- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#ChangeIsActive
- * @description starts render function if this change is active
- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#RenderResult
- * @description render the resultView
- */
-
 /** -------------------- WPS -------------------- */
 
 /**

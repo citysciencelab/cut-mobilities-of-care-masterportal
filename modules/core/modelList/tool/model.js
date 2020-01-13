@@ -14,7 +14,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
-        toolsToRenderInSidebar: ["filter", "schulwegrouting"]
+        toolsToRenderInSidebar: ["filter"]
     },
     /**
      * @class Tool
@@ -34,7 +34,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {String[]} supportedOnlyIn3d=["shadow"] Array of tool ids that are only supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
      * @property {String[]} supportedInOblique=[] Array of tool ids that are only supported in oblique mode
-     * @property {String[]} toolsToRenderInSidebar=["filter", "schulwegrouting"] Array of tool ids that are rendered in sidebar
+     * @property {String[]} toolsToRenderInSidebar=["filter"] Array of tool ids that are rendered in sidebar
      * @fires Core.ModelList.Tool#changeIsActive
      * @fires Window#RadioTriggerWindowShowTool
      * @fires Window#RadioTriggerWindowSetIsVisible
