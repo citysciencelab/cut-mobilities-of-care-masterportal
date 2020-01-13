@@ -359,6 +359,30 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
+     * special handling of min/max-range values for the use of ranges in styleFieldValue
+     * checkes if rangeAttribute exists and is an instant number or a key for a fieldValue
+     * @param {ol/feature} feature Feature to relay on
+     * @param {*} rangeAttribute the rangeAttribute (maxRangeAttribute, minRangeAttribute) from the config
+     * @param {*} defaultValue the to use default value if rangeAttribute seems to be absent
+     * @returns {Number}  the range value to go with
+     */
+    getRangeValueFromRangeAttribute: function (feature, rangeAttribute, defaultValue) {
+        if (rangeAttribute !== undefined) {
+            // handle rangeAttribute to get the result if necessary
+            if (isNaN(rangeAttribute)) {
+                // if rangeAttribute is not a number, rangeAttribute is the identifier for the attribute field used for the max number
+                return feature && typeof feature.get === "function" && feature.get(rangeAttribute) !== undefined ? feature.get(rangeAttribute) : defaultValue;
+            }
+
+            // if rangeAttribute is just a number: use rangeAttribute as result
+            return rangeAttribute;
+        }
+
+        // default for rangeMax is false (no maximum value given)
+        return defaultValue;
+    },
+
+    /**
      * Created a custom polygon style.
      * @param {ol/feature} feature Feature to be styled.
      * @returns {ol/style} - The created style.
@@ -586,8 +610,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         let styleField = this.get("styleField"),
             featureKeys = [],
             featureValue,
-            rangeMax,
-            rangeMin,
             styleFieldValueObj,
             src,
             isSVG,
