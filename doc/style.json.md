@@ -368,9 +368,9 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "anzahl",
-  "minRangeAttribute": "anzahlMin",
-  "maxRangeAttribute": "anzahlMax",
+  "styleField": "Temperatur",
+  "maxRangeAttribute": 300,
+  "minRangeAttribute": -274,
   "styleFieldValues": [
     {
       "styleFieldValue": [null, 0.2],
