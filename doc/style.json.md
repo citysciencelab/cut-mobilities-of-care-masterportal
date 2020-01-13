@@ -47,7 +47,7 @@ Wird in der **[config.json](config.json.md)** in der Layerconfiguration der Para
 #### STYLE FIELD ####
 Das styleField kann entweder ein String sein. Dann wird direkt der Wert verwendet, der sich hinter diesem Attribut des Features befindet.
 Das styleField kann jedoch auch ein Objekt sein. Dann gelten folgende Parameter.
-Es darf nur ein einziges Attribut gefunden werden, das dem "name" und der "condition" entspricht. 
+Es darf nur ein einziges Attribut gefunden werden, das dem "name" und der "condition" entspricht.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -307,52 +307,52 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "anzahl",
+  "styleField": "Temperatur",
   "styleFieldValues": [
     {
-      "styleFieldValue": [null, 1],
+      "styleFieldValue": [null, 0],
       "polygonFillColor": [0, 0, 0, 0.3],
-      "legendValue": "keine oder zu geringe Fallzahlen"
+      "legendValue": "eiskalt"
     },
     {
-      "styleFieldValue": [1, 130],
+      "styleFieldValue": [0, 10],
       "polygonFillColor": [238, 240, 149, 0.7],
-      "legendValue": "unter 130"
+      "legendValue": "frisch"
     },
     {
-      "styleFieldValue": [130, 400],
+      "styleFieldValue": [10, 20],
       "polygonFillColor": [176, 211, 96, 0.7],
-      "legendValue": "130 bis unter 400"
+      "legendValue": "frühlinghaft"
     },
     {
-      "styleFieldValue": [400, 600],
+      "styleFieldValue": [20, 30],
       "polygonFillColor": [109, 173, 68, 0.7],
-      "legendValue": "400 bis unter 600"
+      "legendValue": "schönster Altweibersommer"
     },
     {
-      "styleFieldValue": [600, 1100],
+      "styleFieldValue": [30, 40],
       "polygonFillColor": [66, 130, 26, 0.7],
-      "legendValue": "600 bis unter 1100"
+      "legendValue": "Strandwetter"
     },
     {
-      "styleFieldValue": [1100, null],
+      "styleFieldValue": [40, null],
       "polygonFillColor": [0, 90, 0, 0.7],
-      "legendValue": "1100 und mehr"
+      "legendValue": "zu heiß"
     }
   ]
 }
 ```
 
 #### styleFieldValue als relative Range ####
-Um relative Ranges für absolute Feature-Attribute verwenden zu können (z.B. für Prozentwerte), muss das Attribut des Features in Bezug zu 100% gesetzt werden. Dies passiert automatisch immer dann, wenn im Layerobjekt zusätzlich der Wert *maxRangeAttribute* mit einem String-Attributwert auf einen maximal anzunehmenden Wert für das Attribut des Features mit angegeben wird (default: false).
-Um auch negative Zahlen mit aufzunehmen, wird im Layerobjekt das zusätzliche Feld *minRangeAttribute* mit einem String-Attributwert für den minimal anzunehmenden Wert (default: 0) mit angegeben.
+Um relative Ranges für absolute Feature-Attribute verwenden zu können (z.B. für Prozentwerte), muss das Attribut des Features in Bezug zu 100% gesetzt werden. Dies passiert automatisch immer dann, wenn im Layerobjekt zusätzlich der Wert *maxRangeAttribute* mit einer Number für den maximal anzunehmenden wert gesetzt oder mit einem String-Attributwert auf einen maximal anzunehmenden Wert für das Attribut des Features angegeben wird (default: false).
+Um auch negative Zahlen mit aufzunehmen, wird im Layerobjekt das zusätzliche Feld *minRangeAttribute* mit einem Number- bzw. String-Attributwert für den minimal anzunehmenden Wert (default: 0) mit angegeben.
 
 (!) Für ein Array[x, y] wird immer die Range [x..y[ angenommen (d.h. immer inklusive x und exklusive y).
 (!) Wird für x bzw. y der Wert null eingesetzt, wird hierfür Minus bzw. Plus Unendlich angenommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|maxRangeAttribute|nein|String|false|Attribut des Features, nach dessen Wert der Maximal-Wert für eine relative Range angenommen wird.|
+|maxRangeAttribute|nein|String/Number|false|wenn ein String: Attribut des Features, nach dessen Wert der Maximal-Wert für eine relative Range angenommen wird; wenn vom Typ Number: der Maximal-Wert der angenommen wird.|
 |minRangeAttribute|nein|String|0|Attribut des Features, nach dessen Wert der Minimal-Wert für eine relative Range angenommen wird.|
 
 Beispiele:
@@ -368,34 +368,34 @@ Config-Beispiel:
   "subClass":"CUSTOM",
   "polygonStrokeColor": [255, 255, 255, 1],
   "polygonStrokeWidth": 2,
-  "styleField": "anzahl",
-  "minRangeAttribute": "anzahlMin",
-  "maxRangeAttribute": "anzahlMax",
+  "styleField": "Temperatur",
+  "maxRangeAttribute": 300,
+  "minRangeAttribute": -274,
   "styleFieldValues": [
     {
-      "styleFieldValue": [0, 0.2],
+      "styleFieldValue": [null, 0.2],
       "polygonFillColor": [238, 240, 149, 0.7],
-      "legendValue": "unter 20%"
+      "legendValue": "nahe dem absoluten Nullpunkt"
     },
     {
       "styleFieldValue": [0.2, 0.4],
       "polygonFillColor": [176, 211, 96, 0.7],
-      "legendValue": "20% bis unter 40%"
+      "legendValue": "extrem kalt"
     },
     {
       "styleFieldValue": [0.4, 0.6],
       "polygonFillColor": [109, 173, 68, 0.7],
-      "legendValue": "40% bis unter 60%"
+      "legendValue": "lebensfreundlich"
     },
     {
       "styleFieldValue": [0.6, 0.8],
       "polygonFillColor": [66, 130, 26, 0.7],
-      "legendValue": "60% bis unter 80%"
+      "legendValue": "zu heiß"
     },
     {
       "styleFieldValue": [0.8, null],
       "polygonFillColor": [0, 90, 0, 0.7],
-      "legendValue": "80% und mehr"
+      "legendValue": "viel zu heiß"
     }
   ]
 }
