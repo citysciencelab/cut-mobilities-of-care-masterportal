@@ -394,7 +394,7 @@
  */
 
 /**
- * @namespace Einwohnerabfrage_hh
+ * @namespace Einwohnerabfrage
  * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
@@ -663,12 +663,6 @@
  * @namespace SaveSelection
  * @memberof Tools
  * @description Creates a parametric URL representing the current map state.
- */
-
-/**
- * @namespace SchulwegRouting_HH
- * @memberof Tools
- * @description Routing for school children based on Hamburg ATKIS data.
  */
 
 /**

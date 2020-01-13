@@ -141,11 +141,6 @@
           }
         }
       },
-      "schulwegrouting": {
-        "name": "Schulweg-Routing",
-        "glyphicon": "glyphicon-filter",
-        "layerId": "8712"
-      },
       "filter":
       {
         "name": "Filter",

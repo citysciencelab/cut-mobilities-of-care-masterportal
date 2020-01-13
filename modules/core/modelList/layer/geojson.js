@@ -23,6 +23,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires RemoteInterface#RadioTriggerPostMessage
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
@@ -286,20 +287,24 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * Filters the visibility of features by ids
-     * @param  {string[]} featureIdList Liste der FeatureIds
+     * Filters the visibility of features by ids.
+     * @param  {String[]} featureIdList Feature ids to be shown.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @return {void}
      */
     showFeaturesByIds: function (featureIdList) {
+        const features = [];
+
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
+                features.push(feature);
             }
-
         }, this);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 
     /**

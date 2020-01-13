@@ -48,7 +48,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
-import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
@@ -201,10 +200,6 @@ function loadApp () {
             }
             case "filter": {
                 new FilterView({model: tool});
-                break;
-            }
-            case "schulwegrouting": {
-                new SchulwegRoutingView({model: tool});
                 break;
             }
             case "coord": {
