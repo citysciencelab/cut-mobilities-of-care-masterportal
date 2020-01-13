@@ -142,13 +142,13 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 |----|-------------|---|-------|------------|--------|
 |epsg|nein|String|"EPSG:4326"|Koordinatensystem der SensorThings-API|`"EPSG:4326"`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|**[gfiTheme](#markdown-header-gfi_theme)**|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |id|ja|String||Frei wählbare Layer-ID|`"999999"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|[urlParameter](#markdown-header-sensor-layer)|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
+|**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |mergeThingsByCoordinates|nein|Boolean|false|Gibt an ob Things mit gleicher Coordinate zusammenfasst werden sollen.|`true`|
@@ -188,7 +188,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 ```
 
 
-## Sensor-Layer.urlParameter ##
+## url_Parameter ##
 
 Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
 
@@ -237,6 +237,42 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |kategorie_opendata|nein|String||Opendata-Kategorie aus der Codeliste von govdata.de|
 |kategorie_inspire|nein|String||Inspire-Kategorie aus der Inspire-Codeliste wenn vorhanden, wenn nicht vorhanden *„nicht Inspire-identifiziert“*|
 |kategorie_organisation|nein|String||Organisationsname der datenhaltenden Stelle|
+
+## gfi_theme ##
+
+Das Attribut "gfiTheme" kann entweder als String angegeben werden oder als Objekt.
+Wird es als String angegeben, so wird das entsprechende Template verwendet.
+
+Wird es als Objekt verwendet, so gelten folgende Parameter.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name des gfi Templates.|
+|**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
+
+Beispiel gfiTheme für das template "sensor"
+```
+#!json
+"gfiTheme": {
+   "name": "sensor",
+   "params": {
+         "grafana": true
+   }
+}
+```
+## gfi_theme_params ##
+Hier werden die Parameter für die GFI-Templates definiert.
+
+|Name|params|
+|----|------|
+|sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
+
+## gfi_theme_sensor_params ##
+Hier werden die Parameter für das GFI-Template "sensor" definiert.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit "grafana_url" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
 
 ## gfi_attributes ##
 Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:
@@ -303,6 +339,7 @@ Beispiel gfiAttributes als Objekt
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"lokale GeoJSON"`|
 |typ|ja|String||Diensttyp, in diesem Fall GeoJSON |`"GeoJSON"`|
+|subTyp|nein|enum["OpenSenseMap]||SubTyp um spezielle Daten nachzuladen. |`"OpenSenseMap"`|
 |url|ja|String||Pfad/URL zur GeoJSON. Der Pfad ist relativ zur index.html|`"/myJsons/test.json"`|
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|

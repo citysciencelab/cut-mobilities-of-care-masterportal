@@ -21,6 +21,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {Boolean} showSettings=true Flag if settings selectable.
      * @property {Boolean} isClustered=false Flag if layer is clustered.
      * @property {String[]} allowedVersions=["1.1.0"] Allowed Version of WFS requests.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
@@ -253,10 +254,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
     /**
      * Only shows features that match the given ids.
-     * @param {string[]} featureIdList List of feature ids.
+     * @param {String[]} featureIdList List of feature ids.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @returns {void}
      */
     showFeaturesByIds: function (featureIdList) {
+        const features = [];
+
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id),
@@ -265,7 +269,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             style = this.getStyleAsFunction(this.get("style"));
 
             feature.setStyle(style(feature));
+            features.push(feature);
         }, this);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 
     /**
