@@ -15,7 +15,6 @@ addons/*
 
 bowerupdate.log
 build
-components
 coverage
 
 css/bootstrap.css

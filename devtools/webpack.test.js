@@ -1,5 +1,6 @@
 var webpack = require("webpack"),
-    path = require("path");
+    path = require("path"),
+    VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
@@ -29,6 +30,15 @@ module.exports = {
                 }
             },
             {
+                test: /\.vue$/,
+                loader: "vue-loader",
+                options: {
+                    loaders: {
+                        js: "babel-loader?presets[]=env"
+                    }
+                }
+            },
+            {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 loader: "file-loader",
                 options: {
@@ -53,6 +63,7 @@ module.exports = {
             fs: "fs",
             requestAnimationFrame: "raf"
         }),
+        new VueLoaderPlugin(),
         new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
     ]
 };
