@@ -7,7 +7,8 @@ import {GeoJSON} from "ol/format.js";
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
-        isClustered: false
+        isClustered: false,
+        altitudeMode: "clampToGround"
     }),
 
     /**
@@ -78,7 +79,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
-            altitudeMode: "clampToGround",
+            altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
         }));
 
@@ -190,7 +191,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
         }
-
+        this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
     },
 
