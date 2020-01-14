@@ -35,9 +35,9 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:drawPoint": function () {
+            "change:currentLng": function () {
                 if (this.model.get("isActive") === true) {
-                    this.render(this.model, true);
+                    this.renderAfterLngChanged(this.model, true);
                 }
             }
         });
@@ -74,15 +74,32 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     },
 
     /**
+     * render the tool draw after the language changed
+     * @param {Backbone.model} model - draw model
+     * @param {boolean} isActive - from tool
+     * @return {Backbone.View} DrawView
+     */
+    renderAfterLngChanged: function (model, isActive) {
+        if (isActive && this.model.get("renderToWindow")) {
+            this.renderSurface(model, model.get("lastDrawTypeIndex"));
+        }
+        else {
+            this.removeSurface();
+        }
+        return this;
+    },
+
+    /**
      * render this tool
      * @param {Backbone.model} model - draw model
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renderSurface: function (model) {
+    renderSurface: function (model, lastDrawTypeIndex) {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
-        this.renewSurface();
+        this.renewSurface(lastDrawTypeIndex);
         this.registerListener();
         this.model.toggleInteraction("draw");
     },
@@ -105,40 +122,19 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
 
     /**
      * renews the surface of the drawtool
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renewSurface: function () {
+    renewSurface: function (lastDrawTypeIndex) {
         const element = this.$el.find(".interaction")[0];
 
+        if (lastDrawTypeIndex) {
+            // after lng changed set selectbox to selection before
+            element.selectedIndex = lastDrawTypeIndex;
+        }
         if (element) {
-            // i18n:
-            // switch (element.options[element.selectedIndex].text) {
-            //     case this.model.get("drawPoint"): {
-            //         this.$el.find(".text").hide();
-            //         this.$el.find(".font-size").hide();
-            //         this.$el.find(".font").hide();
-            //         this.$el.find(".radius").show();
-            //         this.$el.find(".stroke-width").hide();
-            //         break;
-            //     }
-            //     case this.model.get("writeText"): {
-            //         this.$el.find(".text").show();
-            //         this.$el.find(".font-size").show();
-            //         this.$el.find(".font").show();
-            //         this.$el.find(".radius").hide();
-            //         this.$el.find(".stroke-width").hide();
-            //         break;
-            //     }
-            //     default: {
-            //         this.$el.find(".text").hide();
-            //         this.$el.find(".font-size").hide();
-            //         this.$el.find(".font").hide();
-            //         this.$el.find(".radius").hide();
-            //         this.$el.find(".stroke-width").show();
-            //         break;
-            //     }
-            switch (element.options[element.selectedIndex].text) {
-                case "Punkt zeichnen": {
+            switch (element.options[element.selectedIndex].id) {
+                case "drawPoint": {
                     this.$el.find(
                         `.text,
                         .font-size,
@@ -158,7 +154,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     ).show();
                     break;
                 }
-                case "Text schreiben": {
+                case "writeText": {
                     this.$el.find(
                         `.radius,
                         .stroke-width,
@@ -178,7 +174,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     ).show();
                     break;
                 }
-                case "Kreis zeichnen": {
+                case "drawCircle": {
                     this.$el.find(
                         `.text,
                         .font-size,
@@ -198,7 +194,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     ).show();
                     break;
                 }
-                case "Doppelkreis zeichnen": {
+                case "drawDoubleCircle": {
                     this.$el.find(
                         `.text,
                         .font-size,
@@ -218,7 +214,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     ).show();
                     break;
                 }
-                case "Linie zeichnen": {
+                case "drawLine": {
                     this.$el.find(
                         `.text,
                         .font.size,
@@ -238,7 +234,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     ).show();
                     break;
                 }
-                case "Fläche zeichnen": {
+                case "drawArea": {
                     this.$el.find(
                         `.text,
                         .font-size,
@@ -276,6 +272,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     break;
                 }
             }
+            this.model.set("lastDrawTypeIndex", element.selectedIndex);
         }
     },
 
@@ -319,7 +316,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         var element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
-        if (selectedElement.text === "Doppelkreis zeichnen") {
+        if (selectedElement.text === this.model.get("drawDoubleCircle")) {
             this.model.enableMethodDefined(false);
         }
         this.model.setDrawType(selectedElement.value, selectedElement.text);
