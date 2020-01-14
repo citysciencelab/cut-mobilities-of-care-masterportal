@@ -6,7 +6,7 @@ export default {
         isConfirmable: false,
         position: "top-center",
         fadeOut: null,
-        uuid: ""
+        uuid: 0
     },
 
     mutations: {
@@ -27,13 +27,12 @@ export default {
         },
 
         /**
-         * Adds a uuid to vuex store.
+         * Update the uuid + 1.
          * @param {object} state  - vuex store
-         * @param {string} uuid The uuid
          * @returns {void}
          */
-        addUUid (state, uuid) {
-            state.uuid = uuid;
+        updateUuid (state) {
+            state.uuid += 1;
         },
 
         /**
@@ -60,22 +59,6 @@ export default {
 
     actions: {
         /**
-         * Creates an UUID with prefix.
-         * @param {string} [namespace=""] The prefix.
-         * @returns {string} UUID with prefix
-         */
-        createUuidv4 ({commit}, namespace = "") {
-            const uuid = namespace + "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-                const r = Math.random() * 16 | 0,
-                    v = c === "x" ? r : r & 0x3 | 0x8;
-
-                return v.toString(16);
-            });
-
-            commit("addUUid", uuid);
-        },
-
-        /**
          * Adds an alert to store.
          * @param {ActionContext} param0 - context passed by vuex
          * @param {string} alert - message to alert
@@ -84,15 +67,12 @@ export default {
          */
         addAlert ({commit}, alert) {
             const newAlert = {
+                id: "alert_" + this.state.Alerting.uuid,
                 message: this.state,
                 category: this.state.Alerting.category,
                 isDismissable: this.state.Alerting.isDismissable,
                 isConfirmable: this.state.Alerting.isConfirmable
             };
-
-            this.dispatch("createUuidv4", "alert_");
-
-            newAlert.id = this.state.Alerting.uuid;
 
             if (typeof alert === "string") {
                 newAlert.message = alert;
@@ -116,6 +96,7 @@ export default {
                 }
             }
 
+            commit("updateUuid");
             commit("addAlert", newAlert);
         },
 
