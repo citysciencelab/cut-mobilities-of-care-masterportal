@@ -385,7 +385,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     getRangeValueFromRangeAttribute: function (feature, rangeAttribute, defaultValue) {
         if (rangeAttribute !== undefined) {
             // handle rangeAttribute to get the result if necessary
-            if (isNaN(rangeAttribute)) {
+            if (isNaN(rangeAttribute) || rangeAttribute === " ") {
                 // if rangeAttribute is not a number, rangeAttribute is the identifier for the attribute field used for the max number
                 return feature && typeof feature.get === "function" && feature.get(rangeAttribute) !== undefined ? feature.get(rangeAttribute) : defaultValue;
             }
@@ -432,7 +432,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                     return false;
                 }
 
-                if (typeof styleFieldValue.styleFieldValue === "string") {
+                if (typeof styleFieldValue.styleFieldValue === "string" && typeof featureValue === "string") {
                     // a normal string is given in styleFieldValue.styleFieldValue
                     return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                 }
@@ -655,7 +655,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                         return false;
                     }
 
-                    if (typeof styleFieldValue.styleFieldValue === "string") {
+                    if (typeof styleFieldValue.styleFieldValue === "string" && typeof featureValue === "string") {
                         // a normal string is given in styleFieldValue.styleFieldValue
                         return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
                     }
