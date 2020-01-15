@@ -310,6 +310,17 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         nameTranslationKey: "common:modules.tools.draw.name",
         ...
 ```
+## Übersetzungen in den addons
+
+
+Die Sprachdateien befinden sich unter ./addons/locales/{language}/additional.json
+
+Eine Übersetzung wird dann wie folgt implementiert:
+```
+i18next.t("additional:modules.tools.example.title"),
+
+```
+
 
 ## Häufige Fehler
 

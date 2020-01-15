@@ -312,6 +312,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         nameTranslationKey: "common:modules.tools.draw.name",
         ...
 ```
+## Translations in addons
+
+
+The language files must be stored under ./addons/locales/{language}/additional.json
+
+A Translation is implemented this way:
+```
+i18next.t("additional:modules.tools.example.title"),
+
+```
 
 ## Common errors
 
