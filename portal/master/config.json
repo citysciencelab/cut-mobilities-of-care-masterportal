@@ -221,7 +221,7 @@
         "glyphicon": "glyphicon-wrench",
         "children": {
           "einwohnerabfrage": {
-            "name": "translate#common:menu.tools.popularFigures",
+            "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false
           },

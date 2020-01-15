@@ -176,6 +176,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         if (typeof setter === "function" && i18next.exists(translationKey)) {
                             setter(subkey, i18next.t(translationKey));
                         }
+                        // handle language-files from addons
+                        else if (typeof setter === "function" && translationKey.indexOf("additional") === 0) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
                     };
                 }
                 else if (subconf.hasOwnProperty("i18nextTranslate") && typeof subconf.i18nextTranslate === "function") {
@@ -197,6 +201,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
                         // translate actual value
                         if (typeof setter === "function" && i18next.exists(translationKey)) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
+                        // handle language-files from addons
+                        else if (typeof setter === "function" && translationKey.indexOf("additional") === 0) {
                             setter(subkey, i18next.t(translationKey));
                         }
                     };

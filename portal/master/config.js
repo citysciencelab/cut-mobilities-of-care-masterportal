@@ -82,7 +82,8 @@ const Config = {
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
-    }
+    },
+    addons:["einwohnerabfrage_hh", "sdpdownload"]
 };
 
 /* eslint-enable no-unused-vars */
