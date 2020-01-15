@@ -1,21 +1,20 @@
-import MapHandlerModel from "./model";
+import MapMarkerModel from "./model";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 
 const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */{
     /**
      * @class MapMarkerView
-     * @description todo
+     * @description The view reacts to the backbone radio and hides or shows the marker.
      * @extends Backbone.View
      * @memberof Core.MapMarker
      * @constructs
-     *
+     * @param {Object} config Config for mapMarker model.
      * @listens MapMarker#RadioTriggerMapMarkerZoomTo
      * @listens MapMarker#RadioTriggerMapMarkerHideMarker
      * @listens MapMarker#RadioTriggerMapMarkerShowMarker
      * @listens MapMarker#RadioTriggerMapMarkerHidePolygon
      * @listens MapMarker#RadioTriggerMapMarkerShowPolygon
      * @listens MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
-     *
      * @fires Addon#RadioRequestAddonGetMarkerPosition
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core#RadioTriggerMapViewSetCenter
@@ -27,14 +26,12 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core#RadioTriggerMapRender
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @fires Core#RadioRequestUtilIsViewMobile
-     *
-     * @returns {void}
      */
-    initialize: function () {
+    initialize: function (config) {
         var markerPosition,
             channel = Radio.channel("MapMarker");
 
-        this.model = new MapHandlerModel();
+        this.model = new MapMarkerModel(config);
 
         channel.on({
             "zoomTo": this.zoomTo,
@@ -53,7 +50,9 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
         }
 
-        this.render();
+        if (this.model.get("type") === "Overlay") {
+            this.render();
+        }
         // For BauInfo: requests addon and askes for marker position to set.
         markerPosition = Radio.request("Addon", "getMarkerPosition");
         if (markerPosition) {
@@ -76,9 +75,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     className: "glyphicon glyphicon-map-marker",
 
     /**
-     * @description Zoom auf Treffer
-     * @param {Object} hit - Treffer der Searchbar
-     *
+     * @description Zooms to hit from searchbar.
+     * @param {Object} hit - hit coming from Searchbar
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core#RadioTriggerMapZoomToExtent
      * @fires Core#RadioTriggerMapViewSetCenter
@@ -87,7 +85,6 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
      * @fires Tools.Filter#RadioTriggerFilterResetFilter
-     *
      * @returns {void}
      */
     zoomTo: function (hit) {
@@ -221,19 +218,38 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
         }
     },
+
     /**
-     * @description Todo
-     * @param {array} coordinate Array of coordinates
-     * @fires Core#RadioTriggerMapRender
+     * Shows the marker depending on the marker type.
+     * @param {Number[]} coordinate The coordinate.
      * @returns {void}
      */
     showMarker: function (coordinate) {
+        const type = this.model.get("type"),
+            marker = this.model.get("marker");
+
         this.hideMarker();
+        if (type === "Overlay") {
+            this.setOverlayPosition(marker, coordinate);
+        }
+        else if (type === "Layer") {
+            this.setLayerFeatureCoords(marker, coordinate);
+        }
+    },
+
+    /**
+     * If the marker is an overlay the position of the overlay is set.
+     * @param {ol/Overlay} marker The marker as an ol/Overlay.
+     * @param {Number[]} coordinate The coordinate.
+     * @fires Core#RadioTriggerMapRender
+     * @returns{void}
+     */
+    setOverlayPosition: function (marker, coordinate) {
         if (coordinate.length === 2) {
-            this.model.get("marker").setPosition(coordinate);
+            marker.setPosition(coordinate);
         }
         else {
-            this.model.get("marker").setPosition([coordinate[0], coordinate[1]]);
+            marker.setPosition([coordinate[0], coordinate[1]]);
         }
         this.$el.show();
         // Re-renders the map to remove a marker that's offset by several pixels.
@@ -241,11 +257,30 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     },
 
     /**
+     * If the marker is an layer, set the coordinates of its first (and single) feature.
+     * @param {ol/VectorLayer} marker The marker as an ol/VectorLayer..
+     * @param {*} coordinate Coordinate.
+     * @returns {void}
+     */
+    setLayerFeatureCoords: function (marker, coordinate) {
+        marker.getSource().getFeatures()[0].getGeometry().setCoordinates(coordinate);
+        marker.setVisible(true);
+    },
+
+    /**
      * @description Hide Map marker
      * @returns {void}
      */
     hideMarker: function () {
-        this.$el.hide();
+        const type = this.model.get("type"),
+            marker = this.model.get("marker");
+
+        if (type === "Overlay") {
+            this.$el.hide();
+        }
+        else if (type === "Layer") {
+            marker.setVisible(false);
+        }
     },
     /**
      * @description Shows Polygon
