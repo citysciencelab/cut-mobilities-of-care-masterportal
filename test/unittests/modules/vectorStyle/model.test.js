@@ -206,6 +206,12 @@ describe("vectorStyle", function () {
                     if (key === "foo") {
                         return 100;
                     }
+                    else if (key === "undefined") {
+                        return 101;
+                    }
+                    else if (key === " ") {
+                        return 102;
+                    }
                     else if (key === "1") {
                         return "this should never happen";
                     }
@@ -216,8 +222,10 @@ describe("vectorStyle", function () {
                 }
             };
 
-            it("should return the value of rangeAttribute as key of the given feature if rangeAttribute is no Number", function () {
+            it("should return the value of rangeAttribute as key of the given feature if rangeAttribute is not a Number", function () {
                 expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "foo", null)).to.equal(100);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "undefined", null)).to.equal(101);
+                expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, " ", null)).to.equal(102);
             });
             it("should return the default value if rangeAttribute is not a number and not a feature key", function () {
                 expect(vectorStyle.getRangeValueFromRangeAttribute(testFeatureForRangeValue, "bar", "baz")).to.equal("baz");
