@@ -141,11 +141,6 @@
           }
         }
       },
-      "schulwegrouting": {
-        "name": "translate#common:menu.wayToSchool",
-        "glyphicon": "glyphicon-filter",
-        "layerId": "8712"
-      },
       "filter":
       {
         "name": "translate#common:menu.filter",

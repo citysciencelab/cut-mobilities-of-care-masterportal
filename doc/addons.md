@@ -14,7 +14,7 @@ Folgende Struktur ist dabei zu beachten:
 
 ## Dateistruktur von Addons ##
 
-1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien einschließlich der **doc.md** Dateien.
+1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die beiden Ordner **doc** und **unittests** mit den jeweiligen **.md** und **.test.js** Dateien.
 
 #### Beispiel entsprechende Ordnerstruktur ####
 ```
@@ -23,13 +23,19 @@ myMasterPortalFolder/
         myAddon1/
             loader.js
             anotherFile.js
-            doc.md
+            doc/
+                config.json.md
+            unittests/
+                model.test.js
             [...]
         myAddon2/
             subFolder/
                 init.js
                 [...]
-            doc.md
+            doc/
+                beschreibung.md
+            unittests/
+                addon.test.js
             anotherFile.js
             [...]
     devtools/
@@ -80,6 +86,13 @@ const exampleAddon = Backbone.Model.extend({
 });
 
 export default exampleAddon;
+```
+Das Model muss folgende properties haben:
+```
+type: "tool",
+id: "exampleId", // muss gleich dem Schlüssel unter tools in der config.json sein
+name: "Example Tool", 
+glyphicon: "glyphicon-example"
 ```
 
 3. Die Addons-Config-Datei erstellen:

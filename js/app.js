@@ -1,4 +1,6 @@
-import Alert from "../modules/alerting/model";
+import Vue from "vue";
+import App from "../src/App.vue";
+import store from "../src/store";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -46,7 +48,6 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
-import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
@@ -79,7 +80,7 @@ import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 
-var sbconfig, controls, controlsView;
+let sbconfig, controls, controlsView;
 
 /**
  * load the configuration of master portal
@@ -87,15 +88,14 @@ var sbconfig, controls, controlsView;
  */
 function loadApp () {
     /* eslint-disable no-undef */
-    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS;
-    /* eslint-disable no-undef */
-
-    // Prepare config for Utils
-    var utilConfig = {},
-        style,
+    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
+        utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        alertingConfig = Config.alerting ? Config.alerting : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        style = Radio.request("Util", "getUiStyle");
+        /* eslint-disable no-undef */
+    let app = {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -117,8 +117,16 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+    Vue.config.productionTip = false;
+    app = new Vue({
+        render: h => h(App),
+        store
+    });
+
+    app.$store.commit("addConfigToStore", Config);
+    app.$mount();
+
     // Core laden
-    new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -193,10 +201,6 @@ function loadApp () {
             }
             case "filter": {
                 new FilterView({model: tool});
-                break;
-            }
-            case "schulwegrouting": {
-                new SchulwegRoutingView({model: tool});
                 break;
             }
             case "coord": {
@@ -305,8 +309,6 @@ function loadApp () {
             }
         }
     });
-
-    style = Radio.request("Util", "getUiStyle");
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -440,7 +442,7 @@ function loadApp () {
         });
     }
 
-    new MapMarkerView();
+    new MapMarkerView(mapMarkerConfig);
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);

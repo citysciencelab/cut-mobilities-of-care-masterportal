@@ -1,5 +1,6 @@
 var webpack = require("webpack"),
-    path = require("path");
+    path = require("path"),
+    VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
@@ -11,8 +12,7 @@ module.exports = {
         alias: {
             "@modules": path.resolve(__dirname, "../modules"),
             "@addons": path.resolve(__dirname, "../addons"),
-            "@testUtil": path.resolve(__dirname, "../test/unittests/Util"),
-            "@portalconfigs": path.resolve(__dirname, "../portalconfigs")
+            "@testUtil": path.resolve(__dirname, "../test/unittests/Util")
         }
     },
     module: {
@@ -27,6 +27,15 @@ module.exports = {
                 options: {
                     presets: ["@babel/preset-env"],
                     plugins: ["@babel/plugin-syntax-dynamic-import"]
+                }
+            },
+            {
+                test: /\.vue$/,
+                loader: "vue-loader",
+                options: {
+                    loaders: {
+                        js: "babel-loader?presets[]=env"
+                    }
                 }
             },
             {
@@ -55,6 +64,7 @@ module.exports = {
             fs: "fs",
             requestAnimationFrame: "raf"
         }),
+        new VueLoaderPlugin(),
         new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
     ]
 };
