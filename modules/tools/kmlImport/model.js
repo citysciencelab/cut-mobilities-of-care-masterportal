@@ -13,7 +13,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
 
         // translations
         fakeButtonText: "",
-        importButtonText: ""
+        importButtonText: "",
         kmlLineColor: "000000",
         kmlLabelColor: "000000",
         kmlPolyColor: "000000"
