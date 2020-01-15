@@ -5,6 +5,7 @@ Dieses Dokument beschreibt, wie mit Sprachen und Übersetzungen im Masterportal 
 Es ist für Anfänger, Fortgeschrittene und Experten gedacht.
 
 Dies sind die Ziele dieses Dokuments:
+
 1. Wie erweitert man Sprachdateien und wie werden neue Sprachen hinzugefügt (Anfänger).
 2. Wie fügst du Sprachen in neue models ein (fortgeschrittene Benutzer).
 3. Wie haben wir es geschafft Übersetzungen und Sprachen zu verwenden (Experten).
@@ -28,7 +29,7 @@ Es werden folgende i18next-Plugins verwendet:
 * [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
 * [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Auslesen der Sprache aus der query Url
 
-i18next sendet mit diesem Radio-Event einen Sprachwechsel: "i18next#RadioTriggerSprachwechsel".
+i18next sendet mit diesem Radio-Event einen Sprachwechsel: "i18next#RadioTriggerLanguageChanged".
 Um i18next im Code zu verwenden, wird es als globale Variable "i18next" oder für Devs von der Browser-Konsole aus mit "Backbone.i18next" bereitgestellt.
 
 
@@ -76,7 +77,7 @@ Die Additional Sprachdatei wird für Addons (ehemalige custom modules) verwendet
 
 ### Custom Sprachdatei - custom.json
 Die Custom Sprachdatei wird für Übersetzungen der Instanzen des MP (das Portal) verwendet.
-
+Es ist noch nicht klar wofür wir diese Datei brauchen, sie entfällt vielleicht.
 
 
 
