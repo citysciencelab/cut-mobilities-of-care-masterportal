@@ -44,7 +44,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |**[remoteInterface](#markdown-header-remoteInterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
-
+|mapMarker|nein|**[mapMarker](#markdown-header-mapMarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
 *********
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -269,10 +269,18 @@ zoomToGeometry: {
 ## alerting ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|category|nein|String|"alert-info"|Bestimmt das Layout des Bootstrap-Alerts. Siehe **[Bootstrap](https://getbootstrap.com/docs/3.3/components/#alerts)**|
-|isDismissable|nein|Boolean|true|Legt fest, ob der Alarm weggeklickt werden kann, indem eine weitere Bootstrap-Class am alert gesetzt wird .|
-|isConfirmable|nein|Boolean|false|Flag ob alert bestätigt werden muss.|
-|position|nein|String|"top-center"|Position des Alerts (Bootstrap-Class)|
-|fadeOut|nein|Integer|null|Milliseconds bis zum automatischen fade-out des alerts|
+|category|nein|String|"alert-info"|Bestimmt das Layout des Bootstrap-Alerts. Siehe **[Bootstrap](https://getbootstrap.com/docs/3.4/components/#alerts)**|
+|fadeOut|nein|Integer|null|Angabe in Millisekunden, in der der Alert verblasst.|
+|isDismissable|nein|Boolean|true|Legt fest, ob der Alert weggeklickt werden kann, indem eine weitere Bootstrap-Class am alert gesetzt wird.|
+|isConfirmable|nein|Boolean|false|Legt fest, ob der Alert mit einem OK-Button bestätigt werden muss.|
+|position|nein|String|"top-center"|Position des Alerts. Mögliche Werte: "top-center", "center-center" und "bottom-center")|
+
+***
+## mapMarker ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|type|nein|enum["Overlay", "Layer"]|"Overlay"|Typ des MapMarkers.|
+|mapMarkerStyleId|nein|String|"mapMarkerStyle"|Style Id des MapMarkers.|
+
 
 >Zurück zur **[Dokumentation Masterportal](doc.md)**.

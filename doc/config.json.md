@@ -198,10 +198,10 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
     "minChars": 3,
     "serviceId": "elastic",
     "queryObject": {
-                        "id": "query",
-                        "params": {
-                            "query_string": "%%searchString%%"
-                        }
+        "id": "query",
+        "params": {
+            "query_string": "%%searchString%%"
+        }
 }
 ```
 
@@ -247,8 +247,8 @@ Konfiguration des Elastic Search Suchdienstes
 |useProxy|nein|Boolean|false|Flag die angibt ob die url vom geproxied werden soll oder nicht.|false|
 
  **Beispiel**
- ```
- #!json
+```
+#!json
 "elasticSearch": {
     "minChars":3,
     "serviceId":"elastic_hh",
@@ -274,6 +274,7 @@ Konfiguration des Elastic Search Suchdienstes
     "hitGlyphicon": "glyphicon-list"
 }
 ```
+
 
 ***
 #### Portalconfig.searchBar.elasticSearch.hitMap
@@ -800,8 +801,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 
-[type:einwohnerabfrage]: # (Portalconfig.menu.tool.einwohnerabfrage)
-
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
@@ -820,8 +819,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:contact]: # (Portalconfig.menu.tool.contact)
 
-[type:schulwegrouting]: # (Portalconfig.menu.tool.schulwegrouting)
-
 [type:filter]: # (Portalconfig.menu.tool.filter)
 
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
@@ -834,7 +831,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|einwohnerabfrage|nein|**[einwohnerabfrage](#markdown-header-portalconfigmenutooleinwohnerabfrage)**||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|true|
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vector-Features.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Flurstückssuche.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
@@ -856,7 +852,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Werkzeug zum Abspielen einer Reihendfolge von Layers.|false|
 |legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||Legende. Stellt die Legende aller sichtbaren Layer dar.|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|false|
-|schulwegrouting|nein|**[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)**||Schulwegrouting.|true|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Neues Filtermodul.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
@@ -994,35 +989,6 @@ Todo
 #!json
 {
     "scale": 2
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.einwohnerabfrage
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
-
-**ACHTUNG: Backend notwendig!**
-
-**Es wird über einen WPS eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeuges im Menu.|false|
-|glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
-|onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
-|populationReqServiceId|ja|String|"2"|In rest-services.[...].js konfigurierte Service-ID|false|
-
-**Beispiel Einwohnerabfrage**
-```
-#!json
-"einwohnerabfrage": {
-    "name": "Einwohneranzahl abfragen",
-    "glyphicon": "glyphicon-wrench",
-    "onlyDesktop": false
 }
 ```
 
@@ -1193,32 +1159,6 @@ Er kann aber auch ein Objekt sein.
 {
     "name": "Grundschulen",
     "matchingMode": "AND"
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.schulwegrouting
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
-
-**ACHTUNG: Backend notwendig!**
-
-**Es wird über einen WPS eine FME-Workbench angesprochen, welche das Routing berechnet.**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|layerId|ja|String||Id des Layers der de Schulen enthält. Dieser Layer muss auch in den **[Themenconfig](#markdown-header-themenconfig)** konfiguriert sein.|false|
-
-**Beispiel**
-```
-#!json
-"schulwegrouting": {
-    "name": "Schulweg-Routing",
-    "glyphicon": "glyphicon-filter",
-    "layerId": "8712"
 }
 ```
 

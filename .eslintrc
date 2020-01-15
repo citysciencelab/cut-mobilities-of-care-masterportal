@@ -18,7 +18,8 @@
         "i18next": true
     },
     "plugins": [
-        "chai-friendly"
+        "chai-friendly",
+        "vue"
     ],
     "parser": "babel-eslint",
     "parserOptions": {

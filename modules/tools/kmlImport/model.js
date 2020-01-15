@@ -14,6 +14,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         // translations
         fakeButtonText: "",
         importButtonText: ""
+        kmlLineColor: "000000",
+        kmlLabelColor: "000000",
+        kmlPolyColor: "000000"
     }),
 
     /**
@@ -119,8 +122,15 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
 
         features.forEach((feature, index) => {
             const drawGeometryType = feature.getGeometry().getType(),
-                fontText = feature.get("name");
+                fontText = feature.get("name"),
+                lineStyle = styleObjects[index].lineStyle.color,
+                labelStyle = styleObjects[index].labelStyle.color,
+                polyStyle = styleObjects[index].polyStyle.color;
             let style;
+
+            styleObjects[index].lineStyle.color = lineStyle === "" ? this.defaults.kmlLineColor : lineStyle;
+            styleObjects[index].labelStyle.color = labelStyle === "" ? this.defaults.kmlLabelColor : labelStyle;
+            styleObjects[index].polyStyle.color = polyStyle === "" ? this.defaults.kmlPolyColor : polyStyle;
 
             if (drawGeometryType === "Point" && fontText !== undefined) {
                 styleObjects[index].labelStyle.color = this.convertHexColorToRgbArray(styleObjects[index].labelStyle.color);
@@ -128,7 +138,6 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
             }
             else {
                 styleObjects[index].lineStyle.color = this.convertHexColorToRgbArray(styleObjects[index].lineStyle.color);
-
                 styleObjects[index].lineStyle.width = Number.isNaN(styleObjects[index].lineStyle.width) ? 1 : styleObjects[index].lineStyle.width;
                 styleObjects[index].polyStyle.color = styleObjects[index].polyStyle.color.length < 6
                     ? styleObjects[index].lineStyle.color : this.convertHexColorToRgbArray(styleObjects[index].polyStyle.color);

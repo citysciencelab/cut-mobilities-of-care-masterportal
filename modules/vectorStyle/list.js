@@ -90,6 +90,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             }
         });
         styleIds.push(this.getStyleIdForZoomToFeature());
+        styleIds.push(this.getStyleIdForMapMarkerPoint());
 
         _.each(tools, function (tool) {
             if (_.has(tool, "styleId")) {
@@ -113,6 +114,19 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
             styleId = Config.zoomToFeature.styleId;
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from MapMarker
+     * @returns {String} - Style id of mapMarker.
+     */
+    getStyleIdForMapMarkerPoint: function () {
+        let styleId;
+
+        if (Config && Config.hasOwnProperty("mapMarker") && Config.mapMarker.hasOwnProperty("mapMarkerStyleId")) {
+            styleId = Config.mapMarker.mapMarkerStyleId;
         }
         return styleId;
     }

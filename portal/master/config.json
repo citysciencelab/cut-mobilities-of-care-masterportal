@@ -141,11 +141,6 @@
           }
         }
       },
-      "schulwegrouting": {
-        "name": "translate#common:menu.wayToSchool",
-        "glyphicon": "glyphicon-filter",
-        "layerId": "8712"
-      },
       "filter":
       {
         "name": "translate#common:menu.filter",
@@ -220,11 +215,14 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
+<<<<<<< HEAD
           "einwohnerabfrage": {
             "name": "translate#common:menu.tools.popularFigures",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false
           },
+=======
+>>>>>>> dev
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
             "glyphicon": "glyphicon-th-list"
