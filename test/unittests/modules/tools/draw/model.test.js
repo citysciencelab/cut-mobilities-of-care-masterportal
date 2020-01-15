@@ -63,7 +63,7 @@ describe("drawModel", function () {
         it("the result should be two instances of draw", function () {
             var drawType = {
                     geometry: "Circle",
-                    text: "Doppelkreis zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawDoubleCircle")
                 },
                 layer = new VectorLayer(),
                 isActive = true,
@@ -75,8 +75,8 @@ describe("drawModel", function () {
             expect(model.get("drawInteraction2") instanceof Draw).to.be.true;
         });
         it("there should only be one drawInteraction", function () {
-            var listOfDrawTypes = [{geometry: "Circle", text: "Kreis zeichnen"}, {geometry: "Point", text: "Punkt zeichnen"},
-                    {geometry: "Text", text: "Text schreiben"}, {geometry: "LineString", text: "Linie zeichnen"}],
+            var listOfDrawTypes = [{geometry: "Circle", text: i18next.t("common:modules.tools.draw.Circle")}, {geometry: "Point", text: i18next.t("common:modules.tools.draw.drawPoint")},
+                    {geometry: "Text", text: i18next.t("common:modules.tools.draw.writeText")}, {geometry: "LineString", text: i18next.t("common:modules.tools.draw.drawLine")}],
                 layer = new VectorLayer(),
                 isActive = true,
                 maxFeatures = "";
@@ -318,12 +318,12 @@ describe("drawModel", function () {
             expect(model.get("methodCircle")).to.be.undefined;
         });
         it("should return 'interactiv'", function () {
-            model.setDrawType("Circle", "Kreis zeichnen");
+            model.setDrawType("Circle", i18next.t("common:modules.tools.draw.drawCircle"));
 
             expect(model.get("methodCircle")).to.deep.equal("interactiv");
         });
         it("should return 'defined'", function () {
-            model.setDrawType("Circle", "Doppelkreis zeichnen");
+            model.setDrawType("Circle", i18next.t("common:modules.tools.draw.drawDoubleCircle"));
 
             expect(model.get("methodCircle")).to.deep.equal("defined");
         });
