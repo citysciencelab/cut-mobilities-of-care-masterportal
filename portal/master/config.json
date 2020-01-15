@@ -215,14 +215,11 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
-<<<<<<< HEAD
           "einwohnerabfrage": {
-            "name": "translate#common:menu.tools.popularFigures",
+            "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false
           },
-=======
->>>>>>> dev
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
             "glyphicon": "glyphicon-th-list"
