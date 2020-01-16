@@ -550,10 +550,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     createCircleSVG: function (style) {
         var svg = "",
             circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
-            circleStrokeOpacity = style.get("circleStrokeColor")[3].toString() || 0,
+            circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
             circleFillColor = style.returnColor(style.get("circleFillColor"), "hex"),
-            circleFillOpacity = style.get("circleFillColor")[3].toString() || 0;
+            circleFillOpacity = style.get("circleFillColor")[3] || 0;
 
         svg += "<svg height='35' width='35'>";
         svg += "<circle cx='17.5' cy='17.5' r='15' stroke='";
@@ -581,7 +581,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         var svg = "",
             strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
-            strokeOpacity = style.get("lineStrokeColor")[3].toString() || 0;
+            strokeOpacity = style.get("lineStrokeColor")[3] || 0;
 
         svg += "<svg height='35' width='35'>";
         svg += "<path d='M 05 30 L 30 05' stroke='";
@@ -606,8 +606,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
             strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
-            fillOpacity = style.get("polygonFillColor")[3].toString() || 0,
-            strokeOpacity = style.get("polygonStrokeColor")[3].toString() || 0;
+            fillOpacity = style.get("polygonFillColor")[3] || 0,
+            strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
 
         svg += "<svg height='35' width='35'>";
         svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
