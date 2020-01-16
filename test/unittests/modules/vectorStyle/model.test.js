@@ -312,6 +312,82 @@ describe("vectorStyle", function () {
                 expect(vectorStyle.isFeatureValueInStyleFieldRange(0, "foo")).to.be.false;
             });
         });
+        describe("getStyleFieldValueObject", function () {
+            it("should return false if no feature, no styleFieldValues or no styleFieldParam as String or Object is given", function () {
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, false, [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject(false, {foo: "bar"}, [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject(false, "baz", [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, {foo: "bar"}, false)).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, "baz", false)).to.be.false;
+            });
+            it("should return null when no feature attribute matches the given styleFieldName", function () {
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "unknown styleFieldName given", [])).to.be.null;
+            });
+            it("should return null when no styleFieldValue matched any entry of given styleFieldValues", function () {
+                let styleFieldValues = [
+                    {styleFieldValue: "baz"},
+                    {styleFieldValue: "qux"},
+                    {styleFieldValue: "foobar"}
+                ];
+
+                features[0].set("foo", "bar");
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.be.null;
+
+                styleFieldValues = [{}, {}, {}];
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.be.null;
+            });
+
+            it("should return the entry of styleFieldValues that matches a given styleFieldValue if both are strings", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: "baz"},
+                        {styleFieldValue: "bar", foobar: 123},
+                        {styleFieldValue: "qux"}
+                    ],
+                    expectedValue = {styleFieldValue: "bar", foobar: 123};
+
+                features[0].set("foo", "bar");
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.deep.equal(expectedValue);
+            });
+            it("should return the entry of styleFieldValues that finds styleFieldValue within its range", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [null, 0]},
+                        {styleFieldValue: [0, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    expectedValue = {styleFieldValue: [0, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.deep.equal(expectedValue);
+            });
+            it("should return the entry of styleFieldValues that finds styleFieldValue within its relative range setup by min and max range values", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [0, 0.5]},
+                        {styleFieldValue: [0.5, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    maxRangeAttribute = 200,
+                    minRangeAttribute = -200,
+                    expectedValue = {styleFieldValue: [0.5, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues, maxRangeAttribute, minRangeAttribute)).to.deep.equal(expectedValue);
+            });
+            it("should return a styleFieldValues entry that has styleFieldValue within its relative range setup by min and max range values found in the feature", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [0, 0.5]},
+                        {styleFieldValue: [0.5, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    maxRangeAttribute = "fooMax",
+                    minRangeAttribute = "fooMin",
+                    expectedValue = {styleFieldValue: [0.5, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                features[0].set("fooMax", 200);
+                features[0].set("fooMin", -200);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues, maxRangeAttribute, minRangeAttribute)).to.deep.equal(expectedValue);
+            });
+        });
 
         describe("POINT CIRCLE", function () {
             it("should return style with default circle values", function () {
@@ -363,6 +439,97 @@ describe("vectorStyle", function () {
                 expect(circleStyleObj).to.deep.equal(expectedValues);
             });
         });
+
+        describe("LINE SIMPLE", function () {
+            it("should return a simple line style", function () {
+                const style = {
+                        class: "LINE",
+                        subClass: "SIMPLE",
+                        lineStrokeColor: [1, 1, 1, 1],
+                        lineStrokeWidth: 1
+                    },
+                    lineModel = new Model(style),
+                    lineStyle = lineModel.createStyle(features[0], false),
+                    circleStyleObj = {},
+                    expectedValues = {
+                        strokeColor: [1, 1, 1, 1],
+                        strokeWidth: 1,
+                        strokeDash: null
+                    };
+
+                circleStyleObj.strokeColor = lineStyle.getStroke().getColor();
+                circleStyleObj.strokeWidth = lineStyle.getStroke().getWidth();
+                circleStyleObj.strokeDash = lineStyle.getStroke().getLineDash();
+
+                expect(circleStyleObj).to.deep.equal(expectedValues);
+            });
+
+            it("should return a simple dashed line style", function () {
+                const style = {
+                        class: "LINE",
+                        subClass: "SIMPLE",
+                        lineStrokeColor: [1, 1, 1, 1],
+                        lineStrokeWidth: 1,
+                        lineStrokeDash: [1, 1]
+                    },
+                    lineModel = new Model(style),
+                    lineStyle = lineModel.createStyle(features[0], false),
+                    circleStyleObj = {},
+                    expectedValues = {
+                        strokeColor: [1, 1, 1, 1],
+                        strokeWidth: 1,
+                        strokeDash: [1, 1]
+                    };
+
+                circleStyleObj.strokeColor = lineStyle.getStroke().getColor();
+                circleStyleObj.strokeWidth = lineStyle.getStroke().getWidth();
+                circleStyleObj.strokeDash = lineStyle.getStroke().getLineDash();
+
+                expect(circleStyleObj).to.deep.equal(expectedValues);
+            });
+
+            it("should return a line style with a specific style selected out of its styleFieldValues", function () {
+                const style = {
+                        class: "LINE",
+                        subClass: "SIMPLE",
+                        lineStrokeColor: [1, 1, 1, 1],
+                        lineStrokeWidth: 1,
+                        lineStrokeDash: [1, 1],
+                        styleField: "foo",
+                        styleFieldValues: [
+                            {
+                                styleFieldValue: "bar",
+                                lineStrokeColor: [2, 2, 2, 1],
+                                lineStrokeWidth: 2,
+                                lineStrokeDash: [2, 2]
+                            },
+                            {
+                                styleFieldValue: "baz",
+                                lineStrokeColor: [3, 3, 3, 1],
+                                lineStrokeWidth: 3,
+                                lineStrokeDash: [3, 3]
+                            }
+                        ]
+                    },
+                    lineModel = new Model(style),
+                    circleStyleObj = {},
+                    expectedValues = {
+                        strokeColor: [2, 2, 2, 1],
+                        strokeWidth: 2,
+                        strokeDash: [2, 2]
+                    };
+                var lineStyle;
+
+                features[0].set("foo", "bar");
+                lineStyle = lineModel.createStyle(features[0], false);
+                circleStyleObj.strokeColor = lineStyle.getStroke().getColor();
+                circleStyleObj.strokeWidth = lineStyle.getStroke().getWidth();
+                circleStyleObj.strokeDash = lineStyle.getStroke().getLineDash();
+
+                expect(circleStyleObj).to.deep.equal(expectedValues);
+            });
+        });
+
         describe("TEXT SIMPLE", function () {
             it("should return simple style with text", function () {
                 var style = {
@@ -562,6 +729,30 @@ describe("vectorStyle", function () {
         });
         it("should return undefined for empty keys", function () {
             expect(model.translateNameFromObject([], "other_k", "contains")).to.be.undefined;
+        });
+        it("should return undefined for unexpected keys", function () {
+            expect(model.translateNameFromObject(undefined, "foo", "bar")).to.be.undefined;
+            expect(model.translateNameFromObject(false, "foo", "bar")).to.be.undefined;
+            expect(model.translateNameFromObject(null, "foo", "bar")).to.be.undefined;
+            expect(model.translateNameFromObject({}, "foo", "bar")).to.be.undefined;
+            expect(model.translateNameFromObject("foo", "foo", "bar")).to.be.undefined;
+            expect(model.translateNameFromObject(123456, "foo", "bar")).to.be.undefined;
+        });
+        it("should return undefined for unexpected name parameter", function () {
+            expect(model.translateNameFromObject([], undefined, "bar")).to.be.undefined;
+            expect(model.translateNameFromObject([], false, "bar")).to.be.undefined;
+            expect(model.translateNameFromObject([], null, "bar")).to.be.undefined;
+            expect(model.translateNameFromObject([], {}, "bar")).to.be.undefined;
+            expect(model.translateNameFromObject([], [], "bar")).to.be.undefined;
+            expect(model.translateNameFromObject([], 123456, "bar")).to.be.undefined;
+        });
+        it("should return undefined for unexpected condition parameter", function () {
+            expect(model.translateNameFromObject([], "foo", undefined)).to.be.undefined;
+            expect(model.translateNameFromObject([], "foo", false)).to.be.undefined;
+            expect(model.translateNameFromObject([], "foo", null)).to.be.undefined;
+            expect(model.translateNameFromObject([], "foo", {})).to.be.undefined;
+            expect(model.translateNameFromObject([], "foo", [])).to.be.undefined;
+            expect(model.translateNameFromObject([], "foo", 123456)).to.be.undefined;
         });
     });
     describe("checkIfMatchesValid", function () {
