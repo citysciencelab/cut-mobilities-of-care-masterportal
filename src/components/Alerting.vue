@@ -27,8 +27,8 @@ export default {
             }
         });
     },
-    mounted() {    
-        document.getElementsByTagName("body")[0].append(this.$el);
+    mounted() {
+        document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
     updated() {
         const that = this;
