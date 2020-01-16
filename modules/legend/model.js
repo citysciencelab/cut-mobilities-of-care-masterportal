@@ -369,7 +369,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         }
         else if (styleClass === "LINE") {
             // Custom Point Styles
-            if (styleSubClass === "CUSTOM") {
+            if (styleFieldValues) {
                 _.each(styleFieldValues, function (styleFieldValue) {
                     const subStyle = style.clone();
 
@@ -580,7 +580,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         var svg = "",
             strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
-            strokeOpacity = style.get("lineStrokeColor")[3] || 0;
+            strokeOpacity = style.get("lineStrokeColor")[3] || 0,
+            strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
 
         svg += "<svg height='35' width='35'>";
         svg += "<path d='M 05 30 L 30 05' stroke='";
@@ -589,6 +590,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         svg += strokeOpacity;
         svg += "' stroke-width='";
         svg += strokeWidth;
+        if (strokeDash) {
+            svg += "' stroke-dasharray='";
+            svg += strokeDash
+        }
         svg += "' fill='none'/>";
         svg += "</svg>";
 

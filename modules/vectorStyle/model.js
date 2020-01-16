@@ -7,6 +7,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         "subClass": "SIMPLE",
         "styleField": "",
         "styleFieldValues": [],
+        "maxRangeAttribute": false,
+        "minRangeAttribute": 0,
         "labelField": "",
         // für subclass SIMPLE
         "imageName": "blank.png",
@@ -62,8 +64,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         // Für Line
         "lineStrokeColor": [0, 0, 0, 1],
         "lineStrokeWidth": 2,
-        // Für SubClass DASH
-        "lineStrokeDash": [0.5, 1],
+        "lineStrokeDash": undefined,
         // Für subClass ADVANCED
         // Für scalingShape CIRCLESEGMENTS
         "circleSegmentsRadius": 10,
@@ -87,70 +88,72 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @memberof VectorStyle
      * @constructs
      * @description Style model to create an open layers vector style for each opbject in style.json.
-     * @param {String} imagePath="" Path to images.
-     * @param {String} class="POINT" Class of style. Matches the geometry
-     * @param {String} subClass="SIMPLE" SubClass of style.
-     * @param {String|Object} styleField="" Attribute name to be styled with. Or object with condition.
-     * @param {Object[]} styleFieldValues=[] Values of attribute name with its style definition.
-     * @param {String} labelField="" Attribute name to create style label.
-     * @param {String} imageName="blank.png" Name of image. Is used with imagePath.
-     * @param {Number} imageWidth=1 Width of image in px.
-     * @param {Number} imageHeight=1 Height of image in px.
-     * @param {Number} imageScale=1 Scale of image.
-     * @param {Number} imageOffsetX=0.5 horizontal offset of image.
-     * @param {Number} imageOffsetY=0.5 vertical offset of image.
-     * @param {String} imageOffsetXUnit="fraction" Unit of horizontal offset of image.
-     * @param {String} imageOffsetYUnit="fraction" Unit of vertical offset of image.
-     * @param {Number} circleRadius=10 Radius of Circle in px.
-     * @param {Number[]} circleFillColor=[0,153,255,1] Fill color of Circle in rgba-format.
-     * @param {Number[]} circleStrokeColor=[0,0,0,1] Stroke color of Circle in rgba-format.
-     * @param {Number} circleStrokeWidth=2 Stroke width of circle.
-     * @param {String} textAlign="center" Alignment of text.
-     * @param {String} textFont="10px sans-serif" Font of text.
-     * @param {Number} textScale=1 Scale of text.
-     * @param {Number} textOffsetX=0 Horizontal offset of text.
-     * @param {Number} textOffsetY=0 Vertical offset of text.
-     * @param {Number[]} textFillColor=[255,255,255,1] Fill color of test in rgba-format.
-     * @param {Number[]} textStrokeColor=[0,0,0,1] Stroke color of text in rgba-format.
-     * @param {Number} textStrokeWidth=3 Stroke width of text.
-     * @param {String} clusterClass="CIRCLE" Class for clustered feature.
-     * @param {Number} clusterCircleRadius=10 Circle radius for clustered feature.
-     * @param {Number[]} clusterCircleFillColor=[0,153,255,1] Fill color of circle for clustered feature in rgba-format.
-     * @param {Number[]} clusterCircleStrokeColor=[0,0,0,1] Stroke color of circle for clustered feature in rgba-format.
-     * @param {Number} clusterCircleStrokeWidth=2 Stroke width of circle for clustered feature.
-     * @param {String} clusterImageName="blank.png" Name of image for clustered feature. Is used with imagePath.
-     * @param {Number} clusterImageWidth=1 Width of image for clustered feature in px.
-     * @param {Number} clusterImageHeight=1 Height of image for clustered feature in px.
-     * @param {Number} clusterImageScale=1 Scale of image for clustered feature.
-     * @param {Number} clusterImageOffsetX=0.5 horizontal offset of image for clustered feature.
-     * @param {Number} clusterImageOffsetY=0.5 vertical offset of image for clustered feature.
-     * @param {String} clusterText="COUNTER" Flag of what text is to be shown.
-     * @param {String} clusterTextAlign="center" Alignment of text for clustered feature.
-     * @param {String} clusterTextFont="10px sans-serif" Font of text for clustered feature.
-     * @param {Number} clusterTextScale=1 Scale of text for clustered feature.
-     * @param {Number} clusterTextOffsetX=0 Horizontal offset of text for clustered feature.
-     * @param {Number} clusterTextOffsetY=0 Vertical offset of text for clustered feature.
-     * @param {Number[]} clusterTextFillColor=[255,255,255,1] Fill color of test in rgba-format for clustered feature.
-     * @param {Number[]} clusterTextStrokeColor=[0,0,0,1] Stroke color of text in rgba-format for clustered feature.
-     * @param {Number} clusterTextStrokeWidth=3 Stroke width of text for clustered feature.
-     * @param {Number[]} polygonFillColor=[255,255,255,1] Fill color of polygon in rgba-format.
-     * @param {Number[]} polygonStrokeColor=[0,0,0,1] Stroke color of polygon in rgba-format.
-     * @param {Number} polygonStrokeWidth=2 Stroke width of polygon.
-     * @param {Number[]} lineStrokeColor=[0,0,0,1] Stroke color of line in rgba-format.
-     * @param {Number} lineStrokeWidth=2 Stroke width of line
-     * @param {Number} lineStrokeDash=[0.5, 1] Stroke width of line
-     * @param {Number} circleSegmentsRadius=10 Radius of circle segments.
-     * @param {Number} circleSegmentsStrokeWidth=4 Stroke width of circle segments.
-     * @param {Number[]} circleSegmentsBackgroundColor=[255,255,255,1] Background color of circle segments in rgba-format.
-     * @param {Number[]} scalingValueDefaultColor=[0,0,0,1] Default color of circle segments in rgba-format.
-     * @param {Number} circleSegmentsGap=10 Gap between the circle segments.
-     * @param {Number} circleBarScalingFactor=1 Scaling factor of circle bar.
-     * @param {Number} circleBarRadius=6 Radius of circle bar.
-     * @param {Number} circleBarLineStroke=5 Line stroke of circle bar.
-     * @param {Number[]} circleBarCircleFillColor=[0,0,0,1] Fill color of circle bar in rgba-format.
-     * @param {Number[]} circleBarCircleStrokeColor=[0,0,0,1] Stroke color of circle bar in rgba-format.
-     * @param {Number} circleBarCircleStrokeWidth=1 Circle stroke width of circle bar.
-     * @param {Number[]} circleBarLineStrokeColor=[0,0,0,1] Line stroke color of circle bar in rgba-format.
+     * @param {String} [imagePath=""] Path to images.
+     * @param {String} [class="POINT"] Class of style. Matches the geometry
+     * @param {String} [subClass="SIMPLE"] SubClass of style.
+     * @param {String|Object} [styleField=""] Attribute name to be styled with. Or object with name or condition.
+     * @param {Object[]} [styleFieldValues=[]] Values of attribute name with its style definition.
+     * @param {String|Number|Boolean} [maxRangeAttribute=false] if String: the features attribute to get the maximum value for a range from; if number: the maximum value in itself; if false: no maximum value, therefore no relative range
+     * @param {String|Number} [minRangeAttribute=0] only taken into effekt if maxRangeAttribute is given; if String: the features attribute to get the minimum value for a range from; if number: the minimum value in itslef;
+     * @param {String} [labelField=""] Attribute name to create style label.
+     * @param {String} [imageName="blank.png"] Name of image. Is used with imagePath.
+     * @param {Number} [imageWidth=1] Width of image in px.
+     * @param {Number} [imageHeight=1] Height of image in px.
+     * @param {Number} [imageScale=1] Scale of image.
+     * @param {Number} [imageOffsetX=0.5] horizontal offset of image.
+     * @param {Number} [imageOffsetY=0.5] vertical offset of image.
+     * @param {String} [imageOffsetXUnit="fraction"] Unit of horizontal offset of image.
+     * @param {String} [imageOffsetYUnit="fraction"] Unit of vertical offset of image.
+     * @param {Number} [circleRadius=10] Radius of Circle in px.
+     * @param {Number[]} [circleFillColor=[0,153,255,1]] Fill color of Circle in rgba-format.
+     * @param {Number[]} [circleStrokeColor=[0,0,0,1]] Stroke color of Circle in rgba-format.
+     * @param {Number} [circleStrokeWidth=2] Stroke width of circle.
+     * @param {String} [textAlign="center"] Alignment of text.
+     * @param {String} [textFont="10px sans-serif"] Font of text.
+     * @param {Number} [textScale=1] Scale of text.
+     * @param {Number} [textOffsetX=0] Horizontal offset of text.
+     * @param {Number} [textOffsetY=0] Vertical offset of text.
+     * @param {Number[]} [textFillColor=[255,255,255,1]] Fill color of test in rgba-format.
+     * @param {Number[]} [textStrokeColor=[0,0,0,1]] Stroke color of text in rgba-format.
+     * @param {Number} [textStrokeWidth=3] Stroke width of text.
+     * @param {String} [clusterClass="CIRCLE"] Class for clustered feature.
+     * @param {Number} [clusterCircleRadius=10] Circle radius for clustered feature.
+     * @param {Number[]} [clusterCircleFillColor=[0,153,255,1]] Fill color of circle for clustered feature in rgba-format.
+     * @param {Number[]} [clusterCircleStrokeColor=[0,0,0,1]] Stroke color of circle for clustered feature in rgba-format.
+     * @param {Number} [clusterCircleStrokeWidth=2] Stroke width of circle for clustered feature.
+     * @param {String} [clusterImageName="blank.png"] Name of image for clustered feature. Is used with imagePath.
+     * @param {Number} [clusterImageWidth=1] Width of image for clustered feature in px.
+     * @param {Number} [clusterImageHeight=1] Height of image for clustered feature in px.
+     * @param {Number} [clusterImageScale=1] Scale of image for clustered feature.
+     * @param {Number} [clusterImageOffsetX=0.5] horizontal offset of image for clustered feature.
+     * @param {Number} [clusterImageOffsetY=0.5] vertical offset of image for clustered feature.
+     * @param {String} [clusterText="COUNTER"] Flag of what text is to be shown.
+     * @param {String} [clusterTextAlign="center"] Alignment of text for clustered feature.
+     * @param {String} [clusterTextFont="10px sans-serif"] Font of text for clustered feature.
+     * @param {Number} [clusterTextScale=1] Scale of text for clustered feature.
+     * @param {Number} [clusterTextOffsetX=0] Horizontal offset of text for clustered feature.
+     * @param {Number} [clusterTextOffsetY=0] Vertical offset of text for clustered feature.
+     * @param {Number[]} [clusterTextFillColor=[255,255,255,1]] Fill color of test in rgba-format for clustered feature.
+     * @param {Number[]} [clusterTextStrokeColor=[0,0,0,1]] Stroke color of text in rgba-format for clustered feature.
+     * @param {Number} [clusterTextStrokeWidth=3] Stroke width of text for clustered feature.
+     * @param {Number[]} [polygonFillColor=[255,255,255,1]] Fill color of polygon in rgba-format.
+     * @param {Number[]} [polygonStrokeColor=[0,0,0,1]] Stroke color of polygon in rgba-format.
+     * @param {Number} [polygonStrokeWidth=2] Stroke width of polygon.
+     * @param {Number[]} [lineStrokeColor=[0,0,0,1]] Stroke color of line in rgba-format.
+     * @param {Number} [lineStrokeWidth=2] Stroke width of line
+     * @param {Number} [lineStrokeDash=undefined] Stroke width of line
+     * @param {Number} [circleSegmentsRadius=10] Radius of circle segments.
+     * @param {Number} [circleSegmentsStrokeWidth=4] Stroke width of circle segments.
+     * @param {Number[]} [circleSegmentsBackgroundColor=[255,255,255,1]] Background color of circle segments in rgba-format.
+     * @param {Number[]} [scalingValueDefaultColor=[0,0,0,1]] Default color of circle segments in rgba-format.
+     * @param {Number} [circleSegmentsGap=10] Gap between the circle segments.
+     * @param {Number} [circleBarScalingFactor=1] Scaling factor of circle bar.
+     * @param {Number} [circleBarRadius=6] Radius of circle bar.
+     * @param {Number} [circleBarLineStroke=5] Line stroke of circle bar.
+     * @param {Number[]} [circleBarCircleFillColor=[0,0,0,1]] Fill color of circle bar in rgba-format.
+     * @param {Number[]} [circleBarCircleStrokeColor=[0,0,0,1]] Stroke color of circle bar in rgba-format.
+     * @param {Number} [circleBarCircleStrokeWidth=1] Circle stroke width of circle bar.
+     * @param {Number[]} [circleBarLineStrokeColor=[0,0,0,1]] Line stroke color of circle bar in rgba-format.
      */
     initialize: function () {
         if (!_.isUndefined(Config.wfsImgPath)) {
@@ -237,10 +240,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         var style = this.getDefaultStyle();
 
         if (styleSubClass === "SIMPLE") {
-            style = this.createSimpleLineStyle();
-        }
-        else if (styleSubClass === "DASH") {
-            style = this.creatDashLineStyle();
+            style = this.createSimpleLineStyle(feature);
         }
 
         return style;
@@ -249,38 +249,21 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     /**
     * Creates a simpleLineStyle.
     * all features get the same style.
+    * @param {ol/feature} feature Feature to be styled.
     * @returns {ol/style} - The created style.
     */
-    createSimpleLineStyle: function () {
-        const strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
-            strokewidth = parseFloat(this.get("lineStrokeWidth"), 10),
-            strokestyle = new Stroke({
-                color: strokecolor,
-                width: strokewidth
+    createSimpleLineStyle: function (feature) {
+        const strokeColor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
+            strokeWidth = parseFloat(this.get("lineStrokeWidth"), 10),
+            strokeDash = this.get("lineStrokeDash"),
+            styleFieldObj = this.getStyleFieldValueObject(feature, this.get("styleField"), this.get("styleFieldValues"), this.get("maxRangeAttribute"), this.get("minRangeAttribute")),
+            strokeStyle = new Stroke({
+                color: styleFieldObj && styleFieldObj.lineStrokeColor ? this.returnColor(styleFieldObj.lineStrokeColor, "rgb") : strokeColor,
+                width: styleFieldObj && styleFieldObj.lineStrokeWidth ? parseFloat(styleFieldObj.lineStrokeWidth, 10) : strokeWidth,
+                lineDash: styleFieldObj && styleFieldObj.lineStrokeDash ? styleFieldObj.lineStrokeDash : strokeDash
             }),
             style = new Style({
-                stroke: strokestyle
-            });
-
-        return style;
-    },
-
-    /**
-     * Creates a dashLineStyle.
-     * all features get the same style.
-     * @returns {ol/style} - The created style.
-     */
-    creatDashLineStyle: function () {
-        const strokecolor = this.returnColor(this.get("lineStrokeColor"), "rgb"),
-            strokewidth = parseFloat(this.get("lineStrokeWidth"), 10),
-            strokeLinedash = this.get("lineStrokeDash"),
-            strokestyle = new Stroke({
-                color: strokecolor,
-                width: strokewidth,
-                lineDash: strokeLinedash
-            }),
-            style = new Style({
-                stroke: strokestyle
+                stroke: strokeStyle
             });
 
         return style;
@@ -327,75 +310,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         });
 
         return style;
-    },
-
-    /**
-     * checks wheather or not featureValue is in the range of styleFieldRange (depending on rangeMax and rangeMin - if given)
-     * @param {Float} featureValue the featureValue to be checked (e.g. 732 cars)
-     * @param {Float[]} styleFieldRange a range as an array [x, y] - x and y should be relative if rangeMax is given, absolute otherwise - x and y can be null for infinite
-     * @param {Integer|Boolean} rangeMax the maximum value to be expected as featureValue gets - if not given styleFieldRange should be absolute
-     * @param {Integer} rangeMin the minimum value to be expected for featureValue - is only taken into account if rangeMax is given
-     * @return {Boolean}  false if featureValue is not in the range - true if featureValue is in the range
-     */
-    isFeatureValueInStyleFieldRange: function (featureValue, styleFieldRange, rangeMax, rangeMin) {
-        const rMax = isNaN(rangeMax) ? false : rangeMax,
-            rMin = isNaN(rangeMin) ? 0 : rangeMin;
-        let value = featureValue;
-
-        if (!Array.isArray(styleFieldRange) || styleFieldRange.length !== 2) {
-            // there is no range - so featureValue can't be in it
-            return false;
-        }
-        else if (isNaN(value) || value === null) {
-            // if featureValue is not a number it can't be in the range
-            // as null stands for infinit, null can't be in any range
-            return false;
-        }
-
-        if (rMax !== false) {
-            // if rMax is set, a relative range is expected: value has to be set to be relative to max-min
-            value = 1 / (parseInt(rMax, 10) - parseInt(rMin, 10)) * (value - parseInt(rMin, 10));
-        }
-
-        if (styleFieldRange[0] === null && styleFieldRange[1] === null) {
-            // everything is in a range of [null, null]
-            return true;
-        }
-        else if (styleFieldRange[0] === null) {
-            // if a range [null, x] is given, x should not be included
-            return value < styleFieldRange[1];
-        }
-        else if (styleFieldRange[1] === null) {
-            // if a range [x, null] is given, x should be included
-            return value >= styleFieldRange[0];
-        }
-
-        // if a range [x, y] is given, x should be included but y should not be included
-        return value >= styleFieldRange[0] && value < styleFieldRange[1];
-    },
-
-    /**
-     * special handling of min/max-range values for the use of ranges in styleFieldValue
-     * checkes if rangeAttribute exists and is an instant number or a key for a fieldValue
-     * @param {ol/feature} feature Feature to relay on
-     * @param {*} rangeAttribute the rangeAttribute (maxRangeAttribute, minRangeAttribute) from the config
-     * @param {*} defaultValue the to use default value if rangeAttribute seems to be absent
-     * @returns {Number}  the range value to go with
-     */
-    getRangeValueFromRangeAttribute: function (feature, rangeAttribute, defaultValue) {
-        if (rangeAttribute !== undefined) {
-            // handle rangeAttribute to get the result if necessary
-            if (isNaN(rangeAttribute) || rangeAttribute === " ") {
-                // if rangeAttribute is not a number, rangeAttribute is the identifier for the attribute field used for the max number
-                return feature && typeof feature.get === "function" && feature.get(rangeAttribute) !== undefined ? feature.get(rangeAttribute) : defaultValue;
-            }
-
-            // if rangeAttribute is just a number: use rangeAttribute as result
-            return rangeAttribute;
-        }
-
-        // default for rangeMax is false (no maximum value given)
-        return defaultValue;
     },
 
     /**
@@ -697,20 +611,147 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
+     * checks wheather or not featureValue is in the range of styleFieldRange (depending on rangeMax and rangeMin - if given)
+     * @param {Float} featureValue the featureValue to be checked (e.g. 732 cars)
+     * @param {Float[]} styleFieldRange a range as an array [x, y] - x and y should be relative if rangeMax is given, absolute otherwise - x and y can be null for infinite
+     * @param {Integer|Boolean} rangeMax the maximum value to be expected as featureValue gets - if not given styleFieldRange should be absolute
+     * @param {Integer} rangeMin the minimum value to be expected for featureValue - is only taken into account if rangeMax is given
+     * @return {Boolean}  false if featureValue is not in the range - true if featureValue is in the range
+     */
+    isFeatureValueInStyleFieldRange: function (featureValue, styleFieldRange, rangeMax, rangeMin) {
+        const rMax = isNaN(rangeMax) ? false : rangeMax,
+            rMin = isNaN(rangeMin) ? 0 : rangeMin;
+        let value = featureValue;
+
+        if (!Array.isArray(styleFieldRange) || styleFieldRange.length !== 2) {
+            // there is no range - so featureValue can't be in it
+            return false;
+        }
+        else if (isNaN(value) || value === null) {
+            // if featureValue is not a number it can't be in the range
+            // as null stands for infinit, null can't be in any range
+            return false;
+        }
+
+        if (rMax !== false) {
+            // if rMax is set, a relative range is expected: value has to be set to be relative to max-min
+            value = 1 / (parseInt(rMax, 10) - parseInt(rMin, 10)) * (value - parseInt(rMin, 10));
+        }
+
+        if (styleFieldRange[0] === null && styleFieldRange[1] === null) {
+            // everything is in a range of [null, null]
+            return true;
+        }
+        else if (styleFieldRange[0] === null) {
+            // if a range [null, x] is given, x should not be included
+            return value < styleFieldRange[1];
+        }
+        else if (styleFieldRange[1] === null) {
+            // if a range [x, null] is given, x should be included
+            return value >= styleFieldRange[0];
+        }
+
+        // if a range [x, y] is given, x should be included but y should not be included
+        return value >= styleFieldRange[0] && value < styleFieldRange[1];
+    },
+
+    /**
+     * special handling of min/max-range values for the use of ranges in styleFieldValue
+     * checkes if rangeAttribute exists and is an instant number or a key for a fieldValue
+     * @param {ol/feature} feature Feature to relay on
+     * @param {*} rangeAttribute the rangeAttribute (maxRangeAttribute, minRangeAttribute) from the config
+     * @param {*} defaultValue the to use default value if rangeAttribute seems to be absent
+     * @returns {Number}  the range value to go with
+     */
+    getRangeValueFromRangeAttribute: function (feature, rangeAttribute, defaultValue) {
+        if (rangeAttribute !== undefined) {
+            // handle rangeAttribute to get the result if necessary
+            if (isNaN(rangeAttribute) || rangeAttribute === " ") {
+                // if rangeAttribute is not a number, rangeAttribute is the identifier for the attribute field used for the max number
+                return feature && typeof feature.get === "function" && feature.get(rangeAttribute) !== undefined ? feature.get(rangeAttribute) : defaultValue;
+            }
+
+            // if rangeAttribute is just a number: use rangeAttribute as result
+            return rangeAttribute;
+        }
+
+        // default for rangeMax is false (no maximum value given)
+        return defaultValue;
+    },
+
+    /**
+     * searches in a list of styleFieldValues for the value that equals styleFieldParam or matches its range with styleFieldParam
+     * @param {ol/feature} feature Feature to be styled.
+     * @param {String|Object} styleFieldParam Attribute name to be styled with. Or object with name and condition.
+     * @param {Object[]} styleFieldValues Values of attribute name with its style definition.
+     * @param {String|Number|Boolean} [maxRangeAttribute=false] if String: the features attribute to get the maximum value for a range from; if number: the maximum value in itself; if false: no maximum value, therefore no relative range
+     * @param {String|Number} [minRangeAttribute=0] only taken into effekt if maxRangeAttribute is given; if String: the features attribute to get the minimum value for a range from; if number: the minimum value in itslef;
+     * @returns {Object/Boolean}  returns the found styleFieldValue, null if no value has matched or false if no feature, styleField or any styleFieldValues exists
+     */
+    getStyleFieldValueObject: function (feature, styleFieldParam, styleFieldValues, maxRangeAttribute, minRangeAttribute) {
+        var featureValue;
+
+        if (!feature || typeof styleFieldParam !== "object" && typeof styleFieldParam !== "string" || !styleFieldValues) {
+            return false;
+        }
+
+        const rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
+            rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
+        let featureKeys,
+            styleField = styleFieldParam,
+            obj,
+            idx;
+
+        if (typeof styleField === "object") {
+            featureKeys = feature.get("features") && feature.get("features").length ? feature.get("features")[0].getKeys() : feature.getKeys();
+            styleField = this.translateNameFromObject(featureKeys, styleField.name, styleField.condition);
+        }
+
+        featureValue = feature.get(styleField);
+        if (featureValue === undefined) {
+            return null;
+        }
+
+        for (idx in styleFieldValues) {
+            obj = styleFieldValues[idx];
+
+            if (!obj || !obj.hasOwnProperty("styleFieldValue")) {
+                continue;
+            }
+
+            if (typeof obj.styleFieldValue === "string" && typeof featureValue === "string") {
+                // a normal string is given in obj.styleFieldValue
+                if (obj.styleFieldValue.toUpperCase() === featureValue.toUpperCase()) {
+                    return obj;
+                }
+            }
+
+            if (this.isFeatureValueInStyleFieldRange(featureValue, obj.styleFieldValue, rangeMax, rangeMin)) {
+                return obj;
+            }
+        }
+
+        return null;
+    },
+
+    /**
      * Translates the given name from gfiAttribute Object based on the condition type
      * @param {Object} keys List of all keys that the feature has.
      * @param {String} name The name to be proofed against the keys.
-     * @param {Object} condition Condition to be proofed.
-     * @returns {String} - Attribute key if condition matches exactly one key.
+     * @param {String} condition Condition to be proofed.
+     * @returns {String} - Attribute key if condition matches exactly one key; undefined if unexpected params where given
      */
     translateNameFromObject: function (keys, name, condition) {
-        const length = name.length;
         let match,
             matches = [];
 
+        if (!Array.isArray(keys) || typeof name !== "string" || typeof condition !== "string") {
+            return undefined;
+        }
+
         if (condition === "contains") {
             matches = keys.filter(key => {
-                return key.length !== length && key.includes(name);
+                return key.length !== name.length && key.includes(name);
             });
             if (this.checkIfMatchesValid(name, condition, matches)) {
                 match = matches[0];
@@ -718,7 +759,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (condition === "startsWith") {
             matches = keys.filter(key => {
-                return key.length !== length && key.startsWith(name);
+                return key.length !== name.length && key.startsWith(name);
             });
             if (this.checkIfMatchesValid(name, condition, matches)) {
                 match = matches[0];
@@ -726,7 +767,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (condition === "endsWith") {
             matches = keys.filter(key => {
-                return key.length !== length && key.endsWith(name);
+                return key.length !== name.length && key.endsWith(name);
             });
             if (this.checkIfMatchesValid(name, condition, matches)) {
                 match = matches[0];
