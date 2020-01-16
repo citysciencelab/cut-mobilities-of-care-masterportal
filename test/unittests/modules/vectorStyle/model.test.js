@@ -377,6 +377,82 @@ describe("vectorStyle", function () {
                 expect(vectorStyle.isFeatureValueInStyleFieldRange(0, "foo")).to.be.false;
             });
         });
+        describe("getStyleFieldValueObject", function () {
+            it("should return false if no feature, no styleFieldValues or no styleFieldParam as String or Object is given", function () {
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, false, [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject(false, {foo: "bar"}, [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject(false, "baz", [1, 2, 3])).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, {foo: "bar"}, false)).to.be.false;
+                expect(vectorStyle.getStyleFieldValueObject({foo: "bar"}, "baz", false)).to.be.false;
+            });
+            it("should return null when no feature attribute matches the given styleFieldName", function () {
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "unknown styleFieldName given", [])).to.be.null;
+            });
+            it("should return null when no styleFieldValue matched any entry of given styleFieldValues", function () {
+                let styleFieldValues = [
+                    {styleFieldValue: "baz"},
+                    {styleFieldValue: "qux"},
+                    {styleFieldValue: "foobar"}
+                ];
+
+                features[0].set("foo", "bar");
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.be.null;
+
+                styleFieldValues = [{}, {}, {}];
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.be.null;
+            });
+
+            it("should return the entry of styleFieldValues that matches a given styleFieldValue if both are strings", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: "baz"},
+                        {styleFieldValue: "bar", foobar: 123},
+                        {styleFieldValue: "qux"}
+                    ],
+                    expectedValue = {styleFieldValue: "bar", foobar: 123};
+
+                features[0].set("foo", "bar");
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.deep.equal(expectedValue);
+            });
+            it("should return the entry of styleFieldValues that finds styleFieldValue within its range", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [null, 0]},
+                        {styleFieldValue: [0, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    expectedValue = {styleFieldValue: [0, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues)).to.deep.equal(expectedValue);
+            });
+            it("should return the entry of styleFieldValues that finds styleFieldValue within its relative range setup by min and max range values", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [0, 0.5]},
+                        {styleFieldValue: [0.5, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    maxRangeAttribute = 200,
+                    minRangeAttribute = -200,
+                    expectedValue = {styleFieldValue: [0.5, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues, maxRangeAttribute, minRangeAttribute)).to.deep.equal(expectedValue);
+            });
+            it("should return a styleFieldValues entry that has styleFieldValue within its relative range setup by min and max range values found in the feature", function () {
+                const styleFieldValues = [
+                        {styleFieldValue: [0, 0.5]},
+                        {styleFieldValue: [0.5, 1], foobar: 123},
+                        {styleFieldValue: [1, null]}
+                    ],
+                    maxRangeAttribute = "fooMax",
+                    minRangeAttribute = "fooMin",
+                    expectedValue = {styleFieldValue: [0.5, 1], foobar: 123};
+
+                features[0].set("foo", 0);
+                features[0].set("fooMax", 200);
+                features[0].set("fooMin", -200);
+                expect(vectorStyle.getStyleFieldValueObject(features[0], "foo", styleFieldValues, maxRangeAttribute, minRangeAttribute)).to.deep.equal(expectedValue);
+            });
+        });
 
         describe("getStyleFieldValueObject", function () {
             it("should return false if no feature, no styleFieldValues or no styleFieldParam as String or Object is given", function () {
