@@ -13,6 +13,7 @@ describe("core/modelList/layer/sensor", function () {
 
     before(function () {
         sensorLayer = new SensorLayerModel();
+        sensorLayer.set("url", "test/test/test", {silent: true});
 
         sensorLayer.set("url", "test/test/test", {silent: true});
 
