@@ -19,7 +19,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             mergeThingsByCoordinates: false,
             showNoDataValue: true,
             noDataValue: "no data",
-            altitudeMode: "clampToGround"
+            altitudeMode: "clampToGround",
+            isSubscribed: false,
+            mqttClient: null
         }),
     /**
      * @class SensorLayer
@@ -50,14 +52,34 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
-        this.checkForScale(Radio.request("MapView", "getOptions"));
-
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
 
         // change language from moment.js to german
         moment.locale("de");
+    },
+
+    /**
+     * Check if layer is whithin range and selected to determine if all conditions are fullfilled to start or stop subscription.
+     * Because of usage of serveral listeners it's necessary to create a "isSubscribed" flag to prevent multiple executions.
+     * @returns {void}
+     */
+    checkConditionsForSubscription: function () {
+        const features = this.get("layer").getSource().getFeatures();
+
+        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+            this.setIsSubscribed(true);
+            if (Array.isArray(features) && !features.length) {
+                this.initializeConnection();
+            }
+            // connection to live update
+            this.createMqttConnectionToSensorThings();
+        }
+        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+            this.setIsSubscribed(false);
+            this.endMqttConnectionToSensorThings();
+        }
     },
 
     /**
@@ -87,7 +109,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             altitudeMode: this.get("altitudeMode")
         }));
 
-        this.updateData();
+        // subscription / unsubscription to mmqt only happens by this change events
+        this.listenTo(this, {
+            "change:isOutOfRange": this.checkConditionsForSubscription,
+            "change:isSelected": this.checkConditionsForSubscription
+        });
     },
 
     /**
@@ -106,7 +132,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @fires Core#RadioRequestUtilGetProxyURL
      * @returns {void}
      */
-    updateData: function () {
+    initializeConnection: function () {
         var sensorData,
             features,
             isClustered = this.has("clusterDistance"),
@@ -126,13 +152,19 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             this.featuresLoaded(features);
         }
 
-        // connection to live update
-        this.createMqttConnectionToSensorThings(features);
-
         if (!_.isUndefined(features)) {
             this.styling(isClustered);
             this.get("layer").setStyle(this.get("style"));
         }
+    },
+
+    /**
+     * Ends mqtt client instantly
+     * @returns {void}
+     */
+    endMqttConnectionToSensorThings: function () {
+        this.get("mqttClient").end(true);
+        this.setMqttClient(null);
     },
 
     /**
@@ -595,8 +627,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param {array} features - features with DatastreamID
      * @returns {void}
      */
-    createMqttConnectionToSensorThings: function (features) {
-        var dataStreamIds = this.getDataStreamIds(features),
+    createMqttConnectionToSensorThings: function () {
+        const features = this.get("layer").getSource().getFeatures(),
+            dataStreamIds = this.getDataStreamIds(features),
             client = mqtt.connect({
                 host: this.get("url").split("/")[2],
                 protocol: "wss",
@@ -620,6 +653,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonData.dataStreamId = topic.match(regex)[1];
             this.options.context.updateFromMqtt(jsonData);
         });
+
+        this.setMqttClient(client);
     },
 
     /**
@@ -736,6 +771,24 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     setClusterLayerSource: function (value) {
         this.set("clusterLayerSource", value);
+    },
+
+    /**
+     * Setter for isSubscribed
+     * @param {boolean} value isSubscribed
+     * @returns {void}
+     */
+    setIsSubscribed: function (value) {
+        this.set("isSubscribed", value);
+    },
+
+    /**
+     * Setter for mqttClient
+     * @param {boolean} value mqttClient
+     * @returns {void}
+     */
+    setMqttClient: function (value) {
+        this.set("mqttClient", value);
     }
 
 });
