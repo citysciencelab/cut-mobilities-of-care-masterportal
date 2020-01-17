@@ -3,14 +3,39 @@ import * as moment from "moment";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
 import {expect} from "chai";
+import VectorLayer from "ol/layer/Vector.js";
+import {Vector as VectorSource} from "ol/source.js";
+import sinon from "sinon";
 
 describe("core/modelList/layer/sensor", function () {
     var sensorLayer;
 
     before(function () {
         sensorLayer = new SensorLayerModel();
+        sensorLayer.set("url", "test/test/test", {silent: true});
 
         moment.locale("de");
+
+        sinon.stub(Radio, "request").callsFake(function (channel, topic) {
+            if (channel === "MapView" && topic === "getCurrentExtent") {
+                return [100, 100, 200, 200];
+            }
+            else if (channel === "Map" && topic === "registerListener") {
+                return {"key": "test"};
+            }
+
+            return null;
+        });
+    });
+
+    after(function () {
+        sinon.restore();
+    });
+
+    describe("initialize", function () {
+        it("ol/layer is not declared on startup", function () {
+            expect(sensorLayer.get("layer")).to.be.undefined;
+        });
     });
 
     describe("buildSensorThingsUrl", function () {
@@ -352,6 +377,83 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.flattenArray(123)).to.equal(123);
             expect(sensorLayer.flattenArray("123")).to.equal("123");
             expect(sensorLayer.flattenArray({id: "123"})).to.deep.equal({id: "123"});
+        });
+    });
+    describe("enlargeExtent", function () {
+        it("should return correctly enlarged extent", function () {
+            expect(sensorLayer.enlargeExtent([100, 100, 200, 200], 0.1)).to.be.an("array").to.have.ordered.members([90, 90, 210, 210]);
+        });
+        it("should return correctly reduced extent", function () {
+            expect(sensorLayer.enlargeExtent([100, 100, 200, 200], -0.1)).to.be.an("array").to.have.ordered.members([110, 110, 190, 190]);
+        });
+    });
+
+    describe("getFeaturesInExtent", function () {
+        it("should return no feature within extent", function () {
+            sensorLayer.setLayer(new VectorLayer({
+                source: new VectorSource(),
+                name: "test",
+                typ: "SensorThings",
+                id: "123"
+            }));
+            sensorLayer.get("layer").getSource().addFeatures([new Feature({
+                geometry: new Point([50, 50])
+            })]);
+
+            expect(sensorLayer.getFeaturesInExtent()).to.be.an("array").that.is.empty;
+        });
+
+        it("should return only one feature within extent", function () {
+            sensorLayer.get("layer").getSource().addFeatures([new Feature({
+                geometry: new Point([150, 150])
+            })]);
+
+            expect(sensorLayer.getFeaturesInExtent()).to.be.an("array").to.have.lengthOf(1);
+        });
+
+        it("should also return a feature inside enlarged extent", function () {
+            sensorLayer.get("layer").getSource().addFeatures([new Feature({
+                geometry: new Point([201, 201])
+            })]);
+
+            expect(sensorLayer.getFeaturesInExtent()).to.be.an("array").to.have.lengthOf(2);
+        });
+    });
+
+    describe("checkConditionsForSubscription", function () {
+        it("should be unsubsribed on startup", function () {
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.false;
+            expect(sensorLayer.get("moveendListener")).to.be.null;
+        });
+
+        it("should be subscribed when inRange and selected", function () {
+            sensorLayer.set("isOutOfRange", false, {silent: true});
+            sensorLayer.set("isSelected", true, {silent: true});
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.true;
+        });
+
+        it("should set moveendListener", function () {
+            expect(sensorLayer.get("moveendListener")).to.not.be.null;
+        });
+
+        it("should be unsubscribed when out of range", function () {
+            sensorLayer.set("isOutOfRange", true, {silent: true});
+            sensorLayer.set("isSelected", true, {silent: true});
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.false;
+        });
+
+        it("should remove moveendListener", function () {
+            expect(sensorLayer.get("moveendListener")).to.be.null;
+        });
+
+        it("should be unsubscribed when unselected", function () {
+            sensorLayer.set("isOutOfRange", false, {silent: true});
+            sensorLayer.set("isSelected", false, {silent: true});
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.false;
         });
     });
 });
