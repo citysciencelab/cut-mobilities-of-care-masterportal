@@ -592,7 +592,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         svg += strokeWidth;
         if (strokeDash) {
             svg += "' stroke-dasharray='";
-            svg += strokeDash
+            svg += strokeDash;
         }
         svg += "' fill='none'/>";
         svg += "</svg>";
