@@ -3,25 +3,26 @@ import mqtt from "mqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
-import {buffer, containsExtent} from "ol/extent";
-import {GeoJSON} from "ol/format.js";
+import {transformToMapProjection} from "masterportalAPI/src/crs";
+import Feature from "ol/Feature.js";
+import Point from "ol/geom/Point.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
-        supported: ["2D", "3D"],
-        epsg: "EPSG:4326",
-        utc: "+1",
-        version: "1.0",
-        useProxyURL: false,
-        mqttPath: "/mqtt",
-        mergeThingsByCoordinates: false,
-        showNoDataValue: true,
-        noDataValue: "no data",
-        altitudeMode: "clampToGround",
-        isSubscribed: false,
-        moveendListener: null
-    }),
-
+    defaults: _.extend({}, Layer.prototype.defaults,
+        {
+            supported: ["2D", "3D"],
+            epsg: "EPSG:4326",
+            utc: "+1",
+            version: "1.0",
+            useProxyURL: false,
+            mqttPath: "/mqtt",
+            mergeThingsByCoordinates: false,
+            showNoDataValue: true,
+            noDataValue: "no data",
+            altitudeMode: "clampToGround",
+            isSubscribed: false,
+            mqttClient: null
+        }),
     /**
      * @class SensorLayer
      * @extends Layer
@@ -51,11 +52,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
-        // set subscriptionTopics as instance variable (!)
-        this.set("subscriptionTopics", {});
-
-        this.createMqttConnectionToSensorThings();
-
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -65,47 +61,25 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Start or stop subscription according to its conditions.
+     * Check if layer is whithin range and selected to determine if all conditions are fullfilled to start or stop subscription.
      * Because of usage of serveral listeners it's necessary to create a "isSubscribed" flag to prevent multiple executions.
      * @returns {void}
      */
-    changedConditions: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            state = this.checkConditionsForSubscription();
+    checkConditionsForSubscription: function () {
+        const features = this.get("layer").getSource().getFeatures();
 
-        if (state === true) {
+        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
             this.setIsSubscribed(true);
             if (Array.isArray(features) && !features.length) {
                 this.initializeConnection();
             }
-            // call subscriptions
-            this.updateSubscription();
-            // create listener of moveend event
-            this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
-        }
-        else if (state === false) {
-            this.setIsSubscribed(false);
-            // remove listener of moveend event
-            Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
-            this.setMoveendListener(null);
-            // remove connection to live update
-            this.unsubscribeFromSensorThings();
-        }
-    },
-
-    /**
-     * Check if layer is whithin range and selected to determine if all conditions are fullfilled.
-     * @returns {void}
-     */
-    checkConditionsForSubscription: function () {
-        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
-            return true;
+            // connection to live update
+            this.createMqttConnectionToSensorThings();
         }
         else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
-            return false;
+            this.setIsSubscribed(false);
+            this.endMqttConnectionToSensorThings();
         }
-
-        return undefined;
     },
 
     /**
@@ -121,7 +95,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Creates the layer.
-     * @listens Core#RadioTriggerMapViewChangedCenter
      * @returns {void}
      */
     createLayer: function () {
@@ -138,8 +111,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // subscription / unsubscription to mmqt only happens by this change events
         this.listenTo(this, {
-            "change:isVisibleInMap": this.changedConditions,
-            "change:isOutOfRange": this.changedConditions
+            "change:isOutOfRange": this.checkConditionsForSubscription,
+            "change:isSelected": this.checkConditionsForSubscription
         });
     },
 
@@ -183,6 +156,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             this.styling(isClustered);
             this.get("layer").setStyle(this.get("style"));
         }
+    },
+
+    /**
+     * Ends mqtt client instantly
+     * @returns {void}
+     */
+    endMqttConnectionToSensorThings: function () {
+        this.get("mqttClient").end(true);
+        this.setMqttClient(null);
     },
 
     /**
@@ -231,10 +213,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         var features = [];
 
         _.each(sensorData, function (data, index) {
-            let feature;
+            var xyTransform,
+                feature;
 
             if (data.hasOwnProperty("location") && data.location && !_.isUndefined(epsg)) {
-                feature = this.parseJson(data.location);
+                xyTransform = transformToMapProjection(Radio.request("Map", "getMap"), epsg, data.location);
+                feature = new Feature({
+                    geometry: new Point(xyTransform)
+                });
             }
             else {
                 return;
@@ -386,7 +372,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             allThings.push(things.value);
         }
 
-        allThings = this.flattenArray(allThings);
+        allThings = allThings.flat();
         allThings = this.getNewestSensorData(allThings);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
@@ -409,11 +395,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         allThingsWithSensorData.forEach(thing => {
             const dataStreams = thing.Datastreams;
-
-            // A thing may not have properties. So we ensure we can access them.
-            if (!thing.hasOwnProperty("properties")) {
-                thing.properties = {};
-            }
 
             thing.properties.dataStreamId = [];
             thing.properties.dataStreamName = [];
@@ -444,7 +425,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
             thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
         });
-
         return allThingsWithSensorData;
     },
 
@@ -485,14 +465,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         var mergeAllThings = [],
             indices = [],
             things,
-            jsonGeom,
-            jsonGeom2;
+            xy,
+            xy2;
 
         _.each(allThings, function (thing, index) {
             // if the thing was assigned already
             if (!_.contains(indices, index)) {
                 things = [];
-                jsonGeom = JSON.stringify(this.getJsonGeometry(thing, 0));
+                xy = this.getCoordinates(thing);
 
                 // if no datastream exists
                 if (_.isEmpty(thing.Datastreams)) {
@@ -500,9 +480,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
 
                 _.each(allThings, function (thing2, index2) {
-                    jsonGeom2 = JSON.stringify(this.getJsonGeometry(thing2, 0));
+                    xy2 = this.getCoordinates(thing2);
 
-                    if (jsonGeom === jsonGeom2) {
+                    if (_.isEqual(xy, xy2)) {
                         things.push(thing2);
                         indices.push(index2);
                     }
@@ -516,50 +496,28 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Searches the thing for its geometry location.
-     * For some reason there are two different object pathes to check.
-     * @param   {object} thing    aggregated thing
-     * @param   {integer} index   index of location in array Locations
-     * @returns {object|null} Json object or null
+     * retrieves coordinates by different geometry types
+     * @param  {object} thing - thing
+     * @return {array} coordinates
      */
-    getJsonGeometry: function (thing, index) {
-        const Locations = thing && thing.hasOwnProperty("Locations") ? thing.Locations : null,
-            location = Locations && Locations.hasOwnProperty(index) && Locations[index].hasOwnProperty("location") ? Locations[index].location : null;
+    getCoordinates: function (thing) {
+        var xy;
 
-        if (location && location.hasOwnProperty("geometry") && location.geometry.hasOwnProperty("type")) {
-            return location.geometry;
-        }
-        else if (location && location.hasOwnProperty("type")) {
-            return location;
-        }
+        if (!_.isUndefined(thing) && !_.isEmpty(thing.Locations)) {
+            if (thing.Locations[0].location.type === "Feature" &&
+                !_.isUndefined(thing.Locations[0].location.geometry) &&
+                !_.isUndefined(thing.Locations[0].location.geometry.coordinates)) {
 
-        return null;
-    },
+                xy = thing.Locations[0].location.geometry.coordinates;
+            }
+            else if (thing.Locations[0].location.type === "Point" &&
+                !_.isUndefined(thing.Locations[0].location.coordinates)) {
 
-    /**
-     * Tries to parse object to ol.format.GeoJson
-     * @param   {object} data object to parse
-     * @throws an error if the argument cannot be parsed.
-     * @returns {ol/Feature} ol feature
-     */
-    parseJson: function (data) {
-        const mapCrs = Radio.request("MapView", "getProjection"),
-            thingEPSG = this.get("epsg"),
-            geojsonReader = new GeoJSON({
-                featureProjection: mapCrs,
-                dataProjection: thingEPSG
-            });
-
-        let jsonObjects;
-
-        try {
-            jsonObjects = geojsonReader.readFeature(data);
-        }
-        catch (err) {
-            console.error("JSON structure in sensor thing location cannot be parsed.");
+                xy = thing.Locations[0].location.coordinates;
+            }
         }
 
-        return jsonObjects;
+        return xy;
     },
 
     /**
@@ -577,41 +535,31 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 let keys = [],
                     props = {};
 
-                aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
+                aggregatedThing.location = this.getCoordinates(thing[0]);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
+                    keys.push(Object.keys(thing2.name));
+                    keys.push(Object.keys(thing2.description));
                     props = Object.assign(props, thing2.properties);
+                    props = Object.assign(props, {name: thing2.name});
+                    props = Object.assign(props, {description: thing2.description});
                 });
-                keys = [...new Set(this.flattenArray(keys))];
+                keys = [...new Set(keys.flat())];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
-                keys.push("name");
-                keys.push("description");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
-                aggregatedThing.location = this.getJsonGeometry(thing, 0);
+                aggregatedThing.location = this.getCoordinates(thing);
                 aggregatedThing.properties = thing.properties;
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
-            aggregatedThing.properties.Datastreams = thing.Datastreams;
-
             aggregatedArray.push(aggregatedThing);
         });
 
         return aggregatedArray;
-    },
-
-    /**
-     * flattenArray creates a new array with all sub-array elements concatenated
-     * @info this is equivalent to Array.flat() - except no addition for testing is needed for this one
-     * @param {*} array the array to flatten its sub-arrays or anything else
-     * @returns {*}  the flattened array if an array was given, the untouched input otherwise
-     */
-    flattenArray: function (array) {
-        return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
 
     /**
@@ -642,7 +590,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const aggregatedProperties = {};
 
         keys.forEach(key => {
-            const valuesArray = thingArray.map(thing => key === "name" || key === "description" ? thing[key] : thing.properties[key]);
+            const valuesArray = thingArray.map(thing => thing.properties[key]);
 
             aggregatedProperties[key] = valuesArray.join(" | ");
         });
@@ -672,18 +620,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createMqttConnectionToSensorThings: function () {
-        if (!this.get("url")) {
-            return;
-        }
+        const features = this.get("layer").getSource().getFeatures(),
+            dataStreamIds = this.getDataStreamIds(features),
+            client = mqtt.connect({
+                host: this.get("url").split("/")[2],
+                protocol: "wss",
+                path: this.get("mqttPath"),
+                context: this
+            });
 
-        const client = mqtt.connect({
-            host: this.get("url").split("/")[2],
-            protocol: "wss",
-            path: this.get("mqttPath"),
-            context: this
+        client.on("connect", function () {
+            var version = this.options.context.get("version");
+
+            _.each(dataStreamIds, function (id) {
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations");
+            });
         });
-
-        this.setMqttClient(client);
 
         // messages from the server
         client.on("message", function (topic, payload) {
@@ -693,91 +645,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonData.dataStreamId = topic.match(regex)[1];
             this.options.context.updateFromMqtt(jsonData);
         });
-    },
 
-    /**
-     * subscribes to the mqtt client with the features in the current extent
-     * @returns {Void}  -
-     */
-    subscribeToSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
-            dataStreamIds = this.getDataStreamIds(features),
-            version = this.get("version"),
-            client = this.get("mqttClient"),
-            subscriptionTopics = this.get("subscriptionTopics");
-
-        dataStreamIds.forEach(function (id) {
-            if (client && !subscriptionTopics[id]) {
-                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations");
-                subscriptionTopics[id] = true;
-            }
-        });
-    },
-
-    /**
-     * unsubscribes from the mqtt client with topics formerly subscribed
-     * @returns {Void}  -
-     */
-    unsubscribeFromSensorThings: function () {
-        const features = this.getFeaturesInExtent(),
-            dataStreamIds = this.getDataStreamIds(features),
-            dataStreamIdsInverted = {},
-            subscriptionTopics = this.get("subscriptionTopics"),
-            version = this.get("version"),
-            isSelected = this.get("isSelected"),
-            client = this.get("mqttClient");
-        let id;
-
-        dataStreamIds.forEach(function (datastreamId) {
-            dataStreamIdsInverted[datastreamId] = true;
-        });
-
-        for (id in subscriptionTopics) {
-            if (client && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id))) {
-                client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
-                subscriptionTopics[id] = false;
-            }
-        }
-    },
-
-    /**
-     * Refresh all connections by ending all established connections and creating new ones
-     * @returns {void}
-     */
-    updateSubscription: function () {
-        this.unsubscribeFromSensorThings();
-        this.subscribeToSensorThings();
-    },
-
-    /**
-     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @returns {ol/featre[]} features
-     */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
-            featuresInExtent = [];
-
-        features.forEach(feature => {
-            if (containsExtent(enlargedExtent, feature.getGeometry().getExtent())) {
-                featuresInExtent.push(feature);
-            }
-        });
-
-        return featuresInExtent;
-    },
-
-    /**
-     * enlarge given extent by factor
-     * @param   {ol/extent} extent extent to enlarge
-     * @param   {float} factor factor to enlarge extent
-     * @returns {ol/extent} enlargedExtent
-     */
-    enlargeExtent: function (extent, factor) {
-        const bufferAmount = (extent[2] - extent[0]) * factor;
-
-        return buffer(extent, bufferAmount);
+        this.setMqttClient(client);
     },
 
     /**
@@ -791,31 +660,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamId = String(thingToUpdate.dataStreamId),
             features = this.get("layerSource").getFeatures(),
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
-            result = thingToUpdate.result,
+            result = String(thingToUpdate.result),
             utc = this.get("utc"),
             phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
 
-        this.updateObservationForDatastreams(feature, dataStreamId, thing);
         this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
-    },
-
-    /**
-     * updates the Datastreams of the given feature with received time and result of the Observation
-     * @param {ol/feature} feature - feature to be updated
-     * @param {String} dataStreamId - dataStreamId
-     * @param {Object} observation the observation to update the old observation with
-     * @returns {Void}  -
-     */
-    updateObservationForDatastreams: function (feature, dataStreamId, observation) {
-        if (!Array.isArray(feature.get("Datastreams"))) {
-            return;
-        }
-
-        feature.get("Datastreams").forEach(function (datastream) {
-            if (datastream["@iot.id"] !== undefined && String(datastream["@iot.id"]) === String(dataStreamId)) {
-                datastream.Observations = [observation];
-            }
-        });
     },
 
     /**
@@ -828,13 +677,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
-        const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
-            dataStreamNameArray = feature.get("dataStreamName").split(" | "),
-            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "";
         let updatedFeature = feature;
 
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result);
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime);
+        updatedFeature.set("dataStream_" + dataStreamId, result);
+        updatedFeature.set("dataStream_" + dataStreamId + "_phenomenonTime", phenomenonTime);
         updatedFeature = this.aggregateDataStreamValue(feature);
         updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
         this.featureUpdated(updatedFeature);
@@ -842,49 +688,27 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * helper function for getDataStreamIds: pushes the datastream ids into the given array
-     * @param {ol/Feature} feature the feature containing datastream ids
-     * @param {String[]} dataStreamIdsArray the array to push the datastream ids into
-     * @returns {Void}  -
-     */
-    getDataStreamIdsHelper: function (feature, dataStreamIdsArray) {
-        let dataStreamIds = feature && feature.get("dataStreamId") !== undefined ? feature.get("dataStreamId") : "";
-
-        if (dataStreamIds.indexOf("|") >= 0) {
-            dataStreamIds = dataStreamIds.split("|");
-
-            dataStreamIds.forEach(function (id) {
-                dataStreamIdsArray.push(id.trim());
-            });
-        }
-        else {
-            dataStreamIdsArray.push(String(dataStreamIds));
-        }
-    },
-
-    /**
-     * get DataStreamIds for this layer - using dataStreamId property with expected pipe delimitors
-     * @param  {ol/Feature[]} features - features with datastream ids or features with features (see clustering) with datastreamids
-     * @return {String[]} dataStreamIdsArray - contains all datastream ids from this layer
+     * get DataStreamIds
+     * @param  {Array} features - features with datastreamids
+     * @return {Array} dataStreamIdsArray - contains all ids from this layer
      */
     getDataStreamIds: function (features) {
-        const dataStreamIdsArray = [];
+        var dataStreamIdsArray = [];
 
-        if (!Array.isArray(features)) {
-            return [];
-        }
+        _.each(features, function (feature) {
+            var dataStreamIds = _.isUndefined(feature.get("dataStreamId")) ? "" : feature.get("dataStreamId");
 
-        features.forEach(function (feature) {
-            if (Array.isArray(feature.get("features"))) {
-                // obviously clustered featuers are activated
-                feature.get("features").forEach(function (subfeature) {
-                    this.getDataStreamIdsHelper(subfeature, dataStreamIdsArray);
-                }.bind(this));
+            if (_.contains(dataStreamIds, "|")) {
+                dataStreamIds = dataStreamIds.split(" | ");
+
+                _.each(dataStreamIds, function (id) {
+                    dataStreamIdsArray.push(id);
+                });
             }
             else {
-                this.getDataStreamIdsHelper(feature, dataStreamIdsArray);
+                dataStreamIdsArray.push(String(dataStreamIds));
             }
-        }.bind(this));
+        });
 
         return dataStreamIdsArray;
     },
@@ -957,15 +781,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     setMqttClient: function (value) {
         this.set("mqttClient", value);
-    },
-
-    /**
-     * Setter for moveendListener
-     * @param {boolean} value moveendListener
-     * @returns {void}
-     */
-    setMoveendListener: function (value) {
-        this.set("moveendListener", value);
     }
 
 });
