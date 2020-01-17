@@ -6,6 +6,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
+import {buffer, containsExtent} from "ol/extent";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults,
@@ -21,7 +22,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             noDataValue: "no data",
             altitudeMode: "clampToGround",
             isSubscribed: false,
-            mqttClient: null
+            mqttClient: null,
+            moveendListener: null
         }),
     /**
      * @class SensorLayer
@@ -75,11 +77,26 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }
             // connection to live update
             this.createMqttConnectionToSensorThings();
+            // create listener of moveend event
+            this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
         }
         else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
             this.setIsSubscribed(false);
+            // remove listener of moveend event
+            Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
+            this.setMoveendListener(null);
+            // remove connection to live update
             this.endMqttConnectionToSensorThings();
         }
+    },
+
+    /**
+     * Refresh all connections by ending all established connections and creating new ones
+     * @returns {void}
+     */
+    updateSubscription: function () {
+        this.endMqttConnectionToSensorThings();
+        this.createMqttConnectionToSensorThings();
     },
 
     /**
@@ -95,6 +112,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Creates the layer.
+     * @listens Core#RadioTriggerMapViewChangedCenter
      * @returns {void}
      */
     createLayer: function () {
@@ -111,8 +129,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // subscription / unsubscription to mmqt only happens by this change events
         this.listenTo(this, {
-            "change:isOutOfRange": this.checkConditionsForSubscription,
-            "change:isSelected": this.checkConditionsForSubscription
+            "change:isVisibleInMap": this.checkConditionsForSubscription,
+            "change:isOutOfRange": this.checkConditionsForSubscription
         });
     },
 
@@ -620,7 +638,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createMqttConnectionToSensorThings: function () {
-        const features = this.get("layer").getSource().getFeatures(),
+        const features = this.getFeaturesInExtent(),
             dataStreamIds = this.getDataStreamIds(features),
             client = mqtt.connect({
                 host: this.get("url").split("/")[2],
@@ -647,6 +665,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         this.setMqttClient(client);
+    },
+
+    /**
+     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
+     * @returns {ol/featre[]} features
+     */
+    getFeaturesInExtent: function () {
+        const features = this.get("layer").getSource().getFeatures(),
+            currentExtent = Radio.request("MapView", "getCurrentExtent"),
+            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
+            featuresInExtent = [];
+
+        features.forEach(feature => {
+            if (containsExtent(enlargedExtent, feature.getGeometry().getExtent())) {
+                featuresInExtent.push(feature);
+            }
+        });
+
+        return featuresInExtent;
+    },
+
+    /**
+     * enlarge given extent by factor
+     * @param   {ol/extent} extent extent to enlarge
+     * @param   {float} factor factor to enlarge extent
+     * @returns {ol/extent} enlargedExtent
+     */
+    enlargeExtent: function (extent, factor) {
+        const bufferAmount = (extent[2] - extent[0]) * factor;
+
+        return buffer(extent, bufferAmount);
     },
 
     /**
@@ -781,6 +830,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     setMqttClient: function (value) {
         this.set("mqttClient", value);
+    },
+
+    /**
+     * Setter for moveendListener
+     * @param {boolean} value moveendListener
+     * @returns {void}
+     */
+    setMoveendListener: function (value) {
+        this.set("moveendListener", value);
     }
 
 });

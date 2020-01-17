@@ -2,7 +2,6 @@ import SensorLayerModel from "@modules/core/modelList/layer/sensor.js";
 import * as moment from "moment";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
-import LineString from "ol/geom/LineString";
 import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Vector as VectorSource} from "ol/source.js";
@@ -20,9 +19,6 @@ describe("core/modelList/layer/sensor", function () {
         sinon.stub(Radio, "request").callsFake(function (channel, topic) {
             if (channel === "MapView" && topic === "getCurrentExtent") {
                 return [100, 100, 200, 200];
-            }
-            else if (channel === "MapView" && topic === "getProjection") {
-                return "EPSG:25832";
             }
             else if (channel === "Map" && topic === "registerListener") {
                 return {"key": "test"};
@@ -48,6 +44,51 @@ describe("core/modelList/layer/sensor", function () {
         });
         it("should return version in String", function () {
             expect(sensorLayer.buildSensorThingsUrl(undefined, 1.0, undefined)).to.have.string("v1.0");
+        });
+    });
+
+    describe("getCoordinates", function () {
+        it("should return an undefined for undefined input", function () {
+            expect(sensorLayer.getCoordinates(undefined)).to.be.undefined;
+        });
+        it("should return an undefined for empty array input", function () {
+            expect(sensorLayer.getCoordinates([])).to.be.undefined;
+        });
+        it("should return in array with coordinates as array from input object", function () {
+            var thing = {
+                Locations: [{
+                    location: {
+                        type: "Feature",
+                        geometry: {
+                            coordinates: [100, 100]
+                        }
+                    }
+                }]
+            };
+
+            expect(sensorLayer.getCoordinates(thing)).to.deep.equal([100, 100]);
+        });
+        it("should return undefined if a subitem is missing", function () {
+            var thing = {
+                Locations: [{
+                    location: {
+                        type: "Feature"
+                    }
+                }]
+            };
+
+            expect(sensorLayer.getCoordinates(thing)).to.be.undefined;
+        });
+        it("should return undefined if a subitem is missing", function () {
+            var thing1 = {
+                Locations: [{
+                    location: {
+                        type: "Point"
+                    }
+                }]
+            };
+
+            expect(sensorLayer.getCoordinates(thing1)).to.be.undefined;
         });
     });
 
@@ -236,108 +277,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.excludeDataStreamKeys(["test_1", "test_2", "hello"], "test_")).to.deep.equal(["hello"]);
         });
     });
-    describe("aggregatePropertiesOfThings", function () {
-        it("should set one Thing in a simple way without aggregation", function () {
-            const allThings = [
-                    {
-                        name: "foo",
-                        description: "bar",
-                        properties: {
-                            "baz": "qux"
-                        },
-                        Locations: [{
-                            location: {
-                                type: "Feature",
-                                geometry: {
-                                    type: "Point",
-                                    coordinates: [1, 2, 3]
-                                }
-                            }
-                        }],
-                        Datastreams: [{"foobar": 1}]
-                    }
-                ],
-                expectedOutcome = [{
-                    location: [1, 2, 3],
-                    properties: {
-                        baz: "qux",
-                        name: "foo",
-                        description: "bar",
-                        requestUrl: "http://example.com",
-                        versionUrl: "1.0"
-                    }
-                }];
 
-            sensorLayer.set("url", "http://example.com", {silent: true});
-            sensorLayer.set("version", "1.0", {silent: true});
-
-            expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
-        });
-        it("should aggregate Things if there is more than one thing", function () {
-            const allThings = [[
-                    {
-                        name: "foo",
-                        description: "bar",
-                        properties: {
-                            "baz": "qux"
-                        },
-                        Locations: [{
-                            location: {
-                                type: "Point",
-                                coordinates: [3, 4, 5]
-                            }
-                        }]
-                    },
-                    {
-                        name: "oof",
-                        description: "rab",
-                        properties: {
-                            "baz": "xuq"
-                        },
-                        Locations: [{
-                            location: {
-                                type: "Feature",
-                                geometry: {
-                                    type: "Point",
-                                    coordinates: [3, 4, 5]
-                                }
-                            }
-                        }]
-                    }
-                ]],
-                expectedOutcome = [{
-                    location: [3, 4, 5],
-                    properties: {
-                        baz: "qux | xuq",
-                        name: "foo | oof",
-                        description: "bar | rab",
-                        requestUrl: "http://example.com",
-                        versionUrl: "1.0"
-                    }
-                }];
-
-            sensorLayer.set("url", "http://example.com", {silent: true});
-            sensorLayer.set("version", "1.0", {silent: true});
-
-            expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
-        });
-    });
-    describe("flattenArray", function () {
-        it("should return flattened array", function () {
-            expect(sensorLayer.flattenArray([["1", "2"], ["3"], ["4"]])).to.deep.equal(["1", "2", "3", "4"]);
-        });
-        it("should return empty array on empty array input", function () {
-            expect(sensorLayer.flattenArray([])).to.deep.equal([]);
-        });
-        it("should return empty array on undefined input", function () {
-            expect(sensorLayer.flattenArray(undefined)).to.be.undefined;
-        });
-        it("should return empty array on other input", function () {
-            expect(sensorLayer.flattenArray(123)).to.equal(123);
-            expect(sensorLayer.flattenArray("123")).to.equal("123");
-            expect(sensorLayer.flattenArray({id: "123"})).to.deep.equal({id: "123"});
-        });
-    });
     describe("enlargeExtent", function () {
         it("should return correctly enlarged extent", function () {
             expect(sensorLayer.enlargeExtent([100, 100, 200, 200], 0.1)).to.be.an("array").to.have.ordered.members([90, 90, 210, 210]);
@@ -380,194 +320,39 @@ describe("core/modelList/layer/sensor", function () {
     });
 
     describe("checkConditionsForSubscription", function () {
-        it("should be undefined on startup", function () {
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.undefined;
+        it("should be unsubsribed on startup", function () {
+            sensorLayer.checkConditionsForSubscription();
             expect(sensorLayer.get("isSubscribed")).to.be.false;
+            expect(sensorLayer.get("moveendListener")).to.be.null;
         });
 
-        it("should be true when inRange and selected", function () {
+        it("should be subscribed when inRange and selected", function () {
             sensorLayer.set("isOutOfRange", false, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.true;
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.true;
         });
 
-        it("should be false when out of range", function () {
-            sensorLayer.set("isOutOfRange", true, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.set("isSubscribed", true, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
-        });
-
-        it("should be false when unselected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", false, {silent: true});
-            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
-        });
-    });
-
-    describe("changedConditions", function () {
         it("should set moveendListener", function () {
-            sensorLayer.set("isSubscribed", false, {silent: true});
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.changedConditions();
             expect(sensorLayer.get("moveendListener")).to.not.be.null;
         });
 
-        it("should unset moveendListener", function () {
-            sensorLayer.set("isSubscribed", true, {silent: true});
+        it("should be unsubscribed when out of range", function () {
             sensorLayer.set("isOutOfRange", true, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.changedConditions();
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.false;
+        });
+
+        it("should remove moveendListener", function () {
             expect(sensorLayer.get("moveendListener")).to.be.null;
         });
-    });
 
-    describe("subscribeToSensorThings", function () {
-        let topics = [];
-
-        it("should subscribe on a topic", function () {
-            topics = [];
-            sensorLayer.set("mqttClient", {
-                subscribe: function (topic) {
-                    topics.push(topic);
-                }
-            });
-
-            sensorLayer.set("subscriptionTopics", {});
-            sensorLayer.subscribeToSensorThings();
-
-            expect(topics).to.deep.equal(["v1.0/Datastreams()/Observations"]);
-        });
-        it("should not subscribe on a topic that has already been subscribed", function () {
-            topics = [];
-            sensorLayer.set("mqttClient", {
-                unsubscribe: function (topic) {
-                    topics.push(topic);
-                }
-            });
-
-            sensorLayer.set("subscriptionTopics", {
-                "": true
-            });
-            sensorLayer.subscribeToSensorThings();
-
-            expect(topics).to.be.empty;
-        });
-    });
-
-    describe("unsubscribeFromSensorThings", function () {
-        let topics = [];
-
-        it("should unsubscribe from a topic", function () {
-            topics = [];
-            sensorLayer.set("mqttClient", {
-                unsubscribe: function (topic) {
-                    topics.push(topic);
-                }
-            });
-
-            sensorLayer.set("subscriptionTopics", {
-                "foo": true
-            });
-            sensorLayer.unsubscribeFromSensorThings();
-
-            expect(topics).to.deep.equal(["v1.0/Datastreams(foo)/Observations"]);
-        });
-        it("should not unsubscribe from a topic that is already unsubscribed", function () {
-            topics = [];
-            sensorLayer.set("mqttClient", {
-                unsubscribe: function (topic) {
-                    topics.push(topic);
-                }
-            });
-
-            sensorLayer.set("subscriptionTopics", {
-                "foo": false
-            });
-            sensorLayer.unsubscribeFromSensorThings();
-
-            expect(topics).to.be.empty;
-        });
-    });
-
-    describe("updateObservationForDatastreams", function () {
-        const feature = new Feature({
-            Datastreams: [{
-                "@iot.id": "foo",
-                Observations: []
-            }, {
-                "@iot.id": "bar",
-                Observations: []
-            }]
-        });
-
-        it("should add the given observation to the property Datastreams where the datastream id equals the given datastream id", function () {
-            sensorLayer.updateObservationForDatastreams(feature, "foo", "qox");
-
-            expect(feature.get("Datastreams")[0].Observations).to.deep.equal(["qox"]);
-            expect(feature.get("Datastreams")[1].Observations).to.be.empty;
-        });
-    });
-
-    describe("getJsonGeometry", function () {
-        it("should return the location in geometry", function () {
-            const testObject = {
-                Locations: [
-                    {
-                        location: {
-                            geometry: {
-                                type: "Point",
-                                test: "Test"
-                            }
-                        }
-                    }
-                ]
-            };
-
-            expect(sensorLayer.getJsonGeometry(testObject, 0)).to.be.an("object").to.include({test: "Test"});
-            expect(sensorLayer.getJsonGeometry(testObject, 1)).to.be.null;
-        });
-        it("should return the location without geometry", function () {
-            const testObject2 = {
-                Locations: [
-                    {
-                        location: {
-                            type: "Point",
-                            test: "Test"
-                        }
-                    }
-                ]
-            };
-
-            expect(sensorLayer.getJsonGeometry(testObject2, 0)).to.be.an("object").to.include({test: "Test"});
-            expect(sensorLayer.getJsonGeometry(testObject2, 1)).to.be.null;
-        });
-    });
-
-    describe("parseJson", function () {
-        it("should parse point object", function () {
-            const obj = {
-                "type": "Point",
-                "coordinates": [10.210913, 53.488449]
-            };
-
-            sensorLayer.set("epsg", "EPSG:4326", {silent: true});
-            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
-            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(Point);
-        });
-    });
-
-    describe("parseJson", function () {
-        it("should parse line object", function () {
-            const obj = {
-                "type": "LineString",
-                "coordinates": [[10.210913, 53.488449], [11.210913, 54.488449]]
-            };
-
-            sensorLayer.set("epsg", "EPSG:4326", {silent: true});
-            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
-            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(LineString);
+        it("should be unsubscribed when unselected", function () {
+            sensorLayer.set("isOutOfRange", false, {silent: true});
+            sensorLayer.set("isSelected", false, {silent: true});
+            sensorLayer.checkConditionsForSubscription();
+            expect(sensorLayer.get("isSubscribed")).to.be.false;
         });
     });
 });
