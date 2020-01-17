@@ -6,11 +6,15 @@ const fs = require("fs-extra"),
 
     replaceStrings = require(path.resolve(rootPath, "devtools/tasks/replace")),
     prependVersionNumber = require(path.resolve(rootPath, "devtools/tasks/prependVersionNumber")),
+    gitRevSync = require("git-rev-sync"),
 
     stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
     distPath = path.resolve(rootPath, "dist/"),
     mastercodeVersionPath = path.resolve(distPath, "mastercode/", stableVersionNumber),
     buildTempPath = path.resolve(distPath, "build/");
+
+
+
 
 /**
  * remove files if if they already exist.
@@ -47,6 +51,17 @@ function buildSinglePortal (allPortalPaths) {
  * @returns {void}
  */
 module.exports = function buildWebpack (answers) {
+    console.log("#########################");
+
+    console.log(gitRevSync.short());
+    console.log(gitRevSync.long());
+    console.log(gitRevSync.branch());
+
+
+
+    return;
+
+
     const
         sourcePortalsFolder = path.resolve(rootPath, answers.portalPath),
         cliExecCommand = "webpack --config devtools/webpack.prod.js";

@@ -31,6 +31,7 @@
     "cesium": "1.50.0",
     "d3": "4.9.x",
     "dom-parser": "^0.1.5",
+    "git-rev-sync": "^2.0.0",
     "https-proxy-agent": "^3.0.0",
     "jquery": "^3.4.1",
     "jquery-ui": "1.x",
