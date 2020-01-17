@@ -186,6 +186,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
+     * Ends mqtt client instantly
+     * @returns {void}
+     */
+    endMqttConnectionToSensorThings: function () {
+        this.get("mqttClient").end(true);
+        this.setMqttClient(null);
+    },
+
+    /**
      * get response from a given URL
      * @param  {String} requestUrl - to request sensordata
      * @fires Core#RadioTriggerUtilShowLoader
@@ -688,6 +697,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonData.dataStreamId = topic.match(regex)[1];
             this.options.context.updateFromMqtt(jsonData);
         });
+
+        this.setMqttClient(client);
     },
 
     /**
