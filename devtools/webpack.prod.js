@@ -4,7 +4,7 @@ const merge = require("webpack-merge"),
     path = require("path"),
 
     rootPath = path.resolve(__dirname, "../"),
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))();
 
 module.exports = function () {
     return merge.smart(new Common(), {
@@ -12,7 +12,7 @@ module.exports = function () {
         output: {
             path: path.resolve(__dirname, "../dist/build"),
             filename: "js/[name].js",
-            publicPath: "../mastercode/" + stableVersionNumber + "/"
+            publicPath: "../mastercode/" + mastercodeVersionFolderName + "/"
         },
         module: {
             rules: [

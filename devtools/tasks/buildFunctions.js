@@ -6,15 +6,11 @@ const fs = require("fs-extra"),
 
     replaceStrings = require(path.resolve(rootPath, "devtools/tasks/replace")),
     prependVersionNumber = require(path.resolve(rootPath, "devtools/tasks/prependVersionNumber")),
-    gitRevSync = require("git-rev-sync"),
-    moment = require("moment"),
-    gitLastCommit = require("git-last-commit"),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
 
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
     distPath = path.resolve(rootPath, "dist/"),
-    buildTempPath = path.resolve(distPath, "build/");
-
-let mastercodeVersionPath = path.resolve(distPath, "mastercode/", stableVersionNumber);
+    buildTempPath = path.resolve(distPath, "build/"),
+    mastercodeVersionPath = path.resolve(distPath, "mastercode/", mastercodeVersionFolderName);
 
 /**
  * remove files if if they already exist.
@@ -50,7 +46,7 @@ function buildSinglePortal (allPortalPaths) {
  * @param {Object} answers contains the attributes for the portal to be build
  * @returns {void}
  */
-function startBuilding (answers) {
+module.exports = function buildWebpack (answers) {
     const
         sourcePortalsFolder = path.resolve(rootPath, answers.portalPath),
         cliExecCommand = "webpack --config devtools/webpack.prod.js";
@@ -96,27 +92,5 @@ function startBuilding (answers) {
 
     }).catch(function (err) {
         throw new Error("ERROR", err);
-    });
-}
-
-/**
- * checkout if package is built from stable or not, after that start to build
- * @param {Object} answers contains the attributes for the portal to be build
- * @returns {void}
- */
-module.exports = function buildWebpack (answers) {
-    gitLastCommit.getLastCommit((err, commit) => {
-        let devRevInfo;
-
-        if (err) {
-            throw new Error("ERROR", err);
-        }
-
-        if (commit.branch.toUpperCase() !== "STABLE") {
-            devRevInfo = "DEV_" + moment(gitRevSync.date()).format("YYYY-MM-DD__h-m-s");
-            mastercodeVersionPath = [mastercodeVersionPath, devRevInfo, commit.author.name].join("_");
-        }
-
-        startBuilding(answers);
     });
 };
