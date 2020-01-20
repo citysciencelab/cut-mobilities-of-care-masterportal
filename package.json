@@ -100,7 +100,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run test && eslint --max-warnings 0 \"./**/*.js\""
+      "pre-push": "npm run test && npm run buildJsDoc && eslint --max-warnings 0 \"./**/*.js\""
     }
   }
 }
