@@ -320,39 +320,46 @@ describe("core/modelList/layer/sensor", function () {
     });
 
     describe("checkConditionsForSubscription", function () {
-        it("should be unsubsribed on startup", function () {
-            sensorLayer.checkConditionsForSubscription();
+        it("should be undefined on startup", function () {
+            expect(sensorLayer.checkConditionsForSubscription()).to.be.undefined;
             expect(sensorLayer.get("isSubscribed")).to.be.false;
-            expect(sensorLayer.get("moveendListener")).to.be.null;
         });
 
-        it("should be subscribed when inRange and selected", function () {
+        it("should be true when inRange and selected", function () {
             sensorLayer.set("isOutOfRange", false, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.checkConditionsForSubscription();
-            expect(sensorLayer.get("isSubscribed")).to.be.true;
+            expect(sensorLayer.checkConditionsForSubscription()).to.be.true;
         });
 
+        it("should be false when out of range", function () {
+            sensorLayer.set("isOutOfRange", true, {silent: true});
+            sensorLayer.set("isSelected", true, {silent: true});
+            sensorLayer.set("isSubscribed", true, {silent: true});
+            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
+        });
+
+        it("should be false when unselected", function () {
+            sensorLayer.set("isOutOfRange", false, {silent: true});
+            sensorLayer.set("isSelected", false, {silent: true});
+            expect(sensorLayer.checkConditionsForSubscription()).to.be.false;
+        });
+    });
+
+    describe("changedConditions", function () {
         it("should set moveendListener", function () {
+            sensorLayer.set("isSubscribed", false, {silent: true});
+            sensorLayer.set("isOutOfRange", false, {silent: true});
+            sensorLayer.set("isSelected", true, {silent: true});
+            sensorLayer.changedConditions();
             expect(sensorLayer.get("moveendListener")).to.not.be.null;
         });
 
-        it("should be unsubscribed when out of range", function () {
+        it("should unset moveendListener", function () {
+            sensorLayer.set("isSubscribed", true, {silent: true});
             sensorLayer.set("isOutOfRange", true, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
-            sensorLayer.checkConditionsForSubscription();
-            expect(sensorLayer.get("isSubscribed")).to.be.false;
-        });
-
-        it("should remove moveendListener", function () {
+            sensorLayer.changedConditions();
             expect(sensorLayer.get("moveendListener")).to.be.null;
-        });
-
-        it("should be unsubscribed when unselected", function () {
-            sensorLayer.set("isOutOfRange", false, {silent: true});
-            sensorLayer.set("isSelected", false, {silent: true});
-            sensorLayer.checkConditionsForSubscription();
-            expect(sensorLayer.get("isSubscribed")).to.be.false;
         });
     });
 });
