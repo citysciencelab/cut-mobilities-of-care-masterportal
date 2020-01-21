@@ -63,14 +63,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Check if layer is whithin range and selected to determine if all conditions are fullfilled to start or stop subscription.
+     * Start or stop subscription according to its conditions.
      * Because of usage of serveral listeners it's necessary to create a "isSubscribed" flag to prevent multiple executions.
      * @returns {void}
      */
-    checkConditionsForSubscription: function () {
-        const features = this.get("layer").getSource().getFeatures();
+    changedConditions: function () {
+        const features = this.get("layer").getSource().getFeatures(),
+            state = this.checkConditionsForSubscription();
 
-        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+        if (state === true) {
             this.setIsSubscribed(true);
             if (Array.isArray(features) && !features.length) {
                 this.initializeConnection();
@@ -80,7 +81,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             // create listener of moveend event
             this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
         }
-        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+        else if (state === false) {
             this.setIsSubscribed(false);
             // remove listener of moveend event
             Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
@@ -88,6 +89,21 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             // remove connection to live update
             this.endMqttConnectionToSensorThings();
         }
+    },
+
+    /**
+     * Check if layer is whithin range and selected to determine if all conditions are fullfilled.
+     * @returns {void}
+     */
+    checkConditionsForSubscription: function () {
+        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+            return true;
+        }
+        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+            return false;
+        }
+
+        return undefined;
     },
 
     /**
@@ -129,8 +145,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // subscription / unsubscription to mmqt only happens by this change events
         this.listenTo(this, {
-            "change:isVisibleInMap": this.checkConditionsForSubscription,
-            "change:isOutOfRange": this.checkConditionsForSubscription
+            "change:isVisibleInMap": this.changedConditions,
+            "change:isOutOfRange": this.changedConditions
         });
     },
 
