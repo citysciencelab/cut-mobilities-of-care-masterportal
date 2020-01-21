@@ -114,6 +114,21 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
+     * Check if layer is whithin range and selected to determine if all conditions are fullfilled.
+     * @returns {void}
+     */
+    checkConditionsForSubscription: function () {
+        if (this.get("isOutOfRange") === false && this.get("isSelected") === true && this.get("isSubscribed") === false) {
+            return true;
+        }
+        else if ((this.get("isOutOfRange") === true || this.get("isSelected") === false) && this.get("isSubscribed") === true) {
+            return false;
+        }
+
+        return undefined;
+    },
+
+    /**
      * Refresh all connections by ending all established connections and creating new ones
      * @returns {void}
      */
