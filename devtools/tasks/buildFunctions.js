@@ -60,7 +60,7 @@ module.exports = function buildWebpack (answers) {
     }
 
     allPortalPaths = fs.readdirSync(sourcePortalsFolder)
-        .map(name => sourcePortalsFolder + "\\" + name)
+        .map(name => path.join(sourcePortalsFolder, name))
         .filter(name => fs.lstatSync(name).isDirectory() && !name.endsWith(".git"));
 
     // console.warn("NOTICE: executing command \"" + cliExecCommand + "\"");
