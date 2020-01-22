@@ -12,16 +12,6 @@ const fs = require("fs-extra"),
     };
 
 /**
- * zips a given folder and deletes it afterwards
- * @returns {void}
- */
-function zipFolder () {
-    zipAFolder.zip(destinationFolder, destinationFolder + ".zip").then(() => {
-        // fs.remove(folder).catch(error => console.error(error));
-    });
-}
-
-/**
  * Deletes unwanted css asset files from addons
  * @returns {void}
  */
@@ -58,7 +48,7 @@ function removeAddonJsFiles () {
                 await fs.remove(folderToCheck + file);
             }
         }
-        zipFolder();
+        zipAFolder.zip(destinationFolder, destinationFolder + ".zip");
     });
 
 }
