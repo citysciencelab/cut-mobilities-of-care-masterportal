@@ -57,7 +57,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
     },
 
     /**
-     * todo
+     * Stores the projections and adds interaction pointermove to map
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioTriggerMapAddInteraction
      * @returns {void}
