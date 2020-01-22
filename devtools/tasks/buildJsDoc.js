@@ -15,3 +15,5 @@ execute("if exist jsdoc rd /s /q jsdoc")
     .then(function () {
         execute(pathToJsDocCmd + " -c ./devtools/jsdoc/jsdoc-config.json");
     });
+    process.on('unhandledRejection', error => { console.error(error) })
+
