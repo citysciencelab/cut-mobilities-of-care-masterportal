@@ -84,15 +84,11 @@ module.exports = function buildWebpack (answers) {
                     fs.remove(buildTempPath).catch(error => console.error(error));
                 }).catch(error => console.error(error));
             }).catch(error => console.error(error));
-        }).catch(function (err) {
-            throw new Error("ERROR", err);
-        });
+        }).catch(error => console.error(error));
 
         buildSinglePortal(allPortalPaths);
 
-    }).catch(function (err) {
-        throw new Error("ERROR", err);
-    });
+    }).catch(error => console.error(error));
 };
 
 
