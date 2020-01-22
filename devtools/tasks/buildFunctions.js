@@ -6,11 +6,11 @@ const fs = require("fs-extra"),
 
     replaceStrings = require(path.resolve(rootPath, "devtools/tasks/replace")),
     prependVersionNumber = require(path.resolve(rootPath, "devtools/tasks/prependVersionNumber")),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
 
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
     distPath = path.resolve(rootPath, "dist/"),
-    mastercodeVersionPath = path.resolve(distPath, "mastercode/", stableVersionNumber),
-    buildTempPath = path.resolve(distPath, "build/");
+    buildTempPath = path.resolve(distPath, "build/"),
+    mastercodeVersionPath = path.resolve(distPath, "mastercode/", mastercodeVersionFolderName);
 
 /**
  * remove files if if they already exist.
@@ -42,7 +42,7 @@ function buildSinglePortal (allPortalPaths) {
 }
 
 /**
- * start the process to build a portal with webpack
+ * start the build process with webpack
  * @param {Object} answers contains the attributes for the portal to be build
  * @returns {void}
  */
@@ -90,5 +90,3 @@ module.exports = function buildWebpack (answers) {
 
     }).catch(error => console.error(error));
 };
-
-
