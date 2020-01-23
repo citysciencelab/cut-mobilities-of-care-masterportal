@@ -29,7 +29,7 @@ const Config = {
         // WGS84
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ],
-    portalConf: "../../portal/master/",
+    portalConf: "../../../../../test/end2end/resources/configs/custom",
     remoteInterface: {
         postMessageUrl: "http://localhost:9001"
     },

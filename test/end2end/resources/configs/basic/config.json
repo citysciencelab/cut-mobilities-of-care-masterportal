@@ -130,7 +130,11 @@
 						}
 					],
 					"name": "Kita und Krankenhäuser"
-				},
+        },
+        {
+          "id": "4736",
+          "name": "Geobasiskarte (dunkel)"
+        },
 				{
           "id": "2003",
           "name": "WFS Schutzgebiete",
