@@ -59,7 +59,7 @@ export default {
          * @fires AlertingView#RadioTriggerAlertClosed
          * @return {void}
          */
-        closeAlert: function (mode, event) {
+        closeAlert (mode, event) {
             const div = $(event.currentTarget).parent();
 
             this.$store.dispatch("removeAlert", $(div[0]).attr("id"));

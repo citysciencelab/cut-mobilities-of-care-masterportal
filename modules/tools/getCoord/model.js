@@ -36,25 +36,25 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
-    initialize: function () {
-        this.superInitialize();
-        this.listenTo(this, {
-            "change:isActive": function (model, value) {
-                Radio.trigger("MapMarker", "hideMarker");
-                Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
-                if (value) {
-                    this.listenTo(Radio.channel("Map"), {
-                        "clickedWindowPosition": function (evt) {
-                            this.positionClicked(evt.coordinate);
-                        }
-                    });
-                }
-                else {
-                    this.stopListening(Radio.channel("Map", "clickedWindowPosition"));
-                }
-            }
-        });
-    },
+    // initialize: function () {
+    //     this.superInitialize();
+    //     this.listenTo(this, {
+    //         "change:isActive": function (model, value) {
+    //             Radio.trigger("MapMarker", "hideMarker");
+    //             Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
+    //             if (value) {
+    //                 this.listenTo(Radio.channel("Map"), {
+    //                     "clickedWindowPosition": function (evt) {
+    //                         this.positionClicked(evt.coordinate);
+    //                     }
+    //                 });
+    //             }
+    //             else {
+    //                 this.stopListening(Radio.channel("Map", "clickedWindowPosition"));
+    //             }
+    //         }
+    //     });
+    // },
 
     /**
      * todo
