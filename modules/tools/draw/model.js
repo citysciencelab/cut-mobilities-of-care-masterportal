@@ -30,6 +30,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         glyphicon: "glyphicon-pencil",
         addFeatureListener: {},
         zIndex: 0,
+        earthRadius: 6378137,
         transparencyOptions: [
             {caption: "0 %", value: 1.0},
             {caption: "10 %", value: 0.9},
@@ -259,11 +260,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      */
     calculateCircle: function (evt, circleCenter, circleRadius) {
         const map = Radio.request("Map", "getMap"),
+            earthRadius = this.get("earthRadius"),
             resultCoordinates = [
-                this.getCircleExtentByDistanceLat(circleCenter, circleRadius, map, Config.earthRadius),
-                this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius, map, Config.earthRadius),
-                this.getCircleExtentByDistanceLon(circleCenter, circleRadius, map, Config.earthRadius),
-                this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius, map, Config.earthRadius)
+                this.getCircleExtentByDistanceLat(circleCenter, circleRadius, map, earthRadius),
+                this.getCircleExtentByDistanceLat(circleCenter, -1 * circleRadius, map, earthRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, circleRadius, map, earthRadius),
+                this.getCircleExtentByDistanceLon(circleCenter, -1 * circleRadius, map, earthRadius)
             ],
             assortedCoordinates = this.assortResultCoordinates(circleCenter, resultCoordinates);
 
