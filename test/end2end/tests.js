@@ -1,6 +1,6 @@
 const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
     modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
-    modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
+    // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
     // modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
@@ -8,6 +8,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
+    parametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
     legendTests = require("./tests/Legend.js");
 
 /**
@@ -51,27 +52,23 @@ function tests (builder, url, browsername, resolution, config, mode) {
         }
 
 
-        // modules/controls
-        // TODO commented out for dev branch until ready
+        // // // modules/controls
         // modulesControlsAttributionsTests(e2eTestParams);
         modulesControlsBackForwardTests(e2eTestParams);
-
-        // TODO commented out since failing (for chrome)
         // modulesControlsFreezeTests(e2eTestParams);
-
-        // TODO commented out for dev branch until ready
         // modulesControlsFullScreenTests(e2eTestParams);
         modulesControlsOrientationTests(e2eTestParams);
-        // TODO commented out for dev branch until ready
         // modulesControlsOverviewMapTests(e2eTestParams);
         modulesControlsTotalViewTests(e2eTestParams);
-        // TODO commented out for dev branch until ready
         // modulesControlsZoomTests(e2eTestParams);
 
-        // non-module tests
+        // // // modules/core
+        parametricUrlTests(e2eTestParams);
+
+        // // // non-module tests
+        legendTests(e2eTestParams);
         panTests(e2eTestParams);
         zoomTests(e2eTestParams);
-        legendTests(e2eTestParams);
     });
 }
 
