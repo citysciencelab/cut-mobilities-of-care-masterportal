@@ -24,7 +24,7 @@ const store = new Vuex.Store({
          * @param {object} [Config={}] - data from config.js
          * @returns {void}
          */
-        addConfigToStore(state, Config = {}) {
+        addConfigToStore (state, Config = {}) {
             Object.keys(Config).forEach(configModule => {
                 const vuexModule =
                     configModule.charAt(0).toUpperCase() +
@@ -38,7 +38,8 @@ const store = new Vuex.Store({
                                     Config[configModule][value];
                             }
                         });
-                    } else {
+                    }
+                    else {
                         state[vuexModule][configModule] = Config[configModule];
                     }
                 }
@@ -68,4 +69,5 @@ const store = new Vuex.Store({
         }
     }
 });
+
 export default store;
