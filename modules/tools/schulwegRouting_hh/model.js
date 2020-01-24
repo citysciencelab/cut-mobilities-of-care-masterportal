@@ -274,7 +274,7 @@ const SchulwegRouting = Tool.extend({
     },
     sendRequest: function (requestID, requestObj) {
         this.toggleLoader(true);
-        Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this), 50000);
+        Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this));
     },
     toggleLoader: function (show) {
         if (show) {
