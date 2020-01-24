@@ -24,7 +24,7 @@ const store = new Vuex.Store({
          * @param {object} [Config={}] - data from config.js
          * @returns {void}
          */
-        addConfigToStore(state, Config = {}) {
+        addConfigToStore (state, Config = {}) {
             Object.keys(Config).forEach(configModule => {
                 const vuexModule =
                     configModule.charAt(0).toUpperCase() +
@@ -38,21 +38,23 @@ const store = new Vuex.Store({
                                     Config[configModule][value];
                             }
                         });
-                    } else {
+                    }
+                    else {
                         state[vuexModule][configModule] = Config[configModule];
                     }
                 }
             });
         },
-        setToolActive(state, payload) {
+        setToolActive (state, payload) {
             Object.keys(state.Tools).forEach(toolId => {
                 const tool = state.Tools[toolId];
-                if (tool && tool.id == payload.id) {
-                    console.log("set Tool active ", payload.active, tool.id);
+
+                if (tool && tool.id === payload.id) {
                     tool.active = payload.active;
                 }
             });
         }
     }
 });
+
 export default store;
