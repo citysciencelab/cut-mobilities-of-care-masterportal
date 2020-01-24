@@ -129,7 +129,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         Radio.trigger("ClickCounter", "toolChanged");
         if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
-            store.commit("setToolActive", {id: this.model.id, active:true});
+            store.commit("setToolActive", {id: this.model.id, active: true});
         }
         else {
             if (!this.model.collection) {
