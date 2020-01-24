@@ -29,11 +29,11 @@ const WPS = Backbone.Model.extend({
      * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
      * @returns {void}
      */
-    request: function (wpsID, identifier, data, responseFunction, timeout) {
+    request: function (wpsID, identifier, data, responseFunction) {
         var xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
             url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
 
-        this.sendRequest(url, xmlString, responseFunction, timeout);
+        this.sendRequest(url, xmlString, responseFunction);
     },
 
     /**
@@ -44,12 +44,12 @@ const WPS = Backbone.Model.extend({
      * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
      * @returns {void}
      */
-    sendRequest: function (url, xmlString, responseFunction, timeout) {
+    sendRequest: function (url, xmlString, responseFunction) {
         var xhr = new XMLHttpRequest(),
             that = this;
 
         xhr.open("POST", url);
-        xhr.timeout = timeout && typeof timeout === "number" ? timeout : 10000;
+        xhr.timeout = 10000;
 
         xhr.onload = function (event) {
             that.handleResponse(event.currentTarget.responseText, xhr.status, responseFunction);
