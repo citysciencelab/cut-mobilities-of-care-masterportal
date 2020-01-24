@@ -45,7 +45,7 @@ import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
-import  store from "../../../src/store/index";
+import store from "../../../src/store/index";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -529,7 +529,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
         activeToolsToDeactivate.forEach((tool) => {
             tool.setIsActive(false);
-            store.commit("setToolActive", {id: tool.id, active:false});
+            store.commit("setToolActive", {id: tool.id, active: false});
         });
     },
 
@@ -545,7 +545,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeTools = _.without(activeTools, legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
-            store.commit("setToolActive", {id: defaultTool.id, active:true});
+            store.commit("setToolActive", {id: defaultTool.id, active: true});
         }
     },
 

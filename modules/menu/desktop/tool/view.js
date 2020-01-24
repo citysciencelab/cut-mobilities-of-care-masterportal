@@ -108,7 +108,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         Radio.trigger("ClickCounter", "toolChanged");
         if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
-            store.commit("setToolActive", {id: this.model.id, active:true});
+            store.commit("setToolActive", {id: this.model.id, active: true});
         }
         else {
             if (!this.model.collection) {
@@ -118,7 +118,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             }
             this.model.collection.setActiveToolsToFalse(this.model);
             this.model.setIsActive(true);
-            store.commit("setToolActive", {id: this.model.id, active:true});
+            store.commit("setToolActive", {id: this.model.id, active: true});
         }
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
