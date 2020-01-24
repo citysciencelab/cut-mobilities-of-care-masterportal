@@ -14,6 +14,7 @@ const WPS = Backbone.Model.extend({
     },
     initialize: function () {
         var channel = Radio.channel("WPS");
+
         this.listenTo(channel, {
             "request": this.request
         }, this);
@@ -39,8 +40,8 @@ const WPS = Backbone.Model.extend({
      * @desc sends POST request to wps
      * @param {string} url url
      * @param {string} xmlString XML to be sent as String
-     * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
      * @param {function} responseFunction function to be called
+     * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
      * @returns {void}
      */
     sendRequest: function (url, xmlString, responseFunction, timeout) {
@@ -48,7 +49,7 @@ const WPS = Backbone.Model.extend({
             that = this;
 
         xhr.open("POST", url);
-        xhr.timeout = (timeout && typeof timeout === "number") ? timeout : 10000;
+        xhr.timeout = timeout && typeof timeout === "number" ? timeout : 10000;
 
         xhr.onload = function (event) {
             that.handleResponse(event.currentTarget.responseText, xhr.status, responseFunction);
