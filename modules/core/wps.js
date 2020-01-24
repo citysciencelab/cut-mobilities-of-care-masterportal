@@ -26,14 +26,18 @@ const WPS = Backbone.Model.extend({
      * @param {string} identifier The functionality to be invoked by the wps
      * @param {object} data Contains the Attributes to be sent
      * @param {function} responseFunction function to be called
+<<<<<<< HEAD
      * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
+=======
+     * @param {number} timeout if set, used as timeout in milliseconds, else timeout of 10.000 msecs is used
+>>>>>>> update: timeout in wps request schulwergouting set to 50000
      * @returns {void}
      */
-    request: function (wpsID, identifier, data, responseFunction) {
+    request: function (wpsID, identifier, data, responseFunction, timeout) {
         var xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
             url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
 
-        this.sendRequest(url, xmlString, responseFunction);
+        this.sendRequest(url, xmlString, responseFunction, timeout);
     },
 
     /**
@@ -44,12 +48,12 @@ const WPS = Backbone.Model.extend({
      * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
      * @returns {void}
      */
-    sendRequest: function (url, xmlString, responseFunction) {
+    sendRequest: function (url, xmlString, responseFunction, timeout) {
         var xhr = new XMLHttpRequest(),
             that = this;
 
         xhr.open("POST", url);
-        xhr.timeout = 10000;
+        xhr.timeout = timeout && typeof timeout === "number" ? timeout : 10000;
 
         xhr.onload = function (event) {
             that.handleResponse(event.currentTarget.responseText, xhr.status, responseFunction);
