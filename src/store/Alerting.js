@@ -65,13 +65,13 @@ export default {
          * @param {string} uuid - uuid for alert
          * @returns {void}
          */
-        addAlert ({commit}, alert) {
+        addAlert ({state, commit}, alert) {
             const newAlert = {
-                id: "alert_" + this.state.Alerting.uuid,
-                message: this.state,
-                category: this.state.Alerting.category,
-                isDismissable: this.state.Alerting.isDismissable,
-                isConfirmable: this.state.Alerting.isConfirmable
+                id: "alert_" + state.uuid,
+                message: "",
+                category: state.category,
+                isDismissable: state.isDismissable,
+                isConfirmable: state.isConfirmable
             };
 
             if (typeof alert === "string") {
