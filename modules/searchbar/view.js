@@ -228,9 +228,13 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickListGroupItem: function (e) {
         // fix für Firefox
-        var event = e || window.event;
+        const event = e || window.event;
+        let target = $(event.target);
 
-        this.collapseHits($(event.target));
+        if (target.hasClass("badge")) {
+            target = target.parent();
+        }
+        this.collapseHits(target);
     },
 
     /**
