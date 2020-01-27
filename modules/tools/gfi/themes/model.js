@@ -435,7 +435,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                         name = preGfi[origName.toLowerCase()];
                     }
                     if (typeof translatedName === "object") {
-                        name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
+                        name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
+                        // name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
                         translatedName = translatedName.name;
                     }
 
@@ -471,6 +472,30 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }, {});
         }
         return gfi;
+    },
+
+    getNameFromObject: function (preGfi, origName, translatedName) {
+        let name = this.translateNameFromObject(preGfi, origName, translatedName.condition),
+            date;
+
+        const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
+            format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
+
+        if (name && translatedName.hasOwnProperty("suffix")) {
+            name = String(name) + " " + translatedName.suffix;
+        }
+        if (name && type === "date") {
+            date = moment(String(name));
+
+            if (date.isValid()) {
+                name = moment(String(name)).format(format);
+            }
+            else {
+                console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
+            }
+        }
+
+        return name;
     },
 
     /**

@@ -311,10 +311,12 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|name|true|String||Name bei exakt einem Match angezeigt werden soll. |'"Test"'|
+|name|true|String||Name, der bei exakt einem Match angezeigt werden soll. |'"Test"'|
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
+|type|false|enum["date"]||Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
+|suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-Beispiel gfiAttributes als Objekt
+Beispiel gfiAttributes als Objekt mit suffix.
 ```
 #!json
 {
@@ -323,7 +325,23 @@ Beispiel gfiAttributes als Objekt
       "key2": "Key der im Portal gezeigt wird 2",
       "key3": {
          "name": "Key der im Portal gezeigt wird 3",
-         "condition": "contains"
+         "condition": "contains",
+         "suffix": "°C"
+      }
+   }
+}
+```
+Beispiel gfiAttributes als Objekt mit type
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "key3": {
+         "name": "Key der im Portal gezeigt wird 3",
+         "condition": "contains",
+         "type": "date"
       }
    }
 }
