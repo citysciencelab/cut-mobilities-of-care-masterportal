@@ -436,7 +436,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                     }
                     if (typeof translatedName === "object") {
                         name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
-                        // name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
                         translatedName = translatedName.name;
                     }
 
