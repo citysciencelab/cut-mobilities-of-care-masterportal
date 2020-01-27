@@ -77,55 +77,6 @@ label {
     }
 }
 
-@media (min-width: 325px) {
-    #loading {
-        font-size: 30px;
-    }
-}
-
-@media (min-width: 400px) {
-    #loading {
-        font-size: 35px;
-    }
-}
-
-@media (min-width: 500px) {
-    #loading {
-        font-size: 40px;
-    }
-}
-
-@media (min-width: 600px) {
-    #loading {
-        font-size: 55px;
-    }
-}
-
-@media (min-width: 800px) {
-    #loading {
-        font-size: 60
-        px;
-    }
-}
-
-@media (min-width: 1000px) {
-    #loading {
-        font-size: 65px;
-    }
-}
-
-@media (min-width: 1300px) {
-    #loading {
-        font-size: 70px;
-    }
-}
-
-@media (min-width: 1600px) {
-    #loading {
-        font-size: 75px;
-    }
-}
-
 #poibody {
     overflow:auto;
 }
@@ -147,7 +98,7 @@ label {
     position: absolute;
     width: 100%;
     z-index: 2000;
-    visibility: hidden;
+    display: none;
 }
 
 #loader img {
