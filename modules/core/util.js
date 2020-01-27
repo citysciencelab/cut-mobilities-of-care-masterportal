@@ -355,6 +355,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
+        window.setTimeout(function () {
+            $("#loading").fadeOut(this.fadeOut);
+        }, 1000);
         $("#loader").hide();
     },
 

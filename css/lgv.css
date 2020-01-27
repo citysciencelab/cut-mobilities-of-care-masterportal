@@ -36,11 +36,17 @@ label {
     #poibody {
         max-height:120px;
     }
+    #loading {
+        top:50px;
+    }
 }
 
 @media (min-height:250px) {
     #poibody {
         max-height:200px;
+    }
+    #loading {
+        top:100px;
     }
 }
 
@@ -48,17 +54,75 @@ label {
     #poibody {
         max-height:220px;
     }
+    #loading {
+        top:110px;
+    }
 }
 
 @media (min-height:480px) {
     #poibody {
         max-height:400px;
     }
+    #loading {
+        top:200px;
+    }
 }
 
 @media (min-height: 768px) {
     #poibody {
         max-height:700px;
+    }
+    #loading {
+        top:240px;
+    }
+}
+
+@media (min-width: 325px) {
+    #loading {
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 400px) {
+    #loading {
+        font-size: 35px;
+    }
+}
+
+@media (min-width: 500px) {
+    #loading {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 600px) {
+    #loading {
+        font-size: 55px;
+    }
+}
+
+@media (min-width: 800px) {
+    #loading {
+        font-size: 60
+        px;
+    }
+}
+
+@media (min-width: 1000px) {
+    #loading {
+        font-size: 65px;
+    }
+}
+
+@media (min-width: 1300px) {
+    #loading {
+        font-size: 70px;
+    }
+}
+
+@media (min-width: 1600px) {
+    #loading {
+        font-size: 75px;
     }
 }
 
@@ -83,6 +147,7 @@ label {
     position: absolute;
     width: 100%;
     z-index: 2000;
+    visibility: hidden;
 }
 
 #loader img {
@@ -91,6 +156,18 @@ label {
     top: 50%;
     margin-left: -21px;
     margin-top: -5px;
+}
+ 
+#loading {
+    position: relative;
+    text-align: center;
+    z-index: 9999;
+    height: 0px;
+}
+    
+#loading img {
+    width: 50%;
+    height: auto;
 }
 
 .cluster {
