@@ -480,20 +480,24 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
             format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
 
-        if (name && translatedName.hasOwnProperty("suffix")) {
-            name = String(name) + " " + translatedName.suffix;
-        }
-        if (name && type === "date") {
-            date = moment(String(name));
+        if (name) {
+            if (translatedName.hasOwnProperty("suffix")) {
+                name = String(name) + " " + translatedName.suffix;
+            }
+            if (type === "date") {
+                date = moment(String(name));
 
-            if (date.isValid()) {
-                name = moment(String(name)).format(format);
+                if (date.isValid()) {
+                    name = moment(String(name)).format(format);
+                }
+            }
+            else if (type === "string") {
+                name = String(name);
             }
             else {
                 console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
             }
         }
-
         return name;
     },
 
@@ -534,7 +538,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else {
-            console.error("unknown matching type for gfi translation");
+            name = preGfi[origName];
         }
         return name;
     },
