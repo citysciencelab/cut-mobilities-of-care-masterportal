@@ -62,8 +62,6 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
             searchbarWidth = document.getElementById("searchForm").offsetWidth + searchBarIconEl.offsetWidth;
             navBarWidth = document.getElementById("main-nav").offsetWidth;
             titleWidth = titleEl ? titleEl.offsetWidth : 0;
-            console.log(titleWidth);
-            
             rest = navBarWidth - navMenuWidth - searchbarWidth;
 
             if (titleWidth > 10) { // sometimes titleEl has width of 10px, i don't know why -> behave like title is not rendered
