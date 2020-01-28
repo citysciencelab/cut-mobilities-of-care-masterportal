@@ -898,6 +898,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             Radio.trigger("Util", "showLoader");
         }
         else if (num === 0) {
+            Radio.trigger("Util", "hideLoadingModule");
             Radio.trigger("Util", "hideLoader");
             this.stopListening(this, "change:initalLoading");
         }
