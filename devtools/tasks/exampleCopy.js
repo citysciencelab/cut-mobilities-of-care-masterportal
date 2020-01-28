@@ -1,32 +1,70 @@
 const fs = require("fs-extra"),
     zipAFolder = require("zip-a-folder"),
-    packageJSON = require("../../package.json");
+    path = require("path"),
+
+    rootPath = path.resolve(__dirname, "../../"),
+    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
+    destinationFolder = path.resolve(rootPath, "dist/examples_" + stableVersionNumber),
+    portal = {
+        name: "Basic",
+        source: "./dist/basic",
+        mastercode: "./dist/mastercode"
+    };
 
 /**
- * zips a given folder and deletes it afterwards
- * @param {String} folder folder to be zipped
+ * Deletes unwanted css asset files from addons
  * @returns {void}
  */
-function zipFolder (folder) {
-    zipAFolder.zip(folder, folder + ".zip").then(() => {
-        fs.remove(folder).catch(error => console.error(error));
+function removeAddonCssFiles () {
+    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/css/";
+
+    fs.readdir(folderToCheck, async (err, files) => {
+        if (err) {
+            throw new Error("ERROR", err);
+        }
+        for (const file of files) {
+            if (file !== "masterportal.css" && file !== "woffs") {
+                await fs.remove(folderToCheck + file);
+            }
+        }
+        removeAddonJsFiles();
     });
+
+}
+
+/**
+ * Deletes unwanted js asset files from addons
+ * @returns {void}
+ */
+function removeAddonJsFiles () {
+    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/js/";
+
+    fs.readdir(folderToCheck, async (err, files) => {
+        if (err) {
+            throw new Error("ERROR", err);
+        }
+        for (const file of files) {
+            if (file !== "masterportal.js") {
+                await fs.remove(folderToCheck + file);
+            }
+        }
+        zipAFolder.zip(destinationFolder, destinationFolder + ".zip");
+    });
+
 }
 
 /**
  * creates the folder which contains the example portal
- * @param {String} folder folder to create
- * @param {Object} portal for the exmaples
  * @returns {void}
  */
-function createFolders (folder, portal) {
-    const destinationFolder = folder + "/" + portal.name;
+function createFolders () {
+    const destinationPortalFolder = destinationFolder + "/" + portal.name;
 
-    fs.mkdir(folder).then(() => {
-        fs.mkdir(destinationFolder).then(() => {
-            fs.copy(portal.source, destinationFolder).then(() => {
-                fs.copy(portal.mastercode, folder + "/mastercode").then(() => {
-                    zipFolder(folder);
+    fs.mkdir(destinationFolder).then(() => {
+        fs.mkdir(destinationPortalFolder).then(() => {
+            fs.copy(portal.source, destinationPortalFolder).then(() => {
+                fs.copy(portal.mastercode, destinationFolder + "/mastercode").then(() => {
+                    removeAddonCssFiles();
                 }).catch(err => console.error(err));
             }).catch(err => console.error(err));
         }).catch(err => console.error(err));
@@ -35,32 +73,13 @@ function createFolders (folder, portal) {
 
 /**
  * Deletes the folders if they already exist.
- * @param {String[]} folders folders to create
- * @param {Object} portal portal for the exmaples
  * @returns {void}
  */
-function removeFolders (folders, portal) {
-    folders.forEach(function (folder) {
-        fs.remove(folder).then(() => {
-            createFolders(folder, portal);
-        }).catch(err => console.error(err));
-    });
-}
-
-/**
- * Defines the folders to be created and the portal for the examples.
- * @returns {void}
- */
-function createFolderStructure () {
-    const folders = ["examples", "examples-" + packageJSON.version],
-        portal = {
-            name: "Basic",
-            source: "./dist/basic",
-            mastercode: "./dist/mastercode"
-        };
-
-    removeFolders(folders, portal);
+function removeFolders () {
+    fs.remove(destinationFolder).then(() => {
+        createFolders(destinationFolder, portal);
+    }).catch(err => console.error(err));
 }
 
 console.warn("create example folders, copy portal and dependencies");
-createFolderStructure();
+removeFolders();
