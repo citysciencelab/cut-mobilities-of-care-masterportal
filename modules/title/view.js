@@ -14,11 +14,11 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
 
         this.listenTo(Radio.channel("Title"), {
             "setSize": function () {
-                this.setSize();
+                this.renderDependingOnSpace();
             }
         });
 
-        window.addEventListener("resize", _.bind(this.setSize, this));
+        window.addEventListener("resize", _.bind(this.renderDependingOnSpace, this));
 
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function () {
@@ -26,7 +26,7 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
             }
         });
 
-        this.setSize();
+        this.renderDependingOnSpace();
     },
     className: "portal-title",
     id: "portalTitle",
@@ -36,7 +36,7 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
      * @returns {void}
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         $(".nav-menu").after(this.$el);
@@ -45,21 +45,37 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
     },
 
     /**
-     * Sets the size of the title.
+     * Renders the title if enough space available.
      * @returns {void}
      */
-    setSize: function () {
-        var rootWidth,
+    renderDependingOnSpace: function () {
+        let navMenuWidth,
             searchbarWidth,
-            width;
+            navBarWidth,
+            titleWidth,
+            rest;
+        const searchBarIconEl = document.getElementById("searchbar"),
+            titleEl = document.getElementById("portalTitle");
 
-        if (!_.isNull(document.getElementById("searchbar"))) {
-            rootWidth = document.getElementById("root").offsetWidth;
-            searchbarWidth = document.getElementById("searchbar").offsetWidth;
-            width = document.getElementById("navbarRow").offsetWidth - rootWidth - searchbarWidth - 100; // 50px toleranz wegen padding und margin von #root, #searchbar , .navbar-collapse und #portalTitle
+        if (searchBarIconEl) {
+            navMenuWidth = document.getElementById("root").offsetWidth;
+            searchbarWidth = document.getElementById("searchForm").offsetWidth + searchBarIconEl.offsetWidth;
+            navBarWidth = document.getElementById("main-nav").offsetWidth;
+            titleWidth = titleEl ? titleEl.offsetWidth : 0;
+            console.log(titleWidth);
+            
+            rest = navBarWidth - navMenuWidth - searchbarWidth;
 
-            this.$el.width(width);
-            if (width > 100) {
+            if (titleWidth > 10) { // sometimes titleEl has width of 10px, i don't know why -> behave like title is not rendered
+                if (titleWidth < rest + 40) { // add 40px for a bit space
+                    this.render();
+                }
+                else {
+                    this.$el.empty();
+                }
+            }
+            // titleEl is not rendered at this moment
+            else if (rest > 500) {
                 this.render();
             }
             else {
