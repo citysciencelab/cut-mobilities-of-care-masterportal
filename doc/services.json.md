@@ -250,14 +250,12 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 |name|ja|String||Name des gfi Templates.|
 |**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
 
-Beispiel gfiTheme für das template "sensor"
+Beispiel gfiTheme
 ```
 #!json
 "gfiTheme": {
    "name": "sensor",
-   "params": {
-         "grafana": true
-   }
+   "params": {}
 }
 ```
 ## gfi_theme_params ##
@@ -272,7 +270,21 @@ Hier werden die Parameter für das GFI-Template "sensor" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit "grafana_url" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit dem value des Attributes "iFrameAttributesPrefix" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|iFrameAttributesPrefix|nein|String||Prefix für die Attribute, die die url zu grafana enthalten.|
+
+Beispiel gfiTheme für das template "sensor"
+```
+#!json
+"gfiTheme": {
+   "name": "sensor",
+   "params": {
+         "grafana": true,
+         "iFrameAttributesPrefix": "grafana_url"
+   }
+}
+```
+
 
 ## gfi_attributes ##
 Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:

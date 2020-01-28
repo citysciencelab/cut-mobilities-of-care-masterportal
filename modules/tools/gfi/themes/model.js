@@ -425,7 +425,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
             else {
                 preGfi = this.allKeysToLowerCase(preGfi);
-                preGfi = this.removeAttributesStartingWith(preGfi, "grafana_url");
+                if (this.get("gfiParams") && this.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
+                    preGfi = this.removeIFrameAttributes(preGfi, this.get("gfiParams").iFrameAttributesPrefix);
+                }
                 _.each(gfiAttributes, function (value, key) {
                     var name,
                         origName = key,
@@ -456,15 +458,15 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * Removes Attributes from the preGfi object that start with the given string.
      * Currently used only for sensor-Theme.
      * @param {Object} preGfi preGfi.
-     * @param {String} string String condition each attributes starts with.
+     * @param {String} prefix String condition each attributes starts with.
      * @returns {Object} - The pregfi without the attributes starting with string.
      */
-    removeAttributesStartingWith: function (preGfi, string) {
+    removeIFrameAttributes: function (preGfi, prefix) {
         let gfi = preGfi;
 
         if (this.get("gfiTheme") === "sensor") {
             gfi = Object.keys(gfi).filter(key => {
-                return !key.startsWith(string);
+                return !key.startsWith(prefix);
             }).reduce((obj, key) => {
                 obj[key] = gfi[key];
                 return obj;
