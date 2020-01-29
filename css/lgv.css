@@ -98,7 +98,7 @@ label {
     position: absolute;
     width: 100%;
     z-index: 2000;
-    display: none;
+    /* display: none; */
 }
 
 #loader img {
@@ -110,15 +110,26 @@ label {
 }
  
 #loading {
+    animation-name: slidingIntro;
+    animation-duration: 3s;
     position: relative;
     text-align: center;
     z-index: 9999;
     height: 0px;
 }
+
+@keyframes slidingIntro {
+    from { transform: translateX(100%) }
+    to   { transform: translateX(0%) }
+}
     
 #loading img {
     width: 50%;
     height: auto;
+}
+
+#loading div {
+    font-size: 100px;
 }
 
 .cluster {
