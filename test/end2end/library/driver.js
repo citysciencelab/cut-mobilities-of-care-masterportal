@@ -31,8 +31,8 @@ async function initDriver (builder, url, resolution, mode) {
     const driver = await builder.build(),
         widthHeight = resolution.split("x").map(x => parseInt(x, 10));
 
-    await driver.get(url);
     await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
+    await driver.get(url);
     await driver.wait(until.elementLocated(By.id("loader")), 50000);
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
