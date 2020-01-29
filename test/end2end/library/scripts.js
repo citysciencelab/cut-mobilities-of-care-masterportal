@@ -158,6 +158,22 @@ function setCenter () {
     Backbone.Radio.trigger("MapView", "setCenter", arguments[0]);
 }
 
+/**
+ * Increases zoom level by 1.
+ * @returns {void}
+ */
+function zoomIn () {
+    Backbone.Radio.trigger("MapView", "setZoomLevelUp");
+}
+
+/**
+ * Reduces zoom level by 1.
+ * @returns {void}
+ */
+function zoomOut () {
+    Backbone.Radio.trigger("MapView", "setZoomLevelDown");
+}
+
 module.exports = {
     mouseWheelUp,
     mouseWheelDown,
@@ -167,7 +183,9 @@ module.exports = {
     doesLayerWithFeaturesExist,
     getCenter,
     getResolution,
-    setCenter
+    setCenter,
+    zoomIn,
+    zoomOut
 };
 
 /* eslint-enable prefer-rest-params */

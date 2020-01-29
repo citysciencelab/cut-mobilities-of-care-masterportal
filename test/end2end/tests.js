@@ -6,6 +6,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     // modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
     modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+    modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
     parametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
@@ -64,6 +65,9 @@ function tests (builder, url, browsername, resolution, config, mode) {
 
         // // // modules/core
         parametricUrlTests(e2eTestParams);
+
+        // // // modules/tools
+        modulesToolsGfi(e2eTestParams);
 
         // // // non-module tests
         legendTests(e2eTestParams);

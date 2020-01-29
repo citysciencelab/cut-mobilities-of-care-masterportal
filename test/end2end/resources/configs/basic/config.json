@@ -172,7 +172,11 @@
 				{
 					"id": "1133",
 					"name": "WFS Line (Default Style)"
-				}
+        },
+        {
+          "id": "8730",
+          "name": "Verkehrsstärken"
+        }
 			]
 		}
 	}
