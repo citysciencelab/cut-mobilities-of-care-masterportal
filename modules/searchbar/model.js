@@ -274,6 +274,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             usedNumbers = [],
             randomNumber;
 
+        hitList = Radio.request("Util", "sort", "address", hitList, "name");
+        this.setHitList(hitList);
+
         // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.
         // Im Rahmen der initialen Suche muss sichergestellt werden, dass die Ergebnisse der einzelnen
         // Algorithmen erst verarbeitet werden, wenn alle Ergebnisse vorliegen.
@@ -310,14 +313,69 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             recommendedList = singleTypes;
         }
         else {
-            recommendedList = this.get("hitList");
+            recommendedList = hitList;
         }
-        this.set("recommendedList", _.sortBy(recommendedList, "name"));
+
+        this.setRecommendedList(recommendedList);
+        this.setTypeList(this.prepareTypeList(hitList));
         this.trigger("renderRecommendedList");
 
         if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
             Radio.trigger("ViewZoom", "hitSelected");
         }
+    },
+
+    /**
+     * Sorts the hitList by type.
+     * @param {Object[]} hitList Hitlist.
+     * @returns {Object[]} - sorted Hits by Type
+     */
+    prepareTypeList: function (hitList) {
+        const typeList = [],
+            types = hitList.map(hit => hit.type),
+            uniqueTypes = types.reduce((unique, item) => {
+                return unique.includes(item) ? unique : [...unique, item];
+            }, []);
+
+        uniqueTypes.forEach(type => {
+            const typeListPart = hitList.filter(hit => {
+                    return hit.type === type;
+                }),
+                typeListObj = {
+                    type: type,
+                    list: typeListPart
+                };
+
+            typeList.push(typeListObj);
+        });
+        return typeList;
+    },
+
+    /**
+     * Setter for attribute "recommendedList".
+     * @param {Object[]} value recommendedList.
+     * @returns {void}
+     */
+    setRecommendedList: function (value) {
+        this.set("recommendedList", value);
+    },
+
+    /**
+     * Setter for attribute "hitList".
+     * @param {Object[]} value hitList.
+     * @returns {void}
+     */
+    setHitList: function (value) {
+        this.set("hitList", value);
+    },
+
+    /**
+     * Setter for attribute "typeList".
+     * @param {Object[]} value typeList.
+     * @returns {void}
+     */
+    setTypeList: function (value) {
+        this.set("typeList", value);
     },
 
     /**

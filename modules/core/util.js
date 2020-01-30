@@ -133,12 +133,13 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Sorting alorithm that distinguishes between array[objects] and other arrays.
      * arrays[objects] can be sorted by up to 2 object attributes
+     * @param {String} type Type of sortAlgorithm
      * @param {array} input array that has to be sorted
      * @param {String} first first attribute an array[objects] has to be sorted by
      * @param {String} second second attribute an array[objects] has to be sorted by
      * @returns {array} sorted array
      */
-    sort: function (input, first, second) {
+    sort: function (type, input, first, second) {
         var sorted,
             isArrayOfObjects = _.every(input, function (element) {
                 return _.isObject(element);
@@ -151,7 +152,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             sorted = this.sortArray(input);
         }
         else if (_.isArray(input) && isArrayOfObjects) {
-            sorted = this.sortObjects(input, first, second);
+            sorted = this.sortObjects(type, input, first, second);
         }
 
         return sorted;
@@ -167,17 +168,17 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} a todo
-     * @param {*} b todo
-     * @returns {*} todo
+     * Sorting function for alphanumeric sorting. First sorts alphabetically, then numerically.
+     * @param {*} a First comparator.
+     * @param {*} b Secons comparator.
+     * @returns {Number} Sorting index.
      */
     sortAlphaNum: function (a, b) {
-        var regExAlpha = /[^a-zA-Z]/g,
+        const regExAlpha = /[^a-zA-Z]/g,
             regExNum = /[^0-9]/g,
             aAlpha = String(a).replace(regExAlpha, ""),
-            bAlpha = String(b).replace(regExAlpha, ""),
-            aNum,
+            bAlpha = String(b).replace(regExAlpha, "");
+        let aNum,
             bNum,
             returnVal = -1;
 
@@ -198,14 +199,113 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} input todo
-     * @param {*} first todo
-     * @param {*} second todo
-     * @returns {*} todo
+     * Sorting function for numalpha sorting. First sorts numerically, then alphabetically.
+     * @param {*} a First comparator.
+     * @param {*} b Secons comparator.
+     * @returns {Number} Sorting index.
      */
-    sortObjects: function (input, first, second) {
-        var sortedObj = input;
+    sortNumAlpha: function (a, b) {
+        const regExAlpha = /[^a-zA-Z]/g,
+            regExNum = /[^0-9]/g,
+            aAlpha = String(a).replace(regExAlpha, ""),
+            bAlpha = String(b).replace(regExAlpha, ""),
+            aNum = parseInt(String(a).replace(regExNum, ""), 10),
+            bNum = parseInt(String(b).replace(regExNum, ""), 10);
+        let returnVal = -1;
+
+        if (aNum === bNum) {
+            if (aAlpha === bAlpha) {
+                returnVal = 0;
+            }
+            else if (aAlpha > bAlpha) {
+                returnVal = 1;
+            }
+        }
+        else {
+            returnVal = aNum > bNum ? 1 : -1;
+        }
+
+        return returnVal;
+    },
+
+    /**
+     * Sorting Function to sort address.
+     * Expected string format to be "STREETNAME HOUSENUMBER_WITH_OR_WITHOUT_SUFFIX, *"
+     * @param {String} a First comparator.
+     * @param {String} b Secons comparator.
+     * @returns {Number} Sorting index.
+     */
+    sortAddress: function (a, b) {
+        const aSplit = this.splitAddressString(a, ",", " "),
+            bSplit = this.splitAddressString(b, ",", " "),
+            aFirstPart = aSplit[0],
+            aSecondPart = aSplit[1],
+            bFirstPart = bSplit[0],
+            bSecondPart = bSplit[1];
+        let returnVal = -1;
+
+        if (aFirstPart > bFirstPart) {
+            returnVal = 1;
+        }
+        if (aFirstPart === bFirstPart) {
+            returnVal = this.sortNumAlpha(aSecondPart, bSecondPart);
+        }
+
+        return returnVal;
+    },
+
+    /**
+     * Splits the address string.
+     * @param {String} string Address string.
+     * @param {String} separator Separator to separate the Address and Housenumber from other info such as zipCode or City.
+     * @param {String} lastOccurrenceChar Character to separate the streetname from the housenumber.
+     * @returns {String[]} - Array containing the splitted parts.
+     */
+    splitAddressString: function (string, separator, lastOccurrenceChar) {
+        const splitBySeparator = string.split(separator),
+            splittedString = [];
+
+        splitBySeparator.forEach(split => {
+            const lastOccurrence = split.lastIndexOf(lastOccurrenceChar),
+                firstPart = split.substr(0, lastOccurrence).trim(),
+                secondPart = split.substr(lastOccurrence).trim();
+
+            splittedString.push(firstPart);
+            splittedString.push(secondPart);
+        });
+        return splittedString;
+    },
+
+    /**
+     * Sorts array of objects basend on the gioven type.
+     * @param {String} type Type of sort algorithm.
+     * @param {Object[]} input Array with object to be sorted.
+     * @param {String} first First attribute to sort by.
+     * @param {String} second Second attribute to sort by.
+     * @returns {Object[]} - Sorted array of objects.
+     */
+    sortObjects: function (type, input, first, second) {
+        let sortedObj = input;
+
+        if (type === "address") {
+            sortedObj = this.sortObjectsAsAddress(sortedObj, first);
+        }
+        else {
+            sortedObj = this.sortObjectsNonAddress(sortedObj, first, second);
+        }
+
+        return sortedObj;
+    },
+
+    /**
+     * Sorts Objects not as address.
+     * @param {Object[]} input Array with object to be sorted.
+     * @param {String} first First attribute to sort by.
+     * @param {String} second Second attribute to sort by.
+     * @returns {Object[]} - Sorted array of objects.
+     */
+    sortObjectsNonAddress: function (input, first, second) {
+        let sortedObj = input;
 
         sortedObj = _.chain(input)
             .sortBy(function (element) {
@@ -217,6 +317,27 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             .value();
 
         return sortedObj;
+    },
+
+    /**
+     * Sorts array of objects as address using a special sorting alorithm
+     * @param {Object[]} input Array with object to be sorted.
+     * @param {String} attribute Attribute to sort by.
+     * @returns {Object[]} - Sorted array of objects.
+     */
+    sortObjectsAsAddress: function (input, attribute) {
+        const sorted = [],
+            values = input.map(obj =>obj[attribute]),
+            sortedValues = values.sort(this.sortAddress.bind(this));
+
+        sortedValues.forEach(value => {
+            const filteredFeatures = input.filter(obj => {
+                return obj[attribute] === value;
+            });
+
+            sorted.push(filteredFeatures[0]);
+        });
+        return sorted;
     },
 
     /**

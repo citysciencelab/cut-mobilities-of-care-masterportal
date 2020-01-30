@@ -36,23 +36,23 @@ describe("core/Util", function () {
         });
         // undefined
         it("should return undefined for undefined input", function () {
-            expect(model.sort(undefined)).to.be.undefined;
+            expect(model.sort("", undefined)).to.be.undefined;
         });
         // array
         it("should sort array[String] alphanumerically", function () {
             var array = ["Test 11", "Test 1", "Test 2", "Test 5"];
 
-            expect(model.sort(array)).to.deep.equal(["Test 1", "Test 2", "Test 5", "Test 11"]);
+            expect(model.sort("", array)).to.deep.equal(["Test 1", "Test 2", "Test 5", "Test 11"]);
         });
         it("should sort array[int] alphanumerically", function () {
             var array = [11, 1, 2, 5];
 
-            expect(model.sort(array)).to.deep.equal([1, 2, 5, 11]);
+            expect(model.sort("", array)).to.deep.equal([1, 2, 5, 11]);
         });
         it("should sort array[float] alphanumerically", function () {
             var array = [11.1, 1.1, 2.1, 5.1];
 
-            expect(model.sort(array)).to.deep.equal([1.1, 2.1, 5.1, 11.1]);
+            expect(model.sort("", array)).to.deep.equal([1.1, 2.1, 5.1, 11.1]);
         });
         // object
         it("should sort array[object] with integers alphanumerically first attr1, then attr2", function () {
@@ -62,7 +62,7 @@ describe("core/Util", function () {
             array.push({attr1: 11, attr2: 5});
             array.push({attr1: 5, attr2: 5});
             array.push({attr1: 5, attr2: 1});
-            expect(model.sort(array, "attr1", "attr2")).to.deep.equal([
+            expect(model.sort("", array, "attr1", "attr2")).to.deep.equal([
                 {attr1: 1, attr2: 11}, {attr1: 5, attr2: 1}, {attr1: 5, attr2: 5}, {attr1: 11, attr2: 5}
             ]);
         });
@@ -73,7 +73,7 @@ describe("core/Util", function () {
             array.push({attr1: 11, attr2: 5});
             array.push({attr1: 5, attr2: 5});
             array.push({attr1: 5, attr2: 1});
-            expect(model.sort(array, "attr2", "attr1")).to.deep.equal([
+            expect(model.sort("", array, "attr2", "attr1")).to.deep.equal([
                 {attr1: 5, attr2: 1}, {attr1: 5, attr2: 5}, {attr1: 11, attr2: 5}, {attr1: 1, attr2: 11}
             ]);
         });
@@ -84,7 +84,7 @@ describe("core/Util", function () {
             array.push({attr1: 11, attr2: 5});
             array.push({attr1: 5, attr2: 5});
             array.push({attr1: 5, attr2: 1});
-            expect(model.sort(array, "attr1")).to.deep.equal([
+            expect(model.sort("", array, "attr1")).to.deep.equal([
                 {attr1: 1, attr2: 11}, {attr1: 5, attr2: 5}, {attr1: 5, attr2: 1}, {attr1: 11, attr2: 5}
             ]);
         });
@@ -95,7 +95,7 @@ describe("core/Util", function () {
             array.push({attr1: 11, attr2: 5});
             array.push({attr1: 5, attr2: 5});
             array.push({attr1: 5, attr2: 1});
-            expect(model.sort(array, "attr2")).to.deep.equal([
+            expect(model.sort("", array, "attr2")).to.deep.equal([
                 {attr1: 5, attr2: 1}, {attr1: 11, attr2: 5}, {attr1: 5, attr2: 5}, {attr1: 1, attr2: 11}
             ]);
         });
@@ -106,7 +106,7 @@ describe("core/Util", function () {
             array.push({attr1: 11, attr2: 5});
             array.push({attr1: 5, attr2: 5});
             array.push({attr1: 5, attr2: 1});
-            expect(model.sort(array, undefined, "attr2")).to.deep.equal([
+            expect(model.sort("", array, undefined, "attr2")).to.deep.equal([
                 {attr1: 5, attr2: 1}, {attr1: 11, attr2: 5}, {attr1: 5, attr2: 5}, {attr1: 1, attr2: 11}
             ]);
         });
@@ -118,7 +118,7 @@ describe("core/Util", function () {
             array.push({attr1: "5", attr2: "b"});
             array.push({attr1: "5", attr2: "c"});
 
-            expect(model.sort(array, "attr1", "attr2")).to.deep.equal([
+            expect(model.sort("", array, "attr1", "attr2")).to.deep.equal([
                 {attr1: "1", attr2: ""}, {attr1: "5", attr2: "b"}, {attr1: "5", attr2: "c"}, {attr1: "11", attr2: "a"}
             ]);
         });
@@ -130,7 +130,7 @@ describe("core/Util", function () {
             array.push({attr1: "5", attr2: "b"});
             array.push({attr1: "5", attr2: "c"});
 
-            expect(model.sort(array, "attr2", "attr1")).to.deep.equal([
+            expect(model.sort("", array, "attr2", "attr1")).to.deep.equal([
                 {attr1: "1", attr2: ""}, {attr1: "11", attr2: "a"}, {attr1: "5", attr2: "b"}, {attr1: "5", attr2: "c"}
             ]);
         });
@@ -196,6 +196,56 @@ describe("core/Util", function () {
 
             proxyURL = model.getProxyURL("./test.json");
             expect(proxyURL).to.be.equal("./test.json");
+        });
+    });
+    describe("splitAddressString", function () {
+        it("should split addressString with streetname without blank", function () {
+            expect(model.splitAddressString("Straße 1, PLZ Stadt", ",", " ")).to.deep.equal([
+                "Straße",
+                "1",
+                "PLZ",
+                "Stadt"
+            ]);
+        });
+        it("should split addressString with streetname without blank and housenumber with suffix", function () {
+            expect(model.splitAddressString("Straße 1a, PLZ Stadt", ",", " ")).to.deep.equal([
+                "Straße",
+                "1a",
+                "PLZ",
+                "Stadt"
+            ]);
+        });
+        it("should split addressString with streetname with blank", function () {
+            expect(model.splitAddressString("Platz ohne Namen 1, PLZ Stadt", ",", " ")).to.deep.equal([
+                "Platz ohne Namen",
+                "1",
+                "PLZ",
+                "Stadt"
+            ]);
+        });
+    });
+    describe("sortObjectsAsAddress", function () {
+        it("foobar", function () {
+            var array = [];
+
+            array.push({attr1: "aStraße 1b, 12345 Stadt"});
+            array.push({attr1: "aStraße 1, 12345 Stadt"});
+            array.push({attr1: "cStraße ohne Namen 10, 12345 Stadt"});
+            array.push({attr1: "aStraße 10, 12345 Stadt"});
+            array.push({attr1: "aStraße 2, 12345 Stadt"});
+            array.push({attr1: "aStraße 1a, 12345 Stadt"});
+            array.push({attr1: "bStraße 10, 12345 Stadt"});
+            array.push({attr1: "12Straße 10, 12345 Stadt"});
+            expect(model.sortObjectsAsAddress(array, "attr1")).to.deep.equal([
+                {attr1: "12Straße 10, 12345 Stadt"},
+                {attr1: "aStraße 1, 12345 Stadt"},
+                {attr1: "aStraße 1a, 12345 Stadt"},
+                {attr1: "aStraße 1b, 12345 Stadt"},
+                {attr1: "aStraße 2, 12345 Stadt"},
+                {attr1: "aStraße 10, 12345 Stadt"},
+                {attr1: "bStraße 10, 12345 Stadt"},
+                {attr1: "cStraße ohne Namen 10, 12345 Stadt"}
+            ]);
         });
     });
 });

@@ -1431,8 +1431,12 @@
 /**
  * @event Core#RadioRequestUtilSort
  * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
- * @returns {string[]} - Sorted Array
- * @example Radio.request("Util", "sort", values);
+ * @param {String} type Type of sort algorithm Currently .
+ * @param {String[] | Object[]} values Values to be sorted.
+ * @param {String} first Name of first Attribute to be sorted.
+ * @param {String} second Name of second Attribute to be sorted. Only if type!== "address".
+ * @returns {string[] | Object[]} - Sorted Array
+ * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
 /**

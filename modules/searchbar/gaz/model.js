@@ -153,7 +153,7 @@ const GazetteerModel = Backbone.Model.extend({
                 affix: $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] ? $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent : ""
             });
         });
-        sortedHouseNumbers = Radio.request("Util", "sort", houseNumbers, "number", "affix");
+        sortedHouseNumbers = Radio.request("Util", "sort", "", houseNumbers, "number", "affix");
 
         Radio.trigger("Gaz", "houseNumbers", sortedHouseNumbers);
         return sortedHouseNumbers;
