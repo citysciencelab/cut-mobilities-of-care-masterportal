@@ -6,6 +6,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
         "change .symbol select": "setSymbol",
+        "change .pointSize select": "setPointSize",
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
@@ -118,11 +119,12 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     .dropdownUnit,
                     .dropdownMethod,
                     .colorContour,
-                    .opacityContour`
+                    .opacityContour,
+                    .radius`
                 ).hide();
                 this.$el.find(
                     `.symbol,
-                    .radius,
+                    .pointSize,
                     .color,
                     .opacity`
                 ).show();
@@ -131,6 +133,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             case "Text schreiben": {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .radius,
                     .stroke-width,
                     .circleRadiusOuter,
@@ -152,6 +155,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             case "Kreis zeichnen": {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .text,
                     .font-size,
                     .font,
@@ -173,6 +177,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             case "Doppelkreis zeichnen": {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .text,
                     .font-size,
                     .font,
@@ -194,6 +199,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             case "Linie zeichnen": {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .text,
                     .font.size,
                     .font,
@@ -215,6 +221,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             case "Fläche zeichnen": {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .text,
                     .font-size,
                     .font,
@@ -235,6 +242,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             default: {
                 this.$el.find(
                     `.symbol,
+                    .pointSize,
                     .text,
                     .font-size,
                     .font,
@@ -360,6 +368,16 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     setSymbol: function (evt) {
         this.model.setSymbol(evt.target.value);
+        this.model.updateDrawInteraction();
+    },
+
+    /**
+     * Setter for the PointSize on the model.
+     * @param {*} evt - With a new PointSize.
+     * @return {void}
+     */
+    setPointSize: function (evt) {
+        this.model.setPointSize(evt.target.value);
         this.model.updateDrawInteraction();
     },
 

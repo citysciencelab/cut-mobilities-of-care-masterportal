@@ -25,7 +25,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             geometry: "Point",
             text: "Punkt zeichnen"
         },
-        symbol: "Lieferwagen",
+        symbol: {
+            caption: "Blatt",
+            type: "glyphicon",
+            value: "\ue103"
+        },
+        pointSize: 16,
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
@@ -63,12 +68,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "6 px", value: 6}
         ],
         pointSizeOptions: [
-            {caption: "6 px", value: 6},
-            {caption: "8 px", value: 8},
-            {caption: "10 px", value: 10},
-            {caption: "12 px", value: 12},
-            {caption: "14 px", value: 14},
-            {caption: "16 px", value: 16}
+            {caption: "16 px", value: 16},
+            {caption: "24 px", value: 24},
+            {caption: "32 px", value: 32},
+            {caption: "40 px", value: 40},
+            {caption: "48 px", value: 48},
+            {caption: "56 px", value: 56},
+            {caption: "64 px", value: 64}
         ],
         fontSizeOptions: [
             {caption: "10 px", value: 10},
@@ -91,15 +97,18 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Doppelkreis zeichnen", value: "Circle"},
             {caption: "Text schreiben", value: "Point"}
         ],
-        // TODO: Die verschiedenen Optionen mit ihren Pfaden hinzufügen
-        symbolOptions: [
-            {caption: "Anker", value: "../../../icons/anker.png"},
-            {caption: "Einkaufswagen", value: "../../../icons/einkaufswagen.png"},
-            {caption: "Film", value: "../../../icons/film.png"},
-            {caption: "Kaffee", value: "../../../icons/kaffee.png"},
-            {caption: "Lieferwagen", value: "../../../icons/lieferwagen.png"},
-            {caption: "Paket", value: "../../../icons/paket.png"},
-            {caption: "WIFI", value: "../../../icons/wifi.png"}
+        // TODO: config.json.md schreiben! Achtung: es gibt vorgaben die beachtet werden müssen
+        iconList: [
+            {caption: "Blatt", type: "glyphicon", value: "\ue103"},
+            {caption: "CD", type: "glyphicon", value: "\ue201"},
+            {caption: "Doktorhut", type: "glyphicon", value: "\ue233"},
+            {caption: "Feuer", type: "glyphicon", value: "\ue104"},
+            {caption: "Film", type: "glyphicon", value: "\ue009"},
+            {caption: "Flagge", type: "glyphicon", value: "\ue034"},
+            {caption: "Globus", type: "glyphicon", value: "\ue135"},
+            {caption: "Musik", type: "glyphicon", value: "\ue002"},
+            {caption: "Straße", type: "glyphicon", value: "\ue024"},
+            {caption: "Zelt", type: "glyphicon", value: "\u26fa"}
         ]
     }),
 
@@ -797,7 +806,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             strokeWidth = this.get("strokeWidth"),
             radius = this.get("radius"),
             zIndex = this.get("zIndex"),
-            symbol = this.get("symbol");
+            symbol = this.get("symbol"),
+            pointSize = this.get("pointSize");
 
         if (drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
@@ -806,7 +816,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
         else if (drawType.text === "Punkt zeichnen") {
-            style = this.getPointStyle(color, strokeWidth, radius, zIndex, colorContour, symbol);
+            style = this.getPointStyle(color, pointSize, zIndex, symbol);
         }
         else {
             style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
@@ -879,27 +889,56 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     /**
      * Creates and returns a feature style for points.
      * @param {*} color - of drawings
-     * @param {*} radius - from geometry
+     * @param {*} pointSize - from geometry
      * @param {*} zIndex - of Element
-     * @param {*} symbol - to be drawn
+     * @param {*} symbol - to be drawn consisting of value and type divided by '@@'
      * @return {ol/style/Style} style
+     * @throws Error if the type of the symbol is not supported.
      */
-    getPointStyle: function (color, radius, zIndex, symbol) {
-        return new Style({
-            // TODO: Aktuell wird nichts angezeigt und nichts gezeichnet
-            image: new Icon({
-                size: [radius, radius],
-                color: color,
-                src: symbol
-            }),
-            /* image: new Circle({
-                radius: radius,
-                fill: new Fill({
-                    color: color
-                })
-            }),*/
-            zIndex: zIndex
-        });
+    getPointStyle: function (color, pointSize, zIndex, symbol) {
+        let style,
+            sym = [];
+
+        // sym[0] = value, sym[1] = type
+        // Different ways of creatin the array occur because of needed parsing for the combobox.
+        // However, the data is normally saved as an object
+        if (typeof symbol === "string") {
+            sym = symbol.split("@@");
+        }
+        else {
+            sym[0] = symbol.value;
+            sym[1] = symbol.type;
+        }
+
+        if (sym[1] === "glyphicon") {
+            style = new Style({
+                text: new Text({
+                    text: sym[0],
+                    font: "normal " + pointSize + "px \"Glyphicons Halflings\"",
+                    fill: new Fill({
+                        color: color
+                    })
+                }),
+                zIndex: zIndex
+            });
+        }
+        // TODO: the scale has to depend on the image width instead of on fixed 100
+        // To use the opacity given by the color parameter it has to be separately added
+        else if (sym[1] === "image") {
+            style = new Style({
+                image: new Icon({
+                    src: sym[0],
+                    scale: 1 / (100 / pointSize),
+                    opacity: color[3],
+                    color: color.slice(0, 3)
+                }),
+                zIndex: zIndex
+            });
+        }
+        else {
+            throw new Error(`The given type ${sym[1]} of the symbol is not supported!`);
+        }
+        return style;
     },
 
     /**
@@ -1130,7 +1169,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     putGlyphToCursor: function (glyphicon) {
-        if (glyphicon.indexOf("trash") !== -1) {
+        if (glyphicon.indexOf("trash") !== -1 || glyphicon.indexOf("wrench") !== -1) {
             $("#map").removeClass("no-cursor");
             $("#map").addClass("cursor-crosshair");
         }
@@ -1186,6 +1225,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         $(".color select")[0].disabled = disAble;
         $(".colorContour select")[0].disabled = disAble;
         $(".symbol select")[0].disabled = disAble;
+        $(".pointSize select")[0].disabled = disAble;
         if (disAble === false && this.get("methodCircle") === "defined") {
             this.enableMethodDefined(disAble);
         }
@@ -1248,11 +1288,20 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
     /**
      * setter for symbol
-     * @param {string} value - symbol
+     * @param {string} value - symbol with value, caption and type
      * @return {void}
      */
     setSymbol: function (value) {
         this.set("symbol", value);
+    },
+
+    /**
+     * setter for pointSize
+     * @param {*} value - pointSize
+     * @return {void}
+     */
+    setPointSize: function (value) {
+        this.set("pointSize", parseInt(value, 10));
     },
 
     /**
