@@ -1,17 +1,18 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
-    _ = require("underscore"),
     UglifyJsPlugin = require("uglifyjs-webpack-plugin"),
-    path = require("path");
+    path = require("path"),
 
-module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
+    rootPath = path.resolve(__dirname, "../"),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))();
 
-    return merge.smart(new Common(path2CustomModule), {
+module.exports = function () {
+    return merge.smart(new Common(), {
         mode: "production",
         output: {
             path: path.resolve(__dirname, "../dist/build"),
-            filename: "js/masterportal.js"
+            filename: "js/[name].js",
+            publicPath: "../mastercode/" + mastercodeVersionFolderName + "/"
         },
         module: {
             rules: [
@@ -21,7 +22,8 @@ module.exports = function (env, args) {
                     loader: "file-loader",
                     options: {
                         name: "[name].[ext]",
-                        outputPath: "css/woffs/"
+                        outputPath: "css/woffs/",
+                        publicPath: "./woffs/"
                     }
                 }
             ]

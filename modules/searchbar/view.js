@@ -9,6 +9,7 @@ import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./osm/model";
 import GdiModel from "./gdi/model";
+import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 
 /**
@@ -146,6 +147,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (_.has(config, "gdi") === true) {
             new GdiModel(config.gdi);
         }
+        if (config.hasOwnProperty("elasticSearch")) {
+            new ElasticSearchModel(config.elasticSearch);
+        }
 
         this.model.setHitIsClick(false);
 
@@ -224,9 +228,13 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickListGroupItem: function (e) {
         // fix für Firefox
-        var event = e || window.event;
+        const event = e || window.event;
+        let target = $(event.target);
 
-        this.collapseHits($(event.target));
+        if (target.hasClass("badge")) {
+            target = target.parent();
+        }
+        this.collapseHits(target);
     },
 
     /**

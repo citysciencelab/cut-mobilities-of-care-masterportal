@@ -1,4 +1,6 @@
-import Alert from "../modules/alerting/model";
+import Vue from "vue";
+import App from "../src/App.vue";
+import store from "../src/store";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -9,21 +11,22 @@ import Map from "../modules/core/map";
 import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
+import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
-import ZoomToFeature from "../modules/zoomtofeature/model";
+import ZoomToFeature from "../modules/zoomToFeature/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
-import LayerinformationModel from "../modules/layerinformation/model";
+import LayerinformationModel from "../modules/layerInformation/model";
 import FooterView from "../modules/footer/view";
-import ClickCounterModel from "../modules/ClickCounter/model";
+import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleline/view";
+import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
@@ -40,17 +43,15 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
-import ImportView from "../modules/tools/kmlimport/view";
-import WFSFeatureFilterView from "../modules/wfsfeaturefilter/view";
+import ImportView from "../modules/tools/kmlImport/view";
+import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
-import AddWMSView from "../modules/tools/addwms/view";
+import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
-import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
-import TreeFilterView from "../modules/treefilter/view";
+import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featurelister/view";
+import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 // @deprecated in version 3.0.0
 // remove "version" in doc and config.
@@ -63,34 +64,37 @@ import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
-import TotalView from "../modules/controls/totalview/view";
+import TotalView from "../modules/controls/totalView/view";
 import AttributionsView from "../modules/controls/attributions/view";
-import OverviewmapView from "../modules/controls/overviewmap/view";
+import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
-import ButtonObliqueView from "../modules/controls/buttonoblique/view";
+import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-import BackForwardView from "../modules/controls/backforward/view";
+import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
-import VirtualcityModel from "../modules/tools/virtualcity/model";
+import VirtualcityModel from "../modules/tools/virtualCity/model";
 
-var sbconfig, controls, controlsView;
+let sbconfig, controls, controlsView;
 
 /**
  * load the configuration of master portal
  * @return {void}.
  */
 function loadApp () {
-
-    // Prepare config for Utils
-    var utilConfig = {},
+    /* eslint-disable no-undef */
+    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
+        utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        alertingConfig = Config.alerting ? Config.alerting : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        style = Radio.request("Util", "getUiStyle");
+        /* eslint-disable no-undef */
+    let app = {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -105,14 +109,23 @@ function loadApp () {
     // RemoteInterface laden
     if (_.has(Config, "remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
+        new RadioMasterportalAPI();
     }
 
     if (_.has(Config, "quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
 
+    Vue.config.productionTip = false;
+    app = new Vue({
+        render: h => h(App),
+        store
+    });
+
+    app.$store.commit("addConfigToStore", Config);
+    app.$mount();
+
     // Core laden
-    new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -132,8 +145,10 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
-    new ZoomToGeometry();
 
+    if (Config.hasOwnProperty("zoomToGeometry")) {
+        new ZoomToGeometry(Config.zoomToGeometry);
+    }
     if (_.has(Config, "zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
@@ -175,10 +190,6 @@ function loadApp () {
                 new CompareFeaturesView({model: tool});
                 break;
             }
-            case "einwohnerabfrage": {
-                new EinwohnerabfrageView({model: tool});
-                break;
-            }
             case "lines": {
                 new LineView({model: tool});
                 break;
@@ -189,10 +200,6 @@ function loadApp () {
             }
             case "filter": {
                 new FilterView({model: tool});
-                break;
-            }
-            case "schulwegrouting": {
-                new SchulwegRoutingView({model: tool});
                 break;
             }
             case "coord": {
@@ -301,9 +308,6 @@ function loadApp () {
             }
         }
     });
-
-    const style = Radio.request("Util", "getUiStyle");
-
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -437,7 +441,7 @@ function loadApp () {
         });
     }
 
-    new MapMarkerView();
+    new MapMarkerView(mapMarkerConfig);
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
@@ -450,24 +454,27 @@ function loadApp () {
 
     new HighlightFeature();
 
-    // Variable CUSTOMMODULE wird im webpack.DefinePlugin gesetzt
-    /* eslint-disable no-undef */
-    if (CUSTOMMODULE !== "") {
-        // DO NOT REMOVE [webpackMode: "eager"] comment, its needed.
-        import(/* webpackMode: "eager" */CUSTOMMODULE)
-            .then(module => {
-                /* eslint-disable new-cap */
-                const customModule = new module.default();
-                // custommodules are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Later on the model must be replaced in modellist:
+    if (Config.addons !== undefined) {
+        Config.addons.forEach((addonKey) => {
+            if (allAddons[addonKey] !== undefined) {
+                // .js need to be removed so webpack only searches for .js files
+                const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                Radio.trigger("ModelList", "replaceModelById", customModule.model.id, customModule.model);
-            })
-            .catch(error => {
-                console.error(error);
-                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-            });
+                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
+                    /* eslint-disable new-cap */
+                    const addon = new module.default();
+
+                    // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                    if (addon.model) {
+                        Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
+                    }
+                }).catch(error => {
+                    console.error(error);
+                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+                });
+            }
+        });
     }
-    /* eslint-enable no-undef */
 
     Radio.trigger("Util", "hideLoader");
 }

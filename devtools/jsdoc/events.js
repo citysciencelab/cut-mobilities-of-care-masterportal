@@ -74,6 +74,12 @@
  * @description Triggered by Model when new content is available.
  */
 
+ /**
+ * @event Sidebar#setWidth
+ * @param {String} width Width of sidebar.
+ * @description Triggered by Model when sidebar is toggled.
+ */
+
 /**
  * @event Sidebar#RadioTriggerSidebarToggle
  * @param {Boolean} isVisible Flag if sidebar is now visible or not.
@@ -420,6 +426,14 @@
  * @param {String} id Id of vector layer.
  * @param {ol/Feature[]} features Features that have been loaded.
  * @example Radio.trigger("VectorLayer", "featureUpdated", id, features)
+ */
+
+/**
+ * @event Layer#RadioTriggerVectorLayerResetFeatures
+ * @description Triggers an event with the features that are shown. Used for updates in heatmap after filter.
+ * @param {String} id Id of vector layer.
+ * @param {ol/Feature[]} features Features that are visible.
+ * @example Radio.trigger("VectorLayer", "resetFeatures", id, features)
  */
 
  /**
@@ -1002,6 +1016,12 @@
  * @description See {@link List#toggleDefaultTool}
  * @example Radio.trigger("ModelList", "toggleDefaultTool")
  */
+
+/**
+* @event Core.ModelList#RadioTriggerModelListRefreshLightTree
+* @description Refreshes the light tree.
+* @example Radio.trigger("ModelList", "refreshLightTree")
+*/
 
 /**
  * @event Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
@@ -2049,24 +2069,17 @@
  * @description todo
  */
 
-
-/** -------------------- Tools.Einwohnerabfrage_hh -------------------- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#ChangeIsActive
- * @description starts render function if this change is active
- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#RenderResult
- * @description render the resultView
- */
-
 /** -------------------- WPS -------------------- */
 
 /**
  * @event Core#RadioTriggerWPSRequest
+ * @param {string} wpsID The service id, defined in rest-services.json
+ * @param {string} identifier The functionality to be invoked by the wps
+ * @param {object} data Contains the Attributes to be sent
+ * @param {function} responseFunction function to be called
+ * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
  * @description todo
+ * @example Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this), 50000);
  */
 
 /** -------------------- Snippets -------------------- */
@@ -2269,18 +2282,23 @@
  * @param {string} [featureAttribute] - if given, only one entry of map is returned
  */
 
-/** -------------------- CUSTOMMODULE -------------------- */
+/** -------------------- ADDON -------------------- */
 
 /**
- * @event CustomModule#RadioRequestCustomModuleGetMarkerPosition
+ * @event Addon#RadioRequestAddonGetMarkerPosition
  * @description todo
  */
 
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**
- * @event Tools.LayerSliderModel#RadioTriggerChangeIsActive
- * @description todo
+ * @event Tools.LayerSlider#changeIsActive
+ * @description Event fired when layer slider model changes its attribute "isActive".
+ */
+
+ /**
+ * @event Tools.LayerSlider#changeActiveLayer
+ * @description Event fired when layer slider model changes its attribute "activeLayer".
  */
 
 /** -------------------- TOOLS.GETCOORD -------------------- */
@@ -2288,4 +2306,86 @@
 /**
  * @event Tools.GetCoord#RadioTriggerChangeIsActive
  * @description todo
+ */
+
+/** -------------------- TOOLS.DRAW -------------------- */
+
+/**
+ * @event Tools.Draw#RadioRequestDrawGetLayer
+ * @description Returns the draw layer
+ * @example Radio.request("Draw", "getLayer");
+ * @returns {ol/Layer} - The draw layer.
+ */
+
+/**
+ * @event Tools.Draw#RadioRequestDrawDownloadWithoutGUI
+ * @description Returns download features without using the download gui.
+ * @param {Object} obj Params for download without gui.
+ * @param {String} obj.geomType Geometry type of features.
+ * @param {Boolean} obj.transformWGS Flag if features should be transformed.
+ * @example Radio.request("Draw", "downloadWithoutGUI", obj);
+ * @returns {String} - The Features as string.
+ */
+
+ /**
+ * @event Tools.Draw#RadioTriggerDrawInitWithoutGUI
+ * @description Initializes the Draw tool to perform download without the download gui.
+ * @param {Object} obj Params for init without gui.
+ * @param {String} obj.drawType Draw type of features. Possible values are "Point", "LineString", "Polygon", "Circle".
+ * @param {String} obj.color="55, 126, 184" Color as rgb string.
+ * @param {Number} obj.opacity=1.0 Opacity.
+ * @param {Number} obj.maxFeatures maximum of Features.
+ * @param {String} obj.initialJSON Features to be Drawn on the layer.
+ * @param {Boolean} obj.transformWGS Flag if features should be transformed.
+ * @param {Boolean} obj.zoomToExtent Flag if map should be zoomed to extent.
+ * @example Radio.trigger("Draw", "initWithoutGUI", obj);
+ */
+
+/**
+ * @event Tools.Draw#RadioTriggerDeleteAllFeatures
+ * @description Deletes all drawn features.
+ * @example Radio.trigger("Draw", "deleteAllFeatures");
+ */
+
+/**
+ * @event Tools.Draw#RadioTriggerCancelDrawWithoutGUI
+ * @description Deletes all drawn features.
+ * @param {String} cursor Cursor.
+ * @example Radio.trigger("Draw", "cancelDrawWithoutGUI", cursor);
+ */
+
+/**
+ * @event Tools.Draw#RadioTriggerDownloadViaRemoteInterface
+ * @description Deletes all drawn features.
+ * @param {String} geomType Type of geometry.
+ * @example Radio.trigger("Draw", "downloadViaRemoteInterface", geomType);
+ */
+
+
+/** -------------------- TOOLS.DOWNLOAD -------------------- */
+
+/**
+ * @event Tools.Download#RadioTriggerDownloadStart
+ * @description Triggers the download tool to start.
+ * @param {Object} obj Configuration to start the download module.
+ * @param {String[]} obj.formats Formats to be supported.
+ * @param {ol/Feature[]} obj.features Features to be downloaded.
+ * @example Radio.trigger("Download", "start", obj);
+ */
+
+ /**
+ * @event Tools.Download#changeIsActive
+ * @description Triggered when the model attribute "isActive" changes.
+ */
+
+/** -------------------- ZOOMTOGEOMETRY -------------------- */
+
+/**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometryZoomToGeometry
+ * @description Zooms the map to a geometry from wfs.
+ */
+
+ /**
+ * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
+ * @description Todo
  */

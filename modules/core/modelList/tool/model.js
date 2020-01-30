@@ -14,7 +14,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
-        toolsToRenderInSidebar: ["filter", "schulwegrouting"]
+        toolsToRenderInSidebar: ["filter"]
     },
     /**
      * @class Tool
@@ -34,7 +34,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {String[]} supportedOnlyIn3d=["shadow"] Array of tool ids that are only supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
      * @property {String[]} supportedInOblique=[] Array of tool ids that are only supported in oblique mode
-     * @property {String[]} toolsToRenderInSidebar=["filter", "schulwegrouting"] Array of tool ids that are rendered in sidebar
+     * @property {String[]} toolsToRenderInSidebar=["filter"] Array of tool ids that are rendered in sidebar
      * @fires Core.ModelList.Tool#changeIsActive
      * @fires Window#RadioTriggerWindowShowTool
      * @fires Window#RadioTriggerWindowSetIsVisible
@@ -50,13 +50,15 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                var gfiModel = model.collection.findWhere({id: "gfi"}),
-                    activeTools = [];
+                const gfiModel = model.collection ? model.collection.findWhere({id: "gfi"}) : undefined;
+                let activeTools = [];
 
                 if (value) {
 
                     if (model.get("keepOtherToolsOpened") !== true) {
-                        this.collection.setActiveToolsToFalse(model);
+                        if (this.collection) {
+                            this.collection.setActiveToolsToFalse(model);
+                        }
                     }
 
                     if (model.get("renderToWindow")) {
@@ -73,9 +75,9 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
                     if (model.get("renderToWindow")) {
                         Radio.trigger("Window", "setIsVisible", false);
                     }
-                    activeTools = model.collection.where({isActive: true});
+                    activeTools = model.collection ? model.collection.where({isActive: true}) : undefined;
 
-                    if (activeTools.length === 0) {
+                    if (activeTools && activeTools.length === 0) {
                         model.collection.toggleDefaultTool();
                     }
                 }

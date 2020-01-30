@@ -1,4 +1,9 @@
 /**
+ * @namespace AddOns
+ * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ */
+
+/**
  * @namespace Controls
  * @description Controls are small Elements that allow the user to interact directly with the Application.
  * In the Application the controls are situated in red squares on the map on the right side of the window.
@@ -65,7 +70,7 @@
  */
 
 /**
- * @namespace Overviewmap
+ * @namespace OverviewMap
  * @memberof Controls
  * @description Small map on the bottom right of the Application, that gives the user an overview.
  */
@@ -265,6 +270,12 @@
  * @description Configures search in geodata infrastructure with elastic search
  */
 
+ /**
+ * @namespace ElasticSearch
+ * @memberof Searchbar
+ * @description Configures search in geodata infrastructure with elastic search
+ */
+
 /**
  * @namespace Osm
  * @memberof Searchbar
@@ -272,7 +283,7 @@
  */
 
 /**
- * @namespace SpecialWfs
+ * @namespace SpecialWFS
  * @memberof Searchbar
  * @description foobar
  */
@@ -312,7 +323,7 @@
  */
 
 /**
- * @namespace Multicheckbox
+ * @namespace MultiCheckbox
  * @memberof Snippets
  * @description Multicheckbox snippet for the filter model
  */
@@ -353,7 +364,7 @@
  */
 
 /**
- * @namespace AddWms
+ * @namespace AddWMS
  * @memberof Tools
  * @description Tool to add external WMS services as layer to the map.
  */
@@ -383,7 +394,7 @@
  */
 
 /**
- * @namespace Einwohnerabfrage_hh
+ * @namespace Einwohnerabfrage
  * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
@@ -521,7 +532,7 @@
  */
 
 /**
- * @namespace ElektroladeSaeulen
+ * @namespace Elektroladesaeulen
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for ElektroladeSaeulen
  */
@@ -568,6 +579,12 @@
  * @description GFI Theme for SolarAtlas
  */
 
+ /**
+ * @namespace Sensor
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for Sensordata
+ */
+
 /**
  * @namespace Table
  * @memberof Tools.GFI.Themes
@@ -602,6 +619,8 @@
  * @namespace LayerSlider
  * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).
+ * Can be configured as Player (sliderType="player") with start, stop, pause buttons.
+ * Can be configured as Handle (sliderType="handle") with a drag handle to wander through the layers using transparency.
  */
 
 /**
@@ -650,12 +669,6 @@
  * @namespace SaveSelection
  * @memberof Tools
  * @description Creates a parametric URL representing the current map state.
- */
-
-/**
- * @namespace SchulwegRouting_HH
- * @memberof Tools
- * @description Routing for school children based on Hamburg ATKIS data.
  */
 
 /**

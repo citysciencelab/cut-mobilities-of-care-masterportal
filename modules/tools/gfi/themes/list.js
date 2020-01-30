@@ -12,8 +12,8 @@ import TrinkwasserThemeView from "./trinkwasser/view";
 import TrinkwasserTheme from "./trinkwasser/model";
 import MietenspiegelThemeView from "./mietenspiegel/view";
 import MietenspiegelTheme from "./mietenspiegel/model";
-import SgvOnlineTheme from "./sgvonline/model";
-import SgvOnlineThemeView from "./sgvonline/view";
+import SgvOnlineTheme from "./sgvOnline/model";
+import SgvOnlineThemeView from "./sgvOnline/view";
 import VerkehrsStaerkenTheme from "./verkehrsstaerken/model";
 import VerkehrsStaerkenThemeView from "./verkehrsstaerken/view";
 import SchulInfoTheme from "./schulinfo/model";
@@ -32,8 +32,16 @@ import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
 import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
 import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
+import BalkendiagrammThemeView from "./bildungsatlas/balkendiagramm/view";
+import BalkendiagrammTheme from "./bildungsatlas/balkendiagramm/model";
 import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
 import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
+import SchulenWohnortThemeView from "./bildungsatlas/schulenWohnort/view";
+import SchulenWohnortTheme from "./bildungsatlas/schulenWohnort/model";
+import SchulentlasseneThemeView from "./bildungsatlas/schulentlassene/view";
+import SchulentlasseneTheme from "./bildungsatlas/schulentlassene/model";
+import SensorThemeView from "./sensor/view";
+import SensorTheme from "./sensor/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -63,6 +71,13 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "schulenEinzugsgebiete") {
             theme = new SchulenEinzugsgebieteTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenWohnort") {
+            theme = new SchulenWohnortTheme(attrs, options);
+
+        }
+        else if (attrs.gfiTheme === "schulentlassene") {
+            theme = new SchulentlasseneTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
             theme = new DipasTheme(attrs, options);
@@ -105,6 +120,12 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "balkendiagramm") {
+            theme = new BalkendiagrammTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "sensor") {
+            theme = new SensorTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -163,6 +184,14 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                 new SchulenEinzugsgebieteThemeView({model: model});
                 break;
             }
+            case "schulenWohnort": {
+                new SchulenWohnortThemeView({model: model});
+                break;
+            }
+            case "schulentlassene": {
+                new SchulentlasseneThemeView({model: model});
+                break;
+            }
             case "reisezeiten": {
                 new ReisezeitenThemeView({model: model});
                 break;
@@ -217,6 +246,14 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "buildings_3d": {
                 new Buildings3dThemeView({model: model});
+                break;
+            }
+            case "balkendiagramm": {
+                new BalkendiagrammThemeView({model: model});
+                break;
+            }
+            case "sensor": {
+                new SensorThemeView({model: model});
                 break;
             }
             default: {

@@ -1,81 +1,92 @@
 const fs = require("fs-extra"),
-    replaceStrings = require("./replace"),
-    prependVersionNumber = require("./prependVersionNumber"),
-    execute = require("child-process-promise").exec;
+    execute = require("child-process-promise").exec,
 
-/**
- * copy files to the given destination
- * @param {String} source source of the built portal
- * @param {String} destination destination folder for the built portal
- * @returns {void}
- */
-function copyFiles (source, destination) {
-    fs.copy(source, destination).then(() => {
-        console.warn("NOTE: Successfully Copied \"" + source + "\" to \"" + destination + "\".");
-        fs.copy("./img", destination + "/img").then(() => {
-            console.warn("NOTE: Successfully copied \"./img\" to \"" + destination + "\".");
-            fs.copy("./dist/build", destination).then(() => {
-                fs.remove("./dist/build").catch(error => console.error(error));
-                replaceStrings(destination);
-                console.warn("NOTE: Successfully copied \"./dist/build\" to \"" + destination + "\".");
-            }).catch(error => console.error(error));
-        }).catch(error => console.error(error));
-    }).catch(error => console.error(error));
-}
+    path = require("path"),
+    rootPath = path.resolve(__dirname, "../../"),
+
+    replaceStrings = require(path.resolve(rootPath, "devtools/tasks/replace")),
+    prependVersionNumber = require(path.resolve(rootPath, "devtools/tasks/prependVersionNumber")),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
+
+    distPath = path.resolve(rootPath, "dist/"),
+    buildTempPath = path.resolve(distPath, "build/"),
+    mastercodeVersionPath = path.resolve(distPath, "mastercode/", mastercodeVersionFolderName);
 
 /**
  * remove files if if they already exist.
- * @param {Object} answers contains the attributes for the portal to be build
+ * @param {Array} allPortalPaths all source paths of all portals to be built
  * @returns {void}
  */
-function removeFiles (answers) {
-    const portalName = answers.portalPath.split("/").pop(),
-        destination = "dist/" + portalName,
-        source = "./" + answers.portalPath;
+function buildSinglePortal (allPortalPaths) {
+    let sourcePortalPath = [];
 
-    if (portalName === "") {
-        console.warn("ERROR: Portal \"" + source + "\" not found.");
+    if (allPortalPaths.length === 0) {
         return;
     }
 
-    fs.remove(destination).then(() => {
-        console.warn("NOTE: Successfully deleted \"" + destination + "\" directory.");
-        copyFiles(source, destination);
+    sourcePortalPath = allPortalPaths.pop();
+
+    const portalName = sourcePortalPath.split(path.sep).pop(),
+        distPortalPath = path.resolve(distPath, portalName);
+
+    fs.remove(distPortalPath).then(() => {
+        // console.warn("NOTE: Deleted directory \"" + distPortalPath + "\".");
+        fs.copy(sourcePortalPath, distPortalPath).then(() => {
+            // console.warn("NOTE: Copied \"" + sourcePortalPath + "\" to \"" + distPortalPath + "\".");
+            replaceStrings(distPortalPath);
+            buildSinglePortal(allPortalPaths);
+        }).catch(error => console.error(error));
+    }).catch(function (err) {
+        throw new Error("ERROR", err);
     });
 }
 
 /**
- * start the process to build a portal with webpack
+ * start the build process with webpack
  * @param {Object} answers contains the attributes for the portal to be build
  * @returns {void}
  */
 module.exports = function buildWebpack (answers) {
-    let command;
+    const
+        sourcePortalsFolder = path.resolve(rootPath, answers.portalPath),
+        cliExecCommand = "webpack --config devtools/webpack.prod.js";
 
-    answers.portalPath = answers.portalPath.replace(/\/$/, "");
-    if (!fs.existsSync(answers.portalPath)) {
-        console.warn("ERROR: Module path \"" + answers.portalPath + "\" not found!");
-        return;
+    let allPortalPaths = [];
+
+
+    if (!fs.existsSync(sourcePortalsFolder)) {
+        console.error("---\n---");
+        throw new Error("ERROR: PATH DOES NOT EXIST \"" + sourcePortalsFolder + "\"\nABORTED...");
     }
 
-    if (answers.customModule !== "") {
-        command = "webpack --config devtools/webpack.prod.js --CUSTOMMODULE ../" + answers.portalPath + "/" + answers.customModule;
-    }
-    else {
-        command = "webpack --config devtools/webpack.prod.js";
-    }
-    console.warn("NOTICE: webpack startet...");
-    console.warn("NOTICE: executing command " + command);
+    allPortalPaths = fs.readdirSync(sourcePortalsFolder)
+        .map(name => path.join(sourcePortalsFolder, name))
+        .filter(name => fs.lstatSync(name).isDirectory() && !name.endsWith(".git"));
 
-    execute(command)
-        .then(function (result) {
-            console.warn(result.stdout);
-            prependVersionNumber("./dist/build/js/masterportal.js");
-            removeFiles(answers);
-        })
-        .catch(function (err) {
-            console.error("ERROR: ", err);
-        });
+    // console.warn("NOTICE: executing command \"" + cliExecCommand + "\"");
+    console.warn("NOTICE: Building portals. Please wait...");
+
+    execute(cliExecCommand).then(function (result) {
+
+        console.warn(result.stdout);
+
+        prependVersionNumber(path.resolve(buildTempPath, "js/masterportal.js"));
+
+        fs.remove(mastercodeVersionPath).then(() => {
+            // console.warn("NOTE: Deleted directory \"" + mastercodeVersionPath + "\".");
+
+            fs.copy("./img", mastercodeVersionPath + "/img").then(() => {
+                // console.warn("NOTE: Copied \"./img\" to \"" + mastercodeVersionPath + "\".");
+
+                fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
+                    // console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
+
+                    fs.remove(buildTempPath).catch(error => console.error(error));
+                }).catch(error => console.error(error));
+            }).catch(error => console.error(error));
+        }).catch(error => console.error(error));
+
+        buildSinglePortal(allPortalPaths);
+
+    }).catch(error => console.error(error));
 };
-
-

@@ -5,12 +5,12 @@ const merge = require("webpack-merge"),
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
     fs = require("fs"),
-    _ = require("underscore"),
     HttpsProxyAgent = require("https-proxy-agent"),
     /* eslint-disable no-process-env */
     proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
     /* eslint-disable no-process-env */
     proxyAgent = proxyServer !== undefined ? new HttpsProxyAgent(proxyServer) : "";
+
 
 let proxies;
 
@@ -27,20 +27,21 @@ Object.keys(proxies).forEach(proxy => {
     }
 });
 
-module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
+module.exports = function () {
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
         devServer: {
-            port: 9001,
-            publicPath: "/build/",
-            overlay: true,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
             https: true,
             open: true,
             openPage: "portal/master",
-            proxy: proxies
+            overlay: true,
+            port: 9001,
+            proxy: proxies,
+            publicPath: "/build/"
         },
         module: {
             rules: [
@@ -70,5 +71,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    }, new Common(path2CustomModule));
+    }, new Common());
 };

@@ -6,8 +6,8 @@ import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
 import OLCesium from "olcs/OLCesium.js";
 import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import FixedOverlaySynchronizer from "./3dUtils/FixedOverlaySynchronizer.js";
-import WMSRasterSynchronizer from "./3dUtils/WMSRasterSynchronizer.js";
+import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
+import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 import moment from "moment";
 import {register} from "ol/proj/proj4.js";
@@ -514,7 +514,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.setMap3d(this.createMap3d());
             this.handle3DEvents();
             this.setCesiumSceneDefaults();
-            this.setCameraParameter(cameraParameter);
+            if (cameraParameter) {
+                this.setCameraParameter(cameraParameter);
+            }
             camera = this.getMap3d().getCesiumScene().camera;
             camera.changed.addEventListener(this.reactToCameraChanged, this);
         }
