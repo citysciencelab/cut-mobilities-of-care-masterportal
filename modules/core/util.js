@@ -6,7 +6,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 40
+        loaderOverlayTimeout: 40,
+        fadeOut: 2000
     },
     /**
      * @class Util
@@ -364,9 +365,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoadingModule: function () {
-        window.setTimeout(function () {
-            $("#loading").fadeOut(this.fadeOut);
-        }, 1000);
+        $("#loading").fadeOut(this.get("fadeOut"));
     },
 
     /**

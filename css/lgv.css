@@ -36,17 +36,11 @@ label {
     #poibody {
         max-height:120px;
     }
-    #loading {
-        top:50px;
-    }
 }
 
 @media (min-height:250px) {
     #poibody {
         max-height:200px;
-    }
-    #loading {
-        top:100px;
     }
 }
 
@@ -54,26 +48,17 @@ label {
     #poibody {
         max-height:220px;
     }
-    #loading {
-        top:110px;
-    }
 }
 
 @media (min-height:480px) {
     #poibody {
         max-height:400px;
     }
-    #loading {
-        top:200px;
-    }
 }
 
 @media (min-height: 768px) {
     #poibody {
         max-height:700px;
-    }
-    #loading {
-        top:240px;
     }
 }
 
@@ -98,7 +83,7 @@ label {
     position: absolute;
     width: 100%;
     z-index: 2000;
-    /* display: none; */
+    display: none;
 }
 
 #loader img {
@@ -108,28 +93,19 @@ label {
     margin-left: -21px;
     margin-top: -5px;
 }
- 
-#loading {
-    animation-name: slidingIntro;
-    animation-duration: 3s;
-    position: relative;
-    text-align: center;
-    z-index: 9999;
-    height: 0px;
-}
 
-@keyframes slidingIntro {
-    from { transform: translateX(100%) }
-    to   { transform: translateX(0%) }
-}
-    
-#loading img {
-    width: 50%;
-    height: auto;
+#loading {
+    position: absolute;
+    top: 30%;
+    left: 32.5%;
+    z-index: 9999;
+    text-align: center;
+    width: 35%;
 }
 
 #loading div {
-    font-size: 100px;
+    font-size: 5vw;
+    line-height: 130%;
 }
 
 .cluster {
