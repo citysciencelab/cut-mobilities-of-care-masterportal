@@ -7,6 +7,72 @@
  */
 
 /**
+ * Mocks the browser's GeoLocationAPI to make it usable in tests.
+ * From https://github.com/janmonschke/GeoMock/blob/master/geomock.js
+ */
+const mockGeoLocationAPI = `
+(function() {
+    (function() {
+        if (typeof navigator === "undefined" || navigator === null) {
+            window.navigator = {};
+        }
+        if (navigator.geolocation == null) {
+            window.navigator.geolocation = {};
+        }
+        navigator.geolocation.mock = true;
+        navigator.geolocation.delay = 1000;
+        navigator.geolocation.shouldFail = false;
+        navigator.geolocation.failsAt = -1;
+        navigator.geolocation.errorMessage = "There was an error retrieving the position!";
+        navigator.geolocation.currentTimeout = -1;
+        navigator.geolocation.lastPosReturned = 0;
+        navigator.geolocation._sanitizeLastReturned = function() {
+            if (this.lastPosReturned > this.waypoints.length - 1) {
+                return this.lastPosReturned = 0;
+            }
+        };
+        navigator.geolocation._geoCall = function(method, success, error) {
+            var _this = this;
+            if (this.shouldFail && (error != null)) {
+                return this.currentTimeout = window[method].call(null, function() {
+                    return error(_this.errorMessage);
+                }, this.delay);
+            } else {
+                if (success != null) {
+                    return this.currentTimeout = window[method].call(null, function() {
+                        success(_this.waypoints[_this.lastPosReturned++]);
+                        return _this._sanitizeLastReturned();
+                    }, this.delay);
+                }
+            }
+        };
+        navigator.geolocation.getCurrentPosition = function(success, error) {
+            return this._geoCall("setTimeout", success, error);
+        };
+        navigator.geolocation.watchPosition = function(success, error) {
+            this._geoCall("setInterval", success, error);
+            return this.currentTimeout;
+        };
+        navigator.geolocation.clearWatch = function(id) {
+            return clearInterval(id);
+        };
+        return navigator.geolocation.waypoints = [
+            { coords: { latitude: 53.553567, longitude: 9.993051, accuracy: 1500 } },
+            { coords: { latitude: 53.553546, longitude: 9.993097, accuracy: 1334 } },
+            { coords: { latitude: 53.553530, longitude: 9.993132, accuracy: 631 } },
+            { coords: { latitude: 53.553509, longitude: 9.993175, accuracy: 361 } },
+            { coords: { latitude: 53.553485, longitude: 9.993213, accuracy: 150 } },
+            { coords: { latitude: 53.553469, longitude: 9.993245, accuracy: 65 } },
+            { coords: { latitude: 53.553475, longitude: 9.993307, accuracy: 65 } },
+            { coords: { latitude: 53.553507, longitude: 9.993374, accuracy: 65 } },
+            { coords: { latitude: 53.553542, longitude: 9.993463, accuracy: 65 } },
+            { coords: { latitude: 53.553574, longitude: 9.993541, accuracy: 65 } }
+        ];
+    })();
+}).call(this);
+`;
+
+/**
  * Scrolls the first given argument up.
  * Needed since selenium does not support scrolling.
  * @param {WebElement} x element to scroll
@@ -175,6 +241,7 @@ function zoomOut () {
 }
 
 module.exports = {
+    mockGeoLocationAPI,
     mouseWheelUp,
     mouseWheelDown,
     isFullscreen,
