@@ -25,7 +25,6 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
                 this.render();
             }
         });
-
         this.renderDependingOnSpace();
     },
     className: "portal-title",
@@ -43,7 +42,6 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
 
         return this;
     },
-
     /**
      * Renders the title if enough space available.
      * @returns {void}
@@ -53,31 +51,46 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
             searchbarWidth,
             navBarWidth,
             titleWidth,
-            rest;
+            rest,
+            doRender = false;
         const searchBarIconEl = document.getElementById("searchbar"),
-            titleEl = document.getElementById("portalTitle");
+            titleEl = document.getElementById("portalTitle"),
+            titlePadding = 10;
 
         if (searchBarIconEl) {
             navMenuWidth = document.getElementById("root").offsetWidth;
             searchbarWidth = document.getElementById("searchForm").offsetWidth + searchBarIconEl.offsetWidth;
             navBarWidth = document.getElementById("main-nav").offsetWidth;
             titleWidth = titleEl ? titleEl.offsetWidth : 0;
-            rest = navBarWidth - navMenuWidth - searchbarWidth;
-
-            if (titleWidth > 10) { // sometimes titleEl has width of 10px, i don't know why -> behave like title is not rendered
-                if (titleWidth < rest + 40) { // add 40px for a bit space
-                    this.render();
-                }
-                else {
-                    this.$el.empty();
+            if (!this.model.get("titleWidth")) {
+                if (titleWidth > titlePadding) {
+                    this.model.set("titleWidth", titleWidth);
+                    this.$el.width(titleWidth);
                 }
             }
-            // titleEl is not rendered at this moment
-            else if (rest > 500) {
+            else {
+                titleWidth = this.model.get("titleWidth");
+            }
+            rest = navBarWidth - navMenuWidth - searchbarWidth;
+
+            // check if title is smaller than the rest: set new width at el to visualize ... at the end of the title
+            if ((rest - titleWidth) < 0 && rest > 0 && (rest - titleWidth) > -(titleWidth - 30)) {
+                this.$el.width(rest);
+                doRender = true;
+            }
+            else if (titleWidth > 0) {
+                this.$el.width(titleWidth);
+            }
+            if (doRender) {
+                this.render();
+            }
+            else if (titleWidth < rest && rest > 50) {
                 this.render();
             }
             else {
                 this.$el.empty();
+                // reset width at title, else the header may be wrapped
+                this.$el.css("width", "auto");
             }
         }
     }
