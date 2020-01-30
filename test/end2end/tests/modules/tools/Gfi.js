@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function GfiTests ({builder, url, resolution}) {
-    describe.only("Gfi", function () {
+    describe("Gfi", function () {
         let driver;
 
         beforeEach(async function () {
@@ -181,7 +181,7 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isBasic(url)) {
-            it.only("basic tree event layer displays gfi in iFrame", async function () {
+            it("basic tree event layer displays gfi in iFrame", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li[2]/span/span/span"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
