@@ -68,6 +68,10 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
                     this.$el.width(titleWidth);
                 }
             }
+            else if (titleWidth > this.model.get("titleWidth")) {
+                this.model.set("titleWidth", titleWidth);
+                this.$el.width(titleWidth);
+            }
             else {
                 titleWidth = this.model.get("titleWidth");
             }
