@@ -315,7 +315,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         else {
             recommendedList = hitList;
         }
-
+        recommendedList = Radio.request("Util", "sort", "address", recommendedList, "name");
         this.setRecommendedList(recommendedList);
         this.setTypeList(this.prepareTypeList(hitList));
         this.trigger("renderRecommendedList");
