@@ -15,6 +15,7 @@ import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAP
 import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
+import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
@@ -53,6 +54,7 @@ import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
+
 // @deprecated in version 3.0.0
 // remove "version" in doc and config.
 // rename "print_" to "print"
@@ -136,6 +138,7 @@ function loadApp () {
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
+    new WindowView();
 
     if (_.has(Config, "cswId")) {
         cswParserSettings.cswId = Config.cswId;
@@ -145,6 +148,7 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
+    new ColorScale();
 
     if (Config.hasOwnProperty("zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
@@ -178,7 +182,7 @@ function loadApp () {
         new ScaleLineView();
     }
 
-    new WindowView();
+
     // Module laden
     // Tools
 
