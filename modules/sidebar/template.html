@@ -1,0 +1,5 @@
+<!DOCTYPE html>
+<% if (dragable) { %>
+    <div class="drag-bar">&#8942;</div>
+<% } %>
+<div class="content" style="<% if (dragable) { %>width: calc(100% - 25px); margin-left: 25px; <% } %>"></div>

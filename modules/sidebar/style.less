@@ -4,10 +4,12 @@
 .sidebar {
     height: calc(100% - 50px);
     float: left;
-    overflow: auto;
+    // overflow: auto;
     display: none;
     position: relative;
-    width: 30%
+    width: 30%;
+    background-color: @background_color_1;
+    z-index: 2;
 }
 .sidebar-mobile {
     position: fixed;
@@ -21,6 +23,9 @@
     overflow-x: hidden;
     overflow-y: auto;
     margin: 3%;
+    .drag-bar {
+        display: none;
+    }
 }
 .backdrop {
     position: fixed;
@@ -30,4 +35,28 @@
     bottom: 0;
     z-index: 1040;
     background-color: @background_color_2;
+}
+.content {
+    overflow: auto;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+.drag-bar {
+    position:absolute;
+    display: inline-block;
+    height: calc(100vh - 50px);
+    line-height: calc(100vh - 50px);
+    vertical-align: top;
+    width:20px;
+    text-align: center;
+    font-size: 24px;
+    border-right: 1px solid #fafafa;
+    cursor: grab;
+    &:hover {
+        background: rgb(250, 250, 250);
+    }
+    &.dragging {
+        cursor:grabbing;
+    }
 }
