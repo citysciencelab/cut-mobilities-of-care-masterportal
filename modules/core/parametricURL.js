@@ -119,7 +119,10 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     parameterValue = decodeURIComponent(parameterFromUrlAsArray[1]);
 
                 result[parameterNameUpperCase] = parameterValue;
-                if (!possibleUrlParameters.hasOwnProperty(parameterNameUpperCase) && parameterNameUpperCase !== "VISIBILITY" && parameterNameUpperCase !== "TRANSPARENCY") {
+                if (!possibleUrlParameters.hasOwnProperty(parameterNameUpperCase)
+                    && parameterNameUpperCase !== "VISIBILITY"
+                    && parameterNameUpperCase !== "TRANSPARENCY"
+                    && parameterNameUpperCase !== "CONFIG") {
                     console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
                 }
             });
