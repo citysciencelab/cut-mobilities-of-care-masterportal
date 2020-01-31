@@ -247,21 +247,34 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     getStreets: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            coordinates,
-            hitNames = [],
+        const hits = $("wfs\\:member,member", data),
+            hitNames = [];
+        let posResult,
+            position,
             hitName;
 
         _.each(hits, function (hit) {
-            coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
+            /*
+            position example from WFS:
+            <iso19112:position_strassenachse xmlns:iso19112="http://www.opengis.net/iso19112">
+                <!--
+                Inlined geometry 'HH_STR_10785800_ISO19112_POSITION_STRASSENACHSE'
+                -->
+                <gml:Point gml:id="HH_STR_10785800_ISO19112_POSITION_STRASSENACHSE" srsName="urn:ogc:def:crs:EPSG::25832">
+                    <gml:pos>561260.027 5938772.298</gml:pos>
+                </gml:Point>
+            </iso19112:position_strassenachse>
+            <iso19112:locationType xmlns:iso19112="http://www.opengis.net/iso19112" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://localhost:9001/dog_gages/services/wfs_gages?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&ID=HH_SILC_2#HH_SILC_2"/>
+           */
+            posResult = $(hit).find("gml\\:pos,pos");
+            position = posResult.length > 1 ? posResult[1].textContent.split(" ") : posResult[0].textContent.split(" ");
             hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
             hitNames.push(hitName);
-
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
                 type: "Straße",
-                coordinate: coordinates,
+                coordinate: position,
                 glyphicon: "glyphicon-road",
                 id: hitName.replace(/ /g, "") + "Straße"
             });
@@ -296,22 +309,16 @@ const GazetteerModel = Backbone.Model.extend({
      */
     getDistricts: function (data) {
         var hits = $("wfs\\:member,member", data),
-            coordinate,
-            coordinateArray,
             hitName,
-            pos,
-            posList;
+            pos;
 
         _.each(hits, function (hit) {
-            posList = $(hit).find("gml\\:posList,posList")[0];
-            pos = $(hit).find("gml\\:pos,pos")[0];
-            coordinate = posList ? posList.textContent : pos.textContent;
-            coordinateArray = coordinate.split(" ");
+            pos = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
             hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
                 type: "Stadtteil",
-                coordinate: coordinateArray,
+                coordinate: pos,
                 glyphicon: "glyphicon-map-marker",
                 id: hitName.replace(/ /g, "") + "Stadtteil"
             });
