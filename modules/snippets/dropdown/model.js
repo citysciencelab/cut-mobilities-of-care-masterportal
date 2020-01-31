@@ -91,25 +91,6 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     },
 
     /**
-     * removes all value-models from collection and calls addValueModel for each new value
-     * @param {string[]} newValueList - new dropdown values
-     * @param {string[]} preselectedValues - new preselected values
-     * @returns {void}
-     */
-    replaceValueModels: function (newValueList, preselectedValues) {
-        this.get("valuesCollection").reset();
-        newValueList.forEach(function (value) {
-            this.addValueModel(value);
-        }, this);
-        this.set("preselectedValues", preselectedValues);
-        if (preselectedValues.length > 0) {
-            this.updateSelectedValues(preselectedValues);
-        }
-        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
-        this.trigger("render");
-    },
-
-    /**
      * creates a model value and adds it to the value collection
      * @param {string} value - value
      * @param {string|undefined} group - name of its group
@@ -234,11 +215,17 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      */
     setValueModelsToShow: function (models, isGrouped) {
         if (isGrouped) {
+<<<<<<< HEAD
             const groupedModels = Radio.request("Util", "groupBy", models, function (model) {
                 return model.get("group");
             });
 
             this.set("valueModelsToShow", groupedModels);
+=======
+            this.set("valueModelsToShow", _.groupBy(models, function (model) {
+                return model.get("group");
+            }));
+>>>>>>> update - dropdown snippet with groups and live search
         }
         else {
             this.set("valueModelsToShow", models);
