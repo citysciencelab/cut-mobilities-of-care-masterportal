@@ -105,7 +105,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "isMap3d": this.isMap3d,
             "getMap3d": this.getMap3d,
             "getMapMode": this.getMapMode,
-            "getFeatures3dAtPosition": this.getFeatures3dAtPosition
+            "getFeatures3dAtPosition": this.getFeatures3dAtPosition,
+            "getLayerByName": this.getLayerByName,
+            "getOverlayById": this.getOverlayById
         }, this);
 
         channel.on({
@@ -938,7 +940,15 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * This function allows the hover text to be hovered so that the text could be copied
+     * gets an overlay by its identifier
+     * @param {string|number} id - identifier
+     * @returns {ol.Overlay} the overlay
+     */
+    getOverlayById: function (id) {
+        return this.get("map").getOverlayById(id);
+    },
+
+    /** This function allows the hover text to be hovered so that the text could be copied
      * a new class "hoverText" will be inserted by mouseover and removed by mouseout
      * @returns {void}
      */
