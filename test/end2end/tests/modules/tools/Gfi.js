@@ -29,6 +29,7 @@ async function GfiTests ({builder, url, resolution}) {
              * in test resolution 1024x768. This causes the page to be scrollable, which in turn
              * confuses Chrome regarding clicking the center of ".ol-viewport" - instead, Chrome
              * will click somewhere near the feature.
+             * NOTE issue identified in https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues/445/masterportal-header-bricht-um-version-243
              */
             it("custom tree hospitals open gfi on click", async function () {
                 await clickFeature(driver, [576048.895, 5957194.601]);
@@ -55,8 +56,8 @@ async function GfiTests ({builder, url, resolution}) {
                 // open layer
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#InfrastrukturBauenundWohnen422 > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#BebauungsplneHamburg414 > .glyphicon-unchecked"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'InfrastrukturBauenundWohnen')]/*[contains(@class,'glyphicon')]"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'BebauungsplneHamburg')]/*[contains(@class,'glyphicon-unchecked')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
                 await clickFeature(driver, [554521.38, 5932738.29]);
@@ -89,7 +90,7 @@ async function GfiTests ({builder, url, resolution}) {
             it("default tree traffic camera layer displays gfi including video element", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#TransportundVerkehr363 > .glyphicon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Verkehrskameras Hamburg')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
@@ -151,7 +152,7 @@ async function GfiTests ({builder, url, resolution}) {
             it("default tree bicycle count layer shows gfi with info page initially open", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#TransportundVerkehr363 > .glyphicon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.css(".layer:nth-child(53) > .layer-item > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
@@ -205,8 +206,8 @@ async function GfiTests ({builder, url, resolution}) {
                 await (await driver.findElement(By.css(".layer-item:nth-child(1) > .layer-item > .glyphicon"))).click();
                 // open hvv stop layer
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#EisenbahnwesenPersonenbefrderung75 > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#HamburgerVerkehrsverbundHVV76 > .glyphicon-plus-sign"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'EisenbahnwesenPersonenbefrderung')]/*[contains(@class,'glyphicon')]"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'HamburgerVerkehrsverbundHVV')]/*[contains(@class,'glyphicon-plus-sign')]"))).click();
                 await (await driver.findElement(By.css(".layer:nth-child(15) > .layer-item > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
@@ -222,11 +223,10 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
-            // NOTE dragAndDrop does nothing in Chrome; the test just does nothing there and still passes
             it("default tree gfi windows can be dragged, but not outside the screen", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
-                await (await driver.findElement(By.css("#TransportundVerkehr363 > .glyphicon"))).click();
+                await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.css(".layer:nth-child(53) > .layer-item > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
@@ -234,18 +234,24 @@ async function GfiTests ({builder, url, resolution}) {
 
                 await driver.wait(until.elementLocated(By.css("div.gfi-header.ui-draggable-handle")));
 
-                // move to center of viewport
+                const header = await driver.findElement(By.css("div.gfi-header.ui-draggable-handle"));
+
+                // move to center of viewport, causing element to reach lower bounds
                 await driver.actions({bridge: true})
-                    .dragAndDrop(
-                        await driver.findElement(By.css("div.gfi-header.ui-draggable-handle")),
-                        await driver.findElement(By.css(".ol-viewport"))
-                    );
+                    .dragAndDrop(header, await driver.findElement(By.css(".ol-viewport")))
+                    .perform();
                 expect(await driver.findElement(By.css("div.gfi")).isDisplayed()).to.be.true;
+
+                const {y} = await header.getRect(); // eslint-disable-line one-var
 
                 // try to move out of viewport; expect gfi to stay within
                 await driver.actions({bridge: true})
-                    .dragAndDrop(await driver.findElement(By.css("div.gfi-header.ui-draggable-handle")), {x: 9999, y: 9999});
+                    .dragAndDrop(header, {x: -50, y: 50})
+                    .perform();
                 expect(await driver.findElement(By.css("div.gfi")).isDisplayed()).to.be.true;
+
+                // check if element moved further down
+                expect((await header.getRect()).y).to.equal(y);
             });
         }
     });
