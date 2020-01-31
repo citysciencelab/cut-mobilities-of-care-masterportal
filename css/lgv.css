@@ -83,7 +83,6 @@ label {
     position: absolute;
     width: 100%;
     z-index: 2000;
-    display: none;
 }
 
 #loader img {
