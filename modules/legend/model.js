@@ -8,7 +8,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         paramsStyleWMSArray: [],
         renderToWindow: false,
         renderToSidebar: false,
-        keepOtherToolsOpened: true,
+        keepOpen: true,
         glyphicon: "glyphicon-book",
         rotationAngle: 0,
         startX: 0,
@@ -60,6 +60,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             "updateParamsStyleWMS": this.updateParamsStyleWMSArray,
             "resetParamsStyleWMS": this.resetParamsStyleWMSArray
         });
+
         this.listenTo(this, {
             "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
         });
@@ -525,6 +526,19 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         svg += "</svg>";
 
         return svg;
+    },
+
+    colorStringToArray (colorAsString) {
+        let color = colorAsString,
+            colorAsArr = [];
+
+        color = color.slice(color.indexOf("(") + 1, color.indexOf(")"));
+
+        colorAsArr = color.split(", ");
+        colorAsArr = colorAsArr.map(x => parseInt(x, 10));
+        colorAsArr.push(1);
+
+        return colorAsArr;
     },
     /**
     * todo
