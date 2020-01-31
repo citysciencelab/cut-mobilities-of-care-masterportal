@@ -37,6 +37,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetPathFromLoader
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
+     * @listens Core#RadioRequestUtilRenameKeys
+     * @listens Core#RadioRequestUtilRenameValues
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
@@ -75,7 +77,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "punctuate": this.punctuate,
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
-            "getPathFromLoader": this.getPathFromLoader
+            "getPathFromLoader": this.getPathFromLoader,
+            "renameKeys": this.renameKeys,
+            "renameValues": this.renameValues,
+            "pickKeyValuePairs": this.pickKeyValuePairs
         }, this);
 
         channel.on({
@@ -253,7 +258,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 text: "Inhalt wurde in die Zwischenablage kopiert.",
                 kategorie: "alert-info",
                 position: "top-center",
-                animation: 2000
+                fadeOut: 5000
             });
         }
         catch (e) {
@@ -405,7 +410,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return url;
             }
 
-            result = url.replace(protocol, "").replace(":" + port, "");
+            if (port) {
+                result = url.replace(":" + port, "");
+            }
+
+            result = url.replace(protocol, "");
             // www und www2 usw. raus
             // hostname = result.replace(/www\d?\./, "");
             hostname = parser.hostname.split(".").join("_");
@@ -495,6 +504,64 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }, this);
             result += lineDelimiter;
         }, this);
+
+        return result;
+    },
+
+    /**
+     * replaces the names of object keys with the values provided.
+     * @param {object} keysMap - keys mapping object
+     * @param {object} obj - the original object
+     * @returns {object} the renamed object
+     */
+    renameKeys: function (keysMap, obj) {
+        return Object.keys(obj).reduce((acc, key) => {
+            return {
+                ...acc,
+                ...{[keysMap[key] || key]: obj[key]}
+            };
+        },
+        {});
+    },
+
+    /**
+     * recursively replaces the names of object values with the values provided.
+     * @param {object} valuesMap - values mapping object
+     * @param {object} obj - the original object
+     * @returns {object} the renamed object
+     */
+    renameValues: function (valuesMap, obj) {
+        return Object.keys(obj).reduce((acc, key) => {
+            if (obj[key]) {
+                if (obj[key].constructor === Object) {
+                    return {
+                        ...acc,
+                        ...{[key]: this.renameValues(valuesMap, obj[key])}
+                    };
+                }
+            }
+            return {
+                ...acc,
+                ...{[key]: valuesMap[obj[key]] || obj[key]}
+            };
+        },
+        {});
+    },
+
+    /**
+     * picks the key-value pairs corresponding to the given keys from an object.
+     * @param {object} obj - the original object
+     * @param {string[]} keys - the given keys to be returned
+     * @returns {object} the picked object
+     */
+    pickKeyValuePairs: function (obj, keys) {
+        var result = {};
+
+        keys.forEach(function (key) {
+            if (obj.hasOwnProperty(key)) {
+                result[key] = obj[key];
+            }
+        });
 
         return result;
     },
