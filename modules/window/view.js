@@ -21,7 +21,8 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         "click .glyphicon-remove": "hide",
         "touchmove .title": "touchMoveWindow",
         "touchstart .title": "touchStartWindow",
-        "touchend .title": "touchMoveEnd"
+        "touchend .title": "touchMoveEnd",
+        "pointerdown .glyphicon-triangle-right": "resizeWindowStart"
     },
 
     /**
@@ -68,6 +69,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             });
         }, this));
 
+        window.addEventListener("pointermove", this.resizeWindowMove.bind(this));
+        window.addEventListener("pointerup", this.resizeWindowEnd.bind(this));
+
         channel.on({
             "hide": this.hide
         }, this);
@@ -79,6 +83,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     model: new Window(),
     templateMax: _.template(templateMax),
     templateTable: _.template(templateTable),
+    dragging: false,
 
     /**
      * Renders the Window
@@ -90,6 +95,8 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             currentTableClass;
 
         if (this.model.get("isVisible") === true) {
+            this.resetSize();
+
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
                 this.$el.html(this.templateTable(attr));
                 document.getElementsByClassName("masterportal-container")[0].appendChild(this.el);
@@ -152,6 +159,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
         this.$(".header").addClass("header-min");
         this.$el.draggable("disable");
+        this.resetSize();
     },
     /**
      * Maximizes the Window
@@ -351,6 +359,61 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             return newPosition;
         }
         return newPosition;
+    },
+
+    /**
+     * Triggered onpointerdown .glyphicon-triangle-right
+     * @description sets dragging prop true, all pointer movements trigger resizeWindowMove until released
+     * @returns {void}
+     */
+    resizeWindowStart: function () {
+        this.dragging = true;
+        this.$el.css({
+            "max-width": "none",
+            "width": this.el.clientWidth
+        });
+        document.body.style.cursor = "grabbing";
+    },
+
+    /**
+     * triggers onpointermove if dragging prop is truthy
+     * @description resizes the Window if cursor is not outside the #map
+     * @param {Event} evt the pointerEvent on window Object
+     * @returns {void}
+     */
+    resizeWindowMove: function (evt) {
+        if (this.dragging) {
+            evt.preventDefault();
+            if (evt.clientX < document.getElementById("map").clientWidth - 10) {
+                this.$el.css({
+                    "width": evt.clientX - this.el.offsetLeft
+                });
+            }
+            else {
+                this.resizeWindowEnd();
+            }
+        }
+    },
+
+    /**
+     * triggers onpointerup on Window Object
+     * @description sets dragging property false, ends resizing
+     * @returns {void}
+     */
+    resizeWindowEnd: function () {
+        this.dragging = false;
+        document.body.style.cursor = "";
+    },
+
+    /**
+     * resets the size to the css defined values when the window is reopened
+     * @returns {void}
+     */
+    resetSize: function () {
+        this.$el.css({
+            "max-width": "500px",
+            "width": "auto"
+        });
     }
 });
 

@@ -69,6 +69,7 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         this.set("title", value.get("name"));
         this.set("icon", value.get("glyphicon"));
         this.set("winType", value.get("id"));
+        this.set("resizable", value.get("resizableWindow"));
     },
     setWindowLeft: function (value) {
         this.set("windowLeft", value);
