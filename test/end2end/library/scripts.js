@@ -217,11 +217,33 @@ function getResolution () {
 }
 
 /**
+ * @returns {Number} tilt value in 3D mode
+ */
+function getTilt () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getTilt();
+}
+
+/**
+ * @returns {Number} heading value in 3D mode
+ */
+function getHeading () {
+    return Backbone.Radio.request("Map", "getMap3d").getCamera().getHeading();
+}
+
+/**
  * @param {Number[]} coords target coordinates
  * @returns {void}
  */
 function setCenter () {
     Backbone.Radio.trigger("MapView", "setCenter", arguments[0]);
+}
+
+/**
+ * @param {Number} tilt value for 3D mode
+ * @returns {void}
+ */
+function setTilt (tilt) {
+    Backbone.Radio.request("Map", "getMap3d").getCamera().setTilt(tilt);
 }
 
 /**
@@ -250,7 +272,10 @@ module.exports = {
     doesLayerWithFeaturesExist,
     getCenter,
     getResolution,
+    getTilt,
+    getHeading,
     setCenter,
+    setTilt,
     zoomIn,
     zoomOut
 };
