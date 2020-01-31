@@ -16,6 +16,14 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      */
     initialize: function (attributes, options) {
         this.url = this.getUrlPath(options.url);
+        this.fetchData();
+    },
+
+    /**
+     * Fetches the Data from the config.json.
+     * @returns {void}
+     */
+    fetchData: function () {
         this.fetch({async: false,
             error: function (model, xhr, error) {
                 const statusText = xhr.statusText;
@@ -26,9 +34,12 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                 // SyntaxError for consoletesting, propably because of older version.
                 if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
+                        text: "<strong>Die Datei \"" + model.url + "\" ist nicht vorhanden!</strong>"
+                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                         kategorie: "alert-warning"
                     });
+                    this.url = "config.json";
+                    this.fetchData();
                 }
                 else {
                     message = error.errorThrown.message;
@@ -41,7 +52,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         kategorie: "alert-warning"
                     });
                 }
-            }
+            }.bind(this)
         });
     },
 
@@ -57,44 +68,23 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
     /**
     * build url to config file. decide between absolute or relative path
-    * @param {string} url - base url for config
+    * @param {string} configJsonPathFromConfig - url for the config.json configured in config.js
     * @return {string} url to config file
     */
-    getUrlPath: function (url) {
-        var path = url !== undefined ? url : "config.json",
-            configPath;
+    getUrlPath: function (configJsonPathFromConfig) {
+        const defaultPath = "config.json",
+            defaultFormat = ".json",
+            configJsonPathFromUrl = this.requestConfigFromUtil();
+        let targetPath = defaultPath;
 
-        if (path.slice(-6) === "?noext") {
-            path = url;
+        if (configJsonPathFromUrl !== undefined && configJsonPathFromUrl.slice(-5) === defaultFormat) {
+            targetPath = configJsonPathFromUrl;
         }
-        else if (path.slice(-5) !== ".json") {
-            configPath = this.requestConfigFromUtil();
-
-            if (configPath && configPath.length > 0) {
-
-                if (configPath.match(/^https?:\/\//)) {
-                    // the provided path is an absolute path
-                    path = configPath;
-
-                }
-                else {
-                    // the provided path is a relative path
-                    // remove trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
-                    if (path.slice(-1) === "/") {
-                        path = path.slice(0, -1);
-                    }
-                    if (configPath.slice(0, 1) === "/") {
-                        configPath = configPath.slice(1);
-                    }
-                    path = path + "/" + configPath;
-                }
-            }
-            else {
-                path = "config.json";
-            }
+        else if (configJsonPathFromConfig !== undefined && configJsonPathFromConfig.slice(-5) === defaultFormat) {
+            targetPath = configJsonPathFromConfig;
         }
 
-        return path;
+        return targetPath;
     },
 
     /**
