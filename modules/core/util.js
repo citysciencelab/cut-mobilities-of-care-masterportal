@@ -461,7 +461,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
             else {
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Config-Parameter verlangt eine Datei mit der Endung \".json\".</small>",
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
+                    + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
+                    + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                     kategorie: "alert-warning"
                 });
             }
