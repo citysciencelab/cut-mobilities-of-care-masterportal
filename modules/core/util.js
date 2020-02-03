@@ -365,7 +365,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoadingModule: function () {
-        $("#loading").fadeOut(this.get("fadeOut"));
+        $(".loading").fadeOut(this.get("fadeOut"));
     },
 
     /**

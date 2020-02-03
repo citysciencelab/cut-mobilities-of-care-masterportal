@@ -93,7 +93,7 @@ label {
     margin-top: -5px;
 }
 
-#loading {
+.loading {
     position: absolute;
     top: 30%;
     left: 32.5%;
@@ -102,9 +102,10 @@ label {
     width: 35%;
 }
 
-#loading div {
-    font-size: 5vw;
+.loading div {
+    font-size:5vmin;
     line-height: 130%;
+    margin-top: 5%;
 }
 
 .cluster {
