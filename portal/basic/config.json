@@ -49,7 +49,7 @@
 					"draw": {
 						"name": "Zeichnen / Schreiben",
 						"glyphicon": "glyphicon-pencil",
-						"iconList":[
+						"iconList": [
 							{
 								"caption": "Punkt",
 								"type": "simple_point",

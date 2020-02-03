@@ -99,16 +99,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         ],
         iconList: [
             {caption: "Punkt", type: "simple_point", value: "simple_point"},
-            {caption: "Blatt", type: "glyphicon", value: "\ue103"},
-            {caption: "CD", type: "glyphicon", value: "\ue201"},
-            {caption: "Doktorhut", type: "glyphicon", value: "\ue233"},
-            {caption: "Feuer", type: "glyphicon", value: "\ue104"},
-            {caption: "Film", type: "glyphicon", value: "\ue009"},
-            {caption: "Flagge", type: "glyphicon", value: "\ue034"},
-            {caption: "Globus", type: "glyphicon", value: "\ue135"},
-            {caption: "Musik", type: "glyphicon", value: "\ue002"},
-            {caption: "Straße", type: "glyphicon", value: "\ue024"},
-            {caption: "Zelt", type: "glyphicon", value: "\u26fa"}
+            {caption: "Blatt", type: "glyphicon", value: "\ue103"}
         ]
     }),
 

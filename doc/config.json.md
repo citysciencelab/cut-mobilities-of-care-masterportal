@@ -808,6 +808,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:routing]: # (Portalconfig.menu.tool.routing)
 
+[type:draw]: # (Portalconfig.menu.tool.draw)
+
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -844,7 +846,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
-|draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
+|draw|nein|**[draw](#markdown-header-portalconfigmenudraw)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
 |styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektor Layers auf.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linenhafte Objekte.|false|
@@ -1378,6 +1380,126 @@ Routing Modul.
     "isInitOpen": false
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.draw
+
+Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welche auch als Symbole dargestellt werden können, (Doppel-)Kreise, Polygone, Polyline und Text.
+
+[inherits]: # (Portalconfig.menu.tool)
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeugs im Menü.|false|
+|glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
+|iconList|nein|[icon]**(#markdown-header-portalconfigmenutooldrawicon)**[]|[
+            {caption: "Punkt", type: "simple_point", value: "simple_point"},
+            {caption: "Blatt", type: "glyphicon", value: "\ue103"}
+        ]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+
+**Beispiel**
+
+```
+#!json
+"draw": {
+    "name": "Zeichnen / Schreiben",
+    "glyphicon": "glyphicon-pencil",
+    "iconList": [
+                    {
+				        "caption": "Punkt",
+						"type": "simple_point",
+						"value": "simple_point"
+					},
+					{
+						"caption": "Blatt",
+						"type": "glyphicon",
+						"value": "\ue103"
+					},
+					{
+						"caption": "CD",
+						"type": "glyphicon",
+						"value": "\ue201"
+					},
+					{
+						"caption": "Doktorhut",
+						"type": "glyphicon",
+						"value": "\ue233"
+					},
+					{
+						"caption": "Film",
+						"type": "glyphicon",
+						"value": "\ue009"
+					},
+					{
+						"caption": "Flagge",
+						"type": "glyphicon",
+						"value": "\ue034"
+					},
+					{
+						"caption": "Globus",
+						"type": "glyphicon",
+						"value": "\ue135"
+					},
+					{
+						"caption": "Musik",
+						"type": "glyphicon",
+						"value": "\ue002"
+					},
+					{
+						"caption": "Straße",
+						"type": "glyphicon",
+						"value": "\ue024"	
+					},
+					{
+						"caption": "Zelt",
+						"type": "glyphicon",
+						"value": "\u26fa"
+					}
+    ]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.icon
+
+Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird|false|
+|type|ja|[iconType]**(#markdown-header-portalconfigmenutooldrawiconiconType)**||Typ des zu zeichnenden Objektes.|false|
+|value|ja|String||Wert, des zu zeichnenden Objektes.|false|
+
+**Beispiele**
+
+```
+#!json
+{
+	"caption": "Wolke",
+	"type": "image",
+	"value": "../../../../../img/icons/cloud.png"
+}
+
+{
+    "caption": "Feuer",
+    "type": "glyphicon",
+    "value": "\ue104"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.icon.iconType
+
+Typ des [icon]**(#markdown-header-portalconfigmenutoolicon)**, wobei dies auch Einfluss auf die Art des Wertes hat.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|---|--------------|---|-------|------------|------|
+|simple_point|nein|String||Zeichnet einen normalen Punkt. Der übergebene Wert ist hierbei irrelevant|false|
+|glyphicon|nein|String||Zeichnet ein Symbol. Dieses basiert auf dem Unicodewert aus `value` des [icon]**(#markdown-header-portalconfigmenutoolicon)**.|false|
+|image|nein|String||Zeichnet ein PNG-Bild. Dieses entspricht dem Bild mit dem aus `value` übergebenen Pfad des [icon]**(#markdown-header-portalconfigmenutoolicon)**. Standardmäßig werden diese Bilder in dem Ordner `/img/icons/` abgelegt.|false|
 
 ***
 
