@@ -1393,10 +1393,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|[icon]**(#markdown-header-portalconfigmenutooldrawicon)**[]|[
-            {caption: "Punkt", type: "simple_point", value: "simple_point"},
-            {caption: "Blatt", type: "glyphicon", value: "\ue103"}
-        ]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "Punkt", type: "simple_point", value: "simple_point"}, {caption: "Blatt", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
 
 **Beispiel**
 
@@ -1469,7 +1466,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird|false|
-|type|ja|[iconType]**(#markdown-header-portalconfigmenutooldrawiconiconType)**||Typ des zu zeichnenden Objektes.|false|
+|type|ja|**[iconType](#markdown-header-portalconfigmenutooldrawiconiconType)**||Typ des zu zeichnenden Objektes.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
 **Beispiele**
@@ -1493,13 +1490,13 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 #### Portalconfig.menu.tool.draw.icon.iconType
 
-Typ des [icon]**(#markdown-header-portalconfigmenutoolicon)**, wobei dies auch Einfluss auf die Art des Wertes hat.
+Typ des **[icon](#markdown-header-portalconfigmenutoolicon)**, wobei dies auch Einfluss auf die Art des Wertes hat.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |---|--------------|---|-------|------------|------|
 |simple_point|nein|String||Zeichnet einen normalen Punkt. Der übergebene Wert ist hierbei irrelevant|false|
-|glyphicon|nein|String||Zeichnet ein Symbol. Dieses basiert auf dem Unicodewert aus `value` des [icon]**(#markdown-header-portalconfigmenutoolicon)**.|false|
-|image|nein|String||Zeichnet ein PNG-Bild. Dieses entspricht dem Bild mit dem aus `value` übergebenen Pfad des [icon]**(#markdown-header-portalconfigmenutoolicon)**. Standardmäßig werden diese Bilder in dem Ordner `/img/icons/` abgelegt.|false|
+|glyphicon|nein|String||Zeichnet ein Symbol. Dieses basiert auf dem Unicodewert aus `value` des **[icon](#markdown-header-portalconfigmenutoolicon)**.|false|
+|image|nein|String||Zeichnet ein PNG-Bild. Dieses entspricht dem Bild mit dem aus `value` übergebenen Pfad des **[icon](#markdown-header-portalconfigmenutoolicon)**. Standardmäßig werden diese Bilder in dem Ordner `/img/icons/` abgelegt.|false|
 
 ***
 
