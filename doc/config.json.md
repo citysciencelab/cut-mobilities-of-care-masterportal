@@ -1385,9 +1385,9 @@ Routing Modul.
 
 #### Portalconfig.menu.tool.draw
 
-Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welche auch als Symbole dargestellt werden können, (Doppel-)Kreise, Polygone, Polyline und Text.
-
 [inherits]: # (Portalconfig.menu.tool)
+
+Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welche auch als Symbole dargestellt werden können, (Doppel-)Kreise, Polygone, Polyline und Text.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
