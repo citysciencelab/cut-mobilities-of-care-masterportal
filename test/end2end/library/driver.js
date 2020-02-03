@@ -2,7 +2,10 @@ const {until, By} = require("selenium-webdriver"),
     {getResolution} = require("./scripts");
 
 /**
- * Activated 3D mode for opened Masterportal.
+ * Activates 3D mode for opened Masterportal.
+ * This is prepared here to rerun universally applicable tests
+ * in multiple modes. Turning the 3D mode on/off and other
+ * mode-specific tests are done from 2D mode in separate files.
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
@@ -11,7 +14,10 @@ async function prepare3D (driver) { // eslint-disable-line
 }
 
 /**
- * Activated OB mode for opened Masterportal.
+ * Activates OB mode for opened Masterportal.
+ * This is prepared here to rerun universally applicable tests
+ * in multiple modes. Turning the OB mode on/off and other
+ * mode-specific tests are done from 2D mode in separate files.
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
