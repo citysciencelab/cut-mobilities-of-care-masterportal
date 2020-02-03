@@ -3,8 +3,8 @@ const fs = require("fs-extra"),
     path = require("path"),
 
     rootPath = path.resolve(__dirname, "../../"),
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
-    destinationFolder = path.resolve(rootPath, "dist/examples_" + stableVersionNumber),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
+    destinationFolder = path.resolve(rootPath, "dist/examples_" + mastercodeVersionFolderName),
     portal = {
         name: "Basic",
         source: "./dist/basic",
@@ -16,19 +16,20 @@ const fs = require("fs-extra"),
  * @returns {void}
  */
 function removeAddonCssFiles () {
-    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/css/";
+    const folderToCheck = destinationFolder + "/mastercode/" + mastercodeVersionFolderName + "/css/";
 
-    fs.readdir(folderToCheck, async (err, files) => {
-        if (err) {
-            throw new Error("ERROR", err);
-        }
-        for (const file of files) {
-            if (file !== "masterportal.css" && file !== "woffs") {
-                await fs.remove(folderToCheck + file);
+    try {
+        fs.readdir(folderToCheck, async (err, files) => {
+            for (const file of files) {
+                if (file !== "masterportal.css" && file !== "woffs") {
+                    await fs.remove(folderToCheck + file);
+                }
             }
-        }
-        removeAddonJsFiles();
-    });
+            removeAddonJsFiles();
+        });
+    } catch (err) {
+        console.error(err);
+    }
 
 }
 
@@ -37,7 +38,7 @@ function removeAddonCssFiles () {
  * @returns {void}
  */
 function removeAddonJsFiles () {
-    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/js/";
+    const folderToCheck = destinationFolder + "/mastercode/" + mastercodeVersionFolderName + "/js/";
 
     fs.readdir(folderToCheck, async (err, files) => {
         if (err) {
