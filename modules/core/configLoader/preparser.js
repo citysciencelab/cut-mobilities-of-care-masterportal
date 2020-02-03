@@ -2,7 +2,9 @@ import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
-    defaults: {},
+    defaults: {
+        defaultConfigPath: "config.json"
+    },
     /**
      * @class Preparser
      * @extends Backbone.Model
@@ -15,15 +17,18 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @param {*} options todo
      */
     initialize: function (attributes, options) {
-        this.url = this.getUrlPath(options.url);
-        this.fetchData();
+        const defaultConfigPath = this.get("defaultConfigPath");
+
+        this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
+        this.fetchData(defaultConfigPath);
     },
 
     /**
      * Fetches the Data from the config.json.
+     * @param {string} defaultConfigPath The default path to config.json
      * @returns {void}
      */
-    fetchData: function () {
+    fetchData: function (defaultConfigPath) {
         this.fetch({async: false,
             error: function (model, xhr, error) {
                 const statusText = xhr.statusText;
@@ -38,8 +43,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                         kategorie: "alert-warning"
                     });
-                    this.url = "config.json";
-                    this.fetchData();
+                    if (this.url !== defaultConfigPath) {
+                        this.url = defaultConfigPath;
+                        this.fetchData(defaultConfigPath);
+                    }
                 }
                 else {
                     message = error.errorThrown.message;
@@ -67,20 +74,23 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     },
 
     /**
-    * build url to config file. decide between absolute or relative path
-    * @param {string} configJsonPathFromConfig - url for the config.json configured in config.js
+    * Build url to config file. Decide between absolute or relative path.
+    * @param {string} [configJsonPathFromConfig=""] - url for the config.json configured in config.js
+    * @param {string} [configJsonPathFromUrl=""] - The config parameter from the url, which parsed in util.
+    * @param {string} [defaultConfigPath="config.json"] The default path to config.json
     * @return {string} url to config file
     */
-    getUrlPath: function (configJsonPathFromConfig) {
-        const defaultPath = "config.json",
-            defaultFormat = ".json",
-            configJsonPathFromUrl = this.requestConfigFromUtil();
-        let targetPath = defaultPath;
+    getUrlPath: function (configJsonPathFromConfig = "", configJsonPathFromUrl = "", defaultConfigPath = "config.json") {
+        const defaultFormat = ".json";
+        let targetPath = defaultConfigPath;
 
-        if (configJsonPathFromUrl !== undefined && configJsonPathFromUrl.slice(-5) === defaultFormat) {
+        if (configJsonPathFromConfig.slice(-5) !== defaultFormat && configJsonPathFromUrl.slice(-5) === defaultFormat && configJsonPathFromUrl.slice(0, 4) !== "http") {
+            targetPath = configJsonPathFromConfig + configJsonPathFromUrl;
+        }
+        else if (configJsonPathFromUrl.slice(-5) === defaultFormat) {
             targetPath = configJsonPathFromUrl;
         }
-        else if (configJsonPathFromConfig !== undefined && configJsonPathFromConfig.slice(-5) === defaultFormat) {
+        else if (configJsonPathFromConfig.slice(-5) === defaultFormat) {
             targetPath = configJsonPathFromConfig;
         }
 
