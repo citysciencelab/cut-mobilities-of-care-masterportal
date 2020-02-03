@@ -246,7 +246,7 @@ Konfiguration des Elastic Search Suchdienstes
 
  **Beispiel**
  ```
- #!json
+#!json
 "elasticSearch": {
     "minChars":3,
     "serviceId":"elastic_hh",
