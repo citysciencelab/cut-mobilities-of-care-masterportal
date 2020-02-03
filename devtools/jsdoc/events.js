@@ -2389,3 +2389,20 @@
  * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
  * @description Todo
  */
+
+ /** -------------------- TOOLS.PARCELSEARCH -------------------- */
+
+/**
+ * @event Tools.ParcelSearch#RadioRequestParcelSearchParcelFound
+ * @description Todo
+ */
+
+  /** -------------------- TOOLS.GFI -------------------- */
+
+/**
+ * @event Tools.GFI#RadioRequestGFIGetRequestedParcelId
+ * @description Todo
+ */
+
+
+ 

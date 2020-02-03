@@ -14,7 +14,7 @@ Folgende Struktur ist dabei zu beachten:
 
 ## Dateistruktur von Addons ##
 
-1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die beiden Ordner **doc** und **unittests** mit den jeweiligen **.md** und **.test.js** Dateien.
+1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die Ordner **doc**, **jsdoc** und **unittests** mit den jeweiligen **.md**, **.js** und **.test.js** Dateien.
 
 #### Beispiel entsprechende Ordnerstruktur ####
 ```
@@ -25,6 +25,9 @@ myMasterPortalFolder/
             anotherFile.js
             doc/
                 config.json.md
+            jsdoc/
+                events.js
+                namespaces.js
             unittests/
                 model.test.js
             [...]
@@ -34,6 +37,9 @@ myMasterPortalFolder/
                 [...]
             doc/
                 beschreibung.md
+            jsdoc/
+                events.js
+                namespaces.js
             unittests/
                 addon.test.js
             anotherFile.js
@@ -114,6 +120,26 @@ const Config = {
     addons: ["boris"],
     // [...]
 };
+```
+
+5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
+
+```
+/**
+ * @namespace ExampleAddon
+ * @memberof Addons
+ */
+```
+
+6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
+
+```
+/**
+* @class exampleAddon
+* @extends Tool
+* @memberof Addons.ExampleAddon
+* @constructs
+*/
 ```
 
 
