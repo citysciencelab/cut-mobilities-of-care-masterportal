@@ -26,9 +26,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             text: "Punkt zeichnen"
         },
         symbol: {
-            caption: "Blatt",
-            type: "glyphicon",
-            value: "\ue103"
+            caption: "Punkt",
+            type: "simple_point",
+            value: "simple_point"
         },
         pointSize: 16,
         renderToWindow: true,
@@ -97,8 +97,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Doppelkreis zeichnen", value: "Circle"},
             {caption: "Text schreiben", value: "Point"}
         ],
-        // TODO: config.json.md schreiben! Achtung: es gibt vorgaben die beachtet werden müssen
         iconList: [
+            {caption: "Punkt", type: "simple_point", value: "simple_point"},
             {caption: "Blatt", type: "glyphicon", value: "\ue103"},
             {caption: "CD", type: "glyphicon", value: "\ue201"},
             {caption: "Doktorhut", type: "glyphicon", value: "\ue233"},
@@ -807,7 +807,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             radius = this.get("radius"),
             zIndex = this.get("zIndex"),
             symbol = this.get("symbol"),
-            pointSize = this.get("pointSize");
+            pointSize = this.get("pointSize"),
+            glyphBool = symbol.type ? symbol.type !== "simple_point" : symbol.indexOf("simple_point") === -1;
 
         if (drawType.text === "Text schreiben") {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
@@ -815,11 +816,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else if (drawType.hasOwnProperty("geometry") && drawType.text === "Kreis zeichnen" || drawType.text === "Doppelkreis zeichnen") {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
-        else if (drawType.text === "Punkt zeichnen") {
-            style = this.getPointStyle(color, pointSize, zIndex, symbol);
+        // If a point should be drawn there also needs to be checked if an icon should be drawn or a simple point
+        else if (drawType.text === "Punkt zeichnen" && glyphBool) {
+            style = this.getPointStyle(color, pointSize, symbol, zIndex);
         }
         else {
-            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, pointSize, zIndex, colorContour);
         }
 
         return style.clone();
@@ -890,12 +892,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * Creates and returns a feature style for points.
      * @param {*} color - of drawings
      * @param {*} pointSize - from geometry
-     * @param {*} zIndex - of Element
      * @param {*} symbol - to be drawn consisting of value and type divided by '@@'
+     * @param {*} zIndex - of Element
      * @return {ol/style/Style} style
      * @throws Error if the type of the symbol is not supported.
      */
-    getPointStyle: function (color, pointSize, zIndex, symbol) {
+    getPointStyle: function (color, pointSize, symbol, zIndex) {
         let style,
             sym = [];
 
@@ -922,13 +924,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 zIndex: zIndex
             });
         }
-        // TODO: the scale has to depend on the image width instead of on fixed 100
+        // TODO: the scale has to depend on the image width instead of on fixed 96 of the cloud image; all images need a fixed size!
         // To use the opacity given by the color parameter it has to be separately added
         else if (sym[1] === "image") {
             style = new Style({
                 image: new Icon({
                     src: sym[0],
-                    scale: 1 / (100 / pointSize),
+                    scale: 1 / (96 / pointSize),
                     opacity: color[3],
                     color: color.slice(0, 3)
                 }),
@@ -946,12 +948,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
-     * @param {number} radius - from geometry
+     * @param {number} pointSize - from geometry
      * @param {number} zIndex - zIndex of Element
      * @param {number} colorContour - color of the contours
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex, colorContour) {
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, pointSize, zIndex, colorContour) {
         return new Style({
             fill: new Fill({
                 color: color
@@ -961,7 +963,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 width: strokeWidth
             }),
             image: new Circle({
-                radius: drawGeometryType === "Point" ? radius : 6,
+                radius: drawGeometryType === "Point" ? pointSize / 2 : 6,
                 fill: new Fill({
                     color: drawGeometryType === "Point" ? color : colorContour
                 })

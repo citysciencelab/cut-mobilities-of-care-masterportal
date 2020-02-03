@@ -51,6 +51,11 @@
 						"glyphicon": "glyphicon-pencil",
 						"iconList":[
 							{
+								"caption": "Punkt",
+								"type": "simple_point",
+								"value": "simple_point"
+							},
+							{
 								"caption": "Blatt",
 								"type": "glyphicon",
 								"value": "\ue103"
@@ -94,6 +99,11 @@
 								"caption": "Straße",
 								"type": "glyphicon",
 								"value": "\ue024"	
+							},
+							{
+								"caption": "Wolke",
+								"type": "image",
+								"value": "../../../../../img/icons/cloud.png"
 							},
 							{
 								"caption": "Zelt",
