@@ -1,6 +1,6 @@
 /**
- * @namespace AddOns
- * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ * @namespace Addons
+ * @description Addons are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
  */
 
 /**
