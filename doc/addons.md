@@ -122,5 +122,25 @@ const Config = {
 };
 ```
 
+5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
+
+```
+/**
+ * @namespace ExampleAddon
+ * @memberof Addons
+ */
+```
+
+6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
+
+```
+/**
+* @class exampleAddon
+* @extends Tool
+* @memberof Addons.ExampleAddon
+* @constructs
+*/
+```
+
 
 
