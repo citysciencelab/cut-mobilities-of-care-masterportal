@@ -425,6 +425,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
             else {
                 preGfi = this.allKeysToLowerCase(preGfi);
+                if (this.get("gfiParams") && this.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
+                    preGfi = this.removeIFrameAttributes(preGfi, this.get("gfiParams").iFrameAttributesPrefix);
+                }
                 _.each(gfiAttributes, function (value, key) {
                     var name,
                         origName = key,
@@ -434,7 +437,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                         name = preGfi[origName.toLowerCase()];
                     }
                     if (typeof translatedName === "object") {
-                        name = this.translateNameFromObject(preGfi, origName.toLowerCase(), translatedName.condition);
+                        name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
                         translatedName = translatedName.name;
                     }
 
@@ -449,6 +452,55 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         }, this);
 
         return pgfi;
+    },
+
+    /**
+     * Removes Attributes from the preGfi object that start with the given string.
+     * Currently used only for sensor-Theme.
+     * @param {Object} preGfi preGfi.
+     * @param {String} prefix String condition each attributes starts with.
+     * @returns {Object} - The pregfi without the attributes starting with string.
+     */
+    removeIFrameAttributes: function (preGfi, prefix) {
+        let gfi = preGfi;
+
+        if (this.get("gfiTheme") === "sensor") {
+            gfi = Object.keys(gfi).filter(key => {
+                return !key.startsWith(prefix);
+            }).reduce((obj, key) => {
+                obj[key] = gfi[key];
+                return obj;
+            }, {});
+        }
+        return gfi;
+    },
+
+    getNameFromObject: function (preGfi, origName, translatedName) {
+        let name = this.translateNameFromObject(preGfi, origName, translatedName.condition),
+            date;
+
+        const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
+            format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
+
+        if (name) {
+            if (translatedName.hasOwnProperty("suffix")) {
+                name = String(name) + " " + translatedName.suffix;
+            }
+            if (type === "date") {
+                date = moment(String(name));
+
+                if (date.isValid()) {
+                    name = moment(String(name)).format(format);
+                }
+            }
+            else if (type === "string") {
+                name = String(name);
+            }
+            else {
+                console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
+            }
+        }
+        return name;
     },
 
     /**
@@ -488,7 +540,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else {
-            console.error("unknown matching type for gfi translation");
+            name = preGfi[origName];
         }
         return name;
     },
