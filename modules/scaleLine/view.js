@@ -26,7 +26,7 @@ const ScaleLineView = Backbone.View.extend({
         if (!_.isEmpty(document.getElementsByClassName("footer"))) {
             document.getElementsByClassName("footer")[0].appendChild(this.el);
         }
-        else {
+        else if (!_.isEmpty(document.getElementsByClassName("ol-viewport"))) {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
         }
 

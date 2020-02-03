@@ -520,6 +520,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 model.parentId === "info" ||
                 model.parentId === "bezirke" ||
                 model.parentId === "3d_daten" ||
+                model.parentId === "simulation" ||
+                model.parentId === "utilities" ||
                 model.parentId === "ansichten";
         }));
     },
