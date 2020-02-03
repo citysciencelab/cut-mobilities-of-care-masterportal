@@ -20,6 +20,9 @@ function removeAddonCssFiles () {
 
     try {
         fs.readdir(folderToCheck, async (err, files) => {
+            if (err) {
+                throw new Error(err);
+            }
             for (const file of files) {
                 if (file !== "masterportal.css" && file !== "woffs") {
                     await fs.remove(folderToCheck + file);
@@ -27,7 +30,8 @@ function removeAddonCssFiles () {
             }
             removeAddonJsFiles();
         });
-    } catch (err) {
+    }
+    catch (err) {
         console.error(err);
     }
 
