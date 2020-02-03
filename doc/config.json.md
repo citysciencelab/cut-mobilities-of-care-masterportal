@@ -245,7 +245,7 @@ Konfiguration des Elastic Search Suchdienstes
 |useProxy|nein|Boolean|false|Flag die angibt ob die url vom geproxied werden soll oder nicht.|false|
 
  **Beispiel**
- ```
+```
 #!json
 "elasticSearch": {
     "minChars":3,
