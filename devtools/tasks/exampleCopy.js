@@ -3,8 +3,11 @@ const fs = require("fs-extra"),
     path = require("path"),
 
     rootPath = path.resolve(__dirname, "../../"),
+    getStableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))("."),
     mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
     destinationFolder = path.resolve(rootPath, "dist/examples_" + mastercodeVersionFolderName),
+    zipFilename1 = path.resolve(rootPath, "dist/examples.zip"),
+    zipFilename2 = path.resolve(rootPath, "dist/examples-" + getStableVersionNumber + ".zip"),
     portal = {
         name: "Basic",
         source: "./dist/basic",
@@ -38,7 +41,7 @@ function removeAddonCssFiles () {
 }
 
 /**
- * Deletes unwanted js asset files from addons
+ * Deletes unwanted js asset files from addons and finally creates 2 zip files
  * @returns {void}
  */
 function removeAddonJsFiles () {
@@ -53,7 +56,9 @@ function removeAddonJsFiles () {
                 await fs.remove(folderToCheck + file);
             }
         }
-        zipAFolder.zip(destinationFolder, destinationFolder + ".zip");
+        zipAFolder.zip(destinationFolder, zipFilename1).then(() => {
+            fs.copyFileSync(zipFilename1, zipFilename2);
+        }).catch(err2 => console.error(err2));
     });
 
 }
