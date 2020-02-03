@@ -113,6 +113,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      * @returns {void}
      */
     toggleIsActiveClass: function () {
+        // console.log(this.$el);
         if (this.model.get("isActive") === true) {
             this.$el.addClass("active");
         }
