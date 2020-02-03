@@ -22,7 +22,8 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         var channel = Radio.channel("StyleList");
 
         channel.reply({
-            "returnModelById": this.returnModelById
+            "returnModelById": this.returnModelById,
+            "getDefaultStyle": this.model.getDefaultStyle
         }, this);
 
         if (this.url() !== "keine Style JSON") {
