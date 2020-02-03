@@ -2,7 +2,6 @@ import {Style} from "ol/style.js";
 import PointStyle from "./pointStyle";
 import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
-import LinestringStyle from "./linestringStyle";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     /**
@@ -13,26 +12,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @constructs
      */
     defaults: {
-        /**
-         * @type {string}
-         * styleId is set in style.json
-         */
-        "styleId": null,
-        /**
-         * @type {object[]}
-         * Array with styling rules and its conditions.
-         */
-        "rules": null,
-        /**
-         * @type {object[]}
-         * list of used styling rules for legend grafic
-         */
-        "legendInfos": []
-    },
-
-    initialize: function () {
-        // legendInfos must be set on initialize. Otherwhile legendInfos are mixed up with other VectorStyleModels
-        this.set("legendInfos", []);
+        "conditions": null,
+        "style": null
     },
 
     /**
@@ -42,19 +23,18 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style} style used in layer model
      */
     createStyle: function (feature, isClustered) {
-        const rules = this.getRulesForFeature(feature),
-            // Takes first rule in array for labeling so that is giving precedence to the order in the style.json
-            style = Array.isArray(rules) && rules.length > 0 ? rules[0].style : null,
-            hasLabelField = style && style.hasOwnProperty("labelField"),
-            styleObject = this.getGeometryStyle(feature, rules, isClustered);
+        const rule = this.getRuleForFeature(feature),
+            style = rule && rule.style ? rule.style : null,
+            // geometry style is always requested
+            styleObject = this.getGeometryStyle(feature, style, isClustered);
 
         // label style is optional and depends on some fields
-        if (isClustered || hasLabelField) {
+        if (isClustered || rule.style.hasOwnProperty("labelField")) {
             if (_.isArray(styleObject)) {
-                styleObject[0].setText(this.getLabelStyle(feature, style, isClustered));
+                styleObject[0].setText(this.getLabelStyle(feature, rule.style, isClustered));
             }
             else {
-                styleObject.setText(this.getLabelStyle(feature, style, isClustered));
+                styleObject.setText(this.getLabelStyle(feature, rule.style, isClustered));
             }
         }
 
@@ -62,60 +42,27 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returns true if feature contains some kind of MultiGeometry
-     * @param   {string}  geometryType     the geometry type to check
-     * @returns {Boolean} is geometrytype a multiGeometry
-     */
-    isMultiGeometry: function (geometryType) {
-        return geometryType === "MultiPoint" || geometryType === "MultiLineString" || geometryType === "MultiPolygon" || geometryType === "GeometryCollection";
-    },
-
-    /**
      * Returns the style for the geometry object
      * @param   {ol/feature}  feature     the ol/feature to style
-     * @param   {object[]}  rules       styling rules to check. Array can be empty.
+     * @param   {object|null}  style       styling rule from style.json
      * @param   {Boolean} isClustered Flag to show if feature is clustered.
      * @returns {ol/style/Style}    style is always returned
      */
-    getGeometryStyle: function (feature, rules, isClustered) {
-        const geometryType = feature.getGeometry().getType(),
-            isMultiGeometry = this.isMultiGeometry(geometryType);
-
-        // For simple geometries the first styling rule is used.
-        // That algorithm implements an OR statement between multiple valid conditions giving precedence to its order in the style.json.
-        if (!isMultiGeometry && rules.hasOwnProperty(0) && rules[0].hasOwnProperty("style")) {
-            return this.getSimpleGeometryStyle(geometryType, feature, rules[0], isClustered);
-        }
-        // MultiGeometries must be checked against all rules because there might be a "sequence" in the condition.
-        else if (isMultiGeometry && rules.length > 0 && rules.every(element => element.hasOwnProperty("style"))) {
-            return this.getMultiGeometryStyle(geometryType, feature, rules, isClustered);
-        }
-
-        console.warn("No valid styling rule found.");
-        return new Style();
-    },
-
-    /**
-     * Returns the style for simple (non-multi) geometry types
-     * @param   {string}  geometryType GeometryType
-     * @param   {ol/feature}  feature     the ol/feature to style
-     * @param   {object[]}  rule       styling rules to check.
-     * @param   {Boolean} isClustered  Flag to show if feature is clustered.
-     * @returns {ol/style/Style}    style is always returned
-     */
-    getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
-        const style = rule.style;
+    getGeometryStyle: function (feature, style, isClustered) {
+        const geometryType = feature.getGeometry().getType();
         let styleObject;
 
-        if (geometryType === "Point") {
+        if (!style) {
+            console.warn("No styling rules defined.");
+            return new Style();
+        }
+        else if (geometryType === "Point") {
             styleObject = new PointStyle(feature, style, isClustered);
-            this.checkLegendInfo("Point", feature, rule, styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "LineString") {
-            styleObject = new LinestringStyle(feature, style, isClustered);
-            this.checkLegendInfo("LineString", feature, rule, styleObject);
-            return styleObject.getStyle();
+            console.warn("Geometry type not implemented: " + geometryType);
+            return new Style();
         }
         else if (geometryType === "LinearRing") {
             console.warn("Geometry type not implemented: " + geometryType);
@@ -123,106 +70,31 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
-            this.checkLegendInfo("Polygon", feature, rule, styleObject);
             return styleObject.getStyle();
+        }
+        else if (geometryType === "MultiPoint") {
+            console.warn("Geometry type not implemented: " + geometryType);
+            return new Style();
+        }
+        else if (geometryType === "MultiLineString") {
+            console.warn("Geometry type not implemented: " + geometryType);
+            return new Style();
+        }
+        else if (geometryType === "MultiPolygon") {
+            console.warn("Geometry type not implemented: " + geometryType);
+            return new Style();
+        }
+        else if (geometryType === "GeometryCollection") {
+            console.warn("Geometry type not implemented: " + geometryType);
+            return new Style();
         }
         else if (geometryType === "Circle") {
             console.warn("Geometry type not implemented: " + geometryType);
             return new Style();
         }
 
-        console.warn("Geometry type not implemented: " + geometryType);
+        console.warn("Unknown geometry type: " + geometryType);
         return new Style();
-    },
-
-    /**
-     * Returns an array of simple geometry styles.
-     * @param   {string}  geometryType GeometryType
-     * @param   {ol/feature}  feature     the ol/feature to style
-     * @param   {object[]}  rules       styling rules to check.
-     * @param   {Boolean} isClustered  Flag to show if feature is clustered.
-     * @returns {ol/style/Style[]}    style array of simple geometry styles is always returned
-     */
-    getMultiGeometryStyle: function (geometryType, feature, rules, isClustered) {
-        const olStyle = [];
-        let geometries;
-
-        if (geometryType === "MultiPoint") {
-            geometries = feature.getGeometry().getPoints();
-        }
-        else if (geometryType === "MultiLineString") {
-            geometries = feature.getGeometry().getLineStrings();
-        }
-        else if (geometryType === "MultiPolygon") {
-            geometries = feature.getGeometry().getPolygons();
-        }
-        else if (geometryType === "GeometryCollection") {
-            geometries = feature.getGeometry().getGeometries();
-        }
-
-        geometries.forEach((geometry, index) => {
-            const geometryTypeSimpleGeom = geometry.getType(),
-                rule = this.getRuleForIndex(rules, index);
-
-            // For simplicity reasons we do not support multi encasulated multi geometries but ignore them.
-            if (this.isMultiGeometry(geometryTypeSimpleGeom)) {
-                console.warn("Multi encapsulated multiGeometries are not supported.");
-            }
-            else if (rule) {
-                const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
-
-                simpleStyle.setGeometry(geometry);
-                olStyle.push(simpleStyle);
-            }
-        }, this);
-
-        return olStyle;
-    },
-
-    /**
-     * Returns the best rule for the indexed feature giving precedence to the index position or conditions.
-     * @param   {object[]} rules the rules to check
-     * @param   {integer} index the index position of this geometry in the multi geometry
-     * @returns {object|null} the rule or null if no rule match the conditions
-     */
-    getRuleForIndex: function (rules, index) {
-        const indexedRule = this.getIndexedRule(rules, index),
-            propertiesRule = rules.find(rule => {
-                return rule.hasOwnProperty("conditions");
-            }),
-            fallbackRule = rules.find(rule => {
-                return !rule.hasOwnProperty("conditions");
-            });
-
-        if (indexedRule) {
-            return indexedRule;
-        }
-        else if (propertiesRule) {
-            return propertiesRule;
-        }
-        else if (fallbackRule) {
-            return fallbackRule;
-        }
-
-        return null;
-    },
-
-    /**
-     * Returns the first rule that satisfies the index of the multi geometry.
-     * The "sequence" must be an integer with defined min and max values representing the index range.
-     * @param   {object[]} rules all rules the satisfy conditions.properties.
-     * @param   {integer} index the simple geometries index
-     * @returns {object|undefined} the proper rule
-     */
-    getIndexedRule: function (rules, index) {
-        return rules.find(rule => {
-            const sequence = rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("sequence") ? rule.conditions.sequence : null,
-                isSequenceValid = sequence && Array.isArray(sequence) && sequence.every(element => typeof element === "number") && sequence.length === 2 && sequence[1] >= sequence[0],
-                minValue = isSequenceValid ? sequence[0] : -1,
-                maxValue = isSequenceValid ? sequence[1] : -1;
-
-            return index >= minValue && index <= maxValue;
-        });
     },
 
     /**
@@ -239,37 +111,63 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returning all rules that fit to the feature. Array could be empty.
+     * Checking all rules returning the first one that fits to the feature.
+     * Implements OR logic to return exactly one rule
      * @param {ol/feature} feature the feature to check
-     * @returns {object[]} return all rules that fit to the feature
+     * @returns {object|null} returns one rule object or null if no rule fits to the feature
      */
-    getRulesForFeature: function (feature) {
-        return this.get("rules").filter(rule => this.checkProperties(feature, rule));
+    getRuleForFeature: function (feature) {
+        return this.get("rules").find(rule => {
+            if (this.checkConditions(feature, rule)) {
+                return rule;
+            }
+
+            return null;
+        }, this);
     },
 
     /**
-     * Loops one feature through all properties returning true if all properties are satisfied.
-     * Returns also true if rule has no "conditions" to check.
-     * @param   {ol/feature} feature to check
-     * @param {object} rule the rule to check
-     * @returns {Boolean} true if all properties are satisfied
+     * Checks one feature against one rule returning true if rule fits or if rule has no condiotions.
+     * Available condition checks: "properties", "sequence"
+     * @param   {ol/feature} feature the feature to check
+     * @param   {object} rule the rule to check
+     * @returns {Boolean} returns true if all properties are found
      */
-    checkProperties: function (feature, rule) {
-        if (rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("properties")) {
-            const featureProperties = feature.getProperties(),
-                properties = rule.conditions.properties;
+    checkConditions: function (feature, rule) {
+        let properties = true,
+            sequence = true;
 
-            let key;
-
-            for (key in properties) {
-                const value = properties[key];
-
-                if (!this.checkProperty(featureProperties, key, value)) {
-                    return false;
-                }
+        if (rule.hasOwnProperty("conditions")) {
+            if (rule.conditions.hasOwnProperty("properties")) {
+                properties = this.checkProperties(feature, rule.conditions.properties);
+            }
+            if (rule.conditions.hasOwnProperty("sequence")) {
+                sequence = this.checkGeometrySequence(feature, rule.conditions.sequence);
             }
 
-            return true;
+            return properties && sequence;
+        }
+        return true;
+    },
+
+    /**
+     * Loops one feature through all properties returning true if all properties are satisfied. Otherwhile false.
+     * @param   {ol/feature} feature to check
+     * @param   {object} properties key/value pairs to check
+     * @param   {string} properties.key attribute name or object path to check
+     * @param   {string} properties.value attribute value
+     * @returns {Boolean} true if all properties are satisfied
+     */
+    checkProperties: function (feature, properties) {
+        const featureProperties = feature.getProperties();
+        let key;
+
+        for (key in properties) {
+            const value = properties[key];
+
+            if (!this.checkProperty(featureProperties, key, value)) {
+                return false;
+            }
         }
 
         return true;
@@ -423,91 +321,21 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
+     * [checkGeometrySequence description]
+     * @todo noch keine Ahnung, wie man das implementieren kann. Wie sieht die Geometry aus? Können MultiLines einzeln gestylt werden?
+     * @returns {void}
+     */
+    checkGeometrySequence: function () {
+        return true;
+    },
+
+    /**
      * checks if value starts with special prefix to determine if value is a object path
      * @param   {string} value string to check
      * @returns {Boolean} true is value is an object path
      */
     isObjectPath: function (value) {
         return typeof value === "string" && value.startsWith("@");
-    },
-
-    /**
-     * Checks the rule to determine it can be added to the legend info
-     * @param   {string} geometryType features geometry type
-     * @param   {ol/feature} feature      Feature with properties
-     * @param   {OBJECT} rule         a rule description
-     * @param   {vectorStyle/style} styleObject  style information
-     * @returns {void}
-     */
-    checkLegendInfo: function (geometryType, feature, rule, styleObject) {
-        if (rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("properties")) {
-            const featureProperties = feature.getProperties(),
-                properties = rule.conditions.properties;
-
-            let key;
-
-            for (key in properties) {
-                const referenceValue = this.getReferenceValue(featureProperties, properties[key]);
-
-                this.addLegendInfo(geometryType, this.getLegendDescription(key, referenceValue), styleObject);
-            }
-
-            return;
-        }
-
-        this.addLegendInfo(geometryType, null, styleObject);
-    },
-
-    /**
-     * Returns a string with a default description of a rule
-     * @param   {string} featureValue property name
-     * @param   {string} value        value
-     * @returns {string} legend default description
-     */
-    getLegendDescription: function (featureValue, value) {
-        if (typeof value === "string") {
-            return value;
-        }
-        else if (Array.isArray(value) && value.every(element => typeof element === "number") && (value.length === 2 || value.length === 4)) {
-            if (value.length === 2) {
-                return featureValue + " (" + value[0].toString() + " - " + value[1].toString() + ")";
-            }
-
-            return featureValue + " (" + value[2] + " - " + value[3] + ")";
-        }
-
-        return null;
-    },
-
-    /**
-     * Adds a legendInfo only once
-     * @param {string} geometryType features geometry type
-     * @param {string} condition    stringified condition
-     * @param {vectorStyle/style} styleObject  a vector style
-     * @returns {void}
-     */
-    addLegendInfo: function (geometryType, condition, styleObject) {
-        const legendInfos = this.get("legendInfos"),
-            hasLegendInfo = legendInfos.some(legend => {
-                return legend.geometryType === geometryType && legend.condition === condition;
-            });
-
-        if (!hasLegendInfo) {
-            legendInfos.push({
-                "geometryType": geometryType,
-                "condition": condition,
-                "styleObject": styleObject
-            });
-            Radio.trigger("Legend", "setLayerList");
-        }
-    },
-
-    /**
-     * returns the legend info
-     * @returns {object[]} legend objects
-     */
-    getLegendInfos: function () {
-        return this.get("legendInfos");
     }
 });
 
