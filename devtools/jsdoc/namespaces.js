@@ -880,3 +880,8 @@
  * @memberof Core.ModelList.Layer
  * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
  */
+
+/**
+ * @namespace VectorStyle
+ * @description vector styles for vector layer
+ */

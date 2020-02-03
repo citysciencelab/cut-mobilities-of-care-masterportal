@@ -87,6 +87,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @extends Backbone.Model
      * @memberof VectorStyle
      * @constructs
+     * @deprecated since new styleModel. Should be removed with version 3.0.
      * @description Style model to create an open layers vector style for each opbject in style.json.
      * @param {String} [imagePath=""] Path to images.
      * @param {String} [class="POINT"] Class of style. Matches the geometry
