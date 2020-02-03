@@ -191,6 +191,21 @@ function doesLayerWithFeaturesExist () {
     return found;
 }
 
+/** @returns {boolean} true if all of map.getLayers have visibility set to false */
+function areAllLayersHidden () {
+    return !Backbone.Radio
+        .request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .map(l => l.getVisible())
+        .reduce((acc, next) => acc || next, false);
+}
+
+/** @returns {boolean} true if oblique map responds to be turned on */
+function isObModeOn () {
+    return Backbone.Radio.request("ObliqueMap", "isActive");
+}
+
 /**
  * Checks whether browser is in fullscreen mode.
  * @returns {boolean} true if fullscreen is detected
@@ -230,6 +245,20 @@ function getHeading () {
     return Backbone.Radio.request("Map", "getMap3d").getCamera().getHeading();
 }
 
+/** @returns {(Number | null)} currently active OB mode direction flag */
+function getDirection () {
+    const currentDirection = Backbone.Radio.request("ObliqueMap", "getCurrentDirection");
+
+    return currentDirection ? currentDirection.direction : null;
+}
+
+/** @returns {(Number | null)} OB mode resolution */
+function getObModeResolution () {
+    const currentDirection = Backbone.Radio.request("ObliqueMap", "getCurrentDirection");
+
+    return currentDirection ? currentDirection.currentView.view.getResolution() : null;
+}
+
 /**
  * @param {Number[]} coords target coordinates
  * @returns {void}
@@ -266,14 +295,18 @@ module.exports = {
     mockGeoLocationAPI,
     mouseWheelUp,
     mouseWheelDown,
+    areAllLayersHidden,
     isFullscreen,
     isLayerVisible,
+    isObModeOn,
+    getObModeResolution,
     areLayersOrdered,
     doesLayerWithFeaturesExist,
     getCenter,
     getResolution,
     getTilt,
     getHeading,
+    getDirection,
     setCenter,
     setTilt,
     zoomIn,

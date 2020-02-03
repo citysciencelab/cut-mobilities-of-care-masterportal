@@ -1,6 +1,7 @@
 const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
     modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
     modulesControlsButton3DTests = require("./tests/modules/controls/Button3D.js"),
+    modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
     // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
@@ -57,6 +58,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
         // modulesControlsAttributionsTests(e2eTestParams);
         modulesControlsBackForwardTests(e2eTestParams);
         modulesControlsButton3DTests(e2eTestParams);
+        modulesControlsButtonObliqueTests(e2eTestParams);
         // modulesControlsFreezeTests(e2eTestParams);
         // modulesControlsFullScreenTests(e2eTestParams);
         modulesControlsOrientationTests(e2eTestParams);
