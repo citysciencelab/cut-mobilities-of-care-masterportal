@@ -9,8 +9,10 @@ const {until, By} = require("selenium-webdriver"),
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
-async function prepare3D (driver) { // eslint-disable-line
-    // TODO set driver state to activated 3D mode
+async function prepare3D (driver) {
+    await driver.wait(until.elementLocated(By.css("#button3D")));
+    await (await driver.findElement(By.css("#button3D"))).click();
+    await driver.wait(until.elementLocated(By.css("#orientation3d")));
 }
 
 /**
@@ -21,8 +23,11 @@ async function prepare3D (driver) { // eslint-disable-line
  * @param {selenium.webdriver.Driver} driver to manipulate
  * @returns {void}
  */
-async function prepareOB (driver) { // eslint-disable-line
-    // TODO set driver state to activated OB mode
+async function prepareOB (driver) {
+    await driver.wait(until.elementLocated(By.css("#buttonOblique")));
+    await (await driver.findElement(By.css("#buttonOblique"))).click();
+    // downloads >42MB before setting compass, give it some time
+    await driver.wait(until.elementLocated(By.css("#orientation3d .control-box-container.oblique #zoom-in")), 120000);
 }
 
 /**
