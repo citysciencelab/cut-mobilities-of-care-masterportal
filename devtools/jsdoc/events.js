@@ -2283,6 +2283,13 @@
  * @description todo
  */
 
+ /** -------------------- ADDONS -------------------- */
+ /**
+ * @event Addons#initialized
+ * @description Is fired after addons are inizialized if addons are configured, e.g. the language files are loaded
+ */
+
+
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**

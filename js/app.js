@@ -460,8 +460,35 @@ function loadApp () {
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
+        Radio.channel("Addons");
+        let initCounter = 0;
+
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
+                initCounter++;
+            }
+        });
+        initCounter = initCounter * Object.keys(i18next.options.getLanguages()).length;
+
+        Config.addons.forEach((addonKey) => {
+            if (allAddons[addonKey] !== undefined) {
+
+                Object.keys(i18next.options.getLanguages()).forEach((lng) => {
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                        .then(({default: additionalLocales}) => {
+                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            initCounter--;
+                            if (initCounter === 0) {
+                                Radio.trigger("Addons", "initialized");
+                            }
+                        }).catch(error => {
+                            initCounter--;
+                            console.warn(error);
+                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                        });
+                });
+
+
                 // .js need to be removed so webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
@@ -471,6 +498,15 @@ function loadApp () {
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
                     if (addon.model) {
+                        // set this special attribute, because it is the only one set before this replacement
+                        const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
+
+                        if (!model) {
+                            console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
+                        }
+                        else {
+                            addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
+                        }
                         Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
                     }
                 }).catch(error => {
