@@ -40,6 +40,18 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         "<small>Auszug:" + snippet + "</small>",
                         kategorie: "alert-warning"
                     });
+                    if (error.textStatus === "parsererror" && error.errorThrown.message === "Syntaxfehler") {
+                        // reload page once
+                        if (window.localStorage) {
+                            if (!localStorage.getItem("firstLoad")) {
+                                localStorage.firstLoad = true;
+                                window.location.reload();
+                            }
+                            else {
+                                localStorage.removeItem("firstLoad");
+                            }
+                        }
+                    }
                 }
             }
         });
