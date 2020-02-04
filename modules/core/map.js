@@ -207,6 +207,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
         register(proj4);
+        // sign projection for use in masterportal
+        proj4.defs(epsgCode).masterportal = true;
     },
 
     /**
