@@ -31,7 +31,6 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
-import CoordPopupView from "../modules/tools/getCoord/view";
 import ShadowView from "../modules/tools/shadow/view";
 import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
@@ -203,7 +202,6 @@ function loadApp () {
                 break;
             }
             case "coord": {
-                new CoordPopupView({model: tool});
                 break;
             }
             case "shadow": {
