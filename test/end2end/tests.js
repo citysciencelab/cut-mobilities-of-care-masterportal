@@ -9,6 +9,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
+    modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
     parametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
@@ -43,16 +44,12 @@ function tests (builder, url, browsername, resolution, config, mode) {
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
         this.timeout(150000);
 
-        const e2eTestParams = {builder, url, resolution, config, mode, browsername};
-
-        /*
-         * restriction statement to reduce tests during writing; will change a lot and should be ultimately removed;
-         * overall test call structure may require some changes previously to reduce run-time
-         */
-        if (mode !== "2D") {
-            // usage of 3D/OB mode not ready yet
+        // TODO remove to activate OB testing
+        if (mode === "OB") {
             return;
         }
+
+        const e2eTestParams = {builder, url, resolution, config, mode, browsername};
 
         // // // modules/controls
         // modulesControlsAttributionsTests(e2eTestParams);
@@ -71,6 +68,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
 
         // // // modules/tools
         modulesToolsGfi(e2eTestParams);
+        modulesToolsMeasure(e2eTestParams);
 
         // // // non-module tests
         legendTests(e2eTestParams);

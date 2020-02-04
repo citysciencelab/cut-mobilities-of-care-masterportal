@@ -35,7 +35,7 @@ function isMobile (resolution) {
  * @returns {boolean} whether mode is 2D
  */
 function is2D (mode) {
-    return mode === modes[0];
+    return mode === "2D";
 }
 
 /**
@@ -44,7 +44,7 @@ function is2D (mode) {
  * @returns {boolean} whether mode is 3D
  */
 function is3D (mode) {
-    return mode === modes[1];
+    return mode === "3D";
 }
 
 /**
@@ -53,7 +53,7 @@ function is3D (mode) {
  * @returns {boolean} whether mode is OB
  */
 function isOB (mode) {
-    return mode === modes[0];
+    return mode === "OB";
 }
 
 /**

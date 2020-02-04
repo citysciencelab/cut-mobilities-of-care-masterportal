@@ -125,6 +125,24 @@ function isLayerVisible () {
 }
 
 /**
+ * @param {string} name name of layer to check features of
+ * @param {number} length expected length of feature list
+ * @returns {boolean} true if layer with "name" exists and its source has "length" features
+ */
+function hasVectorLayerLength () {
+    const layer = Backbone.Radio.request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .filter(l => l.get("name") === arguments[0])[0];
+
+    return layer
+        ? layer.getSource()
+            .getFeatures()
+            .length === arguments[1]
+        : false;
+}
+
+/**
  * Checks whether layers are present in given order. Additional layers may be present.
  * @param {String[]} layerIds layers should be present left-to-right (equals bottom-to-top)
  * @returns {boolean} true if all given layers found and in requested order
@@ -199,6 +217,62 @@ function areAllLayersHidden () {
         .getArray()
         .map(l => l.getVisible())
         .reduce((acc, next) => acc || next, false);
+}
+
+/**
+ * @param {string[]} texts texts to search for
+ * @returns {boolean} true if all texts are found in order as feature texts
+ */
+function areRegExpsInMeasureLayer () {
+    const texts = Backbone.Radio.request("Map", "getMap")
+            .getLayers()
+            .getArray()
+            .filter(l => l.get("name") === "measure_layer")[0]
+            .getSource()
+            .getFeatures()
+            .map(f => f.getStyle())
+            .filter(s => s)
+            .reduce((acc, curr) => [...acc, ...curr], [])
+            .map(s => s.getText().getText()),
+        regExps = arguments[0].map(s => new RegExp(s));
+
+    for (const re of regExps) {
+        let found = false;
+
+        for (const text of texts) {
+            if (re.test(text)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * @param {number} x number of feature to return coordinates of
+ * @param {string} name name of layer to retrieve feature of
+ * @returns {(Array.<number[]> | null)} coordinates or null if layer or feature not found
+ */
+function getCoordinatesOfXthFeatureInLayer () {
+    const layer = Backbone.Radio.request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .filter(l => l.get("name") === arguments[1])[0];
+
+    if (layer) {
+        const feature = layer.getSource().getFeatures()[arguments[0]];
+
+        if (feature) {
+            return feature.getGeometry().getCoordinates();
+        }
+    }
+
+    return null;
 }
 
 /** @returns {boolean} true if oblique map responds to be turned on */
@@ -296,10 +370,13 @@ module.exports = {
     mouseWheelUp,
     mouseWheelDown,
     areAllLayersHidden,
+    areRegExpsInMeasureLayer,
     isFullscreen,
     isLayerVisible,
     isObModeOn,
     getObModeResolution,
+    getCoordinatesOfXthFeatureInLayer,
+    hasVectorLayerLength,
     areLayersOrdered,
     doesLayerWithFeaturesExist,
     getCenter,
