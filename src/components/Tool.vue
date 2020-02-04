@@ -37,8 +37,13 @@ export default {
                 }
             }
             else {
-                document.getElementById("map").style.width = "100%";
-                Radio.trigger("Map", "updateSize");
+                const sidebars = document.getElementsByClassName("sidebar");
+                if(! sidebars || sidebars.length === 0){
+                    //only set the map to full width, if not another sidebar is open
+                    // das muss spaeter anders geloest werden, wenn alle tools im store registriert sind kann abgefragt werden, ob die sidebar sichtbar ist
+                    document.getElementById("map").style.width = "100%";
+                    Radio.trigger("Map", "updateSize");
+                }
             }
         }
     },
