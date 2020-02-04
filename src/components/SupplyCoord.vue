@@ -85,7 +85,7 @@ export default {
             return this.$store.state.Tools.SupplyCoord.renderToWindow;
         },
         icon() {
-            return this.$store.state.Tools.SupplyCoord.icon;
+            return this.$store.state.Tools.SupplyCoord.glyphicon;
         },
         title() {
             return this.$store.state.Tools.SupplyCoord.title;
