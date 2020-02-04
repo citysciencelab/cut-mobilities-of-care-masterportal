@@ -18,7 +18,8 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
             }
         });
 
-        window.addEventListener("resize", _.bind(this.renderDependingOnSpace, this));
+        window.addEventListener("resize", this.renderDependingOnSpace.bind(this));
+
 
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": function () {
