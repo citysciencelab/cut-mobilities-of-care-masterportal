@@ -5,7 +5,7 @@ export default {
         // change this to render in window or in sidebar
         renderToWindow: false,
         id: "coord",
-        title: "Koordinaten Abfrage",
+        title: "Koordinaten abfragen",
         deactivateGFI: true,
         glyphicon: "glyphicon-screenshot",
         // SupplyCoord specific:
