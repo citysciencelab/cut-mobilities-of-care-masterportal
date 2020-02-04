@@ -15,7 +15,7 @@ async function MeasureTests ({builder, url, resolution, mode}) {
         execute2dTests = !is3D(mode),
         execute3dTests = is3D(mode) && !isBasic(url); // no 3D mode active in basic conf
 
-    (skipAll ? describe.skip : describe.only)("Measure Tool", function () {
+    (skipAll ? describe.skip : describe)("Measure Tool", function () {
         (execute2dTests ? describe : describe.skip)("2D measurement", function () {
             let driver, dropdownGeometry, dropdownUnit, questionIcon, deleteButton, viewport;
 
