@@ -528,18 +528,6 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         return svg;
     },
 
-    colorStringToArray (colorAsString) {
-        let color = colorAsString,
-            colorAsArr = [];
-
-        color = color.slice(color.indexOf("(") + 1, color.indexOf(")"));
-
-        colorAsArr = color.split(", ");
-        colorAsArr = colorAsArr.map(x => parseInt(x, 10));
-        colorAsArr.push(1);
-
-        return colorAsArr;
-    },
     /**
     * todo
     * @param {*} style todo
