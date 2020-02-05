@@ -65,7 +65,7 @@ Wir haben uns entschieden, die Übersetzungen in drei verschiedene Dateien aufzu
 2. additional
 3. custom
 
-Hier ein Link zur **[Architektur](i18n_Architektur.JPG)**
+Hier ein Link zur **[Architektur](i18n.jpeg)**
 
 
 ### Common Sprachdatei - common.json

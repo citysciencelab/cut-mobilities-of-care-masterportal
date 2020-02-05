@@ -66,7 +66,7 @@ We decided to split translations into three different files:
 2. additional
 3. custom
 
-See the **[architecture](i18n_Architektur.JPG)**
+See the **[architecture](i18n.jpeg)**
 
 
 ### Common Language File - common.json
