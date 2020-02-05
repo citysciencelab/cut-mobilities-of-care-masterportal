@@ -250,14 +250,12 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 |name|ja|String||Name des gfi Templates.|
 |**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
 
-Beispiel gfiTheme für das template "sensor"
+Beispiel gfiTheme
 ```
 #!json
 "gfiTheme": {
    "name": "sensor",
-   "params": {
-         "grafana": true
-   }
+   "params": {}
 }
 ```
 ## gfi_theme_params ##
@@ -272,7 +270,21 @@ Hier werden die Parameter für das GFI-Template "sensor" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit "grafana_url" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit dem value des Attributes "iFrameAttributesPrefix" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|iFrameAttributesPrefix|nein|String||Prefix für die Attribute, die die url zu grafana enthalten.|
+
+Beispiel gfiTheme für das template "sensor"
+```
+#!json
+"gfiTheme": {
+   "name": "sensor",
+   "params": {
+         "grafana": true,
+         "iFrameAttributesPrefix": "grafana_url"
+   }
+}
+```
+
 
 ## gfi_attributes ##
 Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:
@@ -311,10 +323,13 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|name|true|String||Name bei exakt einem Match angezeigt werden soll. |'"Test"'|
+|name|true|String||Name, der bei exakt einem Match angezeigt werden soll. |'"Test"'|
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
+|type|false|enum["string","date"]|"string"|Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
+|format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
+|suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-Beispiel gfiAttributes als Objekt
+Beispiel gfiAttributes als Objekt mit suffix.
 ```
 #!json
 {
@@ -323,7 +338,24 @@ Beispiel gfiAttributes als Objekt
       "key2": "Key der im Portal gezeigt wird 2",
       "key3": {
          "name": "Key der im Portal gezeigt wird 3",
-         "condition": "contains"
+         "condition": "contains",
+         "suffix": "°C"
+      }
+   }
+}
+```
+Beispiel gfiAttributes als Objekt mit type und format
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "key3": {
+         "name": "Key der im Portal gezeigt wird 3",
+         "condition": "contains",
+         "type": "date",
+         "format": "DD.MM.YY"
       }
    }
 }
