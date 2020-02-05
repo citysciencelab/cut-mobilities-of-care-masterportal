@@ -292,58 +292,57 @@ describe("core/Util", function () {
                 "Stadt"
             ]);
         });
-        it("should split addressString with streetname without blank and housenumber with suffix", function () {
-            expect(model.splitAddressString("Straße 1a, PLZ Stadt", ",", " ")).to.deep.equal([
-                "Straße",
-                "1a",
-                "PLZ",
-                "Stadt"
-            ]);
-        });
-        it("should split addressString with streetname with blank", function () {
-            expect(model.splitAddressString("Platz ohne Namen 1, PLZ Stadt", ",", " ")).to.deep.equal([
-                "Platz ohne Namen",
-                "1",
-                "PLZ",
-                "Stadt"
-            ]);
-        });
-    });
-    describe("sortObjectsAsAddress", function () {
-        it("should return sorted objects", function () {
-            const array = [];
 
-            array.push({name: "aStraße 1b, 12345 Stadt"});
-            array.push({name: "aStraße 1, 12345 Stadt"});
-            array.push({name: "cStraße ohne Namen 10, 12345 Stadt"});
-            array.push({name: "aStraße 10, 12345 Stadt"});
-            array.push({name: "aStraße 2, 12345 Stadt"});
-            array.push({name: "aStraße 1a, 12345 Stadt"});
-            array.push({name: "bStraße 10, 12345 Stadt"});
-            array.push({name: "12Straße 10, 12345 Stadt"});
-            expect(model.sortObjectsAsAddress(array)).to.deep.equal([
-                {name: "12Straße 10, 12345 Stadt"},
-                {name: "aStraße 1, 12345 Stadt"},
-                {name: "aStraße 1a, 12345 Stadt"},
-                {name: "aStraße 1b, 12345 Stadt"},
-                {name: "aStraße 2, 12345 Stadt"},
-                {name: "aStraße 10, 12345 Stadt"},
-                {name: "bStraße 10, 12345 Stadt"},
-                {name: "cStraße ohne Namen 10, 12345 Stadt"}
-            ]);
+        it("should return an object", function () {
+            expect(model.renameKeys({name: "firstName", job: "passion"}, obj)).to.be.an("object");
+        });
+
+        it("should have the keys called firstName and passion", function () {
+            expect(model.renameKeys({name: "firstName", job: "passion"}, obj)).to.include({firstName: "Reder", passion: "Frontend-Master"});
         });
     });
-    describe("isValidAddressString", function () {
-        it("should return true for valid address strings", function () {
-            expect(model.isValidAddressString("aStraße 1b, 12345 Stadt", ",", " ")).to.be.true;
-            expect(model.isValidAddressString("aStraße 1, 12345 Stadt", ",", " ")).to.be.true;
-            expect(model.isValidAddressString("cStraße ohne Namen 10, 12345 Stadt", ",", " ")).to.be.true;
+
+    describe("renameValues", function () {
+        const obj = {
+            name: "Reder",
+            job: "Frontend_Master",
+            shoeSize: "100"
+        };
+
+        before(function () {
+            model = new Model();
         });
-        it("should return false for invalid address stringsA", function () {
-            expect(model.isValidAddressString("aStraße 1b 12345 Stadt", ",", " ")).to.be.false;
+
+        it("should return an object", function () {
+            expect(model.renameValues({Reder: "Vornfeld", Frontend_Master: "Backend_Master"}, obj)).to.be.an("object");
         });
-        it("should return false for invalid address stringsB", function () {
-            expect(model.isValidAddressString("aStraße, 12345 Stadt", ",", " ")).to.be.false;
+
+        it("should have the values Vornfeld and Backend_Master", function () {
+            expect(model.renameValues({Reder: "Vornfeld", Frontend_Master: "Backend_Master"}, obj)).to.include({name: "Vornfeld", job: "Backend_Master"});
+        });
+    });
+
+    describe("pickKeyValuePairs", function () {
+        const obj = {
+            name: "Reder",
+            job: "Frontend_Master",
+            shoeSize: "100"
+        };
+
+        before(function () {
+            model = new Model();
+        });
+
+        it("should return an object", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.be.an("object");
+        });
+
+        it("should have the keys name and job", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.have.all.keys("name", "job");
+        });
+
+        it("should return an object equals {name: 'Reder', job: 'Frontend_Master'}", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.deep.equal({name: "Reder", job: "Frontend_Master"});
         });
     });
 });
