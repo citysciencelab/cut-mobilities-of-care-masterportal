@@ -70,7 +70,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     changedConditions: function () {
-        const features = this.get("layer").getSource().getFeatures(),
+        const features = this.get("layerSource").getFeatures(),
             state = this.checkConditionsForSubscription();
 
         if (state === true) {
@@ -183,15 +183,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             this.styling(isClustered);
             this.get("layer").setStyle(this.get("style"));
         }
-    },
-
-    /**
-     * Ends mqtt client instantly
-     * @returns {void}
-     */
-    endMqttConnectionToSensorThings: function () {
-        this.get("mqttClient").end(true);
-        this.setMqttClient(null);
     },
 
     /**
@@ -697,8 +688,60 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonData.dataStreamId = topic.match(regex)[1];
             this.options.context.updateFromMqtt(jsonData);
         });
+    },
 
-        this.setMqttClient(client);
+    /**
+     * subscribes to the mqtt client with the features in the current extent
+     * @returns {Void}  -
+     */
+    subscribeToSensorThings: function () {
+        const features = this.getFeaturesInExtent(),
+            dataStreamIds = this.getDataStreamIds(features),
+            version = this.get("version"),
+            client = this.get("mqttClient"),
+            subscriptionTopics = this.get("subscriptionTopics");
+
+        dataStreamIds.forEach(function (id) {
+            if (!subscriptionTopics[id]) {
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations");
+                subscriptionTopics[id] = true;
+            }
+        });
+    },
+
+    /**
+     * unsubscribes from the mqtt client with topics formerly subscribed
+     * @returns {Void}  -
+     */
+    unsubscribeFromSensorThings: function () {
+        const features = this.getFeaturesInExtent(),
+            dataStreamIds = this.getDataStreamIds(features),
+            dataStreamIdsInverted = {},
+            subscriptionTopics = this.get("subscriptionTopics"),
+            version = this.get("version"),
+            isSelected = this.get("isSelected"),
+            client = this.get("mqttClient");
+        let id;
+
+        dataStreamIds.forEach(function (id) {
+            dataStreamIdsInverted[id] = true;
+        });
+
+        for (id in subscriptionTopics) {
+            if (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id)) {
+                client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
+                subscriptionTopics[id] = false;
+            }
+        };
+    },
+
+    /**
+     * Refresh all connections by ending all established connections and creating new ones
+     * @returns {void}
+     */
+    updateSubscription: function () {
+        this.unsubscribeFromSensorThings();
+        this.subscribeToSensorThings();
     },
 
     /**
@@ -760,7 +803,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {ol/featre[]} features
      */
     getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
+        const features = this.get("layerSource").getFeatures(),
             currentExtent = Radio.request("MapView", "getCurrentExtent"),
             enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
