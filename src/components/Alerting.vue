@@ -5,7 +5,9 @@
                 <button v-if="alert.isDismissable===true" v-on:click="closeAlert('closed', $event)" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <p>{{ alert.message }}</p>
+                <p>
+                    <span v-html="alert.message"></span>
+                </p>
                 <button v-if="alert.isConfirmable" v-on:click="closeAlert('confirmed', $event)" type="button" class="btn btn-primary alert-confirm" aria-label="Close">OK</button>
             </div>
         </div>
@@ -27,8 +29,8 @@ export default {
             }
         });
     },
-    mounted() {    
-        document.getElementsByTagName("body")[0].append(this.$el);
+    mounted() {
+        document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
     updated() {
         const that = this;

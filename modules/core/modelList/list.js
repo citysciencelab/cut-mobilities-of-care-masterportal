@@ -1065,6 +1065,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
+            layer.styling(value);
+            layer.get("layer").setStyle(layer.get("style"));
         });
     },
 

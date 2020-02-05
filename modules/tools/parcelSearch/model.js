@@ -19,6 +19,7 @@ const ParcelSearch = Tool.extend({
         cadastralDistrictNumber: "0", // default Flur
         parcelDenominatorField: false, // sollen Flurstücksnenner verwendet werden? Aus config
         parcelNumber: "", // default Flurstücksnummer
+        maxParcelNumberLength: 6, // default max-length of parcel number
         parcelDenominatorNumber: "0", // default Flurstücksnenner,
         createReport: false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         parcelFound: false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert

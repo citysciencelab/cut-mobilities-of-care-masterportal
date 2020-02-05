@@ -1,19 +1,20 @@
 const replace = require("replace-in-file"),
     path = require("path"),
     rootPath = path.resolve(__dirname, "../../"),
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))();
+
 
 module.exports = function (destination) {
     const replacements = [
         {
             "files": destination + "/index.html",
             "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
-            "to": "../mastercode/" + stableVersionNumber + "/img/ajax-loader.gif"
+            "to": "../mastercode/" + mastercodeVersionFolderName + "/img/ajax-loader.gif"
         },
         {
             "files": destination + "/index.html",
             "from": /\/*(\.+\/)*build/g,
-            "to": "../mastercode/" + stableVersionNumber
+            "to": "../mastercode/" + mastercodeVersionFolderName
         },
         {
             "files": destination + "/css/style.css",

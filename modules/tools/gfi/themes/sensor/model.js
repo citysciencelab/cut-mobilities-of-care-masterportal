@@ -2,12 +2,13 @@ import Theme from "../model";
 
 const SensorTheme = Theme.extend(/** @lends SensorTheme.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
-        grafana: false
+        grafana: false,
+        grafanaUrls: {}
     }),
     /**
      * @class SensorTheme
      * @description This theme is used to show sensor-data.
-     * If "grafana" is configured and the feature contains attributes starting with "grafana_url",
+     * If "grafana" is configured and the feature contains attributes starting with the content of attribute "iFrameAttributesPrefix",
      * then these links are used to generate iframes.
      * @memberof Tools.GFI.Themes.Sensor
      * @constructs
@@ -25,6 +26,7 @@ const SensorTheme = Theme.extend(/** @lends SensorTheme.prototype*/{
      */
     parseProperties: function () {
         let grafana,
+            iFrameAttributesPrefix,
             grafanaUrls;
         const feature = this.get("feature");
 
@@ -33,26 +35,32 @@ const SensorTheme = Theme.extend(/** @lends SensorTheme.prototype*/{
 
             this.setGrafana(grafana);
         }
+        if (feature.get("gfiParams") && feature.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
+            iFrameAttributesPrefix = feature.get("gfiParams").iFrameAttributesPrefix;
 
-        if (grafana) {
-            grafanaUrls = this.getGrafanaUrlsFromFeature(feature);
+            this.setGrafana(grafana, iFrameAttributesPrefix);
+        }
+
+        if (grafana && iFrameAttributesPrefix) {
+            grafanaUrls = this.getGrafanaUrlsFromFeature(feature, iFrameAttributesPrefix);
 
             this.setGrafanaUrls(grafanaUrls);
         }
     },
 
     /**
-     * Parses all attributes of the gfiFeature that start with ""grafana_url".
+     * Parses all attributes of the gfiFeature that start with the content of attribute "iFrameAttributesPrefix".
      * @param {ol/Feature} feature gfiFeature.
+     * @param {String} iFrameAttributesPrefix The prefixString
      * @returns {Object} - An object containing all the grafana urls.
      */
-    getGrafanaUrlsFromFeature: function (feature) {
+    getGrafanaUrlsFromFeature: function (feature, iFrameAttributesPrefix) {
         const grafanaUrls = {};
         let attributesContainingGrafana = [];
 
         if (feature) {
             attributesContainingGrafana = feature.getKeys().filter(key => {
-                return key.startsWith("grafana_url");
+                return key.startsWith(iFrameAttributesPrefix);
             });
 
             attributesContainingGrafana.forEach(attr => {

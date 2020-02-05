@@ -13,3 +13,4 @@ Konventionen für das Master-Portal
 7. Verwende **[sprechende Fehlermeldungen](conventions/errorMessages.md)**.
 8. Schreibe **[konfigurierbaren](conventions/configuration.md)** Code und erweitere die Dokumentation für das Masterportal.
 9. Beachte die **[Abwärts-Kompatibilität](conventions/backwardsCompatibility.md)** der Konfigurationsdateien.
+10. Pre-push Hooks **[Pre-push Hooks](conventions/pre-push_hooks.md)**

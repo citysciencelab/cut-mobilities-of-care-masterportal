@@ -112,7 +112,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     getLayerIdFromIndex: function (index, mode) {
         const position = this.getPositionFromValue(index, mode),
             layerIdObj = this.get("layerIds")[position],
-            layerId = layerIdObj ? layerIdObj.layerId : this.get("layerIds").length - 1;
+            layerId = layerIdObj ? layerIdObj.layerId : undefined;
 
         return layerId;
     },

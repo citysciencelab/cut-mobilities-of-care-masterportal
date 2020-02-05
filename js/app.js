@@ -492,7 +492,7 @@ function loadApp () {
                 // .js need to be removed so webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ `../addons/${entryPoint}.js`).then(module => {
+                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 
