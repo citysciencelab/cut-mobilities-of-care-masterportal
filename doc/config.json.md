@@ -1466,7 +1466,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird.|false|
-|type|ja|**[iconType](#markdown-header-portalconfigmenutooldrawiconiconType)**||Typ des zu zeichnenden Objektes.|false|
+|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/icons/` abgelegt. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
 **Beispiele**
@@ -1476,7 +1476,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 {
 	"caption": "Wolke",
 	"type": "image",
-	"value": "../../../../../img/icons/cloud.png"
+	"value": "/img/icons/cloud.png"
 }
 
 {
@@ -1485,18 +1485,6 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
     "value": "\ue104"
 }
 ```
-
-***
-
-#### Portalconfig.menu.tool.draw.icon.iconType
-
-Typ des **[icon](#markdown-header-portalconfigmenutoolicon)**, wobei dies auch Einfluss auf die Art des Wertes hat.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|---|--------------|---|-------|------------|------|
-|simple_point|nein|String||Zeichnet einen normalen Punkt. Der übergebene Wert ist hierbei irrelevant.|false|
-|glyphicon|nein|String||Zeichnet ein Symbol. Dieses basiert auf dem Unicodewert aus `value` des **[icon](#markdown-header-portalconfigmenutoolicon)**.|false|
-|image|nein|String||Zeichnet ein PNG-Bild. Dieses entspricht dem Bild mit dem aus `value` übergebenen Pfad des **[icon](#markdown-header-portalconfigmenutoolicon)**. Standardmäßig werden diese Bilder in dem Ordner `/img/icons/` abgelegt.|false|
 
 ***
 

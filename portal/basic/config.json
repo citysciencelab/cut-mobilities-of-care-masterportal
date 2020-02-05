@@ -103,7 +103,7 @@
 							{
 								"caption": "Wolke",
 								"type": "image",
-								"value": "../../../../../img/icons/cloud.png"
+								"value": "/img/icons/cloud.png"
 							},
 							{
 								"caption": "Zelt",
