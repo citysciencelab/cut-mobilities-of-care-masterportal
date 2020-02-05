@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const Config = {
+    addons: ["einwohnerabfrage"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
