@@ -1465,7 +1465,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird|false|
+|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird.|false|
 |type|ja|**[iconType](#markdown-header-portalconfigmenutooldrawiconiconType)**||Typ des zu zeichnenden Objektes.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
@@ -1494,7 +1494,7 @@ Typ des **[icon](#markdown-header-portalconfigmenutoolicon)**, wobei dies auch E
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |---|--------------|---|-------|------------|------|
-|simple_point|nein|String||Zeichnet einen normalen Punkt. Der übergebene Wert ist hierbei irrelevant|false|
+|simple_point|nein|String||Zeichnet einen normalen Punkt. Der übergebene Wert ist hierbei irrelevant.|false|
 |glyphicon|nein|String||Zeichnet ein Symbol. Dieses basiert auf dem Unicodewert aus `value` des **[icon](#markdown-header-portalconfigmenutoolicon)**.|false|
 |image|nein|String||Zeichnet ein PNG-Bild. Dieses entspricht dem Bild mit dem aus `value` übergebenen Pfad des **[icon](#markdown-header-portalconfigmenutoolicon)**. Standardmäßig werden diese Bilder in dem Ordner `/img/icons/` abgelegt.|false|
 
