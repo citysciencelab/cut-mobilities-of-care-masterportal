@@ -129,15 +129,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Refresh all connections by ending all established connections and creating new ones
-     * @returns {void}
-     */
-    updateSubscription: function () {
-        this.endMqttConnectionToSensorThings();
-        this.createMqttConnectionToSensorThings();
-    },
-
-    /**
      * Creates the vectorSource.
      * @returns {void}
      */
@@ -212,15 +203,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             this.styling(isClustered);
             this.get("layer").setStyle(this.get("style"));
         }
-    },
-
-    /**
-     * Ends mqtt client instantly
-     * @returns {void}
-     */
-    endMqttConnectionToSensorThings: function () {
-        this.get("mqttClient").end(true);
-        this.setMqttClient(null);
     },
 
     /**
@@ -734,8 +716,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             jsonData.dataStreamId = topic.match(regex)[1];
             this.updateFromMqtt(jsonData);
         });
-
-        this.setMqttClient(client);
     },
 
     /**
@@ -797,42 +777,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @fires Core#RadioRequestMapViewGetCurrentExtent
      * @returns {ol/featre[]} features
      */
     getFeaturesInExtent: function () {
         const features = this.get("layerSource").getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
-            featuresInExtent = [];
-
-        features.forEach(feature => {
-            if (containsExtent(enlargedExtent, feature.getGeometry().getExtent())) {
-                featuresInExtent.push(feature);
-            }
-        });
-
-        return featuresInExtent;
-    },
-
-    /**
-     * enlarge given extent by factor
-     * @param   {ol/extent} extent extent to enlarge
-     * @param   {float} factor factor to enlarge extent
-     * @returns {ol/extent} enlargedExtent
-     */
-    enlargeExtent: function (extent, factor) {
-        const bufferAmount = (extent[2] - extent[0]) * factor;
-
-        return buffer(extent, bufferAmount);
-    },
-
-    /**
-     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @returns {ol/featre[]} features
-     */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
             currentExtent = Radio.request("MapView", "getCurrentExtent"),
             enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
