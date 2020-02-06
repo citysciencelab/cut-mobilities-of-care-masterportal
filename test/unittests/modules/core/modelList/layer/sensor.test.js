@@ -2,6 +2,7 @@ import SensorLayerModel from "@modules/core/modelList/layer/sensor.js";
 import * as moment from "moment";
 import Feature from "ol/Feature.js";
 import Point from "ol/geom/Point.js";
+import LineString from "ol/geom/LineString";
 import {expect} from "chai";
 import VectorLayer from "ol/layer/Vector.js";
 import {Vector as VectorSource} from "ol/source.js";
@@ -19,6 +20,9 @@ describe("core/modelList/layer/sensor", function () {
         sinon.stub(Radio, "request").callsFake(function (channel, topic) {
             if (channel === "MapView" && topic === "getCurrentExtent") {
                 return [100, 100, 200, 200];
+            }
+            else if (channel === "MapView" && topic === "getProjection") {
+                return "EPSG:25832";
             }
             else if (channel === "Map" && topic === "registerListener") {
                 return {"key": "test"};
@@ -44,51 +48,6 @@ describe("core/modelList/layer/sensor", function () {
         });
         it("should return version in String", function () {
             expect(sensorLayer.buildSensorThingsUrl(undefined, 1.0, undefined)).to.have.string("v1.0");
-        });
-    });
-
-    describe("getCoordinates", function () {
-        it("should return an undefined for undefined input", function () {
-            expect(sensorLayer.getCoordinates(undefined)).to.be.undefined;
-        });
-        it("should return an undefined for empty array input", function () {
-            expect(sensorLayer.getCoordinates([])).to.be.undefined;
-        });
-        it("should return in array with coordinates as array from input object", function () {
-            var thing = {
-                Locations: [{
-                    location: {
-                        type: "Feature",
-                        geometry: {
-                            coordinates: [100, 100]
-                        }
-                    }
-                }]
-            };
-
-            expect(sensorLayer.getCoordinates(thing)).to.deep.equal([100, 100]);
-        });
-        it("should return undefined if a subitem is missing", function () {
-            var thing = {
-                Locations: [{
-                    location: {
-                        type: "Feature"
-                    }
-                }]
-            };
-
-            expect(sensorLayer.getCoordinates(thing)).to.be.undefined;
-        });
-        it("should return undefined if a subitem is missing", function () {
-            var thing1 = {
-                Locations: [{
-                    location: {
-                        type: "Point"
-                    }
-                }]
-            };
-
-            expect(sensorLayer.getCoordinates(thing1)).to.be.undefined;
         });
     });
 
@@ -447,6 +406,67 @@ describe("core/modelList/layer/sensor", function () {
 
             expect(feature.get("Datastreams")[0].Observations).to.deep.equal(["qox"]);
             expect(feature.get("Datastreams")[1].Observations).to.be.empty;
+        });
+    });
+
+    describe("getJsonGeometry", function () {
+        it("should return the location in geometry", function () {
+            const testObject = {
+                Locations: [
+                    {
+                        location: {
+                            geometry: {
+                                type: "Point",
+                                test: "Test"
+                            }
+                        }
+                    }
+                ]
+            };
+
+            expect(sensorLayer.getJsonGeometry(testObject, 0)).to.be.an("object").to.include({test: "Test"});
+            expect(sensorLayer.getJsonGeometry(testObject, 1)).to.be.null;
+        });
+        it("should return the location without geometry", function () {
+            const testObject2 = {
+                Locations: [
+                    {
+                        location: {
+                            type: "Point",
+                            test: "Test"
+                        }
+                    }
+                ]
+            };
+
+            expect(sensorLayer.getJsonGeometry(testObject2, 0)).to.be.an("object").to.include({test: "Test"});
+            expect(sensorLayer.getJsonGeometry(testObject2, 1)).to.be.null;
+        });
+    });
+
+    describe("parseJson", function () {
+        it("should parse point object", function () {
+            const obj = {
+                "type": "Point",
+                "coordinates": [10.210913, 53.488449]
+            };
+
+            sensorLayer.set("epsg", "EPSG:4326", {silent: true});
+            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
+            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(Point);
+        });
+    });
+
+    describe("parseJson", function () {
+        it("should parse line object", function () {
+            const obj = {
+                "type": "LineString",
+                "coordinates": [[10.210913, 53.488449], [11.210913, 54.488449]]
+            };
+
+            sensorLayer.set("epsg", "EPSG:4326", {silent: true});
+            expect(sensorLayer.parseJson(obj)).to.be.an.instanceof(Feature);
+            expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(LineString);
         });
     });
 });
