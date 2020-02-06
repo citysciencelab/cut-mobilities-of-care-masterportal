@@ -723,8 +723,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             client = this.get("mqttClient");
         let id;
 
-        dataStreamIds.forEach(function (id) {
-            dataStreamIdsInverted[id] = true;
+        dataStreamIds.forEach(function (datastreamId) {
+            dataStreamIdsInverted[datastreamId] = true;
         });
 
         for (id in subscriptionTopics) {
@@ -732,7 +732,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = false;
             }
-        };
+        }
     },
 
     /**
