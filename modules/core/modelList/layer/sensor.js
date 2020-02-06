@@ -3,10 +3,8 @@ import mqtt from "mqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
-import {transformToMapProjection} from "masterportalAPI/src/crs";
-import Feature from "ol/Feature.js";
-import Point from "ol/geom/Point.js";
 import {buffer, containsExtent} from "ol/extent";
+import {GeoJSON} from "ol/format.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
@@ -233,14 +231,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         var features = [];
 
         _.each(sensorData, function (data, index) {
-            var xyTransform,
-                feature;
+            let feature;
 
             if (data.hasOwnProperty("location") && data.location && !_.isUndefined(epsg)) {
-                xyTransform = transformToMapProjection(Radio.request("Map", "getMap"), epsg, data.location);
-                feature = new Feature({
-                    geometry: new Point(xyTransform)
-                });
+                feature = this.parseJson(data.location);
             }
             else {
                 return;
@@ -491,14 +485,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         var mergeAllThings = [],
             indices = [],
             things,
-            xy,
-            xy2;
+            jsonGeom,
+            jsonGeom2;
 
         _.each(allThings, function (thing, index) {
             // if the thing was assigned already
             if (!_.contains(indices, index)) {
                 things = [];
-                xy = this.getCoordinates(thing);
+                jsonGeom = JSON.stringify(this.getJsonGeometry(thing, 0));
 
                 // if no datastream exists
                 if (_.isEmpty(thing.Datastreams)) {
@@ -506,9 +500,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
 
                 _.each(allThings, function (thing2, index2) {
-                    xy2 = this.getCoordinates(thing2);
+                    jsonGeom2 = JSON.stringify(this.getJsonGeometry(thing, 0));
 
-                    if (_.isEqual(xy, xy2)) {
+                    if (jsonGeom === jsonGeom2) {
                         things.push(thing2);
                         indices.push(index2);
                     }
@@ -522,28 +516,50 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * retrieves coordinates by different geometry types
-     * @param  {object} thing - thing
-     * @return {array} coordinates
+     * Searches the thing for its geometry location.
+     * For some reason there are two different object pathes to check.
+     * @param   {object} thing    aggregated thing
+     * @param   {integer} index   index of location in array Locations
+     * @returns {object|null} Json object or null
      */
-    getCoordinates: function (thing) {
-        var xy;
+    getJsonGeometry: function (thing, index) {
+        const Locations = thing && thing.hasOwnProperty("Locations") ? thing.Locations : null,
+            location = Locations && Locations.hasOwnProperty(index) && Locations[index].hasOwnProperty("location") ? Locations[index].location : null;
 
-        if (!_.isUndefined(thing) && !_.isEmpty(thing.Locations)) {
-            if (thing.Locations[0].location.type === "Feature" &&
-                !_.isUndefined(thing.Locations[0].location.geometry) &&
-                !_.isUndefined(thing.Locations[0].location.geometry.coordinates)) {
-
-                xy = thing.Locations[0].location.geometry.coordinates;
-            }
-            else if (thing.Locations[0].location.type === "Point" &&
-                !_.isUndefined(thing.Locations[0].location.coordinates)) {
-
-                xy = thing.Locations[0].location.coordinates;
-            }
+        if (location && location.hasOwnProperty("geometry") && location.geometry.hasOwnProperty("type")) {
+            return location.geometry;
+        }
+        else if (location && location.hasOwnProperty("type")) {
+            return location;
         }
 
-        return xy;
+        return null;
+    },
+
+    /**
+     * Tries to parse object to ol.format.GeoJson
+     * @param   {object} data object to parse
+     * @throws an error if the argument cannot be parsed.
+     * @returns {ol/Feature} ol feature
+     */
+    parseJson: function (data) {
+        const mapCrs = Radio.request("MapView", "getProjection"),
+            thingEPSG = this.get("epsg"),
+            geojsonReader = new GeoJSON({
+                featureProjection: mapCrs,
+                dataProjection: thingEPSG
+            });
+
+        let jsonObjects;
+
+        try {
+            jsonObjects = geojsonReader.readFeature(data);
+        }
+        catch (err) {
+            console.error("JSON structure in sensor thing location cannot be parsed.");
+        }
+
+        return jsonObjects;
     },
 
     /**
@@ -561,7 +577,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 let keys = [],
                     props = {};
 
-                aggregatedThing.location = this.getCoordinates(thing[0]);
+                aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
                     props = Object.assign(props, thing2.properties);
@@ -573,7 +589,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
-                aggregatedThing.location = this.getCoordinates(thing);
+                aggregatedThing.location = this.getJsonGeometry(thing, 0);
                 aggregatedThing.properties = thing.properties;
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
