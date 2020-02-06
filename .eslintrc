@@ -18,16 +18,103 @@
         "i18next": true
     },
     "plugins": [
-        "chai-friendly",
-        "vue"
+        "chai-friendly"
     ],
-    "parser": "babel-eslint",
     "parserOptions": {
+        "parser": "babel-eslint",
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
-    "extends": "plugin:backbone/recommended",
+    "extends": [
+        "plugin:backbone/recommended",
+        "plugin:vue/essential"
+    ],
     "rules": {
+        // Priority B: Strongly Recommended
+        "vue/attribute-hyphenation": ["error", "always"],
+        "vue/html-closing-bracket-newline": ["error", {
+            "singleline": "never",
+            "multiline": "always"
+        }],
+        "vue/html-closing-bracket-spacing": ["error", {
+            "startTag": "never",
+            "endTag": "never",
+            "selfClosingTag": "always"
+        }],
+        "vue/html-end-tags": ["error"],
+        "vue/html-indent": ["error", 4],
+        "vue/html-quotes": ["error"],
+        "vue/html-self-closing": ["error", {
+            "html": {
+                "void": "never",
+                "normal": "always",
+                "component": "always"
+            },
+            "svg": "always",
+            "math": "always"
+        }],
+        "vue/max-attributes-per-line": ["error", {
+            "singleline": 1,
+            "multiline": {
+                "max": 1,
+                "allowFirstLine": false
+            }
+        }],
+        "vue/multiline-html-element-content-newline": ["error", {
+            "ignoreWhenEmpty": true,
+            "ignores": ["pre", "textarea", "a", "abbr", "audio", "b", "bdi", "bdo", "canvas", "cite", "code", "data", "del", "dfn", "em", "i", "iframe", "ins", "kbd", "label", "map", "mark", "noscript", "object", "output", "picture", "q", "ruby", "s", "samp", "small", "span", "strong", "sub", "sup", "svg", "time", "u", "var", "video"],
+            "allowEmptyLines": false
+        }],
+        "vue/mustache-interpolation-spacing": ["error", "always"],
+        "vue/name-property-casing": ["error", "PascalCase"],
+        "vue/no-multi-spaces": ["error", {
+            "ignoreProperties": false
+        }],
+        "vue/no-spaces-around-equal-signs-in-attribute": ["error"],
+        "vue/no-template-shadow": ["error"],
+        "vue/prop-name-casing": ["error"],
+        "vue/require-default-prop": ["error"],
+        "vue/require-prop-types": ["error"],
+        "vue/singleline-html-element-content-newline": ["error", {
+            "ignoreWhenNoAttributes": true,
+            "ignoreWhenEmpty": true,
+            "ignores": ["pre", "textarea", "a", "abbr", "audio", "b", "bdi", "bdo", "canvas", "cite", "code", "data", "del", "dfn", "em", "i", "iframe", "ins", "kbd", "label", "map", "mark", "noscript", "object", "output", "picture", "q", "ruby", "s", "samp", "small", "span", "strong", "sub", "sup", "svg", "time", "u", "var", "video"]
+        }],
+        "vue/v-bind-style": ["error", "shorthand"],
+        "vue/v-on-style": ["error", "shorthand"],
+        // Priority C: Recommended
+        "vue/attributes-order": ["error", {
+            "order": [ "DEFINITION", "LIST_RENDERING", "CONDITIONALS", "RENDER_MODIFIERS", "GLOBAL", "UNIQUE", "TWO_WAY_BINDING", "OTHER_DIRECTIVES", "OTHER_ATTR", "EVENTS", "CONTENT"]
+        }],
+        "vue/order-in-components": ["error", {
+            "order": [ "el", "name", "parent", "functional", ["delimiters", "comments"], ["components", "directives", "filters"], "extends", "mixins", "inheritAttrs", "model", ["props", "propsData"], "fetch", "asyncData", "data", "computed", "watch", "LIFECYCLE_HOOKS", "methods", "head", ["template", "render"], "renderError"]
+        }],
+        "vue/this-in-template": ["error", "never"],
+        // Uncategorizied
+        "vue/array-bracket-spacing": ["error"],
+        "vue/component-definition-name-casing": ["error", "PascalCase"],
+        "vue/component-name-in-template-casing": ["error", "PascalCase", {
+            "registeredComponentsOnly": true,
+            "ignores": []
+        }],
+        "vue/component-tags-order": ["error", {
+            "order": ["script", "template", "style"]
+        }],
+        "vue/eqeqeq": ["error"],
+        "vue/match-component-file-name": ["error", {
+            "extensions": ["vue"],
+            "shouldMatchCase": false
+        }],
+        "vue/no-deprecated-scope-attribute": ["error"],
+        "vue/no-deprecated-slot-attribute": ["error"],
+        "vue/no-deprecated-slot-scope-attribute": ["error"],
+        "vue/no-static-inline-styles": ["error", {
+            "allowBinding": false
+        }],
+        "vue/require-direct-export": ["error"],
+        "vue/require-name-property": ["error"],
+        "vue/valid-v-bind-sync": ["error"],
+        "vue/valid-v-slot": ["error"],
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
         "getter-return": "error",
