@@ -94,8 +94,8 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     },
     /**
     * Removes the uniqueId from the given list.
-    * @param {*} uniqueIdList to remove the id from
-    * @param {*} uniqueId to remove from list
+    * @param {Array} uniqueIdList to remove the id from
+    * @param {String} uniqueId to remove from list
     * @returns {void}
     */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
