@@ -753,27 +753,49 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * get DataStreamIds
-     * @param  {Array} features - features with datastreamids
-     * @return {Array} dataStreamIdsArray - contains all ids from this layer
+     * helper function for getDataStreamIds: pushes the datastream ids into the given array
+     * @param {ol/Feature} feature the feature containing datastream ids
+     * @param {String[]} dataStreamIdsArray the array to push the datastream ids into
+     * @returns {Void}  -
+     */
+    getDataStreamIdsHelper: function (feature, dataStreamIdsArray) {
+        let dataStreamIds = feature && feature.get("dataStreamId") !== undefined ? feature.get("dataStreamId") : "";
+
+        if (dataStreamIds.indexOf("|") >= 0) {
+            dataStreamIds = dataStreamIds.split("|");
+
+            dataStreamIds.forEach(function (id) {
+                dataStreamIdsArray.push(id.trim());
+            });
+        }
+        else {
+            dataStreamIdsArray.push(String(dataStreamIds));
+        }
+    },
+
+    /**
+     * get DataStreamIds for this layer - using dataStreamId property with expected pipe delimitors
+     * @param  {ol/Feature[]} features - features with datastream ids or features with features (see clustering) with datastreamids
+     * @return {String[]} dataStreamIdsArray - contains all datastream ids from this layer
      */
     getDataStreamIds: function (features) {
-        var dataStreamIdsArray = [];
+        const dataStreamIdsArray = [];
 
-        _.each(features, function (feature) {
-            var dataStreamIds = _.isUndefined(feature.get("dataStreamId")) ? "" : feature.get("dataStreamId");
+        if (!Array.isArray(features)) {
+            return [];
+        }
 
-            if (_.contains(dataStreamIds, "|")) {
-                dataStreamIds = dataStreamIds.split(" | ");
-
-                _.each(dataStreamIds, function (id) {
-                    dataStreamIdsArray.push(id);
-                });
+        features.forEach(function (feature) {
+            if (Array.isArray(feature.get("features"))) {
+                // obviously clustered featuers are activated
+                feature.get("features").forEach(function (subfeature) {
+                    this.getDataStreamIdsHelper(subfeature, dataStreamIdsArray);
+                }.bind(this));
             }
             else {
-                dataStreamIdsArray.push(String(dataStreamIds));
+                this.getDataStreamIdsHelper(feature, dataStreamIdsArray);
             }
-        });
+        }.bind(this));
 
         return dataStreamIdsArray;
     },
