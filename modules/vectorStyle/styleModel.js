@@ -2,6 +2,7 @@ import {Style} from "ol/style.js";
 import PointStyle from "./pointStyle";
 import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
+import LinestringStyle from "./linestringStyle";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     /**
@@ -92,8 +93,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return styleObject.getStyle();
         }
         else if (geometryType === "LineString") {
-            console.warn("Geometry type not implemented: " + geometryType);
-            return new Style();
+            styleObject = new LinestringStyle(feature, style, isClustered);
+            return styleObject.getStyle();
         }
         else if (geometryType === "LinearRing") {
             console.warn("Geometry type not implemented: " + geometryType);
