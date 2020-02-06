@@ -1,22 +1,18 @@
-<template lang="html">
-    <div id="messages" v-bind:class="[position]">
-        <div v-for="alert in alerts">
-            <div :id="alert.id" :class="['alert', alert.category]" role="alert">
-                <button v-if="alert.isDismissable===true" v-on:click="closeAlert('closed', $event)" type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p>
-                    <span v-html="alert.message"></span>
-                </p>
-                <button v-if="alert.isConfirmable" v-on:click="closeAlert('confirmed', $event)" type="button" class="btn btn-primary alert-confirm" aria-label="Close">OK</button>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script>
 export default {
-    created() {
+    name: "Alerting",
+    computed: {
+        alerts () {
+            return this.$store.state.Alerting.alerts;
+        },
+        fadeOut () {
+            return this.$store.state.Alerting.fadeOut;
+        },
+        position () {
+            return this.$store.state.Alerting.position;
+        }
+    },
+    created () {
         const that = this,
             myBus = Backbone.Events;
 
@@ -29,10 +25,10 @@ export default {
             }
         });
     },
-    mounted() {
+    mounted () {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
-    updated() {
+    updated () {
         const that = this;
 
         if (this.fadeOut) {
@@ -40,17 +36,6 @@ export default {
                 that.$store.dispatch("removeAlert", $(this).attr("id"));
                 $(this).remove();
             });
-        }
-    },
-    computed: {
-        alerts () {
-            return this.$store.state.Alerting.alerts;
-        },
-        fadeOut () {
-            return this.$store.state.Alerting.fadeOut;
-        },
-        position () {
-            return this.$store.state.Alerting.position;
         }
     },
     methods: {
@@ -68,8 +53,51 @@ export default {
             Radio.trigger("Alert", mode, $(div[0]).attr("id"));
         }
     }
-}
+};
 </script>
+
+<template>
+    <div
+        id="messages"
+        :class="[position]"
+    >
+        <div
+            v-for="alert in alerts"
+            :key="alert.id"
+        >
+            <div
+                :id="alert.id"
+                :class="['alert', alert.category]"
+                role="alert"
+            >
+                <button
+                    v-if="alert.isDismissable===true"
+                    type="button"
+                    class="close"
+                    aria-label="Close"
+                    @click="closeAlert('closed', $event)"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <p>
+                    <span
+                        v-html="alert.message"
+                    />
+                </p>
+                <button
+                    v-if="alert.isConfirmable"
+                    type="button"
+                    class="btn btn-primary alert-confirm"
+                    aria-label="Close"
+                    @:click="closeAlert('confirmed', $event)"
+                >
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
 
 <style lang="less">
 div#messages {
