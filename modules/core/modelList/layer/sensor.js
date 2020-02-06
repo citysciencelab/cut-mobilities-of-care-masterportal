@@ -416,6 +416,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         allThingsWithSensorData.forEach(thing => {
             const dataStreams = thing.Datastreams;
 
+            // A thing may not have properties. So we ensure we can access them.
+            if (!thing.hasOwnProperty("properties")) {
+                thing.properties = {};
+            }
+
             thing.properties.dataStreamId = [];
             thing.properties.dataStreamName = [];
             dataStreams.forEach(dataStream => {
