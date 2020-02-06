@@ -40,8 +40,8 @@ const LinestringStyleModel = StyleModel.extend(/** @lends LinestringStyleModel.p
                 lineDash: this.get("lineStrokeDash"),
                 lineDashOffset: this.get("lineStrokeDashOffset"),
                 miterLimit: this.get("lineStrokeMiterLimit"),
-                color: this.get("polygonStrokeColor"),
-                width: this.get("polygonStrokeWidth")
+                color: this.get("lineStrokeColor"),
+                width: this.get("lineStrokeWidth")
             })
         });
     }
