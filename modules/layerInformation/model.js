@@ -99,10 +99,12 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     * @returns {void}
     */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        const index = uniqueIdList.indexOf(uniqueId);
+        const index = uniqueIdList ? uniqueIdList.indexOf(uniqueId) : -1;
 
-        uniqueIdList.splice(index, 1);
-        this.setUniqueIdList(uniqueIdList);
+        if (index > -1) {
+            uniqueIdList.splice(index, 1);
+        }
+        this.setUniqueIdList(uniqueIdList ? uniqueIdList : []);
     },
     /**
     * Adds all parsed data to this model.
