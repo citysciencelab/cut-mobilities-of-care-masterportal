@@ -75,7 +75,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     changedConditions: function () {
-        const features = this.get("layerSource").getFeatures(),
+        const features = this.get("layer").getSource().getFeatures(),
             state = this.checkConditionsForSubscription();
 
         if (state === true) {
@@ -780,7 +780,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {ol/featre[]} features
      */
     getFeaturesInExtent: function () {
-        const features = this.get("layerSource").getFeatures(),
+        const features = this.get("layer").getSource().getFeatures(),
             currentExtent = Radio.request("MapView", "getCurrentExtent"),
             enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
