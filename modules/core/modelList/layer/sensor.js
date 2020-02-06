@@ -72,7 +72,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     changedConditions: function () {
-        const features = this.get("layerSource").getFeatures(),
+        const features = this.get("layer").getSource().getFeatures(),
             state = this.checkConditionsForSubscription();
 
         if (state === true) {
@@ -445,6 +445,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
             thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
         });
+
         return allThingsWithSensorData;
     },
 
@@ -576,6 +577,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
+            aggregatedThing.properties.Datastreams = thing.Datastreams;
+
             aggregatedArray.push(aggregatedThing);
         });
 
@@ -675,7 +678,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             subscriptionTopics = this.get("subscriptionTopics");
 
         dataStreamIds.forEach(function (id) {
-            if (!subscriptionTopics[id]) {
+            if (client && !subscriptionTopics[id]) {
                 client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = true;
             }
@@ -701,7 +704,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         for (id in subscriptionTopics) {
-            if (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id)) {
+            if (client && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id))) {
                 client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = false;
             }
@@ -722,7 +725,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {ol/featre[]} features
      */
     getFeaturesInExtent: function () {
-        const features = this.get("layerSource").getFeatures(),
+        const features = this.get("layer").getSource().getFeatures(),
             currentExtent = Radio.request("MapView", "getCurrentExtent"),
             enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
             featuresInExtent = [];
@@ -759,11 +762,31 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamId = String(thingToUpdate.dataStreamId),
             features = this.get("layerSource").getFeatures(),
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
-            result = String(thingToUpdate.result),
+            result = thingToUpdate.result,
             utc = this.get("utc"),
             phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
 
+        this.updateObservationForDatastreams(feature, dataStreamId, thing);
         this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
+    },
+
+    /**
+     * updates the Datastreams of the given feature with received time and result of the Observation
+     * @param {ol/feature} feature - feature to be updated
+     * @param {String} dataStreamId - dataStreamId
+     * @param {Object} observation the observation to update the old observation with
+     * @returns {Void}  -
+     */
+    updateObservationForDatastreams: function (feature, dataStreamId, observation) {
+        if (!Array.isArray(feature.get("Datastreams"))) {
+            return;
+        }
+
+        feature.get("Datastreams").forEach(function (datastream) {
+            if (datastream["@iot.id"] !== undefined && String(datastream["@iot.id"]) === String(dataStreamId)) {
+                datastream.Observations = [observation];
+            }
+        });
     },
 
     /**
@@ -776,10 +799,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
+        const dataStreamName = feature.get("dataStreamName");
         let updatedFeature = feature;
 
-        updatedFeature.set("dataStream_" + dataStreamId + "_Status", result);
-        updatedFeature.set("dataStream_" + dataStreamId + "_phenomenonTime", phenomenonTime);
+        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result);
+        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime);
         updatedFeature = this.aggregateDataStreamValue(feature);
         updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
         this.featureUpdated(updatedFeature);
