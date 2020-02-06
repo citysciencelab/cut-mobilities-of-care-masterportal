@@ -14,7 +14,8 @@ import "bootstrap/js/tab";
  */
 const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationView.prototype */{
     events: {
-        "click .glyphicon-remove": "hide"
+        "click .glyphicon-remove": "remove",
+        "click .tab-toggle": "toggleTab"
     },
     /**
      * @class LayerInformationView
@@ -29,7 +30,14 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     initialize: function () {
         this.listenTo(this.model, {
             // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
-            "sync": this.render,
+            "sync": function () {
+                this.render();
+                this.$el.on({
+                    click: function (e) {
+                        e.stopPropagation();
+                    }
+                });
+            },
             "removeView": this.remove
         });
     },
@@ -38,40 +46,66 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     template: _.template(Template),
     contentTemplate: _.template(ContentTemplate),
     /**
-    * todo
-    * @returns {*} returns this
-    */
+     * Renders this view in an overlay.
+     * @returns {this} this view
+     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.addContentHTML();
-        $("#map").append(this.$el.html(this.template(attr)));
+        this.$el.html(this.template(attr));
+        $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
         this.$el.draggable({
             containment: "#map",
             handle: ".header"
         });
-        this.$el.show();
+        this.delegateEvents();
         return this;
     },
+    /**
+     * Toggles the tab after click.
+     * @param {Event} evt the click event
+     * @returns {void}
+     */
+    toggleTab: function (evt) {
+        const contentId = $(evt.currentTarget).attr("value");
+        let tabContentId;
+
+        // deactivate all tabs and their contents
+        $(evt.currentTarget).parent().find("li").each(function (index, li) {
+            tabContentId = $(li).attr("value");
+
+            $(li).removeClass("active");
+            $("#" + tabContentId).removeClass("active");
+            $("#" + tabContentId).removeClass("in");
+        });
+        // activate selected tab and its content
+        $(evt.currentTarget).addClass("active");
+        $("#" + contentId).addClass("active");
+        $("#" + contentId).addClass("in");
+    },
+
     /**
      * Adds the legend definition to the rendered HTML, this is needed by the template
      * @returns {void}
      */
     addContentHTML: function () {
-        var legends = this.model.get("legend");
+        const legends = this.model.get("legend");
 
         _.each(legends.legend, function (legend) {
             legend.html = this.contentTemplate(legend);
         }, this);
     },
     /**
-    * todo
+    * Removes this view.
     * @fires Layer#RadioTriggerLayerSetLayerInfoChecked
     * @returns {void}
     */
-    hide: function () {
+    remove: function () {
         Radio.trigger("Layer", "setLayerInfoChecked", false);
-        this.$el.hide();
+        this.undelegateEvents();
+        this.$el.remove();
+        $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").remove(this.$el);
         this.model.setIsVisible(false);
     }
 });
