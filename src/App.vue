@@ -2,8 +2,10 @@
 import Alerting from './components/Alerting.vue'
 import SupplyCoord from './components/SupplyCoord.vue'
 import ScaleLine from "./components/ScaleLine.vue";
+import Title from "./components/Title.vue";
 
 export default {
+<<<<<<< HEAD
     name: "App",
     components: {
         Alerting,
@@ -11,6 +13,16 @@ export default {
         ScaleLine
     }
 };
+=======
+  name: 'App',
+  components: {
+    Alerting,
+    Title,
+    SupplyCoord,
+    ScaleLine
+  }
+}
+>>>>>>> update - eslint for vue
 </script>
 
 <template>
@@ -18,8 +30,10 @@ export default {
         <Alerting />
         <SupplyCoord />
         <ScaleLine />
+        <Title />
     </div>
 </template>
 
 <style>
+
 </style>
