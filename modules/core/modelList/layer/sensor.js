@@ -9,23 +9,21 @@ import Point from "ol/geom/Point.js";
 import {buffer, containsExtent} from "ol/extent";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults,
-        {
-            supported: ["2D", "3D"],
-            epsg: "EPSG:4326",
-            utc: "+1",
-            version: "1.0",
-            useProxyURL: false,
-            mqttPath: "/mqtt",
-            mergeThingsByCoordinates: false,
-            showNoDataValue: true,
-            noDataValue: "no data",
-            altitudeMode: "clampToGround",
-            isSubscribed: false,
-            mqttClient: null,
-            subscriptionTopics: {},
-            moveendListener: null
-        }),
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        epsg: "EPSG:4326",
+        utc: "+1",
+        version: "1.0",
+        useProxyURL: false,
+        mqttPath: "/mqtt",
+        mergeThingsByCoordinates: false,
+        showNoDataValue: true,
+        noDataValue: "no data",
+        altitudeMode: "clampToGround",
+        isSubscribed: false,
+        moveendListener: null
+    }),
+
     /**
      * @class SensorLayer
      * @extends Layer
@@ -55,6 +53,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
+        // set subscriptionTopics as instance variable (!)
+        this.set("subscriptionTopics", {});
+
         this.createMqttConnectionToSensorThings();
 
         if (!this.get("isChildLayer")) {
@@ -703,8 +704,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             client = this.get("mqttClient");
         let id;
 
-        dataStreamIds.forEach(function (id) {
-            dataStreamIdsInverted[id] = true;
+        dataStreamIds.forEach(function (datastreamId) {
+            dataStreamIdsInverted[datastreamId] = true;
         });
 
         for (id in subscriptionTopics) {
@@ -712,7 +713,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = false;
             }
-        };
+        }
     },
 
     /**
