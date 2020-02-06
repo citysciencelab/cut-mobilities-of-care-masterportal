@@ -92,7 +92,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     addContentHTML: function () {
         const legends = this.model.get("legend");
 
-        _.each(legends.legend, function (legend) {
+        legends.legend.forEach(function (legend) {
             legend.html = this.contentTemplate(legend);
         }, this);
     },

@@ -12,6 +12,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         datePublication: null,
         dateRevision: null,
         periodicity: null,
+        idCounter: 0,
         overlay: new Overlay({element: undefined})
     },
 
@@ -26,6 +27,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
      * @property {String} periodicity=null Periodicity
+     * @property {Number} idCounter=0 counter for unique ids
      * @property {Overlay} overlay=new Overlay({element: undefined}) the overlay
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestUtilIsViewMobile
@@ -88,7 +90,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     * @returns {Boolean} true|false
     */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
-        return uniqueIdList.indexOf(uniqueId) > -1;
+        return uniqueIdList ? uniqueIdList.indexOf(uniqueId) > -1 : false;
     },
     /**
     * Removes the uniqueId from the given list.
@@ -118,7 +120,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     */
     requestMetaData: function (attrs) {
         const metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
-            uniqueId = _.uniqueId(),
+            uniqueId = this.uniqueId("layerinfo"),
             cswObj = {};
 
         if (metaId !== null) {
@@ -129,6 +131,18 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             cswObj.uniqueId = uniqueId;
             Radio.trigger("CswParser", "getMetaData", cswObj);
         }
+    },
+    /**
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
+
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
     },
     /**
     * Binds the view depending on mobile or not.
@@ -201,11 +215,19 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 metaURL = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId")).get("url") + metaID;
             }
 
-            if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
+            if (metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
                 metaURLs.push(metaURL);
             }
         }, this);
         this.set("metaURL", metaURLs);
+    },
+    /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+    setIdCounter: function (value) {
+        this.set("idCounter", value);
     },
     /**
     * Setter function for isVisible
