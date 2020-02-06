@@ -785,7 +785,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
         let updatedFeature = feature;
 
-        updatedFeature.set("dataStream_" + dataStreamId, result);
+        updatedFeature.set("dataStream_" + dataStreamId + "_Status", result);
         updatedFeature.set("dataStream_" + dataStreamId + "_phenomenonTime", phenomenonTime);
         updatedFeature = this.aggregateDataStreamValue(feature);
         updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
