@@ -42,7 +42,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         "<small>Auszug:" + snippet + "</small>",
                         kategorie: "alert-warning"
                     });
-                    if (textStatus === "parsererror"){
+                    if (textStatus === "parsererror") {
                         // reload page once
                         if (window.localStorage) {
                             if (!localStorage.getItem("firstLoad")) {
