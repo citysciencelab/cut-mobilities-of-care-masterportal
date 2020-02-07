@@ -10,6 +10,10 @@
     width: 30%;
     background-color: @background_color_1;
     z-index: 2;
+    .dragable {
+        width: calc(100% - 25px);
+        margin-left: 25px;;
+    }
 }
 .sidebar-mobile {
     position: fixed;
@@ -36,7 +40,7 @@
     z-index: 1040;
     background-color: @background_color_2;
 }
-.content {
+#sidebar-content {
     overflow: auto;
     display: inline-block;
     height: 100%;
