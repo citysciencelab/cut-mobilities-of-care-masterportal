@@ -56,7 +56,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     updateValueModels: function (valueList, isGrouped) {
         if (isGrouped) {
             // array of objects
-            _.each(valueList, function (obj) {
+            valueList.forEach(function (obj) {
                 if (!this.get("valuesCollection").models.map(model => model.get("value")).includes(obj.value)) {
                     this.addValueModel(obj.value, obj.group);
                 }
@@ -67,7 +67,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         }
         else {
             // array of strings
-            _.each(valueList, function (value) {
+            valueList.forEach(function (value) {
                 if (!this.get("valuesCollection").models.map(model => model.get("value")).includes(value)) {
                     this.addValueModel(value);
                 }
@@ -203,9 +203,11 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      */
     setValueModelsToShow: function (models, isGrouped) {
         if (isGrouped) {
-            this.set("valueModelsToShow", _.groupBy(models, function (model) {
+            const groupedModels = Radio.request("Util", "groupBy", models, function (model) {
                 return model.get("group");
-            }));
+            });
+
+            this.set("valueModelsToShow", groupedModels);
         }
         else {
             this.set("valueModelsToShow", models);

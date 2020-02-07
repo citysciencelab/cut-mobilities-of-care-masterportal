@@ -127,7 +127,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             typ: this.get("typ"),
             id: this.get("id"),
             weight: function (feature) {
-                if (!_.isUndefined(feature.get("calculatedWeight"))) {
+                if (feature.get("calculatedWeight") !== undefined) {
                     return feature.get("calculatedWeight");
                 }
                 return feature.get("normalizeWeightForHeatmap");
@@ -161,7 +161,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             weightAttributeMax = this.get("weightAttributeMax"),
             cloneFeatures = [];
 
-        _.each(features, function (feature) {
+        features.forEach(function (feature) {
             var cloneFeature = feature.clone(),
                 count;
 
@@ -170,7 +170,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
                 cloneFeature.set("weightForHeatmap", count);
             }
 
-            if (!_.isUndefined(weightAttribute && weightAttributeMax)) {
+            if ((weightAttribute && weightAttributeMax) !== undefined) {
                 cloneFeature.set("calculatedWeight", feature.get(weightAttribute) / weightAttributeMax);
             }
 
@@ -214,7 +214,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         cloneFeature.setId(featureId);
 
         // check is feature exist
-        _.each(layerSource.getFeatures(), function (feat) {
+        layerSource.getFeatures().forEach(function (feat) {
             if (feat.getId() === featureId) {
                 heatmapFeature = feat;
             }
@@ -228,7 +228,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
 
         // if the feature is new, then pushes otherwise change it
-        if (_.isUndefined(heatmapFeature)) {
+        if (heatmapFeature !== undefined) {
             layerSource.addFeature(cloneFeature);
         }
         else {
@@ -252,7 +252,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             return feature.get("weightForHeatmap");
         }).get("weightForHeatmap");
 
-        _.each(featuresWithValue, function (feature) {
+        featuresWithValue.forEach(function (feature) {
             feature.set("weightForHeatmap", feature.get("weightForHeatmap") / max);
         });
     },

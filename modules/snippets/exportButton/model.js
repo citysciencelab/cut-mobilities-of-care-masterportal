@@ -40,7 +40,7 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
     convertRawData: function () {
         const data = this.get("rawData");
 
-        if (data.length > 0 || _.allKeys(data).length > 0) {
+        if (data.length > 0 || Object.keys(data).length > 0) {
             switch (this.get("fileExtension")) {
                 case "csv":
                     this.convertJsonToCsv(data);

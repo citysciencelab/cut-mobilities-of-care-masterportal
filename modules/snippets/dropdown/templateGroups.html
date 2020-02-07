@@ -1,7 +1,7 @@
 <select class="selectpicker <%isDropup? print('dropup') : print('')%>" title="<%= displayName %>" data-live-search="<%= liveSearch ? true : false %>" <%isMultiple? print("multiple") : print("")%>>
-    <% _.each(valueModelsToShow, function (value, key) { %>
+    <% Object.keys(valueModelsToShow).forEach(function (key, index) { %>
         <optgroup label="<%= key %>">
-            <% _.each(value, function (model) { %>
+            <% valueModelsToShow[key].forEach(function (model) { %>
                 <option value="<%= model.get('value') %>"><%= model.get('displayName') %></option>
             <% }); %>
         </optgroup>
@@ -11,7 +11,6 @@
     <div class="info-icon">
         <span class="glyphicon glyphicon-info-sign"></span>
     </div>
-<% } %>
-<% if (!_.isUndefined(this.model.get("infoText"))) { %>
     <div class="info-text"><%= infoText %></div>
 <% } %>
+
