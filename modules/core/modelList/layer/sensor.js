@@ -1,5 +1,5 @@
 import Layer from "./model";
-import mqtt from "mqtt";
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
@@ -14,6 +14,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         version: "1.0",
         useProxyURL: false,
         mqttPath: "/mqtt",
+        httpSubFolder: "",
         mergeThingsByCoordinates: false,
         showNoDataValue: true,
         noDataValue: "no data",
@@ -53,6 +54,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     initialize: function () {
         // set subscriptionTopics as instance variable (!)
         this.set("subscriptionTopics", {});
+        this.set("httpSubFolder", this.get("url") && String(this.get("url")).split("/").length > 3 ? "/" + String(this.get("url")).split("/").slice(3).join("/") : "");
 
         this.createMqttConnectionToSensorThings();
 
@@ -671,22 +673,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             return;
         }
 
-        const client = mqtt.connect({
-            host: this.get("url").split("/")[2],
-            protocol: "wss",
-            path: this.get("mqttPath"),
-            context: this
-        });
+        const mqtt = new SensorThingsMqtt(),
+            client = mqtt.connect({
+                host: this.get("url").split("/")[2],
+                protocol: "wss",
+                path: this.get("mqttPath"),
+                context: this
+            });
 
         this.setMqttClient(client);
 
         // messages from the server
-        client.on("message", function (topic, payload) {
-            var jsonData = JSON.parse(payload),
-                regex = /\((.*)\)/; // search value in chlich, that represents the datastreamid on position 1
+        client.on("message", function (topic, jsonData) {
+            const regex = /\((.*)\)/; // search value in chlich, that represents the datastreamid on position 1
 
             jsonData.dataStreamId = topic.match(regex)[1];
-            this.options.context.updateFromMqtt(jsonData);
+            this.updateFromMqtt(jsonData);
         });
     },
 
@@ -757,10 +759,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         dataStreamIds.forEach(function (id) {
             if (client && !subscriptionTopics[id]) {
-                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations");
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
+                    rm_simulate: true,
+                    rm_path: this.get("httpSubFolder")
+                });
                 subscriptionTopics[id] = true;
             }
-        });
+        }.bind(this));
     },
 
     /**

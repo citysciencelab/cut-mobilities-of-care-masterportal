@@ -40,6 +40,13 @@ describe("core/modelList/layer/sensor", function () {
         it("ol/layer is not declared on startup", function () {
             expect(sensorLayer.get("layer")).to.be.undefined;
         });
+
+        it("expect to set httpSubFolder from url on initialize", function () {
+            sensorLayer.set("url", "http://example.com/foo/bar", {silent: true});
+            sensorLayer.initialize();
+
+            expect(sensorLayer.get("httpSubFolder")).to.equal("/foo/bar");
+        });
     });
 
     describe("buildSensorThingsUrl", function () {
