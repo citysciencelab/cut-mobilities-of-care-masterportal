@@ -74,7 +74,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
     /**
     * Updates parsed metadata of the layer.
-    * @param {Object} cswObj Contains informations abou the layer
+    * @param {Object} cswObj Contains informations about the layer
     * @returns {void}
     */
     fetchedMetaData: function (cswObj) {
