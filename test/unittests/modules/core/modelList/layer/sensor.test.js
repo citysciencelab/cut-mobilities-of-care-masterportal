@@ -463,4 +463,91 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.get("moveendListener")).to.be.null;
         });
     });
+
+    describe("subscribeToSensorThings", function () {
+        let topics = [];
+
+        it("should subscribe on a topic", function () {
+            topics = [];
+            sensorLayer.set("mqttClient", {
+                subscribe: function (topic) {
+                    topics.push(topic);
+                }
+            });
+
+            sensorLayer.set("subscriptionTopics", {});
+            sensorLayer.subscribeToSensorThings();
+
+            expect(topics).to.deep.equal(["v1.0/Datastreams()/Observations"]);
+        });
+        it("should not subscribe on a topic that has already been subscribed", function () {
+            topics = [];
+            sensorLayer.set("mqttClient", {
+                unsubscribe: function (topic) {
+                    topics.push(topic);
+                }
+            });
+
+            sensorLayer.set("subscriptionTopics", {
+                "": true
+            });
+            sensorLayer.subscribeToSensorThings();
+
+            expect(topics).to.be.empty;
+        });
+    });
+
+    describe("unsubscribeFromSensorThings", function () {
+        let topics = [];
+
+        it("should unsubscribe from a topic", function () {
+            topics = [];
+            sensorLayer.set("mqttClient", {
+                unsubscribe: function (topic) {
+                    topics.push(topic);
+                }
+            });
+
+            sensorLayer.set("subscriptionTopics", {
+                "foo": true
+            });
+            sensorLayer.unsubscribeFromSensorThings();
+
+            expect(topics).to.deep.equal(["v1.0/Datastreams(foo)/Observations"]);
+        });
+        it("should not unsubscribe from a topic that is already unsubscribed", function () {
+            topics = [];
+            sensorLayer.set("mqttClient", {
+                unsubscribe: function (topic) {
+                    topics.push(topic);
+                }
+            });
+
+            sensorLayer.set("subscriptionTopics", {
+                "foo": false
+            });
+            sensorLayer.unsubscribeFromSensorThings();
+
+            expect(topics).to.be.empty;
+        });
+    });
+
+    describe("updateObservationForDatastreams", function () {
+        const feature = new Feature({
+            Datastreams: [{
+                "@iot.id": "foo",
+                Observations: []
+            }, {
+                "@iot.id": "bar",
+                Observations: []
+            }]
+        });
+
+        it("should add the given observation to the property Datastreams where the datastream id equals the given datastream id", function () {
+            sensorLayer.updateObservationForDatastreams(feature, "foo", "qox");
+
+            expect(feature.get("Datastreams")[0].Observations).to.deep.equal(["qox"]);
+            expect(feature.get("Datastreams")[1].Observations).to.be.empty;
+        });
+    });
 });
