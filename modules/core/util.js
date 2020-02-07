@@ -710,6 +710,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> refactor - replace underscore functions
      * Groups the elements of an array based on the given function.
      * Use Array.prototype.map() to map the values of an array to a function or property name.
      * Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
@@ -725,8 +728,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
+<<<<<<< HEAD
 =======
 >>>>>>> update - extended util by a few functions for objects
+=======
+>>>>>>> refactor - replace underscore functions
      * Setter for config
      * @param {*} value todo
      * @returns {void}
