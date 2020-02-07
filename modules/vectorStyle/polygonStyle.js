@@ -13,8 +13,15 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
      * @property {Boolean} isClustered Flag to show if feature is clustered.
      */
     defaults: {
+        // for stroke
         "polygonStrokeColor": [0, 0, 0, 1],
         "polygonStrokeWidth": 1,
+        "polygonStrokeCap": "round",
+        "polygonStrokeJoin": "round",
+        "polygonStrokeDash": undefined,
+        "polygonStrokeDashOffset": 0,
+        "polygonStrokeMiterLimit": 10,
+        // for fill
         "polygonFillColor": [10, 200, 100, 0.5]
     },
 
@@ -31,6 +38,11 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
     getStyle: function () {
         return new Style({
             stroke: new Stroke({
+                lineCap: this.get("polygonStrokeCap"),
+                lineJoin: this.get("polygonStrokeJoin"),
+                lineDash: this.get("polygonStrokeDash"),
+                lineDashOffset: this.get("polygonStrokeDashOffset"),
+                miterLimit: this.get("polygonStrokeMiterLimit"),
                 color: this.get("polygonStrokeColor"),
                 width: this.get("polygonStrokeWidth")
             }),
