@@ -94,7 +94,7 @@ const GazetteerModel = Backbone.Model.extend({
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, this.get("typeOfRequest"));
             }
             if (this.get("searchDistricts") === true) {
-                if (searchString.match(/^[a-z-]+$/i) !== null) {
+                if (searchString.match(/^[a-z-.\s]+$/i) !== null) {
                     this.setTypeOfRequest("searchDistricts");
                     this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, this.get("typeOfRequest"));
                 }
