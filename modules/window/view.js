@@ -372,7 +372,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             "max-width": "none",
             "width": this.el.clientWidth
         });
-        document.body.style.cursor = "grabbing";
+        this.$el.find(".win-footer").addClass("dragging");
     },
 
     /**
@@ -402,7 +402,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      */
     resizeWindowEnd: function () {
         this.dragging = false;
-        document.body.style.cursor = "";
+        this.$el.find(".win-footer").removeClass("dragging");
     },
 
     /**
