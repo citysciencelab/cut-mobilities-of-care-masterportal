@@ -121,7 +121,14 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case "Stadtteil": {
-                const coordsToUse = coord.length === 2 ? coord : (coord.length > 2 ? [coord[0], coord[1]] : [])
+                let coordsToUse = [];
+
+                if (coord.length === 2) {
+                    coordsToUse = coord;
+                }
+                else if (coord.length > 2) {
+                    coordsToUse = [coord[0], coord[1]];
+                }
                 this.showMarker(coordsToUse);
                 break;
             }
