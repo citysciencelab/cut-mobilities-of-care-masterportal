@@ -1,5 +1,6 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
+import Overlay from "ol/Overlay.js";
 
 const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationModel.prototype */{
     defaults: {
@@ -10,7 +11,9 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         uniqueIdList: [],
         datePublication: null,
         dateRevision: null,
-        periodicity: null
+        periodicity: null,
+        idCounter: 0,
+        overlay: new Overlay({element: undefined})
     },
 
     /**
@@ -24,11 +27,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
      * @property {String} periodicity=null Periodicity
+     * @property {Number} idCounter=0 counter for unique ids
+     * @property {Overlay} overlay=new Overlay({element: undefined}) the overlay
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestUtilIsViewMobile
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @fires LayerInformation#RadioTriggerLayerInformationSync
      * @fires LayerInformation#RadioTriggerLayerInformationRemoveView
+     * @fires Core#RadioTriggerMapAddOverlay
      * @listens LayerInformation#RadioTriggerLayerInformationAdd
      * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
@@ -59,57 +65,67 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             "fetchedMetaData": this.fetchedMetaData
         });
         this.bindView(Radio.request("Util", "isViewMobile"));
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            }
+        }, this);
     },
+
     /**
-    * todo
-    * @param {*} cswObj todo
+    * Updates parsed metadata of the layer.
+    * @param {Object} cswObj Contains informations about the layer
     * @returns {void}
     */
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
-            this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            this.updateMetaData(cswObj.parsedData);
         }
     },
     /**
-    * todo
-    * @param {*} uniqueIdList todo
-    * @param {*} uniqueId todo
-    * @returns {*} todo
+    * Returns true, if the uniqueId is contained in list of uniqueIds
+    * @param {Array} uniqueIdList list of uniqueIds
+    * @param {string} uniqueId uniqueId to check
+    * @returns {Boolean} true|false
     */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
-        return _.contains(uniqueIdList, uniqueId);
+        return uniqueIdList ? uniqueIdList.indexOf(uniqueId) > -1 : false;
     },
     /**
-    * todo
-    * @param {*} uniqueIdList todo
-    * @param {*} uniqueId todo
+    * Removes the uniqueId from the given list.
+    * @param {Array} uniqueIdList to remove the id from
+    * @param {String} uniqueId to remove from list
     * @returns {void}
     */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
+        const index = uniqueIdList ? uniqueIdList.indexOf(uniqueId) : -1;
+
+        if (index > -1) {
+            uniqueIdList.splice(index, 1);
+        }
+        this.setUniqueIdList(uniqueIdList ? uniqueIdList : []);
     },
     /**
-    * todo
-    * @param {*} layerName todo
-    * @param {*} parsedData todo
+    * Adds all parsed data to this model.
+    * @param {Object} parsedData parsed metadata
     * @returns {void}
     */
-    updateMetaData: function (layerName, parsedData) {
+    updateMetaData: function (parsedData) {
         this.set(parsedData);
     },
     /**
-    * todo
-    * @param {*} attrs todo
+    * Triggers getMetaData from CswParser, if metaID available in attrs
+    * @param {Object} attrs Objekt mit Attributen zur Darstellung
     * @fires CswParser#RadioTriggerCswParserGetMetaData
     * @returns {void}
     */
     requestMetaData: function (attrs) {
-        var metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
-            uniqueId = _.uniqueId(),
+        const metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
+            uniqueId = this.uniqueId("layerinfo"),
             cswObj = {};
 
-        if (!_.isNull(metaId)) {
+        if (metaId !== null) {
             this.get("uniqueIdList").push(uniqueId);
             cswObj.layerName = attrs.layername;
             cswObj.metaId = metaId;
@@ -119,12 +135,24 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         }
     },
     /**
-    * todo
-    * @param {*} isMobile todo
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
+
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
+    },
+    /**
+    * Binds the view depending on mobile or not.
+    * @param {Boolean} isMobile true, if app is on a mobile
     * @returns {void}
     */
     bindView: function (isMobile) {
-        var currentView;
+        let currentView;
 
         if (isMobile === true) {
             currentView = new ViewMobile({model: this});
@@ -176,11 +204,11 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @returns {void}
      */
     setMetadataURL: function () {
-        var metaURLs = [],
-            metaURL = "",
+        const metaURLs = [];
+        let metaURL = "",
             service;
 
-        _.each(this.get("metaID"), function (metaID) {
+        this.get("metaID").forEach(function (metaID) {
             service = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId"));
             if (service === undefined) {
                 console.warn("Rest Service mit der ID " + this.get("metaDataCatalogueId") + " ist rest-services.json nicht konfiguriert!");
@@ -189,15 +217,23 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 metaURL = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId")).get("url") + metaID;
             }
 
-            if (metaID !== "" && !_.contains(metaURLs, metaURL)) {
+            if (metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
                 metaURLs.push(metaURL);
             }
         }, this);
         this.set("metaURL", metaURLs);
     },
     /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+    setIdCounter: function (value) {
+        this.set("idCounter", value);
+    },
+    /**
     * Setter function for isVisible
-    * @param {Boolean} value todo
+    * @param {Boolean} value true, if this is visible
     * @returns {void}
     */
     setIsVisible: function (value) {
@@ -205,12 +241,28 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     },
     /**
     * Setter function for uniqueIdList
-    * @param {*} value todo
+    * @param {Array} value the uniqueIdList
     * @returns {void}
     */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
+    },
+    /**
+    * Setter function for overlay element
+    * @param {Object} value the element
+    * @returns {void}
+    */
+    setOverlayElement: function (value) {
+        this.get("overlay").setElement(value);
+    },
+    /**
+    * Getter function for overlay element
+    * @returns {Object} the overlay-element
+    */
+    getOverlayElement: function () {
+        return this.get("overlay").getElement();
     }
+
 });
 
 export default LayerInformationModel;
