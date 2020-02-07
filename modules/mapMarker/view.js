@@ -121,14 +121,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case "Stadtteil": {
-                if (coord.length === 2) {
-                    this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
-                }
-                else if (coord.length > 2) {
-                    Radio.trigger("MapView", "setCenter", [coord[0], coord[1]], this.model.get("zoomLevel"));
-                    this.showMarker(coord);
-                }
+                const coordsToUse = coord.length === 2 ? coord : (coord.length > 2 ? [coord[0], coord[1]] : [])
+                this.showMarker(coordsToUse);
                 break;
             }
             case "Thema": {
