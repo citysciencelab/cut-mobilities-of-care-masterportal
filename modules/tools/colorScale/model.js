@@ -29,6 +29,7 @@ const ColorScale = Backbone.Model.extend({
      */
 
     generateColorScale (values = [0, 1], colorspace = "interpolateBlues", legendSteps = 5, type = "sequential", defaultColor = "rgb(51, 153, 204)") {
+        const legendDefaultColor = "rgb(99,99,99)";
         var _values = values.filter(val => !isNaN(val)),
             _undefineds = values.filter(val => val === undefined),
             minValue = Math.min(..._values),
@@ -58,7 +59,7 @@ const ColorScale = Backbone.Model.extend({
             legend.colors = this.createLegendValues(scale, legend.values);
             if (_undefineds.length > 0) {
                 legend.values.push("Keine Daten");
-                legend.colors.push("rgb(99,99,99)");
+                legend.colors.push(legendDefaultColor);
             }
         }
 
@@ -71,10 +72,10 @@ const ColorScale = Backbone.Model.extend({
         }
         else if (values.length === _undefineds.length) {
             scale = function () {
-                return "rgb(99,99,99)";
+                return legendDefaultColor;
             };
             legend.values.push("Keine Daten");
-            legend.colors.push("rgb(99,99,99)");
+            legend.colors.push(legendDefaultColor);
         }
 
         return {scale, legend};
