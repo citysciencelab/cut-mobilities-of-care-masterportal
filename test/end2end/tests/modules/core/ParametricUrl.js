@@ -276,12 +276,14 @@ async function ParameterTests ({builder, url, resolution}) {
         }
 
         if (isDefault(url)) {
-            it("opening and configuring lots of layers works", async function () {
+            it.skip("opening and configuring lots of layers works", async function () {
                 /* TODO
                 6.16. (DT, nur FHH-Atlas) Portal mit dem Parameter ?layerIDs=368,8,717,2428,2423,1562_0,2432,1754,1757,1172,1935geofox-bahn,2676,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5 aufrufen (2,5h)
                     -> Es werden diverse Layer angezeigt NOTE nur einer wegen überwiegend visibility false
                     -> Es wird kein Fehler oder Alert angezeigt NOTE einige Fehler/Alerts - falsche Datenquelle? (DT)
                     -> Transparenz und Sichtbarkeit der Layer stimmen mit dem Aufruf überein NOTE ist im Test
+
+                NOTE nach Rücksprache in MPLGV-96 erstmal auf ".skip" gestellt, bis eine öffentliche Konfiguration hierfür kommt
                 */
                 let layers = "368,8,717,2428,2423,1562_0,2432,1754,1757,1172,1935geofox-bahn,2676,2444,1561_6,2941,2452",
                     visibility = "true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false",
