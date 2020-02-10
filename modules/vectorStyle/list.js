@@ -14,6 +14,10 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @memberof VectorStyle
      * @constructs
      * @description Collection that stores all the vector styles contained in style.json.
+     * Only the styles of the configured layers are kept.
+     * If a tool has an attribute "styleId", then also this style is kept.
+     * The styleId can be a string or an array of strings or an array of objects that need to have the attribute "id".
+     * example "myStyleId", ["myStyleId2", "myStyleId3"], [{"id": "myStyleId4", "name": "I am not relevant for the style"}]
      * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      * @fires Alerting#RadioTriggerAlertAlert
      * @listens VectorStyle#RadioRequestStyleListReturnModelById
@@ -92,9 +96,21 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
 
-        _.each(tools, function (tool) {
-            if (_.has(tool, "styleId")) {
-                styleIds.push(tool.styleId);
+        tools.forEach(tool => {
+            if (tool.hasOwnProperty("styleId")) {
+                if (Array.isArray(tool.styleId)) {
+                    tool.styleId.forEach(styleIdInArray => {
+                        if (styleIdInArray instanceof Object) {
+                            styleIds.push(styleIdInArray.id);
+                        }
+                        else {
+                            styleIds.push(styleIdInArray);
+                        }
+                    });
+                }
+                else {
+                    styleIds.push(tool.styleId);
+                }
             }
         });
 
