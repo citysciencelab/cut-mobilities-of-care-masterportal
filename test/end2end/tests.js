@@ -10,6 +10,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     modulesCoreParametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
     modulesSearchbarSearchCategories = require("./tests/modules/searchbar/SearchCategories.js"),
+    modulesSearchbarGdiSearch = require("./tests/modules/searchbar/GdiSearch.js"),
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
     panTests = require("./tests/Pan.js"),
@@ -69,6 +70,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
 
         // // // modules/searchbar
         modulesSearchbarSearchCategories(e2eTestParams);
+        modulesSearchbarGdiSearch(e2eTestParams);
 
         // // // modules/tools
         modulesToolsGfi(e2eTestParams);
