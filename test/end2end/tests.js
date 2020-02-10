@@ -8,11 +8,12 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     // modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
     modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
     // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+    modulesCoreParametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
+    modulesSearchbarSearchCategories = require("./tests/modules/searchbar/SearchCategories.js"),
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
-    parametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
     legendTests = require("./tests/Legend.js");
 
 /**
@@ -64,7 +65,10 @@ function tests (builder, url, browsername, resolution, config, mode) {
         // modulesControlsZoomTests(e2eTestParams);
 
         // // // modules/core
-        parametricUrlTests(e2eTestParams);
+        modulesCoreParametricUrlTests(e2eTestParams);
+
+        // // // modules/searchbar
+        modulesSearchbarSearchCategories(e2eTestParams);
 
         // // // modules/tools
         modulesToolsGfi(e2eTestParams);

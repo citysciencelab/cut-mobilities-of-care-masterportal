@@ -143,6 +143,44 @@ function hasVectorLayerLength () {
 }
 
 /**
+ * Function used to check a vector layer's style.
+ * Extend whenever further properties are needed for a comparison.
+ * @param {string} name name of layer to check style of
+ * @param {object} params set of optional parameters to check for
+ * @param {(string|object)} [params.stroke.color] expected color of stroke
+ * @param {(string|object)} [params.fill.color] expected color of fill
+ * @returns {boolean} true if layer with "name" exists and its source has "length" features
+ */
+function hasVectorLayerStyle () {
+    const layer = Backbone.Radio.request("Map", "getMap")
+            .getLayers()
+            .getArray()
+            .filter(l => l.get("name") === arguments[0])[0],
+        {stroke, fill} = arguments[1];
+
+    if (stroke) {
+        if (stroke.color) {
+            if (JSON.stringify(layer.getStyle().getStroke().getColor()) !== JSON.stringify(stroke.color)) {
+                return false;
+            }
+        }
+    }
+
+    if (fill) {
+        if (fill.color) {
+            if (JSON.stringify(layer.getStyle().getFill().getColor()) !== JSON.stringify(fill.color)) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+
+    // fill color [ 8, 119, 95, 0.3 ]
+    // stroke color "#08775f"
+}
+
+/**
  * Checks whether layers are present in given order. Additional layers may be present.
  * @param {String[]} layerIds layers should be present left-to-right (equals bottom-to-top)
  * @returns {boolean} true if all given layers found and in requested order
@@ -365,6 +403,14 @@ function zoomOut () {
     Backbone.Radio.trigger("MapView", "setZoomLevelDown");
 }
 
+/**
+ * Sets resolution to given value.
+ * @returns {void}
+ */
+function setResolution () {
+    Backbone.Radio.trigger("MapView", "setConstrainedResolution", arguments[0], 0);
+}
+
 module.exports = {
     mockGeoLocationAPI,
     mouseWheelUp,
@@ -377,6 +423,7 @@ module.exports = {
     getObModeResolution,
     getCoordinatesOfXthFeatureInLayer,
     hasVectorLayerLength,
+    hasVectorLayerStyle,
     areLayersOrdered,
     doesLayerWithFeaturesExist,
     getCenter,
@@ -385,6 +432,7 @@ module.exports = {
     getHeading,
     getDirection,
     setCenter,
+    setResolution,
     setTilt,
     zoomIn,
     zoomOut

@@ -65,9 +65,34 @@ async function hoverFeature (driver, coordinates) {
         .perform();
 }
 
+/**
+ * Some elements (e.g. in the search view) are replaced very quickly. It may occur that a command like
+ * "(await driver.findElement(x)).click()" crashes as the element has been removed
+ * after being found, but before being clicked. To circumvent this issue, this function
+ * just retries until the element wasn't removed between find and click.
+ * @param {object} driver initialized driver
+ * @param {By} selector to find element with
+ * @returns {void}
+ */
+async function reclickUntilNotStale (driver, selector) {
+    let error;
+
+    do {
+        error = null;
+        try {
+            await (await driver.findElement(selector)).click();
+        }
+        catch (e) {
+            error = e;
+            await driver.wait(new Promise(r => setTimeout(r, 100)));
+        }
+    } while (error !== null);
+}
+
 module.exports = {
     getTextOfElements,
     centersTo,
     clickFeature,
-    hoverFeature
+    hoverFeature,
+    reclickUntilNotStale
 };
