@@ -339,7 +339,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
         }
-        else if (map3dModel.isMap3d()) {
+        else if (map3dModel && map3dModel.isMap3d()) {
             return "3D";
         }
         return "2D";

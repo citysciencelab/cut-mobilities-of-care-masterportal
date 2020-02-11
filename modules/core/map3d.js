@@ -7,7 +7,7 @@ import {transform, get} from "ol/proj.js";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
-        shadowTime: Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate())
+        shadowTime: window.Cesium ? Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()) : undefined
     },
     /**
      * @class Map3dModel
