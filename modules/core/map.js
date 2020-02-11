@@ -70,7 +70,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioRequestMapClickedWindowPosition
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Core#RadiotriggerMapCameraChanged
+     * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core#RadioTriggerUtilShowLoader
      * @fires Core#RadioTriggerUtilHideLoader

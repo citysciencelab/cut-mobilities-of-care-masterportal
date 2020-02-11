@@ -5,11 +5,34 @@ import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
 
-const Map3dModel = Backbone.Model.extend({
+const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
         shadowTime: Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate())
     },
-
+    /**
+     * @class Map3dModel
+     * @extends Backbone.Model
+     * @memberof Core
+     * @constructs
+     * @property {Cesium.JulianDate} shadowTime Current time in julian format.
+     * @listens Core#RadioRequestMapIsMap3d
+     * @listens Core#RadioRequestGetMap3d
+     * @listens Core#RadioRequestMapGetFeatures3dAtPosition
+     * @listens Core#RadioTriggerMapSetShadowTime
+     * @listens Core#RadioTriggerMapActivateMap3d
+     * @listens Core#RadioTriggerMapDeactivateMap3d
+     * @listens Core#RadioTriggerMapSetCameraParameter
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioRequestMapGetMapMode
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioRequestMapClickedWindowPosition
+     * @fires Core#RadioRequestMapGetMap
+     * @fires Core#RadioTriggerMapCameraChanged
+     */
     initialize: function () {
         const channel = Radio.channel("Map");
 
@@ -32,6 +55,15 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Activates the map3d if it not already set.
+     * If mapmode is "Oblique" it deactivates it.
+     * @fires Core#RadioRequestMapGetMapMode
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioTriggerMapChange
+     * @returns {void}
+     */
     activateMap3d: function () {
         const mapMode = Radio.request("Map", "getMapMode");
         let map3d = this.get("map3d"),
@@ -57,11 +89,21 @@ const Map3dModel = Backbone.Model.extend({
         Radio.trigger("Map", "change", "3D");
     },
 
+    /**
+     * Prepares the cesium scene.
+     * @param {Cesium.scene} scene Cesium scene.
+     * @returns {void}
+     */
     prepareScene: function (scene) {
         this.handle3DEvents(scene);
         this.setCesiumSceneDefaults(scene);
     },
 
+    /**
+     * Prepares the camera and listens to camera changed events.
+     * @param {Cesium.scene} scene Cesium scene.
+     * @returns {void}
+     */
     prepareCamera: function (scene) {
         const camera = scene.camera,
             cameraParameter = Config.hasOwnProperty("cameraParameter") ? Config.cameraParameter : null;
@@ -72,6 +114,12 @@ const Map3dModel = Backbone.Model.extend({
         camera.changed.addEventListener(this.reactToCameraChanged, this);
     },
 
+    /**
+     * Deactivates oblique mode and listens to change event to activate 3d mode.
+     * @listens Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerObliqueMapDeactivate
+     * @returns {void}
+     */
     deactivateOblique: function () {
         Radio.once("Map", "change", function (onceMapMode) {
             if (onceMapMode === "2D") {
@@ -81,6 +129,14 @@ const Map3dModel = Backbone.Model.extend({
         Radio.trigger("ObliqueMap", "deactivate");
     },
 
+    /**
+     * Reacts to 3d click event in cesium scene.
+     * @param {Event} event The cesium event.
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioRequestMapClickedWindowPosition
+     * @fires Core#RadioRequestMapGetMap
+     * @returns {void}
+     */
     reactTo3DClickEvent: function (event) {
         const map3d = this.get("map3d"),
             scene = map3d.getCesiumScene(),
@@ -122,6 +178,14 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Deactivates the 3d mode.
+     * @fires Core#RadioRequestMapGetMap
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioTriggerMapChange
+     * @returns {void}
+     */
     deactivateMap3d: function () {
         const map3d = this.get("map3d"),
             map = Radio.request("Map", "getMap"),
@@ -148,6 +212,11 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Reacts if the camera has changed.
+     * @fires Core#RadioTriggerMapCameraChanged
+     * @returns {void}
+     */
     reactToCameraChanged: function () {
         const map3d = this.get("map3d"),
             camera = map3d.getCamera();
@@ -155,6 +224,11 @@ const Map3dModel = Backbone.Model.extend({
         Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
     },
 
+    /**
+     * Logic to listen to click events in 3d mode.
+     * @param {Cesium.scene} scene Cesium scene.
+     * @returns {void}
+     */
     handle3DEvents: function (scene) {
         let eventHandler;
 
@@ -164,6 +238,11 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Retrieves the features that are at a given 3d coordinate.
+     * @param {Number[]} position 3d coordinate array.
+     * @returns {Object[]} - found objects
+     */
     getFeatures3dAtPosition: function (position) {
         const map3d = this.get("map3d");
         let scene,
@@ -176,6 +255,11 @@ const Map3dModel = Backbone.Model.extend({
         return objects;
     },
 
+    /**
+     * Sets the camera parameters either from config or from an trigger.
+     * @param {Object} params Params.
+     * @returns {void}
+     */
     setCameraParameter: function (params) {
         const map3d = this.get("map3d");
         let camera,
@@ -211,6 +295,11 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Sets the cesium scene defaults from the config.js
+     * @param {Cesium.scene} scene Cesium scene.
+     * @returns {void}
+     */
     setCesiumSceneDefaults: function (scene) {
         let params;
 
@@ -236,6 +325,11 @@ const Map3dModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Creates the olcesium  3d map.
+     * @fires Core#RadioRequestMapGetMap
+     * @returns {OLCesium} - ol cesium map.
+     */
     createMap3d: function () {
         var map3d = new OLCesium({
             map: Radio.request("Map", "getMap"),
@@ -252,18 +346,36 @@ const Map3dModel = Backbone.Model.extend({
         return map3d;
     },
 
+    /**
+     * Checks if map in in 3d mode
+     * @returns {Boolean} Flag if map is in 3d mode and enabled.
+     */
     isMap3d: function () {
         return this.get("map3d") && this.get("map3d").getEnabled();
     },
 
+    /**
+     * Returns the shadowTime.
+     * @returns {Cesium.JulianDate} - shadow time in julian date format.
+     */
     getShadowTime: function () {
         return this.get("shadowTime");
     },
 
-    setShadowTime: function (value) {
-        this.set("shadowTime", value);
+    /**
+     * Setter for attribute "shadowTime".
+     * @param {Cesium.JulianDate} shadowTime Shadow time in julian date format.
+     * @returns {void}
+     */
+    setShadowTime: function (shadowTime) {
+        this.set("shadowTime", shadowTime);
     },
 
+    /**
+     * Setter for attribute "map3d".
+     * @param {OLCesium} map3d ol cesium map.
+     * @returns {void}
+     */
     setMap3d: function (map3d) {
         this.set("map3d", map3d);
     }
