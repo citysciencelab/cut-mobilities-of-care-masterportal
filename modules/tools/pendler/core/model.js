@@ -138,7 +138,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             context: this,
             success: successFunction,
             error: function (jqXHR, errorText, error) {
-                console.error("Loading of " + url + " failed:",error);
+                console.error("Loading of " + this.get("url") + " failed:", error);
             }
         });
     },
