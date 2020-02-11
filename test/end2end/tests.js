@@ -1,7 +1,7 @@
 const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
     modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
     modulesControlsButton3DTests = require("./tests/modules/controls/Button3D.js"),
-    modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
+    // modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
     // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
     // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
@@ -13,6 +13,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     modulesSearchbarGdiSearch = require("./tests/modules/searchbar/GdiSearch.js"),
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
+    modulesToolsParcelSearch = require("./tests/modules/tools/ParcelSearch.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
     legendTests = require("./tests/Legend.js");
@@ -51,35 +52,42 @@ function tests (builder, url, browsername, resolution, config, mode) {
             return;
         }
 
-        const e2eTestParams = {builder, url, resolution, config, mode, browsername};
+        const suites = [
+                // // // modules/controls
+                // modulesControlsAttributionsTests,
+                modulesControlsBackForwardTests,
+                modulesControlsButton3DTests,
+                // TODO pull OB to different suites array - maybe depending on environment variable?
+                // modulesControlsButtonObliqueTests,
+                // modulesControlsFreezeTests,
+                // modulesControlsFullScreenTests,
+                modulesControlsOrientationTests,
+                // modulesControlsOverviewMapTests,
+                modulesControlsTotalViewTests,
+                // modulesControlsZoomTests,
 
-        // // // modules/controls
-        // modulesControlsAttributionsTests(e2eTestParams);
-        modulesControlsBackForwardTests(e2eTestParams);
-        modulesControlsButton3DTests(e2eTestParams);
-        modulesControlsButtonObliqueTests(e2eTestParams);
-        // modulesControlsFreezeTests(e2eTestParams);
-        // modulesControlsFullScreenTests(e2eTestParams);
-        modulesControlsOrientationTests(e2eTestParams);
-        // modulesControlsOverviewMapTests(e2eTestParams);
-        modulesControlsTotalViewTests(e2eTestParams);
-        // modulesControlsZoomTests(e2eTestParams);
+                // // // modules/core
+                modulesCoreParametricUrlTests,
 
-        // // // modules/core
-        modulesCoreParametricUrlTests(e2eTestParams);
+                // // // modules/searchbar
+                modulesSearchbarSearchCategories,
+                modulesSearchbarGdiSearch,
 
-        // // // modules/searchbar
-        modulesSearchbarSearchCategories(e2eTestParams);
-        modulesSearchbarGdiSearch(e2eTestParams);
+                // // // modules/tools
+                modulesToolsGfi,
+                modulesToolsMeasure,
+                modulesToolsParcelSearch,
 
-        // // // modules/tools
-        modulesToolsGfi(e2eTestParams);
-        modulesToolsMeasure(e2eTestParams);
+                // // // non-module tests
+                legendTests,
+                panTests,
+                zoomTests
+            ],
+            e2eTestParams = {builder, url, resolution, config, mode, browsername};
 
-        // // // non-module tests
-        legendTests(e2eTestParams);
-        panTests(e2eTestParams);
-        zoomTests(e2eTestParams);
+        for (const suite of suites) {
+            suite(e2eTestParams);
+        }
     });
 }
 
