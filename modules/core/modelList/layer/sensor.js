@@ -500,7 +500,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
 
                 _.each(allThings, function (thing2, index2) {
-                    jsonGeom2 = JSON.stringify(this.getJsonGeometry(thing, 0));
+                    jsonGeom2 = JSON.stringify(this.getJsonGeometry(thing2, 0));
 
                     if (jsonGeom === jsonGeom2) {
                         things.push(thing2);
