@@ -1,5 +1,6 @@
 import Layer from "./model";
 import {SensorThingsMqtt} from "./sensorThingsMqtt";
+import {SensorThingsHttp} from "./sensorThingsHttp";
 import moment from "moment";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
@@ -176,33 +177,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Initial loading of sensor data function
+     * @param {Function} onsuccess a function to call on success
      * @fires Core#RadioRequestUtilGetProxyURL
      * @returns {void}
      */
-    initializeConnection: function () {
-        var sensorData,
-            features,
-            isClustered = this.has("clusterDistance"),
-            url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
+    initializeConnection: function (onsuccess) {
+        const url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter"),
-            epsg = this.get("epsg"),
             mergeThingsByCoordinates = this.get("mergeThingsByCoordinates");
 
-        sensorData = this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates);
-        features = this.createFeatures(sensorData, epsg);
+        this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates, function (sensorData) {
+            const epsg = this.get("epsg"),
+                features = this.createFeatures(sensorData, epsg),
+                isClustered = this.has("clusterDistance");
 
-        // Add features to vectorlayer
-        if (!_.isEmpty(features)) {
-            this.get("layerSource").addFeatures(features);
-            this.prepareFeaturesFor3D(features);
-            this.featuresLoaded(features);
-        }
+            // Add features to vectorlayer
+            if (!_.isEmpty(features)) {
+                this.get("layerSource").addFeatures(features);
+                this.prepareFeaturesFor3D(features);
+                this.featuresLoaded(features);
+            }
 
-        if (!_.isUndefined(features)) {
-            this.styling(isClustered);
-            this.get("layer").setStyle(this.get("style"));
-        }
+            if (!_.isUndefined(features)) {
+                this.styling(isClustered);
+                this.get("layer").setStyle(this.get("style"));
+            }
+
+            if (typeof onsuccess === "function") {
+                onsuccess();
+            }
+        }.bind(this));
     },
 
     /**
@@ -373,48 +378,46 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {String} urlParams - url parameters
      * @param  {Boolean} mergeThingsByCoordinates - Flag if things should be merged if they have the same Coordinates
      * @return {array} all things with attributes and location
+     * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
-    loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates) {
-        var allThings = [],
-            requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
-            things = this.getResponseFromRequestUrl(requestUrl),
-            thingsCount,
-            thingsbyOneRequest,
-            thingsRequestUrl,
-            index;
+    loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
+        var requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
+            http = new SensorThingsHttp();
 
-        if (_.isUndefined(things) || !_.has(things, "value")) {
-            // Return witout data to prevent crashing
-            console.warn("Sensor-Layer: Result of query was undefined or malformed.");
-            return [];
-        }
+        http.get(requestUrl, function (result) {
+            // on success
+            let allThings;
 
-        thingsCount = _.isUndefined(things) ? 0 : things["@iot.count"]; // count of all things
-        thingsbyOneRequest = things.value.length; // count of things on one request
-
-        allThings.push(things.value);
-        for (index = thingsbyOneRequest; index < thingsCount; index += thingsbyOneRequest) {
-            thingsRequestUrl = requestUrl + "&$skip=" + index;
-
-            things = this.getResponseFromRequestUrl(thingsRequestUrl);
-
-            if (_.isUndefined(things) || !_.has(things, "value")) {
-                // Return witout data to prevent crashing
-                console.warn("Sensor-Layer: Result of sub-query was undefined or malformed.");
-                continue;
+            allThings = result.flat();
+            allThings = this.getNewestSensorData(allThings);
+            if (mergeThingsByCoordinates) {
+                allThings = this.mergeByCoordinates(allThings);
             }
-            allThings.push(things.value);
-        }
 
-        allThings = this.flattenArray(allThings);
-        allThings = this.getNewestSensorData(allThings);
-        if (mergeThingsByCoordinates) {
-            allThings = this.mergeByCoordinates(allThings);
-        }
+            allThings = this.aggregatePropertiesOfThings(allThings);
 
-        allThings = this.aggregatePropertiesOfThings(allThings);
+            if (typeof onsuccess === "function") {
+                onsuccess(allThings);
+            }
 
-        return allThings;
+        }.bind(this), function () {
+            // on start
+            Radio.trigger("Util", "showLoader");
+
+        }, function () {
+            // on complete
+            Radio.trigger("Util", "hideLoader");
+
+        }, function (error) {
+            // on error
+            Radio.trigger("Alert", "alert", {
+                text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
+                    this.get("name") + " aufgetreten</strong>",
+                kategorie: "alert-danger"
+            });
+
+            console.warn(error);
+        }.bind(this));
     },
 
     /**

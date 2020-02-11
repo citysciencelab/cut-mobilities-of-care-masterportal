@@ -143,11 +143,209 @@ Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Maste
 
 
 
+
+## SensorThingsHttp ##
+Requests to a SensorThingsAPI can be automatically splitted into chunks of requests. Therefore it is possible to show the progress of a http SensorThingsAPI call for a better user experience (see [Automatic Split](#markdown-header-automatic-split)). The request to a SensorThingsAPI can use the current browser extent to narrow down and minimize the server response (see [Automatic call in Extent](#markdown-header-automatic-call-in-extent)). For the Masterportal we have implemented a software layer called *SensorThingsHttp* that provides the split handling and the extent for you.
+
+*Note: Please keep in mind that automatic progress and "call in extent" is only available if your server side implementation of the SensorThingsAPI (e.g. FROST Server) provides and has activated the skip and geography functions.*
+
+
+### Automatic Split ###
+Your server configuration should include the automatic skipping of responses. If this is the case, responses that seem to be too big to receive in one response have included a follow up link ("@iot.nextLink") to be called to receive the next chunk of data. To get the total number of expected datasets, the "@iot.count" value can be used.
+
+Using the *SensorThingsHttp.get()* function, the *SensorThingsHttp* layer does the correct work of "@iot.nextLink" (see [The "@iot.nextLink" Value](#markdown-header-the-iotnextlink-value)) and "@iot.count" (see [The "@iot.count" Value](#markdown-header-the-iotcount-value)) for you.
+
+Here is a basic implementation of *SensorThingsHttp* using some basic Events of the Masterportal to show its functionality:
+
+```
+#!javascript
+
+import {SensorThingsHttp} from "@modules/core/modelList/layer/sensorThingsHttp";
+
+const http = new SensorThingsHttp(),
+    url = "https://iot.hamburg.de/v1.0/Things";
+
+http.get(url, function (response) {
+    // on success
+    // do something with the total response
+
+}, function () {
+    // on start
+    Radio.trigger("Util", "showLoader");
+
+}, function () {
+    // on complete (always called)
+    Radio.trigger("Util", "hideLoader");
+
+}, function (error) {
+    // on error
+    console.warn(error);
+
+}, function (progress) {
+    // on wait
+    // the progress (percentage = Math.round(progress * 100)) to update your progress bar with
+
+});
+
+```
+
+Please note that the http.get call in itself is asynchronous. All parameters of *SensorThingsHttp.get()* except for "url" are optional. It makes sense of cause to use at least onsuccess to receive the response.
+
+There is an optional seventh parameter (httpClient) that can be used to change the default http handler (in our case axios). This optional httpClient can be a simple function with the parameters url, onsuccess and onerror.
+
+
+
+### The "@iot.nextLink" Value ###
+If you don't want to use *SensorThingsHttp* to automaticaly split the data, here are some guides to help you do your own thing.
+
+If the data of a call has too many datasets, the server splitts the result into chunks indicated by a "@iot.nextLink". You can follow through all "@iot.nextLink" urls, gathering the responses to one big response until the end of data is received. If no follow up link ("@iot.nextLink") is received, the data is complete in the first place or it is the last chunk of datasets to receive.
+
+**Example**
+
+The following url will only get 100 datasets and is including a "@iot.nextLink" to be called to receive the next chunk: [https://iot.hamburg.de/v1.0/Things](https://iot.hamburg.de/v1.0/Things)
+```
+#!json
+{
+  "@iot.nextLink" : "https://iot.hamburg.de/v1.0/Things?$skip=100",
+  "value" : [ {
+      "...": "..."
+  }]
+}
+```
+
+Calling the next link ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) will provide you with the next chunk of data and another follow up link ("@iot.nextLink") and so forth, until in the last dataset no follow up link is given.
+
+
+### The "@iot.count" Value ###
+To show the progress of the current http call, you can use the loop through "@iot.nextLink" urls in combination with the $count=true parameter. If you add $count=true to any SensorThingsAPI url, the received data includes the number of datasets to be expected in total ("@iot.count").
+
+**Example**
+
+To get the total number of datasets to expect from one call, simply add $count=true to any SensorThingsAPI url: [https://iot.hamburg.de/v1.0/Things?$count=true](https://iot.hamburg.de/v1.0/Things?$count=true)
+```
+#!json
+{
+  "@iot.count" : 4723,
+  "@iot.nextLink" : "https://iot.hamburg.de/v1.0/Things?$skip=100&$count=true",
+  "value" : [ {
+      "...": "..."
+  }]
+}
+```
+
+Combining the absolute number ("@iot.count") and the value of the current $skip parameter gives you the progress (1 / @iot.count * skip).
+
+
+
+### Automatic use of Extent ###
+You would want your server implementation of the SensorThingsAPI (e.g. FROST Server) to filter data within a given extent (e.g. a polygon). The FROST Server provides you with this functionality. To use this feature the *SensorThingsHttp* layer has a function (*SensorThingsHttp.getInExtent()*) to call data only within the given extent.
+
+Using *SensorThingsHttp.getInExtent()* you also use the skipping progress explained [above](#markdown-header-automatic-split). The *SensorThingsHttp* layer does the correct work of "st_within(Locations/location,geography'POLYGON ((...))')" (see [The use of POLYGON](#the_use_of_polygon)) for you.
+
+The extent needs to be described including its source projection and target projection. The following extent options are mandatory for the use of *SensorThingsHttp.getInExtent()*:
+
+|name|mandatory|type|default|description|example|
+|----|---------|----|-------|-----------|-------|
+|extent|yes|Number[]|-|the extent based on your current OpenLayers Map|[556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008]|
+|sourceProjection|yes|String|-|the projection of the extent|"EPSG:25832"|
+|targetProjection|yes|String|-|the projection the SensorThingsAPI server expects|"EPSG:4326"|
+
+Here is a basic implementation of *SensorThingsHttp* receiving only data within the browsers current extent, using some basic Events of the Masterportal to show its functionality:
+
+```
+#!javascript
+
+import {SensorThingsHttp} from "@modules/core/modelList/layer/sensorThingsHttp";
+
+const http = new SensorThingsHttp(),
+    extent = Radio.request("MapView", "getCurrentExtent"),
+    projection = Radio.request("MapView", "getProjection").getCode(),
+    epsg = this.get("epsg"),
+    url = "https://iot.hamburg.de/v1.0/Things";
+
+http.getInExtent(url, {
+    extent: extent,
+    sourceProjection: projection,
+    targetProjection: epsg
+}, function (response) {
+    // on success
+    // do something with the response
+
+}, function () {
+    // on start (always called)
+    Radio.trigger("Util", "showLoader");
+
+}, function () {
+    // on complete (always called)
+    Radio.trigger("Util", "hideLoader");
+
+}, function (error) {
+    // on error
+    console.warn(error);
+
+}, function (progress) {
+    // on wait
+    // the progress to update your progress bar with
+    // to get the percentage use Math.round(progress * 100)
+
+});
+
+```
+
+In case of *SensorThingsHttp.getInExtent()* the "url" and "extent" parameters are mandatory. To get the response you need to set the third parameter as an on success function. The rest ist optional.
+
+There is an optional eighth parameter (httpClient) that can be used to change the default http handler (in our case axios). This optional httpClient can be a simple function with the parameters url, onsuccess and onerror.
+
+
+### The use of POLYGON ###
+If you don't want to use *SensorThingsHttp* to call your data in the current extent, here are some guides to go on your own.
+
+To receive data only in a specified extent the SensorThingsAPI provides certain geospatial functions using POINT or POLYGON structures (see [https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56)). You can set your extent using a POLYGON. You can then use the Locations of a Thing to filter within an extent.
+
+This is a basic example:
+
+[https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations](https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations)
+
+*Note: Keep in mind to convert your projection into the used projection of the SensorThingsAPI.* If the server uses EPSG:4326 but your Masterportal is set to use EPSG:25832 you should use OpenLayers to convert. An alternative is provided by "masterportalAPI/src/crs" with its "transform" function.
+
+Example to transform a Location from your current projection into EPSG:4326:
+```
+#!javascript
+
+import {transform} from "masterportalAPI/src/crs";
+
+const extent = Radio.request("MapView", "getCurrentExtent"),
+    projection = Radio.request("MapView", "getProjection").getCode(),
+    epsg = "EPSG:4326",
+    topLeftCorner = transform(projection, epsg, {x: extent[0], y: extent[1]}),
+    bottomRightCorner = transform(projection, epsg, {x: extent[2], y: extent[3]});
+
+```
+
+Working with the current extent given by an OpenLayer Map you will only get the top left corner and the bottom right corner. To draw yourself a POLYGON to be used with SensorThingsAPI, you need to draw your rectangle as follows:
+
+```
+#!javascript
+
+const extent = Radio.request("MapView", "getCurrentExtent"),
+    polygon = [
+        {x: extent[0], y: extent[1]},
+        {x: extent[2], y: extent[1]},
+        {x: extent[2], y: extent[3]},
+        {x: extent[0], y: extent[3]},
+        {x: extent[0], y: extent[1]}
+    ];
+
+```
+
+
+
 ## sensorThingsMqtt ##
 Der FROST Server unterstützt aktuell keine *Retained Messages*.
 Das Masterportal bietet Ihnen eine eigene mqtt Software Schicht an die *Retained Messages* simulieren kann.
 So können Sie verhindern, dass Sie Ihre eigene Software Architektur wegen fehlender *Retained Messages* im mqtt Protokoll umbauen müssen.
 Die *sensorThingsMqtt*-Schicht lässt sich wie das npm-Paket mqtt bedienen.
+
 
 
 ### Wie man mqtt implementiert ###
