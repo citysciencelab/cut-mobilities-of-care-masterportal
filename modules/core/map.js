@@ -26,7 +26,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @constructs
      * @param {Object} mapViewSettings Settings for the map.
      * @property {Number} initalLoading=0 todo
-     * @property {Cesium.JulianDate} shadowTime=null DefaultTime for 3D rendering even with disabled shadows.
      * @listens Core#RadioRequestMapGetLayers
      * @listens Core#RadioRequestMapGetWGS84MapSizeBBOX
      * @listens Core#RadioRequestMapCreateLayerIfNotExists
@@ -35,7 +34,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @listens Core#RadioRequestMapRegisterListener
      * @listens Core#RadioRequestMapGetMap
      * @listens Core#RadioRequestMapGetMapMode
-     * @listens Core#RadioRequestMapGetFeatures3dAtPosition
      * @listens Core#RadioTriggerMapAddLayer
      * @listens Core#RadioTriggerMapAddLayerToIndex
      * @listens Core#RadioTriggerMapSetLayerToIndex

@@ -33,56 +33,65 @@ const Map3dModel = Backbone.Model.extend({
     },
 
     activateMap3d: function () {
-        var camera,
-            cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null,
-            mapMode = Radio.request("Map", "getMapMode"),
-            map3d = this.get("map3d");
+        const mapMode = Radio.request("Map", "getMapMode");
+        let map3d = this.get("map3d"),
+            scene;
 
         if (this.isMap3d()) {
             return;
         }
-        if (mapMode === "Oblique") {
-            Radio.once("Map", "change", function (onceMapMode) {
-                if (onceMapMode === "2D") {
-                    this.activateMap3d();
-                }
-            }.bind(this));
-            Radio.trigger("ObliqueMap", "deactivate");
+        else if (mapMode === "Oblique") {
+            this.deactivateOblique();
             return;
         }
-        Radio.trigger("Map", "beforeChange", "3D");
-        if (!map3d) {
-            this.setMap3d(this.createMap3d());
-            this.handle3DEvents();
-            this.setCesiumSceneDefaults();
-            if (cameraParameter) {
-                this.setCameraParameter(cameraParameter);
-            }
-            camera = this.get("map3d").getCesiumScene().camera;
-            camera.changed.addEventListener(this.reactToCameraChanged, this);
+        else if (!map3d) {
+            Radio.trigger("Map", "beforeChange", "3D");
+            map3d = this.createMap3d();
+            scene = map3d.getCesiumScene();
+            this.prepareScene(scene);
+            this.setMap3d(map3d);
+            this.prepareCamera(scene);
         }
-        this.get("map3d").setEnabled(true);
+        map3d.setEnabled(true);
         Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
         Radio.trigger("Map", "change", "3D");
     },
-    /**
-     * todo
-     * @param {*} event - todo
-     * @fires Core#RadioRequestMapViewGetProjection
-     * @fires Core#RadioRequestMapClickedWindowPosition
-     * @returns {void}
-     */
+
+    prepareScene: function (scene) {
+        this.handle3DEvents(scene);
+        this.setCesiumSceneDefaults(scene);
+    },
+
+    prepareCamera: function (scene) {
+        const camera = scene.camera,
+            cameraParameter = Config.hasOwnProperty("cameraParameter") ? Config.cameraParameter : null;
+
+        if (cameraParameter) {
+            this.setCameraParameter(cameraParameter);
+        }
+        camera.changed.addEventListener(this.reactToCameraChanged, this);
+    },
+
+    deactivateOblique: function () {
+        Radio.once("Map", "change", function (onceMapMode) {
+            if (onceMapMode === "2D") {
+                this.activateMap3d();
+            }
+        }.bind(this));
+        Radio.trigger("ObliqueMap", "deactivate");
+    },
+
     reactTo3DClickEvent: function (event) {
-        var map3d = this.get("map3d"),
+        const map3d = this.get("map3d"),
             scene = map3d.getCesiumScene(),
             ray = scene.camera.getPickRay(event.position),
             cartesian = scene.globe.pick(ray, scene),
-            height,
+            mapProjection = Radio.request("MapView", "getProjection");
+        let height,
             coords,
             cartographic,
             distance,
             resolution,
-            mapProjection = Radio.request("MapView", "getProjection"),
             transformedCoords,
             transformedPickedPosition,
             pickedPositionCartesian,
@@ -114,11 +123,11 @@ const Map3dModel = Backbone.Model.extend({
     },
 
     deactivateMap3d: function () {
-        var resolution,
-            resolutions,
-            map3d = this.get("map3d"),
+        const map3d = this.get("map3d"),
             map = Radio.request("Map", "getMap"),
             view = map.getView();
+        let resolution,
+            resolutions;
 
         if (map3d) {
             Radio.trigger("Map", "beforeChange", "2D");
@@ -140,26 +149,25 @@ const Map3dModel = Backbone.Model.extend({
     },
 
     reactToCameraChanged: function () {
-        var map3d = this.get("map3d"),
+        const map3d = this.get("map3d"),
             camera = map3d.getCamera();
 
         Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
     },
 
-    handle3DEvents: function () {
-        var eventHandler,
-            map3d = this.get("map3d");
+    handle3DEvents: function (scene) {
+        let eventHandler;
 
         if (window.Cesium) {
-            eventHandler = new window.Cesium.ScreenSpaceEventHandler(map3d.getCesiumScene().canvas);
+            eventHandler = new window.Cesium.ScreenSpaceEventHandler(scene.canvas);
             eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
         }
     },
 
     getFeatures3dAtPosition: function (position) {
-        var scene,
-            objects,
-            map3d = this.get("map3d");
+        const map3d = this.get("map3d");
+        let scene,
+            objects;
 
         if (map3d) {
             scene = map3d.getCesiumScene();
@@ -169,8 +177,8 @@ const Map3dModel = Backbone.Model.extend({
     },
 
     setCameraParameter: function (params) {
-        var map3d = this.get("map3d"),
-            camera,
+        const map3d = this.get("map3d");
+        let camera,
             destination,
             orientation;
 
@@ -189,46 +197,43 @@ const Map3dModel = Backbone.Model.extend({
                 orientation
             });
         }
-        else if (_.isUndefined(map3d) === false && _.isNull(params) === false) {
+        else if (map3d !== undefined && params !== null) {
             camera = map3d.getCamera();
-            if (_.has(params, "tilt")) {
+            if (params.hasOwnProperty("tilt")) {
                 camera.setTilt(parseFloat(params.tilt));
             }
-            if (_.has(params, "heading")) {
+            if (params.hasOwnProperty("heading")) {
                 camera.setHeading(parseFloat(params.heading));
             }
-            if (_.has(params, "altitude")) {
+            if (params.hasOwnProperty("altitude")) {
                 camera.setAltitude(parseFloat(params.altitude));
             }
         }
     },
 
-    setCesiumSceneDefaults: function () {
-        var params,
-            map3d = this.get("map3d"),
-            scene = map3d.getCesiumScene();
+    setCesiumSceneDefaults: function (scene) {
+        let params;
 
-        if (_.has(Config, "cesiumParameter")) {
+        if (Config.hasOwnProperty("cesiumParameter")) {
             params = Config.cesiumParameter;
-            if (_.has(params, "fog")) {
-                scene.fog.enabled = _.has(params.fog, "enabled") ? params.fog.enabled : scene.fog.enabled;
-                scene.fog.density = _.has(params.fog, "density") ? parseFloat(params.fog.density) : scene.fog.density;
-                scene.fog.screenSpaceErrorFactor = _.has(params.fog, "screenSpaceErrorFactor") ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
+            if (params.hasOwnProperty("fog")) {
+                scene.fog.enabled = params.fog.hasOwnProperty("enabled") ? params.fog.enabled : scene.fog.enabled;
+                scene.fog.density = params.fog.hasOwnProperty("density") ? parseFloat(params.fog.density) : scene.fog.density;
+                scene.fog.screenSpaceErrorFactor = params.fog.hasOwnProperty("screenSpaceErrorFactor") ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
             }
 
-            scene.globe.tileCacheSize = _.has(params, "tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
-            scene.globe.maximumScreenSpaceError = _.has(params, "maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
+            scene.globe.tileCacheSize = params.hasOwnProperty("tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
+            scene.globe.maximumScreenSpaceError = params.hasOwnProperty("maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
             scene.shadowMap.maximumDistance = 5000.0;
             scene.shadowMap.darkness = 0.6;
-            scene.shadowMap.size = 2048; // this is default
-            scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
-            scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
+            scene.shadowMap.size = 2048;
+            scene.fxaa = params.hasOwnProperty("fxaa") ? params.fxaa : scene.fxaa;
+            scene.globe.enableLighting = params.hasOwnProperty("enableLighting") ? params.enableLighting : scene.globe.enableLighting;
             scene.globe.depthTestAgainstTerrain = true;
             scene.highDynamicRange = false;
             scene.pickTranslucentDepth = true;
             scene.camera.enableTerrainAdjustmentWhenLoading = true;
         }
-        return scene;
     },
 
     createMap3d: function () {
@@ -260,7 +265,7 @@ const Map3dModel = Backbone.Model.extend({
     },
 
     setMap3d: function (map3d) {
-        return this.set("map3d", map3d);
+        this.set("map3d", map3d);
     }
 
 });
