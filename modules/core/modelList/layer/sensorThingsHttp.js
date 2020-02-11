@@ -2,7 +2,7 @@
 import axios from "axios";
 import UrlParser from "url-parse";
 import {transform as transformProjectionToProjection} from "masterportalAPI/src/crs";
-Backbone.UrlParser = UrlParser;
+
 /**
  * SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol
  * SensorThingsAPI: https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
@@ -11,10 +11,11 @@ Backbone.UrlParser = UrlParser;
  *
  * To import SensorThingsHttp: import {SensorThingsHttp} from "./SensorThingsHttp";
  * create a new object:        obj = new SensorThingsHttp()
- * call:                       result = obj.get(url, onsucces, oncomplete, onerror)
- * call:                       result = obj.getInExtent(url, extent, onsucces, oncomplete, onerror)
+ * call:                       obj.get(url, onsuccess, onstart, oncomplete, onerror, onwait)
+ * call:                       obj.getInExtent(url, extentObj, onsuccess, onstart, oncomplete, onerror, onwait)
+ * get the result via onsuccess = function (result) { ... }
  * @returns {Void}  this is a constructor
- * @memberof Core.ModelList.Layer.SensorThingsMqtt
+ * @memberof Core.ModelList.Layer.SensorThingsHttp
  * @export
  */
 export function SensorThingsHttp () {
