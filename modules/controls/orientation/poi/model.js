@@ -28,6 +28,12 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     getFeatures: function () {
+        /**
+         * Selector for old or new way to set vector legend
+         * @deprecated with new vectorStyle module
+         * @type {Boolean}
+         */
+        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
         var poiDistances = Radio.request("geolocation", "getPoiDistances"),
             poiFeatures = [],
             featInCircle = [],
@@ -46,8 +52,10 @@ const POIModel = Backbone.Model.extend({
 
         _.each(poiFeatures, function (category) {
             _.each(category.features, function (feat) {
+                const imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
+
                 _.extend(feat, {
-                    imgPath: this.getImgPath(feat),
+                    imgPath: imgPath,
                     name: this.getFeatureTitle(feat)
                 });
             }, this);
@@ -93,10 +101,11 @@ const POIModel = Backbone.Model.extend({
 
     /**
      * Ermittelt zum Feature den img-Path und gibt ihn zurück.
+     * @deprecated with new vectorStyle module
      * @param  {ol.feature} feat Feature
      * @return {string}      imgPath
      */
-    getImgPath: function (feat) {
+    getImgPathOld: function (feat) {
         var imagePath = "",
             style = Radio.request("StyleList", "returnModelById", feat.styleId),
             styleClass,
@@ -128,7 +137,41 @@ const POIModel = Backbone.Model.extend({
     },
 
     /**
+     * Ermittelt zum Feature den img-Path und gibt ihn zurück.
+     * @param  {ol.feature} feat Feature
+     * @return {string}      imgPath
+     */
+    getImgPath: function (feat) {
+        let imagePath = "";
+        const style = Radio.request("StyleList", "returnModelById", feat.styleId);
+
+        if (style) {
+            style.getLegendInfos().forEach(legendInfo => {
+                if (legendInfo.geometryType === "Point") {
+                    const type = legendInfo.styleObject.get("type");
+
+                    if (type === "icon") {
+                        imagePath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                    }
+                    else if (type === "circle") {
+                        imagePath = this.createCircleSVG(style);
+                    }
+                }
+                else if (legendInfo.geometryType === "LineString") {
+                    imagePath = this.createLineSVG(legendInfo.styleObject);
+                }
+                else if (legendInfo.geometryType === "Polygon") {
+                    imagePath = this.createPolygonSVG(legendInfo.styleObject);
+                }
+            });
+        }
+
+        return imagePath;
+    },
+
+    /**
      * Sucht nach dem ImageName bei styleField-Angaben im Style
+     * @deprecated with new vectorStyle module
      * @param  {ol.feature} feature      Feature mit allen Angaben
      * @param  {object} style       Style des Features
      * @return {string}                  Name des Bildes
