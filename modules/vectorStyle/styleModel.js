@@ -13,8 +13,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @constructs
      */
     defaults: {
-        "conditions": null,
-        "style": null
+        /**
+         * @type {string}
+         * styleId is set in style.json
+         */
+        "styleId": null,
+        /**
+         * @type {object[]}
+         * Array with styling rules and its conditions.
+         */
+        "rules": null,
+        /**
+         * @type {object[]}
+         * list of used styling rules for legend grafic
+         */
+        "legendInfos": []
+    },
+
+    initialize: function () {
+        // legendInfos must be set on initialize. Otherwhile legendInfos are mixed up with other VectorStyleModels
+        this.set("legendInfos", []);
     },
 
     /**
@@ -66,7 +84,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         // For simple geometries the first styling rule is used.
         // That algorithm implements an OR statement between multiple valid conditions giving precedence to its order in the style.json.
         if (!isMultiGeometry && rules.hasOwnProperty(0) && rules[0].hasOwnProperty("style")) {
-            return this.getSimpleGeometryStyle(geometryType, feature, rules[0].style, isClustered);
+            return this.getSimpleGeometryStyle(geometryType, feature, rules[0], isClustered);
         }
         // MultiGeometries must be checked against all rules because there might be a "sequence" in the condition.
         else if (isMultiGeometry && rules.length > 0 && rules.every(element => element.hasOwnProperty("style"))) {
@@ -81,19 +99,22 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns the style for simple (non-multi) geometry types
      * @param   {string}  geometryType GeometryType
      * @param   {ol/feature}  feature     the ol/feature to style
-     * @param   {object}  style       styling rule to use.
+     * @param   {object[]}  rule       styling rules to check.
      * @param   {Boolean} isClustered  Flag to show if feature is clustered.
      * @returns {ol/style/Style}    style is always returned
      */
-    getSimpleGeometryStyle: function (geometryType, feature, style, isClustered) {
+    getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
+        const style = rule.style;
         let styleObject;
 
         if (geometryType === "Point") {
             styleObject = new PointStyle(feature, style, isClustered);
+            this.checkLegendInfo("Point", feature, rule, styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "LineString") {
             styleObject = new LinestringStyle(feature, style, isClustered);
+            this.checkLegendInfo("LineString", feature, rule, styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "LinearRing") {
@@ -102,6 +123,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
+            this.checkLegendInfo("Polygon", feature, rule, styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -147,7 +169,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 console.warn("Multi encapsulated multiGeometries are not supported.");
             }
             else if (rule) {
-                const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule.style, isClustered);
+                const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
 
                 simpleStyle.setGeometry(geometry);
                 olStyle.push(simpleStyle);
@@ -407,6 +429,85 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     isObjectPath: function (value) {
         return typeof value === "string" && value.startsWith("@");
+    },
+
+    /**
+     * Checks the rule to determine it can be added to the legend info
+     * @param   {string} geometryType features geometry type
+     * @param   {ol/feature} feature      Feature with properties
+     * @param   {OBJECT} rule         a rule description
+     * @param   {vectorStyle/style} styleObject  style information
+     * @returns {void}
+     */
+    checkLegendInfo: function (geometryType, feature, rule, styleObject) {
+        if (rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("properties")) {
+            const featureProperties = feature.getProperties(),
+                properties = rule.conditions.properties;
+
+            let key;
+
+            for (key in properties) {
+                const referenceValue = this.getReferenceValue(featureProperties, properties[key]);
+
+                this.addLegendInfo(geometryType, this.getLegendDescription(key, referenceValue), styleObject);
+            }
+
+            return;
+        }
+
+        this.addLegendInfo(geometryType, null, styleObject);
+    },
+
+    /**
+     * Returns a string with a default description of a rule
+     * @param   {string} featureValue property name
+     * @param   {string} value        value
+     * @returns {string} legend default description
+     */
+    getLegendDescription: function (featureValue, value) {
+        if (typeof value === "string") {
+            return value;
+        }
+        else if (Array.isArray(value) && value.every(element => typeof element === "number") && (value.length === 2 || value.length === 4)) {
+            if (value.length === 2) {
+                return featureValue + " (" + value[0].toString() + " - " + value[1].toString() + ")";
+            }
+
+            return featureValue + " (" + value[2] + " - " + value[3] + ")";
+        }
+
+        return null;
+    },
+
+    /**
+     * Adds a legendInfo only once
+     * @param {string} geometryType features geometry type
+     * @param {string} condition    stringified condition
+     * @param {vectorStyle/style} styleObject  a vector style
+     * @returns {void}
+     */
+    addLegendInfo: function (geometryType, condition, styleObject) {
+        const legendInfos = this.get("legendInfos"),
+            hasLegendInfo = legendInfos.some(legend => {
+                return legend.geometryType === geometryType && legend.condition === condition;
+            });
+
+        if (!hasLegendInfo) {
+            legendInfos.push({
+                "geometryType": geometryType,
+                "condition": condition,
+                "styleObject": styleObject
+            });
+            Radio.trigger("Legend", "setLayerList");
+        }
+    },
+
+    /**
+     * returns the legend info
+     * @returns {object[]} legend objects
+     */
+    getLegendInfos: function () {
+        return this.get("legendInfos");
     }
 });
 

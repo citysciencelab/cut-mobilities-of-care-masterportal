@@ -211,7 +211,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {Object} returns legend definition
     */
     getLegendDefinition: function (layername, typ, legendURL, styleId, layerSources) {
-        var defs = [];
+        var defs = [],
+            /**
+             * Selector for old or new way to set vector legend
+             * @deprecated with new vectorStyle module
+             * @type {Boolean}
+             */
+            isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
 
         if (legendURL === "ignore") {
             return {
@@ -223,13 +229,22 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             return this.getLegendParamsFromWMS(layername, legendURL);
         }
         else if (typ === "WFS") {
-            return this.getLegendParamsFromVector(layername, styleId);
+            if (isNewVectorStyle) {
+                return this.getLegendParamsFromVector(layername, styleId);
+            }
+            return this.getLegendParamsFromVectorOld(layername, styleId);
         }
         else if (typ === "SensorThings") {
-            return this.getLegendParamsFromVector(layername, styleId);
+            if (isNewVectorStyle) {
+                return this.getLegendParamsFromVector(layername, styleId);
+            }
+            return this.getLegendParamsFromVectorOld(layername, styleId);
         }
         else if (typ === "GeoJSON") {
-            return this.getLegendParamsFromVector(layername, styleId);
+            if (isNewVectorStyle) {
+                return this.getLegendParamsFromVector(layername, styleId);
+            }
+            return this.getLegendParamsFromVectorOld(layername, styleId);
         }
         else if (typ === "StaticImage") {
             return this.getLegendParamsFromURL(layername, legendURL, typ);
@@ -305,6 +320,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates legend object for vector layer using it's style
+     * @deprecated with new vectorStyle module
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
      * @param   {integer} styleId styleId
@@ -315,7 +331,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.img svg
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
-    getLegendParamsFromVector: function (layername, styleId) {
+    getLegendParamsFromVectorOld: function (layername, styleId) {
         let subLegend,
             image = [],
             name = [];
@@ -422,14 +438,15 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates the legend for a line style
+     * @deprecated with new vectorStyle module
      * @param   {string} layername     layername defined in config
      * @param   {VectorStyle} style    style created by vectorStyle
      * @returns {object}               legend definition for a line
      */
-    getLegendParamsForLines: function (layername, style) {
+    getLegendParamsForLinesOld: function (layername, style) {
         let name;
 
-        const svg = this.createLineSVG(style);
+        const svg = this.createLineSVGOld(style);
 
         if (style.has("legendValue")) {
             name = style.get("legendValue");
@@ -446,14 +463,15 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates the legend for a polygon style
+     * @deprecated with new vectorStyle module
      * @param   {string} layername     layername defined in config
      * @param   {VectorStyle} style    style created by vectorStyle
      * @returns {object}               legend definition for a polygon
      */
-    getLegendParamsForPolygons: function (layername, style) {
+    getLegendParamsForPolygonsOld: function (layername, style) {
         let name;
 
-        const svg = this.createPolygonSVG(style);
+        const svg = this.createPolygonSVGOld(style);
 
         if (style.has("legendValue")) {
             name = style.get("legendValue");
@@ -471,21 +489,22 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     /**
      * Creates the legend for a point style.
      * The Styles Circle and Advanced are processed separately.
+     * @deprecated with new vectorStyle module
      * @param   {string} styleSubClass name of subclass defined in style
      * @param   {string} layername     layername defined in config
      * @param   {VectorStyle} style    style created by vectorStyle
      * @returns {object}               legend definition for a point
      */
-    getLegendParamsForPoint: function (styleSubClass, layername, style) {
+    getLegendParamsForPointOld: function (styleSubClass, layername, style) {
         let name = [],
             svg = [],
             allItems;
 
         if (styleSubClass === "CIRCLE") {
-            svg = this.createCircleSVG(style);
+            svg = this.createCircleSVGOld(style);
         }
         else if (styleSubClass === "ADVANCED") {
-            allItems = this.drawAdvancedStyle(style, layername, svg, name);
+            allItems = this.drawAdvancedStyleOld(style, layername, svg, name);
 
             return {
                 name: allItems[1],
@@ -496,7 +515,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = this.createImageSVG(style);
         }
 
-        name = this.determineValueName(style, layername);
+        name = this.determineValueNameOld(style, layername);
 
         return {
             name: name,
@@ -507,11 +526,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     /**
      * Determines the name of a feature to display in the legend.
      * The attributes are considered in the order legendValue, styleFieldValue and layerName.
+     * @deprecated with new vectorStyle module
      * @param {VectorStyle} style - Style created by vectorStyle.
      * @param {string} layername - Layername defined in config.
      * @returns {string} the name for the layer in legend
      */
-    determineValueName: function (style, layername) {
+    determineValueNameOld: function (style, layername) {
         let name = layername;
 
         if (style.has("legendValue")) {
@@ -541,12 +561,14 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return svg;
     },
+
     /**
-    * todo
-    * @param {*} style todo
-    * @returns {*} returns todo
-    */
-    createCircleSVG: function (style) {
+     * Creates an SVG for a circle
+     * @deprecated with new vectorStyle module
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createCircleSVGOld: function (style) {
         var svg = "",
             circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
             circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
@@ -573,10 +595,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates an SVG for a line
+     * @deprecated with new vectorStyle module
      * @param   {vectorStyle} style feature styles
      * @returns {string} svg
      */
-    createLineSVG: function (style) {
+    createLineSVGOld: function (style) {
         var svg = "",
             strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
@@ -602,10 +625,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Creates an SVG for a polygon
+     * @deprecated with new vectorStyle module
      * @param   {vectorStyle} style feature styles
      * @returns {string} svg
      */
-    createPolygonSVG: function (style) {
+    createPolygonSVGOld: function (style) {
         var svg = "",
             fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
             strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
@@ -632,13 +656,14 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
     /**
      * Draw advanced styles in legend
+     * @deprecated with new vectorStyle module
      * @param {ol.style} style style from features
      * @param {String} layername Name of layer
      * @param {Array} image should contain the image source for legend elements
      * @param {Array} name should contain the names for legend elements
      * @returns {Array} returns allItems
     */
-    drawAdvancedStyle: function (style, layername, image, name) {
+    drawAdvancedStyleOld: function (style, layername, image, name) {
         var scalingShape = style.get("scalingShape"),
             scalingAttribute = style.get("scalingAttribute"),
             scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
@@ -724,6 +749,299 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return [image, name];
     },
+
+    /**
+     * Creates legend object for vector layer using it's style
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @param   {string} layername Name of layer to use in legend view
+     * @param   {integer} styleId styleId
+     * @returns {object} legendObject legend item
+     * @returns {string} legendObject.legendname layername
+     * @returns {object[]} legendObject.legend Array of legend entries in this particular layer e.g. because of multiple categories
+     * @returns {string} legendObject.legend.legendname name of legend entry
+     * @returns {string} legendObject.legend.img svg
+     * @returns {string} legendObject.legend.typ=svg fixed type
+     */
+    getLegendParamsFromVector: function (layername, styleId) {
+        let subLegend;
+        const image = [],
+            name = [],
+            style = Radio.request("StyleList", "returnModelById", styleId);
+
+        if (!style) {
+            console.warn("Missing style definition for styleId " + styleId);
+
+            return {
+                layername: layername,
+                legend: [{
+                    legendname: [],
+                    img: [],
+                    typ: "svg"
+                }]
+            };
+        }
+
+        style.getLegendInfos().forEach(legendInfo => {
+            if (legendInfo.geometryType !== "Point" && legendInfo.geometryType !== "LineString" && legendInfo.geometryType !== "Polygon") {
+                console.warn("Cannot style geometry type: " + legendInfo.geometryType);
+                return;
+            }
+
+            if (legendInfo.geometryType === "Point") {
+                subLegend = this.getLegendParamsForPoint(legendInfo, layername);
+            }
+            else if (legendInfo.geometryType === "LineString") {
+                subLegend = this.getLegendParamsForLines(legendInfo, layername);
+            }
+            else if (legendInfo.geometryType === "Polygon") {
+                subLegend = this.getLegendParamsForPolygons(legendInfo, layername);
+            }
+            image.push(subLegend.svg);
+            name.push(subLegend.name);
+        });
+
+        return {
+            layername: layername,
+            legend: [{
+                legendname: name,
+                img: image,
+                typ: "svg"
+            }]
+        };
+    },
+
+    /**
+     * Creates the legend for a line style
+     * @param   {VectorStyle} legendInfo    prepared legend infos of vectorstyle
+     * @param   {string} layername     layername defined in config
+     * @returns {object}               legend definition for a line
+     */
+    getLegendParamsForLines: function (legendInfo, layername) {
+        const style = legendInfo.styleObject,
+            condition = legendInfo.condition,
+            svg = this.createLineSVG(style),
+            name = this.determineValueName(style, condition, layername);
+
+        return {
+            name: name,
+            svg: svg
+        };
+    },
+
+    /**
+     * Creates the legend for a polygon style
+     * @param   {VectorStyle} legendInfo    prepared legend infos of vectorstyle
+     * @param   {string} layername     layername defined in config
+     * @returns {object}               legend definition for a polygon
+     */
+    getLegendParamsForPolygons: function (legendInfo, layername) {
+        const style = legendInfo.styleObject,
+            condition = legendInfo.condition,
+            svg = this.createPolygonSVG(style),
+            name = this.determineValueName(style, condition, layername);
+
+        return {
+            name: name,
+            svg: svg
+        };
+    },
+
+    /**
+     * Creates the legend for a point style.
+     * The Styles Circle and Advanced are processed separately.
+     * @param   {VectorStyle} legendInfo    prepared legend infos of vectorstyle
+     * @param   {string} layername     layername defined in config
+     * @returns {object}               legend definition for a point
+     */
+    getLegendParamsForPoint: function (legendInfo, layername) {
+        const style = legendInfo.styleObject,
+            condition = legendInfo.condition,
+            type = style.get("type");
+
+        let name = [],
+            svg = [],
+            allItems;
+
+        if (type === "circle") {
+            svg = this.createCircleSVG(style);
+        }
+        else if (type === "nominal" || type === "interval") {
+            allItems = this.drawAdvancedStyle(type, style, layername, svg, name);
+
+            return {
+                name: allItems[1],
+                svg: allItems[0]
+            };
+        }
+        else {
+            svg = this.createImageSVG(style);
+        }
+
+        name = this.determineValueName(style, condition, layername);
+
+        return {
+            name: name,
+            svg: svg
+        };
+    },
+
+    /**
+     * Determines the name of a feature to display in the legend.
+     * The attributes are considered in the order legendValue, styleFieldValue and layerName.
+     * @param {VectorStyle} style - Style created by vectorStyle.
+     * @param {VectorStyle} condition - textual condition for this rule
+     * @param {string} layername - Layername defined in config.
+     * @returns {string} the name for the layer in legend
+     */
+    determineValueName: function (style, condition, layername) {
+        let name = layername;
+
+        if (style.has("legendValue")) {
+            name = style.get("legendValue");
+        }
+        else if (condition !== null) {
+            name = condition;
+        }
+
+        return name;
+    },
+
+    /**
+     * Draw advanced styles in legend
+     * @param {ol.style} type type of point
+     * @param {ol.style} style style from features
+     * @param {String} layername Name of layer
+     * @param {Array} image should contain the image source for legend elements
+     * @param {Array} name should contain the names for legend elements
+     * @returns {Array} returns allItems
+    */
+    drawAdvancedStyle: function (type, style, layername, image, name) {
+        var scalingShape = style.get("scalingShape"),
+            scalingAttribute = style.get("scalingAttribute"),
+            scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
+            styleScalingValues = style.get("styleScalingValues"),
+            advancedStyle = style.clone(),
+            allItems = [];
+
+        // set the background of the SVG transparent
+        // necessary because the image is in the background and the SVG on top of this
+        if (advancedStyle.get("imageName") !== "blank.png") {
+            advancedStyle.setCircleSegmentsBackgroundColor([
+                255, 255, 255, 0
+            ]);
+        }
+
+        // chooses which case should be draw
+        if (type === "nominal" && scalingShape === "CIRCLESEGMENTS") {
+            styleScalingValues = advancedStyle.get("scalingValues");
+
+            allItems = this.drawNominalCircleSegmentsStyle(styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name);
+        }
+        else if (type === "interval" && scalingShape === "CIRCLE_BAR") {
+            allItems = this.drawIntervalCircleBars(scalingAttribute, advancedStyle, layername, image, name);
+        }
+
+        return allItems;
+    },
+
+    /**
+     * Creates an SVG for a circle
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createCircleSVG: function (style) {
+        var svg = "",
+            circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+            circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
+            circleStrokeWidth = style.get("circleStrokeWidth"),
+            circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+            circleFillOpacity = style.get("circleFillColor")[3] || 0;
+
+        svg += "<svg height='35' width='35'>";
+        svg += "<circle cx='17.5' cy='17.5' r='15' stroke='";
+        svg += circleStrokeColor;
+        svg += "' stroke-opacity='";
+        svg += circleStrokeOpacity;
+        svg += "' stroke-width='";
+        svg += circleStrokeWidth;
+        svg += "' fill='";
+        svg += circleFillColor;
+        svg += "' fill-opacity='";
+        svg += circleFillOpacity;
+        svg += "'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Creates an SVG for a line
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createLineSVG: function (style) {
+        var svg = "",
+            strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+            strokeWidth = style.get("lineStrokeWidth"),
+            strokeOpacity = style.get("lineStrokeColor")[3] || 0,
+            strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
+
+        svg += "<svg height='35' width='35'>";
+        svg += "<path d='M 05 30 L 30 05' stroke='";
+        svg += strokeColor;
+        svg += "' stroke-opacity='";
+        svg += strokeOpacity;
+        svg += "' stroke-width='";
+        svg += strokeWidth;
+        if (strokeDash) {
+            svg += "' stroke-dasharray='";
+            svg += strokeDash;
+        }
+        svg += "' fill='none'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Creates an SVG for a polygon
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createPolygonSVG: function (style) {
+        var svg = "",
+            fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
+            strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
+            strokeWidth = style.get("polygonStrokeWidth"),
+            fillOpacity = style.get("polygonFillColor")[3] || 0,
+            strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
+
+        svg += "<svg height='35' width='35'>";
+        svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+        svg += fillColor;
+        svg += ";fill-opacity:";
+        svg += fillOpacity;
+        svg += ";stroke:";
+        svg += strokeColor;
+        svg += ";stroke-opacity:";
+        svg += strokeOpacity;
+        svg += ";stroke-width:";
+        svg += strokeWidth;
+        svg += ";'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Returns a rgb color string that can be interpreted in SVG.
+     * @param   {integer[]} color color set in style
+     * @returns {string} svg color
+     */
+    colorToRgb: function (color) {
+        return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+    },
+
     /**
     * Sets the left position of the legend window in touchmove
     * @param {Number} value Left position
