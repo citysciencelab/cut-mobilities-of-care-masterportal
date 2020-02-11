@@ -82,12 +82,19 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         if (state === true) {
             this.setIsSubscribed(true);
             if (Array.isArray(features) && !features.length) {
-                this.initializeConnection();
+                this.initializeConnection(function () {
+                    // call subscriptions
+                    this.updateSubscription();
+                    // create listener of moveend event
+                    this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+                }.bind(this));
             }
-            // call subscriptions
-            this.updateSubscription();
-            // create listener of moveend event
-            this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+            else {
+                // call subscriptions
+                this.updateSubscription();
+                // create listener of moveend event
+                this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateSubscription.bind(this)));
+            }
         }
         else if (state === false) {
             this.setIsSubscribed(false);
@@ -210,42 +217,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }.bind(this));
     },
 
-    /**
-     * get response from a given URL
-     * @param  {String} requestUrl - to request sensordata
-     * @fires Core#RadioTriggerUtilShowLoader
-     * @fires Core#RadioTriggerUtilHideLoader
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @return {objects} response with sensorObjects
-     */
-    getResponseFromRequestUrl: function (requestUrl) {
-        var response;
-
-        Radio.trigger("Util", "showLoader");
-        $.ajax({
-            dataType: "json",
-            url: requestUrl,
-            async: false,
-            type: "GET",
-            context: this,
-
-            // handling response
-            success: function (resp) {
-                Radio.trigger("Util", "hideLoader");
-                response = resp;
-            },
-            error: function () {
-                Radio.trigger("Util", "hideLoader");
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
-                        this.get("name") + " aufgetreten</strong>",
-                    kategorie: "alert-danger"
-                });
-            }
-        });
-
-        return response;
-    },
     /**
      * draw points on the map
      * @param  {array} sensorData - sensor with location and properties
@@ -381,8 +352,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
     loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
-        var requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
+        const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp();
+        let isComplete = false;
 
         http.get(requestUrl, function (result) {
             // on success
@@ -402,11 +374,19 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         }.bind(this), function () {
             // on start
-            Radio.trigger("Util", "showLoader");
+
+            // app.js and map.js switch the loader off (hideLoader) after onstart has started showLoader
+            // so let's wait a second before showing the loader at this point
+            setTimeout(function () {
+                if (!isComplete) {
+                    Radio.trigger("Util", "showLoader");
+                }
+            }, 200);
 
         }, function () {
             // on complete
             Radio.trigger("Util", "hideLoader");
+            isComplete = true;
 
         }, function (error) {
             // on error
