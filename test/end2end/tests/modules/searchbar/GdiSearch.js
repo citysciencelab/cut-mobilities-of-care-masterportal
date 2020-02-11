@@ -57,7 +57,7 @@ async function SearchCategories ({builder, url, resolution}) {
 
                 it("shows the selection in the topic tree", async function () {
                     await driver.wait(until.elementIsVisible(await driver.findElement(treeSelector)));
-                    // TODO ENABLE await driver.wait(until.elementIsVisible(await driver.findElement(checkboxSelector)));
+                    await driver.wait(until.elementIsVisible(await driver.findElement(checkboxSelector)));
                 });
             }
 
