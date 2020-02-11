@@ -130,15 +130,17 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     sendRequest: function (type, data, successFunction) {
+        const url = this.get("url");
+
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", this.get("url")),
+            url: Radio.request("Util", "getProxyURL", url),
             data: data,
             contentType: "text/xml",
             type: type,
             context: this,
             success: successFunction,
             error: function (jqXHR, errorText, error) {
-                console.error("Loading of " + this.get("url") + " failed:", error);
+                console.error("Loading of " + url + " failed:", error);
             }
         });
     },
