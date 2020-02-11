@@ -121,15 +121,16 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case "Stadtteil": {
-                let coordsToUse = [];
-
                 if (coord.length === 2) {
-                    coordsToUse = coord;
+                    this.showMarker(coord);
+                    Radio.trigger("MapView", "setCenter", coord.map(singleCoord => parseInt(singleCoord, 10)), this.model.get("zoomLevel"));
                 }
                 else if (coord.length > 2) {
-                    coordsToUse = [coord[0], coord[1]];
+                    this.model.setWkt("POLYGON", coord);
+                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+
+                    this.showMarker(this.model.getCenterFromExtent(this.model.getExtent()));
                 }
-                this.showMarker(coordsToUse);
                 break;
             }
             case "Thema": {
