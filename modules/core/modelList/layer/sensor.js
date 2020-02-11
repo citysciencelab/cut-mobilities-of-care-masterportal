@@ -47,6 +47,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The attribute key is "dataStream_[dataStreamId]_[name]".
      * All available dataStreams, their ids, their latest observation and values are separately aggregated and stored (separated by " | ") in the following attributes:
      * dataStreamId, dataStreamName, dataStreamValue, dataStreamPhenomenonTime
+     * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -505,7 +506,11 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.location = this.getCoordinates(thing[0]);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
+                    keys.push(Object.keys(thing2.name));
+                    keys.push(Object.keys(thing2.description));
                     props = Object.assign(props, thing2.properties);
+                    props = Object.assign(props, {name: thing2.name});
+                    props = Object.assign(props, {description: thing2.description});
                 });
                 keys = [...new Set(keys.flat())];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
@@ -514,6 +519,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             else {
                 aggregatedThing.location = this.getCoordinates(thing);
                 aggregatedThing.properties = thing.properties;
+                aggregatedThing.properties.name = thing.name;
+                aggregatedThing.properties.description = thing.description;
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
