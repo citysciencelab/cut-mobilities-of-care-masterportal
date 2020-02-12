@@ -283,12 +283,21 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {Boolean} true if property is satisfied. Otherwhile returns false.
      */
     checkProperty: function (featureProperties, key, value) {
-        const featureValue = this.getFeatureValue(featureProperties, key),
-            referenceValue = this.getReferenceValue(featureProperties, value);
+        let featureProperty = featureProperties;
+
+        // if they are clustered features, then the first one is taken from the array
+        if (featureProperties.features && featureProperties.hasOwnProperty("features")) {
+            if (featureProperties.features[0] && featureProperties.features[0].hasOwnProperty("values_")) {
+                featureProperty = featureProperties.features[0].values_;
+            }
+        }
+
+        const featureValue = this.getFeatureValue(featureProperty, key),
+            referenceValue = this.getReferenceValue(featureProperty, value);
 
         if ((typeof featureValue === "string" || typeof featureValue === "number") && (typeof referenceValue === "string" || typeof referenceValue === "number" ||
-        (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") &&
-        (referenceValue.length === 2 || referenceValue.length === 4)))) {
+            (Array.isArray(referenceValue) && referenceValue.every(element => typeof element === "number") &&
+                (referenceValue.length === 2 || referenceValue.length === 4)))) {
             return this.compareValues(featureValue, referenceValue);
         }
 
