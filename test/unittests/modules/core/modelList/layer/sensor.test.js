@@ -13,6 +13,7 @@ describe("core/modelList/layer/sensor", function () {
 
     before(function () {
         sensorLayer = new SensorLayerModel();
+
         sensorLayer.set("url", "test/test/test", {silent: true});
 
         moment.locale("de");
@@ -261,6 +262,8 @@ describe("core/modelList/layer/sensor", function () {
                 typ: "SensorThings",
                 id: "123"
             }));
+            sensorLayer.set("layerSource", sensorLayer.get("layer").getSource());
+
             sensorLayer.get("layer").getSource().addFeatures([new Feature({
                 geometry: new Point([50, 50])
             })]);
@@ -313,6 +316,15 @@ describe("core/modelList/layer/sensor", function () {
 
     describe("changedConditions", function () {
         it("should set moveendListener", function () {
+            sensorLayer.set("mqttClient", {
+                subscribe: function () {
+                    return false;
+                },
+                unsubscribe: function () {
+                    return false;
+                }
+            });
+
             sensorLayer.set("isSubscribed", false, {silent: true});
             sensorLayer.set("isOutOfRange", false, {silent: true});
             sensorLayer.set("isSelected", true, {silent: true});
@@ -348,7 +360,7 @@ describe("core/modelList/layer/sensor", function () {
         it("should not subscribe on a topic that has already been subscribed", function () {
             topics = [];
             sensorLayer.set("mqttClient", {
-                unsubscribe: function (topic) {
+                subscribe: function (topic) {
                     topics.push(topic);
                 }
             });
