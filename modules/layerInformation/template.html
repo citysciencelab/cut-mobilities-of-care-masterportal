@@ -27,12 +27,12 @@
     <% } %>
         <hr>
         <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
+            <li value="legende" class="tab-toggle active"><a data-toggle="tab" href="#legende">Legende</a></li>
             <% if (!_.isNull(downloadLinks)) { %>
-            <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
+            <li value="LayerInfoDataDownload" class="tab-toggle"><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
             <% } %>
             <% if (!_.isNull(url)) { %>
-            <li><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
+            <li value="url" class="tab-toggle"><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
             <% } %>
         </ul>
         <br>
