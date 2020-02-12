@@ -880,7 +880,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else if (_.has(hit, "coordinate")) {
             Radio.trigger("MapMarker", "showMarker", hit.coordinate);
         }
-        else if (hit.hasOwnProperty("type") && hit.type !== "Thema") {
+        else if (hit.hasOwnProperty("type") && hit.type !== i18next.t("common:modules.searchbar.type.topic")) {
             console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
         }
     },
