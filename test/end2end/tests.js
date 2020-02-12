@@ -15,6 +15,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
     modulesToolsParcelSearch = require("./tests/modules/tools/ParcelSearch.js"),
+    modulesToolsSearchByCoord = require("./tests/modules/tools/SearchByCoord.js"),
     panTests = require("./tests/Pan.js"),
     zoomTests = require("./tests/Zoom.js"),
     legendTests = require("./tests/Legend.js");
@@ -79,6 +80,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 modulesToolsGfi,
                 modulesToolsMeasure,
                 modulesToolsParcelSearch,
+                modulesToolsSearchByCoord,
 
                 // // // non-module tests
                 legendTests,

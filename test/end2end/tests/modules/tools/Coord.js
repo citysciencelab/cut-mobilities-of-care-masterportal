@@ -8,7 +8,7 @@ const webdriver = require("selenium-webdriver"),
     {By, until, Key} = webdriver;
 
 /**
- * Tests regarding parcel search feature.
+ * Tests regarding coord tool.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
