@@ -222,12 +222,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }
 
             feature.setId(index);
-            feature.setProperties(data.properties);
+            feature.setProperties(data.properties, true);
 
             // for a special theme
             if (_.isObject(this.get("gfiTheme"))) {
-                feature.set("gfiParams", this.get("gfiTheme").params);
-                feature.set("utc", this.get("utc"));
+                feature.set("gfiParams", this.get("gfiTheme").params, true);
+                feature.set("utc", this.get("utc"), true);
             }
             feature = this.aggregateDataStreamValue(feature);
             feature = this.aggregateDataStreamPhenomenonTime(feature);
@@ -262,7 +262,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     dataStreamValues.push(feature.get("dataStream_" + id + "_" + dataStreamName));
                 }
             });
-            modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "));
+            modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "), true);
         }
         return modifiedFeature;
     },
@@ -287,7 +287,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     dataStreamPhenomenonTimes.push(feature.get("dataStream_" + id + "_" + dataStreamName + "_phenomenonTime"));
                 }
             });
-            modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "));
+            modifiedFeature.set("dataStreamPhenomenonTime", dataStreamPhenomenonTimes.join(" | "), true);
         }
         return modifiedFeature;
     },
@@ -802,14 +802,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     updateFromMqtt: function (thing) {
-        var thingToUpdate = !_.isUndefined(thing) ? thing : {},
+        var thingToUpdate = thing !== undefined ? thing : {},
             dataStreamId = String(thingToUpdate.dataStreamId),
             features = this.get("layerSource").getFeatures(),
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
             result = thingToUpdate.result,
             utc = this.get("utc"),
             phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
-
+    
         this.updateObservationForDatastreams(feature, dataStreamId, thing);
         this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
     },
@@ -848,8 +848,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "";
         let updatedFeature = feature;
 
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result);
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime);
+        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result, true);
+        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
         updatedFeature = this.aggregateDataStreamValue(feature);
         updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
         this.featureUpdated(updatedFeature);
