@@ -3,7 +3,6 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
     {getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, setCenter} = require("../../../library/scripts"),
     {centersTo} = require("../../../library/utils"),
-    {onMoveEnd} = require("../../../library/scriptsAsync"),
     {isBasic, isCustom, isDefault} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -230,28 +229,27 @@ async function ParameterTests ({builder, url, resolution}) {
             });
         }
 
-        it("?query= fills and executes search and zooms to result if unique address", async function () {
-            driver = await initDriver(builder, `${url}?query=Neuenfelder Straße,19, 21109`, resolution);
-            await driver.executeAsyncScript(onMoveEnd);
+        if (isDefault(url)) {
+            it("?query= fills and executes search and zooms to result if unique address", async function () {
+                driver = await initDriver(builder, `${url}?query=Neuenfelder Straße,19, 21109`, resolution);
 
-            await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
-            const input = await driver.findElement(By.css("#searchInput"));
+                await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
+                const input = await driver.findElement(By.css("#searchInput")),
+                    expected = [566610.46394, 5928085.6];
+                let center;
 
-            // value is set to search field
-            await driver.wait(async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109");
+                // value is set to search field
+                await driver.wait(async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109");
 
-            /* NOTE
-                This feature does not work in manual testing via URL query. On trying to use the keyboard
-                after entering it via query, the input seems to block when using backspace and new inputs.
-                When repaired (or configured?), the coordinate [0, 0] below should be changed to the
-                zoomed-to coordinate after visually confirming that it is the correct one.
-            */
-            expect([0, 0]).to.eql(await driver.executeScript(getCenter));
-            /* TODO MPLGV-91
-            6.13. Portal mit den Parametern ?query=Neuenfelder Straße,19, 21109 aufrufen (30m)
-                -> Suche wird automatisch ausgeführt und zoomt auf die Adresse.
-            */
-        });
+                await driver.wait(async () => {
+                    center = await driver.executeScript(getCenter);
+                    return (
+                        Math.abs(expected[0] - center[0]) < 0.1 &&
+                        Math.abs(expected[1] - center[1]) < 0.1
+                    );
+                }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
+            });
+        }
 
         if (isCustom(url)) {
             it("?config= allows selecting a config", async function () {
