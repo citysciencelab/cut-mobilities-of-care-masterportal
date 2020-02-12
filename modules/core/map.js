@@ -521,7 +521,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             camera.changed.addEventListener(this.reactToCameraChanged, this);
         }
         this.getMap3d().setEnabled(true);
-        Radio.trigger("Alert", "alert", Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.3d.betaWarning3d")));
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.3d.betaWarning3d"));
         Radio.trigger("Map", "change", "3D");
     },
 

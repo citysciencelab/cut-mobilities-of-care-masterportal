@@ -38,7 +38,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @listens Core#RadioTriggerMapChange
      */
     initialize: function () {
-        var channel = Radio.channel("Map"),
+        const channel = Radio.channel("Map"),
             style = Radio.request("Util", "getUiStyle");
 
         this.model = new Button3dModel();

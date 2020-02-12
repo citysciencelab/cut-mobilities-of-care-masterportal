@@ -36,7 +36,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
      * @listens Controls.ButtonOblique#changeCloseViewObliqueText
      */
     initialize: function () {
-        var channel = Radio.channel("Map"),
+        const channel = Radio.channel("Map"),
             style = Radio.request("Util", "getUiStyle");
 
         this.model = new ButtonObliqueModel();
