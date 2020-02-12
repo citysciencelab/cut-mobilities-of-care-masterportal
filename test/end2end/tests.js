@@ -11,6 +11,7 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     modulesCoreParametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
     modulesSearchbarSearchCategories = require("./tests/modules/searchbar/SearchCategories.js"),
     modulesSearchbarGdiSearch = require("./tests/modules/searchbar/GdiSearch.js"),
+    modulesToolsCoord = require("./tests/modules/tools/Coord.js"),
     modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
     modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
     modulesToolsParcelSearch = require("./tests/modules/tools/ParcelSearch.js"),
@@ -74,6 +75,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 modulesSearchbarGdiSearch,
 
                 // // // modules/tools
+                modulesToolsCoord,
                 modulesToolsGfi,
                 modulesToolsMeasure,
                 modulesToolsParcelSearch,
