@@ -103,8 +103,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
 
         this.hideMarker();
         this.hidePolygon();
-        console.log(hit.type);
-        
+
         switch (hit.type) {
             case i18next.t("common:modules.searchbar.type.street"): {
                 this.model.setWkt("POLYGON", coord);
