@@ -12,7 +12,7 @@
                 <span>{{title}}</span>
             </p>
         </div>
-        <div class="win-body">
+        <div class="win-body-vue">
             <slot name="toolBody"></slot>
         </div>
     </div>
@@ -25,6 +25,12 @@ export default {
     props: ["title", "icon", "active", "renderToWindow"],
     mounted() {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
+        // if (this.renderToWindow){
+        //    this.$nextTick(function () {
+        //         // Code that will run only after the entire view has been rendered
+        //         $('#inka').draggable();
+        //     })
+        // }
     },
     watch: {
         active(newValue, oldValue) {
@@ -37,13 +43,13 @@ export default {
                 }
             }
             else {
-                const sidebars = document.getElementsByClassName("sidebar");
-                if(! sidebars || sidebars.length === 0){
+                if (!this.renderToWindow){
                     //only set the map to full width, if not another sidebar is open
                     // das muss spaeter anders geloest werden, wenn alle tools im store registriert sind kann abgefragt werden, ob die sidebar sichtbar ist
                     document.getElementById("map").style.width = "100%";
                     Radio.trigger("Map", "updateSize");
                 }
+                this.close();
             }
         }
     },
@@ -144,7 +150,7 @@ export default {
         }
     }
 }
-.win-body {
+.win-body-vue {
     padding: 20px;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -165,7 +171,7 @@ export default {
             color: @color_2;
         }
     }
-    .win-body {
+    .win-body-vue {
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         background-color: @background_color_3;

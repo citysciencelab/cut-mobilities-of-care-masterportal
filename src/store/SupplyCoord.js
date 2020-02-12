@@ -3,7 +3,7 @@ export default {
     state: {
         active: false,
         // change this to render in window or in sidebar
-        renderToWindow: false,
+        renderToWindow: true,
         id: "coord",
         title: "Koordinaten abfragen",
         deactivateGFI: true,
