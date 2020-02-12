@@ -47,7 +47,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {Void}  -
      */
     changeLang: function () {
-        this.set( {
+        this.set({
             title: i18next.t("common:modules.tools.compareFeatures.title"),
             topicsSelection: i18next.t("common:modules.tools.compareFeatures.topicsSelection"),
             moreInfo: i18next.t("common:modules.tools.compareFeatures.moreInfo"),

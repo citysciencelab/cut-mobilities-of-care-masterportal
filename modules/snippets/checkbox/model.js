@@ -1,7 +1,7 @@
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
-const CheckboxSnippet = SnippetModel.extend({
+const CheckboxSnippet = SnippetModel.extend(/** @lends CheckboxSnippet.prototype */{
     defaults: {
         size: "small",
         // translations

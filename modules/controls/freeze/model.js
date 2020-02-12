@@ -8,7 +8,7 @@ const FreezeModel = Backbone.Model.extend(/** @lends FreezeModel.prototype */{
         // translations
         freezeText: "",
         unfreezeText: "",
-        name: "",
+        name: ""
     },
 
     /**

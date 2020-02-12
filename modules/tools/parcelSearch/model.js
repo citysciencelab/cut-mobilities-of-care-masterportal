@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 
-const ParcelSearch = Tool.extend({
+const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         deactivateGFI: false,
         renderToWindow: true,

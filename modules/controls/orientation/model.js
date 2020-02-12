@@ -30,6 +30,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
      * @description Create orientation control instance
      * @extends Backbone.Model
      * @memberof Controls.orientation
+     * @param {Object} config - todo
      * @constructs
      * @property {String} titleGeolocate="", filled with "Standpunkt"- translated
      * @property {String} titleGeolocatePOI="", filled with "In meiner Nähe"- translated
