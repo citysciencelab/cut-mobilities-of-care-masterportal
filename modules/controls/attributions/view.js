@@ -33,9 +33,9 @@ const AttributionsControlView = Backbone.View.extend(/** @lends AttributionsCont
      * @fires Core.ConfigLoader#RadioRequestParserGetPortalConfig
      */
     initialize: function () {
-        var jAttributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
+        const attributionsConfig = Radio.request("Parser", "getPortalConfig").controls.attributions;
 
-        this.model = new AttributionsControlModel(jAttributionsConfig);
+        this.model = new AttributionsControlModel(attributionsConfig);
         this.listenTo(Radio.channel("Attributions"), {
             "renderAttributions": this.render
         });

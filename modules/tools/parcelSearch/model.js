@@ -79,6 +79,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
      * @constructs
      * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker

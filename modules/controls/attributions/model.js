@@ -135,7 +135,7 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
      * @returns {Void}  -
      */
     removeAttribution: function (name, text, type) {
-        var filteredAttributions = this.get("attributionList").filter(function (attribution) {
+        const filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
 
@@ -200,7 +200,7 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
      * @returns {void}
      */
     removeAllLayerAttributions: function () {
-        var attributions = this.get("attributionList"),
+        const attributions = this.get("attributionList"),
             filteredAttributions = attributions.filter(function (attribution) {
                 return attribution.type !== "layer";
             });
@@ -215,12 +215,12 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
      * @returns {void}
      */
     generateAttributions: function (filteredModelList) {
-        _.each(filteredModelList, function (model) {
-            var name = model.get("name"),
-                text = "",
+        filteredModelList.forEach(function (model) {
+            const name = model.get("name"),
                 type = "layer";
+            let text = "";
 
-            if (_.isObject(model.get("layerAttribution"))) {
+            if (this.isObject(model.get("layerAttribution"))) {
                 text = model.get("layerAttribution").text;
             }
             else {
@@ -228,6 +228,16 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
             }
             this.createAttribution(name, text, type);
         }, this);
+    },
+    /**
+     * Returns true, if obj is an object
+     * @param {*} obj to inspect
+     * @returns {void}
+     */
+    isObject: function (obj) {
+        const type = typeof obj;
+
+        return type === "function" || type === "object";
     },
     /**
      * Setter for "isContentVisible"
