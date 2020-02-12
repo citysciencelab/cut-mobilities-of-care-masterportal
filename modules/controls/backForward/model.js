@@ -4,9 +4,9 @@ const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.proto
         wentFor: false,
         currentPos: 0,
         config: {},
-
-        stepForwardText: "Nächste Ansicht",
-        stepBackwardText: "Letzte Ansicht"
+        // translations
+        stepForwardText: "",
+        stepBackwardText: ""
     },
     /**
      * @class BackForwardModel
@@ -14,6 +14,8 @@ const BackForwardModel = Backbone.Model.extend(/** @lends BackForwardModel.proto
      * @extends Backbone.Model
      * @memberof Controls.BackForward
      * @constructs
+     * @property {String} stepForwardText="", filled with "Nächste Ansicht"- translated
+     * @property {String} stepBackwardText="", filled with "Letzte Ansicht"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {

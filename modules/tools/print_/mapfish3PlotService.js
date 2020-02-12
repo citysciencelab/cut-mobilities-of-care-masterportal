@@ -45,6 +45,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         glyphicon: "glyphicon-print",
         eventListener: {},
         dpiForPdf: 200,
+        // translations
         titleLabel: "",
         titlePlaceholder: "",
         layoutLabel: "",

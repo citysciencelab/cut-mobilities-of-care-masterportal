@@ -2,6 +2,7 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
     defaults: {
         languageCodes: {},
         activeCode: "",
+        // translations
         closeButton: "",
         languageTitle: ""
     },
@@ -10,6 +11,10 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
      * @extends Backbone.Model
      * @memberof language
      * @constructs
+     * @property {Object} languageCodes={}, all available langiages as codes
+     * @property {String} activeCode="", actual used language as code
+     * @property {String} closeButton="", filled with "Schliessen"- translated
+     * @property {String} languageTitle="", filled with "Bitte wählen Sie eine Sprache aus"- translated
      */
     initialize: function () {
         this.listenTo(Radio.channel("i18next"), {

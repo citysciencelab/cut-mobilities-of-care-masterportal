@@ -21,6 +21,8 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
      * @memberof Footer
      * @property {Array} urls Array of URLs to be displayed in the Footer (defaults to LGV Hamburg)
      * @property {Object} version={} Version of Masterportal to be shown in the footer
+     * @property {String} currentLng="", contains current language - if this changes the view is rendered
+     * @property {String} versionText="", filled with "Version"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      * @constructs
      */

@@ -1,6 +1,7 @@
 
 const ZoomControlModel = Backbone.Model.extend(/** @lends ZoomControlModel.prototype */{
     defaults: {
+        // translations
         zoomInText: "",
         zoomOutText: ""
     },

@@ -5,7 +5,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 import {Stroke, Style} from "ol/style.js";
 
-const RoutingModel = Tool.extend({
+const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         bkgSuggestURL: "",
         bkgGeosearchURL: "",
@@ -27,6 +27,7 @@ const RoutingModel = Tool.extend({
         isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
         renderToWindow: true,
         glyphicon: "glyphicon-road",
+        // translations
         startAddressLabel: "",
         destinationAddressLabel: "",
         fromPlaceholder: "",
@@ -40,7 +41,44 @@ const RoutingModel = Tool.extend({
         calculateRoute: "",
         currentPosition: ""
     }),
-
+    /**
+     * @class RoutingModel
+     * @extends Tool
+     * @memberof Tools.viomRouting
+     * @property {String} bkgSuggestURL="" todo
+     * @property {String} bkgGeosearchURL="" todo
+     * @property {String} viomRoutingURL="" todo
+     * @property {String} viomProviderID="" todo
+     * @property {String} description="" todo
+     * @property {String} endDescription="" todo
+     * @property {String} routingtime="" todo
+     * @property {String} routingdate="" todo
+     * @property {String} fromCoord="" todo
+     * @property {String} toCoord="" todo
+     * @property {Array} fromList=[] todo
+     * @property {Array} toList=[] todo
+     * @property {String} startAdresse="" todo
+     * @property {String} zielAdresse="" todo
+     * @property {String} bbox="" todo
+     * @property {Object} routelayer=null todo
+     * @property {Boolean} isGeolocationPossible=Radio.request("geolocation", "isGeoLocationPossible") === true todo
+     * @property {Boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-road" todo
+     * @property {String} startAddressLabel="", filled with "Startadresse"- translated
+     * @property {String} destinationAddressLabel="", filled with "Zieladresse"- translated
+     * @property {String} fromPlaceholder="", filled with "Von"- translated
+     * @property {String} toPlaceholder="", filled with "Bis"- translated
+     * @property {String} setStartTimeText="", filled with "Startzeitpunkt vorgeben"- translated
+     * @property {String} date="", filled with "Datum"- translated
+     * @property {String} time="", filled with "Zeit"- translated
+     * @property {String} routingError="", filled with "Fehlermeldung bei Routenberechung"- translated
+     * @property {String} enterStartDestHoverText="", filled with "Start- und Ziel eingeben"- translated
+     * @property {String} enterOptionsText="", filled with "Optionen eingeben"- translated
+     * @property {String} calculateRoute="", filled with "Route berechnen"- translated
+     * @property {String} currentPosition="", filled with "Aktueller Standpunkt"- translated
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
         this.superInitialize();
 

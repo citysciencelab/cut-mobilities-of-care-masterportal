@@ -14,17 +14,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         cc: [],
         ccToUser: false,
         bcc: [],
-        textPlaceholder: "",
-        userNamePlaceholder: "Ihr Name",
-        emailAddressPlaceholder: "Ihre Emailadresse",
-        telephonePlaceholder: "Ihre Telefonnummer",
-        errorName: "Bitte nennen Sie uns Ihren Namen.",
-        errorEmail: "Bitte geben Sie eine gültige Emailadresse ein.",
-        errorNumber: "Unter welcher Telefonnummer können wir Sie erreichen?",
-        textSendButton: "Abschicken",
-        errorMessage: "Emailversand fehlgeschlagen!",
-        successMessage: "Ihre Anfrage wurde erfolgreich versendet",
-        successTicket: "Ihre Ticketnummer lautet: ",
         text: "",
         url: "",
         ticketId: "",
@@ -39,7 +28,19 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         serviceID: undefined,
         closeAndDelete: false,
         withTicketNo: true,
-        lngSwitchDetected: ""
+        lngSwitchDetected: "",
+        // translations
+        textPlaceholder: "",
+        userNamePlaceholder: "",
+        emailAddressPlaceholder: "",
+        telephonePlaceholder: "",
+        errorName: "",
+        errorEmail: "",
+        errorNumber: "",
+        textSendButton: "",
+        errorMessage: "",
+        successMessage: "",
+        successTicket: ""
     }),
 
     /**
@@ -61,7 +62,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {Object[]} [bcc=[]] BCC emails. Email object existst of:
      * @property {String} bcc.email Email address
      * @property {String} bcc.name Email name to be shown
-     * @property {String} [textPlaceholder="Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"] Placeholder for user input textarea
      * @property {String} text="" Users text
      * @property {String} url="" Url of email service
      * @property {String} ticketId="" Generated Id of user ticket. Format "mm.dd.-[Id]"
@@ -74,6 +74,18 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {String} contactInfo="" Additional text that can be shown above the contact form
      * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
+     * @property {String} lngSwitchDetected="" contains the current language, view is listening to it
+     * @property {String} textPlaceholder="Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"] Placeholder for user input textarea
+     * @property {String} userNamePlaceholder="", filled with "Ihr Name"- translated
+     * @property {String} emailAddressPlaceholder="", filled with "Ihre Emailadresse"- translated
+     * @property {String} telephonePlaceholder="", filled with "Ihre Telefonnummer"- translated
+     * @property {String} errorName="", filled with "Bitte nennen Sie uns Ihren Namen."- translated
+     * @property {String} errorEmail="", filled with "Bitte geben Sie eine gültige Emailadresse ein."- translated
+     * @property {String} errorNumber="", filled with "Unter welcher Telefonnummer können wir Sie erreichen?"- translated
+     * @property {String} textSendButton="", filled with "Abschicken"- translated
+     * @property {String} errorMessage="", filled with "Emailversand fehlgeschlagen!"- translated
+     * @property {String} successMessage="", filled with "Ihre Anfrage wurde erfolgreich versendet"- translated
+     * @property {String} successTicket="", filled with "Ihre Ticketnummer lautet:"- translated
      * @fires Parser#RadioRequestParserGetPortalConfig
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Util#RadioTriggerUtilShowLoader

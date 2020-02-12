@@ -9,11 +9,9 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
         startY: 0,
         windowLeft: 0,
         windowTop: 0,
-
-        // the current value that is shown in the window
         currentValue: false,
-
         name: "",
+        // translations
         minimizeText: "Minimieren",
         closeText: "Schließen"
     },
@@ -24,6 +22,19 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
      * @extends Backbone.Model
      * @memberof Window
      * @constructs
+     * @property {Boolean} isCollapsed=false todo
+     * @property {Boolean} isVisible=false todo
+     * @property {String} maxPosLeft="" todo
+     * @property {String} maxPosTop="60px" todo
+     * @property {Number} rotationAngle=0 todo
+     * @property {Number} startX=0 todo
+     * @property {Number} startY=0 todo
+     * @property {Number} windowLeft=0 todo
+     * @property {Number} windowTop=0 todo
+     * @property {Boolean} currentValue=false the current value that is shown in the window
+     * @property {String} name="" todo
+     * @property {String} minimizeText="", filled with "Minimieren"- translated
+     * @property {String} closeText="", filled with "Schließen"- translated
      * @listens Window#RadioTriggerWindowSetIsVisible
      * @listens Window#RadioTriggerWindowShowTool
      * @listens Window#RadioTriggerWindowCollapseWin
@@ -48,7 +59,6 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
     /**
      * change language - sets default values for the language
      * Translates the title of the window, if 'nameTranslationKey' exists in tool and no name is defined in config.js for the tool.
-     * @param {String} lng the language changed to
      * @returns {Void}  -
      */
     changeLang: function () {

@@ -1,37 +1,54 @@
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
 
-const SearchByCoord = Tool.extend({
+const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
-        "coordSystem": "ETRS89",
-        "coordSystems": ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
-        "coordinatesEasting": "",
-        "coordinatesNorthing": "",
+        coordSystem: "ETRS89",
+        coordSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
+        coordinatesEasting: "",
+        coordinatesNorthing: "",
         renderToWindow: true,
         glyphicon: "glyphicon-record",
-
+        // translations
         coordSystemField: "",
         hdmsEastingLabel: "",
         hdmsNorthingLabel: "",
         cartesianEastingLabel: "",
         cartesianNorthingLabel: "",
-
         exampleAcronym: "",
         searchButtonText: ""
     }),
+    /**
+     * @class SearchByCoord
+     * @extends Tool
+     * @memberof Tools.searchByCoord
+     * @property {String} coordSystem="ETRS89" todo
+     * @property {Array} coordSystems= ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"] todo
+     * @property {String} coordinatesEasting="" todo
+     * @property {String} coordinatesNorthing="" todo
+     * @property {boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-record" todo
+     * @property {String} coordSystemField="", filled with "Koordinatensystem"- translated
+     * @property {String} hdmsEastingLabel="", filled with "Länge"- translated
+     * @property {String} hdmsNorthingLabel="", filled with "Breite"- translated
+     * @property {String} cartesianEastingLabel="", filled with "Rechtswert"- translated
+     * @property {String} cartesianNorthingLabel="", filled with "Hochwert"- translated
+     * @property {String} exampleAcronym="", filled with "Bsp."- translated
+     * @property {String} searchButtonText="", filled with "Suchen"- translated
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
         this.superInitialize();
 
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang
         });
-
         this.changeLang();
     },
 
     /**
      * change language - sets default values for the language
-     * @param {String} lng the language changed to
      * @returns {Void} -
      */
     changeLang: function () {

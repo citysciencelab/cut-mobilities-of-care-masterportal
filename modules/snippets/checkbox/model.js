@@ -3,14 +3,27 @@ import ValueModel from "../value/model";
 
 const CheckboxSnippet = SnippetModel.extend({
     defaults: {
-        // text of the on toggle
-        textOn: "An",
-        // text of the off toggle
-        textOff: "Aus",
-        // size of the toggle. possible values: large, normal, small, mini
-        size: "small"
+        size: "small",
+        // translations
+        textOn: "",
+        textOff: ""
     },
-
+    /**
+     * @class CheckboxSnippet
+     * @memberof snippets.checkbox
+     * @extends SnippetModel
+     * @constructs
+     * @property {String} size="small", size of the toggle. possible values: large, normal, small, mini
+     * @property {String} textOn="", filled with "An"- translated / text of the on toggle
+     * @property {String} textOff="", filled with "Aus"- translated / text of the off toggle
+     * @fires Core#RadioRequestMapGetMap
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @fires Core#RadioTriggerMapAddControl
+     * @fires Core#RadioTriggerMapRemoveControl
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
         this.superInitialize();
         this.changeLang(i18next.language);

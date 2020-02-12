@@ -5,7 +5,7 @@ const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsCo
         isInitOpenDesktop: true,
         isInitOpenMobile: false,
         attributionList: [],
-
+        // translations
         showAttributionsText: "",
         hideAttributionsText: ""
     },

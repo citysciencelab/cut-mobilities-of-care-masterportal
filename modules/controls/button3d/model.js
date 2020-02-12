@@ -2,8 +2,9 @@
 const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype */{
     defaults: {
         buttonTitle: "3D",
-        openView3dText: "Ansicht einschalten",
-        closeView3dText: "Ansicht ausschalten"
+        // translations
+        openView3dText: "",
+        closeView3dText: ""
     },
 
     /**
@@ -12,6 +13,8 @@ const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype *
      * @extends Backbone.Model
      * @memberof Controls/Zoom
      * @constructs
+     * @property {String} openView3dText="", filled with "Ansicht einschalten"- translated
+     * @property {String} closeView3dText="", filled with "Ansicht ausschalten"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      * @returns {void}
      */

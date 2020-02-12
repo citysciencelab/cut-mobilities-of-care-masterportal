@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 
-const SaveSelection = Tool.extend({
+const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         zoomLevel: "",
         centerCoords: [],
@@ -11,9 +11,29 @@ const SaveSelection = Tool.extend({
         simpleMap: false,
         renderToWindow: true,
         glyphicon: "glyphicon-share",
+        // translations
         saveSelectionText: ""
     }),
-
+    /**
+     * @class SaveSelection
+     * @extends Tool
+     * @memberof Tools.SaveSelection
+     * @property {String} zoomLevel="" todo
+     * @property {Array} centerCoords=[] todo
+     * @property {Array} layerIDList=[] todo
+     * @property {Array} layerVisibilityList=[] todo
+     * @property {Array} layerTranseparenceList=[] todo
+     * @property {String} url="" todo
+     * @property {Boolean} simpleMap=false todo
+     * @property {Boolean} renderToWindow=true todo
+     * @property {Boolean} glyphicon="glyphicon-share" todo
+     * @property {String} saveSelectionText="", filled with "Speichern Sie diese URL als Lesezeichen ab"- translated
+     * @constructs
+     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function () {
         var channel = Radio.channel("SaveSelection");
 
@@ -49,7 +69,10 @@ const SaveSelection = Tool.extend({
 
         this.changeLang(i18next.language);
     },
-
+    /**
+     * change language - sets default values for the language
+     * @returns {Void} -
+     */
     changeLang: function () {
         this.set({
             saveSelectionText: i18next.t("common:modules.tools.saveSelection.saveSelectionText")

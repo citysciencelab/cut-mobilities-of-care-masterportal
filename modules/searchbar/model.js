@@ -11,11 +11,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
         activeInitialSearchTasks: [],
-
+        // translations
         i18nextTranslate: null,
-        buttonSearchTitle: "Suchen",
-        buttonOpenHelpTitle: "Hilfe öffnen",
-        showAllResultsText: "alle Ergebnisse anzeigen"
+        buttonSearchTitle: "",
+        buttonOpenHelpTitle: "",
+        showAllResultsText: ""
     },
 
     /**
@@ -35,6 +35,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
+     * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
+     * @property {String} buttonSearchTitle="", filled with "Suchen"- translated
+     * @property {String} buttonOpenHelpTitle="", filled with "Hilfe öffnen"- translated
+     * @property {String} showAllResultsText="", filled with "alle Ergebnisse anzeigen"- translated
      * @listens Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @listens Searchbar#RadioTriggerSearchbarPushHits
      * @listens Searchbar#RadioTriggerSearchbarRemoveHits
@@ -74,7 +78,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
     },
 
     /**
-     * change language - sets default values for the language
+     * change language - sets default values for the language.
+     * If contents from config.json are translated, this is respected here by using the function "i18nextTranslate".
      * @param {String} lng the language changed to
      * @returns {Void} -
      */
@@ -86,7 +91,6 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
                 setLanguage[key] = value;
             });
         }
-
         setLanguage.buttonSearchTitle = i18next.t("common:button.search");
         setLanguage.buttonOpenHelpTitle = i18next.t("common:modules.quickHelp.titleTag");
         setLanguage.showAllResultsText = i18next.t("common:modules.searchbar.showAllResults");

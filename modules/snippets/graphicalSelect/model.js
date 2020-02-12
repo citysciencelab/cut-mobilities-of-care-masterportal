@@ -25,7 +25,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         snippetDropdownModel: {},
         currentValue: "",
         selectedAreaGeoJson: undefined,
-        // to translate
+        // translations
         geographicValues: {},
         displayName: "",
         tooltipMessage: "",

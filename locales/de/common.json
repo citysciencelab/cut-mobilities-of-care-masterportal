@@ -141,8 +141,8 @@
             "compareFeatures": {
                 "title": "Vergleichsliste",
                 "topicsSelection": "Themen Auswahl",
-                "moreInfo": "mehr Infos",
-                "lessInfo": "weniger Infos",
+                "moreInfo": "Mehr Infos",
+                "lessInfo": "Weniger Infos",
                 "exportAsPdf": "Export als PDF",
                 "noFeatures": {
                     "nothingSelected": "Es sind keine {{objects}} für die Vergleichsliste ausgewählt.",

@@ -10,13 +10,12 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         format: new KML({extractStyles: true}),
         renderToWindow: true,
         glyphicon: "glyphicon-import",
-
-        // translations
-        fakeButtonText: "",
-        importButtonText: "",
         kmlLineColor: "000000",
         kmlLabelColor: "000000",
-        kmlPolyColor: "000000"
+        kmlPolyColor: "000000",
+        // translations
+        fakeButtonText: "",
+        importButtonText: ""
     }),
 
     /**
@@ -30,6 +29,8 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @property {ol/format} format=new KML({extractStyles: true}) todo
      * @property {Boolean} renderToWindow=true todo
      * @property {String} glyphicon="glyphicon-import" todo
+     * @property {String} fakeButtonText="", filled with "Datei auswählen (keine ausgewählt)"- translated
+     * @property {String} importButtonText="", filled with "IMPORT"- translated
      * @listens Tools.Kmlimport#ChangeIsActive
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestMapCreateLayerIfNotExists

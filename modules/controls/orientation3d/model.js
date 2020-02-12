@@ -1,18 +1,19 @@
 
 const Orientation3DModel = Backbone.Model.extend(/** @lends Orientation3DModel.prototype */{
     defaults: {
-        "pointerNorthText": "Ansicht einnorden/Ansicht drehen",
-        "pointerSouthText": "Südblick",
-        "pointerEastText": "Ost Blick",
-        "pointerWestText": "West Blick",
-        "moveNorthText": "Nach Norden bewegen",
-        "moveSouthText": "Nach Süden bewegen",
-        "moveWestText": "Nach Westen bewegen",
-        "moveEastText": "Nach Osten bewegen",
-        "tiltDownText": "Ansicht neigen",
-        "tiltResetText": "Ansicht zurückstellen",
-        "zoomInText": "Hineinzoomen",
-        "zoomOutText": "Herauszoomen"
+        // translations
+        "pointerNorthText": "",
+        "pointerSouthText": "",
+        "pointerEastText": "",
+        "pointerWestText": "",
+        "moveNorthText": "",
+        "moveSouthText": "",
+        "moveWestText": "",
+        "moveEastText": "",
+        "tiltDownText": "",
+        "tiltResetText": "",
+        "zoomInText": "",
+        "zoomOutText": ""
     },
 
     /**
@@ -21,6 +22,18 @@ const Orientation3DModel = Backbone.Model.extend(/** @lends Orientation3DModel.p
      * @extends Backbone.Model
      * @memberof Controls/Orientation3d
      * @constructs
+     * @property {String} pointerNorthText="", filled with "Ansicht einnorden/Ansicht drehen"- translated
+     * @property {String} pointerSouthText="", filled with "Südblick"- translated
+     * @property {String} pointerEastText="", filled with "Ost Blick"- translated
+     * @property {String} pointerWestText="", filled with "West Blick"- translated
+     * @property {String} moveNorthText="", filled with "Nach Norden bewegen"- translated
+     * @property {String} moveSouthText="", filled with "Nach Süden bewegen"- translated
+     * @property {String} moveWestText="", filled with "Nach Westen bewegen"- translated
+     * @property {String} moveEastText="", filled with "Nach Osten bewegen"- translated
+     * @property {String} tiltDownText="", filled with "Ansicht neigen"- translated
+     * @property {String} tiltResetText="", filled with "Ansicht zurückstellen"- translated
+     * @property {String} zoomInText="", filled with "Hineinzoomen"- translated
+     * @property {String} zoomOutText="", filled with "Herauszoomen"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      * @returns {void}
      */

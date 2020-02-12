@@ -2,14 +2,27 @@ import FreezeView from "./freezeWindowView";
 import FreezeToolMenuView from "./freezeToolMenuView";
 import FreezeControlMenuView from "./freezeControlMenuView";
 
-const FreezeModel = Backbone.Model.extend({
+const FreezeModel = Backbone.Model.extend(/** @lends FreezeModel.prototype */{
     defaults: {
-        freezeText: "Ansicht sperren",
-        unfreezeText: "Ansicht entsperren",
-        name: "Ansicht sperren",
-        glyphicon: "icon-lock"
+        glyphicon: "icon-lock",
+        // translations
+        freezeText: "",
+        unfreezeText: "",
+        name: "",
     },
 
+    /**
+     * @class FreezeModel
+     * @description model for freeze window
+     * @extends Backbone.Model
+     * @memberof Controls/Freeze
+     * @constructs
+     * @property {String} freezeText="", filled with "Ansicht sperren"- translated
+     * @property {String} unfreezeText="", filled with "Ansicht entsperren"- translated
+     * @property {String} name="", filled with "Ansicht sperren"- translated
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @returns {void}
+     */
     initialize: function () {
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang

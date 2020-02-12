@@ -141,8 +141,8 @@
             "compareFeatures": {
                 "title": "Comparison list",
                 "topicsSelection": "Topics selection",
-                "moreInfo": "more info",
-                "lessInfo": "less info",
+                "moreInfo": "More info",
+                "lessInfo": "Less info",
                 "exportAsPdf": "Export as PDF",
                 "noFeatures": {
                     "nothingSelected": "There are no {{objects}} selected for the comparison list.",
@@ -181,14 +181,14 @@
                 "generateReport": "Generate report"
             },
             "getCoord": {
-                "coordSystemField": "coordinate system",
+                "coordSystemField": "Coordinate system",
                 "hdms": {
-                    "eastingLabel": "longitude",
-                    "northingLabel": "altitude"
+                    "eastingLabel": "Longitude",
+                    "northingLabel": "Altitude"
                 },
                 "cartesian": {
-                    "eastingLabel": "easting",
-                    "northingLabel": "northing"
+                    "eastingLabel": "Easting",
+                    "northingLabel": "Northing"
                 }
             },
             "viomRouting": {

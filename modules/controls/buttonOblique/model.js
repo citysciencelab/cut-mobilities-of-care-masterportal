@@ -1,9 +1,10 @@
 
 const ButtonObliqueModel = Backbone.Model.extend(/** @lends ButtonObliqueModel.prototype */{
     defaults: {
-        buttonTitle: "Schrägluftbilder",
-        openViewObliqueText: "Schrägluftbilder einschalten",
-        closeViewObliqueText: "Schrägluftbilder ausschalten"
+        // translations
+        buttonTitle: "",
+        openViewObliqueText: "",
+        closeViewObliqueText: ""
     },
 
     /**
@@ -12,6 +13,9 @@ const ButtonObliqueModel = Backbone.Model.extend(/** @lends ButtonObliqueModel.p
      * @extends Backbone.Model
      * @memberof Controls/ButtonOblique
      * @constructs
+     * @property {String} buttonTitle="", filled with "Schrägluftbilder"- translated
+     * @property {String} openViewObliqueText="", filled with "Schrägluftbilder einschalten"- translated
+     * @property {String} closeViewObliqueText="", filled with "Schrägluftbilder ausschalten"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      * @returns {void}
      */
@@ -26,9 +30,6 @@ const ButtonObliqueModel = Backbone.Model.extend(/** @lends ButtonObliqueModel.p
     /**
     * change language - sets default values for the language
     * @param {String} lng the language changed to
-    * @fires Controls.ButtonOblique#changeButtonTitle
-    * @fires Controls.ButtonOblique#changeOpenViewObliqueText
-    * @fires Controls.ButtonOblique#changeCloseViewObliqueText
     * @returns {Void}  -
     */
     changeLang: function () {

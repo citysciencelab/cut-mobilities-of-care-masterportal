@@ -1,12 +1,12 @@
 
 const FullScreenControlModel = Backbone.Model.extend(/** @lends FullScreenControlModel.prototype */{
     defaults: {
+        // states wheather or not full screen is enabled (true) or disabled (false) using browser tools
+        state: false,
+        // translations
         enableText: "",
         disableText: "",
-        toggleText: "",
-
-        // states wheather or not full screen is enabled (true) or disabled (false) using browser tools
-        state: false
+        toggleText: ""
     },
 
     /**

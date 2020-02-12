@@ -39,6 +39,50 @@ const ParcelSearch = Tool.extend({
         tryAgainLater: ""
 
     }),
+    /**
+     * @class ParcelSearch
+     * @extends Tool
+     * @memberof Tools.ParcelSearch
+     * @property {Boolean} deactivateGFI=false todo
+     * @property {Boolean} renderToWindow=true todo
+     * @property {Boolean} isCollapsed=undefined todo
+     * @property {Boolean} isCurrentWin=undefined todo
+     * @property {String} countryNumber="02" todo
+     * @property {Boolean} fetched=false todo
+     * @property {String} serviceId="" todo
+     * @property {String} reportServiceId="" todo
+     * @property {String} serviceURL="" todo
+     * @property {String} storedQueryID=null todo
+     * @property {Object} districts={} todo
+     * @property {Object} cadastralDistricts={} todo
+     * @property {String} districtNumber="0" todo
+     * @property {boolean} cadastralDistrictField=false todo
+     * @property {String} cadastralDistrictNumber="0" todo
+     * @property {Boolean} parcelDenominatorField=false todo
+     * @property {String} parcelNumber="" todo
+     * @property {String} maxParcelNumberLength="6" todo
+     * @property {String} parcelDenominatorNumber="0" todo
+     * @property {Boolean} createReport=false todo
+     * @property {Boolean} parcelFound=false todo
+     * @property {String} glyphicon="glyphicon-search" todo
+     * @property {String} mapMarkerType="Parcel" todo
+     * @property {String} searchText="", filled with "Suchen"- translated
+     * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
+     * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
+     * @property {String} parcelNumberPlaceholderText="", filled with "Nummer eingeben"- translated
+     * @property {String} districtText="", filled with "Gemarkung"- translated
+     * @property {String} chooseText="", filled with "bitte wählen"- translated
+     * @property {String} wrongConfig="", filled with "Ungültige oder unvollständige Konfiguration"- translated
+     * @property {String} districtsLoadFailed="", filled with "Gemarkungen konnten nicht geladen werden"- translated
+     * @property {String} wrongConfigParcelsearch="", filled with "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support."- translated
+     * @property {String} parcelSearchImpossible="", filled with "Flurstücksabfrage derzeit nicht möglich!"- translated
+     * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
+     * @constructs
+     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function () {
         this.superInitialize();
         this.changeLang(i18next.language);

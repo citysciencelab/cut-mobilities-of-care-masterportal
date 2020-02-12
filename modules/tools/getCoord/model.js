@@ -15,7 +15,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
         deactivateGFI: true,
         renderToWindow: true,
         glyphicon: "glyphicon-screenshot",
-
+        // translations
         coordSystemField: "",
         hdmsEastingLabel: "",
         hdmsNorthingLabel: "",
@@ -36,8 +36,14 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @property {boolean} deactivateGFI=true todo
      * @property {boolean} renderToWindow=true todo
      * @property {string} glyphicon="glyphicon-screenshot" todo
+     * @property {String} coordSystemField="", filled with "Koordinatensystem"- translated
+     * @property {String} hdmsEastingLabel="", filled with "Länge"- translated
+     * @property {String} hdmsNorthingLabel="", filled with "Breite"- translated
+     * @property {String} cartesianEastingLabel="", filled with "Rechtswert"- translated
+     * @property {String} cartesianNorthingLabel="", filled with "Hochwert"- translated
      * @constructs
      * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker

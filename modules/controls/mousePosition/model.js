@@ -1,9 +1,10 @@
 
 const MousePositionControlModel = Backbone.Model.extend(/** @lends MousePositionControlModel.prototype */{
     defaults: {
-        hintText: "Bewegen Sie die Maus über die Karte",
-        showMousePositionText: "Einblenden",
-        hideMousePositionText: "Ausblenden"
+        // translations
+        hintText: "",
+        showMousePositionText: "",
+        hideMousePositionText: ""
     },
 
     /**
@@ -12,8 +13,9 @@ const MousePositionControlModel = Backbone.Model.extend(/** @lends MousePosition
      * @extends Backbone.Model
      * @memberof Controls/MousePosition
      * @constructs
-     * @property {String} zoomIn="" the title text for zooming in
-     * @property {String} zoomOut="" the title text for zooming out
+     * @property {String} hintText="", filled with "Bewegen Sie die Maus über die Karte"- translated
+     * @property {String} showMousePositionText="", filled with "Einblenden"- translated
+     * @property {String} hideMousePositionText="", filled with "Ausblenden"- translated
      * @listens i18next#RadioTriggerLanguageChanged
      * @returns {Void}  -
      */

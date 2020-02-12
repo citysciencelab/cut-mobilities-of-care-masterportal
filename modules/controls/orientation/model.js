@@ -4,7 +4,7 @@ import Geolocation from "ol/Geolocation.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 
-const OrientationModel = Backbone.Model.extend({
+const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.prototype */{
     defaults: {
         zoomMode: "once", // once oder always entsprechend Config
         firstGeolocation: true, // Flag, ob es sich um die erste geolocation handelt, damit "once" abgebildet werden kann.
@@ -20,11 +20,21 @@ const OrientationModel = Backbone.Model.extend({
         isGeolocationDenied: false,
         isGeoLocationPossible: false,
         epsg: "EPSG:25832",
-
-        titleGeolocate: "Standpunkt",
-        titleGeolocatePOI: "In meiner Nähe"
+        // translations
+        titleGeolocate: "",
+        titleGeolocatePOI: ""
 
     },
+    /**
+     * @class OrientationModel
+     * @description Create orientation control instance
+     * @extends Backbone.Model
+     * @memberof Controls.orientation
+     * @constructs
+     * @property {String} titleGeolocate="", filled with "Standpunkt"- translated
+     * @property {String} titleGeolocatePOI="", filled with "In meiner Nähe"- translated
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function (config) {
         var channel;
 

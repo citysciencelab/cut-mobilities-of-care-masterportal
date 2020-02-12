@@ -43,6 +43,14 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @property {ol/Feature[]} features=[] The features to be donloaded.
      * @property {String} dataString="" The features converted as dataString.
      * @property {String} fileName="" The filename.
+     * @property {String} createFirstText="", filled with "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!"- translated
+     * @property {String} unknownGeometry="", filled with "Unbekannte Geometry:"- translated
+     * @property {String} formatText="", filled with "Format"- translated
+     * @property {String} pleaseChooseText="", filled with "Bitte Auswählen"- translated
+     * @property {String} filenameText="", filled with "Dateiname"- translated
+     * @property {String} enterFilenameText="", filled with "Bitte Dateiname angeben"- translated
+     * @property {String} loadDownText="", filled with "Herunterladen"- translated
+     * @property {String} backText="", filled with "Zurück"- translated
      * @listens Tools.Download#RadioTriggerDownloadStart
      * @listens i18next#RadioTriggerLanguageChanged
      * @fires Alerting#RadioTriggerAlertAlert

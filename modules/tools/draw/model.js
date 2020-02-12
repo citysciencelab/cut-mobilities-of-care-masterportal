@@ -149,6 +149,49 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} glyphicon="glyphicon-pencil" CSS glyphicon class.
      * @property {Object} addFeatureListener Listener.
      * @property {Number} zIndex=0 zIndex.
+     * @property {String} currentLng: "" contains the current language, view listens to it
+     * @property {String} clickToPlaceText: "" contains the translated text
+     * @property {String} draw: "" contains the translated text
+     * @property {String} geometryDrawFailed: "" contains the translated text
+     * @property {String} defindeTwoCircles: "" contains the translated text
+     * @property {String} defindeInnerCircle: "" contains the translated text
+     * @property {String} defindeDiameter: "" contains the translated text
+     * @property {String} defindeOuterCircle: "" contains the translated text
+     * @property {String} drawPoint: "" contains the translated text
+     * @property {String} writeText: "" contains the translated text
+     * @property {String} drawLine: "" contains the translated text
+     * @property {String} drawArea: "" contains the translated text
+     * @property {String} drawCircle: "" contains the translated text
+     * @property {String} drawDoubleCircle: "" contains the translated text
+     * @property {String} doubleCirclePlaceholder: "" contains the translated text
+     * @property {String} diameter: "" contains the translated text
+     * @property {String} outerDiameter: "" contains the translated text
+     * @property {String} unit: "" contains the translated text
+     * @property {String} textI18n: "" contains the translated text
+     * @property {String} method: "" contains the translated text
+     * @property {String} interactive: "" contains the translated text
+     * @property {String} defined: "" contains the translated text
+     * @property {String} transparencyOutline: "" contains the translated text
+     * @property {String} outlineColor: "" contains the translated text
+     * @property {String} fontSizeText: "" contains the translated text
+     * @property {String} fontName: "" contains the translated text
+     * @property {String} size: "" contains the translated text
+     * @property {String} lineWidth: "" contains the translated text
+     * @property {String} transparency: "" contains the translated text
+     * @property {String} colorText: "" contains the translated text
+     * @property {String} blue: "" contains the translated text
+     * @property {String} yellow: "" contains the translated text
+     * @property {String} grey: "" contains the translated text
+     * @property {String} green: "" contains the translated text
+     * @property {String} orange: "" contains the translated text
+     * @property {String} red: "" contains the translated text
+     * @property {String} black: "" contains the translated text
+     * @property {String} white: "" contains the translated text
+     * @property {String} drawBtnText: "" contains the translated text
+     * @property {String} editBtnText: "" contains the translated text
+     * @property {String} downloadBtnText: "" contains the translated text
+     * @property {String} deleteBtnText: "" contains the translated text
+     * @property {String} deleteAllBtnText: "" contains the translated text
      * @listens Tools.Draw#RadioRequestDrawGetLayer
      * @listens Tools.Draw#RadioRequestDrawDownloadWithoutGUI
      * @listens Tools.Draw#RadioTriggerDrawInitWithoutGUI

@@ -16,7 +16,7 @@ const CompareFeaturesModel = Tool.extend({
         numberOfAttributesToShow: 12,
         glyphicon: "glyphicon-th-list",
         renderToWindow: false,
-        // translation
+        // translations
         title: "",
         topicsSelection: "",
         moreInfo: "",
@@ -47,21 +47,17 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {Void}  -
      */
     changeLang: function () {
-        const prefix = "common:modules.tools.compareFeatures.",
-            feedbackPrefix = prefix + "feedback.",
-            values = {
-                title: i18next.t(prefix + "title"),
-                topicsSelection: i18next.t(prefix + "topicsSelection"),
-                moreInfo: i18next.t(prefix + "moreInfo"),
-                lessInfo: i18next.t(prefix + "lessInfo"),
-                exportAsPdf: i18next.t(prefix + "exportAsPdf"),
-                limitReached: i18next.t(feedbackPrefix + "limitReached"),
-                removeObjects: i18next.t(feedbackPrefix + "removeObjects"),
-                gotoComparisonlist: i18next.t(feedbackPrefix + "gotoComparisonlist"),
-                back: i18next.t("common:button.back")
-            };
-
-        this.set(values);
+        this.set( {
+            title: i18next.t("common:modules.tools.compareFeatures.title"),
+            topicsSelection: i18next.t("common:modules.tools.compareFeatures.topicsSelection"),
+            moreInfo: i18next.t("common:modules.tools.compareFeatures.moreInfo"),
+            lessInfo: i18next.t("common:modules.tools.compareFeatures.lessInfo"),
+            exportAsPdf: i18next.t("common:modules.tools.compareFeatures.exportAsPdf"),
+            limitReached: i18next.t("common:modules.tools.compareFeatures.feedback.limitReached"),
+            removeObjects: i18next.t("common:modules.tools.compareFeatures.feedback.removeObjects"),
+            gotoComparisonlist: i18next.t("common:modules.tools.compareFeatures.feedback.gotoComparisonlist"),
+            back: i18next.t("common:button.back")
+        });
     },
 
     /**

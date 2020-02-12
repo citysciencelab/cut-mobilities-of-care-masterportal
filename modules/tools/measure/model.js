@@ -118,7 +118,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         textPoint: {},
         scale: -1,
         style: "DEFAULT",
-        "glyphicon": "glyphicon-resize-full",
+        glyphicon: "glyphicon-resize-full",
+        // translations
         geometry: "",
         measure: "",
         plzConsider: "",
@@ -139,6 +140,14 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @property {String} uiStyle="DEFAULT" style for master portal
      * @property {Number} scale=-1
      * @property {String} style="DEFAULT" style for master portal
+     * @property {String} geometry="", filled with "Geometrie"- translated
+     * @property {String} measure="", filled with "Einheit"- translated
+     * @property {String} plzConsider="", filled with "Bitte beachten Sie"- translated
+     * @property {String} valuesNotExact="", filled with "Die angezeigten Werte unterliegen Ungenauigkeiten"- translated
+     * @property {String} findFurtherInf="", filled with "Weitere Informationen finden Sie hier"- translated
+     * @property {String} deleteMeasurements="", filled with "Messungen löschen"- translated
+     * @property {String} stretch="", filled with "Strecke"- translated
+     * @property {String} area="", filled with "Fläche"- translated
      */
     initialize: function () {
         var selectedValues,
