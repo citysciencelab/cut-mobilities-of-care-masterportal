@@ -11,15 +11,18 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParcelSearchTests ({builder, url, resolution}) {
-    const skip = !(isDefault(url) || isCustom(url));
+    const skip = !(isDefault(url) || isCustom(url)),
+        withCadastral = isDefault(url);
 
-    (skip ? describe.skip : describe)("ParcelSearch", function () {
+    (skip ? describe.skip : describe.only)("ParcelSearch", function () {
         const selectors = {
             tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
             toolParcelSearch: By.xpath("//a[contains(.,'Flurstückssuche')]"),
             modal: By.xpath("//div[@id='window']"),
             districtLabel: By.xpath("//label[contains(.,'Gemarkung')]"),
             districtField: By.xpath("//select[@id='districtField']"),
+            cadastralDistrictLabel: By.xpath("//label[contains(.,'Flur')]"),
+            cadastralDistrictField: By.xpath("//select[@id='cadastralDistrictField']"),
             parcelLabel: By.xpath("//label[contains(.,'Flurstücksnummer')]"),
             parcelField: By.xpath("//input[@id='parcelField']"),
             searchMarker: By.xpath("//div[@id='searchMarker']"),
@@ -37,7 +40,7 @@ async function ParcelSearchTests ({builder, url, resolution}) {
             await driver.quit();
         });
 
-        it("opens a modal on activation providing subdistrict and parcel input elements", async () => {
+        it("opens a modal on activation providing input elements", async () => {
             const tools = await driver.findElement(selectors.tools),
                 toolParcelSearch = await driver.findElement(selectors.toolParcelSearch);
 
@@ -51,16 +54,20 @@ async function ParcelSearchTests ({builder, url, resolution}) {
             await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
             await driver.wait(until.elementLocated(selectors.districtField));
             await driver.wait(until.elementLocated(selectors.districtLabel));
+            if (withCadastral) {
+                await driver.wait(until.elementLocated(selectors.cadastralDistrictField));
+                await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel));
+            }
             await driver.wait(until.elementLocated(selectors.parcelLabel));
             await driver.wait(until.elementLocated(selectors.parcelField));
-        });
 
-        it("centers map on and sets marker to parcel after choosing subdistrict and entering a parcel number", async () => {
             searchMarker = await driver.findElement(selectors.searchMarker);
             districtField = await driver.findElement(selectors.districtField);
             parcelField = await driver.findElement(selectors.parcelField);
             submitButton = await driver.findElement(selectors.submitButton);
+        });
 
+        (withCadastral ? it.skip : it)("centers map on and sets marker to parcel after choosing subdistrict and entering a parcel number", async () => {
             expect(await searchMarker.isDisplayed()).to.be.false;
 
             await driver.wait(until.elementIsVisible(districtField));
@@ -75,11 +82,16 @@ async function ParcelSearchTests ({builder, url, resolution}) {
         });
 
         it("can be minimized", async () => {
+            await driver.wait(until.elementLocated(selectors.minimize));
+
             const minimize = await driver.findElement(selectors.minimize);
 
-            await minimize.click();
+            // minimize may not work on first click
+            while (await driver.findElement(By.css("#window .win-body")).isDisplayed()) {
+                await minimize.click();
+                await driver.wait(new Promise(r => setTimeout(r, 100)));
+            }
 
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("#window .win-body"))));
             await driver.wait(async () => (await driver.findElements(By.css("#window .win-heading.header-min"))).length === 1);
             expect(await districtField.isDisplayed()).to.be.false;
             expect(await parcelField.isDisplayed()).to.be.false;
@@ -87,6 +99,8 @@ async function ParcelSearchTests ({builder, url, resolution}) {
         });
 
         it("can be maximized again", async () => {
+            await driver.wait(until.elementLocated(selectors.maximize));
+
             const maximize = await driver.findElement(selectors.maximize);
 
             await maximize.click();
@@ -96,14 +110,6 @@ async function ParcelSearchTests ({builder, url, resolution}) {
             expect(await districtField.isDisplayed()).to.be.true;
             expect(await parcelField.isDisplayed()).to.be.true;
             expect(await submitButton.isDisplayed()).to.be.true;
-        });
-
-        it.skip("offers additional selection with extended configuration", async () => {
-            // TODO get a fitting configuration; may e.g. use DT for this case, and CT for cases above
-            // -> Es wird eine Auswahlliste für Gemarkungen angezeigt
-            // -> Darunter wird ein Inputfeld für Flur angezeigt
-            // -> Darunter wird ein Inputfeld für Flurstücksnummern angezeigt
-            // Zusatz: Die Elemente werden auch ausprobiert
         });
     });
 }
