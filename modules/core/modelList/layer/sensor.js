@@ -22,7 +22,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         noDataValue: "no data",
         altitudeMode: "clampToGround",
         isSubscribed: false,
-        moveendListener: null
+        moveendListener: null,
+        loadThingsOnlyInCurrentExtent: false,
+        intvLoadingThingsInExtent: 0,
+        delayLoadingThingsInExtent: 1000
     }),
 
     /**
@@ -81,7 +84,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         if (state === true) {
             this.setIsSubscribed(true);
-            if (Array.isArray(features) && !features.length) {
+            if (!this.get("loadThingsOnlyInCurrentExtent") && Array.isArray(features) && !features.length) {
                 this.initializeConnection(function () {
                     // call subscriptions
                     this.updateSubscription();
@@ -197,7 +200,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
                 this.prepareFeaturesFor3D(features);
-                this.featuresLoaded(features);
+                Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
             }
 
             if (features !== undefined) {
@@ -347,52 +350,98 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
     loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
-        const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
-            http = new SensorThingsHttp();
         let isComplete = false;
+        const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
+            http = new SensorThingsHttp(),
+            currentExtent = {
+                extent: Radio.request("MapView", "getCurrentExtent"),
+                sourceProjection: Radio.request("MapView", "getProjection").getCode(),
+                targetProjection: this.get("epsg")
+            },
+            /**
+             * a function to receive the response of an http call
+             * @param {Object} result the response from the http request as array buffer
+             * @returns {Void}  -
+             */
+            httpOnSucess = function (result) {
+                // on success
+                let allThings;
 
-        http.get(requestUrl, function (result) {
-            // on success
-            let allThings;
-
-            allThings = result.flat();
-            allThings = this.getNewestSensorData(allThings);
-            if (mergeThingsByCoordinates) {
-                allThings = this.mergeByCoordinates(allThings);
-            }
-
-            allThings = this.aggregatePropertiesOfThings(allThings);
-
-            if (typeof onsuccess === "function") {
-                onsuccess(allThings);
-            }
-
-        }.bind(this), function () {
-            // on start
-
-            // app.js and map.js switch the loader off (hideLoader) after onstart has started showLoader
-            // so let's wait a second before showing the loader at this point
-            setTimeout(function () {
-                if (!isComplete) {
-                    Radio.trigger("Util", "showLoader");
+                allThings = result.flat();
+                allThings = this.getNewestSensorData(allThings);
+                if (mergeThingsByCoordinates) {
+                    allThings = this.mergeByCoordinates(allThings);
                 }
-            }, 200);
 
-        }, function () {
-            // on complete
-            Radio.trigger("Util", "hideLoader");
-            isComplete = true;
+                allThings = this.aggregatePropertiesOfThings(allThings);
 
-        }, function (error) {
-            // on error
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
-                    this.get("name") + " aufgetreten</strong>",
-                kategorie: "alert-danger"
-            });
+                if (typeof onsuccess === "function") {
+                    onsuccess(allThings);
+                }
+            }.bind(this),
+            /**
+             * a function to call before calling anything
+             * @returns {Void}  -
+             */
+            httpOnStart = function () {
+                // on start
 
-            console.warn(error);
-        }.bind(this));
+                // app.js and map.js switch the loader off (hideLoader) after onstart has started showLoader
+                // so let's wait a second before showing the loader at this point
+                setTimeout(function () {
+                    if (!isComplete) {
+                        this.loadSensorThingsStart();
+                    }
+                }.bind(this), 200);
+            }.bind(this),
+            /**
+             * a function to be run when a http call is completete either way wheather it was successfull or a failure
+             * @returns {Void}  -
+             */
+            httpOnComplete = function () {
+                // on complete
+                this.loadSensorThingsComplete();
+                isComplete = true;
+            }.bind(this),
+            /**
+             * a function to be run when a http call is completete either way wheather it was successfull or a failure
+             * @param {Error} error the occuring error
+             * @returns {Void}  -
+             */
+            httpOnError = function (error) {
+                // on error
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
+                        this.get("name") + " aufgetreten</strong>",
+                    kategorie: "alert-danger"
+                });
+                console.warn(error);
+            }.bind(this);
+
+        if (!this.get("loadThingsOnlyInCurrentExtent")) {
+            http.get(requestUrl, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+        }
+        else {
+            http.getInExtent(requestUrl, currentExtent, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+        }
+    },
+
+    /**
+     * to call on start of loadSensorThings
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @returns {Void}  -
+     */
+    loadSensorThingsStart: function () {
+        Radio.trigger("Util", "showLoader");
+    },
+
+    /**
+     * to call on start of loadSensorThings
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @returns {Void}  -
+     */
+    loadSensorThingsComplete: function () {
+        Radio.trigger("Util", "hideLoader");
     },
 
     /**
@@ -748,8 +797,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     updateSubscription: function () {
-        this.unsubscribeFromSensorThings();
-        this.subscribeToSensorThings();
+        if (!this.get("loadThingsOnlyInCurrentExtent")) {
+            this.unsubscribeFromSensorThings();
+            this.subscribeToSensorThings();
+        }
+        else {
+            this.loadFeaturesInExtentAndUpdateSubscription();
+        }
+    },
+
+    /**
+     * loads only things in the current extent and updates the subscriptions
+     * delays before reloading stuff - maybe other moves will trigger in the midtime, so delay...
+     * @returns {void}
+     */
+    loadFeaturesInExtentAndUpdateSubscription: function () {
+        if (this.get("intvLoadingThingsInExtent") !== 0) {
+            // stop any other action requested
+            clearInterval(this.get("intvLoadingThingsInExtent"));
+        }
+
+        this.set("intvLoadingThingsInExtent", setInterval(function () {
+            this.clearLayerSource();
+
+            this.unsubscribeFromSensorThings();
+            this.initializeConnection(function () {
+                this.subscribeToSensorThings();
+            }.bind(this));
+
+            clearInterval(this.get("intvLoadingThingsInExtent"));
+            this.set("intvLoadingThingsInExtent", 0);
+        }.bind(this), this.get("delayLoadingThingsInExtent")));
     },
 
     /**
@@ -955,6 +1033,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
+    },
+
+    /**
+     * clears all open layer features hold in the VectorSource
+     * @post VectorSource is emptied
+     * @return {Void}  -
+     */
+    clearLayerSource: function () {
+        this.get("layer").getSource().clear();
     },
 
     /**
