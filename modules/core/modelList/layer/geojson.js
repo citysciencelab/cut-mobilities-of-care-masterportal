@@ -263,7 +263,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                 });
             });
         }
-        else {
+        else if (subTyp !== undefined) {
             console.error("Subtype " + subTyp + " is not yet supported for GeoJSON-Layer.");
         }
     },
