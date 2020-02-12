@@ -209,11 +209,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {Ol.Features} feature to draw
      */
     createFeatures: function (sensorData, epsg) {
-        var features = [];
+        let features = [],
+            feature;
 
         sensorData.forEach(function (data, index) {
-            let feature;
-
             if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
                 feature = this.parseJson(data.location);
             }
@@ -298,7 +297,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {String} phenomenonTime converted with UTC
      */
     changeTimeZone: function (phenomenonTime, utc) {
-        var utcAlgebraicSign,
+        let utcAlgebraicSign,
             utcNumber,
             utcSub,
             time = "";
@@ -444,10 +443,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {String} URL to request sensorThings
      */
     buildSensorThingsUrl: function (url, version, urlParams) {
-        var requestUrl,
-            and = "$",
+        let requestUrl,
             versionAsString = version,
-            key;
+            key,
+            and = "$";
 
         if (typeof version === "number") {
             versionAsString = version.toFixed(1);
@@ -638,7 +637,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     styling: function (isClustered) {
-        var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (stylelistmodel !== undefined) {
             this.setStyle(function (feature) {
@@ -803,7 +802,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     updateFromMqtt: function (thing) {
-        var thingToUpdate = thing !== undefined ? thing : {},
+        const thingToUpdate = thing !== undefined ? thing : {},
             dataStreamId = String(thingToUpdate.dataStreamId),
             features = this.get("layerSource").getFeatures(),
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
@@ -928,7 +927,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createLegendURL: function () {
-        var style;
+        let style;
 
         if (this.get("LegendURL") !== undefined && !this.get("LegendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
