@@ -365,13 +365,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                         subStyle.set(key, styleFieldValue[key]);
                     }
 
-                    subLegend = this.getLegendParamsForPoint("", layername, subStyle);
+                    subLegend = this.getLegendParamsForPointOld("", layername, subStyle);
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
                 });
             }
             else {
-                subLegend = this.getLegendParamsForPoint(styleSubClass, layername, style);
+                subLegend = this.getLegendParamsForPointOld(styleSubClass, layername, style);
 
                 if (Array.isArray(subLegend.name) && Array.isArray(subLegend.svg)) {
                     image = subLegend.svg;
@@ -393,13 +393,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                     for (const key in styleFieldValue) {
                         subStyle.set(key, styleFieldValue[key]);
                     }
-                    subLegend = this.getLegendParamsForLines(layername, subStyle);
+                    subLegend = this.getLegendParamsForLinesOld(layername, subStyle);
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
                 }, this);
             }
             else {
-                subLegend = this.getLegendParamsForLines(layername, style);
+                subLegend = this.getLegendParamsForLinesOld(layername, style);
                 image.push(subLegend.svg);
                 name.push(subLegend.name);
             }
@@ -414,13 +414,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                     for (const key in styleFieldValue) {
                         subStyle.set(key, styleFieldValue[key]);
                     }
-                    subLegend = this.getLegendParamsForPolygons(layername, subStyle);
+                    subLegend = this.getLegendParamsForPolygonsOld(layername, subStyle);
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
                 }, this);
             }
             else {
-                subLegend = this.getLegendParamsForPolygons(layername, style);
+                subLegend = this.getLegendParamsForPolygonsOld(layername, style);
                 image.push(subLegend.svg);
                 name.push(subLegend.name);
             }
