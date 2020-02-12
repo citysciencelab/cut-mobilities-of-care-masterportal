@@ -458,7 +458,7 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     showError: function (err) {
-        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+        const detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
         Radio.trigger("Alert", "alert", i18next.t("common:modules.searchbar.gaz.errorMsg") + " " + detail);
     },

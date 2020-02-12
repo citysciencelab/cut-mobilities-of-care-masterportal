@@ -8,10 +8,10 @@
         </span>
     </div>
     <div class="form-group form-group-sm">
-        <%  _.each(languageCodes, function(value, key) { %>
+        <%  Object.keys(languageCodes).forEach(function(key){ %>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <a class="lng btn <% if (key === activeCode) print('disabled') %>" data-code="<%= key %>">
-                    <%= value %>
+                    <%= languageCodes[key] %>
                 </a>
             </div>
         <% }); %>

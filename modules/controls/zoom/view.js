@@ -19,7 +19,7 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
      * @listens Map#RadioTriggerMapChange
      */
     initialize: function () {
-        var channel = Radio.channel("Map");
+        const channel = Radio.channel("Map");
 
         this.model = new ZoomControlModel();
         this.listenTo(this.model, {
@@ -43,7 +43,7 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
      * @description Template used for the Zoom Buttons
      * @memberof Controls.Zoom
      */
-    template: null,
+    template: _.template(ZoomControlTemplate),
 
     /**
      * Render Function
@@ -52,7 +52,6 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
     render: function () {
         const attr = this.model.toJSON();
 
-        this.template = _.template(ZoomControlTemplate);
         this.$el.html(this.template(attr));
         return this;
     },

@@ -41,7 +41,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      * @returns {this} this
      */
     render: function () {
-        const attr = this.maybeTranslateName(this.model.toJSON());
+        const attr = this.translateName(this.model.toJSON());
 
         if (this.model.get("isVisibleInMenu") !== false) {
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
@@ -55,7 +55,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      * @param {Array} attr attributes of this model
      * @returns {Array} attributes of this model maybe with translated name, if necessary
      */
-    maybeTranslateName: function (attr) {
+    translateName: function (attr) {
         if (attr.name && attr.name.indexOf("translate#") === 0) {
             // addons-model: name is not translated in app.js, must be done here
             const translationKey = attr.name.substr("translate#".length);

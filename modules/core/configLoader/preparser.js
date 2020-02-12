@@ -3,7 +3,8 @@ import CustomTreeParser from "./parserCustomTree";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {
-        defaultConfigPath: "config.json"
+        defaultConfigPath: "config.json",
+        keysNotToTranslateName: ["hitMap"]
     },
     /**
      * @class Preparser
@@ -160,7 +161,8 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @post all objects of translatable values of subconf (the raw data) have an extended key i18nextTranlate with a function(setter, key) added
      */
     addTranslationToRawConfig: function (subconf, prefix) {
-        _.each(subconf, function (subobj, subkey) {
+        Object.keys(subconf).forEach(function (subkey) {
+            const subobj = subconf[subkey];
             let translationKey;
 
             if (typeof subobj === "string") {
@@ -230,7 +232,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                     subconf[subkey] = i18next.t(translationKey);
                 }
             }
-            else if (typeof subobj === "object") {
+            else if (typeof subobj === "object" && this.get("keysNotToTranslateName").indexOf(subkey) < 0) {
                 this.addTranslationToRawConfig(subobj, prefix);
             }
         }, this);

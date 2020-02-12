@@ -57,17 +57,17 @@ const SpecialWFSModel = Backbone.Model.extend({
     * @returns {void}
     */
     setDefinitions: function (values) {
-        var definitions = [];
+        const definitions = [];
 
-        _.each(values, function (value) {
-            var definition = value;
+        values.forEach(function (value) {
+            let definition = value;
 
             // @deprecated since 3.0.0
-            if (_.has(value, "data")) {
-                definition = _.extend(value, this.getDataParameters(value));
+            if (value.hasOwnProperty("data")) {
+                definition = Object.assign(value, this.getDataParameters(value));
             }
 
-            if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
+            if (!definition.hasOwnProperty("typeName") || !definition.hasOwnProperty("propertyNames")) {
                 console.error("SpecialWFS (setDefinitions): parameters missing - definition of specialWFS is ignored.");
                 return undefined;
             }

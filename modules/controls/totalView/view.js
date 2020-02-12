@@ -14,8 +14,8 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      * @listens Menu#RadioTriggerMenuLoaderReady
      */
     initialize: function (id) {
-        var style = Radio.request("Util", "getUiStyle"),
-            element;
+        const style = Radio.request("Util", "getUiStyle");
+        let element = null;
 
         this.id = id;
         if (style === "DEFAULT") {
@@ -87,8 +87,8 @@ const TotalViewMapView = Backbone.View.extend(/** @lends TotalViewMapView.protot
      * @return {String} template with possile modified glyphicon
      */
     modifyTemplate: function (tpl, isMobile) {
-        var result,
-            config = Radio.request("Parser", "getItemByAttributes", {id: this.id});
+        const config = Radio.request("Parser", "getItemByAttributes", {id: this.id});
+        let result = null;
 
         if (config.attr === true) {
             result = tpl;
