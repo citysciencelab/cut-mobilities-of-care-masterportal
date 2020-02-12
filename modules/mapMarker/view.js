@@ -103,24 +103,26 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
 
         this.hideMarker();
         this.hidePolygon();
+        console.log(hit.type);
+        
         switch (hit.type) {
-            case "Straße": {
+            case i18next.t("common:modules.searchbar.type.street"): {
                 this.model.setWkt("POLYGON", coord);
 
                 Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
                 break;
             }
-            case "Parcel": {
+            case i18next.t("common:modules.searchbar.type.parcel"): {
                 Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                 this.showMarker(coord);
                 break;
             }
-            case "Adresse": {
+            case i18next.t("common:modules.searchbar.type.address"): {
                 this.showMarker(coord);
                 Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                 break;
             }
-            case "Stadtteil": {
+            case i18next.t("common:modules.searchbar.type.district"): {
                 if (coord.length === 2) {
                     this.showMarker(coord);
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
@@ -133,7 +135,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 }
                 break;
             }
-            case "Thema": {
+            case i18next.t("common:modules.searchbar.type.topic"): {
                 isMobile = Radio.request("Util", "isViewMobile");
 
                 // desktop - Themenbaum wird aufgeklappt
