@@ -45,6 +45,19 @@ const store = new Vuex.Store({
                 }
             });
         },
+        setToolConfig (state, payload) {
+            Object.keys(state.Tools).forEach(toolId => {
+                const tool = state.Tools[toolId];
+
+                if (tool && tool.id === payload.id) {
+                    if (payload.name) {
+                        // special handling of attribute name, is a reserved keyword in vue -> use title
+                        tool.title = payload.name;
+                    }
+                    Object.assign(tool, payload);
+                }
+            });
+        },
         setToolActive (state, payload) {
             Object.keys(state.Tools).forEach(toolId => {
                 const tool = state.Tools[toolId];

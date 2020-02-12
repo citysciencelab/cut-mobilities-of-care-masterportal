@@ -206,9 +206,6 @@ function loadApp () {
                 new FilterView({model: tool});
                 break;
             }
-            case "coord": {
-                break;
-            }
             case "shadow": {
                 new ShadowView({model: tool});
                 break;

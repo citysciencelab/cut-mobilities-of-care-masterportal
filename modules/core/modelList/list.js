@@ -36,7 +36,6 @@ import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addWMS/model";
-import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
@@ -253,7 +252,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new Filter(attrs, options);
             }
             else if (attrs.id === "coord") {
-                return new GetCoord(attrs, options);
+                store.commit("setToolConfig", attrs);
             }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
