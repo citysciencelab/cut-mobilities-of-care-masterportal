@@ -37,9 +37,9 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function (config) {
-        var channel;
+        let channel = null;
 
-        if (_.has(config, "attr") && _.has(config.attr, "poiDistances") && _.isArray(config.attr.poiDistances)) {
+        if (config !== undefined && config.hasOwnProperty("attr") && config.attr.hasOwnProperty("poiDistances") && typeof config.attr.poiDistances === "Array") {
             this.setPoiDistances(config.attr.poiDistances);
         }
         channel = Radio.channel("geolocation");
@@ -134,7 +134,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         Radio.trigger("Map", "removeOverlay", this.get("marker"));
     },
     untrack: function () {
-        var geolocation = this.get("geolocation");
+        const geolocation = this.get("geolocation");
 
         geolocation.un("change", this.positioning.bind(this), this);
         geolocation.un("error", this.onError.bind(this), this);
@@ -145,7 +145,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         this.set("tracking", false);
     },
     track: function () {
-        var geolocation;
+        let geolocation = null;
 
         if (this.get("isGeolocationDenied") === false) {
             Radio.trigger("Map", "addOverlay", this.get("marker"));
@@ -177,7 +177,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         Radio.trigger("MapView", "setCenter", position, 6);
     },
     positioning: function () {
-        var geolocation = this.get("geolocation"),
+        const geolocation = this.get("geolocation"),
             position = geolocation.getPosition(),
             firstGeolocation = this.get("firstGeolocation"),
             zoomMode = this.get("zoomMode"),
@@ -219,7 +219,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         Radio.trigger("Util", "hideLoader");
     },
     trackPOI: function () {
-        var geolocation;
+        let geolocation = null;
 
         Radio.trigger("Map", "addOverlay", this.get("marker"));
         if (this.get("geolocation") === null) {
@@ -234,7 +234,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         geolocation.once("error", this.onPOIError, this);
     },
     untrackPOI: function () {
-        var geolocation = this.get("geolocation");
+        const geolocation = this.get("geolocation");
 
         geolocation.un("change", this.callGetPOI, this);
         geolocation.un("error", this.onPOIError, this);
@@ -249,13 +249,13 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
      * @return {Array}          Array of ol.features
      */
     getVectorFeaturesInCircle: function (distance) {
-        var geolocation = this.get("geolocation"),
+        const geolocation = this.get("geolocation"),
             position = geolocation.getPosition(),
             centerPosition = proj4(proj4("EPSG:4326"), proj4(this.get("epsg")), position),
             circle = new Circle(centerPosition, distance),
             circleExtent = circle.getExtent(),
-            visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-            featuresAll = [],
+            visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+        let featuresAll = [],
             features = [];
 
         _.each(visibleWFSLayers, function (layer) {
@@ -282,7 +282,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
      * @return {float}      Entfernung
      */
     getDistance: function (feat, centerPosition) {
-        var closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
+        const closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
             line = new LineString([closestPoint, centerPosition]),
             dist = Math.round(line.getLength());
 
@@ -304,7 +304,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
     },
 
     setIsGeoLocationPossible: function () {
-        this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost", "127.0.0.1"], window.location.hostname));
+        this.set("isGeoLocationPossible", window.location.protocol === "https:" || ["localhost", "127.0.0.1"].indexOf(window.location.hostname));
     },
 
     // setter for poiDistances

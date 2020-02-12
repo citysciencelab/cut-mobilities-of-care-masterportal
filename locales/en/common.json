@@ -288,7 +288,7 @@
             "orientation": {
                 "titleGeolocate": "Common position",
                 "titleGeolocatePOI": "Close to me",
-                "geolocationDeniedText": "localisation is not available",
+                "geolocationDeniedText": "Localisation is not available",
                 "trackingDeniedText": "'$t(common:modules.controls.orientation.titleGeolocatePOI)' is not available"
             },
             "orientation3d": {

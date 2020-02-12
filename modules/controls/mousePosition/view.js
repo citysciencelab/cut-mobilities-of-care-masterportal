@@ -29,7 +29,7 @@ const MousePositionView = Backbone.View.extend({
         return this;
     },
     setCoordinates: function (evt) {
-        var coordinates = evt.map.getCoordinateFromPixel(evt.pixel),
+        const coordinates = evt.map.getCoordinateFromPixel(evt.pixel),
             coordX = coordinates[0].toString(),
             coordY = coordinates[1].toString();
 
