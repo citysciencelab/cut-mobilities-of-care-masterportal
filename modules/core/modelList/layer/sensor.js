@@ -8,7 +8,7 @@ import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         epsg: "EPSG:4326",
         utc: "+1",
@@ -143,7 +143,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             name: this.get("name"),
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
-            gfiTheme: _.isObject(this.get("gfiTheme")) ? this.get("gfiTheme").name : this.get("gfiTheme"),
+            gfiTheme: typeof this.get("gfiTheme") === "object" ? this.get("gfiTheme").name : this.get("gfiTheme"),
             routable: this.get("routable"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
@@ -185,13 +185,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 isClustered = this.has("clusterDistance");
 
             // Add features to vectorlayer
-            if (!_.isEmpty(features)) {
+            if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
                 this.prepareFeaturesFor3D(features);
                 this.featuresLoaded(features);
             }
 
-            if (!_.isUndefined(features)) {
+            if (features !== undefined) {
                 this.styling(isClustered);
                 this.get("layer").setStyle(this.get("style"));
             }
@@ -211,10 +211,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     createFeatures: function (sensorData, epsg) {
         var features = [];
 
-        _.each(sensorData, function (data, index) {
+        sensorData.forEach(function (data, index) {
             let feature;
 
-            if (data.hasOwnProperty("location") && data.location && !_.isUndefined(epsg)) {
+            if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
                 feature = this.parseJson(data.location);
             }
             else {
@@ -225,7 +225,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             feature.setProperties(data.properties, true);
 
             // for a special theme
-            if (_.isObject(this.get("gfiTheme"))) {
+            if (typeof this.get("gfiTheme") === "object") {
                 feature.set("gfiParams", this.get("gfiTheme").params, true);
                 feature.set("utc", this.get("utc"), true);
             }
@@ -236,7 +236,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // only features with geometry
         features = features.filter(function (feature) {
-            return !_.isUndefined(feature.getGeometry());
+            return feature.getGeometry() !== undefined;
         });
 
         return features;
@@ -303,10 +303,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             utcSub,
             time = "";
 
-        if (_.isUndefined(phenomenonTime)) {
+        if (phenomenonTime === undefined) {
             return "";
         }
-        else if (!_.isUndefined(utc) && (_.includes(utc, "+") || _.includes(utc, "-"))) {
+        else if (utc !== undefined && (utc.indexOf("+") !== -1 || utc.indexOf("-") !== -1)) {
             utcAlgebraicSign = utc.substring(0, 1);
 
             if (utc.length === 2) {
@@ -446,19 +446,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     buildSensorThingsUrl: function (url, version, urlParams) {
         var requestUrl,
             and = "$",
-            versionAsString = version;
+            versionAsString = version,
+            key;
 
-        if (_.isNumber(version)) {
+        if (typeof version === "number") {
             versionAsString = version.toFixed(1);
         }
 
         requestUrl = url + "/v" + versionAsString + "/Things?";
 
         if (urlParams) {
-            _.each(urlParams, function (value, key) {
-                requestUrl = requestUrl + and + key + "=" + value;
+            for (key in urlParams) {
+                requestUrl = requestUrl + and + key + "=" + urlParams[key];
                 and = "&$";
-            });
+            };
         }
 
         return requestUrl;
@@ -639,7 +640,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     styling: function (isClustered) {
         var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-        if (!_.isUndefined(stylelistmodel)) {
+        if (stylelistmodel !== undefined) {
             this.setStyle(function (feature) {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
@@ -929,10 +930,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     createLegendURL: function () {
         var style;
 
-        if (!_.isUndefined(this.get("LegendURL")) && !this.get("LegendURL").length) {
+        if (this.get("LegendURL") !== undefined && !this.get("LegendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-            if (!_.isUndefined(style)) {
+            if (style !== undefined) {
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
