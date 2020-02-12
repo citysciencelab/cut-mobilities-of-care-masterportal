@@ -28,7 +28,7 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @listens Controls.BackForward#changeStepBackwardText
      */
     initialize: function () {
-        var channel = Radio.channel("BackForwardView");
+        const channel = Radio.channel("BackForwardView");
 
         this.model = new BackForwardModel();
 
@@ -71,12 +71,12 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @return {Backbone.Template} modified template
      */
     modifyTemplate: function (tpl) {
-        var result,
-            configData = this.model.get("config"),
-            forwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconFor : configData,
-            backwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconBack : configData,
-            buttons,
-            re;
+        const configData = this.model.get("config"),
+            forwardGlyph = typeof configData !== "undefined" ? configData.attr.glyphiconFor : configData,
+            backwardGlyph = typeof configData !== "undefined" ? configData.attr.glyphiconBack : configData;
+        let result = "",
+            buttons = "",
+            re = null;
 
         if (!forwardGlyph && !backwardGlyph) {
             result = tpl;
@@ -113,12 +113,12 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @returns {void}
      */
     updatePermalink: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+        const forButton = document.getElementsByClassName("forward glyphicon")[0],
             backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales"),
             currentPos = this.model.get("currentPos"),
-            that = this,
-            scale,
+            that = this;
+        let scale,
             center;
 
         if (centerScales.length === 0) {
@@ -163,7 +163,7 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @returns {void}
      */
     setNextLastView: function (direction) {
-        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+        const forButton = document.getElementsByClassName("forward glyphicon")[0],
             backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
