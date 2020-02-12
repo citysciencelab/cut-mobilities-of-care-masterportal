@@ -64,7 +64,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             "languageChanged": this.changeLang
         });
 
-        if (typeof (Radio.request("ParametricURL", "getInitString") !== "undefined")) {
+        if (typeof Radio.request("ParametricURL", "getInitString") !== "undefined") {
             // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
             this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
         }
