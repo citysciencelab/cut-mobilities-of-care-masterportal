@@ -212,31 +212,33 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         let features = [],
             feature;
 
-        sensorData.forEach(function (data, index) {
-            if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
-                feature = this.parseJson(data.location);
-            }
-            else {
-                return;
-            }
+        if (Array.isArray(sensorData)) {
+            sensorData.forEach(function (data, index) {
+                if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
+                    feature = this.parseJson(data.location);
+                }
+                else {
+                    return;
+                }
 
-            feature.setId(index);
-            feature.setProperties(data.properties, true);
+                feature.setId(index);
+                feature.setProperties(data.properties, true);
 
-            // for a special theme
-            if (typeof this.get("gfiTheme") === "object") {
-                feature.set("gfiParams", this.get("gfiTheme").params, true);
-                feature.set("utc", this.get("utc"), true);
-            }
-            feature = this.aggregateDataStreamValue(feature);
-            feature = this.aggregateDataStreamPhenomenonTime(feature);
-            features.push(feature);
-        }, this);
+                // for a special theme
+                if (typeof this.get("gfiTheme") === "object") {
+                    feature.set("gfiParams", this.get("gfiTheme").params, true);
+                    feature.set("utc", this.get("utc"), true);
+                }
+                feature = this.aggregateDataStreamValue(feature);
+                feature = this.aggregateDataStreamPhenomenonTime(feature);
+                features.push(feature);
+            }, this);
 
-        // only features with geometry
-        features = features.filter(function (feature) {
-            return feature.getGeometry() !== undefined;
-        });
+            // only features with geometry
+            features = features.filter(function (subFeature) {
+                return subFeature.getGeometry() !== undefined;
+            });
+        }
 
         return features;
     },
@@ -443,25 +445,32 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {String} URL to request sensorThings
      */
     buildSensorThingsUrl: function (url, version, urlParams) {
-        let requestUrl,
+        let query = "",
             versionAsString = version,
-            key,
-            and = "$";
+            key;
 
         if (typeof version === "number") {
             versionAsString = version.toFixed(1);
         }
 
-        requestUrl = url + "/v" + versionAsString + "/Things?";
-
-        if (urlParams) {
+        if (typeof urlParams === "object") {
             for (key in urlParams) {
-                requestUrl = requestUrl + and + key + "=" + urlParams[key];
-                and = "&$";
-            };
+                if (query) {
+                    query += "&";
+                }
+
+                if (Array.isArray(urlParams[key])) {
+                    if (urlParams[key].length) {
+                        query += "$" + key + "=" + urlParams[key].join(",");
+                    }
+                }
+                else {
+                    query += "$" + key + "=" + urlParams[key];
+                }
+            }
         }
 
-        return requestUrl;
+        return String(url) + "/v" + String(versionAsString) + "/Things?" + query;
     },
 
     /**
@@ -810,7 +819,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             result = thingToUpdate.result,
             utc = this.get("utc"),
             phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
-    
+
         this.updateObservationForDatastreams(feature, dataStreamId, thing);
         this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
     },

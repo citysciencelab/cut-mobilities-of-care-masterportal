@@ -52,11 +52,76 @@ describe("core/modelList/layer/sensor", function () {
     });
 
     describe("buildSensorThingsUrl", function () {
-        it("should return url as String for undefined input", function () {
-            expect(sensorLayer.buildSensorThingsUrl(undefined, undefined, undefined)).to.be.a("string");
+        it("should return an url as string for a specific input", function () {
+            const testUrl = "https://www.example.com:1234/foo/bar",
+                testVersion = "1.0",
+                testUrlParams = {
+                    "baz": 1234,
+                    "qux": "foobar"
+                },
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?$baz=1234&$qux=foobar";
+
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, testUrlParams)).to.equal(expectedOutput);
         });
-        it("should return version in String", function () {
-            expect(sensorLayer.buildSensorThingsUrl(undefined, 1.0, undefined)).to.have.string("v1.0");
+        it("should return an url as string for a specific input including nested urlParams", function () {
+            const testUrl = "https://www.example.com:1234/foo/bar",
+                testVersion = "1.0",
+                testUrlParams = {
+                    "baz": 1234,
+                    "qux": [
+                        "subParamA",
+                        "subParamB",
+                        "subParamC"
+                    ]
+                },
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?$baz=1234&$qux=subParamA,subParamB,subParamC";
+
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, testUrlParams)).to.equal(expectedOutput);
+        });
+
+        it("should return an url without query if no params as object are given", function () {
+            const testUrl = "https://www.example.com:1234/foo/bar",
+                testVersion = "1.0",
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?";
+
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, false)).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, undefined)).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, null)).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, "baz")).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, 12345)).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, [])).to.equal(expectedOutput);
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, {})).to.equal(expectedOutput);
+        });
+        it("should eat any url possible without checking its target or syntax", function () {
+            const testUrlParams = {
+                "foo": "bar"
+            };
+
+            expect(sensorLayer.buildSensorThingsUrl("", "1.0", testUrlParams)).to.equal("/v1.0/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("http://", "1.0", testUrlParams)).to.equal("http:///v1.0/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("wfs://baz", "1.0", testUrlParams)).to.equal("wfs://baz/v1.0/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("foobar://baz////", "1.0", testUrlParams)).to.equal("foobar://baz/////v1.0/Things?$foo=bar");
+        });
+        it("should take any version as string unchecked", function () {
+            expect(sensorLayer.buildSensorThingsUrl("", "1.0", false)).to.equal("/v1.0/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", "foo", false)).to.equal("/vfoo/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", "foo.bar.baz", false)).to.equal("/vfoo.bar.baz/Things?");
+        });
+        it("should take any version as number fixed to one decimal number", function () {
+            expect(sensorLayer.buildSensorThingsUrl("", 0.5, false)).to.equal("/v0.5/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", 0.55, false)).to.equal("/v0.6/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", 0.00000001, false)).to.equal("/v0.0/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", 999999.9999999, false)).to.equal("/v1000000.0/Things?");
+        });
+        it("should stringify any given parameter for url and version - no matter what", function () {
+            const testUrlParams = {
+                "foo": "bar"
+            };
+
+            expect(sensorLayer.buildSensorThingsUrl(undefined, undefined, testUrlParams)).to.equal("undefined/vundefined/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl(null, null, testUrlParams)).to.equal("null/vnull/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl([], [], testUrlParams)).to.equal("/v/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl({}, {}, testUrlParams)).to.equal("[object Object]/v[object Object]/Things?$foo=bar");
         });
     });
 
@@ -91,13 +156,13 @@ describe("core/modelList/layer/sensor", function () {
     });
 
     describe("createFeatures", function () {
-        it("should return a empty array for empty array input", function () {
-            expect(sensorLayer.createFeatures(undefined, undefined)).to.be.an("array").that.is.empty;
-        });
-        it("should return a empty array for undefined input", function () {
+        it("should return an empty array for empty array input", function () {
             expect(sensorLayer.createFeatures([], undefined)).to.be.an("array").that.is.empty;
         });
-        it("should return a empty array for obj and undefined epsg input", function () {
+        it("should return an empty array for undefined input", function () {
+            expect(sensorLayer.createFeatures(undefined, undefined)).to.be.an("array").that.is.empty;
+        });
+        it("should return an empty array for obj and undefined epsg input", function () {
             var data = [{location: [10, 10]}];
 
             expect(sensorLayer.createFeatures(data, undefined)).to.be.an("array").that.is.empty;
