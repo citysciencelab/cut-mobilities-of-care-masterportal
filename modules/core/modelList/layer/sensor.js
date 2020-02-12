@@ -470,35 +470,25 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {array} merged things
      */
     mergeByCoordinates: function (allThings) {
-        var mergeAllThings = [],
-            indices = [],
-            things,
-            jsonGeom,
-            jsonGeom2;
+        const mergeAllThings = [],
+            mergeAllThingsAssoc = {};
+        let jsonGeomString;
 
-        _.each(allThings, function (thing, index) {
-            // if the thing was assigned already
-            if (!_.contains(indices, index)) {
-                things = [];
-                jsonGeom = JSON.stringify(this.getJsonGeometry(thing, 0));
-
-                // if no datastream exists
-                if (_.isEmpty(thing.Datastreams)) {
-                    return;
-                }
-
-                _.each(allThings, function (thing2, index2) {
-                    jsonGeom2 = JSON.stringify(this.getJsonGeometry(thing2, 0));
-
-                    if (jsonGeom === jsonGeom2) {
-                        things.push(thing2);
-                        indices.push(index2);
-                    }
-                }, this);
-
-                mergeAllThings.push(things);
+        allThings.forEach(function (thing) {
+            // if no datastream exists
+            if (!Array.isArray(thing.Datastreams) || !thing.Datastreams.length) {
+                return;
             }
-        }, this);
+
+            jsonGeomString = JSON.stringify(this.getJsonGeometry(thing, 0));
+            
+            if (!mergeAllThingsAssoc.hasOwnProperty(jsonGeomString)) {
+                mergeAllThingsAssoc[jsonGeomString] = [];
+                mergeAllThings.push(mergeAllThingsAssoc[jsonGeomString]);
+            }
+
+            mergeAllThingsAssoc[jsonGeomString].push(thing);
+        }.bind(this));
 
         return mergeAllThings;
     },
