@@ -24,6 +24,12 @@ export default {
     props: ["title", "icon", "active", "renderToWindow"],
     mounted() {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
+        // if (this.renderToWindow){
+        //    this.$nextTick(function () {
+        //         // Code that will run only after the entire view has been rendered
+        //         $('#inka').draggable();
+        //     })
+        // }
     },
     updated() {
         if(this.renderToWindow && this.draggable === false && this.active){
