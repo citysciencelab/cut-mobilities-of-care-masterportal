@@ -52,7 +52,21 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         "clusterImageHeight": 1,
         "clusterImageScale": 1,
         "clusterImageOffsetX": 0.5,
-        "clusterImageOffsetY": 0.5
+        "clusterImageOffsetY": 0.5,
+        // Für scalingShape CIRCLESEGMENTS
+        "circleSegmentsRadius": 10,
+        "circleSegmentsStrokeWidth": 4,
+        "circleSegmentsBackgroundColor": [255, 255, 255, 0],
+        "scalingValueDefaultColor": [0, 0, 0, 1],
+        "circleSegmentsGap": 10,
+        // Für scalingShape CIRCLE_BAR
+        "circleBarScalingFactor": 1,
+        "circleBarRadius": 6,
+        "circleBarLineStroke": 5,
+        "circleBarCircleFillColor": [0, 0, 0, 1],
+        "circleBarCircleStrokeColor": [0, 0, 0, 1],
+        "circleBarCircleStrokeWidth": 1,
+        "circleBarLineStrokeColor": [0, 0, 0, 1]
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -348,21 +362,9 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {array} normColor
      */
     normalizeRgbColor: function (newColor) {
-        var normColor = newColor;
+        const defaultArray = [1, 1, 1, 1];
 
-        if (normColor.length === 4) {
-            return normColor;
-        }
-        else if (newColor.length > 4) {
-            normColor = normColor.slice(0, 3);
-        }
-        else if (newColor.length < 4) {
-            while (newColor.length !== 4) {
-                newColor.push(1);
-            }
-        }
-
-        return normColor;
+        return newColor.concat(defaultArray).slice(0, 4);
     },
 
     /**
@@ -441,11 +443,11 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 ? {empty: 0} : scalingAttributesAsObject,
             states = scalingAttribute;
 
-        if (_.contains(states, "|")) {
-            states = states.split(" | ");
+        if (_.isUndefined(states)) {
+            return scalingObject;
         }
-        else if (_.isUndefined(states)) {
-            states = undefined;
+        else if (_.contains(states, "|")) {
+            states = states.split(" | ");
         }
         else {
             states = [states];

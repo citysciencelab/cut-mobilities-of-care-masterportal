@@ -75,7 +75,8 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         /**
          * @type {number}
          */
-        "textStrokeWidth": 3
+        "textStrokeWidth": 3,
+        "labelField": ""
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -92,10 +93,8 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         const isClustered = this.get("isClustered"),
             feature = this.get("feature");
 
-        if (isClustered && feature.get("features").length > 1) {
-            if (this.get("clusterTextType") !== "none") {
-                return this.createClusteredTextStyle();
-            }
+        if (isClustered && feature.hasOwnProperty("features") && this.get("clusterTextType") !== "none") {
+            return this.createClusteredTextStyle();
         }
         else if (this.checkLabelField()) {
             return this.createLabeledTextStyle();
@@ -113,7 +112,7 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
             featureProperties = feature.getProperties(),
             labelField = this.get("labelField") ? this.get("labelField") : null;
 
-        if (labelField && featureProperties.hasOwnProperty(labelField)) {
+        if (labelField && featureProperties && featureProperties.hasOwnProperty(labelField)) {
             return true;
         }
 
@@ -162,10 +161,12 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
     * @returns {ol/style/Text} - The created style.
     */
     createLabeledTextStyle: function () {
-        const feature = this.get("feature");
+        const feature = this.get("feature"),
+            featureProperties = feature.getProperties(),
+            labelField = this.get("labelField");
 
         return new Text({
-            text: feature.get("labelField"),
+            text: featureProperties && featureProperties.hasOwnProperty(labelField) ? featureProperties[labelField] : "undefined",
             textAlign: this.get("textAlign"),
             offsetX: this.get("textOffsetX"),
             offsetY: this.get("textOffsetY"),

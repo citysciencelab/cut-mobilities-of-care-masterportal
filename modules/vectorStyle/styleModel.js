@@ -180,7 +180,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returns the best rule for the indexed feature giving precedence to the index position or conditions.
+     * Returns the best rule for the indexed feature giving precedence to the index position.
+     * Otherwhile returns the rule with conditions but without a sequence definition.
+     * Fallback is a rule without conditions.
+     * That means also: A rule with fitting properties but without fitting sequence is never used for any multi geometry.
      * @param   {object[]} rules the rules to check
      * @param   {integer} index the index position of this geometry in the multi geometry
      * @returns {object|null} the rule or null if no rule match the conditions
@@ -188,7 +191,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     getRuleForIndex: function (rules, index) {
         const indexedRule = this.getIndexedRule(rules, index),
             propertiesRule = rules.find(rule => {
-                return rule.hasOwnProperty("conditions");
+                return rule.hasOwnProperty("conditions") && !rule.conditions.hasOwnProperty("sequence");
             }),
             fallbackRule = rules.find(rule => {
                 return !rule.hasOwnProperty("conditions");
