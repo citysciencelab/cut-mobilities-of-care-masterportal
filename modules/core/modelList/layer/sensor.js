@@ -820,7 +820,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
-        const dataStreamName = feature.get("dataStreamName");
+        const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
+            dataStreamNameArray = feature.get("dataStreamName").split(" | "),
+            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "";
         let updatedFeature = feature;
 
         updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result);
