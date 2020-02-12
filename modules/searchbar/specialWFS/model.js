@@ -151,7 +151,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             data;
 
         if (searchString.length >= this.get("minChars")) {
-            definitions.forEach( function (def) {
+            definitions.forEach(function (def) {
                 // translate if necessary
                 if (typeof def.i18nextTranslate === "function") {
                     def.i18nextTranslate(function (key, value) {
