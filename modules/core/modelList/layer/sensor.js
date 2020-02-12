@@ -692,8 +692,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         this.setMqttClient(client);
 
-        this.setMqttClient(client);
-
         // messages from the server
         client.on("message", function (topic, jsonData) {
             const regex = /\((.*)\)/; // search value in topic, that represents the datastreamid on position 1
