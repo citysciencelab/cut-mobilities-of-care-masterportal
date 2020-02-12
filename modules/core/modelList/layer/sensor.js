@@ -474,21 +474,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             mergeAllThingsAssoc = {};
         let jsonGeomString;
 
-        allThings.forEach(function (thing) {
-            // if no datastream exists
-            if (!Array.isArray(thing.Datastreams) || !thing.Datastreams.length) {
-                return;
-            }
+        if (Array.isArray(allThings)) {
+            allThings.forEach(function (thing) {
+                // if no datastream exists
+                if (!Array.isArray(thing.Datastreams) || !thing.Datastreams.length) {
+                    return;
+                }
 
-            jsonGeomString = JSON.stringify(this.getJsonGeometry(thing, 0));
-            
-            if (!mergeAllThingsAssoc.hasOwnProperty(jsonGeomString)) {
-                mergeAllThingsAssoc[jsonGeomString] = [];
-                mergeAllThings.push(mergeAllThingsAssoc[jsonGeomString]);
-            }
+                jsonGeomString = JSON.stringify(this.getJsonGeometry(thing, 0));
+                if (!mergeAllThingsAssoc.hasOwnProperty(jsonGeomString)) {
+                    mergeAllThingsAssoc[jsonGeomString] = [];
+                    mergeAllThings.push(mergeAllThingsAssoc[jsonGeomString]);
+                }
 
-            mergeAllThingsAssoc[jsonGeomString].push(thing);
-        }.bind(this));
+                mergeAllThingsAssoc[jsonGeomString].push(thing);
+            }.bind(this));
+        }
 
         return mergeAllThings;
     },
