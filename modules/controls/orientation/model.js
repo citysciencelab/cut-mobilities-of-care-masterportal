@@ -39,7 +39,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
     initialize: function (config) {
         let channel = null;
 
-        if (config !== undefined && config.hasOwnProperty("attr") && config.attr.hasOwnProperty("poiDistances") && typeof config.attr.poiDistances === "Array") {
+        if (config !== undefined && config.hasOwnProperty("attr") && config.attr.hasOwnProperty("poiDistances") && Array.isArray(config.attr.poiDistances)) {
             this.setPoiDistances(config.attr.poiDistances);
         }
         channel = Radio.channel("geolocation");
