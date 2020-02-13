@@ -69,7 +69,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
             validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/;
 
         if (attributes.coordSystem === "ETRS89") {
-            for (let [key, value] of Object.entries(attributes.coordinates)) {
+            for (const [key, value] of Object.entries(attributes.coordinates)) {
                 let fieldName;
 
                 $(fieldName + ".text-danger").html("");
@@ -96,7 +96,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                     $(fieldName).parent().removeClass("has-error");
                     Radio.trigger("Alert", "alert:remove");
                 }
-            };
+            }
         }
         else if (attributes.coordSystem === "WGS84") {
             if (attributes.coordinates[0].coord === undefined || attributes.coordinates[0].coord.length < 1) {

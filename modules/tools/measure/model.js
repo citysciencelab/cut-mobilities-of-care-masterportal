@@ -197,7 +197,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             name: "Einheit",
             type: "string",
             displayName: "Einheit auswählen",
-            values:Object.keys(this.get("values_unit")),
+            values: Object.keys(this.get("values_unit")),
             snippetType: "dropdown",
             isMultiple: false,
             preselectedValues: Object.keys(this.get("values_unit"))[0]
@@ -260,7 +260,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             stretch: i18next.t("common:modules.tools.measure.stretch"),
             area: i18next.t("common:modules.tools.measure.area")
         });
-        if (geometry != null && (((Array.isArray(geometry) || typeof geometry === "String") && geometry.length > 0) || Object.keys(geometry).length > 0)) {
+        if (geometry !== null && (((Array.isArray(geometry) || typeof geometry === "string") && geometry.length > 0) || Object.keys(geometry).length > 0)) {
             this.get("snippetDropdownModelGeometry").setPreselectedValues(Object.keys(this.getLocalizedValues())[0]);
             this.get("snippetDropdownModelGeometry").updateValues(Object.keys(this.getLocalizedValues()));
             this.get("snippetDropdownModelGeometry").updateSelectableValues(Object.keys(this.getLocalizedValues()));
@@ -977,7 +977,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     * @param {string} value counter
     * @returns {void}
     */
-   setIdCounter: function (value) {
+    setIdCounter: function (value) {
         this.set("idCounter", value);
     }
 });
