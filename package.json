@@ -36,7 +36,7 @@
     "jquery-ui": "1.x",
     "moment": "2.x",
     "mqtt": "^2.15.x",
-    "olcs": "^2.5.0",
+    "olcs": "^2.10.0",
     "rbush": "^2.0.2",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.1",
