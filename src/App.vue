@@ -4,6 +4,7 @@ import SupplyCoord from './components/SupplyCoord.vue'
 import ScaleLine from "./components/ScaleLine.vue";
 import Title from "./components/Title.vue";
 import ScaleLine from "./components/ScaleLine.vue";
+import Title from "./components/Title.vue";
 
 export default {
 <<<<<<< HEAD
@@ -43,6 +44,7 @@ export default {
         <ScaleLine />
         <Title />
         <ScaleLine />
+        <Title />
     </div>
 </template>
 
