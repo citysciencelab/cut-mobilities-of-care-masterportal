@@ -9,11 +9,31 @@
     <title>Masterportal</title>
     <link rel="stylesheet" href="../../build/css/masterportal.css">
     <link rel="stylesheet" href="https://geoportal-hamburg.de/lgv-config/css/fonts.css">
+    <style>
+        #portal-text {
+            display: none;
+        }
+        #loader {
+            display: none;
+        }
+        #dpidiv {
+            height: 1in;
+            left: -100%;
+            position: absolute;
+            top: -100%;
+            width: 1in;
+        }
+    </style>
 </head>
 <body>
     <div class="masterportal-container">
-        <div id="loader"><img src="../../img/ajax-loader.gif"></div>
-        <div id='dpidiv' style='height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>
+        <div class="loading">
+            <img id="portal-logo" src="https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/Logo_Masterportal.svg">
+            <div id="portal-text">Masterportal</div>
+            <div id="init-loader"><img src="https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/ajax-loader.gif"></div>
+        </div>
+        <div id="loader"><img src="https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/ajax-loader.gif"></div>
+        <div id='dpidiv'></div>
         <div id="popup"></div>
         <nav id="main-nav" class="navbar navbar-default" role="navigation">
             <div class="container-fluid">
