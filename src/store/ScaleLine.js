@@ -32,7 +32,7 @@ export default {
 
         /**
          * Calculates the scaleLineValue für the scale bar in relation to a 2cm long line
-         * Ff the scaleLineValue is greater than 1000 meter, it is given as km
+         * If the scaleLineValue is greater than 1000 meter, it is given as km
          * @param {ActionContext} param0 - context passed by vuex
          * @returns {void}
         */

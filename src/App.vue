@@ -3,16 +3,25 @@ import Alerting from './components/Alerting.vue'
 import SupplyCoord from './components/SupplyCoord.vue'
 import ScaleLine from "./components/ScaleLine.vue";
 import Title from "./components/Title.vue";
+import ScaleLine from "./components/ScaleLine.vue";
 
 export default {
+<<<<<<< HEAD
 <<<<<<< HEAD
     name: "App",
     components: {
         Alerting,
+=======
+    name: 'App',
+    components: {
+        Alerting,
+        Title,
+>>>>>>> refactor scaleLine from backbone to vue
         SupplyCoord,
         ScaleLine
     }
 };
+<<<<<<< HEAD
 =======
   name: 'App',
   components: {
@@ -23,6 +32,8 @@ export default {
   }
 }
 >>>>>>> update - eslint for vue
+=======
+>>>>>>> refactor scaleLine from backbone to vue
 </script>
 
 <template>
@@ -31,6 +42,7 @@ export default {
         <SupplyCoord />
         <ScaleLine />
         <Title />
+        <ScaleLine />
     </div>
 </template>
 
