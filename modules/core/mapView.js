@@ -105,6 +105,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             Radio.trigger("MapView", "changedCenter", this.getCenter());
             Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
+        Radio.trigger("MapView", "changedOptions", _.findWhere(this.get("options"), {resolution: this.get("view").constrainResolution(this.get("view").getResolution())}));
     },
 
     /**
