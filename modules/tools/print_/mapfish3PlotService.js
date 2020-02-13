@@ -45,6 +45,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         glyphicon: "glyphicon-print",
         eventListener: {},
         dpiForPdf: 200,
+        currentLng: "",
         // translations
         titleLabel: "",
         titlePlaceholder: "",
@@ -86,6 +87,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} eventListener={} - todo
      * @property {Boolean} printLegend=false Flag if checkbox to print legend should be activated.
+     * @property {String} currentLng "" contains the current language - view listens to it
      * @property {String} titleLabel Label text for print-window
      * @property {String} titlePlaceholder placeholder text for print-window
      * @property {String} layoutLabel Label text for print-window
@@ -144,7 +146,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
-    changeLang: function () {
+    changeLang: function (lng) {
         this.set({
             titleLabel: i18next.t("common:modules.tools.print.titleLabel"),
             titlePlaceholder: i18next.t("common:modules.tools.print.titlePlaceholder"),
@@ -154,7 +156,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
             printLabel: i18next.t("common:modules.tools.print.printLabel"),
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
-            layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true})
+            layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
+            currentLng: lng
         });
     },
 

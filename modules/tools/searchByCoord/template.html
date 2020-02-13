@@ -4,12 +4,12 @@
         <label for="coordSystemField" class="col-md-5 col-sm-5 control-label"><%= coordSystemField %></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="coordSystemField">
-                <% _.each(coordSystems, function(value, key) {
+                <% for (let [key, value] of Object.entries(coordSystems)) {
                     if (value === coordSystem) {%>
                         <option value=<%= value %> SELECTED><%= value%></option>
                     <%} else { %>
                         <option value=<%= value %>><%= value%></option>
-                <% }}, this); %>
+                <% }}; %>
             </select>
         </div>
     </div>

@@ -51,7 +51,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      * @returns {void}
      */
     addValueModels: function (valueList) {
-        _.each(valueList, function (value) {
+        valueList.forEach(function (value) {
             this.addValueModel(value);
         }, this);
     },
@@ -63,7 +63,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      */
     replaceValueModels: function (newValueList, preselectedValues) {
         this.get("valuesCollection").reset();
-        _.each(newValueList, function (value) {
+        newValueList.forEach(function (value) {
             this.addValueModel(value);
         }, this);
         this.set("preselectedValues", preselectedValues);
@@ -111,9 +111,9 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     * @return {void}
     */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models;
+        const collection = this.get("valuesCollection").models;
 
-        _.each(collection.models, function (model) {
+        collection.models.forEach(function (model) {
             model.set("isSelectable", true);
         }, this);
     },

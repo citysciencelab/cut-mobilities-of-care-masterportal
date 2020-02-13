@@ -15,11 +15,6 @@ var etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": 
 
 before(function () {
     model = new Model();
-
-    i18next.init({
-        lng: "cimode",
-        debug: false
-    });
 });
 
 describe("function for validate input", function () {

@@ -69,14 +69,14 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                         coords = [];
 
                     if (geom instanceof LineString) {
-                        _.each(geom.getCoordinates(), function (coordinate, index) {
+                        geom.getCoordinates().forEach(function (coordinate, index) {
                             if (index > 0 && index < geom.getCoordinates().length - 1) {
                                 coords.push(coordinate);
                             }
                         });
                     }
                     if (geom instanceof Polygon) {
-                        _.each(geom.getCoordinates()[0], function (coordinate, index) {
+                        geom.getCoordinates()[0].forEach(function (coordinate, index) {
                             if (index > 0 && index < geom.getCoordinates()[0].length - 1) {
                                 coords.push(coordinate);
                             }
@@ -119,6 +119,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         scale: -1,
         style: "DEFAULT",
         glyphicon: "glyphicon-resize-full",
+        idCounter: 0,
         // translations
         geometry: "",
         measure: "",
@@ -140,6 +141,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @property {String} uiStyle="DEFAULT" style for master portal
      * @property {Number} scale=-1
      * @property {String} style="DEFAULT" style for master portal
+     * @property {Number} idCounter=0 counter for unique ids
      * @property {String} geometry="", filled with "Geometrie"- translated
      * @property {String} measure="", filled with "Einheit"- translated
      * @property {String} plzConsider="", filled with "Bitte beachten Sie"- translated
@@ -186,34 +188,34 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             name: "Geometrie",
             type: "string",
             displayName: "Geometrie auswählen",
-            values: _.allKeys(this.getLocalizedValues()),
+            values: Object.keys(this.getLocalizedValues()),
             snippetType: "dropdown",
             isMultiple: false,
-            preselectedValues: _.allKeys(this.getLocalizedValues())[0]
+            preselectedValues: Object.keys(this.getLocalizedValues())[0]
         }));
         this.setDropDownSnippetUnit(new SnippetDropdownModel({
             name: "Einheit",
             type: "string",
             displayName: "Einheit auswählen",
-            values: _.allKeys(this.get("values_unit")),
+            values:Object.keys(this.get("values_unit")),
             snippetType: "dropdown",
             isMultiple: false,
-            preselectedValues: _.allKeys(this.get("values_unit"))[0]
+            preselectedValues: Object.keys(this.get("values_unit"))[0]
         }));
         this.listenTo(this.get("snippetDropdownModelGeometry"), {
             "valuesChanged": function () {
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 if (selectedValues.values[0] === this.get("area")) {
-                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit_polygon"))[0]);
-                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit_polygon")));
-                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit_polygon")));
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(Object.keys(this.get("values_unit_polygon"))[0]);
+                    this.get("snippetDropdownModelUnit").updateValues(Object.keys(this.get("values_unit_polygon")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(Object.keys(this.get("values_unit_polygon")));
                 }
                 else {
-                    this.get("snippetDropdownModelUnit").setPreselectedValues(_.allKeys(this.get("values_unit"))[0]);
-                    this.get("snippetDropdownModelUnit").updateValues(_.allKeys(this.get("values_unit")));
-                    this.get("snippetDropdownModelUnit").updateSelectedValues(_.allKeys(this.get("values_unit")));
+                    this.get("snippetDropdownModelUnit").setPreselectedValues(Object.keys(this.get("values_unit"))[0]);
+                    this.get("snippetDropdownModelUnit").updateValues(Object.keys(this.get("values_unit")));
+                    this.get("snippetDropdownModelUnit").updateSelectedValues(Object.keys(this.get("values_unit")));
                 }
-                this.createInteraction(selectedValues.values[0] || _.allKeys(this.getLocalizedValues())[0]);
+                this.createInteraction(selectedValues.values[0] || Object.keys(this.getLocalizedValues())[0]);
             }
         });
         this.listenTo(this.get("snippetDropdownModelUnit"), {
@@ -221,7 +223,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
                 if (!this.getIsDrawn()) {
-                    this.createInteraction(selectedValues.values[0] || _.allKeys(this.getLocalizedValues())[0]);
+                    this.createInteraction(selectedValues.values[0] || Object.keys(this.getLocalizedValues())[0]);
                 }
                 this.setUnit(selectedUnit.values[0]);
             }
@@ -246,6 +248,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {Void}  -
      */
     changeLang: function () {
+        const geometry = this.get("snippetDropdownModelGeometry");
+
         this.set({
             geometry: i18next.t("common:modules.tools.measure.geometry"),
             measure: i18next.t("common:modules.tools.measure.measure"),
@@ -256,10 +260,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             stretch: i18next.t("common:modules.tools.measure.stretch"),
             area: i18next.t("common:modules.tools.measure.area")
         });
-        if (!_.isEmpty(this.get("snippetDropdownModelGeometry"))) {
-            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.getLocalizedValues())[0]);
-            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.getLocalizedValues()));
-            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.getLocalizedValues()));
+        if (geometry != null && (((Array.isArray(geometry) || typeof geometry === "String") && geometry.length > 0) || Object.keys(geometry).length > 0)) {
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(Object.keys(this.getLocalizedValues())[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(Object.keys(this.getLocalizedValues()));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(Object.keys(this.getLocalizedValues()));
         }
     },
 
@@ -279,14 +283,14 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             this.setQuickHelp(quickHelpSet);
             this.setUiStyle(Radio.request("Util", "getUiStyle"));
             this.setScale(Radio.request("MapView", "getOptions").scale);
-            measureLayer = _.find(layers.getArray(), function (layer) {
+            measureLayer = layers.getArray().find(function (layer) {
                 return layer.get("name") === "measure_layer";
             });
             if (measureLayer === undefined) {
                 Radio.trigger("Map", "addLayerToIndex", [this.get("layer"), layers.getArray().length]);
             }
             selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
-            this.createInteraction(selectedValues.values[0] || _.allKeys(this.getLocalizedValues())[0]);
+            this.createInteraction(selectedValues.values[0] || Object.keys(this.getLocalizedValues())[0]);
 
         }
         else {
@@ -306,19 +310,19 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         this.deleteFeatures();
         if (map === "3D") {
             this.set("isMap3d", true);
-            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.get("values_3d"))[0]);
-            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.get("values_3d")));
-            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.get("values_3d")));
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(Object.keys(this.get("values_3d"))[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(Object.keys(this.get("values_3d")));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(Object.keys(this.get("values_3d")));
         }
         else {
             this.set("isMap3d", false);
-            this.get("snippetDropdownModelGeometry").setPreselectedValues(_.allKeys(this.getLocalizedValues())[0]);
-            this.get("snippetDropdownModelGeometry").updateValues(_.allKeys(this.getLocalizedValues()));
-            this.get("snippetDropdownModelGeometry").updateSelectableValues(_.allKeys(this.getLocalizedValues()));
+            this.get("snippetDropdownModelGeometry").setPreselectedValues(Object.keys(this.getLocalizedValues())[0]);
+            this.get("snippetDropdownModelGeometry").updateValues(Object.keys(this.getLocalizedValues()));
+            this.get("snippetDropdownModelGeometry").updateSelectableValues(Object.keys(this.getLocalizedValues()));
         }
         if (this.get("isActive")) {
             selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
-            this.createInteraction(selectedValues.values[0] || _.allKeys(this.get("values_3d"))[0]);
+            this.createInteraction(selectedValues.values[0] || Object.keys(this.get("values_3d"))[0]);
         }
     },
 
@@ -580,7 +584,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             }),
             styles = [];
 
-        if (!_.isUndefined(feature)) {
+        if (feature !== undefined) {
             geom = feature.getGeometry();
         }
 
@@ -635,7 +639,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             coord,
             pointFeature;
 
-        if (!_.isUndefined(feature)) {
+        if (feature !== undefined) {
             geom = feature.getGeometry();
         }
 
@@ -657,8 +661,20 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         else {
             pointFeature.setStyle(this.generateTextStyles(feature));
         }
-        pointFeature.set("styleId", _.uniqueId());
+        pointFeature.set("styleId", this.uniqueId("measureStyle"));
         return pointFeature;
+    },
+    /**
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
+
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
     },
 
     /**
@@ -955,6 +971,14 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      */
     setDropDownSnippetUnit: function (value) {
         this.set("snippetDropdownModelUnit", value);
+    },
+    /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+   setIdCounter: function (value) {
+        this.set("idCounter", value);
     }
 });
 

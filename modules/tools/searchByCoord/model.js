@@ -64,13 +64,13 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
     },
 
     validate: function (attributes) {
-        var validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
+        const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/;
 
         if (attributes.coordSystem === "ETRS89") {
-            _.each(attributes.coordinates, function (value, key) {
-                var fieldName;
+            for (let [key, value] of Object.entries(attributes.coordinates)) {
+                let fieldName;
 
                 $(fieldName + ".text-danger").html("");
                 if (key === 0) {
@@ -79,7 +79,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                 else {
                     fieldName = "#coordinatesNorthingField";
                 }
-                if (_.isUndefined(value.coord) || value.coord.length < 1) {
+                if (value.coord === undefined || value.coord.length < 1) {
                     value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: value.key});
                     $(fieldName + "+ .text-danger").html("");
                     $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
@@ -96,16 +96,16 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                     $(fieldName).parent().removeClass("has-error");
                     Radio.trigger("Alert", "alert:remove");
                 }
-            });
+            };
         }
         else if (attributes.coordSystem === "WGS84") {
-            if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
+            if (attributes.coordinates[0].coord === undefined || attributes.coordinates[0].coord.length < 1) {
                 attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
-            else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84))) {
+            else if (attributes.coordinates[0].coord.match(validWGS84) === null) {
                 attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
@@ -117,13 +117,13 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                 Radio.trigger("Alert", "alert:remove");
             }
 
-            if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
+            if (attributes.coordinates[0].coord === undefined || attributes.coordinates[1].coord.length < 1) {
                 attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
-            else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84))) {
+            else if (attributes.coordinates[1].coord.match(validWGS84) === null) {
                 attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
@@ -136,13 +136,13 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
             }
         }
         else if (attributes.coordSystem === "WGS84(Dezimalgrad)") {
-            if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[0].coord.length < 1) {
+            if (attributes.coordinates[0].coord === undefined || attributes.coordinates[0].coord.length < 1) {
                 attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[0].key});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
                 $("#coordinatesEastingField").parent().addClass("has-error");
             }
-            else if (_.isNull(attributes.coordinates[0].coord.match(validWGS84_dez))) {
+            else if (attributes.coordinates[0].coord.match(validWGS84_dez) === null) {
                 attributes.coordinates[0].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[0].key, valueExample: attributes.coordinates[0].example});
                 $("#coordinatesEastingField + .text-danger").html("");
                 $("#coordinatesEastingField").after("<span class='text-danger'><small>" + attributes.coordinates[0].ErrorMsg + "</small></span>");
@@ -153,13 +153,13 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                 $("#coordinatesEastingField").parent().removeClass("has-error");
                 Radio.trigger("Alert", "alert:remove");
             }
-            if (_.isUndefined(attributes.coordinates[0].coord) || attributes.coordinates[1].coord.length < 1) {
+            if (attributes.coordinates[0].coord === undefined || attributes.coordinates[1].coord.length < 1) {
                 attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");
             }
-            else if (_.isNull(attributes.coordinates[1].coord.match(validWGS84_dez))) {
+            else if (attributes.coordinates[1].coord.match(validWGS84_dez) === null) {
                 attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: attributes.coordinates[1].key, valueExample: attributes.coordinates[1].example});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
@@ -180,7 +180,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
         this.set("coordSystem", value);
     },
     setCoordinates: function (easting, northing) {
-        var coordinateArray = [];
+        let coordinateArray = [];
 
         if (this.get("coordSystem") === "WGS84") {
 
@@ -208,7 +208,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
         }
     },
     getNewCenter: function () {
-        var easting,
+        let easting,
             northing;
 
         if (this.get("coordSystem") === "WGS84") {

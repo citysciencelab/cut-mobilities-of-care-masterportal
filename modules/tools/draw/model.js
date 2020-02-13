@@ -956,11 +956,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             radius = this.get("radius"),
             zIndex = this.get("zIndex");
 
-        if (_.has(drawType, "text") && drawType.text === this.get("writeText")) {
-        // if (drawType.text === "Text schreiben") {//von Kilian
+        if (drawType.hasOwnProperty("text") && drawType.text === this.get("writeText")) {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
         }
-        else if (drawType.hasOwnProperty("geometry") && (_.has(drawType, "text") && drawType.text === this.get("drawCircle") || drawType.text === this.get("drawDoubleCircle"))) {
+        else if (drawType.hasOwnProperty("geometry") && (drawType.hasOwnProperty("text") && drawType.text === this.get("drawCircle") || drawType.text === this.get("drawDoubleCircle"))) {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
         else {
