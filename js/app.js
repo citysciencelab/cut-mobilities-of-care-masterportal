@@ -125,6 +125,9 @@ function loadApp () {
     });
 
     app.$store.commit("addConfigToStore", Config);
+
+    Vue.prototype.$configJson = Radio.request("Parser", "getPortalConfig");
+
     app.$mount();
 
     // Core laden
@@ -442,9 +445,9 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
-        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-            new TitleView();
-        }
+        // if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
+        //     new TitleView();
+        // }
     }
 
     if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
