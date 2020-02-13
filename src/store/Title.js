@@ -1,4 +1,3 @@
-
 export default {
     state: {
         link: "https://geoinfo.hamburg.de",
