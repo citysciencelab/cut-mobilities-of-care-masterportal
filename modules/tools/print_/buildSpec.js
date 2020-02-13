@@ -693,17 +693,18 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {string} the attribute by whose value the feature is styled
      */
     getStyleAttribute: function (layer, feature, isNewVectorStyle) {
-        const layerId = layer.get("id"),
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+        const layerId = layer.get("id");
+
+        let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            styleField = "styleId",
+            styleList;
+
+
+        if (layerModel !== undefined) {
+            layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
             styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-
-        let groupLayerModel,
-            styleField = "styleId";
-
-        if (layerModel !== undefined && styleList !== undefined) {
-            groupLayerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-            if (groupLayerModel.get("styleId")) {
-                if (isNewVectorStyle) {
+            if (layerModel.get("styleId")) {
+                if (isNewVectorStyle && styleList !== undefined) {
                     styleField = styleList.getRulesForFeature(feature)[0] && styleList.getRulesForFeature(feature)[0].hasOwnProperty("conditions") ? Object.keys(styleList.getRulesForFeature(feature)[0].conditions.properties)[0] : "";
                 }
                 else {
