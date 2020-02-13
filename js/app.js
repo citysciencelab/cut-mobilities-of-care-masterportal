@@ -27,7 +27,6 @@ import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
@@ -94,6 +93,7 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
+        style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
     let app = {},
         style = "";
@@ -178,12 +178,7 @@ function loadApp () {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
-    if (Config.hasOwnProperty("scaleLine") && Config.scaleLine === true) {
-        new ScaleLineView();
-    }
-
-    style = Radio.request("Util", "getUiStyle");
-
+    new WindowView();
     // Module laden
     // Tools
     new SidebarView();

@@ -46,6 +46,7 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
                 }
             }, this);
         }
+        Radio.trigger("Footer", "isReady");
         return this;
     },
     /**
