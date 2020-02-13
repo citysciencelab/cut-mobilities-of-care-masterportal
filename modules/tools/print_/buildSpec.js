@@ -287,14 +287,16 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - style for mapfish print.
      */
     buildStyle: function (layer, features, geojsonList) {
-        var mapfishStyleObject = {
+        const mapfishStyleObject = {
                 "version": "2"
             },
-            styleAttribute = this.getStyleAttribute(layer);
+            isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
 
         features.forEach(function (feature) {
-            var clonedFeature,
-                styles = this.getFeatureStyle(feature, layer),
+            const styles = this.getFeatureStyle(feature, layer),
+                styleAttribute = this.getStyleAttribute(layer, feature, isNewVectorStyle);
+
+            let clonedFeature,
                 stylingRule,
                 styleObject,
                 geometryType,
@@ -318,6 +320,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         return;
                     }
+
                     styleObject = {
                         symbolizers: []
                     };
@@ -671,7 +674,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         // feature with geometry style and label style
         else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-            if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
+            if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
                 return "[" + styleAttr + "='" + feature.get(styleAttr) + "' AND " + labelField + "='" + labelValue + "']";
@@ -685,17 +688,27 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * @param {ol.Layer} layer -
+     * @param {Object} feature - the feature of current layer
+     * @param {boolean} isNewVectorStyle - check if it is the new vector style
      * @returns {string} the attribute by whose value the feature is styled
      */
-    getStyleAttribute: function (layer) {
-        var layerId = layer.get("id"),
+    getStyleAttribute: function (layer, feature, isNewVectorStyle) {
+        const layerId = layer.get("id"),
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
+
+        let groupLayerModel,
             styleField = "styleId";
 
-        if (layerModel !== undefined) {
-            layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
-            if (layerModel.get("styleId")) {
-                styleField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+        if (layerModel !== undefined && styleList !== undefined) {
+            groupLayerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
+            if (groupLayerModel.get("styleId")) {
+                if (isNewVectorStyle) {
+                    styleField = styleList.getRulesForFeature(feature)[0] && styleList.getRulesForFeature(feature)[0].hasOwnProperty("conditions") ? Object.keys(styleList.getRulesForFeature(feature)[0].conditions.properties)[0] : "";
+                }
+                else {
+                    styleField = styleList.get("styleField");
+                }
             }
         }
 
