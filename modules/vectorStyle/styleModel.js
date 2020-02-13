@@ -277,6 +277,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Checks one feature against one property returning true if property satisfies condition.
+     * if clustering is activated, the parameter featureProperties has an array of feautures. only the first feature
+     * from the array is relevant at this point, because only individual features are styled here.
+     * The styling of clustered features happens in another function.
      * @param   {object} featureProperties properties of the feature that has to be checked
      * @param   {string} key attribute name or object path to check
      * @param   {string|number|array} value attribute value or object path to check
@@ -286,9 +289,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         let featureProperty = featureProperties;
 
         // if they are clustered features, then the first one is taken from the array
-        if (featureProperties.features && featureProperties.hasOwnProperty("features")) {
-            if (featureProperties.features[0] && featureProperties.features[0].hasOwnProperty("values_")) {
-                featureProperty = featureProperties.features[0].values_;
+        if (typeof featureProperties === "object" && featureProperties.hasOwnProperty("features")) {
+            if (Array.isArray(featureProperties.features) && featureProperties.features.length > 0) {
+                featureProperty = featureProperties.features[0].getProperties();
             }
         }
 
