@@ -575,7 +575,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
             if (Array.isArray(thing)) {
                 let keys = [],
-                    props = {};
+                    props = {},
+                    datastreams = [];
 
                 aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
                 thing.forEach(thing2 => {
@@ -585,20 +586,22 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     props = Object.assign(props, thing2.properties);
                     props = Object.assign(props, {name: thing2.name});
                     props = Object.assign(props, {description: thing2.description});
+                    datastreams = datastreams.concat(thing2.Datastreams);
                 });
                 keys = [...new Set(keys.flat())];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
+                aggregatedThing.properties.Datastreams = datastreams;
             }
             else {
                 aggregatedThing.location = this.getJsonGeometry(thing, 0);
                 aggregatedThing.properties = thing.properties;
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
+                aggregatedThing.properties.Datastreams = thing.Datastreams;
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
-            aggregatedThing.properties.Datastreams = thing.Datastreams;
 
             aggregatedArray.push(aggregatedThing);
         });
