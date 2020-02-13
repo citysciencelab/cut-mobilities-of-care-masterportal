@@ -262,7 +262,7 @@ describe("core/modelList/layer/sensor", function () {
                 typ: "SensorThings",
                 id: "123"
             }));
-            sensorLayer.set("layerSource", sensorLayer.get("layer").getSource());
+            sensorLayer.set("layerSource", sensorLayer.get("layer").getSource(), {silent: true});
 
             sensorLayer.get("layer").getSource().addFeatures([new Feature({
                 geometry: new Point([50, 50])
@@ -323,7 +323,7 @@ describe("core/modelList/layer/sensor", function () {
                 unsubscribe: function () {
                     return false;
                 }
-            });
+            }, {silent: true});
 
             sensorLayer.set("isSubscribed", false, {silent: true});
             sensorLayer.set("isOutOfRange", false, {silent: true});
@@ -350,9 +350,9 @@ describe("core/modelList/layer/sensor", function () {
                 subscribe: function (topic) {
                     topics.push(topic);
                 }
-            });
+            }, {silent: true});
 
-            sensorLayer.set("subscriptionTopics", {});
+            sensorLayer.set("subscriptionTopics", {}, {silent: true});
             sensorLayer.subscribeToSensorThings();
 
             expect(topics).to.deep.equal(["v1.0/Datastreams()/Observations"]);
@@ -363,11 +363,9 @@ describe("core/modelList/layer/sensor", function () {
                 subscribe: function (topic) {
                     topics.push(topic);
                 }
-            });
+            }, {silent: true});
 
-            sensorLayer.set("subscriptionTopics", {
-                "": true
-            });
+            sensorLayer.set("subscriptionTopics", {"": true}, {silent: true});
             sensorLayer.subscribeToSensorThings();
 
             expect(topics).to.be.empty;
@@ -383,11 +381,9 @@ describe("core/modelList/layer/sensor", function () {
                 unsubscribe: function (topic) {
                     topics.push(topic);
                 }
-            });
+            }, {silent: true});
 
-            sensorLayer.set("subscriptionTopics", {
-                "foo": true
-            });
+            sensorLayer.set("subscriptionTopics", {"foo": true}, {silent: true});
             sensorLayer.unsubscribeFromSensorThings();
 
             expect(topics).to.deep.equal(["v1.0/Datastreams(foo)/Observations"]);
@@ -398,11 +394,9 @@ describe("core/modelList/layer/sensor", function () {
                 unsubscribe: function (topic) {
                     topics.push(topic);
                 }
-            });
+            }, {silent: true});
 
-            sensorLayer.set("subscriptionTopics", {
-                "foo": false
-            });
+            sensorLayer.set("subscriptionTopics", {"foo": false}, {silent: true});
             sensorLayer.unsubscribeFromSensorThings();
 
             expect(topics).to.be.empty;
