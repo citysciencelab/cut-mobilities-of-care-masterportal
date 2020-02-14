@@ -113,9 +113,9 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     },
 
     /**
-    * todo
-    * @param {*} response todo
-    * @returns {*} todo
+    * Parses the specifications from the config.json.
+    * @param {Object} response - Parameters from the config.json.
+    * @returns {void} - no value is returned.
     */
     parse: function (response) {
         let attributes;
@@ -131,6 +131,8 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
             snippetInfos: this.requestSnippetInfos()
         };
+
+        Radio.trigger("Preparser", "isParsed", attributes);
 
         /**
          * this.updateTreeType

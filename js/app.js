@@ -126,8 +126,6 @@ function loadApp () {
 
     app.$store.commit("addConfigToStore", Config);
 
-    Vue.prototype.$configJson = Radio.request("Parser", "getPortalConfig");
-
     app.$mount();
 
     // Core laden

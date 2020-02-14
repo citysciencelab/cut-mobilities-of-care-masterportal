@@ -12,7 +12,15 @@
 <script>
 export default {
     created() {
-        this.$store.commit("setDefaultParameters", this.$configJson, this.$store.state);
+        const that = this,
+            myBus = Backbone.Events;
+
+        myBus.listenTo(Radio.channel("Preparser"), {
+            isParsed: function (response) {
+                that.$store.state.configJson = response.portalConfig;
+                that.$store.commit("setDefaultParameters", that.$store.state.configJson, that.$store.state);
+            }
+        });
     },
     mounted () {
         // document.getElementById("root").appendChild(this.$el);
