@@ -43,8 +43,9 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
 
     /**
      * Removes the menu and reloads it.
+     * @return {Void}  -
      */
-    reloadMenu: function(){
+    reloadMenu: function () {
         $("div.collapse.navbar-collapse ul.nav-menu").empty();
         $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
         this.loadMenu();

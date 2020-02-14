@@ -26,7 +26,6 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 this.toggleSupportedVisibility(mode);
             }
         });
-            
         this.render();
         this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         this.setCssClass();
