@@ -277,7 +277,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * Sorts array of objects basend on the gioven type.
+     * Sorts array of objects basend on the given type.
      * @param {String} type Type of sort algorithm.
      * @param {Object[]} input Array with object to be sorted.
      * @param {String} first First attribute to sort by.
