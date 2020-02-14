@@ -15,6 +15,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
         deactivateGFI: true,
         renderToWindow: true,
         glyphicon: "glyphicon-screenshot",
+        currentLng: "",
         // translations
         coordSystemField: "",
         hdmsEastingLabel: "",
@@ -36,6 +37,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @property {boolean} deactivateGFI=true todo
      * @property {boolean} renderToWindow=true todo
      * @property {string} glyphicon="glyphicon-screenshot" todo
+     * @property {string} currentLng="" contains the current language - view is listening to it's changes
      * @property {String} coordSystemField="", filled with "Koordinatensystem"- translated
      * @property {String} hdmsEastingLabel="", filled with "Länge"- translated
      * @property {String} hdmsNorthingLabel="", filled with "Breite"- translated
@@ -79,13 +81,14 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @param {String} lng the language changed to
      * @returns {Void} -
      */
-    changeLang: function () {
+    changeLang: function (lng) {
         this.set({
             "coordSystemField": i18next.t("common:modules.tools.getCoord.coordSystemField"),
             "hdmsEastingLabel": i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
             "hdmsNorthingLabel": i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
             "cartesianEastingLabel": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
-            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel")
+            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            "currentLng": lng
         });
     },
 

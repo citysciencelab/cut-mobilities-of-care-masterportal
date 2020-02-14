@@ -25,20 +25,18 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
     id: "languagebar",
     template: _.template(Template),
     /**
-     * Render function for title.
+     * Render function for view in an overlay.
      * @returns {void}
      */
     render: function () {
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-
-        $(".footer").append(this.$el);
-
         this.bindShowLanguageList(this.$el);
         this.bindChangeLanguage(this.$el);
         this.bindClosePopup(this.$el);
-
+        this.model.setOverlayElement(this.$el[0]);
+        $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
         return this;
     },
 

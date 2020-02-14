@@ -120,6 +120,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         style: "DEFAULT",
         glyphicon: "glyphicon-resize-full",
         idCounter: 0,
+        currentLng: "",
         // translations
         geometry: "",
         measure: "",
@@ -143,6 +144,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @property {String} style="DEFAULT" style for master portal
      * @property {Number} idCounter=0 counter for unique ids
      * @property {String} geometry="", filled with "Geometrie"- translated
+     * @property {String} currentLng="", contains the current language - view listens to it
      * @property {String} measure="", filled with "Einheit"- translated
      * @property {String} plzConsider="", filled with "Bitte beachten Sie"- translated
      * @property {String} valuesNotExact="", filled with "Die angezeigten Werte unterliegen Ungenauigkeiten"- translated
@@ -247,7 +249,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
-    changeLang: function () {
+    changeLang: function (lng) {
         const geometry = this.get("snippetDropdownModelGeometry");
 
         this.set({
@@ -265,6 +267,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             this.get("snippetDropdownModelGeometry").updateValues(Object.keys(this.getLocalizedValues()));
             this.get("snippetDropdownModelGeometry").updateSelectableValues(Object.keys(this.getLocalizedValues()));
         }
+        this.set("currentLng", lng);
     },
 
     /**
@@ -446,6 +449,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                console.log('evt draw start:',evt);
+                
                 that.setIsDrawn(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
@@ -851,15 +856,15 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {void}
      */
     removeIncompleteDrawing: function () {
-        var isDrawn = this.get("isDrawn"),
-            source,
-            actualFeature;
+        let source = null,
+            actualFeature = null;
 
-        if (isDrawn) {
+        if (this.get("isDrawn")) {
             source = this.get("source");
-            actualFeature = source.getFeatures().slice(-1)[0];
-
-            source.removeFeature(actualFeature);
+            if(source.getFeatures().length > 0){
+                actualFeature = source.getFeatures().slice(-1)[0];
+                source.removeFeature(actualFeature);
+            }
         }
     },
 

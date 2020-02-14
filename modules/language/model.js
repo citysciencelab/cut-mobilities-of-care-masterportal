@@ -1,7 +1,12 @@
+import Overlay from 'ol/Overlay';
+
 const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype */ {
     defaults: {
         languageCodes: {},
         activeCode: "",
+        overlay : new Overlay({
+            element: null
+          }),
         // translations
         closeButton: "",
         languageTitle: ""
@@ -13,10 +18,16 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
      * @constructs
      * @property {Object} languageCodes={}, all available langiages as codes
      * @property {String} activeCode="", actual used language as code
+     * @property {Overlay} overlay=new Overlay({ element: null }) render this in an overlay for not bubbling down click-events
      * @property {String} closeButton="", filled with "Schliessen"- translated
      * @property {String} languageTitle="", filled with "Bitte wählen Sie eine Sprache aus"- translated
      */
     initialize: function () {
+        this.listenTo(Radio.channel("Map"), {
+            "isReady": function () {
+                Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            }
+        }, this);
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang
         });
@@ -43,6 +54,14 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
                 languageTitle: i18next.t("common:modules.language.languageTitle")
             });
         }
+    },
+     /**
+    * Setter function for overlay element
+    * @param {Object} value the element
+    * @returns {void}
+    */
+   setOverlayElement: function (value) {
+      this.get("overlay").setElement(value);
     }
 });
 
