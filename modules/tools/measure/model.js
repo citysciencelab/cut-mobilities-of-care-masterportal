@@ -431,7 +431,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     createInteraction: function (drawType) {
         const that = this,
             value = this.getLocalizedValues()[drawType];
-        let textPoint
+        let textPoint;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");

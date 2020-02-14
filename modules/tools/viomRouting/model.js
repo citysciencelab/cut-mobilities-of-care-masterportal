@@ -120,11 +120,11 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
         this.set("startAdresse", this.get("currentPosition"));
     },
     setParams: function () {
-    const viomRoutingModel = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID")),
-        bkgSuggestModel = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID")),
-        bkgGeosearchModel = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID")),
-        epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "",
-        bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
+        const viomRoutingModel = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID")),
+            bkgSuggestModel = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID")),
+            bkgGeosearchModel = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID")),
+            epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "",
+            bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
 
         this.set("bkgSuggestURL", bkgSuggestModel.get("url"));
         this.set("bkgGeosearchURL", bkgGeosearchModel.get("url"));

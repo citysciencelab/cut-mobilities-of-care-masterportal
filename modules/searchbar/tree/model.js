@@ -108,7 +108,8 @@ const TreeModel = Backbone.Model.extend({
         // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
         // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
         const layerModelsUnique = [];
-        layerModels.forEach(function(model) {
+
+        layerModels.forEach(function (model) {
             const uniqueId = model.name + model.id;
 
             if (layerModelsUnique.indexOf(uniqueId) === -1) {

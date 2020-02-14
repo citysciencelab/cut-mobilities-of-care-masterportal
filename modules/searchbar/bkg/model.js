@@ -112,7 +112,7 @@ const BKGSearchModel = Backbone.Model.extend({
         }
         Radio.trigger("Searchbar", "createRecommendedList", "bkg");
     },
-     /**
+    /**
      * Returns a unique id, starts with the given prefix
      * @param {string} prefix prefix for the id
      * @returns {string} a unique id

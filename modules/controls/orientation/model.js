@@ -258,7 +258,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         let featuresAll = [],
             features = [];
 
-            visibleWFSLayers.forEach(function (layer) {
+        visibleWFSLayers.forEach(function (layer) {
             if (layer.has("layerSource") === true) {
                 features = layer.get("layerSource").getFeaturesInExtent(circleExtent);
                 features.forEach(function (feat) {
@@ -268,7 +268,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
                         dist2Pos: this.getDistance(feat, centerPosition)
                     });
                 }, this);
-                featuresAll = this.union(features, featuresAll, function(obj1, obj2){
+                featuresAll = this.union(features, featuresAll, function (obj1, obj2) {
                     return obj1 === obj2;
                 });
             }
@@ -276,11 +276,20 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
 
         return featuresAll;
     },
-    union: function(arr1, arr2, equalityFunc) {
+    /**
+     * Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+     * @param  {Array} arr1 the first array
+     * @param  {Array} arr2 the second array
+     * @param  {Function} equalityFunc to compare objects
+     * @returns {Array} the union of the two arrays
+     */
+    union: function (arr1, arr2, equalityFunc) {
         const union = arr1.concat(arr2);
-    
-        for (var i = 0; i < union.length; i++) {
-            for (var j = i+1; j < union.length; j++) {
+        let i = 0,
+            j = 0;
+
+        for (i = 0; i < union.length; i++) {
+            for (j = i + 1; j < union.length; j++) {
                 if (equalityFunc(union[i], union[j])) {
                     union.splice(j, 1);
                     j--;
