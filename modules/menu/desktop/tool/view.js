@@ -26,8 +26,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 this.toggleSupportedVisibility(mode);
             }
         });
-        Radio.once("Addons", "initialized", this.render, this);
-
+            
         this.render();
         this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         this.setCssClass();

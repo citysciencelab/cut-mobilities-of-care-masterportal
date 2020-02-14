@@ -22,9 +22,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         if (this.menuStyle === "DEFAULT") {
             Radio.on("Util", {
                 "isViewMobileChanged": function () {
-                    $("div.collapse.navbar-collapse ul.nav-menu").empty();
-                    $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
-                    this.loadMenu();
+                    this.reloadMenu();
                 }
             }, this);
         }
@@ -32,13 +30,23 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": function () {
                 this.switchCollectionLanguage(Radio.request("ModelList", "getCollection"));
-
-                $("div.collapse.navbar-collapse ul.nav-menu").empty();
-                $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
-                this.loadMenu();
+                this.reloadMenu();
             }
         });
+        this.listenToOnce(Radio.channel("Addons"), {
+            "initialized": function () {
+                this.reloadMenu();
+            }
+        });
+        this.loadMenu();
+    },
 
+    /**
+     * Removes the menu and reloads it.
+     */
+    reloadMenu: function(){
+        $("div.collapse.navbar-collapse ul.nav-menu").empty();
+        $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
         this.loadMenu();
     },
 
