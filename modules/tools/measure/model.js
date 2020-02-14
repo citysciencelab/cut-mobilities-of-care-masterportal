@@ -449,8 +449,6 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                console.log('evt draw start:',evt);
-                
                 that.setIsDrawn(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
@@ -861,7 +859,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
 
         if (this.get("isDrawn")) {
             source = this.get("source");
-            if(source.getFeatures().length > 0){
+            if (source.getFeatures().length > 0) {
                 actualFeature = source.getFeatures().slice(-1)[0];
                 source.removeFeature(actualFeature);
             }

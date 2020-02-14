@@ -1,12 +1,12 @@
-import Overlay from 'ol/Overlay';
+import Overlay from "ol/Overlay";
 
 const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype */ {
     defaults: {
         languageCodes: {},
         activeCode: "",
-        overlay : new Overlay({
+        overlay: new Overlay({
             element: null
-          }),
+        }),
         // translations
         closeButton: "",
         languageTitle: ""
@@ -55,13 +55,13 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
             });
         }
     },
-     /**
+    /**
     * Setter function for overlay element
     * @param {Object} value the element
     * @returns {void}
     */
-   setOverlayElement: function (value) {
-      this.get("overlay").setElement(value);
+    setOverlayElement: function (value) {
+        this.get("overlay").setElement(value);
     }
 });
 

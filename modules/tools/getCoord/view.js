@@ -23,7 +23,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
             "change:isActive change:url": this.render,
             "change:positionMapProjection": this.changedPosition,
             "change:currentLng": () => {
-                this.render(this.model, this.model.get("isActive"))
+                this.render(this.model, this.model.get("isActive"));
             }
         });
         // To initially open this tool it needs to fire change:isActive event on parent model because other

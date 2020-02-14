@@ -25,7 +25,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "change:currentLng": () => {
-                this.render(this.model, this.model.get("isActive"))
+                this.render(this.model, this.model.get("isActive"));
             }
         });
         this.snippetDropdownViewGeometry = new SnippetDropdownView({model: this.model.get("snippetDropdownModelGeometry")});

@@ -10,7 +10,7 @@ const SaveSelectionView = Backbone.View.extend({
             "change:isActive": this.render,
             "change:url": this.setUrlValue,
             "change:saveSelectionText": () => {
-                this.render(this.model, this.model.get("isActive"))
+                this.render(this.model, this.model.get("isActive"));
             }
         });
         if (this.model.get("isActive") === true) {
