@@ -6,7 +6,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 40
+        loaderOverlayTimeout: 40,
+        fadeOut: 2000
     },
     /**
      * @class Util
@@ -80,6 +81,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
         channel.on({
             "hideLoader": this.hideLoader,
+            "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle,
             "copyToClipboard": this.copyToClipboard
@@ -356,6 +358,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoader: function () {
         $("#loader").hide();
+    },
+
+    /**
+     * hides the loading module until the timeout has expired
+     * @returns {void}
+     */
+    hideLoadingModule: function () {
+        $(".loading").fadeOut(this.get("fadeOut"));
     },
 
     /**
