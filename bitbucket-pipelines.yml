@@ -3,8 +3,6 @@ image: node:12.13.1
 pipelines:
     default:
         - step:
-            caches:
-                - node
             name: build and test in Browser
             script:
                 - npm install
