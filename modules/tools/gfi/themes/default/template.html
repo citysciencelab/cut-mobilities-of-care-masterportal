@@ -10,7 +10,7 @@
                 </td>
             </tr>
         <% }
-        else if (_.isString(key) === false || _.isString(value)=== false) { %>
+        else if (typeof key !== "string" || typeof value !== "string") { %>
             <tr colspan="2">
                 <td class="font-bold">
                     <%= key + ""%>
@@ -28,7 +28,7 @@
                 <td>
                     <% if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") { %>
                         <% if (value.split("|").length > 1) { %>
-                            <% _.each(value.split("|"), function (val) { %>
+                            <% value.split("|").forEach(function (val) { %>
                                 <a href="<%= val %>" target="_blank">Anlage <%= anlagenCounter %></a><br>
                                 <% anlagenCounter++; %>
                             <% }); %>

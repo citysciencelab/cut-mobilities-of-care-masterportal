@@ -29,19 +29,19 @@ const ColorScale = Backbone.Model.extend({
      */
 
     generateColorScale (values = [0, 1], colorspace = "interpolateBlues", legendSteps = 5, type = "sequential", defaultColor = "rgb(51, 153, 204)") {
-        const legendDefaultColor = "rgb(99,99,99)";
-        var _values = values.filter(val => !isNaN(val)),
-            _undefineds = values.filter(val => val === undefined),
-            minValue = Math.min(..._values),
-            maxValue = Math.max(..._values),
-            scale,
+        const legendDefaultColor = "rgb(99,99,99)",
+            filteredValues = values.filter(val => !isNaN(val)),
+            filteredUndefineds = values.filter(val => val === undefined),
+            minValue = Math.min(...filteredValues),
+            maxValue = Math.max(...filteredValues),
             legend = {
                 values: [],
                 colors: []
             };
+        let scale;
 
         // Check if more than one value has been submitted
-        if (minValue !== maxValue && _values.length > 0) {
+        if (minValue !== maxValue && filteredValues.length > 0) {
             switch (type) {
                 case "linear":
                     scale = scaleLinear()
@@ -57,20 +57,20 @@ const ColorScale = Backbone.Model.extend({
 
             legend.values = this.interpolateValues(minValue, maxValue, legendSteps);
             legend.colors = this.createLegendValues(scale, legend.values);
-            if (_undefineds.length > 0) {
+            if (filteredUndefineds.length > 0) {
                 legend.values.push("Keine Daten");
                 legend.colors.push(legendDefaultColor);
             }
         }
 
         // return default color if not
-        else if (values.length !== _undefineds.length) {
+        else if (values.length !== filteredUndefineds.length) {
             scale = function () {
                 return defaultColor;
             };
             legend = null;
         }
-        else if (values.length === _undefineds.length) {
+        else if (values.length === filteredUndefineds.length) {
             scale = function () {
                 return legendDefaultColor;
             };
@@ -80,8 +80,16 @@ const ColorScale = Backbone.Model.extend({
 
         return {scale, legend};
     },
+
+    /**
+     * calculates the values for the legend using the min and max values and the number of steps
+     * @param {number} min - min value
+     * @param {number} max - max value
+     * @param {number} steps - number of steps
+     * @return {number[]} calculated values
+     */
     interpolateValues: function (min, max, steps = 5) {
-        var values = [min],
+        const values = [min],
             step = (max - min) / (steps - 1);
 
         for (let i = 0; i < steps - 1; i++) {
@@ -90,8 +98,15 @@ const ColorScale = Backbone.Model.extend({
 
         return values;
     },
+
+    /**
+     * gets the rgbs for the corresponding values
+     * @param {object} scale - d3 scale
+     * @param {number[]} values - legend values
+     * @returns {string[]} array of rgbs
+     */
     createLegendValues: function (scale, values) {
-        var colors = [];
+        const colors = [];
 
         values.forEach((val) => {
             colors.push(scale(val));

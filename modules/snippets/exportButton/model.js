@@ -15,6 +15,11 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
      * @extends SnippetModel
      * @memberof Snippets.ExportButton
      * @constructs
+     * @property {string} tag=button name
+     * @property {string} rawData= origin data as json string
+     * @property {string} filename=name of the file
+     * @property {string} fileExtension
+     * @property {object} data=data for export
      * @returns {void}
      */
     initialize: function () {
@@ -60,7 +65,7 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
     convertJsonToCsv: function (data = this.get("rawData")) {
         let dataAsObjArr = data;
 
-        if (typeof data.length === "undefined") {
+        if (data.length === "undefined") {
             dataAsObjArr = this.refineObject(dataAsObjArr);
         }
 

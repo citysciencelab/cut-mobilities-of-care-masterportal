@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<% if (displayName) { %>
 <form class="form-inline">
     <div class= "title-values pull-left">
-        <% if (withLabel === true) { %>
+        <% if (withLabel === true && displayName) { %>
         <div class="form-group form-group-sm">
             <label><%= displayName %></label>
         </div>
@@ -21,7 +20,6 @@
     </div>
     <% } %>
 </form>
-<% } %>
 </div>
 <input class="slider" type="text" />
 <% if (!_.isUndefined(this.model.get("infoText"))) { %>

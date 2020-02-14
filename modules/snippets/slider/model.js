@@ -13,6 +13,8 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @property {float | array} [preselectedValues] Initial value. Use array to have a range slider.
      * @property {float} precision=3 The number of digits shown after the decimal.
      * @property {string} selection=before Selection placement. Accepts: 'before', 'after' or 'none'. In case of a range slider, the selection will be placed between the handles
+     * @property {string} displayName=display name of the snippet
+     * @property {ticks} ticks=slider ticks
      * @property {boolean} withLabel=true Flag to show label
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
