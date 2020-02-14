@@ -4,9 +4,13 @@ const webdriver = require("selenium-webdriver"),
         chrome: {"browserName": "chrome", version: "79", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
+    /** TODO
+     * when changing the following values, also change the functions beneath; the values there should eventually
+     * be replaced with references to these arrays, but during test writing, cases are oftentimes commented out,
+     * effectively changing indices lots of time; do this when all e2e tests have been written
+     */
     resolutions = [
         "1024x768"
-        // TODO commented out for dev branch until ready
         // "600x800"
     ],
     configs = new Map([
@@ -16,8 +20,8 @@ const webdriver = require("selenium-webdriver"),
     ]),
     modes = [
         "2D",
-        "3D",
-        "OB"
+        // "3D",
+        // "OB"
     ];
 
 /**
@@ -26,7 +30,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {boolean} whether resolution is supposed to model mobile view
  */
 function isMobile (resolution) {
-    return resolution === resolutions[1];
+    return resolution === "600x800";
 }
 
 /**
@@ -107,7 +111,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
             "browser_version": "74.0",
             "os": "Windows",
             "os_version": "10"
-        }/* , TODO commented out for dev branch until ready
+        }/*
         {
             ...base,
             "browserName": "Safari",
