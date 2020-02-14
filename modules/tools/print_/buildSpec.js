@@ -688,9 +688,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * @param {ol.Layer} layer -
-     * @param {Object} feature - the feature of current layer
-     * @param {boolean} isNewVectorStyle - check if it is the new vector style
-     * @returns {string} the attribute by whose value the feature is styled
+     * @param {ol.feature} feature - the feature of current layer
+     * @param {Boolean} isNewVectorStyle - check if it is the new vector style
+     * @returns {String} the attribute by whose value the feature is styled
      */
     getStyleAttribute: function (layer, feature, isNewVectorStyle) {
         const layerId = layer.get("id");
@@ -705,7 +705,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             if (layerModel.get("styleId")) {
                 if (isNewVectorStyle && styleList !== undefined) {
-                    styleField = styleList.getRulesForFeature(feature)[0] && styleList.getRulesForFeature(feature)[0].hasOwnProperty("conditions") ? Object.keys(styleList.getRulesForFeature(feature)[0].conditions.properties)[0] : "";
+                    styleField = styleList.getRulesForFeature(feature).length && styleList.getRulesForFeature(feature)[0] && styleList.getRulesForFeature(feature)[0].hasOwnProperty("conditions") ? Object.keys(styleList.getRulesForFeature(feature)[0].conditions.properties)[0] : "";
                 }
                 else {
                     styleField = styleList.get("styleField");
