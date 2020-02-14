@@ -697,7 +697,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             styleField = "styleId",
-            styleList;
+            styleList,
+            ruleFeature;
 
 
         if (layerModel !== undefined) {
@@ -705,7 +706,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             if (layerModel.get("styleId")) {
                 if (isNewVectorStyle && styleList !== undefined) {
-                    styleField = styleList.getRulesForFeature(feature).length && styleList.getRulesForFeature(feature)[0] && styleList.getRulesForFeature(feature)[0].hasOwnProperty("conditions") ? Object.keys(styleList.getRulesForFeature(feature)[0].conditions.properties)[0] : "";
+                    ruleFeature = styleList.getRulesForFeature(feature);
+                    styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0].hasOwnProperty("conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
                 }
                 else {
                     styleField = styleList.get("styleField");
