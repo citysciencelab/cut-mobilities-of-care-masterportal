@@ -2,15 +2,7 @@
 
 export default {
     created() {
-        const that = this,
-            myBus = Backbone.Events;
-
-        myBus.listenTo(Radio.channel("Preparser"), {
-            isParsed: function (response) {
-                that.$store.state.configJson = response.portalConfig;
-                that.$store.commit("setDefaultParameters", that.$store.state.configJson, that.$store.state);
-            }
-        });
+        
     },
     mounted () {
         $(this.$el).insertAfter(document.getElementById("root"));
