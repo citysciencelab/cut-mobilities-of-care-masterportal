@@ -164,7 +164,7 @@ function initLanguage (portalLanguageConfig) {
                 return portalLanguage.enabled;
             },
 
-            ns: ["common", "additional"],
+            ns: ["common"],
             defaultNS: "common",
 
             backend: {

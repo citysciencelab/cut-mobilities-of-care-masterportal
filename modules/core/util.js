@@ -250,7 +250,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         try {
             document.execCommand("copy");
             Radio.trigger("Alert", "alert", {
-                text: "Inhalt wurde in die Zwischenablage kopiert.",
+                text:  i18next.t("common:modules.tools.saveSelection.contentSaved"),
                 kategorie: "alert-info",
                 position: "top-center",
                 animation: 2000
@@ -258,7 +258,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         }
         catch (e) {
             Radio.trigger("Alert", "alert", {
-                text: "Inhalt konnte nicht in die Zwischenablage kopiert werden.",
+                text:  i18next.t("common:modules.tools.saveSelection.contenNotSaved"),
                 kategorie: "alert-info",
                 position: "top-center"
             });

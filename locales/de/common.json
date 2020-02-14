@@ -166,7 +166,9 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab"
+                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab",
+                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
+                "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             },
             "kmlImport": {
                 "unknownGeometry": "Unbekannte Geometry",
