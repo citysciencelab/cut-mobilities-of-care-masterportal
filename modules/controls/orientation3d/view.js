@@ -12,7 +12,7 @@ const Orientation3DView = Backbone.View.extend({
         "click .compass-pointer-west": "pointerClicked"
     },
     initialize: function () {
-        var channel = Radio.channel("Map"),
+        const channel = Radio.channel("Map"),
             obliqueChannel = Radio.channel("ObliqueMap");
 
         this.model = new Orientation3DModel();

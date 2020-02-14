@@ -152,8 +152,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @property {String} area="", filled with "Fläche"- translated
      */
     initialize: function () {
-        var selectedValues,
-            selectedUnit;
+        let selectedValues = null,
+            selectedUnit = null;
 
         if (Radio.request("Util", "getUiStyle") !== "DEFAULT") {
             this.setStyle("TABLE");
@@ -429,9 +429,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     createInteraction: function (drawType) {
-        var that = this,
-            textPoint,
+        const that = this,
             value = this.getLocalizedValues()[drawType];
+        let textPoint
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
@@ -570,9 +570,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {object} styles
      */
     generateTextStyles: function (feature) {
-        var geom,
-            output = {},
-            fill = new Fill({
+        const fill = new Fill({
                 color: [0, 0, 0, 1]
             }),
             stroke = new Stroke({
@@ -581,7 +579,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             }),
             backgroundFill = new Fill({
                 color: [255, 127, 0, 1]
-            }),
+            });
+        let geom = null,
+            output = {},
             styles = [];
 
         if (feature !== undefined) {
@@ -635,9 +635,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} pointFeature
      */
     generateTextPoint: function (feature, distance, heightDiff, coords) {
-        var geom,
-            coord,
-            pointFeature;
+        let geom = null,
+            coord = null,
+            pointFeature = null;
 
         if (feature !== undefined) {
             geom = feature.getGeometry();
@@ -744,7 +744,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {undefined}
      */
     calcDeltaPow: function (coordinates, pos0, pos1) {
-        var dx = coordinates[pos0][0] - coordinates[pos1][0],
+        const dx = coordinates[pos0][0] - coordinates[pos1][0],
             dy = coordinates[pos0][1] - coordinates[pos1][1],
             deltaPow = Math.pow(dx, 2) + Math.pow(dy, 2);
 

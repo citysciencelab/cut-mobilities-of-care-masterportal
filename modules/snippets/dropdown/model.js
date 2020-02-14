@@ -113,7 +113,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     resetValues: function () {
         const collection = this.get("valuesCollection").models;
 
-        collection.models.forEach(function (model) {
+        collection.forEach(function (model) {
             model.set("isSelectable", true);
         }, this);
     },

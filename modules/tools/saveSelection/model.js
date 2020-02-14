@@ -35,7 +35,7 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function () {
-        var channel = Radio.channel("SaveSelection");
+        const channel = Radio.channel("SaveSelection");
 
         this.superInitialize();
         channel.reply({

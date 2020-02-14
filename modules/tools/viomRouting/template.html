@@ -36,12 +36,12 @@
     <h4><%= setStartTimeText %>:</h4>
     <div class="input-group inputGroupR">
         <span class="input-group-addon"><%= date %></span>
-        <input type="date" id="dayOfWeekButton" class="form-control changedWochentag" aria-describedby="basic-addon2" min="2017-01-01" value="<% var date = new Date(); print (date.toISOString().split('T')[0]) %>">
+        <input type="date" id="dayOfWeekButton" class="form-control changedWochentag" aria-describedby="basic-addon2" min="2017-01-01" value="<% print (new Date().toISOString().split('T')[0]) %>">
     </div>
     <br>
     <div class="input-group inputGroupR">
         <span class="input-group-addon"><%= time %></span>
-        <input type="time" id="timeButton" class="form-control changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" value="<% var date = new Date(); print (date.toLocaleTimeString()) %>">
+        <input type="time" id="timeButton" class="form-control changedUhrzeit" aria-describedby="basic-addon2" min="00:00" max="23:59" value="<% print (new Date().toLocaleTimeString()) %>">
     </div>
 </div>
 
@@ -52,7 +52,7 @@
         //todo ins i18n
         if(description){
             description.forEach(function (item, index) {
-                    var tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
+                    const tracDesc = "<strong>" + item.Description.split(". ")[0] + ".</strong>",
                         tracLength = "<em>" + item.Description.split(". ")[1] + "</em>";
 
                     print("<li id='teil" + index.toString() + "' class='list-group-item'><span class=''>" + tracDesc + "<br>" + tracLength + "</span></li>");

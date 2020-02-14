@@ -28,7 +28,7 @@ const CompareFeaturesModel = Tool.extend({
         back: ""
     }),
     initialize: function () {
-        var channel = Radio.channel("CompareFeatures");
+        const channel = Radio.channel("CompareFeatures");
 
         this.superInitialize();
         this.changeLang(i18next.language);

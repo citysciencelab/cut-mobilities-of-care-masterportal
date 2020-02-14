@@ -92,7 +92,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
         });
 
-        if (_.has(parameters, "TYPENAMES") === false || _.has(parameters, "PROPERTYNAME") === false) {
+        if (!parameters.hasOwnProperty("TYPENAMES") || !parameters.hasOwnProperty("PROPERTYNAME")) {
             console.error("SpecialWFS (getDataParameters): parameters missing - definition of specialWFS is ignored.");
             return undefined;
         }
@@ -184,7 +184,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     sendRequest: function (def, data) {
         var ajax = this.get("ajaxRequests");
 
-        if (ajax[def.name] !== null && !_.isUndefined(ajax[def.name])) {
+        if (ajax[def.name] !== null && ajax[def.name] !== undefined) {
             ajax[def.name].abort();
             this.polishAjax(def.name);
         }

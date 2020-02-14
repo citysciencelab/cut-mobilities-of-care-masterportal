@@ -301,7 +301,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     renderGlyphicon: function (evt) {
-        var element = document.getElementById("cursorGlyph");
+        const element = document.getElementById("cursorGlyph");
 
         $(element).css("left", evt.originalEvent.offsetX + 5);
         $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
@@ -313,7 +313,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setDrawType: function (evt) {
-        var element = evt.target,
+        const element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
         if (selectedElement.text === this.model.get("drawDoubleCircle")) {
@@ -423,7 +423,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setColor: function (evt) {
-        var colors = evt.target.value.split(","),
+        const colors = evt.target.value.split(","),
             newColor = [];
 
         colors.forEach(function (color) {
@@ -441,7 +441,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setColorContour: function (evt) {
-        var colors = evt.target.value.split(","),
+        const colors = evt.target.value.split(","),
             newColorContour = [];
 
         colors.forEach(function (color) {

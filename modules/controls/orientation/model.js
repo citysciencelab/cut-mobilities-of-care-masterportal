@@ -104,7 +104,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
      */
     setConfig: function () {
         if (this.get("poiDistances")) {
-            if (_.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
+            if (Array.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
                 this.setPoiDistances(this.get("poiDistances"));
                 this.setShowPoi(true);
             }
@@ -244,7 +244,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
     },
 
     /**
-     * Ermittelt die Features aus Vektprlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
+     * Ermittelt die Features aus Vektorlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
      * @param  {integer} distance Umkreis
      * @return {Array}          Array of ol.features
      */
@@ -258,21 +258,36 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         let featuresAll = [],
             features = [];
 
-        _.each(visibleWFSLayers, function (layer) {
+            visibleWFSLayers.forEach(function (layer) {
             if (layer.has("layerSource") === true) {
                 features = layer.get("layerSource").getFeaturesInExtent(circleExtent);
-                _.each(features, function (feat) {
-                    _.extend(feat, {
+                features.forEach(function (feat) {
+                    Object.assign(feat, {
                         styleId: layer.get("styleId"),
                         layerName: layer.get("name"),
                         dist2Pos: this.getDistance(feat, centerPosition)
                     });
                 }, this);
-                featuresAll = _.union(features, featuresAll);
+                featuresAll = this.union(features, featuresAll, function(obj1, obj2){
+                    return obj1 === obj2;
+                });
             }
         }, this);
 
         return featuresAll;
+    },
+    union: function(arr1, arr2, equalityFunc) {
+        const union = arr1.concat(arr2);
+    
+        for (var i = 0; i < union.length; i++) {
+            for (var j = i+1; j < union.length; j++) {
+                if (equalityFunc(union[i], union[j])) {
+                    union.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        return union;
     },
 
     /**

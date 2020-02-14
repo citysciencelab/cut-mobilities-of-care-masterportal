@@ -62,7 +62,7 @@ const CompareFeaturesView = Backbone.View.extend({
      */
     renderListModal: function (model) {
         // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
-        var realLayerId = model.get("layerId").split("_")[0],
+        const realLayerId = model.get("layerId").split("_")[0],
             layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": realLayerId}),
             attr = Object.assign(model.toJSON(), {
                 list: model.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
@@ -121,7 +121,7 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     removeFeatureFromList: function (evt) {
-        var featureToRemoved = _.find(this.model.get("featureList"), function (feature) {
+        const featureToRemoved = _.find(this.model.get("featureList"), function (feature) {
             return feature.getId() === evt.target.id;
         });
 
@@ -132,7 +132,7 @@ const CompareFeaturesView = Backbone.View.extend({
         }
     },
     preparePrint: function () {
-        var rowsToShow = this.$el.find("tr:visible").length;
+        const rowsToShow = this.$el.find("tr:visible").length;
 
         this.model.preparePrint(rowsToShow);
     },
@@ -143,7 +143,7 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     toggleRows: function (evt) {
-        var text = this.model.get("moreInfo");
+        const text = this.model.get("moreInfo");
 
         this.$el.find(".toggle-row").toggle();
         if (evt.target.textContent === text) {

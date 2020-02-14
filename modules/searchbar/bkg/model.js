@@ -14,7 +14,8 @@ const BKGSearchModel = Backbone.Model.extend({
         score: 0.6,
         ajaxRequests: {},
         typeOfRequest: "",
-        zoomToResult: false
+        zoomToResult: false,
+        idCounter: 0
     },
     /**
      * @description Initialisierung der BKG Suggest Suche
@@ -27,6 +28,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @param {string} [config.epsg=EPSG:25832] - EPSG-Code des verwendeten Koordinatensystems.
      * @param {string} [config.filter=filter=(typ:*)] - Filterstring
      * @param {float} [config.score=0.6] - Score-Wert, der die Qualität der Ergebnisse auswertet.
+     * @param {Number} idCounter=0 counter for unique ids
      * @returns {void}
      */
     initialize: function (config) {
@@ -59,7 +61,7 @@ const BKGSearchModel = Backbone.Model.extend({
         if (config.score) {
             this.set("score", config.score);
         }
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.directSearch(Radio.request("ParametricURL", "getInitString"));
         }
 
@@ -91,7 +93,7 @@ const BKGSearchModel = Backbone.Model.extend({
             });
         }
         else {
-            _.each(data, function (hit) {
+            data.forEach(function (hit) {
                 if (hit.score > this.get("score")) {
                     Radio.trigger("Searchbar", "pushHits", "hitList", {
                         name: hit.suggestion,
@@ -99,7 +101,7 @@ const BKGSearchModel = Backbone.Model.extend({
                         type: i18next.t("common:modules.searchbar.type.location"),
                         bkg: true,
                         glyphicon: "glyphicon-road",
-                        id: _.uniqueId("bkgSuggest"),
+                        id: this.uniqueId("bkgSuggest"),
                         triggerEvent: {
                             channel: "Searchbar",
                             event: "bkgSearch"
@@ -110,7 +112,18 @@ const BKGSearchModel = Backbone.Model.extend({
         }
         Radio.trigger("Searchbar", "createRecommendedList", "bkg");
     },
+     /**
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
 
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
+    },
     /**
      * Startet die Suche
      * @param  {string} searchString Suchpattern
@@ -135,7 +148,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @return {void}
      */
     pushSuggestions: function (data) {
-        _.each(data, function (hit) {
+        data.forEach(function (hit) {
             if (hit.score > this.get("score")) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hit.suggestion,
@@ -143,7 +156,7 @@ const BKGSearchModel = Backbone.Model.extend({
                     type: i18next.t("common:modules.searchbar.type.location"),
                     bkg: true,
                     glyphicon: "glyphicon-road",
-                    id: _.uniqueId("bkgSuggest"),
+                    id: this.uniqueId("bkgSuggest"),
                     triggerEvent: {
                         channel: "Searchbar",
                         event: "bkgSearch"
@@ -197,7 +210,7 @@ const BKGSearchModel = Backbone.Model.extend({
     sendRequest: function (url, data, successFunction, asyncBool, type) {
         var ajax = this.get("ajaxRequests");
 
-        if (ajax[type] !== null && !_.isUndefined(ajax[type])) {
+        if (ajax[type] !== null && ajax[type] !== undefined) {
             ajax[type].abort();
             this.polishAjax(type);
         }
@@ -261,6 +274,14 @@ const BKGSearchModel = Backbone.Model.extend({
 
     setShowOrHideMarker: function (value) {
         this.set("showOrHideMarker", value);
+    },
+    /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+    setIdCounter: function (value) {
+        this.set("idCounter", value);
     }
 });
 

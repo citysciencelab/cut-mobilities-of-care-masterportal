@@ -10,7 +10,7 @@ import Map from "ol/Map";
 import View from "ol/View";
 
 describe("drawModel", function () {
-    var model;
+    let model;
 
     before(function () {
         i18next.init({
@@ -27,12 +27,12 @@ describe("drawModel", function () {
             expect(model.createLayer(undefined)).to.exist;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
-            var result = model.createLayer(undefined);
+            const result = model.createLayer(undefined);
 
             expect(result instanceof VectorLayer).to.be.true;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
-            var layer = new VectorLayer();
+            const layer = new VectorLayer();
 
             expect(model.createLayer(layer)).is.equal(layer);
         });
@@ -40,14 +40,14 @@ describe("drawModel", function () {
 
     describe("createDrawInteraction", function () {
         it("the result should be an instance of Draw for empty input", function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 result = model.createDrawInteraction(drawType, layer);
 
             expect(result instanceof Draw).to.be.true;
         });
         it("should be the result color is the same as input color", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Point",
                     text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
@@ -61,7 +61,7 @@ describe("drawModel", function () {
 
     describe("createDrawInteractionAndAddToMap", function () {
         it("the result should be two instances of draw", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Circle",
                     text: i18next.t("common:modules.tools.draw.drawDoubleCircle")
                 },
@@ -75,7 +75,7 @@ describe("drawModel", function () {
             expect(model.get("drawInteraction2") instanceof Draw).to.be.true;
         });
         it("there should only be one drawInteraction", function () {
-            var listOfDrawTypes = [{geometry: "Circle", text: i18next.t("common:modules.tools.draw.Circle")}, {geometry: "Point", text: i18next.t("common:modules.tools.draw.drawPoint")},
+            const listOfDrawTypes = [{geometry: "Circle", text: i18next.t("common:modules.tools.draw.Circle")}, {geometry: "Point", text: i18next.t("common:modules.tools.draw.drawPoint")},
                     {geometry: "Text", text: i18next.t("common:modules.tools.draw.writeText")}, {geometry: "LineString", text: i18next.t("common:modules.tools.draw.drawLine")}],
                 layer = new VectorLayer(),
                 isActive = true,
@@ -253,7 +253,7 @@ describe("drawModel", function () {
 
     describe("deactivateDrawInteraction", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 drawInteraction1 = model.createDrawInteraction(drawType, layer),
                 drawInteraction2 = model.createDrawInteraction(drawType, layer);
@@ -276,7 +276,7 @@ describe("drawModel", function () {
 
     describe("checkAndRemovePreviousDrawInteraction", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 drawInteraction1 = model.createDrawInteraction(drawType, layer),
                 drawInteraction2 = model.createDrawInteraction(drawType, layer);
@@ -331,7 +331,7 @@ describe("drawModel", function () {
 
     describe("getStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var result;
+            let result = null;
 
             model.setDrawType(undefined, undefined);
             model.setColor([]);
@@ -339,13 +339,13 @@ describe("drawModel", function () {
             expect(result instanceof Style).to.be.true;
         });
         it("the result should be an instance of Style for undefined input", function () {
-            var result = model.getStyle(undefined, undefined);
+            const result = model.getStyle(undefined, undefined);
 
             expect(result instanceof Style).to.be.true;
         });
         it("should return result color to be the same as input color for geometry point", function () {
-            var color = [55, 126, 184, 1],
-                result;
+            const color = [55, 126, 184, 1];
+            let result = null;
 
             model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
@@ -354,8 +354,8 @@ describe("drawModel", function () {
             expect(result.getFill().getColor()).to.deep.equal(color);
         });
         it("should be the result color ist the same as input color for text", function () {
-            var color = [255, 0, 0, 1],
-                result;
+            const color = [255, 0, 0, 1];
+            let result = null;
 
             model.setDrawType("text", i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
@@ -367,7 +367,7 @@ describe("drawModel", function () {
 
     describe("getTextStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var color = [],
+            const color = [],
                 text = "",
                 fontSize = 0,
                 font = "";
@@ -375,7 +375,7 @@ describe("drawModel", function () {
             expect(model.getTextStyle(color, text, fontSize, font) instanceof Style).to.be.true;
         });
         it("the result should be an instance of Style and Text for empty input", function () {
-            var color = [],
+            const color = [],
                 text = "",
                 fontSize = 0,
                 font = "";
@@ -383,7 +383,7 @@ describe("drawModel", function () {
             expect(model.getTextStyle(color, text, fontSize, font).getText() instanceof Text).to.be.true;
         });
         it("should be the result fontSize ist the same as input fontSize", function () {
-            var color = [255, 255, 0, 1],
+            const color = [255, 255, 0, 1],
                 text = "",
                 fontSize = 10,
                 font = "Arial",
@@ -398,7 +398,7 @@ describe("drawModel", function () {
 
     describe("getDrawStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var color = [],
+            const color = [],
                 drawGeometryType = "",
                 strokeWidth = 0,
                 radius = 0;
@@ -409,7 +409,7 @@ describe("drawModel", function () {
             expect(model.getDrawStyle(undefined, undefined, undefined, undefined) instanceof Style).to.be.true;
         });
         it("should be the result color ist the same as input color", function () {
-            var color = [0, 0, 0, 1],
+            const color = [0, 0, 0, 1],
                 drawGeometryType = "Point",
                 strokeWidth = 10,
                 radius = 20,
@@ -418,7 +418,7 @@ describe("drawModel", function () {
             expect(result.getFill().getColor()).to.equal(color);
         });
         it("should be the result strokeWidth ist the same as input strokeWidth", function () {
-            var color = [0, 0, 0, 1],
+            const color = [0, 0, 0, 1],
                 drawGeometryType = "Point",
                 strokeWidth = 10,
                 radius = 20,
@@ -472,7 +472,7 @@ describe("drawModel", function () {
 
         describe("createModifyInteraction", function () {
             it("should be an instance of Modify for empty input", function () {
-                var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
+                const interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
 
                 expect(interaction instanceof Modify).to.be.true;
             });
@@ -491,7 +491,7 @@ describe("drawModel", function () {
     });
     describe("inititalizeWithoutGUI", function () {
         before(function () {
-            var params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
+            const params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
 
             model.inititalizeWithoutGUI(params);
         });
@@ -510,7 +510,7 @@ describe("drawModel", function () {
             expect(model.get("opacity")).to.equal(0.5);
         });
         it("should add Feature", function () {
-            var feature = model.get("layer").getSource().getFeatures();
+            const feature = model.get("layer").getSource().getFeatures();
 
             expect(feature).to.have.lengthOf(1);
         });
@@ -531,7 +531,7 @@ describe("drawModel", function () {
 
     describe("cancelDrawWithoutGUI", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer();
 
             model.createDrawInteraction(drawType, layer);
@@ -562,8 +562,8 @@ describe("drawModel", function () {
     });
 
     describe("downloadFeaturesWithoutGUI", function () {
-        var downloadedFeatures,
-            featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
+        let downloadedFeatures = null;
+        const featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
             multiPolygonfeatColFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": [[[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]]}, "properties": null}]};
 
         it("should return FeatureCollection", function () {
