@@ -41,10 +41,12 @@ const MultiCheckboxModel = SnippetModel.extend({
      * @returns {void}
      */
     addValueModel: function (value) {
+        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
+
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
-            iconPath: this.getIconPath(value),
+            iconPath: isNewVectorStyle ? this.getIconPath() : this.getIconPathOld(value),
             displayName: value,
             isSelected: this.get("isInitialLoad") ? true : _.contains(this.get("preselectedValues"), value),
             isSelectable: true,
@@ -53,11 +55,55 @@ const MultiCheckboxModel = SnippetModel.extend({
     },
 
     /**
+     * Determines the iconPath and returns it
+     * @returns {string} - path to Icon
+     */
+    getIconPath: function () {
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
+        let styleId,
+            styleModel,
+            iconPath = "";
+
+        if (layerModel) {
+            styleId = layerModel.get("styleId");
+
+            if (styleId) {
+                styleModel = Radio.request("StyleList", "returnModelById", styleId);
+            }
+        }
+
+        if (styleModel) {
+
+            styleModel.getLegendInfos().forEach(legendInfo => {
+                if (legendInfo.geometryType === "Point") {
+                    const type = legendInfo.styleObject.get("type");
+
+                    if (type === "icon") {
+                        iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                    }
+                    else if (type === "circle") {
+                        iconPath = this.createCircleSVG(styleModel);
+                    }
+                }
+                else if (legendInfo.geometryType === "LineString") {
+                    iconPath = this.createLineSVG(legendInfo.styleObject);
+                }
+                else if (legendInfo.geometryType === "Polygon") {
+                    iconPath = this.createPolygonSVG(legendInfo.styleObject);
+                }
+            });
+        }
+
+        return iconPath;
+    },
+
+    /**
      * creates a model value and adds it to the value collection
+     * @deprecated with new vectorStyle module
      * @param  {string} value - value
      * @returns {string} - path to Icon
      */
-    getIconPath: function (value) {
+    getIconPathOld: function (value) {
         var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")}),
             styleId,
             styleModel,
@@ -84,10 +130,11 @@ const MultiCheckboxModel = SnippetModel.extend({
 
         return iconPath;
     },
+
     /**
-    * resetCollection
-    * @return {void}
-    */
+     * resetCollection
+     * @return {void}
+     */
     resetValues: function () {
         var models = this.get("valuesCollection").models;
 
