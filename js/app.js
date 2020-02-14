@@ -134,6 +134,9 @@ function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
+
+    app.$store.commit("addConfigToStore", Radio.request("Parser", "getPortalConfig"));
+
     new StyleList();
     new ParametricURL();
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
