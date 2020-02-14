@@ -268,7 +268,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {ol.layer.Vector} layer vector layer with vector source
      * @param {ol.feature[]} features vectorfeatures
      * @returns {object} - geojson layer spec
-    */
+     */
     buildVector: function (layer, features) {
         var geojsonList = [];
 
@@ -784,7 +784,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 if (isMetaDataAvailable) {
                     metaDataLayerList.push(layerParam.layername);
                 }
-                if (layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+
+                if (layerParam.legend !== null && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
                         text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
@@ -840,7 +841,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     prepareLegendAttributes: function (layerParam) {
         var valuesArray = [],
-            typ = layerParam.legend[0].typ;
+            typ = layerParam.legend !== null ? layerParam.legend[0].typ : "";
 
         if (typ === "WMS") {
             valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
@@ -1044,12 +1045,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         strokeWidth: 3,
                         type: "point"
                     },
-                    {
-                        fillColor: "#e10019",
-                        pointRadius: 4,
-                        strokeOpacity: 0,
-                        type: "point"
-                    }]
+                        {
+                            fillColor: "#e10019",
+                            pointRadius: 4,
+                            strokeOpacity: 0,
+                            type: "point"
+                        }]
                 }
             }
         });
