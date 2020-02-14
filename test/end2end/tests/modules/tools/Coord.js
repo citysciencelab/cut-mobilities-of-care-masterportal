@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {isMobile} = require("../../../settings"),
+    {isMobile, isBasic} = require("../../../settings"),
     namedProjectionsBasic = require("../../../resources/configs/basic/config").namedProjections,
     namedProjectionsDefault = require("../../../resources/configs/default/config").namedProjections,
     namedProjectionsCustom = require("../../../resources/configs/custom/config").namedProjections,
@@ -132,7 +132,10 @@ async function CoordTests ({builder, url, resolution}) {
             for (const field of [northingField, eastingField]) {
                 const value = await field.getAttribute("value");
 
+                // first click sometimes ignored as driver tends to get stuck on search field
                 await field.click();
+                await field.click();
+                await driver.wait(new Promise(r => setTimeout(r, 100)));
                 await searchInput.sendKeys(Key.CONTROL, "v");
 
                 expect(await searchInput.getAttribute("value")).to.equal(value);
@@ -158,11 +161,13 @@ async function CoordTests ({builder, url, resolution}) {
         });
 
         it("displays values according to chosen coordinate system", async () => {
-            await (await driver.findElement(selectors.coordSystemSelect)).click();
-            await (await driver.findElement(selectors.wgs84Option)).click();
+            if (!isBasic(url)) {
+                await (await driver.findElement(selectors.coordSystemSelect)).click();
+                await (await driver.findElement(selectors.wgs84Option)).click();
 
-            expect(await northingField.getAttribute("value")).to.match(/\d{1,2}° \d{1,2}′ \d{1,2}″ E/g);
-            expect(await eastingField.getAttribute("value")).to.match(/\d{1,2}° \d{1,2}′ \d{1,2}″ N/g);
+                expect(await northingField.getAttribute("value")).to.match(/\d{1,2}° \d{1,2}′ \d{1,2}″ E/g);
+                expect(await eastingField.getAttribute("value")).to.match(/\d{1,2}° \d{1,2}′ \d{1,2}″ N/g);
+            }
 
             await (await driver.findElement(selectors.coordSystemSelect)).click();
             await (await driver.findElement(selectors.utm32nOption)).click();

@@ -14,7 +14,7 @@ async function ParcelSearchTests ({builder, url, resolution}) {
     const skip = !(isDefault(url) || isCustom(url)),
         withCadastral = isDefault(url);
 
-    (skip ? describe.skip : describe.only)("ParcelSearch", function () {
+    (skip ? describe.skip : describe)("ParcelSearch", function () {
         const selectors = {
             tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
             toolParcelSearch: By.xpath("//a[contains(.,'Flurstückssuche')]"),
