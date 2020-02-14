@@ -15,6 +15,9 @@ const ScaleLineView = Backbone.View.extend({
                 }
             }
         });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.render
+        });
         this.render();
     },
     className: "scale-line",
