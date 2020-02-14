@@ -235,12 +235,12 @@
           },
           "measure":
           {
-            "name": "Strecke / Fläche messen",
+            "name": "translate#common:menu.tools.measure",
             "glyphicon": "glyphicon-resize-full"
           },
           "coord":
           {
-            "name": "Koordinaten abfragen",
+            "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
           "shadow":
@@ -257,7 +257,7 @@
           },
           "print":
           {
-            "name": "Karte drucken",
+            "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish_qs",
             "printAppId": "mrh",
@@ -269,12 +269,12 @@
           },
           "searchByCoord":
           {
-            "name": "Koordinatensuche",
+            "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
           "kmlimport":
           {
-            "name": "KML Import",
+            "name": "translate#common:menu.tools.kmlimport",
             "glyphicon": "glyphicon-import"
           },
           "wfsFeatureFilter":
@@ -291,7 +291,7 @@
           },
           "routing":
           {
-            "name": "Routenplaner",
+            "name": "translate#common:menu.tools.routing",
             "glyphicon": "glyphicon-road",
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
@@ -300,7 +300,7 @@
           },
           "draw":
           {
-            "name": "translate#common:modules.tools.draw.name",
+            "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil"
           },
           "styleWMS": {
@@ -338,7 +338,7 @@
             "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection": {
-            "name": "Auswahl speichern",
+            "name": "translate#common:menu.tools.saveSelection",
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
@@ -377,20 +377,20 @@
       },
       "info":
       {
-        "name": "translate#common:menu.info.name",
+        "name": "translate#common:menu.info",
         "glyphicon": "glyphicon-info-sign",
         "children":
         {
           "staticlinks": [
           {
-            "name": "translate#common:menu.info.disclaimer",
+            "name": "translate#common:modules.tools.info.disclaimer",
             "glyphicon": "glyphicon-globe",
             "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
           },
           {
-            "name": "translate#common:menu.info.home.name",
+            "name": "translate#common:modules.tools.info.home.name",
             "glyphicon": "glyphicon-globe",
-            "url": "translate#common:menu.info.home.url"
+            "url": "translate#common:modules.tools.info.home.url"
           }]
         }
       }

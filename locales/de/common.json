@@ -27,18 +27,19 @@
         "tools": {
             "name": "Werkzeuge",
             "compareFeatures": "Vergleichsliste",
-            "parcelSearch": "Flurstückssuche"
+            "parcelSearch": "Flurstückssuche",
+            "print": "Karte Drucken",
+            "measure": "Strecke / Fläche messen",
+            "coord": "Koordinaten abfragen",
+            "searchByCoord": "Koordinatensuche",
+            "kmlimport": "KML Import",
+            "routing": "Routenplaner",
+            "draw": "Zeichnen / Schreiben",
+            "saveSelection": "Auswahl speichern"
         },
         "legend": "Legende",
         "contact": "Kontakt",
-        "info": {
-            "name": "Informationen",
-            "disclaimer": "Haftungsausschluss",
-            "home": {
-                "name": "Hamburg",
-                "url": "https://www.hamburg.de/"
-            }
-        }
+        "info": "Informationen"
     },
     "tree": {
         "trafficCameras": "Verkehrskameras"
@@ -109,6 +110,13 @@
             "version":"Version"
         },
         "tools": {
+            "info": {
+                "disclaimer": "Haftungsausschluss",
+                "home": {
+                    "name": "Hamburg",
+                    "url": "https://www.hamburg.de/"
+                }
+            },
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
                 "userNamePlaceholder": "Ihr Name",
@@ -216,7 +224,6 @@
                 "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
-                "name": "Zeichnen / Schreiben",
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",

@@ -309,7 +309,7 @@ If it should be translated, the key for the translation of the name can be enter
 ```
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
-        nameTranslationKey: "common:modules.tools.draw.name",
+        nameTranslationKey: "common:menu.tools.draw",
         ...
 ```
 ## Translations in addons

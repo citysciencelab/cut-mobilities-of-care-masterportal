@@ -96,7 +96,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
                     $(fieldName).parent().removeClass("has-error");
                     Radio.trigger("Alert", "alert:remove");
                 }
-            }npm 
+            }
         }
         else if (attributes.coordSystem === "WGS84") {
             if (attributes.coordinates[0].coord === undefined || attributes.coordinates[0].coord.length < 1) {

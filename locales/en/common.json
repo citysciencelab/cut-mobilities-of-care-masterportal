@@ -25,20 +25,21 @@
         "wayToSchool": "Your way to school",
         "filter": "Filtering",
         "tools": {
-            "name": "more tools",
+            "name": "More tools",
             "compareFeatures": "Compare features",
-            "parcelSearch": "Parcel search"
+            "parcelSearch": "Parcel search",
+            "print": "Print map",
+            "measure": "Measure distance / area",
+            "coord": "Query coordinates",
+            "searchByCoord": "Coordinate search",
+            "kmlimport": "KML import",
+            "routing": "Route planner",
+            "draw": "Drawing / writing",
+            "saveSelection": "Save selection"
         },
-        "legend": "explanations",
-        "contact": "mail",
-        "info": {
-            "name": "informations",
-            "disclaimer": "legal disclaimer",
-            "home": {
-                "name": "Hamburg Town",
-                "url": "https://www.hamburg.com/"
-            }
-        }
+        "legend": "Explanations",
+        "contact": "Mail",
+        "info": "Informations"
     },
     "tree": {
         "trafficCameras": "survey cameras (traffic)"
@@ -109,6 +110,13 @@
             "version":"Version"
         },
         "tools": {
+            "info": {
+                "disclaimer": "Legal disclaimer",
+                "home": {
+                    "name": "Hamburg Town",
+                    "url": "https://www.hamburg.com/"
+                }
+            },
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
                 "userNamePlaceholder": "Your name",
@@ -216,7 +224,6 @@
                 "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
-                "name": "Drawing / Writing",
                 "clickToPlaceText": "Click on the map to place the text",
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",

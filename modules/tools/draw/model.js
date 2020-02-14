@@ -13,7 +13,7 @@ import {toLonLat, transform} from "ol/proj";
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         name: "Zeichnen / Schreiben",
-        nameTranslationKey: "common:modules.tools.draw.name",
+        nameTranslationKey: "common:menu.tools.draw",
         drawInteraction: undefined,
         selectInteraction: undefined,
         modifyInteraction: undefined,
@@ -130,6 +130,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @class DrawModel
      * @extends Tool
      * @memberof Tools.Draw
+     * @property {String} nameTranslationKey=common:menu.tools.draw is used to translate the title, if no translation configured for thie title in config.json
      * @property {*} drawInteraction=undefined The draw interaction.
      * @property {*} selectInteraction=undefined The select interaction.
      * @property {*} modifyInteraction=undefined The modify interaction.
