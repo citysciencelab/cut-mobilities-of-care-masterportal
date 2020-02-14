@@ -9,6 +9,46 @@ import Title from "./Title";
 =======
 Vue.use(Vuex);
 
+/**
+ * todo
+ * @returns {object} todo
+ */
+function configToStateModules () {
+    return {
+        Alerting: "alerting",
+        Title: "portalTitle",
+        Filter: "filter"
+    };
+}
+
+/**
+ * todo
+ * @param {*} object todo
+ * @param {*} element todo
+ * @returns {object} todo
+ */
+// function findElement (object, element) {
+//     var result = "";
+
+//     var abc = Object.keys(object).find(key => {
+//         var attribute = object[key];
+
+//         if (key === element) {
+//             console.log(key);
+//             console.log(object[key]);
+
+//             return object[key];
+//         }
+//         else if (typeof attribute === "object") {
+//             findElement(attribute, element);
+//         }
+//     });
+
+//     console.log(abc);
+
+//     return result;
+// }
+
 export default new Vuex.Store({
     modules: {
         Alerting: Alerting,
