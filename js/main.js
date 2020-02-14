@@ -13,11 +13,11 @@ import i18nextXHRBackend from "i18next-xhr-backend";
 import i18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 
 const scriptTags = document.getElementsByTagName("script"),
-    scriptTagsArray = Array.prototype.slice.call(scriptTags),
-    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js";
+    scriptTagsArray = Array.prototype.slice.call(scriptTags);
 let strippedLocation = null,
     loadConfigJs = null,
-    context = null;
+    context = null,
+    configPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/") + 1) + "config.js";
 
 // wenn Config.js nicht in der index.html als Script-Tag eingebunden ist, muss sie zunächst zugefügt und geladen werden
 if (!("Config" in window)) {
