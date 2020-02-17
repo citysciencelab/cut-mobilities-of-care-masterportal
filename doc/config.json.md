@@ -1948,6 +1948,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
+|urlIsVisible|nein|Boolean|true|Anzeige ob die URL in der Layerinformation angezeigt werden soll.|false|
 
 **Beispiel**
 ```

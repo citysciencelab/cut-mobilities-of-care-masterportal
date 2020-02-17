@@ -123,7 +123,8 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             "metaID": metaID,
             "layername": name,
             "url": null,
-            "typ": null
+            "typ": null,
+            "urlIsVisible": this.get("urlIsVisible")
         });
 
         this.setLayerInfoChecked(true);
