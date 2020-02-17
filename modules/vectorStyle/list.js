@@ -2,12 +2,6 @@ import WFSStyle from "./model";
 
 const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     model: WFSStyle,
-    url: function () {
-        if (!_.has(Config, "styleConf") || Config.styleConf === "") {
-            return "keine Style JSON";
-        }
-        return Config.styleConf;
-    },
     /**
      * @class StyleList
      * @extends Backbone.Collection
@@ -29,36 +23,51 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             "returnModelById": this.returnModelById
         }, this);
 
-        if (this.url() !== "keine Style JSON") {
-            this.fetch({
-                cache: false,
-                async: false,
-                error: function (model, xhr, error) {
-                    const statusText = xhr.statusText;
-                    let message,
-                        position,
-                        snippet;
-
-                    if (statusText === "Not Found") {
-                        Radio.trigger("Alert", "alert", {
-                            text: "<strong>Die Datei '" + model.url() + "' ist nicht vorhanden!</strong>",
-                            kategorie: "alert-warning"
-                        });
-                    }
-                    else {
-                        message = error.errorThrown.message;
-                        position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
-                        snippet = xhr.responseText.substring(position - 30, position + 30);
-                        Radio.trigger("Alert", "alert", {
-                            text: "<strong>Die Datei '" + model.url() + "' konnte leider nicht geladen werden!</strong> <br> " +
-                            "<small>Details: " + error.textStatus + " - " + error.errorThrown.message + ".</small><br>" +
-                            "<small>Auszug:" + snippet + "</small>",
-                            kategorie: "alert-warning"
-                        });
-                    }
-                }
-            });
+        if (Config.hasOwnProperty("styleConf") && Config.styleConf !== "") {
+            this.fetchStyles(Config.styleConf);
         }
+    },
+
+    /**
+     * Fetches the style.json
+     * @param {String} url Url to style.json
+     * @returns {void}
+     */
+    fetchStyles: function (url) {
+        const xhr = new XMLHttpRequest(),
+            that = this;
+
+        xhr.open("GET", url, false);
+        xhr.onreadystatechange = function (event) {
+            const target = event.target,
+                status = target.status;
+            let data;
+
+            // ok
+            if (status === 200) {
+                try {
+                    data = JSON.parse(target.response);
+                }
+                catch (e) {
+                    Radio.trigger("Alert", "alert", {
+                        text: "<strong>Die Datei '" + target.responseURL + "' konnte leider nicht geladen werden!</strong> <br> " +
+                        "<small>Details: " + e.message + ".</small><br>",
+                        kategorie: "alert-warning"
+                    });
+                }
+                that.parseStyles(data);
+            }
+            // not found
+            else if (status === 404) {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Die Datei '" + target.responseURL + "' ist nicht vorhanden!</strong>",
+                    kategorie: "alert-warning"
+                });
+            }
+
+
+        };
+        xhr.send();
     },
     returnModelById: function (layerId) {
         return this.find(function (slmodel) {
@@ -73,52 +82,81 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @return {object[]} filtered style.json objects
      * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      */
-    parse: function (data) {
-        var layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
-            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"}),
-            styleIds = [],
+    parseStyles: function (data) {
+        const layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
+            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"});
+        let styleIds = [],
             filteredData = [];
 
-        _.each(layers, function (layer) {
-            if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings") {
-                if (_.has(layer, "styleId")) {
-                    styleIds.push(layer.styleId);
-                }
-            }
-            else if (layer.typ === "GROUP") {
-                _.each(layer.children, function (child) {
-                    if (_.has(child, "styleId")) {
-                        styleIds.push(child.styleId);
-                    }
-                });
-            }
-        });
+        styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
+        styleIds.push(this.getStyleIdsFromTools(tools));
 
-        tools.forEach(tool => {
-            if (tool.hasOwnProperty("styleId")) {
-                if (Array.isArray(tool.styleId)) {
-                    tool.styleId.forEach(styleIdInArray => {
-                        if (styleIdInArray instanceof Object) {
-                            styleIds.push(styleIdInArray.id);
-                        }
-                        else {
-                            styleIds.push(styleIdInArray);
+        styleIds = styleIds.flat();
+        filteredData = data.filter(function (styleModel) {
+            return styleIds.includes(styleModel.layerId);
+        });
+
+        this.add(filteredData);
+        return filteredData;
+    },
+
+    /**
+     * Gathers the styleIds of the layers.
+     * @param {Object[]} layers The configured layers.
+     * @returns {Sting[]} - StyleIds from layers.
+     */
+    getStyleIdsFromLayers: function (layers) {
+        const styleIds = [];
+
+        if (layers) {
+            layers.forEach(layer => {
+                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings") {
+                    if (layer.hasOwnProperty("styleId")) {
+                        styleIds.push(layer.styleId);
+                    }
+                }
+                else if (layer.typ === "GROUP") {
+                    layer.children.forEach(child => {
+                        if (child.hasOwnProperty("styleId")) {
+                            styleIds.push(child.styleId);
                         }
                     });
                 }
-                else {
-                    styleIds.push(tool.styleId);
+            });
+        }
+        return styleIds;
+    },
+
+    /**
+     * Gathers the styleIds of the configured tools.
+     * @param {Object[]} tools The configured tools.
+     * @returns {String[]} - StyleIds of Tools
+     */
+    getStyleIdsFromTools: function (tools) {
+        const styleIds = [];
+
+        if (tools) {
+            tools.forEach(tool => {
+                if (tool.hasOwnProperty("styleId")) {
+                    if (Array.isArray(tool.styleId)) {
+                        tool.styleId.forEach(styleIdInArray => {
+                            if (styleIdInArray instanceof Object) {
+                                styleIds.push(styleIdInArray.id);
+                            }
+                            else {
+                                styleIds.push(styleIdInArray);
+                            }
+                        });
+                    }
+                    else {
+                        styleIds.push(tool.styleId);
+                    }
                 }
-            }
-        });
-
-        filteredData = data.filter(function (styleModel) {
-            return _.contains(styleIds, styleModel.layerId);
-        });
-
-        return filteredData;
+            });
+        }
+        return styleIds;
     },
 
     /**
