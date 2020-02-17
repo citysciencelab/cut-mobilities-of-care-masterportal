@@ -124,7 +124,7 @@ function loadApp () {
         store
     });
 
-    app.$store.commit("addConfigToStore", Config);
+    app.$store.commit("addConfigJsToStore", Config);
 
     app.$mount();
 
@@ -135,7 +135,7 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
 
-    app.$store.commit("addConfigToStore", Radio.request("Parser", "getPortalConfig"));
+    app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
 
     new StyleList();
     new ParametricURL();
