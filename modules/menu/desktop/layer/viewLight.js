@@ -39,6 +39,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
         });
+        this.listenTo(Radio.channel("Layerinformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerinformationIcon
+        });
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();
@@ -121,6 +124,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
+        this.highlightLayerinformationIcon();
     },
 
     /**
@@ -231,6 +235,12 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         else {
             this.$el.hide();
         }
+    },
+    highlightLayerinformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerinformationIcon");
+    },
+    unhighlightLayerinformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerinformationIcon");
     }
 });
 
