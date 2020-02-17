@@ -340,7 +340,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             allThings.push(things.value);
         }
 
-        allThings = allThings.flat();
+        allThings = this.flattenArray(allThings);
         allThings = this.getNewestSensorData(allThings);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
@@ -469,23 +469,21 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {array} coordinates
      */
     getCoordinates: function (thing) {
-        var xy;
+        const locationObj = thing && thing.Locations && thing.Locations.length > 0 ? thing.Locations[0].location : undefined,
+            geometryObj = locationObj ? locationObj.geometry : undefined,
+            type = locationObj ? locationObj.type : undefined;
+        let coordinates;
 
-        if (!_.isUndefined(thing) && !_.isEmpty(thing.Locations)) {
-            if (thing.Locations[0].location.type === "Feature" &&
-                !_.isUndefined(thing.Locations[0].location.geometry) &&
-                !_.isUndefined(thing.Locations[0].location.geometry.coordinates)) {
-
-                xy = thing.Locations[0].location.geometry.coordinates;
+        if (locationObj) {
+            if (type === "Feature" && geometryObj && geometryObj.coordinates) {
+                coordinates = geometryObj.coordinates;
             }
-            else if (thing.Locations[0].location.type === "Point" &&
-                !_.isUndefined(thing.Locations[0].location.coordinates)) {
-
-                xy = thing.Locations[0].location.coordinates;
+            else if (type === "Point" && locationObj.coordinates) {
+                coordinates = locationObj.coordinates;
             }
         }
 
-        return xy;
+        return coordinates;
     },
 
     /**
@@ -506,14 +504,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.location = this.getCoordinates(thing[0]);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
-                    keys.push(Object.keys(thing2.name));
-                    keys.push(Object.keys(thing2.description));
                     props = Object.assign(props, thing2.properties);
-                    props = Object.assign(props, {name: thing2.name});
-                    props = Object.assign(props, {description: thing2.description});
                 });
-                keys = [...new Set(keys.flat())];
+                keys = [...new Set(this.flattenArray(keys))];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                keys.push("name");
+                keys.push("description");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
@@ -528,6 +524,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         return aggregatedArray;
+    },
+
+    flattenArray: function (array) {
+        return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
 
     /**
@@ -558,7 +558,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const aggregatedProperties = {};
 
         keys.forEach(key => {
-            const valuesArray = thingArray.map(thing => thing.properties[key]);
+            const valuesArray = thingArray.map(thing => key === "name" || key === "description" ? thing[key] : thing.properties[key]);
 
             aggregatedProperties[key] = valuesArray.join(" | ");
         });
