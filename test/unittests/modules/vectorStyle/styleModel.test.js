@@ -210,36 +210,37 @@ describe("vectorStyleModel", function () {
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
-    describe("checkLegendInfo", function () {
-        it("initially there should be no legendInfos", function () {
-            expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(0);
+    describe("createLegendId", function () {
+        it("returns correct id for Point and null", function () {
+            expect(styleModel.createLegendId("Point", {})).to.equal("UG9pbnRudWxs");
         });
-        it("should add a legendInfo", function () {
-            styleModel.checkLegendInfo("Point", jsonObjects[0], rules2[2], "test");
-            expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(1);
+        it("returns correct id for Linestring with some conditions", function () {
+            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name"}}})).to.equal("UG9pbnR7InByb3BlcnRpZXMiOnsibmFtZSI6Im5hbWUifX0=");
+        });
+        it("returns correct id for Linestring with other conditions", function () {
+            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name2"}}})).to.equal("UG9pbnR7InByb3BlcnRpZXMiOnsibmFtZSI6Im5hbWUyIn19");
         });
     });
 
     describe("addLegendInfo", function () {
-        it("checkLegendInfo should have inserted a valid legendInfo", function () {
+        it("legendInfos should be empty", function () {
+            expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(0);
+        });
+        it("addLegendInfo should insert one item", function () {
+            styleModel.addLegendInfo("myId", "Point", "test");
             expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(1);
-            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", condition: null, styleObject: "test"});
+            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
         });
-    });
-
-    describe("getLegendDescription", function () {
-        it("should return aspected string", function () {
-            expect(styleModel.getLegendDescription("featureValue", "value")).to.equal("value");
-            expect(styleModel.getLegendDescription("featureValue", [0, 5])).to.equal("featureValue (0 - 5)");
-            expect(styleModel.getLegendDescription("featureValue", [0, 1, 2, 3])).to.equal("featureValue (2 - 3)");
+        it("but should not insert it twice", function () {
+            styleModel.addLegendInfo("myId", "Point", "test");
+            expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(1);
+            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
         });
-        it("should return null if value is invalid", function () {
-            expect(styleModel.getLegendDescription("featureValue", 213)).to.be.null;
-            expect(styleModel.getLegendDescription("featureValue", [1])).to.be.null;
-            expect(styleModel.getLegendDescription("featureValue", [1, 2, 3])).to.be.null;
-            expect(styleModel.getLegendDescription("featureValue", [1, 2, 3, 4, 5])).to.be.null;
-            expect(styleModel.getLegendDescription("featureValue", ["1", 2])).to.be.null;
-            expect(styleModel.getLegendDescription("featureValue", [1, 2, 3, "4"])).to.be.null;
+        it("as long the id is not a bit different", function () {
+            styleModel.addLegendInfo("myId2", "Point", "test");
+            expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(2);
+            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
+            expect(styleModel.get("legendInfos")[1]).to.deep.include({geometryType: "Point", id: "myId2", styleObject: "test"});
         });
     });
 

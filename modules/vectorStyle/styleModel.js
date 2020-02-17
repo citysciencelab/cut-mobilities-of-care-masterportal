@@ -105,16 +105,18 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
         const style = rule.style;
-        let styleObject;
+        let styleObject, id;
 
         if (geometryType === "Point") {
             styleObject = new PointStyle(feature, style, isClustered);
-            this.checkLegendInfo("Point", feature, rule, styleObject);
+            id = this.createLegendId("Point", rule);
+            this.addLegendInfo(id, "Point", styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "LineString") {
             styleObject = new LinestringStyle(feature, style, isClustered);
-            this.checkLegendInfo("LineString", feature, rule, styleObject);
+            id = this.createLegendId("LineString", rule);
+            this.addLegendInfo(id, "LineString", styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "LinearRing") {
@@ -123,7 +125,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
-            this.checkLegendInfo("Polygon", feature, rule, styleObject);
+            id = this.createLegendId("Polygon", rule);
+            this.addLegendInfo(id, "Polygon", styleObject);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -447,70 +450,34 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Checks the rule to determine it can be added to the legend info
+     * Returns a id created from geometryType and conditions using base64 decoding.
      * @param   {string} geometryType features geometry type
-     * @param   {ol/feature} feature      Feature with properties
-     * @param   {OBJECT} rule         a rule description
-     * @param   {vectorStyle/style} styleObject  style information
-     * @returns {void}
+     * @param   {object} rule         a rule description
+     * @returns {string} id
      */
-    checkLegendInfo: function (geometryType, feature, rule, styleObject) {
-        if (rule.hasOwnProperty("conditions") && rule.conditions.hasOwnProperty("properties")) {
-            const featureProperties = feature.getProperties(),
-                properties = rule.conditions.properties;
+    createLegendId: function (geometryType, rule) {
+        const properties = rule.hasOwnProperty("conditions") ? rule.conditions : null;
 
-            let key;
-
-            for (key in properties) {
-                const referenceValue = this.getReferenceValue(featureProperties, properties[key]);
-
-                this.addLegendInfo(geometryType, this.getLegendDescription(key, referenceValue), styleObject);
-            }
-
-            return;
-        }
-
-        this.addLegendInfo(geometryType, null, styleObject);
+        return btoa(geometryType + JSON.stringify(properties));
     },
 
     /**
-     * Returns a string with a default description of a rule
-     * @param   {string} featureValue property name
-     * @param   {string} value        value
-     * @returns {string} legend default description
-     */
-    getLegendDescription: function (featureValue, value) {
-        if (typeof value === "string") {
-            return value;
-        }
-        else if (Array.isArray(value) && value.every(element => typeof element === "number") && (value.length === 2 || value.length === 4)) {
-            if (value.length === 2) {
-                return featureValue + " (" + value[0].toString() + " - " + value[1].toString() + ")";
-            }
-
-            return featureValue + " (" + value[2] + " - " + value[3] + ")";
-        }
-
-        return null;
-    },
-
-    /**
-     * Adds a legendInfo only once
-     * @param {string} geometryType features geometry type
-     * @param {string} condition    stringified condition
-     * @param {vectorStyle/style} styleObject  a vector style
+     * Adds a unique legendInfo for each id
+     * @param {string} id unique identifier for each combination of geometryType and conditions
+     * @param {string} geometryType features geometry type needed in legend model
+     * @param {vectorStyle/style} styleObject  a vector style needed in
      * @returns {void}
      */
-    addLegendInfo: function (geometryType, condition, styleObject) {
+    addLegendInfo: function (id, geometryType, styleObject) {
         const legendInfos = this.get("legendInfos"),
             hasLegendInfo = legendInfos.some(legend => {
-                return legend.geometryType === geometryType && legend.condition === condition;
+                return legend.id === id;
             });
 
         if (!hasLegendInfo) {
             legendInfos.push({
+                "id": id,
                 "geometryType": geometryType,
-                "condition": condition,
                 "styleObject": styleObject
             });
             Radio.trigger("Legend", "setLayerList");

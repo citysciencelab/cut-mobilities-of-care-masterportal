@@ -242,6 +242,8 @@ Beispiel eines *style*:
 
 Darüber hinaus kann für alle genannten Geometriearten eine Textbeschriftung vorgenommen werden. Siehe hierzu [Text](#markdown-header-text).
 
+Eine individuelle Legendenbeschriftung kann gesetzt werden. Siehe hierzu [Legende](#markdown-header-legende).
+
 ### Point
 Die Abbildungsvorschriften für Punkte unterscheiden sich in
 
@@ -407,6 +409,15 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 |textStrokeWidth|   |Integer| 3 | Breite der Textstriche.|
 
 > Hinweis: Eine Cluster-Beschriftung ist gegenüber dieser Beschriftung höher priorisiert.
+
+### Legende
+Die textliche Beschreibung in der Legende kann gesteuert werden. Dies geschieht über den Parameter *legendValue*.
+```javascript
+"style": {
+    "legendValue": "mein Text"
+}
+```
+> Hinweis: Das Attribut *legendValue* muss pro Layer und Geometrietyp unique sein, da die Legende ansonsten unvollständig ist.
 
 ## Beispiel
 Nachfolgend eine Beispielkonfiguration für einen Sensorlayer:
