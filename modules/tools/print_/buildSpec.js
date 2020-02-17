@@ -787,7 +787,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     metaDataLayerList.push(layerParam.layername);
                 }
 
-                if (layerParam.legend !== null && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+                if (Array.isArray(layerParam) && layerParam.length > 0 && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
                         text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
@@ -843,7 +843,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     prepareLegendAttributes: function (layerParam) {
         var valuesArray = [],
-            typ = layerParam.legend !== null ? layerParam.legend[0].typ : "";
+            typ = Array.isArray(layerParam) && layerParam.length > 0 ? layerParam.legend[0].typ : "";
 
         if (typ === "WMS") {
             valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
@@ -1047,12 +1047,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         strokeWidth: 3,
                         type: "point"
                     },
-                        {
-                            fillColor: "#e10019",
-                            pointRadius: 4,
-                            strokeOpacity: 0,
-                            type: "point"
-                        }]
+                    {
+                        fillColor: "#e10019",
+                        pointRadius: 4,
+                        strokeOpacity: 0,
+                        type: "point"
+                    }]
                 }
             }
         });
