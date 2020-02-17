@@ -331,7 +331,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      * @returns {OLCesium} - ol cesium map.
      */
     createMap3d: function () {
-        var map3d = new OLCesium({
+        const map3d = new OLCesium({
             map: Radio.request("Map", "getMap"),
             time: this.getShadowTime.bind(this),
             sceneOptions: {
