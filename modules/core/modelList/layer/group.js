@@ -106,8 +106,15 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      */
     showLayerInformation: function () {
         var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
+            legend = "",
             name = this.get("name");
+
+        if (!this.get("layerSource")) {
+            this.prepareLayerObject();
+            // this.createLayerSource();
+            // this.createLegendURL();
+        };
+        legend = Radio.request("Legend", "getLegend", this);
 
         _.each(this.get("children"), function (layer) {
             var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
