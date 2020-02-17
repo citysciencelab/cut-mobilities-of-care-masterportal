@@ -111,9 +111,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
 
         if (!this.get("layerSource")) {
             this.prepareLayerObject();
-            // this.createLayerSource();
-            // this.createLegendURL();
-        };
+        }
         legend = Radio.request("Legend", "getLegend", this);
 
         _.each(this.get("children"), function (layer) {

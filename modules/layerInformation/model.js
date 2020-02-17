@@ -44,6 +44,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
         this.listenTo(channel, {
             "add": function (attrs) {
+                Radio.trigger("Layerinformation", "unhighlightLayerInformationIcon");
                 this.setAttributes(attrs);
                 this.setIsVisible(true);
             }
