@@ -10,6 +10,9 @@ export default {
         },
         mapMode () {
             return this.$store.state.ScaleLine.mapMode;
+        },
+        insideFooter () {
+            return this.$store.state.ScaleLine.insideFooter;
         }
 
     },
@@ -21,6 +24,7 @@ export default {
             changedOptions: function (options) {
                 that.$store.dispatch("modifyScale", options);
                 that.$store.dispatch("updateScaleLineValue", options);
+                document.getElementsByClassName("ol-viewport")[0].appendChild(that.$el);
             }
         });
         myBus.listenTo(Radio.channel("Map"), {
@@ -30,9 +34,15 @@ export default {
         });
         myBus.listenTo(Radio.channel("Footer"), {
             isReady: function () {
-                document.getElementsByClassName("footer")[0].appendChild(that.$el);
+                that.$store.state.ScaleLine.insideFooter = true;
             }
         });
+    },
+    updated () {
+        if(this.insideFooter) {
+            document.getElementById("scale-line").remove();
+            document.getElementsByClassName("footer")[0].appendChild(this.$el);
+        }
     }
 }
 </script>

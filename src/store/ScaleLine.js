@@ -2,7 +2,8 @@ export default {
     state: {
         scaleNumber: "",
         scaleLineValue: "",
-        mapMode: "2D"
+        mapMode: "2D",
+        insideFooter: false
     },
     mutations: {
         updateScaleNumber (state, scaleNumber) {
