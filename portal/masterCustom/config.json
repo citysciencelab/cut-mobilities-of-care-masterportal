@@ -516,11 +516,13 @@
         "Layer":[
            {
               "id":"12883",
-              "name":"Gelände"
+              "name":"Gelände",
+              "visibility":true
            },
            {
               "id":"12884",
-              "name":"Gebäude LoD2"
+              "name":"Gebäude LoD2",
+              "visibility":true
            }
         ]
      },
