@@ -14,7 +14,16 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         id: "",
         selectAllGlyphicon: "glyphicon-unchecked",
         glyphicon: "glyphicon-folder-open",
-        obliqueModeBlacklist: ["tree", "tools"]
+        obliqueModeBlacklist: ["tree", "tools"],
+        // translate
+        currentLng: "",
+        saveSelectionText: "",
+        topicsHelpText: "",
+        mapBackgroundText: "",
+        pinTopicsTreeText: "",
+        hideAllTopicsText: "",
+        showAllTopicsText: "",
+        categoryText: ""
     }),
     /**
      * @class Folder
@@ -32,6 +41,13 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String} id="" Unique id for folder.
      * @property {String} selectAllGlyphicon="glyphicon-unchecked" Glyphicon class of folder to select all children.
      * @property {String} glyphicon="glyphicon-folder-open" Glyphicon class of folder
+     * @property {String} currentLng=""contains the current language - view listens to it
+     * @property {String} saveSelectionText="" will be translated
+     * @property {String} topicsHelpText="" will be translated
+     * @property {String} mapBackgroundText="" will be translated
+     * @property {String} pinTopicsTreeText="" will be translated
+     * @property {String} hideAllTopicsText="" will be translated
+     * @property {String} showAllTopicsText="" will be translated
      * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schr�gluftbilder").
      */
     initialize: function () {
@@ -59,6 +75,27 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
                 this.setIsVisibleInMenu(false);
             }
         }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
+    },
+     /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            saveSelectionText: i18next.t("common:menu.tools.saveSelection"),
+            topicsHelpText: i18next.t("common:tree.topicsHelp"),
+            mapBackgroundText: i18next.t("common:tree.mapBackground"),
+            pinTopicsTreeText: i18next.t("common:tree.pinTopicsTree"),
+            hideAllTopicsText: i18next.t("common:tree.hideAllTopics"),
+            showAllTopicsText: i18next.t("common:tree.showAllTopics"),
+            categoryText: i18next.t("common:tree.category"),
+            currentLng: lng
+        });
     },
 
     /**
@@ -120,6 +157,14 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      */
     setSelectAllGlyphicon: function (value) {
         this.set("selectAllGlyphicon", value);
+    },
+    /**
+     * Sets the attribute "selectAllGlyphicon"
+     * @param {String} value Glyphicon class.
+     * @returns {void}
+     */
+    translate: function (value) {
+        return i18next.t(value)
     }
 });
 

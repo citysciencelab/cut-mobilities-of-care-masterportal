@@ -39,7 +39,11 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
      */
     changeLang: function (lng) {
         const urls = this.get("urls");
-
+        urls.forEach(function (url) {
+            if (url.alias.indexOf("translate#") > -1) {
+                url.alias = i18next.t(url.alias.substring("translate#".length));
+            }
+        }, this);
         urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
         this.set({
             urls: urls,

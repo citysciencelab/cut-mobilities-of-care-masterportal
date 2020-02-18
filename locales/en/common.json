@@ -35,14 +35,21 @@
             "kmlimport": "KML import",
             "routing": "Route planner",
             "draw": "Drawing / writing",
-            "saveSelection": "Save selection"
+            "saveSelection": "Save selection",
+            "getInfos": "Retrieve information"
         },
         "legend": "Explanations",
         "contact": "Mail",
         "info": "Informations"
     },
     "tree": {
-        "trafficCameras": "survey cameras (traffic)"
+        "trafficCameras": "survey cameras (traffic)",
+        "topicsHelp": "Topics help Hilfe",
+        "mapBackground": "Map background grey/white",
+        "pinTopicsTree": "Fix/remove topic tree",
+        "hideAllTopics": "Hide all topics",
+        "showAllTopics": "Show all topics",
+        "category": "Categorie"
     },
     "date": "Date",
     "time": "Time",
@@ -107,7 +114,8 @@
         },
         "footer":{
             "designation":"Cartography and design:",
-            "version":"Version"
+            "version":"Version",
+            "cardDiscrepancy":"Card discrepancy"
         },
         "tools": {
             "info": {
@@ -360,7 +368,10 @@
             }
         },
         "searchbar": {
-            "placeholder": "Search for Address/Hospital/B-Plan",
+            "placeholder": { 
+                "addressHospitalBplan" : "Search for Address/Hospital/B-Plan",
+                "addressTopicParcel" : "Search address, district, topics, parcel"
+            },
             "showAllResults": "Show all results",
             "type": {
                 "street": "street",

@@ -110,7 +110,7 @@
         "minChars": 3
       },
       "zoomLevel": 9,
-      "placeholder": "translate#common:modules.searchbar.placeholder"
+      "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView":
     {
@@ -251,7 +251,7 @@
           },
           "gfi":
           {
-            "name": "Informationen abfragen",
+            "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },

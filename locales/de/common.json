@@ -35,14 +35,21 @@
             "kmlimport": "KML Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
-            "saveSelection": "Auswahl speichern"
+            "saveSelection": "Auswahl speichern",
+            "getInfos": "Informationen abfragen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
         "info": "Informationen"
     },
     "tree": {
-        "trafficCameras": "Verkehrskameras"
+        "trafficCameras": "Verkehrskameras",
+        "topicsHelp": "Themenbaum Hilfe",
+        "mapBackground": "Kartenhintergrund grau/weiß",
+        "pinTopicsTree": "Themenbaum fixieren/lösen",
+        "hideAllTopics": "Alle Themen entfernen",
+        "showAllTopics": "Alle Themen darstellen",
+        "category": "Kategorie"
     },
     "date": "Datum",
     "time": "Zeit",
@@ -107,7 +114,8 @@
         },
         "footer":{
             "designation":"Kartographie und Gestaltung:",
-            "version":"Version"
+            "version":"Version",
+            "cardDiscrepancy":"Kartenunstimmigkeit"
         },
         "tools": {
             "info": {
@@ -360,7 +368,10 @@
             }
         },
         "searchbar": {
-            "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan",
+            "placeholder": { 
+                "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
+                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
+            },
             "showAllResults": "alle Ergebnisse anzeigen",
             "type": {
                 "street": "Straße",
