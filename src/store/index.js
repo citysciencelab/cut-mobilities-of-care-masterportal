@@ -21,7 +21,7 @@ function getConfigToStateModules () {
  * For all other values such as strings and arrays, the values are added directly to the store.
  * Triggers the parsing for each available module one after the other
  * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js.
+ * @param {object} [Config={}] - Data from config.js or config.json.
  * @param {object} [configToStateModulesParameters={}] - Contains Config parameters to Moudles.
  * @returns {void}
  */
@@ -37,7 +37,7 @@ function parseConfigToStore (state, Config = {}, configToStateModulesParameters 
  * Adds the data from the Config to the Vuex Store.
  * Objects that have a parameter "children" will be searched at a deeper level.
  * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js.
+ * @param {object} [Config={}] - Data from config.js or config.json.
  * @param {string} configParameter - Parameter assigned to a module in the Config.
  * @param {string} stateModule - Module to which a config parameter is to be assigned.
  * @returns {void}
@@ -59,7 +59,7 @@ function parseConfigParameters (state, Config = {}, configParameter, stateModule
  * Adds the parameters of the Config to the Vuex store.
  * For objects, each attribute is added individually.
  * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js.
+ * @param {object} [Config={}] - Data from config.js or config.json.
  * @param {string} configParameter - Parameter assigned to a module in the Config.
  * @param {string} stateModule - Module to which a config parameter is to be assigned.
  * @returns {void}
