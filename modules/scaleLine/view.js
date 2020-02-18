@@ -26,7 +26,7 @@ const ScaleLineView = Backbone.View.extend({
         const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        if (document.getElementsByClassName("footer")) {
+        if (document.getElementsByClassName("footer").length > 0) {
             document.getElementsByClassName("footer")[0].appendChild(this.el);
         }
         else {

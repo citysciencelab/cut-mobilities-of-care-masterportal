@@ -47,12 +47,16 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
                         return;
                     }
                 }
-                this.reloadMenu();
+                if (this.menuStyle === "DEFAULT") {
+                    this.reloadMenu();
+                }
             }
         });
         this.listenToOnce(Radio.channel("Addons"), {
             "initialized": function () {
-                this.reloadMenu();
+                if (this.menuStyle === "DEFAULT") {
+                    this.reloadMenu();
+                }
             }
         });
         this.loadMenu();
