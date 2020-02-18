@@ -29,7 +29,24 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
 
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": function () {
-                this.switchCollectionLanguage(Radio.request("ModelList", "getCollection"));
+                const collection = Radio.request("ModelList", "getCollection");
+                let foundExpanded = false,
+                    rootModels = null;
+
+                this.switchCollectionLanguage(collection);
+                if (Radio.request("Util", "isViewMobile")) {
+                    rootModels = collection.where({parentId: "root"});
+                    rootModels.forEach(model => {
+                        if (model.get("isExpanded") === true) {
+                            model.set("isExpanded", false);
+                            foundExpanded = true;
+                        }
+                    });
+                    if (foundExpanded) {
+                        // do not reload mobile-menu, if one was expanded --> prevent double entries in menu after "languageChanged"
+                        return;
+                    }
+                }
                 this.reloadMenu();
             }
         });
