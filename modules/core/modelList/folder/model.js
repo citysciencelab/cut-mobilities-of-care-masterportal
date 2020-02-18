@@ -80,7 +80,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         });
         this.changeLang();
     },
-     /**
+    /**
      * change language - sets default values for the language
      * @param {String} lng the language changed to
      * @returns {Void}  -
@@ -159,12 +159,12 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         this.set("selectAllGlyphicon", value);
     },
     /**
-     * Sets the attribute "selectAllGlyphicon"
-     * @param {String} value Glyphicon class.
+     * Translates the given key
+     * @param {String} key key to translate
      * @returns {void}
      */
-    translate: function (value) {
-        return i18next.t(value)
+    translate: function (key) {
+        return i18next.t(key);
     }
 });
 

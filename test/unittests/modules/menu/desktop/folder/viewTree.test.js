@@ -5,6 +5,11 @@ describe("menu/desktop/folder/viewTree", function () {
     var viewTree;
 
     before(function () {
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
+        });
         var fakeModel = {
             get: function () {
                 return true;
@@ -28,7 +33,8 @@ describe("menu/desktop/folder/viewTree", function () {
                     "isFolderSelectable": this.isFolderSelectable,
                     "isLeafFolder": true,
                     "isSelected": false,
-                    "name": "testFolder"
+                    "name": "testFolder",
+                    "showAllTopicsText": "test"
                 };
             },
 
