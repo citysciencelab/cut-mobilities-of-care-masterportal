@@ -38,18 +38,18 @@ export default {
 </script>
 
 <template>
-    <div v-if="mapMode != 'Oblique'" class="scale-line">
-        <span class="scale">
+    <div id="scale-line" v-if="mapMode != 'Oblique'">
+        <span>
         {{scaleLineValue}}
         </span>
-        <span class="scale">
+        <span>
             1: {{scaleNumber}}
         </span>
     </div>
 </template>
 
 <style lang="less">
-.scale-line {
+div#scale-line {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
     border-radius: 0 5px 0 0;
     bottom: 0;
@@ -60,7 +60,7 @@ export default {
     padding: 4px 8px;
     right: 0px;
 }
-.scale {
+div#scale-line > span {
     &:first-child {
         border-bottom: 1px solid;
         border-left: 1px solid;
