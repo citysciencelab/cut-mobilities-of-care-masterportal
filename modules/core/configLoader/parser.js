@@ -349,6 +349,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             typ: "WMS",
             type: "layer",
             url: url,
+            urlIsVsible: true,
             version: version
         };
 
@@ -379,7 +380,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isSelected: true,
             isVisibleInTree: true,
             cache: false,
-            datasets: []
+            datasets: [],
+            urlIsVsible: true
         };
 
         this.addItem(layer);
@@ -417,7 +419,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 transparency: 0,
                 transparent: true,
                 typ: "WMS",
-                type: "layer"
+                type: "layer",
+                urlIsVsible: true
             };
 
         if (hit.source) {

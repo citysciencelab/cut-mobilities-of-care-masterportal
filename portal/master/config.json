@@ -512,7 +512,8 @@
       {
         "id": "4561",
         "infoFormat": "text/html",
-        "visibility": false
+        "visibility": false,
+        "urlIsVisible": false
       },
       {
         "id": "9726"
