@@ -23,16 +23,20 @@ const ScaleLineView = Backbone.View.extend({
     className: "scale-line",
     template: _.template(ScaleLineTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        if (!_.isEmpty(document.getElementsByClassName("footer"))) {
+        if (document.getElementsByClassName("footer")) {
             document.getElementsByClassName("footer")[0].appendChild(this.el);
         }
         else {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
         }
-
+        if (!i18next.options.isEnabled()) {
+            this.$el.css({
+                "right": "0px"
+            });
+        }
         return this;
     }
 });
