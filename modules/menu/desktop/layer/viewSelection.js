@@ -22,8 +22,8 @@ const LayerView = Backbone.View.extend({
             "change:transparency": this.rerender,
             "change:isOutOfRange": this.toggleColor
         });
-        this.listenTo(Radio.channel("Layerinformation"), {
-            "unhighlightLayerInformationIcon": this.unhighlightLayerinformationIcon
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
@@ -93,7 +93,7 @@ const LayerView = Backbone.View.extend({
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
-        this.highlightLayerinformationIcon();
+        this.highlightLayerInformationIcon();
     },
 
     toggleIsSettingVisible: function () {
@@ -144,11 +144,21 @@ const LayerView = Backbone.View.extend({
             }
         }
     },
+
+    /**
+     * Highlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
     highlightLayerinformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerinformationIcon");
     },
-    unhighlightLayerinformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerinformationIcon");
+
+    /**
+     * Highlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    unhighlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
     }
 });
 

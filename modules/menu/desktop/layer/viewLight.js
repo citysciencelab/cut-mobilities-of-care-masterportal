@@ -25,6 +25,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeTransparency
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
+     * @listens Map#RadioTriggerLayerInformation
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
@@ -39,8 +40,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
         });
-        this.listenTo(Radio.channel("Layerinformation"), {
-            "unhighlightLayerInformationIcon": this.unhighlightLayerinformationIcon
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         this.$el.on({
             click: function (e) {
@@ -124,7 +125,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
-        this.highlightLayerinformationIcon();
+        this.highlightLayerInformationIcon();
     },
 
     /**
@@ -236,11 +237,21 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.hide();
         }
     },
-    highlightLayerinformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerinformationIcon");
+
+    /**
+     * Highlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    highlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
     },
-    unhighlightLayerinformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerinformationIcon");
+
+    /**
+     * Unighlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    unhighlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
     }
 });
 

@@ -26,8 +26,8 @@ const LayerView = Backbone.View.extend({
                 }
             }
         });
-        this.listenTo(Radio.channel("Layerinformation"), {
-            "unhighlightLayerInformationIcon": this.unhighlightLayerinformationIcon
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
 
         this.render();
@@ -101,7 +101,7 @@ const LayerView = Backbone.View.extend({
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         this.$("div.collapse.navbar-collapse").removeClass("in");
-        this.highlightLayerinformationIcon();
+        this.highlightLayerInformationIcon();
     },
     toggleIsSettingVisible: function () {
         this.model.toggleIsSettingVisible();
@@ -130,11 +130,21 @@ const LayerView = Backbone.View.extend({
         this.$el.find("*").css("cursor", "pointer");
         this.$el.attr("title", "");
     },
+
+    /**
+     * Highlights the Layerinformation Icon in the layertree
+     * @returns {void}
+     */
     highlightLayerinformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerinformationIcon");
+        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
     },
+
+    /**
+     * Highlights the Layerinformation Icon in the layertree
+     * @returns {void}
+     */
     unhighlightLayerinformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerinformationIcon");
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
     }
 });
 

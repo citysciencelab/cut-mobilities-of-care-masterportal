@@ -107,7 +107,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         this.$el.remove();
         $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").remove(this.$el);
         this.model.setIsVisible(false);
-        Radio.trigger("Layerinformation", "unhighlightLayerInformationIcon");
+        Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
     }
 });
 
