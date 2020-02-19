@@ -1,9 +1,6 @@
 <script>
 
 export default {
-    created() {
-        
-    },
     mounted () {
         $(this.$el).insertAfter(document.getElementById("root"));
     },
