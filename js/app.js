@@ -118,6 +118,7 @@ function loadApp () {
 
     Vue.config.productionTip = false;
     app = new Vue({
+        name: "VueApp",
         render: h => h(App),
         store
     });
