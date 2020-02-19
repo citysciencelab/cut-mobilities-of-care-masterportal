@@ -91,7 +91,7 @@ const ZoomToFeature = Backbone.Model.extend({
         var featureStyle = new Style();
 
         if (!_.isUndefined(styleListModel)) {
-            featureStyle = styleListModel.createStyle(iconFeature);
+            featureStyle = styleListModel.createStyle(iconFeature, false);
         }
 
         return featureStyle;

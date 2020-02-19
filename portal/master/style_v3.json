@@ -1,5 +1,21 @@
 [
   {
+    "styleId": "location_eventlotse",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "imageScale" : "2",
+          "imageName": "location_eventlotse.svg",
+          "imageWidth": 24,
+          "imageHeight": 24,
+          "imageOffsetY": 24,
+          "imageOffsetYUnit": "pixels"
+        }
+      }
+    ]
+  },
+  {
     "styleId": "1711",
     "rules": [
       {
