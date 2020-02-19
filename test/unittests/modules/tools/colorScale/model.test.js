@@ -29,6 +29,11 @@ describe("tools/colorScale", function () {
         it("should return a rgb string equal to rgb(227, 238, 248)", function () {
             expect(model.generateColorScale(["853.0", "1312.0", "1133.0"], "interpolateBlues").scale("900")).to.equal("rgb(227, 238, 248)");
         });
+
+
+        it("should return a rgb string equal to rgb(247, 251, 255)", function () {
+            expect(model.generateColorScale([undefined, "1312.0", "1133.0"], undefined).scale("900")).to.equal("rgb(247, 251, 255)");
+        });
     });
 
     describe("interpolateValues", function () {
