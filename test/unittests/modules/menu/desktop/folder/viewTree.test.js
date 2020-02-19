@@ -5,11 +5,6 @@ describe("menu/desktop/folder/viewTree", function () {
     var viewTree;
 
     before(function () {
-        i18next.init({
-            lng: "cimode",
-            debug: false
-
-        });
         var fakeModel = {
             get: function () {
                 return true;
@@ -53,6 +48,11 @@ describe("menu/desktop/folder/viewTree", function () {
 
         viewTree = new ViewTree({
             model: fakeModel
+        });
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
         });
     });
 
