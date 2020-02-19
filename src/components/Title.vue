@@ -32,7 +32,8 @@ export default {
     },
     computed: {
         /**
-        * LogoLink is going to be deprecated in 3.0.0
+        * LogoLink
+        * @deprecated in 3.0.0
         */
         link () {
             const deprecatedParameter = this.getDeprecatedParameters('LogoLink');
@@ -40,16 +41,19 @@ export default {
             return ((deprecatedParameter === undefined) ? this.$store.state.Title.link : deprecatedParameter);
         },
         /**
-        * LogoToolTip is going to be deprecated in 3.0.0
-        * tooltip is going to be deprecated in 3.0.0
+        * LogoToolTip
+        * @deprecated in 3.0.0
+        * tooltip
+        * @deprecated in 3.0.0
         */
         toolTip () {
             const deprecatedParameter = ((this.getDeprecatedParameters('LogoToolTip') === undefined) ? this.getDeprecatedParameters('tooltip') : deprecatedParameter);
 
-            return ((deprecatedParameter === undefined) ? this.$store.state.Title.link : deprecatedParameter);
+            return ((deprecatedParameter === undefined) ? this.$store.state.Title.toolTip : deprecatedParameter);
         },
         /**
-        * LogoLink is going to be deprecated in 3.0.0
+        * LogoLink
+        * @deprecated in 3.0.0
         */
         logo () {
             const deprecatedParameter = this.getDeprecatedParameters('PortalLogo');
@@ -57,7 +61,8 @@ export default {
             return ((deprecatedParameter === undefined) ? this.$store.state.Title.logo : deprecatedParameter);
         },
         /**
-        * PortalTitle is going to be deprecated in 3.0.0
+        * PortalTitle
+        * @deprecated in 3.0.0
         */
         title () {
             const deprecatedParameter = this.getDeprecatedParameters('PortalTitle');
