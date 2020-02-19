@@ -1,3 +1,73 @@
+<script>
+
+export default {
+    mounted () {
+        $(this.$el).insertAfter(document.getElementById("root"));
+    },
+    methods: {
+        /**
+         * Checks whether deprecated parameters have been defined in the config.json.
+         * If this is the case, these values are read out and written into the store.
+         * @param {string} [deprecatedParameter] - name of the deprecated parameter.
+         * @returns {String} - returns the parametervalues.
+         */
+        getDeprecatedParameters (deprecatedParameter) {
+            const deprecatedVsNew = {
+                PortalTitle: "title",
+                LogoLink: "link",
+                LogoToolTip: "toolTip",
+                tooltip: "toolTip",
+                PortalLogo: "logo"
+            }
+
+            if (this.$store.state.Title[deprecatedParameter] !== undefined) {
+                console.warn(
+                    "Attribute '" + deprecatedParameter + "' is deprecated. Please use Object 'portalTitle' and the attribute '"
+                    + deprecatedVsNew[deprecatedParameter] + "' instead."
+                );
+                return this.$store.state.Title[deprecatedParameter];
+            }
+            return undefined;
+        }
+    },
+    computed: {
+        /**
+        * LogoLink is going to be deprecated in 3.0.0
+        */
+        link () {
+            const deprecatedParameter = this.getDeprecatedParameters('LogoLink');
+
+            return ((deprecatedParameter === undefined) ? this.$store.state.Title.link : deprecatedParameter);
+        },
+        /**
+        * LogoToolTip is going to be deprecated in 3.0.0
+        * tooltip is going to be deprecated in 3.0.0
+        */
+        toolTip () {
+            const deprecatedParameter = ((this.getDeprecatedParameters('LogoToolTip') === undefined) ? this.getDeprecatedParameters('tooltip') : deprecatedParameter);
+
+            return ((deprecatedParameter === undefined) ? this.$store.state.Title.link : deprecatedParameter);
+        },
+        /**
+        * LogoLink is going to be deprecated in 3.0.0
+        */
+        logo () {
+            const deprecatedParameter = this.getDeprecatedParameters('PortalLogo');
+
+            return ((deprecatedParameter === undefined) ? this.$store.state.Title.logo : deprecatedParameter);
+        },
+        /**
+        * PortalTitle is going to be deprecated in 3.0.0
+        */
+        title () {
+            const deprecatedParameter = this.getDeprecatedParameters('PortalTitle');
+
+            return ((deprecatedParameter === undefined) ? this.$store.state.Title.title : deprecatedParameter);
+        },
+    }
+}
+</script>
+
 <template>
     <div class="portal-title">
         <a :href="link" target="_blank" :data-toggle="title" data-placement="bottom" :title="toolTip">
@@ -8,41 +78,6 @@
         </span>
     </div>
 </template>
-
-<script>
-export default {
-    created() {
-        const that = this,
-            myBus = Backbone.Events;
-
-        myBus.listenTo(Radio.channel("Preparser"), {
-            isParsed: function (response) {
-                that.$store.state.configJson = response.portalConfig;
-                that.$store.commit("setDefaultParameters", that.$store.state.configJson, that.$store.state);
-            }
-        });
-    },
-    mounted () {
-        // document.getElementById("root").appendChild(this.$el);
-        $(this.$el).insertAfter(document.getElementById("root"));
-    },
-    computed: {
-        link () {
-            return this.$store.state.Title.link;
-        },
-        toolTip () {
-            return this.$store.state.Title.toolTip;
-        },
-        logo () {
-            return this.$store.state.Title.logo;
-        },
-        title () {
-            return this.$store.state.Title.title;
-        }
-    }
-}
-
-</script>
 
 <style scoped>
 
