@@ -236,12 +236,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {Number} Sorting index.
      */
     sortAddress: function (a, b) {
-        const aSplit = this.splitAddressString(a, ",", " "),
+        const aIsValid = this.isValidAddressString(a, ",", " "),
+            bIsValid = this.isValidAddressString(b, ",", " "),
+            aSplit = this.splitAddressString(a, ",", " "),
             bSplit = this.splitAddressString(b, ",", " "),
-            aFirstPart = aSplit[0],
-            aSecondPart = aSplit[1],
-            bFirstPart = bSplit[0],
-            bSecondPart = bSplit[1];
+            aFirstPart = aIsValid ? aSplit[0] : a,
+            aSecondPart = aIsValid ? aSplit[1] : a,
+            bFirstPart = bIsValid ? bSplit[0] : b,
+            bSecondPart = bIsValid ? bSplit[1] : b;
         let returnVal = -1;
 
         if (aFirstPart > bFirstPart) {
@@ -274,6 +276,26 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             splittedString.push(secondPart);
         });
         return splittedString;
+    },
+
+    /**
+     * Checks if address string is valid for address sorting.
+     * The string gets splitted by "separator". The the occurrence of the "lastOcccurrenceChar" is checked.
+     * @param {String} string String to check.
+     * @param {String} separator Separator to separate Address (streetname and housenumber) from additional information (postal code, etc.).
+     * @param {String} lastOccurrenceChar Charactor to separate the streetname from the housenumber.
+     * @returns {Boolean} - Flag if string is valid.
+     */
+    isValidAddressString: function (string, separator, lastOccurrenceChar) {
+        let isValidAddressString = false;
+        const separatedString = string.split(separator),
+            firstPartOfSeparatedString = separatedString[0];
+
+        if (string.indexOf(separator) !== -1 && firstPartOfSeparatedString && firstPartOfSeparatedString.indexOf(lastOccurrenceChar) !== -1) {
+            isValidAddressString = true;
+        }
+
+        return isValidAddressString;
     },
 
     /**

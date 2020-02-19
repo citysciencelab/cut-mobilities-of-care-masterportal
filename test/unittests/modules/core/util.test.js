@@ -225,7 +225,7 @@ describe("core/Util", function () {
         });
     });
     describe("sortObjectsAsAddress", function () {
-        it("foobar", function () {
+        it("should return sorted objects", function () {
             var array = [];
 
             array.push({attr1: "aStraße 1b, 12345 Stadt"});
@@ -246,6 +246,19 @@ describe("core/Util", function () {
                 {attr1: "bStraße 10, 12345 Stadt"},
                 {attr1: "cStraße ohne Namen 10, 12345 Stadt"}
             ]);
+        });
+    });
+    describe("isValidAddressString", function () {
+        it("should return true for valid address strings", function () {
+            expect(model.isValidAddressString("aStraße 1b, 12345 Stadt", ",", " ")).to.be.true;
+            expect(model.isValidAddressString("aStraße 1, 12345 Stadt", ",", " ")).to.be.true;
+            expect(model.isValidAddressString("cStraße ohne Namen 10, 12345 Stadt", ",", " ")).to.be.true;
+        });
+        it("should return false for invalid address stringsA", function () {
+            expect(model.isValidAddressString("aStraße 1b 12345 Stadt", ",", " ")).to.be.false;
+        });
+        it("should return false for invalid address stringsB", function () {
+            expect(model.isValidAddressString("aStraße, 12345 Stadt", ",", " ")).to.be.false;
         });
     });
 });
