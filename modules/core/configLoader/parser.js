@@ -398,10 +398,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGdiLayer: function (hit) {
-        const treeType = this.get("treeType"),
+        const treeType = this.get("treeType");
+        let level = 0;
+            layerTreeId,
             parentId = "tree",
-            level = 0;
-        let layerTreeId,
             gdiLayer = {
                 cache: false,
                 featureCount: "3",
