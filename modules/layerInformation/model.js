@@ -256,6 +256,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.get("overlay").setElement(value);
     },
     /**
+    * Setter function for overlay element
+    * @param {Object} value the element
+    * @returns {void}
+    */
+    setUrlIsVisible: function (value) {
+        this.set("urlIsVisible", value);
+    },
+    /**
     * Getter function for overlay element
     * @returns {Object} the overlay-element
     */

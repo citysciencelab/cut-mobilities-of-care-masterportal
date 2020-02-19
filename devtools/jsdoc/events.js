@@ -564,7 +564,7 @@
  */
 
 /**
- * @event Core#RadiotriggerMapCameraChanged
+ * @event Core#RadioTriggerMapCameraChanged
  * @description todo
  */
 
