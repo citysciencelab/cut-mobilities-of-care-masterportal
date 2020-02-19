@@ -26,6 +26,9 @@ describe("core/modelList/layer/sensor", function () {
         it("should return an undefined for undefined input", function () {
             expect(sensorLayer.getCoordinates(undefined)).to.be.undefined;
         });
+        it("should return an undefined for empty array input", function () {
+            expect(sensorLayer.getCoordinates([])).to.be.undefined;
+        });
         it("should return in array with coordinates as array from input object", function () {
             var thing = {
                 Locations: [{

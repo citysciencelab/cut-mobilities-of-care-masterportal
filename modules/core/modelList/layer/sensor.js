@@ -469,21 +469,23 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {array} coordinates
      */
     getCoordinates: function (thing) {
-        const locationObj = thing && thing.Locations && thing.Locations.length > 0 ? thing.Locations[0].location : undefined,
-            geometryObj = locationObj ? locationObj.geometry : undefined,
-            type = locationObj ? locationObj.type : undefined;
-        let coordinates;
+        var xy;
 
-        if (locationObj) {
-            if (type === "Feature" && geometryObj && geometryObj.coordinates) {
-                coordinates = geometryObj.coordinates;
+        if (!_.isUndefined(thing) && !_.isEmpty(thing.Locations)) {
+            if (thing.Locations[0].location.type === "Feature" &&
+                !_.isUndefined(thing.Locations[0].location.geometry) &&
+                !_.isUndefined(thing.Locations[0].location.geometry.coordinates)) {
+
+                xy = thing.Locations[0].location.geometry.coordinates;
             }
-            else if (type === "Point" && locationObj.coordinates) {
-                coordinates = locationObj.coordinates;
+            else if (thing.Locations[0].location.type === "Point" &&
+                !_.isUndefined(thing.Locations[0].location.coordinates)) {
+
+                xy = thing.Locations[0].location.coordinates;
             }
         }
 
-        return coordinates;
+        return xy;
     },
 
     /**
@@ -526,6 +528,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         return aggregatedArray;
     },
 
+    /**
+     * flattenArray creates a new array with all sub-array elements concatenated
+     * @info this is equivalent to Array.flat() - except no addition for testing is needed for this one
+     * @param {*} array the array to flatten its sub-arrays or anything else
+     * @returns {*}  the flattened array if an array was given, the untouched input otherwise
+     */
     flattenArray: function (array) {
         return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
