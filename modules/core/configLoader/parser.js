@@ -399,7 +399,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     addGdiLayer: function (hit) {
         const treeType = this.get("treeType");
-        let level = 0;
+        let level = 0,
             layerTreeId,
             parentId = "tree",
             gdiLayer = {
