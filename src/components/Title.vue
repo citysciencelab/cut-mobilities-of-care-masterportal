@@ -77,34 +77,39 @@ export default {
     <div class="portal-title">
         <a :href="link" target="_blank" :data-toggle="title" data-placement="bottom" :title="toolTip">
             <img :src="logo">
+            <span>
+                {{ title }}
+            </span>
         </a>
-        <span>
-            {{ title }}
-        </span>
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 
 .portal-title {
-    padding-left: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    margin-left: 10px;
     overflow: hidden;
-    font-size: 26px;
-    color: rgb(51,51,51);
-    font-family: 'MasterPortalFont','Arial Narrow',Arial,sans-serif;
-    vertical-align: middle;
     line-height: 50px;
     float: left;
-    >a {
-        >img {
-            margin: 5px 5px 5px 5px;
+    a {
+        text-decoration: none;
+        display: block;
+        img {
+            margin: 0 5px 0 5px;
             max-height: 40px;
+            display: inline-block;
+            vertical-align: middle;
         }
-    }
-    >span {
-        padding-left: 5px;
+        span {
+            color: #333333;
+            margin-left: 5px;
+            font-size: 26px;
+            font-family: 'MasterPortalFont','Arial Narrow',Arial,sans-serif;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: middle;
+        }
     }
 }
 
