@@ -137,9 +137,9 @@ export default ExampleModel;
 #### Höre auf dein Model
 
 
-Wenn der View richtig eingerichtet ist, sollte er auf Änderungen im Model hören und das Template bereits rendern.
+Wenn die View richtig eingerichtet ist, sollte er auf Änderungen im Model hören und das Template bereits rendern.
 Derzeit verwenden wir im Masterportal underscore für das Templating.
-Um zu zeigen, wie dies geschehen SOLLTE, verwenden wir das Modell von oben und setzen den MV* wie folgt auf.
+Um zu zeigen, wie dies geschehen SOLLTE, verwenden wir das Model von oben und setzen den MV* wie folgt auf.
 
 ExampleTemplate
 ```
@@ -196,11 +196,11 @@ export default ExampleView;
 
 ## Übersetzung der Namen in der config.json
 
-Dieser Abschnitt beschreibt den Ansatz, wie i18next die in die config.json angegebenen Namen übersetzt.
-Das Erste ist ein best practise Szenario, dann folgt eine Beschreibung, was im Hintergrund passiert und warum es passiert.
+Dieser Abschnitt beschreibt den Ansatz, wie i18next die in der config.json angegebenen Namen übersetzt.
+Das Erste ist ein best practice Szenario, dann folgt eine Beschreibung, was im Hintergrund passiert und warum es passiert.
 
 
-### Best practise szenario
+### Best practice szenario
 
 ### Menü
 

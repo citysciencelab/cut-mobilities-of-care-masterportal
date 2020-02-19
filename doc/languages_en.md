@@ -199,11 +199,11 @@ export default ExampleView;
 ## Translation of the names in the config.json
 
 This section describes a different take on i18next to translate values put into the config.json.
-First is a best practise szenario.
+First is a best practice szenario.
 Second is the description what happens in the background and why it happens.
 
 
-### Best practise szenario
+### Best practice szenario
 
 ### Menu
 
