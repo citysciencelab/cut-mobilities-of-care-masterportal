@@ -2,7 +2,7 @@ import Model from "@modules/core/util.js";
 import {expect} from "chai";
 
 describe("core/Util", function () {
-    var model;
+    let model;
 
     describe("punctuate", function () {
         before(function () {
@@ -40,23 +40,23 @@ describe("core/Util", function () {
         });
         // array
         it("should sort array[String] alphanumerically", function () {
-            var array = ["Test 11", "Test 1", "Test 2", "Test 5"];
+            const array = ["Test 11", "Test 1", "Test 2", "Test 5"];
 
             expect(model.sort("", array)).to.deep.equal(["Test 1", "Test 2", "Test 5", "Test 11"]);
         });
         it("should sort array[int] alphanumerically", function () {
-            var array = [11, 1, 2, 5];
+            const array = [11, 1, 2, 5];
 
             expect(model.sort("", array)).to.deep.equal([1, 2, 5, 11]);
         });
         it("should sort array[float] alphanumerically", function () {
-            var array = [11.1, 1.1, 2.1, 5.1];
+            const array = [11.1, 1.1, 2.1, 5.1];
 
             expect(model.sort("", array)).to.deep.equal([1.1, 2.1, 5.1, 11.1]);
         });
         // object
         it("should sort array[object] with integers alphanumerically first attr1, then attr2", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: 1, attr2: 11});
             array.push({attr1: 11, attr2: 5});
@@ -67,7 +67,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with integers alphanumerically first attr2, then attr1", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: 1, attr2: 11});
             array.push({attr1: 11, attr2: 5});
@@ -78,7 +78,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with integers alphanumerically only attr1", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: 1, attr2: 11});
             array.push({attr1: 11, attr2: 5});
@@ -89,7 +89,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with integers alphanumerically only attr2", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: 1, attr2: 11});
             array.push({attr1: 11, attr2: 5});
@@ -100,7 +100,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with integers alphanumerically attr1 === undefined attr2", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: 1, attr2: 11});
             array.push({attr1: 11, attr2: 5});
@@ -111,7 +111,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with Strings alphanumerically first attr1, then attr2", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: "1", attr2: ""});
             array.push({attr1: "11", attr2: "a"});
@@ -123,7 +123,7 @@ describe("core/Util", function () {
             ]);
         });
         it("should sort array[object] with Strings alphanumerically first attr2, then attr1", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: "1", attr2: ""});
             array.push({attr1: "11", attr2: "a"});
@@ -138,7 +138,7 @@ describe("core/Util", function () {
     });
 
     describe("convertArrayOfObjectsToCsv", function () {
-        var array = [{attr1: "der", attr2: "die"}, {attr1: "das", attr2: "hier"}, {attr1: "dort", attr2: "oben"}];
+        const array = [{attr1: "der", attr2: "die"}, {attr1: "das", attr2: "hier"}, {attr1: "dort", attr2: "oben"}];
 
         before(function () {
             model = new Model();
@@ -159,7 +159,7 @@ describe("core/Util", function () {
 
     describe("generate proxy url", function () {
         it("should generate key without hostname from url", function () {
-            var proxyURL;
+            let proxyURL = "";
 
             model = new Model();
 
@@ -168,7 +168,7 @@ describe("core/Util", function () {
         });
 
         it("should generate key with hostname from url", function () {
-            var proxyURL;
+            let proxyURL = "";
 
             model = new Model({
                 proxyHost: "https://test-proxy.example.com"
@@ -178,7 +178,7 @@ describe("core/Util", function () {
             expect(proxyURL).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
         });
         it("shouldn't transform url for local ressources I", function () {
-            var proxyURL;
+            let proxyURL = "";
 
             model = new Model({
                 proxyHost: "https://test-proxy.example.com"
@@ -188,7 +188,7 @@ describe("core/Util", function () {
             expect(proxyURL).to.be.equal("http://localhost/test.json");
         });
         it("shouldn't transform url for local ressources II", function () {
-            var proxyURL;
+            let proxyURL = "";
 
             model = new Model({
                 proxyHost: "https://test-proxy.example.com"
@@ -226,7 +226,7 @@ describe("core/Util", function () {
     });
     describe("sortObjectsAsAddress", function () {
         it("should return sorted objects", function () {
-            var array = [];
+            const array = [];
 
             array.push({attr1: "aStraße 1b, 12345 Stadt"});
             array.push({attr1: "aStraße 1, 12345 Stadt"});

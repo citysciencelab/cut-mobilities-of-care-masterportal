@@ -103,7 +103,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     },
 
     addSnippet: function (featureAttribute) {
-        var snippetAttribute = featureAttribute,
+        let snippetAttribute = featureAttribute,
             isSelected = false;
 
         snippetAttribute.values = Radio.request("Util", "sort", "", snippetAttribute.values);

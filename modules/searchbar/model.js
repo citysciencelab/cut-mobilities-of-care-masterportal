@@ -266,8 +266,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     createRecommendedList: function (triggeredBy) {
-        var max = this.get("recommendedListLength"),
-            recommendedList = [],
+        const max = this.get("recommendedListLength");
+        let recommendedList = [],
             hitList = this.get("hitList");
 
         hitList = Radio.request("Util", "sort", "address", hitList, "name");
