@@ -114,6 +114,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
     /**
     * Parses the specifications from the config.json.
+    * If the portalconfigparameters are parsed, this will trigger the Preparser.
     * @param {Object} response - Parameters from the config.json.
     * @returns {void} - no value is returned.
     */
