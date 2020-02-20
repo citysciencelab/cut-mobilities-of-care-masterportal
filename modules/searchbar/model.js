@@ -268,11 +268,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
     createRecommendedList: function (triggeredBy) {
         var max = this.get("recommendedListLength"),
             recommendedList = [],
-            hitList = this.get("hitList"),
-            foundTypes = [],
-            singleTypes,
-            usedNumbers = [],
-            randomNumber;
+            hitList = this.get("hitList");
 
         hitList = Radio.request("Util", "sort", "address", hitList, "name");
         this.setHitList(hitList);
@@ -290,27 +286,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
 
         if (hitList.length > max) {
-            singleTypes = _.reject(hitList, function (hit) {
-                var res;
-
-                if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                    res = true;
-                }
-                else {
-                    foundTypes.push(hit.type);
-                }
-                return res;
-            });
-
-            while (singleTypes.length < max) {
-                randomNumber = _.random(0, hitList.length - 1);
-                if (_.contains(usedNumbers, randomNumber) === false) {
-                    singleTypes.push(hitList[randomNumber]);
-                    usedNumbers.push(randomNumber);
-                    singleTypes = _.uniq(singleTypes);
-                }
-            }
-            recommendedList = singleTypes;
+            recommendedList = this.getRandomEntriesOfEachType(hitList, max);
         }
         else {
             recommendedList = hitList;
@@ -323,6 +299,39 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
             Radio.trigger("ViewZoom", "hitSelected");
         }
+    },
+
+    getRandomEntriesOfEachType: function (hitList, maxLength) {
+        const randomEntries = [],
+            max = hitList.length < maxLength ? hitList.length : maxLength;
+        let foundTypes = [],
+            foundTypesIterator = 0,
+            counter = 0;
+
+        hitList.every(hit => foundTypes.push(hit.type));
+        foundTypes = [...new Set(foundTypes)];
+
+        while (counter < max) {
+            const foundTypesLength = foundTypes.length,
+                positionOfFoundTypes = foundTypesIterator % foundTypesLength,
+                type = foundTypes[positionOfFoundTypes],
+                randomEntryByType = this.getRandomEntryByType(hitList, type);
+
+            if (!randomEntries.includes(randomEntryByType)) {
+                randomEntries.push(randomEntryByType);
+                counter++;
+            }
+            foundTypesIterator++;
+        }
+
+        return randomEntries;
+    },
+
+    getRandomEntryByType: function (hitList, type) {
+        const hitListByType = hitList.filter(hit => hit.type === type),
+            randomNumber = Math.floor(Math.random() * hitListByType.length);
+
+        return hitListByType[randomNumber];
     },
 
     /**
