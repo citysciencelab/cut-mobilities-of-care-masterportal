@@ -42,7 +42,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "click .form-control-feedback": "deleteSearchString",
         "click .btn-search": "searchAll",
         "click .list-group-item.hit": "hitSelected",
-        "touchstart .list-group-item.hit": "hitSelected",
         "click .list-group-item.results": "renderHitList",
         "mouseover .list-group-item.hit": "showMarker",
         "mouseleave .list-group-item.hit": "hideMarker",
