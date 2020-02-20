@@ -1,12 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import Alerting from "./Alerting";
+import ScaleLine from "./ScaleLine";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        Alerting: Alerting
+        Alerting: Alerting,
+        ScaleLine: ScaleLine
     },
     mutations: {
         /**

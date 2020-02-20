@@ -1,10 +1,12 @@
 <script>
 import Alerting from "./components/Alerting.vue";
+import ScaleLine from "./components/ScaleLine.vue";
 
 export default {
     name: "App",
     components: {
-        Alerting
+        Alerting,
+        ScaleLine
     }
 };
 </script>
@@ -12,6 +14,7 @@ export default {
 <template>
     <div id="app">
         <Alerting />
+        <ScaleLine />
     </div>
 </template>
 
