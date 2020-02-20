@@ -1,32 +1,3 @@
-<template lang="html">
-    <Tool v-bind:title="title" v-bind:icon="icon" v-bind:active="active" v-bind:renderToWindow="renderToWindow">
-        <form v-if="active" class="form-horizontal" role="form" slot="toolBody">
-            <div class="form-group form-group-sm">
-                <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
-                <div class="col-md-7 col-sm-7">
-                    <select class="form-control input-sm pull-left" id="coordSystemField" v-model="currentSelection" @change="selectionChanged($event)">
-                        <option v-for="(projection, i) in projections" v-bind:key="i" v-bind:value="projection.name" v-bind:SELECTED="projection.name === currentProjectionName">
-                            {{ projection.title ? projection.title : projection.name}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label id="coordinatesEastingLabel" for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">{{coordinatesEastingLabel}}</label>
-                <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesEastingField" v-model="coordinatesEastingField" readonly contenteditable="false">
-                </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label id="coordinatesNorthingLabel" for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">{{coordinatesNorthingLabel}}</label>
-                <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesNorthingField" v-model="coordinatesNorthingField" readonly contenteditable="false">
-                </div>
-            </div>
-        </form> 
-    </Tool>  
-</template>
-
 <script>
 import Tool from "./Tool.vue";
 import { mapState } from "vuex";
@@ -232,3 +203,32 @@ export default {
     }
 };
 </script>
+
+<template lang="html">
+    <Tool v-bind:title="title" v-bind:icon="icon" v-bind:active="active" v-bind:renderToWindow="renderToWindow">
+        <form v-if="active" class="form-horizontal" role="form" slot="toolBody">
+            <div class="form-group form-group-sm">
+                <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
+                <div class="col-md-7 col-sm-7">
+                    <select class="form-control input-sm pull-left" id="coordSystemField" v-model="currentSelection" @change="selectionChanged($event)">
+                        <option v-for="(projection, i) in projections" v-bind:key="i" v-bind:value="projection.name" v-bind:SELECTED="projection.name === currentProjectionName">
+                            {{ projection.title ? projection.title : projection.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label id="coordinatesEastingLabel" for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">{{coordinatesEastingLabel}}</label>
+                <div class="col-md-7 col-sm-7">
+                    <input type="text" class="form-control" id="coordinatesEastingField" v-model="coordinatesEastingField" readonly contenteditable="false">
+                </div>
+            </div>
+            <div class="form-group form-group-sm">
+                <label id="coordinatesNorthingLabel" for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">{{coordinatesNorthingLabel}}</label>
+                <div class="col-md-7 col-sm-7">
+                    <input type="text" class="form-control" id="coordinatesNorthingField" v-model="coordinatesNorthingField" readonly contenteditable="false">
+                </div>
+            </div>
+        </form> 
+    </Tool>  
+</template>

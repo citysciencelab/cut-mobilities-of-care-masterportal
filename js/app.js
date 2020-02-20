@@ -26,7 +26,6 @@ import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
@@ -117,6 +116,7 @@ function loadApp () {
 
     Vue.config.productionTip = false;
     app = new Vue({
+        name: "VueApp",
         render: h => h(App),
         store
     });
@@ -171,10 +171,6 @@ function loadApp () {
 
     if (_.has(Config, "mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
-    }
-
-    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
-        new ScaleLineView();
     }
 
     new WindowView();

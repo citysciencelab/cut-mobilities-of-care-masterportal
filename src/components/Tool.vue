@@ -1,21 +1,3 @@
-<template>
-    <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']">
-        <div class="win-heading header">
-            <p class="buttons pull-right">
-                <span class="glyphicon glyphicon-remove" v-on:click="close($event)"></span>
-            </p>
-            <p class="buttons pull-left move">
-                <span class="glyphicon win-icon" v-bind:class="icon"></span>
-            </p>
-            <p class="title move">
-                <span>{{title}}</span>
-            </p>
-        </div>
-        <div class="win-body-vue">
-            <slot name="toolBody"></slot>
-        </div>
-    </div>
-</template>
 <script>
 import { mapState } from "vuex";
 
@@ -76,6 +58,26 @@ export default {
     }
 };
 </script>
+
+<template>
+    <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']">
+        <div class="win-heading header">
+            <p class="buttons pull-right">
+                <span class="glyphicon glyphicon-remove" v-on:click="close($event)"></span>
+            </p>
+            <p class="buttons pull-left move">
+                <span class="glyphicon win-icon" v-bind:class="icon"></span>
+            </p>
+            <p class="title move">
+                <span>{{title}}</span>
+            </p>
+        </div>
+        <div class="win-body-vue">
+            <slot name="toolBody"></slot>
+        </div>
+    </div>
+</template>
+
 <style lang="less">
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(255, 255, 255);

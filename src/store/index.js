@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Alerting from "./Alerting";
 import SupplyCoord from "./SupplyCoord";
+import ScaleLine from "./ScaleLine";
 
 Vue.use(Vuex);
 
@@ -13,7 +14,8 @@ const store = new Vuex.Store({
             modules: {
                 SupplyCoord // hier die stores von weiteren Tools eintragen
             }
-        }
+        },
+        ScaleLine: ScaleLine
     },
     mutations: {
         /**
