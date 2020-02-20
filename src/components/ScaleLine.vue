@@ -61,7 +61,6 @@ export default {
 <style lang="less">
 div#scale-line {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
-    border-radius: 0 5px 0 0;
     bottom: 0;
     color: #777;
     position: absolute;
@@ -75,7 +74,6 @@ div#scale-line > span {
         border-bottom: 1px solid;
         border-left: 1px solid;
         border-right: 1px solid;
-        padding: 0 20px;
         display: inline-block;
         width: 2cm;
     }
