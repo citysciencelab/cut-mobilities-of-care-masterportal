@@ -24,18 +24,27 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @fires MapView#RadioRequestMapViewGetCenter
      * @fires MapView#RadioTriggerMapViewSetScale
      * @fires MapView#RadioTriggerMapViewSetCenter
+     * @listens Controls.BackForward#changeStepForwardText
+     * @listens Controls.BackForward#changeStepBackwardText
      */
     initialize: function () {
-        var channel = Radio.channel("BackForwardView"),
-            template;
+        const channel = Radio.channel("BackForwardView");
 
         this.model = new BackForwardModel();
-        template = this.modifyTemplate(BackForwardTemplate);
-        this.template = _.template(template);
 
         channel.reply({
             "getView": this
         }, this);
+
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.stepForwardText || changed.stepBackwardText) {
+                    this.render();
+                }
+            }
+        });
 
         Radio.trigger("Map", "registerListener", "moveend", this.updatePermalink.bind(this));
         this.render();
@@ -47,7 +56,12 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @return {Backbone.View} BackForwardView
      */
     render: function () {
-        this.$el.html(this.template());
+        const attr = this.model.toJSON(),
+            template = _.template(this.modifyTemplate(BackForwardTemplate));
+
+        this.$el.html(template(attr));
+        this.updatePointerEvents();
+
         return this;
     },
 
@@ -57,12 +71,12 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @return {Backbone.Template} modified template
      */
     modifyTemplate: function (tpl) {
-        var result,
-            configData = this.model.get("config"),
-            forwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconFor : configData,
-            backwardGlyph = _.isUndefined(configData) === false ? configData.attr.glyphiconBack : configData,
-            buttons,
-            re;
+        const configData = this.model.get("config"),
+            forwardGlyph = typeof configData !== "undefined" ? configData.attr.glyphiconFor : configData,
+            backwardGlyph = typeof configData !== "undefined" ? configData.attr.glyphiconBack : configData;
+        let result = "",
+            buttons = "",
+            re = null;
 
         if (!forwardGlyph && !backwardGlyph) {
             result = tpl;
@@ -99,12 +113,12 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @returns {void}
      */
     updatePermalink: function () {
-        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+        const forButton = document.getElementsByClassName("forward glyphicon")[0],
             backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales"),
             currentPos = this.model.get("currentPos"),
-            that = this,
-            scale,
+            that = this;
+        let scale,
             center;
 
         if (centerScales.length === 0) {
@@ -149,7 +163,7 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
      * @returns {void}
      */
     setNextLastView: function (direction) {
-        var forButton = document.getElementsByClassName("forward glyphicon")[0],
+        const forButton = document.getElementsByClassName("forward glyphicon")[0],
             backButton = document.getElementsByClassName("backward glyphicon")[0],
             centerScales = this.model.get("CenterScales");
 
@@ -172,6 +186,32 @@ const BackForwardView = Backbone.View.extend(/** @lends BackForwardView.prototyp
             if (this.model.get("currentPos") === 0) {
                 $(backButton).css("pointer-events", "none");
             }
+        }
+    },
+
+    /**
+     * correction for the pointer-events when language changes - this is a similar technic as in this.setNextLastView but for both buttons and without any action attached
+     * @pre there may or may not button pointer-events blocked
+     * @post there are only those button pointer-events blocked that are necessary
+     * @returns {Void}  -
+     */
+    updatePointerEvents: function () {
+        const forButton = document.getElementsByClassName("forward glyphicon")[0],
+            backButton = document.getElementsByClassName("backward glyphicon")[0],
+            centerScales = this.model.get("CenterScales");
+
+        if (centerScales.length === 0 || this.model.get("currentPos") >= centerScales.length - 1) {
+            $(forButton).css("pointer-events", "none");
+        }
+        else {
+            $(forButton).css("pointer-events", "auto");
+        }
+
+        if (this.model.get("currentPos") === 0) {
+            $(backButton).css("pointer-events", "none");
+        }
+        else {
+            $(backButton).css("pointer-events", "auto");
         }
     }
 });

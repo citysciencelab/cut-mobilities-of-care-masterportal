@@ -11,7 +11,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         isOpen: false,
         name: "Geometrie",
         type: "string",
-        displayName: "Geometrie auswählen",
         snippetType: "graphicalselect",
         isMultiple: false,
         drawInteraction: undefined,
@@ -24,15 +23,13 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             positioning: "top-left"
         }),
         snippetDropdownModel: {},
-        geographicValues: {
-            "Rechteck aufziehen": "Box",
-            "Kreis aufziehen": "Circle",
-            "Fläche zeichnen": "Polygon"
-        },
         currentValue: "",
         selectedAreaGeoJson: undefined,
-        tooltipMessage: "Klicken zum Starten und Beenden",
-        tooltipMessagePolygon: "Klicken um Stützpunkt hinzuzufügen"
+        // translations
+        geographicValues: {},
+        displayName: "",
+        tooltipMessage: "",
+        tooltipMessagePolygon: ""
     },
     /**
      * @class GraphicalSelectModel
@@ -69,6 +66,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      */
     initialize: function () {
         this.superInitialize();
+        this.changeLang(i18next.language);
         const channel = Radio.channel("GraphicalSelect");
 
         channel.on({
@@ -97,6 +95,37 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
             isMultiple: this.get("isMultiple"),
             preselectedValues: Object.keys(this.get("geographicValues"))[0]
         }));
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        const geographicValues = {},
+            model = this.get("snippetDropdownModel"),
+            selectBySquare = i18next.t("common:snippets.graphicalSelect.selectBySquare"),
+            selectByCircle = i18next.t("common:snippets.graphicalSelect.selectByCircle"),
+            selectByPolygon = i18next.t("common:snippets.graphicalSelect.selectByPolygon");
+
+        geographicValues[selectBySquare] = "Box";
+        geographicValues[selectByCircle] = "Circle";
+        geographicValues[selectByPolygon] = "Polygon";
+        this.set({
+            displayName: i18next.t("common:snippets.graphicalSelect.displayName"),
+            selectBySquare: selectBySquare,
+            selectByCircle: selectByCircle,
+            selectByPolygon: selectByPolygon,
+            tooltipMessage: i18next.t("common:snippets.graphicalSelect.tooltipMessage"),
+            tooltipMessagePolygon: i18next.t("common:snippets.graphicalSelect.tooltipMessagePolygon"),
+            geographicValues: geographicValues
+        });
+        if (model.replaceValueModels) {
+            model.replaceValueModels(Object.keys(geographicValues), Object.keys(geographicValues)[0]);
+        }
     },
     /**
       * Handles (de-)activation of this Tool

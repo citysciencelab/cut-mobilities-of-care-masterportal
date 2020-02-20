@@ -274,7 +274,7 @@ const GazetteerModel = Backbone.Model.extend({
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
-                type: "Straße",
+                type: i18next.t("common:modules.searchbar.type.street"),
                 coordinate: position,
                 glyphicon: "glyphicon-road",
                 id: hitName.replace(/ /g, "") + "Straße"
@@ -318,7 +318,7 @@ const GazetteerModel = Backbone.Model.extend({
             hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
-                type: "Stadtteil",
+                type: i18next.t("common:modules.searchbar.type.district"),
                 coordinate: pos,
                 glyphicon: "glyphicon-map-marker",
                 id: hitName.replace(/ /g, "") + "Stadtteil"
@@ -382,7 +382,7 @@ const GazetteerModel = Backbone.Model.extend({
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: "Flurstück " + gemarkung + "/" + flurstueck,
-                type: "Parcel",
+                type: i18next.t("common:modules.searchbar.type.parcel"),
                 coordinate: coordinate,
                 glyphicon: "glyphicon-map-marker",
                 geom: geom,
@@ -404,7 +404,7 @@ const GazetteerModel = Backbone.Model.extend({
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hitName,
-                    type: "Straße",
+                    type: i18next.t("common:modules.searchbar.type.street"),
                     coordinate: coordinates,
                     glyphicon: "glyphicon-road",
                     id: hitName.replace(/ /g, "") + "Straße"
@@ -468,7 +468,7 @@ const GazetteerModel = Backbone.Model.extend({
     showError: function (err) {
         const detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        Radio.trigger("Alert", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.searchbar.gaz.errorMsg") + " " + detail);
     },
 
     /**
@@ -540,7 +540,7 @@ const GazetteerModel = Backbone.Model.extend({
             // "Hitlist-Objekte"
             obj = {
                 name: name,
-                type: "Adresse",
+                type: i18next.t("common:modules.searchbar.type.address"),
                 coordinate: coordinate,
                 glyphicon: "glyphicon-map-marker",
                 adress: adress,

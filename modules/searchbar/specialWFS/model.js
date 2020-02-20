@@ -57,18 +57,18 @@ const SpecialWFSModel = Backbone.Model.extend({
     * @returns {void}
     */
     setDefinitions: function (values) {
-        var definitions = [];
+        const definitions = [];
 
-        _.each(values, function (value) {
-            var definition = value;
+        values.forEach(function (value) {
+            let definition = value;
 
             // @deprecated since 3.0.0
-            if (_.has(value, "data")) {
-                definition = _.extend(value, this.getDataParameters(value));
+            if (value.hasOwnProperty("data")) {
+                definition = Object.assign(value, this.getDataParameters(value));
             }
 
-            if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
-                console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+            if (!definition.hasOwnProperty("typeName") || !definition.hasOwnProperty("propertyNames")) {
+                console.error("SpecialWFS (setDefinitions): parameters missing - definition of specialWFS is ignored.");
                 return undefined;
             }
 
@@ -92,8 +92,8 @@ const SpecialWFSModel = Backbone.Model.extend({
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
         });
 
-        if (_.has(parameters, "TYPENAMES") === false || _.has(parameters, "PROPERTYNAME") === false) {
-            console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+        if (!parameters.hasOwnProperty("TYPENAMES") || !parameters.hasOwnProperty("PROPERTYNAME")) {
+            console.error("SpecialWFS (getDataParameters): parameters missing - definition of specialWFS is ignored.");
             return undefined;
         }
 
@@ -151,7 +151,14 @@ const SpecialWFSModel = Backbone.Model.extend({
             data;
 
         if (searchString.length >= this.get("minChars")) {
-            _.each(definitions, function (def) {
+            definitions.forEach(function (def) {
+                // translate if necessary
+                if (typeof def.i18nextTranslate === "function") {
+                    def.i18nextTranslate(function (key, value) {
+                        def[key] = value;
+                    });
+                }
+
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);
@@ -177,7 +184,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     sendRequest: function (def, data) {
         var ajax = this.get("ajaxRequests");
 
-        if (ajax[def.name] !== null && !_.isUndefined(ajax[def.name])) {
+        if (ajax[def.name] !== null && ajax[def.name] !== undefined) {
             ajax[def.name].abort();
             this.polishAjax(def.name);
         }

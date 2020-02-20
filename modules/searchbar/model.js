@@ -10,7 +10,12 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
-        activeInitialSearchTasks: []
+        activeInitialSearchTasks: [],
+        // translations
+        i18nextTranslate: null,
+        buttonSearchTitle: "",
+        buttonOpenHelpTitle: "",
+        showAllResultsText: ""
     },
 
     /**
@@ -30,6 +35,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
+     * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
+     * @property {String} buttonSearchTitle="", filled with "Suchen"- translated
+     * @property {String} buttonOpenHelpTitle="", filled with "Hilfe öffnen"- translated
+     * @property {String} showAllResultsText="", filled with "alle Ergebnisse anzeigen"- translated
      * @listens Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @listens Searchbar#RadioTriggerSearchbarPushHits
      * @listens Searchbar#RadioTriggerSearchbarRemoveHits
@@ -51,7 +60,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             "abortSearch": this.abortSearch
         });
 
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        if (typeof Radio.request("ParametricURL", "getInitString") !== "undefined") {
             // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
             this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
         }
@@ -61,6 +74,28 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             this.set("isInitialRecommendedListCreated", true);
         }
 
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language.
+     * If contents from config.json are translated, this is respected here by using the function "i18nextTranslate".
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        const setLanguage = {};
+
+        if (typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                setLanguage[key] = value;
+            });
+        }
+        setLanguage.buttonSearchTitle = i18next.t("common:button.search");
+        setLanguage.buttonOpenHelpTitle = i18next.t("common:modules.quickHelp.titleTag");
+        setLanguage.showAllResultsText = i18next.t("common:modules.searchbar.showAllResults");
+
+        this.set(setLanguage);
     },
 
     /**
