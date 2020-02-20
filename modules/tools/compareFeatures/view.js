@@ -121,7 +121,7 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     removeFeatureFromList: function (evt) {
-        const featureToRemoved = _.find(this.model.get("featureList"), function (feature) {
+        const featureToRemoved = this.model.get("featureList").find(function (feature) {
             return feature.getId() === evt.target.id;
         });
 
