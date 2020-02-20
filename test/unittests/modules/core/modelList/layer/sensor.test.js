@@ -482,4 +482,117 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.parseJson(obj).getGeometry()).to.be.an.instanceof(LineString);
         });
     });
+
+    describe("aggregatePropertiesOfThings", function () {
+        it("should set one Thing in a simple way without aggregation", function () {
+            const allThings = [
+                    {
+                        name: "foo",
+                        description: "bar",
+                        properties: {
+                            "baz": "qux"
+                        },
+                        Locations: [{
+                            location: {
+                                type: "Feature",
+                                geometry: {
+                                    type: "Point",
+                                    coordinates: [1, 2, 3]
+                                }
+                            }
+                        }],
+                        Datastreams: [{"foobar": 1}]
+                    }
+                ],
+                expectedOutcome = [{
+                    location: {
+                        type: "Point",
+                        coordinates: [1, 2, 3]
+                    },
+                    properties: {
+                        baz: "qux",
+                        name: "foo",
+                        description: "bar",
+                        requestUrl: "http://example.com",
+                        versionUrl: "1.0",
+                        Datastreams: [{"foobar": 1}]
+                    }
+                }];
+
+            sensorLayer.set("url", "http://example.com", {silent: true});
+            sensorLayer.set("version", "1.0", {silent: true});
+
+            expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
+        });
+        it("should aggregate Things if there is more than one thing", function () {
+            const allThings = [[
+                    {
+                        name: "foo",
+                        description: "bar",
+                        properties: {
+                            "baz": "qux"
+                        },
+                        Locations: [{
+                            location: {
+                                type: "Point",
+                                coordinates: [3, 4, 5]
+                            }
+                        }],
+                        Datastreams: [{"foobar": 10}]
+                    },
+                    {
+                        name: "oof",
+                        description: "rab",
+                        properties: {
+                            "baz": "xuq"
+                        },
+                        Locations: [{
+                            location: {
+                                type: "Feature",
+                                geometry: {
+                                    type: "Point",
+                                    coordinates: [3, 4, 5]
+                                }
+                            }
+                        }],
+                        Datastreams: [{"foobar": 11}]
+                    }
+                ]],
+                expectedOutcome = [{
+                    location: {
+                        type: "Point",
+                        coordinates: [3, 4, 5]
+                    },
+                    properties: {
+                        Datastreams: [{"foobar": 10}, {"foobar": 11}],
+                        baz: "qux | xuq",
+                        name: "foo | oof",
+                        description: "bar | rab",
+                        requestUrl: "http://example.com",
+                        versionUrl: "1.0"
+                    }
+                }];
+
+            sensorLayer.set("url", "http://example.com", {silent: true});
+            sensorLayer.set("version", "1.0", {silent: true});
+
+            expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
+        });
+    });
+    describe("flattenArray", function () {
+        it("should return flattened array", function () {
+            expect(sensorLayer.flattenArray([["1", "2"], ["3"], ["4"]])).to.deep.equal(["1", "2", "3", "4"]);
+        });
+        it("should return empty array on empty array input", function () {
+            expect(sensorLayer.flattenArray([])).to.deep.equal([]);
+        });
+        it("should return empty array on undefined input", function () {
+            expect(sensorLayer.flattenArray(undefined)).to.be.undefined;
+        });
+        it("should return empty array on other input", function () {
+            expect(sensorLayer.flattenArray(123)).to.equal(123);
+            expect(sensorLayer.flattenArray("123")).to.equal("123");
+            expect(sensorLayer.flattenArray({id: "123"})).to.deep.equal({id: "123"});
+        });
+    });
 });
