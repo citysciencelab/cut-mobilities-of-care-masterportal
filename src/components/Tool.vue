@@ -1,6 +1,5 @@
 <template>
-    <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']"
-    >
+    <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']">
         <div class="win-heading header">
             <p class="buttons pull-right">
                 <span class="glyphicon glyphicon-remove" v-on:click="close($event)"></span>
@@ -25,40 +24,52 @@ export default {
     props: ["title", "icon", "active", "renderToWindow"],
     mounted() {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
-        // if (this.renderToWindow){
-        //    this.$nextTick(function () {
-        //         // Code that will run only after the entire view has been rendered
-        //         $('#inka').draggable();
-        //     })
-        // }
+    },
+    updated() {
+        if(this.renderToWindow && this.draggable === false && this.active){
+            //tried to do this in mounted.nextTick, but the el is not filled then
+             $(this.$el).draggable({
+                    containment: "#map",
+                    handle: ".move",
+                    start: function (event, ui) {
+                        // As .draggable works by manipulating the css top and left values the following code is necessary if the bottom and right values
+                        // are used for the positioning of the tool window (as is the case for the table tool window). Otherwise dragging the window will
+                        // resize the window if no height and width values are set.
+                        ui.helper.css({
+                            right: "auto",
+                            bottom: "auto"
+                        });
+                    },
+                });
+            this.draggable = true;
+        }
+    },
+    data() {
+        return {
+            draggable: false
+        };
     },
     watch: {
         active(newValue, oldValue) {
-            if (newValue) {
-                if (!this.renderToWindow) {
-                    document.getElementById("map").style.width = "70%";
-                    Radio.trigger("Map", "updateSize");
-                } else {
-                    document.getElementById("map").style.width = "100%";
-                }
+            if (newValue === false) {
+                this.draggable = false;
             }
-            else {
-                if (!this.renderToWindow){
-                    //only set the map to full width, if not another sidebar is open
-                    // das muss spaeter anders geloest werden, wenn alle tools im store registriert sind kann abgefragt werden, ob die sidebar sichtbar ist
-                    document.getElementById("map").style.width = "100%";
-                    Radio.trigger("Map", "updateSize");
-                }
-                this.close();
-            }
+            this.updateMap();
         }
     },
     methods: {
-        close(event) {
+        updateMap(){
             if (!this.renderToWindow) {
+                //only set the map to full width, if not another sidebar is open
+                // das muss spaeter anders geloest werden, wenn alle tools im store registriert sind kann abgefragt werden, ob die sidebar sichtbar ist
                 document.getElementById("map").style.width = "100%";
                 Radio.trigger("Map", "updateSize");
+            } else {
+                document.getElementById("map").style.width = "100%";
             }
+        },
+        close(event) {
+            this.updateMap();
             // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
             this.$parent.$emit("close", event);
         }
@@ -207,6 +218,7 @@ export default {
     top: 50px;
     right: 0;
     width: 30%;
+    background-color: @background_color_1;
     .header();
 }
 </style>
