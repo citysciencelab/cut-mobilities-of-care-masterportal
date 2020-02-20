@@ -72,24 +72,26 @@ const MultiCheckboxModel = SnippetModel.extend({
             }
         }
 
-        if (styleModel) {
+        if (styleModel && styleModel.getLegendInfos() && Array.isArray(styleModel.getLegendInfos())) {
 
             styleModel.getLegendInfos().forEach(legendInfo => {
-                if (legendInfo.geometryType === "Point") {
-                    const type = legendInfo.styleObject.get("type");
+                if (legendInfo.geometryType) {
+                    if (legendInfo.geometryType === "Point") {
+                        const type = legendInfo.styleObject.get("type");
 
-                    if (type === "icon") {
-                        iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                        if (type === "icon") {
+                            iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                        }
+                        else if (type === "circle") {
+                            iconPath = this.createCircleSVG(styleModel);
+                        }
                     }
-                    else if (type === "circle") {
-                        iconPath = this.createCircleSVG(styleModel);
+                    else if (legendInfo.geometryType === "LineString") {
+                        iconPath = this.createLineSVG(legendInfo.styleObject);
                     }
-                }
-                else if (legendInfo.geometryType === "LineString") {
-                    iconPath = this.createLineSVG(legendInfo.styleObject);
-                }
-                else if (legendInfo.geometryType === "Polygon") {
-                    iconPath = this.createPolygonSVG(legendInfo.styleObject);
+                    else if (legendInfo.geometryType === "Polygon") {
+                        iconPath = this.createPolygonSVG(legendInfo.styleObject);
+                    }
                 }
             });
         }
