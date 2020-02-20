@@ -78,7 +78,7 @@ export default {
     </div>
 </template>
 
-<style lang="less">
+<style lang="less" scoped>
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(255, 255, 255);
 @font_family_1: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
