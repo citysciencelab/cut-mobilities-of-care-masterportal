@@ -231,12 +231,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Sorting Function to sort address.
      * Expected string format to be "STREETNAME HOUSENUMBER_WITH_OR_WITHOUT_SUFFIX, *"
-     * @param {String} a First comparator.
-     * @param {String} b Secons comparator.
+     * @param {String} aObj First comparator.
+     * @param {String} bObj Secons comparator.
      * @returns {Number} Sorting index.
      */
-    sortAddress: function (a, b) {
-        const aIsValid = this.isValidAddressString(a, ",", " "),
+    sortAddress: function (aObj, bObj) {
+        const a = aObj.name,
+            b = bObj.name,
+            aIsValid = this.isValidAddressString(a, ",", " "),
             bIsValid = this.isValidAddressString(b, ",", " "),
             aSplit = this.splitAddressString(a, ",", " "),
             bSplit = this.splitAddressString(b, ",", " "),
@@ -344,22 +346,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * Sorts array of objects as address using a special sorting alorithm
      * @param {Object[]} input Array with object to be sorted.
-     * @param {String} attribute Attribute to sort by.
      * @returns {Object[]} - Sorted array of objects.
      */
-    sortObjectsAsAddress: function (input, attribute) {
-        const sorted = [],
-            values = input.map(obj =>obj[attribute]),
-            sortedValues = values.sort(this.sortAddress.bind(this));
-
-        sortedValues.forEach(value => {
-            const filteredFeatures = input.filter(obj => {
-                return obj[attribute] === value;
-            });
-
-            sorted.push(filteredFeatures[0]);
-        });
-        return sorted;
+    sortObjectsAsAddress: function (input) {
+        return input.sort(this.sortAddress.bind(this));
     },
 
     /**
