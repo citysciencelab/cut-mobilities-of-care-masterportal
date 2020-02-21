@@ -231,7 +231,6 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         Radio.trigger("Filter", "disable");
         Radio.trigger("ModelList", "toggleWfsCluster", false);
         Radio.trigger("Map", "activateMap3d");
-
         Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.3d.betaWarning"));
 
         activeTools.forEach(tool => {
