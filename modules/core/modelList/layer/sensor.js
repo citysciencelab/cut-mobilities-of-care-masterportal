@@ -455,7 +455,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         if (typeof urlParams === "object") {
             for (key in urlParams) {
-                if (query) {
+                if (query !== "") {
                     query += "&";
                 }
 
@@ -741,37 +741,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     updateSubscription: function () {
         this.unsubscribeFromSensorThings();
         this.subscribeToSensorThings();
-    },
-
-    /**
-     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @returns {ol/featre[]} features
-     */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
-            featuresInExtent = [];
-
-        features.forEach(feature => {
-            if (containsExtent(enlargedExtent, feature.getGeometry().getExtent())) {
-                featuresInExtent.push(feature);
-            }
-        });
-
-        return featuresInExtent;
-    },
-
-    /**
-     * enlarge given extent by factor
-     * @param   {ol/extent} extent extent to enlarge
-     * @param   {float} factor factor to enlarge extent
-     * @returns {ol/extent} enlargedExtent
-     */
-    enlargeExtent: function (extent, factor) {
-        const bufferAmount = (extent[2] - extent[0]) * factor;
-
-        return buffer(extent, bufferAmount);
     },
 
     /**
