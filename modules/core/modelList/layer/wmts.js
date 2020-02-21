@@ -108,7 +108,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     },
 
     /**
-     * TODO: This needs to be changes so that the Legend actually is
      * Sets the parameter "legendURL" to GetLegendGraphic if it is empty or undefined.
      *
      * @returns {void}
