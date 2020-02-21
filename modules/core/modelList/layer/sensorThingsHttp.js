@@ -66,7 +66,7 @@ export function SensorThingsHttp () {
                 return;
             }
 
-            if (query) {
+            if (query !== "") {
                 query += ",";
             }
             query += coord.x + " " + coord.y;

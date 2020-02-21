@@ -125,15 +125,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Refresh all connections by ending all established connections and creating new ones
-     * @returns {void}
-     */
-    updateSubscription: function () {
-        this.endMqttConnectionToSensorThings();
-        this.createMqttConnectionToSensorThings();
-    },
-
-    /**
      * Creates the vectorSource.
      * @returns {void}
      */
@@ -359,7 +350,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 targetProjection: this.get("epsg")
             },
             /**
-             * a function to receive the response of an http call
+             * a function to receive the response of a http call
              * @param {Object} result the response from the http request as array buffer
              * @returns {Void}  -
              */
@@ -395,7 +386,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }.bind(this), 200);
             }.bind(this),
             /**
-             * a function to be run when a http call is completete either way wheather it was successfull or a failure
+             * A function that is executed when the http call is completed, regardless of whether there is a success or a failure.
              * @returns {Void}  -
              */
             httpOnComplete = function () {
@@ -404,7 +395,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 isComplete = true;
             }.bind(this),
             /**
-             * a function to be run when a http call is completete either way wheather it was successfull or a failure
+             * a function to call on error
              * @param {Error} error the occuring error
              * @returns {Void}  -
              */
@@ -427,7 +418,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * to call on start of loadSensorThings
+     * to call on starting of loadSensorThings
      * @fires Core#RadioTriggerUtilShowLoader
      * @returns {Void}  -
      */
@@ -436,7 +427,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * to call on start of loadSensorThings
+     * to call on ending of loadSensorThings
      * @fires Core#RadioTriggerUtilHideLoader
      * @returns {Void}  -
      */
@@ -807,7 +798,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * loads only things in the current extent and updates the subscriptions
+     * loading things only in the current extent and updating the subscriptions
      * delays before reloading stuff - maybe other moves will trigger in the midtime, so delay...
      * @returns {void}
      */
@@ -828,37 +819,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             clearInterval(this.get("intvLoadingThingsInExtent"));
             this.set("intvLoadingThingsInExtent", 0);
         }.bind(this), this.get("delayLoadingThingsInExtent")));
-    },
-
-    /**
-     * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
-     * @returns {ol/featre[]} features
-     */
-    getFeaturesInExtent: function () {
-        const features = this.get("layer").getSource().getFeatures(),
-            currentExtent = Radio.request("MapView", "getCurrentExtent"),
-            enlargedExtent = this.enlargeExtent(currentExtent, 0.05),
-            featuresInExtent = [];
-
-        features.forEach(feature => {
-            if (containsExtent(enlargedExtent, feature.getGeometry().getExtent())) {
-                featuresInExtent.push(feature);
-            }
-        });
-
-        return featuresInExtent;
-    },
-
-    /**
-     * enlarge given extent by factor
-     * @param   {ol/extent} extent extent to enlarge
-     * @param   {float} factor factor to enlarge extent
-     * @returns {ol/extent} enlargedExtent
-     */
-    enlargeExtent: function (extent, factor) {
-        const bufferAmount = (extent[2] - extent[0]) * factor;
-
-        return buffer(extent, bufferAmount);
     },
 
     /**
