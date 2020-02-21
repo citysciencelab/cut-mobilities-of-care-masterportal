@@ -20,23 +20,25 @@ export default {
         const that = this,
             myBus = Backbone.Events;
 
-        myBus.listenTo(Radio.channel("MapView"), {
-            changedOptions: function (options) {
-                that.$store.dispatch("modifyScale", options);
-                that.$store.dispatch("updateScaleLineValue", options);
-                document.getElementsByClassName("ol-viewport")[0].appendChild(that.$el);
-            }
-        });
-        myBus.listenTo(Radio.channel("Map"), {
-            change: function (mode) {
-                that.$store.state.ScaleLine.mapMode = mode;
-            }
-        });
-        myBus.listenTo(Radio.channel("Footer"), {
-            isReady: function () {
-                that.$store.state.ScaleLine.insideFooter = true;
-            }
-        });
+        if (that.$store.state.ScaleLine.scaleLine) {
+            myBus.listenTo(Radio.channel("MapView"), {
+                changedOptions: function (options) {
+                    that.$store.dispatch("modifyScale", options);
+                    that.$store.dispatch("updateScaleLineValue", options);
+                    document.getElementsByClassName("ol-viewport")[0].appendChild(that.$el);
+                }
+            });
+            myBus.listenTo(Radio.channel("Map"), {
+                change: function (mode) {
+                    that.$store.state.ScaleLine.mapMode = mode;
+                }
+            });
+            myBus.listenTo(Radio.channel("Footer"), {
+                isReady: function () {
+                    that.$store.state.ScaleLine.insideFooter = true;
+                }
+            });
+        }
     },
     updated () {
         if (this.insideFooter) {

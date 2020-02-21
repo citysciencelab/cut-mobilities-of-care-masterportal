@@ -12,7 +12,8 @@ import Title from "./Title";
 function getConfigToStateModules () {
     return {
         Alerting: "alerting",
-        Title: "portalTitle"
+        Title: "portalTitle",
+        ScaleLine: "scaleLine"
     };
 }
 
