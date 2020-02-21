@@ -37,7 +37,10 @@ export default {
     },
     data() {
         return {
-            draggable: false
+            draggable: false,
+            maxPosTop: 0,
+            maxPosLeft: 0
+
         };
     },
     watch: {
@@ -52,6 +55,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * Updates the size of the map debending on sidebars visibility
+         *  @return {void}
+         */
         updateMap(){
             if (!this.renderToWindow) {
                 //only set the map to full width, if not another sidebar is open
@@ -62,6 +69,41 @@ export default {
                 document.getElementById("map").style.width = "100%";
             }
         },
+        /**
+         * Minimizes the Window
+         *  @return {void}
+         */
+        minimize: function () {
+            const el = $(this.$el);
+
+            this.maxPosTop = el.css("top");
+            this.maxPosLeft = el.css("left");
+            $(".win-body-vue").hide();
+            $(".glyphicon-minus").hide();
+            el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
+            $(".header").addClass("header-min");
+            el.draggable("disable");
+        },
+        /**
+         * Maximizes the Window
+         *  @return {void}
+         */
+        maximize: function () {
+            if ($(".win-body-vue").css("display") === "none") {
+                const el = $(this.$el);
+
+                $(".win-body-vue").show();
+                $(".glyphicon-minus").show();
+                el.css({"top": this.maxPosTop, "bottom": "", "left": this.maxPosLeft, "margin-bottom": "30px"});
+                $(".header").removeClass("header-min");
+                el.draggable("enable");
+            }
+        },
+        /**
+         * Updates size of map and emits event to parent.
+         * @property {Event} event the click event
+         * @return {void}
+         */
         close(event) {
             this.updateMap();
             // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
@@ -74,12 +116,13 @@ export default {
     <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']">
         <div class="win-heading header">
             <p class="buttons pull-right">
+                <span class="glyphicon glyphicon-minus" title="Minimieren" v-on:click="minimize"></span>
                 <span class="glyphicon glyphicon-remove" v-on:click="close($event)"></span>
             </p>
             <p class="buttons pull-left move">
                 <span class="glyphicon win-icon" v-bind:class="icon"></span>
             </p>
-            <p class="title move">
+            <p class="title move" v-on:click="maximize">
                 <span>{{title}}</span>
             </p>
         </div>
