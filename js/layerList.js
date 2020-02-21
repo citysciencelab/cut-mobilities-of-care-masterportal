@@ -88,18 +88,29 @@ export function deleteLayersByMetaIds (response, metaIds) {
  * @return {Object[]} response - Objekte aus der services.json
  */
 export function mergeLayersByMetaIds (response, metaIds) {
-    var rawLayerArray = response,
-        objectsById,
-        newObject;
+    let rawLayerArray = response,
+        objectsById;
 
-    _.each(metaIds, function (metaID) {
+    metaIds.forEach(function (metaID) {
+        const newObject = {};
+
         // Objekte mit derselben Metadaten-Id
         objectsById = rawLayerArray.filter(function (layer) {
             return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
         });
-        // Das erste Objekt wird kopiert
-        if (_.isEmpty(objectsById) === false) {
-            newObject = _.clone(objectsById[0]);
+        // Das erste Objekt, das nicht den value "ignore" unter gfiAttributes trägt, wird kopiert
+        if (typeof objectsById !== undefined && objectsById.length > 0) {
+            let entry;
+
+            for (entry of objectsById) {
+                if (entry.gfiAttributes === "ignore") {
+                    Object.assign(newObject, entry);
+                }
+                else {
+                    Object.assign(newObject, entry);
+                    break;
+                }
+            }
             // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
             newObject.name = objectsById[0].datasets[0].md_name;
             // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
