@@ -39,8 +39,10 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     createLayerSource: function () {
         const projection = getProjection(this.get("coordinateSystem")),
             extent = projection.getExtent(),
-            style = this.get("style") === "" ? "normal" : this.get("style"),
-            format = this.get("format") === "" ? "image/png" : this.get("format"),
+            style = this.get("style") && this.get("style") !== "" ? this.get("style") : "normal",
+            format = this.get("format"),
+            gutter = this.get("gutter") ? this.get("gutter") : "0",
+            wrapX = this.get("wrapX") ? this.get("wrapX") : false,
             urls = this.get("urls"),
             size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
             resLength = parseInt(this.get("resLength"), 10),
@@ -61,13 +63,13 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             urls: urls,
             matrixSet: this.get("tileMatrixSet"),
             tileSize: this.get("tileSize"),
-            gutter: this.get("gutter"),
+            gutter: gutter,
             layer: this.get("layer"),
             format: format,
             style: style,
             version: this.get("version"),
             transparent: this.get("transparent").toString(),
-            wrapX: this.get("wrapX"),
+            wrapX: wrapX,
             requestEncoding: this.get("requestEncoding")
         }));
     },

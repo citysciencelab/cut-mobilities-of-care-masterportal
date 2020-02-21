@@ -27,7 +27,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
 |tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
-|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMTS siehe unten](#markdown-header-wmts-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
 **Beispiel WMS:**
@@ -75,6 +75,78 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 ```
 
 
+## WMTS-Layer ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
+|format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
+|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
+|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
+|id|ja|String||Frei wählbare Layer-ID|`"320"`|
+|layer|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`"ignore"`|
+|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
+|minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Geoland Basemap"`|
+|origin|ja|Number[]||Der Ursprung des Kachelrasters. Dieser kann entweder den WMTS Capabilities entnommen werden oder entspricht meist der oberen linken Ecke des extents.|`[-20037508.3428, 20037508.3428]`|
+|requestEncoding|ja|enum["KVP", "REST"]||Codierung der Anfrage an den WMTS Dienst.|`"REST"`|
+|resLength|ja|String||Länge des resolutions und des matrixIds Arrays. Wird benötigt, um die maximale Zoom-Stufe des Layers einstellen zu können.|`"20"`|
+|style|nein|String|"normal"|Name des Styles, welcher dem aus den WMTS Capabilities entsprechen muss.|`"normal"`|
+|tileMatrixSet|ja|String||Set der Matrix, welcher für die Anfrage an den WMTS Dienst benötigt wird.|`"google3857"`|
+|tileSize|ja|String||Kachelgröße in Pixel.|`"256"`|
+|transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`false`|
+|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMTS"`|
+|urls|ja|String[]/String||URLs des WMTS Dienstes. Wenn nur eine einzelne URL als String angegeben wird, dann wird diese intern zu einem Array verarbeitet.|`["https://maps1.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]`|
+|version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.0.0"`|
+|wrapX|nein|Boolean|false|Gibt an, ob die Welt horizontal gewrapped werden soll.|`true`|
+
+**Beispiel WMTS:**
+
+
+```
+#!json
+
+{
+   "id": "320",
+   "name": "Geoland Basemap",
+   "urls": [
+      "https://maps1.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+      "https://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+      "https://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+      "https://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+      "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"
+   ],
+   "typ": "WMTS",
+   "layer": "geolandbasemap",
+   "version": "1.0.0",
+   "format": "image/png",
+   "style": "normal",
+   "transparent": false,
+   "tileSize": "256",
+   "gutter": "0",
+   "minScale": "0",
+   "maxScale": "2500000",
+   "tileMatrixSet": "google3857",
+   "coordinateSystem": "EPSG:3857",
+   "gfiAttributes": "ignore",
+   "gfiTheme": "default",
+   "layerAttribution": "nicht vorhanden",
+   "legendURL": "ignore",
+   "cache": true,
+   "wrapX": true,
+   "origin": [
+      -20037508.3428,
+      20037508.3428
+   ],
+   "resLength": "20",
+   "requestEncoding": "REST"
+}
+```
+
+
 ## WFS-Layer ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -88,7 +160,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall WFS (**[WMS siehe oben](#markdown-header-wms-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WFS"`|
+|typ|ja|String||Diensttyp, in diesem Fall WFS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WFS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"`|
 |version|nein|String||Dienste Version, die über GetFeature angesprochen wird.|`"1.1.0"`|
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
@@ -146,7 +218,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 |id|ja|String||Frei wählbare Layer-ID|`"999999"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
-|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
+|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
