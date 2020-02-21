@@ -4,66 +4,78 @@
 
 
 # Masterportal - Sensor Layer #
-This document describes the sensor layer of the Masterportal based on the SensorThingsAPI.
+Im Folgenden wird das auf der SensorThingsAPI basierende Sensor-Layer des Masterportals beschrieben.
 
 
-## Clarifications ##
+## Begriffsklärungen ##
 
 
 ### OGC SensorThings API ###
-The Open Geospatial Consortium (OGC) SensorThingsAPI "provides an open standard-based and geospatial-enabled framework to interconnect the Internet of Things devices, data, and applications over the Web." ([source](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#6)) The framework includes a data model that provides all the things a broker (the server) needs in a network of publishers (sensors) and clients (browsers etc.).
+Die Open Geospatial Consortium (OGC) SensorThingsAPI stellt ein Framework für geographische Daten im Open-Standard zur Verfügung.
+Die SensorThingsAPI ermöglicht die Vernetzung von Geräten, Daten und Applikationen im IoT (Internet of Things).
 
-For more information about the open standard SensorThingsAPI visit:
+> "[The SensorThingsAPI] provides an open standard-based and geospatial-enabled framework to interconnect the Internet of Things devices, data, and applications over the Web." ([Quelle](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#6))
+
+Das Framework beinhaltet ein Datenmodel das die Verbindung zwischen dem sog. "Broker" (der Server) und einem Netz aus sog. Publishern (Sensoren) und sog. Clients (z.B. das Masterportal im Browser) abbildet.
+
+Unter folgenden Links gibt es mehr hilfreiche Informationen über die SensorThingsAPI:
 
  - [https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#1](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#1)
  - [http://developers.sensorup.com/docs/](http://developers.sensorup.com/docs/)
  - [https://gost1.docs.apiary.io/#reference/0/things](https://gost1.docs.apiary.io/#reference/0/things)
 
-The data diagramm can also be seen here:
+Hier ein Direktlink zum Datenmodel:
 
  - [http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#24](http://docs.opengeospatial.org/is/15-078r6/15-078r6.html#24)
 
 
 ### FROST Server ###
-The FROST Server is the Fraunhofer Open-source SensorThings Server. It is "a Server implementation of the OGC SensorThings API." ([source](https://github.com/FraunhoferIOSB/FROST-Server)) In our case the FROST Server deals as broker between the publisher (sensor) and the client (Masterportal, browser). The content of the FROST Server can be called bidirectional using http and its live updates via mqtt or CoAP.
+Der FROST Server wird vom Fraunhofer-Institut entwickelt. Der FROST Server ist die serverseitige Implementierung der SensorThingsAPI.
+
+> "[It is] a Server implementation of the OGC SensorThings API." ([Quelle](https://github.com/FraunhoferIOSB/FROST-Server))
+
+Der FROST Server ist der Broker zwischen dem Publisher (Sensor) und dem Client (Masterportal bzw. Browser).
+Der FROST Server kann klassisch per http auf seiner REST Schnittstelle aufgerufen werden und bidirektional per mqtt oder CoAP.
 
 
-### The REST API - http ###
-To narrow down the topics you want to subscribe to, use a http REST call.
+### Die REST API - http ###
+Die zum Abonnieren benötigten IDs der Things erhält man am besten mithilfe eines initialen http-Aufrufes an die REST Schnittstelle.
 
-*Important note: You can use expand and filter in the url query only with http REST calls. With mqtt you can only subscribe on a plain path, as url querys will be ignored (no use of $expand or $filter or $orderby or ... in subscriptions).*
+*Wichtig: Nur auf http-Basis lassen sich die expand- und filter-Funktionen der REST-Schnittstelle nutzen.
+Ein Abonnement lässt sich nur über das mqtt Protokoll und nur mit einem reinen Pfad (keine Querys) abschließen. Queries (also alles in der URL nach dem "?") wird ignoriert.*
 
-Here are some basic examples:
+Hier einige Beispiele für den Abruf von Daten über die REST Schnittstelle:
 
- - overview: [https://iot.hamburg.de/](https://iot.hamburg.de/)
- - all Things of the SensorThingsAPI: [https://iot.hamburg.de/v1.0/Things](https://iot.hamburg.de/v1.0/Things)
- - one Thing of the SensorThingsAPI: [https://iot.hamburg.de/v1.0/Things(26)](https://iot.hamburg.de/v1.0/Things(26))
- - one Datastream: [https://iot.hamburg.de/v1.0/Datastreams(74)](https://iot.hamburg.de/v1.0/Datastreams(74))
- - all Datastreams of one Thing: [https://iot.hamburg.de/v1.0/Things(26)/Datastreams](https://iot.hamburg.de/v1.0/Things(26)/Datastreams)
- - all Observations of a Datastream: [https://iot.hamburg.de/v1.0/Datastreams(74)/Observations](https://iot.hamburg.de/v1.0/Datastreams(74)/Observations)
+ - Übersicht: [https://iot.hamburg.de/](https://iot.hamburg.de/)
+ - alle Things der SensorThingsAPI: [https://iot.hamburg.de/v1.0/Things](https://iot.hamburg.de/v1.0/Things)
+ - ein Thing der SensorThingsAPI: [https://iot.hamburg.de/v1.0/Things(26)](https://iot.hamburg.de/v1.0/Things(26))
+ - ein Datastream: [https://iot.hamburg.de/v1.0/Datastreams(74)](https://iot.hamburg.de/v1.0/Datastreams(74))
+ - alle Datastreams eines Things: [https://iot.hamburg.de/v1.0/Things(26)/Datastreams](https://iot.hamburg.de/v1.0/Things(26)/Datastreams)
+ - alle Observations eines Datastreams: [https://iot.hamburg.de/v1.0/Datastreams(74)/Observations](https://iot.hamburg.de/v1.0/Datastreams(74)/Observations)
 
-The FROST Server implements a REST API that allows you to expand and filter the query based on a sql like query language. To join tables use the $expand tag in the query url and seperate multiple joins with a simple comma.
+Der FROST Server hat mit seiner REST Schnittstelle expand- und filter-Funktionen implementiert, die an eine SQL-Syntax erinnern und sich ähnlich benutzen lassen.
+Um z.B. zwei Tabellen miteinander zu verknüpfen, wird der $expand-Parameter verwendet. Um weitere Tabellen zu joinen können diese kommasepariert aufgelistet werden.
 
- - one Thing with its Location: [https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations](https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations)
- - one Things with its Location and Observations (note that Observations are in relation with Datastreams, not with Things): [https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations,Datastreams/Observations](https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations,Datastreams/Observations)
+ - ein Thing mit seiner Location: [https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations](https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations)
+ - ein Thing mit seiner Location und Observation (bitte beachten Sie, dass Observations in Relation zum Datastream steht - nicht in direkter Relation zum Thing): [https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations,Datastreams/Observations](https://iot.hamburg.de/v1.0/Things(26)?$expand=Locations,Datastreams/Observations)
 
-To filter Things without knowing its identifier, use $filter as url query.
+Um nach Things zu filtern - ohne eine eindeutige ID zu verwenden - kann der $filter Parameter verwendet werden.
 
- - find a Thing by its name with $filter=name eq '...': [https://iot.hamburg.de/v1.0/Things?$filter=name%20eq%20%27StadtRad-Station%20Grandweg%20/%20Veilchenweg%27](https://iot.hamburg.de/v1.0/Things?$filter=name%20eq%20%27StadtRad-Station%20Grandweg%20/%20Veilchenweg%27)
+ - finde ein Thing anhand seines Names mit $filter=name eq '...': [https://iot.hamburg.de/v1.0/Things?$filter=name%20eq%20%27StadtRad-Station%20Grandweg%20/%20Veilchenweg%27](https://iot.hamburg.de/v1.0/Things?$filter=name%20eq%20%27StadtRad-Station%20Grandweg%20/%20Veilchenweg%27)
 
-To order Things use $orderby. This is important if you want to get the latest Observation, as they are sorted ascending by default. Use $top=x to select only top results.
+Mit $orderby lassen sich Things sortieren. Um z.B. an die neuest Observation zu kommen, muss die Observations-Liste absteigend nach Datum sortiert und mit $top=1 der erste Datensatz dem Ergebnis entnommen werden.
 
- - order the Observations and pick the first one using $orderby=phenomenonTime desc&$top=1: [https://iot.hamburg.de/v1.0/Datastreams(74)/Observations?$orderby=phenomenonTime%20desc&$top=1](https://iot.hamburg.de/v1.0/Datastreams(74)/Observations?$orderby=phenomenonTime%20desc&$top=1)
+ - sortiere Observations nach Datum und nimm den ersten Datensatz mit $orderby=phenomenonTime desc&$top=1: [https://iot.hamburg.de/v1.0/Datastreams(74)/Observations?$orderby=phenomenonTime%20desc&$top=1](https://iot.hamburg.de/v1.0/Datastreams(74)/Observations?$orderby=phenomenonTime%20desc&$top=1)
 
-You can use sub expands to get even better results:
+Sie können auch verschachtelte Statements verwenden:
 
  - [http://iot.hamburg.de/v1.0/Things(614)?$expand=Datastreams($expand=Observations),Locations](http://iot.hamburg.de/v1.0/Things(614)?$expand=Datastreams($expand=Observations),Locations)
 
-To get Things within an extent use a POLYGON:
+Um Things innerhalb eines Karten-Bereiches (z.B. dem aktuellen Browser-Ausschnitt) abzurufen, kann der relevante Bereich als POLYGON übergeben werden.
 
  - [https://iot.hamburg.de/v1.0/Things?$filter=startswith(Things/name,%27StadtRad-Station%27)%20and%20st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations](https://iot.hamburg.de/v1.0/Things?$filter=startswith(Things/name,%27StadtRad-Station%27)%20and%20st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations)
 
-Let's break this down:
+Im Detail:
 
  - https://iot.hamburg.de/v1.0/Things?
  - $filter=
@@ -79,52 +91,67 @@ Let's break this down:
    - )
  - &$expand=Locations
 
-You will receive only those things that location is within the given polygon. This can increase the speed of the network delivery as you can call for only those Things that are in your actual browser extent and you would only subscribe those.
+Die Antwort vom Server enthält nur die Things, deren Location innerhalb des gewünschten POLYGON liegt.
+Ruft man initial nur den relevanten Bereich vom Server ab, kann sich dies positiv auf die Geschwindigkeit auswirken - zumal man im zweiten Schritt dann auch nur die Things abonnieren könnte, die im aktuellen Browser-Fenster liegen.
 
 
 
-### The REST API - mqtt ###
-mqtt is a protocol made for the Internet of Things to keep an open connection to the server and communicate with pull (commands from client to server) and push (messages from server to client) over one connection without ever closing it. In the browser this might be implemented using socket.io. If you use npm you would use the mqtt package instead.
+### Die REST API - mqtt ###
+Das mqtt Protokoll wurde für das Intenet of Things (IoT) entwickelt. Es hält eine bidirektionale Verbindung zum Server offen und kommuniziert über pull- und push-Nachrichten.
+Die meisten Browser-Implementierungen nutzen unter dem mqtt Protokoll socket.io, da Browser direktes mqtt normalerweise nicht können. Das mqtt-Paket von npm ist ein gutes Beispiel für eine solche Implementierung.
 
-The client uses mqtt to subscribe to a topic. A topic is a plain path to something (e.g. "v1.0/Datastreams(74)/Observations"). Note: The used host is given to mqtt at connect. Therefore a topic leaves the hostname open.
+Mithilfe des mqtt Protokolls abonniert der Client (Browser) ein Topic (Thema).
+Ein Topic verweist mithilfe eines REST Pfads auf eine Entität (die Tabellen aus dem Daten-Model), über deren Änderung informiert werden soll (z.B. "v1.0/Datastreams(74)/Observations").
+*Hinweis: Der host wird beim Connect mit mqtt übergeben und wird aus dem Topic immer weggelassen.*
 
-After subscribing to a topic (e.g. "v1.0/Datastreams(74)/Observations") the server will push every new message (e.g. the Observation of the Datastream 74) over the opened mqtt connection to the client. As mqtt can only subscribe and unsubscribe topics, you have to use http requests (as shown above) to assemble the parts of your topic. All entities of the SensorThingsAPI can be requested as topic.
+Ist eine solches Topic über mqtt abonniert worden, pushed der Broker alle Änderungen an der dahinter liegenden Tabelle an den Client.
+Alle Entitäten (Tabellen des Daten-Models) können abonniert und deabonniert werden.
+Da mqtt nur auf das Abonnieren und Deabonnieren ausgelegt ist, müssen alle anderen Aktionen (z.B. Initiales Abfragen relevanter IDs) über http abgewickelt werden.
 
-As mentioned before, you can only subscribe to plain REST urls. Everything in the query part will be ignored:
+Wie bereits erwähnt, sind Topics reine REST Pfade ohne Query. Beispiel:
 
- - this will work fine with mqtt: mqtt://iot.hamburg.de/v1.0/Datastreams(74)/Observations
- - this woun't work with mqtt: mqtt://iot.hamburg.de/v1.0/Datastreams(74)?$expand=Observations
+ - dies kann man abonnieren: mqtt://iot.hamburg.de/v1.0/Datastreams(74)/Observations
+ - dies kann man nicht abonnieren: mqtt://iot.hamburg.de/v1.0/Datastreams(74)?$expand=Observations
 
-The currently used mqtt version in the Masterportal is: 3.1.1
+Die aktuelle mqtt Version im Masterportal ist: 3.1.1
 
- - More information about mqtt 3.1.1: [https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html)
- - More information about mqtt 5.0.0: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
+ - Informationen zu mqtt 3.1.1: [https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html)
+ - Informationen zu mqtt 5.0.0: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
 
 
 
 ### mqtt - Retained Messages ###
-Following the mqtt protocol, the publisher (sensor) must declare themselves as slow. Therefore the broker (server) is asked to cache (retain) its latest received message to send to subscribing clients to come. If a publisher has a high frequency (e.g. every second a new measurment) the publisher should not demand the use of Retained Messages for performance reasons.
 
-With Retained Messages the mqtt broker (server) keeps the latest message of the publisher (sensor) in its cache. Without Retained Messages only new received messages from the publisher are broadcasted to listening clients. In conclusion no "last message" from the brokers cache will be send to subscribing clients if the publisher disclaims the use of Retained Messages.
+Laut mqtt Protokoll muss ein Publisher (Sensor) dem Broker (Server) mitteilen, wenn er selten Aktualisierungen vornimmt.
+Der Publisher motiviert den Broker dazu seine jeweils letzte Nachricht im Arbeitsspeicher zu halten, um sie neu abonnierenden Clients direkt zur Verfügung zu stellen, da er selbst erst in später Zukunft wieder von sich hören lassen wird.
+Hat ein Publisher hingegen eine hohe Nachrichten-Frequenz (z.B. jede Sekunde), teilt er dem Broker mit, dass sich ein Bereithalten seiner Nachrichten nicht lohnt, da er eh sofort die nächste schickt.
 
- - For more information about Retained Messages demanded by the publisher: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104)
- - For more information about Retained Messages Flags of the client and their purpose: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440)
+Als *Retained Messages* werden solche Nachrichten bezeichnet, die der Broker zwar ganz normal im Permaspeicher speichert, die jedoch zusätzlich im Arbeitsspeicher für künftige Abonnements bereit hält.
+Würde es keine *Retained Messages* geben, würden immer nur gerade empfangene Nachrichten vom Broker an die abonnierten Clients gesendet.
+
+ - Mehr Informationen zu *Retained Messages* wie der Publisher sie vom Broker verlangt: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104)
+ - Mehr Informationen zu *Retained Messages* wie der Client sie vom Broker verlangt: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440)
 
 
 
-### FROST Server and Retained Messages ###
-Currently the FROST Server does not support Retained Messages. If you want to receive the latest message at subscription time you need to get it by a different path. Currently the FROST Server only broadcasts received messages without caching them regardless of what the publisher demands regarding Retained Messages.
+### FROST Server und Retained Messages ###
+Der FROST Server unterstützt aktuell keine *Retained Messages*.
+Wenn Sie beim Abonnement eines Topics die letzte Nachricht empfangen möchten, die der Broker für dieses Topic erhalten hat, müssen Sie diese Nachricht über einen anderen Weg abrufen.
+Dies ist immer der Fall - unabhängig davon was der Publisher dem Broker zur Behandlung seiner Nachrichten als *Retained Messages* mitteilt.
 
-To solve this problem the Masterportal has its own mqtt software layer called **[sensorThingsMqtt](#sensorthingsmqtt)** that simulates Retained Messages.
+Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Masterportal eine Software-Schicht implemntiert die *Retained Messages* simulieren kann. Diese Software-Schicht heißt **[sensorThingsMqtt](#sensorthingsmqtt)**.
 
 
 
 ## sensorThingsMqtt ##
-Currently the FROST Server does not support Retained Messages. The Masterportal provides you with a mqtt software layer that can simulate Retained Messages to avoid bypassing this information otherwise and changing your sensor architecture because of the special needs of the FROST Server.
+Der FROST Server unterstützt aktuell keine *Retained Messages*.
+Das Masterportal bietet Ihnen eine eigene mqtt Software Schicht an die *Retained Messages* simulieren kann.
+So können Sie verhindern, dass Sie Ihre eigene Software Architektur wegen fehlender *Retained Messages* im mqtt Protokoll umbauen müssen.
+Die *sensorThingsMqtt*-Schicht lässt sich wie das npm-Paket mqtt bedienen.
 
 
-### how to implement mqtt ###
-The out of the book implementation of npms mqtt package with JavaScript goes like this:
+### Wie man mqtt implementiert ###
+Hier ein einfaches Beispiel zur Implementierung des npm-Paketes mqtt mit Javascript:
 
 ```
 #!javascript
@@ -154,13 +181,13 @@ client.on("message", function (topic, payload) {
 });
 ```
 
-Because the FROST Server does not support Retained Messages, the on message event will not be triggert by the broker (server) immediately after the subscription. If the topic is part of a slow measuring publisher (sensor, e.g. a charging station) the on message event will be called somewhere in the distant future but not immediately. Retained Messages would have provide us with the latest message shortly after subscription. But we have no Retained Messages using the FROST Server.
+Da der FROST Server keine *Retained Messages* unterstützt, wird das *on message*-Event nach dem Abonnement nicht sofort mit der letzten empfangenen Nachricht vom Broker aufgerufen (getriggert).
+Wenn der hinter dem Topic stehende Publisher (Sensor) langsam ist (z.B. eine Ladesäule), würde das *on message*-Event vielleicht erst in einigen Stunden das erste Mal feuern.
 
 
-### Simulation of Retained Messages ###
-Our solution for the Masterportal is a simulation of Retained Messages in a software layer called **SensorThingsMqtt**. Using this software layer you can use mqtt as if Retained Messages are available. The implementation is something similar to the "out of the book implementation" above.
-
-It goes like this:
+### Simulation von Retained Messages ###
+Die Lösung im Masterportal ist die Simulation von *Retained Messages* mit der *SensorThingsMqtt*-Schicht.
+Nach außen hin sieht es so aus, als sei alles normal. Hier eine Beispiel-Implementierung der *SensorThingsMqtt*-Schicht. Beachten Sie die starke Ähnlichkeit zum Beispiel der Implementierung des npm-Paketes mqtt mit Javascript (s.o.):
 
 ```
 #!javascript
@@ -190,28 +217,26 @@ client.on("message", function (topic, jsonPayload) {
 });
 ```
 
-Note the changes:
+Die Änderungen im Detail:
 
- - context: here you can set your this scope for the events (on connect and on message)
- - rm_simulate: if set to true a simulation of Retained Messages via https will take place
- - jsonPayload: using sensorThingsMqtt the payload is always delivered as a JavaScript Object or JSON - no need to parse it furthermore
- - note that no simulation of Retained Messages will take place if retain is set to 2 (even if rm_simulate is true). Negate this sentence: "If the Retain Handling option is not 2, all matching retained messages are sent to the Client." ([source](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440))
+ - context: hier übergeben Sie den für die Events zu verwendenden Scope (dann brauchen Sie kein .bind(this) zu benutzen)
+ - rm_simulate: wenn dieses Flag auf true steht, werden *Retained Messages* simuliert. Steht das Flag auf false, gibt es keinen Unterschied zwischen SensorThingsMqtt und dem npm-Paket mqtt.
+ - jsonPayload: die *sensorThingsMqtt*-Schicht wandelt alle Antworten vom Broker nach JSON um - daher kein eigenes Umwandeln mehr nötig.
+ - bitte beachten Sie, dass wenn Sie *retain* auf 2 stellen, keine Simulation von Retained Messages stattfindet (selbst wenn rm_simulate auf true steht). Nehmen Sie hierzu die mqtt Spezifikation zur Kenntnis: "If the Retain Handling option is not 2, all matching retained messages are sent to the Client." ([Quelle](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440))
 
 
-### Configuration ###
-The software layer SensorThingsMqtt can be used similar to npm mqtt (as shown above).
+### Konfiguration ###
+Die *SensorThingsMqtt*-Schicht kann wie das npm-Paket mqtt verwendet werden. Es gibt jedoch Erweiterungen der Funktionen mqtt.connect und client.subscribe.
 
-Nevertheless there are some additions in the configuration of mqtt.connect and client.subscribe.
+#### Optionen: SensorThingsMqtt.connect ####
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|host|Ja|String|-|der Host mit dem sich über mqtt verbunden wird|iot.hamburg.de|
+|protocol|Nein|String|mqtt|das zu verwendende Protokoll|mqtt, mqtts, ws, wss, wx, wxs|
+|path|Nein|String|emtpy|der vom Standard abweichende Pfad zur mqtt-Applikation auf dem Server. Dies kann der Fall sein, wenn ein anderes Protokoll als mqtt verwendet wird.|host: "iot.hamburg.de", protocol: "wss", path: "/mqtt" -> results in wss://iot.hamburg.de/mqtt|
+|context|Nein|JavaScript Scope|Der Scope in dem die Events ausgeführt werden.|Wenn hier *this* eingetragen wird, kann *this* in den Events ohne extra binding verwendet werden.|
 
-#### Options: SensorThingsMqtt.connect ####
-|name|mandatory|type|default|description|example|
-|----|---------|----|-------|-----------|-------|
-|host|yes|String|-|the host to connect mqtt to|iot.hamburg.de|
-|protocol|no|String|mqtt|the protocol to use|mqtt, mqtts, ws, wss, wx, wxs|
-|path|no|String|emtpy|The path to follow for the mqtt application on the server. This could be the case if you use a different protocol than mqtt.|e.g. host: "iot.hamburg.de", protocol: "wss", path: "/mqtt" -> results in wss://iot.hamburg.de/mqtt|
-|context|no|JavaScript Scope|The scope to run the events in.|If you set context to this, you can use this in your event functions to reach your current module.|
-
-Example:
+Beispiel:
 
 ```
 #!javascript
@@ -226,17 +251,17 @@ const client = mqtt.connect({
 });
 ```
 
-#### Options: SensorThingsMqttClient.subscribe ####
-|name|mandatory|type|default|description|example|
-|----|---------|----|-------|-----------|-------|
-|qos|no|Number|0|The maximum Quality of Service level at which the Server can send Application Messages to the Client. [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 or 2|
-|retain|no|Number|0|flag of how to use Retained Messages for this subscription [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265)|0: get latest message on subscription, 1: get latest message only if first to subscribe on topic, 2: do not send messages on subscription|
-|rm_simulate|no|Boolean|false|activate the simulation of Retained Messages||
-|rm_path|no|String|empty|a path on the server in case the path differs from the standard implementation|if http REST is http://test.com/subpath/Datastreams but mqtt is mqtt://test.com/Datastreams you then want to set rm_path to "subpath/"|
-|rm_protocol|no|String|"https"|the protocol to use for the simulation|http, https, ...|
-|rm_httpClient|no|Function|SensorThingsClientHttp|an alternative function to call http urls with; the default http handler uses axios|if you prefer a different httpclient set rm_httpClient as a function(url, onsuccess) with onsuccess as function(resp)|
+#### Optionen: SensorThingsMqttClient.subscribe ####
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|qos|Nein|Number|0|"The maximum Quality of Service level at which the Server can send Application Messages to the Client." [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 or 2|
+|retain|Nein|Number|0|"flag of how to use Retained Messages for this subscription" [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265)|0: get latest message on subscription, 1: get latest message only if first to subscribe on topic, 2: do not send messages on subscription|
+|rm_simulate|Nein|Boolean|false|Flag zum Aktivieren der Simulation von *Retained Messages*|true oder false|
+|rm_path|Nein|String|empty|der Pfad-Anteil in dem sich http- und mqtt-Abrufe unterscheiden|wenn http REST http://test.com/subpath/Datastreams , aber mqtt liegt unter mqtt://test.com/Datastreams , dann muss rm_path auf "subpath/" gestellt werden|
+|rm_protocol|Nein|String|"https"|das für die Simulation von *Retained Messages* zu verwendende Protokoll|http, https, ...|
+|rm_httpClient|Nein|Function|SensorThingsClientHttp|Eine Alternativ-Funktion mit der http Aufrufe stattfinden sollen. Per Default wird intern Axios verwendet.|Wenn Sie eine andere Art des Aufrufs von URLs wünschen, stellen Sie rm_httpClient ein als eine Funktion function(url, onsuccess) mit onsuccess als function(resp)|
 
-Example:
+Beispiel:
 
 ```
 #!javascript
@@ -272,33 +297,36 @@ client.on("connect", function () {
 
 
 
-### Scalability and Performance ###
-Our solution to simulate Retained Messages for each subscription via http has a low scalability and a weak performance. We choose this solution out of fife potential resolutions. To follow our thoughts keep in mind that with real Retained Messages cached by the server scalability and performance would not be an issue for the sensor layer of the Masterportal. We had to compromise as follows:
+### Skalierbarkeit und Performanz ###
+Der FROST Server unterstützt aktuell keine *Retained Messages*.
+Unsere Lösung ist die Arbeit mit simulierten *Retained Messages* per http für jedes Abonnement. Diese Lösung skaliert nicht und hat eine geringe Performanz.
+Wir hatten fünf Möglichkeiten zur Auswahl. Um Transparenz zu schaffen werden diese fünf Möglichkeiten hier dargestellt.
+Bitte beachten Sie, dass die performanteste skalierende Methode die Verwendung "echter" *Retained Messages* auf Broker-Seite wäre.
 
- 1. the FROST Server implements Retained Messages
-    - high scalability and high performance
-    - not available at this point in time
- 2. call at once and before any subscription has been made: get all initial data of all topics you want to subscribe to with one http request
-    - low scalability
-    - performance depends on the quality of server and network
-    - hard to implement in a comprehensible way
- 3. call one by one for each topic: get the data of each topic with http after a subscription is made (simulation of Retained Messages)
-    - low scalability
-    - performance depends on the quality of the network
- 4. estimation of the approximately best size for requests (like 2.) and then sending many of queued requests before any subscripition is done
-    - scalability and performance debend on the estimation, might be low
-    - nearly impossible to estimate
-    - no programmer should take responsibility for something like this
- 5. like 2. but with a defined maximum of topics to subscribe to (e.g. 200)
-    - high scalability (mustn't scale up)
-    - high performance (no need for it)
-    - bad UI
-    - contradicts with the philosophy of the Masterportal
+ 1. der FROST Server unterstützt Retained Messages
+    - skaliert, hohe Performanz
+    - aktuell nicht verfügbar
+ 2. ein initialer Abruf aller Nachrichten für alle Topics die abonniert werden sollen
+    - skaliert nicht
+    - Performanz hängt vom Server und dem Netzwerk des Clients ab
+    - clientseitig schwer zu sauber zu implementieren
+ 3. Einzelabrufe von Topics bei jedem Abonnement: (Simulation von *Retained Messages*)
+    - skaliert nicht
+    - die Performanz hängt vom Netzwerk des Clients ab
+ 4. Schätzen der maximalen Anzahl gleichzeitig abrufbaren Datastream-Observations, ohne dass die Performanz dieses Einen Aufrufes leidet - und dann asynchroner Abruf in entsprechend großen Häppchen.
+    - Die geschätzte maximale Anzahl ist abhängig vom Endanwender (Computer, Browser, Netzwerk) und von der Größen der Datenbank-Tabellen die sortiert werden müssen. Das variiert und macht die Schätzung unmöglich.
+    - Wahrscheinlich wäre ein Zufalls-Wert für die Größe der Häppchen performanter als die Festlegung auf einen Wert.
+    - Wir stoßen hier an die Grenzen dessen, was als Programmierer vertretbar ist.
+ 5. Wir legen ein Maximum an gleichzeitig abonnierbaren Features fest (z.B. 200 Features). Wird der Wert überstiegen, wird der Aufruf der Datastream-Observations entsprechend beschnitten und ein Hinweis an den Kunden ausgegeben, dass wir nicht mehr Features unterstützen können.
+    - braucht nicht zu skalieren
+    - hohe Performanz
+    - aus UI-Sicht nicht vertretbar
+    - widerspricht der Philosophie des Masterportals
 
-On january 30th 2020 a decision has been made for 3.:
+Am 30. Januar 2020 haben wir uns für die 3. Möglichkeit entschieden:
 
-  - it is the easiest way to implement
-  - it is simply exchangeable if the FROST Server would support Retained Messages in the future, because only one software layer would be affected
+  - diese ist am einfachsten zu implementieren
+  - diese ist einfach austauschbar, wenn der FROST Server in Zukunft einmal *Retained Messages* anbietet
 
 
 

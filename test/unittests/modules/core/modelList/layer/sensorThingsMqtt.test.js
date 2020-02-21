@@ -26,13 +26,19 @@ describe("core/modelList/layer/SensorThingsMqtt", function () {
         });
 
         it("should warn if the host is not set in the mqtt options", function () {
-            const lastError = false,
-                onerror = function (errormsg) {
-                    lastError = errormsg;
-                };
+            let lastError = false;
+
+            /**
+             * a function to call on error
+             * @param {String} errormsg the error message as String
+             * @returns {Void}  -
+             */
+            function onerror (errormsg) {
+                lastError = errormsg;
+            }
 
             mqtt.connect({}, mqttTest, onerror);
-            expect(lastError).to.be.a('string');
+            expect(lastError).to.be.a("string");
         });
     });
 
