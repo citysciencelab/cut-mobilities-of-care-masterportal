@@ -1,0 +1,121 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.masterportal-container {
+    height: 100%;
+    font-family: MasterPortalFont, Arial, sans-serif;
+}
+
+label {
+    font-weight: normal;
+}
+
+
+.masterportal-container #cursorGlyph {
+    position: absolute;
+    z-index: 1000;
+    cursor: none;
+}
+
+.glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open, .glyphicon-question-sign {
+    cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    .btn-glyphicon, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-info-sign, .glyphicon-check, .glyphicon-unchecked, .glyphicon-envelope, .glyphicon-book {
+        font-size: 18px !important;
+    }
+    html, body {
+        font-size: 16px;
+    }
+}
+
+@media (min-height:200px) {
+    #poibody {
+        max-height:120px;
+    }
+}
+
+@media (min-height:250px) {
+    #poibody {
+        max-height:200px;
+    }
+}
+
+@media (min-height:300px) {
+    #poibody {
+        max-height:220px;
+    }
+}
+
+@media (min-height:480px) {
+    #poibody {
+        max-height:400px;
+    }
+}
+
+@media (min-height: 768px) {
+    #poibody {
+        max-height:700px;
+    }
+}
+
+#poibody {
+    overflow:auto;
+}
+
+/*bootstrap überschreiben*/
+.list-group {
+    margin-bottom: 0px !important;
+}
+
+.form-group:last-child {
+    margin-bottom: 0px;
+}
+
+/******* Ajax Loader *******/
+#loader {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 2000;
+}
+
+#loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -21px;
+    margin-top: -5px;
+}
+
+.loading {
+    position: absolute;
+    top: 30%;
+    left: 32.5%;
+    z-index: 9999;
+    text-align: center;
+    width: 35%;
+}
+
+.loading div {
+    font-size:5vmin;
+    line-height: 130%;
+    margin-top: 5%;
+}
+
+.cluster {
+    font-size:25px;
+    border-radius:30px!important;
+    float:left;
+    margin:10px;
+}
+
+.btn-lgv-grey {
+    background-color:#E3E3E3;
+    color: #000000;
+}

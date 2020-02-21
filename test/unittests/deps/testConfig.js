@@ -84,7 +84,7 @@ module.exports = {
     portalConf: "../../portal/master/",
     layerConf: "/lgv-config/services-fhhnet-ALL.json",
     restConf: "/lgv-config/rest-services-fhhnet.json",
-    styleConf: "/lgv-config/style_v2.json",
+    styleConf: "",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,
     scaleLine: true,

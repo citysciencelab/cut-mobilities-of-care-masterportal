@@ -28,7 +28,8 @@ describe("menu/desktop/folder/viewTree", function () {
                     "isFolderSelectable": this.isFolderSelectable,
                     "isLeafFolder": true,
                     "isSelected": false,
-                    "name": "testFolder"
+                    "name": "testFolder",
+                    "showAllTopicsText": "test"
                 };
             },
 
@@ -47,6 +48,11 @@ describe("menu/desktop/folder/viewTree", function () {
 
         viewTree = new ViewTree({
             model: fakeModel
+        });
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
         });
     });
 

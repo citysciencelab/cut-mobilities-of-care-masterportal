@@ -39,9 +39,7 @@ import FeatureLister from "../../featureLister/model";
 import AddWms from "../../tools/addWMS/model";
 import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
-import Schulwegrouting from "../../tools/schulwegRouting_hh/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
-import Einwohnerabfrage_HH from "../../tools/einwohnerabfrage_hh/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
@@ -246,14 +244,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
             }
-            else if (attrs.id === "einwohnerabfrage") {
-                return new Einwohnerabfrage_HH(attrs, options);
-            }
             else if (attrs.id === "legend") {
                 return new Legend(attrs, options);
-            }
-            else if (attrs.id === "schulwegrouting") {
-                return new Schulwegrouting(attrs, options);
             }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
@@ -966,11 +958,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     replaceModelById: function (id, newModel) {
-        var model = this.get(id);
+        const model = this.get(id);
+        let index = 0;
 
         if (model) {
+            index = this.indexOf(model);
             this.remove(model);
-            this.add(newModel);
+            this.add(newModel, {at: index});
             this.updateLayerView();
         }
     },
@@ -1077,6 +1071,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         clusterModels.forEach(function (layer) {
             layer.set("isClustered", value);
+            layer.styling(value);
+            layer.get("layer").setStyle(layer.get("style"));
         });
     },
 

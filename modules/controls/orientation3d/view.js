@@ -1,5 +1,6 @@
 import Orientation3DTemplate from "text-loader!./template.html";
 import {ViewDirection} from "vcs-oblique/src/vcs/oblique/viewDirection";
+import Orientation3DModel from "./model";
 
 const Orientation3DView = Backbone.View.extend({
     events: {
@@ -11,10 +12,23 @@ const Orientation3DView = Backbone.View.extend({
         "click .compass-pointer-west": "pointerClicked"
     },
     initialize: function () {
-        var channel = Radio.channel("Map"),
+        const channel = Radio.channel("Map"),
             obliqueChannel = Radio.channel("ObliqueMap");
 
+        this.model = new Orientation3DModel();
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.pointerNorthText) {
+                    // listening to one text changed should be enaught to know what's happening
+                    this.render();
+                }
+            }
+        });
+
         this.render();
+        this.$el.hide();
         this.mapChange(Radio.request("Map", "getMapMode"));
         channel.on({
             "change": this.mapChange
@@ -39,8 +53,9 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     render: function () {
-        this.$el.html(this.template);
-        this.$el.hide();
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
         return this;
     },
     hide: function () {

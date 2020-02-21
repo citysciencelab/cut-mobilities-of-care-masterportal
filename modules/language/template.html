@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<span class="currentLan"><%= activeCode %></span>
+<div class="popup-language">
+    <div class="lng-header">
+        <span><%= languageTitle %></span>
+        <span class="buttons pull-right">
+            <span class="glyphicon glyphicon-remove" title="<%= closeButton %>"></span>
+        </span>
+    </div>
+    <div class="form-group form-group-sm">
+        <%  Object.keys(languageCodes).forEach(function(key){ %>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <a class="lng btn <% if (key === activeCode) print('disabled') %>" data-code="<%= key %>">
+                    <%= languageCodes[key] %>
+                </a>
+            </div>
+        <% }); %>
+    </div>
+</div>

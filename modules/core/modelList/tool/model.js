@@ -14,7 +14,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
-        toolsToRenderInSidebar: ["filter", "schulwegrouting"]
+        toolsToRenderInSidebar: ["filter"]
     },
     /**
      * @class Tool
@@ -34,7 +34,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {String[]} supportedOnlyIn3d=["shadow"] Array of tool ids that are only supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
      * @property {String[]} supportedInOblique=[] Array of tool ids that are only supported in oblique mode
-     * @property {String[]} toolsToRenderInSidebar=["filter", "schulwegrouting"] Array of tool ids that are rendered in sidebar
+     * @property {String[]} toolsToRenderInSidebar=["filter"] Array of tool ids that are rendered in sidebar
      * @fires Core.ModelList.Tool#changeIsActive
      * @fires Window#RadioTriggerWindowShowTool
      * @fires Window#RadioTriggerWindowSetIsVisible
@@ -44,6 +44,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @listens Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @listens Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     superInitialize: function () {
         const channel = Radio.channel("Tool");
@@ -94,6 +95,27 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         Radio.trigger("Autostart", "initializedModul", this.get("id"));
         if (this.get("isInitOpen")) {
             this.setIsActive("true");
+        }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.superChangeLang
+        });
+        this.superChangeLang();
+
+    },
+    /**
+     * change language - sets or translates the name of this tool, if property i18nextTranslate is no function.
+     * If name is defined in config.json, the name is not translated else property nameTranslationKey is used.
+     * @returns {Void}  -
+     */
+    superChangeLang: function () {
+        if (typeof this.get("i18nextTranslate") !== "function") {
+            if (this.get("useConfigName") === true) {
+                // do not translate, use name defined in config.json
+                this.set("name", this.get("name"));
+            }
+            else if (typeof this.get("nameTranslationKey") === "string" && i18next.exists(this.get("nameTranslationKey"))) {
+                this.set("name", i18next.t(this.get("nameTranslationKey")));
+            }
         }
     },
     /**

@@ -5,8 +5,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
-        "change .symbol select": "setSymbol",
-        "change .pointSize select": "setPointSize",
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
@@ -36,7 +34,12 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:currentLng": function () {
+                if (this.model.get("isActive") === true) {
+                    this.renderAfterLngChanged(this.model, true);
+                }
+            }
         });
 
         new DownloadView();
@@ -71,15 +74,32 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     },
 
     /**
+     * render the tool draw after the language changed
+     * @param {Backbone.model} model - draw model
+     * @param {boolean} isActive - from tool
+     * @return {Backbone.View} DrawView
+     */
+    renderAfterLngChanged: function (model, isActive) {
+        if (isActive && this.model.get("renderToWindow")) {
+            this.renderSurface(model, model.get("lastDrawTypeIndex"));
+        }
+        else {
+            this.removeSurface();
+        }
+        return this;
+    },
+
+    /**
      * render this tool
      * @param {Backbone.model} model - draw model
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renderSurface: function (model) {
+    renderSurface: function (model, lastDrawTypeIndex) {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
-        this.renewSurface();
+        this.renewSurface(lastDrawTypeIndex);
         this.registerListener();
         this.model.toggleInteraction("draw");
     },
@@ -89,7 +109,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     removeSurface: function () {
-        var layerSource = this.model.get("layer").getSource();
+        const layerSource = this.model.get("layer").getSource();
 
         this.model.resetModule();
         $("#map").removeClass("no-cursor");
@@ -102,163 +122,157 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
 
     /**
      * renews the surface of the drawtool
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renewSurface: function () {
-        var element = this.$el.find(".interaction")[0];
+    renewSurface: function (lastDrawTypeIndex) {
+        const element = this.$el.find(".interaction")[0];
 
-        switch (element.options[element.selectedIndex].text) {
-            case "Punkt zeichnen": {
-                this.$el.find(
-                    `.text,
-                    .font-size,
-                    .font,
-                    .stroke-width,
-                    .circleRadiusInner,
-                    .circleRadiusOuter,
-                    .dropdownUnit,
-                    .dropdownMethod,
-                    .colorContour,
-                    .opacityContour,
-                    .radius`
-                ).hide();
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .color,
-                    .opacity`
-                ).show();
-                break;
+        if (lastDrawTypeIndex) {
+            // after lng changed set selectbox to selection before
+            element.selectedIndex = lastDrawTypeIndex;
+        }
+        if (element) {
+            switch (element.options[element.selectedIndex].id) {
+                case "drawPoint": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .stroke-width,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .colorContour,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.radius,
+                        .color,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "writeText": {
+                    this.$el.find(
+                        `.radius,
+                        .stroke-width,
+                        .circleRadiusOuter,
+                        .circleRadiusInner,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .colorContour,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .color,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawCircle": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .circleRadiusOuter,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .circleRadiusInner,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .color,
+                        .colorContour,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawDoubleCircle": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .dropdownMethod,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .color,
+                        .colorContour,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawLine": {
+                    this.$el.find(
+                        `.text,
+                        .font.size,
+                        .font,
+                        .radius,
+                        .color,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .opacity`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .colorContour,
+                        .opacityContour`
+                    ).show();
+                    break;
+                }
+                case "drawArea": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .color,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                default: {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .dropdownMethod`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .colorContour,
+                        .color`
+                    ).show();
+                    break;
+                }
             }
-            case "Text schreiben": {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .radius,
-                    .stroke-width,
-                    .circleRadiusOuter,
-                    .circleRadiusInner,
-                    .dropdownUnit,
-                    .dropdownMethod,
-                    .colorContour,
-                    .opacityContour`
-                ).hide();
-                this.$el.find(
-                    `.text,
-                    .font-size,
-                    .font,
-                    .color,
-                    .opacity`
-                ).show();
-                break;
-            }
-            case "Kreis zeichnen": {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .text,
-                    .font-size,
-                    .font,
-                    .radius,
-                    .circleRadiusOuter,
-                    .opacityContour`
-                ).hide();
-                this.$el.find(
-                    `.stroke-width,
-                    .circleRadiusInner,
-                    .dropdownUnit,
-                    .dropdownMethod,
-                    .color,
-                    .colorContour,
-                    .opacity`
-                ).show();
-                break;
-            }
-            case "Doppelkreis zeichnen": {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .text,
-                    .font-size,
-                    .font,
-                    .radius,
-                    .dropdownMethod,
-                    .opacityContour`
-                ).hide();
-                this.$el.find(
-                    `.stroke-width,
-                    .circleRadiusInner,
-                    .circleRadiusOuter,
-                    .dropdownUnit,
-                    .color,
-                    .colorContour,
-                    .opacity`
-                ).show();
-                break;
-            }
-            case "Linie zeichnen": {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .text,
-                    .font.size,
-                    .font,
-                    .radius,
-                    .color,
-                    .dropdownUnit,
-                    .dropdownMethod,
-                    .circleRadiusInner,
-                    .circleRadiusOuter,
-                    .opacity`
-                ).hide();
-                this.$el.find(
-                    `.stroke-width,
-                    .colorContour,
-                    .opacityContour`
-                ).show();
-                break;
-            }
-            case "Fläche zeichnen": {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .text,
-                    .font-size,
-                    .font,
-                    .radius,
-                    .dropdownUnit,
-                    .dropdownMethod,
-                    .circleRadiusInner,
-                    .circleRadiusOuter,
-                    .opacityContour`
-                ).hide();
-                this.$el.find(
-                    `.stroke-width,
-                    .color,
-                    .opacity`
-                ).show();
-                break;
-            }
-            default: {
-                this.$el.find(
-                    `.symbol,
-                    .pointSize,
-                    .text,
-                    .font-size,
-                    .font,
-                    .radius,
-                    .circleRadiusInner,
-                    .circleRadiusOuter,
-                    .dropdownUnit,
-                    .dropdownMethod`
-                ).hide();
-                this.$el.find(
-                    `.stroke-width,
-                    .colorContour,
-                    .color`
-                ).show();
-                break;
-            }
+            this.model.set("lastDrawTypeIndex", element.selectedIndex);
         }
     },
 
@@ -287,7 +301,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     renderGlyphicon: function (evt) {
-        var element = document.getElementById("cursorGlyph");
+        const element = document.getElementById("cursorGlyph");
 
         $(element).css("left", evt.originalEvent.offsetX + 5);
         $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
@@ -299,10 +313,10 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setDrawType: function (evt) {
-        var element = evt.target,
+        const element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
-        if (selectedElement.text === "Doppelkreis zeichnen") {
+        if (selectedElement.text === this.model.get("drawDoubleCircle")) {
             this.model.enableMethodDefined(false);
         }
         this.model.setDrawType(selectedElement.value, selectedElement.text);
@@ -362,26 +376,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     },
 
     /**
-     * Setter for the Symbol on the model.
-     * @param {*} evt - With a new Symbol.
-     * @return {void}
-     */
-    setSymbol: function (evt) {
-        this.model.setSymbol(evt.target.value);
-        this.model.updateDrawInteraction();
-    },
-
-    /**
-     * Setter for the PointSize on the model.
-     * @param {*} evt - With a new PointSize.
-     * @return {void}
-     */
-    setPointSize: function (evt) {
-        this.model.setPointSize(evt.target.value);
-        this.model.updateDrawInteraction();
-    },
-
-    /**
      * setter for font on the model
      * @param {event} evt - with new font
      * @return {void}
@@ -429,7 +423,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setColor: function (evt) {
-        var colors = evt.target.value.split(","),
+        const colors = evt.target.value.split(","),
             newColor = [];
 
         colors.forEach(function (color) {
@@ -447,7 +441,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {void}
      */
     setColorContour: function (evt) {
-        var colors = evt.target.value.split(","),
+        const colors = evt.target.value.split(","),
             newColorContour = [];
 
         colors.forEach(function (color) {

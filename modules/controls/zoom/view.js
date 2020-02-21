@@ -1,4 +1,5 @@
 import ZoomControlTemplate from "text-loader!./template.html";
+import ZoomControlModel from "./model";
 
 const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototype */{
     events: {
@@ -18,7 +19,18 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
      * @listens Map#RadioTriggerMapChange
      */
     initialize: function () {
-        var channel = Radio.channel("Map");
+        const channel = Radio.channel("Map");
+
+        this.model = new ZoomControlModel();
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.zoomInText || changed.zoomOutText) {
+                    this.render();
+                }
+            }
+        });
 
         this.render();
         this.mapChange(Radio.request("Map", "getMapMode"));
@@ -38,7 +50,9 @@ const ZoomControlView = Backbone.View.extend(/** @lends ZoomControlView.prototyp
      * @returns {ZoomControlView} - Returns itself
      */
     render: function () {
-        this.$el.html(this.template);
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
         return this;
     },
 

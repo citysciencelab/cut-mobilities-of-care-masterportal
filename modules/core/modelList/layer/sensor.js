@@ -10,6 +10,7 @@ import Point from "ol/geom/Point.js";
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults,
         {
+            supported: ["2D", "3D"],
             epsg: "EPSG:4326",
             utc: "+1",
             version: "1.0",
@@ -17,7 +18,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             mqttPath: "/mqtt",
             mergeThingsByCoordinates: false,
             showNoDataValue: true,
-            noDataValue: "no data"
+            noDataValue: "no data",
+            altitudeMode: "clampToGround"
         }),
     /**
      * @class SensorLayer
@@ -45,6 +47,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The attribute key is "dataStream_[dataStreamId]_[name]".
      * All available dataStreams, their ids, their latest observation and values are separately aggregated and stored (separated by " | ") in the following attributes:
      * dataStreamId, dataStreamName, dataStreamValue, dataStreamPhenomenonTime
+     * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -80,7 +83,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             gfiAttributes: this.get("gfiAttributes"),
             gfiTheme: _.isObject(this.get("gfiTheme")) ? this.get("gfiTheme").name : this.get("gfiTheme"),
             routable: this.get("routable"),
-            id: this.get("id")
+            id: this.get("id"),
+            altitudeMode: this.get("altitudeMode")
         }));
 
         this.updateData();
@@ -118,6 +122,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         // Add features to vectorlayer
         if (!_.isEmpty(features)) {
             this.get("layerSource").addFeatures(features);
+            this.prepareFeaturesFor3D(features);
             this.featuresLoaded(features);
         }
 
@@ -335,7 +340,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             allThings.push(things.value);
         }
 
-        allThings = allThings.flat();
+        allThings = this.flattenArray(allThings);
         allThings = this.getNewestSensorData(allThings);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
@@ -503,13 +508,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     keys.push(Object.keys(thing2.properties));
                     props = Object.assign(props, thing2.properties);
                 });
-                keys = [...new Set(keys.flat())];
+                keys = [...new Set(this.flattenArray(keys))];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                keys.push("name");
+                keys.push("description");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
                 aggregatedThing.location = this.getCoordinates(thing);
                 aggregatedThing.properties = thing.properties;
+                aggregatedThing.properties.name = thing.name;
+                aggregatedThing.properties.description = thing.description;
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
@@ -517,6 +526,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         return aggregatedArray;
+    },
+
+    /**
+     * flattenArray creates a new array with all sub-array elements concatenated
+     * @info this is equivalent to Array.flat() - except no addition for testing is needed for this one
+     * @param {*} array the array to flatten its sub-arrays or anything else
+     * @returns {*}  the flattened array if an array was given, the untouched input otherwise
+     */
+    flattenArray: function (array) {
+        return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
 
     /**
@@ -547,7 +566,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const aggregatedProperties = {};
 
         keys.forEach(key => {
-            const valuesArray = thingArray.map(thing => thing.properties[key]);
+            const valuesArray = thingArray.map(thing => key === "name" || key === "description" ? thing[key] : thing.properties[key]);
 
             aggregatedProperties[key] = valuesArray.join(" | ");
         });

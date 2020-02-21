@@ -428,6 +428,14 @@
  * @example Radio.trigger("VectorLayer", "featureUpdated", id, features)
  */
 
+/**
+ * @event Layer#RadioTriggerVectorLayerResetFeatures
+ * @description Triggers an event with the features that are shown. Used for updates in heatmap after filter.
+ * @param {String} id Id of vector layer.
+ * @param {ol/Feature[]} features Features that are visible.
+ * @example Radio.trigger("VectorLayer", "resetFeatures", id, features)
+ */
+
  /**
  * @event Layer#RadioRequestVectorLayerGetFeatures
  * @param {String} id Id of vector layer.
@@ -556,7 +564,7 @@
  */
 
 /**
- * @event Core#RadiotriggerMapCameraChanged
+ * @event Core#RadioTriggerMapCameraChanged
  * @description todo
  */
 
@@ -2061,24 +2069,17 @@
  * @description todo
  */
 
-
-/** -------------------- Tools.Einwohnerabfrage_hh -------------------- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#ChangeIsActive
- * @description starts render function if this change is active
- */
-
-/**
- * @event Tools.Einwohnerabfrage_hh#RenderResult
- * @description render the resultView
- */
-
 /** -------------------- WPS -------------------- */
 
 /**
  * @event Core#RadioTriggerWPSRequest
+ * @param {string} wpsID The service id, defined in rest-services.json
+ * @param {string} identifier The functionality to be invoked by the wps
+ * @param {object} data Contains the Attributes to be sent
+ * @param {function} responseFunction function to be called
+ * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
  * @description todo
+ * @example Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this), 50000);
  */
 
 /** -------------------- Snippets -------------------- */
@@ -2288,11 +2289,23 @@
  * @description todo
  */
 
+ /** -------------------- ADDONS -------------------- */
+ /**
+ * @event Addons#initialized
+ * @description Is fired after addons are inizialized if addons are configured, e.g. the language files are loaded
+ */
+
+
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**
- * @event Tools.LayerSliderModel#RadioTriggerChangeIsActive
- * @description todo
+ * @event Tools.LayerSlider#changeIsActive
+ * @description Event fired when layer slider model changes its attribute "isActive".
+ */
+
+ /**
+ * @event Tools.LayerSlider#changeActiveLayer
+ * @description Event fired when layer slider model changes its attribute "activeLayer".
  */
 
 /** -------------------- TOOLS.GETCOORD -------------------- */
@@ -2372,6 +2385,15 @@
  * @description Triggered when the model attribute "isActive" changes.
  */
 
+/** -------------------- i18next -------------------- */
+
+/**
+ * @event i18next#RadioTriggerLanguageChanged
+ * @description Triggers if the languages has changed
+ * @param {String} lng the new language to use
+ * @example Radio.trigger("i18next", "languageChanged", lng);
+ */
+
 /** -------------------- ZOOMTOGEOMETRY -------------------- */
 
 /**
@@ -2383,3 +2405,20 @@
  * @event ZoomToGeometry#RadioTriggerZoomToGeometrySetIsRender
  * @description Todo
  */
+
+ /** -------------------- TOOLS.PARCELSEARCH -------------------- */
+
+/**
+ * @event Tools.ParcelSearch#RadioRequestParcelSearchParcelFound
+ * @description Todo
+ */
+
+  /** -------------------- TOOLS.GFI -------------------- */
+
+/**
+ * @event Tools.GFI#RadioRequestGFIGetRequestedParcelId
+ * @description Todo
+ */
+
+
+ 

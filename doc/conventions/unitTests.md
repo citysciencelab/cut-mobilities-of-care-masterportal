@@ -61,6 +61,8 @@ Beispiel:
 
 5.3.4 Jede Funktion soll mindestens einen **Positiv-Test** (Funktionsaufruf mit plausiblen Werten) und einen **Negativ-Test** (Funktionsaufruf mit unplausiblen Werten, z.B. *undefined*, *[]*, *{}*, *""*, ...) enthalten.
 
-5.3.5 Alle Unit-Tests müssen fehlerfrei durchlaufen. Dies wird beim pushen durch eine pre-push Hook geprüft.
+5.3.5 Alle Unit-Tests müssen fehlerfrei durchlaufen. Dies wird beim pushen durch eine pre-push Hook geprüft. Dabei werden auch die unittests der **[addons](../../addons)** geprüft. Siehe dazu **[Doku addons](../addons.md)**.
+
+5.3.6 Beachte die Beschreibung zu **[unittesting](../unittesting.md)**.
 
 Beispiel unter **[test/unittests/ExampleTest](../../test/unittests/ExampleTest)**

@@ -28,20 +28,27 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "10.x",
     "bootstrap-toggle": "2.x.x",
-    "cesium": "1.50.0",
     "d3": "4.9.x",
     "dom-parser": "^0.1.5",
+    "git-rev-sync": "^2.0.0",
     "https-proxy-agent": "^3.0.0",
+    "i18next": "^19.0.1",
+    "i18next-browser-languagedetector": "^4.0.1",
+    "i18next-xhr-backend": "^3.2.2",
     "jquery": "^3.4.1",
     "jquery-ui": "1.x",
     "moment": "2.x",
     "mqtt": "^2.15.x",
-    "olcs": "^2.5.0",
+    "olcs": "^2.10.0",
     "rbush": "^2.0.2",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0",
+    "vue": "^2.6.10",
+    "vue-loader": "^15.7.2",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.1.2",
     "zip-a-folder": "0.0.6"
   },
   "devDependencies": {
@@ -50,7 +57,7 @@
     "@babel/preset-env": "^7.6.3",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
-    "canvas": "^2.4.1",
+    "canvas": "^2.6.1",
     "chai": "4.1.1",
     "child-process-promise": "^2.2.1",
     "css-loader": "^1.0.0",
@@ -60,6 +67,7 @@
     "eslint": "^6.5.1",
     "eslint-plugin-backbone": "^2.1.1",
     "eslint-plugin-chai-friendly": "^0.4.1",
+    "eslint-plugin-vue": "^6.1.2",
     "file-loader": "^2.0.0",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.0",
@@ -95,7 +103,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run test && eslint --max-warnings 0 \"./**/*.js\""
+      "pre-push": "eslint --max-warnings 0 \"./**/*.js\" && npm run buildJsDoc && npm run test"
     }
   }
 }

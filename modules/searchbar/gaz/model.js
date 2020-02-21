@@ -14,7 +14,8 @@ const GazetteerModel = Backbone.Model.extend({
         searchStringRegExp: "",
         houseNumbers: [],
         ajaxRequests: {},
-        typeOfRequest: ""
+        typeOfRequest: "",
+        idCounter: 0
     },
     /**
      * @description Initialisierung der Gazetteer Suche
@@ -28,7 +29,7 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     initialize: function (config) {
-        var gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
+        const gazService = Radio.request("RestReader", "getServiceById", config.serviceId);
 
         this.listenTo(Radio.channel("Searchbar"), {
             "search": this.search,
@@ -66,7 +67,7 @@ const GazetteerModel = Backbone.Model.extend({
         if (config.minChars) {
             this.set("minChars", config.minChars);
         }
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.directSearch(Radio.request("ParametricURL", "getInitString"));
         }
     },
@@ -93,19 +94,19 @@ const GazetteerModel = Backbone.Model.extend({
                 this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(searchString), this.getStreets, this.get("typeOfRequest"));
             }
             if (this.get("searchDistricts") === true) {
-                if (!_.isNull(searchString.match(/^[a-z-]+$/i))) {
+                if (searchString.match(/^[a-z-.\s]+$/i) !== null) {
                     this.setTypeOfRequest("searchDistricts");
                     this.sendRequest("StoredQuery_ID=findeStadtteil&stadtteilname=" + searchString, this.getDistricts, this.get("typeOfRequest"));
                 }
             }
             if (this.get("searchParcels") === true) {
-                if (!_.isNull(searchString.match(/^[0-9]{4}[\s|/][0-9]*$/))) {
+                if (searchString.match(/^[0-9]{4}[\s|/][0-9]*$/) !== null) {
                     gemarkung = searchString.split(/[\s|/]/)[0];
                     flurstuecksnummer = searchString.split(/[\s|/]/)[1];
                     this.setTypeOfRequest("searchParcels1");
                     this.sendRequest("StoredQuery_ID=Flurstueck&gemarkung=" + gemarkung + "&flurstuecksnummer=" + flurstuecksnummer, this.getParcel, this.get("typeOfRequest"));
                 }
-                else if (!_.isNull(searchString.match(/^[0-9]{5,}$/))) {
+                else if (searchString.match(/^[0-9]{5,}$/) !== null) {
                     gemarkung = searchString.slice(0, 4);
                     flurstuecksnummer = searchString.slice(4);
                     this.setTypeOfRequest("searchParcels2");
@@ -113,7 +114,7 @@ const GazetteerModel = Backbone.Model.extend({
                 }
             }
             if (this.get("searchStreetKey") === true) {
-                if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+                if (searchString.match(/^[a-z]{1}[0-9]{1,5}$/i) !== null) {
                     this.setTypeOfRequest("searchStreetKey");
                     this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, this.get("typeOfRequest"));
                 }
@@ -126,10 +127,10 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     parseStreets: function (data) {
-        var hits = $("wfs\\:member,member", data),
+        const hits = $("wfs\\:member,member", data),
             streetNames = [];
 
-        _.each(hits, function (hit) {
+        hits.each(function (i, hit) {
             streetNames.push($(hit).find("dog\\:strassenname, strassenname")[0].textContent);
         }, this);
 
@@ -142,11 +143,11 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     parseHousenumbers: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            sortedHouseNumbers,
+        const hits = $("wfs\\:member,member", data),
             houseNumbers = [];
+        let sortedHouseNumbers = null;
 
-        _.each(hits, function (hit) {
+        hits.each(function (i, hit) {
             houseNumbers.push({
                 position: $(hit).find("gml\\:pos,pos")[0].textContent,
                 number: $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent,
@@ -188,7 +189,7 @@ const GazetteerModel = Backbone.Model.extend({
     * @returns {void}
     */
     directSearch: function (pattern) {
-        var searchString = pattern,
+        let searchString = pattern,
             splitInitString;
 
         this.set("searchString", searchString);
@@ -209,7 +210,7 @@ const GazetteerModel = Backbone.Model.extend({
         }
         // Suche nach Straßenschlüssel
         if (this.get("searchStreetKey") === true) {
-            if (!_.isNull(searchString.match(/^[a-z]{1}[0-9]{1,5}$/i))) {
+            if (searchString.match(/^[a-z]{1}[0-9]{1,5}$/i) !== null) {
                 this.setTypeOfRequest("searchStreetKey2");
                 this.sendRequest("StoredQuery_ID=findeStrassenSchluessel&strassenschluessel=" + searchString, this.getStreetKey, this.get("typeOfRequest"));
             }
@@ -247,21 +248,34 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     getStreets: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            coordinates,
-            hitNames = [],
+        const hits = $("wfs\\:member,member", data),
+            hitNames = [];
+        let posResult,
+            position,
             hitName;
 
-        _.each(hits, function (hit) {
-            coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
+        hits.each(function (i, hit) {
+        /*
+           position example from WFS:
+            <iso19112:position_strassenachse xmlns:iso19112="http://www.opengis.net/iso19112">
+                <!--
+                Inlined geometry 'HH_STR_10785800_ISO19112_POSITION_STRASSENACHSE'
+                -->
+                <gml:Point gml:id="HH_STR_10785800_ISO19112_POSITION_STRASSENACHSE" srsName="urn:ogc:def:crs:EPSG::25832">
+                    <gml:pos>561260.027 5938772.298</gml:pos>
+                </gml:Point>
+            </iso19112:position_strassenachse>
+            <iso19112:locationType xmlns:iso19112="http://www.opengis.net/iso19112" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://localhost:9001/dog_gages/services/wfs_gages?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&OUTPUTFORMAT=application%2Fgml%2Bxml%3B+version%3D3.2&STOREDQUERY_ID=urn:ogc:def:query:OGC-WFS::GetFeatureById&ID=HH_SILC_2#HH_SILC_2"/>
+           */
+            posResult = $(hit).find("gml\\:pos,pos");
+            position = posResult.length > 1 ? posResult[1].textContent.split(" ") : posResult[0].textContent.split(" ");
             hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
             hitNames.push(hitName);
-
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
-                type: "Straße",
-                coordinate: coordinates,
+                type: i18next.t("common:modules.searchbar.type.street"),
+                coordinate: position,
                 glyphicon: "glyphicon-road",
                 id: hitName.replace(/ /g, "") + "Straße"
             });
@@ -277,7 +291,7 @@ const GazetteerModel = Backbone.Model.extend({
                 this.searchInHouseNumbers();
             }
             else {
-                _.each(hitNames, function (value) {
+                hitNames.forEach(function (value) {
                     if (value.toLowerCase() === this.get("searchString").toLowerCase()) {
                         this.set("onlyOneStreetName", value);
                         this.setTypeOfRequest("searchHouseNumbers2");
@@ -295,23 +309,17 @@ const GazetteerModel = Backbone.Model.extend({
      * @return {void}
      */
     getDistricts: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            coordinate,
-            coordinateArray,
-            hitName,
-            pos,
-            posList;
+        const hits = $("wfs\\:member,member", data);
+        let hitName,
+            pos;
 
-        _.each(hits, function (hit) {
-            posList = $(hit).find("gml\\:posList,posList")[0];
-            pos = $(hit).find("gml\\:pos,pos")[0];
-            coordinate = posList ? posList.textContent : pos.textContent;
-            coordinateArray = coordinate.split(" ");
+        hits.each(function (i, hit) {
+            pos = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
             hitName = $(hit).find("iso19112\\:geographicIdentifier , geographicIdentifier")[0].textContent;
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: hitName,
-                type: "Stadtteil",
-                coordinate: coordinateArray,
+                type: i18next.t("common:modules.searchbar.type.district"),
+                coordinate: pos,
                 glyphicon: "glyphicon-map-marker",
                 id: hitName.replace(/ /g, "") + "Stadtteil"
             });
@@ -320,11 +328,11 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     searchInHouseNumbers: function () {
-        var address, number;
+        let address, number;
 
         // Adressuche über Copy/Paste
         if (this.get("pastedHouseNumber") !== undefined) {
-            _.each(this.get("houseNumbers"), function (houseNumber) {
+            this.get("houseNumbers").forEach(function (houseNumber) {
                 address = houseNumber.name.replace(/ /g, "");
                 number = houseNumber.adress.housenumber + houseNumber.adress.affix;
 
@@ -335,7 +343,7 @@ const GazetteerModel = Backbone.Model.extend({
             this.unset("pastedHouseNumber");
         }
         else {
-            _.each(this.get("houseNumbers"), function (houseNumber) {
+            this.get("houseNumbers").forEach(function (houseNumber) {
                 address = houseNumber.name.replace(/ /g, "");
 
                 if (address.search(this.get("searchStringRegExp")) !== -1) {
@@ -352,20 +360,20 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     createHouseNumbers: function (data) {
-        var streetname = this.get("onlyOneStreetName");
+        const streetname = this.get("onlyOneStreetName");
 
         this.setHouseNumbers(data, streetname);
     },
 
     getParcel: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            coordinate,
+        const hits = $("wfs\\:member,member", data);
+        let coordinate,
             position,
             geom,
             gemarkung,
             flurstueck;
 
-        _.each(hits, function (hit) {
+        hits.each(function (i, hit) {
             position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
             gemarkung = $(hit).find("dog\\:gemarkung,gemarkung")[0].textContent;
             flurstueck = $(hit).find("dog\\:flurstuecksnummer,flurstuecksnummer")[0].textContent;
@@ -374,7 +382,7 @@ const GazetteerModel = Backbone.Model.extend({
             // "Hitlist-Objekte"
             Radio.trigger("Searchbar", "pushHits", "hitList", {
                 name: "Flurstück " + gemarkung + "/" + flurstueck,
-                type: "Parcel",
+                type: i18next.t("common:modules.searchbar.type.parcel"),
                 coordinate: coordinate,
                 glyphicon: "glyphicon-map-marker",
                 geom: geom,
@@ -385,18 +393,18 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     getStreetKey: function (data) {
-        var hits = $("wfs\\:member,member", data),
-            coordinates,
+        const hits = $("wfs\\:member,member", data);
+        let coordinates,
             hitName;
 
-        _.each(hits, function (hit) {
+        hits.each(function (i, hit) {
             if ($(hit).find("gml\\:posList,posList").length > 0 && $(hit).find("dog\\:strassenname, strassenname").length > 0) {
                 coordinates = $(hit).find("gml\\:posList,posList")[0].textContent.split(" ");
                 hitName = $(hit).find("dog\\:strassenname, strassenname")[0].textContent;
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     name: hitName,
-                    type: "Straße",
+                    type: i18next.t("common:modules.searchbar.type.street"),
                     coordinate: coordinates,
                     glyphicon: "glyphicon-road",
                     id: hitName.replace(/ /g, "") + "Straße"
@@ -413,9 +421,9 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (data, successFunction, type) {
-        var ajax = this.get("ajaxRequests");
+        const ajax = this.get("ajaxRequests");
 
-        if (ajax[type] !== null && !_.isUndefined(ajax[type])) {
+        if (ajax[type] !== null && ajax[type] !== undefined) {
             ajax[type].abort();
             this.polishAjax(type);
         }
@@ -458,9 +466,9 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     showError: function (err) {
-        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+        const detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
-        Radio.trigger("Alert", "alert", "Gazetteer-URL nicht erreichbar. " + detail);
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.searchbar.gaz.errorMsg") + " " + detail);
     },
 
     /**
@@ -469,8 +477,14 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     polishAjax: function (type) {
-        var ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+        const ajax = this.get("ajaxRequests"),
+            cleanedAjax = {};
+
+        Object.keys(ajax).forEach(function (key) {
+            if (key !== type) {
+                cleanedAjax[key] = ajax[key];
+            }
+        });
 
         this.set("ajaxRequests", cleanedAjax);
     },
@@ -491,17 +505,18 @@ const GazetteerModel = Backbone.Model.extend({
      * @returns {void}
      */
     setHouseNumbers: function (data, streetname) {
-        var hits = $("wfs\\:member,member", data),
-            number,
+        const hits = $("wfs\\:member,member", data),
+            houseNumbers = [],
+            that = this;
+        let number,
             affix,
             coordinate,
             position,
             name,
             adress = {},
-            obj = {},
-            houseNumbers = [];
+            obj = {};
 
-        _.each(hits, function (hit) {
+        hits.each(function (i, hit) {
             position = $(hit).find("gml\\:pos,pos")[0].textContent.split(" ");
             coordinate = [parseFloat(position[0]), parseFloat(position[1])];
             number = $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent;
@@ -525,17 +540,37 @@ const GazetteerModel = Backbone.Model.extend({
             // "Hitlist-Objekte"
             obj = {
                 name: name,
-                type: "Adresse",
+                type: i18next.t("common:modules.searchbar.type.address"),
                 coordinate: coordinate,
                 glyphicon: "glyphicon-map-marker",
                 adress: adress,
-                id: _.uniqueId("Adresse")
+                id: that.uniqueId("Adresse")
             };
 
             houseNumbers.push(obj);
         }, this);
 
         this.set("houseNumbers", houseNumbers);
+    },
+    /**
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
+
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
+    },
+    /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+    setIdCounter: function (value) {
+        this.set("idCounter", value);
     }
 });
 

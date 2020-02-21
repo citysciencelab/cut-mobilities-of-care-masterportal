@@ -15,6 +15,7 @@ const RoutingView = Backbone.View.extend({
 
         this.model.setParams();
         this.template = _.template(RoutingWin);
+
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "change:fromCoord": this.toggleRoutingButton,
@@ -24,8 +25,14 @@ const RoutingView = Backbone.View.extend({
             "change:toList": this.toListChanged,
             "change:startAdresse": this.changeStartAdresse,
             "change:zielAdresse": this.changeZielAdresse,
-            "change:isGeolocationPossible": this.changeGeolocationPossible
+            "change:isGeolocationPossible": this.changeGeolocationPossible,
+            "change:startAddressLabel": function () {
+                if (this.model.get("isActive")) {
+                    this.render(this.model, true);
+                }
+            }
         }, this);
+
         channel.on({
             "setRoutingDestination": this.setRoutingDestination
         }, this);

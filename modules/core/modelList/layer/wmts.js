@@ -108,6 +108,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
     /**
      * Sets the parameter "legendURL" to GetLegendGraphic if it is empty or undefined.
+     * This method works the same as the createLegendURL of the WMS.
      *
      * @returns {void}
      */

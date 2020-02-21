@@ -7,7 +7,8 @@ import {GeoJSON} from "ol/format.js";
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     defaults: _.extend({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
-        isClustered: false
+        isClustered: false,
+        altitudeMode: "clampToGround"
     }),
 
     /**
@@ -23,6 +24,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires RemoteInterface#RadioTriggerPostMessage
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
@@ -77,7 +79,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
-            altitudeMode: "clampToGround",
+            altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
         }));
 
@@ -126,6 +128,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         xhr.timeout = 10000;
         xhr.onload = function (event) {
             that.handleResponse(event.currentTarget.responseText, xhr.status, showLoader);
+            that.expandFeaturesBySubTyp(that.get("subTyp"));
         };
         xhr.ontimeout = function () {
             that.handleResponse({}, "timeout", showLoader);
@@ -188,7 +191,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
         }
-
+        this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
     },
 
@@ -235,8 +238,79 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         catch (err) {
             console.error("GeoJSON cannot be parsed.");
         }
-
         return jsonObjects;
+    },
+
+    /**
+     * Requests the latest sensorValues from OpenSenseMap.
+     * @param {String} subTyp SubTyp of layer.
+     * @returns {void}
+     */
+    expandFeaturesBySubTyp: function (subTyp) {
+        const expandedFeatures = this.get("layerSource").getFeatures();
+
+        if (subTyp === "OpenSenseMap") {
+            expandedFeatures.forEach(feature => {
+                const sensors = feature.get("sensors");
+
+                sensors.forEach(sensor => {
+                    const sensorId = sensor._id,
+                        name = sensor.title.toLowerCase() || "unnamedSensor",
+                        unit = sensor.unit || "",
+                        type = sensor.sensorType || "unnamedSensorType";
+
+                    this.getValueFromOpenSenseMapSensor(feature, sensorId, name, unit, type);
+                });
+            });
+        }
+        else if (subTyp !== undefined) {
+            console.error("Subtype " + subTyp + " is not yet supported for GeoJSON-Layer.");
+        }
+    },
+
+    /**
+     * Sends async request to get the newest measurement of each sensor per feature.
+     * Async so that the user can already navigate in the map without waiting for all sensorvalues for all features.
+     * @param {Feature} feature The current Feature.
+     * @param {String} sensorId Id of sensor.
+     * @param {String} name Name of sensor.
+     * @param {String} unit Unit of sensor.
+     * @param {String} type Type of sensor.
+     * @returns {void}
+     */
+    getValueFromOpenSenseMapSensor: function (feature, sensorId, name, unit, type) {
+        const xhr = new XMLHttpRequest(),
+            async = true,
+            that = this,
+            boxId = feature.get("_id");
+        let url = "https://api.opensensemap.org/boxes/" + boxId + "/data/" + sensorId;
+
+        url = Radio.request("Util", "getProxyURL", url);
+        xhr.open("GET", url, async);
+        xhr.onload = function (event) {
+            let response = JSON.parse(event.currentTarget.responseText);
+
+            response = response.length > 0 ? response[0] : undefined;
+            that.setOpenSenseMapSensorValues(feature, response, name, unit, type);
+        };
+        xhr.send();
+    },
+
+    /**
+     * Sets the latest measurements of the opensensemap sensors at the feature.
+     * @param {Feature} feature The feature.
+     * @param {JSON} response The parsed response as JSON.
+     * @param {String} name Name of sensor.
+     * @param {String} unit Unit of sensor.
+     * @param {String} type Type of sensor.
+     * @returns {void}
+     */
+    setOpenSenseMapSensorValues: function (feature, response, name, unit, type) {
+        if (response) {
+            feature.set(name, response.value + " " + unit);
+            feature.set(name + "_createdAt", response.createdAt);
+            feature.set(name + "_sensorType", type);
+        }
     },
 
     /**
@@ -286,20 +360,24 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * Filters the visibility of features by ids
-     * @param  {string[]} featureIdList Liste der FeatureIds
+     * Filters the visibility of features by ids.
+     * @param  {String[]} featureIdList Feature ids to be shown.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @return {void}
      */
     showFeaturesByIds: function (featureIdList) {
+        const features = [];
+
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
+                features.push(feature);
             }
-
         }, this);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 
     /**
