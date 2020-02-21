@@ -21,6 +21,15 @@ import UrlParser from "url-parse";
  */
 export function SensorThingsMqtt () {
     /**
+     * the default function to call on error
+     * @param {String} errormsg the error message as String
+     * @returns {Void}  -
+     */
+    function _defaultErrorHandler (errormsg) {
+        console.warn(errormsg);
+    }
+
+    /**
      * connects to the host of the given url with mqtt and calls the given url with http
      * @param {Object} mqttOptions the mqtt options
      * @param {String} mqttOptions.host the mqtt host
@@ -28,16 +37,22 @@ export function SensorThingsMqtt () {
      * @param {String} [mqttOptions.path] the path to follow (e.g. if protocol is wss, the path might be /mqtt)
      * @param {Object} [mqttOptions.context] the scope to call with
      * @param {mqtt} [mqtt_opt] the mqtt object to be used instead of the default (default is the npm package mqtt)
+     * @param {SensorThingsErrorCallback} [onerror_opt] an optional callback to use as errorhandler - if not set console.warn will be triggert on error
      * @returns {SensorThingsMqttClient}  the client to bind the message and connect event and to subscribe and unsubscribe with
      */
-    this.connect = function (mqttOptions, mqtt_opt) {
+    this.connect = function (mqttOptions, mqtt_opt, onerror_opt) {
         const options = Object.assign({
-                host: "iot.hamburg.de",
+                host: "",
                 protocol: "mqtt",
                 path: "/",
                 context: this
             }, mqttOptions),
-            mqttClient = (mqtt_opt || defaultMqtt).connect(options);
+            mqttClient = (mqtt_opt || defaultMqtt).connect(options),
+            onerror = onerror_opt || _defaultErrorHandler;
+
+        if (options.host === "") {
+            onerror("No host was set on connecting with SensorThingsMqtt. Please set the host.");
+        }
 
         return new SensorThingsMqttClient(mqttClient, options.host, options.context);
     };
@@ -123,20 +138,20 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
     }
 
     /**
-     * sets a handler as event of "what" for the _mqttClient
-     * @info if what equals 'message', handler is set as instance variable _messageHandler - later used for the simulation of retained messages
-     * @param {String} what the name of the mqtt event (connect, message, close, end, error)
+     * sets a handler as event of "eventName" for the _mqttClient
+     * @description if eventName equals 'message', handler is set as instance variable _messageHandler - later used for the simulation of retained messages
+     * @param {String} eventName the name of the mqtt event (connect, message, close, end, error)
      * @param {SensorThingsMqtt~connectCallbackSuccess} handler the event handler
      * @returns {Void}  -
      */
-    this.on = function (what, handler) {
+    this.on = function (eventName, handler) {
         if (typeof handler !== "function") {
             return;
         }
 
-        if (what === "message") {
+        if (eventName === "message") {
             _messageHandler = handler;
-            _mqttClient.on(what, function (topic, payload) {
+            _mqttClient.on(eventName, function (topic, payload) {
                 try {
                     return handler.call(_context, topic, JSON.parse(payload));
                 }
@@ -146,7 +161,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
             });
         }
         else {
-            _mqttClient.on(what, function (...args) {
+            _mqttClient.on(eventName, function (...args) {
                 return handler.apply(_context, args);
             });
         }
@@ -202,25 +217,32 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
 
     /**
      * a function to receive the mqtt response with
-     * @info jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
+     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
      * @callback SensorThingsMqttClient~callbackMessage
      * @param {String} topic the topic that has been received an update
      * @param {Object} payload the pushed response from the mqtt server
      */
+
+    /**
+     * a function to call data from a http api with
+     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
+     * @callback SensorThingsClientHttp
+     * @param {String} url the url to call
+     * @param {SensorThingsCallbackHttpSuccess} onsuccess a function (resp) with the response of the call
+     * @param {SensorThingsErrorCallback} onerror a function to handle errors with
+     */
+
+    /**
+     * a function to receive the response of an http call
+     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
+     * @callback SensorThingsCallbackHttpSuccess
+     * @param {Object} response the response from the http request as array buffer
+     */
 }
 
 /**
- * a function to call data from a http api with
- * @info jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
- * @callback SensorThingsClientHttp
- * @param {String} url the url to call
- * @param {Function} onsuccess a function (resp) with the response of the call
- * @param {SensorThingsErrorCallback} onerror a function to handle errors with
- */
-
-/**
- * a function to receive the response of an http call
- * @info jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
- * @callback SensorThingsCallbackHttpSuccess
- * @param {Object} response the response from the http request as array buffer
+ * a function to call on error
+ * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
+ * @callback SensorThingsErrorCallback
+ * @param {String} errormsg the error message as String
  */

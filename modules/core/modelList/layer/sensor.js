@@ -14,6 +14,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         version: "1.0",
         useProxyURL: false,
         mqttPath: "/mqtt",
+        subscriptionTopics: {},
         httpSubFolder: "",
         mergeThingsByCoordinates: false,
         showNoDataValue: true,
@@ -28,6 +29,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @extends Layer
      * @memberof Core.ModelList.Layer
      * @constructs
+     * @property {String} url the url to initialiy call the SensorThings-API with
      * @property {String} epsg="EPSG:4326" EPSG-Code for incoming sensor geometries.
      * @property {String} utc="+1" UTC-Timezone to calulate correct time.
      * @property {String} version="1.0" Version the SensorThingsAPI is requested.
@@ -39,6 +41,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @fires GFI#RadioTriggerGFIChangeFeature
+     * @fires Core#RadioRequestMapViewGetCurrentExtent
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      * @description This layer type requests its data from the SensorThinsgAPI (STA).
      * The layer reacts to changes of the own features triggered by the STA.
@@ -53,8 +56,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     initialize: function () {
         // set subscriptionTopics as instance variable (!)
-        this.set("subscriptionTopics", {});
-        this.set("httpSubFolder", this.get("url") && String(this.get("url")).split("/").length > 3 ? "/" + String(this.get("url")).split("/").slice(3).join("/") : "");
+        this.setSubscriptionTopics({});
+        this.setHttpSubFolder(this.get("url") && String(this.get("url")).split("/").length > 3 ? "/" + String(this.get("url")).split("/").slice(3).join("/") : "");
 
         this.createMqttConnectionToSensorThings();
 
@@ -685,7 +688,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         // messages from the server
         client.on("message", function (topic, jsonData) {
-            const regex = /\((.*)\)/; // search value in chlich, that represents the datastreamid on position 1
+            const regex = /\((.*)\)/; // search value in topic, that represents the datastreamid on position 1
 
             jsonData.dataStreamId = topic.match(regex)[1];
             this.updateFromMqtt(jsonData);
@@ -751,6 +754,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
     /**
      * Returns features in enlarged extent (enlarged by 5% to make sure moving features close to the extent can move into the mapview)
+     * @fires Core#RadioRequestMapViewGetCurrentExtent
      * @returns {ol/featre[]} features
      */
     getFeaturesInExtent: function () {
@@ -966,6 +970,24 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      */
     setMoveendListener: function (value) {
         this.set("moveendListener", value);
+    },
+
+    /**
+     * Setter for SubscriptionTopics
+     * @param {Object} value the SubscriptionTopic as object
+     * @returns {Void}  -
+     */
+    setSubscriptionTopics: function (value) {
+        this.set("subscriptionTopics", value);
+    },
+
+    /**
+     * Setter for the HttpSubFolder
+     * @param {String} value the httpSubFolder as String
+     * @returns {Void}  -
+     */
+    setHttpSubFolder: function (value) {
+        this.set("httpSubFolder", value);
     }
 
 });

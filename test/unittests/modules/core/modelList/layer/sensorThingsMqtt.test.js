@@ -14,13 +14,25 @@ describe("core/modelList/layer/SensorThingsMqtt", function () {
             expect(typeof mqtt.connect === "function").to.be.true;
         });
         it("should return a new client and call connect on the given mqtt object", function () {
-            const client = mqtt.connect({}, mqttTest);
+            const client = mqtt.connect({
+                host: "foo"
+            }, mqttTest);
 
             expect(typeof client.on === "function").to.be.true;
             expect(typeof client.subscribe === "function").to.be.true;
             expect(typeof client.unsubscribe === "function").to.be.true;
 
             expect(client.getMqttClient()).to.equal("testclient");
+        });
+
+        it("should warn if the host is not set in the mqtt options", function () {
+            const lastError = false,
+                onerror = function (errormsg) {
+                    lastError = errormsg;
+                };
+
+            mqtt.connect({}, mqttTest, onerror);
+            expect(lastError).to.be.a('string');
         });
     });
 

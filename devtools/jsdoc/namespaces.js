@@ -885,3 +885,9 @@
  * @namespace VectorStyle
  * @description vector styles for vector layer
  */
+
+/**
+ * @namespace SensorThingsMqtt
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol
+ */
