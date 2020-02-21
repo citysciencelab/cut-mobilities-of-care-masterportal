@@ -47,7 +47,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             resolutions = new Array(resLength),
             matrixIds = new Array(resLength);
 
-        // TODO: zoom zoom beachten, dass der hier anders und deswegen komisch ist -> Max bis 19, da dann ein 404 kommt
         this.generateArrays(resolutions, matrixIds, resLength, size);
 
         this.setLayerSource(new WMTS({
