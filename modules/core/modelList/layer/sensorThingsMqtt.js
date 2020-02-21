@@ -3,19 +3,21 @@ import axios from "axios";
 import UrlParser from "url-parse";
 
 /**
- * SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol
+ * SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ * <pre>
  * SensorThingsAPI: https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
  *
  * This software layer uses mqtt 3.1.1
  * mqtt 3.1.1: https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
  *
- * This layer can simulate retained messages if the server is not able to work with retained messages.
- * If the simulation or retained messages us active, for every subscription there will be a single http call send to the server.
+ * This layer can simulate Retained Messages if the Broker (Server) is not able to work with retained messages.
+ * If the simulation or Retained Messages is activated, for every subscription there will be a single http call send to the Broker (Server).
  *
  * To import SensorThingsMqtt: import {SensorThingsMqtt} from "./SensorThingsMqtt";
- * create a new object:        obj = new SensorThingsMqtt()
- * connect:                    client = obj.connect(opts)
- * @returns {Void}  this is a constructor
+ * create a new object:        const obj = new SensorThingsMqtt()
+ * connect:                    const client = obj.connect(opts)
+ * </pre>
+ * @constructor
  * @memberof Core.ModelList.Layer.SensorThingsMqtt
  * @export
  */
@@ -38,7 +40,7 @@ export function SensorThingsMqtt () {
      * @param {Object} [mqttOptions.context] the scope to call with
      * @param {mqtt} [mqtt_opt] the mqtt object to be used instead of the default (default is the npm package mqtt)
      * @param {SensorThingsErrorCallback} [onerror_opt] an optional callback to use as errorhandler - if not set console.warn will be triggert on error
-     * @returns {SensorThingsMqttClient}  the client to bind the message and connect event and to subscribe and unsubscribe with
+     * @returns {SensorThingsHttpClient}  the client to bind the message and connect event and to subscribe and unsubscribe with
      */
     this.connect = function (mqttOptions, mqtt_opt, onerror_opt) {
         const options = Object.assign({
@@ -59,11 +61,11 @@ export function SensorThingsMqtt () {
 }
 
 /**
- * the SensorThingsMqttClient - received by SensorThingsMqtt.connect
+ * The SensorThingsMqttClient - received calling SensorThingsMqtt.connect
+ * @constructor
  * @param {mqtt/mqttClient} _mqttClient the mqtt client (e.g. from npm mqtt)
  * @param {String} _mqttHost the mqtt host
  * @param {Object} _context the context to call events in (e.g. this)
- * @returns {Void}  this is a constructor
  * @memberof Core.ModelList.Layer.SensorThingsMqtt
  * @export
  */
@@ -73,7 +75,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
     /**
      * an async function to call an url and to receive data from
      * @param {String} url the url to call
-     * @param {SensorThingsCallbackHttpSuccess} onsuccess a function(resp) with resp as JSON response of the call
+     * @param {Function} onsuccess a function(resp) with resp as JSON response of the call
      * @returns {Void}  -
      */
     function _defaultHttpClient (url, onsuccess) {
@@ -94,7 +96,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * a function to simulate retained messages via http
      * @param {String} host the protocol, hostname and port (optional) to call e.g. https://example.com
      * @param {String} topic the topic to call e.g. v1.0/Things(614)
-     * @param {SensorThingsClientHttp} httpClient the function to call an url with
+     * @param {SensorThingsHttpClient} httpClient the function to call an url with
      * @param {SensorThingsMqttClient~callbackMessage} callbackMessage the handler as function(payload) to give the simulated retained message to
      * @returns {Void}  -
      */
@@ -141,7 +143,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * sets a handler as event of "eventName" for the _mqttClient
      * @description if eventName equals 'message', handler is set as instance variable _messageHandler - later used for the simulation of retained messages
      * @param {String} eventName the name of the mqtt event (connect, message, close, end, error)
-     * @param {SensorThingsMqtt~connectCallbackSuccess} handler the event handler
+     * @param {SensorThingsMqttCallbackMessage} handler the event handler
      * @returns {Void}  -
      */
     this.on = function (eventName, handler) {
@@ -177,7 +179,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * @param {String} [options_opt.rm_path=""] a path on the server in case the path differs from the standard implementation
      * @param {String} [options_opt.rm_protocol="https"] the protocol to use for the simulation (http, https, ...)
      * @param {SensorThingsClientHttp} [options_opt.rm_httpClient] a function to call an url with for the simulation instead of using the default (_defaultHttpClient)
-     * @param {SensorThingsMqttClient~callbackMessage} [onmessage_opt] a function to be called for receiving the message, default: _messageHandler
+     * @param {SensorThingsMqttCallbackMessage} [onmessage_opt] a function to be called for receiving the message, default: _messageHandler
      * @returns {Void}  -
      */
     this.subscribe = function (topic, options_opt, onmessage_opt) {
@@ -215,34 +217,25 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
         return _mqttClient;
     };
 
-    /**
-     * a function to receive the mqtt response with
-     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
-     * @callback SensorThingsMqttClient~callbackMessage
-     * @param {String} topic the topic that has been received an update
-     * @param {Object} payload the pushed response from the mqtt server
-     */
-
-    /**
-     * a function to call data from a http api with
-     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
-     * @callback SensorThingsClientHttp
-     * @param {String} url the url to call
-     * @param {SensorThingsCallbackHttpSuccess} onsuccess a function (resp) with the response of the call
-     * @param {SensorThingsErrorCallback} onerror a function to handle errors with
-     */
-
-    /**
-     * a function to receive the response of an http call
-     * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
-     * @callback SensorThingsCallbackHttpSuccess
-     * @param {Object} response the response from the http request as array buffer
-     */
 }
 
 /**
+ * a function to receive the mqtt response with
+ * @callback SensorThingsMqttCallbackMessage
+ * @param {String} topic the topic that has been received an update
+ * @param {Object} payload the pushed response from the mqtt server
+ */
+
+/**
  * a function to call on error
- * @description jsdocs for callback functions see: https://jsdoc.app/tags-callback.html
  * @callback SensorThingsErrorCallback
  * @param {String} errormsg the error message as String
+ */
+
+/**
+ * a function to call data from a http api with
+ * @callback SensorThingsHttpClient
+ * @param {String} url the url to call
+ * @param {Function} onsuccess a function (resp) with the response of the call
+ * @param {SensorThingsErrorCallback} onerror a function to handle errors with
  */
