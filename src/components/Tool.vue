@@ -28,6 +28,9 @@ export default {
                             bottom: "auto"
                         });
                     },
+                    stop: function (event, ui) {
+                        ui.helper.css({"height": "", "width": ""});
+                    }
                 });
             this.draggable = true;
         }
@@ -41,6 +44,9 @@ export default {
         active(newValue, oldValue) {
             if (newValue === false) {
                 this.draggable = false;
+                $(".backdrop").remove();
+            } else if(!this.renderToWindow && Radio.request("Util", "isViewMobile")){
+                $(".masterportal-container").append("<div class='backdrop'></div>");
             }
             this.updateMap();
         }
@@ -129,12 +135,6 @@ export default {
                 }
             }
         }
-    }
-}
-
-@media (max-width: 766px) {
-    .tool-window {
-        right: 0;
     }
 }
 
@@ -227,5 +227,20 @@ export default {
     width: 30%;
     background-color: @background_color_1;
     .header();
+}
+@media (max-width: 767px) {
+    .tool-window {
+        right: 0;
+    }
+    .sidebar-vue {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1050;
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin: 3%;
+    }
 }
 </style>
