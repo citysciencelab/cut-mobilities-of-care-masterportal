@@ -889,5 +889,11 @@
 /**
  * @namespace SensorThingsMqtt
  * @memberof Core.ModelList.Layer
- * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol
+ * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ */
+
+/**
+ * @namespace SensorThingsHttp
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol.
  */

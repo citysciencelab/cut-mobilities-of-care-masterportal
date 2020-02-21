@@ -145,17 +145,27 @@ Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Maste
 
 
 ## SensorThingsHttp ##
-Requests to a SensorThingsAPI can be automatically splitted into chunks of requests. Therefore it is possible to show the progress of a http SensorThingsAPI call for a better user experience (see [Automatic Split](#markdown-header-automatic-split)). The request to a SensorThingsAPI can use the current browser extent to narrow down and minimize the server response (see [Automatic call in Extent](#markdown-header-automatic-call-in-extent)). For the Masterportal we have implemented a software layer called *SensorThingsHttp* that provides the split handling and the extent for you.
+Die SensorThingsAPI sieht ein automatisches Splitten von zu großen Server-Antworten vor.
+Bietet der Broker (Server) diese Funktion an, kann sie u.a. dafür genutzt werden den aktuellen Fortschritt (Progress) des Aufrufes in der UI darzustellen (siehe [Automatisches Splitten](#markdown-header-automatisches-splitten)).
+Die Antwort des Servers kann zusätzlich auf einen bestimmten Karten-Ausschnitt (z.B. der Extent des Browsers) eingegrenzt werden. Hierdurch wird die Server-Antwort kleiner (siehe [Automatischer Aufruf im Karten-Ausschnitt](#markdown-header-automatischer-aufruf-im-karten-ausschnitt)).
 
-*Note: Please keep in mind that automatic progress and "call in extent" is only available if your server side implementation of the SensorThingsAPI (e.g. FROST Server) provides and has activated the skip and geography functions.*
+Für das Masterportal haben wir eine Software-Schicht *SensorThingsHttp* implementiert, die den Aufruf und das Splitting für Sie übernimmt.
+
+*Hinweis: Bitte beachten Sie, dass das Splitten der Antwort und der Abruf des aktuellen Karten-Ausschnittes nur verfügbar ist, wenn Ihr Server (z.B. FROST Server) entsprechend aufgesetzt ist.*
 
 
-### Automatic Split ###
-Your server configuration should include the automatic skipping of responses. If this is the case, responses that seem to be too big to receive in one response have included a follow up link ("@iot.nextLink") to be called to receive the next chunk of data. To get the total number of expected datasets, the "@iot.count" value can be used.
+### Automatisches Splitten ###
+Vorrausgesetzt wird, dass Ihr Server das Splitten von Antworten wie es mit der SensorThingsAPI möglich ist korrekt anwendet.
 
-Using the *SensorThingsHttp.get()* function, the *SensorThingsHttp* layer does the correct work of "@iot.nextLink" (see [The "@iot.nextLink" Value](#markdown-header-the-iotnextlink-value)) and "@iot.count" (see [The "@iot.count" Value](#markdown-header-the-iotcount-value)) for you.
+Antworten die zu groß sind, werden vom Server automatisch in mehrere Teile aufgeteilt. Nur der erste Teil wird Ihnen übermittelt.
+Alle weiteren Teile werden nicht übermittelt. Die Antwort enthält immer einen Skip-Link ("@iot.nextLink"), unter dem der jeweils nächste Teil abrufbar ist.
+Um die Gesamtzahl aller möglichen Datensätze der Anfrage zu ermitteln, kann das Feld "@iot.count" ausgewertet werden.
+Wenn Sie die Software-Schicht *SensorThingsHttp* benutzen, werden die gesplitteten Antworten vom Server automatisch korrekt behandelt.
 
-Here is a basic implementation of *SensorThingsHttp* using some basic Events of the Masterportal to show its functionality:
+ - Zur Verwendung von "@iot.nextLink" - siehe [Auswertung von "@iot.nextLink"](#markdown-header-auswertung-von-iotnextLink).
+ - Zur Verwendung von "@iot.count" - siehe [Aufruf mit "@iot.count"](#markdown-header-aufruf-mit-iotcount).
+
+Es folgt ein Implementierungs-Beispiel von *SensorThingsHttp*. Zur Veranschaulichung werden ein paar zusätzliche Events des Masterportals verwendet:
 
 ```
 #!javascript
@@ -189,20 +199,24 @@ http.get(url, function (response) {
 
 ```
 
-Please note that the http.get call in itself is asynchronous. All parameters of *SensorThingsHttp.get()* except for "url" are optional. It makes sense of cause to use at least onsuccess to receive the response.
+Bitte beachten Sie, dass *SensorThingsHttp.get()* asynchron arbeitet. Alle Parameter (die vielen Funktionen) sind optional - außer "url". Natürlich macht es Sinn zumindest den onsuccess-Callback mit zu übergeben um an die Response zu kommen.
 
-There is an optional seventh parameter (httpClient) that can be used to change the default http handler (in our case axios). This optional httpClient can be a simple function with the parameters url, onsuccess and onerror.
+Hinweis: Es gibt einen optionalen siebten Parameter (httpClient), der benutzt werden kann um den intern verwendeten default Http-Client zu ersetzen.
+Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) oder eigene Tests schreiben wollen ist eine Funktion mit drei Parametern als Http-Client nötig: function (url, onsuccess, onerror).
 
 
 
-### The "@iot.nextLink" Value ###
-If you don't want to use *SensorThingsHttp* to automaticaly split the data, here are some guides to help you do your own thing.
+### Auswertung von "@iot.nextLink" ###
+Wenn Sie nicht auf die Software-Schicht *SensorThingsHttp* angewiesen sein möchten um Ihre gesplitteten Antworten zu empfangen, folgen nun einige Hilfen die Ihnen das Leben erleichtern können.
 
-If the data of a call has too many datasets, the server splitts the result into chunks indicated by a "@iot.nextLink". You can follow through all "@iot.nextLink" urls, gathering the responses to one big response until the end of data is received. If no follow up link ("@iot.nextLink") is received, the data is complete in the first place or it is the last chunk of datasets to receive.
+Ist die Antwort vom Server zu groß, splittet der Server das Ergebnis automatisch in kleinere Teile von denen er Ihnen nur den Ersten übermittelt. Der jeweils nächste Teil kann über den Link "@iot.nextLink" in der Antwort abgerufen werden.
+Sie können diesem "@iot.nextLink" folgen und erhalten in der nächsten Antwort ggf. wieder einen "@iot.nextLink".
+Und so geht es weiter wie bei Hänsel und Gretel, bis sie beim letzten Teil angekommen sind, in dessen Daten Ihnen kein weiterer "@iot.nextLink" mehr angeboten wird. Hieran erkennen Sie den letzten Teil.
 
-**Example**
+**Beispiel**
 
-The following url will only get 100 datasets and is including a "@iot.nextLink" to be called to receive the next chunk: [https://iot.hamburg.de/v1.0/Things](https://iot.hamburg.de/v1.0/Things)
+Die URL [https://iot.hamburg.de/v1.0/Things](https://iot.hamburg.de/v1.0/Things) gibt Ihnen nur 100 Datensätze zurück.
+Im Datensatz finden Sie den angesprochenen Wert "@iot.nextLink", der auf den nächsten Datensatz verweist:
 ```
 #!json
 {
@@ -213,15 +227,21 @@ The following url will only get 100 datasets and is including a "@iot.nextLink" 
 }
 ```
 
-Calling the next link ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) will provide you with the next chunk of data and another follow up link ("@iot.nextLink") and so forth, until in the last dataset no follow up link is given.
+Rufen Sie den nächsten Link auf ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) wird Ihnen ein weiterer Datensatz mit einem "@iot.nextLink" geschickt, usw.
+Das Ende erkennen Sie daran, dass der "@iot.nextLink" fehlt.
 
 
-### The "@iot.count" Value ###
-To show the progress of the current http call, you can use the loop through "@iot.nextLink" urls in combination with the $count=true parameter. If you add $count=true to any SensorThingsAPI url, the received data includes the number of datasets to be expected in total ("@iot.count").
+### Aufruf mit "@iot.count" ###
+Um die Gesamtzahl aller zu erwartenden Datensätze zu erfragen, gibt es das Feld "@iot.count".
+Dieses Feld muss mit dem Zusatz ($count=true) im Aufruf erst aktiviert werden.
 
-**Example**
+Die so erhaltene Gesamtzahl in Kombination mit dem aktuellen skip-Wert ergibt für Ihre Applikation den Lade-Fortschritt (Progress), den Sie dem Endnutzer anzeigen können.
 
-To get the total number of datasets to expect from one call, simply add $count=true to any SensorThingsAPI url: [https://iot.hamburg.de/v1.0/Things?$count=true](https://iot.hamburg.de/v1.0/Things?$count=true)
+**Beispiel**
+
+Um die Gesamtzahl aller zu erwartenden Datensätze Ihres Aufrufes auszugeben, fügen Sie $count=true in Ihren Aufruf mit ein: [https://iot.hamburg.de/v1.0/Things?$count=true](https://iot.hamburg.de/v1.0/Things?$count=true)
+
+Die Antwort:
 ```
 #!json
 {
@@ -233,24 +253,28 @@ To get the total number of datasets to expect from one call, simply add $count=t
 }
 ```
 
-Combining the absolute number ("@iot.count") and the value of the current $skip parameter gives you the progress (1 / @iot.count * skip).
+Der Lade-Fortschritt (Progress) kann mithilfe des Wertes "@iot.count" und dem skip-Wert in der url von "@iot.nextLink" wie folgt ermittelt werden: (1 / @iot.count * skip)
 
 
 
-### Automatic use of Extent ###
-You would want your server implementation of the SensorThingsAPI (e.g. FROST Server) to filter data within a given extent (e.g. a polygon). The FROST Server provides you with this functionality. To use this feature the *SensorThingsHttp* layer has a function (*SensorThingsHttp.getInExtent()*) to call data only within the given extent.
+### Automatischer Aufruf im Karten-Ausschnitt ###
+Es ist möglich den Broker (z.B. FROST Server) der SensorThingsAPI anzuweisen Ihnen nur die Things zu übermitteln, die sich in einem bestimmten Karten-Ausschnitt befinden.
+Der FROST Server bietet diese Funktion.
+Das Software-Layer *SensorThingsHttp* des Masterportals stellt Ihnen diese Technik mit seiner Funktion *SensorThingsHttp.getInExtent()* zur Verfügung.
 
-Using *SensorThingsHttp.getInExtent()* you also use the skipping progress explained [above](#markdown-header-automatic-split). The *SensorThingsHttp* layer does the correct work of "st_within(Locations/location,geography'POLYGON ((...))')" (see [The use of POLYGON](#the_use_of_polygon)) for you.
+Die Funktion *SensorThingsHttp.getInExtent()* übernimmt die korrekte Anwendung von "st_within(Locations/location,geography'POLYGON ((...))')" (siehe [Benutzung von POLYGON](#markdown-header-benutzung-von-polygon)) für Sie.
+Wenn Sie die Funktion *SensorThingsHttp.getInExtent()* nutzen, müssen Sie sich natürlich auch nicht mehr um das [automatische Splitten und Skippen](#markdown-header-auswertung-von-iotnextLink) kümmern.
+Die Funktion erledigt beides für Sie.
 
-The extent needs to be described including its source projection and target projection. The following extent options are mandatory for the use of *SensorThingsHttp.getInExtent()*:
+Einzig den Karten-Ausschnitt müssen Sie korrekt angeben. Die folgenden Parameter für den Extent sind verpflichtend, wenn Sie die Funktion *SensorThingsHttp.getInExtent()* nutzen möchten:
 
-|name|mandatory|type|default|description|example|
-|----|---------|----|-------|-----------|-------|
-|extent|yes|Number[]|-|the extent based on your current OpenLayers Map|[556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008]|
-|sourceProjection|yes|String|-|the projection of the extent|"EPSG:25832"|
-|targetProjection|yes|String|-|the projection the SensorThingsAPI server expects|"EPSG:4326"|
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|extent|Ja|Number[]|-|der Karten-Ausschnitt in Ihrer OpenLayers Map|[556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008]|
+|sourceProjection|Ja|String|-|Das Format (projection) des Ausschnittes|"EPSG:25832"|
+|targetProjection|Ja|String|-|Das Format (projection) das der Broker (Server) erwartet|"EPSG:4326"|
 
-Here is a basic implementation of *SensorThingsHttp* receiving only data within the browsers current extent, using some basic Events of the Masterportal to show its functionality:
+Es folgt ein Implementierungs-Beispiel der Funktion *SensorThingsHttp.getInExtent()*. Zur Veranschaulichung werden ein paar zusätzliche Events des Masterportals verwendet:
 
 ```
 #!javascript
@@ -292,23 +316,29 @@ http.getInExtent(url, {
 
 ```
 
-In case of *SensorThingsHttp.getInExtent()* the "url" and "extent" parameters are mandatory. To get the response you need to set the third parameter as an on success function. The rest ist optional.
+Bitte beachten Sie, dass *SensorThingsHttp.getInExtent()* asynchron arbeitet. Alle Parameter (die vielen Funktionen) sind optional - außer "url" und "extent". Natürlich macht es Sinn zumindest den onsuccess-Callback mit zu übergeben um an die Response zu kommen.
 
-There is an optional eighth parameter (httpClient) that can be used to change the default http handler (in our case axios). This optional httpClient can be a simple function with the parameters url, onsuccess and onerror.
+Hinweis: Es gibt einen optionalen achten Parameter (httpClient), der benutzt werden kann um den intern verwendeten default Http-Client zu ersetzen.
+Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) ist eine Funktion mit drei Parametern als Http-Client nötig: function (url, onsuccess, onerror).
 
 
-### The use of POLYGON ###
-If you don't want to use *SensorThingsHttp* to call your data in the current extent, here are some guides to go on your own.
 
-To receive data only in a specified extent the SensorThingsAPI provides certain geospatial functions using POINT or POLYGON structures (see [https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56)). You can set your extent using a POLYGON. You can then use the Locations of a Thing to filter within an extent.
+### Benutzung von POLYGON ###
+Wenn Sie die Software-Schicht *SensorThingsHttp* nicht nutzen möchten um Sensoren einzig im aktuellen Karten-Ausschnitt abzurufen, hier eine kurze Hilfe um Ihnen das Leben zu erleichtern.
 
-This is a basic example:
+Wenn Ihr Server dies anbietet (z.B. FROST Server), bietet die SensorThingsAPI geobezogene Funktionalitäten (z.B. POINT und POLYGON) an.
+(Siehe [https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#56)).
+
+Hier ein Beispiel:
 
 [https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations](https://iot.hamburg.de/v1.0/Things?$filter=st_within(Locations/location,geography%27POLYGON%20((10.0270%2053.5695,10.0370%2053.5695,10.0370%2053.5795,10.0270%2053.5795,10.0270%2053.5695))%27)&$expand=Locations)
 
-*Note: Keep in mind to convert your projection into the used projection of the SensorThingsAPI.* If the server uses EPSG:4326 but your Masterportal is set to use EPSG:25832 you should use OpenLayers to convert. An alternative is provided by "masterportalAPI/src/crs" with its "transform" function.
+*Hinweis: Beachten Sie das korrekte Format zu verwenden. Dies ist abhängig von Ihrer Server-Konfiguration.*
 
-Example to transform a Location from your current projection into EPSG:4326:
+Rechnet der Broker (Server) mit EPSG:4326, aber Ihr Masterportal verwendet EPSG:25832, müssen Sie zuvor konvertieren. Es bietet sich an OpenLayers dafür zu benutzen. Alternativ bietet Ihnen das Masterportal eine "transform"-Funktion unter "masterportalAPI/src/crs".
+
+Hier ein Beispiel wie Sie "masterportalAPI/src/crs" nutzen um das aktuelle Format des Masterportals z.B. in "EPSG:4326" zu konvertieren:
+
 ```
 #!javascript
 
@@ -322,7 +352,8 @@ const extent = Radio.request("MapView", "getCurrentExtent"),
 
 ```
 
-Working with the current extent given by an OpenLayer Map you will only get the top left corner and the bottom right corner. To draw yourself a POLYGON to be used with SensorThingsAPI, you need to draw your rectangle as follows:
+Auf diese Weise erhalten Sie natürlich nur die Ecken linksoben und rechtsunten Ihres aktuellen Bild-Ausschnittes.
+Um hieraus ein POLYGON zu bauen, das von der SensorThingsAPI als POLYGON-Wert akzeptiert wird, müssen Sie folgende Umwandlung vornehmen:
 
 ```
 #!javascript
@@ -337,6 +368,8 @@ const extent = Radio.request("MapView", "getCurrentExtent"),
     ];
 
 ```
+
+
 
 
 
