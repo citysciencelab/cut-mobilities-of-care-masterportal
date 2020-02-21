@@ -21,7 +21,10 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive change:url": this.render,
-            "change:positionMapProjection": this.changedPosition
+            "change:positionMapProjection": this.changedPosition,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
         // To initially open this tool it needs to fire change:isActive event on parent model because other
         // tools need to be closed before - this happens by listening to change:isActive.
@@ -104,13 +107,14 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     adjustWindow: function (targetProjection) {
         // geographische Koordinaten
         if (targetProjection.projName === "longlat") {
-            this.$("#coordinatesEastingLabel").text("Breite");
-            this.$("#coordinatesNorthingLabel").text("Länge");
+            // hint: this is turned around (easting <=> northing) just for labeling in hdms
+            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.northingLabel"));
+            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"));
         }
         // kartesische Koordinaten
         else {
-            this.$("#coordinatesEastingLabel").text("Rechtswert");
-            this.$("#coordinatesNorthingLabel").text("Hochwert");
+            this.$("#coordinatesEastingLabel").text(i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"));
+            this.$("#coordinatesNorthingLabel").text(i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"));
         }
     },
 

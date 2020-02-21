@@ -2289,6 +2289,13 @@
  * @description todo
  */
 
+ /** -------------------- ADDONS -------------------- */
+ /**
+ * @event Addons#initialized
+ * @description Is fired after addons are inizialized if addons are configured, e.g. the language files are loaded
+ */
+
+
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**
@@ -2376,6 +2383,15 @@
  /**
  * @event Tools.Download#changeIsActive
  * @description Triggered when the model attribute "isActive" changes.
+ */
+
+/** -------------------- i18next -------------------- */
+
+/**
+ * @event i18next#RadioTriggerLanguageChanged
+ * @description Triggers if the languages has changed
+ * @param {String} lng the new language to use
+ * @example Radio.trigger("i18next", "languageChanged", lng);
  */
 
 /** -------------------- ZOOMTOGEOMETRY -------------------- */

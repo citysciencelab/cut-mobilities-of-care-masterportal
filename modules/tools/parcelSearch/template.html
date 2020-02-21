@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <div class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
-        <label for="districtField" class="col-md-5 col-sm-5 control-label">Gemarkung</label>
+        <label for="districtField" class="col-md-5 col-sm-5 control-label"><%=districtText%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="districtField">
-                <option <% if (districtNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0">bitte wählen</option>
-                <% _.each(this.model.get("districts"), function(value, key) { %>
+                <option <% if (districtNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0"><%=chooseText%></option>
+                <% for (let [key, value] of Object.entries(this.model.get("districts"))) { %>
                     <option <% if (districtNumber === value) {print ("selected ");} %>class="pull-left" value=<%= value %>><%= key + " (" + value + ")" %></option>
-                <% }); %>
+                <% }; %>
             </select>
         </div>
     </div>
@@ -17,10 +17,12 @@
         <div class="col-md-7 col-sm-7">
             <fieldset <% if (districtNumber === "0") {print ("disabled ");} %>id="cadastralDistrictFieldSet">
                 <select class="form-control input-sm pull-left" id="cadastralDistrictField">
-                    <option <% if (cadastralDistrictNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0">bitte wählen</option>
-                    <% _.each((_.values(_.pick(cadastralDistricts, districtNumber))[0]), function (cadastralDistrict) { %>
-                        <option <% if (cadastralDistrictNumber === cadastralDistrict) {print ("selected ");} %>class="pull-left" value=<%= cadastralDistrict %>><%= cadastralDistrict %></option>
-                    <% }); %>
+                    <option <% if (cadastralDistrictNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0"><%=chooseText%></option>
+                    <% if(cadastralDistricts[districtNumber]){%>
+                        <% cadastralDistricts[districtNumber].forEach(function (cadastralDistrict) { %>
+                            <option <% if (cadastralDistrictNumber === cadastralDistrict) {print ("selected ");} %>class="pull-left" value=<%= cadastralDistrict %>><%= cadastralDistrict %></option>
+                        <% });%> 
+                    <% } %>
                 </select>
             </fieldset>
         </div>
@@ -28,13 +30,13 @@
     <% } %>
 
     <div class="form-group form-group-sm">
-        <label for="parcelField" class="col-md-5 col-sm-5 control-label">Flurst&uuml;cksnummer</label>
+        <label for="parcelField" class="col-md-5 col-sm-5 control-label"><%=parcelNumberText%></label>
         <div class="col-md-7 col-sm-7">
              <div class="input-group" style="width:100%">
-                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelNumber %>" placeholder="Nummer eingeben" maxlength="<%= maxParcelNumberLength %>"/>
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelNumber %>" placeholder="<%=parcelNumberPlaceholderText%>" maxlength="<%= maxParcelNumberLength %>"/>
                 <% if (this.model.get("parcelDenominatorField") === true) { %>
                 <span class="input-group-addon">/</span>
-                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelDenominatorNumber %>" placeholder="Nummer eingeben" maxlength="<%= maxParcelNumberLength %>"/>
+                <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelDenominatorNumber %>" placeholder="<%=parcelNumberPlaceholderText%>" maxlength="<%= maxParcelNumberLength %>"/>
                 <% } %>
             </div>
         </div>
@@ -42,13 +44,13 @@
     <div class="form-group form-group-sm">
         <% if (createReport === true) { %>
             <div class="col-md-6 col-sm-6 col-xs-6">
-                <button id="reportbutton" class="btn btn-primary btn-md btn-block" <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0") || parcelNumber === "" || (parcelDenominatorField === true && parcelDenominatorNumber ==="")) {print ("disabled ");} %>>Bericht erzeugen</button>
+                <button id="reportbutton" class="btn btn-primary btn-md btn-block" <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0") || parcelNumber === "" || (parcelDenominatorField === true && parcelDenominatorNumber ==="")) {print ("disabled ");} %>><%=generateReportText%></button>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-6">
         <% } else { %>
             <div class="col-md-12 col-sm-12 col-xs-12">
         <% } %>
-            <button id="submitbutton" class="btn btn-primary btn-md btn-block" <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0") || parcelNumber === "" || (parcelDenominatorField === true && parcelDenominatorNumber ==="")) {print ("disabled ");} %>>Suchen</button>
+            <button id="submitbutton" class="btn btn-primary btn-md btn-block" <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0") || parcelNumber === "" || (parcelDenominatorField === true && parcelDenominatorNumber ==="")) {print ("disabled ");} %>><%=searchText%></button>
             </div>
     </div>
 </div>

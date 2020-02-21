@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <form id="printTool" class="form-horizontal">
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Titel</label>
+        <label class="col-sm-5 control-label"><%= titleLabel %></label>
         <div class="col-sm-7">
-            <input type="text" class="form-control" maxLength="45" value="<%= title %>">
+            <input type="text" class="form-control" maxLength="45" value="<%= titlePlaceholder %>">
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Layout</label>
+        <label class="col-sm-5 control-label"><%= layoutLabel %></label>
         <div class="col-sm-7">
             <select id="printLayout" class="form-control input-sm">
-                <% _.each(layoutList, function(layout) { %>
-                    <% if (layout.name === currentLayout.name) { %>
-                        <option SELECTED><%= layout.name %></option>
-                    <% } else { %>
-                        <option><%= layout.name %></option>
-                    <% }%>
+                <% layoutList.forEach(function(layout) { %>
+                    <option value="<%= layout.name %>" <% layout.name === currentLayout.name ? print("selected"): "" %> ><%= layoutNameList[layout.name] ? layoutNameList[layout.name] : layout.name %></option>
                 <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Format</label>
+        <label class="col-sm-5 control-label"><%= formatLabel %></label>
         <div class="col-sm-7">
             <select id="printFormat" class="form-control input-sm">
-                <% _.each(formatList, function(format) { %>
+                <% formatList.forEach(function(format) { %>
                     <% if (format === currentFormat) { %>
                         <option SELECTED><%= format %></option>
                     <% } else { %>
@@ -35,10 +31,10 @@
         </div>
     </div>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Maßstab</label>
+        <label class="col-sm-5 control-label"><%= scaleLabel %></label>
         <div class="col-sm-7">
             <select id="printScale" class="form-control input-sm">
-                <% _.each(scaleList, function(scale) { %>
+                <% scaleList.forEach(function(scale) { %>
                     <% if (scale === currentScale) { %>
                         <option value="<%= scale %>" SELECTED>1: <%= scale < 10000 ? scale : scale.toString().substring(0, scale.toString().length - 3) + " " + scale.toString().substring(scale.toString().length - 3) %></option>
                     <% } else { %>
@@ -50,7 +46,7 @@
     </div>
     <% if(isLegendAvailable) { %>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label"><%= legendText %></label>
+        <label class="col-sm-5 control-label"><%= withLegendLabel %></label>
         <div class="col-sm-7">
             <div class="checkbox">
                 <input id="printLegend" type="checkbox" <% if (isLegendSelected) print('checked') %>>
@@ -60,7 +56,7 @@
     <% } %>
     <% if(isGfiAvailable && isGfiActive) { %>
     <div class="form-group form-group-sm">
-        <label class="col-sm-5 control-label">Mit Informationen</label>
+        <label class="col-sm-5 control-label"><%= withInfoLabel %></label>
         <div class="col-sm-7">
             <div class="checkbox">
                 <input id="printGfi" type="checkbox" <% if (isGfiSelected) print('checked') %>>
@@ -70,7 +66,7 @@
     <% } %>
     <div class="form-group form-group-sm">
         <div class="col-sm-12">
-            <button type="button" class="btn btn-lgv-grey btn-block">Drucken</button>
+            <button type="button" class="btn btn-lgv-grey btn-block"><%= printLabel %></button>
         </div>
     </div>
 </form>

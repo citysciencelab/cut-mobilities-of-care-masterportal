@@ -29,9 +29,22 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
     initialize: function () {
         this.template = _.template(PrintTemplate);
         this.listenTo(this.model, {
-            "change:isActive": this.render,
-            "change:isGfiActive": this.render,
-            "change:currentScale": this.render
+            "change": function (model) {
+                const changed = model.changed;
+
+                if (changed.hasOwnProperty("isActive")) {
+                    this.render(model);
+                }
+                else if (changed.hasOwnProperty("isGfiActive")) {
+                    this.render(model);
+                }
+                else if (changed.hasOwnProperty("currentScale")) {
+                    this.render(model);
+                }
+                else if (changed.currentLng) {
+                    this.render(model);
+                }
+            }
         });
     },
 
