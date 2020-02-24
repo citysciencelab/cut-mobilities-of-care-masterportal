@@ -51,10 +51,6 @@
                         "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
                         "parcelDenominator": false
                     },
-                    "einwohnerabfrage": {
-                        "name": "Einwohneranzahl abfragen",
-                        "glyphicon": "glyphicon-wrench"
-                    },
                     "measure": {
                         "name": "Strecke / Fläche messen",
                         "glyphicon": "glyphicon-resize-full"
