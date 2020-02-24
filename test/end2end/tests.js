@@ -21,7 +21,8 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
     legendTests = require("./tests/Legend.js");
 
 /**
- * The complete Triforce, or one or more components of the Triforce.
+ * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
+ * which parameters are required and must build the driver by itself, either per test or for the whole suite.
  * @typedef {Object} e2eTestParams
  * @property {selenium-webdriver.Builder} builder fully prepared builder that can be used for instantiation
  * @property {String} url to open Masterportal with

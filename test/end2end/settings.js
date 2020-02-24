@@ -14,9 +14,10 @@ const webdriver = require("selenium-webdriver"),
         // "600x800"
     ],
     configs = new Map([
-        ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
-        ["DT", "/test/end2end/resources/configs/default"], // DT = Default Tree (like portal/master)
-        ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
+        ["basic", "/portal/basic"], // was LT
+        ["master", "/portal/master"], // was DT
+        ["custom", "/portal/masterCustom"], // was CT
+        ["default", "/portal/masterDefault"] // was DT, too?
     ]),
     modes = [
         "2D",
@@ -61,30 +62,39 @@ function isOB (mode) {
 }
 
 /**
- * Returns true for url indicating basic (LT) configuration.
+ * Returns true for url indicating basic configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.includes(configs.get("LT"));
+    return url.endsWith(configs.get("basic"));
 }
 
 /**
- * Returns true for url indicating default (DT) configuration.
+ * Returns true for url indicating master configuration.
+ * @param {String} url url in use
+ * @returns {boolean} whether configuration is basic
+ */
+function isMaster (url) {
+    return url.endsWith(configs.get("master"));
+}
+
+/**
+ * Returns true for url indicating default configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.includes(configs.get("DT"));
+    return url.endsWith(configs.get("default"));
 }
 
 /**
- * Returns true for url indicating custom (CT) configuration.
+ * Returns true for url indicating custom configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.includes(configs.get("CT"));
+    return url.endsWith(configs.get("custom"));
 }
 
 /**
@@ -132,6 +142,7 @@ module.exports = {
     isOB,
     isMobile,
     isBasic,
+    isMaster,
     isDefault,
     isCustom,
     getBsCapabilities
