@@ -38,9 +38,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         if (this.has("clusterDistance")) {
             this.set("isClustered", true);
         }
-
-        this.setStyleId(this.get("styleId") || this.get("id"));
-        this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
 
     /**
@@ -172,7 +169,8 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         var mapCrs = Radio.request("MapView", "getProjection"),
             jsonCrs = this.getJsonProjection(data),
             features = this.parseDataToFeatures(data, mapCrs, jsonCrs),
-            newFeatures = [];
+            newFeatures = [],
+            isClustered = this.has("clusterDistance");
 
         if (!features) {
             return;
@@ -193,6 +191,26 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         }
         this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
+        if (!_.isUndefined(features)) {
+            this.styling(isClustered);
+            this.get("layer").setStyle(this.get("style"));
+        }
+    },
+
+    /**
+     * create style, function triggers to style_v2.json
+     * @param  {boolean} isClustered - should
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @returns {void}
+     */
+    styling: function (isClustered) {
+        var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+
+        if (!_.isUndefined(stylelistmodel)) {
+            this.setStyle(function (feature) {
+                return stylelistmodel.createStyle(feature, isClustered);
+            });
+        }
     },
 
     /**
@@ -327,22 +345,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * sets style function for features or layer
-     * @param  {Backbone.Model} stylelistmodel Model für Styles
-     * @returns {void}
-     */
-    setStyleFunction: function (stylelistmodel) {
-        if (_.isUndefined(stylelistmodel)) {
-            this.set("styleFunction", undefined);
-        }
-        else {
-            this.set("styleFunction", function (feature) {
-                return stylelistmodel.createStyle(feature, this.get("isClustered"));
-            }.bind(this));
-        }
-    },
-
-    /**
      * creates the legendUrl used by layerinformation
      * @fires StyleList#RadioRequestReturnModelById
      * @returns {void}
@@ -404,11 +406,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         collection.forEach(function (feature) {
             feature.setStyle(undefined);
         }, this);
-    },
-
-    // setter for styleId
-    setStyleId: function (value) {
-        this.set("styleId", value);
     },
 
     // setter for style
