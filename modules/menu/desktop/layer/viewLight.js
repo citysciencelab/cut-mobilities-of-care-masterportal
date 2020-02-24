@@ -25,7 +25,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeTransparency
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
-     * @listens Map#RadioTriggerLayerInformation
+     * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
@@ -63,7 +63,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             selector = $("#" + this.model.get("parentId"));
 
         selector.prepend(this.$el.html(this.template(attr)));
@@ -78,7 +78,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     rerender: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
@@ -91,7 +91,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @return {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -247,7 +247,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Unighlights the Layer Information Icon in the layertree
+     * Unhighlights the Layer Information Icon in the layertree
      * @returns {void}
      */
     unhighlightLayerInformationIcon: function () {

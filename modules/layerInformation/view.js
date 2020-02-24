@@ -99,6 +99,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     /**
     * Removes this view.
     * @fires Layer#RadioTriggerLayerSetLayerInfoChecked
+    * @fires Layer#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
     * @returns {void}
     */
     remove: function () {
