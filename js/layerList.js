@@ -91,44 +91,47 @@ export function mergeLayersByMetaIds (response, metaIds) {
     let rawLayerArray = response,
         objectsById;
 
-    metaIds.forEach(function (metaID) {
-        const newObject = {};
+    if (metaIds !== undefined && metaIds !== "") {
 
-        // Objekte mit derselben Metadaten-Id
-        objectsById = rawLayerArray.filter(function (layer) {
-            return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
-        });
-        // Das erste Objekt, das nicht den value "ignore" unter gfiAttributes trägt, wird kopiert
-        if (typeof objectsById !== undefined && objectsById.length > 0) {
-            let entry;
+        metaIds.forEach(function (metaID) {
+            const newObject = {};
 
-            for (entry of objectsById) {
-                if (entry.gfiAttributes === "ignore") {
-                    Object.assign(newObject, entry);
+            // Objekte mit derselben Metadaten-Id
+            objectsById = rawLayerArray.filter(function (layer) {
+                return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
+            });
+            // Das erste Objekt, das nicht den value "ignore" unter gfiAttributes trägt, wird kopiert
+            if (typeof objectsById !== undefined && objectsById.length > 0) {
+                let entry;
+
+                for (entry of objectsById) {
+                    if (entry.gfiAttributes === "ignore") {
+                        Object.assign(newObject, entry);
+                    }
+                    else {
+                        Object.assign(newObject, entry);
+                        break;
+                    }
                 }
-                else {
-                    Object.assign(newObject, entry);
-                    break;
-                }
+                // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
+                newObject.name = objectsById[0].datasets[0].md_name;
+                // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
+                newObject.layers = _.pluck(objectsById, "layers").toString();
+                // Das Attribut maxScale wird gruppiert und der höchste Wert am kopierten Objekt gesetzt
+                newObject.maxScale = _.max(_.pluck(objectsById, "maxScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
+                newObject.minScale = _.min(_.pluck(objectsById, "minScale"), function (scale) {
+                    return parseInt(scale, 10);
+                });
+                // Entfernt alle zu "gruppierenden" Objekte aus der response
+                rawLayerArray = _.difference(rawLayerArray, objectsById);
+                // Fügt das kopierte (gruppierte) Objekt der response hinzu
+                rawLayerArray.push(newObject);
             }
-            // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
-            newObject.name = objectsById[0].datasets[0].md_name;
-            // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-            newObject.layers = _.pluck(objectsById, "layers").toString();
-            // Das Attribut maxScale wird gruppiert und der höchste Wert am kopierten Objekt gesetzt
-            newObject.maxScale = _.max(_.pluck(objectsById, "maxScale"), function (scale) {
-                return parseInt(scale, 10);
-            });
-            // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
-            newObject.minScale = _.min(_.pluck(objectsById, "minScale"), function (scale) {
-                return parseInt(scale, 10);
-            });
-            // Entfernt alle zu "gruppierenden" Objekte aus der response
-            rawLayerArray = _.difference(rawLayerArray, objectsById);
-            // Fügt das kopierte (gruppierte) Objekt der response hinzu
-            rawLayerArray.push(newObject);
-        }
-    });
+        });
+    }
 
     return rawLayerArray;
 }
