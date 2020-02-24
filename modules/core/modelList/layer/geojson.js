@@ -191,7 +191,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         }
         this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
-        if (!_.isUndefined(features)) {
+        if (features) {
             this.styling(isClustered);
             this.get("layer").setStyle(this.get("style"));
         }
@@ -206,7 +206,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     styling: function (isClustered) {
         var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-        if (!_.isUndefined(stylelistmodel)) {
+        if (stylelistmodel) {
             this.setStyle(function (feature) {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
