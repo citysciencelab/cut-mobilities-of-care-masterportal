@@ -93,7 +93,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdsFromTools(tools));
 
-        styleIds = styleIds.flat();
+        styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
         filteredData = data.filter(function (styleModel) {
             return styleIds.includes(styleModel.layerId);
         });
