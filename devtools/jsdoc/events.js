@@ -850,6 +850,12 @@
  * @description todo
  */
 
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+ * @description Unhighlight the icon in the layertree for layerinformation
+ * @example Radio.trigger("LayerInformation", "unhighlightLayerInfomationIcon")
+ */
+
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
@@ -2425,4 +2431,3 @@
  */
 
 
- 
