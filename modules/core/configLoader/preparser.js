@@ -133,8 +133,6 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             snippetInfos: this.requestSnippetInfos()
         };
 
-        Radio.trigger("Preparser", "isParsed", attributes);
-
         /**
          * this.updateTreeType
          * @deprecated in 3.0.0
