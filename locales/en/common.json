@@ -334,7 +334,7 @@
                 "buttonTitle": "3D",
                 "openView3d": "Start view",
                 "closeView3d": "Close view",
-                "betaWarning3d": "The 3D mode is currently still in the beta version!"
+                "betaWarning": "The 3D mode is currently still in the beta version!"
             },
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
