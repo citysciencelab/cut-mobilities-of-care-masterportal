@@ -445,7 +445,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     toggleAttributionsInterval: function () {
         let channelName, eventName, timeout;
 
-        if (this.has("layerAttribution") && typeof this.get("layerAttribution" === "object")) {
+        if (this.has("layerAttribution") && typeof this.get("layerAttribution") === "object") {
             channelName = this.get("layerAttribution").channel;
             eventName = this.get("layerAttribution").eventname;
             timeout = this.get("layerAttribution").timeout;
