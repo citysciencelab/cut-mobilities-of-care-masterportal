@@ -34,13 +34,13 @@ export function SensorThingsHttp () {
             method: "get",
             url: url,
             responseType: "text"
-        }).catch(function (error) {
-            if (typeof onerror === "function") {
-                onerror(error);
-            }
         }).then(function (response) {
             if (response !== undefined && typeof onsuccess === "function") {
                 onsuccess(response.data);
+            }
+        }).catch(function (error) {
+            if (typeof onerror === "function") {
+                onerror(error);
             }
         });
     }
@@ -178,20 +178,24 @@ export function SensorThingsHttp () {
      */
     function addCountToUrl (url) {
         const parsedUrl = new UrlParser(url);
+        let parsedUrlHref = "";
 
-        if (!parsedUrl.query) {
-            parsedUrl.query = {};
+        if (typeof parsedUrl === "object") {
+            if (!parsedUrl.query) {
+                parsedUrl.query = {};
+            }
+
+            // use UrlParser.set to parse query into object
+            parsedUrl.set("query", parsedUrl.query);
+            parsedUrl.query.$count = true;
+            parsedUrl.set("query", parsedUrl.query);
+
+            if (parsedUrl.hasOwnProperty("href")) {
+                parsedUrlHref = parsedUrl.href;
+            }
         }
 
-        // use UrlParser.set to parse query into object
-        parsedUrl.set("query", parsedUrl.query);
-
-        parsedUrl.query.$count = true;
-
-        // use UrlParser.set(query) to overwrite href
-        parsedUrl.set("query", parsedUrl.query);
-
-        return parsedUrl.href;
+        return parsedUrlHref;
     }
 
     /**
@@ -222,7 +226,7 @@ export function SensorThingsHttp () {
     }
 
     /**
-     * helper function to call the SensorThingsAPI with skip function
+     * helper function to call the SensorThingsAPI with skip function - for more informations about this issue please read the doc/sensorThings.md
      * @param {String} url the url to call
      * @param {Function} onsuccess a function (resp) with the response of the call
      * @param {Function} oncomplete a function to allways call when the request is finished (successfully or in failure)

@@ -1,4 +1,6 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>Back to **[Documentation Masterportal](doc.md)**.
+
+>Hier geht es zur deutschen Dokumentation dieser Datei: [sensorThings.md](sensorThings.md).
 
 [TOC]
 

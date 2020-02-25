@@ -83,12 +83,12 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
             method: "get",
             url: url,
             responseType: "text"
-        }).catch(function (error) {
-            console.warn("SensorThingsMqttClient - httpClient - an error occured calling the url: ", url, error);
         }).then(function (response) {
             if (typeof onsuccess === "function") {
                 onsuccess(response.data);
             }
+        }).catch(function (error) {
+            console.warn("SensorThingsMqttClient - httpClient - an error occured calling the url: ", url, error);
         });
     }
 

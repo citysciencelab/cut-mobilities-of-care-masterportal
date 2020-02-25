@@ -1,5 +1,7 @@
 >Zurück zur **[Dokumentation Masterportal](doc.md)**.
 
+>Click here to view the english translation of this document: [sensorThings_EN.md](sensorThings_EN.md).
+
 [TOC]
 
 
