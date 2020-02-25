@@ -114,10 +114,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.rerender();
-
-        if (Radio.request("LayerInformation", "getIsVisible")) {
-            this.showLayerInformation();
-        }
     },
 
     /**
