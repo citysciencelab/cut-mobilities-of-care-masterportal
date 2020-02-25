@@ -482,13 +482,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
     /**
      * Triggers the uiStyle for the modes: table or simple.
-     * @param {*} result - Table or simple style.
+     * @param {string} [result=""] - Table or simple style.
      * @fires Core#RadioTriggerUtilSetUiStyle
      * @returns {void}
      */
-    parseStyle: function (result) {
-        if (result && (result === "TABLE" || result === "SIMPLE")) {
-            Radio.trigger("Util", "setUiStyle", result);
+    parseStyle: function (result = "") {
+        const resultUpperCase = result.toUpperCase();
+
+        if (resultUpperCase === "TABLE" || resultUpperCase === "SIMPLE") {
+            Radio.trigger("Util", "setUiStyle", resultUpperCase);
         }
     },
 
