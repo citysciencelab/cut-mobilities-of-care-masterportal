@@ -722,6 +722,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * Converts an rgb array to hexcode. Default is the open layers default color.
+     * It also checks if rgb is an hexcode, if true it will be returned.
      * @param {number[]} rgb - a rgb color represented as an array
      * @returns {string} - hex color
      */
@@ -737,7 +738,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             hexB = this.addZero(rgb[2].toString(16));
             hexString = "#" + hexR + hexG + hexB;
         }
-
+        else if (typeof rgb === "string" && rgb.includes("#") && rgb.length >= 4) {
+            hexString = rgb;
+        }
         return hexString;
     },
 
