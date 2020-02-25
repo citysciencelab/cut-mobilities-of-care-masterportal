@@ -10,18 +10,18 @@
 <% if (id === "Baselayer") { %>
     <span class="catalog_buttons pull-right">
         <% if (this.model.get("quickHelp") === true) { %>
-            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="Themenbaum Hilfe"></span>
+            <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="<%= topicsHelpText%>"></span>
         <% } %>
         <% if (backgroundImage) { %>
-            <span class="glyphicon glyphicon-adjust rotate-adjust-back" data-toggle="tooltip" data-placement="bottom" title="Kartenhintergrund grau/weiß"></span>
+            <span class="glyphicon glyphicon-adjust rotate-adjust-back" data-toggle="tooltip" data-placement="bottom" title="<%= mapBackgroundText%>"></span>
         <% } %>
-        <span class="glyphicon glyphicon-pushpin rotate-pin-back" data-toggle="tooltip" data-placement="bottom" title="Themenbaum fixieren/lösen"></span>
+        <span class="glyphicon glyphicon-pushpin rotate-pin-back" data-toggle="tooltip" data-placement="bottom" title="<%= pinTopicsTreeText%>"></span>
     <span>
 <% } %>
 <% if (id === "Overlayer" && treeType === "default") { %>
         <form class="form-inline pull-right">
             <div class="form-group catalog-selection">
-                <span class="control-label">Kategorie</span>
+                <span class="control-label"><%= categoryText %></span>
                 <select class="form-control">
                     <% _.each(categories, function (cat) { %>
                         <% if (cat === category) { %>
@@ -36,7 +36,7 @@
 <% if (id === "SelectedLayer") { %>
         <% if (true) { %>
         <div class="layer-selection-save pull-right">
-            <span>Auswahl speichern</span>
+            <span><%= saveSelectionText %></span>
             <span class="glyphicon glyphicon-share"></span>
         </div>
         <% } %>

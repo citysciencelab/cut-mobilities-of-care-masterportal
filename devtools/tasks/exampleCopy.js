@@ -3,8 +3,11 @@ const fs = require("fs-extra"),
     path = require("path"),
 
     rootPath = path.resolve(__dirname, "../../"),
-    stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
-    destinationFolder = path.resolve(rootPath, "dist/examples_" + stableVersionNumber),
+    getStableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))("."),
+    mastercodeVersionFolderName = require(path.resolve(rootPath, "devtools/tasks/getMastercodeVersionFolderName"))(),
+    destinationFolder = path.resolve(rootPath, "dist/examples_" + mastercodeVersionFolderName),
+    zipFilename1 = path.resolve(rootPath, "dist/examples.zip"),
+    zipFilename2 = path.resolve(rootPath, "dist/examples-" + getStableVersionNumber + ".zip"),
     portal = {
         name: "Basic",
         source: "./dist/basic",
@@ -16,28 +19,33 @@ const fs = require("fs-extra"),
  * @returns {void}
  */
 function removeAddonCssFiles () {
-    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/css/";
+    const folderToCheck = destinationFolder + "/mastercode/" + mastercodeVersionFolderName + "/css/";
 
-    fs.readdir(folderToCheck, async (err, files) => {
-        if (err) {
-            throw new Error("ERROR", err);
-        }
-        for (const file of files) {
-            if (file !== "masterportal.css" && file !== "woffs") {
-                await fs.remove(folderToCheck + file);
+    try {
+        fs.readdir(folderToCheck, async (err, files) => {
+            if (err) {
+                throw new Error(err);
             }
-        }
-        removeAddonJsFiles();
-    });
+            for (const file of files) {
+                if (file !== "masterportal.css" && file !== "woffs") {
+                    await fs.remove(folderToCheck + file);
+                }
+            }
+            removeAddonJsFiles();
+        });
+    }
+    catch (err) {
+        console.error(err);
+    }
 
 }
 
 /**
- * Deletes unwanted js asset files from addons
+ * Deletes unwanted js asset files from addons and finally creates 2 zip files
  * @returns {void}
  */
 function removeAddonJsFiles () {
-    const folderToCheck = destinationFolder + "/mastercode/" + stableVersionNumber + "/js/";
+    const folderToCheck = destinationFolder + "/mastercode/" + mastercodeVersionFolderName + "/js/";
 
     fs.readdir(folderToCheck, async (err, files) => {
         if (err) {
@@ -48,7 +56,9 @@ function removeAddonJsFiles () {
                 await fs.remove(folderToCheck + file);
             }
         }
-        zipAFolder.zip(destinationFolder, destinationFolder + ".zip");
+        zipAFolder.zip(destinationFolder, zipFilename1).then(() => {
+            fs.copyFileSync(zipFilename1, zipFilename2);
+        }).catch(err2 => console.error(err2));
     });
 
 }

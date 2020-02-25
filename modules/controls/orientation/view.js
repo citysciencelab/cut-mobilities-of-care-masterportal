@@ -8,10 +8,10 @@ const OrientationView = Backbone.View.extend({
         "click .orientationButtons > .glyphicon-record": "getPOI"
     },
     initialize: function (attr) {
-        var showGeolocation,
-            showPoi,
-            poiDistances,
-            channel;
+        let showGeolocation = null,
+            showPoi = null,
+            poiDistances = null,
+            channel = null;
 
         this.model = new OrientationModel(attr.config);
         showGeolocation = this.model.get("isGeoLocationPossible");
@@ -29,8 +29,19 @@ const OrientationView = Backbone.View.extend({
             });
 
             this.listenTo(this.model, {
-                "change:tracking": this.trackingChanged,
-                "change:isGeolocationDenied": this.toggleBackground
+                "change": function () {
+                    const changed = this.model.changed;
+
+                    if (changed.hasOwnProperty("tracking")) {
+                        this.trackingChanged();
+                    }
+                    else if (changed.hasOwnProperty("isGeolocationDenied")) {
+                        this.toggleBackground();
+                    }
+                    else if (changed.titleGeolocate || changed.titleGeolocatePOI) {
+                        this.render();
+                    }
+                }
             }, this);
 
             this.render();
@@ -46,7 +57,7 @@ const OrientationView = Backbone.View.extend({
     className: "row",
     template: _.template(OrientationTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         // fügt dem ol.Overlay das Element hinzu, welches erst nach render existiert.
@@ -88,7 +99,7 @@ const OrientationView = Backbone.View.extend({
     * schaltet POI-Control un-/sichtbar
     */
     checkWFS: function () {
-        var visibleWFSModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+        const visibleWFSModels = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
 
         if (visibleWFSModels.length === 0) {
             this.$("#geolocatePOI").hide();

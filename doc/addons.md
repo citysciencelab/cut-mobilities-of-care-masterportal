@@ -6,15 +6,15 @@ Dadurch werden die Models der externen Sourcen erst ganz zum Schluß initialisie
 
 Die View-Klasse der externen Sourcen muss das zugehörige Model neu anlegen. Dieses wird dann in der Model-Liste mit dem Platzhalter-Model ausgetauscht.
 
-Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repos und erlaubt so eine getrennte Verwaltung.
+Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repository und erlaubt so eine getrennte Verwaltung.
 
-Diese Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals.
+Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren.
 
 Folgende Struktur ist dabei zu beachten:
 
-## Dateistruktur von Addons ##
+## 1. Dateistruktur von Addons ##
 
-1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die beiden Ordner **doc** und **unittests** mit den jeweiligen **.md** und **.test.js** Dateien.
+1.1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die Ordner **doc**, **jsdoc** und **unittests** mit den jeweiligen **.md**, **.js** und **.test.js** Dateien.
 
 #### Beispiel entsprechende Ordnerstruktur ####
 ```
@@ -25,6 +25,9 @@ myMasterPortalFolder/
             anotherFile.js
             doc/
                 config.json.md
+            jsdoc/
+                events.js
+                namespaces.js
             unittests/
                 model.test.js
             [...]
@@ -34,6 +37,9 @@ myMasterPortalFolder/
                 [...]
             doc/
                 beschreibung.md
+            jsdoc/
+                events.js
+                namespaces.js
             unittests/
                 addon.test.js
             anotherFile.js
@@ -43,7 +49,7 @@ myMasterPortalFolder/
     [...]
 ```
 
-2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den Namen der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
+1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
 ```
@@ -54,13 +60,13 @@ myMasterPortalFolder/
 }
 ```
 
-3. Es sollten hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
+1.3. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
 
-## Beispiel-Addon ##
+## 2. Beispiel-Addon ##
 
 Hier legen wir kurz ein Beispiel-Addon an!
 
-1. Dateien Erstellen: Das Beispiel-Addon trägt den Namen *exampleAddon* und seine Enrypoint-Datei heißt *entrypoint.js*. Daraus ergibt sich eine Dateistruktur wie folgt:
+2.1. Dateien Erstellen: Das Beispiel-Addon trägt den Namen *exampleAddon* und seine Enrypoint-Datei heißt *entrypoint.js*. Daraus ergibt sich eine Dateistruktur wie folgt:
 
 ```
 myMasterPortalFolder/
@@ -72,7 +78,7 @@ myMasterPortalFolder/
     [...]
 ```
 
-2. Addon-Code schreiben:
+2.2. Addon-Code schreiben:
 
 ```
 // myMasterPortalFolder/addons/exampleAddon/entrypoint.js
@@ -95,7 +101,7 @@ name: "Example Tool",
 glyphicon: "glyphicon-example"
 ```
 
-3. Die Addons-Config-Datei erstellen:
+2.3. Die Addons-Config-Datei erstellen:
 
 ```
 // myMasterPortalFolder/addons/addonsConf.json
@@ -105,7 +111,7 @@ glyphicon: "glyphicon-example"
 }
 ```
 
-4. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
+2.4. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
 ```
 // myMasterPortalFolder/config.js
 
@@ -114,6 +120,26 @@ const Config = {
     addons: ["boris"],
     // [...]
 };
+```
+
+2.5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
+
+```
+/**
+ * @namespace ExampleAddon
+ * @memberof Addons
+ */
+```
+
+2.6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
+
+```
+/**
+* @class exampleAddon
+* @extends Tool
+* @memberof Addons.ExampleAddon
+* @constructs
+*/
 ```
 
 

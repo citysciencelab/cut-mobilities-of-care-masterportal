@@ -963,11 +963,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     replaceModelById: function (id, newModel) {
-        var model = this.get(id);
+        const model = this.get(id);
+        let index = 0;
 
         if (model) {
+            index = this.indexOf(model);
             this.remove(model);
-            this.add(newModel);
+            this.add(newModel, {at: index});
             this.updateLayerView();
         }
     },

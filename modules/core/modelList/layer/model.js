@@ -495,7 +495,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
-            "typ": this.get("typ")
+            "typ": this.get("typ"),
+            "urlIsVisible": this.get("urlIsVisible")
         });
 
         this.setLayerInfoChecked(true);

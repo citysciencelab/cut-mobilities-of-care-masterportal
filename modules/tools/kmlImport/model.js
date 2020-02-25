@@ -12,7 +12,10 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         glyphicon: "glyphicon-import",
         kmlLineColor: "000000",
         kmlLabelColor: "000000",
-        kmlPolyColor: "000000"
+        kmlPolyColor: "000000",
+        // translations
+        fakeButtonText: "",
+        importButtonText: ""
     }),
 
     /**
@@ -26,6 +29,8 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @property {ol/format} format=new KML({extractStyles: true}) todo
      * @property {Boolean} renderToWindow=true todo
      * @property {String} glyphicon="glyphicon-import" todo
+     * @property {String} fakeButtonText="", filled with "Datei auswählen (keine ausgewählt)"- translated
+     * @property {String} importButtonText="", filled with "IMPORT"- translated
      * @listens Tools.Kmlimport#ChangeIsActive
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestMapCreateLayerIfNotExists
@@ -42,6 +47,24 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                     this.set("source", drawLayer.getSource());
                 }
             }
+        });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            fakeButtonText: i18next.t("common:modules.tools.kmlImport.fakeButton"),
+            importButtonText: i18next.t("common:modules.tools.kmlImport.importButton")
         });
     },
 
@@ -63,7 +86,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {void}
      */
     emptyInput: function () {
-        $("#fakebutton").html("Datei auswählen (keine ausgewählt)");
+        $("#fakebutton").html(this.get("fakeButtonText"));
         if (this.get("text") !== "") {
             this.setText("");
             $("#fakebutton").toggleClass("btn-primary");
@@ -86,7 +109,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
             this.setFeatures(features);
         }
         else {
-            Radio.trigger("Alert", "alert", "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus");
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.kmlImport.chooseFileFirst"));
         }
     },
 
@@ -281,7 +304,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
                 break;
             }
             default: {
-                Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.kmlImport.unknownGeometry") + ": <br><strong>" + geometry.getType());
             }
         }
         return transCoord;

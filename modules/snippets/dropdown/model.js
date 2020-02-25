@@ -21,7 +21,19 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         liveSearch: false,
         isDropup: false
     },
-
+    /**
+     * @class DropdownModel
+     * @extends SnippetModel
+     * @memberof Snippets.Dropdown
+     * @namespace GraphicalSelect
+     * @description creates a dropdown
+     * @constructs
+     * @property {Boolean} isOpen=false dropdown is open or closed
+     * @property {Boolean} values=[] init dropdown values
+     * @property {Boolean} preselectedValues=[] preselected values
+     * @property {Boolean} numOfOptions=10 number of entries displayed
+     * @property {Boolean} isMultiple=true dropdown multiple
+     */
     initialize: function () {
         this.superInitialize();
 
@@ -79,6 +91,25 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     },
 
     /**
+     * removes all value-models from collection and calls addValueModel for each new value
+     * @param {string[]} newValueList - new dropdown values
+     * @param {string[]} preselectedValues - new preselected values
+     * @returns {void}
+     */
+    replaceValueModels: function (newValueList, preselectedValues) {
+        this.get("valuesCollection").reset();
+        newValueList.forEach(function (value) {
+            this.addValueModel(value);
+        }, this);
+        this.set("preselectedValues", preselectedValues);
+        if (preselectedValues.length > 0) {
+            this.updateSelectedValues(preselectedValues);
+        }
+        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+        this.trigger("render");
+    },
+
+    /**
      * creates a model value and adds it to the value collection
      * @param {string} value - value
      * @param {string|undefined} group - name of its group
@@ -117,9 +148,9 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     * @return {void}
     */
     resetValues: function () {
-        var collection = this.get("valuesCollection").models;
+        const collection = this.get("valuesCollection").models;
 
-        _.each(collection.models, function (model) {
+        collection.forEach(function (model) {
             model.set("isSelectable", true);
         }, this);
     },

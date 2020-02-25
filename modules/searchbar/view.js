@@ -42,7 +42,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "click .form-control-feedback": "deleteSearchString",
         "click .btn-search": "searchAll",
         "click .list-group-item.hit": "hitSelected",
-        "touchstart .list-group-item.hit": "hitSelected",
         "click .list-group-item.results": "renderHitList",
         "mouseover .list-group-item.hit": "showMarker",
         "mouseleave .list-group-item.hit": "hideMarker",
@@ -86,7 +85,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.className = "navbar-form col-xs-9";
 
         this.listenTo(this.model, {
-            "renderRecommendedList": this.renderRecommendedList
+            "renderRecommendedList": this.renderRecommendedList,
+            "change:placeholder change:buttonSearchTitle change:showAllResultsText": this.initialRender
         });
 
         this.listenTo(Radio.channel("TableMenu"), {
@@ -122,29 +122,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setInitialSearchTasks(config);
 
         // Bedarfsweises Laden der Suchalgorythmen
-        if (_.has(config, "gazetteer") === true) {
+        if (config.hasOwnProperty("gazetteer")) {
             new GAZModel(config.gazetteer);
         }
-        if (_.has(config, "specialWFS") === true) {
+        if (config.hasOwnProperty("specialWFS")) {
             new SpecialWFSModel(config.specialWFS);
         }
-        if (_.has(config, "visibleVector") === true) {
+        if (config.hasOwnProperty("visibleVector")) {
             new VisibleVectorModel(config.visibleVector);
         }
-        else if (_.has(config, "visibleWFS") === true) {
+        else if (config.hasOwnProperty("visibleWFS")) {
             // Deprecated mit neuer Stable
             new VisibleVectorModel(config.visibleWFS);
         }
-        if (_.has(config, "bkg") === true) {
+        if (config.hasOwnProperty("bkg")) {
             new BKGModel(config.bkg);
         }
-        if (_.has(config, "tree") === true) {
+        if (config.hasOwnProperty("tree")) {
             new TreeModel(config.tree);
         }
-        if (_.has(config, "osm") === true) {
+        if (config.hasOwnProperty("osm")) {
             new OSMModel(config.osm);
         }
-        if (_.has(config, "gdi") === true) {
+        if (config.hasOwnProperty("gdi")) {
             new GdiModel(config.gdi);
         }
         if (config.hasOwnProperty("elasticSearch")) {
@@ -868,18 +868,18 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     showMarker: function (evt) {
         var hitId = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+            hit = this.model.get("hitList").filter(obj => obj.id === hitId);
 
-        if (_.has(hit, "triggerEvent")) {
+        if (hit.hasOwnProperty("triggerEvent")) {
             // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
             if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick") {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
             }
         }
-        else if (_.has(hit, "coordinate")) {
+        else if (hit.hasOwnProperty("coordinate")) {
             Radio.trigger("MapMarker", "showMarker", hit.coordinate);
         }
-        else if (hit.hasOwnProperty("type") && hit.type !== "Thema") {
+        else if (hit.hasOwnProperty("type") && hit.type !== i18next.t("common:modules.searchbar.type.topic")) {
             console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
         }
     },
@@ -894,12 +894,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         var hitId,
             hit;
 
-        if (!_.isUndefined(evt)) {
+        if (evt !== undefined) {
             hitId = evt.currentTarget.id;
             hit = _.findWhere(this.model.get("hitList"), {id: hitId});
         }
 
-        if (_.has(hit, "triggerEvent")) {
+        if (hit.hasOwnProperty("triggerEvent")) {
         // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
             if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
                 Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);

@@ -36,10 +36,10 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @listens WindowView#RadioTriggerWindowHide
      */
     initialize: function () {
-        var channel = Radio.channel("WindowView");
+        const channel = Radio.channel("WindowView");
 
         this.listenTo(this.model, {
-            "change:isVisible change:winType": this.render
+            "change:isVisible change:winType change:minimizeText change:closeText": this.render
         });
 
         this.$el.draggable({
