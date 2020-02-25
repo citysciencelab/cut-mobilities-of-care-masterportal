@@ -56,13 +56,12 @@ export default {
     },
     methods: {
         /**
-         * Updates the size of the map debending on sidebars visibility
+         * Updates the size of the map depending on sidebars visibility
          *  @return {void}
          */
         updateMap(){
             if (!this.renderToWindow) {
                 //only set the map to full width, if not another sidebar is open
-                // das muss spaeter anders geloest werden, wenn alle tools im store registriert sind kann abgefragt werden, ob die sidebar sichtbar ist
                 document.getElementById("map").style.width = "100%";
                 Radio.trigger("Map", "updateSize");
             } else {
