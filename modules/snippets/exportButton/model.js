@@ -65,7 +65,7 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
     convertJsonToCsv: function (data = this.get("rawData")) {
         let dataAsObjArr = data;
 
-        if (data.length === "undefined") {
+        if (data.length === undefined) {
             dataAsObjArr = this.refineObject(dataAsObjArr);
         }
 
