@@ -323,14 +323,16 @@ Konfiguration der SpecialWFS Suche
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "B-Plan",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         },
         {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "im Verfahren",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         }
     ]
 }
@@ -350,6 +352,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|false|
+|namespaces|nein|String||XML Namespaces zur Abfrage von propertyNames oder geometryName (*xmlns:wfs*, *xmlns:ogc* und *xmlns:gml* werden immer genutzt).|false|
 |data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|false|
 
 **Beispiel**
