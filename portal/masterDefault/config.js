@@ -69,7 +69,7 @@ const Config = {
             {
                 "bezeichnung": "",
                 "url": "https://www.hamburg.de/bsu/timonline",
-                "alias": "Kartenunstimmigkeit"
+                "alias": "translate#common:modules.footer.cardDiscrepancy"
             }
         ]
     },
