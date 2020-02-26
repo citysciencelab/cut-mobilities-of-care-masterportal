@@ -712,6 +712,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setVisible: function (value) {
         this.get("layer").setVisible(value);
+    },
+
+    /**
+     * Setter for layerInfoClicked
+     * @param {Boolean} value Flag if layerinfo is opened
+     * @returns {void} -
+     */
+    setLayerInfoClicked: function (value) {
+        this.set("layerInfoClicked", value);
     }
 });
 
