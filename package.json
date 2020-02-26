@@ -58,6 +58,7 @@
     "moment-timezone": "^0.5.28",
     "mqtt": "^2.15.x",
     "object-hash": "^2.0.3",
+    "ol-mapbox-style": "^4.3.1",
     "olcs": "^2.10.0",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",

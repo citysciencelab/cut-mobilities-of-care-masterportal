@@ -41,9 +41,9 @@
 					"measure": {
 						"name": "Strecke / Fläche messen"
 					},
-					"draw": {
-						"name": "Zeichnen / Schreiben",
-						"glyphicon": "glyphicon-pencil"
+					"styleVT": {
+						"name": "Style vectorTiles",
+						"glyphicon": "glyphicon-tint"
 					},
 					"kmlimport": {
 						"name": "KML Import"

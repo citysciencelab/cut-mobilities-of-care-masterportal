@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<div class="form-horizontal" role="form">
+    <div class="form-group form-group-sm">
+        <div class="col-md-12 col-sm-12">
+            <label class="range-label">Layer</label>
+            <select class="form-control input-sm" id="styleVT-selectedLayerField">
+                <option class="pull-left" value="" selected="true">Bitte Thema auswählen</option>
+                <% _.each(vectorTileLayerList, function (vectorTileLayer) { %>
+                    <option class ="pull-left" value="<%= vectorTileLayer.id %>" <% if (model && model.attributes.id === vectorTileLayer.id) { print ("SELECTED")} %>><%= vectorTileLayer.name %></option>
+                <% })%>
+            </select>
+        </div>
+    </div>
+    <% if ( model !== null && model!== undefined) { %>
+        <div class="form-group form-group-sm">
+            <div class="col-md-12 col-sm-12">
+                <label class="style-label">Style</label>
+                <select class="form-control input-sm" id="styleVT-selectedStyleField">
+                    <% _.each(model.get("vtStyles"), function (vtStyle) { %>
+                        <option class="pull-left" value=<%= vtStyle.id %> <% if (vtStyle.id === model.attributes.selectedStyleID) { print ("SELECTED")} %>><%= vtStyle.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    <% } %>
+</div>
