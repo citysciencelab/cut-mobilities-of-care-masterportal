@@ -278,7 +278,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Checks if address string is valid for address sorting.
-     * The string gets splitted by "separator". The the occurrence of the "lastOcccurrenceChar" is checked.
+     * The string gets splitted by "separator". The occurrence of the "lastOcccurrenceChar" is checked.
      * @param {String} string String to check.
      * @param {String} separator Separator to separate Address (streetname and housenumber) from additional information (postal code, etc.).
      * @param {String} lastOccurrenceChar Charactor to separate the streetname from the housenumber.
