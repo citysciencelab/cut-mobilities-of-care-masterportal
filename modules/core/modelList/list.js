@@ -43,7 +43,7 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
-import Viewpoint from "./viewpoint/model";
+import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 
