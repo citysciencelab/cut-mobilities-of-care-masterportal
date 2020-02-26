@@ -52,7 +52,7 @@
                         "parcelDenominator": false
                     },
                     "measure": {
-                        "name": "Strecke / Fläche messen",
+                        "name": "translate#common:menu.tools.measure",
                         "glyphicon": "glyphicon-resize-full"
                     },
                     "gfi": {
