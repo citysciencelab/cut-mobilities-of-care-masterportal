@@ -6,6 +6,8 @@
 Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
+***
+
 ## WMS-Layer ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -30,8 +32,8 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMTS siehe unten](#markdown-header-wmts-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
-**Beispiel WMS:**
 
+**Beispiel WMS:**
 
 ```
 #!json
@@ -74,6 +76,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    }
 ```
 
+***
 
 ## WMTS-Layer ##
 
@@ -104,7 +107,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |wrapX|nein|Boolean|false|Gibt an, ob die Welt horizontal gewrapped werden soll.|`true`|
 
 **Beispiel WMTS:**
-
 
 ```
 #!json
@@ -146,6 +148,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 }
 ```
 
+***
 
 ## WFS-Layer ##
 
@@ -168,7 +171,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 
 **Beispiel WFS:**
-
 
 ```
 #!json
@@ -204,6 +206,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    }
 ```
 
+***
 
 ## Sensor-Layer ##
 
@@ -232,7 +235,6 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 
 **Beispiel Sensor:**
 
-
 ```
 #!json
 
@@ -259,6 +261,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
    }
 ```
 
+***
 
 ## url_Parameter ##
 
@@ -270,6 +273,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
+
 ```
 #!json
 
@@ -281,6 +285,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
    }
 ```
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation und das Phänomen (ObservedProperty), das beobachtet wird. Wenn vorhanden wird die ObservedProperty für die dynamische Attributerstellung verwendet.**
+
 ```
 #!json
 
@@ -296,6 +301,9 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 		}
    }
 ```
+
+***
+
 ## WMS_WFS_datasets ##
 
 Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter *kategorie..* werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.
@@ -310,6 +318,8 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |kategorie_inspire|nein|String||Inspire-Kategorie aus der Inspire-Codeliste wenn vorhanden, wenn nicht vorhanden *„nicht Inspire-identifiziert“*|
 |kategorie_organisation|nein|String||Organisationsname der datenhaltenden Stelle|
 
+***
+
 ## gfi_theme ##
 
 Das Attribut "gfiTheme" kann entweder als String angegeben werden oder als Objekt.
@@ -322,7 +332,8 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 |name|ja|String||Name des gfi Templates.|
 |**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
 
-Beispiel gfiTheme
+**Beispiel gfiTheme:**
+
 ```
 #!json
 "gfiTheme": {
@@ -330,12 +341,17 @@ Beispiel gfiTheme
    "params": {}
 }
 ```
+
+***
+
 ## gfi_theme_params ##
 Hier werden die Parameter für die GFI-Templates definiert.
 
 |Name|params|
 |----|------|
 |sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
+
+***
 
 ## gfi_theme_sensor_params ##
 Hier werden die Parameter für das GFI-Template "sensor" definiert.
@@ -345,7 +361,8 @@ Hier werden die Parameter für das GFI-Template "sensor" definiert.
 |grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit dem value des Attributes "iFrameAttributesPrefix" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
 |iFrameAttributesPrefix|nein|String||Prefix für die Attribute, die die url zu grafana enthalten.|
 
-Beispiel gfiTheme für das template "sensor"
+**Beispiel gfiTheme für das template "sensor":**
+
 ```
 #!json
 "gfiTheme": {
@@ -357,6 +374,7 @@ Beispiel gfiTheme für das template "sensor"
 }
 ```
 
+***
 
 ## gfi_attributes ##
 Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:
@@ -364,7 +382,8 @@ Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal dienstesei
 **showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt.
 Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, siehe(**[config.js](config.js.md)**)
 
-Beispiel gfiAttributes als String
+**Beispiel gfiAttributes als String:**
+
 ```
 #!json
 {
@@ -372,7 +391,8 @@ Beispiel gfiAttributes als String
 }
 ```
 
-Beispiel gfiAttributes als String
+**Beispiel gfiAttributes als String:**
+
 ```
 #!json
 {
@@ -380,7 +400,8 @@ Beispiel gfiAttributes als String
 }
 ```
 
-Beispiel gfiAttributes als Objekt
+**Beispiel gfiAttributes als Objekt:**
+
 ```
 #!json
 {
@@ -391,7 +412,8 @@ Beispiel gfiAttributes als Objekt
    }
 }
 ```
-Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
+
+Wird `gfiAttributes` als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -401,7 +423,8 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 |format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
 |suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-Beispiel gfiAttributes als Objekt mit suffix.
+**Beispiel gfiAttributes als Objekt mit suffix:**
+
 ```
 #!json
 {
@@ -416,7 +439,9 @@ Beispiel gfiAttributes als Objekt mit suffix.
    }
 }
 ```
-Beispiel gfiAttributes als Objekt mit type und format
+
+**Beispiel gfiAttributes als Objekt mit type und format:**
+
 ```
 #!json
 {
@@ -432,6 +457,8 @@ Beispiel gfiAttributes als Objekt mit type und format
    }
 }
 ```
+
+***
 
 ## GeoJSON-Layer ##
 
@@ -451,7 +478,6 @@ Beispiel gfiAttributes als Objekt mit type und format
 
 **Beispiel GeoJSON:**
 
-
 ```
 #!json
 
@@ -465,6 +491,8 @@ Beispiel gfiAttributes als Objekt mit type und format
       "legendURL" : "",
    }
 ```
+
+***
 
 ## Heatmap-Layer ##
 
@@ -482,7 +510,6 @@ Beispiel gfiAttributes als Objekt mit type und format
 |dataLayerId|ja|String||Id des Layers der die Features für die Heatmap liefert |`"4321"`|
 
 **Beispiel HeatmapLayer:**
-
 
 ```
 #!json
@@ -507,6 +534,8 @@ Beispiel gfiAttributes als Objekt mit type und format
 	}
 ```
 
+***
+
 ## 3D Object Layer TileSet ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -525,7 +554,6 @@ Beispiel gfiAttributes als Objekt mit type und format
 [cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
 
 **Beispiel Tileset:**
-
 
 ```
 #!json
@@ -560,6 +588,8 @@ Beispiel gfiAttributes als Objekt mit type und format
    }
 ```
 
+***
+
 ## Terrain3D Quantized Mesh Dataset ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -574,7 +604,6 @@ Beispiel gfiAttributes als Objekt mit type und format
 |**[cesiumTerrainProviderOptions]**|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
 
 [cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
-
 
 **Beispiel Terrain:**
 
@@ -608,6 +637,9 @@ Beispiel gfiAttributes als Objekt mit type und format
       ]
    }
 ```
+
+***
+
 ## Oblique Layer ##
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -624,7 +656,6 @@ Beispiel gfiAttributes als Objekt mit type und format
 |resolution|nein|Number||Auflösung der Schrägluftbilder in cm z.B. 10 . |`10`|
 |projection|ja|String||Projektion der Schrägluftbild ebene. |`EPSG:25832`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/oblique"`|
-
 
 **Beispiel Oblique Ebene:**
 
@@ -656,6 +687,8 @@ Beispiel gfiAttributes als Objekt mit type und format
    }
 ```
 
+***
+
 ## Entities Layer 3D ##
 
 Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
@@ -670,7 +703,7 @@ Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
 |typ|ja|String||Diensttyp, in diesem Fall Entities3D |`"Entities3D"`|
 |entities|ja|Array||Modelle, die angezeigt werden sollen |`[]`|
 
-Entity Optionen
+**Entity Optionen**
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -685,8 +718,6 @@ Entity Optionen
 |scale|nein|Number|1|Skalierung des Modells|`1`|
 |allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI)|`true`|
 |show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein)|`true`|
-
-
 
 **Beispiel Entities3D Ebene:**
 
