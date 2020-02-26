@@ -134,6 +134,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         this.set("activeInitialSearchTasks", activeSearchTasks);
     },
 
+    /**
+     * Setter for attribute "initSearchString".
+     * @param {String} value Search string for initial search.
+     * @returns {void}
+     */
     setInitSearchString: function (value) {
         this.set("initSearchString", value);
     },
@@ -301,6 +306,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
     },
 
+    /**
+     * @param {Object[]} hitList List of all hits from searchbar.
+     * @param {Number} maxLength Configured number of hits to be shown.
+     * @returns {Object[]} - random Entries. mimum length is given by attribute "maxLength".
+     */
     getRandomEntriesOfEachType: function (hitList, maxLength) {
         const randomEntries = [],
             max = hitList.length < maxLength ? hitList.length : maxLength;
@@ -327,6 +337,12 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         return randomEntries;
     },
 
+    /**
+     * Filters the hitList by type and returns an random object of the list.
+     * @param {Object[]} hitList List of all hits from searchbar.
+     * @param {String} type Type of search.
+     * @returns {Object} - random object of hitlist by given type.
+     */
     getRandomEntryByType: function (hitList, type) {
         const hitListByType = hitList.filter(hit => hit.type === type),
             randomNumber = Math.floor(Math.random() * hitListByType.length);
